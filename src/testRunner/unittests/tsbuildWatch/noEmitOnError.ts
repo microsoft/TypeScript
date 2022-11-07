@@ -1,31 +1,31 @@
 namespace ts.tscWatch {
 describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
-    function change(caption: string, content: string): TscWatchCompileChange {
+    function change(caption: string, content: string): ts.tscWatch.TscWatchCompileChange {
         return {
             caption,
-            change: sys => sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, content),
+            change: sys => sys.writeFile(`${ts.TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, content),
             // build project
-            timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+            timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
         };
     }
 
-    const noChange: TscWatchCompileChange = {
+    const noChange: ts.tscWatch.TscWatchCompileChange = {
         caption: "No change",
-        change: sys => sys.writeFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, sys.readFile(`${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`)!),
+        change: sys => sys.writeFile(`${ts.TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`, sys.readFile(`${ts.TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError/src/main.ts`)!),
         // build project
-        timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+        timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
     };
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "noEmitOnError",
         subScenario: "does not emit any files on error",
         commandLineArgs: ["-b", "-w", "-verbose"],
-        sys: () => createWatchedSystem(
+        sys: () => ts.tscWatch.createWatchedSystem(
             [
                 ...["tsconfig.json", "shared/types/db.ts", "src/main.ts", "src/other.ts"]
-                    .map(f => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", f)),
-                { path: libFile.path, content: libContent }
+                    .map(f => ts.TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", f)),
+                { path: ts.tscWatch.libFile.path, content: ts.libContent }
             ],
-            { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError` }
+            { currentDirectory: `${ts.TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError` }
         ),
         changes: [
             noChange,

@@ -1,10 +1,10 @@
 /*@internal*/
 namespace ts {
-export function transformNodeModule(context: TransformationContext) {
+export function transformNodeModule(context: ts.TransformationContext) {
     const previousOnSubstituteNode = context.onSubstituteNode;
     const previousOnEmitNode = context.onEmitNode;
 
-    const esmTransform = transformECMAScriptModule(context);
+    const esmTransform = ts.transformECMAScriptModule(context);
 
     const esmOnSubstituteNode = context.onSubstituteNode;
     const esmOnEmitNode = context.onEmitNode;
@@ -12,21 +12,21 @@ export function transformNodeModule(context: TransformationContext) {
     context.onSubstituteNode = previousOnSubstituteNode;
     context.onEmitNode = previousOnEmitNode;
 
-    const cjsTransform = transformModule(context);
+    const cjsTransform = ts.transformModule(context);
 
     const cjsOnSubstituteNode = context.onSubstituteNode;
     const cjsOnEmitNode = context.onEmitNode;
 
     context.onSubstituteNode = onSubstituteNode;
     context.onEmitNode = onEmitNode;
-    context.enableSubstitution(SyntaxKind.SourceFile);
-    context.enableEmitNotification(SyntaxKind.SourceFile);
+    context.enableSubstitution(ts.SyntaxKind.SourceFile);
+    context.enableEmitNotification(ts.SyntaxKind.SourceFile);
 
-    let currentSourceFile: SourceFile | undefined;
+    let currentSourceFile: ts.SourceFile | undefined;
     return transformSourceFileOrBundle;
 
-    function onSubstituteNode(hint: EmitHint, node: Node) {
-        if (isSourceFile(node)) {
+    function onSubstituteNode(hint: ts.EmitHint, node: ts.Node) {
+        if (ts.isSourceFile(node)) {
             currentSourceFile = node;
             // Neither component transform wants substitution notifications for `SourceFile`s, and, in fact, relies on
             // the source file emit notification to setup scope variables for substitutions (so we _cannot_ call their substitute
@@ -37,31 +37,31 @@ export function transformNodeModule(context: TransformationContext) {
             if (!currentSourceFile) {
                 return previousOnSubstituteNode(hint, node);
             }
-            if (currentSourceFile.impliedNodeFormat === ModuleKind.ESNext) {
+            if (currentSourceFile.impliedNodeFormat === ts.ModuleKind.ESNext) {
                 return esmOnSubstituteNode(hint, node);
             }
             return cjsOnSubstituteNode(hint, node);
         }
     }
 
-    function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
-        if (isSourceFile(node)) {
+    function onEmitNode(hint: ts.EmitHint, node: ts.Node, emitCallback: (hint: ts.EmitHint, node: ts.Node) => void): void {
+        if (ts.isSourceFile(node)) {
             currentSourceFile = node;
         }
         if (!currentSourceFile) {
             return previousOnEmitNode(hint, node, emitCallback);
         }
-        if (currentSourceFile.impliedNodeFormat === ModuleKind.ESNext) {
+        if (currentSourceFile.impliedNodeFormat === ts.ModuleKind.ESNext) {
             return esmOnEmitNode(hint, node, emitCallback);
         }
         return cjsOnEmitNode(hint, node, emitCallback);
     }
 
-    function getModuleTransformForFile(file: SourceFile): (typeof esmTransform) {
-        return file.impliedNodeFormat === ModuleKind.ESNext ? esmTransform : cjsTransform;
+    function getModuleTransformForFile(file: ts.SourceFile): (typeof esmTransform) {
+        return file.impliedNodeFormat === ts.ModuleKind.ESNext ? esmTransform : cjsTransform;
     }
 
-    function transformSourceFile(node: SourceFile) {
+    function transformSourceFile(node: ts.SourceFile) {
         if (node.isDeclarationFile) {
             return node;
         }
@@ -69,16 +69,16 @@ export function transformNodeModule(context: TransformationContext) {
         currentSourceFile = node;
         const result = getModuleTransformForFile(node)(node);
         currentSourceFile = undefined;
-        Debug.assert(isSourceFile(result));
+        ts.Debug.assert(ts.isSourceFile(result));
         return result;
     }
 
-    function transformSourceFileOrBundle(node: SourceFile | Bundle) {
-        return node.kind === SyntaxKind.SourceFile ? transformSourceFile(node) : transformBundle(node);
+    function transformSourceFileOrBundle(node: ts.SourceFile | ts.Bundle) {
+        return node.kind === ts.SyntaxKind.SourceFile ? transformSourceFile(node) : transformBundle(node);
     }
 
-    function transformBundle(node: Bundle) {
-        return context.factory.createBundle(map(node.sourceFiles, transformSourceFile), node.prepends);
+    function transformBundle(node: ts.Bundle) {
+        return context.factory.createBundle(ts.map(node.sourceFiles, transformSourceFile), node.prepends);
     }
 }
 }

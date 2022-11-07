@@ -1,18 +1,18 @@
 namespace ts {
 describe("unittests:: tsbuild:: configFileErrors:: when tsconfig extends the missing file", () => {
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "configFileErrors",
         subScenario: "when tsconfig extends the missing file",
-        fs: () => loadProjectFromDisk("tests/projects/missingExtendedConfig"),
+        fs: () => ts.loadProjectFromDisk("tests/projects/missingExtendedConfig"),
         commandLineArgs: ["--b", "/src/tsconfig.json"],
     });
 });
 
 describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in config file", () => {
-    verifyTscWithEdits({
+    ts.verifyTscWithEdits({
         scenario: "configFileErrors",
         subScenario: "reports syntax errors in config file",
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/a.ts": "export function foo() { }",
             "/src/b.ts": "export function bar() { }",
             "/src/tsconfig.json": Utils.dedent`
@@ -29,7 +29,7 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
         commandLineArgs: ["--b", "/src/tsconfig.json"],
         edits: [
             {
-                modifyFs: fs => replaceText(fs, "/src/tsconfig.json", ",", `,
+                modifyFs: fs => ts.replaceText(fs, "/src/tsconfig.json", ",", `,
         "declaration": true,`),
                 subScenario: "reports syntax errors after change to config file",
                 discrepancyExplanation: () => [
@@ -38,10 +38,10 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
                 ],
             },
             {
-                modifyFs: fs => appendText(fs, "/src/a.ts", "export function fooBar() { }"),
+                modifyFs: fs => ts.appendText(fs, "/src/a.ts", "export function fooBar() { }"),
                 subScenario: "reports syntax errors after change to ts file",
             },
-            noChangeRun,
+            ts.noChangeRun,
             {
                 modifyFs: fs => fs.writeFileSync(
                     "/src/tsconfig.json",

@@ -1,18 +1,18 @@
 namespace ts {
-interface ExpectedResult { typeAcquisition: TypeAcquisition; errors: Diagnostic[]; }
+interface ExpectedResult { typeAcquisition: ts.TypeAcquisition; errors: ts.Diagnostic[]; }
 describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
     function assertTypeAcquisition(json: any, configFileName: string, expectedResult: ExpectedResult) {
         assertTypeAcquisitionWithJson(json, configFileName, expectedResult);
         assertTypeAcquisitionWithJsonNode(json, configFileName, expectedResult);
     }
 
-    function verifyAcquisition(actualTypeAcquisition: TypeAcquisition | undefined, expectedResult: ExpectedResult) {
+    function verifyAcquisition(actualTypeAcquisition: ts.TypeAcquisition | undefined, expectedResult: ExpectedResult) {
         const parsedTypeAcquisition = JSON.stringify(actualTypeAcquisition);
         const expectedTypeAcquisition = JSON.stringify(expectedResult.typeAcquisition);
         assert.equal(parsedTypeAcquisition, expectedTypeAcquisition);
     }
 
-    function verifyErrors(actualErrors: Diagnostic[], expectedResult: ExpectedResult, hasLocation?: boolean) {
+    function verifyErrors(actualErrors: ts.Diagnostic[], expectedResult: ExpectedResult, hasLocation?: boolean) {
         const expectedErrors = expectedResult.errors;
         assert.isTrue(expectedResult.errors.length === actualErrors.length, `Expected error: ${JSON.stringify(expectedResult.errors)}. Actual error: ${JSON.stringify(actualErrors)}.`);
         for (let i = 0; i < actualErrors.length; i++) {
@@ -30,21 +30,21 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
 
     function assertTypeAcquisitionWithJson(json: any, configFileName: string, expectedResult: ExpectedResult) {
         const jsonOptions = json.typeAcquisition || json.typingOptions;
-        const { options: actualTypeAcquisition, errors: actualErrors } = convertTypeAcquisitionFromJson(jsonOptions, "/apath/", configFileName);
+        const { options: actualTypeAcquisition, errors: actualErrors } = ts.convertTypeAcquisitionFromJson(jsonOptions, "/apath/", configFileName);
         verifyAcquisition(actualTypeAcquisition, expectedResult);
         verifyErrors(actualErrors, expectedResult);
     }
 
     function assertTypeAcquisitionWithJsonNode(json: any, configFileName: string, expectedResult: ExpectedResult) {
         const fileText = JSON.stringify(json);
-        const result = parseJsonText(configFileName, fileText);
+        const result = ts.parseJsonText(configFileName, fileText);
         assert(!result.parseDiagnostics.length);
         assert(!!result.endOfFileToken);
-        const host: ParseConfigHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/apath/" }));
-        const { typeAcquisition: actualTypeAcquisition, errors: actualParseErrors } = parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
+        const host: ts.ParseConfigHost = new fakes.ParseConfigHost(new vfs.FileSystem(/*ignoreCase*/ false, { cwd: "/apath/" }));
+        const { typeAcquisition: actualTypeAcquisition, errors: actualParseErrors } = ts.parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
         verifyAcquisition(actualTypeAcquisition, expectedResult);
 
-        const actualErrors = filter(actualParseErrors, error => error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
+        const actualErrors = ts.filter(actualParseErrors, error => error.code !== ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
         verifyErrors(actualErrors, expectedResult, /*hasLocation*/ true);
     }
 
@@ -67,7 +67,7 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
                     include: ["0.d.ts", "1.d.ts"],
                     exclude: ["0.js", "1.js"]
                 },
-                errors: [] as Diagnostic[]
+                errors: [] as ts.Diagnostic[]
             }
         );
     });
@@ -90,7 +90,7 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
                     include: ["0.d.ts", "1.d.ts"],
                     exclude: ["0.js", "1.js"]
                 },
-                errors: [] as Diagnostic[]
+                errors: [] as ts.Diagnostic[]
             });
     });
 
@@ -111,8 +111,8 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
                 },
                 errors: [
                     {
-                        category: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.category,
-                        code: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.code,
+                        category: ts.Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.category,
+                        code: ts.Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.code,
                         file: undefined,
                         start: 0,
                         length: 0,
@@ -131,7 +131,7 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
                     include: [],
                     exclude: []
                 },
-                errors: [] as Diagnostic[]
+                errors: [] as ts.Diagnostic[]
             });
     });
 
@@ -150,7 +150,7 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
                     include: [],
                     exclude: []
                 },
-                errors: [] as Diagnostic[]
+                errors: [] as ts.Diagnostic[]
             });
     });
 
@@ -172,7 +172,7 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
                     include: ["0.d.ts"],
                     exclude: ["0.js"]
                 },
-                errors: [] as Diagnostic[]
+                errors: [] as ts.Diagnostic[]
             });
     });
 
@@ -185,7 +185,7 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
                     include: [],
                     exclude: []
                 },
-                errors: [] as Diagnostic[]
+                errors: [] as ts.Diagnostic[]
             });
     });
 
@@ -206,8 +206,8 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
                 },
                 errors: [
                     {
-                        category: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.category,
-                        code: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.code,
+                        category: ts.Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.category,
+                        code: ts.Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.code,
                         file: undefined,
                         start: 0,
                         length: 0,
@@ -232,7 +232,7 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
                     include: [],
                     exclude: []
                 },
-                errors: [] as Diagnostic[]
+                errors: [] as ts.Diagnostic[]
             });
     });
 });

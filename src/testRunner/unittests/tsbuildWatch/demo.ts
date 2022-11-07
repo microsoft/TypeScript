@@ -1,19 +1,19 @@
 namespace ts.tscWatch {
 describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
-    const projectLocation = `${TestFSWithWatch.tsbuildProjectsLocation}/demo`;
-    let coreFiles: File[];
-    let animalFiles: File[];
-    let zooFiles: File[];
-    let solutionFile: File;
-    let baseConfig: File;
-    let allFiles: File[];
+    const projectLocation = `${ts.TestFSWithWatch.tsbuildProjectsLocation}/demo`;
+    let coreFiles: ts.tscWatch.File[];
+    let animalFiles: ts.tscWatch.File[];
+    let zooFiles: ts.tscWatch.File[];
+    let solutionFile: ts.tscWatch.File;
+    let baseConfig: ts.tscWatch.File;
+    let allFiles: ts.tscWatch.File[];
     before(() => {
         coreFiles = subProjectFiles("core", ["tsconfig.json", "utilities.ts"]);
         animalFiles = subProjectFiles("animals", ["tsconfig.json", "animal.ts", "dog.ts", "index.ts"]);
         zooFiles = subProjectFiles("zoo", ["tsconfig.json", "zoo.ts"]);
         solutionFile = projectFile("tsconfig.json");
         baseConfig = projectFile("tsconfig-base.json");
-        allFiles = [...coreFiles, ...animalFiles, ...zooFiles, solutionFile, baseConfig, { path: libFile.path, content: libContent }];
+        allFiles = [...coreFiles, ...animalFiles, ...zooFiles, solutionFile, baseConfig, { path: ts.tscWatch.libFile.path, content: ts.libContent }];
     });
 
     after(() => {
@@ -25,12 +25,12 @@ describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
         allFiles = undefined!;
     });
 
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "demo",
         subScenario: "updates with circular reference",
         commandLineArgs: ["-b", "-w", "-verbose"],
         sys: () => {
-            const sys = createWatchedSystem(allFiles, { currentDirectory: projectLocation });
+            const sys = ts.tscWatch.createWatchedSystem(allFiles, { currentDirectory: projectLocation });
             sys.writeFile(coreFiles[0].path, coreFiles[0].content.replace(
                 "}",
                 `},
@@ -55,12 +55,12 @@ describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
         ]
     });
 
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "demo",
         subScenario: "updates with bad reference",
         commandLineArgs: ["-b", "-w", "-verbose"],
         sys: () => {
-            const sys = createWatchedSystem(allFiles, { currentDirectory: projectLocation });
+            const sys = ts.tscWatch.createWatchedSystem(allFiles, { currentDirectory: projectLocation });
             sys.writeFile(coreFiles[1].path, `import * as A from '../animals';
 ${coreFiles[1].content}`);
             return sys;
@@ -72,17 +72,17 @@ ${coreFiles[1].content}`);
 import * as A from '../animals';
 ${coreFiles[1].content}`),
                 // build core
-                timeouts: checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
+                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout,
             }
         ]
     });
 
-    function subProjectFiles(subProject: string, fileNames: readonly string[]): File[] {
+    function subProjectFiles(subProject: string, fileNames: readonly string[]): ts.tscWatch.File[] {
         return fileNames.map(file => projectFile(`${subProject}/${file}`));
     }
 
-    function projectFile(fileName: string): File {
-        return TestFSWithWatch.getTsBuildProjectFile("demo", fileName);
+    function projectFile(fileName: string): ts.tscWatch.File {
+        return ts.TestFSWithWatch.getTsBuildProjectFile("demo", fileName);
     }
 });
 }

@@ -1,44 +1,44 @@
 namespace ts.projectSystem {
 describe("unittests:: tsserver:: completions", () => {
     it("works", () => {
-        const aTs: File = {
+        const aTs: ts.projectSystem.File = {
             path: "/a.ts",
             content: "export const foo = 0;",
         };
-        const bTs: File = {
+        const bTs: ts.projectSystem.File = {
             path: "/b.ts",
             content: "foo",
         };
-        const tsconfig: File = {
+        const tsconfig: ts.projectSystem.File = {
             path: "/tsconfig.json",
             content: "{}",
         };
 
-        const session = createSession(createServerHost([aTs, bTs, tsconfig]));
-        openFilesForSession([aTs, bTs], session);
+        const session = ts.projectSystem.createSession(ts.projectSystem.createServerHost([aTs, bTs, tsconfig]));
+        ts.projectSystem.openFilesForSession([aTs, bTs], session);
 
-        const requestLocation: protocol.FileLocationRequestArgs = {
+        const requestLocation: ts.projectSystem.protocol.FileLocationRequestArgs = {
             file: bTs.path,
             line: 1,
             offset: 3,
         };
 
-        const response = executeSessionRequest<protocol.CompletionsRequest, protocol.CompletionInfoResponse>(session, protocol.CommandTypes.CompletionInfo, {
+        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.CompletionsRequest, ts.projectSystem.protocol.CompletionInfoResponse>(session, ts.projectSystem.protocol.CommandTypes.CompletionInfo, {
             ...requestLocation,
             includeExternalModuleExports: true,
             prefix: "foo",
         });
-        const entry: protocol.CompletionEntry = {
+        const entry: ts.projectSystem.protocol.CompletionEntry = {
             hasAction: true,
             insertText: undefined,
             isRecommended: undefined,
-            kind: ScriptElementKind.constElement,
-            kindModifiers: ScriptElementKindModifier.exportedModifier,
+            kind: ts.ScriptElementKind.constElement,
+            kindModifiers: ts.ScriptElementKindModifier.exportedModifier,
             name: "foo",
             replacementSpan: undefined,
             isPackageJsonImport: undefined,
             isImportStatementCompletion: undefined,
-            sortText: Completions.SortText.AutoImportSuggestions,
+            sortText: ts.Completions.SortText.AutoImportSuggestions,
             source: "/a",
             sourceDisplay: undefined,
             isSnippet: undefined,
@@ -51,8 +51,8 @@ describe("unittests:: tsserver:: completions", () => {
         const exportMapKey = (response?.entries[0].data as any)?.exportMapKey;
         assert.isString(exportMapKey);
         delete (response?.entries[0].data as any).exportMapKey;
-        assert.deepEqual<protocol.CompletionInfo | undefined>(response, {
-            flags: CompletionInfoFlags.MayIncludeAutoImports,
+        assert.deepEqual<ts.projectSystem.protocol.CompletionInfo | undefined>(response, {
+            flags: ts.CompletionInfoFlags.MayIncludeAutoImports,
             isGlobalCompletion: true,
             isIncomplete: undefined,
             isMemberCompletion: false,
@@ -61,29 +61,29 @@ describe("unittests:: tsserver:: completions", () => {
             entries: [entry],
         });
 
-        const detailsRequestArgs: protocol.CompletionDetailsRequestArgs = {
+        const detailsRequestArgs: ts.projectSystem.protocol.CompletionDetailsRequestArgs = {
             ...requestLocation,
             entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
         };
 
-        const detailsResponse = executeSessionRequest<protocol.CompletionDetailsRequest, protocol.CompletionDetailsResponse>(session, protocol.CommandTypes.CompletionDetails, detailsRequestArgs);
-        const detailsCommon: protocol.CompletionEntryDetails & CompletionEntryDetails = {
+        const detailsResponse = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.CompletionDetailsRequest, ts.projectSystem.protocol.CompletionDetailsResponse>(session, ts.projectSystem.protocol.CommandTypes.CompletionDetails, detailsRequestArgs);
+        const detailsCommon: ts.projectSystem.protocol.CompletionEntryDetails & ts.CompletionEntryDetails = {
             displayParts: [
-                keywordPart(SyntaxKind.ConstKeyword),
-                spacePart(),
-                displayPart("foo", SymbolDisplayPartKind.localName),
-                punctuationPart(SyntaxKind.ColonToken),
-                spacePart(),
-                displayPart("0", SymbolDisplayPartKind.stringLiteral),
+                ts.keywordPart(ts.SyntaxKind.ConstKeyword),
+                ts.spacePart(),
+                ts.displayPart("foo", ts.SymbolDisplayPartKind.localName),
+                ts.punctuationPart(ts.SyntaxKind.ColonToken),
+                ts.spacePart(),
+                ts.displayPart("0", ts.SymbolDisplayPartKind.stringLiteral),
             ],
-            documentation: emptyArray,
-            kind: ScriptElementKind.constElement,
-            kindModifiers: ScriptElementKindModifier.exportedModifier,
+            documentation: ts.emptyArray,
+            kind: ts.ScriptElementKind.constElement,
+            kindModifiers: ts.ScriptElementKindModifier.exportedModifier,
             name: "foo",
             source: [{ text: "./a", kind: "text" }],
             sourceDisplay: [{ text: "./a", kind: "text" }],
         };
-        assert.deepEqual<readonly protocol.CompletionEntryDetails[] | undefined>(detailsResponse, [
+        assert.deepEqual<readonly ts.projectSystem.protocol.CompletionEntryDetails[] | undefined>(detailsResponse, [
             {
                 codeActions: [
                     {
@@ -108,15 +108,15 @@ describe("unittests:: tsserver:: completions", () => {
             },
         ]);
 
-        interface CompletionDetailsFullRequest extends protocol.FileLocationRequest {
-            readonly command: protocol.CommandTypes.CompletionDetailsFull;
-            readonly arguments: protocol.CompletionDetailsRequestArgs;
+        interface CompletionDetailsFullRequest extends ts.projectSystem.protocol.FileLocationRequest {
+            readonly command: ts.projectSystem.protocol.CommandTypes.CompletionDetailsFull;
+            readonly arguments: ts.projectSystem.protocol.CompletionDetailsRequestArgs;
         }
-        interface CompletionDetailsFullResponse extends protocol.Response {
-            readonly body?: readonly CompletionEntryDetails[];
+        interface CompletionDetailsFullResponse extends ts.projectSystem.protocol.Response {
+            readonly body?: readonly ts.CompletionEntryDetails[];
         }
-        const detailsFullResponse = executeSessionRequest<CompletionDetailsFullRequest, CompletionDetailsFullResponse>(session, protocol.CommandTypes.CompletionDetailsFull, detailsRequestArgs);
-        assert.deepEqual<readonly CompletionEntryDetails[] | undefined>(detailsFullResponse, [
+        const detailsFullResponse = ts.projectSystem.executeSessionRequest<CompletionDetailsFullRequest, CompletionDetailsFullResponse>(session, ts.projectSystem.protocol.CommandTypes.CompletionDetailsFull, detailsRequestArgs);
+        assert.deepEqual<readonly ts.CompletionEntryDetails[] | undefined>(detailsFullResponse, [
             {
                 codeActions: [
                     {
@@ -124,7 +124,7 @@ describe("unittests:: tsserver:: completions", () => {
                         changes: [
                             {
                                 fileName: "/b.ts",
-                                textChanges: [createTextChange(createTextSpan(0, 0), 'import { foo } from "./a";\n\n')],
+                                textChanges: [ts.createTextChange(ts.createTextSpan(0, 0), 'import { foo } from "./a";\n\n')],
                             },
                         ],
                         commands: undefined,
@@ -138,7 +138,7 @@ describe("unittests:: tsserver:: completions", () => {
 
     it("works when files are included from two different drives of windows", () => {
         const projectRoot = "e:/myproject";
-        const appPackage: File = {
+        const appPackage: ts.projectSystem.File = {
             path: `${projectRoot}/package.json`,
             content: JSON.stringify({
                 name: "test",
@@ -149,7 +149,7 @@ describe("unittests:: tsserver:: completions", () => {
                 }
             })
         };
-        const appFile: File = {
+        const appFile: ts.projectSystem.File = {
             path: `${projectRoot}/src/app.js`,
             content: `import React from 'react';
 import {
@@ -159,37 +159,37 @@ import {
         };
         const localNodeModules = `${projectRoot}/node_modules`;
         const localAtTypes = `${localNodeModules}/@types`;
-        const localReactPackage: File = {
+        const localReactPackage: ts.projectSystem.File = {
             path: `${localAtTypes}/react/package.json`,
             content: JSON.stringify({
                 name: "@types/react",
                 version: "16.9.14",
             })
         };
-        const localReact: File = {
+        const localReact: ts.projectSystem.File = {
             path: `${localAtTypes}/react/index.d.ts`,
             content: `import * as PropTypes from 'prop-types';
 `
         };
-        const localReactRouterDomPackage: File = {
+        const localReactRouterDomPackage: ts.projectSystem.File = {
             path: `${localNodeModules}/react-router-dom/package.json`,
             content: JSON.stringify({
                 name: "react-router-dom",
                 version: "5.1.2",
             })
         };
-        const localReactRouterDom: File = {
+        const localReactRouterDom: ts.projectSystem.File = {
             path: `${localNodeModules}/react-router-dom/index.js`,
             content: `export function foo() {}`
         };
-        const localPropTypesPackage: File = {
+        const localPropTypesPackage: ts.projectSystem.File = {
             path: `${localAtTypes}/prop-types/package.json`,
             content: JSON.stringify({
                 name: "@types/prop-types",
                 version: "15.7.3",
             })
         };
-        const localPropTypes: File = {
+        const localPropTypes: ts.projectSystem.File = {
             path: `${localAtTypes}/prop-types/index.d.ts`,
             content: `export type ReactComponentLike =
     | string
@@ -200,14 +200,14 @@ import {
 
         const globalCacheLocation = `c:/typescript`;
         const globalAtTypes = `${globalCacheLocation}/node_modules/@types`;
-        const globalReactRouterDomPackage: File = {
+        const globalReactRouterDomPackage: ts.projectSystem.File = {
             path: `${globalAtTypes}/react-router-dom/package.json`,
             content: JSON.stringify({
                 name: "@types/react-router-dom",
                 version: "5.1.2",
             })
         };
-        const globalReactRouterDom: File = {
+        const globalReactRouterDom: ts.projectSystem.File = {
             path: `${globalAtTypes}/react-router-dom/index.d.ts`,
             content: `import * as React from 'react';
 export interface BrowserRouterProps {
@@ -217,11 +217,11 @@ export interface BrowserRouterProps {
     keyLength?: number;
 }`
         };
-        const globalReactPackage: File = {
+        const globalReactPackage: ts.projectSystem.File = {
             path: `${globalAtTypes}/react/package.json`,
             content: localReactPackage.content
         };
-        const globalReact: File = {
+        const globalReact: ts.projectSystem.File = {
             path: `${globalAtTypes}/react/index.d.ts`,
             content: localReact.content
         };
@@ -235,7 +235,7 @@ export interface BrowserRouterProps {
         ];
         const files = [
             ...filesInProject,
-            appPackage, libFile,
+            appPackage, ts.projectSystem.libFile,
             localReactPackage,
             localReactRouterDomPackage, localReactRouterDom,
             localPropTypesPackage,
@@ -243,17 +243,17 @@ export interface BrowserRouterProps {
             globalReactPackage,
         ];
 
-        const host = createServerHost(files, { windowsStyleRoot: "c:/" });
-        const session = createSession(host, {
-            typingsInstaller: new TestTypingsInstaller(globalCacheLocation, /*throttleLimit*/ 5, host),
+        const host = ts.projectSystem.createServerHost(files, { windowsStyleRoot: "c:/" });
+        const session = ts.projectSystem.createSession(host, {
+            typingsInstaller: new ts.projectSystem.TestTypingsInstaller(globalCacheLocation, /*throttleLimit*/ 5, host),
         });
         const service = session.getProjectService();
-        openFilesForSession([appFile], session);
-        checkNumberOfProjects(service, { inferredProjects: 1 });
-        const windowsStyleLibFilePath = "c:/" + libFile.path.substring(1);
-        checkProjectActualFiles(service.inferredProjects[0], filesInProject.map(f => f.path).concat(windowsStyleLibFilePath));
-        session.executeCommandSeq<protocol.CompletionsRequest>({
-            command: protocol.CommandTypes.CompletionInfo,
+        ts.projectSystem.openFilesForSession([appFile], session);
+        ts.projectSystem.checkNumberOfProjects(service, { inferredProjects: 1 });
+        const windowsStyleLibFilePath = "c:/" + ts.projectSystem.libFile.path.substring(1);
+        ts.projectSystem.checkProjectActualFiles(service.inferredProjects[0], filesInProject.map(f => f.path).concat(windowsStyleLibFilePath));
+        session.executeCommandSeq<ts.projectSystem.protocol.CompletionsRequest>({
+            command: ts.projectSystem.protocol.CommandTypes.CompletionInfo,
             arguments: {
                 file: appFile.path,
                 line: 5,

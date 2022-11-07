@@ -1,41 +1,41 @@
 namespace ts {
 describe("unittests:: tsc:: listFilesOnly::", () => {
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "listFilesOnly",
         subScenario: "combined with watch",
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/test.ts": Utils.dedent`
                         export const x = 1;`,
         }),
         commandLineArgs: ["/src/test.ts", "--watch", "--listFilesOnly"]
     });
 
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "listFilesOnly",
         subScenario: "loose file",
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/test.ts": Utils.dedent`
                         export const x = 1;`,
         }),
         commandLineArgs: ["/src/test.ts", "--listFilesOnly"]
     });
 
-    verifyTscWithEdits({
+    ts.verifyTscWithEdits({
         scenario: "listFilesOnly",
         subScenario: "combined with incremental",
-        fs: () => loadProjectFromFiles({
+        fs: () => ts.loadProjectFromFiles({
             "/src/test.ts": `export const x = 1;`,
             "/src/tsconfig.json": "{}"
         }),
         commandLineArgs: ["-p", "/src", "--incremental", "--listFilesOnly"],
         edits: [
             {
-                ...noChangeRun,
+                ...ts.noChangeRun,
                 commandLineArgs: ["-p", "/src", "--incremental"],
             },
-            noChangeRun,
+            ts.noChangeRun,
             {
-                ...noChangeRun,
+                ...ts.noChangeRun,
                 commandLineArgs: ["-p", "/src", "--incremental"],
             }
         ]

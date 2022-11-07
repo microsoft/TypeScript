@@ -11,18 +11,18 @@ export enum StatisticType {
     memory,
 }
 
-function countLines(program: Program): Map<number> {
+function countLines(program: ts.Program): ts.Map<number> {
     const counts = getCountsMap();
-    forEach(program.getSourceFiles(), file => {
+    ts.forEach(program.getSourceFiles(), file => {
         const key = getCountKey(program, file);
-        const lineCount = getLineStarts(file).length;
+        const lineCount = ts.getLineStarts(file).length;
         counts.set(key, counts.get(key)! + lineCount);
     });
     return counts;
 }
 
 function getCountsMap() {
-    const counts = new Map<string, number>();
+    const counts = new ts.Map<string, number>();
     counts.set("Library", 0);
     counts.set("Definitions", 0);
     counts.set("TypeScript", 0);
@@ -32,7 +32,7 @@ function getCountsMap() {
     return counts;
 }
 
-function getCountKey(program: Program, file: SourceFile) {
+function getCountKey(program: ts.Program, file: ts.SourceFile) {
     if (program.isSourceFileDefaultLibrary(file)) {
         return "Library";
     }
@@ -41,13 +41,13 @@ function getCountKey(program: Program, file: SourceFile) {
     }
 
     const path = file.path;
-    if (fileExtensionIsOneOf(path, supportedTSExtensionsFlat)) {
+    if (ts.fileExtensionIsOneOf(path, ts.supportedTSExtensionsFlat)) {
         return "TypeScript";
     }
-    else if (fileExtensionIsOneOf(path, supportedJSExtensionsFlat)) {
+    else if (ts.fileExtensionIsOneOf(path, ts.supportedJSExtensionsFlat)) {
         return "JavaScript";
     }
-    else if (fileExtensionIs(path, Extension.Json)) {
+    else if (ts.fileExtensionIs(path, ts.Extension.Json)) {
         return "JSON";
     }
     else {
@@ -56,38 +56,38 @@ function getCountKey(program: Program, file: SourceFile) {
 }
 
 function updateReportDiagnostic(
-    sys: System,
-    existing: DiagnosticReporter,
-    options: CompilerOptions | BuildOptions
-): DiagnosticReporter {
+    sys: ts.System,
+    existing: ts.DiagnosticReporter,
+    options: ts.CompilerOptions | ts.BuildOptions
+): ts.DiagnosticReporter {
     return shouldBePretty(sys, options) ?
-        createDiagnosticReporter(sys, /*pretty*/ true) :
+        ts.createDiagnosticReporter(sys, /*pretty*/ true) :
         existing;
 }
 
-function defaultIsPretty(sys: System) {
+function defaultIsPretty(sys: ts.System) {
     return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY() && !sys.getEnvironmentVariable("NO_COLOR");
 }
 
-function shouldBePretty(sys: System, options: CompilerOptions | BuildOptions) {
+function shouldBePretty(sys: ts.System, options: ts.CompilerOptions | ts.BuildOptions) {
     if (!options || typeof options.pretty === "undefined") {
         return defaultIsPretty(sys);
     }
     return options.pretty;
 }
 
-function getOptionsForHelp(commandLine: ParsedCommandLine) {
+function getOptionsForHelp(commandLine: ts.ParsedCommandLine) {
     // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
     return !!commandLine.options.all ?
-        sort(optionDeclarations, (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
-        filter(optionDeclarations.slice(), v => !!v.showInSimplifiedHelpView);
+        ts.sort(ts.optionDeclarations, (a, b) => ts.compareStringsCaseInsensitive(a.name, b.name)) :
+        ts.filter(ts.optionDeclarations.slice(), v => !!v.showInSimplifiedHelpView);
 }
 
-function printVersion(sys: System) {
-    sys.write(getDiagnosticText(Diagnostics.Version_0, version) + sys.newLine);
+function printVersion(sys: ts.System) {
+    sys.write(ts.getDiagnosticText(ts.Diagnostics.Version_0, ts.version) + sys.newLine);
 }
 
-function createColors(sys: System) {
+function createColors(sys: ts.System) {
     const showColors = defaultIsPretty(sys);
     if (!showColors) {
         return {
@@ -102,7 +102,7 @@ function createColors(sys: System) {
         return `\x1b[1m${str}\x1b[22m`;
     }
 
-    const isWindows = sys.getEnvironmentVariable("OS") && stringContains(sys.getEnvironmentVariable("OS").toLowerCase(), "windows");
+    const isWindows = sys.getEnvironmentVariable("OS") && ts.stringContains(sys.getEnvironmentVariable("OS").toLowerCase(), "windows");
     const isWindowsTerminal = sys.getEnvironmentVariable("WT_SESSION");
     const isVSCode = sys.getEnvironmentVariable("TERM_PROGRAM") && sys.getEnvironmentVariable("TERM_PROGRAM") === "vscode";
 
@@ -139,11 +139,11 @@ function createColors(sys: System) {
     };
 }
 
-function getDisplayNameTextOfOption(option: CommandLineOption) {
+function getDisplayNameTextOfOption(option: ts.CommandLineOption) {
     return `--${option.name}${option.shortName ? `, -${option.shortName}` : ""}`;
 }
 
-function generateOptionOutput(sys: System, option: CommandLineOption, rightAlignOfLeft: number, leftAlignOfRight: number) {
+function generateOptionOutput(sys: ts.System, option: ts.CommandLineOption, rightAlignOfLeft: number, leftAlignOfRight: number) {
     interface ValueCandidate {
         // "one or more" or "any of"
         valueType: string;
@@ -160,7 +160,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
     const valueCandidates = getValueCandidate(option);
     const defaultValueDescription =
         typeof option.defaultValueDescription === "object"
-            ? getDiagnosticText(option.defaultValueDescription)
+            ? ts.getDiagnosticText(option.defaultValueDescription)
             : formatDefaultValue(
                   option.defaultValueDescription,
                   option.type === "list" ? option.element.type : option.type
@@ -171,7 +171,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
     if (terminalWidth >= 80) {
         let description = "";
         if (option.description) {
-            description = getDiagnosticText(option.description);
+            description = ts.getDiagnosticText(option.description);
         }
         text.push(...getPrettyOutput(name, description, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ true), sys.newLine);
         if (showAdditionalInfoOutput(valueCandidates, option)) {
@@ -179,7 +179,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
                 text.push(...getPrettyOutput(valueCandidates.valueType, valueCandidates.possibleValues, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false), sys.newLine);
             }
             if (defaultValueDescription) {
-                text.push(...getPrettyOutput(getDiagnosticText(Diagnostics.default_Colon), defaultValueDescription, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false), sys.newLine);
+                text.push(...getPrettyOutput(ts.getDiagnosticText(ts.Diagnostics.default_Colon), defaultValueDescription, rightAlignOfLeft, leftAlignOfRight, terminalWidth, /*colorLeft*/ false), sys.newLine);
             }
         }
         text.push(sys.newLine);
@@ -187,7 +187,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
     else {
         text.push(colors.blue(name), sys.newLine);
         if (option.description) {
-            const description = getDiagnosticText(option.description);
+            const description = ts.getDiagnosticText(option.description);
             text.push(description);
         }
         text.push(sys.newLine);
@@ -197,7 +197,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
             }
             if (defaultValueDescription) {
                 if (valueCandidates) text.push(sys.newLine);
-                const diagType = getDiagnosticText(Diagnostics.default_Colon);
+                const diagType = ts.getDiagnosticText(ts.Diagnostics.default_Colon);
                 text.push(`${diagType} ${defaultValueDescription}`);
             }
 
@@ -208,25 +208,25 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
     return text;
 
     function formatDefaultValue(
-        defaultValue: CommandLineOption["defaultValueDescription"],
-        type: CommandLineOption["type"]
+        defaultValue: ts.CommandLineOption["defaultValueDescription"],
+        type: ts.CommandLineOption["type"]
     ) {
         return defaultValue !== undefined && typeof type === "object"
             // e.g. ScriptTarget.ES2015 -> "es6/es2015"
-            ? arrayFrom(type.entries())
+            ? ts.arrayFrom(type.entries())
                   .filter(([, value]) => value === defaultValue)
                   .map(([name]) => name)
                   .join("/")
             : String(defaultValue);
     }
 
-    function showAdditionalInfoOutput(valueCandidates: ValueCandidate | undefined, option: CommandLineOption): boolean {
+    function showAdditionalInfoOutput(valueCandidates: ValueCandidate | undefined, option: ts.CommandLineOption): boolean {
         const ignoreValues = ["string"];
         const ignoredDescriptions = [undefined, "false", "n/a"];
         const defaultValueDescription = option.defaultValueDescription;
-        if (option.category === Diagnostics.Command_line_Options) return false;
+        if (option.category === ts.Diagnostics.Command_line_Options) return false;
 
-        if (contains(ignoreValues, valueCandidates?.possibleValues) && contains(ignoredDescriptions, defaultValueDescription)) {
+        if (ts.contains(ignoreValues, valueCandidates?.possibleValues) && ts.contains(ignoredDescriptions, defaultValueDescription)) {
             return false;
         }
         return true;
@@ -240,12 +240,12 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
         while (remainRight.length > 0) {
             let curLeft = "";
             if (isFirstLine) {
-                curLeft = padLeft(left, rightAlignOfLeft);
-                curLeft = padRight(curLeft, leftAlignOfRight);
+                curLeft = ts.padLeft(left, rightAlignOfLeft);
+                curLeft = ts.padRight(curLeft, leftAlignOfRight);
                 curLeft = colorLeft ? colors.blue(curLeft) : curLeft;
             }
             else {
-                curLeft = padLeft("", leftAlignOfRight);
+                curLeft = ts.padLeft("", leftAlignOfRight);
             }
 
             const curRight = remainRight.substr(0, rightCharacterNumber);
@@ -256,7 +256,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
         return res;
     }
 
-    function getValueCandidate(option: CommandLineOption): ValueCandidate | undefined {
+    function getValueCandidate(option: ts.CommandLineOption): ValueCandidate | undefined {
         // option.type might be "string" | "number" | "boolean" | "object" | "list" | ESMap<string, number | string>
         // string -- any of: string
         // number -- any of: number
@@ -273,20 +273,20 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
             possibleValues: getPossibleValues(option)
         };
 
-        function getValueType(option: CommandLineOption) {
+        function getValueType(option: ts.CommandLineOption) {
             switch (option.type) {
                 case "string":
                 case "number":
                 case "boolean":
-                    return getDiagnosticText(Diagnostics.type_Colon);
+                    return ts.getDiagnosticText(ts.Diagnostics.type_Colon);
                 case "list":
-                    return getDiagnosticText(Diagnostics.one_or_more_Colon);
+                    return ts.getDiagnosticText(ts.Diagnostics.one_or_more_Colon);
                 default:
-                    return getDiagnosticText(Diagnostics.one_of_Colon);
+                    return ts.getDiagnosticText(ts.Diagnostics.one_of_Colon);
             }
         }
 
-        function getPossibleValues(option: CommandLineOption) {
+        function getPossibleValues(option: ts.CommandLineOption) {
             let possibleValues: string;
             switch (option.type) {
                 case "string":
@@ -308,7 +308,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
                     option.type.forEach((value, name) => {
                         (inverted[value] ||= []).push(name);
                     });
-                    return getEntries(inverted)
+                    return ts.getEntries(inverted)
                         .map(([, synonyms]) => synonyms.join("/"))
                         .join(", ");
             }
@@ -317,7 +317,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
     }
 }
 
-function generateGroupOptionOutput(sys: System, optionsList: readonly CommandLineOption[]) {
+function generateGroupOptionOutput(sys: ts.System, optionsList: readonly ts.CommandLineOption[]) {
     let maxLength = 0;
     for (const option of optionsList) {
         const curLength = getDisplayNameTextOfOption(option).length;
@@ -342,7 +342,7 @@ function generateGroupOptionOutput(sys: System, optionsList: readonly CommandLin
     return lines;
 }
 
-function generateSectionOptionsOutput(sys: System, sectionName: string, options: readonly CommandLineOption[], subCategory: boolean, beforeOptionsDescription?: string, afterOptionsDescription?: string) {
+function generateSectionOptionsOutput(sys: ts.System, sectionName: string, options: readonly ts.CommandLineOption[], subCategory: boolean, beforeOptionsDescription?: string, afterOptionsDescription?: string) {
     let res: string[] = [];
     res.push(createColors(sys).bold(sectionName) + sys.newLine + sys.newLine);
     if (beforeOptionsDescription) {
@@ -355,12 +355,12 @@ function generateSectionOptionsOutput(sys: System, sectionName: string, options:
         }
         return res;
     }
-    const categoryMap = new Map<string, CommandLineOption[]>();
+    const categoryMap = new ts.Map<string, ts.CommandLineOption[]>();
     for (const option of options) {
         if (!option.category) {
             continue;
         }
-        const curCategory = getDiagnosticText(option.category);
+        const curCategory = ts.getDiagnosticText(option.category);
         const optionsOfCurCategory = categoryMap.get(curCategory) ?? [];
         optionsOfCurCategory.push(option);
         categoryMap.set(curCategory, optionsOfCurCategory);
@@ -375,74 +375,74 @@ function generateSectionOptionsOutput(sys: System, sectionName: string, options:
     return res;
 }
 
-function printEasyHelp(sys: System, simpleOptions: readonly CommandLineOption[]) {
+function printEasyHelp(sys: ts.System, simpleOptions: readonly ts.CommandLineOption[]) {
     const colors = createColors(sys);
-    let output: string[] = [...getHeader(sys,`${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`)];
-    output.push(colors.bold(getDiagnosticText(Diagnostics.COMMON_COMMANDS)) + sys.newLine + sys.newLine);
+    let output: string[] = [...getHeader(sys,`${ts.getDiagnosticText(ts.Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${ts.getDiagnosticText(ts.Diagnostics.Version_0, ts.version)}`)];
+    output.push(colors.bold(ts.getDiagnosticText(ts.Diagnostics.COMMON_COMMANDS)) + sys.newLine + sys.newLine);
 
-    example("tsc", Diagnostics.Compiles_the_current_project_tsconfig_json_in_the_working_directory);
-    example("tsc app.ts util.ts", Diagnostics.Ignoring_tsconfig_json_compiles_the_specified_files_with_default_compiler_options);
-    example("tsc -b", Diagnostics.Build_a_composite_project_in_the_working_directory);
-    example("tsc --init", Diagnostics.Creates_a_tsconfig_json_with_the_recommended_settings_in_the_working_directory);
-    example("tsc -p ./path/to/tsconfig.json", Diagnostics.Compiles_the_TypeScript_project_located_at_the_specified_path);
-    example("tsc --help --all", Diagnostics.An_expanded_version_of_this_information_showing_all_possible_compiler_options);
-    example(["tsc --noEmit", "tsc --target esnext"], Diagnostics.Compiles_the_current_project_with_additional_settings);
+    example("tsc", ts.Diagnostics.Compiles_the_current_project_tsconfig_json_in_the_working_directory);
+    example("tsc app.ts util.ts", ts.Diagnostics.Ignoring_tsconfig_json_compiles_the_specified_files_with_default_compiler_options);
+    example("tsc -b", ts.Diagnostics.Build_a_composite_project_in_the_working_directory);
+    example("tsc --init", ts.Diagnostics.Creates_a_tsconfig_json_with_the_recommended_settings_in_the_working_directory);
+    example("tsc -p ./path/to/tsconfig.json", ts.Diagnostics.Compiles_the_TypeScript_project_located_at_the_specified_path);
+    example("tsc --help --all", ts.Diagnostics.An_expanded_version_of_this_information_showing_all_possible_compiler_options);
+    example(["tsc --noEmit", "tsc --target esnext"], ts.Diagnostics.Compiles_the_current_project_with_additional_settings);
 
-    const cliCommands = simpleOptions.filter(opt => opt.isCommandLineOnly || opt.category === Diagnostics.Command_line_Options);
-    const configOpts = simpleOptions.filter(opt => !contains(cliCommands, opt));
+    const cliCommands = simpleOptions.filter(opt => opt.isCommandLineOnly || opt.category === ts.Diagnostics.Command_line_Options);
+    const configOpts = simpleOptions.filter(opt => !ts.contains(cliCommands, opt));
 
     output = [
         ...output,
-        ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.COMMAND_LINE_FLAGS), cliCommands, /*subCategory*/ false, /* beforeOptionsDescription */ undefined, /* afterOptionsDescription*/ undefined),
-        ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.COMMON_COMPILER_OPTIONS), configOpts, /*subCategory*/ false, /* beforeOptionsDescription */ undefined, formatMessage(/*_dummy*/ undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsc"))
+        ...generateSectionOptionsOutput(sys, ts.getDiagnosticText(ts.Diagnostics.COMMAND_LINE_FLAGS), cliCommands, /*subCategory*/ false, /* beforeOptionsDescription */ undefined, /* afterOptionsDescription*/ undefined),
+        ...generateSectionOptionsOutput(sys, ts.getDiagnosticText(ts.Diagnostics.COMMON_COMPILER_OPTIONS), configOpts, /*subCategory*/ false, /* beforeOptionsDescription */ undefined, ts.formatMessage(/*_dummy*/ undefined, ts.Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsc"))
     ];
 
     for (const line of output) {
         sys.write(line);
     }
 
-    function example(ex: string | string[], desc: DiagnosticMessage) {
+    function example(ex: string | string[], desc: ts.DiagnosticMessage) {
         const examples = typeof ex === "string" ? [ex] : ex;
         for (const example of examples) {
             output.push("  " + colors.blue(example) + sys.newLine);
         }
-        output.push("  " + getDiagnosticText(desc) + sys.newLine + sys.newLine);
+        output.push("  " + ts.getDiagnosticText(desc) + sys.newLine + sys.newLine);
     }
 }
 
-function printAllHelp(sys: System, compilerOptions: readonly CommandLineOption[], buildOptions: readonly CommandLineOption[], watchOptions: readonly CommandLineOption[]) {
-    let output: string[] = [...getHeader(sys,`${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`)];
-    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.ALL_COMPILER_OPTIONS), compilerOptions, /*subCategory*/ true, /* beforeOptionsDescription */ undefined, formatMessage(/*_dummy*/ undefined, Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsc"))];
-    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.WATCH_OPTIONS), watchOptions, /*subCategory*/ false, getDiagnosticText(Diagnostics.Including_watch_w_will_start_watching_the_current_project_for_the_file_changes_Once_set_you_can_config_watch_mode_with_Colon))];
-    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), buildOptions, /*subCategory*/ false, formatMessage(/*_dummy*/ undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
+function printAllHelp(sys: ts.System, compilerOptions: readonly ts.CommandLineOption[], buildOptions: readonly ts.CommandLineOption[], watchOptions: readonly ts.CommandLineOption[]) {
+    let output: string[] = [...getHeader(sys,`${ts.getDiagnosticText(ts.Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${ts.getDiagnosticText(ts.Diagnostics.Version_0, ts.version)}`)];
+    output = [...output, ...generateSectionOptionsOutput(sys, ts.getDiagnosticText(ts.Diagnostics.ALL_COMPILER_OPTIONS), compilerOptions, /*subCategory*/ true, /* beforeOptionsDescription */ undefined, ts.formatMessage(/*_dummy*/ undefined, ts.Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsc"))];
+    output = [...output, ...generateSectionOptionsOutput(sys, ts.getDiagnosticText(ts.Diagnostics.WATCH_OPTIONS), watchOptions, /*subCategory*/ false, ts.getDiagnosticText(ts.Diagnostics.Including_watch_w_will_start_watching_the_current_project_for_the_file_changes_Once_set_you_can_config_watch_mode_with_Colon))];
+    output = [...output, ...generateSectionOptionsOutput(sys, ts.getDiagnosticText(ts.Diagnostics.BUILD_OPTIONS), buildOptions, /*subCategory*/ false, ts.formatMessage(/*_dummy*/ undefined, ts.Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
     for (const line of output) {
         sys.write(line);
     }
 }
 
-function printBuildHelp(sys: System, buildOptions: readonly CommandLineOption[]) {
-    let output: string[] = [...getHeader(sys,`${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`)];
-    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), buildOptions, /*subCategory*/ false, formatMessage(/*_dummy*/ undefined, Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
+function printBuildHelp(sys: ts.System, buildOptions: readonly ts.CommandLineOption[]) {
+    let output: string[] = [...getHeader(sys,`${ts.getDiagnosticText(ts.Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${ts.getDiagnosticText(ts.Diagnostics.Version_0, ts.version)}`)];
+    output = [...output, ...generateSectionOptionsOutput(sys, ts.getDiagnosticText(ts.Diagnostics.BUILD_OPTIONS), buildOptions, /*subCategory*/ false, ts.formatMessage(/*_dummy*/ undefined, ts.Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
     for (const line of output) {
         sys.write(line);
     }
 }
 
-function getHeader(sys: System, message: string) {
+function getHeader(sys: ts.System, message: string) {
     const colors = createColors(sys);
     const header: string[] = [];
     const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;
     const tsIconLength = 5;
 
-    const tsIconFirstLine = colors.blueBackground(padLeft("", tsIconLength));
-    const tsIconSecondLine = colors.blueBackground(colors.brightWhite(padLeft("TS ", tsIconLength)));
+    const tsIconFirstLine = colors.blueBackground(ts.padLeft("", tsIconLength));
+    const tsIconSecondLine = colors.blueBackground(colors.brightWhite(ts.padLeft("TS ", tsIconLength)));
     // If we have enough space, print TS icon.
     if (terminalWidth >= message.length + tsIconLength) {
         // right align of the icon is 120 at most.
         const rightAlign = terminalWidth > 120 ? 120 : terminalWidth;
         const leftAlign = rightAlign - tsIconLength;
-        header.push(padRight(message, leftAlign) + tsIconFirstLine + sys.newLine);
-        header.push(padLeft("", leftAlign) + tsIconSecondLine + sys.newLine);
+        header.push(ts.padRight(message, leftAlign) + tsIconFirstLine + sys.newLine);
+        header.push(ts.padLeft("", leftAlign) + tsIconSecondLine + sys.newLine);
     }
     else {
         header.push(message + sys.newLine);
@@ -451,105 +451,105 @@ function getHeader(sys: System, message: string) {
     return header;
 }
 
-function printHelp(sys: System, commandLine: ParsedCommandLine) {
+function printHelp(sys: ts.System, commandLine: ts.ParsedCommandLine) {
     if (!commandLine.options.all) {
         printEasyHelp(sys, getOptionsForHelp(commandLine));
     }
     else {
-        printAllHelp(sys, getOptionsForHelp(commandLine), optionsForBuild, optionsForWatch);
+        printAllHelp(sys, getOptionsForHelp(commandLine), ts.optionsForBuild, ts.optionsForWatch);
     }
 }
 
 function executeCommandLineWorker(
-    sys: System,
+    sys: ts.System,
     cb: ExecuteCommandLineCallbacks,
-    commandLine: ParsedCommandLine,
+    commandLine: ts.ParsedCommandLine,
 ) {
-    let reportDiagnostic = createDiagnosticReporter(sys);
+    let reportDiagnostic = ts.createDiagnosticReporter(sys);
     if (commandLine.options.build) {
-        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_build_must_be_the_first_command_line_argument));
-        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+        reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.Option_build_must_be_the_first_command_line_argument));
+        return sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
     }
 
     // Configuration file name (if any)
     let configFileName: string | undefined;
     if (commandLine.options.locale) {
-        validateLocaleAndSetLanguage(commandLine.options.locale, sys, commandLine.errors);
+        ts.validateLocaleAndSetLanguage(commandLine.options.locale, sys, commandLine.errors);
     }
 
     // If there are any errors due to command line parsing and/or
     // setting up localization, report them and quit.
     if (commandLine.errors.length > 0) {
         commandLine.errors.forEach(reportDiagnostic);
-        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+        return sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
     }
 
     if (commandLine.options.init) {
         writeConfigFile(sys, reportDiagnostic, commandLine.options, commandLine.fileNames);
-        return sys.exit(ExitStatus.Success);
+        return sys.exit(ts.ExitStatus.Success);
     }
 
     if (commandLine.options.version) {
         printVersion(sys);
-        return sys.exit(ExitStatus.Success);
+        return sys.exit(ts.ExitStatus.Success);
     }
 
     if (commandLine.options.help || commandLine.options.all) {
         printHelp(sys, commandLine);
-        return sys.exit(ExitStatus.Success);
+        return sys.exit(ts.ExitStatus.Success);
     }
 
     if (commandLine.options.watch && commandLine.options.listFilesOnly) {
-        reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "watch", "listFilesOnly"));
-        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+        reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.Options_0_and_1_cannot_be_combined, "watch", "listFilesOnly"));
+        return sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
     }
 
     if (commandLine.options.project) {
         if (commandLine.fileNames.length !== 0) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
-            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+            reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.Option_project_cannot_be_mixed_with_source_files_on_a_command_line));
+            return sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
-        const fileOrDirectory = normalizePath(commandLine.options.project);
+        const fileOrDirectory = ts.normalizePath(commandLine.options.project);
         if (!fileOrDirectory /* current directory "." */ || sys.directoryExists(fileOrDirectory)) {
-            configFileName = combinePaths(fileOrDirectory, "tsconfig.json");
+            configFileName = ts.combinePaths(fileOrDirectory, "tsconfig.json");
             if (!sys.fileExists(configFileName)) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_specified_directory_Colon_0, commandLine.options.project));
-                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_specified_directory_Colon_0, commandLine.options.project));
+                return sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
         else {
             configFileName = fileOrDirectory;
             if (!sys.fileExists(configFileName)) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_specified_path_does_not_exist_Colon_0, commandLine.options.project));
-                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.The_specified_path_does_not_exist_Colon_0, commandLine.options.project));
+                return sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
         }
     }
     else if (commandLine.fileNames.length === 0) {
-        const searchPath = normalizePath(sys.getCurrentDirectory());
-        configFileName = findConfigFile(searchPath, fileName => sys.fileExists(fileName));
+        const searchPath = ts.normalizePath(sys.getCurrentDirectory());
+        configFileName = ts.findConfigFile(searchPath, fileName => sys.fileExists(fileName));
     }
 
     if (commandLine.fileNames.length === 0 && !configFileName) {
         if (commandLine.options.showConfig) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, normalizePath(sys.getCurrentDirectory())));
+            reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, ts.normalizePath(sys.getCurrentDirectory())));
         }
         else {
             printVersion(sys);
             printHelp(sys, commandLine);
         }
-        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+        return sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
     }
 
     const currentDirectory = sys.getCurrentDirectory();
-    const commandLineOptions = convertToOptionsWithAbsolutePaths(
+    const commandLineOptions = ts.convertToOptionsWithAbsolutePaths(
         commandLine.options,
-        fileName => getNormalizedAbsolutePath(fileName, currentDirectory)
+        fileName => ts.getNormalizedAbsolutePath(fileName, currentDirectory)
     );
     if (configFileName) {
-        const extendedConfigCache = new Map<string, ExtendedConfigCacheEntry>();
-        const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, extendedConfigCache, commandLine.watchOptions, sys, reportDiagnostic)!; // TODO: GH#18217
+        const extendedConfigCache = new ts.Map<string, ts.ExtendedConfigCacheEntry>();
+        const configParseResult = ts.parseConfigFileWithSystem(configFileName, commandLineOptions, extendedConfigCache, commandLine.watchOptions, sys, reportDiagnostic)!; // TODO: GH#18217
         if (commandLineOptions.showConfig) {
             if (configParseResult.errors.length !== 0) {
                 reportDiagnostic = updateReportDiagnostic(
@@ -558,18 +558,18 @@ function executeCommandLineWorker(
                     configParseResult.options
                 );
                 configParseResult.errors.forEach(reportDiagnostic);
-                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                return sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
             }
             // eslint-disable-next-line no-null/no-null
-            sys.write(JSON.stringify(convertToTSConfig(configParseResult, configFileName, sys), null, 4) + sys.newLine);
-            return sys.exit(ExitStatus.Success);
+            sys.write(JSON.stringify(ts.convertToTSConfig(configParseResult, configFileName, sys), null, 4) + sys.newLine);
+            return sys.exit(ts.ExitStatus.Success);
         }
         reportDiagnostic = updateReportDiagnostic(
             sys,
             reportDiagnostic,
             configParseResult.options
         );
-        if (isWatchSet(configParseResult.options)) {
+        if (ts.isWatchSet(configParseResult.options)) {
             if (reportWatchModeWithoutSysSupport(sys, reportDiagnostic)) return;
             return createWatchOfConfigFile(
                 sys,
@@ -581,7 +581,7 @@ function executeCommandLineWorker(
                 extendedConfigCache,
             );
         }
-        else if (isIncrementalCompilation(configParseResult.options)) {
+        else if (ts.isIncrementalCompilation(configParseResult.options)) {
             performIncrementalCompilation(
                 sys,
                 cb,
@@ -601,15 +601,15 @@ function executeCommandLineWorker(
     else {
         if (commandLineOptions.showConfig) {
             // eslint-disable-next-line no-null/no-null
-            sys.write(JSON.stringify(convertToTSConfig(commandLine, combinePaths(currentDirectory, "tsconfig.json"), sys), null, 4) + sys.newLine);
-            return sys.exit(ExitStatus.Success);
+            sys.write(JSON.stringify(ts.convertToTSConfig(commandLine, ts.combinePaths(currentDirectory, "tsconfig.json"), sys), null, 4) + sys.newLine);
+            return sys.exit(ts.ExitStatus.Success);
         }
         reportDiagnostic = updateReportDiagnostic(
             sys,
             reportDiagnostic,
             commandLineOptions
         );
-        if (isWatchSet(commandLineOptions)) {
+        if (ts.isWatchSet(commandLineOptions)) {
             if (reportWatchModeWithoutSysSupport(sys, reportDiagnostic)) return;
             return createWatchOfFilesAndCompilerOptions(
                 sys,
@@ -620,7 +620,7 @@ function executeCommandLineWorker(
                 commandLine.watchOptions,
             );
         }
-        else if (isIncrementalCompilation(commandLineOptions)) {
+        else if (ts.isIncrementalCompilation(commandLineOptions)) {
             performIncrementalCompilation(
                 sys,
                 cb,
@@ -640,21 +640,21 @@ function executeCommandLineWorker(
 }
 
 export function isBuild(commandLineArgs: readonly string[]) {
-    if (commandLineArgs.length > 0 && commandLineArgs[0].charCodeAt(0) === CharacterCodes.minus) {
-        const firstOption = commandLineArgs[0].slice(commandLineArgs[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
+    if (commandLineArgs.length > 0 && commandLineArgs[0].charCodeAt(0) === ts.CharacterCodes.minus) {
+        const firstOption = commandLineArgs[0].slice(commandLineArgs[0].charCodeAt(1) === ts.CharacterCodes.minus ? 2 : 1).toLowerCase();
         return firstOption === "build" || firstOption === "b";
     }
     return false;
 }
 
-export type ExecuteCommandLineCallbacks = (program: Program | BuilderProgram | ParsedCommandLine) => void;
+export type ExecuteCommandLineCallbacks = (program: ts.Program | ts.BuilderProgram | ts.ParsedCommandLine) => void;
 export function executeCommandLine(
-    system: System,
+    system: ts.System,
     cb: ExecuteCommandLineCallbacks,
     commandLineArgs: readonly string[],
 ) {
     if (isBuild(commandLineArgs)) {
-        const { buildOptions, watchOptions, projects, errors } = parseBuildCommand(commandLineArgs.slice(1));
+        const { buildOptions, watchOptions, projects, errors } = ts.parseBuildCommand(commandLineArgs.slice(1));
         if (buildOptions.generateCpuProfile && system.enableCPUProfiler) {
             system.enableCPUProfiler(buildOptions.generateCpuProfile, () => performBuild(
                 system,
@@ -677,7 +677,7 @@ export function executeCommandLine(
         }
     }
 
-    const commandLine = parseCommandLine(commandLineArgs, path => system.readFile(path));
+    const commandLine = ts.parseCommandLine(commandLineArgs, path => system.readFile(path));
     if (commandLine.options.generateCpuProfile && system.enableCPUProfiler) {
         system.enableCPUProfiler(commandLine.options.generateCpuProfile, () => executeCommandLineWorker(
             system,
@@ -690,63 +690,63 @@ export function executeCommandLine(
     }
 }
 
-function reportWatchModeWithoutSysSupport(sys: System, reportDiagnostic: DiagnosticReporter) {
+function reportWatchModeWithoutSysSupport(sys: ts.System, reportDiagnostic: ts.DiagnosticReporter) {
     if (!sys.watchFile || !sys.watchDirectory) {
-        reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
-        sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+        reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"));
+        sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
         return true;
     }
     return false;
 }
 
 function performBuild(
-    sys: System,
+    sys: ts.System,
     cb: ExecuteCommandLineCallbacks,
-    buildOptions: BuildOptions,
-    watchOptions: WatchOptions | undefined,
+    buildOptions: ts.BuildOptions,
+    watchOptions: ts.WatchOptions | undefined,
     projects: string[],
-    errors: Diagnostic[]
+    errors: ts.Diagnostic[]
 ) {
     // Update to pretty if host supports it
     const reportDiagnostic = updateReportDiagnostic(
         sys,
-        createDiagnosticReporter(sys),
+        ts.createDiagnosticReporter(sys),
         buildOptions
     );
 
     if (buildOptions.locale) {
-        validateLocaleAndSetLanguage(buildOptions.locale, sys, errors);
+        ts.validateLocaleAndSetLanguage(buildOptions.locale, sys, errors);
     }
 
     if (errors.length > 0) {
         errors.forEach(reportDiagnostic);
-        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+        return sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
     }
 
     if (buildOptions.help) {
         printVersion(sys);
-        printBuildHelp(sys, buildOpts);
-        return sys.exit(ExitStatus.Success);
+        printBuildHelp(sys, ts.buildOpts);
+        return sys.exit(ts.ExitStatus.Success);
     }
 
     if (projects.length === 0) {
         printVersion(sys);
-        printBuildHelp(sys, buildOpts);
-        return sys.exit(ExitStatus.Success);
+        printBuildHelp(sys, ts.buildOpts);
+        return sys.exit(ts.ExitStatus.Success);
     }
 
     if (!sys.getModifiedTime || !sys.setModifiedTime || (buildOptions.clean && !sys.deleteFile)) {
-        reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--build"));
-        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+        reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.The_current_host_does_not_support_the_0_option, "--build"));
+        return sys.exit(ts.ExitStatus.DiagnosticsPresent_OutputsSkipped);
     }
 
     if (buildOptions.watch) {
         if (reportWatchModeWithoutSysSupport(sys, reportDiagnostic)) return;
-        const buildHost = createSolutionBuilderWithWatchHost(
+        const buildHost = ts.createSolutionBuilderWithWatchHost(
             sys,
             /*createProgram*/ undefined,
             reportDiagnostic,
-            createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
+            ts.createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
             createWatchStatusReporter(sys, buildOptions)
         );
         const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
@@ -756,63 +756,63 @@ function performBuild(
         buildHost.onWatchStatusChange = (d, newLine, options, errorCount) => {
             onWatchStatusChange?.(d, newLine, options, errorCount);
             if (reportBuildStatistics && (
-                d.code === Diagnostics.Found_0_errors_Watching_for_file_changes.code ||
-                d.code === Diagnostics.Found_1_error_Watching_for_file_changes.code
+                d.code === ts.Diagnostics.Found_0_errors_Watching_for_file_changes.code ||
+                d.code === ts.Diagnostics.Found_1_error_Watching_for_file_changes.code
             )) {
                 reportSolutionBuilderTimes(builder, solutionPerformance);
             }
         };
-        const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions, watchOptions);
+        const builder = ts.createSolutionBuilderWithWatch(buildHost, projects, buildOptions, watchOptions);
         builder.build();
         reportSolutionBuilderTimes(builder, solutionPerformance);
         reportBuildStatistics = true;
         return builder;
     }
 
-    const buildHost = createSolutionBuilderHost(
+    const buildHost = ts.createSolutionBuilderHost(
         sys,
         /*createProgram*/ undefined,
         reportDiagnostic,
-        createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
+        ts.createBuilderStatusReporter(sys, shouldBePretty(sys, buildOptions)),
         createReportErrorSummary(sys, buildOptions)
     );
     const solutionPerformance = enableSolutionPerformance(sys, buildOptions);
     updateSolutionBuilderHost(sys, cb, buildHost, solutionPerformance);
-    const builder = createSolutionBuilder(buildHost, projects, buildOptions);
+    const builder = ts.createSolutionBuilder(buildHost, projects, buildOptions);
     const exitStatus = buildOptions.clean ? builder.clean() : builder.build();
     reportSolutionBuilderTimes(builder, solutionPerformance);
-    dumpTracingLegend(); // Will no-op if there hasn't been any tracing
+    ts.dumpTracingLegend(); // Will no-op if there hasn't been any tracing
     return sys.exit(exitStatus);
 }
 
-function createReportErrorSummary(sys: System, options: CompilerOptions | BuildOptions): ReportEmitErrorSummary | undefined {
+function createReportErrorSummary(sys: ts.System, options: ts.CompilerOptions | ts.BuildOptions): ts.ReportEmitErrorSummary | undefined {
     return shouldBePretty(sys, options) ?
-        (errorCount, filesInError) => sys.write(getErrorSummaryText(errorCount, filesInError, sys.newLine, sys)) :
+        (errorCount, filesInError) => sys.write(ts.getErrorSummaryText(errorCount, filesInError, sys.newLine, sys)) :
         undefined;
 }
 
 function performCompilation(
-    sys: System,
+    sys: ts.System,
     cb: ExecuteCommandLineCallbacks,
-    reportDiagnostic: DiagnosticReporter,
-    config: ParsedCommandLine
+    reportDiagnostic: ts.DiagnosticReporter,
+    config: ts.ParsedCommandLine
 ) {
     const { fileNames, options, projectReferences } = config;
-    const host = createCompilerHostWorker(options, /*setParentPos*/ undefined, sys);
+    const host = ts.createCompilerHostWorker(options, /*setParentPos*/ undefined, sys);
     const currentDirectory = host.getCurrentDirectory();
-    const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
-    changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
+    const getCanonicalFileName = ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames());
+    ts.changeCompilerHostLikeToUseCache(host, fileName => ts.toPath(fileName, currentDirectory, getCanonicalFileName));
     enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
 
-    const programOptions: CreateProgramOptions = {
+    const programOptions: ts.CreateProgramOptions = {
         rootNames: fileNames,
         options,
         projectReferences,
         host,
-        configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config)
+        configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(config)
     };
-    const program = createProgram(programOptions);
-    const exitStatus = emitFilesAndReportErrorsAndGetExitStatus(
+    const program = ts.createProgram(programOptions);
+    const exitStatus = ts.emitFilesAndReportErrorsAndGetExitStatus(
         program,
         reportDiagnostic,
         s => sys.write(s + sys.newLine),
@@ -824,20 +824,20 @@ function performCompilation(
 }
 
 function performIncrementalCompilation(
-    sys: System,
+    sys: ts.System,
     cb: ExecuteCommandLineCallbacks,
-    reportDiagnostic: DiagnosticReporter,
-    config: ParsedCommandLine
+    reportDiagnostic: ts.DiagnosticReporter,
+    config: ts.ParsedCommandLine
 ) {
     const { options, fileNames, projectReferences } = config;
     enableStatisticsAndTracing(sys, options, /*isBuildMode*/ false);
-    const host = createIncrementalCompilerHost(options, sys);
+    const host = ts.createIncrementalCompilerHost(options, sys);
     const exitStatus = ts.performIncrementalCompilation({
         host,
         system: sys,
         rootNames: fileNames,
         options,
-        configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
+        configFileParsingDiagnostics: ts.getConfigFileParsingDiagnostics(config),
         projectReferences,
         reportDiagnostic,
         reportErrorSummary: createReportErrorSummary(sys, options),
@@ -850,9 +850,9 @@ function performIncrementalCompilation(
 }
 
 function updateSolutionBuilderHost(
-    sys: System,
+    sys: ts.System,
     cb: ExecuteCommandLineCallbacks,
-    buildHost: SolutionBuilderHostBase<EmitAndSemanticDiagnosticsBuilderProgram>,
+    buildHost: ts.SolutionBuilderHostBase<ts.EmitAndSemanticDiagnosticsBuilderProgram>,
     solutionPerformance: SolutionPerformance | undefined,
 ) {
     updateCreateProgram(sys, buildHost, /*isBuildMode*/ true);
@@ -867,10 +867,10 @@ function updateSolutionBuilderHost(
     };
 }
 
-function updateCreateProgram<T extends BuilderProgram>(sys: System, host: { createProgram: CreateProgram<T>; }, isBuildMode: boolean) {
+function updateCreateProgram<T extends ts.BuilderProgram>(sys: ts.System, host: { createProgram: ts.CreateProgram<T>; }, isBuildMode: boolean) {
     const compileUsingBuilder = host.createProgram;
     host.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
-        Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
+        ts.Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
         if (options !== undefined) {
             enableStatisticsAndTracing(sys, options, isBuildMode);
         }
@@ -879,9 +879,9 @@ function updateCreateProgram<T extends BuilderProgram>(sys: System, host: { crea
 }
 
 function updateWatchCompilationHost(
-    sys: System,
+    sys: ts.System,
     cb: ExecuteCommandLineCallbacks,
-    watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>,
+    watchCompilerHost: ts.WatchCompilerHost<ts.EmitAndSemanticDiagnosticsBuilderProgram>,
 ) {
     updateCreateProgram(sys, watchCompilerHost, /*isBuildMode*/ false);
     const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
@@ -892,20 +892,20 @@ function updateWatchCompilationHost(
     };
 }
 
-function createWatchStatusReporter(sys: System, options: CompilerOptions | BuildOptions) {
+function createWatchStatusReporter(sys: ts.System, options: ts.CompilerOptions | ts.BuildOptions) {
     return ts.createWatchStatusReporter(sys, shouldBePretty(sys, options));
 }
 
 function createWatchOfConfigFile(
-    system: System,
+    system: ts.System,
     cb: ExecuteCommandLineCallbacks,
-    reportDiagnostic: DiagnosticReporter,
-    configParseResult: ParsedCommandLine,
-    optionsToExtend: CompilerOptions,
-    watchOptionsToExtend: WatchOptions | undefined,
-    extendedConfigCache: Map<ExtendedConfigCacheEntry>,
+    reportDiagnostic: ts.DiagnosticReporter,
+    configParseResult: ts.ParsedCommandLine,
+    optionsToExtend: ts.CompilerOptions,
+    watchOptionsToExtend: ts.WatchOptions | undefined,
+    extendedConfigCache: ts.Map<ts.ExtendedConfigCacheEntry>,
 ) {
-    const watchCompilerHost = createWatchCompilerHostOfConfigFile({
+    const watchCompilerHost = ts.createWatchCompilerHostOfConfigFile({
         configFileName: configParseResult.options.configFilePath!,
         optionsToExtend,
         watchOptionsToExtend,
@@ -916,18 +916,18 @@ function createWatchOfConfigFile(
     updateWatchCompilationHost(system, cb, watchCompilerHost);
     watchCompilerHost.configFileParsingResult = configParseResult;
     watchCompilerHost.extendedConfigCache = extendedConfigCache;
-    return createWatchProgram(watchCompilerHost);
+    return ts.createWatchProgram(watchCompilerHost);
 }
 
 function createWatchOfFilesAndCompilerOptions(
-    system: System,
+    system: ts.System,
     cb: ExecuteCommandLineCallbacks,
-    reportDiagnostic: DiagnosticReporter,
+    reportDiagnostic: ts.DiagnosticReporter,
     rootFiles: string[],
-    options: CompilerOptions,
-    watchOptions: WatchOptions | undefined,
+    options: ts.CompilerOptions,
+    watchOptions: ts.WatchOptions | undefined,
 ) {
-    const watchCompilerHost = createWatchCompilerHostOfFilesAndCompilerOptions({
+    const watchCompilerHost = ts.createWatchCompilerHostOfFilesAndCompilerOptions({
         rootFiles,
         options,
         watchOptions,
@@ -936,7 +936,7 @@ function createWatchOfFilesAndCompilerOptions(
         reportWatchStatus: createWatchStatusReporter(system, options)
     });
     updateWatchCompilationHost(system, cb, watchCompilerHost);
-    return createWatchProgram(watchCompilerHost);
+    return ts.createWatchProgram(watchCompilerHost);
 }
 
 interface SolutionPerformance {
@@ -945,15 +945,15 @@ interface SolutionPerformance {
     clear(): void;
 }
 
-function enableSolutionPerformance(system: System, options: BuildOptions) {
-    if (system === sys && options.extendedDiagnostics) {
-        performance.enable();
+function enableSolutionPerformance(system: ts.System, options: ts.BuildOptions) {
+    if (system === ts.sys && options.extendedDiagnostics) {
+        ts.performance.enable();
         return createSolutionPerfomrance();
     }
 }
 
 function createSolutionPerfomrance(): SolutionPerformance {
-    let statistics: ESMap<string, Statistic> | undefined;
+    let statistics: ts.ESMap<string, Statistic> | undefined;
     return {
         addAggregateStatistic,
         forEachAggregateStatistics: forEachAggreateStatistics,
@@ -967,7 +967,7 @@ function createSolutionPerfomrance(): SolutionPerformance {
             else existing.value += s.value;
         }
         else {
-            (statistics ??= new Map()).set(s.name, s);
+            (statistics ??= new ts.Map()).set(s.name, s);
         }
     }
 
@@ -981,18 +981,18 @@ function createSolutionPerfomrance(): SolutionPerformance {
 }
 
 function reportSolutionBuilderTimes(
-    builder: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>,
+    builder: ts.SolutionBuilder<ts.EmitAndSemanticDiagnosticsBuilderProgram>,
     solutionPerformance: SolutionPerformance | undefined) {
     if (!solutionPerformance) return;
 
-    if (!performance.isEnabled()) {
-        sys.write(Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message + "\n");
+    if (!ts.performance.isEnabled()) {
+        ts.sys.write(ts.Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message + "\n");
         return;
     }
 
     const statistics: Statistic[] = [];
     statistics.push(
-        { name: "Projects in scope", value: getBuildOrderFromAnyBuildOrder(builder.getBuildOrder()).length, type: StatisticType.count },
+        { name: "Projects in scope", value: ts.getBuildOrderFromAnyBuildOrder(builder.getBuildOrder()).length, type: StatisticType.count },
     );
     reportSolutionBuilderCountStatistic("SolutionBuilder::Projects built");
     reportSolutionBuilderCountStatistic("SolutionBuilder::Timestamps only updates");
@@ -1001,17 +1001,17 @@ function reportSolutionBuilderTimes(
         s.name = `Aggregate ${s.name}`;
         statistics.push(s);
     });
-    performance.forEachMeasure((name, duration) => {
+    ts.performance.forEachMeasure((name, duration) => {
         if (isSolutionMarkOrMeasure(name)) statistics.push({ name: `${getNameFromSolutionBuilderMarkOrMeasure(name)} time`, value: duration, type: StatisticType.time });
     });
-    performance.disable();
-    performance.enable();
+    ts.performance.disable();
+    ts.performance.enable();
     solutionPerformance.clear();
 
-    reportAllStatistics(sys, statistics);
+    reportAllStatistics(ts.sys, statistics);
 
     function reportSolutionBuilderCountStatistic(name: string) {
-        const value = performance.getCount(name);
+        const value = ts.performance.getCount(name);
         if (value) {
             statistics.push({ name: getNameFromSolutionBuilderMarkOrMeasure(name), value, type: StatisticType.count });
         }
@@ -1022,40 +1022,40 @@ function reportSolutionBuilderTimes(
     }
 }
 
-function canReportDiagnostics(system: System, compilerOptions: CompilerOptions) {
-    return system === sys && (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics);
+function canReportDiagnostics(system: ts.System, compilerOptions: ts.CompilerOptions) {
+    return system === ts.sys && (compilerOptions.diagnostics || compilerOptions.extendedDiagnostics);
 }
 
-function canTrace(system: System, compilerOptions: CompilerOptions) {
-    return system === sys && compilerOptions.generateTrace;
+function canTrace(system: ts.System, compilerOptions: ts.CompilerOptions) {
+    return system === ts.sys && compilerOptions.generateTrace;
 }
 
-function enableStatisticsAndTracing(system: System, compilerOptions: CompilerOptions, isBuildMode: boolean) {
+function enableStatisticsAndTracing(system: ts.System, compilerOptions: ts.CompilerOptions, isBuildMode: boolean) {
     if (canReportDiagnostics(system, compilerOptions)) {
-        performance.enable(system);
+        ts.performance.enable(system);
     }
 
     if (canTrace(system, compilerOptions)) {
-        startTracing(isBuildMode ? "build" : "project",
+        ts.startTracing(isBuildMode ? "build" : "project",
             compilerOptions.generateTrace!, compilerOptions.configFilePath);
     }
 }
 
 function isSolutionMarkOrMeasure(name: string) {
-    return startsWith(name, "SolutionBuilder::");
+    return ts.startsWith(name, "SolutionBuilder::");
 }
 
-function isProgram(programOrConfig: Program | ParsedCommandLine): programOrConfig is Program {
-    return !(programOrConfig as ParsedCommandLine).options;
+function isProgram(programOrConfig: ts.Program | ts.ParsedCommandLine): programOrConfig is ts.Program {
+    return !(programOrConfig as ts.ParsedCommandLine).options;
 }
 
-function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandLine, solutionPerformance: SolutionPerformance | undefined) {
+function reportStatistics(sys: ts.System, programOrConfig: ts.Program | ts.ParsedCommandLine, solutionPerformance: SolutionPerformance | undefined) {
     const program = isProgram(programOrConfig) ? programOrConfig : undefined;
     const config = isProgram(programOrConfig) ? undefined : programOrConfig;
     const compilerOptions = program ? program.getCompilerOptions() : config!.options;
 
     if (canTrace(sys, compilerOptions)) {
-        tracing?.stopTracing();
+        ts.tracing?.stopTracing();
     }
 
     let statistics: Statistic[];
@@ -1067,12 +1067,12 @@ function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandL
 
             const lineCounts = countLines(program);
             if (compilerOptions.extendedDiagnostics) {
-                for (const key of arrayFrom(lineCounts.keys())) {
+                for (const key of ts.arrayFrom(lineCounts.keys())) {
                     reportCountStatistic("Lines of " + key, lineCounts.get(key)!);
                 }
             }
             else {
-                reportCountStatistic("Lines", reduceLeftIterator(lineCounts.values(), (sum, count) => sum + count, 0));
+                reportCountStatistic("Lines", ts.reduceLeftIterator(lineCounts.values(), (sum, count) => sum + count, 0));
             }
 
             reportCountStatistic("Identifiers", program.getIdentifierCount());
@@ -1084,11 +1084,11 @@ function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandL
             reportStatisticalValue({ name: "Memory used", value: memoryUsed, type: StatisticType.memory }, /*aggregate*/ true);
         }
 
-        const isPerformanceEnabled = performance.isEnabled();
-        const programTime = isPerformanceEnabled ? performance.getDuration("Program") : 0;
-        const bindTime = isPerformanceEnabled ? performance.getDuration("Bind") : 0;
-        const checkTime = isPerformanceEnabled ? performance.getDuration("Check") : 0;
-        const emitTime = isPerformanceEnabled ? performance.getDuration("Emit") : 0;
+        const isPerformanceEnabled = ts.performance.isEnabled();
+        const programTime = isPerformanceEnabled ? ts.performance.getDuration("Program") : 0;
+        const bindTime = isPerformanceEnabled ? ts.performance.getDuration("Bind") : 0;
+        const checkTime = isPerformanceEnabled ? ts.performance.getDuration("Check") : 0;
+        const emitTime = isPerformanceEnabled ? ts.performance.getDuration("Emit") : 0;
         if (compilerOptions.extendedDiagnostics) {
             if (program) {
                 const caches = program.getRelationCacheSizes();
@@ -1098,7 +1098,7 @@ function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandL
                 reportCountStatistic("Strict subtype cache size", caches.strictSubtype);
             }
             if (isPerformanceEnabled) {
-                performance.forEachMeasure((name, duration) => {
+                ts.performance.forEachMeasure((name, duration) => {
                     if (!isSolutionMarkOrMeasure(name)) reportTimeStatistic(`${name} time`, duration, /*aggregate*/ true);
                 });
             }
@@ -1108,8 +1108,8 @@ function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandL
             // Note: To match the behavior of previous versions of the compiler, the reported parse time includes
             // I/O read time and processing time for triple-slash references and module imports, and the reported
             // emit time includes I/O write time. We preserve this behavior so we can accurately compare times.
-            reportTimeStatistic("I/O read", performance.getDuration("I/O Read"), /*aggregate*/ true);
-            reportTimeStatistic("I/O write", performance.getDuration("I/O Write"), /*aggregate*/ true);
+            reportTimeStatistic("I/O read", ts.performance.getDuration("I/O Read"), /*aggregate*/ true);
+            reportTimeStatistic("I/O write", ts.performance.getDuration("I/O Write"), /*aggregate*/ true);
             reportTimeStatistic("Parse time", programTime, /*aggregate*/ true);
             reportTimeStatistic("Bind time", bindTime, /*aggregate*/ true);
             reportTimeStatistic("Check time", checkTime, /*aggregate*/ true);
@@ -1120,20 +1120,20 @@ function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandL
         }
         reportAllStatistics(sys, statistics);
         if (!isPerformanceEnabled) {
-            sys.write(Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message + "\n");
+            sys.write(ts.Diagnostics.Performance_timings_for_diagnostics_or_extendedDiagnostics_are_not_available_in_this_session_A_native_implementation_of_the_Web_Performance_API_could_not_be_found.message + "\n");
         }
         else {
             if (solutionPerformance) {
                 // Clear selected marks and measures
-                performance.forEachMeasure(name => {
-                    if (!isSolutionMarkOrMeasure(name)) performance.clearMeasures(name);
+                ts.performance.forEachMeasure(name => {
+                    if (!isSolutionMarkOrMeasure(name)) ts.performance.clearMeasures(name);
                 });
-                performance.forEachMark(name => {
-                    if (!isSolutionMarkOrMeasure(name)) performance.clearMarks(name);
+                ts.performance.forEachMark(name => {
+                    if (!isSolutionMarkOrMeasure(name)) ts.performance.clearMarks(name);
                 });
             }
             else {
-                performance.disable();
+                ts.performance.disable();
             }
         }
     }
@@ -1152,7 +1152,7 @@ function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandL
     }
 }
 
-function reportAllStatistics(sys: System, statistics: Statistic[]) {
+function reportAllStatistics(sys: ts.System, statistics: Statistic[]) {
     let nameSize = 0;
     let valueSize = 0;
     for (const s of statistics) {
@@ -1167,7 +1167,7 @@ function reportAllStatistics(sys: System, statistics: Statistic[]) {
     }
 
     for (const s of statistics) {
-        sys.write(padRight(s.name + ":", nameSize + 2) + padLeft(statisticValue(s).toString(), valueSize) + sys.newLine);
+        sys.write(ts.padRight(s.name + ":", nameSize + 2) + ts.padLeft(statisticValue(s).toString(), valueSize) + sys.newLine);
     }
 }
 
@@ -1180,25 +1180,25 @@ function statisticValue(s: Statistic) {
         case StatisticType.memory:
             return Math.round(s.value / 1000) + "K";
         default:
-            Debug.assertNever(s.type);
+            ts.Debug.assertNever(s.type);
     }
 }
 
 function writeConfigFile(
-    sys: System,
-    reportDiagnostic: DiagnosticReporter,
-    options: CompilerOptions,
+    sys: ts.System,
+    reportDiagnostic: ts.DiagnosticReporter,
+    options: ts.CompilerOptions,
     fileNames: string[]
 ) {
     const currentDirectory = sys.getCurrentDirectory();
-    const file = normalizePath(combinePaths(currentDirectory, "tsconfig.json"));
+    const file = ts.normalizePath(ts.combinePaths(currentDirectory, "tsconfig.json"));
     if (sys.fileExists(file)) {
-        reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
+        reportDiagnostic(ts.createCompilerDiagnostic(ts.Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
     }
     else {
-        sys.writeFile(file, generateTSConfig(options, fileNames, sys.newLine));
+        sys.writeFile(file, ts.generateTSConfig(options, fileNames, sys.newLine));
         const output: string[] = [sys.newLine, ...getHeader(sys,"Created a new tsconfig.json with:")];
-        output.push(getCompilerOptionsDiffValue(options, sys.newLine) + sys.newLine + sys.newLine);
+        output.push(ts.getCompilerOptionsDiffValue(options, sys.newLine) + sys.newLine + sys.newLine);
         output.push(`You can learn more at https://aka.ms/tsconfig` + sys.newLine);
         for (const line of output) {
             sys.write(line);

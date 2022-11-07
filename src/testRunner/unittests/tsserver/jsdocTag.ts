@@ -1,6 +1,6 @@
 namespace ts.projectSystem {
 describe("unittests:: tsserver:: jsdoc @link ", () => {
-    const config: File = {
+    const config: ts.projectSystem.File = {
         path: "/a/tsconfig.json",
         content: `{
 "compilerOptions": {
@@ -11,26 +11,26 @@ describe("unittests:: tsserver:: jsdoc @link ", () => {
 }
 `
     };
-    function assertQuickInfoJSDoc(file: File, options: {
+    function assertQuickInfoJSDoc(file: ts.projectSystem.File, options: {
         displayPartsForJSDoc: boolean,
-        command: protocol.CommandTypes,
+        command: ts.projectSystem.protocol.CommandTypes,
         tags: string | unknown[] | undefined,
         documentation: string | unknown[]
     }) {
 
         const { command, displayPartsForJSDoc, tags, documentation } = options;
-        const session = createSession(createServerHost([file, config]));
+        const session = ts.projectSystem.createSession(ts.projectSystem.createServerHost([file, config]));
         session.getProjectService().setHostConfiguration({ preferences: { displayPartsForJSDoc } });
-        openFilesForSession([file], session);
+        ts.projectSystem.openFilesForSession([file], session);
         const indexOfX = file.content.indexOf("x");
-        const quickInfo = session.executeCommandSeq<protocol.QuickInfoRequest>({
-            command: command as protocol.CommandTypes.Quickinfo,
+        const quickInfo = session.executeCommandSeq<ts.projectSystem.protocol.QuickInfoRequest>({
+            command: command as ts.projectSystem.protocol.CommandTypes.Quickinfo,
             arguments: {
                 file: file.path,
                 position: indexOfX,
-            } as protocol.FileLocationRequestArgs
+            } as ts.projectSystem.protocol.FileLocationRequestArgs
         }).response;
-        const summaryAndLocation = command === protocol.CommandTypes.Quickinfo ? {
+        const summaryAndLocation = command === ts.projectSystem.protocol.CommandTypes.Quickinfo ? {
             displayString: "var x: number",
             start: {
                 line: 3,
@@ -74,13 +74,13 @@ describe("unittests:: tsserver:: jsdoc @link ", () => {
         });
     }
 
-    const linkInTag: File = {
+    const linkInTag: ts.projectSystem.File = {
         path: "/a/someFile1.js",
         content: `class C { }
 /** @wat {@link C} */
 var x = 1`
     };
-    const linkInComment: File = {
+    const linkInComment: ts.projectSystem.File = {
         path: "/a/someFile1.js",
         content: `class C { }
      /** {@link C} */
@@ -90,7 +90,7 @@ var x = 1
 
     it("for quickinfo, should provide display parts plus a span for a working link in a tag", () => {
         assertQuickInfoJSDoc(linkInTag, {
-            command: protocol.CommandTypes.Quickinfo,
+            command: ts.projectSystem.protocol.CommandTypes.Quickinfo,
             displayPartsForJSDoc: true,
             documentation: [],
             tags: [{
@@ -124,7 +124,7 @@ var x = 1
     });
     it("for quickinfo, should provide a string for a working link in a tag", () => {
         assertQuickInfoJSDoc(linkInTag, {
-            command: protocol.CommandTypes.Quickinfo,
+            command: ts.projectSystem.protocol.CommandTypes.Quickinfo,
             displayPartsForJSDoc: false,
             documentation: "",
             tags: [{
@@ -135,7 +135,7 @@ var x = 1
     });
     it("for quickinfo, should provide display parts for a working link in a comment", () => {
         assertQuickInfoJSDoc(linkInComment, {
-            command: protocol.CommandTypes.Quickinfo,
+            command: ts.projectSystem.protocol.CommandTypes.Quickinfo,
             displayPartsForJSDoc: true,
             documentation: [{
                 kind: "text",
@@ -166,7 +166,7 @@ var x = 1
     });
     it("for quickinfo, should provide a string for a working link in a comment", () => {
         assertQuickInfoJSDoc(linkInComment, {
-            command: protocol.CommandTypes.Quickinfo,
+            command: ts.projectSystem.protocol.CommandTypes.Quickinfo,
             displayPartsForJSDoc: false,
             documentation: "{@link C}",
             tags: [],
@@ -175,7 +175,7 @@ var x = 1
 
     it("for quickinfo-full, should provide display parts plus a span for a working link in a tag", () => {
         assertQuickInfoJSDoc(linkInTag, {
-            command: protocol.CommandTypes.QuickinfoFull,
+            command: ts.projectSystem.protocol.CommandTypes.QuickinfoFull,
             displayPartsForJSDoc: true,
             documentation: [],
             tags: [{
@@ -205,7 +205,7 @@ var x = 1
     });
     it("for quickinfo-full, should provide a string for a working link in a tag", () => {
         assertQuickInfoJSDoc(linkInTag, {
-            command: protocol.CommandTypes.QuickinfoFull,
+            command: ts.projectSystem.protocol.CommandTypes.QuickinfoFull,
             displayPartsForJSDoc: false,
             documentation: [],
             tags: [{
@@ -216,7 +216,7 @@ var x = 1
     });
     it("for quickinfo-full, should provide display parts plus a span for a working link in a comment", () => {
         assertQuickInfoJSDoc(linkInComment, {
-            command: protocol.CommandTypes.QuickinfoFull,
+            command: ts.projectSystem.protocol.CommandTypes.QuickinfoFull,
             displayPartsForJSDoc: true,
             documentation: [{
                 kind: "text",
@@ -243,7 +243,7 @@ var x = 1
     });
     it("for quickinfo-full, should provide a string for a working link in a comment", () => {
         assertQuickInfoJSDoc(linkInComment, {
-            command: protocol.CommandTypes.QuickinfoFull,
+            command: ts.projectSystem.protocol.CommandTypes.QuickinfoFull,
             displayPartsForJSDoc: false,
             documentation: [{
                     kind: "text",
@@ -271,11 +271,11 @@ var x = 1
 
     function assertSignatureHelpJSDoc(options: {
         displayPartsForJSDoc: boolean,
-        command: protocol.CommandTypes,
+        command: ts.projectSystem.protocol.CommandTypes,
         documentation: string | unknown[],
         tags: unknown[]
     }) {
-        const linkInParamTag: File = {
+        const linkInParamTag: ts.projectSystem.File = {
             path: "/a/someFile1.js",
             content: `class C { }
 /** @param y - {@link C} */
@@ -284,21 +284,21 @@ x(1)`
         };
 
         const { command, displayPartsForJSDoc, documentation, tags } = options;
-        const session = createSession(createServerHost([linkInParamTag, config]));
+        const session = ts.projectSystem.createSession(ts.projectSystem.createServerHost([linkInParamTag, config]));
         session.getProjectService().setHostConfiguration({ preferences: { displayPartsForJSDoc } });
-        openFilesForSession([linkInParamTag], session);
+        ts.projectSystem.openFilesForSession([linkInParamTag], session);
         const indexOfX = linkInParamTag.content.lastIndexOf("1");
-        const signatureHelp = session.executeCommandSeq<protocol.SignatureHelpRequest>({
-            command: command as protocol.CommandTypes.SignatureHelp,
+        const signatureHelp = session.executeCommandSeq<ts.projectSystem.protocol.SignatureHelpRequest>({
+            command: command as ts.projectSystem.protocol.CommandTypes.SignatureHelp,
             arguments: {
                 triggerReason: {
                     kind: "invoked"
                 },
                 file: linkInParamTag.path,
                 position: indexOfX,
-            } as protocol.SignatureHelpRequestArgs
+            } as ts.projectSystem.protocol.SignatureHelpRequestArgs
         }).response;
-        const applicableSpan = command === protocol.CommandTypes.SignatureHelp ? {
+        const applicableSpan = command === ts.projectSystem.protocol.CommandTypes.SignatureHelp ? {
             end: {
                 line: 4,
                 offset: 4
@@ -382,7 +382,7 @@ x(1)`
     }
     it("for signature help, should provide a string for a working link in a comment", () => {
         assertSignatureHelpJSDoc({
-            command: protocol.CommandTypes.SignatureHelp,
+            command: ts.projectSystem.protocol.CommandTypes.SignatureHelp,
             displayPartsForJSDoc: false,
             tags: [{
                 name: "param",
@@ -449,7 +449,7 @@ x(1)`
             }]
         }];
         assertSignatureHelpJSDoc({
-            command: protocol.CommandTypes.SignatureHelp,
+            command: ts.projectSystem.protocol.CommandTypes.SignatureHelp,
             displayPartsForJSDoc: true,
             tags,
             documentation: tags[0].text.slice(2)
@@ -457,7 +457,7 @@ x(1)`
     });
     it("for signature help-full, should provide a string for a working link in a comment", () => {
         assertSignatureHelpJSDoc({
-            command: protocol.CommandTypes.SignatureHelpFull,
+            command: ts.projectSystem.protocol.CommandTypes.SignatureHelpFull,
             displayPartsForJSDoc: false,
             tags: [{
                 name: "param",
@@ -516,7 +516,7 @@ x(1)`
             }]
         }];
         assertSignatureHelpJSDoc({
-            command: protocol.CommandTypes.SignatureHelpFull,
+            command: ts.projectSystem.protocol.CommandTypes.SignatureHelpFull,
             displayPartsForJSDoc: true,
             tags,
             documentation: tags[0].text.slice(2),
@@ -525,10 +525,10 @@ x(1)`
 
     function assertCompletionsJSDoc(options: {
         displayPartsForJSDoc: boolean,
-        command: protocol.CommandTypes,
+        command: ts.projectSystem.protocol.CommandTypes,
         tags: unknown[]
     }) {
-        const linkInParamJSDoc: File = {
+        const linkInParamJSDoc: ts.projectSystem.File = {
             path: "/a/someFile1.js",
             content: `class C { }
 /** @param x - see {@link C} */
@@ -536,17 +536,17 @@ function foo (x) { }
 foo`
         };
         const { command, displayPartsForJSDoc, tags } = options;
-        const session = createSession(createServerHost([linkInParamJSDoc, config]));
+        const session = ts.projectSystem.createSession(ts.projectSystem.createServerHost([linkInParamJSDoc, config]));
         session.getProjectService().setHostConfiguration({ preferences: { displayPartsForJSDoc } });
-        openFilesForSession([linkInParamJSDoc], session);
+        ts.projectSystem.openFilesForSession([linkInParamJSDoc], session);
         const indexOfFoo = linkInParamJSDoc.content.lastIndexOf("fo");
-        const completions = session.executeCommandSeq<protocol.CompletionDetailsRequest>({
-            command: command as protocol.CommandTypes.CompletionDetails,
+        const completions = session.executeCommandSeq<ts.projectSystem.protocol.CompletionDetailsRequest>({
+            command: command as ts.projectSystem.protocol.CommandTypes.CompletionDetails,
             arguments: {
                 entryNames: ["foo"],
                 file: linkInParamJSDoc.path,
                 position: indexOfFoo,
-            } as protocol.CompletionDetailsRequestArgs
+            } as ts.projectSystem.protocol.CompletionDetailsRequestArgs
         }).response;
         assert.deepEqual(completions, [{
             codeActions: undefined,
@@ -598,7 +598,7 @@ foo`
     }
     it("for completions, should provide display parts for a working link in a comment", () => {
         assertCompletionsJSDoc({
-            command: protocol.CommandTypes.CompletionDetails,
+            command: ts.projectSystem.protocol.CommandTypes.CompletionDetails,
             displayPartsForJSDoc: true,
             tags: [{
                 name: "param",
@@ -637,7 +637,7 @@ foo`
     });
     it("for completions, should provide a string for a working link in a comment", () => {
         assertCompletionsJSDoc({
-            command: protocol.CommandTypes.CompletionDetails,
+            command: ts.projectSystem.protocol.CommandTypes.CompletionDetails,
             displayPartsForJSDoc: false,
             tags: [{
                 name: "param",
@@ -647,7 +647,7 @@ foo`
     });
     it("for completions-full, should provide display parts for a working link in a comment", () => {
         assertCompletionsJSDoc({
-            command: protocol.CommandTypes.CompletionDetailsFull,
+            command: ts.projectSystem.protocol.CommandTypes.CompletionDetailsFull,
             displayPartsForJSDoc: true,
             tags: [{
                 name: "param",
@@ -682,7 +682,7 @@ foo`
     });
     it("for completions-full, should provide a string for a working link in a comment", () => {
         assertCompletionsJSDoc({
-            command: protocol.CommandTypes.CompletionDetailsFull,
+            command: ts.projectSystem.protocol.CommandTypes.CompletionDetailsFull,
             displayPartsForJSDoc: false,
             tags: [{
                 name: "param",

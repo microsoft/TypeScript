@@ -7,8 +7,8 @@ namespace ts {
 /**
  * @deprecated Use `isMemberName` instead.
  */
-export const isIdentifierOrPrivateIdentifier = Debug.deprecate(function isIdentifierOrPrivateIdentifier(node: Node): node is MemberName {
-    return isMemberName(node);
+export const isIdentifierOrPrivateIdentifier = ts.Debug.deprecate(function isIdentifierOrPrivateIdentifier(node: ts.Node): node is ts.MemberName {
+    return ts.isMemberName(node);
 }, {
     since: "4.2",
     warnAfter: "4.3",

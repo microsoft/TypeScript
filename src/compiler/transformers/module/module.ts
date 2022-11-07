@@ -1,17 +1,17 @@
 /*@internal*/
 namespace ts {
 
-export function transformModule(context: TransformationContext) {
+export function transformModule(context: ts.TransformationContext) {
     interface AsynchronousDependencies {
-        aliasedModuleNames: Expression[];
-        unaliasedModuleNames: Expression[];
-        importAliasNames: ParameterDeclaration[];
+        aliasedModuleNames: ts.Expression[];
+        unaliasedModuleNames: ts.Expression[];
+        importAliasNames: ts.ParameterDeclaration[];
     }
 
-    function getTransformModuleDelegate(moduleKind: ModuleKind): (node: SourceFile) => SourceFile {
+    function getTransformModuleDelegate(moduleKind: ts.ModuleKind): (node: ts.SourceFile) => ts.SourceFile {
         switch (moduleKind) {
-            case ModuleKind.AMD: return transformAMDModule;
-            case ModuleKind.UMD: return transformUMDModule;
+            case ts.ModuleKind.AMD: return transformAMDModule;
+            case ts.ModuleKind.UMD: return transformUMDModule;
             default: return transformCommonJSModule;
         }
     }
@@ -27,45 +27,45 @@ export function transformModule(context: TransformationContext) {
     const compilerOptions = context.getCompilerOptions();
     const resolver = context.getEmitResolver();
     const host = context.getEmitHost();
-    const languageVersion = getEmitScriptTarget(compilerOptions);
-    const moduleKind = getEmitModuleKind(compilerOptions);
+    const languageVersion = ts.getEmitScriptTarget(compilerOptions);
+    const moduleKind = ts.getEmitModuleKind(compilerOptions);
     const previousOnSubstituteNode = context.onSubstituteNode;
     const previousOnEmitNode = context.onEmitNode;
     context.onSubstituteNode = onSubstituteNode;
     context.onEmitNode = onEmitNode;
-    context.enableSubstitution(SyntaxKind.CallExpression); // Substitute calls to imported/exported symbols to avoid incorrect `this`.
-    context.enableSubstitution(SyntaxKind.TaggedTemplateExpression); // Substitute calls to imported/exported symbols to avoid incorrect `this`.
-    context.enableSubstitution(SyntaxKind.Identifier); // Substitutes expression identifiers with imported/exported symbols.
-    context.enableSubstitution(SyntaxKind.BinaryExpression); // Substitutes assignments to exported symbols.
-    context.enableSubstitution(SyntaxKind.ShorthandPropertyAssignment); // Substitutes shorthand property assignments for imported/exported symbols.
-    context.enableEmitNotification(SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
+    context.enableSubstitution(ts.SyntaxKind.CallExpression); // Substitute calls to imported/exported symbols to avoid incorrect `this`.
+    context.enableSubstitution(ts.SyntaxKind.TaggedTemplateExpression); // Substitute calls to imported/exported symbols to avoid incorrect `this`.
+    context.enableSubstitution(ts.SyntaxKind.Identifier); // Substitutes expression identifiers with imported/exported symbols.
+    context.enableSubstitution(ts.SyntaxKind.BinaryExpression); // Substitutes assignments to exported symbols.
+    context.enableSubstitution(ts.SyntaxKind.ShorthandPropertyAssignment); // Substitutes shorthand property assignments for imported/exported symbols.
+    context.enableEmitNotification(ts.SyntaxKind.SourceFile); // Restore state when substituting nodes in a file.
 
-    const moduleInfoMap: ExternalModuleInfo[] = []; // The ExternalModuleInfo for each file.
-    const deferredExports: (Statement[] | undefined)[] = []; // Exports to defer until an EndOfDeclarationMarker is found.
+    const moduleInfoMap: ts.ExternalModuleInfo[] = []; // The ExternalModuleInfo for each file.
+    const deferredExports: (ts.Statement[] | undefined)[] = []; // Exports to defer until an EndOfDeclarationMarker is found.
 
-    let currentSourceFile: SourceFile; // The current file.
-    let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
+    let currentSourceFile: ts.SourceFile; // The current file.
+    let currentModuleInfo: ts.ExternalModuleInfo; // The ExternalModuleInfo for the current file.
     const noSubstitution: boolean[] = []; // Set of nodes for which substitution rules should be ignored.
     let needUMDDynamicImportHelper: boolean;
 
-    return chainBundle(context, transformSourceFile);
+    return ts.chainBundle(context, transformSourceFile);
 
     /**
      * Transforms the module aspects of a SourceFile.
      *
      * @param node The SourceFile node.
      */
-    function transformSourceFile(node: SourceFile) {
+    function transformSourceFile(node: ts.SourceFile) {
         if (node.isDeclarationFile ||
-            !(isEffectiveExternalModule(node, compilerOptions) ||
-                node.transformFlags & TransformFlags.ContainsDynamicImport ||
-                (isJsonSourceFile(node) && hasJsonModuleEmitEnabled(compilerOptions) && outFile(compilerOptions)))) {
+            !(ts.isEffectiveExternalModule(node, compilerOptions) ||
+                node.transformFlags & ts.TransformFlags.ContainsDynamicImport ||
+                (ts.isJsonSourceFile(node) && ts.hasJsonModuleEmitEnabled(compilerOptions) && ts.outFile(compilerOptions)))) {
             return node;
         }
 
         currentSourceFile = node;
-        currentModuleInfo = collectExternalModuleInfo(context, node, resolver, compilerOptions);
-        moduleInfoMap[getOriginalNodeId(node)] = currentModuleInfo;
+        currentModuleInfo = ts.collectExternalModuleInfo(context, node, resolver, compilerOptions);
+        moduleInfoMap[ts.getOriginalNodeId(node)] = currentModuleInfo;
 
         // Perform the transformation.
         const transformModule = getTransformModuleDelegate(moduleKind);
@@ -78,7 +78,7 @@ export function transformModule(context: TransformationContext) {
 
 
     function shouldEmitUnderscoreUnderscoreESModule() {
-        if (!currentModuleInfo.exportEquals && isExternalModule(currentSourceFile)) {
+        if (!currentModuleInfo.exportEquals && ts.isExternalModule(currentSourceFile)) {
             return true;
         }
         return false;
@@ -89,39 +89,39 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The SourceFile node.
      */
-    function transformCommonJSModule(node: SourceFile) {
+    function transformCommonJSModule(node: ts.SourceFile) {
         startLexicalEnvironment();
 
-        const statements: Statement[] = [];
-        const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
-        const statementOffset = factory.copyPrologue(node.statements, statements, ensureUseStrict && !isJsonSourceFile(node), topLevelVisitor);
+        const statements: ts.Statement[] = [];
+        const ensureUseStrict = ts.getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && ts.isExternalModule(currentSourceFile));
+        const statementOffset = factory.copyPrologue(node.statements, statements, ensureUseStrict && !ts.isJsonSourceFile(node), topLevelVisitor);
 
         if (shouldEmitUnderscoreUnderscoreESModule()) {
-            append(statements, createUnderscoreUnderscoreESModule());
+            ts.append(statements, createUnderscoreUnderscoreESModule());
         }
-        if (length(currentModuleInfo.exportedNames)) {
+        if (ts.length(currentModuleInfo.exportedNames)) {
             const chunkSize = 50;
             for (let i=0; i<currentModuleInfo.exportedNames!.length; i += chunkSize) {
-                append(
+                ts.append(
                     statements,
                     factory.createExpressionStatement(
-                        reduceLeft(
+                        ts.reduceLeft(
                             currentModuleInfo.exportedNames!.slice(i, i + chunkSize),
-                            (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
-                            factory.createVoidZero() as Expression
+                            (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(ts.idText(nextId))), prev),
+                            factory.createVoidZero() as ts.Expression
                         )
                     )
                 );
             }
         }
 
-        append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, topLevelVisitor, isStatement));
-        addRange(statements, visitNodes(node.statements, topLevelVisitor, isStatement, statementOffset));
+        ts.append(statements, ts.visitNode(currentModuleInfo.externalHelpersImportDeclaration, topLevelVisitor, ts.isStatement));
+        ts.addRange(statements, ts.visitNodes(node.statements, topLevelVisitor, ts.isStatement, statementOffset));
         addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
-        insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
+        ts.insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
-        const updated = factory.updateSourceFile(node, setTextRange(factory.createNodeArray(statements), node.statements));
-        addEmitHelpers(updated, context.readEmitHelpers());
+        const updated = factory.updateSourceFile(node, ts.setTextRange(factory.createNodeArray(statements), node.statements));
+        ts.addEmitHelpers(updated, context.readEmitHelpers());
         return updated;
     }
 
@@ -130,10 +130,10 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The SourceFile node.
      */
-    function transformAMDModule(node: SourceFile) {
+    function transformAMDModule(node: ts.SourceFile) {
         const define = factory.createIdentifier("define");
-        const moduleName = tryGetModuleNameFromFile(factory, node, host, compilerOptions);
-        const jsonSourceFile = isJsonSourceFile(node) && node;
+        const moduleName = ts.tryGetModuleNameFromFile(factory, node, host, compilerOptions);
+        const jsonSourceFile = ts.isJsonSourceFile(node) && node;
 
         // An AMD define function has the following shape:
         //
@@ -162,7 +162,7 @@ export function transformModule(context: TransformationContext) {
         //
         //     define(mofactory.updateSourceFile", "module2"], function ...
         const updated = factory.updateSourceFile(node,
-            setTextRange(
+            ts.setTextRange(
                 factory.createNodeArray([
                     factory.createExpressionStatement(
                         factory.createCallExpression(
@@ -175,7 +175,7 @@ export function transformModule(context: TransformationContext) {
                                 // Add the dependency array argument:
                                 //
                                 //     ["require", "exports", module1", "module2", ...]
-                                factory.createArrayLiteralExpression(jsonSourceFile ? emptyArray : [
+                                factory.createArrayLiteralExpression(jsonSourceFile ? ts.emptyArray : [
                                     factory.createStringLiteral("require"),
                                     factory.createStringLiteral("exports"),
                                     ...aliasedModuleNames,
@@ -208,7 +208,7 @@ export function transformModule(context: TransformationContext) {
             )
         );
 
-        addEmitHelpers(updated, context.readEmitHelpers());
+        ts.addEmitHelpers(updated, context.readEmitHelpers());
         return updated;
     }
 
@@ -217,9 +217,9 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The SourceFile node.
      */
-    function transformUMDModule(node: SourceFile) {
+    function transformUMDModule(node: ts.SourceFile) {
         const { aliasedModuleNames, unaliasedModuleNames, importAliasNames } = collectAsynchronousDependencies(node, /*includeNonAmdDependencies*/ false);
-        const moduleName = tryGetModuleNameFromFile(factory, node, host, compilerOptions);
+        const moduleName = ts.tryGetModuleNameFromFile(factory, node, host, compilerOptions);
         const umdHeader = factory.createFunctionExpression(
             /*modifiers*/ undefined,
             /*asteriskToken*/ undefined,
@@ -227,7 +227,7 @@ export function transformModule(context: TransformationContext) {
             /*typeParameters*/ undefined,
             [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "factory")],
             /*type*/ undefined,
-            setTextRange(
+            ts.setTextRange(
                 factory.createBlock(
                     [
                         factory.createIfStatement(
@@ -254,7 +254,7 @@ export function transformModule(context: TransformationContext) {
                                         )
                                     ]
                                 ),
-                                setEmitFlags(
+                                ts.setEmitFlags(
                                     factory.createIfStatement(
                                         factory.createStrictInequality(
                                             factory.createIdentifier("v"),
@@ -267,7 +267,7 @@ export function transformModule(context: TransformationContext) {
                                             )
                                         )
                                     ),
-                                    EmitFlags.SingleLine
+                                    ts.EmitFlags.SingleLine
                                 )
                             ]),
                             factory.createIfStatement(
@@ -317,7 +317,7 @@ export function transformModule(context: TransformationContext) {
 
         const updated = factory.updateSourceFile(
             node,
-            setTextRange(
+            ts.setTextRange(
                 factory.createNodeArray([
                     factory.createExpressionStatement(
                         factory.createCallExpression(
@@ -348,7 +348,7 @@ export function transformModule(context: TransformationContext) {
             )
         );
 
-        addEmitHelpers(updated, context.readEmitHelpers());
+        ts.addEmitHelpers(updated, context.readEmitHelpers());
         return updated;
     }
 
@@ -358,17 +358,17 @@ export function transformModule(context: TransformationContext) {
      * @param node The source file.
      * @param includeNonAmdDependencies A value indicating whether to include non-AMD dependencies.
      */
-    function collectAsynchronousDependencies(node: SourceFile, includeNonAmdDependencies: boolean): AsynchronousDependencies {
+    function collectAsynchronousDependencies(node: ts.SourceFile, includeNonAmdDependencies: boolean): AsynchronousDependencies {
         // names of modules with corresponding parameter in the factory function
-        const aliasedModuleNames: Expression[] = [];
+        const aliasedModuleNames: ts.Expression[] = [];
 
         // names of modules with no corresponding parameters in factory function
-        const unaliasedModuleNames: Expression[] = [];
+        const unaliasedModuleNames: ts.Expression[] = [];
 
         // names of the parameters in the factory function; these
         // parameters need to match the indexes of the corresponding
         // module names in aliasedModuleNames.
-        const importAliasNames: ParameterDeclaration[] = [];
+        const importAliasNames: ts.ParameterDeclaration[] = [];
 
         // Fill in amd-dependency tags
         for (const amdDependency of node.amdDependencies) {
@@ -383,10 +383,10 @@ export function transformModule(context: TransformationContext) {
 
         for (const importNode of currentModuleInfo.externalImports) {
             // Find the name of the external module
-            const externalModuleName = getExternalModuleNameLiteral(factory, importNode, currentSourceFile, host, resolver, compilerOptions);
+            const externalModuleName = ts.getExternalModuleNameLiteral(factory, importNode, currentSourceFile, host, resolver, compilerOptions);
 
             // Find the name of the module alias, if there is one
-            const importAliasName = getLocalNameForExternalImport(factory, importNode, currentSourceFile);
+            const importAliasName = ts.getLocalNameForExternalImport(factory, importNode, currentSourceFile);
             // It is possible that externalModuleName is undefined if it is not string literal.
             // This can happen in the invalid import syntax.
             // E.g : "import * from alias from 'someLib';"
@@ -394,7 +394,7 @@ export function transformModule(context: TransformationContext) {
                 if (includeNonAmdDependencies && importAliasName) {
                     // Set emitFlags on the name of the classDeclaration
                     // This is so that when printer will not substitute the identifier
-                    setEmitFlags(importAliasName, EmitFlags.NoSubstitution);
+                    ts.setEmitFlags(importAliasName, ts.EmitFlags.NoSubstitution);
                     aliasedModuleNames.push(externalModuleName);
                     importAliasNames.push(factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, importAliasName));
                 }
@@ -407,11 +407,11 @@ export function transformModule(context: TransformationContext) {
         return { aliasedModuleNames, unaliasedModuleNames, importAliasNames };
     }
 
-    function getAMDImportExpressionForImport(node: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration) {
-        if (isImportEqualsDeclaration(node) || isExportDeclaration(node) || !getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions)) {
+    function getAMDImportExpressionForImport(node: ts.ImportDeclaration | ts.ExportDeclaration | ts.ImportEqualsDeclaration) {
+        if (ts.isImportEqualsDeclaration(node) || ts.isExportDeclaration(node) || !ts.getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions)) {
             return undefined;
         }
-        const name = getLocalNameForExternalImport(factory, node, currentSourceFile)!; // TODO: GH#18217
+        const name = ts.getLocalNameForExternalImport(factory, node, currentSourceFile)!; // TODO: GH#18217
         const expr = getHelperExpressionForImport(node, name);
         if (expr === name) {
             return undefined;
@@ -424,36 +424,36 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The SourceFile node.
      */
-    function transformAsynchronousModuleBody(node: SourceFile) {
+    function transformAsynchronousModuleBody(node: ts.SourceFile) {
         startLexicalEnvironment();
 
-        const statements: Statement[] = [];
+        const statements: ts.Statement[] = [];
         const statementOffset = factory.copyPrologue(node.statements, statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, topLevelVisitor);
 
         if (shouldEmitUnderscoreUnderscoreESModule()) {
-            append(statements, createUnderscoreUnderscoreESModule());
+            ts.append(statements, createUnderscoreUnderscoreESModule());
         }
-        if (length(currentModuleInfo.exportedNames)) {
-            append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
+        if (ts.length(currentModuleInfo.exportedNames)) {
+            ts.append(statements, factory.createExpressionStatement(ts.reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(ts.idText(nextId))), prev), factory.createVoidZero() as ts.Expression)));
         }
 
         // Visit each statement of the module body.
-        append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, topLevelVisitor, isStatement));
-        if (moduleKind === ModuleKind.AMD) {
-            addRange(statements, mapDefined(currentModuleInfo.externalImports, getAMDImportExpressionForImport));
+        ts.append(statements, ts.visitNode(currentModuleInfo.externalHelpersImportDeclaration, topLevelVisitor, ts.isStatement));
+        if (moduleKind === ts.ModuleKind.AMD) {
+            ts.addRange(statements, ts.mapDefined(currentModuleInfo.externalImports, getAMDImportExpressionForImport));
         }
-        addRange(statements, visitNodes(node.statements, topLevelVisitor, isStatement, statementOffset));
+        ts.addRange(statements, ts.visitNodes(node.statements, topLevelVisitor, ts.isStatement, statementOffset));
 
         // Append the 'export =' statement if provided.
         addExportEqualsIfNeeded(statements, /*emitAsReturn*/ true);
 
         // End the lexical environment for the module body
         // and merge any new lexical declarations.
-        insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
+        ts.insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
         const body = factory.createBlock(statements, /*multiLine*/ true);
         if (needUMDDynamicImportHelper) {
-            addEmitHelper(body, dynamicImportUMDHelper);
+            ts.addEmitHelper(body, dynamicImportUMDHelper);
         }
 
         return body;
@@ -467,14 +467,14 @@ export function transformModule(context: TransformationContext) {
      * @param emitAsReturn A value indicating whether to emit the `export=` statement as a
      * return statement.
      */
-    function addExportEqualsIfNeeded(statements: Statement[], emitAsReturn: boolean) {
+    function addExportEqualsIfNeeded(statements: ts.Statement[], emitAsReturn: boolean) {
         if (currentModuleInfo.exportEquals) {
-            const expressionResult = visitNode(currentModuleInfo.exportEquals.expression, visitor);
+            const expressionResult = ts.visitNode(currentModuleInfo.exportEquals.expression, visitor);
             if (expressionResult) {
                 if (emitAsReturn) {
                     const statement = factory.createReturnStatement(expressionResult);
-                    setTextRange(statement, currentModuleInfo.exportEquals);
-                    setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments);
+                    ts.setTextRange(statement, currentModuleInfo.exportEquals);
+                    ts.setEmitFlags(statement, ts.EmitFlags.NoTokenSourceMaps | ts.EmitFlags.NoComments);
                     statements.push(statement);
                 }
                 else {
@@ -488,8 +488,8 @@ export function transformModule(context: TransformationContext) {
                         )
                     );
 
-                    setTextRange(statement, currentModuleInfo.exportEquals);
-                    setEmitFlags(statement, EmitFlags.NoComments);
+                    ts.setTextRange(statement, currentModuleInfo.exportEquals);
+                    ts.setEmitFlags(statement, ts.EmitFlags.NoComments);
                     statements.push(statement);
                 }
             }
@@ -505,112 +505,112 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function topLevelVisitor(node: Node): VisitResult<Node> {
+    function topLevelVisitor(node: ts.Node): ts.VisitResult<ts.Node> {
         switch (node.kind) {
-            case SyntaxKind.ImportDeclaration:
-                return visitImportDeclaration(node as ImportDeclaration);
+            case ts.SyntaxKind.ImportDeclaration:
+                return visitImportDeclaration(node as ts.ImportDeclaration);
 
-            case SyntaxKind.ImportEqualsDeclaration:
-                return visitImportEqualsDeclaration(node as ImportEqualsDeclaration);
+            case ts.SyntaxKind.ImportEqualsDeclaration:
+                return visitImportEqualsDeclaration(node as ts.ImportEqualsDeclaration);
 
-            case SyntaxKind.ExportDeclaration:
-                return visitExportDeclaration(node as ExportDeclaration);
+            case ts.SyntaxKind.ExportDeclaration:
+                return visitExportDeclaration(node as ts.ExportDeclaration);
 
-            case SyntaxKind.ExportAssignment:
-                return visitExportAssignment(node as ExportAssignment);
+            case ts.SyntaxKind.ExportAssignment:
+                return visitExportAssignment(node as ts.ExportAssignment);
 
-            case SyntaxKind.VariableStatement:
-                return visitVariableStatement(node as VariableStatement);
+            case ts.SyntaxKind.VariableStatement:
+                return visitVariableStatement(node as ts.VariableStatement);
 
-            case SyntaxKind.FunctionDeclaration:
-                return visitFunctionDeclaration(node as FunctionDeclaration);
+            case ts.SyntaxKind.FunctionDeclaration:
+                return visitFunctionDeclaration(node as ts.FunctionDeclaration);
 
-            case SyntaxKind.ClassDeclaration:
-                return visitClassDeclaration(node as ClassDeclaration);
+            case ts.SyntaxKind.ClassDeclaration:
+                return visitClassDeclaration(node as ts.ClassDeclaration);
 
-            case SyntaxKind.MergeDeclarationMarker:
-                return visitMergeDeclarationMarker(node as MergeDeclarationMarker);
+            case ts.SyntaxKind.MergeDeclarationMarker:
+                return visitMergeDeclarationMarker(node as ts.MergeDeclarationMarker);
 
-            case SyntaxKind.EndOfDeclarationMarker:
-                return visitEndOfDeclarationMarker(node as EndOfDeclarationMarker);
+            case ts.SyntaxKind.EndOfDeclarationMarker:
+                return visitEndOfDeclarationMarker(node as ts.EndOfDeclarationMarker);
 
             default:
                 return visitor(node);
         }
     }
 
-    function visitorWorker(node: Node, valueIsDiscarded: boolean): VisitResult<Node> {
+    function visitorWorker(node: ts.Node, valueIsDiscarded: boolean): ts.VisitResult<ts.Node> {
         // This visitor does not need to descend into the tree if there is no dynamic import, destructuring assignment, or update expression
         // as export/import statements are only transformed at the top level of a file.
-        if (!(node.transformFlags & (TransformFlags.ContainsDynamicImport | TransformFlags.ContainsDestructuringAssignment | TransformFlags.ContainsUpdateExpressionForIdentifier))) {
+        if (!(node.transformFlags & (ts.TransformFlags.ContainsDynamicImport | ts.TransformFlags.ContainsDestructuringAssignment | ts.TransformFlags.ContainsUpdateExpressionForIdentifier))) {
             return node;
         }
 
         switch (node.kind) {
-            case SyntaxKind.ForStatement:
-                return visitForStatement(node as ForStatement);
-            case SyntaxKind.ExpressionStatement:
-                return visitExpressionStatement(node as ExpressionStatement);
-            case SyntaxKind.ParenthesizedExpression:
-                return visitParenthesizedExpression(node as ParenthesizedExpression, valueIsDiscarded);
-            case SyntaxKind.PartiallyEmittedExpression:
-                return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, valueIsDiscarded);
-            case SyntaxKind.CallExpression:
-                if (isImportCall(node) && currentSourceFile.impliedNodeFormat === undefined) {
+            case ts.SyntaxKind.ForStatement:
+                return visitForStatement(node as ts.ForStatement);
+            case ts.SyntaxKind.ExpressionStatement:
+                return visitExpressionStatement(node as ts.ExpressionStatement);
+            case ts.SyntaxKind.ParenthesizedExpression:
+                return visitParenthesizedExpression(node as ts.ParenthesizedExpression, valueIsDiscarded);
+            case ts.SyntaxKind.PartiallyEmittedExpression:
+                return visitPartiallyEmittedExpression(node as ts.PartiallyEmittedExpression, valueIsDiscarded);
+            case ts.SyntaxKind.CallExpression:
+                if (ts.isImportCall(node) && currentSourceFile.impliedNodeFormat === undefined) {
                     return visitImportCallExpression(node);
                 }
                 break;
-            case SyntaxKind.BinaryExpression:
-                if (isDestructuringAssignment(node)) {
+            case ts.SyntaxKind.BinaryExpression:
+                if (ts.isDestructuringAssignment(node)) {
                     return visitDestructuringAssignment(node, valueIsDiscarded);
                 }
                 break;
-            case SyntaxKind.PrefixUnaryExpression:
-            case SyntaxKind.PostfixUnaryExpression:
-                return visitPreOrPostfixUnaryExpression(node as PrefixUnaryExpression | PostfixUnaryExpression, valueIsDiscarded);
+            case ts.SyntaxKind.PrefixUnaryExpression:
+            case ts.SyntaxKind.PostfixUnaryExpression:
+                return visitPreOrPostfixUnaryExpression(node as ts.PrefixUnaryExpression | ts.PostfixUnaryExpression, valueIsDiscarded);
         }
 
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function visitor(node: Node): VisitResult<Node> {
+    function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
         return visitorWorker(node, /*valueIsDiscarded*/ false);
     }
 
-    function discardedValueVisitor(node: Node): VisitResult<Node> {
+    function discardedValueVisitor(node: ts.Node): ts.VisitResult<ts.Node> {
         return visitorWorker(node, /*valueIsDiscarded*/ true);
     }
 
-    function destructuringNeedsFlattening(node: Expression): boolean {
-        if (isObjectLiteralExpression(node)) {
+    function destructuringNeedsFlattening(node: ts.Expression): boolean {
+        if (ts.isObjectLiteralExpression(node)) {
             for (const elem of node.properties) {
                 switch (elem.kind) {
-                    case SyntaxKind.PropertyAssignment:
+                    case ts.SyntaxKind.PropertyAssignment:
                         if (destructuringNeedsFlattening(elem.initializer)) {
                             return true;
                         }
                         break;
-                    case SyntaxKind.ShorthandPropertyAssignment:
+                    case ts.SyntaxKind.ShorthandPropertyAssignment:
                         if (destructuringNeedsFlattening(elem.name)) {
                             return true;
                         }
                         break;
-                    case SyntaxKind.SpreadAssignment:
+                    case ts.SyntaxKind.SpreadAssignment:
                         if (destructuringNeedsFlattening(elem.expression)) {
                             return true;
                         }
                         break;
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
+                    case ts.SyntaxKind.MethodDeclaration:
+                    case ts.SyntaxKind.GetAccessor:
+                    case ts.SyntaxKind.SetAccessor:
                         return false;
-                    default: Debug.assertNever(elem, "Unhandled object member kind");
+                    default: ts.Debug.assertNever(elem, "Unhandled object member kind");
                 }
             }
         }
-        else if (isArrayLiteralExpression(node)) {
+        else if (ts.isArrayLiteralExpression(node)) {
             for (const elem of node.elements) {
-                if (isSpreadElement(elem)) {
+                if (ts.isSpreadElement(elem)) {
                     if (destructuringNeedsFlattening(elem.expression)) {
                         return true;
                     }
@@ -620,45 +620,45 @@ export function transformModule(context: TransformationContext) {
                 }
             }
         }
-        else if (isIdentifier(node)) {
-            return length(getExports(node)) > (isExportName(node) ? 1 : 0);
+        else if (ts.isIdentifier(node)) {
+            return ts.length(getExports(node)) > (ts.isExportName(node) ? 1 : 0);
         }
         return false;
     }
 
-    function visitDestructuringAssignment(node: DestructuringAssignment, valueIsDiscarded: boolean): Expression {
+    function visitDestructuringAssignment(node: ts.DestructuringAssignment, valueIsDiscarded: boolean): ts.Expression {
         if (destructuringNeedsFlattening(node.left)) {
-            return flattenDestructuringAssignment(node, visitor, context, FlattenLevel.All, !valueIsDiscarded, createAllExportExpressions);
+            return ts.flattenDestructuringAssignment(node, visitor, context, ts.FlattenLevel.All, !valueIsDiscarded, createAllExportExpressions);
         }
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function visitForStatement(node: ForStatement) {
+    function visitForStatement(node: ts.ForStatement) {
         return factory.updateForStatement(
             node,
-            visitNode(node.initializer, discardedValueVisitor, isForInitializer),
-            visitNode(node.condition, visitor, isExpression),
-            visitNode(node.incrementor, discardedValueVisitor, isExpression),
-            visitIterationBody(node.statement, visitor, context)
+            ts.visitNode(node.initializer, discardedValueVisitor, ts.isForInitializer),
+            ts.visitNode(node.condition, visitor, ts.isExpression),
+            ts.visitNode(node.incrementor, discardedValueVisitor, ts.isExpression),
+            ts.visitIterationBody(node.statement, visitor, context)
         );
     }
 
-    function visitExpressionStatement(node: ExpressionStatement) {
+    function visitExpressionStatement(node: ts.ExpressionStatement) {
         return factory.updateExpressionStatement(
             node,
-            visitNode(node.expression, discardedValueVisitor, isExpression)
+            ts.visitNode(node.expression, discardedValueVisitor, ts.isExpression)
         );
     }
 
-    function visitParenthesizedExpression(node: ParenthesizedExpression, valueIsDiscarded: boolean) {
-        return factory.updateParenthesizedExpression(node, visitNode(node.expression, valueIsDiscarded ? discardedValueVisitor : visitor, isExpression));
+    function visitParenthesizedExpression(node: ts.ParenthesizedExpression, valueIsDiscarded: boolean) {
+        return factory.updateParenthesizedExpression(node, ts.visitNode(node.expression, valueIsDiscarded ? discardedValueVisitor : visitor, ts.isExpression));
     }
 
-    function visitPartiallyEmittedExpression(node: PartiallyEmittedExpression, valueIsDiscarded: boolean) {
-        return factory.updatePartiallyEmittedExpression(node, visitNode(node.expression, valueIsDiscarded ? discardedValueVisitor : visitor, isExpression));
+    function visitPartiallyEmittedExpression(node: ts.PartiallyEmittedExpression, valueIsDiscarded: boolean) {
+        return factory.updatePartiallyEmittedExpression(node, ts.visitNode(node.expression, valueIsDiscarded ? discardedValueVisitor : visitor, ts.isExpression));
     }
 
-    function visitPreOrPostfixUnaryExpression(node: PrefixUnaryExpression | PostfixUnaryExpression, valueIsDiscarded: boolean) {
+    function visitPreOrPostfixUnaryExpression(node: ts.PrefixUnaryExpression | ts.PostfixUnaryExpression, valueIsDiscarded: boolean) {
         // When we see a prefix or postfix increment expression whose operand is an exported
         // symbol, we should ensure all exports of that symbol are updated with the correct
         // value.
@@ -668,16 +668,16 @@ export function transformModule(context: TransformationContext) {
         // - We do not transform identifiers that were originally the name of an enum or
         //   namespace due to how they are transformed in TypeScript.
         // - We only transform identifiers that are exported at the top level.
-        if ((node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken)
-            && isIdentifier(node.operand)
-            && !isGeneratedIdentifier(node.operand)
-            && !isLocalName(node.operand)
-            && !isDeclarationNameOfEnumOrNamespace(node.operand)) {
+        if ((node.operator === ts.SyntaxKind.PlusPlusToken || node.operator === ts.SyntaxKind.MinusMinusToken)
+            && ts.isIdentifier(node.operand)
+            && !ts.isGeneratedIdentifier(node.operand)
+            && !ts.isLocalName(node.operand)
+            && !ts.isDeclarationNameOfEnumOrNamespace(node.operand)) {
             const exportedNames = getExports(node.operand);
             if (exportedNames) {
-                let temp: Identifier | undefined;
-                let expression: Expression = visitNode(node.operand, visitor, isExpression);
-                if (isPrefixUnaryExpression(node)) {
+                let temp: ts.Identifier | undefined;
+                let expression: ts.Expression = ts.visitNode(node.operand, visitor, ts.isExpression);
+                if (ts.isPrefixUnaryExpression(node)) {
                     expression = factory.updatePrefixUnaryExpression(node, expression);
                 }
                 else {
@@ -685,47 +685,47 @@ export function transformModule(context: TransformationContext) {
                     if (!valueIsDiscarded) {
                         temp = factory.createTempVariable(hoistVariableDeclaration);
                         expression = factory.createAssignment(temp, expression);
-                        setTextRange(expression, node);
+                        ts.setTextRange(expression, node);
                     }
                     expression = factory.createComma(expression, factory.cloneNode(node.operand));
-                    setTextRange(expression, node);
+                    ts.setTextRange(expression, node);
                 }
 
                 for (const exportName of exportedNames) {
-                    noSubstitution[getNodeId(expression)] = true;
+                    noSubstitution[ts.getNodeId(expression)] = true;
                     expression = createExportExpression(exportName, expression);
-                    setTextRange(expression, node);
+                    ts.setTextRange(expression, node);
                 }
 
                 if (temp) {
-                    noSubstitution[getNodeId(expression)] = true;
+                    noSubstitution[ts.getNodeId(expression)] = true;
                     expression = factory.createComma(expression, temp);
-                    setTextRange(expression, node);
+                    ts.setTextRange(expression, node);
                 }
                 return expression;
             }
         }
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function visitImportCallExpression(node: ImportCall): Expression {
-        const externalModuleName = getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
-        const firstArgument = visitNode(firstOrUndefined(node.arguments), visitor);
+    function visitImportCallExpression(node: ts.ImportCall): ts.Expression {
+        const externalModuleName = ts.getExternalModuleNameLiteral(factory, node, currentSourceFile, host, resolver, compilerOptions);
+        const firstArgument = ts.visitNode(ts.firstOrUndefined(node.arguments), visitor);
         // Only use the external module name if it differs from the first argument. This allows us to preserve the quote style of the argument on output.
-        const argument = externalModuleName && (!firstArgument || !isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ? externalModuleName : firstArgument;
-        const containsLexicalThis = !!(node.transformFlags & TransformFlags.ContainsLexicalThis);
+        const argument = externalModuleName && (!firstArgument || !ts.isStringLiteral(firstArgument) || firstArgument.text !== externalModuleName.text) ? externalModuleName : firstArgument;
+        const containsLexicalThis = !!(node.transformFlags & ts.TransformFlags.ContainsLexicalThis);
         switch (compilerOptions.module) {
-            case ModuleKind.AMD:
+            case ts.ModuleKind.AMD:
                 return createImportCallExpressionAMD(argument, containsLexicalThis);
-            case ModuleKind.UMD:
+            case ts.ModuleKind.UMD:
                 return createImportCallExpressionUMD(argument ?? factory.createVoidZero(), containsLexicalThis);
-            case ModuleKind.CommonJS:
+            case ts.ModuleKind.CommonJS:
             default:
                 return createImportCallExpressionCommonJS(argument);
         }
     }
 
-    function createImportCallExpressionUMD(arg: Expression, containsLexicalThis: boolean): Expression {
+    function createImportCallExpressionUMD(arg: ts.Expression, containsLexicalThis: boolean): ts.Expression {
         // (function (factory) {
         //      ... (regular UMD)
         // }
@@ -740,8 +740,8 @@ export function transformModule(context: TransformationContext) {
         //          : new Promise(function (_a, _b) { require([x], _a, _b); }); /*Amd Require*/
         // });
         needUMDDynamicImportHelper = true;
-        if (isSimpleCopiableExpression(arg)) {
-            const argClone = isGeneratedIdentifier(arg) ? arg : isStringLiteral(arg) ? factory.createStringLiteralFromNode(arg) : setEmitFlags(setTextRange(factory.cloneNode(arg), arg), EmitFlags.NoComments);
+        if (ts.isSimpleCopiableExpression(arg)) {
+            const argClone = ts.isGeneratedIdentifier(arg) ? arg : ts.isStringLiteral(arg) ? factory.createStringLiteralFromNode(arg) : ts.setEmitFlags(ts.setTextRange(factory.cloneNode(arg), arg), ts.EmitFlags.NoComments);
             return factory.createConditionalExpression(
                 /*condition*/ factory.createIdentifier("__syncRequire"),
                 /*questionToken*/ undefined,
@@ -762,7 +762,7 @@ export function transformModule(context: TransformationContext) {
         }
     }
 
-    function createImportCallExpressionAMD(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
+    function createImportCallExpressionAMD(arg: ts.Expression | undefined, containsLexicalThis: boolean): ts.Expression {
         // improt("./blah")
         // emit as
         // define(["require", "exports", "blah"], function (require, exports) {
@@ -785,8 +785,8 @@ export function transformModule(context: TransformationContext) {
             )
         ]);
 
-        let func: FunctionExpression | ArrowFunction;
-        if (languageVersion >= ScriptTarget.ES2015) {
+        let func: ts.FunctionExpression | ts.ArrowFunction;
+        if (languageVersion >= ts.ScriptTarget.ES2015) {
             func = factory.createArrowFunction(
                 /*modifiers*/ undefined,
                 /*typeParameters*/ undefined,
@@ -809,18 +809,18 @@ export function transformModule(context: TransformationContext) {
             // that this new function expression indicates it captures 'this' so that the
             // es2015 transformer will properly substitute 'this' with '_this'.
             if (containsLexicalThis) {
-                setEmitFlags(func, EmitFlags.CapturesThis);
+                ts.setEmitFlags(func, ts.EmitFlags.CapturesThis);
             }
         }
 
         const promise = factory.createNewExpression(factory.createIdentifier("Promise"), /*typeArguments*/ undefined, [func]);
-        if (getESModuleInterop(compilerOptions)) {
+        if (ts.getESModuleInterop(compilerOptions)) {
             return factory.createCallExpression(factory.createPropertyAccessExpression(promise, factory.createIdentifier("then")), /*typeArguments*/ undefined, [emitHelpers().createImportStarCallbackHelper()]);
         }
         return promise;
     }
 
-    function createImportCallExpressionCommonJS(arg: Expression | undefined, isInlineable?: boolean): Expression {
+    function createImportCallExpressionCommonJS(arg: ts.Expression | undefined, isInlineable?: boolean): ts.Expression {
         // import(x)
         // emit as
         // var _a;
@@ -828,23 +828,23 @@ export function transformModule(context: TransformationContext) {
         // We have to wrap require in then callback so that require is done in asynchronously
         // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
         // If the arg is not inlineable, we have to evaluate it in the current scope with a temp var
-        const temp = arg && !isSimpleInlineableExpression(arg) && !isInlineable ? factory.createTempVariable(hoistVariableDeclaration) : undefined;
+        const temp = arg && !ts.isSimpleInlineableExpression(arg) && !isInlineable ? factory.createTempVariable(hoistVariableDeclaration) : undefined;
         const promiseResolveCall = factory.createCallExpression(
             factory.createPropertyAccessExpression(factory.createIdentifier("Promise"), "resolve"),
             /*typeArguments*/ undefined,
             /*argumentsArray*/ [],
         );
-        let requireCall: Expression = factory.createCallExpression(
+        let requireCall: ts.Expression = factory.createCallExpression(
             factory.createIdentifier("require"),
             /*typeArguments*/ undefined,
             temp ? [temp] : arg ? [arg] : [],
         );
-        if (getESModuleInterop(compilerOptions)) {
+        if (ts.getESModuleInterop(compilerOptions)) {
             requireCall = emitHelpers().createImportStarHelper(requireCall);
         }
 
-        let func: FunctionExpression | ArrowFunction;
-        if (languageVersion >= ScriptTarget.ES2015) {
+        let func: ts.FunctionExpression | ts.ArrowFunction;
+        if (languageVersion >= ts.ScriptTarget.ES2015) {
             func = factory.createArrowFunction(
                 /*modifiers*/ undefined,
                 /*typeParameters*/ undefined,
@@ -869,24 +869,24 @@ export function transformModule(context: TransformationContext) {
         return temp === undefined ? downleveledImport : factory.createCommaListExpression([factory.createAssignment(temp, arg!), downleveledImport]);
     }
 
-    function getHelperExpressionForExport(node: ExportDeclaration, innerExpr: Expression) {
-        if (!getESModuleInterop(compilerOptions) || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
+    function getHelperExpressionForExport(node: ts.ExportDeclaration, innerExpr: ts.Expression) {
+        if (!ts.getESModuleInterop(compilerOptions) || ts.getEmitFlags(node) & ts.EmitFlags.NeverApplyImportHelper) {
             return innerExpr;
         }
-        if (getExportNeedsImportStarHelper(node)) {
+        if (ts.getExportNeedsImportStarHelper(node)) {
             return emitHelpers().createImportStarHelper(innerExpr);
         }
         return innerExpr;
     }
 
-    function getHelperExpressionForImport(node: ImportDeclaration, innerExpr: Expression) {
-        if (!getESModuleInterop(compilerOptions) || getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) {
+    function getHelperExpressionForImport(node: ts.ImportDeclaration, innerExpr: ts.Expression) {
+        if (!ts.getESModuleInterop(compilerOptions) || ts.getEmitFlags(node) & ts.EmitFlags.NeverApplyImportHelper) {
             return innerExpr;
         }
-        if (getImportNeedsImportStarHelper(node)) {
+        if (ts.getImportNeedsImportStarHelper(node)) {
             return emitHelpers().createImportStarHelper(innerExpr);
         }
-        if (getImportNeedsImportDefaultHelper(node)) {
+        if (ts.getImportNeedsImportDefaultHelper(node)) {
             return emitHelpers().createImportDefaultHelper(innerExpr);
         }
         return innerExpr;
@@ -897,17 +897,17 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> {
-        let statements: Statement[] | undefined;
-        const namespaceDeclaration = getNamespaceDeclarationNode(node);
-        if (moduleKind !== ModuleKind.AMD) {
+    function visitImportDeclaration(node: ts.ImportDeclaration): ts.VisitResult<ts.Statement> {
+        let statements: ts.Statement[] | undefined;
+        const namespaceDeclaration = ts.getNamespaceDeclarationNode(node);
+        if (moduleKind !== ts.ModuleKind.AMD) {
             if (!node.importClause) {
                 // import "mod";
-                return setOriginalNode(setTextRange(factory.createExpressionStatement(createRequireCall(node)), node), node);
+                return ts.setOriginalNode(ts.setTextRange(factory.createExpressionStatement(createRequireCall(node)), node), node);
             }
             else {
-                const variables: VariableDeclaration[] = [];
-                if (namespaceDeclaration && !isDefaultImport(node)) {
+                const variables: ts.VariableDeclaration[] = [];
+                if (namespaceDeclaration && !ts.isDefaultImport(node)) {
                     // import * as n from "mod";
                     variables.push(
                         factory.createVariableDeclaration(
@@ -932,7 +932,7 @@ export function transformModule(context: TransformationContext) {
                         )
                     );
 
-                    if (namespaceDeclaration && isDefaultImport(node)) {
+                    if (namespaceDeclaration && ts.isDefaultImport(node)) {
                         variables.push(
                             factory.createVariableDeclaration(
                                 factory.cloneNode(namespaceDeclaration.name),
@@ -944,14 +944,14 @@ export function transformModule(context: TransformationContext) {
                     }
                 }
 
-                statements = append(statements,
-                    setOriginalNode(
-                        setTextRange(
+                statements = ts.append(statements,
+                    ts.setOriginalNode(
+                        ts.setTextRange(
                             factory.createVariableStatement(
                                 /*modifiers*/ undefined,
                                 factory.createVariableDeclarationList(
                                     variables,
-                                    languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
+                                    languageVersion >= ts.ScriptTarget.ES2015 ? ts.NodeFlags.Const : ts.NodeFlags.None
                                 )
                             ),
                             /*location*/ node),
@@ -960,15 +960,15 @@ export function transformModule(context: TransformationContext) {
                 );
             }
         }
-        else if (namespaceDeclaration && isDefaultImport(node)) {
+        else if (namespaceDeclaration && ts.isDefaultImport(node)) {
             // import d, * as n from "mod";
-            statements = append(statements,
+            statements = ts.append(statements,
                 factory.createVariableStatement(
                     /*modifiers*/ undefined,
                     factory.createVariableDeclarationList(
                         [
-                            setOriginalNode(
-                                setTextRange(
+                            ts.setOriginalNode(
+                                ts.setTextRange(
                                     factory.createVariableDeclaration(
                                         factory.cloneNode(namespaceDeclaration.name),
                                         /*exclamationToken*/ undefined,
@@ -979,7 +979,7 @@ export function transformModule(context: TransformationContext) {
                                 /*original*/ node
                             )
                         ],
-                        languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
+                        languageVersion >= ts.ScriptTarget.ES2015 ? ts.NodeFlags.Const : ts.NodeFlags.None
                     )
                 )
             );
@@ -987,14 +987,14 @@ export function transformModule(context: TransformationContext) {
 
         if (hasAssociatedEndOfDeclarationMarker(node)) {
             // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
+            const id = ts.getOriginalNodeId(node);
             deferredExports[id] = appendExportsOfImportDeclaration(deferredExports[id], node);
         }
         else {
             statements = appendExportsOfImportDeclaration(statements, node);
         }
 
-        return singleOrMany(statements);
+        return ts.singleOrMany(statements);
     }
 
     /**
@@ -1002,9 +1002,9 @@ export function transformModule(context: TransformationContext) {
      *
      * @param importNode The declararation to import.
      */
-    function createRequireCall(importNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
-        const moduleName = getExternalModuleNameLiteral(factory, importNode, currentSourceFile, host, resolver, compilerOptions);
-        const args: Expression[] = [];
+    function createRequireCall(importNode: ts.ImportDeclaration | ts.ImportEqualsDeclaration | ts.ExportDeclaration) {
+        const moduleName = ts.getExternalModuleNameLiteral(factory, importNode, currentSourceFile, host, resolver, compilerOptions);
+        const args: ts.Expression[] = [];
         if (moduleName) {
             args.push(moduleName);
         }
@@ -1017,15 +1017,15 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement> {
-        Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
+    function visitImportEqualsDeclaration(node: ts.ImportEqualsDeclaration): ts.VisitResult<ts.Statement> {
+        ts.Debug.assert(ts.isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
 
-        let statements: Statement[] | undefined;
-        if (moduleKind !== ModuleKind.AMD) {
-            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-                statements = append(statements,
-                    setOriginalNode(
-                        setTextRange(
+        let statements: ts.Statement[] | undefined;
+        if (moduleKind !== ts.ModuleKind.AMD) {
+            if (ts.hasSyntacticModifier(node, ts.ModifierFlags.Export)) {
+                statements = ts.append(statements,
+                    ts.setOriginalNode(
+                        ts.setTextRange(
                             factory.createExpressionStatement(
                                 createExportExpression(
                                     node.name,
@@ -1038,9 +1038,9 @@ export function transformModule(context: TransformationContext) {
                 );
             }
             else {
-                statements = append(statements,
-                    setOriginalNode(
-                        setTextRange(
+                statements = ts.append(statements,
+                    ts.setOriginalNode(
+                        ts.setTextRange(
                             factory.createVariableStatement(
                                 /*modifiers*/ undefined,
                                 factory.createVariableDeclarationList(
@@ -1052,7 +1052,7 @@ export function transformModule(context: TransformationContext) {
                                             createRequireCall(node)
                                         )
                                     ],
-                                    /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
+                                    /*flags*/ languageVersion >= ts.ScriptTarget.ES2015 ? ts.NodeFlags.Const : ts.NodeFlags.None
                                 )
                             ),
                             node),
@@ -1062,10 +1062,10 @@ export function transformModule(context: TransformationContext) {
             }
         }
         else {
-            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-                statements = append(statements,
-                    setOriginalNode(
-                        setTextRange(
+            if (ts.hasSyntacticModifier(node, ts.ModifierFlags.Export)) {
+                statements = ts.append(statements,
+                    ts.setOriginalNode(
+                        ts.setTextRange(
                             factory.createExpressionStatement(
                                 createExportExpression(factory.getExportName(node), factory.getLocalName(node))
                             ),
@@ -1078,14 +1078,14 @@ export function transformModule(context: TransformationContext) {
 
         if (hasAssociatedEndOfDeclarationMarker(node)) {
             // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
+            const id = ts.getOriginalNodeId(node);
             deferredExports[id] = appendExportsOfImportEqualsDeclaration(deferredExports[id], node);
         }
         else {
             statements = appendExportsOfImportEqualsDeclaration(statements, node);
         }
 
-        return singleOrMany(statements);
+        return ts.singleOrMany(statements);
     }
 
     /**
@@ -1093,7 +1093,7 @@ export function transformModule(context: TransformationContext) {
      *
      * @param The node to visit.
      */
-    function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
+    function visitExportDeclaration(node: ts.ExportDeclaration): ts.VisitResult<ts.Statement> {
         if (!node.moduleSpecifier) {
             // Elide export declarations with no module specifier as they are handled
             // elsewhere.
@@ -1102,13 +1102,13 @@ export function transformModule(context: TransformationContext) {
 
         const generatedName = factory.getGeneratedNameForNode(node);
 
-        if (node.exportClause && isNamedExports(node.exportClause)) {
-            const statements: Statement[] = [];
+        if (node.exportClause && ts.isNamedExports(node.exportClause)) {
+            const statements: ts.Statement[] = [];
             // export { x, y } from "mod";
-            if (moduleKind !== ModuleKind.AMD) {
+            if (moduleKind !== ts.ModuleKind.AMD) {
                 statements.push(
-                    setOriginalNode(
-                        setTextRange(
+                    ts.setOriginalNode(
+                        ts.setTextRange(
                             factory.createVariableStatement(
                                 /*modifiers*/ undefined,
                                 factory.createVariableDeclarationList([
@@ -1126,10 +1126,10 @@ export function transformModule(context: TransformationContext) {
                 );
             }
             for (const specifier of node.exportClause.elements) {
-                if (languageVersion === ScriptTarget.ES3) {
+                if (languageVersion === ts.ScriptTarget.ES3) {
                     statements.push(
-                        setOriginalNode(
-                            setTextRange(
+                        ts.setOriginalNode(
+                            ts.setTextRange(
                                 factory.createExpressionStatement(
                                     emitHelpers().createCreateBindingHelper(generatedName, factory.createStringLiteralFromNode(specifier.propertyName || specifier.name), specifier.propertyName ? factory.createStringLiteralFromNode(specifier.name) : undefined)
                                 ),
@@ -1140,15 +1140,15 @@ export function transformModule(context: TransformationContext) {
                 }
                 else {
                     const exportNeedsImportDefault =
-                        !!getESModuleInterop(compilerOptions) &&
-                        !(getEmitFlags(node) & EmitFlags.NeverApplyImportHelper) &&
-                        idText(specifier.propertyName || specifier.name) === "default";
+                        !!ts.getESModuleInterop(compilerOptions) &&
+                        !(ts.getEmitFlags(node) & ts.EmitFlags.NeverApplyImportHelper) &&
+                        ts.idText(specifier.propertyName || specifier.name) === "default";
                     const exportedValue = factory.createPropertyAccessExpression(
                         exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
                         specifier.propertyName || specifier.name);
                     statements.push(
-                        setOriginalNode(
-                            setTextRange(
+                        ts.setOriginalNode(
+                            ts.setTextRange(
                                 factory.createExpressionStatement(
                                     createExportExpression(factory.getExportName(specifier), exportedValue, /* location */ undefined, /* liveBinding */ true)
                                 ),
@@ -1159,22 +1159,22 @@ export function transformModule(context: TransformationContext) {
                 }
             }
 
-            return singleOrMany(statements);
+            return ts.singleOrMany(statements);
         }
         else if (node.exportClause) {
-            const statements: Statement[] = [];
+            const statements: ts.Statement[] = [];
             // export * as ns from "mod";
             // export * as default from "mod";
             statements.push(
-                setOriginalNode(
-                    setTextRange(
+                ts.setOriginalNode(
+                    ts.setTextRange(
                         factory.createExpressionStatement(
                             createExportExpression(
                                 factory.cloneNode(node.exportClause.name),
-                                getHelperExpressionForExport(node, moduleKind !== ModuleKind.AMD ?
+                                getHelperExpressionForExport(node, moduleKind !== ts.ModuleKind.AMD ?
                                     createRequireCall(node) :
-                                    isExportNamespaceAsDefaultDeclaration(node) ? generatedName :
-                                        factory.createIdentifier(idText(node.exportClause.name)))
+                                    ts.isExportNamespaceAsDefaultDeclaration(node) ? generatedName :
+                                        factory.createIdentifier(ts.idText(node.exportClause.name)))
                             )
                         ),
                         node
@@ -1183,14 +1183,14 @@ export function transformModule(context: TransformationContext) {
                 )
             );
 
-            return singleOrMany(statements);
+            return ts.singleOrMany(statements);
         }
         else {
             // export * from "mod";
-            return setOriginalNode(
-                setTextRange(
+            return ts.setOriginalNode(
+                ts.setTextRange(
                     factory.createExpressionStatement(
-                        emitHelpers().createExportStarHelper(moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)
+                        emitHelpers().createExportStarHelper(moduleKind !== ts.ModuleKind.AMD ? createRequireCall(node) : generatedName)
                     ),
                     node),
                 node
@@ -1203,23 +1203,23 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> {
+    function visitExportAssignment(node: ts.ExportAssignment): ts.VisitResult<ts.Statement> {
         if (node.isExportEquals) {
             return undefined;
         }
 
-        let statements: Statement[] | undefined;
+        let statements: ts.Statement[] | undefined;
         const original = node.original;
         if (original && hasAssociatedEndOfDeclarationMarker(original)) {
             // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
-            deferredExports[id] = appendExportStatement(deferredExports[id], factory.createIdentifier("default"), visitNode(node.expression, visitor), /*location*/ node, /*allowComments*/ true);
+            const id = ts.getOriginalNodeId(node);
+            deferredExports[id] = appendExportStatement(deferredExports[id], factory.createIdentifier("default"), ts.visitNode(node.expression, visitor), /*location*/ node, /*allowComments*/ true);
         }
         else {
-            statements = appendExportStatement(statements, factory.createIdentifier("default"), visitNode(node.expression, visitor), /*location*/ node, /*allowComments*/ true);
+            statements = appendExportStatement(statements, factory.createIdentifier("default"), ts.visitNode(node.expression, visitor), /*location*/ node, /*allowComments*/ true);
         }
 
-        return singleOrMany(statements);
+        return ts.singleOrMany(statements);
     }
 
     /**
@@ -1227,20 +1227,20 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
-        let statements: Statement[] | undefined;
-        if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-            statements = append(statements,
-                setOriginalNode(
-                    setTextRange(
+    function visitFunctionDeclaration(node: ts.FunctionDeclaration): ts.VisitResult<ts.Statement> {
+        let statements: ts.Statement[] | undefined;
+        if (ts.hasSyntacticModifier(node, ts.ModifierFlags.Export)) {
+            statements = ts.append(statements,
+                ts.setOriginalNode(
+                    ts.setTextRange(
                         factory.createFunctionDeclaration(
-                            visitNodes(node.modifiers, modifierVisitor, isModifier),
+                            ts.visitNodes(node.modifiers, modifierVisitor, ts.isModifier),
                             node.asteriskToken,
                             factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                             /*typeParameters*/ undefined,
-                            visitNodes(node.parameters, visitor),
+                            ts.visitNodes(node.parameters, visitor),
                             /*type*/ undefined,
-                            visitEachChild(node.body, visitor, context)
+                            ts.visitEachChild(node.body, visitor, context)
                         ),
                         /*location*/ node
                     ),
@@ -1249,19 +1249,19 @@ export function transformModule(context: TransformationContext) {
             );
         }
         else {
-            statements = append(statements, visitEachChild(node, visitor, context));
+            statements = ts.append(statements, ts.visitEachChild(node, visitor, context));
         }
 
         if (hasAssociatedEndOfDeclarationMarker(node)) {
             // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
+            const id = ts.getOriginalNodeId(node);
             deferredExports[id] = appendExportsOfHoistedDeclaration(deferredExports[id], node);
         }
         else {
             statements = appendExportsOfHoistedDeclaration(statements, node);
         }
 
-        return singleOrMany(statements);
+        return ts.singleOrMany(statements);
     }
 
     /**
@@ -1269,18 +1269,18 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
-        let statements: Statement[] | undefined;
-        if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-            statements = append(statements,
-                setOriginalNode(
-                    setTextRange(
+    function visitClassDeclaration(node: ts.ClassDeclaration): ts.VisitResult<ts.Statement> {
+        let statements: ts.Statement[] | undefined;
+        if (ts.hasSyntacticModifier(node, ts.ModifierFlags.Export)) {
+            statements = ts.append(statements,
+                ts.setOriginalNode(
+                    ts.setTextRange(
                         factory.createClassDeclaration(
-                            visitNodes(node.modifiers, modifierVisitor, isModifierLike),
+                            ts.visitNodes(node.modifiers, modifierVisitor, ts.isModifierLike),
                             factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                             /*typeParameters*/ undefined,
-                            visitNodes(node.heritageClauses, visitor),
-                            visitNodes(node.members, visitor)
+                            ts.visitNodes(node.heritageClauses, visitor),
+                            ts.visitNodes(node.members, visitor)
                         ),
                         node
                     ),
@@ -1289,19 +1289,19 @@ export function transformModule(context: TransformationContext) {
             );
         }
         else {
-            statements = append(statements, visitEachChild(node, visitor, context));
+            statements = ts.append(statements, ts.visitEachChild(node, visitor, context));
         }
 
         if (hasAssociatedEndOfDeclarationMarker(node)) {
             // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
+            const id = ts.getOriginalNodeId(node);
             deferredExports[id] = appendExportsOfHoistedDeclaration(deferredExports[id], node);
         }
         else {
             statements = appendExportsOfHoistedDeclaration(statements, node);
         }
 
-        return singleOrMany(statements);
+        return ts.singleOrMany(statements);
     }
 
     /**
@@ -1309,89 +1309,89 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitVariableStatement(node: VariableStatement): VisitResult<Statement> {
-        let statements: Statement[] | undefined;
-        let variables: VariableDeclaration[] | undefined;
-        let expressions: Expression[] | undefined;
+    function visitVariableStatement(node: ts.VariableStatement): ts.VisitResult<ts.Statement> {
+        let statements: ts.Statement[] | undefined;
+        let variables: ts.VariableDeclaration[] | undefined;
+        let expressions: ts.Expression[] | undefined;
 
-        if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-            let modifiers: NodeArray<Modifier> | undefined;
+        if (ts.hasSyntacticModifier(node, ts.ModifierFlags.Export)) {
+            let modifiers: ts.NodeArray<ts.Modifier> | undefined;
             let removeCommentsOnExpressions = false;
 
             // If we're exporting these variables, then these just become assignments to 'exports.x'.
             for (const variable of node.declarationList.declarations) {
-                if (isIdentifier(variable.name) && isLocalName(variable.name)) {
+                if (ts.isIdentifier(variable.name) && ts.isLocalName(variable.name)) {
                     if (!modifiers) {
-                        modifiers = visitNodes(node.modifiers, modifierVisitor, isModifier);
+                        modifiers = ts.visitNodes(node.modifiers, modifierVisitor, ts.isModifier);
                     }
 
-                    variables = append(variables, variable);
+                    variables = ts.append(variables, variable);
                 }
                 else if (variable.initializer) {
-                    if (!isBindingPattern(variable.name) && (isArrowFunction(variable.initializer) || isFunctionExpression(variable.initializer) || isClassExpression(variable.initializer))) {
+                    if (!ts.isBindingPattern(variable.name) && (ts.isArrowFunction(variable.initializer) || ts.isFunctionExpression(variable.initializer) || ts.isClassExpression(variable.initializer))) {
                         const expression = factory.createAssignment(
-                            setTextRange(
+                            ts.setTextRange(
                                 factory.createPropertyAccessExpression(
                                     factory.createIdentifier("exports"),
                                     variable.name
                                 ),
                                 /*location*/ variable.name
                             ),
-                            factory.createIdentifier(getTextOfIdentifierOrLiteral(variable.name))
+                            factory.createIdentifier(ts.getTextOfIdentifierOrLiteral(variable.name))
                         );
                         const updatedVariable = factory.createVariableDeclaration(
                             variable.name,
                             variable.exclamationToken,
                             variable.type,
-                            visitNode(variable.initializer, visitor)
+                            ts.visitNode(variable.initializer, visitor)
                         );
 
-                        variables = append(variables, updatedVariable);
-                        expressions = append(expressions, expression);
+                        variables = ts.append(variables, updatedVariable);
+                        expressions = ts.append(expressions, expression);
                         removeCommentsOnExpressions = true;
                     }
                     else {
-                        expressions = append(expressions, transformInitializedVariable(variable as InitializedVariableDeclaration));
+                        expressions = ts.append(expressions, transformInitializedVariable(variable as ts.InitializedVariableDeclaration));
                     }
                 }
             }
 
             if (variables) {
-                statements = append(statements, factory.updateVariableStatement(node, modifiers, factory.updateVariableDeclarationList(node.declarationList, variables)));
+                statements = ts.append(statements, factory.updateVariableStatement(node, modifiers, factory.updateVariableDeclarationList(node.declarationList, variables)));
             }
 
             if (expressions) {
-                const statement = setOriginalNode(setTextRange(factory.createExpressionStatement(factory.inlineExpressions(expressions)), node), node);
+                const statement = ts.setOriginalNode(ts.setTextRange(factory.createExpressionStatement(factory.inlineExpressions(expressions)), node), node);
                 if (removeCommentsOnExpressions) {
-                    removeAllComments(statement);
+                    ts.removeAllComments(statement);
                 }
-                statements = append(statements, statement);
+                statements = ts.append(statements, statement);
             }
         }
         else {
-            statements = append(statements, visitEachChild(node, visitor, context));
+            statements = ts.append(statements, ts.visitEachChild(node, visitor, context));
         }
 
         if (hasAssociatedEndOfDeclarationMarker(node)) {
             // Defer exports until we encounter an EndOfDeclarationMarker node
-            const id = getOriginalNodeId(node);
+            const id = ts.getOriginalNodeId(node);
             deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], node);
         }
         else {
             statements = appendExportsOfVariableStatement(statements, node);
         }
 
-        return singleOrMany(statements);
+        return ts.singleOrMany(statements);
     }
 
-    function createAllExportExpressions(name: Identifier, value: Expression, location?: TextRange) {
+    function createAllExportExpressions(name: ts.Identifier, value: ts.Expression, location?: ts.TextRange) {
         const exportedNames = getExports(name);
         if (exportedNames) {
             // For each additional export of the declaration, apply an export assignment.
-            let expression: Expression = isExportName(name) ? value : factory.createAssignment(name, value);
+            let expression: ts.Expression = ts.isExportName(name) ? value : factory.createAssignment(name, value);
             for (const exportName of exportedNames) {
                 // Mark the node to prevent triggering substitution.
-                setEmitFlags(expression, EmitFlags.NoSubstitution);
+                ts.setEmitFlags(expression, ts.EmitFlags.NoSubstitution);
                 expression = createExportExpression(exportName, expression, /*location*/ location);
             }
 
@@ -1405,27 +1405,27 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The node to transform.
      */
-    function transformInitializedVariable(node: InitializedVariableDeclaration): Expression {
-        if (isBindingPattern(node.name)) {
-            return flattenDestructuringAssignment(
-                visitNode(node, visitor),
+    function transformInitializedVariable(node: ts.InitializedVariableDeclaration): ts.Expression {
+        if (ts.isBindingPattern(node.name)) {
+            return ts.flattenDestructuringAssignment(
+                ts.visitNode(node, visitor),
                 /*visitor*/ undefined,
                 context,
-                FlattenLevel.All,
+                ts.FlattenLevel.All,
                 /*needsValue*/ false,
                 createAllExportExpressions
             );
         }
         else {
             return factory.createAssignment(
-                setTextRange(
+                ts.setTextRange(
                     factory.createPropertyAccessExpression(
                         factory.createIdentifier("exports"),
                         node.name
                     ),
                     /*location*/ node.name
                 ),
-                node.initializer ? visitNode(node.initializer, visitor) : factory.createVoidZero()
+                node.initializer ? ts.visitNode(node.initializer, visitor) : factory.createVoidZero()
             );
         }
     }
@@ -1436,7 +1436,7 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitMergeDeclarationMarker(node: MergeDeclarationMarker): VisitResult<Statement> {
+    function visitMergeDeclarationMarker(node: ts.MergeDeclarationMarker): ts.VisitResult<ts.Statement> {
         // For an EnumDeclaration or ModuleDeclaration that merges with a preceeding
         // declaration we do not emit a leading variable declaration. To preserve the
         // begin/end semantics of the declararation and to properly handle exports
@@ -1444,9 +1444,9 @@ export function transformModule(context: TransformationContext) {
         //
         // To balance the declaration, add the exports of the elided variable
         // statement.
-        if (hasAssociatedEndOfDeclarationMarker(node) && node.original!.kind === SyntaxKind.VariableStatement) {
-            const id = getOriginalNodeId(node);
-            deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], node.original as VariableStatement);
+        if (hasAssociatedEndOfDeclarationMarker(node) && node.original!.kind === ts.SyntaxKind.VariableStatement) {
+            const id = ts.getOriginalNodeId(node);
+            deferredExports[id] = appendExportsOfVariableStatement(deferredExports[id], node.original as ts.VariableStatement);
         }
 
         return node;
@@ -1457,8 +1457,8 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The node to test.
      */
-    function hasAssociatedEndOfDeclarationMarker(node: Node) {
-        return (getEmitFlags(node) & EmitFlags.HasEndOfDeclarationMarker) !== 0;
+    function hasAssociatedEndOfDeclarationMarker(node: ts.Node) {
+        return (ts.getEmitFlags(node) & ts.EmitFlags.HasEndOfDeclarationMarker) !== 0;
     }
 
     /**
@@ -1467,15 +1467,15 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitEndOfDeclarationMarker(node: EndOfDeclarationMarker): VisitResult<Statement> {
+    function visitEndOfDeclarationMarker(node: ts.EndOfDeclarationMarker): ts.VisitResult<ts.Statement> {
         // For some transformations we emit an `EndOfDeclarationMarker` to mark the actual
         // end of the transformed declaration. We use this marker to emit any deferred exports
         // of the declaration.
-        const id = getOriginalNodeId(node);
+        const id = ts.getOriginalNodeId(node);
         const statements = deferredExports[id];
         if (statements) {
             delete deferredExports[id];
-            return append(statements, node);
+            return ts.append(statements, node);
         }
 
         return node;
@@ -1490,7 +1490,7 @@ export function transformModule(context: TransformationContext) {
      * appended.
      * @param decl The declaration whose exports are to be recorded.
      */
-    function appendExportsOfImportDeclaration(statements: Statement[] | undefined, decl: ImportDeclaration): Statement[] | undefined {
+    function appendExportsOfImportDeclaration(statements: ts.Statement[] | undefined, decl: ts.ImportDeclaration): ts.Statement[] | undefined {
         if (currentModuleInfo.exportEquals) {
             return statements;
         }
@@ -1507,11 +1507,11 @@ export function transformModule(context: TransformationContext) {
         const namedBindings = importClause.namedBindings;
         if (namedBindings) {
             switch (namedBindings.kind) {
-                case SyntaxKind.NamespaceImport:
+                case ts.SyntaxKind.NamespaceImport:
                     statements = appendExportsOfDeclaration(statements, namedBindings);
                     break;
 
-                case SyntaxKind.NamedImports:
+                case ts.SyntaxKind.NamedImports:
                     for (const importBinding of namedBindings.elements) {
                         statements = appendExportsOfDeclaration(statements, importBinding, /* liveBinding */ true);
                     }
@@ -1532,7 +1532,7 @@ export function transformModule(context: TransformationContext) {
      * appended.
      * @param decl The declaration whose exports are to be recorded.
      */
-    function appendExportsOfImportEqualsDeclaration(statements: Statement[] | undefined, decl: ImportEqualsDeclaration): Statement[] | undefined {
+    function appendExportsOfImportEqualsDeclaration(statements: ts.Statement[] | undefined, decl: ts.ImportEqualsDeclaration): ts.Statement[] | undefined {
         if (currentModuleInfo.exportEquals) {
             return statements;
         }
@@ -1549,7 +1549,7 @@ export function transformModule(context: TransformationContext) {
      * appended.
      * @param node The VariableStatement whose exports are to be recorded.
      */
-    function appendExportsOfVariableStatement(statements: Statement[] | undefined, node: VariableStatement): Statement[] | undefined {
+    function appendExportsOfVariableStatement(statements: ts.Statement[] | undefined, node: ts.VariableStatement): ts.Statement[] | undefined {
         if (currentModuleInfo.exportEquals) {
             return statements;
         }
@@ -1570,19 +1570,19 @@ export function transformModule(context: TransformationContext) {
      * appended.
      * @param decl The declaration whose exports are to be recorded.
      */
-    function appendExportsOfBindingElement(statements: Statement[] | undefined, decl: VariableDeclaration | BindingElement): Statement[] | undefined {
+    function appendExportsOfBindingElement(statements: ts.Statement[] | undefined, decl: ts.VariableDeclaration | ts.BindingElement): ts.Statement[] | undefined {
         if (currentModuleInfo.exportEquals) {
             return statements;
         }
 
-        if (isBindingPattern(decl.name)) {
+        if (ts.isBindingPattern(decl.name)) {
             for (const element of decl.name.elements) {
-                if (!isOmittedExpression(element)) {
+                if (!ts.isOmittedExpression(element)) {
                     statements = appendExportsOfBindingElement(statements, element);
                 }
             }
         }
-        else if (!isGeneratedIdentifier(decl.name)) {
+        else if (!ts.isGeneratedIdentifier(decl.name)) {
             statements = appendExportsOfDeclaration(statements, decl);
         }
 
@@ -1598,13 +1598,13 @@ export function transformModule(context: TransformationContext) {
      * appended.
      * @param decl The declaration whose exports are to be recorded.
      */
-    function appendExportsOfHoistedDeclaration(statements: Statement[] | undefined, decl: ClassDeclaration | FunctionDeclaration): Statement[] | undefined {
+    function appendExportsOfHoistedDeclaration(statements: ts.Statement[] | undefined, decl: ts.ClassDeclaration | ts.FunctionDeclaration): ts.Statement[] | undefined {
         if (currentModuleInfo.exportEquals) {
             return statements;
         }
 
-        if (hasSyntacticModifier(decl, ModifierFlags.Export)) {
-            const exportName = hasSyntacticModifier(decl, ModifierFlags.Default) ? factory.createIdentifier("default") : factory.getDeclarationName(decl);
+        if (ts.hasSyntacticModifier(decl, ts.ModifierFlags.Export)) {
+            const exportName = ts.hasSyntacticModifier(decl, ts.ModifierFlags.Default) ? factory.createIdentifier("default") : factory.getDeclarationName(decl);
             statements = appendExportStatement(statements, exportName, factory.getLocalName(decl), /*location*/ decl);
         }
 
@@ -1623,9 +1623,9 @@ export function transformModule(context: TransformationContext) {
      * appended.
      * @param decl The declaration to export.
      */
-    function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration, liveBinding?: boolean): Statement[] | undefined {
+    function appendExportsOfDeclaration(statements: ts.Statement[] | undefined, decl: ts.Declaration, liveBinding?: boolean): ts.Statement[] | undefined {
         const name = factory.getDeclarationName(decl);
-        const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(idText(name));
+        const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(ts.idText(name));
         if (exportSpecifiers) {
             for (const exportSpecifier of exportSpecifiers) {
                 statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name, /* allowComments */ undefined, liveBinding);
@@ -1646,14 +1646,14 @@ export function transformModule(context: TransformationContext) {
      * @param location The location to use for source maps and comments for the export.
      * @param allowComments Whether to allow comments on the export.
      */
-    function appendExportStatement(statements: Statement[] | undefined, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean): Statement[] | undefined {
-        statements = append(statements, createExportStatement(exportName, expression, location, allowComments, liveBinding));
+    function appendExportStatement(statements: ts.Statement[] | undefined, exportName: ts.Identifier, expression: ts.Expression, location?: ts.TextRange, allowComments?: boolean, liveBinding?: boolean): ts.Statement[] | undefined {
+        statements = ts.append(statements, createExportStatement(exportName, expression, location, allowComments, liveBinding));
         return statements;
     }
 
     function createUnderscoreUnderscoreESModule() {
-        let statement: Statement;
-        if (languageVersion === ScriptTarget.ES3) {
+        let statement: ts.Statement;
+        if (languageVersion === ts.ScriptTarget.ES3) {
             statement = factory.createExpressionStatement(
                 createExportExpression(
                     factory.createIdentifier("__esModule"),
@@ -1676,7 +1676,7 @@ export function transformModule(context: TransformationContext) {
                 )
             );
         }
-        setEmitFlags(statement, EmitFlags.CustomPrologue);
+        ts.setEmitFlags(statement, ts.EmitFlags.CustomPrologue);
         return statement;
     }
 
@@ -1688,11 +1688,11 @@ export function transformModule(context: TransformationContext) {
      * @param location The location to use for source maps and comments for the export.
      * @param allowComments An optional value indicating whether to emit comments for the statement.
      */
-    function createExportStatement(name: Identifier, value: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean) {
-        const statement = setTextRange(factory.createExpressionStatement(createExportExpression(name, value, /* location */ undefined, liveBinding)), location);
-        startOnNewLine(statement);
+    function createExportStatement(name: ts.Identifier, value: ts.Expression, location?: ts.TextRange, allowComments?: boolean, liveBinding?: boolean) {
+        const statement = ts.setTextRange(factory.createExpressionStatement(createExportExpression(name, value, /* location */ undefined, liveBinding)), location);
+        ts.startOnNewLine(statement);
         if (!allowComments) {
-            setEmitFlags(statement, EmitFlags.NoComments);
+            ts.setEmitFlags(statement, ts.EmitFlags.NoComments);
         }
 
         return statement;
@@ -1705,9 +1705,9 @@ export function transformModule(context: TransformationContext) {
      * @param value The exported value.
      * @param location The location to use for source maps and comments for the export.
      */
-    function createExportExpression(name: Identifier, value: Expression, location?: TextRange, liveBinding?: boolean) {
-        return setTextRange(
-            liveBinding && languageVersion !== ScriptTarget.ES3 ? factory.createCallExpression(
+    function createExportExpression(name: ts.Identifier, value: ts.Expression, location?: ts.TextRange, liveBinding?: boolean) {
+        return ts.setTextRange(
+            liveBinding && languageVersion !== ts.ScriptTarget.ES3 ? factory.createCallExpression(
                 factory.createPropertyAccessExpression(
                     factory.createIdentifier("Object"),
                     "defineProperty"
@@ -1749,11 +1749,11 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function modifierVisitor(node: Node): VisitResult<Node> {
+    function modifierVisitor(node: ts.Node): ts.VisitResult<ts.Node> {
         // Elide module-specific modifiers.
         switch (node.kind) {
-            case SyntaxKind.ExportKeyword:
-            case SyntaxKind.DefaultKeyword:
+            case ts.SyntaxKind.ExportKeyword:
+            case ts.SyntaxKind.DefaultKeyword:
                 return undefined;
         }
 
@@ -1771,10 +1771,10 @@ export function transformModule(context: TransformationContext) {
      * @param node The node to emit.
      * @param emit A callback used to emit the node in the printer.
      */
-    function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
-        if (node.kind === SyntaxKind.SourceFile) {
-            currentSourceFile = node as SourceFile;
-            currentModuleInfo = moduleInfoMap[getOriginalNodeId(currentSourceFile)];
+    function onEmitNode(hint: ts.EmitHint, node: ts.Node, emitCallback: (hint: ts.EmitHint, node: ts.Node) => void): void {
+        if (node.kind === ts.SyntaxKind.SourceFile) {
+            currentSourceFile = node as ts.SourceFile;
+            currentModuleInfo = moduleInfoMap[ts.getOriginalNodeId(currentSourceFile)];
 
             previousOnEmitNode(hint, node, emitCallback);
 
@@ -1796,16 +1796,16 @@ export function transformModule(context: TransformationContext) {
      * @param hint A hint as to the intended usage of the node.
      * @param node The node to substitute.
      */
-    function onSubstituteNode(hint: EmitHint, node: Node) {
+    function onSubstituteNode(hint: ts.EmitHint, node: ts.Node) {
         node = previousOnSubstituteNode(hint, node);
         if (node.id && noSubstitution[node.id]) {
             return node;
         }
 
-        if (hint === EmitHint.Expression) {
-            return substituteExpression(node as Expression);
+        if (hint === ts.EmitHint.Expression) {
+            return substituteExpression(node as ts.Expression);
         }
-        else if (isShorthandPropertyAssignment(node)) {
+        else if (ts.isShorthandPropertyAssignment(node)) {
             return substituteShorthandPropertyAssignment(node);
         }
 
@@ -1818,7 +1818,7 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The node to substitute.
      */
-    function substituteShorthandPropertyAssignment(node: ShorthandPropertyAssignment): ObjectLiteralElementLike {
+    function substituteShorthandPropertyAssignment(node: ts.ShorthandPropertyAssignment): ts.ObjectLiteralElementLike {
         const name = node.name;
         const exportedOrImportedName = substituteExpressionIdentifier(name);
         if (exportedOrImportedName !== name) {
@@ -1826,9 +1826,9 @@ export function transformModule(context: TransformationContext) {
             // destructuring assignment
             if (node.objectAssignmentInitializer) {
                 const initializer = factory.createAssignment(exportedOrImportedName, node.objectAssignmentInitializer);
-                return setTextRange(factory.createPropertyAssignment(name, initializer), node);
+                return ts.setTextRange(factory.createPropertyAssignment(name, initializer), node);
             }
-            return setTextRange(factory.createPropertyAssignment(name, exportedOrImportedName), node);
+            return ts.setTextRange(factory.createPropertyAssignment(name, exportedOrImportedName), node);
         }
         return node;
     }
@@ -1838,33 +1838,33 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The node to substitute.
      */
-    function substituteExpression(node: Expression) {
+    function substituteExpression(node: ts.Expression) {
         switch (node.kind) {
-            case SyntaxKind.Identifier:
-                return substituteExpressionIdentifier(node as Identifier);
-            case SyntaxKind.CallExpression:
-                return substituteCallExpression(node as CallExpression);
-            case SyntaxKind.TaggedTemplateExpression:
-                return substituteTaggedTemplateExpression(node as TaggedTemplateExpression);
-            case SyntaxKind.BinaryExpression:
-                return substituteBinaryExpression(node as BinaryExpression);
+            case ts.SyntaxKind.Identifier:
+                return substituteExpressionIdentifier(node as ts.Identifier);
+            case ts.SyntaxKind.CallExpression:
+                return substituteCallExpression(node as ts.CallExpression);
+            case ts.SyntaxKind.TaggedTemplateExpression:
+                return substituteTaggedTemplateExpression(node as ts.TaggedTemplateExpression);
+            case ts.SyntaxKind.BinaryExpression:
+                return substituteBinaryExpression(node as ts.BinaryExpression);
         }
 
         return node;
     }
 
-    function substituteCallExpression(node: CallExpression) {
-        if (isIdentifier(node.expression)) {
+    function substituteCallExpression(node: ts.CallExpression) {
+        if (ts.isIdentifier(node.expression)) {
             const expression = substituteExpressionIdentifier(node.expression);
-            noSubstitution[getNodeId(expression)] = true;
-            if (!isIdentifier(expression) && !(getEmitFlags(node.expression) & EmitFlags.HelperName)) {
-                return addEmitFlags(
+            noSubstitution[ts.getNodeId(expression)] = true;
+            if (!ts.isIdentifier(expression) && !(ts.getEmitFlags(node.expression) & ts.EmitFlags.HelperName)) {
+                return ts.addEmitFlags(
                     factory.updateCallExpression(node,
                         expression,
                         /*typeArguments*/ undefined,
                         node.arguments
                     ),
-                    EmitFlags.IndirectCall
+                    ts.EmitFlags.IndirectCall
                 );
 
             }
@@ -1872,18 +1872,18 @@ export function transformModule(context: TransformationContext) {
         return node;
     }
 
-    function substituteTaggedTemplateExpression(node: TaggedTemplateExpression) {
-        if (isIdentifier(node.tag)) {
+    function substituteTaggedTemplateExpression(node: ts.TaggedTemplateExpression) {
+        if (ts.isIdentifier(node.tag)) {
             const tag = substituteExpressionIdentifier(node.tag);
-            noSubstitution[getNodeId(tag)] = true;
-            if (!isIdentifier(tag) && !(getEmitFlags(node.tag) & EmitFlags.HelperName)) {
-                return addEmitFlags(
+            noSubstitution[ts.getNodeId(tag)] = true;
+            if (!ts.isIdentifier(tag) && !(ts.getEmitFlags(node.tag) & ts.EmitFlags.HelperName)) {
+                return ts.addEmitFlags(
                     factory.updateTaggedTemplateExpression(node,
                         tag,
                         /*typeArguments*/ undefined,
                         node.template
                     ),
-                    EmitFlags.IndirectCall
+                    ts.EmitFlags.IndirectCall
                 );
             }
         }
@@ -1896,18 +1896,18 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The node to substitute.
      */
-    function substituteExpressionIdentifier(node: Identifier): Expression {
-        if (getEmitFlags(node) & EmitFlags.HelperName) {
-            const externalHelpersModuleName = getExternalHelpersModuleName(currentSourceFile);
+    function substituteExpressionIdentifier(node: ts.Identifier): ts.Expression {
+        if (ts.getEmitFlags(node) & ts.EmitFlags.HelperName) {
+            const externalHelpersModuleName = ts.getExternalHelpersModuleName(currentSourceFile);
             if (externalHelpersModuleName) {
                 return factory.createPropertyAccessExpression(externalHelpersModuleName, node);
             }
             return node;
         }
-        else if (!(isGeneratedIdentifier(node) && !(node.autoGenerateFlags & GeneratedIdentifierFlags.AllowNameSubstitution)) && !isLocalName(node)) {
-            const exportContainer = resolver.getReferencedExportContainer(node, isExportName(node));
-            if (exportContainer && exportContainer.kind === SyntaxKind.SourceFile) {
-                return setTextRange(
+        else if (!(ts.isGeneratedIdentifier(node) && !(node.autoGenerateFlags & ts.GeneratedIdentifierFlags.AllowNameSubstitution)) && !ts.isLocalName(node)) {
+            const exportContainer = resolver.getReferencedExportContainer(node, ts.isExportName(node));
+            if (exportContainer && exportContainer.kind === ts.SyntaxKind.SourceFile) {
+                return ts.setTextRange(
                     factory.createPropertyAccessExpression(
                         factory.createIdentifier("exports"),
                         factory.cloneNode(node)
@@ -1917,8 +1917,8 @@ export function transformModule(context: TransformationContext) {
             }
             const importDeclaration = resolver.getReferencedImportDeclaration(node);
             if (importDeclaration) {
-                if (isImportClause(importDeclaration)) {
-                    return setTextRange(
+                if (ts.isImportClause(importDeclaration)) {
+                    return ts.setTextRange(
                         factory.createPropertyAccessExpression(
                             factory.getGeneratedNameForNode(importDeclaration.parent),
                             factory.createIdentifier("default")
@@ -1926,9 +1926,9 @@ export function transformModule(context: TransformationContext) {
                         /*location*/ node
                     );
                 }
-                else if (isImportSpecifier(importDeclaration)) {
+                else if (ts.isImportSpecifier(importDeclaration)) {
                     const name = importDeclaration.propertyName || importDeclaration.name;
-                    return setTextRange(
+                    return ts.setTextRange(
                         factory.createPropertyAccessExpression(
                             factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
                             factory.cloneNode(name)
@@ -1946,7 +1946,7 @@ export function transformModule(context: TransformationContext) {
      *
      * @param node The node to substitute.
      */
-    function substituteBinaryExpression(node: BinaryExpression): Expression {
+    function substituteBinaryExpression(node: ts.BinaryExpression): ts.Expression {
         // When we see an assignment expression whose left-hand side is an exported symbol,
         // we should ensure all exports of that symbol are updated with the correct value.
         //
@@ -1955,18 +1955,18 @@ export function transformModule(context: TransformationContext) {
         // - We do not substitute identifiers that were originally the name of an enum or
         //   namespace due to how they are transformed in TypeScript.
         // - We only substitute identifiers that are exported at the top level.
-        if (isAssignmentOperator(node.operatorToken.kind)
-            && isIdentifier(node.left)
-            && !isGeneratedIdentifier(node.left)
-            && !isLocalName(node.left)
-            && !isDeclarationNameOfEnumOrNamespace(node.left)) {
+        if (ts.isAssignmentOperator(node.operatorToken.kind)
+            && ts.isIdentifier(node.left)
+            && !ts.isGeneratedIdentifier(node.left)
+            && !ts.isLocalName(node.left)
+            && !ts.isDeclarationNameOfEnumOrNamespace(node.left)) {
             const exportedNames = getExports(node.left);
             if (exportedNames) {
                 // For each additional export of the declaration, apply an export assignment.
-                let expression: Expression = node;
+                let expression: ts.Expression = node;
                 for (const exportName of exportedNames) {
                     // Mark the node to prevent triggering this rule again.
-                    noSubstitution[getNodeId(expression)] = true;
+                    noSubstitution[ts.getNodeId(expression)] = true;
                     expression = createExportExpression(exportName, expression, /*location*/ node);
                 }
 
@@ -1982,20 +1982,20 @@ export function transformModule(context: TransformationContext) {
      *
      * @param name The name.
      */
-    function getExports(name: Identifier): Identifier[] | undefined {
-        if (!isGeneratedIdentifier(name)) {
+    function getExports(name: ts.Identifier): ts.Identifier[] | undefined {
+        if (!ts.isGeneratedIdentifier(name)) {
             const valueDeclaration = resolver.getReferencedImportDeclaration(name)
                 || resolver.getReferencedValueDeclaration(name);
             if (valueDeclaration) {
                 return currentModuleInfo
-                    && currentModuleInfo.exportedBindings[getOriginalNodeId(valueDeclaration)];
+                    && currentModuleInfo.exportedBindings[ts.getOriginalNodeId(valueDeclaration)];
             }
         }
     }
 }
 
 // emit helper for dynamic import
-const dynamicImportUMDHelper: EmitHelper = {
+const dynamicImportUMDHelper: ts.EmitHelper = {
     name: "typescript:dynamicimport-sync-require",
     scoped: true,
     text: `

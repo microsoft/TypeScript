@@ -3,11 +3,11 @@ function editFlat(position: number, deletedLength: number, newText: string, sour
     return source.substring(0, position) + newText + source.substring(position + deletedLength, source.length);
 }
 
-function lineColToPosition(lineIndex: server.LineIndex, line: number, col: number) {
+function lineColToPosition(lineIndex: ts.server.LineIndex, line: number, col: number) {
     return lineIndex.absolutePositionOfStartOfLine(line) + (col - 1);
 }
 
-function validateEdit(lineIndex: server.LineIndex, sourceText: string, position: number, deleteLength: number, insertString: string): void {
+function validateEdit(lineIndex: ts.server.LineIndex, sourceText: string, position: number, deleteLength: number, insertString: string): void {
     const checkText = editFlat(position, deleteLength, insertString, sourceText);
     const snapshot = lineIndex.edit(position, deleteLength, insertString);
     const editedText = snapshot.getText(0, snapshot.getLength());
@@ -30,10 +30,10 @@ k=y;
 var p:Point=new Point();
 var q:Point=<Point>p;`;
 
-        const { lines } = server.LineIndex.linesFromText(testContent);
+        const { lines } = ts.server.LineIndex.linesFromText(testContent);
         assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
 
-        const lineIndex = new server.LineIndex();
+        const lineIndex = new ts.server.LineIndex();
         lineIndex.load(lines);
 
         validateEditAtLineCharIndex = (line: number, char: number, deleteLength: number, insertString: string) => {
@@ -47,7 +47,7 @@ var q:Point=<Point>p;`;
     });
 
     it("handles empty lines array", () => {
-        const lineIndex = new server.LineIndex();
+        const lineIndex = new ts.server.LineIndex();
         lineIndex.load([]);
         assert.deepEqual(lineIndex.positionToLineOffset(0), { line: 1, offset: 1 });
     });
@@ -55,8 +55,8 @@ var q:Point=<Point>p;`;
     it("handles emptying whole file (GH#44518)", () => {
         // See below for the main thing that this tests; it would be better to have a test
         // that uses `ScriptInfo.positionToLineOffset` but I couldn't find away to do that
-        const { lines } = server.LineIndex.linesFromText("function foo() {\n\ndsa\n\n}\n\nfo(dsa\n\n\n    ");
-        const lineIndex = new server.LineIndex();
+        const { lines } = ts.server.LineIndex.linesFromText("function foo() {\n\ndsa\n\n}\n\nfo(dsa\n\n\n    ");
+        const lineIndex = new ts.server.LineIndex();
         lineIndex.load(lines);
         const snapshot = lineIndex.edit(0, 39);
         assert.equal(snapshot.getText(0, snapshot.getLength()), "");
@@ -102,10 +102,10 @@ that ate the grass
 that was purple at the tips
 and grew 1cm per day`;
 
-        ({ lines, lineMap } = server.LineIndex.linesFromText(testContent));
+        ({ lines, lineMap } = ts.server.LineIndex.linesFromText(testContent));
         assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
 
-        const lineIndex = new server.LineIndex();
+        const lineIndex = new ts.server.LineIndex();
         lineIndex.load(lines);
 
         validateEditAtPosition = (position: number, deleteLength: number, insertString: string) => {
@@ -204,7 +204,7 @@ describe(`unittests:: tsserver:: VersionCache stress test`, () => {
     // const iterationCount = 20000; // uncomment for testing
     let lines: string[];
     let lineMap: number[];
-    let lineIndex: server.LineIndex;
+    let lineIndex: ts.server.LineIndex;
     let testContent: string;
 
     before(() => {
@@ -214,10 +214,10 @@ describe(`unittests:: tsserver:: VersionCache stress test`, () => {
         const totalChars = testContent.length;
         assert.isTrue(totalChars > 0, "Failed to read test file.");
 
-        ({ lines, lineMap } = server.LineIndex.linesFromText(testContent));
+        ({ lines, lineMap } = ts.server.LineIndex.linesFromText(testContent));
         assert.isTrue(lines.length > 0, "Failed to initialize test text. Expected text to have at least one line");
 
-        lineIndex = new server.LineIndex();
+        lineIndex = new ts.server.LineIndex();
         lineIndex.load(lines);
 
         let etotalChars = totalChars;
@@ -285,7 +285,7 @@ describe(`unittests:: tsserver:: VersionCache stress test`, () => {
     });
 
     it("Edit ScriptVersionCache ", () => {
-        const svc = server.ScriptVersionCache.fromString(testContent);
+        const svc = ts.server.ScriptVersionCache.fromString(testContent);
         let checkText = testContent;
 
         for (let i = 0; i < iterationCount; i++) {
@@ -293,7 +293,7 @@ describe(`unittests:: tsserver:: VersionCache stress test`, () => {
             svc.edit(ersa[i], elas[i], insertString);
             checkText = editFlat(ersa[i], elas[i], insertString, checkText);
             if (0 === (i % 4)) {
-                assert.equal(checkText, getSnapshotText(svc.getSnapshot()));
+                assert.equal(checkText, ts.getSnapshotText(svc.getSnapshot()));
             }
         }
     });
@@ -311,7 +311,7 @@ describe(`unittests:: tsserver:: VersionCache stress test`, () => {
     it("Line/offset from pos", () => {
         for (let i = 0; i < iterationCount; i++) {
             const lp = lineIndex.positionToLineOffset(rsa[i]);
-            const lac = computeLineAndCharacterOfPosition(lineMap, rsa[i]);
+            const lac = ts.computeLineAndCharacterOfPosition(lineMap, rsa[i]);
             assert.equal(lac.line + 1, lp.line, "Line number mismatch " + (lac.line + 1) + " " + lp.line + " " + i);
             assert.equal(lac.character, lp.offset - 1, "Character offset mismatch " + lac.character + " " + (lp.offset - 1) + " " + i);
         }

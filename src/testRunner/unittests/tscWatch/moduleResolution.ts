@@ -1,11 +1,11 @@
 namespace ts.tscWatch {
 describe("unittests:: tsc-watch:: moduleResolution", () => {
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "moduleResolution",
         subScenario: `watches for changes to package-json main fields`,
-        sys: () => createWatchedSystem([
+        sys: () => ts.tscWatch.createWatchedSystem([
             {
-                path: `${projectRoot}/packages/pkg1/package.json`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg1/package.json`,
                 content: JSON.stringify({
                     name: "pkg1",
                     version: "1.0.0",
@@ -13,13 +13,13 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 })
             },
             {
-                path: `${projectRoot}/packages/pkg1/index.ts`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg1/index.ts`,
                 content: Utils.dedent`
             import type { TheNum } from 'pkg2'
             export const theNum: TheNum = 42;`
             },
             {
-                path: `${projectRoot}/packages/pkg1/tsconfig.json`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg1/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         outDir: "build",
@@ -27,19 +27,19 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 })
             },
             {
-                path: `${projectRoot}/packages/pkg2/build/const.d.ts`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg2/build/const.d.ts`,
                 content: `export type TheNum = 42;`
             },
             {
-                path: `${projectRoot}/packages/pkg2/build/index.d.ts`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg2/build/index.d.ts`,
                 content: `export type { TheNum } from './const.js';`
             },
             {
-                path: `${projectRoot}/packages/pkg2/build/other.d.ts`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg2/build/other.d.ts`,
                 content: `export type TheStr = string;`
             },
             {
-                path: `${projectRoot}/packages/pkg2/package.json`,
+                path: `${ts.tscWatch.projectRoot}/packages/pkg2/package.json`,
                 content: JSON.stringify({
                     name: "pkg2",
                     version: "1.0.0",
@@ -47,16 +47,16 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 })
             },
             {
-                path: `${projectRoot}/node_modules/pkg2`,
-                symLink: `${projectRoot}/packages/pkg2`,
+                path: `${ts.tscWatch.projectRoot}/node_modules/pkg2`,
+                symLink: `${ts.tscWatch.projectRoot}/packages/pkg2`,
             },
-            libFile
-        ], { currentDirectory: projectRoot }),
+            ts.tscWatch.libFile
+        ], { currentDirectory: ts.tscWatch.projectRoot }),
         commandLineArgs: ["--project", "./packages/pkg1/tsconfig.json", "-w", "--traceResolution"],
         changes: [
             {
                 caption: "reports import errors after change to package file",
-                change: sys => replaceFileText(sys, `${projectRoot}/packages/pkg2/package.json`, `index.js`, `other.js`),
+                change: sys => ts.tscWatch.replaceFileText(sys, `${ts.tscWatch.projectRoot}/packages/pkg2/package.json`, `index.js`, `other.js`),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // invalidates failed lookups
                     sys.runQueuedTimeoutCallbacks(); // actual update
@@ -64,7 +64,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             },
             {
                 caption: "removes those errors when a package file is changed back",
-                change: sys => replaceFileText(sys, `${projectRoot}/packages/pkg2/package.json`, `other.js`, `index.js`),
+                change: sys => ts.tscWatch.replaceFileText(sys, `${ts.tscWatch.projectRoot}/packages/pkg2/package.json`, `other.js`, `index.js`),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // invalidates failed lookups
                     sys.runQueuedTimeoutCallbacks(); // actual update
@@ -73,12 +73,12 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
         ]
     });
 
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "moduleResolution",
         subScenario: "diagnostics from cache",
-        sys: () => createWatchedSystem([
+        sys: () => ts.tscWatch.createWatchedSystem([
             {
-                path: `${projectRoot}/tsconfig.json`,
+                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         moduleResolution: "nodenext",
@@ -89,7 +89,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 })
             },
             {
-                path: `${projectRoot}/package.json`,
+                path: `${ts.tscWatch.projectRoot}/package.json`,
                 content: JSON.stringify({
                     name: "@this/package",
                     type: "module",
@@ -102,23 +102,23 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 })
             },
             {
-                path: `${projectRoot}/index.ts`,
+                path: `${ts.tscWatch.projectRoot}/index.ts`,
                 content: Utils.dedent`
                         import * as me from "@this/package";
                         me.thing()
                         export function thing(): void {}
                     `
             },
-            libFile
-        ], { currentDirectory: projectRoot }),
+            ts.tscWatch.libFile
+        ], { currentDirectory: ts.tscWatch.projectRoot }),
         commandLineArgs: ["-w", "--traceResolution"],
-        changes: emptyArray
+        changes: ts.emptyArray
     });
 
     describe("package json file is edited", () => {
         function getSys(packageFileContents: string) {
-            const configFile: File = {
-                path: `${projectRoot}/src/tsconfig.json`,
+            const configFile: ts.tscWatch.File = {
+                path: `${ts.tscWatch.projectRoot}/src/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         target: "es2016",
@@ -127,30 +127,30 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     }
                 })
             };
-            const packageFile: File = {
-                path: `${projectRoot}/package.json`,
+            const packageFile: ts.tscWatch.File = {
+                path: `${ts.tscWatch.projectRoot}/package.json`,
                 content: packageFileContents
             };
-            const fileA: File = {
-                path: `${projectRoot}/src/fileA.ts`,
+            const fileA: ts.tscWatch.File = {
+                path: `${ts.tscWatch.projectRoot}/src/fileA.ts`,
                 content: Utils.dedent`
                         import { foo } from "./fileB.mjs";
                         foo();
                     `
             };
-            const fileB: File = {
-                path: `${projectRoot}/project/src/fileB.mts`,
+            const fileB: ts.tscWatch.File = {
+                path: `${ts.tscWatch.projectRoot}/project/src/fileB.mts`,
                 content: Utils.dedent`
                         export function foo() {
                         }
                     `
             };
-            return createWatchedSystem(
-                [configFile, fileA, fileB, packageFile, { ...libFile, path: "/a/lib/lib.es2016.full.d.ts" }],
-                { currentDirectory: projectRoot }
+            return ts.tscWatch.createWatchedSystem(
+                [configFile, fileA, fileB, packageFile, { ...ts.tscWatch.libFile, path: "/a/lib/lib.es2016.full.d.ts" }],
+                { currentDirectory: ts.tscWatch.projectRoot }
             );
         }
-        verifyTscWatch({
+        ts.tscWatch.verifyTscWatch({
             scenario: "moduleResolution",
             subScenario: "package json file is edited",
             commandLineArgs: ["--w", "--p", "src", "--extendedDiagnostics", "-traceResolution", "--explainFiles"],
@@ -158,7 +158,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             changes: [
                 {
                     caption: "Modify package json file to add type module",
-                    change: sys => sys.writeFile(`${projectRoot}/package.json`, JSON.stringify({
+                    change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/package.json`, JSON.stringify({
                         name: "app", version: "1.0.0", type: "module",
                     })),
                     timeouts: host => {
@@ -168,7 +168,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Modify package.json file to remove type module",
-                    change: sys => sys.writeFile(`${projectRoot}/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
+                    change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -176,7 +176,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Delete package.json",
-                    change: sys => sys.deleteFile(`${projectRoot}/package.json`),
+                    change: sys => sys.deleteFile(`${ts.tscWatch.projectRoot}/package.json`),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -184,7 +184,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Modify package json file to add type module",
-                    change: sys => sys.writeFile(`${projectRoot}/package.json`, JSON.stringify({
+                    change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/package.json`, JSON.stringify({
                         name: "app", version: "1.0.0", type: "module",
                     })),
                     timeouts: host => {
@@ -194,7 +194,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Delete package.json",
-                    change: sys => sys.deleteFile(`${projectRoot}/package.json`),
+                    change: sys => sys.deleteFile(`${ts.tscWatch.projectRoot}/package.json`),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -203,7 +203,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             ],
         });
 
-        verifyTscWatch({
+        ts.tscWatch.verifyTscWatch({
             scenario: "moduleResolution",
             subScenario: "package json file is edited when package json with type module exists",
             commandLineArgs: ["--w", "--p", "src", "--extendedDiagnostics", "-traceResolution", "--explainFiles"],
@@ -213,7 +213,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             changes: [
                 {
                     caption: "Modify package.json file to remove type module",
-                    change: sys => sys.writeFile(`${projectRoot}/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
+                    change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -221,7 +221,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Modify package json file to add type module",
-                    change: sys => sys.writeFile(`${projectRoot}/package.json`, JSON.stringify({
+                    change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/package.json`, JSON.stringify({
                         name: "app", version: "1.0.0", type: "module",
                     })),
                     timeouts: host => {
@@ -231,7 +231,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Delete package.json",
-                    change: sys => sys.deleteFile(`${projectRoot}/package.json`),
+                    change: sys => sys.deleteFile(`${ts.tscWatch.projectRoot}/package.json`),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -239,7 +239,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Modify package json file to without type module",
-                    change: sys => sys.writeFile(`${projectRoot}/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
+                    change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -247,7 +247,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Delete package.json",
-                    change: sys => sys.deleteFile(`${projectRoot}/package.json`),
+                    change: sys => sys.deleteFile(`${ts.tscWatch.projectRoot}/package.json`),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -257,18 +257,18 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
         });
     });
 
-    verifyTscWatch({
+    ts.tscWatch.verifyTscWatch({
         scenario: "moduleResolution",
         subScenario: "module resolutions from file are partially used",
-        sys: () => createWatchedSystem([
+        sys: () => ts.tscWatch.createWatchedSystem([
             {
-                path: `${projectRoot}/tsconfig.json`,
+                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { moduleResolution: "node16" },
                 })
             },
             {
-                path: `${projectRoot}/index.ts`,
+                path: `${ts.tscWatch.projectRoot}/index.ts`,
                 content: Utils.dedent`
                         import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" };
                         import type { RequireInterface } from "pkg1" assert { "resolution-mode": "require" };
@@ -276,13 +276,13 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                     `
             },
             {
-                path: `${projectRoot}/a.ts`,
+                path: `${ts.tscWatch.projectRoot}/a.ts`,
                 content: Utils.dedent`
                         export const x = 10;
                     `
             },
             {
-                path: `${projectRoot}/node_modules/pkg/package.json`,
+                path: `${ts.tscWatch.projectRoot}/node_modules/pkg/package.json`,
                 content: JSON.stringify({
                     name: "pkg",
                     version: "0.0.1",
@@ -293,15 +293,15 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 })
             },
             {
-                path: `${projectRoot}/node_modules/pkg/import.d.ts`,
+                path: `${ts.tscWatch.projectRoot}/node_modules/pkg/import.d.ts`,
                 content: `export interface ImportInterface {}`
             },
             {
-                path: `${projectRoot}/node_modules/pkg/require.d.ts`,
+                path: `${ts.tscWatch.projectRoot}/node_modules/pkg/require.d.ts`,
                 content: `export interface RequireInterface {}`
             },
             {
-                path: `${projectRoot}/node_modules/pkg1/package.json`,
+                path: `${ts.tscWatch.projectRoot}/node_modules/pkg1/package.json`,
                 content: JSON.stringify({
                     name: "pkg1",
                     version: "0.0.1",
@@ -312,16 +312,16 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 })
             },
             {
-                path: `${projectRoot}/node_modules/pkg1/import.d.ts`,
+                path: `${ts.tscWatch.projectRoot}/node_modules/pkg1/import.d.ts`,
                 content: `export interface ImportInterface {}`
             },
-            libFile
-        ], { currentDirectory: projectRoot }),
+            ts.tscWatch.libFile
+        ], { currentDirectory: ts.tscWatch.projectRoot }),
         commandLineArgs: ["-w", "--traceResolution"],
         changes: [
             {
                 caption: "modify aFile by adding import",
-                change: sys => sys.appendFile(`${projectRoot}/a.ts`, `import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" }`),
+                change: sys => sys.appendFile(`${ts.tscWatch.projectRoot}/a.ts`, `import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" }`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]

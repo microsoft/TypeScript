@@ -5,8 +5,8 @@
 //     - error: TBD
 namespace ts {
 /** @deprecated Use `isTypeAssertionExpression` instead. */
-export const isTypeAssertion = Debug.deprecate(function isTypeAssertion(node: Node): node is TypeAssertion {
-    return node.kind === SyntaxKind.TypeAssertionExpression;
+export const isTypeAssertion = ts.Debug.deprecate(function isTypeAssertion(node: ts.Node): node is ts.TypeAssertion {
+    return node.kind === ts.SyntaxKind.TypeAssertionExpression;
 }, {
     since: "4.0",
     warnAfter: "4.1",

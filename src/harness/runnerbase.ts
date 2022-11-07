@@ -18,7 +18,7 @@ export function setShardId(id: number) {
 
 export abstract class RunnerBase {
     // contains the tests to run
-    public tests: (string | FileBasedTest)[] = [];
+    public tests: (string | Harness.FileBasedTest)[] = [];
 
     /** Add a source file to the runner's list of tests that need to be initialized with initializeTests */
     public addTest(fileName: string) {
@@ -26,12 +26,12 @@ export abstract class RunnerBase {
     }
 
     public enumerateFiles(folder: string, regex?: RegExp, options?: { recursive: boolean }): string[] {
-        return ts.map(IO.listFiles(userSpecifiedRoot + folder, regex, { recursive: (options ? options.recursive : false) }), ts.normalizeSlashes);
+        return ts.map(Harness.IO.listFiles(Harness.userSpecifiedRoot + folder, regex, { recursive: (options ? options.recursive : false) }), ts.normalizeSlashes);
     }
 
     abstract kind(): TestRunnerKind;
 
-    abstract enumerateTestFiles(): (string | FileBasedTest)[];
+    abstract enumerateTestFiles(): (string | Harness.FileBasedTest)[];
 
     getTestFiles(): ReturnType<this["enumerateTestFiles"]> {
         const all = this.enumerateTestFiles();

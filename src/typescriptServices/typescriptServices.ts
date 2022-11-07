@@ -3,13 +3,13 @@ namespace ts {
 // enable deprecation logging
 declare const console: any;
 if (typeof console !== "undefined") {
-    Debug.loggingHost = {
+    ts.Debug.loggingHost = {
         log(level, s) {
             switch (level) {
-                case LogLevel.Error: return console.error(s);
-                case LogLevel.Warning: return console.warn(s);
-                case LogLevel.Info: return console.log(s);
-                case LogLevel.Verbose: return console.log(s);
+                case ts.LogLevel.Error: return console.error(s);
+                case ts.LogLevel.Warning: return console.warn(s);
+                case ts.LogLevel.Info: return console.log(s);
+                case ts.LogLevel.Verbose: return console.log(s);
             }
         }
     };

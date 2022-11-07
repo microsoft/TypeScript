@@ -1,45 +1,45 @@
 /*@internal*/
 namespace ts {
-export function transformES2021(context: TransformationContext) {
+export function transformES2021(context: ts.TransformationContext) {
     const {
         hoistVariableDeclaration,
         factory
     } = context;
-    return chainBundle(context, transformSourceFile);
+    return ts.chainBundle(context, transformSourceFile);
 
-    function transformSourceFile(node: SourceFile) {
+    function transformSourceFile(node: ts.SourceFile) {
         if (node.isDeclarationFile) {
             return node;
         }
 
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function visitor(node: Node): VisitResult<Node> {
-        if ((node.transformFlags & TransformFlags.ContainsES2021) === 0) {
+    function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
+        if ((node.transformFlags & ts.TransformFlags.ContainsES2021) === 0) {
             return node;
         }
         switch (node.kind) {
-            case SyntaxKind.BinaryExpression:
-                const binaryExpression = node as BinaryExpression;
-                if (isLogicalOrCoalescingAssignmentExpression(binaryExpression)) {
+            case ts.SyntaxKind.BinaryExpression:
+                const binaryExpression = node as ts.BinaryExpression;
+                if (ts.isLogicalOrCoalescingAssignmentExpression(binaryExpression)) {
                     return transformLogicalAssignment(binaryExpression);
                 }
             // falls through
             default:
-                return visitEachChild(node, visitor, context);
+                return ts.visitEachChild(node, visitor, context);
         }
     }
 
-    function transformLogicalAssignment(binaryExpression: AssignmentExpression<Token<LogicalOrCoalescingAssignmentOperator>>): VisitResult<Node> {
+    function transformLogicalAssignment(binaryExpression: ts.AssignmentExpression<ts.Token<ts.LogicalOrCoalescingAssignmentOperator>>): ts.VisitResult<ts.Node> {
         const operator = binaryExpression.operatorToken;
-        const nonAssignmentOperator = getNonAssignmentOperatorForCompoundAssignment(operator.kind);
-        let left = skipParentheses(visitNode(binaryExpression.left, visitor, isLeftHandSideExpression));
+        const nonAssignmentOperator = ts.getNonAssignmentOperatorForCompoundAssignment(operator.kind);
+        let left = ts.skipParentheses(ts.visitNode(binaryExpression.left, visitor, ts.isLeftHandSideExpression));
         let assignmentTarget = left;
-        const right = skipParentheses(visitNode(binaryExpression.right, visitor, isExpression));
+        const right = ts.skipParentheses(ts.visitNode(binaryExpression.right, visitor, ts.isExpression));
 
-        if (isAccessExpression(left)) {
-            const propertyAccessTargetSimpleCopiable = isSimpleCopiableExpression(left.expression);
+        if (ts.isAccessExpression(left)) {
+            const propertyAccessTargetSimpleCopiable = ts.isSimpleCopiableExpression(left.expression);
             const propertyAccessTarget = propertyAccessTargetSimpleCopiable ? left.expression :
                 factory.createTempVariable(hoistVariableDeclaration);
             const propertyAccessTargetAssignment = propertyAccessTargetSimpleCopiable ? left.expression : factory.createAssignment(
@@ -47,7 +47,7 @@ export function transformES2021(context: TransformationContext) {
                 left.expression
             );
 
-            if (isPropertyAccessExpression(left)) {
+            if (ts.isPropertyAccessExpression(left)) {
                 assignmentTarget = factory.createPropertyAccessExpression(
                     propertyAccessTarget,
                     left.name
@@ -58,7 +58,7 @@ export function transformES2021(context: TransformationContext) {
                 );
             }
             else {
-                const elementAccessArgumentSimpleCopiable = isSimpleCopiableExpression(left.argumentExpression);
+                const elementAccessArgumentSimpleCopiable = ts.isSimpleCopiableExpression(left.argumentExpression);
                 const elementAccessArgument = elementAccessArgumentSimpleCopiable ? left.argumentExpression :
                     factory.createTempVariable(hoistVariableDeclaration);
 

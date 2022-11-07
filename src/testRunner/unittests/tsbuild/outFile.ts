@@ -3,7 +3,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
     let outFileFs: vfs.FileSystem;
     let outFileWithBuildFs: vfs.FileSystem;
     before(() => {
-        outFileFs = loadProjectFromDisk("tests/projects/outfile-concat");
+        outFileFs = ts.loadProjectFromDisk("tests/projects/outfile-concat");
     });
     after(() => {
         outFileFs = undefined!;
@@ -29,17 +29,17 @@ describe("unittests:: tsbuild:: outFile::", () => {
         baselineOnly,
         additionalCommandLineArgs,
     }: VerifyOutFileScenarioInput) {
-        const edits: TestTscEdit[] = [];
+        const edits: ts.TestTscEdit[] = [];
         if (!ignoreDtsChanged) {
             edits.push({
                 subScenario: "incremental-declaration-changes",
-                modifyFs: fs => replaceText(fs, "/src/first/first_PART1.ts", "Hello", "Hola"),
+                modifyFs: fs => ts.replaceText(fs, "/src/first/first_PART1.ts", "Hello", "Hola"),
             });
         }
         if (!ignoreDtsUnchanged) {
             edits.push({
                 subScenario: "incremental-declaration-doesnt-change",
-                modifyFs: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
+                modifyFs: fs => ts.appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
             });
         }
         if (modifyAgainFs) {
@@ -48,7 +48,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
                 modifyFs: modifyAgainFs
             });
         }
-        const input: VerifyTscWithEditsInput = {
+        const input: ts.VerifyTscWithEditsInput = {
             subScenario,
             fs: () => outFileFs,
             scenario: "outfile-concat",
@@ -59,8 +59,8 @@ describe("unittests:: tsbuild:: outFile::", () => {
             edits,
         };
         return edits.length ?
-            verifyTscWithEdits(input) :
-            verifyTsc(input);
+            ts.verifyTscWithEdits(input) :
+            ts.verifyTsc(input);
     }
 
     // Verify initial + incremental edits
@@ -77,7 +77,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
     // Verify baseline with build info + dts unChanged
     verifyOutFileScenario({
         subScenario: "when final project is not composite but uses project references",
-        modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
+        modifyFs: fs => ts.replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
         ignoreDtsChanged: true,
         baselineOnly: true
     });
@@ -85,7 +85,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
     // Verify baseline with build info
     verifyOutFileScenario({
         subScenario: "when final project is not composite but incremental",
-        modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, `"incremental": true,`),
+        modifyFs: fs => ts.replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, `"incremental": true,`),
         ignoreDtsChanged: true,
         ignoreDtsUnchanged: true,
         baselineOnly: true
@@ -94,7 +94,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
     // Verify baseline with build info
     verifyOutFileScenario({
         subScenario: "when final project specifies tsBuildInfoFile",
-        modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, `"composite": true,
+        modifyFs: fs => ts.replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, `"composite": true,
         "tsBuildInfoFile": "./thirdjs/output/third.tsbuildinfo",`),
         ignoreDtsChanged: true,
         ignoreDtsUnchanged: true,
@@ -105,22 +105,22 @@ describe("unittests:: tsbuild:: outFile::", () => {
         if (outFileWithBuildFs) return outFileWithBuildFs;
         const fs = outFileFs.shadow();
         const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" });
-        const host = createSolutionBuilderHostForBaseline(sys as TscCompileSystem);
-        const builder = createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true });
+        const host = ts.createSolutionBuilderHostForBaseline(sys as ts.TscCompileSystem);
+        const builder = ts.createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true });
         builder.build();
         fs.makeReadonly();
         return outFileWithBuildFs = fs;
     }
 
-    verifyTscWithEdits({
+    ts.verifyTscWithEdits({
         scenario: "outFile",
         subScenario: "clean projects",
         fs: getOutFileFsAfterBuild,
         commandLineArgs: ["--b", "/src/third", "--clean"],
-        edits: noChangeOnlyRuns
+        edits: ts.noChangeOnlyRuns
     });
 
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "outFile",
         subScenario: "verify buildInfo absence results in new build",
         fs: getOutFileFsAfterBuild,
@@ -128,50 +128,50 @@ describe("unittests:: tsbuild:: outFile::", () => {
         modifyFs: fs => fs.unlinkSync("/src/first/bin/first-output.tsbuildinfo"),
     });
 
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "outFile",
         subScenario: "tsbuildinfo is not generated when incremental is set to false",
         fs: () => outFileFs,
         commandLineArgs: ["--b", "/src/third", "--verbose"],
-        modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
+        modifyFs: fs => ts.replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
     });
 
-    verifyTscCompileLike(testTscCompileLike, {
+    ts.verifyTscCompileLike(ts.testTscCompileLike, {
         scenario: "outFile",
         subScenario: "rebuilds completely when version in tsbuildinfo doesnt match ts version",
         fs: getOutFileFsAfterBuild,
         commandLineArgs: ["--b", "/src/third", "--verbose"],
         compile: sys => {
             // Buildinfo will have version which does not match with current ts version
-            const buildHost = createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
-            const builder = createSolutionBuilder(buildHost, ["/src/third"], { verbose: true });
+            const buildHost = ts.createSolutionBuilderHostForBaseline(sys, "FakeTSCurrentVersion");
+            const builder = ts.createSolutionBuilder(buildHost, ["/src/third"], { verbose: true });
             sys.exit(builder.build());
         }
     });
 
-    verifyTscWithEdits({
+    ts.verifyTscWithEdits({
         scenario: "outFile",
         subScenario: "rebuilds completely when command line incremental flag changes between non dts changes",
         fs: () => outFileFs,
         // Make non composite third project
-        modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
+        modifyFs: fs => ts.replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
         // Build with command line incremental
         commandLineArgs: ["--b", "/src/third", "--i", "--verbose"],
         edits: [
             {
                 subScenario: "Make non incremental build with change in file that doesnt affect dts",
-                modifyFs: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
+                modifyFs: fs => ts.appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
                 commandLineArgs: ["--b", "/src/third", "--verbose"],
             },
             {
                 subScenario: "Make incremental build with change in file that doesnt affect dts",
-                modifyFs: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
+                modifyFs: fs => ts.appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
                 commandLineArgs: ["--b", "/src/third", "--verbose", "--incremental"],
             }
         ]
     });
 
-    verifyTscWithEdits({
+    ts.verifyTscWithEdits({
         scenario: "outFile",
         subScenario: "when input file text does not change but its modified time changes",
         fs: () => outFileFs,
@@ -187,26 +187,26 @@ describe("unittests:: tsbuild:: outFile::", () => {
         ]
     });
 
-    verifyTscCompileLike(testTscCompileLike, {
+    ts.verifyTscCompileLike(ts.testTscCompileLike, {
         scenario: "outFile",
         subScenario: "builds till project specified",
         fs: () => outFileFs,
         commandLineArgs: ["--build", "/src/second/tsconfig.json"],
         compile: sys => {
-            const buildHost = createSolutionBuilderHostForBaseline(sys);
-            const builder = createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
+            const buildHost = ts.createSolutionBuilderHostForBaseline(sys);
+            const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], {});
             sys.exit(builder.build("/src/second/tsconfig.json"));
         }
     });
 
-    verifyTscCompileLike(testTscCompileLike, {
+    ts.verifyTscCompileLike(ts.testTscCompileLike, {
         scenario: "outFile",
         subScenario: "cleans till project specified",
         fs: getOutFileFsAfterBuild,
         commandLineArgs: ["--build", "--clean", "/src/second/tsconfig.json"],
         compile: sys => {
-            const buildHost = createSolutionBuilderHostForBaseline(sys);
-            const builder = createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], { verbose: true });
+            const buildHost = ts.createSolutionBuilderHostForBaseline(sys);
+            const builder = ts.createSolutionBuilder(buildHost, ["/src/third/tsconfig.json"], { verbose: true });
             sys.exit(builder.clean("/src/second/tsconfig.json"));
         }
     });
@@ -218,18 +218,18 @@ describe("unittests:: tsbuild:: outFile::", () => {
             verifyOutFileScenario({
                 subScenario: "strict in all projects",
                 modifyFs: fs => {
-                    enableStrict(fs, "/src/first/tsconfig.json");
-                    enableStrict(fs, "/src/second/tsconfig.json");
-                    enableStrict(fs, "/src/third/tsconfig.json");
+                    ts.enableStrict(fs, "/src/first/tsconfig.json");
+                    ts.enableStrict(fs, "/src/second/tsconfig.json");
+                    ts.enableStrict(fs, "/src/third/tsconfig.json");
                 },
-                modifyAgainFs: fs => addTestPrologue(fs, "/src/first/first_PART1.ts", `"myPrologue"`)
+                modifyAgainFs: fs => ts.addTestPrologue(fs, "/src/first/first_PART1.ts", `"myPrologue"`)
             });
 
             // Verify ignore dtsChanged
             verifyOutFileScenario({
                 subScenario: "strict in one dependency",
-                modifyFs: fs => enableStrict(fs, "/src/second/tsconfig.json"),
-                modifyAgainFs: fs => addTestPrologue(fs, "src/first/first_PART1.ts", `"myPrologue"`),
+                modifyFs: fs => ts.enableStrict(fs, "/src/second/tsconfig.json"),
+                modifyAgainFs: fs => ts.addTestPrologue(fs, "src/first/first_PART1.ts", `"myPrologue"`),
                 ignoreDtsChanged: true,
                 baselineOnly: true
             });
@@ -238,28 +238,28 @@ describe("unittests:: tsbuild:: outFile::", () => {
             verifyOutFileScenario({
                 subScenario: "multiple prologues in all projects",
                 modifyFs: fs => {
-                    enableStrict(fs, "/src/first/tsconfig.json");
-                    addTestPrologue(fs, "/src/first/first_PART1.ts", `"myPrologue"`);
-                    enableStrict(fs, "/src/second/tsconfig.json");
-                    addTestPrologue(fs, "/src/second/second_part1.ts", `"myPrologue"`);
-                    addTestPrologue(fs, "/src/second/second_part2.ts", `"myPrologue2";`);
-                    enableStrict(fs, "/src/third/tsconfig.json");
-                    addTestPrologue(fs, "/src/third/third_part1.ts", `"myPrologue";`);
-                    addTestPrologue(fs, "/src/third/third_part1.ts", `"myPrologue3";`);
+                    ts.enableStrict(fs, "/src/first/tsconfig.json");
+                    ts.addTestPrologue(fs, "/src/first/first_PART1.ts", `"myPrologue"`);
+                    ts.enableStrict(fs, "/src/second/tsconfig.json");
+                    ts.addTestPrologue(fs, "/src/second/second_part1.ts", `"myPrologue"`);
+                    ts.addTestPrologue(fs, "/src/second/second_part2.ts", `"myPrologue2";`);
+                    ts.enableStrict(fs, "/src/third/tsconfig.json");
+                    ts.addTestPrologue(fs, "/src/third/third_part1.ts", `"myPrologue";`);
+                    ts.addTestPrologue(fs, "/src/third/third_part1.ts", `"myPrologue3";`);
                 },
-                modifyAgainFs: fs => addTestPrologue(fs, "/src/first/first_PART1.ts", `"myPrologue5"`)
+                modifyAgainFs: fs => ts.addTestPrologue(fs, "/src/first/first_PART1.ts", `"myPrologue5"`)
             });
 
             // Verify ignore dtsChanged
             verifyOutFileScenario({
                 subScenario: "multiple prologues in different projects",
                 modifyFs: fs => {
-                    enableStrict(fs, "/src/first/tsconfig.json");
-                    addTestPrologue(fs, "/src/second/second_part1.ts", `"myPrologue"`);
-                    addTestPrologue(fs, "/src/second/second_part2.ts", `"myPrologue2";`);
-                    enableStrict(fs, "/src/third/tsconfig.json");
+                    ts.enableStrict(fs, "/src/first/tsconfig.json");
+                    ts.addTestPrologue(fs, "/src/second/second_part1.ts", `"myPrologue"`);
+                    ts.addTestPrologue(fs, "/src/second/second_part2.ts", `"myPrologue2";`);
+                    ts.enableStrict(fs, "/src/third/tsconfig.json");
                 },
-                modifyAgainFs: fs => addTestPrologue(fs, "/src/first/first_PART1.ts", `"myPrologue5"`),
+                modifyAgainFs: fs => ts.addTestPrologue(fs, "/src/first/first_PART1.ts", `"myPrologue5"`),
                 ignoreDtsChanged: true,
                 baselineOnly: true
             });
@@ -272,17 +272,17 @@ describe("unittests:: tsbuild:: outFile::", () => {
             verifyOutFileScenario({
                 subScenario: "shebang in all projects",
                 modifyFs: fs => {
-                    addShebang(fs, "first", "first_PART1");
-                    addShebang(fs, "first", "first_part2");
-                    addShebang(fs, "second", "second_part1");
-                    addShebang(fs, "third", "third_part1");
+                    ts.addShebang(fs, "first", "first_PART1");
+                    ts.addShebang(fs, "first", "first_part2");
+                    ts.addShebang(fs, "second", "second_part1");
+                    ts.addShebang(fs, "third", "third_part1");
                 },
             });
 
             // Verify ignore dtsChanged
             verifyOutFileScenario({
                 subScenario: "shebang in only one dependency project",
-                modifyFs: fs => addShebang(fs, "second", "second_part1"),
+                modifyFs: fs => ts.addShebang(fs, "second", "second_part1"),
                 ignoreDtsChanged: true,
                 baselineOnly: true
             });
@@ -294,21 +294,21 @@ describe("unittests:: tsbuild:: outFile::", () => {
             verifyOutFileScenario({
                 subScenario: "emitHelpers in all projects",
                 modifyFs: fs => {
-                    addRest(fs, "first", "first_PART1");
-                    addRest(fs, "second", "second_part1");
-                    addRest(fs, "third", "third_part1");
+                    ts.addRest(fs, "first", "first_PART1");
+                    ts.addRest(fs, "second", "second_part1");
+                    ts.addRest(fs, "third", "third_part1");
                 },
-                modifyAgainFs: fs => removeRest(fs, "first", "first_PART1")
+                modifyAgainFs: fs => ts.removeRest(fs, "first", "first_PART1")
             });
 
             // Verify ignore dtsChanged
             verifyOutFileScenario({
                 subScenario: "emitHelpers in only one dependency project",
                 modifyFs: fs => {
-                    addStubFoo(fs, "first", "first_PART1");
-                    addRest(fs, "second", "second_part1");
+                    ts.addStubFoo(fs, "first", "first_PART1");
+                    ts.addRest(fs, "second", "second_part1");
                 },
-                modifyAgainFs: fs => changeStubToRest(fs, "first", "first_PART1"),
+                modifyAgainFs: fs => ts.changeStubToRest(fs, "first", "first_PART1"),
                 ignoreDtsChanged: true,
                 baselineOnly: true
             });
@@ -317,14 +317,14 @@ describe("unittests:: tsbuild:: outFile::", () => {
             verifyOutFileScenario({
                 subScenario: "multiple emitHelpers in all projects",
                 modifyFs: fs => {
-                    addRest(fs, "first", "first_PART1");
-                    addSpread(fs, "first", "first_part3");
-                    addRest(fs, "second", "second_part1");
-                    addSpread(fs, "second", "second_part2");
-                    addRest(fs, "third", "third_part1");
-                    addSpread(fs, "third", "third_part1");
+                    ts.addRest(fs, "first", "first_PART1");
+                    ts.addSpread(fs, "first", "first_part3");
+                    ts.addRest(fs, "second", "second_part1");
+                    ts.addSpread(fs, "second", "second_part2");
+                    ts.addRest(fs, "third", "third_part1");
+                    ts.addSpread(fs, "third", "third_part1");
                 },
-                modifyAgainFs: fs => removeRest(fs, "first", "first_PART1"),
+                modifyAgainFs: fs => ts.removeRest(fs, "first", "first_PART1"),
                 ignoreDtsChanged: true,
                 baselineOnly: true
             });
@@ -333,11 +333,11 @@ describe("unittests:: tsbuild:: outFile::", () => {
             verifyOutFileScenario({
                 subScenario: "multiple emitHelpers in different projects",
                 modifyFs: fs => {
-                    addRest(fs, "first", "first_PART1");
-                    addSpread(fs, "second", "second_part1");
-                    addRest(fs, "third", "third_part1");
+                    ts.addRest(fs, "first", "first_PART1");
+                    ts.addSpread(fs, "second", "second_part1");
+                    ts.addRest(fs, "third", "third_part1");
                 },
-                modifyAgainFs: fs => removeRest(fs, "first", "first_PART1"),
+                modifyAgainFs: fs => ts.removeRest(fs, "first", "first_PART1"),
                 ignoreDtsChanged: true,
                 baselineOnly: true
             });
@@ -350,16 +350,16 @@ describe("unittests:: tsbuild:: outFile::", () => {
             verifyOutFileScenario({
                 subScenario: "triple slash refs in all projects",
                 modifyFs: fs => {
-                    addTripleSlashRef(fs, "first", "first_part2");
-                    addTripleSlashRef(fs, "second", "second_part1");
-                    addTripleSlashRef(fs, "third", "third_part1");
+                    ts.addTripleSlashRef(fs, "first", "first_part2");
+                    ts.addTripleSlashRef(fs, "second", "second_part1");
+                    ts.addTripleSlashRef(fs, "third", "third_part1");
                 }
             });
 
             // Verify ignore dtsChanged
             verifyOutFileScenario({
                 subScenario: "triple slash refs in one project",
-                modifyFs: fs => addTripleSlashRef(fs, "second", "second_part1"),
+                modifyFs: fs => ts.addTripleSlashRef(fs, "second", "second_part1"),
                 ignoreDtsChanged: true,
                 baselineOnly: true
             });
@@ -367,7 +367,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
 
         describe("stripInternal", () => {
             function disableRemoveComments(fs: vfs.FileSystem, file: string) {
-                replaceText(fs, file, `"removeComments": true`, `"removeComments": false`);
+                ts.replaceText(fs, file, `"removeComments": true`, `"removeComments": false`);
             }
 
             function diableRemoveCommentsInAll(fs: vfs.FileSystem) {
@@ -377,7 +377,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
             }
 
             function stripInternalOfThird(fs: vfs.FileSystem) {
-                replaceText(fs, "/src/third/tsconfig.json", `"declaration": true,`, `"declaration": true,
+                ts.replaceText(fs, "/src/third/tsconfig.json", `"declaration": true,`, `"declaration": true,
     "stripInternal": true,`);
             }
 
@@ -387,8 +387,8 @@ describe("unittests:: tsbuild:: outFile::", () => {
                     diableRemoveCommentsInAll(fs);
                 }
                 stripInternalOfThird(fs);
-                replaceText(fs, "/src/first/first_PART1.ts", "interface", `${internal} interface`);
-                appendText(fs, "/src/second/second_part1.ts", `
+                ts.replaceText(fs, "/src/first/first_PART1.ts", "interface", `${internal} interface`);
+                ts.appendText(fs, "/src/second/second_part1.ts", `
 class normalC {
     ${internal} constructor() { }
     ${internal} prop: string;
@@ -420,14 +420,14 @@ ${internal} enum internalEnum { a, b, c }`);
             verifyOutFileScenario({
                 subScenario: "stripInternal",
                 modifyFs: stripInternalScenario,
-                modifyAgainFs: fs => replaceText(fs, "/src/first/first_PART1.ts", `/*@internal*/ interface`, "interface"),
+                modifyAgainFs: fs => ts.replaceText(fs, "/src/first/first_PART1.ts", `/*@internal*/ interface`, "interface"),
             });
 
             // Verify ignore dtsChanged
             verifyOutFileScenario({
                 subScenario: "stripInternal with comments emit enabled",
                 modifyFs: fs => stripInternalScenario(fs, /*removeCommentsDisabled*/ true),
-                modifyAgainFs: fs => replaceText(fs, "/src/first/first_PART1.ts", `/*@internal*/ interface`, "interface"),
+                modifyAgainFs: fs => ts.replaceText(fs, "/src/first/first_PART1.ts", `/*@internal*/ interface`, "interface"),
                 ignoreDtsChanged: true,
                 baselineOnly: true
             });
@@ -436,7 +436,7 @@ ${internal} enum internalEnum { a, b, c }`);
             verifyOutFileScenario({
                 subScenario: "stripInternal jsdoc style comment",
                 modifyFs: fs => stripInternalScenario(fs, /*removeCommentsDisabled*/ false, /*jsDocStyle*/ true),
-                modifyAgainFs: fs => replaceText(fs, "/src/first/first_PART1.ts", `/**@internal*/ interface`, "interface"),
+                modifyAgainFs: fs => ts.replaceText(fs, "/src/first/first_PART1.ts", `/**@internal*/ interface`, "interface"),
                 ignoreDtsChanged: true,
                 baselineOnly: true
             });
@@ -451,9 +451,9 @@ ${internal} enum internalEnum { a, b, c }`);
 
             describe("with three levels of project dependency", () => {
                 function makeOneTwoThreeDependOrder(fs: vfs.FileSystem) {
-                    replaceText(fs, "/src/second/tsconfig.json", "[", `[
+                    ts.replaceText(fs, "/src/second/tsconfig.json", "[", `[
     { "path": "../first", "prepend": true }`);
-                    replaceText(fs, "/src/third/tsconfig.json", `{ "path": "../first", "prepend": true },`, "");
+                    ts.replaceText(fs, "/src/third/tsconfig.json", `{ "path": "../first", "prepend": true },`, "");
                 }
 
                 function stripInternalWithDependentOrder(fs: vfs.FileSystem, removeCommentsDisabled?: boolean, jsDocStyle?: boolean) {
@@ -465,14 +465,14 @@ ${internal} enum internalEnum { a, b, c }`);
                 verifyOutFileScenario({
                     subScenario: "stripInternal when one-two-three are prepended in order",
                     modifyFs: stripInternalWithDependentOrder,
-                    modifyAgainFs: fs => replaceText(fs, "/src/first/first_PART1.ts", `/*@internal*/ interface`, "interface"),
+                    modifyAgainFs: fs => ts.replaceText(fs, "/src/first/first_PART1.ts", `/*@internal*/ interface`, "interface"),
                 });
 
                 // Verify ignore dtsChanged
                 verifyOutFileScenario({
                     subScenario: "stripInternal with comments emit enabled when one-two-three are prepended in order",
                     modifyFs: fs => stripInternalWithDependentOrder(fs, /*removeCommentsDisabled*/ true),
-                    modifyAgainFs: fs => replaceText(fs, "/src/first/first_PART1.ts", `/*@internal*/ interface`, "interface"),
+                    modifyAgainFs: fs => ts.replaceText(fs, "/src/first/first_PART1.ts", `/*@internal*/ interface`, "interface"),
                     ignoreDtsChanged: true,
                     baselineOnly: true
                 });
@@ -481,7 +481,7 @@ ${internal} enum internalEnum { a, b, c }`);
                 verifyOutFileScenario({
                     subScenario: "stripInternal jsdoc style comment when one-two-three are prepended in order",
                     modifyFs: fs => stripInternalWithDependentOrder(fs, /*removeCommentsDisabled*/ false, /*jsDocStyle*/ true),
-                    modifyAgainFs: fs => replaceText(fs, "/src/first/first_PART1.ts", `/**@internal*/ interface`, "interface"),
+                    modifyAgainFs: fs => ts.replaceText(fs, "/src/first/first_PART1.ts", `/**@internal*/ interface`, "interface"),
                     ignoreDtsChanged: true,
                     baselineOnly: true
                 });
@@ -500,7 +500,7 @@ ${internal} enum internalEnum { a, b, c }`);
                 subScenario: "stripInternal baseline when internal is inside another internal",
                 modifyFs: fs => {
                     stripInternalOfThird(fs);
-                    prependText(fs, "/src/first/first_PART1.ts", `namespace ts {
+                    ts.prependText(fs, "/src/first/first_PART1.ts", `namespace ts {
     /* @internal */
     /**
      * Subset of properties from SourceFile that are used in multiple utility functions
@@ -539,7 +539,7 @@ ${internal} enum internalEnum { a, b, c }`);
                 subScenario: "stripInternal when few members of enum are internal",
                 modifyFs: fs => {
                     stripInternalOfThird(fs);
-                    prependText(fs, "/src/first/first_PART1.ts", `enum TokenFlags {
+                    ts.prependText(fs, "/src/first/first_PART1.ts", `enum TokenFlags {
     None = 0,
     /* @internal */
     PrecedingLineBreak = 1 << 0,
@@ -621,9 +621,9 @@ ${internal} enum internalEnum { a, b, c }`);
                 subScenario: "declarationMap and sourceMap disabled",
                 modifyFs: fs => {
                     makeThirdEmptySourceFile(fs);
-                    replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, "");
-                    replaceText(fs, "/src/third/tsconfig.json", `"sourceMap": true,`, "");
-                    replaceText(fs, "/src/third/tsconfig.json", `"declarationMap": true,`, "");
+                    ts.replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, "");
+                    ts.replaceText(fs, "/src/third/tsconfig.json", `"sourceMap": true,`, "");
+                    ts.replaceText(fs, "/src/third/tsconfig.json", `"declarationMap": true,`, "");
                 },
                 ignoreDtsChanged: true,
                 ignoreDtsUnchanged: true,
@@ -632,25 +632,25 @@ ${internal} enum internalEnum { a, b, c }`);
         });
     });
 
-    verifyTsc({
+    ts.verifyTsc({
         scenario: "outFile",
         subScenario: "non module projects without prepend",
         fs: () => outFileFs,
         commandLineArgs: ["--b", "/src/third", "--verbose"],
         modifyFs: fs => {
             // No prepend
-            replaceText(fs, "/src/third/tsconfig.json", `{ "path": "../first", "prepend": true }`, `{ "path": "../first" }`);
-            replaceText(fs, "/src/third/tsconfig.json", `{ "path": "../second", "prepend": true }`, `{ "path": "../second" }`);
+            ts.replaceText(fs, "/src/third/tsconfig.json", `{ "path": "../first", "prepend": true }`, `{ "path": "../first" }`);
+            ts.replaceText(fs, "/src/third/tsconfig.json", `{ "path": "../second", "prepend": true }`, `{ "path": "../second" }`);
 
             // Non Modules
-            replaceText(fs, "/src/first/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
-            replaceText(fs, "/src/second/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
-            replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
+            ts.replaceText(fs, "/src/first/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
+            ts.replaceText(fs, "/src/second/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
+            ts.replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, `"composite": true, "module": "none",`);
 
             // Own file emit
-            replaceText(fs, "/src/first/tsconfig.json", `"outFile": "./bin/first-output.js",`, "");
-            replaceText(fs, "/src/second/tsconfig.json", `"outFile": "../2/second-output.js",`, "");
-            replaceText(fs, "/src/third/tsconfig.json", `"outFile": "./thirdjs/output/third-output.js",`, "");
+            ts.replaceText(fs, "/src/first/tsconfig.json", `"outFile": "./bin/first-output.js",`, "");
+            ts.replaceText(fs, "/src/second/tsconfig.json", `"outFile": "../2/second-output.js",`, "");
+            ts.replaceText(fs, "/src/third/tsconfig.json", `"outFile": "./thirdjs/output/third-output.js",`, "");
         },
     });
 });

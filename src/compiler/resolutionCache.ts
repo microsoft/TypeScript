@@ -3,36 +3,36 @@ namespace ts {
 /** This is the cache of module/typedirectives resolution that can be retained across program */
 export interface ResolutionCache {
     startRecordingFilesWithChangedResolutions(): void;
-    finishRecordingFilesWithChangedResolutions(): Path[] | undefined;
+    finishRecordingFilesWithChangedResolutions(): ts.Path[] | undefined;
 
     resolveModuleNames(
         moduleNames: string[],
         containingFile: string,
         reusedNames: string[] | undefined,
-        redirectedReference: ResolvedProjectReference | undefined,
-        containingSourceFile: SourceFile | undefined,
-        resolutionInfo: ModuleResolutionInfo | undefined
-    ): (ResolvedModuleFull | undefined)[];
-    getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): CachedResolvedModuleWithFailedLookupLocations | undefined;
-    resolveTypeReferenceDirectives(typeDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, containingFileMode?: SourceFile["impliedNodeFormat"]): (ResolvedTypeReferenceDirective | undefined)[];
+        redirectedReference: ts.ResolvedProjectReference | undefined,
+        containingSourceFile: ts.SourceFile | undefined,
+        resolutionInfo: ts.ModuleResolutionInfo | undefined
+    ): (ts.ResolvedModuleFull | undefined)[];
+    getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, resolutionMode?: ts.ModuleKind.CommonJS | ts.ModuleKind.ESNext): CachedResolvedModuleWithFailedLookupLocations | undefined;
+    resolveTypeReferenceDirectives(typeDirectiveNames: string[] | readonly ts.FileReference[], containingFile: string, redirectedReference?: ts.ResolvedProjectReference, containingFileMode?: ts.SourceFile["impliedNodeFormat"]): (ts.ResolvedTypeReferenceDirective | undefined)[];
 
     invalidateResolutionsOfFailedLookupLocations(): boolean;
-    invalidateResolutionOfFile(filePath: Path): void;
-    removeResolutionsOfFile(filePath: Path): void;
-    removeResolutionsFromProjectReferenceRedirects(filePath: Path): void;
-    setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: ESMap<Path, readonly string[]>): void;
-    createHasInvalidatedResolutions(customHasInvalidatedResolutions: HasInvalidatedResolutions): HasInvalidatedResolutions;
+    invalidateResolutionOfFile(filePath: ts.Path): void;
+    removeResolutionsOfFile(filePath: ts.Path): void;
+    removeResolutionsFromProjectReferenceRedirects(filePath: ts.Path): void;
+    setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: ts.ESMap<ts.Path, readonly string[]>): void;
+    createHasInvalidatedResolutions(customHasInvalidatedResolutions: ts.HasInvalidatedResolutions): ts.HasInvalidatedResolutions;
     hasChangedAutomaticTypeDirectiveNames(): boolean;
-    isFileWithInvalidatedNonRelativeUnresolvedImports(path: Path): boolean;
+    isFileWithInvalidatedNonRelativeUnresolvedImports(path: ts.Path): boolean;
 
 
     startCachingPerDirectoryResolution(): void;
-    finishCachingPerDirectoryResolution(newProgram: Program | undefined, oldProgram: Program | undefined): void;
+    finishCachingPerDirectoryResolution(newProgram: ts.Program | undefined, oldProgram: ts.Program | undefined): void;
 
     updateTypeRootsWatch(): void;
     closeTypeRootsWatch(): void;
 
-    getModuleResolutionCache(): ModuleResolutionCache;
+    getModuleResolutionCache(): ts.ModuleResolutionCache;
 
     clear(): void;
 }
@@ -43,51 +43,51 @@ interface ResolutionWithFailedLookupLocations {
     isInvalidated?: boolean;
     refCount?: number;
     // Files that have this resolution using
-    files?: Path[];
+    files?: ts.Path[];
 }
 
 interface ResolutionWithResolvedFileName {
     resolvedFileName: string | undefined;
-    packagetId?: PackageId;
+    packagetId?: ts.PackageId;
 }
 
-interface CachedResolvedModuleWithFailedLookupLocations extends ResolvedModuleWithFailedLookupLocations, ResolutionWithFailedLookupLocations {
+interface CachedResolvedModuleWithFailedLookupLocations extends ts.ResolvedModuleWithFailedLookupLocations, ResolutionWithFailedLookupLocations {
 }
 
-interface CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations extends ResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolutionWithFailedLookupLocations {
+interface CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations extends ts.ResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolutionWithFailedLookupLocations {
 }
 
-export interface ResolutionCacheHost extends MinimalResolutionCacheHost {
-    toPath(fileName: string): Path;
-    getCanonicalFileName: GetCanonicalFileName;
-    getCompilationSettings(): CompilerOptions;
-    watchDirectoryOfFailedLookupLocation(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher;
-    watchAffectingFileLocation(file: string, cb: FileWatcherCallback): FileWatcher;
+export interface ResolutionCacheHost extends ts.MinimalResolutionCacheHost {
+    toPath(fileName: string): ts.Path;
+    getCanonicalFileName: ts.GetCanonicalFileName;
+    getCompilationSettings(): ts.CompilerOptions;
+    watchDirectoryOfFailedLookupLocation(directory: string, cb: ts.DirectoryWatcherCallback, flags: ts.WatchDirectoryFlags): ts.FileWatcher;
+    watchAffectingFileLocation(file: string, cb: ts.FileWatcherCallback): ts.FileWatcher;
     onInvalidatedResolution(): void;
-    watchTypeRootsDirectory(directory: string, cb: DirectoryWatcherCallback, flags: WatchDirectoryFlags): FileWatcher;
+    watchTypeRootsDirectory(directory: string, cb: ts.DirectoryWatcherCallback, flags: ts.WatchDirectoryFlags): ts.FileWatcher;
     onChangedAutomaticTypeDirectiveNames(): void;
     scheduleInvalidateResolutionsOfFailedLookupLocations(): void;
-    getCachedDirectoryStructureHost(): CachedDirectoryStructureHost | undefined;
+    getCachedDirectoryStructureHost(): ts.CachedDirectoryStructureHost | undefined;
     projectName?: string;
     getGlobalCache?(): string | undefined;
     globalCacheResolutionModuleName?(externalModuleName: string): string;
     writeLog(s: string): void;
-    getCurrentProgram(): Program | undefined;
-    fileIsOpen(filePath: Path): boolean;
+    getCurrentProgram(): ts.Program | undefined;
+    fileIsOpen(filePath: ts.Path): boolean;
     onDiscoveredSymlink?(): void;
 }
 
 interface FileWatcherOfAffectingLocation {
     /** watcher for the lookup */
-    watcher: FileWatcher;
+    watcher: ts.FileWatcher;
     resolutions: number;
     files: number;
-    paths: Set<string>;
+    paths: ts.Set<string>;
 }
 
 interface DirectoryWatchesOfFailedLookup {
     /** watcher for the lookup */
-    watcher: FileWatcher;
+    watcher: ts.FileWatcher;
     /** ref count keeping this watch alive */
     refCount: number;
     /** is the directory watched being non recursive */
@@ -96,17 +96,17 @@ interface DirectoryWatchesOfFailedLookup {
 
 interface DirectoryOfFailedLookupWatch {
     dir: string;
-    dirPath: Path;
+    dirPath: ts.Path;
     nonRecursive?: boolean;
 }
 
-export function removeIgnoredPath(path: Path): Path | undefined {
+export function removeIgnoredPath(path: ts.Path): ts.Path | undefined {
     // Consider whole staging folder as if node_modules changed.
-    if (endsWith(path, "/node_modules/.staging")) {
-        return removeSuffix(path, "/.staging") as Path;
+    if (ts.endsWith(path, "/node_modules/.staging")) {
+        return ts.removeSuffix(path, "/.staging") as ts.Path;
     }
 
-    return some(ignoredPaths, searchPath => stringContains(path, searchPath)) ?
+    return ts.some(ts.ignoredPaths, searchPath => ts.stringContains(path, searchPath)) ?
         undefined :
         path;
 }
@@ -117,25 +117,25 @@ export function removeIgnoredPath(path: Path): Path | undefined {
  * "c:/", "c:/users", "c:/users/username", "c:/users/username/folderAtRoot", "c:/folderAtRoot"
  * @param dirPath
  */
-export function canWatchDirectoryOrFile(dirPath: Path) {
-    const rootLength = getRootLength(dirPath);
+export function canWatchDirectoryOrFile(dirPath: ts.Path) {
+    const rootLength = ts.getRootLength(dirPath);
     if (dirPath.length === rootLength) {
         // Ignore "/", "c:/"
         return false;
     }
 
-    let nextDirectorySeparator = dirPath.indexOf(directorySeparator, rootLength);
+    let nextDirectorySeparator = dirPath.indexOf(ts.directorySeparator, rootLength);
     if (nextDirectorySeparator === -1) {
         // ignore "/user", "c:/users" or "c:/folderAtRoot"
         return false;
     }
 
     let pathPartForUserCheck = dirPath.substring(rootLength, nextDirectorySeparator + 1);
-    const isNonDirectorySeparatorRoot = rootLength > 1 || dirPath.charCodeAt(0) !== CharacterCodes.slash;
+    const isNonDirectorySeparatorRoot = rootLength > 1 || dirPath.charCodeAt(0) !== ts.CharacterCodes.slash;
     if (isNonDirectorySeparatorRoot &&
         dirPath.search(/[a-zA-Z]:/) !== 0 && // Non dos style paths
         pathPartForUserCheck.search(/[a-zA-Z]\$\//) === 0) { // Dos style nextPart
-        nextDirectorySeparator = dirPath.indexOf(directorySeparator, nextDirectorySeparator + 1);
+        nextDirectorySeparator = dirPath.indexOf(ts.directorySeparator, nextDirectorySeparator + 1);
         if (nextDirectorySeparator === -1) {
             // ignore "//vda1cs4850/c$/folderAtRoot"
             return false;
@@ -151,7 +151,7 @@ export function canWatchDirectoryOrFile(dirPath: Path) {
     }
 
     for (let searchIndex = nextDirectorySeparator + 1, searchLevels = 2; searchLevels > 0; searchLevels--) {
-        searchIndex = dirPath.indexOf(directorySeparator, searchIndex) + 1;
+        searchIndex = dirPath.indexOf(ts.directorySeparator, searchIndex) + 1;
         if (searchIndex === 0) {
             // Folder isnt at expected minimum levels
             return false;
@@ -164,33 +164,33 @@ type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocat
     (resolution: T) => R | undefined;
 
 export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string | undefined, logChangesWhenResolvingModule: boolean): ResolutionCache {
-    let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
-    let filesWithInvalidatedResolutions: Set<Path> | undefined;
-    let filesWithInvalidatedNonRelativeUnresolvedImports: ReadonlyESMap<Path, readonly string[]> | undefined;
-    const nonRelativeExternalModuleResolutions = createMultiMap<ResolutionWithFailedLookupLocations>();
+    let filesWithChangedSetOfUnresolvedImports: ts.Path[] | undefined;
+    let filesWithInvalidatedResolutions: ts.Set<ts.Path> | undefined;
+    let filesWithInvalidatedNonRelativeUnresolvedImports: ts.ReadonlyESMap<ts.Path, readonly string[]> | undefined;
+    const nonRelativeExternalModuleResolutions = ts.createMultiMap<ResolutionWithFailedLookupLocations>();
 
     const resolutionsWithFailedLookups: ResolutionWithFailedLookupLocations[] = [];
     const resolutionsWithOnlyAffectingLocations: ResolutionWithFailedLookupLocations[] = [];
-    const resolvedFileToResolution = createMultiMap<ResolutionWithFailedLookupLocations>();
-    const impliedFormatPackageJsons = new Map<Path, readonly string[]>();
+    const resolvedFileToResolution = ts.createMultiMap<ResolutionWithFailedLookupLocations>();
+    const impliedFormatPackageJsons = new ts.Map<ts.Path, readonly string[]>();
 
     let hasChangedAutomaticTypeDirectiveNames = false;
-    let affectingPathChecksForFile: Set<string> | undefined;
-    let affectingPathChecks: Set<string> | undefined;
-    let failedLookupChecks: Set<Path> | undefined;
-    let startsWithPathChecks: Set<Path> | undefined;
-    let isInDirectoryChecks: Set<Path> | undefined;
+    let affectingPathChecksForFile: ts.Set<string> | undefined;
+    let affectingPathChecks: ts.Set<string> | undefined;
+    let failedLookupChecks: ts.Set<ts.Path> | undefined;
+    let startsWithPathChecks: ts.Set<ts.Path> | undefined;
+    let isInDirectoryChecks: ts.Set<ts.Path> | undefined;
 
-    const getCurrentDirectory = memoize(() => resolutionHost.getCurrentDirectory!()); // TODO: GH#18217
+    const getCurrentDirectory = ts.memoize(() => resolutionHost.getCurrentDirectory!()); // TODO: GH#18217
     const cachedDirectoryStructureHost = resolutionHost.getCachedDirectoryStructureHost();
 
     // The resolvedModuleNames and resolvedTypeReferenceDirectives are the cache of resolutions per file.
     // The key in the map is source file's path.
     // The values are Map of resolutions with key being name lookedup.
-    const resolvedModuleNames = new Map<Path, ModeAwareCache<CachedResolvedModuleWithFailedLookupLocations>>();
-    const perDirectoryResolvedModuleNames: CacheWithRedirects<ModeAwareCache<CachedResolvedModuleWithFailedLookupLocations>> = createCacheWithRedirects();
-    const nonRelativeModuleNameCache: CacheWithRedirects<PerModuleNameCache> = createCacheWithRedirects();
-    const moduleResolutionCache = createModuleResolutionCache(
+    const resolvedModuleNames = new ts.Map<ts.Path, ts.ModeAwareCache<CachedResolvedModuleWithFailedLookupLocations>>();
+    const perDirectoryResolvedModuleNames: ts.CacheWithRedirects<ts.ModeAwareCache<CachedResolvedModuleWithFailedLookupLocations>> = ts.createCacheWithRedirects();
+    const nonRelativeModuleNameCache: ts.CacheWithRedirects<ts.PerModuleNameCache> = ts.createCacheWithRedirects();
+    const moduleResolutionCache = ts.createModuleResolutionCache(
         getCurrentDirectory(),
         resolutionHost.getCanonicalFileName,
         /*options*/ undefined,
@@ -198,9 +198,9 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         nonRelativeModuleNameCache,
     );
 
-    const resolvedTypeReferenceDirectives = new Map<Path, ModeAwareCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
-    const perDirectoryResolvedTypeReferenceDirectives: CacheWithRedirects<ModeAwareCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations>> = createCacheWithRedirects();
-    const typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(
+    const resolvedTypeReferenceDirectives = new ts.Map<ts.Path, ts.ModeAwareCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
+    const perDirectoryResolvedTypeReferenceDirectives: ts.CacheWithRedirects<ts.ModeAwareCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations>> = ts.createCacheWithRedirects();
+    const typeReferenceDirectiveResolutionCache = ts.createTypeReferenceDirectiveResolutionCache(
         getCurrentDirectory(),
         resolutionHost.getCanonicalFileName,
         /*options*/ undefined,
@@ -214,17 +214,17 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
      * This helps in not having to comb through all resolutions when files are added/removed
      * Note that .d.ts file also has .d.ts extension hence will be part of default extensions
      */
-    const failedLookupDefaultExtensions = [Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx, Extension.Json];
-    const customFailedLookupPaths = new Map<string, number>();
+    const failedLookupDefaultExtensions = [ts.Extension.Ts, ts.Extension.Tsx, ts.Extension.Js, ts.Extension.Jsx, ts.Extension.Json];
+    const customFailedLookupPaths = new ts.Map<string, number>();
 
-    const directoryWatchesOfFailedLookups = new Map<string, DirectoryWatchesOfFailedLookup>();
-    const fileWatchesOfAffectingLocations = new Map<string, FileWatcherOfAffectingLocation>();
-    const rootDir = rootDirForResolution && removeTrailingDirectorySeparator(getNormalizedAbsolutePath(rootDirForResolution, getCurrentDirectory()));
-    const rootPath = (rootDir && resolutionHost.toPath(rootDir)) as Path; // TODO: GH#18217
-    const rootSplitLength = rootPath !== undefined ? rootPath.split(directorySeparator).length : 0;
+    const directoryWatchesOfFailedLookups = new ts.Map<string, DirectoryWatchesOfFailedLookup>();
+    const fileWatchesOfAffectingLocations = new ts.Map<string, FileWatcherOfAffectingLocation>();
+    const rootDir = rootDirForResolution && ts.removeTrailingDirectorySeparator(ts.getNormalizedAbsolutePath(rootDirForResolution, getCurrentDirectory()));
+    const rootPath = (rootDir && resolutionHost.toPath(rootDir)) as ts.Path; // TODO: GH#18217
+    const rootSplitLength = rootPath !== undefined ? rootPath.split(ts.directorySeparator).length : 0;
 
     // TypeRoot watches for the types that get added as part of getAutomaticTypeDirectiveNames
-    const typeRootsWatches = new Map<string, FileWatcher>();
+    const typeRootsWatches = new ts.Map<string, ts.FileWatcher>();
 
     return {
         getModuleResolutionCache: () => moduleResolutionCache,
@@ -258,16 +258,16 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         return resolution.resolvedTypeReferenceDirective;
     }
 
-    function isInDirectoryPath(dir: Path | undefined, file: Path) {
+    function isInDirectoryPath(dir: ts.Path | undefined, file: ts.Path) {
         if (dir === undefined || file.length <= dir.length) {
             return false;
         }
-        return startsWith(file, dir) && file[dir.length] === directorySeparator;
+        return ts.startsWith(file, dir) && file[dir.length] === ts.directorySeparator;
     }
 
     function clear() {
-        clearMap(directoryWatchesOfFailedLookups, closeFileWatcherOf);
-        clearMap(fileWatchesOfAffectingLocations, closeFileWatcherOf);
+        ts.clearMap(directoryWatchesOfFailedLookups, ts.closeFileWatcherOf);
+        ts.clearMap(fileWatchesOfAffectingLocations, ts.closeFileWatcherOf);
         customFailedLookupPaths.clear();
         nonRelativeExternalModuleResolutions.clear();
         closeTypeRootsWatch();
@@ -297,7 +297,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         return collected;
     }
 
-    function isFileWithInvalidatedNonRelativeUnresolvedImports(path: Path): boolean {
+    function isFileWithInvalidatedNonRelativeUnresolvedImports(path: ts.Path): boolean {
         if (!filesWithInvalidatedNonRelativeUnresolvedImports) {
             return false;
         }
@@ -307,7 +307,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         return !!value && !!value.length;
     }
 
-    function createHasInvalidatedResolutions(customHasInvalidatedResolutions: HasInvalidatedResolutions): HasInvalidatedResolutions {
+    function createHasInvalidatedResolutions(customHasInvalidatedResolutions: ts.HasInvalidatedResolutions): ts.HasInvalidatedResolutions {
         // Ensure pending resolutions are applied
         invalidateResolutionsOfFailedLookupLocations();
         const collected = filesWithInvalidatedResolutions;
@@ -326,15 +326,15 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         nonRelativeExternalModuleResolutions.clear();
     }
 
-    function finishCachingPerDirectoryResolution(newProgram: Program | undefined, oldProgram: Program | undefined) {
+    function finishCachingPerDirectoryResolution(newProgram: ts.Program | undefined, oldProgram: ts.Program | undefined) {
         filesWithInvalidatedNonRelativeUnresolvedImports = undefined;
         nonRelativeExternalModuleResolutions.forEach(watchFailedLookupLocationOfNonRelativeModuleResolutions);
         nonRelativeExternalModuleResolutions.clear();
         // Update file watches
         if (newProgram !== oldProgram) {
             newProgram?.getSourceFiles().forEach(newFile => {
-                const expected = isExternalOrCommonJsModule(newFile) ? newFile.packageJsonLocations?.length ?? 0 : 0;
-                const existing = impliedFormatPackageJsons.get(newFile.path) ?? emptyArray;
+                const expected = ts.isExternalOrCommonJsModule(newFile) ? newFile.packageJsonLocations?.length ?? 0 : 0;
+                const existing = impliedFormatPackageJsons.get(newFile.path) ?? ts.emptyArray;
                 for (let i = existing.length; i < expected; i++) {
                     createFileWatcherOfAffectingLocation(newFile.packageJsonLocations![i], /*forResolution*/ false);
                 }
@@ -369,7 +369,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         hasChangedAutomaticTypeDirectiveNames = false;
     }
 
-    function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, _containingSourceFile?: never, mode?: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): CachedResolvedModuleWithFailedLookupLocations {
+    function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: ts.CompilerOptions, host: ts.ModuleResolutionHost, redirectedReference?: ts.ResolvedProjectReference, _containingSourceFile?: never, mode?: ts.ModuleKind.CommonJS | ts.ModuleKind.ESNext | undefined): CachedResolvedModuleWithFailedLookupLocations {
         const primaryResult = ts.resolveModuleName(moduleName, containingFile, compilerOptions, host, moduleResolutionCache, redirectedReference, mode);
         // return result immediately only if global cache support is not enabled or if it is .ts, .tsx or .d.ts
         if (!resolutionHost.getGlobalCache) {
@@ -378,11 +378,11 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
         // otherwise try to load typings from @types
         const globalCache = resolutionHost.getGlobalCache();
-        if (globalCache !== undefined && !isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTS(primaryResult.resolvedModule.extension))) {
+        if (globalCache !== undefined && !ts.isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && ts.extensionIsTS(primaryResult.resolvedModule.extension))) {
             // create different collection of failed lookup locations for second pass
             // if it will fail and we've already found something during the first pass - we don't want to pollute its results
-            const { resolvedModule, failedLookupLocations, affectingLocations } = loadModuleFromGlobalCache(
-                Debug.checkDefined(resolutionHost.globalCacheResolutionModuleName)(moduleName),
+            const { resolvedModule, failedLookupLocations, affectingLocations } = ts.loadModuleFromGlobalCache(
+                ts.Debug.checkDefined(resolutionHost.globalCacheResolutionModuleName)(moduleName),
                 resolutionHost.projectName,
                 compilerOptions,
                 host,
@@ -402,24 +402,24 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         return primaryResult;
     }
 
-    function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, _containingSourceFile?: SourceFile, resolutionMode?: SourceFile["impliedNodeFormat"] | undefined): CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations {
+    function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: ts.CompilerOptions, host: ts.ModuleResolutionHost, redirectedReference?: ts.ResolvedProjectReference, _containingSourceFile?: ts.SourceFile, resolutionMode?: ts.SourceFile["impliedNodeFormat"] | undefined): CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         return ts.resolveTypeReferenceDirective(typeReferenceDirectiveName, containingFile, options, host, redirectedReference, typeReferenceDirectiveResolutionCache, resolutionMode);
     }
 
     interface ResolveNamesWithLocalCacheInput<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName> {
-        names: readonly string[] | readonly FileReference[];
+        names: readonly string[] | readonly ts.FileReference[];
         containingFile: string;
-        redirectedReference: ResolvedProjectReference | undefined;
-        cache: ESMap<Path, ModeAwareCache<T>>;
-        perDirectoryCacheWithRedirects: CacheWithRedirects<ModeAwareCache<T>>;
-        loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, containingSourceFile?: SourceFile, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext | undefined) => T;
+        redirectedReference: ts.ResolvedProjectReference | undefined;
+        cache: ts.ESMap<ts.Path, ts.ModeAwareCache<T>>;
+        perDirectoryCacheWithRedirects: ts.CacheWithRedirects<ts.ModeAwareCache<T>>;
+        loader: (name: string, containingFile: string, options: ts.CompilerOptions, host: ts.ModuleResolutionHost, redirectedReference?: ts.ResolvedProjectReference, containingSourceFile?: ts.SourceFile, resolutionMode?: ts.ModuleKind.CommonJS | ts.ModuleKind.ESNext | undefined) => T;
         getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>;
         shouldRetryResolution: (t: T) => boolean;
         reusedNames?: readonly string[];
-        resolutionInfo?: ModuleResolutionInfo;
+        resolutionInfo?: ts.ModuleResolutionInfo;
         logChanges?: boolean;
-        containingSourceFile?: SourceFile;
-        containingSourceFileMode?: SourceFile["impliedNodeFormat"];
+        containingSourceFile?: ts.SourceFile;
+        containingSourceFileMode?: ts.SourceFile["impliedNodeFormat"];
     }
     function resolveNamesWithLocalCache<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>({
         names, containingFile, redirectedReference,
@@ -428,12 +428,12 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         shouldRetryResolution, reusedNames, resolutionInfo, logChanges, containingSourceFile, containingSourceFileMode
     }: ResolveNamesWithLocalCacheInput<T, R>): (R | undefined)[] {
         const path = resolutionHost.toPath(containingFile);
-        const resolutionsInFile = cache.get(path) || cache.set(path, createModeAwareCache()).get(path)!;
-        const dirPath = getDirectoryPath(path);
+        const resolutionsInFile = cache.get(path) || cache.set(path, ts.createModeAwareCache()).get(path)!;
+        const dirPath = ts.getDirectoryPath(path);
         const perDirectoryCache = perDirectoryCacheWithRedirects.getOrCreateMapOfCacheRedirects(redirectedReference);
         let perDirectoryResolution = perDirectoryCache.get(dirPath);
         if (!perDirectoryResolution) {
-            perDirectoryResolution = createModeAwareCache();
+            perDirectoryResolution = ts.createModeAwareCache();
             perDirectoryCache.set(dirPath, perDirectoryResolution);
         }
         const resolvedModules: (R | undefined)[] = [];
@@ -447,21 +447,21 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             !redirectedReference || redirectedReference.sourceFile.path !== oldRedirect.sourceFile.path :
             !!redirectedReference;
 
-        const seenNamesInFile = createModeAwareCache<true>();
+        const seenNamesInFile = ts.createModeAwareCache<true>();
         let i = 0;
         for (const entry of containingSourceFile && resolutionInfo ? resolutionInfo.names : names) {
-            const name = !isString(entry) ? getResolutionName(entry) : entry;
+            const name = !ts.isString(entry) ? ts.getResolutionName(entry) : entry;
             // Imports supply a `containingSourceFile` but no `containingSourceFileMode` - it would be redundant
             // they require calculating the mode for a given import from it's position in the resolution table, since a given
             // import's syntax may override the file's default mode.
             // Type references instead supply a `containingSourceFileMode` and a non-string entry which contains
             // a default file mode override if applicable.
-            const mode = !isString(entry) ?
-                isStringLiteralLike(entry) ?
-                    getModeForUsageLocation(containingSourceFile!, entry) :
-                    getModeForFileReference(entry, containingSourceFileMode) :
+            const mode = !ts.isString(entry) ?
+                ts.isStringLiteralLike(entry) ?
+                    ts.getModeForUsageLocation(containingSourceFile!, entry) :
+                    ts.getModeForFileReference(entry, containingSourceFileMode) :
                 containingSourceFile ?
-                    getModeForResolutionAtIndex(containingSourceFile, i) :
+                    ts.getModeForResolutionAtIndex(containingSourceFile, i) :
                     undefined;
             i++;
             let resolution = resolutionsInFile.get(name, mode);
@@ -469,32 +469,32 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             if (!seenNamesInFile.has(name, mode) &&
                 unmatchedRedirects || !resolution || resolution.isInvalidated ||
                 // If the name is unresolved import that was invalidated, recalculate
-                (hasInvalidatedNonRelativeUnresolvedImport && !isExternalModuleNameRelative(name) && shouldRetryResolution(resolution))) {
+                (hasInvalidatedNonRelativeUnresolvedImport && !ts.isExternalModuleNameRelative(name) && shouldRetryResolution(resolution))) {
                 const existingResolution = resolution;
                 const resolutionInDirectory = perDirectoryResolution.get(name, mode);
                 if (resolutionInDirectory) {
                     resolution = resolutionInDirectory;
                     const host = resolutionHost.getCompilerHost?.() || resolutionHost;
-                    if (isTraceEnabled(compilerOptions, host)) {
+                    if (ts.isTraceEnabled(compilerOptions, host)) {
                         const resolved = getResolutionWithResolvedFileName(resolution);
-                        trace(
+                        ts.trace(
                             host,
                             loader === resolveModuleName as unknown ?
                                 resolved?.resolvedFileName ?
                                     resolved.packagetId ?
-                                        Diagnostics.Reusing_resolution_of_module_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3_with_Package_ID_4:
-                                        Diagnostics.Reusing_resolution_of_module_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3:
-                                    Diagnostics.Reusing_resolution_of_module_0_from_1_found_in_cache_from_location_2_it_was_not_resolved :
+                                        ts.Diagnostics.Reusing_resolution_of_module_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3_with_Package_ID_4:
+                                        ts.Diagnostics.Reusing_resolution_of_module_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3:
+                                    ts.Diagnostics.Reusing_resolution_of_module_0_from_1_found_in_cache_from_location_2_it_was_not_resolved :
                                 resolved?.resolvedFileName ?
                                     resolved.packagetId ?
-                                        Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3_with_Package_ID_4 :
-                                        Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3 :
-                                    Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_found_in_cache_from_location_2_it_was_not_resolved,
+                                        ts.Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3_with_Package_ID_4 :
+                                        ts.Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3 :
+                                    ts.Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_found_in_cache_from_location_2_it_was_not_resolved,
                             name,
                             containingFile,
-                            getDirectoryPath(containingFile),
+                            ts.getDirectoryPath(containingFile),
                             resolved?.resolvedFileName,
-                            resolved?.packagetId && packageIdToString(resolved.packagetId)
+                            resolved?.packagetId && ts.packageIdToString(resolved.packagetId)
                         );
                     }
                 }
@@ -519,41 +519,41 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             }
             else {
                 const host = resolutionHost.getCompilerHost?.() || resolutionHost;
-                if (isTraceEnabled(compilerOptions, host) && !seenNamesInFile.has(name, mode)) {
+                if (ts.isTraceEnabled(compilerOptions, host) && !seenNamesInFile.has(name, mode)) {
                     const resolved = getResolutionWithResolvedFileName(resolution);
-                    trace(
+                    ts.trace(
                         host,
                         loader === resolveModuleName as unknown ?
                             resolved?.resolvedFileName ?
                                 resolved.packagetId ?
-                                    Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2_with_Package_ID_3 :
-                                    Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2 :
-                                Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_not_resolved :
+                                    ts.Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2_with_Package_ID_3 :
+                                    ts.Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_successfully_resolved_to_2 :
+                                ts.Diagnostics.Reusing_resolution_of_module_0_from_1_of_old_program_it_was_not_resolved :
                             resolved?.resolvedFileName ?
                                 resolved.packagetId ?
-                                    Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_of_old_program_it_was_successfully_resolved_to_2_with_Package_ID_3 :
-                                    Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_of_old_program_it_was_successfully_resolved_to_2 :
-                                Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_of_old_program_it_was_not_resolved,
+                                    ts.Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_of_old_program_it_was_successfully_resolved_to_2_with_Package_ID_3 :
+                                    ts.Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_of_old_program_it_was_successfully_resolved_to_2 :
+                                ts.Diagnostics.Reusing_resolution_of_type_reference_directive_0_from_1_of_old_program_it_was_not_resolved,
                         name,
                         containingFile,
                         resolved?.resolvedFileName,
-                        resolved?.packagetId && packageIdToString(resolved.packagetId)
+                        resolved?.packagetId && ts.packageIdToString(resolved.packagetId)
                     );
                 }
             }
-            Debug.assert(resolution !== undefined && !resolution.isInvalidated);
+            ts.Debug.assert(resolution !== undefined && !resolution.isInvalidated);
             seenNamesInFile.set(name, mode, true);
             resolvedModules.push(getResolutionWithResolvedFileName(resolution));
         }
 
         if (containingSourceFile && resolutionInfo) {
-            resolutionInfo.reusedNames?.forEach(literal => seenNamesInFile.set(literal.text, getModeForUsageLocation(containingSourceFile, literal), true));
+            resolutionInfo.reusedNames?.forEach(literal => seenNamesInFile.set(literal.text, ts.getModeForUsageLocation(containingSourceFile, literal), true));
             reusedNames = undefined;
         }
         if (resolutionsInFile.size() !== seenNamesInFile.size()) {
             // Stop watching and remove the unused name
             resolutionsInFile.forEach((resolution, name, mode) => {
-                if (!seenNamesInFile.has(name, mode) && !contains(reusedNames, name)) {
+                if (!seenNamesInFile.has(name, mode) && !ts.contains(reusedNames, name)) {
                     stopWatchFailedLookupLocationOfResolution(resolution, path, getResolutionWithResolvedFileName);
                     resolutionsInFile.delete(name, mode);
                 }
@@ -581,8 +581,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         }
     }
 
-    function resolveTypeReferenceDirectives(typeDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, containingFileMode?: SourceFile["impliedNodeFormat"]): (ResolvedTypeReferenceDirective | undefined)[] {
-        return resolveNamesWithLocalCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations, ResolvedTypeReferenceDirective>({
+    function resolveTypeReferenceDirectives(typeDirectiveNames: string[] | readonly ts.FileReference[], containingFile: string, redirectedReference?: ts.ResolvedProjectReference, containingFileMode?: ts.SourceFile["impliedNodeFormat"]): (ts.ResolvedTypeReferenceDirective | undefined)[] {
+        return resolveNamesWithLocalCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations, ts.ResolvedTypeReferenceDirective>({
             names: typeDirectiveNames,
             containingFile,
             redirectedReference,
@@ -599,11 +599,11 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         moduleNames: string[],
         containingFile: string,
         reusedNames: string[] | undefined,
-        redirectedReference?: ResolvedProjectReference,
-        containingSourceFile?: SourceFile,
-        resolutionInfo?: ModuleResolutionInfo
-    ): (ResolvedModuleFull | undefined)[] {
-        return resolveNamesWithLocalCache<CachedResolvedModuleWithFailedLookupLocations, ResolvedModuleFull>({
+        redirectedReference?: ts.ResolvedProjectReference,
+        containingSourceFile?: ts.SourceFile,
+        resolutionInfo?: ts.ModuleResolutionInfo
+    ): (ts.ResolvedModuleFull | undefined)[] {
+        return resolveNamesWithLocalCache<CachedResolvedModuleWithFailedLookupLocations, ts.ResolvedModuleFull>({
             names: moduleNames,
             containingFile,
             redirectedReference,
@@ -611,7 +611,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             perDirectoryCacheWithRedirects: perDirectoryResolvedModuleNames,
             loader: resolveModuleName,
             getResolutionWithResolvedFileName: getResolvedModule,
-            shouldRetryResolution: resolution => !resolution.resolvedModule || !resolutionExtensionIsTSOrJson(resolution.resolvedModule.extension),
+            shouldRetryResolution: resolution => !resolution.resolvedModule || !ts.resolutionExtensionIsTSOrJson(resolution.resolvedModule.extension),
             reusedNames,
             resolutionInfo,
             logChanges: logChangesWhenResolvingModule,
@@ -619,28 +619,28 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         });
     }
 
-    function getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): CachedResolvedModuleWithFailedLookupLocations | undefined {
+    function getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, resolutionMode?: ts.ModuleKind.CommonJS | ts.ModuleKind.ESNext): CachedResolvedModuleWithFailedLookupLocations | undefined {
         const cache = resolvedModuleNames.get(resolutionHost.toPath(containingFile));
         if (!cache) return undefined;
         return cache.get(moduleName, resolutionMode);
     }
 
-    function isNodeModulesAtTypesDirectory(dirPath: Path) {
-        return endsWith(dirPath, "/node_modules/@types");
+    function isNodeModulesAtTypesDirectory(dirPath: ts.Path) {
+        return ts.endsWith(dirPath, "/node_modules/@types");
     }
 
-    function getDirectoryToWatchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path): DirectoryOfFailedLookupWatch | undefined {
+    function getDirectoryToWatchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: ts.Path): DirectoryOfFailedLookupWatch | undefined {
         if (isInDirectoryPath(rootPath, failedLookupLocationPath)) {
             // Ensure failed look up is normalized path
-            failedLookupLocation = isRootedDiskPath(failedLookupLocation) ? normalizePath(failedLookupLocation) : getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory());
-            const failedLookupPathSplit = failedLookupLocationPath.split(directorySeparator);
-            const failedLookupSplit = failedLookupLocation.split(directorySeparator);
-            Debug.assert(failedLookupSplit.length === failedLookupPathSplit.length, `FailedLookup: ${failedLookupLocation} failedLookupLocationPath: ${failedLookupLocationPath}`);
+            failedLookupLocation = ts.isRootedDiskPath(failedLookupLocation) ? ts.normalizePath(failedLookupLocation) : ts.getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory());
+            const failedLookupPathSplit = failedLookupLocationPath.split(ts.directorySeparator);
+            const failedLookupSplit = failedLookupLocation.split(ts.directorySeparator);
+            ts.Debug.assert(failedLookupSplit.length === failedLookupPathSplit.length, `FailedLookup: ${failedLookupLocation} failedLookupLocationPath: ${failedLookupLocationPath}`);
             if (failedLookupPathSplit.length > rootSplitLength + 1) {
                 // Instead of watching root, watch directory in root to avoid watching excluded directories not needed for module resolution
                 return {
-                    dir: failedLookupSplit.slice(0, rootSplitLength + 1).join(directorySeparator),
-                    dirPath: failedLookupPathSplit.slice(0, rootSplitLength + 1).join(directorySeparator) as Path
+                    dir: failedLookupSplit.slice(0, rootSplitLength + 1).join(ts.directorySeparator),
+                    dirPath: failedLookupPathSplit.slice(0, rootSplitLength + 1).join(ts.directorySeparator) as ts.Path
                 };
             }
             else {
@@ -654,29 +654,29 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         }
 
         return getDirectoryToWatchFromFailedLookupLocationDirectory(
-            getDirectoryPath(getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory())),
-            getDirectoryPath(failedLookupLocationPath)
+            ts.getDirectoryPath(ts.getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory())),
+            ts.getDirectoryPath(failedLookupLocationPath)
         );
     }
 
-    function getDirectoryToWatchFromFailedLookupLocationDirectory(dir: string, dirPath: Path): DirectoryOfFailedLookupWatch | undefined {
+    function getDirectoryToWatchFromFailedLookupLocationDirectory(dir: string, dirPath: ts.Path): DirectoryOfFailedLookupWatch | undefined {
         // If directory path contains node module, get the most parent node_modules directory for watching
-        while (pathContainsNodeModules(dirPath)) {
-            dir = getDirectoryPath(dir);
-            dirPath = getDirectoryPath(dirPath);
+        while (ts.pathContainsNodeModules(dirPath)) {
+            dir = ts.getDirectoryPath(dir);
+            dirPath = ts.getDirectoryPath(dirPath);
         }
 
         // If the directory is node_modules use it to watch, always watch it recursively
-        if (isNodeModulesDirectory(dirPath)) {
-            return canWatchDirectoryOrFile(getDirectoryPath(dirPath)) ? { dir, dirPath } : undefined;
+        if (ts.isNodeModulesDirectory(dirPath)) {
+            return canWatchDirectoryOrFile(ts.getDirectoryPath(dirPath)) ? { dir, dirPath } : undefined;
         }
 
         let nonRecursive = true;
         // Use some ancestor of the root directory
-        let subDirectoryPath: Path | undefined, subDirectory: string | undefined;
+        let subDirectoryPath: ts.Path | undefined, subDirectory: string | undefined;
         if (rootPath !== undefined) {
             while (!isInDirectoryPath(dirPath, rootPath)) {
-                const parentPath = getDirectoryPath(dirPath);
+                const parentPath = ts.getDirectoryPath(dirPath);
                 if (parentPath === dirPath) {
                     break;
                 }
@@ -684,31 +684,31 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 subDirectoryPath = dirPath;
                 subDirectory = dir;
                 dirPath = parentPath;
-                dir = getDirectoryPath(dir);
+                dir = ts.getDirectoryPath(dir);
             }
         }
 
         return canWatchDirectoryOrFile(dirPath) ? { dir: subDirectory || dir, dirPath: subDirectoryPath || dirPath, nonRecursive } : undefined;
     }
 
-    function isPathWithDefaultFailedLookupExtension(path: Path) {
-        return fileExtensionIsOneOf(path, failedLookupDefaultExtensions);
+    function isPathWithDefaultFailedLookupExtension(path: ts.Path) {
+        return ts.fileExtensionIsOneOf(path, failedLookupDefaultExtensions);
     }
 
     function watchFailedLookupLocationsOfExternalModuleResolutions<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
         name: string,
         resolution: T,
-        filePath: Path,
+        filePath: ts.Path,
         getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
     ) {
         if (resolution.refCount) {
             resolution.refCount++;
-            Debug.assertIsDefined(resolution.files);
+            ts.Debug.assertIsDefined(resolution.files);
         }
         else {
             resolution.refCount = 1;
-            Debug.assert(length(resolution.files) === 0); // This resolution shouldnt be referenced by any file yet
-            if (isExternalModuleNameRelative(name)) {
+            ts.Debug.assert(ts.length(resolution.files) === 0); // This resolution shouldnt be referenced by any file yet
+            if (ts.isExternalModuleNameRelative(name)) {
                 watchFailedLookupLocationOfResolution(resolution);
             }
             else {
@@ -723,7 +723,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     }
 
     function watchFailedLookupLocationOfResolution(resolution: ResolutionWithFailedLookupLocations) {
-        Debug.assert(!!resolution.refCount);
+        ts.Debug.assert(!!resolution.refCount);
 
         const { failedLookupLocations, affectingLocations } = resolution;
         if (!failedLookupLocations.length && !affectingLocations.length) return;
@@ -742,7 +742,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                     customFailedLookupPaths.set(failedLookupLocationPath, refCount + 1);
                 }
                 if (dirPath === rootPath) {
-                    Debug.assert(!nonRecursive);
+                    ts.Debug.assert(!nonRecursive);
                     setAtRoot = true;
                 }
                 else {
@@ -759,7 +759,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     }
 
     function watchAffectingLocationsOfResolution(resolution: ResolutionWithFailedLookupLocations, addToResolutionsWithOnlyAffectingLocations: boolean) {
-        Debug.assert(!!resolution.refCount);
+        ts.Debug.assert(!!resolution.refCount);
         const { affectingLocations } = resolution;
         if (!affectingLocations.length) return;
         if (addToResolutionsWithOnlyAffectingLocations) resolutionsWithOnlyAffectingLocations.push(resolution);
@@ -790,25 +790,25 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 }
             }
         }
-        const paths = new Set<string>();
+        const paths = new ts.Set<string>();
         paths.add(locationToWatch);
         let actualWatcher = canWatchDirectoryOrFile(resolutionHost.toPath(locationToWatch)) ?
             resolutionHost.watchAffectingFileLocation(locationToWatch, (fileName, eventKind) => {
                 cachedDirectoryStructureHost?.addOrDeleteFile(fileName, resolutionHost.toPath(locationToWatch), eventKind);
                 const packageJsonMap = moduleResolutionCache.getPackageJsonInfoCache().getInternalMap();
                 paths.forEach(path => {
-                    if (watcher.resolutions) (affectingPathChecks ??= new Set()).add(path);
-                    if (watcher.files) (affectingPathChecksForFile ??= new Set()).add(path);
+                    if (watcher.resolutions) (affectingPathChecks ??= new ts.Set()).add(path);
+                    if (watcher.files) (affectingPathChecksForFile ??= new ts.Set()).add(path);
                     packageJsonMap?.delete(resolutionHost.toPath(path));
                 });
                 resolutionHost.scheduleInvalidateResolutionsOfFailedLookupLocations();
-            }) : noopFileWatcher;
+            }) : ts.noopFileWatcher;
         const watcher: FileWatcherOfAffectingLocation = {
-            watcher: actualWatcher !== noopFileWatcher ? {
+            watcher: actualWatcher !== ts.noopFileWatcher ? {
                 close: () => {
                     actualWatcher.close();
                     // Ensure when watching symlinked package.json, we can close the actual file watcher only once
-                    actualWatcher = noopFileWatcher;
+                    actualWatcher = ts.noopFileWatcher;
                 }
             } : actualWatcher,
             resolutions: forResolution ? 1 : 0,
@@ -832,10 +832,10 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         }
     }
 
-    function setDirectoryWatcher(dir: string, dirPath: Path, nonRecursive?: boolean) {
+    function setDirectoryWatcher(dir: string, dirPath: ts.Path, nonRecursive?: boolean) {
         const dirWatcher = directoryWatchesOfFailedLookups.get(dirPath);
         if (dirWatcher) {
-            Debug.assert(!!nonRecursive === !!dirWatcher.nonRecursive);
+            ts.Debug.assert(!!nonRecursive === !!dirWatcher.nonRecursive);
             dirWatcher.refCount++;
         }
         else {
@@ -845,10 +845,10 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
     function stopWatchFailedLookupLocationOfResolution<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
         resolution: T,
-        filePath: Path,
+        filePath: ts.Path,
         getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
     ) {
-        unorderedRemoveItem(Debug.checkDefined(resolution.files), filePath);
+        ts.unorderedRemoveItem(ts.Debug.checkDefined(resolution.files), filePath);
         resolution.refCount!--;
         if (resolution.refCount) {
             return;
@@ -859,7 +859,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         }
 
         const { failedLookupLocations, affectingLocations } = resolution;
-        if (unorderedRemoveItem(resolutionsWithFailedLookups, resolution)) {
+        if (ts.unorderedRemoveItem(resolutionsWithFailedLookups, resolution)) {
             let removeAtRoot = false;
             for (const failedLookupLocation of failedLookupLocations) {
                 const failedLookupLocationPath = resolutionHost.toPath(failedLookupLocation);
@@ -872,7 +872,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                             customFailedLookupPaths.delete(failedLookupLocationPath);
                         }
                         else {
-                            Debug.assert(refCount > 1);
+                            ts.Debug.assert(refCount > 1);
                             customFailedLookupPaths.set(failedLookupLocationPath, refCount - 1);
                         }
                     }
@@ -890,7 +890,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             }
         }
         else if (affectingLocations.length) {
-            unorderedRemoveItem(resolutionsWithOnlyAffectingLocations, resolution);
+            ts.unorderedRemoveItem(resolutionsWithOnlyAffectingLocations, resolution);
         }
 
         for (const affectingLocation of affectingLocations) {
@@ -905,7 +905,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         dirWatcher.refCount--;
     }
 
-    function createDirectoryWatcher(directory: string, dirPath: Path, nonRecursive: boolean | undefined) {
+    function createDirectoryWatcher(directory: string, dirPath: ts.Path, nonRecursive: boolean | undefined) {
         return resolutionHost.watchDirectoryOfFailedLookupLocation(directory, fileOrDirectory => {
             const fileOrDirectoryPath = resolutionHost.toPath(fileOrDirectory);
             if (cachedDirectoryStructureHost) {
@@ -914,12 +914,12 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             }
 
             scheduleInvalidateResolutionOfFailedLookupLocation(fileOrDirectoryPath, dirPath === fileOrDirectoryPath);
-        }, nonRecursive ? WatchDirectoryFlags.None : WatchDirectoryFlags.Recursive);
+        }, nonRecursive ? ts.WatchDirectoryFlags.None : ts.WatchDirectoryFlags.Recursive);
     }
 
     function removeResolutionsOfFileFromCache<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
-        cache: ESMap<string, ModeAwareCache<T>>,
-        filePath: Path,
+        cache: ts.ESMap<string, ts.ModeAwareCache<T>>,
+        filePath: ts.Path,
         getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
     ) {
         // Deleted file, stop watching failed lookups for all the resolutions in the file
@@ -930,8 +930,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         }
     }
 
-    function removeResolutionsFromProjectReferenceRedirects(filePath: Path) {
-        if (!fileExtensionIs(filePath, Extension.Json)) return;
+    function removeResolutionsFromProjectReferenceRedirects(filePath: ts.Path) {
+        if (!ts.fileExtensionIs(filePath, ts.Extension.Json)) return;
 
         const program = resolutionHost.getCurrentProgram();
         if (!program) return;
@@ -944,7 +944,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         resolvedProjectReference.commandLine.fileNames.forEach(f => removeResolutionsOfFile(resolutionHost.toPath(f)));
     }
 
-    function removeResolutionsOfFile(filePath: Path) {
+    function removeResolutionsOfFile(filePath: ts.Path) {
         removeResolutionsOfFileFromCache(resolvedModuleNames, filePath, getResolvedModule);
         removeResolutionsOfFileFromCache(resolvedTypeReferenceDirectives, filePath, getResolvedTypeReferenceDirective);
     }
@@ -955,36 +955,36 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         for (const resolution of resolutions) {
             if (resolution.isInvalidated || !canInvalidate(resolution)) continue;
             resolution.isInvalidated = invalidated = true;
-            for (const containingFilePath of Debug.checkDefined(resolution.files)) {
-                (filesWithInvalidatedResolutions ??= new Set()).add(containingFilePath);
+            for (const containingFilePath of ts.Debug.checkDefined(resolution.files)) {
+                (filesWithInvalidatedResolutions ??= new ts.Set()).add(containingFilePath);
                 // When its a file with inferred types resolution, invalidate type reference directive resolution
-                hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames || endsWith(containingFilePath, inferredTypesContainingFile);
+                hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames || ts.endsWith(containingFilePath, ts.inferredTypesContainingFile);
             }
         }
         return invalidated;
     }
 
-    function invalidateResolutionOfFile(filePath: Path) {
+    function invalidateResolutionOfFile(filePath: ts.Path) {
         removeResolutionsOfFile(filePath);
         // Resolution is invalidated if the resulting file name is same as the deleted file path
         const prevHasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames;
-        if (invalidateResolutions(resolvedFileToResolution.get(filePath), returnTrue) &&
+        if (invalidateResolutions(resolvedFileToResolution.get(filePath), ts.returnTrue) &&
             hasChangedAutomaticTypeDirectiveNames &&
             !prevHasChangedAutomaticTypeDirectiveNames) {
             resolutionHost.onChangedAutomaticTypeDirectiveNames();
         }
     }
 
-    function setFilesWithInvalidatedNonRelativeUnresolvedImports(filesMap: ReadonlyESMap<Path, readonly string[]>) {
-        Debug.assert(filesWithInvalidatedNonRelativeUnresolvedImports === filesMap || filesWithInvalidatedNonRelativeUnresolvedImports === undefined);
+    function setFilesWithInvalidatedNonRelativeUnresolvedImports(filesMap: ts.ReadonlyESMap<ts.Path, readonly string[]>) {
+        ts.Debug.assert(filesWithInvalidatedNonRelativeUnresolvedImports === filesMap || filesWithInvalidatedNonRelativeUnresolvedImports === undefined);
         filesWithInvalidatedNonRelativeUnresolvedImports = filesMap;
     }
 
-    function scheduleInvalidateResolutionOfFailedLookupLocation(fileOrDirectoryPath: Path, isCreatingWatchedDirectory: boolean) {
+    function scheduleInvalidateResolutionOfFailedLookupLocation(fileOrDirectoryPath: ts.Path, isCreatingWatchedDirectory: boolean) {
         if (isCreatingWatchedDirectory) {
             // Watching directory is created
             // Invalidate any resolution has failed lookup in this directory
-            (isInDirectoryChecks ||= new Set()).add(fileOrDirectoryPath);
+            (isInDirectoryChecks ||= new ts.Set()).add(fileOrDirectoryPath);
         }
         else {
             // If something to do with folder/file starting with "." in node_modules folder, skip it
@@ -999,29 +999,29 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
             // Some file or directory in the watching directory is created
             // Return early if it does not have any of the watching extension or not the custom failed lookup path
-            const dirOfFileOrDirectory = getDirectoryPath(fileOrDirectoryPath);
-            if (isNodeModulesAtTypesDirectory(fileOrDirectoryPath) || isNodeModulesDirectory(fileOrDirectoryPath) ||
-                isNodeModulesAtTypesDirectory(dirOfFileOrDirectory) || isNodeModulesDirectory(dirOfFileOrDirectory)) {
+            const dirOfFileOrDirectory = ts.getDirectoryPath(fileOrDirectoryPath);
+            if (isNodeModulesAtTypesDirectory(fileOrDirectoryPath) || ts.isNodeModulesDirectory(fileOrDirectoryPath) ||
+                isNodeModulesAtTypesDirectory(dirOfFileOrDirectory) || ts.isNodeModulesDirectory(dirOfFileOrDirectory)) {
                 // Invalidate any resolution from this directory
-                (failedLookupChecks ||= new Set()).add(fileOrDirectoryPath);
-                (startsWithPathChecks ||= new Set()).add(fileOrDirectoryPath);
+                (failedLookupChecks ||= new ts.Set()).add(fileOrDirectoryPath);
+                (startsWithPathChecks ||= new ts.Set()).add(fileOrDirectoryPath);
             }
             else {
                 if (!isPathWithDefaultFailedLookupExtension(fileOrDirectoryPath) && !customFailedLookupPaths.has(fileOrDirectoryPath)) {
                     return false;
                 }
                 // Ignore emits from the program
-                if (isEmittedFileOfProgram(resolutionHost.getCurrentProgram(), fileOrDirectoryPath)) {
+                if (ts.isEmittedFileOfProgram(resolutionHost.getCurrentProgram(), fileOrDirectoryPath)) {
                     return false;
                 }
                 // Resolution need to be invalidated if failed lookup location is same as the file or directory getting created
-                (failedLookupChecks ||= new Set()).add(fileOrDirectoryPath);
+                (failedLookupChecks ||= new ts.Set()).add(fileOrDirectoryPath);
 
                 // If the invalidated file is from a node_modules package, invalidate everything else
                 // in the package since we might not get notifications for other files in the package.
                 // This hardens our logic against unreliable file watchers.
-                const packagePath = parseNodeModuleFromPath(fileOrDirectoryPath);
-                if (packagePath) (startsWithPathChecks ||= new Set()).add(packagePath as Path);
+                const packagePath = ts.parseNodeModuleFromPath(fileOrDirectoryPath);
+                if (packagePath) (startsWithPathChecks ||= new ts.Set()).add(packagePath as ts.Path);
             }
         }
         resolutionHost.scheduleInvalidateResolutionsOfFailedLookupLocations();
@@ -1031,8 +1031,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         let invalidated = false;
         if (affectingPathChecksForFile) {
             resolutionHost.getCurrentProgram()?.getSourceFiles().forEach(f => {
-                if (some(f.packageJsonLocations, location => affectingPathChecksForFile!.has(location))) {
-                    (filesWithInvalidatedResolutions ??= new Set()).add(f.path);
+                if (ts.some(f.packageJsonLocations, location => affectingPathChecksForFile!.has(location))) {
+                    (filesWithInvalidatedResolutions ??= new ts.Set()).add(f.path);
                     invalidated = true;
                 }
             });
@@ -1062,10 +1062,10 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         return resolution.failedLookupLocations.some(location => isInvalidatedFailedLookup(resolutionHost.toPath(location)));
     }
 
-    function isInvalidatedFailedLookup(locationPath: Path) {
+    function isInvalidatedFailedLookup(locationPath: ts.Path) {
         return failedLookupChecks?.has(locationPath) ||
-            firstDefinedIterator(startsWithPathChecks?.keys() || emptyIterator, fileOrDirectoryPath => startsWith(locationPath, fileOrDirectoryPath) ? true : undefined) ||
-            firstDefinedIterator(isInDirectoryChecks?.keys() || emptyIterator, fileOrDirectoryPath => isInDirectoryPath(fileOrDirectoryPath, locationPath) ? true : undefined);
+            ts.firstDefinedIterator(startsWithPathChecks?.keys() || ts.emptyIterator, fileOrDirectoryPath => ts.startsWith(locationPath, fileOrDirectoryPath) ? true : undefined) ||
+            ts.firstDefinedIterator(isInDirectoryChecks?.keys() || ts.emptyIterator, fileOrDirectoryPath => isInDirectoryPath(fileOrDirectoryPath, locationPath) ? true : undefined);
     }
 
     function canInvalidatedFailedLookupResolutionWithAffectingLocation(resolution: ResolutionWithFailedLookupLocations) {
@@ -1073,10 +1073,10 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     }
 
     function closeTypeRootsWatch() {
-        clearMap(typeRootsWatches, closeFileWatcher);
+        ts.clearMap(typeRootsWatches, ts.closeFileWatcher);
     }
 
-    function getDirectoryToWatchFailedLookupLocationFromTypeRoot(typeRoot: string, typeRootPath: Path): Path | undefined {
+    function getDirectoryToWatchFailedLookupLocationFromTypeRoot(typeRoot: string, typeRootPath: ts.Path): ts.Path | undefined {
         if (isInDirectoryPath(rootPath, typeRootPath)) {
             return rootPath;
         }
@@ -1084,7 +1084,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         return toWatch && directoryWatchesOfFailedLookups.has(toWatch.dirPath) ? toWatch.dirPath : undefined;
     }
 
-    function createTypeRootsWatch(typeRootPath: Path, typeRoot: string): FileWatcher {
+    function createTypeRootsWatch(typeRootPath: ts.Path, typeRoot: string): ts.FileWatcher {
         // Create new watch and recursive info
         return resolutionHost.watchTypeRootsDirectory(typeRoot, fileOrDirectory => {
             const fileOrDirectoryPath = resolutionHost.toPath(fileOrDirectory);
@@ -1105,7 +1105,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             if (dirPath) {
                 scheduleInvalidateResolutionOfFailedLookupLocation(fileOrDirectoryPath, dirPath === fileOrDirectoryPath);
             }
-        }, WatchDirectoryFlags.Recursive);
+        }, ts.WatchDirectoryFlags.Recursive);
     }
 
     /**
@@ -1123,14 +1123,14 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
         // we need to assume the directories exist to ensure that we can get all the type root directories that get included
         // But filter directories that are at root level to say directory doesnt exist, so that we arent watching them
-        const typeRoots = getEffectiveTypeRoots(options, { directoryExists: directoryExistsForTypeRootWatch, getCurrentDirectory });
+        const typeRoots = ts.getEffectiveTypeRoots(options, { directoryExists: directoryExistsForTypeRootWatch, getCurrentDirectory });
         if (typeRoots) {
-            mutateMap(
+            ts.mutateMap(
                 typeRootsWatches,
-                arrayToMap(typeRoots, tr => resolutionHost.toPath(tr)),
+                ts.arrayToMap(typeRoots, tr => resolutionHost.toPath(tr)),
                 {
                     createNewValue: createTypeRootsWatch,
-                    onDeleteValue: closeFileWatcher
+                    onDeleteValue: ts.closeFileWatcher
                 }
             );
         }
@@ -1145,7 +1145,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
      * Hence return true for all directories except root directories which are filtered from watching
      */
     function directoryExistsForTypeRootWatch(nodeTypesDirectory: string) {
-        const dir = getDirectoryPath(getDirectoryPath(nodeTypesDirectory));
+        const dir = ts.getDirectoryPath(ts.getDirectoryPath(nodeTypesDirectory));
         const dirPath = resolutionHost.toPath(dir);
         return dirPath === rootPath || canWatchDirectoryOrFile(dirPath);
     }
@@ -1153,8 +1153,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
 function resolutionIsSymlink(resolution: ResolutionWithFailedLookupLocations) {
     return !!(
-        (resolution as ResolvedModuleWithFailedLookupLocations).resolvedModule?.originalPath ||
-        (resolution as ResolvedTypeReferenceDirectiveWithFailedLookupLocations).resolvedTypeReferenceDirective?.originalPath
+        (resolution as ts.ResolvedModuleWithFailedLookupLocations).resolvedModule?.originalPath ||
+        (resolution as ts.ResolvedTypeReferenceDirectiveWithFailedLookupLocations).resolvedTypeReferenceDirective?.originalPath
     );
 }
 }

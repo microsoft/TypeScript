@@ -37,7 +37,7 @@ const enum HierarchyFacts {
     IterationStatementExcludes = None,
 }
 
-export function transformES2018(context: TransformationContext) {
+export function transformES2018(context: ts.TransformationContext) {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,
@@ -48,7 +48,7 @@ export function transformES2018(context: TransformationContext) {
 
     const resolver = context.getEmitResolver();
     const compilerOptions = context.getCompilerOptions();
-    const languageVersion = getEmitScriptTarget(compilerOptions);
+    const languageVersion = ts.getEmitScriptTarget(compilerOptions);
 
     const previousOnEmitNode = context.onEmitNode;
     context.onEmitNode = onEmitNode;
@@ -58,22 +58,22 @@ export function transformES2018(context: TransformationContext) {
 
     let exportedVariableStatement = false;
     let enabledSubstitutions: ESNextSubstitutionFlags;
-    let enclosingFunctionFlags: FunctionFlags;
-    let parametersWithPrecedingObjectRestOrSpread: Set<ParameterDeclaration> | undefined;
-    let enclosingSuperContainerFlags: NodeCheckFlags = 0;
+    let enclosingFunctionFlags: ts.FunctionFlags;
+    let parametersWithPrecedingObjectRestOrSpread: ts.Set<ts.ParameterDeclaration> | undefined;
+    let enclosingSuperContainerFlags: ts.NodeCheckFlags = 0;
     let hierarchyFacts: HierarchyFacts = 0;
 
-    let currentSourceFile: SourceFile;
-    let taggedTemplateStringDeclarations: VariableDeclaration[];
+    let currentSourceFile: ts.SourceFile;
+    let taggedTemplateStringDeclarations: ts.VariableDeclaration[];
 
     /** Keeps track of property names accessed on super (`super.x`) within async functions. */
-    let capturedSuperProperties: Set<__String>;
+    let capturedSuperProperties: ts.Set<ts.__String>;
     /** Whether the async function contains an element access on super (`super[x]`). */
     let hasSuperElementAccess: boolean;
     /** A set of node IDs for generated super accessors. */
     const substitutedSuperAccessors: boolean[] = [];
 
-    return chainBundle(context, transformSourceFile);
+    return ts.chainBundle(context, transformSourceFile);
 
     function affectsSubtree(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
         return hierarchyFacts !== (hierarchyFacts & ~excludeFacts | includeFacts);
@@ -99,36 +99,36 @@ export function transformES2018(context: TransformationContext) {
         hierarchyFacts = ancestorFacts;
     }
 
-    function recordTaggedTemplateString(temp: Identifier) {
-        taggedTemplateStringDeclarations = append(
+    function recordTaggedTemplateString(temp: ts.Identifier) {
+        taggedTemplateStringDeclarations = ts.append(
             taggedTemplateStringDeclarations,
             factory.createVariableDeclaration(temp));
     }
 
-    function transformSourceFile(node: SourceFile) {
+    function transformSourceFile(node: ts.SourceFile) {
         if (node.isDeclarationFile) {
             return node;
         }
 
         currentSourceFile = node;
         const visited = visitSourceFile(node);
-        addEmitHelpers(visited, context.readEmitHelpers());
+        ts.addEmitHelpers(visited, context.readEmitHelpers());
 
         currentSourceFile = undefined!;
         taggedTemplateStringDeclarations = undefined!;
         return visited;
     }
 
-    function visitor(node: Node): VisitResult<Node> {
+    function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
         return visitorWorker(node, /*expressionResultIsUnused*/ false);
     }
 
-    function visitorWithUnusedExpressionResult(node: Node): VisitResult<Node> {
+    function visitorWithUnusedExpressionResult(node: ts.Node): ts.VisitResult<ts.Node> {
         return visitorWorker(node, /*expressionResultIsUnused*/ true);
     }
 
-    function visitorNoAsyncModifier(node: Node): VisitResult<Node> {
-        if (node.kind === SyntaxKind.AsyncKeyword) {
+    function visitorNoAsyncModifier(node: ts.Node): ts.VisitResult<ts.Node> {
+        if (node.kind === ts.SyntaxKind.AsyncKeyword) {
             return undefined;
         }
         return node;
@@ -144,158 +144,158 @@ export function transformES2018(context: TransformationContext) {
         return cb(value);
     }
 
-    function visitDefault(node: Node): VisitResult<Node> {
-        return visitEachChild(node, visitor, context);
+    function visitDefault(node: ts.Node): ts.VisitResult<ts.Node> {
+        return ts.visitEachChild(node, visitor, context);
     }
 
     /**
      * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
      * expression of an `ExpressionStatement`).
      */
-    function visitorWorker(node: Node, expressionResultIsUnused: boolean): VisitResult<Node> {
-        if ((node.transformFlags & TransformFlags.ContainsES2018) === 0) {
+    function visitorWorker(node: ts.Node, expressionResultIsUnused: boolean): ts.VisitResult<ts.Node> {
+        if ((node.transformFlags & ts.TransformFlags.ContainsES2018) === 0) {
             return node;
         }
         switch (node.kind) {
-            case SyntaxKind.AwaitExpression:
-                return visitAwaitExpression(node as AwaitExpression);
-            case SyntaxKind.YieldExpression:
-                return visitYieldExpression(node as YieldExpression);
-            case SyntaxKind.ReturnStatement:
-                return visitReturnStatement(node as ReturnStatement);
-            case SyntaxKind.LabeledStatement:
-                return visitLabeledStatement(node as LabeledStatement);
-            case SyntaxKind.ObjectLiteralExpression:
-                return visitObjectLiteralExpression(node as ObjectLiteralExpression);
-            case SyntaxKind.BinaryExpression:
-                return visitBinaryExpression(node as BinaryExpression, expressionResultIsUnused);
-            case SyntaxKind.CommaListExpression:
-                return visitCommaListExpression(node as CommaListExpression, expressionResultIsUnused);
-            case SyntaxKind.CatchClause:
-                return visitCatchClause(node as CatchClause);
-            case SyntaxKind.VariableStatement:
-                return visitVariableStatement(node as VariableStatement);
-            case SyntaxKind.VariableDeclaration:
-                return visitVariableDeclaration(node as VariableDeclaration);
-            case SyntaxKind.DoStatement:
-            case SyntaxKind.WhileStatement:
-            case SyntaxKind.ForInStatement:
+            case ts.SyntaxKind.AwaitExpression:
+                return visitAwaitExpression(node as ts.AwaitExpression);
+            case ts.SyntaxKind.YieldExpression:
+                return visitYieldExpression(node as ts.YieldExpression);
+            case ts.SyntaxKind.ReturnStatement:
+                return visitReturnStatement(node as ts.ReturnStatement);
+            case ts.SyntaxKind.LabeledStatement:
+                return visitLabeledStatement(node as ts.LabeledStatement);
+            case ts.SyntaxKind.ObjectLiteralExpression:
+                return visitObjectLiteralExpression(node as ts.ObjectLiteralExpression);
+            case ts.SyntaxKind.BinaryExpression:
+                return visitBinaryExpression(node as ts.BinaryExpression, expressionResultIsUnused);
+            case ts.SyntaxKind.CommaListExpression:
+                return visitCommaListExpression(node as ts.CommaListExpression, expressionResultIsUnused);
+            case ts.SyntaxKind.CatchClause:
+                return visitCatchClause(node as ts.CatchClause);
+            case ts.SyntaxKind.VariableStatement:
+                return visitVariableStatement(node as ts.VariableStatement);
+            case ts.SyntaxKind.VariableDeclaration:
+                return visitVariableDeclaration(node as ts.VariableDeclaration);
+            case ts.SyntaxKind.DoStatement:
+            case ts.SyntaxKind.WhileStatement:
+            case ts.SyntaxKind.ForInStatement:
                 return doWithHierarchyFacts(
                     visitDefault,
                     node,
                     HierarchyFacts.IterationStatementExcludes,
                     HierarchyFacts.IterationStatementIncludes);
-            case SyntaxKind.ForOfStatement:
-                return visitForOfStatement(node as ForOfStatement, /*outermostLabeledStatement*/ undefined);
-            case SyntaxKind.ForStatement:
+            case ts.SyntaxKind.ForOfStatement:
+                return visitForOfStatement(node as ts.ForOfStatement, /*outermostLabeledStatement*/ undefined);
+            case ts.SyntaxKind.ForStatement:
                 return doWithHierarchyFacts(
                     visitForStatement,
-                    node as ForStatement,
+                    node as ts.ForStatement,
                     HierarchyFacts.IterationStatementExcludes,
                     HierarchyFacts.IterationStatementIncludes);
-            case SyntaxKind.VoidExpression:
-                return visitVoidExpression(node as VoidExpression);
-            case SyntaxKind.Constructor:
+            case ts.SyntaxKind.VoidExpression:
+                return visitVoidExpression(node as ts.VoidExpression);
+            case ts.SyntaxKind.Constructor:
                 return doWithHierarchyFacts(
                     visitConstructorDeclaration,
-                    node as ConstructorDeclaration,
+                    node as ts.ConstructorDeclaration,
                     HierarchyFacts.ClassOrFunctionExcludes,
                     HierarchyFacts.ClassOrFunctionIncludes);
-            case SyntaxKind.MethodDeclaration:
+            case ts.SyntaxKind.MethodDeclaration:
                 return doWithHierarchyFacts(
                     visitMethodDeclaration,
-                    node as MethodDeclaration,
+                    node as ts.MethodDeclaration,
                     HierarchyFacts.ClassOrFunctionExcludes,
                     HierarchyFacts.ClassOrFunctionIncludes);
-            case SyntaxKind.GetAccessor:
+            case ts.SyntaxKind.GetAccessor:
                 return doWithHierarchyFacts(
                     visitGetAccessorDeclaration,
-                    node as GetAccessorDeclaration,
+                    node as ts.GetAccessorDeclaration,
                     HierarchyFacts.ClassOrFunctionExcludes,
                     HierarchyFacts.ClassOrFunctionIncludes);
-            case SyntaxKind.SetAccessor:
+            case ts.SyntaxKind.SetAccessor:
                 return doWithHierarchyFacts(
                     visitSetAccessorDeclaration,
-                    node as SetAccessorDeclaration,
+                    node as ts.SetAccessorDeclaration,
                     HierarchyFacts.ClassOrFunctionExcludes,
                     HierarchyFacts.ClassOrFunctionIncludes);
-            case SyntaxKind.FunctionDeclaration:
+            case ts.SyntaxKind.FunctionDeclaration:
                 return doWithHierarchyFacts(
                     visitFunctionDeclaration,
-                    node as FunctionDeclaration,
+                    node as ts.FunctionDeclaration,
                     HierarchyFacts.ClassOrFunctionExcludes,
                     HierarchyFacts.ClassOrFunctionIncludes);
-            case SyntaxKind.FunctionExpression:
+            case ts.SyntaxKind.FunctionExpression:
                 return doWithHierarchyFacts(
                     visitFunctionExpression,
-                    node as FunctionExpression,
+                    node as ts.FunctionExpression,
                     HierarchyFacts.ClassOrFunctionExcludes,
                     HierarchyFacts.ClassOrFunctionIncludes);
-            case SyntaxKind.ArrowFunction:
+            case ts.SyntaxKind.ArrowFunction:
                 return doWithHierarchyFacts(
                     visitArrowFunction,
-                    node as ArrowFunction,
+                    node as ts.ArrowFunction,
                     HierarchyFacts.ArrowFunctionExcludes,
                     HierarchyFacts.ArrowFunctionIncludes);
-            case SyntaxKind.Parameter:
-                return visitParameter(node as ParameterDeclaration);
-            case SyntaxKind.ExpressionStatement:
-                return visitExpressionStatement(node as ExpressionStatement);
-            case SyntaxKind.ParenthesizedExpression:
-                return visitParenthesizedExpression(node as ParenthesizedExpression, expressionResultIsUnused);
-            case SyntaxKind.TaggedTemplateExpression:
-                return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
-            case SyntaxKind.PropertyAccessExpression:
-                if (capturedSuperProperties && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
+            case ts.SyntaxKind.Parameter:
+                return visitParameter(node as ts.ParameterDeclaration);
+            case ts.SyntaxKind.ExpressionStatement:
+                return visitExpressionStatement(node as ts.ExpressionStatement);
+            case ts.SyntaxKind.ParenthesizedExpression:
+                return visitParenthesizedExpression(node as ts.ParenthesizedExpression, expressionResultIsUnused);
+            case ts.SyntaxKind.TaggedTemplateExpression:
+                return visitTaggedTemplateExpression(node as ts.TaggedTemplateExpression);
+            case ts.SyntaxKind.PropertyAccessExpression:
+                if (capturedSuperProperties && ts.isPropertyAccessExpression(node) && node.expression.kind === ts.SyntaxKind.SuperKeyword) {
                     capturedSuperProperties.add(node.name.escapedText);
                 }
-                return visitEachChild(node, visitor, context);
-            case SyntaxKind.ElementAccessExpression:
-                if (capturedSuperProperties && (node as ElementAccessExpression).expression.kind === SyntaxKind.SuperKeyword) {
+                return ts.visitEachChild(node, visitor, context);
+            case ts.SyntaxKind.ElementAccessExpression:
+                if (capturedSuperProperties && (node as ts.ElementAccessExpression).expression.kind === ts.SyntaxKind.SuperKeyword) {
                     hasSuperElementAccess = true;
                 }
-                return visitEachChild(node, visitor, context);
-            case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.ClassExpression:
+                return ts.visitEachChild(node, visitor, context);
+            case ts.SyntaxKind.ClassDeclaration:
+            case ts.SyntaxKind.ClassExpression:
                 return doWithHierarchyFacts(
                     visitDefault,
                     node,
                     HierarchyFacts.ClassOrFunctionExcludes,
                     HierarchyFacts.ClassOrFunctionIncludes);
             default:
-                return visitEachChild(node, visitor, context);
+                return ts.visitEachChild(node, visitor, context);
         }
     }
 
-    function visitAwaitExpression(node: AwaitExpression): Expression {
-        if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
-            return setOriginalNode(
-                setTextRange(
-                    factory.createYieldExpression(/*asteriskToken*/ undefined, emitHelpers().createAwaitHelper(visitNode(node.expression, visitor, isExpression))),
+    function visitAwaitExpression(node: ts.AwaitExpression): ts.Expression {
+        if (enclosingFunctionFlags & ts.FunctionFlags.Async && enclosingFunctionFlags & ts.FunctionFlags.Generator) {
+            return ts.setOriginalNode(
+                ts.setTextRange(
+                    factory.createYieldExpression(/*asteriskToken*/ undefined, emitHelpers().createAwaitHelper(ts.visitNode(node.expression, visitor, ts.isExpression))),
                     /*location*/ node
                 ),
                 node
             );
         }
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function visitYieldExpression(node: YieldExpression) {
-        if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
+    function visitYieldExpression(node: ts.YieldExpression) {
+        if (enclosingFunctionFlags & ts.FunctionFlags.Async && enclosingFunctionFlags & ts.FunctionFlags.Generator) {
             if (node.asteriskToken) {
-                const expression = visitNode(Debug.checkDefined(node.expression), visitor, isExpression);
+                const expression = ts.visitNode(ts.Debug.checkDefined(node.expression), visitor, ts.isExpression);
 
-                return setOriginalNode(
-                    setTextRange(
+                return ts.setOriginalNode(
+                    ts.setTextRange(
                         factory.createYieldExpression(
                             /*asteriskToken*/ undefined,
                             emitHelpers().createAwaitHelper(
                                 factory.updateYieldExpression(
                                     node,
                                     node.asteriskToken,
-                                    setTextRange(
+                                    ts.setTextRange(
                                         emitHelpers().createAsyncDelegatorHelper(
-                                            setTextRange(
+                                            ts.setTextRange(
                                                 emitHelpers().createAsyncValuesHelper(expression),
                                                 expression
                                             )
@@ -311,13 +311,13 @@ export function transformES2018(context: TransformationContext) {
                 );
             }
 
-            return setOriginalNode(
-                setTextRange(
+            return ts.setOriginalNode(
+                ts.setTextRange(
                     factory.createYieldExpression(
                         /*asteriskToken*/ undefined,
                         createDownlevelAwait(
                             node.expression
-                                ? visitNode(node.expression, visitor, isExpression)
+                                ? ts.visitNode(node.expression, visitor, ts.isExpression)
                                 : factory.createVoidZero()
                         )
                     ),
@@ -327,46 +327,46 @@ export function transformES2018(context: TransformationContext) {
             );
         }
 
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function visitReturnStatement(node: ReturnStatement) {
-        if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
+    function visitReturnStatement(node: ts.ReturnStatement) {
+        if (enclosingFunctionFlags & ts.FunctionFlags.Async && enclosingFunctionFlags & ts.FunctionFlags.Generator) {
             return factory.updateReturnStatement(node, createDownlevelAwait(
-                node.expression ? visitNode(node.expression, visitor, isExpression) : factory.createVoidZero()
+                node.expression ? ts.visitNode(node.expression, visitor, ts.isExpression) : factory.createVoidZero()
             ));
         }
 
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function visitLabeledStatement(node: LabeledStatement) {
-        if (enclosingFunctionFlags & FunctionFlags.Async) {
-            const statement = unwrapInnermostStatementOfLabel(node);
-            if (statement.kind === SyntaxKind.ForOfStatement && (statement as ForOfStatement).awaitModifier) {
-                return visitForOfStatement(statement as ForOfStatement, node);
+    function visitLabeledStatement(node: ts.LabeledStatement) {
+        if (enclosingFunctionFlags & ts.FunctionFlags.Async) {
+            const statement = ts.unwrapInnermostStatementOfLabel(node);
+            if (statement.kind === ts.SyntaxKind.ForOfStatement && (statement as ts.ForOfStatement).awaitModifier) {
+                return visitForOfStatement(statement as ts.ForOfStatement, node);
             }
-            return factory.restoreEnclosingLabel(visitNode(statement, visitor, isStatement, factory.liftToBlock), node);
+            return factory.restoreEnclosingLabel(ts.visitNode(statement, visitor, ts.isStatement, factory.liftToBlock), node);
         }
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function chunkObjectLiteralElements(elements: readonly ObjectLiteralElementLike[]): Expression[] {
-        let chunkObject: ObjectLiteralElementLike[] | undefined;
-        const objects: Expression[] = [];
+    function chunkObjectLiteralElements(elements: readonly ts.ObjectLiteralElementLike[]): ts.Expression[] {
+        let chunkObject: ts.ObjectLiteralElementLike[] | undefined;
+        const objects: ts.Expression[] = [];
         for (const e of elements) {
-            if (e.kind === SyntaxKind.SpreadAssignment) {
+            if (e.kind === ts.SyntaxKind.SpreadAssignment) {
                 if (chunkObject) {
                     objects.push(factory.createObjectLiteralExpression(chunkObject));
                     chunkObject = undefined;
                 }
                 const target = e.expression;
-                objects.push(visitNode(target, visitor, isExpression));
+                objects.push(ts.visitNode(target, visitor, ts.isExpression));
             }
             else {
-                chunkObject = append(chunkObject, e.kind === SyntaxKind.PropertyAssignment
-                    ? factory.createPropertyAssignment(e.name, visitNode(e.initializer, visitor, isExpression))
-                    : visitNode(e, visitor, isObjectLiteralElementLike));
+                chunkObject = ts.append(chunkObject, e.kind === ts.SyntaxKind.PropertyAssignment
+                    ? factory.createPropertyAssignment(e.name, ts.visitNode(e.initializer, visitor, ts.isExpression))
+                    : ts.visitNode(e, visitor, ts.isObjectLiteralElementLike));
             }
         }
         if (chunkObject) {
@@ -376,8 +376,8 @@ export function transformES2018(context: TransformationContext) {
         return objects;
     }
 
-    function visitObjectLiteralExpression(node: ObjectLiteralExpression): Expression {
-        if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+    function visitObjectLiteralExpression(node: ts.ObjectLiteralExpression): ts.Expression {
+        if (node.transformFlags & ts.TransformFlags.ContainsObjectRestOrSpread) {
             // spread elements emit like so:
             // non-spread elements are chunked together into object literals, and then all are passed to __assign:
             //     { a, ...o, b } => __assign(__assign({a}, o), {b});
@@ -400,10 +400,10 @@ export function transformES2018(context: TransformationContext) {
             // If we translate the above to `__assign({}, k, l)`, the `l` will evaluate before `k` is spread and we
             // end up with `{ a: 1, b: 2, c: 3 }`
             const objects = chunkObjectLiteralElements(node.properties);
-            if (objects.length && objects[0].kind !== SyntaxKind.ObjectLiteralExpression) {
+            if (objects.length && objects[0].kind !== ts.SyntaxKind.ObjectLiteralExpression) {
                 objects.unshift(factory.createObjectLiteralExpression());
             }
-            let expression: Expression = objects[0];
+            let expression: ts.Expression = objects[0];
             if (objects.length > 1) {
                 for (let i = 1; i < objects.length; i++) {
                     expression = emitHelpers().createAssignHelper([expression, objects[i]]);
@@ -414,46 +414,46 @@ export function transformES2018(context: TransformationContext) {
                 return emitHelpers().createAssignHelper(objects);
             }
         }
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function visitExpressionStatement(node: ExpressionStatement): ExpressionStatement {
-        return visitEachChild(node, visitorWithUnusedExpressionResult, context);
+    function visitExpressionStatement(node: ts.ExpressionStatement): ts.ExpressionStatement {
+        return ts.visitEachChild(node, visitorWithUnusedExpressionResult, context);
     }
 
     /**
      * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
      * expression of an `ExpressionStatement`).
      */
-    function visitParenthesizedExpression(node: ParenthesizedExpression, expressionResultIsUnused: boolean): ParenthesizedExpression {
-        return visitEachChild(node, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, context);
+    function visitParenthesizedExpression(node: ts.ParenthesizedExpression, expressionResultIsUnused: boolean): ts.ParenthesizedExpression {
+        return ts.visitEachChild(node, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, context);
     }
 
-    function visitSourceFile(node: SourceFile): SourceFile {
+    function visitSourceFile(node: ts.SourceFile): ts.SourceFile {
         const ancestorFacts = enterSubtree(
             HierarchyFacts.SourceFileExcludes,
-            isEffectiveStrictModeSourceFile(node, compilerOptions) ?
+            ts.isEffectiveStrictModeSourceFile(node, compilerOptions) ?
                 HierarchyFacts.StrictModeSourceFileIncludes :
                 HierarchyFacts.SourceFileIncludes);
         exportedVariableStatement = false;
-        const visited = visitEachChild(node, visitor, context);
-        const statement = concatenate(visited.statements, taggedTemplateStringDeclarations && [
+        const visited = ts.visitEachChild(node, visitor, context);
+        const statement = ts.concatenate(visited.statements, taggedTemplateStringDeclarations && [
             factory.createVariableStatement(/*modifiers*/ undefined,
                 factory.createVariableDeclarationList(taggedTemplateStringDeclarations))
         ]);
-        const result = factory.updateSourceFile(visited, setTextRange(factory.createNodeArray(statement), node.statements));
+        const result = factory.updateSourceFile(visited, ts.setTextRange(factory.createNodeArray(statement), node.statements));
         exitSubtree(ancestorFacts);
         return result;
     }
 
-    function visitTaggedTemplateExpression(node: TaggedTemplateExpression) {
-        return processTaggedTemplateExpression(
+    function visitTaggedTemplateExpression(node: ts.TaggedTemplateExpression) {
+        return ts.processTaggedTemplateExpression(
             context,
             node,
             visitor,
             currentSourceFile,
             recordTaggedTemplateString,
-            ProcessLevel.LiftRestriction
+            ts.ProcessLevel.LiftRestriction
         );
     }
 
@@ -464,57 +464,57 @@ export function transformES2018(context: TransformationContext) {
      * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
      * expression of an `ExpressionStatement`).
      */
-    function visitBinaryExpression(node: BinaryExpression, expressionResultIsUnused: boolean): Expression {
-        if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
-            return flattenDestructuringAssignment(
+    function visitBinaryExpression(node: ts.BinaryExpression, expressionResultIsUnused: boolean): ts.Expression {
+        if (ts.isDestructuringAssignment(node) && node.left.transformFlags & ts.TransformFlags.ContainsObjectRestOrSpread) {
+            return ts.flattenDestructuringAssignment(
                 node,
                 visitor,
                 context,
-                FlattenLevel.ObjectRest,
+                ts.FlattenLevel.ObjectRest,
                 !expressionResultIsUnused
             );
         }
-        if (node.operatorToken.kind === SyntaxKind.CommaToken) {
+        if (node.operatorToken.kind === ts.SyntaxKind.CommaToken) {
             return factory.updateBinaryExpression(
                 node,
-                visitNode(node.left, visitorWithUnusedExpressionResult, isExpression),
+                ts.visitNode(node.left, visitorWithUnusedExpressionResult, ts.isExpression),
                 node.operatorToken,
-                visitNode(node.right, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, isExpression)
+                ts.visitNode(node.right, expressionResultIsUnused ? visitorWithUnusedExpressionResult : visitor, ts.isExpression)
             );
         }
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
     /**
      * @param expressionResultIsUnused Indicates the result of an expression is unused by the parent node (i.e., the left side of a comma or the
      * expression of an `ExpressionStatement`).
      */
-    function visitCommaListExpression(node: CommaListExpression, expressionResultIsUnused: boolean): Expression {
+    function visitCommaListExpression(node: ts.CommaListExpression, expressionResultIsUnused: boolean): ts.Expression {
         if (expressionResultIsUnused) {
-            return visitEachChild(node, visitorWithUnusedExpressionResult, context);
+            return ts.visitEachChild(node, visitorWithUnusedExpressionResult, context);
         }
-        let result: Expression[] | undefined;
+        let result: ts.Expression[] | undefined;
         for (let i = 0; i < node.elements.length; i++) {
             const element = node.elements[i];
-            const visited = visitNode(element, i < node.elements.length - 1 ? visitorWithUnusedExpressionResult : visitor, isExpression);
+            const visited = ts.visitNode(element, i < node.elements.length - 1 ? visitorWithUnusedExpressionResult : visitor, ts.isExpression);
             if (result || visited !== element) {
                 result ||= node.elements.slice(0, i);
                 result.push(visited);
             }
         }
-        const elements = result ? setTextRange(factory.createNodeArray(result), node.elements) : node.elements;
+        const elements = result ? ts.setTextRange(factory.createNodeArray(result), node.elements) : node.elements;
         return factory.updateCommaListExpression(node, elements);
     }
 
-    function visitCatchClause(node: CatchClause) {
+    function visitCatchClause(node: ts.CatchClause) {
         if (node.variableDeclaration &&
-            isBindingPattern(node.variableDeclaration.name) &&
-            node.variableDeclaration.name.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+            ts.isBindingPattern(node.variableDeclaration.name) &&
+            node.variableDeclaration.name.transformFlags & ts.TransformFlags.ContainsObjectRestOrSpread) {
             const name = factory.getGeneratedNameForNode(node.variableDeclaration.name);
             const updatedDecl = factory.updateVariableDeclaration(node.variableDeclaration, node.variableDeclaration.name, /*exclamationToken*/ undefined, /*type*/ undefined, name);
-            const visitedBindings = flattenDestructuringBinding(updatedDecl, visitor, context, FlattenLevel.ObjectRest);
-            let block = visitNode(node.block, visitor, isBlock);
-            if (some(visitedBindings)) {
+            const visitedBindings = ts.flattenDestructuringBinding(updatedDecl, visitor, context, ts.FlattenLevel.ObjectRest);
+            let block = ts.visitNode(node.block, visitor, ts.isBlock);
+            if (ts.some(visitedBindings)) {
                 block = factory.updateBlock(block, [
                     factory.createVariableStatement(/*modifiers*/ undefined, visitedBindings),
                     ...block.statements,
@@ -525,18 +525,18 @@ export function transformES2018(context: TransformationContext) {
                 factory.updateVariableDeclaration(node.variableDeclaration, name, /*exclamationToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined),
                 block);
         }
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function visitVariableStatement(node: VariableStatement): VisitResult<VariableStatement> {
-        if (hasSyntacticModifier(node, ModifierFlags.Export)) {
+    function visitVariableStatement(node: ts.VariableStatement): ts.VisitResult<ts.VariableStatement> {
+        if (ts.hasSyntacticModifier(node, ts.ModifierFlags.Export)) {
             const savedExportedVariableStatement = exportedVariableStatement;
             exportedVariableStatement = true;
-            const visited = visitEachChild(node, visitor, context);
+            const visited = ts.visitEachChild(node, visitor, context);
             exportedVariableStatement = savedExportedVariableStatement;
             return visited;
         }
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
     /**
@@ -544,7 +544,7 @@ export function transformES2018(context: TransformationContext) {
      *
      * @param node A VariableDeclaration node.
      */
-    function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
+    function visitVariableDeclaration(node: ts.VariableDeclaration): ts.VisitResult<ts.VariableDeclaration> {
         if (exportedVariableStatement) {
             const savedExportedVariableStatement = exportedVariableStatement;
             exportedVariableStatement = false;
@@ -555,33 +555,33 @@ export function transformES2018(context: TransformationContext) {
         return visitVariableDeclarationWorker(node, /*exportedVariableStatement*/ false);
     }
 
-    function visitVariableDeclarationWorker(node: VariableDeclaration, exportedVariableStatement: boolean): VisitResult<VariableDeclaration> {
+    function visitVariableDeclarationWorker(node: ts.VariableDeclaration, exportedVariableStatement: boolean): ts.VisitResult<ts.VariableDeclaration> {
         // If we are here it is because the name contains a binding pattern with a rest somewhere in it.
-        if (isBindingPattern(node.name) && node.name.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
-            return flattenDestructuringBinding(
+        if (ts.isBindingPattern(node.name) && node.name.transformFlags & ts.TransformFlags.ContainsObjectRestOrSpread) {
+            return ts.flattenDestructuringBinding(
                 node,
                 visitor,
                 context,
-                FlattenLevel.ObjectRest,
+                ts.FlattenLevel.ObjectRest,
                 /*rval*/ undefined,
                 exportedVariableStatement
             );
         }
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function visitForStatement(node: ForStatement): VisitResult<Statement> {
+    function visitForStatement(node: ts.ForStatement): ts.VisitResult<ts.Statement> {
         return factory.updateForStatement(
             node,
-            visitNode(node.initializer, visitorWithUnusedExpressionResult, isForInitializer),
-            visitNode(node.condition, visitor, isExpression),
-            visitNode(node.incrementor, visitorWithUnusedExpressionResult, isExpression),
-            visitIterationBody(node.statement, visitor, context)
+            ts.visitNode(node.initializer, visitorWithUnusedExpressionResult, ts.isForInitializer),
+            ts.visitNode(node.condition, visitor, ts.isExpression),
+            ts.visitNode(node.incrementor, visitorWithUnusedExpressionResult, ts.isExpression),
+            ts.visitIterationBody(node.statement, visitor, context)
         );
     }
 
-    function visitVoidExpression(node: VoidExpression) {
-        return visitEachChild(node, visitorWithUnusedExpressionResult, context);
+    function visitVoidExpression(node: ts.VoidExpression) {
+        return ts.visitEachChild(node, visitorWithUnusedExpressionResult, context);
     }
 
     /**
@@ -589,51 +589,51 @@ export function transformES2018(context: TransformationContext) {
      *
      * @param node A ForOfStatement.
      */
-    function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined): VisitResult<Statement> {
+    function visitForOfStatement(node: ts.ForOfStatement, outermostLabeledStatement: ts.LabeledStatement | undefined): ts.VisitResult<ts.Statement> {
         const ancestorFacts = enterSubtree(HierarchyFacts.IterationStatementExcludes, HierarchyFacts.IterationStatementIncludes);
-        if (node.initializer.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+        if (node.initializer.transformFlags & ts.TransformFlags.ContainsObjectRestOrSpread) {
             node = transformForOfStatementWithObjectRest(node);
         }
         const result = node.awaitModifier ?
             transformForAwaitOfStatement(node, outermostLabeledStatement, ancestorFacts) :
-            factory.restoreEnclosingLabel(visitEachChild(node, visitor, context), outermostLabeledStatement);
+            factory.restoreEnclosingLabel(ts.visitEachChild(node, visitor, context), outermostLabeledStatement);
         exitSubtree(ancestorFacts);
         return result;
     }
 
-    function transformForOfStatementWithObjectRest(node: ForOfStatement) {
-        const initializerWithoutParens = skipParentheses(node.initializer) as ForInitializer;
-        if (isVariableDeclarationList(initializerWithoutParens) || isAssignmentPattern(initializerWithoutParens)) {
-            let bodyLocation: TextRange | undefined;
-            let statementsLocation: TextRange | undefined;
+    function transformForOfStatementWithObjectRest(node: ts.ForOfStatement) {
+        const initializerWithoutParens = ts.skipParentheses(node.initializer) as ts.ForInitializer;
+        if (ts.isVariableDeclarationList(initializerWithoutParens) || ts.isAssignmentPattern(initializerWithoutParens)) {
+            let bodyLocation: ts.TextRange | undefined;
+            let statementsLocation: ts.TextRange | undefined;
             const temp = factory.createTempVariable(/*recordTempVariable*/ undefined);
-            const statements: Statement[] = [createForOfBindingStatement(factory, initializerWithoutParens, temp)];
-            if (isBlock(node.statement)) {
-                addRange(statements, node.statement.statements);
+            const statements: ts.Statement[] = [ts.createForOfBindingStatement(factory, initializerWithoutParens, temp)];
+            if (ts.isBlock(node.statement)) {
+                ts.addRange(statements, node.statement.statements);
                 bodyLocation = node.statement;
                 statementsLocation = node.statement.statements;
             }
             else if (node.statement) {
-                append(statements, node.statement);
+                ts.append(statements, node.statement);
                 bodyLocation = node.statement;
                 statementsLocation = node.statement;
             }
             return factory.updateForOfStatement(
                 node,
                 node.awaitModifier,
-                setTextRange(
+                ts.setTextRange(
                     factory.createVariableDeclarationList(
                         [
-                            setTextRange(factory.createVariableDeclaration(temp), node.initializer)
+                            ts.setTextRange(factory.createVariableDeclaration(temp), node.initializer)
                         ],
-                        NodeFlags.Let
+                        ts.NodeFlags.Let
                     ),
                     node.initializer
                 ),
                 node.expression,
-                setTextRange(
+                ts.setTextRange(
                     factory.createBlock(
-                        setTextRange(factory.createNodeArray(statements), statementsLocation),
+                        ts.setTextRange(factory.createNodeArray(statements), statementsLocation),
                         /*multiLine*/ true
                     ),
                     bodyLocation
@@ -643,29 +643,29 @@ export function transformES2018(context: TransformationContext) {
         return node;
     }
 
-    function convertForOfStatementHead(node: ForOfStatement, boundValue: Expression, nonUserCode: Identifier) {
+    function convertForOfStatementHead(node: ts.ForOfStatement, boundValue: ts.Expression, nonUserCode: ts.Identifier) {
         const value = factory.createTempVariable(hoistVariableDeclaration);
         const iteratorValueExpression = factory.createAssignment(value, boundValue);
         const iteratorValueStatement = factory.createExpressionStatement(iteratorValueExpression);
-        setSourceMapRange(iteratorValueStatement, node.expression);
+        ts.setSourceMapRange(iteratorValueStatement, node.expression);
 
         const exitNonUserCodeExpression = factory.createAssignment(nonUserCode, factory.createFalse());
         const exitNonUserCodeStatement = factory.createExpressionStatement(exitNonUserCodeExpression);
-        setSourceMapRange(exitNonUserCodeStatement, node.expression);
+        ts.setSourceMapRange(exitNonUserCodeStatement, node.expression);
 
         const enterNonUserCodeExpression = factory.createAssignment(nonUserCode, factory.createTrue());
         const enterNonUserCodeStatement = factory.createExpressionStatement(enterNonUserCodeExpression);
-        setSourceMapRange(exitNonUserCodeStatement, node.expression);
+        ts.setSourceMapRange(exitNonUserCodeStatement, node.expression);
 
-        const statements: Statement[] = [];
-        const binding = createForOfBindingStatement(factory, node.initializer, value);
-        statements.push(visitNode(binding, visitor, isStatement));
+        const statements: ts.Statement[] = [];
+        const binding = ts.createForOfBindingStatement(factory, node.initializer, value);
+        statements.push(ts.visitNode(binding, visitor, ts.isStatement));
 
-        let bodyLocation: TextRange | undefined;
-        let statementsLocation: TextRange | undefined;
-        const statement = visitIterationBody(node.statement, visitor, context);
-        if (isBlock(statement)) {
-            addRange(statements, statement.statements);
+        let bodyLocation: ts.TextRange | undefined;
+        let statementsLocation: ts.TextRange | undefined;
+        const statement = ts.visitIterationBody(node.statement, visitor, context);
+        if (ts.isBlock(statement)) {
+            ts.addRange(statements, statement.statements);
             bodyLocation = statement;
             statementsLocation = statement.statements;
         }
@@ -673,15 +673,15 @@ export function transformES2018(context: TransformationContext) {
             statements.push(statement);
         }
 
-        const body = setEmitFlags(
-            setTextRange(
+        const body = ts.setEmitFlags(
+            ts.setTextRange(
                 factory.createBlock(
-                    setTextRange(factory.createNodeArray(statements), statementsLocation),
+                    ts.setTextRange(factory.createNodeArray(statements), statementsLocation),
                     /*multiLine*/ true
                 ),
                 bodyLocation
             ),
-            EmitFlags.NoSourceMap | EmitFlags.NoTokenSourceMaps
+            ts.EmitFlags.NoSourceMap | ts.EmitFlags.NoTokenSourceMaps
         );
 
         return factory.createBlock([
@@ -697,22 +697,22 @@ export function transformES2018(context: TransformationContext) {
         ]);
     }
 
-    function createDownlevelAwait(expression: Expression) {
-        return enclosingFunctionFlags & FunctionFlags.Generator
+    function createDownlevelAwait(expression: ts.Expression) {
+        return enclosingFunctionFlags & ts.FunctionFlags.Generator
             ? factory.createYieldExpression(/*asteriskToken*/ undefined, emitHelpers().createAwaitHelper(expression))
             : factory.createAwaitExpression(expression);
     }
 
-    function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined, ancestorFacts: HierarchyFacts) {
-        const expression = visitNode(node.expression, visitor, isExpression);
-        const iterator = isIdentifier(expression) ? factory.getGeneratedNameForNode(expression) : factory.createTempVariable(/*recordTempVariable*/ undefined);
-        const result = isIdentifier(expression) ? factory.getGeneratedNameForNode(iterator) : factory.createTempVariable(/*recordTempVariable*/ undefined);
+    function transformForAwaitOfStatement(node: ts.ForOfStatement, outermostLabeledStatement: ts.LabeledStatement | undefined, ancestorFacts: HierarchyFacts) {
+        const expression = ts.visitNode(node.expression, visitor, ts.isExpression);
+        const iterator = ts.isIdentifier(expression) ? factory.getGeneratedNameForNode(expression) : factory.createTempVariable(/*recordTempVariable*/ undefined);
+        const result = ts.isIdentifier(expression) ? factory.getGeneratedNameForNode(iterator) : factory.createTempVariable(/*recordTempVariable*/ undefined);
         const nonUserCode = factory.createTempVariable(/*recordTempVariable*/ undefined);
         const done = factory.createTempVariable(hoistVariableDeclaration);
         const errorRecord = factory.createUniqueName("e");
         const catchVariable = factory.getGeneratedNameForNode(errorRecord);
         const returnMethod = factory.createTempVariable(/*recordTempVariable*/ undefined);
-        const callValues = setTextRange(emitHelpers().createAsyncValuesHelper(expression), node.expression);
+        const callValues = ts.setTextRange(emitHelpers().createAsyncValuesHelper(expression), node.expression);
         const callNext = factory.createCallExpression(factory.createPropertyAccessExpression(iterator, "next"), /*typeArguments*/ undefined, []);
         const getDone = factory.createPropertyAccessExpression(result, "done");
         const getValue = factory.createPropertyAccessExpression(result, "value");
@@ -726,19 +726,19 @@ export function transformES2018(context: TransformationContext) {
             factory.inlineExpressions([factory.createAssignment(errorRecord, factory.createVoidZero()), callValues]) :
             callValues;
 
-        const forStatement = setEmitFlags(
-            setTextRange(
+        const forStatement = ts.setEmitFlags(
+            ts.setTextRange(
                 factory.createForStatement(
-                    /*initializer*/ setEmitFlags(
-                        setTextRange(
+                    /*initializer*/ ts.setEmitFlags(
+                        ts.setTextRange(
                             factory.createVariableDeclarationList([
                                 factory.createVariableDeclaration(nonUserCode, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createTrue()),
-                                setTextRange(factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer), node.expression),
+                                ts.setTextRange(factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer), node.expression),
                                 factory.createVariableDeclaration(result)
                             ]),
                             node.expression
                         ),
-                        EmitFlags.NoHoisting
+                        ts.EmitFlags.NoHoisting
                     ),
                     /*condition*/ factory.inlineExpressions([
                         factory.createAssignment(result, createDownlevelAwait(callNext)),
@@ -750,9 +750,9 @@ export function transformES2018(context: TransformationContext) {
                 ),
                 /*location*/ node
             ),
-            EmitFlags.NoTokenTrailingSourceMaps
+            ts.EmitFlags.NoTokenTrailingSourceMaps
         );
-        setOriginalNode(forStatement, node);
+        ts.setOriginalNode(forStatement, node);
 
         return factory.createTryStatement(
             factory.createBlock([
@@ -763,7 +763,7 @@ export function transformES2018(context: TransformationContext) {
             ]),
             factory.createCatchClause(
                 factory.createVariableDeclaration(catchVariable),
-                setEmitFlags(
+                ts.setEmitFlags(
                     factory.createBlock([
                         factory.createExpressionStatement(
                             factory.createAssignment(
@@ -774,13 +774,13 @@ export function transformES2018(context: TransformationContext) {
                             )
                         )
                     ]),
-                    EmitFlags.SingleLine
+                    ts.EmitFlags.SingleLine
                 )
             ),
             factory.createBlock([
                 factory.createTryStatement(
                     /*tryBlock*/ factory.createBlock([
-                        setEmitFlags(
+                        ts.setEmitFlags(
                             factory.createIfStatement(
                                 factory.createLogicalAnd(
                                     factory.createLogicalAnd(
@@ -794,47 +794,47 @@ export function transformES2018(context: TransformationContext) {
                                 ),
                                 factory.createExpressionStatement(createDownlevelAwait(callReturn))
                             ),
-                            EmitFlags.SingleLine
+                            ts.EmitFlags.SingleLine
                         )
                     ]),
                     /*catchClause*/ undefined,
-                    /*finallyBlock*/ setEmitFlags(
+                    /*finallyBlock*/ ts.setEmitFlags(
                         factory.createBlock([
-                            setEmitFlags(
+                            ts.setEmitFlags(
                                 factory.createIfStatement(
                                     errorRecord,
                                     factory.createThrowStatement(
                                         factory.createPropertyAccessExpression(errorRecord, "error")
                                     )
                                 ),
-                                EmitFlags.SingleLine
+                                ts.EmitFlags.SingleLine
                             )
                         ]),
-                        EmitFlags.SingleLine
+                        ts.EmitFlags.SingleLine
                     )
                 )
             ])
         );
     }
 
-    function parameterVisitor(node: Node) {
-        Debug.assertNode(node, isParameter);
+    function parameterVisitor(node: ts.Node) {
+        ts.Debug.assertNode(node, ts.isParameter);
         return visitParameter(node);
     }
 
-    function visitParameter(node: ParameterDeclaration): ParameterDeclaration {
+    function visitParameter(node: ts.ParameterDeclaration): ts.ParameterDeclaration {
         if (parametersWithPrecedingObjectRestOrSpread?.has(node)) {
             return factory.updateParameterDeclaration(
                 node,
                 /*modifiers*/ undefined,
                 node.dotDotDotToken,
-                isBindingPattern(node.name) ? factory.getGeneratedNameForNode(node) : node.name,
+                ts.isBindingPattern(node.name) ? factory.getGeneratedNameForNode(node) : node.name,
                 /*questionToken*/ undefined,
                 /*type*/ undefined,
                 /*initializer*/ undefined
             );
         }
-        if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+        if (node.transformFlags & ts.TransformFlags.ContainsObjectRestOrSpread) {
             // Binding patterns are converted into a generated name and are
             // evaluated inside the function body.
             return factory.updateParameterDeclaration(
@@ -844,34 +844,34 @@ export function transformES2018(context: TransformationContext) {
                 factory.getGeneratedNameForNode(node),
                 /*questionToken*/ undefined,
                 /*type*/ undefined,
-                visitNode(node.initializer, visitor, isExpression)
+                ts.visitNode(node.initializer, visitor, ts.isExpression)
             );
         }
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function collectParametersWithPrecedingObjectRestOrSpread(node: SignatureDeclaration) {
-        let parameters: Set<ParameterDeclaration> | undefined;
+    function collectParametersWithPrecedingObjectRestOrSpread(node: ts.SignatureDeclaration) {
+        let parameters: ts.Set<ts.ParameterDeclaration> | undefined;
         for (const parameter of node.parameters) {
             if (parameters) {
                 parameters.add(parameter);
             }
-            else if (parameter.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
-                parameters = new Set();
+            else if (parameter.transformFlags & ts.TransformFlags.ContainsObjectRestOrSpread) {
+                parameters = new ts.Set();
             }
         }
         return parameters;
     }
 
-    function visitConstructorDeclaration(node: ConstructorDeclaration) {
+    function visitConstructorDeclaration(node: ts.ConstructorDeclaration) {
         const savedEnclosingFunctionFlags = enclosingFunctionFlags;
         const savedParametersWithPrecedingObjectRestOrSpread = parametersWithPrecedingObjectRestOrSpread;
-        enclosingFunctionFlags = getFunctionFlags(node);
+        enclosingFunctionFlags = ts.getFunctionFlags(node);
         parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
         const updated = factory.updateConstructorDeclaration(
             node,
             node.modifiers,
-            visitParameterList(node.parameters, parameterVisitor, context),
+            ts.visitParameterList(node.parameters, parameterVisitor, context),
             transformFunctionBody(node)
         );
         enclosingFunctionFlags = savedEnclosingFunctionFlags;
@@ -879,16 +879,16 @@ export function transformES2018(context: TransformationContext) {
         return updated;
     }
 
-    function visitGetAccessorDeclaration(node: GetAccessorDeclaration) {
+    function visitGetAccessorDeclaration(node: ts.GetAccessorDeclaration) {
         const savedEnclosingFunctionFlags = enclosingFunctionFlags;
         const savedParametersWithPrecedingObjectRestOrSpread = parametersWithPrecedingObjectRestOrSpread;
-        enclosingFunctionFlags = getFunctionFlags(node);
+        enclosingFunctionFlags = ts.getFunctionFlags(node);
         parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
         const updated = factory.updateGetAccessorDeclaration(
             node,
             node.modifiers,
-            visitNode(node.name, visitor, isPropertyName),
-            visitParameterList(node.parameters, parameterVisitor, context),
+            ts.visitNode(node.name, visitor, ts.isPropertyName),
+            ts.visitParameterList(node.parameters, parameterVisitor, context),
             /*type*/ undefined,
             transformFunctionBody(node)
         );
@@ -897,16 +897,16 @@ export function transformES2018(context: TransformationContext) {
         return updated;
     }
 
-    function visitSetAccessorDeclaration(node: SetAccessorDeclaration) {
+    function visitSetAccessorDeclaration(node: ts.SetAccessorDeclaration) {
         const savedEnclosingFunctionFlags = enclosingFunctionFlags;
         const savedParametersWithPrecedingObjectRestOrSpread = parametersWithPrecedingObjectRestOrSpread;
-        enclosingFunctionFlags = getFunctionFlags(node);
+        enclosingFunctionFlags = ts.getFunctionFlags(node);
         parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
         const updated = factory.updateSetAccessorDeclaration(
             node,
             node.modifiers,
-            visitNode(node.name, visitor, isPropertyName),
-            visitParameterList(node.parameters, parameterVisitor, context),
+            ts.visitNode(node.name, visitor, ts.isPropertyName),
+            ts.visitParameterList(node.parameters, parameterVisitor, context),
             transformFunctionBody(node)
         );
         enclosingFunctionFlags = savedEnclosingFunctionFlags;
@@ -914,25 +914,25 @@ export function transformES2018(context: TransformationContext) {
         return updated;
     }
 
-    function visitMethodDeclaration(node: MethodDeclaration) {
+    function visitMethodDeclaration(node: ts.MethodDeclaration) {
         const savedEnclosingFunctionFlags = enclosingFunctionFlags;
         const savedParametersWithPrecedingObjectRestOrSpread = parametersWithPrecedingObjectRestOrSpread;
-        enclosingFunctionFlags = getFunctionFlags(node);
+        enclosingFunctionFlags = ts.getFunctionFlags(node);
         parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
         const updated = factory.updateMethodDeclaration(
             node,
-            enclosingFunctionFlags & FunctionFlags.Generator
-                ? visitNodes(node.modifiers, visitorNoAsyncModifier, isModifierLike)
+            enclosingFunctionFlags & ts.FunctionFlags.Generator
+                ? ts.visitNodes(node.modifiers, visitorNoAsyncModifier, ts.isModifierLike)
                 : node.modifiers,
-            enclosingFunctionFlags & FunctionFlags.Async
+            enclosingFunctionFlags & ts.FunctionFlags.Async
                 ? undefined
                 : node.asteriskToken,
-            visitNode(node.name, visitor, isPropertyName),
-            visitNode<Token<SyntaxKind.QuestionToken>>(/*questionToken*/ undefined, visitor, isToken),
+            ts.visitNode(node.name, visitor, ts.isPropertyName),
+            ts.visitNode<ts.Token<ts.SyntaxKind.QuestionToken>>(/*questionToken*/ undefined, visitor, ts.isToken),
             /*typeParameters*/ undefined,
-            visitParameterList(node.parameters, parameterVisitor, context),
+            ts.visitParameterList(node.parameters, parameterVisitor, context),
             /*type*/ undefined,
-            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
+            enclosingFunctionFlags & ts.FunctionFlags.Async && enclosingFunctionFlags & ts.FunctionFlags.Generator
                 ? transformAsyncGeneratorFunctionBody(node)
                 : transformFunctionBody(node)
         );
@@ -941,24 +941,24 @@ export function transformES2018(context: TransformationContext) {
         return updated;
     }
 
-    function visitFunctionDeclaration(node: FunctionDeclaration) {
+    function visitFunctionDeclaration(node: ts.FunctionDeclaration) {
         const savedEnclosingFunctionFlags = enclosingFunctionFlags;
         const savedParametersWithPrecedingObjectRestOrSpread = parametersWithPrecedingObjectRestOrSpread;
-        enclosingFunctionFlags = getFunctionFlags(node);
+        enclosingFunctionFlags = ts.getFunctionFlags(node);
         parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
         const updated = factory.updateFunctionDeclaration(
             node,
-            enclosingFunctionFlags & FunctionFlags.Generator
-                ? visitNodes(node.modifiers, visitorNoAsyncModifier, isModifier)
+            enclosingFunctionFlags & ts.FunctionFlags.Generator
+                ? ts.visitNodes(node.modifiers, visitorNoAsyncModifier, ts.isModifier)
                 : node.modifiers,
-            enclosingFunctionFlags & FunctionFlags.Async
+            enclosingFunctionFlags & ts.FunctionFlags.Async
                 ? undefined
                 : node.asteriskToken,
             node.name,
             /*typeParameters*/ undefined,
-            visitParameterList(node.parameters, parameterVisitor, context),
+            ts.visitParameterList(node.parameters, parameterVisitor, context),
             /*type*/ undefined,
-            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
+            enclosingFunctionFlags & ts.FunctionFlags.Async && enclosingFunctionFlags & ts.FunctionFlags.Generator
                 ? transformAsyncGeneratorFunctionBody(node)
                 : transformFunctionBody(node)
         );
@@ -967,16 +967,16 @@ export function transformES2018(context: TransformationContext) {
         return updated;
     }
 
-    function visitArrowFunction(node: ArrowFunction) {
+    function visitArrowFunction(node: ts.ArrowFunction) {
         const savedEnclosingFunctionFlags = enclosingFunctionFlags;
         const savedParametersWithPrecedingObjectRestOrSpread = parametersWithPrecedingObjectRestOrSpread;
-        enclosingFunctionFlags = getFunctionFlags(node);
+        enclosingFunctionFlags = ts.getFunctionFlags(node);
         parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
         const updated = factory.updateArrowFunction(
             node,
             node.modifiers,
             /*typeParameters*/ undefined,
-            visitParameterList(node.parameters, parameterVisitor, context),
+            ts.visitParameterList(node.parameters, parameterVisitor, context),
             /*type*/ undefined,
             node.equalsGreaterThanToken,
             transformFunctionBody(node),
@@ -986,24 +986,24 @@ export function transformES2018(context: TransformationContext) {
         return updated;
     }
 
-    function visitFunctionExpression(node: FunctionExpression) {
+    function visitFunctionExpression(node: ts.FunctionExpression) {
         const savedEnclosingFunctionFlags = enclosingFunctionFlags;
         const savedParametersWithPrecedingObjectRestOrSpread = parametersWithPrecedingObjectRestOrSpread;
-        enclosingFunctionFlags = getFunctionFlags(node);
+        enclosingFunctionFlags = ts.getFunctionFlags(node);
         parametersWithPrecedingObjectRestOrSpread = collectParametersWithPrecedingObjectRestOrSpread(node);
         const updated = factory.updateFunctionExpression(
             node,
-            enclosingFunctionFlags & FunctionFlags.Generator
-                ? visitNodes(node.modifiers, visitorNoAsyncModifier, isModifier)
+            enclosingFunctionFlags & ts.FunctionFlags.Generator
+                ? ts.visitNodes(node.modifiers, visitorNoAsyncModifier, ts.isModifier)
                 : node.modifiers,
-            enclosingFunctionFlags & FunctionFlags.Async
+            enclosingFunctionFlags & ts.FunctionFlags.Async
                 ? undefined
                 : node.asteriskToken,
             node.name,
             /*typeParameters*/ undefined,
-            visitParameterList(node.parameters, parameterVisitor, context),
+            ts.visitParameterList(node.parameters, parameterVisitor, context),
             /*type*/ undefined,
-            enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator
+            enclosingFunctionFlags & ts.FunctionFlags.Async && enclosingFunctionFlags & ts.FunctionFlags.Generator
                 ? transformAsyncGeneratorFunctionBody(node)
                 : transformFunctionBody(node)
         );
@@ -1012,29 +1012,29 @@ export function transformES2018(context: TransformationContext) {
         return updated;
     }
 
-    function transformAsyncGeneratorFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody {
+    function transformAsyncGeneratorFunctionBody(node: ts.MethodDeclaration | ts.AccessorDeclaration | ts.FunctionDeclaration | ts.FunctionExpression): ts.FunctionBody {
         resumeLexicalEnvironment();
-        const statements: Statement[] = [];
+        const statements: ts.Statement[] = [];
         const statementOffset = factory.copyPrologue(node.body!.statements, statements, /*ensureUseStrict*/ false, visitor);
         appendObjectRestAssignmentsIfNeeded(statements, node);
 
         const savedCapturedSuperProperties = capturedSuperProperties;
         const savedHasSuperElementAccess = hasSuperElementAccess;
-        capturedSuperProperties = new Set();
+        capturedSuperProperties = new ts.Set();
         hasSuperElementAccess = false;
 
         const returnStatement = factory.createReturnStatement(
             emitHelpers().createAsyncGeneratorHelper(
                 factory.createFunctionExpression(
                     /*modifiers*/ undefined,
-                    factory.createToken(SyntaxKind.AsteriskToken),
+                    factory.createToken(ts.SyntaxKind.AsteriskToken),
                     node.name && factory.getGeneratedNameForNode(node.name),
                     /*typeParameters*/ undefined,
                     /*parameters*/ [],
                     /*type*/ undefined,
                     factory.updateBlock(
                         node.body!,
-                        visitLexicalEnvironment(node.body!.statements, visitor, context, statementOffset)
+                        ts.visitLexicalEnvironment(node.body!.statements, visitor, context, statementOffset)
                     )
                 ),
                 !!(hierarchyFacts & HierarchyFacts.HasLexicalThis)
@@ -1043,26 +1043,26 @@ export function transformES2018(context: TransformationContext) {
 
         // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
         // This step isn't needed if we eventually transform this to ES5.
-        const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 && resolver.getNodeCheckFlags(node) & (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync);
+        const emitSuperHelpers = languageVersion >= ts.ScriptTarget.ES2015 && resolver.getNodeCheckFlags(node) & (ts.NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | ts.NodeCheckFlags.MethodWithSuperPropertyAccessInAsync);
 
         if (emitSuperHelpers) {
             enableSubstitutionForAsyncMethodsWithSuper();
-            const variableStatement = createSuperAccessVariableStatement(factory, resolver, node, capturedSuperProperties);
-            substitutedSuperAccessors[getNodeId(variableStatement)] = true;
-            insertStatementsAfterStandardPrologue(statements, [variableStatement]);
+            const variableStatement = ts.createSuperAccessVariableStatement(factory, resolver, node, capturedSuperProperties);
+            substitutedSuperAccessors[ts.getNodeId(variableStatement)] = true;
+            ts.insertStatementsAfterStandardPrologue(statements, [variableStatement]);
         }
 
         statements.push(returnStatement);
 
-        insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
+        ts.insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
         const block = factory.updateBlock(node.body!, statements);
 
         if (emitSuperHelpers && hasSuperElementAccess) {
-            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
-                addEmitHelper(block, advancedAsyncSuperHelper);
+            if (resolver.getNodeCheckFlags(node) & ts.NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
+                ts.addEmitHelper(block, ts.advancedAsyncSuperHelper);
             }
-            else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAccessInAsync) {
-                addEmitHelper(block, asyncSuperHelper);
+            else if (resolver.getNodeCheckFlags(node) & ts.NodeCheckFlags.MethodWithSuperPropertyAccessInAsync) {
+                ts.addEmitHelper(block, ts.asyncSuperHelper);
             }
         }
 
@@ -1072,59 +1072,59 @@ export function transformES2018(context: TransformationContext) {
         return block;
     }
 
-    function transformFunctionBody(node: FunctionDeclaration | FunctionExpression | ConstructorDeclaration | MethodDeclaration | AccessorDeclaration): FunctionBody;
-    function transformFunctionBody(node: ArrowFunction): ConciseBody;
-    function transformFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
+    function transformFunctionBody(node: ts.FunctionDeclaration | ts.FunctionExpression | ts.ConstructorDeclaration | ts.MethodDeclaration | ts.AccessorDeclaration): ts.FunctionBody;
+    function transformFunctionBody(node: ts.ArrowFunction): ts.ConciseBody;
+    function transformFunctionBody(node: ts.FunctionLikeDeclaration): ts.ConciseBody {
         resumeLexicalEnvironment();
         let statementOffset = 0;
-        const statements: Statement[] = [];
-        const body = visitNode(node.body, visitor, isConciseBody) ?? factory.createBlock([]);
-        if (isBlock(body)) {
+        const statements: ts.Statement[] = [];
+        const body = ts.visitNode(node.body, visitor, ts.isConciseBody) ?? factory.createBlock([]);
+        if (ts.isBlock(body)) {
             statementOffset = factory.copyPrologue(body.statements, statements, /*ensureUseStrict*/ false, visitor);
         }
-        addRange(statements, appendObjectRestAssignmentsIfNeeded(/*statements*/ undefined, node));
+        ts.addRange(statements, appendObjectRestAssignmentsIfNeeded(/*statements*/ undefined, node));
 
         const leadingStatements = endLexicalEnvironment();
-        if (statementOffset > 0 || some(statements) || some(leadingStatements)) {
+        if (statementOffset > 0 || ts.some(statements) || ts.some(leadingStatements)) {
             const block = factory.converters.convertToFunctionBlock(body, /*multiLine*/ true);
-            insertStatementsAfterStandardPrologue(statements, leadingStatements);
-            addRange(statements, block.statements.slice(statementOffset));
-            return factory.updateBlock(block, setTextRange(factory.createNodeArray(statements), block.statements));
+            ts.insertStatementsAfterStandardPrologue(statements, leadingStatements);
+            ts.addRange(statements, block.statements.slice(statementOffset));
+            return factory.updateBlock(block, ts.setTextRange(factory.createNodeArray(statements), block.statements));
         }
         return body;
     }
 
-    function appendObjectRestAssignmentsIfNeeded(statements: Statement[] | undefined, node: FunctionLikeDeclaration): Statement[] | undefined {
+    function appendObjectRestAssignmentsIfNeeded(statements: ts.Statement[] | undefined, node: ts.FunctionLikeDeclaration): ts.Statement[] | undefined {
         let containsPrecedingObjectRestOrSpread = false;
         for (const parameter of node.parameters) {
             if (containsPrecedingObjectRestOrSpread) {
-                if (isBindingPattern(parameter.name)) {
+                if (ts.isBindingPattern(parameter.name)) {
                     // In cases where a binding pattern is simply '[]' or '{}',
                     // we usually don't want to emit a var declaration; however, in the presence
                     // of an initializer, we must emit that expression to preserve side effects.
                     //
                     // NOTE: see `insertDefaultValueAssignmentForBindingPattern` in es2015.ts
                     if (parameter.name.elements.length > 0) {
-                        const declarations = flattenDestructuringBinding(
+                        const declarations = ts.flattenDestructuringBinding(
                             parameter,
                             visitor,
                             context,
-                            FlattenLevel.All,
+                            ts.FlattenLevel.All,
                             factory.getGeneratedNameForNode(parameter));
-                        if (some(declarations)) {
+                        if (ts.some(declarations)) {
                             const declarationList = factory.createVariableDeclarationList(declarations);
                             const statement = factory.createVariableStatement(/*modifiers*/ undefined, declarationList);
-                            setEmitFlags(statement, EmitFlags.CustomPrologue);
-                            statements = append(statements, statement);
+                            ts.setEmitFlags(statement, ts.EmitFlags.CustomPrologue);
+                            statements = ts.append(statements, statement);
                         }
                     }
                     else if (parameter.initializer) {
                         const name = factory.getGeneratedNameForNode(parameter);
-                        const initializer = visitNode(parameter.initializer, visitor, isExpression);
+                        const initializer = ts.visitNode(parameter.initializer, visitor, ts.isExpression);
                         const assignment = factory.createAssignment(name, initializer);
                         const statement = factory.createExpressionStatement(assignment);
-                        setEmitFlags(statement, EmitFlags.CustomPrologue);
-                        statements = append(statements, statement);
+                        ts.setEmitFlags(statement, ts.EmitFlags.CustomPrologue);
+                        statements = ts.append(statements, statement);
                     }
                 }
                 else if (parameter.initializer) {
@@ -1139,44 +1139,44 @@ export function transformES2018(context: TransformationContext) {
                     //  }
 
                     const name = factory.cloneNode(parameter.name);
-                    setTextRange(name, parameter.name);
-                    setEmitFlags(name, EmitFlags.NoSourceMap);
+                    ts.setTextRange(name, parameter.name);
+                    ts.setEmitFlags(name, ts.EmitFlags.NoSourceMap);
 
-                    const initializer = visitNode(parameter.initializer, visitor, isExpression);
-                    addEmitFlags(initializer, EmitFlags.NoSourceMap | EmitFlags.NoComments);
+                    const initializer = ts.visitNode(parameter.initializer, visitor, ts.isExpression);
+                    ts.addEmitFlags(initializer, ts.EmitFlags.NoSourceMap | ts.EmitFlags.NoComments);
 
                     const assignment = factory.createAssignment(name, initializer);
-                    setTextRange(assignment, parameter);
-                    setEmitFlags(assignment, EmitFlags.NoComments);
+                    ts.setTextRange(assignment, parameter);
+                    ts.setEmitFlags(assignment, ts.EmitFlags.NoComments);
 
                     const block = factory.createBlock([factory.createExpressionStatement(assignment)]);
-                    setTextRange(block, parameter);
-                    setEmitFlags(block, EmitFlags.SingleLine | EmitFlags.NoTrailingSourceMap | EmitFlags.NoTokenSourceMaps | EmitFlags.NoComments);
+                    ts.setTextRange(block, parameter);
+                    ts.setEmitFlags(block, ts.EmitFlags.SingleLine | ts.EmitFlags.NoTrailingSourceMap | ts.EmitFlags.NoTokenSourceMaps | ts.EmitFlags.NoComments);
 
                     const typeCheck = factory.createTypeCheck(factory.cloneNode(parameter.name), "undefined");
                     const statement = factory.createIfStatement(typeCheck, block);
-                    startOnNewLine(statement);
-                    setTextRange(statement, parameter);
-                    setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue | EmitFlags.NoComments);
-                    statements = append(statements, statement);
+                    ts.startOnNewLine(statement);
+                    ts.setTextRange(statement, parameter);
+                    ts.setEmitFlags(statement, ts.EmitFlags.NoTokenSourceMaps | ts.EmitFlags.NoTrailingSourceMap | ts.EmitFlags.CustomPrologue | ts.EmitFlags.NoComments);
+                    statements = ts.append(statements, statement);
                 }
             }
-            else if (parameter.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
+            else if (parameter.transformFlags & ts.TransformFlags.ContainsObjectRestOrSpread) {
                 containsPrecedingObjectRestOrSpread = true;
-                const declarations = flattenDestructuringBinding(
+                const declarations = ts.flattenDestructuringBinding(
                     parameter,
                     visitor,
                     context,
-                    FlattenLevel.ObjectRest,
+                    ts.FlattenLevel.ObjectRest,
                     factory.getGeneratedNameForNode(parameter),
                     /*doNotRecordTempVariablesInLine*/ false,
                     /*skipInitializer*/ true,
                 );
-                if (some(declarations)) {
+                if (ts.some(declarations)) {
                     const declarationList = factory.createVariableDeclarationList(declarations);
                     const statement = factory.createVariableStatement(/*modifiers*/ undefined, declarationList);
-                    setEmitFlags(statement, EmitFlags.CustomPrologue);
-                    statements = append(statements, statement);
+                    ts.setEmitFlags(statement, ts.EmitFlags.CustomPrologue);
+                    statements = ts.append(statements, statement);
                 }
             }
         }
@@ -1189,18 +1189,18 @@ export function transformES2018(context: TransformationContext) {
 
             // We need to enable substitutions for call, property access, and element access
             // if we need to rewrite super calls.
-            context.enableSubstitution(SyntaxKind.CallExpression);
-            context.enableSubstitution(SyntaxKind.PropertyAccessExpression);
-            context.enableSubstitution(SyntaxKind.ElementAccessExpression);
+            context.enableSubstitution(ts.SyntaxKind.CallExpression);
+            context.enableSubstitution(ts.SyntaxKind.PropertyAccessExpression);
+            context.enableSubstitution(ts.SyntaxKind.ElementAccessExpression);
 
             // We need to be notified when entering and exiting declarations that bind super.
-            context.enableEmitNotification(SyntaxKind.ClassDeclaration);
-            context.enableEmitNotification(SyntaxKind.MethodDeclaration);
-            context.enableEmitNotification(SyntaxKind.GetAccessor);
-            context.enableEmitNotification(SyntaxKind.SetAccessor);
-            context.enableEmitNotification(SyntaxKind.Constructor);
+            context.enableEmitNotification(ts.SyntaxKind.ClassDeclaration);
+            context.enableEmitNotification(ts.SyntaxKind.MethodDeclaration);
+            context.enableEmitNotification(ts.SyntaxKind.GetAccessor);
+            context.enableEmitNotification(ts.SyntaxKind.SetAccessor);
+            context.enableEmitNotification(ts.SyntaxKind.Constructor);
             // We need to be notified when entering the generated accessor arrow functions.
-            context.enableEmitNotification(SyntaxKind.VariableStatement);
+            context.enableEmitNotification(ts.SyntaxKind.VariableStatement);
         }
     }
 
@@ -1211,11 +1211,11 @@ export function transformES2018(context: TransformationContext) {
      * @param node The node to be printed.
      * @param emitCallback The callback used to emit the node.
      */
-    function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
+    function onEmitNode(hint: ts.EmitHint, node: ts.Node, emitCallback: (hint: ts.EmitHint, node: ts.Node) => void) {
         // If we need to support substitutions for `super` in an async method,
         // we should track it here.
         if (enabledSubstitutions & ESNextSubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
-            const superContainerFlags = resolver.getNodeCheckFlags(node) & (NodeCheckFlags.MethodWithSuperPropertyAccessInAsync | NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync);
+            const superContainerFlags = resolver.getNodeCheckFlags(node) & (ts.NodeCheckFlags.MethodWithSuperPropertyAccessInAsync | ts.NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync);
             if (superContainerFlags !== enclosingSuperContainerFlags) {
                 const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
                 enclosingSuperContainerFlags = superContainerFlags;
@@ -1225,9 +1225,9 @@ export function transformES2018(context: TransformationContext) {
             }
         }
         // Disable substitution in the generated super accessor itself.
-        else if (enabledSubstitutions && substitutedSuperAccessors[getNodeId(node)]) {
+        else if (enabledSubstitutions && substitutedSuperAccessors[ts.getNodeId(node)]) {
             const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
-            enclosingSuperContainerFlags = 0 as NodeCheckFlags;
+            enclosingSuperContainerFlags = 0 as ts.NodeCheckFlags;
             previousOnEmitNode(hint, node, emitCallback);
             enclosingSuperContainerFlags = savedEnclosingSuperContainerFlags;
             return;
@@ -1242,31 +1242,31 @@ export function transformES2018(context: TransformationContext) {
      * @param hint The context for the emitter.
      * @param node The node to substitute.
      */
-    function onSubstituteNode(hint: EmitHint, node: Node) {
+    function onSubstituteNode(hint: ts.EmitHint, node: ts.Node) {
         node = previousOnSubstituteNode(hint, node);
-        if (hint === EmitHint.Expression && enclosingSuperContainerFlags) {
-            return substituteExpression(node as Expression);
+        if (hint === ts.EmitHint.Expression && enclosingSuperContainerFlags) {
+            return substituteExpression(node as ts.Expression);
         }
         return node;
     }
 
-    function substituteExpression(node: Expression) {
+    function substituteExpression(node: ts.Expression) {
         switch (node.kind) {
-            case SyntaxKind.PropertyAccessExpression:
-                return substitutePropertyAccessExpression(node as PropertyAccessExpression);
-            case SyntaxKind.ElementAccessExpression:
-                return substituteElementAccessExpression(node as ElementAccessExpression);
-            case SyntaxKind.CallExpression:
-                return substituteCallExpression(node as CallExpression);
+            case ts.SyntaxKind.PropertyAccessExpression:
+                return substitutePropertyAccessExpression(node as ts.PropertyAccessExpression);
+            case ts.SyntaxKind.ElementAccessExpression:
+                return substituteElementAccessExpression(node as ts.ElementAccessExpression);
+            case ts.SyntaxKind.CallExpression:
+                return substituteCallExpression(node as ts.CallExpression);
         }
         return node;
     }
 
-    function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
-        if (node.expression.kind === SyntaxKind.SuperKeyword) {
-            return setTextRange(
+    function substitutePropertyAccessExpression(node: ts.PropertyAccessExpression) {
+        if (node.expression.kind === ts.SyntaxKind.SuperKeyword) {
+            return ts.setTextRange(
                 factory.createPropertyAccessExpression(
-                    factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
+                    factory.createUniqueName("_super", ts.GeneratedIdentifierFlags.Optimistic | ts.GeneratedIdentifierFlags.FileLevel),
                     node.name),
                 node
             );
@@ -1274,8 +1274,8 @@ export function transformES2018(context: TransformationContext) {
         return node;
     }
 
-    function substituteElementAccessExpression(node: ElementAccessExpression) {
-        if (node.expression.kind === SyntaxKind.SuperKeyword) {
+    function substituteElementAccessExpression(node: ts.ElementAccessExpression) {
+        if (node.expression.kind === ts.SyntaxKind.SuperKeyword) {
             return createSuperElementAccessInAsyncMethod(
                 node.argumentExpression,
                 node
@@ -1284,10 +1284,10 @@ export function transformES2018(context: TransformationContext) {
         return node;
     }
 
-    function substituteCallExpression(node: CallExpression): Expression {
+    function substituteCallExpression(node: ts.CallExpression): ts.Expression {
         const expression = node.expression;
-        if (isSuperProperty(expression)) {
-            const argumentExpression = isPropertyAccessExpression(expression)
+        if (ts.isSuperProperty(expression)) {
+            const argumentExpression = ts.isPropertyAccessExpression(expression)
                 ? substitutePropertyAccessExpression(expression)
                 : substituteElementAccessExpression(expression);
             return factory.createCallExpression(
@@ -1302,18 +1302,18 @@ export function transformES2018(context: TransformationContext) {
         return node;
     }
 
-    function isSuperContainer(node: Node) {
+    function isSuperContainer(node: ts.Node) {
         const kind = node.kind;
-        return kind === SyntaxKind.ClassDeclaration
-            || kind === SyntaxKind.Constructor
-            || kind === SyntaxKind.MethodDeclaration
-            || kind === SyntaxKind.GetAccessor
-            || kind === SyntaxKind.SetAccessor;
+        return kind === ts.SyntaxKind.ClassDeclaration
+            || kind === ts.SyntaxKind.Constructor
+            || kind === ts.SyntaxKind.MethodDeclaration
+            || kind === ts.SyntaxKind.GetAccessor
+            || kind === ts.SyntaxKind.SetAccessor;
     }
 
-    function createSuperElementAccessInAsyncMethod(argumentExpression: Expression, location: TextRange): LeftHandSideExpression {
-        if (enclosingSuperContainerFlags & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
-            return setTextRange(
+    function createSuperElementAccessInAsyncMethod(argumentExpression: ts.Expression, location: ts.TextRange): ts.LeftHandSideExpression {
+        if (enclosingSuperContainerFlags & ts.NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
+            return ts.setTextRange(
                 factory.createPropertyAccessExpression(
                     factory.createCallExpression(
                         factory.createIdentifier("_superIndex"),
@@ -1326,7 +1326,7 @@ export function transformES2018(context: TransformationContext) {
             );
         }
         else {
-            return setTextRange(
+            return ts.setTextRange(
                 factory.createCallExpression(
                     factory.createIdentifier("_superIndex"),
                     /*typeArguments*/ undefined,

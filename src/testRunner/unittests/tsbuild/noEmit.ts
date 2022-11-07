@@ -1,10 +1,10 @@
 namespace ts {
 describe("unittests:: tsbuild:: noEmit", () => {
     function verifyNoEmitWorker(subScenario: string, aTsContent: string, commandLineArgs: readonly string[]) {
-        verifyTscWithEdits({
+        ts.verifyTscWithEdits({
             scenario: "noEmit",
             subScenario,
-            fs: () => loadProjectFromFiles({
+            fs: () => ts.loadProjectFromFiles({
                 "/src/a.ts": aTsContent,
                 "/src/tsconfig.json": JSON.stringify({
                     compilerOptions: { noEmit: true }
@@ -12,12 +12,12 @@ describe("unittests:: tsbuild:: noEmit", () => {
             }),
             commandLineArgs,
             edits: [
-                noChangeRun,
+                ts.noChangeRun,
                 {
                     subScenario: "Fix error",
                     modifyFs: fs => fs.writeFileSync("/src/a.ts", `const a = "hello"`),
                 },
-                noChangeRun,
+                ts.noChangeRun,
             ],
             baselinePrograms: true,
         });

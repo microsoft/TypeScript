@@ -14,7 +14,7 @@ describe("unittests:: base64", () => {
                 "",
             ];
             for (const test of tests) {
-                assert.equal(base64decode({}, convertToBase64(test)), test);
+                assert.equal(ts.base64decode({}, ts.convertToBase64(test)), test);
             }
         });
     });

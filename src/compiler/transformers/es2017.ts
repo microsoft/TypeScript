@@ -1,6 +1,6 @@
 /*@internal*/
 namespace ts {
-type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration;
+type SuperContainer = ts.ClassDeclaration | ts.MethodDeclaration | ts.GetAccessorDeclaration | ts.SetAccessorDeclaration | ts.ConstructorDeclaration;
 
 const enum ES2017SubstitutionFlags {
     /** Enables substitutions for async methods with `super` calls. */
@@ -12,7 +12,7 @@ const enum ContextFlags {
     HasLexicalThis = 1 << 1
 }
 
-export function transformES2017(context: TransformationContext) {
+export function transformES2017(context: ts.TransformationContext) {
     const {
         factory,
         getEmitHelperFactory: emitHelpers,
@@ -23,7 +23,7 @@ export function transformES2017(context: TransformationContext) {
 
     const resolver = context.getEmitResolver();
     const compilerOptions = context.getCompilerOptions();
-    const languageVersion = getEmitScriptTarget(compilerOptions);
+    const languageVersion = ts.getEmitScriptTarget(compilerOptions);
 
     /**
      * Keeps track of whether expression substitution has been enabled for specific edge cases.
@@ -35,14 +35,14 @@ export function transformES2017(context: TransformationContext) {
      * This keeps track of containers where `super` is valid, for use with
      * just-in-time substitution for `super` expressions inside of async methods.
      */
-    let enclosingSuperContainerFlags: NodeCheckFlags = 0;
+    let enclosingSuperContainerFlags: ts.NodeCheckFlags = 0;
 
-    let enclosingFunctionParameterNames: Set<__String>;
+    let enclosingFunctionParameterNames: ts.Set<ts.__String>;
 
     /**
      * Keeps track of property names accessed on super (`super.x`) within async functions.
      */
-    let capturedSuperProperties: Set<__String>;
+    let capturedSuperProperties: ts.Set<ts.__String>;
     /** Whether the async function contains an element access on super (`super[x]`). */
     let hasSuperElementAccess: boolean;
     /** A set of node IDs for generated super accessors (variable statements). */
@@ -58,17 +58,17 @@ export function transformES2017(context: TransformationContext) {
     context.onEmitNode = onEmitNode;
     context.onSubstituteNode = onSubstituteNode;
 
-    return chainBundle(context, transformSourceFile);
+    return ts.chainBundle(context, transformSourceFile);
 
-    function transformSourceFile(node: SourceFile) {
+    function transformSourceFile(node: ts.SourceFile) {
         if (node.isDeclarationFile) {
             return node;
         }
 
         setContextFlag(ContextFlags.NonTopLevel, false);
-        setContextFlag(ContextFlags.HasLexicalThis, !isEffectiveStrictModeSourceFile(node, compilerOptions));
-        const visited = visitEachChild(node, visitor, context);
-        addEmitHelpers(visited, context.readEmitHelpers());
+        setContextFlag(ContextFlags.HasLexicalThis, !ts.isEffectiveStrictModeSourceFile(node, compilerOptions));
+        const visited = ts.visitEachChild(node, visitor, context);
+        ts.addEmitHelpers(visited, context.readEmitHelpers());
         return visited;
     }
 
@@ -99,103 +99,103 @@ export function transformES2017(context: TransformationContext) {
         return cb(value);
     }
 
-    function visitDefault(node: Node): VisitResult<Node> {
-        return visitEachChild(node, visitor, context);
+    function visitDefault(node: ts.Node): ts.VisitResult<ts.Node> {
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function visitor(node: Node): VisitResult<Node> {
-        if ((node.transformFlags & TransformFlags.ContainsES2017) === 0) {
+    function visitor(node: ts.Node): ts.VisitResult<ts.Node> {
+        if ((node.transformFlags & ts.TransformFlags.ContainsES2017) === 0) {
             return node;
         }
         switch (node.kind) {
-            case SyntaxKind.AsyncKeyword:
+            case ts.SyntaxKind.AsyncKeyword:
                 // ES2017 async modifier should be elided for targets < ES2017
                 return undefined;
 
-            case SyntaxKind.AwaitExpression:
-                return visitAwaitExpression(node as AwaitExpression);
+            case ts.SyntaxKind.AwaitExpression:
+                return visitAwaitExpression(node as ts.AwaitExpression);
 
-            case SyntaxKind.MethodDeclaration:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitMethodDeclaration, node as MethodDeclaration);
+            case ts.SyntaxKind.MethodDeclaration:
+                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitMethodDeclaration, node as ts.MethodDeclaration);
 
-            case SyntaxKind.FunctionDeclaration:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionDeclaration, node as FunctionDeclaration);
+            case ts.SyntaxKind.FunctionDeclaration:
+                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionDeclaration, node as ts.FunctionDeclaration);
 
-            case SyntaxKind.FunctionExpression:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionExpression, node as FunctionExpression);
+            case ts.SyntaxKind.FunctionExpression:
+                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitFunctionExpression, node as ts.FunctionExpression);
 
-            case SyntaxKind.ArrowFunction:
-                return doWithContext(ContextFlags.NonTopLevel, visitArrowFunction, node as ArrowFunction);
+            case ts.SyntaxKind.ArrowFunction:
+                return doWithContext(ContextFlags.NonTopLevel, visitArrowFunction, node as ts.ArrowFunction);
 
-            case SyntaxKind.PropertyAccessExpression:
-                if (capturedSuperProperties && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
+            case ts.SyntaxKind.PropertyAccessExpression:
+                if (capturedSuperProperties && ts.isPropertyAccessExpression(node) && node.expression.kind === ts.SyntaxKind.SuperKeyword) {
                     capturedSuperProperties.add(node.name.escapedText);
                 }
-                return visitEachChild(node, visitor, context);
+                return ts.visitEachChild(node, visitor, context);
 
-            case SyntaxKind.ElementAccessExpression:
-                if (capturedSuperProperties && (node as ElementAccessExpression).expression.kind === SyntaxKind.SuperKeyword) {
+            case ts.SyntaxKind.ElementAccessExpression:
+                if (capturedSuperProperties && (node as ts.ElementAccessExpression).expression.kind === ts.SyntaxKind.SuperKeyword) {
                     hasSuperElementAccess = true;
                 }
-                return visitEachChild(node, visitor, context);
+                return ts.visitEachChild(node, visitor, context);
 
-            case SyntaxKind.GetAccessor:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitGetAccessorDeclaration, node as GetAccessorDeclaration);
-            case SyntaxKind.SetAccessor:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitSetAccessorDeclaration, node as SetAccessorDeclaration);
-            case SyntaxKind.Constructor:
-                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitConstructorDeclaration, node as ConstructorDeclaration);
-            case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.ClassExpression:
+            case ts.SyntaxKind.GetAccessor:
+                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitGetAccessorDeclaration, node as ts.GetAccessorDeclaration);
+            case ts.SyntaxKind.SetAccessor:
+                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitSetAccessorDeclaration, node as ts.SetAccessorDeclaration);
+            case ts.SyntaxKind.Constructor:
+                return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitConstructorDeclaration, node as ts.ConstructorDeclaration);
+            case ts.SyntaxKind.ClassDeclaration:
+            case ts.SyntaxKind.ClassExpression:
                 return doWithContext(ContextFlags.NonTopLevel | ContextFlags.HasLexicalThis, visitDefault, node);
 
             default:
-                return visitEachChild(node, visitor, context);
+                return ts.visitEachChild(node, visitor, context);
         }
     }
 
-    function asyncBodyVisitor(node: Node): VisitResult<Node> {
-        if (isNodeWithPossibleHoistedDeclaration(node)) {
+    function asyncBodyVisitor(node: ts.Node): ts.VisitResult<ts.Node> {
+        if (ts.isNodeWithPossibleHoistedDeclaration(node)) {
             switch (node.kind) {
-                case SyntaxKind.VariableStatement:
+                case ts.SyntaxKind.VariableStatement:
                     return visitVariableStatementInAsyncBody(node);
-                case SyntaxKind.ForStatement:
+                case ts.SyntaxKind.ForStatement:
                     return visitForStatementInAsyncBody(node);
-                case SyntaxKind.ForInStatement:
+                case ts.SyntaxKind.ForInStatement:
                     return visitForInStatementInAsyncBody(node);
-                case SyntaxKind.ForOfStatement:
+                case ts.SyntaxKind.ForOfStatement:
                     return visitForOfStatementInAsyncBody(node);
-                case SyntaxKind.CatchClause:
+                case ts.SyntaxKind.CatchClause:
                     return visitCatchClauseInAsyncBody(node);
-                case SyntaxKind.Block:
-                case SyntaxKind.SwitchStatement:
-                case SyntaxKind.CaseBlock:
-                case SyntaxKind.CaseClause:
-                case SyntaxKind.DefaultClause:
-                case SyntaxKind.TryStatement:
-                case SyntaxKind.DoStatement:
-                case SyntaxKind.WhileStatement:
-                case SyntaxKind.IfStatement:
-                case SyntaxKind.WithStatement:
-                case SyntaxKind.LabeledStatement:
-                    return visitEachChild(node, asyncBodyVisitor, context);
+                case ts.SyntaxKind.Block:
+                case ts.SyntaxKind.SwitchStatement:
+                case ts.SyntaxKind.CaseBlock:
+                case ts.SyntaxKind.CaseClause:
+                case ts.SyntaxKind.DefaultClause:
+                case ts.SyntaxKind.TryStatement:
+                case ts.SyntaxKind.DoStatement:
+                case ts.SyntaxKind.WhileStatement:
+                case ts.SyntaxKind.IfStatement:
+                case ts.SyntaxKind.WithStatement:
+                case ts.SyntaxKind.LabeledStatement:
+                    return ts.visitEachChild(node, asyncBodyVisitor, context);
                 default:
-                    return Debug.assertNever(node, "Unhandled node.");
+                    return ts.Debug.assertNever(node, "Unhandled node.");
             }
         }
         return visitor(node);
     }
 
-    function visitCatchClauseInAsyncBody(node: CatchClause) {
-        const catchClauseNames = new Set<__String>();
+    function visitCatchClauseInAsyncBody(node: ts.CatchClause) {
+        const catchClauseNames = new ts.Set<ts.__String>();
         recordDeclarationName(node.variableDeclaration!, catchClauseNames); // TODO: GH#18217
 
         // names declared in a catch variable are block scoped
-        let catchClauseUnshadowedNames: Set<__String> | undefined;
+        let catchClauseUnshadowedNames: ts.Set<ts.__String> | undefined;
         catchClauseNames.forEach((_, escapedName) => {
             if (enclosingFunctionParameterNames.has(escapedName)) {
                 if (!catchClauseUnshadowedNames) {
-                    catchClauseUnshadowedNames = new Set(enclosingFunctionParameterNames);
+                    catchClauseUnshadowedNames = new ts.Set(enclosingFunctionParameterNames);
                 }
                 catchClauseUnshadowedNames.delete(escapedName);
             }
@@ -204,56 +204,56 @@ export function transformES2017(context: TransformationContext) {
         if (catchClauseUnshadowedNames) {
             const savedEnclosingFunctionParameterNames = enclosingFunctionParameterNames;
             enclosingFunctionParameterNames = catchClauseUnshadowedNames;
-            const result = visitEachChild(node, asyncBodyVisitor, context);
+            const result = ts.visitEachChild(node, asyncBodyVisitor, context);
             enclosingFunctionParameterNames = savedEnclosingFunctionParameterNames;
             return result;
         }
         else {
-            return visitEachChild(node, asyncBodyVisitor, context);
+            return ts.visitEachChild(node, asyncBodyVisitor, context);
         }
     }
 
-    function visitVariableStatementInAsyncBody(node: VariableStatement) {
+    function visitVariableStatementInAsyncBody(node: ts.VariableStatement) {
         if (isVariableDeclarationListWithCollidingName(node.declarationList)) {
             const expression = visitVariableDeclarationListWithCollidingNames(node.declarationList, /*hasReceiver*/ false);
             return expression ? factory.createExpressionStatement(expression) : undefined;
         }
-        return visitEachChild(node, visitor, context);
+        return ts.visitEachChild(node, visitor, context);
     }
 
-    function visitForInStatementInAsyncBody(node: ForInStatement) {
+    function visitForInStatementInAsyncBody(node: ts.ForInStatement) {
         return factory.updateForInStatement(
             node,
             isVariableDeclarationListWithCollidingName(node.initializer)
                 ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)!
-                : visitNode(node.initializer, visitor, isForInitializer),
-            visitNode(node.expression, visitor, isExpression),
-            visitIterationBody(node.statement, asyncBodyVisitor, context)
+                : ts.visitNode(node.initializer, visitor, ts.isForInitializer),
+            ts.visitNode(node.expression, visitor, ts.isExpression),
+            ts.visitIterationBody(node.statement, asyncBodyVisitor, context)
         );
     }
 
-    function visitForOfStatementInAsyncBody(node: ForOfStatement) {
+    function visitForOfStatementInAsyncBody(node: ts.ForOfStatement) {
         return factory.updateForOfStatement(
             node,
-            visitNode(node.awaitModifier, visitor, isToken),
+            ts.visitNode(node.awaitModifier, visitor, ts.isToken),
             isVariableDeclarationListWithCollidingName(node.initializer)
                 ? visitVariableDeclarationListWithCollidingNames(node.initializer, /*hasReceiver*/ true)!
-                : visitNode(node.initializer, visitor, isForInitializer),
-            visitNode(node.expression, visitor, isExpression),
-            visitIterationBody(node.statement, asyncBodyVisitor, context)
+                : ts.visitNode(node.initializer, visitor, ts.isForInitializer),
+            ts.visitNode(node.expression, visitor, ts.isExpression),
+            ts.visitIterationBody(node.statement, asyncBodyVisitor, context)
         );
     }
 
-    function visitForStatementInAsyncBody(node: ForStatement) {
+    function visitForStatementInAsyncBody(node: ts.ForStatement) {
         const initializer = node.initializer!; // TODO: GH#18217
         return factory.updateForStatement(
             node,
             isVariableDeclarationListWithCollidingName(initializer)
                 ? visitVariableDeclarationListWithCollidingNames(initializer, /*hasReceiver*/ false)
-                : visitNode(node.initializer, visitor, isForInitializer),
-            visitNode(node.condition, visitor, isExpression),
-            visitNode(node.incrementor, visitor, isExpression),
-            visitIterationBody(node.statement, asyncBodyVisitor, context)
+                : ts.visitNode(node.initializer, visitor, ts.isForInitializer),
+            ts.visitNode(node.condition, visitor, ts.isExpression),
+            ts.visitNode(node.incrementor, visitor, ts.isExpression),
+            ts.visitIterationBody(node.statement, asyncBodyVisitor, context)
         );
     }
 
@@ -264,16 +264,16 @@ export function transformES2017(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitAwaitExpression(node: AwaitExpression): Expression {
+    function visitAwaitExpression(node: ts.AwaitExpression): ts.Expression {
         // do not downlevel a top-level await as it is module syntax...
         if (inTopLevelContext()) {
-            return visitEachChild(node, visitor, context);
+            return ts.visitEachChild(node, visitor, context);
         }
-        return setOriginalNode(
-            setTextRange(
+        return ts.setOriginalNode(
+            ts.setTextRange(
                 factory.createYieldExpression(
                     /*asteriskToken*/ undefined,
-                    visitNode(node.expression, visitor, isExpression)
+                    ts.visitNode(node.expression, visitor, ts.isExpression)
                 ),
                 node
             ),
@@ -281,11 +281,11 @@ export function transformES2017(context: TransformationContext) {
         );
     }
 
-    function visitConstructorDeclaration(node: ConstructorDeclaration) {
+    function visitConstructorDeclaration(node: ts.ConstructorDeclaration) {
         return factory.updateConstructorDeclaration(
             node,
-            visitNodes(node.modifiers, visitor, isModifierLike),
-            visitParameterList(node.parameters, visitor, context),
+            ts.visitNodes(node.modifiers, visitor, ts.isModifierLike),
+            ts.visitParameterList(node.parameters, visitor, context),
             transformMethodBody(node)
         );
     }
@@ -298,39 +298,39 @@ export function transformES2017(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitMethodDeclaration(node: MethodDeclaration) {
+    function visitMethodDeclaration(node: ts.MethodDeclaration) {
         return factory.updateMethodDeclaration(
             node,
-            visitNodes(node.modifiers, visitor, isModifierLike),
+            ts.visitNodes(node.modifiers, visitor, ts.isModifierLike),
             node.asteriskToken,
             node.name,
             /*questionToken*/ undefined,
             /*typeParameters*/ undefined,
-            visitParameterList(node.parameters, visitor, context),
+            ts.visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
-            getFunctionFlags(node) & FunctionFlags.Async
+            ts.getFunctionFlags(node) & ts.FunctionFlags.Async
                 ? transformAsyncFunctionBody(node)
                 : transformMethodBody(node)
         );
     }
 
-    function visitGetAccessorDeclaration(node: GetAccessorDeclaration) {
+    function visitGetAccessorDeclaration(node: ts.GetAccessorDeclaration) {
         return factory.updateGetAccessorDeclaration(
             node,
-            visitNodes(node.modifiers, visitor, isModifierLike),
+            ts.visitNodes(node.modifiers, visitor, ts.isModifierLike),
             node.name,
-            visitParameterList(node.parameters, visitor, context),
+            ts.visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
             transformMethodBody(node)
         );
     }
 
-    function visitSetAccessorDeclaration(node: SetAccessorDeclaration) {
+    function visitSetAccessorDeclaration(node: ts.SetAccessorDeclaration) {
         return factory.updateSetAccessorDeclaration(
             node,
-            visitNodes(node.modifiers, visitor, isModifierLike),
+            ts.visitNodes(node.modifiers, visitor, ts.isModifierLike),
             node.name,
-            visitParameterList(node.parameters, visitor, context),
+            ts.visitParameterList(node.parameters, visitor, context),
             transformMethodBody(node)
         );
     }
@@ -343,18 +343,18 @@ export function transformES2017(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
+    function visitFunctionDeclaration(node: ts.FunctionDeclaration): ts.VisitResult<ts.Statement> {
         return factory.updateFunctionDeclaration(
             node,
-            visitNodes(node.modifiers, visitor, isModifierLike),
+            ts.visitNodes(node.modifiers, visitor, ts.isModifierLike),
             node.asteriskToken,
             node.name,
             /*typeParameters*/ undefined,
-            visitParameterList(node.parameters, visitor, context),
+            ts.visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
-            getFunctionFlags(node) & FunctionFlags.Async
+            ts.getFunctionFlags(node) & ts.FunctionFlags.Async
                 ? transformAsyncFunctionBody(node)
-                : visitFunctionBody(node.body, visitor, context)
+                : ts.visitFunctionBody(node.body, visitor, context)
         );
     }
 
@@ -366,18 +366,18 @@ export function transformES2017(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitFunctionExpression(node: FunctionExpression): Expression {
+    function visitFunctionExpression(node: ts.FunctionExpression): ts.Expression {
         return factory.updateFunctionExpression(
             node,
-            visitNodes(node.modifiers, visitor, isModifierLike),
+            ts.visitNodes(node.modifiers, visitor, ts.isModifierLike),
             node.asteriskToken,
             node.name,
             /*typeParameters*/ undefined,
-            visitParameterList(node.parameters, visitor, context),
+            ts.visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
-            getFunctionFlags(node) & FunctionFlags.Async
+            ts.getFunctionFlags(node) & ts.FunctionFlags.Async
                 ? transformAsyncFunctionBody(node)
-                : visitFunctionBody(node.body, visitor, context)
+                : ts.visitFunctionBody(node.body, visitor, context)
         );
     }
 
@@ -389,89 +389,89 @@ export function transformES2017(context: TransformationContext) {
      *
      * @param node The node to visit.
      */
-    function visitArrowFunction(node: ArrowFunction) {
+    function visitArrowFunction(node: ts.ArrowFunction) {
         return factory.updateArrowFunction(
             node,
-            visitNodes(node.modifiers, visitor, isModifierLike),
+            ts.visitNodes(node.modifiers, visitor, ts.isModifierLike),
             /*typeParameters*/ undefined,
-            visitParameterList(node.parameters, visitor, context),
+            ts.visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
             node.equalsGreaterThanToken,
-            getFunctionFlags(node) & FunctionFlags.Async
+            ts.getFunctionFlags(node) & ts.FunctionFlags.Async
                 ? transformAsyncFunctionBody(node)
-                : visitFunctionBody(node.body, visitor, context),
+                : ts.visitFunctionBody(node.body, visitor, context),
         );
     }
 
-    function recordDeclarationName({ name }: ParameterDeclaration | VariableDeclaration | BindingElement, names: Set<__String>) {
-        if (isIdentifier(name)) {
+    function recordDeclarationName({ name }: ts.ParameterDeclaration | ts.VariableDeclaration | ts.BindingElement, names: ts.Set<ts.__String>) {
+        if (ts.isIdentifier(name)) {
             names.add(name.escapedText);
         }
         else {
             for (const element of name.elements) {
-                if (!isOmittedExpression(element)) {
+                if (!ts.isOmittedExpression(element)) {
                     recordDeclarationName(element, names);
                 }
             }
         }
     }
 
-    function isVariableDeclarationListWithCollidingName(node: ForInitializer): node is VariableDeclarationList {
+    function isVariableDeclarationListWithCollidingName(node: ts.ForInitializer): node is ts.VariableDeclarationList {
         return !!node
-            && isVariableDeclarationList(node)
-            && !(node.flags & NodeFlags.BlockScoped)
+            && ts.isVariableDeclarationList(node)
+            && !(node.flags & ts.NodeFlags.BlockScoped)
             && node.declarations.some(collidesWithParameterName);
     }
 
-    function visitVariableDeclarationListWithCollidingNames(node: VariableDeclarationList, hasReceiver: boolean) {
+    function visitVariableDeclarationListWithCollidingNames(node: ts.VariableDeclarationList, hasReceiver: boolean) {
         hoistVariableDeclarationList(node);
 
-        const variables = getInitializedVariables(node);
+        const variables = ts.getInitializedVariables(node);
         if (variables.length === 0) {
             if (hasReceiver) {
-                return visitNode(factory.converters.convertToAssignmentElementTarget(node.declarations[0].name), visitor, isExpression);
+                return ts.visitNode(factory.converters.convertToAssignmentElementTarget(node.declarations[0].name), visitor, ts.isExpression);
             }
             return undefined;
         }
 
-        return factory.inlineExpressions(map(variables, transformInitializedVariable));
+        return factory.inlineExpressions(ts.map(variables, transformInitializedVariable));
     }
 
-    function hoistVariableDeclarationList(node: VariableDeclarationList) {
-        forEach(node.declarations, hoistVariable);
+    function hoistVariableDeclarationList(node: ts.VariableDeclarationList) {
+        ts.forEach(node.declarations, hoistVariable);
     }
 
-    function hoistVariable({ name }: VariableDeclaration | BindingElement) {
-        if (isIdentifier(name)) {
+    function hoistVariable({ name }: ts.VariableDeclaration | ts.BindingElement) {
+        if (ts.isIdentifier(name)) {
             hoistVariableDeclaration(name);
         }
         else {
             for (const element of name.elements) {
-                if (!isOmittedExpression(element)) {
+                if (!ts.isOmittedExpression(element)) {
                     hoistVariable(element);
                 }
             }
         }
     }
 
-    function transformInitializedVariable(node: VariableDeclaration) {
-        const converted = setSourceMapRange(
+    function transformInitializedVariable(node: ts.VariableDeclaration) {
+        const converted = ts.setSourceMapRange(
             factory.createAssignment(
                 factory.converters.convertToAssignmentElementTarget(node.name),
                 node.initializer!
             ),
             node
         );
-        return visitNode(converted, visitor, isExpression);
+        return ts.visitNode(converted, visitor, ts.isExpression);
     }
 
-    function collidesWithParameterName({ name }: VariableDeclaration | BindingElement): boolean {
-        if (isIdentifier(name)) {
+    function collidesWithParameterName({ name }: ts.VariableDeclaration | ts.BindingElement): boolean {
+        if (ts.isIdentifier(name)) {
             return enclosingFunctionParameterNames.has(name.escapedText);
         }
         else {
             for (const element of name.elements) {
-                if (!isOmittedExpression(element) && collidesWithParameterName(element)) {
+                if (!ts.isOmittedExpression(element) && collidesWithParameterName(element)) {
                     return true;
                 }
             }
@@ -479,41 +479,41 @@ export function transformES2017(context: TransformationContext) {
         return false;
     }
 
-    function transformMethodBody(node: MethodDeclaration | AccessorDeclaration | ConstructorDeclaration): FunctionBody | undefined {
-        Debug.assertIsDefined(node.body);
+    function transformMethodBody(node: ts.MethodDeclaration | ts.AccessorDeclaration | ts.ConstructorDeclaration): ts.FunctionBody | undefined {
+        ts.Debug.assertIsDefined(node.body);
 
         const savedCapturedSuperProperties = capturedSuperProperties;
         const savedHasSuperElementAccess = hasSuperElementAccess;
-        capturedSuperProperties = new Set();
+        capturedSuperProperties = new ts.Set();
         hasSuperElementAccess = false;
 
-        let updated = visitFunctionBody(node.body, visitor, context);
+        let updated = ts.visitFunctionBody(node.body, visitor, context);
 
         // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
         // This step isn't needed if we eventually transform this to ES5.
-        const originalMethod = getOriginalNode(node, isFunctionLikeDeclaration);
-        const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 &&
-            resolver.getNodeCheckFlags(node) & (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync) &&
-            (getFunctionFlags(originalMethod) & FunctionFlags.AsyncGenerator) !== FunctionFlags.AsyncGenerator;
+        const originalMethod = ts.getOriginalNode(node, ts.isFunctionLikeDeclaration);
+        const emitSuperHelpers = languageVersion >= ts.ScriptTarget.ES2015 &&
+            resolver.getNodeCheckFlags(node) & (ts.NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | ts.NodeCheckFlags.MethodWithSuperPropertyAccessInAsync) &&
+            (ts.getFunctionFlags(originalMethod) & ts.FunctionFlags.AsyncGenerator) !== ts.FunctionFlags.AsyncGenerator;
 
         if (emitSuperHelpers) {
             enableSubstitutionForAsyncMethodsWithSuper();
             if (capturedSuperProperties.size) {
                 const variableStatement = createSuperAccessVariableStatement(factory, resolver, node, capturedSuperProperties);
-                substitutedSuperAccessors[getNodeId(variableStatement)] = true;
+                substitutedSuperAccessors[ts.getNodeId(variableStatement)] = true;
 
                 const statements = updated.statements.slice();
-                insertStatementsAfterStandardPrologue(statements, [variableStatement]);
+                ts.insertStatementsAfterStandardPrologue(statements, [variableStatement]);
                 updated = factory.updateBlock(updated, statements);
             }
 
             if (hasSuperElementAccess) {
                 // Emit helpers for super element access expressions (`super[x]`).
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
-                    addEmitHelper(updated, advancedAsyncSuperHelper);
+                if (resolver.getNodeCheckFlags(node) & ts.NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
+                    ts.addEmitHelper(updated, ts.advancedAsyncSuperHelper);
                 }
-                else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAccessInAsync) {
-                    addEmitHelper(updated, asyncSuperHelper);
+                else if (resolver.getNodeCheckFlags(node) & ts.NodeCheckFlags.MethodWithSuperPropertyAccessInAsync) {
+                    ts.addEmitHelper(updated, ts.asyncSuperHelper);
                 }
             }
         }
@@ -523,16 +523,16 @@ export function transformES2017(context: TransformationContext) {
         return updated;
     }
 
-    function transformAsyncFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody;
-    function transformAsyncFunctionBody(node: ArrowFunction): ConciseBody;
-    function transformAsyncFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
+    function transformAsyncFunctionBody(node: ts.MethodDeclaration | ts.AccessorDeclaration | ts.FunctionDeclaration | ts.FunctionExpression): ts.FunctionBody;
+    function transformAsyncFunctionBody(node: ts.ArrowFunction): ts.ConciseBody;
+    function transformAsyncFunctionBody(node: ts.FunctionLikeDeclaration): ts.ConciseBody {
         resumeLexicalEnvironment();
 
-        const original = getOriginalNode(node, isFunctionLike);
+        const original = ts.getOriginalNode(node, ts.isFunctionLike);
         const nodeType = original.type;
-        const promiseConstructor = languageVersion < ScriptTarget.ES2015 ? getPromiseConstructor(nodeType) : undefined;
-        const isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
-        const hasLexicalArguments = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) !== 0;
+        const promiseConstructor = languageVersion < ts.ScriptTarget.ES2015 ? getPromiseConstructor(nodeType) : undefined;
+        const isArrowFunction = node.kind === ts.SyntaxKind.ArrowFunction;
+        const hasLexicalArguments = (resolver.getNodeCheckFlags(node) & ts.NodeCheckFlags.CaptureArguments) !== 0;
 
         // An async function is emit as an outer function that calls an inner
         // generator function. To preserve lexical bindings, we pass the current
@@ -541,7 +541,7 @@ export function transformES2017(context: TransformationContext) {
         // promise constructor.
 
         const savedEnclosingFunctionParameterNames = enclosingFunctionParameterNames;
-        enclosingFunctionParameterNames = new Set();
+        enclosingFunctionParameterNames = new ts.Set();
         for (const parameter of node.parameters) {
             recordDeclarationName(parameter, enclosingFunctionParameterNames);
         }
@@ -549,50 +549,50 @@ export function transformES2017(context: TransformationContext) {
         const savedCapturedSuperProperties = capturedSuperProperties;
         const savedHasSuperElementAccess = hasSuperElementAccess;
         if (!isArrowFunction) {
-            capturedSuperProperties = new Set();
+            capturedSuperProperties = new ts.Set();
             hasSuperElementAccess = false;
         }
 
-        let result: ConciseBody;
+        let result: ts.ConciseBody;
         if (!isArrowFunction) {
-            const statements: Statement[] = [];
-            const statementOffset = factory.copyPrologue((node.body as Block).statements, statements, /*ensureUseStrict*/ false, visitor);
+            const statements: ts.Statement[] = [];
+            const statementOffset = factory.copyPrologue((node.body as ts.Block).statements, statements, /*ensureUseStrict*/ false, visitor);
             statements.push(
                 factory.createReturnStatement(
                     emitHelpers().createAwaiterHelper(
                         inHasLexicalThisContext(),
                         hasLexicalArguments,
                         promiseConstructor,
-                        transformAsyncFunctionBodyWorker(node.body as Block, statementOffset)
+                        transformAsyncFunctionBodyWorker(node.body as ts.Block, statementOffset)
                     )
                 )
             );
 
-            insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
+            ts.insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
             // This step isn't needed if we eventually transform this to ES5.
-            const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 && resolver.getNodeCheckFlags(node) & (NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync);
+            const emitSuperHelpers = languageVersion >= ts.ScriptTarget.ES2015 && resolver.getNodeCheckFlags(node) & (ts.NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync | ts.NodeCheckFlags.MethodWithSuperPropertyAccessInAsync);
 
             if (emitSuperHelpers) {
                 enableSubstitutionForAsyncMethodsWithSuper();
                 if (capturedSuperProperties.size) {
                     const variableStatement = createSuperAccessVariableStatement(factory, resolver, node, capturedSuperProperties);
-                    substitutedSuperAccessors[getNodeId(variableStatement)] = true;
-                    insertStatementsAfterStandardPrologue(statements, [variableStatement]);
+                    substitutedSuperAccessors[ts.getNodeId(variableStatement)] = true;
+                    ts.insertStatementsAfterStandardPrologue(statements, [variableStatement]);
                 }
             }
 
             const block = factory.createBlock(statements, /*multiLine*/ true);
-            setTextRange(block, node.body);
+            ts.setTextRange(block, node.body);
 
             if (emitSuperHelpers && hasSuperElementAccess) {
                 // Emit helpers for super element access expressions (`super[x]`).
-                if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
-                    addEmitHelper(block, advancedAsyncSuperHelper);
+                if (resolver.getNodeCheckFlags(node) & ts.NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
+                    ts.addEmitHelper(block, ts.advancedAsyncSuperHelper);
                 }
-                else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAccessInAsync) {
-                    addEmitHelper(block, asyncSuperHelper);
+                else if (resolver.getNodeCheckFlags(node) & ts.NodeCheckFlags.MethodWithSuperPropertyAccessInAsync) {
+                    ts.addEmitHelper(block, ts.asyncSuperHelper);
                 }
             }
 
@@ -607,9 +607,9 @@ export function transformES2017(context: TransformationContext) {
             );
 
             const declarations = endLexicalEnvironment();
-            if (some(declarations)) {
+            if (ts.some(declarations)) {
                 const block = factory.converters.convertToFunctionBlock(expression);
-                result = factory.updateBlock(block, setTextRange(factory.createNodeArray(concatenate(declarations, block.statements)), block.statements));
+                result = factory.updateBlock(block, ts.setTextRange(factory.createNodeArray(ts.concatenate(declarations, block.statements)), block.statements));
             }
             else {
                 result = expression;
@@ -624,21 +624,21 @@ export function transformES2017(context: TransformationContext) {
         return result;
     }
 
-    function transformAsyncFunctionBodyWorker(body: ConciseBody, start?: number) {
-        if (isBlock(body)) {
-            return factory.updateBlock(body, visitNodes(body.statements, asyncBodyVisitor, isStatement, start));
+    function transformAsyncFunctionBodyWorker(body: ts.ConciseBody, start?: number) {
+        if (ts.isBlock(body)) {
+            return factory.updateBlock(body, ts.visitNodes(body.statements, asyncBodyVisitor, ts.isStatement, start));
         }
         else {
-            return factory.converters.convertToFunctionBlock(visitNode(body, asyncBodyVisitor, isConciseBody));
+            return factory.converters.convertToFunctionBlock(ts.visitNode(body, asyncBodyVisitor, ts.isConciseBody));
         }
     }
 
-    function getPromiseConstructor(type: TypeNode | undefined) {
-        const typeName = type && getEntityNameFromTypeNode(type);
-        if (typeName && isEntityName(typeName)) {
+    function getPromiseConstructor(type: ts.TypeNode | undefined) {
+        const typeName = type && ts.getEntityNameFromTypeNode(type);
+        if (typeName && ts.isEntityName(typeName)) {
             const serializationKind = resolver.getTypeReferenceSerializationKind(typeName);
-            if (serializationKind === TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue
-                || serializationKind === TypeReferenceSerializationKind.Unknown) {
+            if (serializationKind === ts.TypeReferenceSerializationKind.TypeWithConstructSignatureAndValue
+                || serializationKind === ts.TypeReferenceSerializationKind.Unknown) {
                 return typeName;
             }
         }
@@ -652,18 +652,18 @@ export function transformES2017(context: TransformationContext) {
 
             // We need to enable substitutions for call, property access, and element access
             // if we need to rewrite super calls.
-            context.enableSubstitution(SyntaxKind.CallExpression);
-            context.enableSubstitution(SyntaxKind.PropertyAccessExpression);
-            context.enableSubstitution(SyntaxKind.ElementAccessExpression);
+            context.enableSubstitution(ts.SyntaxKind.CallExpression);
+            context.enableSubstitution(ts.SyntaxKind.PropertyAccessExpression);
+            context.enableSubstitution(ts.SyntaxKind.ElementAccessExpression);
 
             // We need to be notified when entering and exiting declarations that bind super.
-            context.enableEmitNotification(SyntaxKind.ClassDeclaration);
-            context.enableEmitNotification(SyntaxKind.MethodDeclaration);
-            context.enableEmitNotification(SyntaxKind.GetAccessor);
-            context.enableEmitNotification(SyntaxKind.SetAccessor);
-            context.enableEmitNotification(SyntaxKind.Constructor);
+            context.enableEmitNotification(ts.SyntaxKind.ClassDeclaration);
+            context.enableEmitNotification(ts.SyntaxKind.MethodDeclaration);
+            context.enableEmitNotification(ts.SyntaxKind.GetAccessor);
+            context.enableEmitNotification(ts.SyntaxKind.SetAccessor);
+            context.enableEmitNotification(ts.SyntaxKind.Constructor);
             // We need to be notified when entering the generated accessor arrow functions.
-            context.enableEmitNotification(SyntaxKind.VariableStatement);
+            context.enableEmitNotification(ts.SyntaxKind.VariableStatement);
         }
     }
 
@@ -674,11 +674,11 @@ export function transformES2017(context: TransformationContext) {
      * @param node The node to emit.
      * @param emit A callback used to emit the node in the printer.
      */
-    function onEmitNode(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void {
+    function onEmitNode(hint: ts.EmitHint, node: ts.Node, emitCallback: (hint: ts.EmitHint, node: ts.Node) => void): void {
         // If we need to support substitutions for `super` in an async method,
         // we should track it here.
         if (enabledSubstitutions & ES2017SubstitutionFlags.AsyncMethodsWithSuper && isSuperContainer(node)) {
-            const superContainerFlags = resolver.getNodeCheckFlags(node) & (NodeCheckFlags.MethodWithSuperPropertyAccessInAsync | NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync);
+            const superContainerFlags = resolver.getNodeCheckFlags(node) & (ts.NodeCheckFlags.MethodWithSuperPropertyAccessInAsync | ts.NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync);
             if (superContainerFlags !== enclosingSuperContainerFlags) {
                 const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
                 enclosingSuperContainerFlags = superContainerFlags;
@@ -688,7 +688,7 @@ export function transformES2017(context: TransformationContext) {
             }
         }
         // Disable substitution in the generated super accessor itself.
-        else if (enabledSubstitutions && substitutedSuperAccessors[getNodeId(node)]) {
+        else if (enabledSubstitutions && substitutedSuperAccessors[ts.getNodeId(node)]) {
             const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
             enclosingSuperContainerFlags = 0;
             previousOnEmitNode(hint, node, emitCallback);
@@ -704,32 +704,32 @@ export function transformES2017(context: TransformationContext) {
      * @param hint A hint as to the intended usage of the node.
      * @param node The node to substitute.
      */
-    function onSubstituteNode(hint: EmitHint, node: Node) {
+    function onSubstituteNode(hint: ts.EmitHint, node: ts.Node) {
         node = previousOnSubstituteNode(hint, node);
-        if (hint === EmitHint.Expression && enclosingSuperContainerFlags) {
-            return substituteExpression(node as Expression);
+        if (hint === ts.EmitHint.Expression && enclosingSuperContainerFlags) {
+            return substituteExpression(node as ts.Expression);
         }
 
         return node;
     }
 
-    function substituteExpression(node: Expression) {
+    function substituteExpression(node: ts.Expression) {
         switch (node.kind) {
-            case SyntaxKind.PropertyAccessExpression:
-                return substitutePropertyAccessExpression(node as PropertyAccessExpression);
-            case SyntaxKind.ElementAccessExpression:
-                return substituteElementAccessExpression(node as ElementAccessExpression);
-            case SyntaxKind.CallExpression:
-                return substituteCallExpression(node as CallExpression);
+            case ts.SyntaxKind.PropertyAccessExpression:
+                return substitutePropertyAccessExpression(node as ts.PropertyAccessExpression);
+            case ts.SyntaxKind.ElementAccessExpression:
+                return substituteElementAccessExpression(node as ts.ElementAccessExpression);
+            case ts.SyntaxKind.CallExpression:
+                return substituteCallExpression(node as ts.CallExpression);
         }
         return node;
     }
 
-    function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
-        if (node.expression.kind === SyntaxKind.SuperKeyword) {
-            return setTextRange(
+    function substitutePropertyAccessExpression(node: ts.PropertyAccessExpression) {
+        if (node.expression.kind === ts.SyntaxKind.SuperKeyword) {
+            return ts.setTextRange(
                 factory.createPropertyAccessExpression(
-                    factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
+                    factory.createUniqueName("_super", ts.GeneratedIdentifierFlags.Optimistic | ts.GeneratedIdentifierFlags.FileLevel),
                     node.name),
                 node
             );
@@ -737,8 +737,8 @@ export function transformES2017(context: TransformationContext) {
         return node;
     }
 
-    function substituteElementAccessExpression(node: ElementAccessExpression) {
-        if (node.expression.kind === SyntaxKind.SuperKeyword) {
+    function substituteElementAccessExpression(node: ts.ElementAccessExpression) {
+        if (node.expression.kind === ts.SyntaxKind.SuperKeyword) {
             return createSuperElementAccessInAsyncMethod(
                 node.argumentExpression,
                 node
@@ -747,10 +747,10 @@ export function transformES2017(context: TransformationContext) {
         return node;
     }
 
-    function substituteCallExpression(node: CallExpression): Expression {
+    function substituteCallExpression(node: ts.CallExpression): ts.Expression {
         const expression = node.expression;
-        if (isSuperProperty(expression)) {
-            const argumentExpression = isPropertyAccessExpression(expression)
+        if (ts.isSuperProperty(expression)) {
+            const argumentExpression = ts.isPropertyAccessExpression(expression)
                 ? substitutePropertyAccessExpression(expression)
                 : substituteElementAccessExpression(expression);
             return factory.createCallExpression(
@@ -765,21 +765,21 @@ export function transformES2017(context: TransformationContext) {
         return node;
     }
 
-    function isSuperContainer(node: Node): node is SuperContainer {
+    function isSuperContainer(node: ts.Node): node is SuperContainer {
         const kind = node.kind;
-        return kind === SyntaxKind.ClassDeclaration
-            || kind === SyntaxKind.Constructor
-            || kind === SyntaxKind.MethodDeclaration
-            || kind === SyntaxKind.GetAccessor
-            || kind === SyntaxKind.SetAccessor;
+        return kind === ts.SyntaxKind.ClassDeclaration
+            || kind === ts.SyntaxKind.Constructor
+            || kind === ts.SyntaxKind.MethodDeclaration
+            || kind === ts.SyntaxKind.GetAccessor
+            || kind === ts.SyntaxKind.SetAccessor;
     }
 
-    function createSuperElementAccessInAsyncMethod(argumentExpression: Expression, location: TextRange): LeftHandSideExpression {
-        if (enclosingSuperContainerFlags & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
-            return setTextRange(
+    function createSuperElementAccessInAsyncMethod(argumentExpression: ts.Expression, location: ts.TextRange): ts.LeftHandSideExpression {
+        if (enclosingSuperContainerFlags & ts.NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) {
+            return ts.setTextRange(
                 factory.createPropertyAccessExpression(
                     factory.createCallExpression(
-                        factory.createUniqueName("_superIndex", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
+                        factory.createUniqueName("_superIndex", ts.GeneratedIdentifierFlags.Optimistic | ts.GeneratedIdentifierFlags.FileLevel),
                         /*typeArguments*/ undefined,
                         [argumentExpression]
                     ),
@@ -789,9 +789,9 @@ export function transformES2017(context: TransformationContext) {
             );
         }
         else {
-            return setTextRange(
+            return ts.setTextRange(
                 factory.createCallExpression(
-                    factory.createUniqueName("_superIndex", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
+                    factory.createUniqueName("_superIndex", ts.GeneratedIdentifierFlags.Optimistic | ts.GeneratedIdentifierFlags.FileLevel),
                     /*typeArguments*/ undefined,
                     [argumentExpression]
                 ),
@@ -802,14 +802,14 @@ export function transformES2017(context: TransformationContext) {
 }
 
 /** Creates a variable named `_super` with accessor properties for the given property names. */
-export function createSuperAccessVariableStatement(factory: NodeFactory, resolver: EmitResolver, node: FunctionLikeDeclaration, names: Set<__String>) {
+export function createSuperAccessVariableStatement(factory: ts.NodeFactory, resolver: ts.EmitResolver, node: ts.FunctionLikeDeclaration, names: ts.Set<ts.__String>) {
     // Create a variable declaration with a getter/setter (if binding) definition for each name:
     //   const _super = Object.create(null, { x: { get: () => super.x, set: (v) => super.x = v }, ... });
-    const hasBinding = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) !== 0;
-    const accessors: PropertyAssignment[] = [];
+    const hasBinding = (resolver.getNodeCheckFlags(node) & ts.NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync) !== 0;
+    const accessors: ts.PropertyAssignment[] = [];
     names.forEach((_, key) => {
-        const name = unescapeLeadingUnderscores(key);
-        const getterAndSetter: PropertyAssignment[] = [];
+        const name = ts.unescapeLeadingUnderscores(key);
+        const getterAndSetter: ts.PropertyAssignment[] = [];
         getterAndSetter.push(factory.createPropertyAssignment(
             "get",
             factory.createArrowFunction(
@@ -818,15 +818,15 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
                 /* parameters */ [],
                 /* type */ undefined,
                 /* equalsGreaterThanToken */ undefined,
-                setEmitFlags(
+                ts.setEmitFlags(
                     factory.createPropertyAccessExpression(
-                        setEmitFlags(
+                        ts.setEmitFlags(
                             factory.createSuper(),
-                            EmitFlags.NoSubstitution
+                            ts.EmitFlags.NoSubstitution
                         ),
                         name
                     ),
-                    EmitFlags.NoSubstitution
+                    ts.EmitFlags.NoSubstitution
                 )
             )
         ));
@@ -850,15 +850,15 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
                         /* type */ undefined,
                         /* equalsGreaterThanToken */ undefined,
                         factory.createAssignment(
-                            setEmitFlags(
+                            ts.setEmitFlags(
                                 factory.createPropertyAccessExpression(
-                                    setEmitFlags(
+                                    ts.setEmitFlags(
                                         factory.createSuper(),
-                                        EmitFlags.NoSubstitution
+                                        ts.EmitFlags.NoSubstitution
                                     ),
                                     name
                                 ),
-                                EmitFlags.NoSubstitution
+                                ts.EmitFlags.NoSubstitution
                             ),
                             factory.createIdentifier("v")
                         )
@@ -878,7 +878,7 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
         factory.createVariableDeclarationList(
             [
                 factory.createVariableDeclaration(
-                    factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel),
+                    factory.createUniqueName("_super", ts.GeneratedIdentifierFlags.Optimistic | ts.GeneratedIdentifierFlags.FileLevel),
                     /*exclamationToken*/ undefined,
                     /* type */ undefined,
                     factory.createCallExpression(
@@ -894,6 +894,6 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
                     )
                 )
             ],
-            NodeFlags.Const));
+            ts.NodeFlags.Const));
 }
 }
