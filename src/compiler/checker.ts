@@ -344,6 +344,7 @@ namespace ts {
         let totalInstantiationCount = 0;
         let instantiationCount = 0;
         let instantiationDepth = 0;
+        let nestedElementCacheContribution = 0;
         let inlineLevel = 0;
         let currentNode: Node | undefined;
         let varianceTypeParameter: TypeParameter | undefined;
@@ -1051,12 +1052,52 @@ namespace ts {
         let _jsxNamespace: __String;
         let _jsxFactoryEntity: EntityName | undefined;
 
-        const subtypeRelation = new Map<string, RelationComparisonResult>();
-        const strictSubtypeRelation = new Map<string, RelationComparisonResult>();
-        const assignableRelation = new Map<string, RelationComparisonResult>();
-        const comparableRelation = new Map<string, RelationComparisonResult>();
-        const identityRelation = new Map<string, RelationComparisonResult>();
-        const enumRelation = new Map<string, RelationComparisonResult>();
+        class ExpandableRelationshipCache<K, V> {
+            private next?: ExpandableRelationshipCache<K, V>;
+            private inner: ESMap<K, V>;
+            constructor() {
+                this.inner = new Map();
+            }
+            get(key: K): V | undefined {
+                return this.inner.has(key) ? this.inner.get(key) : this.next?.get(key);
+            }
+            set(key: K, value: V): this {
+                if (this.inner.size > ((2 ** 24) - 1) && !this.inner.has(key)) {
+                    this.next ||= new ExpandableRelationshipCache();
+                    this.next.set(key, value);
+                }
+                else {
+                    this.inner.set(key, value);
+                }
+                return this;
+            }
+            has(key: K): boolean {
+                return this.inner.has(key) || !!this.next?.has(key);
+            }
+            clear(): void {
+                this.inner.clear();
+                this.next?.clear();
+                this.next = undefined;
+            }
+            delete(key: K): boolean {
+                return this.inner.delete(key) || !!this.next?.delete(key);
+            }
+            forEach(callbackfn: (value: V, key: K, map: ExpandableRelationshipCache<K, V>) => void): void {
+                this.inner.forEach((v, k) => callbackfn(v, k, this));
+                this.next?.forEach((v, k) => callbackfn(v, k, this));
+            }
+            get size(): number {
+                return this.inner.size + (this.next?.size || 0);
+            }
+        }
+
+        type RelationCache = ExpandableRelationshipCache<string, RelationComparisonResult>;
+        const subtypeRelation = new ExpandableRelationshipCache<string, RelationComparisonResult>();
+        const strictSubtypeRelation = new ExpandableRelationshipCache<string, RelationComparisonResult>();
+        const assignableRelation = new ExpandableRelationshipCache<string, RelationComparisonResult>();
+        const comparableRelation = new ExpandableRelationshipCache<string, RelationComparisonResult>();
+        const identityRelation = new ExpandableRelationshipCache<string, RelationComparisonResult>();
+        const enumRelation = new ExpandableRelationshipCache<string, RelationComparisonResult>();
 
         const builtinGlobals = createSymbolTable();
         builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
@@ -17776,7 +17817,7 @@ namespace ts {
         function checkTypeRelatedToAndOptionallyElaborate(
             source: Type,
             target: Type,
-            relation: ESMap<string, RelationComparisonResult>,
+            relation: RelationCache,
             errorNode: Node | undefined,
             expr: Expression | undefined,
             headMessage: DiagnosticMessage | undefined,
@@ -17798,7 +17839,7 @@ namespace ts {
             node: Expression | undefined,
             source: Type,
             target: Type,
-            relation: ESMap<string, RelationComparisonResult>,
+            relation: RelationCache,
             headMessage: DiagnosticMessage | undefined,
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
             errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
@@ -17835,7 +17876,7 @@ namespace ts {
             node: Expression,
             source: Type,
             target: Type,
-            relation: ESMap<string, RelationComparisonResult>,
+            relation: RelationCache,
             headMessage: DiagnosticMessage | undefined,
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
             errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
@@ -17864,7 +17905,7 @@ namespace ts {
             node: ArrowFunction,
             source: Type,
             target: Type,
-            relation: ESMap<string, RelationComparisonResult>,
+            relation: RelationCache,
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
             errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
         ): boolean {
@@ -17951,7 +17992,7 @@ namespace ts {
             iterator: ElaborationIterator,
             source: Type,
             target: Type,
-            relation: ESMap<string, RelationComparisonResult>,
+            relation: RelationCache,
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
             errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
         ) {
@@ -18069,7 +18110,7 @@ namespace ts {
             node: JsxAttributes,
             source: Type,
             target: Type,
-            relation: ESMap<string, RelationComparisonResult>,
+            relation: RelationCache,
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
             errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
         ) {
@@ -18170,7 +18211,7 @@ namespace ts {
             node: ArrayLiteralExpression,
             source: Type,
             target: Type,
-            relation: ESMap<string, RelationComparisonResult>,
+            relation: RelationCache,
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
             errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
         ) {
@@ -18223,7 +18264,7 @@ namespace ts {
             node: ObjectLiteralExpression,
             source: Type,
             target: Type,
-            relation: ESMap<string, RelationComparisonResult>,
+            relation: RelationCache,
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
             errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
         ) {
@@ -18528,7 +18569,7 @@ namespace ts {
             return true;
         }
 
-        function isSimpleTypeRelatedTo(source: Type, target: Type, relation: ESMap<string, RelationComparisonResult>, errorReporter?: ErrorReporter) {
+        function isSimpleTypeRelatedTo(source: Type, target: Type, relation: RelationCache, errorReporter?: ErrorReporter) {
             const s = source.flags;
             const t = target.flags;
             if (t & TypeFlags.AnyOrUnknown || s & TypeFlags.Never || source === wildcardType) return true;
@@ -18569,7 +18610,7 @@ namespace ts {
             return false;
         }
 
-        function isTypeRelatedTo(source: Type, target: Type, relation: ESMap<string, RelationComparisonResult>) {
+        function isTypeRelatedTo(source: Type, target: Type, relation: RelationCache) {
             if (isFreshLiteralType(source)) {
                 source = (source as FreshableType).regularType;
             }
@@ -18646,7 +18687,7 @@ namespace ts {
         function checkTypeRelatedTo(
             source: Type,
             target: Type,
-            relation: ESMap<string, RelationComparisonResult>,
+            relation: RelationCache,
             errorNode: Node | undefined,
             headMessage?: DiagnosticMessage,
             containingMessageChain?: () => DiagnosticMessageChain | undefined,
@@ -21199,7 +21240,7 @@ namespace ts {
          * To improve caching, the relation key for two generic types uses the target's id plus ids of the type parameters.
          * For other cases, the types ids are used.
          */
-        function getRelationKey(source: Type, target: Type, intersectionState: IntersectionState, relation: ESMap<string, RelationComparisonResult>, ignoreConstraints: boolean) {
+        function getRelationKey(source: Type, target: Type, intersectionState: IntersectionState, relation: RelationCache, ignoreConstraints: boolean) {
             if (relation === identityRelation && source.id > target.id) {
                 const temp = source;
                 source = target;
@@ -30670,7 +30711,7 @@ namespace ts {
         function checkApplicableSignatureForJsxOpeningLikeElement(
             node: JsxOpeningLikeElement,
             signature: Signature,
-            relation: ESMap<string, RelationComparisonResult>,
+            relation: RelationCache,
             checkMode: CheckMode,
             reportErrors: boolean,
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
@@ -30773,7 +30814,7 @@ namespace ts {
             node: CallLikeExpression,
             args: readonly Expression[],
             signature: Signature,
-            relation: ESMap<string, RelationComparisonResult>,
+            relation: RelationCache,
             checkMode: CheckMode,
             reportErrors: boolean,
             containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
@@ -31337,7 +31378,7 @@ namespace ts {
                 candidateForTypeArgumentError = oldCandidateForTypeArgumentError;
             }
 
-            function chooseOverload(candidates: Signature[], relation: ESMap<string, RelationComparisonResult>, isSingleNonGenericCandidate: boolean, signatureHelpTrailingComma = false) {
+            function chooseOverload(candidates: Signature[], relation: RelationCache, isSingleNonGenericCandidate: boolean, signatureHelpTrailingComma = false) {
                 candidatesForArgumentError = undefined;
                 candidateForArgumentArityError = undefined;
                 candidateForTypeArgumentError = undefined;
@@ -42000,8 +42041,27 @@ namespace ts {
                 const saveCurrentNode = currentNode;
                 currentNode = node;
                 instantiationCount = 0;
+                const saveNestedElementCacheContribution = nestedElementCacheContribution;
+                nestedElementCacheContribution = 0;
+                const startCacheSize = assignableRelation.size;
                 checkSourceElementWorker(node);
+                const rawAssignabilityCacheContribution = assignableRelation.size - startCacheSize;
+                const assignabilityCacheContribution = rawAssignabilityCacheContribution - nestedElementCacheContribution;
+                nestedElementCacheContribution = saveNestedElementCacheContribution + assignabilityCacheContribution;
                 currentNode = saveCurrentNode;
+
+                // If a single source element triggers pulling in 1 million comparions, editor perf is likely very bad.
+                // Surprisingly, the choice of 1 million is not arbitrary - it's just under 2^20, the number of comparisons
+                // required to compare two 2^10-element unions naively in the worst case. That is juuust large enough to take
+                // a few seconds to check on a laptop, and thus for things to not *obviously* be wrong without an error.
+                // Two 2^12 unions takes about a minute. Larger powers of two aren't worth waiting for, and cause an obvious hang.
+                // The error is sometimes safe to `//@ts-ignore` if the perf is still OK, but does indicate a location
+                // that is likely triggering a performance problem. The types may be able to be restructured to
+                // get better perf, or the constructs in use may be a good candidate for specialized optimizations
+                // in the compiler itself to reduce the amount of work required.
+                if (assignabilityCacheContribution > 1_000_000) {
+                    error(node, Diagnostics.This_source_element_is_ultimately_responsible_for_0_million_type_comparisons_It_is_likely_very_slow_and_may_impact_editor_performance_Simplify_the_types_in_use, Math.floor(assignabilityCacheContribution / 1_000_000));
+                }
             }
         }
 
