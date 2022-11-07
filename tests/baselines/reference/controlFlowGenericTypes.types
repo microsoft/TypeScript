@@ -583,3 +583,22 @@ function update<T extends Control, K extends keyof T>(control : T | undefined, k
     }
 }
 
+// Repro from #50465
+
+type Column<T> = (keyof T extends never ? { id?: number | string } : { id: T }) & { title?: string; }
+>Column : Column<T>
+>id : string | number | undefined
+>id : T
+>title : string | undefined
+
+function getColumnProperty<T>(column: Column<T>, key: keyof Column<T>) {
+>getColumnProperty : <T>(column: Column<T>, key: keyof Column<T>) => Column<T>["title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })]
+>column : Column<T>
+>key : "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })
+
+  return column[key];
+>column[key] : Column<T>["title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })]
+>column : Column<T>
+>key : "title" | keyof (keyof T extends never ? { id?: string | number | undefined; } : { id: T; })
+}
+

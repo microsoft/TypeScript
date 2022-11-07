@@ -42,9 +42,8 @@
 //
 // TODO: figure out a better solution to the API exposure problem.
 
-/// <reference path="../../../src/compiler/diagnosticInformationMap.generated.ts" />
-
 declare module ts {
+    export const Diagnostics: typeof import("../../../src/compiler/diagnosticInformationMap.generated").Diagnostics;
     export type MapKey = string | number;
     export interface Map<T> {
         forEach(action: (value: T, key: string) => void): void;
@@ -91,6 +90,12 @@ declare module ts {
         Message
     }
 
+    enum OrganizeImportsMode {
+      All = "All",
+      SortAndCombine = "SortAndCombine",
+      RemoveUnused = "RemoveUnused",
+  }
+
     interface DiagnosticMessage {
         key: string;
         category: DiagnosticCategory;
@@ -108,6 +113,7 @@ declare module ts {
         fileName?: string;
         ambientModuleName?: string;
         isPackageJsonImport?: true;
+        moduleSpecifier?: string;
         exportName: string;
     }
 
@@ -378,8 +384,10 @@ declare namespace FourSlashInterface {
         rangesAreDocumentHighlights(ranges?: Range[], options?: VerifyDocumentHighlightsOptions): void;
         rangesWithSameTextAreDocumentHighlights(): void;
         documentHighlightsOf(startRange: Range, ranges: Range[], options?: VerifyDocumentHighlightsOptions): void;
-        /** Prefer semanticClassificationsAre for more descriptive tests */
-        encodedSemanticClassificationsLength(format: "original" | "2020", length: number)
+        /** Prefer {@link syntacticClassificationsAre} for more descriptive tests */
+        encodedSyntacticClassificationsLength(expected: number): void;
+        /** Prefer {@link semanticClassificationsAre} for more descriptive tests */
+        encodedSemanticClassificationsLength(format: "original" | "2020", length: number): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
          */
@@ -439,7 +447,7 @@ declare namespace FourSlashInterface {
 
         generateTypes(...options: GenerateTypesOptions[]): void;
 
-        organizeImports(newContent: string): void;
+        organizeImports(newContent: string, mode?: ts.OrganizeImportsMode): void;
 
         toggleLineComment(newFileContent: string): void;
         toggleMultilineComment(newFileContent: string): void;

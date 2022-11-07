@@ -13,6 +13,6 @@ class Test1 extends C1<M2.M2C> {
 }
 
 === tests/cases/compiler/moduleImportedForTypeArgumentPosition_0.ts ===
+
 export interface M2C { }
-No type information for this code.
-No type information for this code.
+
