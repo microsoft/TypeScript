@@ -21633,9 +21633,12 @@ namespace ts {
                 type;
         }
 
-        function getWidenedLiteralLikeTypeForContextualType(type: Type, contextualType: Type | undefined) {
+        function getWidenedLiteralLikeTypeForContextualType(type: Type, contextualType: Type | undefined, node?: Node | undefined) {
             if (!isLiteralOfContextualType(type, contextualType)) {
-                type = getWidenedUniqueESSymbolType(getWidenedLiteralType(type));
+                const instantiatedContextualType = node && instantiateContextualType(contextualType, node, /*contextFlags*/ undefined);
+                if (!instantiatedContextualType || instantiatedContextualType === contextualType || !isLiteralOfContextualType(type, instantiatedContextualType)) {
+                    type = getWidenedUniqueESSymbolType(getWidenedLiteralType(type));
+                }
             }
             return getRegularTypeOfLiteralType(type);
         }
@@ -30492,7 +30495,7 @@ namespace ts {
                         // A return type inference from a binding pattern can be used in instantiating the contextual
                         // type of an argument later in inference, but cannot stand on its own as the final return type.
                         // It is incorporated into `context.returnMapper` which is used in `instantiateContextualType`,
-                        // but doesn't need to go into `context.inferences`. This allows a an array binding pattern to
+                        // but doesn't need to go into `context.inferences`. This allows an array binding pattern to
                         // produce a tuple for `T` in
                         //   declare function f<T>(cb: () => T): T;
                         //   const [e1, e2, e3] = f(() => [1, "hi", true]);
@@ -34963,7 +34966,9 @@ namespace ts {
                 // We strip literal freshness when an appropriate contextual type is present such that contextually typed
                 // literals always preserve their literal types (otherwise they might widen during type inference). An alternative
                 // here would be to not mark contextually typed literals as fresh in the first place.
-                const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node, /*contextFlags*/ undefined)) ?
+                const result = maybeTypeOfKind(type, TypeFlags.Literal) && (
+                    isLiteralOfContextualType(type, instantiateContextualType(contextualType, node, /*contextFlags*/ undefined)) ||
+                    isLiteralOfContextualType(type, contextualType)) ?
                     getRegularTypeOfLiteralType(type) : type;
                 return result;
             }
@@ -35090,7 +35095,7 @@ namespace ts {
             const type = checkExpression(node, checkMode, forceTuple);
             return isConstContext(node) || isCommonJsExportedExpression(node) ? getRegularTypeOfLiteralType(type) :
                 isTypeAssertion(node) ? type :
-                getWidenedLiteralLikeTypeForContextualType(type, instantiateContextualType(arguments.length === 2 ? getContextualType(node, /*contextFlags*/ undefined) : contextualType, node, /*contextFlags*/ undefined));
+                getWidenedLiteralLikeTypeForContextualType(type, arguments.length === 2 ? getContextualType(node, /*contextFlags*/ undefined) : contextualType, node);
         }
 
         function checkPropertyAssignment(node: PropertyAssignment, checkMode?: CheckMode): Type {
