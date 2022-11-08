@@ -254,7 +254,7 @@ function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number,
                 }
             }
             const type = checker.getTypeAtLocation(side);
-            const newNode = checker.getPromisedTypeOfPromise(type) ? factory.createAwaitExpression(side) : side;
+            const newNode = checker.getPromisedTypeOfPromise(type) ? factory.createAwaitExpression(/*operation*/ undefined, side) : side;
             changeTracker.replaceNode(sourceFile, side, newNode);
         }
     }
@@ -268,7 +268,7 @@ function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number,
         changeTracker.replaceNode(
             sourceFile,
             insertionSite.parent.expression,
-            factory.createParenthesizedExpression(factory.createAwaitExpression(insertionSite.parent.expression)));
+            factory.createParenthesizedExpression(factory.createAwaitExpression(/*operation*/ undefined, insertionSite.parent.expression)));
         insertLeadingSemicolonIfNeeded(changeTracker, insertionSite.parent.expression, sourceFile);
     }
     else if (contains(callableConstructableErrorCodes, errorCode) && isCallOrNewExpression(insertionSite.parent)) {
@@ -278,7 +278,7 @@ function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number,
                 return;
             }
         }
-        changeTracker.replaceNode(sourceFile, insertionSite, factory.createParenthesizedExpression(factory.createAwaitExpression(insertionSite)));
+        changeTracker.replaceNode(sourceFile, insertionSite, factory.createParenthesizedExpression(factory.createAwaitExpression(/*operation*/ undefined, insertionSite)));
         insertLeadingSemicolonIfNeeded(changeTracker, insertionSite, sourceFile);
     }
     else {
@@ -288,7 +288,7 @@ function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number,
                 return;
             }
         }
-        changeTracker.replaceNode(sourceFile, insertionSite, factory.createAwaitExpression(insertionSite));
+        changeTracker.replaceNode(sourceFile, insertionSite, factory.createAwaitExpression(/*operation*/ undefined, insertionSite));
     }
 }
 

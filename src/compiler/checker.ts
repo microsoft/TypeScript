@@ -1187,6 +1187,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     let deferredGlobalESSymbolType: ObjectType | undefined;
     let deferredGlobalTypedPropertyDescriptorType: GenericType;
     let deferredGlobalPromiseType: GenericType | undefined;
+    let deferredGlobalPromiseSettledResultType: UnionType | undefined;
     let deferredGlobalPromiseLikeType: GenericType | undefined;
     let deferredGlobalPromiseConstructorSymbol: Symbol | undefined;
     let deferredGlobalPromiseConstructorLikeType: ObjectType | undefined;
@@ -14371,7 +14372,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.resolvedType;
     }
 
-    function getTypeOfGlobalSymbol(symbol: Symbol | undefined, arity: number): ObjectType {
+    function getTypeOfGlobalSymbol(symbol: Symbol | undefined, arity: number, expectUnion?: boolean): ObjectType | UnionType {
 
         function getTypeDeclaration(symbol: Symbol): Declaration | undefined {
             const declarations = symbol.declarations;
@@ -14391,15 +14392,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return arity ? emptyGenericType : emptyObjectType;
         }
         const type = getDeclaredTypeOfSymbol(symbol);
-        if (!(type.flags & TypeFlags.Object)) {
+        const isObjectLike = type.flags & TypeFlags.Object;
+        const isUnion = type.flags & TypeFlags.Union;
+        if (expectUnion ? !isUnion : !isObjectLike) {
+            // TODO: maybe add a new error for expecting a union type?
             error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_be_a_class_or_interface_type, symbolName(symbol));
             return arity ? emptyGenericType : emptyObjectType;
         }
-        if (length((type as InterfaceType).typeParameters) !== arity) {
+        if (length(isUnion ? (type as UnionType).aliasTypeArguments : (type as InterfaceType).typeParameters) !== arity) {
             error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_have_1_type_parameter_s, symbolName(symbol), arity);
             return arity ? emptyGenericType : emptyObjectType;
         }
-        return type as ObjectType;
+        return type as ObjectType | UnionType;
     }
 
     function getGlobalValueSymbol(name: __String, reportErrors: boolean): Symbol | undefined {
@@ -14434,9 +14438,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getGlobalType(name: __String, arity: 0, reportErrors: boolean): ObjectType | undefined;
     function getGlobalType(name: __String, arity: number, reportErrors: true): GenericType;
     function getGlobalType(name: __String, arity: number, reportErrors: boolean): GenericType | undefined;
-    function getGlobalType(name: __String, arity: number, reportErrors: boolean): ObjectType | undefined {
+    function getGlobalType(name: __String, arity: number, reportErrors: boolean, expectUnion: true): UnionType;
+    function getGlobalType(name: __String, arity: number, reportErrors: boolean, expectUnion?: boolean): ObjectType | UnionType | undefined {
         const symbol = getGlobalTypeSymbol(name, reportErrors);
-        return symbol || reportErrors ? getTypeOfGlobalSymbol(symbol, arity) : undefined;
+        return symbol || reportErrors ? getTypeOfGlobalSymbol(symbol, arity, expectUnion) : undefined;
     }
 
     function getGlobalTypedPropertyDescriptorType() {
@@ -14526,6 +14531,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getGlobalIteratorType(reportErrors: boolean) {
         return (deferredGlobalIteratorType ||= getGlobalType("Iterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
+    }
+
+    function getGlobalPromiseSettledResultType(reportErrors: boolean) {
+        return deferredGlobalPromiseSettledResultType || (deferredGlobalPromiseSettledResultType = getGlobalType("PromiseSettledResult" as __String, /*arity*/ 1, reportErrors, /*expectUnion*/ true)) || emptyGenericType;
     }
 
     function getGlobalIterableIteratorType(reportErrors: boolean) {
@@ -24537,6 +24546,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             mapType(type, mapper);
     }
 
+    function mapTupleType(tuple: TupleTypeReference, mapper: (t: Type) => Type): TupleTypeReference {
+        const target = tuple.target;
+        const newType = map(getTypeArguments(tuple), mapper);
+        return (createTupleType(newType, target.elementFlags, target.readonly, target.labeledElementDeclarations)) as TupleTypeReference;
+    }
+
     function extractTypesOfKind(type: Type, kind: TypeFlags) {
         return filterType(type, t => (t.flags & kind) !== 0);
     }
@@ -33990,11 +34005,51 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         addLazyDiagnostic(() => checkAwaitExpressionGrammar(node));
 
         const operandType = checkExpression(node.expression);
-        const awaitedType = checkAwaitedType(operandType, /*withAlias*/ true, node, Diagnostics.Type_of_await_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
-        if (awaitedType === operandType && !isErrorType(awaitedType) && !(operandType.flags & TypeFlags.AnyOrUnknown)) {
-            addErrorOrSuggestion(/*isError*/ false, createDiagnosticForNode(node, Diagnostics.await_has_no_effect_on_the_type_of_this_expression));
+        if (!node.operation) {
+            const awaitedType = checkAwaitedType(operandType, /*withAlias*/ true, node, Diagnostics.Type_of_await_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
+            if (awaitedType === operandType && !isErrorType(awaitedType) && !(operandType.flags & TypeFlags.AnyOrUnknown)) {
+                addErrorOrSuggestion(/*isError*/ false, createDiagnosticForNode(node, Diagnostics.await_has_no_effect_on_the_type_of_this_expression));
+            }
+            return awaitedType;
         }
-        return awaitedType;
+        checkPromiseOperationExists(node.operation);
+        const iterated = getIteratedTypeOrElementType(IterationUse.AllowsSyncIterablesFlag, operandType, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false);
+        if (!iterated) {
+            error(node.expression, Diagnostics.The_expression_after_the_await_0_operator_must_be_iterable, node.operation);
+            return anyType;
+        }
+        const awaited = (type: Type) => checkAwaitedType(type, /*withAlias*/ true, node, Diagnostics.Type_of_await_operand_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
+        switch (node.operation) {
+            case "all": {
+                if (isTupleLikeType(operandType)) return mapTupleType(operandType as TupleTypeReference, awaited);
+                return createArrayType(awaited(iterated));
+            }
+            case "any":
+            case "race":
+                return awaited(iterated);
+            case "allSettled":
+                const PromiseSettledResult = getGlobalPromiseSettledResultType(/*reportErrors*/ true);
+                const promiseSettled = (type: Type) => instantiateType(
+                    PromiseSettledResult,
+                    createTypeMapper(PromiseSettledResult.aliasTypeArguments!, /*targets*/[type])
+                )!;
+                if (PromiseSettledResult === (emptyGenericType as any)) {
+                    error(node, Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_1_or_later, "PromiseSettledResult", "es2020");
+                    return anyType;
+                }
+                if (isTupleLikeType(operandType)) return mapTupleType(operandType as TupleTypeReference, type => promiseSettled(awaited(type)));
+                return createArrayType(promiseSettled(awaited(iterated)));
+            default:
+                Debug.fail();
+        }
+        function checkPromiseOperationExists(op: AwaitExpression["operation"]) {
+            const promiseConstructor = getGlobalPromiseConstructorSymbol(/*reportErrors*/ true);
+            if (!promiseConstructor) return error(node, Diagnostics.Cannot_find_name_0_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_1_or_later, "Promise", "ES2015");
+            if (!getPropertyOfType(getTypeOfSymbol(promiseConstructor), op as __String)) {
+                return error(node, Diagnostics.To_use_await_0_operator_there_must_be_a_Promise_0_method_exists, op);
+            }
+            return undefined;
+        }
     }
 
     function checkPrefixUnaryExpression(node: PrefixUnaryExpression): Type {

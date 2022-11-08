@@ -54,7 +54,7 @@ import {
     TextRange, TextSpan, textSpanEnd, timestamp, TodoComment, TodoCommentDescriptor, Token, toPath, tracing,
     TransformFlags, TransientSymbol, Type, TypeChecker, TypeFlags, TypeNode, TypeParameter, TypePredicate,
     TypeReference, typeToDisplayParts, UnderscoreEscapedMap, UnionOrIntersectionType, UnionType, updateSourceFile,
-    UserPreferences, VariableDeclaration,
+    UserPreferences, VariableDeclaration, isAwaitExpression,
 } from "./_namespaces/ts";
 
 /** The version of the language service API */
@@ -200,6 +200,12 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Nod
         node.forEachChild(child => {
             children.push(child);
         });
+        return children;
+    }
+
+    // await.operations should not have ".opName" as it's children
+    if (isAwaitExpression(node)) {
+        children.push(node.expression);
         return children;
     }
 

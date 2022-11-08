@@ -854,7 +854,7 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.AwaitExpression]: function visitEachChildOfAwaitExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateAwaitExpression(node,
-            nodeVisitor(node.expression, visitor, isExpression));
+            node.operation, nodeVisitor(node.expression, visitor, isExpression));
     },
 
     [SyntaxKind.PrefixUnaryExpression]: function visitEachChildOfPrefixUnaryExpression(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {

@@ -721,7 +721,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
     function createDownlevelAwait(expression: Expression) {
         return enclosingFunctionFlags & FunctionFlags.Generator
             ? factory.createYieldExpression(/*asteriskToken*/ undefined, emitHelpers().createAwaitHelper(expression))
-            : factory.createAwaitExpression(expression);
+            : factory.createAwaitExpression(/*operation*/ undefined, expression);
     }
 
     function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined, ancestorFacts: HierarchyFacts) {

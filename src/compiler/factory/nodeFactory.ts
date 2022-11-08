@@ -2892,21 +2892,23 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createAwaitExpression(expression: Expression) {
+    function createAwaitExpression(operation: AwaitExpression["operation"], expression: Expression) {
         const node = createBaseExpression<AwaitExpression>(SyntaxKind.AwaitExpression);
         node.expression = parenthesizerRules().parenthesizeOperandOfPrefixUnary(expression);
+        node.operation = operation;
         node.transformFlags |=
             propagateChildFlags(node.expression) |
             TransformFlags.ContainsES2017 |
             TransformFlags.ContainsES2018 |
             TransformFlags.ContainsAwait;
+        if (operation) node.transformFlags |= TransformFlags.ContainsESNext;
         return node;
     }
 
     // @api
-    function updateAwaitExpression(node: AwaitExpression, expression: Expression) {
+    function updateAwaitExpression(node: AwaitExpression, operation: AwaitExpression["operation"], expression: Expression) {
         return node.expression !== expression
-            ? update(createAwaitExpression(expression), node)
+            ? update(createAwaitExpression(operation, expression), node)
             : node;
     }
 

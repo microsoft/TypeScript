@@ -500,12 +500,12 @@ function transformPromiseExpressionOfPropertyAccess(returnContextNode: Expressio
     if (shouldReturn(returnContextNode, transformer)) {
         let returnValue = getSynthesizedDeepClone(node);
         if (hasContinuation) {
-            returnValue = factory.createAwaitExpression(returnValue);
+            returnValue = factory.createAwaitExpression(/*operation*/ undefined, returnValue);
         }
         return [factory.createReturnStatement(returnValue)];
     }
 
-    return createVariableOrAssignmentOrExpressionStatement(continuationArgName, factory.createAwaitExpression(node), /*typeAnnotation*/ undefined);
+    return createVariableOrAssignmentOrExpressionStatement(continuationArgName, factory.createAwaitExpression(/*operation*/ undefined, node), /*typeAnnotation*/ undefined);
 }
 
 function createVariableOrAssignmentOrExpressionStatement(variableName: SynthBindingName | undefined, rightHandSide: Expression, typeAnnotation: TypeNode | undefined): readonly Statement[] {
@@ -573,7 +573,7 @@ function transformCallbackArgument(func: Expression, hasContinuation: boolean, c
                 return silentFail();
             }
             const returnType = callSignatures[0].getReturnType();
-            const varDeclOrAssignment = createVariableOrAssignmentOrExpressionStatement(continuationArgName, factory.createAwaitExpression(synthCall), getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker));
+            const varDeclOrAssignment = createVariableOrAssignmentOrExpressionStatement(continuationArgName, factory.createAwaitExpression(/*operation*/ undefined, synthCall), getExplicitPromisedTypeOfPromiseReturningCallExpression(parent, func, transformer.checker));
             if (continuationArgName) {
                 continuationArgName.types.push(transformer.checker.getAwaitedType(returnType) || returnType);
             }
@@ -689,7 +689,7 @@ function transformCallbackArgument(func: Expression, hasContinuation: boolean, c
 
 function getPossiblyAwaitedRightHandSide(checker: TypeChecker, type: Type, expr: Expression): AwaitExpression | Expression {
     const rightHandSide = getSynthesizedDeepClone(expr);
-    return !!checker.getPromisedTypeOfPromise(type) ? factory.createAwaitExpression(rightHandSide) : rightHandSide;
+    return !!checker.getPromisedTypeOfPromise(type) ? factory.createAwaitExpression(/*operation*/ undefined, rightHandSide) : rightHandSide;
 }
 
 function getLastCallSignature(type: Type, checker: TypeChecker): Signature | undefined {
@@ -702,7 +702,7 @@ function removeReturns(stmts: readonly Statement[], prevArgName: SynthBindingNam
     for (const stmt of stmts) {
         if (isReturnStatement(stmt)) {
             if (stmt.expression) {
-                const possiblyAwaitedExpression = isPromiseTypedExpression(stmt.expression, transformer.checker) ? factory.createAwaitExpression(stmt.expression) : stmt.expression;
+                const possiblyAwaitedExpression = isPromiseTypedExpression(stmt.expression, transformer.checker) ? factory.createAwaitExpression(/*operation*/ undefined, stmt.expression) : stmt.expression;
                 if (prevArgName === undefined) {
                     ret.push(factory.createExpressionStatement(possiblyAwaitedExpression));
                 }

@@ -1039,7 +1039,7 @@ function extractFunctionInScope(
         call = factory.createYieldExpression(factory.createToken(SyntaxKind.AsteriskToken), call);
     }
     if (range.facts & RangeFacts.IsAsyncFunction) {
-        call = factory.createAwaitExpression(call);
+        call = factory.createAwaitExpression(/*operation*/ undefined, call);
     }
     if (isInJSXContent(node)) {
         call = factory.createJsxExpression(/*dotDotDotToken*/ undefined, call);
