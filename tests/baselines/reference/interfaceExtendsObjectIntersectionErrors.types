@@ -73,9 +73,9 @@ declare class CX { static a: string }
 
 declare enum EX { A, B, C }
 >EX : EX
->A : EX
->B : EX
->C : EX
+>A : EX.A
+>B : EX.B
+>C : EX.C
 
 declare namespace NX { export const a = "hello" }
 >NX : typeof NX

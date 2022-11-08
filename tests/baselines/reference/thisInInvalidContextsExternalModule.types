@@ -72,11 +72,11 @@ enum SomeEnum {
 >SomeEnum : SomeEnum
 
     A = this, // Should not be allowed
->A : SomeEnum
+>A : SomeEnum.A
 >this : any
 
     B = this.spaaaace // Also should not be allowed
->B : SomeEnum
+>B : SomeEnum.B
 >this.spaaaace : any
 >this : any
 >spaaaace : any
