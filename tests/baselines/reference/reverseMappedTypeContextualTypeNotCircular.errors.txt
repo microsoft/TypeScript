@@ -1,4 +1,5 @@
 tests/cases/compiler/reverseMappedTypeContextualTypeNotCircular.ts(10,3): error TS2322: Type '(state: any, props: any) => {}' is not assignable to type 'Selector<unknown, {}>'.
+  Call signature '(state: any, props: any): {}' expects more arguments than call signature '(state: unknown): {}'.
 
 
 ==== tests/cases/compiler/reverseMappedTypeContextualTypeNotCircular.ts (1 errors) ====
@@ -14,5 +15,6 @@ tests/cases/compiler/reverseMappedTypeContextualTypeNotCircular.ts(10,3): error 
       editable: (state: any, props: any) => editable(), // expect "Type '(state: any, props: any) => {}' is not assignable to type 'Selector<unknown, {}>'", _not_ a circularity error
       ~~~~~~~~
 !!! error TS2322: Type '(state: any, props: any) => {}' is not assignable to type 'Selector<unknown, {}>'.
+!!! error TS2322:   Call signature '(state: any, props: any): {}' expects more arguments than call signature '(state: unknown): {}'.
 !!! related TS6500 tests/cases/compiler/reverseMappedTypeContextualTypeNotCircular.ts:10:3: The expected type comes from property 'editable' which is declared here on type '{ editable: Selector<unknown, {}>; }'
     });
