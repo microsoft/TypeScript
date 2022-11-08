@@ -1,9 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import * as fakes from "../../_namespaces/fakes";
 import * as vfs from "../../_namespaces/vfs";
-import { baselinePrograms } from "../tscWatch/helpers";
-import { commandLineCallbacks, TscCompileSystem, verifyTscBaseline } from "../tsc/helpers";
-import { loadProjectFromFiles, toPathWithSystem } from "./helpers";
+import { baselinePrograms, commandLineCallbacks, loadProjectFromFiles, toPathWithSystem, TscCompileSystem, verifyTscBaseline } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
     let sys: TscCompileSystem;

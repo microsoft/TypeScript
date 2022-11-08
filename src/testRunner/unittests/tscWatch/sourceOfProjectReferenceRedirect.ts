@@ -1,7 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import { createWatchedSystem, File, FileOrFolderOrSymLink, getTsBuildProjectFile, libFile, SymLink } from "../../../harness/virtualFileSystemWithWatch";
+import { libContent } from "../tsc/helpers";
 import { createBaseline, createWatchCompilerHostOfConfigFileForBaseline, runWatchBaseline, solutionBuildWithBaseline } from "./helpers";
-import { libContent } from "../tsbuild/helpers";
 
 describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedirect", () => {
     interface VerifyWatchInput {

@@ -1,7 +1,6 @@
 import * as vfs from "../../_namespaces/vfs";
 import * as Utils from "../../_namespaces/Utils";
-import { verifyTsc } from "../tsc/helpers";
-import { loadProjectFromFiles } from "./helpers";
+import { loadProjectFromFiles, verifyTsc } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: declarationEmit", () => {
     function getFiles(): vfs.FileSet {

@@ -1,8 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 import * as fakes from "../../_namespaces/fakes";
-import { createSolutionBuilderHostForBaseline, noChangeOnlyRuns, testTscCompileLike, TscCompileSystem, verifyTsc, verifyTscCompileLike } from "../tsc/helpers";
-import { replaceText, appendText, prependText, loadProjectFromDisk, TestTscEdit, VerifyTscWithEditsInput, verifyTscWithEdits, addTestPrologue, enableStrict, addRest, addShebang, addSpread, addStubFoo, addTripleSlashRef, changeStubToRest, removeRest } from "./helpers";
+import { addRest, addShebang, addSpread, addStubFoo, addTestPrologue, addTripleSlashRef, appendText, changeStubToRest, createSolutionBuilderHostForBaseline, enableStrict, loadProjectFromDisk, noChangeOnlyRuns, prependText, removeRest, replaceText, testTscCompileLike, TestTscEdit, TscCompileSystem, verifyTsc, verifyTscCompileLike, verifyTscWithEdits, VerifyTscWithEditsInput } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: outFile::", () => {
     let outFileFs: vfs.FileSystem;

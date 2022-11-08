@@ -1,6 +1,5 @@
-import * as Utils from "../../_namespaces/Utils";
-import { noChangeRun, verifyTsc } from "../tsc/helpers";
-import { replaceText, appendText, loadProjectFromDisk, loadProjectFromFiles, verifyTscWithEdits } from "./helpers";
+import { appendText, loadProjectFromDisk, loadProjectFromFiles, noChangeRun, replaceText, verifyTsc, verifyTscWithEdits } from "../tsc/helpers";
+import { dedent } from "../../_namespaces/Utils";
 
 describe("unittests:: tsbuild:: configFileErrors:: when tsconfig extends the missing file", () => {
     verifyTsc({
@@ -18,7 +17,7 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
         fs: () => loadProjectFromFiles({
             "/src/a.ts": "export function foo() { }",
             "/src/b.ts": "export function bar() { }",
-            "/src/tsconfig.json": Utils.dedent`
+            "/src/tsconfig.json": dedent`
 {
     "compilerOptions": {
         "composite": true,

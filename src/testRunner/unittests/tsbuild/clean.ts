@@ -1,6 +1,4 @@
-import { verifyTsc } from "../tsc/helpers";
-import { loadProjectFromFiles } from "./helpers";
-
+import { loadProjectFromFiles, verifyTsc } from "../tsc/helpers";
 describe("unittests:: tsbuild - clean", () => {
     verifyTsc({
         scenario: "clean",

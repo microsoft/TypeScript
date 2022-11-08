@@ -1,6 +1,5 @@
-import { noChangeRun, noChangeWithExportsDiscrepancyRun } from "../tsc/helpers";
+import { loadProjectFromDisk, noChangeRun, noChangeWithExportsDiscrepancyRun, verifyTscWithEdits } from "../tsc/helpers";
 import * as vfs from "../../_namespaces/vfs";
-import { loadProjectFromDisk, verifyTscWithEdits } from "./helpers";
 
 describe("unittests:: tsbuild - with noEmitOnError", () => {
     let projFs: vfs.FileSystem;

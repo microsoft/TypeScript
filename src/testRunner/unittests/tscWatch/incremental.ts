@@ -1,9 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
 import { createWatchedSystem, File, libFile, TestServerHost } from "../../../harness/virtualFileSystemWithWatch";
+import { CommandLineProgram, libContent } from "../tsc/helpers";
 import { applyChange, createBaseline, SystemSnap, verifyTscWatch, watchBaseline } from "./helpers";
-import { CommandLineProgram } from "../tsc/helpers";
-import { libContent } from "../tsbuild/helpers";
 
 describe("unittests:: tsc-watch:: emit file --incremental", () => {
     const project = "/users/username/projects/project";

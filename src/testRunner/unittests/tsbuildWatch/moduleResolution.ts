@@ -1,6 +1,6 @@
-import * as Utils from "../../_namespaces/Utils";
 import { createWatchedSystem, libFile } from "../../../harness/virtualFileSystemWithWatch";
 import { verifyTscWatch } from "../tscWatch/helpers";
+import { dedent } from "../../_namespaces/Utils";
 
 describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
     verifyTscWatch({
@@ -70,7 +70,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
             },
             {
                 path: `/user/username/projects/myproject/packages/pkg1/index.ts`,
-                content: Utils.dedent`
+                content: dedent`
                 import type { TheNum } from 'pkg2'
                 export const theNum: TheNum = 42;`
             },
@@ -162,7 +162,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
             },
             {
                 path: `/user/username/projects/myproject/packages/pkg1/index.ts`,
-                content: Utils.dedent`
+                content: dedent`
                     import type { TheNum } from 'pkg2'
                     export const theNum: TheNum = 42;`
             },

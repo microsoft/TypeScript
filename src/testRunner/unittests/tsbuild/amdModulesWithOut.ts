@@ -1,7 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
-import { verifyTsc } from "../tsc/helpers";
-import { addRest, addShebang, addSpread, addTestPrologue, addTripleSlashRef, appendText, enableStrict, loadProjectFromDisk, removeRest, replaceText, verifyTscWithEdits } from "./helpers";
+import { addRest, addShebang, addSpread, addTestPrologue, addTripleSlashRef, appendText, enableStrict, loadProjectFromDisk, removeRest, replaceText, verifyTsc, verifyTscWithEdits } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
     let outFileFs: vfs.FileSystem;

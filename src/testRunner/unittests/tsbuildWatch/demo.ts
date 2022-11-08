@@ -1,6 +1,6 @@
 import { createWatchedSystem, File, getTsBuildProjectFile, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { libContent } from "../tsc/helpers";
 import { verifyTscWatch } from "../tscWatch/helpers";
-import { libContent } from "../tsbuild/helpers";
 
 describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
     const projectLocation = `/user/username/projects/demo`;

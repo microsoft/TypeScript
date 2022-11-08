@@ -1,5 +1,5 @@
 import * as vfs from "../../_namespaces/vfs";
-import { loadProjectFromDisk, replaceText, verifyTscWithEdits } from "./helpers";
+import { loadProjectFromDisk, replaceText, verifyTscWithEdits } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true", () => {
     let projFs: vfs.FileSystem;

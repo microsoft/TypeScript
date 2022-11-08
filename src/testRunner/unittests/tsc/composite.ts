@@ -1,6 +1,5 @@
 import * as Utils from "../../_namespaces/Utils";
-import { verifyTsc } from "./helpers";
-import { loadProjectFromFiles, replaceText, verifyTscWithEdits } from "../tsbuild/helpers";
+import { loadProjectFromFiles, replaceText, verifyTsc, verifyTscWithEdits } from "./helpers";
 
 describe("unittests:: tsc:: composite::", () => {
     verifyTsc({

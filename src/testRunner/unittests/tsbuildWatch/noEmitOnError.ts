@@ -1,6 +1,6 @@
 import { createWatchedSystem, getTsBuildProjectFile, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { libContent } from "../tsc/helpers";
 import { TscWatchCompileChange, verifyTscWatch } from "../tscWatch/helpers";
-import { libContent } from "../tsbuild/helpers";
 
 describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
     function change(caption: string, content: string): TscWatchCompileChange {

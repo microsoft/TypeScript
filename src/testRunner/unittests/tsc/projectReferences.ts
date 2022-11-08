@@ -1,5 +1,4 @@
-import { loadProjectFromFiles } from "../tsbuild/helpers";
-import { verifyTsc } from "./helpers";
+import { loadProjectFromFiles, verifyTsc } from "./helpers";
 
 describe("unittests:: tsc:: projectReferences::", () => {
     verifyTsc({

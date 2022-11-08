@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { compilerOptionsToConfigJson, noChangeRun, noChangeWithExportsDiscrepancyRun } from "../tsc/helpers";
-import { replaceText, appendText, loadProjectFromFiles, TestTscEdit, verifyTscWithEdits } from "./helpers";
+import { appendText, compilerOptionsToConfigJson, loadProjectFromFiles, noChangeRun, noChangeWithExportsDiscrepancyRun, replaceText, TestTscEdit, verifyTscWithEdits } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: commandLine::", () => {
     describe("different options::", () => {

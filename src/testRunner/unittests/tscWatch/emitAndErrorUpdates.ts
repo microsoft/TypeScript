@@ -1,6 +1,6 @@
 import { createWatchedSystem, File, getTsBuildProjectFile, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { libContent } from "../tsc/helpers";
 import { TscWatchCompileChange, verifyTscWatch } from "./helpers";
-import { libContent } from "../tsbuild/helpers";
 
 describe("unittests:: tsc-watch:: Emit times and Error updates in builder after program changes", () => {
     const config: File = {

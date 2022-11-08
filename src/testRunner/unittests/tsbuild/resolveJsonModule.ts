@@ -1,6 +1,5 @@
 import * as vfs from "../../_namespaces/vfs";
-import { noChangeOnlyRuns, verifyTsc } from "../tsc/helpers";
-import { loadProjectFromDisk, replaceText, verifyTscWithEdits } from "./helpers";
+import { loadProjectFromDisk, noChangeOnlyRuns, replaceText, verifyTsc, verifyTscWithEdits } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: with resolveJsonModule option on project resolveJsonModuleAndComposite", () => {
     let projFs: vfs.FileSystem;

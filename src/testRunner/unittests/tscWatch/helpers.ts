@@ -2,8 +2,7 @@ import * as ts from "../../_namespaces/ts";
 import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes";
 import { Baseline } from "../../_namespaces/Harness";
 import { changeToHostTrackingWrittenFiles, createWatchedSystem, File, FileOrFolderOrSymLink, FileOrFolderOrSymLinkMap, TestServerHost, TestServerHostCreationParameters, TestServerHostTrackingWrittenFiles } from "../../../harness/virtualFileSystemWithWatch";
-import { commandLineCallbacks, CommandLineCallbacks, CommandLineProgram, createSolutionBuilderHostForBaseline } from "../tsc/helpers";
-import { generateSourceMapBaselineFiles } from "../tsbuild/helpers";
+import { baselinePrograms, commandLineCallbacks, CommandLineCallbacks, CommandLineProgram, createSolutionBuilderHostForBaseline, generateSourceMapBaselineFiles } from "../tsc/helpers";
 
 export const commonFile1: File = {
     path: "/a/b/commonFile1.ts",
@@ -224,83 +223,6 @@ export function watchBaseline({ baseline, getPrograms, oldPrograms, sys, oldSnap
     sys.writtenFiles.clear();
     return programs;
 }
-
-export function baselinePrograms(baseline: string[], getPrograms: () => readonly CommandLineProgram[], oldPrograms: readonly (CommandLineProgram | undefined)[], baselineDependencies: boolean | undefined) {
-    const programs = getPrograms();
-    for (let i = 0; i < programs.length; i++) {
-        baselineProgram(baseline, programs[i], oldPrograms[i], baselineDependencies);
-    }
-    return programs;
-}
-
-function baselineProgram(baseline: string[], [program, builderProgram]: CommandLineProgram, oldProgram: CommandLineProgram | undefined, baselineDependencies: boolean | undefined) {
-    if (program !== oldProgram?.[0]) {
-        const options = program.getCompilerOptions();
-        baseline.push(`Program root files: ${JSON.stringify(program.getRootFileNames())}`);
-        baseline.push(`Program options: ${JSON.stringify(options)}`);
-        baseline.push(`Program structureReused: ${(ts as any).StructureIsReused[program.structureIsReused]}`);
-        baseline.push("Program files::");
-        for (const file of program.getSourceFiles()) {
-            baseline.push(file.fileName);
-        }
-    }
-    else {
-        baseline.push(`Program: Same as old program`);
-    }
-    baseline.push("");
-
-    if (!builderProgram) return;
-    if (builderProgram !== oldProgram?.[1]) {
-        const state = builderProgram.getState();
-        const internalState = state as unknown as ts.BuilderProgramState;
-        if (state.semanticDiagnosticsPerFile?.size) {
-            baseline.push("Semantic diagnostics in builder refreshed for::");
-            for (const file of program.getSourceFiles()) {
-                if (!internalState.semanticDiagnosticsFromOldState || !internalState.semanticDiagnosticsFromOldState.has(file.resolvedPath)) {
-                    baseline.push(file.fileName);
-                }
-            }
-        }
-        else {
-            baseline.push("No cached semantic diagnostics in the builder::");
-        }
-        if (internalState) {
-            baseline.push("");
-            if (internalState.hasCalledUpdateShapeSignature?.size) {
-                baseline.push("Shape signatures in builder refreshed for::");
-                internalState.hasCalledUpdateShapeSignature.forEach((path: ts.Path) => {
-                    const info = state.fileInfos.get(path);
-                    if (info?.version === info?.signature || !info?.signature) {
-                        baseline.push(path + " (used version)");
-                    }
-                    else if (internalState.filesChangingSignature?.has(path)) {
-                        baseline.push(path + " (computed .d.ts during emit)");
-                    }
-                    else {
-                        baseline.push(path + " (computed .d.ts)");
-                    }
-                });
-            }
-            else {
-                baseline.push("No shapes updated in the builder::");
-            }
-        }
-        baseline.push("");
-        if (!baselineDependencies) return;
-        baseline.push("Dependencies for::");
-        for (const file of builderProgram.getSourceFiles()) {
-            baseline.push(`${file.fileName}:`);
-            for (const depenedency of builderProgram.getAllDependencies(file)) {
-                baseline.push(`  ${depenedency}`);
-            }
-        }
-    }
-    else {
-        baseline.push(`BuilderProgram: Same as old builder program`);
-    }
-    baseline.push("");
-}
-
 export interface VerifyTscWatch extends TscWatchCompile {
     baselineIncremental?: boolean;
 }

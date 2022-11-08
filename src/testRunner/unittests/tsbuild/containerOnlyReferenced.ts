@@ -1,5 +1,4 @@
-import { noChangeOnlyRuns } from "../tsc/helpers";
-import { loadProjectFromDisk, loadProjectFromFiles, replaceText, verifyTscWithEdits } from "./helpers";
+import { loadProjectFromDisk, loadProjectFromFiles, noChangeOnlyRuns, replaceText, verifyTscWithEdits } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: when containerOnly project is referenced", () => {
     verifyTscWithEdits({

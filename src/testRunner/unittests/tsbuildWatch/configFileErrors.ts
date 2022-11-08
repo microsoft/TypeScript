@@ -1,6 +1,6 @@
 import { createWatchedSystem, libFile, TestServerHost } from "../../../harness/virtualFileSystemWithWatch";
-import * as Utils from "../../_namespaces/Utils";
 import { verifyTscWatch } from "../tscWatch/helpers";
+import { dedent } from "../../_namespaces/Utils";
 
 describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports syntax errors in config file", () => {
     function build(sys: TestServerHost) {
@@ -16,7 +16,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
                 { path: `/user/username/projects/myproject/b.ts`, content: "export function bar() { }" },
                 {
                     path: `/user/username/projects/myproject/tsconfig.json`,
-                    content: Utils.dedent`
+                    content: dedent`
 {
     "compilerOptions": {
         "composite": true,
