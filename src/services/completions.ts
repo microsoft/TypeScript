@@ -565,9 +565,11 @@ namespace ts.Completions {
             getJSCompletionEntries(sourceFile, location.pos, uniqueNames, getEmitScriptTarget(compilerOptions), entries);
         }
 
-        // >> TODO: trigger on semi-completed case-keyword
-        if (contextToken && isCaseBlock(contextToken.parent) && preferences.includeCompletionsWithInsertText) {
-            const cases = getExhaustiveCaseSnippets(contextToken.parent, sourceFile, preferences, compilerOptions, host, program, formatContext);
+        let caseBlock: CaseBlock | undefined;
+        if (preferences.includeCompletionsWithInsertText
+            && contextToken
+            && (caseBlock = findAncestor(contextToken, isCaseBlock))) {
+            const cases = getExhaustiveCaseSnippets(caseBlock, sourceFile, preferences, compilerOptions, host, program, formatContext);
             if (cases) {
                 entries.push(cases.entry);
             }
@@ -589,7 +591,6 @@ namespace ts.Completions {
     }
 
     function getExhaustiveCaseSnippets(
-        // contextToken: Token<SyntaxKind.CaseKeyword>,
         caseBlock: CaseBlock,
         sourceFile: SourceFile,
         preferences: UserPreferences,
@@ -610,24 +611,11 @@ namespace ts.Completions {
         const switchType = checker.getTypeAtLocation(caseBlock.parent.expression);
         // >> TODO: handle unit type case?
         if (switchType && switchType.isUnion() && every(switchType.types, type => type.isLiteral())) {// >> TODO: does this work for enum members? aliases?
-            const printer = createSnippetPrinter({
-                removeComments: true,
-                module: options.module,
-                target: options.target,
-                newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
-            });
-
-
-            // >> TODO: not sure if this is fast enough for filtering existing cases
-            // const existingSymbols = new Map<SymbolId, true>();
-            // const existingLiterals: (number | string | PseudoBigInt)[] = [];
-            // existingLiterals;
-            // const existingValues: (string | number | PseudoBigInt)[] = [];
             const existingStrings = new Set<string>();
             const existingNumbers = new Set<number>();
             const existingBigInts = new Set<string>();
-            const existingBools = new Set<boolean>();
 
+            // Collect constant values in existing clauses.
             for (const clause of clauses) {
                 if (isDefaultClause(clause)) {
                     continue;
@@ -648,15 +636,9 @@ namespace ts.Completions {
                                 existingBigInts.add(pseudoBigIntToString(parsedBigInt)); // >> does it work? answer: no
                             }
                             break;
-                        case SyntaxKind.TrueKeyword:
-                            existingBools.add(true);
-                            break;
-                        case SyntaxKind.FalseKeyword:
-                            existingBools.add(false);
-                            break;
                     }
                 }
-                else if (checker.getSymbolAtLocation(clause.expression)) {
+                else {
                     const symbol = checker.getSymbolAtLocation(clause.expression);
                     if (symbol && symbol.valueDeclaration && isEnumMember(symbol.valueDeclaration)) {
                         const enumValue = checker.getConstantValue(symbol.valueDeclaration);
@@ -673,16 +655,32 @@ namespace ts.Completions {
                 }
             }
 
+            const target = getEmitScriptTarget(options);
             const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
             const elements: Expression[] = [];
             for (const type of switchType.types as LiteralType[]) {
+                // Enums
                 if (type.flags & TypeFlags.EnumLiteral) {
                     Debug.assert(type.symbol, "TODO: should this hold always?");
                     Debug.assert(type.symbol.parent, "TODO: should this hold always too?");
-                    // >> TODO: see if we need to filter enum by their constant vals
-                    const target = getEmitScriptTarget(options);
-                    // >> TODO: figure out if need an import action
-                    // >> TODO: fix issue when qualified import
+                    // Filter existing enums by their values
+                    const enumValue = type.symbol.valueDeclaration && checker.getConstantValue(type.symbol.valueDeclaration as EnumMember);
+                    if (enumValue !== undefined) {
+                        switch (typeof enumValue) {
+                            case "string":
+                                if (existingStrings.has(enumValue)) {
+                                    continue;
+                                }
+                                existingStrings.add(enumValue);
+                                break;
+                            case "number":
+                                if (existingNumbers.has(enumValue)) {
+                                    continue;
+                                }
+                                existingNumbers.add(enumValue);
+                                break;
+                        }
+                    }
                     const typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, caseBlock, target);
                     if (!typeNode) {
                         return undefined;
@@ -692,31 +690,42 @@ namespace ts.Completions {
                         return undefined;
                     }
                     elements.push(expr);
-                    // >> TODO: what if expression has import node?
-                    // const expr = checker.symbolToExpression(type.symbol, SymbolFlags.EnumMember, caseClause.parent, /*flags*/ undefined);
-                    // if (expr) {
-                    //     return expr;
-                    // }
-                // }
-                } // >> TODO: else if boolean???
+                }
+                // Literals
                 else {
-                    // const text = completionNameForLiteral(sourceFile, preferences, type.value);
-                    // >> TODO: filter by existing
-                    const literal: Expression = typeof type.value === "object"
-                        ? factory.createBigIntLiteral(type.value)
-                        : typeof type.value === "number"
-                            ? factory.createNumericLiteral(type.value)
-                            : factory.createStringLiteral(type.value);
-                    elements.push(literal);
+                    switch (typeof type.value) {
+                        case "object":
+                            // BigInt literal
+                            if (!existingBigInts.has(pseudoBigIntToString(type.value))) {
+                                elements.push(factory.createBigIntLiteral(type.value));
+                            }
+                            break;
+                        case "number":
+                            // number literal
+                            if (!existingNumbers.has(type.value)) {
+                                elements.push(factory.createNumericLiteral(type.value));
+                            }
+                            break;
+                        case "string":
+                            if (!existingStrings.has(type.value)) {
+                                elements.push(factory.createStringLiteral(type.value));
+                            }
+                            break;
+                    }
                 }
             }
-
             if (elements.length === 0) {
                 return undefined;
             }
 
             const newClauses = map(elements, element => {
                 return factory.createCaseClause(element, []);
+            });
+            const printer = createSnippetPrinter({
+                removeComments: true,
+                module: options.module,
+                target: options.target,
+                newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
             });
             const insertText = formatContext
                 ? printer.printAndFormatSnippetList(
@@ -735,9 +744,8 @@ namespace ts.Completions {
                     name: `${firstClause} ...`, // >> TODO: what should this be?
                     // isRecommended: true, // >> I assume that is ok because if there's another recommended, it will be sorted after this one
                     kind: ScriptElementKind.unknown, // >> TODO: what should this be?
-                    sortText: SortText.LocalDeclarationPriority, // >> TODO: sort *right after* case keyword
+                    sortText: SortText.GlobalsOrKeywords, // >> TODO: sort *right after* case keyword
                     insertText,
-                    // replacementSpan: getReplacementSpanForContextToken(contextToken),
                     hasAction: importAdder.hasFixes() || undefined,
                     source: CompletionSource.SwitchCases,
                 },
@@ -1843,9 +1851,9 @@ namespace ts.Completions {
         const compilerOptions = program.getCompilerOptions();
         const { name, source, data } = entryId;
 
-        const contextToken = findPrecedingToken(position, sourceFile);
-        if (isInString(sourceFile, position, contextToken)) {
-            return StringCompletions.getStringLiteralCompletionDetails(name, sourceFile, position, contextToken, typeChecker, compilerOptions, host, cancellationToken, preferences);
+        const { previousToken, contextToken } = getRelevantTokens(position, sourceFile);
+        if (isInString(sourceFile, position, previousToken)) {
+            return StringCompletions.getStringLiteralCompletionDetails(name, sourceFile, position, previousToken, typeChecker, compilerOptions, host, cancellationToken, preferences);
         }
 
         // Compute all the completion symbols again.
@@ -1877,7 +1885,6 @@ namespace ts.Completions {
             }
             case "cases": {
                 const { entry, importAdder } = getExhaustiveCaseSnippets(
-                    // contextToken as CaseKeyword,
                     contextToken!.parent as CaseBlock,
                     sourceFile,
                     preferences,

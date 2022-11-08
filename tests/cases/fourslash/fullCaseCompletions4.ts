@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// Basic tests
+// Filter existing values.
 
 // @newline: LF
 //// enum E {
@@ -8,25 +8,31 @@
 ////     B = "B",
 ////     C = "C",
 //// }
-//// // Mixed union
-//// declare const u: E.A | E.B | 1;
+//// declare const u: E.A | E.B | 1 | 1n | "1";
 //// switch (u) {
+////     case E.A:
+////     case 1:
+////     case 1n:
+////     case 0x1n:
+////     case "1":
+////     case `1`:
+////     case `1${u}`:
 ////     case/*1*/
 //// }
-//// // Union enum
-//// declare const e: E;
-//// switch (e) {
-////     case/*2*/
+//// declare const v: E.A | "1" | "2";
+//// switch (v) {
+////     case 0:
+////     case `1`:
+////     /*2*/
 //// }
 //// enum F {
-////     D = 1 << 0,
-////     E = 1 << 1,
-////     F = 1 << 2,
+////     A = "A",
+////     B = "B",
+////     C = A,
 //// }
-//// // Computed enum; not supported (TODO: review this after new enum merge)
-//// declare const f: F;
-//// switch (f) {
-////     case/*3*/
+//// declare const x: F;
+//// switch (x) {
+////     /*3*/
 //// }
 
 verify.completions(
@@ -35,13 +41,11 @@ verify.completions(
         isNewIdentifierLocation: false,
         includes: [
             {
-                name: "case E.A: ...",
+                name: "case E.B: ...",
                 source: completion.CompletionSource.SwitchCases,
                 sortText: completion.SortText.GlobalsOrKeywords,
                 insertText:
-`case E.A:
-case E.B:
-case 1:`,
+            `case E.B:`,
             },
         ],
         preferences: {
@@ -53,13 +57,11 @@ case 1:`,
         isNewIdentifierLocation: false,
         includes: [
             {
-                name: "case E.A: ...",
+                name: `case "2": ...`,
                 source: completion.CompletionSource.SwitchCases,
                 sortText: completion.SortText.GlobalsOrKeywords,
                 insertText:
-`case E.A:
-case E.B:
-case E.C:`,
+            `case "2":`,
             },
         ],
         preferences: {
@@ -69,7 +71,16 @@ case E.C:`,
     {
         marker: "3",
         isNewIdentifierLocation: false,
-        exact: ["e", "E", "f", { name: "F", isRecommended: true }, "u", ...completion.globals],
+        includes: [
+            {
+                name: "case F.A: ...",
+                source: completion.CompletionSource.SwitchCases,
+                sortText: completion.SortText.GlobalsOrKeywords,
+                insertText:
+`case F.A:
+case F.B:`, // no C because C's value is the same as A's
+            },
+        ],
         preferences: {
             includeCompletionsWithInsertText: true,
         },
