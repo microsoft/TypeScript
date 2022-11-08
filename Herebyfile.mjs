@@ -591,11 +591,12 @@ export const watchLocal = task({
     dependencies: [localize, watchTsc, watchTsserver, watchServices, watchLssl, watchOtherOutputs, dts, watchSrc],
 });
 
+const runtestsDeps = [tests, generateLibs].concat(cmdLineOptions.typecheck ? [dts, buildSrc] : []);
 
 export const runTests = task({
     name: "runtests",
     description: "Runs the tests using the built run.js file.",
-    dependencies: [tests, generateLibs, dts, buildSrc],
+    dependencies: runtestsDeps,
     run: () => runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false),
 });
 // task("runtests").flags = {
@@ -617,7 +618,7 @@ export const runTests = task({
 export const runTestsParallel = task({
     name: "runtests-parallel",
     description: "Runs all the tests in parallel using the built run.js file.",
-    dependencies: [tests, generateLibs, dts, buildSrc],
+    dependencies: runtestsDeps,
     run: () => runConsoleTests(testRunner, "min", /*runInParallel*/ cmdLineOptions.workers > 1),
 });
 // task("runtests-parallel").flags = {
