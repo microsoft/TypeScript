@@ -12,7 +12,7 @@ type T3<T extends string> = string & `${T}`;  // `${T}
 >T3 : `${T}`
 
 type T4<T extends string> = string & `${Capitalize<`${T}`>}`;  // `${Capitalize<T>}`
->T4 : `${Capitalize<`${T}`>}`
+>T4 : `${Capitalize<T>}`
 
 function f1(a: boolean[], x: `${number}`) {
 >f1 : (a: boolean[], x: `${number}`) => void

@@ -9,7 +9,7 @@ type TU3 = Uppercase<string>;  // Uppercase<string>
 >TU3 : Uppercase<string>
 
 type TU4 = Uppercase<any>;  // Uppercase<`${any}`>
->TU4 : Uppercase<`${any}`>
+>TU4 : Uppercase<any>
 
 type TU5 = Uppercase<never>;  // never
 >TU5 : never
@@ -27,7 +27,7 @@ type TL3 = Lowercase<string>;  // Lowercase<string>
 >TL3 : Lowercase<string>
 
 type TL4 = Lowercase<any>;  // Lowercase<`${any}`>
->TL4 : Lowercase<`${any}`>
+>TL4 : Lowercase<any>
 
 type TL5 = Lowercase<never>;  // never
 >TL5 : never
@@ -45,7 +45,7 @@ type TC3 = Capitalize<string>;  // Capitalize<string>
 >TC3 : Capitalize<string>
 
 type TC4 = Capitalize<any>;  // Capitalize<`${any}`>
->TC4 : Capitalize<`${any}`>
+>TC4 : Capitalize<any>
 
 type TC5 = Capitalize<never>;  // never
 >TC5 : never
@@ -63,7 +63,7 @@ type TN3 = Uncapitalize<string>;  // Uncapitalize<string>
 >TN3 : Uncapitalize<string>
 
 type TN4 = Uncapitalize<any>;  // Uncapitalize<`${any}`>
->TN4 : Uncapitalize<`${any}`>
+>TN4 : Uncapitalize<any>
 
 type TN5 = Uncapitalize<never>;  // never
 >TN5 : never
@@ -72,13 +72,13 @@ type TN6 = Uncapitalize<42>;  // Error
 >TN6 : 42
 
 type TX1<S extends string> = Uppercase<`aB${S}`>;
->TX1 : Uppercase<`aB${S}`>
+>TX1 : `AB${Uppercase<S>}`
 
 type TX2 = TX1<'xYz'>;  // "ABXYZ"
 >TX2 : "ABXYZ"
 
 type TX3<S extends string> = Lowercase<`aB${S}`>;
->TX3 : Lowercase<`aB${S}`>
+>TX3 : `ab${Lowercase<S>}`
 
 type TX4 = TX3<'xYz'>;  // "abxyz"
 >TX4 : "abxyz"

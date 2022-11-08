@@ -1,4 +1,5 @@
-namespace ts {} // empty ts module so the module migration script knows this file depends on the `ts` project namespace
+import * as ts from "./_namespaces/ts";
+
 // This file actually uses arguments passed on commandline and executes it
 
 // enable deprecation logging

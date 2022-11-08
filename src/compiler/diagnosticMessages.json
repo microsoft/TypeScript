@@ -2256,7 +2256,7 @@
         "category": "Error",
         "code": 2473
     },
-    "const enum member initializers can only contain literal values and other computed enum values.": {
+    "const enum member initializers must be constant expressions.": {
         "category": "Error",
         "code": 2474
     },
@@ -2479,10 +2479,6 @@
     "A function returning 'never' cannot have a reachable end point.": {
         "category": "Error",
         "code": 2534
-    },
-    "Enum type '{0}' has members with initializers that are not literals.": {
-        "category": "Error",
-        "code": 2535
     },
     "Type '{0}' cannot be used to index type '{1}'.": {
         "category": "Error",
@@ -5414,6 +5410,26 @@
         "category": "Message",
         "code": 6401
     },
+    "Resolving in {0} mode with conditions {1}.": {
+        "category": "Message",
+        "code": 6402
+    },
+    "Matched '{0}' condition '{1}'.": {
+        "category": "Message",
+        "code": 6403
+    },
+    "Using '{0}' subpath '{1}' with target '{2}'.": {
+        "category": "Message",
+        "code": 6404
+    },
+    "Saw non-matching condition '{0}'.": {
+        "category": "Message",
+        "code": 6405
+    },
+    "Project '{0}' is out of date because buildinfo file '{1}' indicates there is change in compilerOptions": {
+        "category": "Message",
+        "code": 6406
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -6687,6 +6703,14 @@
         "category": "Message",
         "code": 90058
     },
+    "Export '{0}' from module '{1}'": {
+        "category": "Message",
+        "code": 90059
+    },
+    "Export all referenced locals": {
+        "category": "Message",
+        "code": 90060
+    },
 
     "Convert function to an ES2015 class": {
         "category": "Message",
@@ -7457,7 +7481,7 @@
         "category": "Error",
         "code": 18032
     },
-    "Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.": {
+    "Type '{0}' is not assignable to type '{1}' as required for computed enum member values.": {
         "category": "Error",
         "code": 18033
     },
