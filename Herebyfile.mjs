@@ -8,7 +8,7 @@ import util from "util";
 import chalk from "chalk";
 import { exec, readJson, getDiffTool, getDirSize, memoize, needsUpdate } from "./scripts/build/utils.mjs";
 import { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } from "./scripts/build/tests.mjs";
-import { buildProject as realBuildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
+import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
 import esbuild from "esbuild";
@@ -23,38 +23,6 @@ const copyright = memoize(async () => {
     const contents = await fs.promises.readFile(copyrightFilename, "utf-8");
     return contents.replace(/\r\n/g, "\n");
 });
-
-
-// TODO(jakebailey): This is really gross. If the build is cancelled (i.e. Ctrl+C), the modification will persist.
-// Waiting on: https://github.com/microsoft/TypeScript/issues/51164
-let currentlyBuilding = 0;
-let oldTsconfigBase;
-
-/** @type {typeof realBuildProject} */
-const buildProjectWithEmit = async (...args) => {
-    const tsconfigBasePath = "./src/tsconfig-base.json";
-
-    // Not using fs.promises here, to ensure we are synchronous until running the real build.
-
-    if (currentlyBuilding === 0) {
-        oldTsconfigBase = fs.readFileSync(tsconfigBasePath, "utf-8");
-        fs.writeFileSync(tsconfigBasePath, oldTsconfigBase.replace(`"emitDeclarationOnly": true,`, `"emitDeclarationOnly": false, // DO NOT COMMIT`));
-    }
-
-    currentlyBuilding++;
-
-    await realBuildProject(...args);
-
-    currentlyBuilding--;
-
-    if (currentlyBuilding === 0) {
-        fs.writeFileSync(tsconfigBasePath, oldTsconfigBase);
-    }
-};
-
-
-const buildProject = cmdLineOptions.bundle ? realBuildProject : buildProjectWithEmit;
-
 
 export const buildScripts = task({
     name: "scripts",
