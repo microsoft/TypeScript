@@ -3563,6 +3563,10 @@
         "category": "Error",
         "code": 2845
     },
+    "Call signature '{0}' expects more arguments than call signature '{1}'.": {
+        "category": "Error",
+        "code": 2846
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

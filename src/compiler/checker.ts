@@ -18480,6 +18480,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const sourceHasMoreParameters = !hasEffectiveRestParameter(target) &&
             (checkMode & SignatureCheckMode.StrictArity ? hasEffectiveRestParameter(source) || getParameterCount(source) > targetCount : getMinArgumentCount(source) > targetCount);
         if (sourceHasMoreParameters) {
+            if (reportErrors) {
+                errorReporter!(Diagnostics.Call_signature_0_expects_more_arguments_than_call_signature_1, signatureToString(source), signatureToString(target));
+            }
             return Ternary.False;
         }
 

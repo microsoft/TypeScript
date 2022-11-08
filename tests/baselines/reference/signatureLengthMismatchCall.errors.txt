@@ -1,0 +1,14 @@
+tests/cases/compiler/signatureLengthMismatchCall.ts(5,15): error TS2345: Argument of type '(a: number, b: number) => void' is not assignable to parameter of type '(a: number) => void'.
+  Call signature '(a: number, b: number): void' expects more arguments than call signature '(a: number): void'.
+
+
+==== tests/cases/compiler/signatureLengthMismatchCall.ts (1 errors) ====
+    function takesCallback(fn: (a: number) => void) {
+      // ...
+    }
+    
+    takesCallback((a: number, b: number) => {});
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(a: number, b: number) => void' is not assignable to parameter of type '(a: number) => void'.
+!!! error TS2345:   Call signature '(a: number, b: number): void' expects more arguments than call signature '(a: number): void'.
+    
