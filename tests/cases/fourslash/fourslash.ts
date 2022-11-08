@@ -42,9 +42,8 @@
 //
 // TODO: figure out a better solution to the API exposure problem.
 
-/// <reference path="../../../src/compiler/diagnosticInformationMap.generated.ts" />
-
 declare module ts {
+    export const Diagnostics: typeof import("../../../src/compiler/diagnosticInformationMap.generated").Diagnostics;
     export type MapKey = string | number;
     export interface Map<T> {
         forEach(action: (value: T, key: string) => void): void;
