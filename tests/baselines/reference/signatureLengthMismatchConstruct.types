@@ -1,0 +1,22 @@
+=== tests/cases/compiler/signatureLengthMismatchConstruct.ts ===
+function takesCallback(fn: new (a: number) => void) {
+>takesCallback : (fn: new (a: number) => void) => void
+>fn : new (a: number) => void
+>a : number
+
+  // ...
+}
+
+class OverlongCtor {
+>OverlongCtor : OverlongCtor
+
+  constructor(a: number, b: number) {}
+>a : number
+>b : number
+}
+
+takesCallback(OverlongCtor);
+>takesCallback(OverlongCtor) : void
+>takesCallback : (fn: new (a: number) => void) => void
+>OverlongCtor : typeof OverlongCtor
+

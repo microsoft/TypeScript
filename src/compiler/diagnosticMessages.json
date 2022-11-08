@@ -3567,6 +3567,10 @@
         "category": "Error",
         "code": 2846
     },
+    "Construct signature '{0}' expects more arguments than construct signature '{1}'.": {
+        "category": "Error",
+        "code": 2847
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
