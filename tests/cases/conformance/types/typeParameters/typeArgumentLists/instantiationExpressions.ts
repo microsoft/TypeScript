@@ -33,7 +33,7 @@ declare class C<T> {
 }
 
 function f3() {
-    let c1 = C<string>;  // { new (x: string): C<string>; f<U>(x: U): T[]; prototype: C<any>; }
+    let c1 = C<string>;  // { new (x: string): C<string>; f<U>(x: U): T[]; prototype: C<unknown>; }
     let f1 = C.f<string>;  // (x: string) => string[]
 }
 

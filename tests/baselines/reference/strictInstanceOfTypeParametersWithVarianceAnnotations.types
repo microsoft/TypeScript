@@ -1,0 +1,277 @@
+=== tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts ===
+class UnconstrainedIn<in T> {
+>UnconstrainedIn : UnconstrainedIn<T>
+
+    read: (value: T) => void;
+>read : (value: T) => void
+>value : T
+}
+
+declare const x1: unknown;
+>x1 : unknown
+
+if (x1 instanceof UnconstrainedIn) {
+>x1 instanceof UnconstrainedIn : boolean
+>x1 : unknown
+>UnconstrainedIn : typeof UnconstrainedIn
+
+    x1.read(1);
+>x1.read(1) : void
+>x1.read : (value: unknown) => void
+>x1 : UnconstrainedIn<unknown>
+>read : (value: unknown) => void
+>1 : 1
+
+    x1.read("foo");
+>x1.read("foo") : void
+>x1.read : (value: unknown) => void
+>x1 : UnconstrainedIn<unknown>
+>read : (value: unknown) => void
+>"foo" : "foo"
+}
+
+class ConstrainedIn<in T extends number> {
+>ConstrainedIn : ConstrainedIn<T>
+
+    read: (value: T) => void;
+>read : (value: T) => void
+>value : T
+}
+
+declare const y1: unknown;
+>y1 : unknown
+
+if (y1 instanceof ConstrainedIn) {
+>y1 instanceof ConstrainedIn : boolean
+>y1 : unknown
+>ConstrainedIn : typeof ConstrainedIn
+
+    y1.read(1);
+>y1.read(1) : void
+>y1.read : (value: number) => void
+>y1 : ConstrainedIn<number>
+>read : (value: number) => void
+>1 : 1
+
+    y1.read("foo");
+>y1.read("foo") : void
+>y1.read : (value: number) => void
+>y1 : ConstrainedIn<number>
+>read : (value: number) => void
+>"foo" : "foo"
+}
+
+class UnconstrainedOut<out T> {
+>UnconstrainedOut : UnconstrainedOut<T>
+
+    value: T;
+>value : T
+}
+
+declare const x2: unknown;
+>x2 : unknown
+
+if (x2 instanceof UnconstrainedOut) {
+>x2 instanceof UnconstrainedOut : boolean
+>x2 : unknown
+>UnconstrainedOut : typeof UnconstrainedOut
+
+    x2.value.toUpperCase();
+>x2.value.toUpperCase() : any
+>x2.value.toUpperCase : any
+>x2.value : unknown
+>x2 : UnconstrainedOut<unknown>
+>value : unknown
+>toUpperCase : any
+
+    x2.value++;
+>x2.value++ : number
+>x2.value : unknown
+>x2 : UnconstrainedOut<unknown>
+>value : unknown
+
+    x2.value();
+>x2.value() : any
+>x2.value : unknown
+>x2 : UnconstrainedOut<unknown>
+>value : unknown
+
+    if (typeof x2.value === "string") {
+>typeof x2.value === "string" : boolean
+>typeof x2.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x2.value : unknown
+>x2 : UnconstrainedOut<unknown>
+>value : unknown
+>"string" : "string"
+
+        x2.value.toUpperCase();
+>x2.value.toUpperCase() : string
+>x2.value.toUpperCase : () => string
+>x2.value : string
+>x2 : UnconstrainedOut<unknown>
+>value : string
+>toUpperCase : () => string
+    }
+    if (typeof x2.value === "number") {
+>typeof x2.value === "number" : boolean
+>typeof x2.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x2.value : unknown
+>x2 : UnconstrainedOut<unknown>
+>value : unknown
+>"number" : "number"
+
+        x2.value++;
+>x2.value++ : number
+>x2.value : number
+>x2 : UnconstrainedOut<unknown>
+>value : number
+    }
+}
+
+class ConstrainedOut<out T extends number> {
+>ConstrainedOut : ConstrainedOut<T>
+
+    value: T;
+>value : T
+}
+
+declare const y2: unknown;
+>y2 : unknown
+
+if (y2 instanceof ConstrainedOut) {
+>y2 instanceof ConstrainedOut : boolean
+>y2 : unknown
+>ConstrainedOut : typeof ConstrainedOut
+
+    y2.value++;
+>y2.value++ : number
+>y2.value : number
+>y2 : ConstrainedOut<number>
+>value : number
+}
+
+class UnconstrainedInOut<in out T> {
+>UnconstrainedInOut : UnconstrainedInOut<T>
+
+    value: T;
+>value : T
+
+    read: (value: T) => void;
+>read : (value: T) => void
+>value : T
+}
+
+declare const x3: unknown;
+>x3 : unknown
+
+if (x3 instanceof UnconstrainedInOut) {
+>x3 instanceof UnconstrainedInOut : boolean
+>x3 : unknown
+>UnconstrainedInOut : typeof UnconstrainedInOut
+
+    x3.value.toUpperCase();
+>x3.value.toUpperCase() : any
+>x3.value.toUpperCase : any
+>x3.value : unknown
+>x3 : UnconstrainedInOut<unknown>
+>value : unknown
+>toUpperCase : any
+
+    x3.value++;
+>x3.value++ : number
+>x3.value : unknown
+>x3 : UnconstrainedInOut<unknown>
+>value : unknown
+
+    x3.value();
+>x3.value() : any
+>x3.value : unknown
+>x3 : UnconstrainedInOut<unknown>
+>value : unknown
+
+    if (typeof x3.value === "string") {
+>typeof x3.value === "string" : boolean
+>typeof x3.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x3.value : unknown
+>x3 : UnconstrainedInOut<unknown>
+>value : unknown
+>"string" : "string"
+
+        x3.value.toUpperCase();
+>x3.value.toUpperCase() : string
+>x3.value.toUpperCase : () => string
+>x3.value : string
+>x3 : UnconstrainedInOut<unknown>
+>value : string
+>toUpperCase : () => string
+    }
+    if (typeof x3.value === "number") {
+>typeof x3.value === "number" : boolean
+>typeof x3.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x3.value : unknown
+>x3 : UnconstrainedInOut<unknown>
+>value : unknown
+>"number" : "number"
+
+        x3.value++;
+>x3.value++ : number
+>x3.value : number
+>x3 : UnconstrainedInOut<unknown>
+>value : number
+    }
+
+    x3.read(1);
+>x3.read(1) : void
+>x3.read : (value: unknown) => void
+>x3 : UnconstrainedInOut<unknown>
+>read : (value: unknown) => void
+>1 : 1
+
+    x3.read("foo");
+>x3.read("foo") : void
+>x3.read : (value: unknown) => void
+>x3 : UnconstrainedInOut<unknown>
+>read : (value: unknown) => void
+>"foo" : "foo"
+}
+
+class ConstrainedInOut<in out T extends number> {
+>ConstrainedInOut : ConstrainedInOut<T>
+
+    value: T;
+>value : T
+
+    read: (value: T) => void;
+>read : (value: T) => void
+>value : T
+}
+
+declare const y3: unknown;
+>y3 : unknown
+
+if (y3 instanceof ConstrainedInOut) {
+>y3 instanceof ConstrainedInOut : boolean
+>y3 : unknown
+>ConstrainedInOut : typeof ConstrainedInOut
+
+    y3.value++;
+>y3.value++ : number
+>y3.value : unknown
+>y3 : ConstrainedInOut<unknown>
+>value : unknown
+
+    y3.read(1);
+>y3.read(1) : void
+>y3.read : (value: unknown) => void
+>y3 : ConstrainedInOut<unknown>
+>read : (value: unknown) => void
+>1 : 1
+
+    y3.read("foo");
+>y3.read("foo") : void
+>y3.read : (value: unknown) => void
+>y3 : ConstrainedInOut<unknown>
+>read : (value: unknown) => void
+>"foo" : "foo"
+}
+

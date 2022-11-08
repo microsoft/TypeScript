@@ -31,7 +31,7 @@ declare class C<T> {
 }
 
 function f3() {
-    let c1 = C<string>;  // { new (x: string): C<string>; f<U>(x: U): T[]; prototype: C<any>; }
+    let c1 = C<string>;  // { new (x: string): C<string>; f<U>(x: U): T[]; prototype: C<unknown>; }
     let f1 = C.f<string>;  // (x: string) => string[]
 }
 
@@ -187,7 +187,7 @@ function f2() {
     var A2 = (Array); // Error
 }
 function f3() {
-    var c1 = (C); // { new (x: string): C<string>; f<U>(x: U): T[]; prototype: C<any>; }
+    var c1 = (C); // { new (x: string): C<string>; f<U>(x: U): T[]; prototype: C<unknown>; }
     var f1 = (C.f); // (x: string) => string[]
 }
 function f10(f) {

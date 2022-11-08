@@ -8490,6 +8490,7 @@ export type StrictOptionName =
     | "strictPropertyInitialization"
     | "alwaysStrict"
     | "useUnknownInCatchVariables"
+    | "strictInstanceOfTypeParameters"
     ;
 
 /** @internal */

@@ -107,7 +107,7 @@ declare class C<T> {
 function f3() {
 >f3 : Symbol(f3, Decl(instantiationExpressions.ts, 29, 1))
 
-    let c1 = C<string>;  // { new (x: string): C<string>; f<U>(x: U): T[]; prototype: C<any>; }
+    let c1 = C<string>;  // { new (x: string): C<string>; f<U>(x: U): T[]; prototype: C<unknown>; }
 >c1 : Symbol(c1, Decl(instantiationExpressions.ts, 32, 7))
 >C : Symbol(C, Decl(instantiationExpressions.ts, 24, 40))
 

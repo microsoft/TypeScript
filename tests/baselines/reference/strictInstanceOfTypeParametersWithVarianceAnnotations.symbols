@@ -1,0 +1,241 @@
+=== tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts ===
+class UnconstrainedIn<in T> {
+>UnconstrainedIn : Symbol(UnconstrainedIn, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 0))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 22))
+
+    read: (value: T) => void;
+>read : Symbol(UnconstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 29))
+>value : Symbol(value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 1, 11))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 22))
+}
+
+declare const x1: unknown;
+>x1 : Symbol(x1, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 4, 13))
+
+if (x1 instanceof UnconstrainedIn) {
+>x1 : Symbol(x1, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 4, 13))
+>UnconstrainedIn : Symbol(UnconstrainedIn, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 0))
+
+    x1.read(1);
+>x1.read : Symbol(UnconstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 29))
+>x1 : Symbol(x1, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 4, 13))
+>read : Symbol(UnconstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 29))
+
+    x1.read("foo");
+>x1.read : Symbol(UnconstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 29))
+>x1 : Symbol(x1, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 4, 13))
+>read : Symbol(UnconstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 0, 29))
+}
+
+class ConstrainedIn<in T extends number> {
+>ConstrainedIn : Symbol(ConstrainedIn, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 9, 1))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 20))
+
+    read: (value: T) => void;
+>read : Symbol(ConstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 42))
+>value : Symbol(value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 12, 11))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 20))
+}
+
+declare const y1: unknown;
+>y1 : Symbol(y1, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 15, 13))
+
+if (y1 instanceof ConstrainedIn) {
+>y1 : Symbol(y1, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 15, 13))
+>ConstrainedIn : Symbol(ConstrainedIn, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 9, 1))
+
+    y1.read(1);
+>y1.read : Symbol(ConstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 42))
+>y1 : Symbol(y1, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 15, 13))
+>read : Symbol(ConstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 42))
+
+    y1.read("foo");
+>y1.read : Symbol(ConstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 42))
+>y1 : Symbol(y1, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 15, 13))
+>read : Symbol(ConstrainedIn.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 11, 42))
+}
+
+class UnconstrainedOut<out T> {
+>UnconstrainedOut : Symbol(UnconstrainedOut, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 20, 1))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 23))
+
+    value: T;
+>value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 23))
+}
+
+declare const x2: unknown;
+>x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
+
+if (x2 instanceof UnconstrainedOut) {
+>x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
+>UnconstrainedOut : Symbol(UnconstrainedOut, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 20, 1))
+
+    x2.value.toUpperCase();
+>x2.value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+>x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
+>value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+
+    x2.value++;
+>x2.value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+>x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
+>value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+
+    x2.value();
+>x2.value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+>x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
+>value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+
+    if (typeof x2.value === "string") {
+>x2.value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+>x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
+>value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+
+        x2.value.toUpperCase();
+>x2.value.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>x2.value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+>x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
+>value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+    if (typeof x2.value === "number") {
+>x2.value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+>x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
+>value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+
+        x2.value++;
+>x2.value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+>x2 : Symbol(x2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 26, 13))
+>value : Symbol(UnconstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 22, 31))
+    }
+}
+
+class ConstrainedOut<out T extends number> {
+>ConstrainedOut : Symbol(ConstrainedOut, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 39, 1))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 41, 21))
+
+    value: T;
+>value : Symbol(ConstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 41, 44))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 41, 21))
+}
+
+declare const y2: unknown;
+>y2 : Symbol(y2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 45, 13))
+
+if (y2 instanceof ConstrainedOut) {
+>y2 : Symbol(y2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 45, 13))
+>ConstrainedOut : Symbol(ConstrainedOut, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 39, 1))
+
+    y2.value++;
+>y2.value : Symbol(ConstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 41, 44))
+>y2 : Symbol(y2, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 45, 13))
+>value : Symbol(ConstrainedOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 41, 44))
+}
+
+class UnconstrainedInOut<in out T> {
+>UnconstrainedInOut : Symbol(UnconstrainedInOut, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 49, 1))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 25))
+
+    value: T;
+>value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 25))
+
+    read: (value: T) => void;
+>read : Symbol(UnconstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 52, 13))
+>value : Symbol(value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 53, 11))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 25))
+}
+
+declare const x3: unknown;
+>x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
+
+if (x3 instanceof UnconstrainedInOut) {
+>x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
+>UnconstrainedInOut : Symbol(UnconstrainedInOut, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 49, 1))
+
+    x3.value.toUpperCase();
+>x3.value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+>x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
+>value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+
+    x3.value++;
+>x3.value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+>x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
+>value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+
+    x3.value();
+>x3.value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+>x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
+>value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+
+    if (typeof x3.value === "string") {
+>x3.value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+>x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
+>value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+
+        x3.value.toUpperCase();
+>x3.value.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>x3.value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+>x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
+>value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+    if (typeof x3.value === "number") {
+>x3.value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+>x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
+>value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+
+        x3.value++;
+>x3.value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+>x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
+>value : Symbol(UnconstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 51, 36))
+    }
+
+    x3.read(1);
+>x3.read : Symbol(UnconstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 52, 13))
+>x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
+>read : Symbol(UnconstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 52, 13))
+
+    x3.read("foo");
+>x3.read : Symbol(UnconstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 52, 13))
+>x3 : Symbol(x3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 56, 13))
+>read : Symbol(UnconstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 52, 13))
+}
+
+class ConstrainedInOut<in out T extends number> {
+>ConstrainedInOut : Symbol(ConstrainedInOut, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 72, 1))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 74, 23))
+
+    value: T;
+>value : Symbol(ConstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 74, 49))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 74, 23))
+
+    read: (value: T) => void;
+>read : Symbol(ConstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 75, 13))
+>value : Symbol(value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 76, 11))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 74, 23))
+}
+
+declare const y3: unknown;
+>y3 : Symbol(y3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 79, 13))
+
+if (y3 instanceof ConstrainedInOut) {
+>y3 : Symbol(y3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 79, 13))
+>ConstrainedInOut : Symbol(ConstrainedInOut, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 72, 1))
+
+    y3.value++;
+>y3.value : Symbol(ConstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 74, 49))
+>y3 : Symbol(y3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 79, 13))
+>value : Symbol(ConstrainedInOut.value, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 74, 49))
+
+    y3.read(1);
+>y3.read : Symbol(ConstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 75, 13))
+>y3 : Symbol(y3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 79, 13))
+>read : Symbol(ConstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 75, 13))
+
+    y3.read("foo");
+>y3.read : Symbol(ConstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 75, 13))
+>y3 : Symbol(y3, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 79, 13))
+>read : Symbol(ConstrainedInOut.read, Decl(strictInstanceOfTypeParametersWithVarianceAnnotations.ts, 75, 13))
+}
+

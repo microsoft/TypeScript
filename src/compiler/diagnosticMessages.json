@@ -6071,7 +6071,10 @@
         "category": "Message",
         "code": 6804
     },
-
+    "Default type arguments to parameter constraint or 'unknown' instead of 'any' for instance checks.": {
+        "category": "Message",
+        "code": 6805
+    },
     "one of:": {
         "category": "Message",
         "code": 6900

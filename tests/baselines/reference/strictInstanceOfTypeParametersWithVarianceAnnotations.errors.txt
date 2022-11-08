@@ -1,0 +1,119 @@
+tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(20,13): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(30,14): error TS2339: Property 'toUpperCase' does not exist on type 'unknown'.
+tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(31,5): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(32,8): error TS2349: This expression is not callable.
+  Type '{}' has no call signatures.
+tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(60,14): error TS2339: Property 'toUpperCase' does not exist on type 'unknown'.
+tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(61,5): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(62,8): error TS2349: This expression is not callable.
+  Type '{}' has no call signatures.
+tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts(83,5): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+
+
+==== tests/cases/compiler/strictInstanceOfTypeParametersWithVarianceAnnotations.ts (8 errors) ====
+    class UnconstrainedIn<in T> {
+        read: (value: T) => void;
+    }
+    
+    declare const x1: unknown;
+    
+    if (x1 instanceof UnconstrainedIn) {
+        x1.read(1);
+        x1.read("foo");
+    }
+    
+    class ConstrainedIn<in T extends number> {
+        read: (value: T) => void;
+    }
+    
+    declare const y1: unknown;
+    
+    if (y1 instanceof ConstrainedIn) {
+        y1.read(1);
+        y1.read("foo");
+                ~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    }
+    
+    class UnconstrainedOut<out T> {
+        value: T;
+    }
+    
+    declare const x2: unknown;
+    
+    if (x2 instanceof UnconstrainedOut) {
+        x2.value.toUpperCase();
+                 ~~~~~~~~~~~
+!!! error TS2339: Property 'toUpperCase' does not exist on type 'unknown'.
+        x2.value++;
+        ~~~~~~~~
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+        x2.value();
+           ~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type '{}' has no call signatures.
+    
+        if (typeof x2.value === "string") {
+            x2.value.toUpperCase();
+        }
+        if (typeof x2.value === "number") {
+            x2.value++;
+        }
+    }
+    
+    class ConstrainedOut<out T extends number> {
+        value: T;
+    }
+    
+    declare const y2: unknown;
+    
+    if (y2 instanceof ConstrainedOut) {
+        y2.value++;
+    }
+    
+    class UnconstrainedInOut<in out T> {
+        value: T;
+        read: (value: T) => void;
+    }
+    
+    declare const x3: unknown;
+    
+    if (x3 instanceof UnconstrainedInOut) {
+        x3.value.toUpperCase();
+                 ~~~~~~~~~~~
+!!! error TS2339: Property 'toUpperCase' does not exist on type 'unknown'.
+        x3.value++;
+        ~~~~~~~~
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+        x3.value();
+           ~~~~~
+!!! error TS2349: This expression is not callable.
+!!! error TS2349:   Type '{}' has no call signatures.
+    
+        if (typeof x3.value === "string") {
+            x3.value.toUpperCase();
+        }
+        if (typeof x3.value === "number") {
+            x3.value++;
+        }
+    
+        x3.read(1);
+        x3.read("foo");
+    }
+    
+    class ConstrainedInOut<in out T extends number> {
+        value: T;
+        read: (value: T) => void;
+    }
+    
+    declare const y3: unknown;
+    
+    if (y3 instanceof ConstrainedInOut) {
+        y3.value++;
+        ~~~~~~~~
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+    
+        y3.read(1);
+        y3.read("foo");
+    }
+    

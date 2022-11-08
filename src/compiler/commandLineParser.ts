@@ -882,6 +882,16 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         defaultValueDescription: false,
     },
     {
+        name: "strictInstanceOfTypeParameters",
+        type: "boolean",
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
+        strictFlag: true,
+        category: Diagnostics.Type_Checking,
+        description: Diagnostics.Default_type_arguments_to_parameter_constraint_or_unknown_instead_of_any_for_instance_checks,
+        defaultValueDescription: false,
+    },
+    {
         name: "alwaysStrict",
         type: "boolean",
         affectsSourceFile: true,
