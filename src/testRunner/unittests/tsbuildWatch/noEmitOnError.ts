@@ -1,4 +1,4 @@
-import { createWatchedSystem, getTsBuildProjectFile, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createWatchedSystem, getTsBuildProjectFile, libFile } from "../virtualFileSystemWithWatch";
 import { libContent } from "../tsc/helpers";
 import { TscWatchCompileChange, verifyTscWatch } from "../tscWatch/helpers";
 

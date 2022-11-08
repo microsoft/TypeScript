@@ -1,6 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
-import { createServerHost, File, TestServerHost } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, TestServerHost } from "../virtualFileSystemWithWatch";
 import { protocol } from "../../_namespaces/ts.server";
 import { mapOutputToJson, TestSession, createSession, openFilesForSession } from "./helpers";
 

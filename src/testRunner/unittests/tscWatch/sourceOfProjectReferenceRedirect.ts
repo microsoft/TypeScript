@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { createWatchedSystem, File, FileOrFolderOrSymLink, getTsBuildProjectFile, libFile, SymLink } from "../../../harness/virtualFileSystemWithWatch";
+import { createWatchedSystem, File, FileOrFolderOrSymLink, getTsBuildProjectFile, libFile, SymLink } from "../virtualFileSystemWithWatch";
 import { libContent } from "../tsc/helpers";
 import { createBaseline, createWatchCompilerHostOfConfigFileForBaseline, runWatchBaseline, solutionBuildWithBaseline } from "./helpers";
 

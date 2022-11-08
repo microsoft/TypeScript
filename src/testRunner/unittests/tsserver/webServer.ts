@@ -1,6 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import { createServerHost, File, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
 import { nullLogger, checkNumberOfProjects, checkProjectActualFiles, protocolFileLocationFromSubstring, protocolTextSpanWithContextFromSubstring } from "./helpers";
 import { protocol } from "../../_namespaces/ts.server";
 

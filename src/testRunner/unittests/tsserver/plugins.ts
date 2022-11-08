@@ -1,6 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
-import { createServerHost, File, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
 import { createProjectService, createSession, createLoggerWithInMemoryLogs, openFilesForSession, baselineTsserverLogs } from "./helpers";
 
 describe("unittests:: tsserver:: plugins loading", () => {

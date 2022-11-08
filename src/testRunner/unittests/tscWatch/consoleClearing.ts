@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { createWatchedSystem, File, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createWatchedSystem, File, libFile } from "../virtualFileSystemWithWatch";
 import { createBaseline, createWatchCompilerHostOfConfigFileForBaseline, runWatchBaseline, TscWatchCompileChange, verifyTscWatch } from "./helpers";
 
 describe("unittests:: tsc-watch:: console clearing", () => {

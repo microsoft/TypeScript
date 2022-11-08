@@ -14,7 +14,7 @@
         "sourceMap": true,
         "composite": true,
         "noEmitOnError": true,
-        "emitDeclarationOnly": true,
+        "emitDeclarationOnly": false, // DO NOT COMMIT
 
         "strictNullChecks": true,
         "noImplicitAny": true,

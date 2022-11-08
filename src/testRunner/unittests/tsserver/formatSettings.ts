@@ -1,4 +1,4 @@
-import { createServerHost } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost } from "../virtualFileSystemWithWatch";
 import * as ts from "../../_namespaces/ts";
 import { createProjectService } from "./helpers";
 

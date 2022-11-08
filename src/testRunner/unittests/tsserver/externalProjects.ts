@@ -1,6 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
-import { createServerHost, File, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
 import { protocol } from "../../_namespaces/ts.server";
 import { createProjectService, toExternalFiles, checkProjectActualFiles, toExternalFile, createSession, checkNumberOfProjects, checkNumberOfExternalProjects, checkNumberOfInferredProjects, verifyDynamic, checkProjectRootFiles, configuredProjectAt } from "./helpers";
 

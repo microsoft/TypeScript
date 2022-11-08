@@ -1,6 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import { createWatchedSystem, File, libFile, SymLink } from "../../../harness/virtualFileSystemWithWatch";
+import { createWatchedSystem, File, libFile, SymLink } from "../virtualFileSystemWithWatch";
 import { TscWatchCompileChange, verifyTscWatch } from "./helpers";
 
 describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {

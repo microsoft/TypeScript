@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
 import { commonFile1 } from "../tscWatch/helpers";
 import { CommandNames } from "../../_namespaces/ts.server";
 import { createProjectService, createLoggerWithInMemoryLogs, baselineTsserverLogs, checkNumberOfConfiguredProjects, checkNumberOfInferredProjects, checkProjectActualFiles, checkNumberOfProjects, createSession } from "./helpers";

@@ -1,5 +1,5 @@
 import * as ts from "../../../_namespaces/ts";
-import { createServerHost, File, libFile } from "../../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, libFile } from "../../virtualFileSystemWithWatch";
 import { createSessionWithEventTracking, checkProjectActualFiles, openFilesForSession, checkNumberOfProjects } from "../helpers";
 
 describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large file", () => {

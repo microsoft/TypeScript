@@ -1,5 +1,5 @@
 import * as Utils from "../../_namespaces/Utils";
-import { createServerHost, File, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
 import { createSession, createLoggerWithInMemoryLogs, openFilesForSession, verifyGetErrRequest, baselineTsserverLogs } from "./helpers";
 
 describe("unittests:: tsserver:: moduleResolution", () => {

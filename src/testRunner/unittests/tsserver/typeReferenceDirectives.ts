@@ -1,4 +1,4 @@
-import { createServerHost, File, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
 import { createProjectService, checkNumberOfProjects, checkProjectActualFiles } from "./helpers";
 
 describe("unittests:: tsserver:: typeReferenceDirectives", () => {

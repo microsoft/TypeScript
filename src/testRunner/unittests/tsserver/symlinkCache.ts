@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, SymLink } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, SymLink } from "../virtualFileSystemWithWatch";
 import { openFilesForSession, createSession } from "./helpers";
 
 const appTsconfigJson: File = {

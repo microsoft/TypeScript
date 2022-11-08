@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File } from "../virtualFileSystemWithWatch";
 import { protocol } from "../../_namespaces/ts.server";
 import { createSession, openFilesForSession, executeSessionRequest } from "./helpers";
 

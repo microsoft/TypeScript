@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
 import { TestProjectService, checkProjectActualFiles, createProjectService } from "./helpers";
 
 describe("unittests:: tsserver:: document registry in project service", () => {

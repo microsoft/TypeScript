@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { createWatchedSystem, File, libFile, SymLink, TestServerHost, Tsc_WatchDirectory, Tsc_WatchFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createWatchedSystem, File, libFile, SymLink, TestServerHost, Tsc_WatchDirectory, Tsc_WatchFile } from "../virtualFileSystemWithWatch";
 import { commonFile1, commonFile2, noopChange, verifyTscWatch } from "./helpers";
 
 describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different polling/non polling options", () => {

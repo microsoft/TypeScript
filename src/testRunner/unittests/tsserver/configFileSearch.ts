@@ -1,4 +1,4 @@
-import { createServerHost, File, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
 import { createProjectService, checkNumberOfConfiguredProjects, checkNumberOfInferredProjects, createLoggerWithInMemoryLogs, checkNumberOfProjects, baselineTsserverLogs } from "./helpers";
 
 describe("unittests:: tsserver:: searching for config file", () => {

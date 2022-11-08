@@ -1,4 +1,4 @@
-import { createServerHost, File, libFile, SymLink, TestServerHost } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, libFile, SymLink, TestServerHost } from "../virtualFileSystemWithWatch";
 import { protocol } from "../../_namespaces/ts.server";
 import { createSession, createLoggerWithInMemoryLogs, openFilesForSession, executeSessionRequest, protocolLocationFromSubstring, baselineTsserverLogs, verifyGetErrRequest } from "./helpers";
 

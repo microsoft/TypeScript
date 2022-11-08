@@ -1,6 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import { createWatchedSystem, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createWatchedSystem, libFile } from "../virtualFileSystemWithWatch";
 import { loadProjectFromFiles, noChangeOnlyRuns, verifyTsc, verifyTscWithEdits } from "../tsc/helpers";
 import { verifyTscWatch } from "../tscWatch/helpers";
 

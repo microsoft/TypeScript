@@ -3,7 +3,7 @@ import * as fakes from "../../_namespaces/fakes";
 import * as vfs from "../../_namespaces/vfs";
 import * as vpath from "../../_namespaces/vpath";
 import * as Harness from "../../_namespaces/Harness";
-import { libFile, TestServerHost } from "../../../harness/virtualFileSystemWithWatch";
+import { libFile, TestServerHost } from "../virtualFileSystemWithWatch";
 
 export type TscCompileSystem = fakes.System & {
     writtenFiles: ts.Set<ts.Path>;

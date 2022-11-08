@@ -1,4 +1,4 @@
-import { createWatchedSystem, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createWatchedSystem, libFile } from "../virtualFileSystemWithWatch";
 import { verifyTscWatch } from "../tscWatch/helpers";
 import { dedent } from "../../_namespaces/Utils";
 

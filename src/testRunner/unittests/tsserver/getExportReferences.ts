@@ -1,4 +1,4 @@
-import { createServerHost, File } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File } from "../virtualFileSystemWithWatch";
 import { protocol } from "../../_namespaces/ts.server";
 import { createSession, openFilesForSession, makeReferenceItem, MakeReferenceItem, executeSessionRequest, protocolFileLocationFromSubstring, protocolLocationFromSubstring } from "./helpers";
 

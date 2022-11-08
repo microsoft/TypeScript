@@ -1,4 +1,4 @@
-import { libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { libFile } from "../virtualFileSystemWithWatch";
 import * as Utils from "../../_namespaces/Utils";
 import { loadProjectFromFiles, symbolLibContent, verifyTsc } from "../tsc/helpers";
 

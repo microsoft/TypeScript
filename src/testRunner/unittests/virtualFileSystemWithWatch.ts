@@ -1,4 +1,4 @@
-import * as Harness from "./_namespaces/Harness";
+import * as Harness from "../_namespaces/Harness";
 import {
     arrayFrom, arrayToMap, clear, clone, combinePaths, compareStringsCaseSensitive, createGetCanonicalFileName,
     createMultiMap, createSystemWatchFunctions, Debug, directorySeparator, ESMap, FileSystemEntryKind, FileWatcher,
@@ -6,10 +6,9 @@ import {
     FsWatchWorkerWatcher, generateDjb2Hash, getBaseFileName, getDirectoryPath, getNormalizedAbsolutePath,
     getRelativePathToDirectoryOrUrl, hasProperty, HostWatchDirectory, HostWatchFile, identity, insertSorted, isArray,
     isNumber, isString, Map, mapDefined, matchFiles, ModuleResolutionHost, MultiMap, noop,
-    patchWriteFileEnsuringDirectory, Path, PollingInterval, ReadonlyESMap, RequireResult, SortedArray, sys, toPath,
-} from "./_namespaces/ts";
-import { ServerHost } from "./_namespaces/ts.server";
-import { timeIncrements } from "./vfsUtil";
+    patchWriteFileEnsuringDirectory, Path, PollingInterval, ReadonlyESMap, RequireResult, server, SortedArray, sys, toPath,
+} from "../_namespaces/ts";
+import { timeIncrements } from "../_namespaces/vfs";
 
 export const libFile: File = {
     path: "/a/lib/lib.d.ts",
@@ -317,7 +316,7 @@ export interface TestServerHostOptions {
     environmentVariables?: ESMap<string, string>;
 }
 
-export class TestServerHost implements ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
+export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
     args: string[] = [];
 
     private readonly output: string[] = [];

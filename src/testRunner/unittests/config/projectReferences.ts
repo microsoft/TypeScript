@@ -1,7 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import * as fakes from "../../_namespaces/fakes";
 import * as vfs from "../../_namespaces/vfs";
-import { libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { libFile } from "../virtualFileSystemWithWatch";
 
 interface TestProjectSpecification {
     configFileName?: string;

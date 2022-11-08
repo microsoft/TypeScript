@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { File } from "../../../harness/virtualFileSystemWithWatch";
+import { File } from "../virtualFileSystemWithWatch";
 import { TestServerEventManager, checkNumberOfProjects, fileStats, toExternalFiles } from "./helpers";
 
 describe("unittests:: tsserver:: project telemetry", () => {

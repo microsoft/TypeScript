@@ -1,6 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import { checkNumberOfProjects, checkProjectActualFiles, checkProjectRootFiles, createProjectService, createSession, executeSessionRequest, executeSessionRequestNoResponse, openFilesForSession, verifyDynamic } from "./helpers";
-import { createServerHost, File, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
 import { protocol } from "../../_namespaces/ts.server";
 
 function verifyPathRecognizedAsDynamic(path: string) {

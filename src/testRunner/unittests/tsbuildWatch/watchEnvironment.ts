@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { createWatchedSystem, File, libFile, TestServerHost } from "../../../harness/virtualFileSystemWithWatch";
+import { createWatchedSystem, File, libFile, TestServerHost } from "../virtualFileSystemWithWatch";
 import { createBaseline, createSolutionBuilderWithWatchHostForBaseline, runWatchBaseline } from "../tscWatch/helpers";
 
 describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: with different watch environments", () => {

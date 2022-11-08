@@ -1,4 +1,4 @@
-import { createServerHost, File, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
 import { ensureErrorFreeBuild } from "../tscWatch/helpers";
 import { createSession, createLoggerWithInMemoryLogs, openFilesForSession, baselineTsserverLogs, protocolToLocation } from "./helpers";
 import { protocol } from "../../_namespaces/ts.server";

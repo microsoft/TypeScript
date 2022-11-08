@@ -1,4 +1,4 @@
-import { createServerHost } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost } from "../virtualFileSystemWithWatch";
 import { createProjectService, toExternalFile } from "./helpers";
 
 describe("unittests:: tsserver:: import helpers", () => {

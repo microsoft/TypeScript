@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile, SymLink, TestServerHost } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, libFile, SymLink, TestServerHost } from "../virtualFileSystemWithWatch";
 import { protocol } from "../../_namespaces/ts.server";
 import { Logger, createProjectService, createLoggerWithInMemoryLogs, baselineTsserverLogs, createSession, openFilesForSession, makeSessionRequest, checkProjectActualFiles, checkNumberOfProjects } from "./helpers";
 

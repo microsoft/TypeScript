@@ -1,7 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
 import * as Utils from "../../_namespaces/Utils";
-import { changeToHostTrackingWrittenFiles, checkArray, createServerHost, File, FileOrFolderOrSymLink, libFile, TestServerHost, TestServerHostTrackingWrittenFiles } from "../../../harness/virtualFileSystemWithWatch";
+import { changeToHostTrackingWrittenFiles, checkArray, createServerHost, File, FileOrFolderOrSymLink, libFile, TestServerHost, TestServerHostTrackingWrittenFiles } from "../virtualFileSystemWithWatch";
 import { ensureErrorFreeBuild } from "../tscWatch/helpers";
 import { protocol, CommandNames } from "../../_namespaces/ts.server";
 

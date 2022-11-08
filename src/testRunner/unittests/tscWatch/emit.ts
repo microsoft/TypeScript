@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { createWatchedSystem, File, libFile, TestServerHost } from "../../../harness/virtualFileSystemWithWatch";
+import { createWatchedSystem, File, libFile, TestServerHost } from "../virtualFileSystemWithWatch";
 import { TscWatchCompileChange, verifyTscWatch } from "./helpers";
 
 const scenario = "emit";

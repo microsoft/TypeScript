@@ -1,4 +1,4 @@
-import { File } from "../../../harness/virtualFileSystemWithWatch";
+import { File } from "../virtualFileSystemWithWatch";
 import { GetErrForProjectDiagnostics, verifyGetErrScenario } from "./helpers";
 
 describe("unittests:: tsserver:: with project references and error reporting", () => {

@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
 import { commonFile1, commonFile2 } from "../tscWatch/helpers";
 import { protocol, CommandNames } from "../../_namespaces/ts.server";
 import { createSession, createLoggerWithInMemoryLogs, openFilesForSession, makeSessionRequest, baselineTsserverLogs, createProjectService, configuredProjectAt, checkProjectRootFiles, checkNumberOfConfiguredProjects, checkNumberOfInferredProjects, toExternalFiles, checkNumberOfProjects, checkProjectActualFiles, customTypesMap, toExternalFile, closeFilesForSession, verifyGetErrRequest, protocolFileLocationFromSubstring } from "./helpers";

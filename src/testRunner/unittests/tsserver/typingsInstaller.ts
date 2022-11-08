@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile, TestServerHost } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, libFile, TestServerHost } from "../virtualFileSystemWithWatch";
 import { TestTypingsInstaller, createTypesRegistry, createProjectService, checkProjectActualFiles, configuredProjectAt, createLoggerWithInMemoryLogs, baselineTsserverLogs, checkNumberOfProjects, toExternalFile, customTypesMap, createSession } from "./helpers";
 
 import validatePackageName = ts.JsTyping.validatePackageName;

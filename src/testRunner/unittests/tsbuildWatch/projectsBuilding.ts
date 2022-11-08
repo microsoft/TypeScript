@@ -1,5 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import { createWatchedSystem, File, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createWatchedSystem, File, libFile } from "../virtualFileSystemWithWatch";
 import { noopChange, TscWatchCompileChange, verifyTscWatch } from "../tscWatch/helpers";
 
 describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {

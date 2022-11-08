@@ -1,4 +1,4 @@
-import { createServerHost, File, getTsBuildProjectFile, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { createServerHost, File, getTsBuildProjectFile, libFile } from "../virtualFileSystemWithWatch";
 import { createLoggerWithInMemoryLogs, createProjectService, baselineTsserverLogs, checkNumberOfProjects } from "./helpers";
 
 describe("unittests:: tsserver:: projects with references: invoking when references are already built", () => {
