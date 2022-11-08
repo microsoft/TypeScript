@@ -1,5 +1,5 @@
 import {
-    addEmitHelpers, addInternalEmitFlags, addRange, AllDecorators, append, ArrayAssignmentElement, AssignmentPattern,
+    addEmitHelpers, addInternalEmitFlags, addRange, AllDecorators, AnonymousFunctionDefinition, append, ArrayAssignmentElement, AssignmentPattern,
     AsteriskToken, BinaryExpression, BindingElement, Block, Bundle, CallExpression, chainBundle, childIsDecorated,
     ClassDeclaration, ClassElement, ClassExpression, ClassLikeDeclaration, classOrConstructorParameterIsDecorated,
     ClassStaticBlockDeclaration, CommaListExpression, ComputedPropertyName, ConstructorDeclaration,
@@ -16,9 +16,9 @@ import {
     isDestructuringAssignment, isElementAccessExpression, isEmptyStringLiteral, isExpression, isForInitializer,
     isFunctionExpression, isGeneratedIdentifier, isGetAccessor, isGetAccessorDeclaration, isHeritageClause,
     isIdentifier, isIdentifierText, isLeftHandSideExpression, isMethodDeclaration, isMethodOrAccessor, isModifier,
-    isNamedClassElement, isObjectLiteralElementLike, isObjectLiteralExpression, isOmittedExpression, isParameter,
+    isNamedClassElement, isNamedEvaluation, isObjectLiteralElementLike, isObjectLiteralExpression, isOmittedExpression, isParameter,
     isParameterDeclaration, isParenthesizedExpression, isPrivateIdentifier, isPrivateIdentifierClassElementDeclaration,
-    isPropertyAssignment, isPropertyDeclaration, isPropertyName, isPropertyNameLiteral, isProtoSetter, isSetAccessor,
+    isPropertyAssignment, isPropertyDeclaration, isPropertyName, isPropertyNameLiteral, isSetAccessor,
     isSetAccessorDeclaration, isShorthandPropertyAssignment, isSimpleInlineableExpression, isSpreadAssignment,
     isSpreadElement, isStatement, isStatic, isStaticModifier, isStringLiteral, isSuperProperty, isTemplateLiteral,
     LeftHandSideExpression, Map, map, MethodDeclaration, ModifierFlags, ModifiersArray, moveRangePastDecorators,
@@ -1161,7 +1161,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         //        a. Let _value_ be ? NamedEvaluation of |Initializer| with argument _functionObject_.[[ClassFieldInitializerName]].
         //     ...
 
-        const useNamedEvaluation = !!node.initializer && isDecoratedAnonymousClassExpression(node.initializer);
+        const useNamedEvaluation = isNamedEvaluation(node, isAnonymousClassNeedingAssignedName);
         const { modifiers, name, referencedName, initializersName, descriptorName, thisArg } = partialTransformClassElement(node, useNamedEvaluation, classInfo, hasAccessorModifier(node) ? createAccessorPropertyDescriptorObject : undefined);
 
         startLexicalEnvironment();
@@ -1321,15 +1321,48 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     }
 
     function visitParameterDeclaration(node: ParameterDeclaration) {
-        const updated = factory.updateParameterDeclaration(
-            node,
-            /*modifiers*/ undefined,
-            node.dotDotDotToken,
-            visitNode(node.name, visitor, isBindingName),
-            /*questionToken*/ undefined,
-            /*type*/ undefined,
-            visitNode(node.initializer, visitor, isExpression)
-        );
+        // 8.6.3 RS: IteratorBindingInitialization
+        //   SingleNameBinding : BindingIdentifier Initializer?
+        //     ...
+        //     5. If |Initializer| is present and _v_ is *undefined*, then
+        //        a. If IsAnonymousFunctionDefinition(|Initializer|) is *true*, then
+        //           i. Set _v_ to ? NamedEvaluation of |Initializer| with argument _bindingId_.
+        //     ...
+        //
+        // 14.3.3.3 RS: KeyedBindingInitialization
+        //   SingleNameBinding : BindingIdentifier Initializer?
+        //     ...
+        //     4. If |Initializer| is present and _v_ is *undefined*, then
+        //        a. If IsAnonymousFunctionDefinition(|Initializer|) is *true*, then
+        //           i. Set _v_ to ? NamedEvaluation of |Initializer| with argument _bindingId_.
+        //     ...
+
+        let updated: ParameterDeclaration;
+        if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
+            const assignedName = getAssignedNameOfIdentifier(node.name, node.initializer);
+            const name = visitNode(node.name, visitor, isBindingName);
+            const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
+            updated = factory.updateParameterDeclaration(
+                node,
+                /*modifiers*/ undefined,
+                /*dotDotDotToken*/ undefined,
+                name,
+                /*questionToken*/ undefined,
+                /*type*/ undefined,
+                initializer);
+        }
+        else {
+            updated = factory.updateParameterDeclaration(
+                node,
+                /*modifiers*/ undefined,
+                node.dotDotDotToken,
+                visitNode(node.name, visitor, isBindingName),
+                /*questionToken*/ undefined,
+                /*type*/ undefined,
+                visitNode(node.initializer, visitor, isExpression)
+            );
+        }
+
         if (updated !== node) {
             // While we emit the source map for the node after skipping decorators and modifiers,
             // we need to emit the comments for the original range.
@@ -1341,8 +1374,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         return updated;
     }
 
-    function isDecoratedAnonymousClassExpression(node: Expression) {
-        node = skipOuterExpressions(node);
+    function isAnonymousClassNeedingAssignedName(node: AnonymousFunctionDefinition) {
         return isClassExpression(node) && !node.name && isDecoratedClassLike(node);
     }
 
@@ -1394,19 +1426,11 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             //        a. Let _rval_ be ? NamedEvaluation of |AssignmentExpression| with argument _lref_.[[ReferencedName]].
             //     ...
 
-            switch (node.operatorToken.kind) {
-                case SyntaxKind.EqualsToken:
-                case SyntaxKind.AmpersandAmpersandEqualsToken:
-                case SyntaxKind.BarBarEqualsToken:
-                case SyntaxKind.QuestionQuestionEqualsToken:
-                    if (isIdentifier(node.left) &&
-                        isDecoratedAnonymousClassExpression(node.right)) {
-                        const assignedName = getAssignedNameOfIdentifier(node.left, node.right);
-                        const left = visitNode(node.left, visitor, isExpression);
-                        const right = visitNode(node.right, node => namedEvaluationVisitor(node, assignedName), isExpression);
-                        return factory.updateBinaryExpression(node, left, node.operatorToken, right);
-                    }
-                    break;
+            if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
+                const assignedName = getAssignedNameOfIdentifier(node.left, node.right);
+                const left = visitNode(node.left, visitor, isExpression);
+                const right = visitNode(node.right, node => namedEvaluationVisitor(node, assignedName), isExpression);
+                return factory.updateBinaryExpression(node, left, node.operatorToken, right);
             }
 
             if (isSuperProperty(node.left) && classThis && classSuper) {
@@ -1588,8 +1612,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         //        a. Let _popValue_ be ? NamedEvaluation of |AssignmentExpression| with argument _propKey_.
         //     ...
 
-        if (!isProtoSetter(node.name) &&
-            isDecoratedAnonymousClassExpression(node.initializer)) {
+        if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
             const { referencedName, name } = visitReferencedPropertyName(node.name);
             const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, referencedName), isExpression);
             return factory.updatePropertyAssignment(node, name, initializer);
@@ -1613,8 +1636,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         //        a. Let _value_ be ? NamedEvaluation of |Initializer| with argument _bindingId_.
         //     ...
 
-        if (isIdentifier(node.name) && node.initializer &&
-            isDecoratedAnonymousClassExpression(node.initializer)) {
+        if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
             const assignedName = getAssignedNameOfIdentifier(node.name, node.initializer);
             const name = visitNode(node.name, visitor, isBindingName);
             const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
@@ -1641,9 +1663,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         //           i. Set _v_ to ? NamedEvaluation of |Initializer| with argument _bindingId_.
         //     ...
 
-        if (!node.dotDotDotToken &&
-            isIdentifier(node.name) && node.initializer &&
-            isDecoratedAnonymousClassExpression(node.initializer)) {
+        if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
             const assignedName = getAssignedNameOfIdentifier(node.name, node.initializer);
             const propertyName = visitNode(node.propertyName, visitor, isPropertyName);
             const name = visitNode(node.name, visitor, isBindingName);
@@ -1696,8 +1716,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
             const assignmentTarget = visitDestructuringAssignmentTarget(node.left);
             let initializer: Expression;
-            if (isIdentifier(node.left) &&
-                isDecoratedAnonymousClassExpression(node.right)) {
+            if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
                 const assignedName = getAssignedNameOfIdentifier(node.left, node.right);
                 initializer = visitNode(node.right, node => namedEvaluationVisitor(node, assignedName), isExpression);
             }
@@ -1763,8 +1782,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         //           i. Set _v_ to ? NamedEvaluation of |Initializer| with argument _P_.
         //     ...
 
-        if (node.objectAssignmentInitializer &&
-            isDecoratedAnonymousClassExpression(node.objectAssignmentInitializer)) {
+        if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
             const assignedName = getAssignedNameOfIdentifier(node.name, node.objectAssignmentInitializer);
             const name = visitNode(node.name, visitor, isIdentifier);
             const objectAssignmentInitializer = visitNode(node.objectAssignmentInitializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
@@ -1804,14 +1822,14 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
     function visitExportAssignment(node: ExportAssignment) {
         // 16.2.3.7 RS: Evaluation
         //   ExportDeclaration : `export` `default` AssignmentExpression `;`
-        //     1. If IsAnonymmousFunctionDefinition(|AssignmentExpression|) is *true*, then
+        //     1. If IsAnonymousFunctionDefinition(|AssignmentExpression|) is *true*, then
         //        a. Let _value_ be ? NamedEvaluation of |AssignmentExpression| with argument `"default"`.
         //     ...
 
         // NOTE: Since emit for `export =` translates to `module.exports = ...`, the assigned nameof the class
         // is `""`.
 
-        if (isDecoratedAnonymousClassExpression(node.expression)) {
+        if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
             const referencedName = factory.createStringLiteral(node.isExportEquals ? "" : "default");
             const modifiers = visitNodes(node.modifiers, visitor, isModifier);
             const expression = visitNode(node.expression, node => namedEvaluationVisitor(node, referencedName), isExpression);

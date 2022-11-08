@@ -523,6 +523,16 @@ export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.Al
 }
 
 /** @internal */
+export function walkUpOuterExpressions(node: Expression, kinds = OuterExpressionKinds.All): Node {
+    let parent = node.parent;
+    while (isOuterExpression(parent, kinds)) {
+        parent = parent.parent;
+        Debug.assert(parent);
+    }
+    return parent;
+}
+
+/** @internal */
 export function skipAssertions(node: Expression): Expression;
 /** @internal */
 export function skipAssertions(node: Node): Node;

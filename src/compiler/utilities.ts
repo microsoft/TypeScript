@@ -91,6 +91,7 @@ import {
     ValidImportTypeNode, VariableDeclaration, VariableDeclarationInitializedTo, VariableDeclarationList,
     VariableLikeDeclaration, VariableStatement, version, WhileStatement, WithStatement, WriteFileCallback,
     WriteFileCallbackData, YieldExpression, ClassExpression, InternalEmitFlags, isMethodDeclaration,
+    AmpersandAmpersandEqualsToken, BarBarEqualsToken, QuestionQuestionEqualsToken, WrappedExpression,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -4002,6 +4003,114 @@ export function isESSymbolIdentifier(node: Node): boolean {
 export function isProtoSetter(node: PropertyName) {
     return isIdentifier(node) ? idText(node) === "__proto__" :
         isStringLiteral(node) && node.text === "__proto__";
+}
+
+/** @internal */
+export type AnonymousFunctionDefinition =
+    | ClassExpression & { readonly name?: undefined }
+    | FunctionExpression & { readonly name?: undefined }
+    | ArrowFunction
+    ;
+
+/**
+ * Indicates whether an expression is an anonymous function definition.
+ *
+ * @see https://tc39.es/ecma262/#sec-isanonymousfunctiondefinition
+ * @internal
+ */
+export function isAnonymousFunctionDefinition(node: Expression, cb?: (node: AnonymousFunctionDefinition) => boolean): node is WrappedExpression<AnonymousFunctionDefinition> {
+    node = skipOuterExpressions(node);
+    switch (node.kind) {
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.FunctionExpression:
+            if ((node as ClassExpression | FunctionExpression).name) {
+                return false;
+            }
+            break;
+        case SyntaxKind.ArrowFunction:
+            break;
+        default:
+            return false;
+    }
+    return typeof cb === "function" ? cb(node as AnonymousFunctionDefinition) : true;
+}
+
+/** @internal */
+export type NamedEvaluationSource =
+    | PropertyAssignment & { readonly name: Identifier }
+    | ShorthandPropertyAssignment & { readonly objectAssignmentInitializer: Expression }
+    | VariableDeclaration & { readonly name: Identifier, readonly initializer: Expression }
+    | ParameterDeclaration & { readonly name: Identifier, readonly initializer: Expression, readonly dotDotDotToken: undefined }
+    | BindingElement & { readonly name: Identifier, readonly initializer: Expression, readonly dotDotDotToken: undefined }
+    | PropertyDeclaration & { readonly initializer: Expression }
+    | AssignmentExpression<EqualsToken | AmpersandAmpersandEqualsToken | BarBarEqualsToken | QuestionQuestionEqualsToken> & { readonly left: Identifier }
+    | ExportAssignment
+    ;
+
+/**
+ * Indicates whether a node is a potential source of an assigned name for a class, function, or arrow function.
+ *
+ * @internal
+ */
+export function isNamedEvaluationSource(node: Node): node is NamedEvaluationSource {
+    switch (node.kind) {
+        case SyntaxKind.PropertyAssignment:
+            return !isProtoSetter((node as PropertyAssignment).name);
+        case SyntaxKind.ShorthandPropertyAssignment:
+            return !!(node as ShorthandPropertyAssignment).objectAssignmentInitializer;
+        case SyntaxKind.VariableDeclaration:
+            return isIdentifier((node as VariableDeclaration).name) && !!(node as VariableDeclaration).initializer;
+        case SyntaxKind.Parameter:
+            return isIdentifier((node as ParameterDeclaration).name) && !!(node as VariableDeclaration).initializer && !(node as BindingElement).dotDotDotToken;
+        case SyntaxKind.BindingElement:
+            return isIdentifier((node as BindingElement).name) && !!(node as VariableDeclaration).initializer && !(node as BindingElement).dotDotDotToken;
+        case SyntaxKind.PropertyDeclaration:
+            return !!(node as PropertyDeclaration).initializer;
+        case SyntaxKind.BinaryExpression:
+            switch ((node as BinaryExpression).operatorToken.kind) {
+                case SyntaxKind.EqualsToken:
+                case SyntaxKind.AmpersandAmpersandEqualsToken:
+                case SyntaxKind.BarBarEqualsToken:
+                case SyntaxKind.QuestionQuestionEqualsToken:
+                    return isIdentifier((node as BinaryExpression).left);
+            }
+            break;
+        case SyntaxKind.ExportAssignment:
+            return true;
+    }
+    return false;
+}
+
+/** @internal */
+export type NamedEvaluation =
+    | PropertyAssignment & { readonly name: Identifier, readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
+    | ShorthandPropertyAssignment & { readonly objectAssignmentInitializer: WrappedExpression<AnonymousFunctionDefinition> }
+    | VariableDeclaration & { readonly name: Identifier, readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
+    | ParameterDeclaration & { readonly name: Identifier, readonly dotDotDotToken: undefined, readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
+    | BindingElement & { readonly name: Identifier, readonly dotDotDotToken: undefined, readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
+    | PropertyDeclaration & { readonly initializer: WrappedExpression<AnonymousFunctionDefinition> }
+    | AssignmentExpression<EqualsToken | AmpersandAmpersandEqualsToken | BarBarEqualsToken | QuestionQuestionEqualsToken> & { readonly left: Identifier, readonly right: WrappedExpression<AnonymousFunctionDefinition> }
+    | ExportAssignment & { readonly expression: WrappedExpression<AnonymousFunctionDefinition> }
+    ;
+
+/** @internal */
+export function isNamedEvaluation(node: Node, cb?: (node: AnonymousFunctionDefinition) => boolean): node is NamedEvaluation {
+    if (!isNamedEvaluationSource(node)) return false;
+    switch (node.kind) {
+        case SyntaxKind.PropertyAssignment:
+            return isAnonymousFunctionDefinition(node.initializer, cb);
+        case SyntaxKind.ShorthandPropertyAssignment:
+            return isAnonymousFunctionDefinition(node.objectAssignmentInitializer, cb);
+        case SyntaxKind.VariableDeclaration:
+        case SyntaxKind.Parameter:
+        case SyntaxKind.BindingElement:
+        case SyntaxKind.PropertyDeclaration:
+            return isAnonymousFunctionDefinition(node.initializer, cb);
+        case SyntaxKind.BinaryExpression:
+            return isAnonymousFunctionDefinition(node.right, cb);
+        case SyntaxKind.ExportAssignment:
+            return isAnonymousFunctionDefinition(node.expression, cb);
+    }
 }
 
 /** @internal */

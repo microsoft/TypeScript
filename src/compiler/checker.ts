@@ -196,7 +196,9 @@ import {
     VariableStatement, VarianceFlags, visitEachChild, visitNode, visitNodes, Visitor, VisitResult, VoidExpression,
     walkUpBindingElementsAndPatterns, walkUpParenthesizedExpressions, walkUpParenthesizedTypes,
     walkUpParenthesizedTypesAndGetParentAndChild, WhileStatement, WideningContext, WithStatement, YieldExpression,
-    createDiagnosticForNodeArrayFromMessageChain, isSetAccessorDeclaration,
+    createDiagnosticForNodeArrayFromMessageChain, isSetAccessorDeclaration, isNamedEvaluationSource,
+    walkUpOuterExpressions, classOrConstructorParameterIsDecorated, classElementOrClassElementParameterIsDecorated,
+    isInitializedProperty, getDecorators,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
@@ -540,6 +542,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // is because diagnostics can be quite expensive, and we want to allow hosts to bail out if
     // they no longer need the information (for example, if the user started editing again).
     let cancellationToken: CancellationToken | undefined;
+
+    const requestedExternalEmitHelperNames = new Set<string>();
     let requestedExternalEmitHelpers: ExternalEmitHelpers;
     let externalHelpersModule: Symbol;
 
@@ -38315,8 +38319,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         else if (languageVersion < ScriptTarget.ESNext) {
-            checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.ESDecorate);
-            checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.RunInitializers);
+            checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.ESDecorateAndRunInitializers);
+            if (isClassDeclaration(node)) {
+                if (!node.name) {
+                    checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.SetFunctionName);
+                }
+                else {
+                    const member = getFirstTransformableStaticClassElement(node);
+                    if (member) {
+                        checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.SetFunctionName);
+                    }
+                }
+            }
+            else if (!isClassExpression(node)) {
+                if (isPrivateIdentifier(node.name) && (isMethodDeclaration(node) || isAccessor(node) || isAutoAccessorPropertyDeclaration(node))) {
+                    checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.SetFunctionName);
+                }
+                if (isComputedPropertyName(node.name)) {
+                    checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.PropKey);
+                }
+            }
         }
 
         if (compilerOptions.emitDecoratorMetadata) {
@@ -41012,9 +41034,59 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return true;
     }
 
+    function getFirstTransformableStaticClassElement(node: ClassLikeDeclaration) {
+        const willTransformStaticElementsOfDecoratedClass =
+            !legacyDecorators && languageVersion < ScriptTarget.ESNext &&
+            classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ false, node);
+        const willTransformPrivateElementsOrClassStaticBlocks = languageVersion <= ScriptTarget.ES2022;
+        const willTransformInitializers = !useDefineForClassFields || languageVersion < ScriptTarget.ES2022;
+        if (willTransformStaticElementsOfDecoratedClass || willTransformPrivateElementsOrClassStaticBlocks) {
+            for (const member of node.members) {
+                if (willTransformStaticElementsOfDecoratedClass && classElementOrClassElementParameterIsDecorated(/*useLegacyDecorators*/ false, member, node)) {
+                    return firstOrUndefined(getDecorators(node)) ?? node;
+                }
+                else if (willTransformPrivateElementsOrClassStaticBlocks) {
+                    if (isClassStaticBlockDeclaration(member)) {
+                        return member;
+                    }
+                    else if (isStatic(member)) {
+                        if (isPrivateIdentifierClassElementDeclaration(member) ||
+                            willTransformInitializers && isInitializedProperty(member)) {
+                            return member;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function checkClassExpressionExternalHelpers(node: ClassExpression) {
+        if (node.name) return;
+
+        const parent = walkUpOuterExpressions(node);
+        if (!isNamedEvaluationSource(parent)) return;
+
+        const willTransformESDecorators = !legacyDecorators && languageVersion < ScriptTarget.ESNext;
+        let location: Node | undefined;
+        if (willTransformESDecorators && classOrConstructorParameterIsDecorated(/*useLegacyDecorators*/ false, node)) {
+            location = firstOrUndefined(getDecorators(node)) ?? node;
+        }
+        else {
+            location = getFirstTransformableStaticClassElement(node);
+        }
+
+        if (location) {
+            checkExternalEmitHelpers(location, ExternalEmitHelpers.SetFunctionName);
+            if ((isPropertyAssignment(parent) || isPropertyDeclaration(parent) || isBindingElement(parent)) && isComputedPropertyName(parent.name)) {
+                checkExternalEmitHelpers(location, ExternalEmitHelpers.PropKey);
+            }
+        }
+    }
+
     function checkClassExpression(node: ClassExpression): Type {
         checkClassLikeDeclaration(node);
         checkNodeDeferred(node);
+        checkClassExpressionExternalHelpers(node);
         return getTypeOfSymbol(getSymbolOfNode(node));
     }
 
@@ -45046,24 +45118,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const uncheckedHelpers = helpers & ~requestedExternalEmitHelpers;
                     for (let helper = ExternalEmitHelpers.FirstEmitHelper; helper <= ExternalEmitHelpers.LastEmitHelper; helper <<= 1) {
                         if (uncheckedHelpers & helper) {
-                            const name = getHelperName(helper);
-                            const symbol = getSymbol(helpersModule.exports!, escapeLeadingUnderscores(name), SymbolFlags.Value);
-                            if (!symbol) {
-                                error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_which_does_not_exist_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name);
-                            }
-                            else if (helper & ExternalEmitHelpers.ClassPrivateFieldGet) {
-                                if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 3)) {
-                                    error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 4);
+                            for (const name of getHelperNames(helper)) {
+                                if (requestedExternalEmitHelperNames.has(name)) continue;
+                                requestedExternalEmitHelperNames.add(name);
+
+                                const symbol = getSymbol(helpersModule.exports!, escapeLeadingUnderscores(name), SymbolFlags.Value);
+                                if (!symbol) {
+                                    error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_which_does_not_exist_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name);
                                 }
-                            }
-                            else if (helper & ExternalEmitHelpers.ClassPrivateFieldSet) {
-                                if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 4)) {
-                                    error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 5);
+                                else if (helper & ExternalEmitHelpers.ClassPrivateFieldGet) {
+                                    if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 3)) {
+                                        error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 4);
+                                    }
                                 }
-                            }
-                            else if (helper & ExternalEmitHelpers.SpreadArray) {
-                                if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 2)) {
-                                    error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 3);
+                                else if (helper & ExternalEmitHelpers.ClassPrivateFieldSet) {
+                                    if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 4)) {
+                                        error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 5);
+                                    }
+                                }
+                                else if (helper & ExternalEmitHelpers.SpreadArray) {
+                                    if (!some(getSignaturesOfSymbol(symbol), signature => getParameterCount(signature) > 2)) {
+                                        error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_with_2_parameters_which_is_not_compatible_with_the_one_in_0_Consider_upgrading_your_version_of_0, externalHelpersModuleNameText, name, 3);
+                                    }
                                 }
                             }
                         }
@@ -45074,33 +45150,33 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getHelperName(helper: ExternalEmitHelpers) {
+    function getHelperNames(helper: ExternalEmitHelpers) {
         switch (helper) {
-            case ExternalEmitHelpers.Extends: return "__extends";
-            case ExternalEmitHelpers.Assign: return "__assign";
-            case ExternalEmitHelpers.Rest: return "__rest";
-            case ExternalEmitHelpers.Decorate: return "__decorate";
-            case ExternalEmitHelpers.Metadata: return "__metadata";
-            case ExternalEmitHelpers.Param: return "__param";
-            case ExternalEmitHelpers.Awaiter: return "__awaiter";
-            case ExternalEmitHelpers.Generator: return "__generator";
-            case ExternalEmitHelpers.Values: return "__values";
-            case ExternalEmitHelpers.Read: return "__read";
-            case ExternalEmitHelpers.SpreadArray: return "__spreadArray";
-            case ExternalEmitHelpers.Await: return "__await";
-            case ExternalEmitHelpers.AsyncGenerator: return "__asyncGenerator";
-            case ExternalEmitHelpers.AsyncDelegator: return "__asyncDelegator";
-            case ExternalEmitHelpers.AsyncValues: return "__asyncValues";
-            case ExternalEmitHelpers.ExportStar: return "__exportStar";
-            case ExternalEmitHelpers.ImportStar: return "__importStar";
-            case ExternalEmitHelpers.ImportDefault: return "__importDefault";
-            case ExternalEmitHelpers.MakeTemplateObject: return "__makeTemplateObject";
-            case ExternalEmitHelpers.ClassPrivateFieldGet: return "__classPrivateFieldGet";
-            case ExternalEmitHelpers.ClassPrivateFieldSet: return "__classPrivateFieldSet";
-            case ExternalEmitHelpers.ClassPrivateFieldIn: return "__classPrivateFieldIn";
-            case ExternalEmitHelpers.CreateBinding: return "__createBinding";
-            case ExternalEmitHelpers.ESDecorate: return "__esDecorate";
-            case ExternalEmitHelpers.RunInitializers: return "__runInitializers";
+            case ExternalEmitHelpers.Extends: return ["__extends"];
+            case ExternalEmitHelpers.Assign: return ["__assign"];
+            case ExternalEmitHelpers.Rest: return ["__rest"];
+            case ExternalEmitHelpers.Decorate: return legacyDecorators ? ["__decorate"] : ["__esDecorate", "__runInitializers"];
+            case ExternalEmitHelpers.Metadata: return ["__metadata"];
+            case ExternalEmitHelpers.Param: return ["__param"];
+            case ExternalEmitHelpers.Awaiter: return ["__awaiter"];
+            case ExternalEmitHelpers.Generator: return ["__generator"];
+            case ExternalEmitHelpers.Values: return ["__values"];
+            case ExternalEmitHelpers.Read: return ["__read"];
+            case ExternalEmitHelpers.SpreadArray: return ["__spreadArray"];
+            case ExternalEmitHelpers.Await: return ["__await"];
+            case ExternalEmitHelpers.AsyncGenerator: return ["__asyncGenerator"];
+            case ExternalEmitHelpers.AsyncDelegator: return ["__asyncDelegator"];
+            case ExternalEmitHelpers.AsyncValues: return ["__asyncValues"];
+            case ExternalEmitHelpers.ExportStar: return ["__exportStar"];
+            case ExternalEmitHelpers.ImportStar: return ["__importStar"];
+            case ExternalEmitHelpers.ImportDefault: return ["__importDefault"];
+            case ExternalEmitHelpers.MakeTemplateObject: return ["__makeTemplateObject"];
+            case ExternalEmitHelpers.ClassPrivateFieldGet: return ["__classPrivateFieldGet"];
+            case ExternalEmitHelpers.ClassPrivateFieldSet: return ["__classPrivateFieldSet"];
+            case ExternalEmitHelpers.ClassPrivateFieldIn: return ["__classPrivateFieldIn"];
+            case ExternalEmitHelpers.CreateBinding: return ["__createBinding"];
+            case ExternalEmitHelpers.SetFunctionName: return ["__setFunctionName"];
+            case ExternalEmitHelpers.PropKey: return ["__propKey"];
             default: return Debug.fail("Unrecognized helper");
         }
     }

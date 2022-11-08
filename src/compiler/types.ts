@@ -532,8 +532,11 @@ export type PunctuationSyntaxKind =
     | SyntaxKind.ExclamationToken
     | SyntaxKind.TildeToken
     | SyntaxKind.AmpersandAmpersandToken
+    | SyntaxKind.AmpersandAmpersandEqualsToken
     | SyntaxKind.BarBarToken
+    | SyntaxKind.BarBarEqualsToken
     | SyntaxKind.QuestionQuestionToken
+    | SyntaxKind.QuestionQuestionEqualsToken
     | SyntaxKind.QuestionToken
     | SyntaxKind.ColonToken
     | SyntaxKind.AtToken
@@ -1318,6 +1321,9 @@ export type QuestionToken = PunctuationToken<SyntaxKind.QuestionToken>;
 export type ExclamationToken = PunctuationToken<SyntaxKind.ExclamationToken>;
 export type ColonToken = PunctuationToken<SyntaxKind.ColonToken>;
 export type EqualsToken = PunctuationToken<SyntaxKind.EqualsToken>;
+export type AmpersandAmpersandEqualsToken = PunctuationToken<SyntaxKind.AmpersandAmpersandEqualsToken>;
+export type BarBarEqualsToken = PunctuationToken<SyntaxKind.BarBarEqualsToken>;
+export type QuestionQuestionEqualsToken = PunctuationToken<SyntaxKind.QuestionQuestionEqualsToken>;
 export type AsteriskToken = PunctuationToken<SyntaxKind.AsteriskToken>;
 export type EqualsGreaterThanToken = PunctuationToken<SyntaxKind.EqualsGreaterThanToken>;
 export type PlusToken = PunctuationToken<SyntaxKind.PlusToken>;
@@ -7583,6 +7589,7 @@ export const enum ExternalEmitHelpers {
     Assign = 1 << 1,                // __assign (used by Jsx and ESNext object spread transformations)
     Rest = 1 << 2,                  // __rest (used by ESNext object rest transformation)
     Decorate = 1 << 3,              // __decorate (used by TypeScript decorators transformation)
+    ESDecorateAndRunInitializers = Decorate, // __esDecorate and __runInitializers (used by ECMAScript decorators transformation)
     Metadata = 1 << 4,              // __metadata (used by TypeScript decorators transformation)
     Param = 1 << 5,                 // __param (used by TypeScript decorators transformation)
     Awaiter = 1 << 6,               // __awaiter (used by ES2017 async functions transformation)
@@ -7602,10 +7609,11 @@ export const enum ExternalEmitHelpers {
     ClassPrivateFieldSet = 1 << 20, // __classPrivateFieldSet (used by the class private field transformation)
     ClassPrivateFieldIn = 1 << 21,  // __classPrivateFieldIn (used by the class private field transformation)
     CreateBinding = 1 << 22,        // __createBinding (use by the module transform for (re)exports and namespace imports)
-    ESDecorate = 1 << 23,           // __esDecorate (used by ECMAScript decorators transformation)
-    RunInitializers = 1 << 24,      // __runInitializers (used by ECMAScript decorators transformation)
+    SetFunctionName = 1 << 23,      // __setFunctionName (used by class fields and ECMAScript decorators)
+    PropKey = 1 << 24,              // __propKey (used by class fields and ECMAScript decorators)
+
     FirstEmitHelper = Extends,
-    LastEmitHelper = RunInitializers,
+    LastEmitHelper = PropKey,
 
     // Helpers included by ES2015 for..of
     ForOfIncludes = Values,
@@ -7694,6 +7702,12 @@ export type OuterExpression =
     | AsExpression
     | NonNullExpression
     | PartiallyEmittedExpression;
+
+/** @internal */
+export type WrappedExpression<T extends Expression> =
+    | OuterExpression & { readonly expression: WrappedExpression<T> }
+    | T
+    ;
 
 export type TypeOfTag = "undefined" | "number" | "bigint" | "boolean" | "string" | "symbol" | "object" | "function";
 

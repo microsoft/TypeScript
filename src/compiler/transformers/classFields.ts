@@ -35,13 +35,14 @@ import {
     VariableStatement, visitArray, visitEachChild, visitFunctionBody, visitIterationBody, visitNode, visitNodes,
     visitParameterList, VisitResult, PrivateIdentifierKind, LexicalEnvironment, PrivateEnvironment,
     getInternalEmitFlags, InternalEmitFlags, PropertyAssignment, VariableDeclaration, BindingElement, ExportAssignment,
-    ParenthesizedExpression, PartiallyEmittedExpression, CommaListExpression, isProtoSetter, ArrayAssignmentElement,
+    ParenthesizedExpression, PartiallyEmittedExpression, CommaListExpression, ArrayAssignmentElement,
     find, findComputedPropertyNameCacheAssignment, flattenCommaList, getPrivateIdentifier, isBindingName,
     isCallToHelper, isClassExpression, isClassLike, isExpressionStatement, isLeftHandSideExpression,
     isObjectLiteralExpression, isOmittedExpression, isPropertyNameLiteral, newPrivateEnvironment,
     ObjectAssignmentElement, OmittedExpression, PrivateIdentifierAccessorDeclaration,
     PrivateIdentifierMethodDeclaration, setPrivateIdentifier, ShorthandPropertyAssignment, SpreadAssignment,
-    SpreadElement, visitCommaListElements, Visitor, accessPrivateIdentifier as accessPrivateIdentifierCommon, Bundle
+    SpreadElement, visitCommaListElements, Visitor, accessPrivateIdentifier as accessPrivateIdentifierCommon, Bundle,
+    isNamedEvaluation, AnonymousFunctionDefinition
 } from "../_namespaces/ts";
 
 const enum ClassPropertySubstitutionFlags {
@@ -455,7 +456,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             const receiver = visitNode(node.right, visitor, isExpression);
 
             return setOriginalNode(
-                context.getEmitHelperFactory().createClassPrivateFieldInHelper(info.brandCheckIdentifier, receiver),
+                emitHelpers().createClassPrivateFieldInHelper(info.brandCheckIdentifier, receiver),
                 node
             );
         }
@@ -472,8 +473,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         //        a. Let _popValue_ be ? NamedEvaluation of |AssignmentExpression| with argument _propKey_.
         //     ...
 
-        if (!isProtoSetter(node.name) &&
-            isAnonymousClassDeclarationNeedingAssignedName(node.initializer)) {
+        if (isNamedEvaluation(node.name, isAnonymousClassNeedingAssignedName)) {
             const { referencedName, name } = visitReferencedPropertyName(node.name);
             const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, referencedName), isExpression);
             return factory.updatePropertyAssignment(node, name, initializer);
@@ -517,8 +517,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         //        a. Let _value_ be ? NamedEvaluation of |Initializer| with argument _bindingId_.
         //     ...
 
-        if (isIdentifier(node.name) && node.initializer &&
-            isAnonymousClassDeclarationNeedingAssignedName(node.initializer)) {
+        if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
             const assignedName = getAssignedNameOfIdentifier(node.name, node.initializer);
             const name = visitNode(node.name, visitor, isBindingName);
             const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
@@ -545,8 +544,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         //           i. Set _v_ to ? NamedEvaluation of |Initializer| with argument _bindingId_.
         //     ...
 
-        if (!node.dotDotDotToken && isIdentifier(node.name) && node.initializer &&
-            isAnonymousClassDeclarationNeedingAssignedName(node.initializer)) {
+        if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
             const assignedName = getAssignedNameOfIdentifier(node.name, node.initializer);
             const propertyName = visitNode(node.propertyName, visitor, isPropertyName);
             const name = visitNode(node.name, visitor, isBindingName);
@@ -560,14 +558,14 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function visitExportAssignment(node: ExportAssignment) {
         // 16.2.3.7 RS: Evaluation
         //   ExportDeclaration : `export` `default` AssignmentExpression `;`
-        //     1. If IsAnonymmousFunctionDefinition(|AssignmentExpression|) is *true*, then
+        //     1. If IsAnonymousFunctionDefinition(|AssignmentExpression|) is *true*, then
         //        a. Let _value_ be ? NamedEvaluation of |AssignmentExpression| with argument `"default"`.
         //     ...
 
         // NOTE: Since emit for `export =` translates to `module.exports = ...`, the assigned nameof the class
         // is `""`.
 
-        if (isAnonymousClassDeclarationNeedingAssignedName(node.expression)) {
+        if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
             const assignedName = factory.createStringLiteral(node.isExportEquals ? "" : "default");
             const modifiers = visitNodes(node.modifiers, visitor, isModifier);
             const expression = visitNode(node.expression, node => namedEvaluationVisitor(node, assignedName), isExpression);
@@ -756,7 +754,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             );
         }
 
-        if (node.initializer && isAnonymousClassDeclarationNeedingAssignedName(node.initializer)) {
+        if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
             const { referencedName, name } = visitReferencedPropertyName(node.name);
             return factory.updatePropertyDeclaration(
                 node,
@@ -780,7 +778,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             const expr = getPropertyNameExpressionIfNeeded(
                 node.name,
                 /*shouldHoist*/ !!node.initializer || useDefineForClassFields,
-                /*captureReferencedName*/ !!node.initializer && isAnonymousClassDeclarationNeedingAssignedName(node.initializer));
+                /*captureReferencedName*/ isNamedEvaluation(node, isAnonymousClassNeedingAssignedName));
             if (expr) {
                 getPendingExpressions().push(...flattenCommaList(expr));
             }
@@ -837,21 +835,21 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
         switch (info.kind) {
             case PrivateIdentifierKind.Accessor:
-                return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
+                return emitHelpers().createClassPrivateFieldGetHelper(
                     receiver,
                     info.brandCheckIdentifier,
                     info.kind,
                     info.getterName
                 );
             case PrivateIdentifierKind.Method:
-                return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
+                return emitHelpers().createClassPrivateFieldGetHelper(
                     receiver,
                     info.brandCheckIdentifier,
                     info.kind,
                     info.methodName
                 );
             case PrivateIdentifierKind.Field:
-                return context.getEmitHelperFactory().createClassPrivateFieldGetHelper(
+                return emitHelpers().createClassPrivateFieldGetHelper(
                     receiver,
                     info.brandCheckIdentifier,
                     info.kind,
@@ -1146,8 +1144,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         }
     }
 
-    function isAnonymousClassDeclarationNeedingAssignedName(node: Expression) {
-        node = skipOuterExpressions(node);
+    function isAnonymousClassNeedingAssignedName(node: AnonymousFunctionDefinition) {
         if (isClassExpression(node) && !node.name) {
             const staticPropertiesOrClassStaticBlocks = getStaticPropertiesAndClassStaticBlock(node);
             const classStaticBlock = find(staticPropertiesOrClassStaticBlocks, isClassStaticBlockDeclaration);
@@ -1218,19 +1215,11 @@ export function transformClassFields(context: TransformationContext): (x: Source
             //        a. Let _rval_ be ? NamedEvaluation of |AssignmentExpression| with argument _lref_.[[ReferencedName]].
             //     ...
 
-            switch (node.operatorToken.kind) {
-                case SyntaxKind.EqualsToken:
-                case SyntaxKind.AmpersandAmpersandEqualsToken:
-                case SyntaxKind.BarBarEqualsToken:
-                case SyntaxKind.QuestionQuestionEqualsToken:
-                    if (isIdentifier(node.left) &&
-                        isAnonymousClassDeclarationNeedingAssignedName(node.right)) {
-                        const assignedName = getAssignedNameOfIdentifier(node.left, node.right);
-                        const left = visitNode(node.left, visitor, isExpression);
-                        const right = visitNode(node.right, node => namedEvaluationVisitor(node, assignedName), isExpression);
-                        return factory.updateBinaryExpression(node, left, node.operatorToken, right);
-                    }
-                    break;
+            if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
+                const assignedName = getAssignedNameOfIdentifier(node.left, node.right);
+                const left = visitNode(node.left, visitor, isExpression);
+                const right = visitNode(node.right, node => namedEvaluationVisitor(node, assignedName), isExpression);
+                return factory.updateBinaryExpression(node, left, node.operatorToken, right);
             }
 
             if (isPrivateIdentifierPropertyAccessExpression(node.left)) {
@@ -1398,7 +1387,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
         switch(info.kind) {
             case PrivateIdentifierKind.Accessor:
-                return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
+                return emitHelpers().createClassPrivateFieldSetHelper(
                     receiver,
                     info.brandCheckIdentifier,
                     right,
@@ -1406,7 +1395,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     info.setterName
                 );
             case PrivateIdentifierKind.Method:
-                return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
+                return emitHelpers().createClassPrivateFieldSetHelper(
                     receiver,
                     info.brandCheckIdentifier,
                     right,
@@ -1414,7 +1403,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     /* f */ undefined
                 );
             case PrivateIdentifierKind.Field:
-                return context.getEmitHelperFactory().createClassPrivateFieldSetHelper(
+                return emitHelpers().createClassPrivateFieldSetHelper(
                     receiver,
                     info.brandCheckIdentifier,
                     right,
@@ -2153,7 +2142,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         const emitAssignment = !useDefineForClassFields;
 
         let referencedName: Expression | undefined;
-        if (!!property.initializer && isAnonymousClassDeclarationNeedingAssignedName(property.initializer)) {
+        if (isNamedEvaluation(property, isAnonymousClassNeedingAssignedName)) {
             if (isPropertyNameLiteral(property.name) || isPrivateIdentifier(property.name)) {
                 referencedName = factory.createStringLiteralFromNode(property.name);
             }
@@ -2657,22 +2646,18 @@ export function transformClassFields(context: TransformationContext): (x: Source
         //           i. Let _v_ be ? NamedEvaluation of |Initializer| with argument _lref_.[[ReferencedName]].
         //     ...
 
+        if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
+            const left = visitDestructuringAssignmentTarget(node.left);
+            const assignedName = getAssignedNameOfIdentifier(node.left, node.right);
+            const right = visitNode(node.right, node => namedEvaluationVisitor(node, assignedName), isExpression);
+            return factory.updateBinaryExpression(node, left, node.operatorToken, right);
+        }
         if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
-            const assignmentTarget = visitDestructuringAssignmentTarget(node.left);
-            let initializer: Expression;
-            if (isIdentifier(node.left) &&
-                isAnonymousClassDeclarationNeedingAssignedName(node.right)) {
-                const assignedName = getAssignedNameOfIdentifier(node.left, node.right);
-                initializer = visitNode(node.right, node => namedEvaluationVisitor(node, assignedName), isExpression);
-            }
-            else {
-                initializer = visitNode(node.right, visitor, isExpression);
-            }
-            return factory.updateBinaryExpression(node, assignmentTarget, node.operatorToken, initializer);
+            const left = visitDestructuringAssignmentTarget(node.left);
+            const right = visitNode(node.right, visitor, isExpression);
+            return factory.updateBinaryExpression(node, left, node.operatorToken, right);
         }
-        else {
-            return visitDestructuringAssignmentTarget(node);
-        }
+        return visitDestructuringAssignmentTarget(node);
     }
 
     function visitAssignmentRestElement(node: SpreadElement) {
@@ -2728,8 +2713,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         //           i. Set _v_ to ? NamedEvaluation of |Initializer| with argument _P_.
         //     ...
 
-        if (node.objectAssignmentInitializer &&
-            isAnonymousClassDeclarationNeedingAssignedName(node.objectAssignmentInitializer)) {
+        if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
             const assignedName = getAssignedNameOfIdentifier(node.name, node.objectAssignmentInitializer);
             const objectAssignmentInitializer = visitNode(node.objectAssignmentInitializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
             return factory.updateShorthandPropertyAssignment(node, node.name, objectAssignmentInitializer);
