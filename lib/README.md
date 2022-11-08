@@ -2,4 +2,4 @@
 
 **These files are not meant to be edited by hand.**
 If you need to make modifications, the respective files should be changed within the repository's top-level `src` directory.
-Running `gulp LKG` will then appropriately update the files in this directory.
+Running `hereby LKG` will then appropriately update the files in this directory.

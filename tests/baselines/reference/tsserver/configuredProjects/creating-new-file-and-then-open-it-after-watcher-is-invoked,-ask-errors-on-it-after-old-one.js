@@ -57,15 +57,14 @@ Info 7    [00:00:34.000] Config: /user/username/projects/myproject/tsconfig.json
 }
 Info 8    [00:00:35.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 9    [00:00:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 10   [00:00:37.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 11   [00:00:38.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/bar.ts 500 undefined WatchType: Closed Script info
-Info 12   [00:00:39.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info 13   [00:00:40.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 14   [00:00:41.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 15   [00:00:42.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 16   [00:00:43.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 17   [00:00:44.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 18   [00:00:45.000] 	Files (3)
+Info 10   [00:00:37.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/bar.ts 500 undefined WatchType: Closed Script info
+Info 11   [00:00:38.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info 12   [00:00:39.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 13   [00:00:40.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 14   [00:00:41.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 15   [00:00:42.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 16   [00:00:43.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 17   [00:00:44.000] 	Files (3)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/src/bar.ts
 	/user/username/projects/myproject/src/foo.ts
@@ -78,20 +77,20 @@ Info 18   [00:00:45.000] 	Files (3)
 	src/foo.ts
 	  Matched by include pattern './src' in 'tsconfig.json'
 
-Info 19   [00:00:46.000] -----------------------------------------------
-Info 20   [00:00:47.000] event:
+Info 18   [00:00:45.000] -----------------------------------------------
+Info 19   [00:00:46.000] event:
     {"seq":0,"type":"event","event":"projectLoadingFinish","body":{"projectName":"/user/username/projects/myproject/tsconfig.json"}}
-Info 21   [00:00:48.000] event:
+Info 20   [00:00:47.000] event:
     {"seq":0,"type":"event","event":"telemetry","body":{"telemetryEventName":"projectInfo","payload":{"projectId":"4a33d78ee40d836c4f4e64c59aed976628aea0013be9585c5ff171dfc41baf98","fileStats":{"js":0,"jsSize":0,"jsx":0,"jsxSize":0,"ts":2,"tsSize":50,"tsx":0,"tsxSize":0,"dts":1,"dtsSize":334,"deferred":0,"deferredSize":0},"compilerOptions":{},"typeAcquisition":{"enable":false,"include":false,"exclude":false},"extends":false,"files":false,"include":true,"exclude":false,"compileOnSave":false,"configFileName":"tsconfig.json","projectType":"configured","languageServiceEnabled":true,"version":"FakeVersion"}}}
-Info 22   [00:00:49.000] event:
+Info 21   [00:00:48.000] event:
     {"seq":0,"type":"event","event":"configFileDiag","body":{"triggerFile":"/user/username/projects/myproject/src/foo.ts","configFile":"/user/username/projects/myproject/tsconfig.json","diagnostics":[]}}
-Info 23   [00:00:50.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 23   [00:00:51.000] 	Files (3)
+Info 22   [00:00:49.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 22   [00:00:50.000] 	Files (3)
 
-Info 23   [00:00:52.000] -----------------------------------------------
-Info 23   [00:00:53.000] Open files: 
-Info 23   [00:00:54.000] 	FileName: /user/username/projects/myproject/src/foo.ts ProjectRootPath: /user/username/projects/myproject
-Info 23   [00:00:55.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 22   [00:00:51.000] -----------------------------------------------
+Info 22   [00:00:52.000] Open files: 
+Info 22   [00:00:53.000] 	FileName: /user/username/projects/myproject/src/foo.ts ProjectRootPath: /user/username/projects/myproject
+Info 22   [00:00:54.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 After request
 
 PolledWatches::
@@ -110,15 +109,15 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 23   [00:00:56.000] response:
+Info 22   [00:00:55.000] response:
     {
       "responseRequired": false
     }
-Info 24   [00:00:59.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/sub/fooBar.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 25   [00:01:00.000] Scheduled: /user/username/projects/myproject/tsconfig.json
-Info 26   [00:01:01.000] Scheduled: *ensureProjectForOpenFiles*
-Info 27   [00:01:02.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/sub/fooBar.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
-Info 28   [00:01:03.000] request:
+Info 23   [00:00:58.000] DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/sub/fooBar.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 24   [00:00:59.000] Scheduled: /user/username/projects/myproject/tsconfig.json
+Info 25   [00:01:00.000] Scheduled: *ensureProjectForOpenFiles*
+Info 26   [00:01:01.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/src/sub/fooBar.ts :: WatchInfo: /user/username/projects/myproject/src 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
+Info 27   [00:01:02.000] request:
     {
       "command": "open",
       "arguments": {
@@ -150,12 +149,12 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 29   [00:01:04.000] Search path: /user/username/projects/myproject/src/sub
-Info 30   [00:01:05.000] For info: /user/username/projects/myproject/src/sub/fooBar.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
-Info 31   [00:01:06.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info 32   [00:01:07.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 33   [00:01:08.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 34   [00:01:09.000] 	Files (4)
+Info 28   [00:01:03.000] Search path: /user/username/projects/myproject/src/sub
+Info 29   [00:01:04.000] For info: /user/username/projects/myproject/src/sub/fooBar.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info 30   [00:01:05.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
+Info 31   [00:01:06.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 32   [00:01:07.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 33   [00:01:08.000] 	Files (4)
 	/a/lib/lib.d.ts
 	/user/username/projects/myproject/src/bar.ts
 	/user/username/projects/myproject/src/foo.ts
@@ -171,16 +170,16 @@ Info 34   [00:01:09.000] 	Files (4)
 	src/sub/fooBar.ts
 	  Matched by include pattern './src' in 'tsconfig.json'
 
-Info 35   [00:01:10.000] -----------------------------------------------
-Info 36   [00:01:11.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
-Info 36   [00:01:12.000] 	Files (4)
+Info 34   [00:01:09.000] -----------------------------------------------
+Info 35   [00:01:10.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
+Info 35   [00:01:11.000] 	Files (4)
 
-Info 36   [00:01:13.000] -----------------------------------------------
-Info 36   [00:01:14.000] Open files: 
-Info 36   [00:01:15.000] 	FileName: /user/username/projects/myproject/src/foo.ts ProjectRootPath: /user/username/projects/myproject
-Info 36   [00:01:16.000] 		Projects: /user/username/projects/myproject/tsconfig.json
-Info 36   [00:01:17.000] 	FileName: /user/username/projects/myproject/src/sub/fooBar.ts ProjectRootPath: /user/username/projects/myproject
-Info 36   [00:01:18.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 35   [00:01:12.000] -----------------------------------------------
+Info 35   [00:01:13.000] Open files: 
+Info 35   [00:01:14.000] 	FileName: /user/username/projects/myproject/src/foo.ts ProjectRootPath: /user/username/projects/myproject
+Info 35   [00:01:15.000] 		Projects: /user/username/projects/myproject/tsconfig.json
+Info 35   [00:01:16.000] 	FileName: /user/username/projects/myproject/src/sub/fooBar.ts ProjectRootPath: /user/username/projects/myproject
+Info 35   [00:01:17.000] 		Projects: /user/username/projects/myproject/tsconfig.json
 After request
 
 PolledWatches::
@@ -199,11 +198,11 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 36   [00:01:19.000] response:
+Info 35   [00:01:18.000] response:
     {
       "responseRequired": false
     }
-Info 37   [00:01:20.000] request:
+Info 36   [00:01:19.000] request:
     {
       "command": "geterr",
       "arguments": {
@@ -252,7 +251,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 38   [00:01:21.000] response:
+Info 37   [00:01:20.000] response:
     {
       "responseRequired": false
     }
@@ -292,7 +291,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 39   [00:01:22.000] event:
+Info 38   [00:01:21.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/foo.ts","diagnostics":[]}}
 After running timeout callback3
 
@@ -330,7 +329,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 40   [00:01:23.000] event:
+Info 39   [00:01:22.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/foo.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
@@ -368,7 +367,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 41   [00:01:24.000] event:
+Info 40   [00:01:23.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/foo.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
@@ -424,7 +423,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 42   [00:01:25.000] event:
+Info 41   [00:01:24.000] event:
     {"seq":0,"type":"event","event":"syntaxDiag","body":{"file":"/user/username/projects/myproject/src/sub/fooBar.ts","diagnostics":[]}}
 After running timeout callback4
 
@@ -462,7 +461,7 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 43   [00:01:26.000] event:
+Info 42   [00:01:25.000] event:
     {"seq":0,"type":"event","event":"semanticDiag","body":{"file":"/user/username/projects/myproject/src/sub/fooBar.ts","diagnostics":[]}}
 Before running immediate callbacks and checking length (1)
 
@@ -500,9 +499,9 @@ FsWatchesRecursive::
 /user/username/projects/myproject/src:
   {}
 
-Info 44   [00:01:27.000] event:
+Info 43   [00:01:26.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/sub/fooBar.ts","diagnostics":[]}}
-Info 45   [00:01:28.000] event:
+Info 44   [00:01:27.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
 Before running immediate callbacks and checking length (1)
 
