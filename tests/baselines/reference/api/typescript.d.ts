@@ -3114,7 +3114,7 @@ declare namespace ts {
         DynamicPriority = 2,
         FixedChunkSize = 3
     }
-    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
+    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport | PluginImport[] | ProjectReference[] | null | undefined;
     interface CompilerOptions {
         allowImportingTsExtensions?: boolean;
         allowJs?: boolean;
@@ -3228,6 +3228,7 @@ declare namespace ts {
         synchronousWatchDirectory?: boolean;
         excludeDirectories?: string[];
         excludeFiles?: string[];
+        watchFactory?: string | PluginImport;
         [option: string]: CompilerOptionsValue | undefined;
     }
     interface TypeAcquisition {
@@ -3321,6 +3322,18 @@ declare namespace ts {
         None = 0,
         Recursive = 1
     }
+    type ModuleImportResult<T = {}> = {
+        module: T;
+        modulePath?: string;
+        error: undefined;
+    } | {
+        module: undefined;
+        modulePath?: undefined;
+        error: {
+            stack?: string;
+            message?: string;
+        };
+    };
     interface CreateProgramOptions {
         rootNames: readonly string[];
         options: CompilerOptions;
@@ -5629,8 +5642,8 @@ declare namespace ts {
          */
         emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
     }
-    function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram | undefined;
-    function createIncrementalCompilerHost(options: CompilerOptions, system?: System): CompilerHost;
+    function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost): ts.EmitAndSemanticDiagnosticsBuilderProgram | undefined;
+    function createIncrementalCompilerHost(options: CompilerOptions, system?: ts.System): CompilerHost;
     function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({ rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram }: IncrementalProgramOptions<T>): T;
     /**
      * Create the watch compiler host for either configFile or fileNames and its options
@@ -5661,6 +5674,21 @@ declare namespace ts {
     type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions, errorCount?: number) => void;
     /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
     type CreateProgram<T extends BuilderProgram> = (rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[] | undefined) => T;
+    type UserWatchFactoryModule = (mod: {
+        typescript: typeof ts;
+    }) => UserWatchFactory;
+    interface UserWatchFactoryCreateInfo {
+        options: WatchOptions;
+        config: any;
+        host: WatchHost;
+        solution?: SolutionBuilder<BuilderProgram>;
+        watch?: WatchOfConfigFile<BuilderProgram> | WatchOfFilesAndCompilerOptions<BuilderProgram>;
+    }
+    interface UserWatchFactory {
+        create(createInfo: UserWatchFactoryCreateInfo): void;
+        watchFile?(fileName: string, callback: FileWatcherCallback, pollingInterval: number, options: WatchOptions | undefined): FileWatcher;
+        watchDirectory?(fileName: string, callback: DirectoryWatcherCallback, recursive: boolean, options: WatchOptions | undefined): FileWatcher;
+    }
     /** Host that has watch functionality used in --watch mode */
     interface WatchHost {
         /** If provided, called with Diagnostic message that informs about change in watch status */

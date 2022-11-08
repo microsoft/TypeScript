@@ -7061,7 +7061,7 @@ export enum PollingWatchKind {
     FixedChunkSize,
 }
 
-export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
+export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport | PluginImport[] | ProjectReference[] | null | undefined;
 
 export interface CompilerOptions {
     /** @internal */ all?: boolean;
@@ -7163,6 +7163,7 @@ export interface CompilerOptions {
      */
     pathsBasePath?: string;
     /** @internal */ plugins?: PluginImport[];
+    /** @internal */ allowPlugins?: boolean;
     preserveConstEnums?: boolean;
     noImplicitOverride?: boolean;
     preserveSymlinks?: boolean;
@@ -7219,6 +7220,7 @@ export interface WatchOptions {
     synchronousWatchDirectory?: boolean;
     excludeDirectories?: string[];
     excludeFiles?: string[];
+    watchFactory?: string | PluginImport;
 
     [option: string]: CompilerOptionsValue | undefined;
 }
@@ -7352,7 +7354,6 @@ export interface ConfigFileSpecs {
     isDefaultIncludeSpec: boolean;
 }
 
-/** @internal */
 export type ModuleImportResult<T = {}> =
     | { module: T, modulePath?: string, error: undefined }
     | { module: undefined, modulePath?: undefined, error: { stack?: string, message?: string } };

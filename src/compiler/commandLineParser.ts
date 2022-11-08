@@ -93,6 +93,7 @@ import {
     ParseConfigHost,
     ParsedCommandLine,
     parseJsonText,
+    parsePackageName,
     Path,
     PollingWatchKind,
     PrefixUnaryExpression,
@@ -312,7 +313,20 @@ export const optionsForWatch: CommandLineOption[] = [
         category: Diagnostics.Watch_and_Build_Modes,
         description: Diagnostics.Remove_a_list_of_files_from_the_watch_mode_s_processing,
     },
+    {
+        name: "watchFactory",
+        type: "string",
+        category: Diagnostics.Watch_and_Build_Modes,
+        description: Diagnostics.Specify_which_factory_to_invoke_watchFile_and_watchDirectory_on,
+        extraValidation: watchFactoryToDiagnostic
+    },
 ];
+
+function watchFactoryToDiagnostic(watchFactory: CompilerOptionsValue): [DiagnosticMessage] | undefined {
+    return parsePackageName(watchFactory as string).rest ?
+        [Diagnostics.watchFactory_name_can_only_be_a_package_name] :
+        undefined;
+}
 
 /** @internal */
 export const commonOptionsWithBuild: CommandLineOption[] = [
@@ -499,6 +513,14 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
         isCommandLineOnly: true,
         description: Diagnostics.Set_the_language_of_the_messaging_from_TypeScript_This_does_not_affect_emit,
         defaultValueDescription: Diagnostics.Platform_specific
+    },
+    {
+        name: "allowPlugins",
+        type: "boolean",
+        category: Diagnostics.Command_line_Options,
+        isCommandLineOnly: true,
+        description: Diagnostics.Allow_running_plugins,
+        defaultValueDescription: false,
     },
 ];
 

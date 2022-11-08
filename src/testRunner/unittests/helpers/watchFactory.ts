@@ -1,6 +1,12 @@
 import * as ts from "../../_namespaces/ts";
 import { compilerOptionsToConfigJson, FsContents } from "./contents";
 import {
+    TscWatchCompileChange,
+    TscWatchSystem,
+    VerifyTscWatch,
+    verifyTscWatch,
+} from "./tscWatch";
+import {
     createLoggerWithInMemoryLogs,
     createSession,
     TestSession,
@@ -8,6 +14,7 @@ import {
 } from "./tsserver";
 import {
     createServerHost,
+    createWatchedSystem,
     libFile,
     serializeMultiMap,
     TestServerHost,
@@ -22,7 +29,7 @@ interface WatchedDirectoryCallback {
     callback: ts.DirectoryWatcherCallback;
     options: ts.WatchOptions | undefined;
 }
-export interface WatchFactorySystem extends TestServerHost {
+export interface WatchFactorySystem extends TscWatchSystem {
     factoryData: {
         watchedFiles: ts.MultiMap<string, WatchedFileCallback>;
         watchedDirectories: ts.MultiMap<string, WatchedDirectoryCallback>;
@@ -30,7 +37,7 @@ export interface WatchFactorySystem extends TestServerHost {
         watchFile(path: string, callback: ts.FileWatcherCallback, pollingInterval?: ts.PollingInterval, options?: ts.WatchOptions): ts.FileWatcher;
         watchDirectory(path: string, callback: ts.DirectoryWatcherCallback, recursive?: boolean, options?: ts.WatchOptions): ts.FileWatcher;
         onConfigurationChanged(config: any): void;
-    };
+    }
 }
 
 export function createWatchFactorySystem(inputSystem: TestServerHost, log: (s: string) => void = s => inputSystem.write(s + "\n"), pluginName?: string): WatchFactorySystem {
@@ -77,6 +84,27 @@ export function createWatchFactorySystem(inputSystem: TestServerHost, log: (s: s
     }
 }
 
+function implementRequireForWatchFactorySystem(expect: ExpectWatchOrSolution, system: WatchFactorySystem, excludeWatchFile: boolean) {
+    system.require = (initialPath, moduleName) => {
+        system.write(`Require:: Resolving ${moduleName} from ${initialPath}\n`);
+        return {
+            module: (() => ({
+                create: ({ config, options, watch, solution, session }) => {
+                    system.write(`Module ${moduleName}:: create with config: ${JSON.stringify(config)} and options: ${JSON.stringify(options)}\n`);
+                    ts.Debug.assert(!session);
+                    if (expect & ExpectWatchOrSolution.Watch) ts.Debug.assertIsDefined(watch);
+                    else ts.Debug.assert(!watch);
+                    if (expect & ExpectWatchOrSolution.Solution) ts.Debug.assertIsDefined(solution);
+                    else ts.Debug.assert(!solution);
+                },
+                ... (!excludeWatchFile ? system.factoryData : { watchDirectory: system.factoryData.watchDirectory }),
+            })) as ts.UserWatchFactoryModule,
+            error: undefined
+        };
+    };
+    return system;
+}
+
 function getWatchFactoryFsContents(watchOptions?: ts.WatchOptions, compilerOptions?: ts.CompilerOptions): FsContents {
     return {
         "/user/username/projects/myproject/tsconfig.json": JSON.stringify({
@@ -87,6 +115,80 @@ function getWatchFactoryFsContents(watchOptions?: ts.WatchOptions, compilerOptio
         "/user/username/projects/myproject/b.ts": `export class b { prop = "hello"; foo() { return this.prop; } }`,
         [libFile.path]: libFile.content,
     };
+}
+
+export function createSystemForWatchFactory(watchOptions?: ts.WatchOptions, compilerOptions?: ts.CompilerOptions) {
+    return createWatchFactorySystem(createWatchedSystem(getWatchFactoryFsContents(watchOptions, compilerOptions), { currentDirectory: "/user/username/projects/myproject" }));
+}
+
+export const enum ExpectWatchOrSolution {
+    Watch = 1 << 0,
+    Solution = 1 << 1,
+}
+
+export function createSystemImplementingWatchFactory(expect: ExpectWatchOrSolution, watchOptions?: ts.WatchOptions, compilerOptions?: ts.CompilerOptions, excludeWatchFile?: boolean) {
+    return implementRequireForWatchFactorySystem(expect, createSystemForWatchFactory(watchOptions, compilerOptions), !!excludeWatchFile);
+}
+
+export const watchFactoryTestChangeFile: TscWatchCompileChange<ts.EmitAndSemanticDiagnosticsBuilderProgram> = {
+    caption: "Change file",
+    edit: sys => sys.appendFile(`/user/username/projects/myproject/b.ts`, "export function foo() { }"),
+    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+};
+
+export const watchFactoryTestPluginInvokeChangedFile: TscWatchCompileChange<ts.EmitAndSemanticDiagnosticsBuilderProgram> = {
+    caption: "Invoke plugin watches",
+    edit: sys => (sys as WatchFactorySystem).factoryData.watchedFiles.get(`/user/username/projects/myproject/b.ts`)?.forEach(({ callback }) => callback(`/user/username/projects/myproject/b.ts`, ts.FileWatcherEventKind.Changed)),
+    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+};
+
+export const watchFactoryTestAddFile: TscWatchCompileChange<ts.EmitAndSemanticDiagnosticsBuilderProgram> = {
+    caption: "Add file",
+    edit: sys => sys.writeFile(`/user/username/projects/myproject/c.ts`, "export function foo() { }"),
+    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+};
+export const watchFactoryTestPluginInvokeAddedFile: TscWatchCompileChange<ts.EmitAndSemanticDiagnosticsBuilderProgram> = {
+    caption: "Invoke plugin watches",
+    edit: sys => (sys as WatchFactorySystem).factoryData.watchedDirectoriesRecursive.get("/user/username/projects/myproject")?.forEach(({ callback }) => callback(`/user/username/projects/myproject/c.ts`)),
+    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+};
+
+export function verifyWatchFactory(
+    input: Omit<VerifyTscWatch, "sys" | "scenario"> & { sys: (expect: ExpectWatchOrSolution, watchOptions?: ts.WatchOptions) => TestServerHost; },
+    expect: ExpectWatchOrSolution,
+    watchFactory: string,
+) {
+    verifyTscWatch({
+        scenario: "watchFactory",
+        ...input,
+        sys: () => input.sys(expect, { watchFactory }),
+    });
+    verifyTscWatch({
+        scenario: "watchFactory",
+        ...input,
+        subScenario: `${input.subScenario} object`,
+        // sys: () => input.sys(expect, { watchFactory: { name: watchFactory, myconfig: "somethingelse" } as ts.PluginImport }),
+        sys: () => input.sys(expect, { watchFactory }),
+    });
+}
+
+export function verifyWatchFactoryCommandLine(
+    input: Omit<VerifyTscWatch, "commandLineArgs" | "scenario">,
+    watchFactory: string,
+    buildMode?: true,
+) {
+    verifyTscWatch({
+        scenario: "watchFactory",
+        ...input,
+        commandLineArgs: [...(buildMode ? ["-b"] : []), "-w", "--extendedDiagnostics", "--watchFactory", watchFactory, "--allowPlugins"],
+    });
+    verifyTscWatch({
+        scenario: "watchFactory",
+        ...input,
+        subScenario: `${input.subScenario} object`,
+        // commandLineArgs: [...(buildMode ? ["-b"] : []), "-w", "--extendedDiagnostics", "--watchFactory", JSON.stringify({ name: watchFactory, myconfig: "somethingelse" }), "--allowPlugins"],
+        commandLineArgs: [...(buildMode ? ["-b"] : []), "-w", "--extendedDiagnostics", "--watchFactory", watchFactory, "--allowPlugins"],
+    });
 }
 
 export function createHostForWatchFactoryPlugins(opts?: Partial<TestSessionOptions>, watchOptions?: ts.WatchOptions) {

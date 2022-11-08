@@ -1,3 +1,4 @@
+import * as ts from "./_namespaces/ts";
 import {
     BuilderProgram,
     BuildInfo,
@@ -76,6 +77,7 @@ import {
     ScriptTarget,
     setGetSourceFileAsHashVersioned,
     SharedExtendedConfigFileWatcher,
+    SolutionBuilder,
     SourceFile,
     StringLiteralLike,
     sys,
@@ -148,6 +150,21 @@ export function createIncrementalProgram<T extends BuilderProgram = EmitAndSeman
 export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions, errorCount?: number) => void;
 /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
 export type CreateProgram<T extends BuilderProgram> = (rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[] | undefined) => T;
+
+export type UserWatchFactoryModule = (mod: { typescript: typeof ts }) => UserWatchFactory;
+export interface UserWatchFactoryCreateInfo {
+    options: WatchOptions;
+    config: any;
+    host: WatchHost;
+    solution?: SolutionBuilder<BuilderProgram>;
+    watch?: WatchOfConfigFile<BuilderProgram> | WatchOfFilesAndCompilerOptions<BuilderProgram>
+
+}
+export interface UserWatchFactory {
+    create(createInfo: UserWatchFactoryCreateInfo): void;
+    watchFile?(fileName: string, callback: FileWatcherCallback, pollingInterval: number, options: WatchOptions | undefined): FileWatcher;
+    watchDirectory?(fileName: string, callback: DirectoryWatcherCallback, recursive: boolean, options: WatchOptions | undefined): FileWatcher;
+}
 
 /** Host that has watch functionality used in --watch mode */
 export interface WatchHost {

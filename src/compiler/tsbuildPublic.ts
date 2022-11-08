@@ -162,6 +162,7 @@ export interface BuildOptions {
     /** @internal */ locale?: string;
     /** @internal */ generateCpuProfile?: string;
     /** @internal */ generateTrace?: string;
+    /** @internal */ allowPlugins?: boolean;
 
     [option: string]: CompilerOptionsValue | undefined;
 }

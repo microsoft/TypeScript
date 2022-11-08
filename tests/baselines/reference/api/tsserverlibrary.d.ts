@@ -1274,6 +1274,7 @@ declare namespace ts {
                 synchronousWatchDirectory?: boolean;
                 excludeDirectories?: string[];
                 excludeFiles?: string[];
+                watchFactory?: string | PluginImport;
                 [option: string]: CompilerOptionsValue | undefined;
             }
             /**
@@ -3074,18 +3075,10 @@ declare namespace ts {
             compressionKind: string;
             data: any;
         }
-        type ModuleImportResult = {
-            module: {};
-            error: undefined;
-        } | {
-            module: undefined;
-            error: {
-                stack?: string;
-                message?: string;
-            };
-        };
-        /** @deprecated Use {@link ModuleImportResult} instead. */
-        type RequireResult = ModuleImportResult;
+        /** @deprecated Use {@link ts.ModuleImportResult} instead. */
+        type ModuleImportResult = ts.ModuleImportResult;
+        /** @deprecated Use {@link ts.ModuleImportResult} instead. */
+        type RequireResult = ts.ModuleImportResult;
         interface ServerHost extends System {
             watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
             watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
@@ -3095,7 +3088,7 @@ declare namespace ts {
             clearImmediate(timeoutId: any): void;
             gc?(): void;
             trace?(s: string): void;
-            require?(initialPath: string, moduleName: string): ModuleImportResult;
+            require?(initialPath: string, moduleName: string): ts.ModuleImportResult;
         }
         function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings;
         function toNormalizedPath(fileName: string): NormalizedPath;
@@ -3444,7 +3437,7 @@ declare namespace ts {
         function convertWatchOptions(protocolOptions: protocol.ExternalProjectCompilerOptions, currentDirectory?: string): WatchOptionsAndErrors | undefined;
         function convertTypeAcquisition(protocolOptions: protocol.InferredProjectCompilerOptions): TypeAcquisition | undefined;
         function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind;
-        function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
+        function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ts.ScriptKind.Unknown | ts.ScriptKind.JS | ts.ScriptKind.JSX | ts.ScriptKind.TS | ts.ScriptKind.TSX;
         const maxProgramSizeForNonTsFiles: number;
         const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
         interface ProjectsUpdatedInBackgroundEvent {
@@ -3674,7 +3667,7 @@ declare namespace ts {
             private pendingPluginEnablements?;
             private currentPluginEnablementPromise?;
             constructor(opts: ProjectServiceOptions);
-            toPath(fileName: string): Path;
+            toPath(fileName: string): ts.Path;
             private loadTypesMap;
             updateTypingsForProject(response: SetTypings | InvalidateCachedTypings | PackageInstalledResponse): void;
             private delayUpdateProjectGraph;
@@ -3683,7 +3676,7 @@ declare namespace ts {
             findProject(projectName: string): Project | undefined;
             getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined;
             private doEnsureDefaultProjectForFile;
-            getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string): ScriptInfo | undefined;
+            getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string): ts.server.ScriptInfo | undefined;
             /**
              * Ensures the project structures are upto date
              * This means,
@@ -3692,7 +3685,7 @@ declare namespace ts {
              *   ensure that each open script info has project
              */
             private ensureProjectStructuresUptoDate;
-            getFormatCodeOptions(file: NormalizedPath): FormatCodeSettings;
+            getFormatCodeOptions(file: NormalizedPath): ts.FormatCodeSettings;
             getPreferences(file: NormalizedPath): protocol.UserPreferences;
             getHostFormatCodeOptions(): FormatCodeSettings;
             getHostPreferences(): protocol.UserPreferences;
@@ -3752,7 +3745,7 @@ declare namespace ts {
             private getOrCreateSingleInferredProjectIfEnabled;
             private getOrCreateSingleInferredWithoutProjectRoot;
             private createInferredProject;
-            getScriptInfo(uncheckedFileName: string): ScriptInfo | undefined;
+            getScriptInfo(uncheckedFileName: string): ts.server.ScriptInfo | undefined;
             private watchClosedScriptInfo;
             private createNodeModulesWatcher;
             private watchClosedScriptInfoInNodeModules;
@@ -3764,13 +3757,13 @@ declare namespace ts {
             private getOrCreateScriptInfoOpenedByClientForNormalizedPath;
             getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: {
                 fileExists(path: string): boolean;
-            }): ScriptInfo | undefined;
+            }): ts.server.ScriptInfo | undefined;
             private getOrCreateScriptInfoWorker;
             /**
              * This gets the script info for the normalized path. If the path is not rooted disk path then the open script info with project root context is preferred
              */
-            getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined;
-            getScriptInfoForPath(fileName: Path): ScriptInfo | undefined;
+            getScriptInfoForNormalizedPath(fileName: NormalizedPath): ts.server.ScriptInfo | undefined;
+            getScriptInfoForPath(fileName: Path): ts.server.ScriptInfo | undefined;
             private addSourceInfoToSourceMap;
             private addMissingSourceMapFile;
             setHostConfiguration(args: protocol.ConfigureRequestArguments): void;
@@ -7161,7 +7154,7 @@ declare namespace ts {
         DynamicPriority = 2,
         FixedChunkSize = 3
     }
-    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
+    type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport | PluginImport[] | ProjectReference[] | null | undefined;
     interface CompilerOptions {
         allowImportingTsExtensions?: boolean;
         allowJs?: boolean;
@@ -7275,6 +7268,7 @@ declare namespace ts {
         synchronousWatchDirectory?: boolean;
         excludeDirectories?: string[];
         excludeFiles?: string[];
+        watchFactory?: string | PluginImport;
         [option: string]: CompilerOptionsValue | undefined;
     }
     interface TypeAcquisition {
@@ -7368,6 +7362,18 @@ declare namespace ts {
         None = 0,
         Recursive = 1
     }
+    type ModuleImportResult<T = {}> = {
+        module: T;
+        modulePath?: string;
+        error: undefined;
+    } | {
+        module: undefined;
+        modulePath?: undefined;
+        error: {
+            stack?: string;
+            message?: string;
+        };
+    };
     interface CreateProgramOptions {
         rootNames: readonly string[];
         options: CompilerOptions;
@@ -9676,8 +9682,8 @@ declare namespace ts {
          */
         emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
     }
-    function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram | undefined;
-    function createIncrementalCompilerHost(options: CompilerOptions, system?: System): CompilerHost;
+    function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost): ts.EmitAndSemanticDiagnosticsBuilderProgram | undefined;
+    function createIncrementalCompilerHost(options: CompilerOptions, system?: ts.System): CompilerHost;
     function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({ rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram }: IncrementalProgramOptions<T>): T;
     /**
      * Create the watch compiler host for either configFile or fileNames and its options
@@ -9708,6 +9714,27 @@ declare namespace ts {
     type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions, errorCount?: number) => void;
     /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
     type CreateProgram<T extends BuilderProgram> = (rootNames: readonly string[] | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: readonly Diagnostic[], projectReferences?: readonly ProjectReference[] | undefined) => T;
+    type UserWatchFactoryModule = (mod: {
+        typescript: typeof ts;
+    }) => UserWatchFactory;
+    interface UserWatchFactoryCreateInfo {
+        options: WatchOptions;
+        config: any;
+        host: WatchHost;
+        solution?: SolutionBuilder<BuilderProgram>;
+        watch?: WatchOfConfigFile<BuilderProgram> | WatchOfFilesAndCompilerOptions<BuilderProgram>;
+    }
+    interface UserWatchFactoryCreateInfo {
+        session?: ts.server.Session<unknown>;
+    }
+    interface UserWatchFactory {
+        create(createInfo: UserWatchFactoryCreateInfo): void;
+        watchFile?(fileName: string, callback: FileWatcherCallback, pollingInterval: number, options: WatchOptions | undefined): FileWatcher;
+        watchDirectory?(fileName: string, callback: DirectoryWatcherCallback, recursive: boolean, options: WatchOptions | undefined): FileWatcher;
+    }
+    interface UserWatchFactory {
+        onConfigurationChanged?(config: any): void;
+    }
     /** Host that has watch functionality used in --watch mode */
     interface WatchHost {
         /** If provided, called with Diagnostic message that informs about change in watch status */

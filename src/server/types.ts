@@ -1,3 +1,4 @@
+import * as ts from "./_namespaces/ts";
 import {
     DirectoryWatcherCallback,
     FileWatcher,
@@ -12,10 +13,11 @@ export interface CompressedData {
     data: any;
 }
 
-export type ModuleImportResult = { module: {}, error: undefined } | { module: undefined, error: { stack?: string, message?: string } };
+/** @deprecated Use {@link ts.ModuleImportResult} instead. */
+export type ModuleImportResult = ts.ModuleImportResult;
 
-/** @deprecated Use {@link ModuleImportResult} instead. */
-export type RequireResult = ModuleImportResult;
+/** @deprecated Use {@link ts.ModuleImportResult} instead. */
+export type RequireResult = ts.ModuleImportResult;
 
 export interface ServerHost extends System {
     watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
@@ -26,7 +28,7 @@ export interface ServerHost extends System {
     clearImmediate(timeoutId: any): void;
     gc?(): void;
     trace?(s: string): void;
-    require?(initialPath: string, moduleName: string): ModuleImportResult;
+    require?(initialPath: string, moduleName: string): ts.ModuleImportResult;
     /** @internal */
-    importPlugin?(root: string, moduleName: string): Promise<ModuleImportResult>;
+    importPlugin?(root: string, moduleName: string): Promise<ts.ModuleImportResult>;
 }
