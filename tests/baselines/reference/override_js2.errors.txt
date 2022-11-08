@@ -1,7 +1,7 @@
-tests/cases/conformance/override/a.js(7,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
-tests/cases/conformance/override/a.js(11,5): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
-tests/cases/conformance/override/a.js(17,5): error TS4112: This member cannot have an 'override' modifier because its containing class 'C' does not extend another class.
-tests/cases/conformance/override/a.js(19,5): error TS4112: This member cannot have an 'override' modifier because its containing class 'C' does not extend another class.
+tests/cases/conformance/override/a.js(7,5): error TS4119: This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class 'B'.
+tests/cases/conformance/override/a.js(11,5): error TS4122: This member cannot have a JSDoc comment with an '@override' tag because it is not declared in the base class 'B'.
+tests/cases/conformance/override/a.js(17,5): error TS4121: This member cannot have a JSDoc comment with an '@override' tag because its containing class 'C' does not extend another class.
+tests/cases/conformance/override/a.js(19,5): error TS4121: This member cannot have a JSDoc comment with an '@override' tag because its containing class 'C' does not extend another class.
 
 
 ==== tests/cases/conformance/override/a.js (4 errors) ====
@@ -13,13 +13,13 @@ tests/cases/conformance/override/a.js(19,5): error TS4112: This member cannot ha
     class D extends B {
         foo (v) {}
         ~~~
-!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+!!! error TS4119: This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class 'B'.
         /** @override */
         fooo (v) {}
         /** @override */
         bar(v) {}
         ~~~
-!!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
+!!! error TS4122: This member cannot have a JSDoc comment with an '@override' tag because it is not declared in the base class 'B'.
     }
     
     class C {
@@ -27,9 +27,9 @@ tests/cases/conformance/override/a.js(19,5): error TS4112: This member cannot ha
         /** @override */
         fooo (v) {}
         ~~~~
-!!! error TS4112: This member cannot have an 'override' modifier because its containing class 'C' does not extend another class.
+!!! error TS4121: This member cannot have a JSDoc comment with an '@override' tag because its containing class 'C' does not extend another class.
         /** @override */
         bar(v) {}
         ~~~
-!!! error TS4112: This member cannot have an 'override' modifier because its containing class 'C' does not extend another class.
+!!! error TS4121: This member cannot have a JSDoc comment with an '@override' tag because its containing class 'C' does not extend another class.
     }

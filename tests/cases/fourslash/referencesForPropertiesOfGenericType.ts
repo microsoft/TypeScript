@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface IFoo<T> {
-////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}doSomething|](v: T): T;|]
+////    /*1*/doSomething(v: T): T;
 ////}
 ////
 ////var x: IFoo<string>;
-////x.[|doSomething|]("ss");
+////x./*2*/doSomething("ss");
 ////
 ////var y: IFoo<number>;
-////y.[|doSomething|](12);
+////y./*3*/doSomething(12);
 
-verify.singleReferenceGroup("(method) IFoo<T>.doSomething(v: T): T", "doSomething");
+verify.baselineFindAllReferences('1', '2', '3');

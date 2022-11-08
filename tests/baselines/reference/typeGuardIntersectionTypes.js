@@ -149,12 +149,12 @@ function identifyBeast(beast) {
                 log("bird - 2 legs, wings");
             }
             else {
-                log("unknown - " + beast.legs + " legs, wings");
+                log("unknown - ".concat(beast.legs, " legs, wings"));
             }
         }
         // All non-winged beasts with legs
         else {
-            log("manbearpig - " + beast.legs + " legs, no wings");
+            log("manbearpig - ".concat(beast.legs, " legs, no wings"));
         }
     }
     // All beasts without legs    

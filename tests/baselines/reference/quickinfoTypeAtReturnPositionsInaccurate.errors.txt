@@ -1,11 +1,8 @@
 tests/cases/compiler/quickinfoTypeAtReturnPositionsInaccurate.ts(33,15): error TS2339: Property 'numExclusive' does not exist on type 'NumClass<number> | StrClass<string>'.
   Property 'numExclusive' does not exist on type 'StrClass<string>'.
-tests/cases/compiler/quickinfoTypeAtReturnPositionsInaccurate.ts(101,11): error TS2322: Type 'Program | T' is not assignable to type 'Program'.
-  Type 'T' is not assignable to type 'Program'.
-    Property 'state' is missing in type 'BuilderProgram' but required in type 'Program'.
 
 
-==== tests/cases/compiler/quickinfoTypeAtReturnPositionsInaccurate.ts (2 errors) ====
+==== tests/cases/compiler/quickinfoTypeAtReturnPositionsInaccurate.ts (1 errors) ====
     class NumClass<T extends number> {
         private value!: T;
         public get(): T {
@@ -110,9 +107,4 @@ tests/cases/compiler/quickinfoTypeAtReturnPositionsInaccurate.ts(101,11): error 
     declare function isBuilderProgram<T extends BuilderProgram>(program: Program | T): program is T;
     export function listFiles<T extends BuilderProgram>(program: Program | T) {
         const x: Program = isBuilderProgram(program) ? program.getProgram() : program;
-              ~
-!!! error TS2322: Type 'Program | T' is not assignable to type 'Program'.
-!!! error TS2322:   Type 'T' is not assignable to type 'Program'.
-!!! error TS2322:     Property 'state' is missing in type 'BuilderProgram' but required in type 'Program'.
-!!! related TS2728 tests/cases/compiler/quickinfoTypeAtReturnPositionsInaccurate.ts:97:5: 'state' is declared here.
     }

@@ -113,6 +113,7 @@ var str: string;
 >str : Symbol(str, Decl(typeAssertions.ts, 42, 3))
 
 if(<numOrStr is string>(numOrStr === undefined)) { // Error
+>numOrStr : Symbol(numOrStr)
 >numOrStr : Symbol(numOrStr, Decl(typeAssertions.ts, 41, 3))
 >undefined : Symbol(undefined)
 
@@ -124,6 +125,7 @@ if(<numOrStr is string>(numOrStr === undefined)) { // Error
 if((numOrStr === undefined) as numOrStr is string) { // Error
 >numOrStr : Symbol(numOrStr, Decl(typeAssertions.ts, 41, 3))
 >undefined : Symbol(undefined)
+>numOrStr : Symbol(numOrStr)
 }
 
 

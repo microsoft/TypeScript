@@ -1,8 +1,9 @@
 //// [tests/cases/compiler/APISample_parseConfig.ts] ////
 
-//// [index.d.ts]
-declare module "typescript" {
-    export = ts;
+//// [package.json]
+{
+    "name": "typescript",
+    "types": "/.ts/typescript.d.ts"
 }
 
 //// [APISample_parseConfig.ts]
@@ -42,6 +43,7 @@ export function createProgram(rootFiles: string[], compilerOptionsJson: string):
     return ts.createProgram(rootFiles, settings.options);
 }
 
+
 //// [APISample_parseConfig.js]
 "use strict";
 /*
@@ -56,7 +58,7 @@ function printError(error) {
     if (!error) {
         return;
     }
-    console.log((error.file && error.file.fileName) + ": " + error.messageText);
+    console.log("".concat(error.file && error.file.fileName, ": ").concat(error.messageText));
 }
 function createProgram(rootFiles, compilerOptionsJson) {
     var _a = ts.parseConfigFileTextToJson("tsconfig.json", compilerOptionsJson), config = _a.config, error = _a.error;

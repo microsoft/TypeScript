@@ -11,7 +11,7 @@
 verify.applyCodeActionFromCompletion("", {
   name: "a",
   source: "/a",
-  description: `Import 'a' from module "./a"`,
+  description: `Add import from "./a"`,
   newFileContent: `import { a } from "./a";
 
 function *f() {

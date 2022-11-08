@@ -12,6 +12,6 @@ declare module "m" {
 >X : any
 
     export function bar(): X.bar; // error
->bar : () => any
+>bar : () => X.bar
 >X : any
 }

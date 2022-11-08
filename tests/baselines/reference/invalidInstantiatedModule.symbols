@@ -29,6 +29,8 @@ var m = M2;
 
 var p: m.Point; // Error
 >p : Symbol(p, Decl(invalidInstantiatedModule.ts, 11, 3))
+>m : Symbol(m)
+>Point : Symbol(m.Point)
 
 
  

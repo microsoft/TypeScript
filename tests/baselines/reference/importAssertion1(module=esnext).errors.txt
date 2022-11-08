@@ -1,0 +1,42 @@
+tests/cases/conformance/importAssertion/3.ts(8,11): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
+tests/cases/conformance/importAssertion/3.ts(9,11): message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
+
+
+==== tests/cases/conformance/importAssertion/0.ts (0 errors) ====
+    export const a = 1;
+    export const b = 2;
+    
+==== tests/cases/conformance/importAssertion/1.ts (0 errors) ====
+    import './0' assert { type: "json" }
+    import { a, b } from './0' assert { "type": "json" }
+    import * as foo from './0' assert { type: "json" }
+    a;
+    b;
+    foo.a;
+    foo.b;
+    
+==== tests/cases/conformance/importAssertion/2.ts (0 errors) ====
+    import { a, b } from './0' assert {}
+    import { a as c, b as d } from './0' assert { a: "a", b: "b", c: "c" }
+    a;
+    b;
+    c;
+    d;
+    
+==== tests/cases/conformance/importAssertion/3.ts (2 errors) ====
+    const a = import('./0')
+    const b = import('./0', { assert: { type: "json" } })
+    const c = import('./0', { assert: { type: "json", ttype: "typo" } })
+    const d = import('./0', { assert: {} })
+    const dd = import('./0', {})
+    declare function foo(): any;
+    const e = import('./0', foo())
+    const f = import()
+              ~~~~~~~~
+!!! message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
+    const g = import('./0', {}, {})
+              ~~~~~~~~~~~~~~~~~~~~~
+!!! message TS1450: Dynamic imports can only accept a module specifier and an optional assertion as arguments
+    const h = import('./0', { assert: { type: "json" }},)
+    
+    

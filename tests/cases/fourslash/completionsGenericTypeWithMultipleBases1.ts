@@ -16,7 +16,7 @@ verify.completions({
     marker: "",
     exact: [
         { name: "family", text: "(property) iScope<number>.family: number" },
-        { name: "watch", text: "(property) iBaseScope.watch: () => void" },
         { name: "moveUp", text: "(property) iMover.moveUp: () => void" },
+        { name: "watch", text: "(property) iBaseScope.watch: () => void" },
     ],
 });

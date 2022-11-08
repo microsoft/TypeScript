@@ -4,7 +4,7 @@ class C {
 
   static #x = 123;
 >#x : Symbol(C.#x, Decl(classStaticBlock13.ts, 0, 9))
-  
+
   static {
     console.log(C.#x)
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))

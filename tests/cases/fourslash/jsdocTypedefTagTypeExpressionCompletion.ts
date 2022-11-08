@@ -62,18 +62,17 @@ verify.completions(
     {
         marker: "valueMemberOfFooInstance",
         exact: [
-            { name: "property1", kind: "property" },
             { name: "method3", kind: "method" },
             { name: "method4", kind: "method" },
+            { name: "property1", kind: "property" },
         ],
     },
     {
         marker: "valueMemberOfFoo",
-        exact: [
-            { name: "prototype", sortText: completion.SortText.LocationPriority },
+        exact: completion.functionMembersPlus([
             { name: "method1", kind: "method", kindModifiers: "static", sortText: completion.SortText.LocalDeclarationPriority },
-            ...completion.functionMembers,
-        ],
+            { name: "prototype", sortText: completion.SortText.LocationPriority },
+        ]),
     },
     {
         marker: "propertyName",

@@ -12,7 +12,7 @@ goTo.marker("");
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/a",
-    description: `Import 'foo' from module "./a"`,
+    description: `Add import from "./a"`,
     preferences: {
         quotePreference: "single",
     },

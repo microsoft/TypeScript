@@ -1,7 +1,7 @@
 === tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts ===
 // #31995
 type State = {
->State : State
+>State : { type: "numberVariant"; data: number; } | { type: "stringVariant"; data: string; }
 
     type: "numberVariant";
 >type : "numberVariant"

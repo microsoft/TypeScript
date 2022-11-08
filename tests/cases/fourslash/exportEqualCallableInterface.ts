@@ -15,5 +15,5 @@
 
 verify.completions({
     marker: "",
-    exact: ["foo", ...completion.functionMembersWithPrototype],
+    exact: completion.functionMembersWithPrototypePlus(["foo"]),
 });

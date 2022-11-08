@@ -1,13 +1,16 @@
 === tests/cases/conformance/types/typeAliases/intrinsicKeyword.ts ===
 let e1: intrinsic;
 >e1 : Symbol(e1, Decl(intrinsicKeyword.ts, 0, 3))
+>intrinsic : Symbol(intrinsic)
 
 let e2: { intrinsic: intrinsic };
 >e2 : Symbol(e2, Decl(intrinsicKeyword.ts, 1, 3))
 >intrinsic : Symbol(intrinsic, Decl(intrinsicKeyword.ts, 1, 9))
+>intrinsic : Symbol(intrinsic)
 
 type TE1 = (intrinsic);
 >TE1 : Symbol(TE1, Decl(intrinsicKeyword.ts, 1, 33))
+>intrinsic : Symbol(intrinsic)
 
 type TE2<intrinsic> = intrinsic;
 >TE2 : Symbol(TE2, Decl(intrinsicKeyword.ts, 2, 23))
@@ -16,6 +19,7 @@ type TE2<intrinsic> = intrinsic;
 type TE3<T extends intrinsic> = T;
 >TE3 : Symbol(TE3, Decl(intrinsicKeyword.ts, 3, 32))
 >T : Symbol(T, Decl(intrinsicKeyword.ts, 4, 9))
+>intrinsic : Symbol(intrinsic)
 >T : Symbol(T, Decl(intrinsicKeyword.ts, 4, 9))
 
 type TE4<intrinsic extends intrinsic> = intrinsic;
@@ -34,6 +38,8 @@ function f1() {
 
     let intrinsic: intrinsic.intrinsic;
 >intrinsic : Symbol(intrinsic, Decl(intrinsicKeyword.ts, 9, 7))
+>intrinsic : Symbol(intrinsic)
+>intrinsic : Symbol(intrinsic.intrinsic)
 }
 
 function f2(intrinsic: string) {

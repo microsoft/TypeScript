@@ -26,3 +26,9 @@ function computeCommonSourceDirectoryOfFilenames(integer) {
 >integer : Symbol(integer, Decl(linkTagEmit1.js, 12, 49))
 }
 
+/** {@link https://hvad} */
+var see3 = true
+>see3 : Symbol(see3, Decl(linkTagEmit1.js, 17, 3))
+
+/** @typedef {number} Attempt {@link https://wat} {@linkcode I think lingcod is better} {@linkplain or lutefisk}*/
+

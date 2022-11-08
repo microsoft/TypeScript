@@ -67,6 +67,7 @@ function tup2<T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) {
     return [1, ...t, 2, ...u, 3] as const;
 >t : Symbol(t, Decl(variadicTuples1.ts, 19, 56))
 >u : Symbol(u, Decl(variadicTuples1.ts, 19, 66))
+>const : Symbol(const)
 }
 
 const t2 = tup2(['hello'], [10, true]);
@@ -127,6 +128,8 @@ function concat2<T extends readonly unknown[], U extends readonly unknown[]>(t: 
 const tc5 = concat2([1, 2, 3] as const, [4, 5, 6] as const);  // (1 | 2 | 3 | 4 | 5 | 6)[]
 >tc5 : Symbol(tc5, Decl(variadicTuples1.ts, 40, 5))
 >concat2 : Symbol(concat2, Decl(variadicTuples1.ts, 34, 34))
+>const : Symbol(const)
+>const : Symbol(const)
 
 // Spread arguments
 

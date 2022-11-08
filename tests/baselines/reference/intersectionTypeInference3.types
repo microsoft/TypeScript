@@ -13,7 +13,7 @@ type Nominal<Kind extends string, Type> = Type & {
 };
 
 type A = Nominal<'A', string>;
->A : A
+>A : string & { [Symbol.species]: "A"; }
 
 declare const a: Set<A>;
 >a : Set<A>

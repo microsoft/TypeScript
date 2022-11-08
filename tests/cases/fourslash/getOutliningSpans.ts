@@ -26,11 +26,11 @@
 ////    }|]
 ////}|]
 ////// class expressions
-//// (new class[| {
+//// [|(new class[| {
 ////     bla()[| {
 ////
 ////     }|]
-//// }|])
+//// }|])|]
 ////switch(1)[| {
 //// case 1:[| break;|]
 ////}|]
@@ -64,9 +64,9 @@
 ////}|]
 ////
 ////// function expressions
-////(function f()[| {
+////[|(function f()[| {
 ////
-////}|])
+////}|])|]
 ////
 ////// trivia handeling
 ////class ClassFooWithTrivia[| /*  some comments */
@@ -114,6 +114,15 @@
 ////        2
 ////    ]|]
 ////)|];
-
+////
+////class C<T>[| {
+////    foo: T;
+////}|]
+////
+////class D<T> extends C<T>[| {
+////    constructor(x)[| {
+////        super<T>(x);
+////    }|]
+////}|]
 
 verify.outliningSpansInCurrentFile(test.ranges(), "code");

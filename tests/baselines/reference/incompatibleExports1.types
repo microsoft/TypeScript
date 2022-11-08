@@ -23,7 +23,7 @@ declare module "baz" {
     }
  
     module c {
->c : typeof c
+>c : typeof import("baz")
 
         export var c: string;
 >c : string

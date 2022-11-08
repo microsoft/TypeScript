@@ -1,0 +1,41 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/foo.ts",
+      "position": 77,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 75,
+        "length": 6
+      },
+      "displayParts": [],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/foo.ts",
+      "position": 84,
+      "name": "2"
+    },
+    "quickInfo": {
+      "kind": "interface",
+      "kindModifiers": "declare",
+      "textSpan": {
+        "start": 75,
+        "length": 11
+      },
+      "displayParts": [],
+      "documentation": [
+        {
+          "text": "The type of `import.meta`.\n\nIf you need to declare that a given property exists on `import.meta`,\nthis type may be augmented via interface merging.",
+          "kind": "text"
+        }
+      ]
+    }
+  }
+]

@@ -8,29 +8,29 @@ var v1: C<T>;
 >v1 : any
 
 var v2: D<T> = null;
->v2 : any
+>v2 : D<T>
 >null : null
 
 var v3: E.F<T>;
->v3 : any
+>v3 : E.F<T>
 >E : any
 
 var v3: G.H.I<T>;
->v3 : any
+>v3 : E.F<T>
 >G : any
 >H : any
 
 var v6: K<T>[];
->v6 : any[]
+>v6 : K<T>[]
 
 
 function f1(a: E<T>) {
->f1 : (a: any) => void
->a : any
+>f1 : (a: E<T>) => void
+>a : E<T>
 }
 
 function f2(): F<T> {
->f2 : () => any
+>f2 : () => F<T>
 }
 
 

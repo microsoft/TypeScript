@@ -5,4 +5,6 @@ interface OhNo {
 
 declare let y: OhNo.hello;
 >y : Symbol(y, Decl(invalidUseOfTypeAsNamespace.ts, 3, 11))
+>OhNo : Symbol(OhNo)
+>hello : Symbol(OhNo.hello)
 

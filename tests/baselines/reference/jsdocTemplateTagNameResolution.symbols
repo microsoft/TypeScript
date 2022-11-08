@@ -1,0 +1,15 @@
+=== tests/cases/conformance/jsdoc/file.js ===
+/**
+ * @template T
+ * @template {keyof T} K
+ * @typedef {T[K]} Foo
+ */
+
+const x = { a: 1 };
+>x : Symbol(x, Decl(file.js, 6, 5))
+>a : Symbol(a, Decl(file.js, 6, 11))
+
+/** @type {Foo<typeof x, "a">} */
+const y = "a";
+>y : Symbol(y, Decl(file.js, 9, 5))
+

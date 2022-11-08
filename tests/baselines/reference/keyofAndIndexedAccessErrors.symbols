@@ -23,6 +23,7 @@ type Dictionary<T> = { [x: string]: T };
 
 type T00 = keyof K0;  // Error
 >T00 : Symbol(T00, Decl(keyofAndIndexedAccessErrors.ts, 7, 40))
+>K0 : Symbol(K0)
 
 type T01 = keyof Object;
 >T01 : Symbol(T01, Decl(keyofAndIndexedAccessErrors.ts, 9, 20))

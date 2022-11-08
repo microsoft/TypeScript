@@ -48,7 +48,7 @@ interface Test2 {
 }
 
 type Test3 = {
->Test3 : Test3
+>Test3 : { foo: string; bar: string | number; }
 
     get foo(): string;
 >foo : string

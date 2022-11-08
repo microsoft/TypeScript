@@ -17,5 +17,5 @@ console.log('X is ' + X);
 
 === tests/cases/compiler/other.ts ===
 export type X = {};
->X : X
+>X : {}
 

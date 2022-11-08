@@ -32,5 +32,5 @@ var v = (_a = {},
     _a[a] = function () { },
     _a[true] = function () { },
     _a["hello bye"] = function () { },
-    _a["hello " + a + " bye"] = function () { },
+    _a["hello ".concat(a, " bye")] = function () { },
     _a);

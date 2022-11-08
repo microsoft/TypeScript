@@ -1,0 +1,97 @@
+tests/cases/compiler/parseInvalidNames.ts(1,1): error TS2304: Cannot find name 'namespace'.
+tests/cases/compiler/parseInvalidNames.ts(1,11): error TS2819: Namespace name cannot be '100'.
+tests/cases/compiler/parseInvalidNames.ts(1,15): error TS1005: ';' expected.
+tests/cases/compiler/parseInvalidNames.ts(2,1): error TS2304: Cannot find name 'interface'.
+tests/cases/compiler/parseInvalidNames.ts(2,11): error TS2427: Interface name cannot be '100'.
+tests/cases/compiler/parseInvalidNames.ts(2,15): error TS1005: ';' expected.
+tests/cases/compiler/parseInvalidNames.ts(3,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+tests/cases/compiler/parseInvalidNames.ts(3,8): error TS2819: Namespace name cannot be '100'.
+tests/cases/compiler/parseInvalidNames.ts(3,12): error TS1005: ';' expected.
+tests/cases/compiler/parseInvalidNames.ts(4,1): error TS2304: Cannot find name 'type'.
+tests/cases/compiler/parseInvalidNames.ts(4,6): error TS2457: Type alias name cannot be '100'.
+tests/cases/compiler/parseInvalidNames.ts(4,10): error TS1005: ';' expected.
+tests/cases/compiler/parseInvalidNames.ts(6,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/parseInvalidNames.ts(6,8): error TS2304: Cannot find name 'namespace'.
+tests/cases/compiler/parseInvalidNames.ts(6,18): error TS2819: Namespace name cannot be '100'.
+tests/cases/compiler/parseInvalidNames.ts(6,22): error TS1005: ';' expected.
+tests/cases/compiler/parseInvalidNames.ts(7,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/parseInvalidNames.ts(7,8): error TS2304: Cannot find name 'interface'.
+tests/cases/compiler/parseInvalidNames.ts(7,18): error TS2427: Interface name cannot be '100'.
+tests/cases/compiler/parseInvalidNames.ts(7,22): error TS1005: ';' expected.
+tests/cases/compiler/parseInvalidNames.ts(8,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/parseInvalidNames.ts(8,8): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+tests/cases/compiler/parseInvalidNames.ts(8,15): error TS2819: Namespace name cannot be '100'.
+tests/cases/compiler/parseInvalidNames.ts(8,19): error TS1005: ';' expected.
+tests/cases/compiler/parseInvalidNames.ts(9,1): error TS1128: Declaration or statement expected.
+tests/cases/compiler/parseInvalidNames.ts(9,8): error TS2304: Cannot find name 'type'.
+tests/cases/compiler/parseInvalidNames.ts(9,13): error TS2457: Type alias name cannot be '100'.
+tests/cases/compiler/parseInvalidNames.ts(9,17): error TS1005: ';' expected.
+
+
+==== tests/cases/compiler/parseInvalidNames.ts (28 errors) ====
+    namespace 100 {}
+    ~~~~~~~~~
+!!! error TS2304: Cannot find name 'namespace'.
+              ~~~
+!!! error TS2819: Namespace name cannot be '100'.
+                  ~
+!!! error TS1005: ';' expected.
+    interface 100 {}
+    ~~~~~~~~~
+!!! error TS2304: Cannot find name 'interface'.
+              ~~~
+!!! error TS2427: Interface name cannot be '100'.
+                  ~
+!!! error TS1005: ';' expected.
+    module 100 {}
+    ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+           ~~~
+!!! error TS2819: Namespace name cannot be '100'.
+               ~
+!!! error TS1005: ';' expected.
+    type 100 {}
+    ~~~~
+!!! error TS2304: Cannot find name 'type'.
+         ~~~
+!!! error TS2457: Type alias name cannot be '100'.
+             ~
+!!! error TS1005: ';' expected.
+    
+    export namespace 100 {}
+    ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+           ~~~~~~~~~
+!!! error TS2304: Cannot find name 'namespace'.
+                     ~~~
+!!! error TS2819: Namespace name cannot be '100'.
+                         ~
+!!! error TS1005: ';' expected.
+    export interface 100 {}
+    ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+           ~~~~~~~~~
+!!! error TS2304: Cannot find name 'interface'.
+                     ~~~
+!!! error TS2427: Interface name cannot be '100'.
+                         ~
+!!! error TS1005: ';' expected.
+    export module 100 {}
+    ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+           ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node`.
+                  ~~~
+!!! error TS2819: Namespace name cannot be '100'.
+                      ~
+!!! error TS1005: ';' expected.
+    export type 100 {}
+    ~~~~~~
+!!! error TS1128: Declaration or statement expected.
+           ~~~~
+!!! error TS2304: Cannot find name 'type'.
+                ~~~
+!!! error TS2457: Type alias name cannot be '100'.
+                    ~
+!!! error TS1005: ';' expected.
+    

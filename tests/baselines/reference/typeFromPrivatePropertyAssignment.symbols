@@ -1,0 +1,32 @@
+=== tests/cases/conformance/classes/members/privateNames/typeFromPrivatePropertyAssignment.ts ===
+type Foo = { foo?: string };
+>Foo : Symbol(Foo, Decl(typeFromPrivatePropertyAssignment.ts, 0, 0))
+>foo : Symbol(foo, Decl(typeFromPrivatePropertyAssignment.ts, 0, 12))
+
+class C {
+>C : Symbol(C, Decl(typeFromPrivatePropertyAssignment.ts, 0, 28))
+
+    #a?: Foo;
+>#a : Symbol(C.#a, Decl(typeFromPrivatePropertyAssignment.ts, 2, 9))
+>Foo : Symbol(Foo, Decl(typeFromPrivatePropertyAssignment.ts, 0, 0))
+
+    #b?: Foo;
+>#b : Symbol(C.#b, Decl(typeFromPrivatePropertyAssignment.ts, 3, 13))
+>Foo : Symbol(Foo, Decl(typeFromPrivatePropertyAssignment.ts, 0, 0))
+
+    m() {
+>m : Symbol(C.m, Decl(typeFromPrivatePropertyAssignment.ts, 4, 13))
+
+        const a = this.#a || {};
+>a : Symbol(a, Decl(typeFromPrivatePropertyAssignment.ts, 7, 13))
+>this.#a : Symbol(C.#a, Decl(typeFromPrivatePropertyAssignment.ts, 2, 9))
+>this : Symbol(C, Decl(typeFromPrivatePropertyAssignment.ts, 0, 28))
+
+        this.#b = this.#b || {};
+>this.#b : Symbol(C.#b, Decl(typeFromPrivatePropertyAssignment.ts, 3, 13))
+>this : Symbol(C, Decl(typeFromPrivatePropertyAssignment.ts, 0, 28))
+>this.#b : Symbol(C.#b, Decl(typeFromPrivatePropertyAssignment.ts, 3, 13))
+>this : Symbol(C, Decl(typeFromPrivatePropertyAssignment.ts, 0, 28))
+    }
+}
+

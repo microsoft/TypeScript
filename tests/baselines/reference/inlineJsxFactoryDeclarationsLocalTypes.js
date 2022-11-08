@@ -89,31 +89,36 @@ const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
 
 //// [component.js]
 "use strict";
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 var _this = this;
 exports.__esModule = true;
 exports.tree = exports.MyClass = exports.MySFC = void 0;
 /** @jsx predom */
 var renderer2_1 = require("./renderer2");
-var MySFC = function (props) { return (0, renderer2_1.predom)("p", null,
-    props.x,
+var MySFC = function (props) { return renderer2_1.predom.apply(void 0, __spreadArray(["p", null, props.x,
     " + ",
     props.y,
     " = ",
-    props.x + props.y,
-    _this.props.children); };
+    props.x + props.y], _this.props.children, false)); };
 exports.MySFC = MySFC;
 var MyClass = /** @class */ (function () {
     function MyClass(props) {
         this.props = props;
     }
     MyClass.prototype.render = function () {
-        return (0, renderer2_1.predom)("p", null,
-            this.props.x,
+        return renderer2_1.predom.apply(void 0, __spreadArray(["p", null, this.props.x,
             " + ",
             this.props.y,
             " = ",
-            this.props.x + this.props.y,
-            this.props.children);
+            this.props.x + this.props.y], this.props.children, false));
     };
     return MyClass;
 }());
@@ -124,6 +129,15 @@ exports.tree = (0, renderer2_1.predom)(exports.MySFC, { x: 1, y: 2 },
 exports["default"] = (0, renderer2_1.predom)("h", null);
 //// [index.js]
 "use strict";
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 exports.__esModule = true;
 /** @jsx dom */
 var renderer_1 = require("./renderer");
@@ -142,13 +156,11 @@ var DOMClass = /** @class */ (function () {
         this.props = props;
     }
     DOMClass.prototype.render = function () {
-        return (0, renderer_1.dom)("p", null,
-            this.props.x,
+        return renderer_1.dom.apply(void 0, __spreadArray(["p", null, this.props.x,
             " + ",
             this.props.y,
             " = ",
-            this.props.x + this.props.y,
-            this.props.children);
+            this.props.x + this.props.y], this.props.children, false));
     };
     return DOMClass;
 }());

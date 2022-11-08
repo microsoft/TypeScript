@@ -1,6 +1,6 @@
 === tests/cases/compiler/accessorBodyInTypeContext.ts ===
 type A = {
->A : A
+>A : { readonly foo: number; }
 
     get foo() { return 0 }
 >foo : number
@@ -9,7 +9,7 @@ type A = {
 };
 
 type B = {
->B : B
+>B : { foo: any; }
 
     set foo(v: any) { }
 >foo : any

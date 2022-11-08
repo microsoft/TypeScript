@@ -1,0 +1,73 @@
+=== tests/cases/compiler/contextuallyTypedSymbolNamedProperties.ts ===
+// Repros from #43628
+
+const A = Symbol("A");
+>A : Symbol(A, Decl(contextuallyTypedSymbolNamedProperties.ts, 2, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+const B = Symbol("B");
+>B : Symbol(B, Decl(contextuallyTypedSymbolNamedProperties.ts, 3, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+
+type Action =
+>Action : Symbol(Action, Decl(contextuallyTypedSymbolNamedProperties.ts, 3, 22))
+
+    | {type: typeof A, data: string}
+>type : Symbol(type, Decl(contextuallyTypedSymbolNamedProperties.ts, 6, 7))
+>A : Symbol(A, Decl(contextuallyTypedSymbolNamedProperties.ts, 2, 5))
+>data : Symbol(data, Decl(contextuallyTypedSymbolNamedProperties.ts, 6, 22))
+
+    | {type: typeof B, data: number}
+>type : Symbol(type, Decl(contextuallyTypedSymbolNamedProperties.ts, 7, 7))
+>B : Symbol(B, Decl(contextuallyTypedSymbolNamedProperties.ts, 3, 5))
+>data : Symbol(data, Decl(contextuallyTypedSymbolNamedProperties.ts, 7, 22))
+
+declare const ab: Action;
+>ab : Symbol(ab, Decl(contextuallyTypedSymbolNamedProperties.ts, 9, 13))
+>Action : Symbol(Action, Decl(contextuallyTypedSymbolNamedProperties.ts, 3, 22))
+
+declare function f<T extends { type: string | symbol }>(action: T, blah: { [K in T['type']]: (p: K) => void }): any;
+>f : Symbol(f, Decl(contextuallyTypedSymbolNamedProperties.ts, 9, 25))
+>T : Symbol(T, Decl(contextuallyTypedSymbolNamedProperties.ts, 11, 19))
+>type : Symbol(type, Decl(contextuallyTypedSymbolNamedProperties.ts, 11, 30))
+>action : Symbol(action, Decl(contextuallyTypedSymbolNamedProperties.ts, 11, 56))
+>T : Symbol(T, Decl(contextuallyTypedSymbolNamedProperties.ts, 11, 19))
+>blah : Symbol(blah, Decl(contextuallyTypedSymbolNamedProperties.ts, 11, 66))
+>K : Symbol(K, Decl(contextuallyTypedSymbolNamedProperties.ts, 11, 76))
+>T : Symbol(T, Decl(contextuallyTypedSymbolNamedProperties.ts, 11, 19))
+>p : Symbol(p, Decl(contextuallyTypedSymbolNamedProperties.ts, 11, 94))
+>K : Symbol(K, Decl(contextuallyTypedSymbolNamedProperties.ts, 11, 76))
+
+f(ab, {
+>f : Symbol(f, Decl(contextuallyTypedSymbolNamedProperties.ts, 9, 25))
+>ab : Symbol(ab, Decl(contextuallyTypedSymbolNamedProperties.ts, 9, 13))
+
+    [A]: ap => { ap.description },
+>[A] : Symbol([A], Decl(contextuallyTypedSymbolNamedProperties.ts, 13, 7))
+>A : Symbol(A, Decl(contextuallyTypedSymbolNamedProperties.ts, 2, 5))
+>ap : Symbol(ap, Decl(contextuallyTypedSymbolNamedProperties.ts, 14, 8))
+>ap.description : Symbol(Symbol.description, Decl(lib.es2019.symbol.d.ts, --, --))
+>ap : Symbol(ap, Decl(contextuallyTypedSymbolNamedProperties.ts, 14, 8))
+>description : Symbol(Symbol.description, Decl(lib.es2019.symbol.d.ts, --, --))
+
+    [B]: bp => { bp.description },
+>[B] : Symbol([B], Decl(contextuallyTypedSymbolNamedProperties.ts, 14, 34))
+>B : Symbol(B, Decl(contextuallyTypedSymbolNamedProperties.ts, 3, 5))
+>bp : Symbol(bp, Decl(contextuallyTypedSymbolNamedProperties.ts, 15, 8))
+>bp.description : Symbol(Symbol.description, Decl(lib.es2019.symbol.d.ts, --, --))
+>bp : Symbol(bp, Decl(contextuallyTypedSymbolNamedProperties.ts, 15, 8))
+>description : Symbol(Symbol.description, Decl(lib.es2019.symbol.d.ts, --, --))
+
+})
+
+const x: { [sym: symbol]: (p: string) => void } = { [A]: s => s.length };
+>x : Symbol(x, Decl(contextuallyTypedSymbolNamedProperties.ts, 18, 5))
+>sym : Symbol(sym, Decl(contextuallyTypedSymbolNamedProperties.ts, 18, 12))
+>p : Symbol(p, Decl(contextuallyTypedSymbolNamedProperties.ts, 18, 27))
+>[A] : Symbol([A], Decl(contextuallyTypedSymbolNamedProperties.ts, 18, 51))
+>A : Symbol(A, Decl(contextuallyTypedSymbolNamedProperties.ts, 2, 5))
+>s : Symbol(s, Decl(contextuallyTypedSymbolNamedProperties.ts, 18, 56))
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(contextuallyTypedSymbolNamedProperties.ts, 18, 56))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+

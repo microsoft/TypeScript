@@ -18,6 +18,13 @@ declare var dec: any;
 >await this.#x : number
 >this.#x : number
 >this : this
+
+    g(u) { return #x in u; }
+>g : (u: any) => boolean
+>u : any
+>#x in u : boolean
+>#x : any
+>u : any
 }
 
 const o = { a: 1 };
@@ -75,4 +82,9 @@ export declare function __classPrivateFieldSet(a: any, b: any, c: any, d: any, e
 >c : any
 >d : any
 >e : any
+
+export declare function __classPrivateFieldIn(a: any, b: any): boolean;
+>__classPrivateFieldIn : (a: any, b: any) => boolean
+>a : any
+>b : any
 

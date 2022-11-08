@@ -9,8 +9,8 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "formik": "latest",
+    "@types/prop-types": "latest",
     "@types/react": "latest",
-    "@types/prop-types": "latest"
+    "formik": "latest"
   }
 }

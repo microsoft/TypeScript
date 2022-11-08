@@ -8,10 +8,10 @@ type ExtendedMapper<HandledInputT, OutputT, ArgsT extends any[]> = (name : strin
 >args : ArgsT
 
 type a = ExtendedMapper<any, any, [any]>;
->a : a
+>a : (name: string, mixed: any, args_0: any) => any
 
 type b = ExtendedMapper<any, any, any[]>;
->b : b
+>b : (name: string, mixed: any, ...args: any[]) => any
 
 type test = a extends b ? "y" : "n"
 >test : "y"
@@ -32,10 +32,10 @@ type ExtendedMapper1<HandledInputT, OutputT, ArgsT extends any[]> = (
 );
 
 type a1 = ExtendedMapper1<any, any, [any]>;
->a1 : a1
+>a1 : (name: string, mixed: any, args_0: any) => any
 
 type b1 = ExtendedMapper1<any, any, any[]>;
->b1 : b1
+>b1 : (name: string, mixed: any, ...args: any[]) => any
 
 type test1 = a1 extends b1 ? "y" : "n"
 >test1 : "y"
@@ -56,10 +56,10 @@ type ExtendedMapper2<HandledInputT, OutputT, ArgsT extends any[]> = (
 );
 
 type a2 = ExtendedMapper2<any, any, [any]>;
->a2 : a2
+>a2 : (name: string, mixed: any, args_0: any) => any
 
 type b2 = ExtendedMapper2<any, any, any[]>;
->b2 : b2
+>b2 : (name: string, mixed: any, ...args: any[]) => any
 
 type test2 = a2 extends b2 ? "y" : "n"
 >test2 : "y"
@@ -69,13 +69,13 @@ let check2: test2 = "y";
 >"y" : "y"
 
 type a3 = (name: string, mixed: any, args_0: any) => any
->a3 : a3
+>a3 : (name: string, mixed: any, args_0: any) => any
 >name : string
 >mixed : any
 >args_0 : any
 
 type b3 = (name: string, mixed: any, ...args: any[]) => any
->b3 : b3
+>b3 : (name: string, mixed: any, ...args: any[]) => any
 >name : string
 >mixed : any
 >args : any[]

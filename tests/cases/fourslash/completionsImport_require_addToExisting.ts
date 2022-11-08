@@ -27,7 +27,7 @@ verify.completions({
 verify.applyCodeActionFromCompletion("", {
   name: "x",
   source: "/a",
-  description: `Add 'x' to existing import declaration from "./a"`,
+  description: `Update import from "./a"`,
   newFileContent: `const { f, x } = require("./a");
 
 x`,

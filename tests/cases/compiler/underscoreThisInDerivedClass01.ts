@@ -18,6 +18,8 @@ class C {
 class D extends C {
     constructor() {
         var _this = "uh-oh?";
+        console.log("ruh-roh...");
         super();
+        console.log("d'oh!");
     }
 }

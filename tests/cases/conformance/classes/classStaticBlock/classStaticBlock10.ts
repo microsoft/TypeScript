@@ -1,4 +1,4 @@
-// @target: esnext, es2015, es5
+// @target: esnext, es2022, es2015, es5
 var a1 = 1;
 var a2 = 1;
 const b1 = 2;

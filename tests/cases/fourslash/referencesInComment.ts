@@ -5,4 +5,4 @@
 ////class foo { }
 ////var bar = 0;
 
-goTo.eachMarker(() => verify.noReferences());
+verify.baselineFindAllReferences('1', '2', '3', '4')

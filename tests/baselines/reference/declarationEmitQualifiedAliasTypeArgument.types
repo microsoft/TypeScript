@@ -24,10 +24,10 @@ export enum E {
 }
 
 export type T = G<E>;
->T : T
+>T : { a: string; b: string; }
 
 export type Q = G<E.A>;
->Q : Q
+>Q : { a: string; }
 >E : any
 
 === tests/cases/compiler/index.ts ===

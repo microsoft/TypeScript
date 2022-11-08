@@ -50,9 +50,15 @@ class D extends A {
 >9 : 9
 
     constructor () {
-        var x = 1; // Error
+        var x = 1; // No error
 >x : number
 >1 : 1
+
+        var y = this.s; // Error
+>y : number
+>this.s : number
+>this : this
+>s : number
 
         super();
 >super() : void

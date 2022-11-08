@@ -4,6 +4,7 @@ var v: {
 
    A: B
 >A : Symbol(A, Decl(parserObjectType5.ts, 0, 8))
+>B : Symbol(B)
 
    <T>;
 >T : Symbol(T, Decl(parserObjectType5.ts, 2, 4))

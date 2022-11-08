@@ -18,7 +18,7 @@
 
 function verifyHasBar() {
     verify.completions({
-        exact: [
+        unsorted: [
             { name: "bar", text: "(method) IFoo.bar(): void", kind: "method" },
             ...completion.classElementKeywords,
         ],

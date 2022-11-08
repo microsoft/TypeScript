@@ -2,7 +2,7 @@
 // Repro from #9977
 
 type IDLMemberTypes = OperationMemberType | ConstantMemberType;
->IDLMemberTypes : IDLMemberTypes
+>IDLMemberTypes : OperationMemberType | ConstantMemberType
 
 interface IDLTypeDescription {
     origin: string;

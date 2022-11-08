@@ -40,4 +40,3 @@ class C { m(null: string) {} }
 > : Symbol((Missing), Decl(reservedWords2.ts, 11, 12))
 >string : Symbol(string, Decl(reservedWords2.ts, 11, 17))
 
-

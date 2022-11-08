@@ -41,7 +41,7 @@ export const works1 = fn((x: number) => x);
 >x : number
 
 type MakeItWork = <T>(x: T) => T;
->MakeItWork : MakeItWork
+>MakeItWork : <T>(x: T) => T
 >x : T
 
 export const works2 = fn<MakeItWork>(x => x);

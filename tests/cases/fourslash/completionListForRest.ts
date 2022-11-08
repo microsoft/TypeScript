@@ -10,5 +10,8 @@
 
 verify.completions({
     marker: "1",
-    exact: [{ name: "parent", text: "(property) Gen.parent: Gen" }, { name: "millenial", text: "(property) Gen.millenial: string" }],
+    exact: [
+        { name: "millenial", text: "(property) Gen.millenial: string" },
+        { name: "parent", text: "(property) Gen.parent: Gen" },
+    ],
 });

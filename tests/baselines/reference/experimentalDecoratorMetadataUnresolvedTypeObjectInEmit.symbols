@@ -25,5 +25,6 @@ class Foo {
 >B : Symbol(A.B, Decl(types.d.ts, 0, 21))
 >C : Symbol(A.B.C, Decl(types.d.ts, 1, 24))
 >D : Symbol(A.B.C.D, Decl(types.d.ts, 2, 28))
+>E : Symbol(A.B.C.D.E)
 }
 

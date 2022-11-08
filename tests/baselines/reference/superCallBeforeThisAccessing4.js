@@ -34,16 +34,19 @@ var __extends = (this && this.__extends) || (function () {
 var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
-        this._t;
+        var _this = this;
+        _this._t;
         _this = _super.call(this) || this;
+        return _this;
     }
     return D;
 }(null));
 var E = /** @class */ (function (_super) {
     __extends(E, _super);
     function E() {
-        _this = _super.call(this) || this;
-        this._t;
+        var _this = _super.call(this) || this;
+        _this._t;
+        return _this;
     }
     return E;
 }(null));

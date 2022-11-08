@@ -45,7 +45,7 @@ export module A {
 
     // collision with 'Origin' var in other part of merged module
     export var Origin: Point = { x: 0, y: 0 };
->Origin : any
+>Origin : Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -59,8 +59,8 @@ export module A {
 >Plane : Plane
 
             constructor(public tl: Point, public br: Point) { }
->tl : any
->br : any
+>tl : Point
+>br : Point
         }
     }
 }

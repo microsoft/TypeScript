@@ -1,8 +1,9 @@
 //// [tests/cases/compiler/APISample_linter.ts] ////
 
-//// [index.d.ts]
-declare module "typescript" {
-    export = ts;
+//// [package.json]
+{
+    "name": "typescript",
+    "types": "/.ts/typescript.d.ts"
 }
 
 //// [APISample_linter.ts]
@@ -70,6 +71,7 @@ fileNames.forEach(fileName => {
     delint(sourceFile);
 });
 
+
 //// [APISample_linter.js]
 "use strict";
 /*
@@ -114,7 +116,7 @@ function delint(sourceFile) {
     }
     function report(node, message) {
         var _a = sourceFile.getLineAndCharacterOfPosition(node.getStart()), line = _a.line, character = _a.character;
-        console.log(sourceFile.fileName + " (" + (line + 1) + "," + (character + 1) + "): " + message);
+        console.log("".concat(sourceFile.fileName, " (").concat(line + 1, ",").concat(character + 1, "): ").concat(message));
     }
 }
 exports.delint = delint;

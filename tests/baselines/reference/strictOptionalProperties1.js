@@ -211,6 +211,29 @@ a = c;
 a = d;  // Error
 a = e;  // Error
 
+// Repro from #46004
+
+interface PropsFromReact {
+    onClick?: () => void;
+}
+
+interface PropsFromMaterialUI {
+    onClick?: (() => void) | undefined;
+}
+
+type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+
+interface NavBottomListItem extends TheTypeFromMaterialUI {
+    value: string;
+}
+
+// Repro from #46004
+
+type UA = undefined;  // Explicit undefined type
+type UB = { x?: never }['x'];  // undefined from missing property
+
+type UC = UA & UB;  // undefined
+
 
 //// [strictOptionalProperties1.js]
 "use strict";
@@ -369,11 +392,11 @@ declare function f4(t: [string?]): void;
 declare function f4a(t1: [number, string?], t2: [number, string?, string?]): void;
 declare function f5(t: [number, string?, boolean?]): void;
 declare function f6(): void;
-declare type Props = {
+type Props = {
     foo: string;
     bar: string;
 };
-declare type InputProps = {
+type InputProps = {
     foo?: string;
     bar: string;
 };
@@ -416,7 +439,7 @@ declare function f11<T>(x: {
 }): T;
 declare function f12<T>(x: [T?]): T;
 declare function f13<T>(x: Partial<T>): T;
-declare type Undefinable<T> = T | undefined;
+type Undefinable<T> = T | undefined;
 declare function expectNotUndefined<T>(value: Undefinable<T>): T;
 interface Bar {
     bar?: number;
@@ -453,3 +476,18 @@ declare var e: {
     a: number;
     b?: string | undefined;
 };
+interface PropsFromReact {
+    onClick?: () => void;
+}
+interface PropsFromMaterialUI {
+    onClick?: (() => void) | undefined;
+}
+type TheTypeFromMaterialUI = PropsFromReact & PropsFromMaterialUI;
+interface NavBottomListItem extends TheTypeFromMaterialUI {
+    value: string;
+}
+type UA = undefined;
+type UB = {
+    x?: never;
+}['x'];
+type UC = UA & UB;

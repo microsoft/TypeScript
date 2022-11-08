@@ -1,0 +1,50 @@
+=== tests/cases/compiler/controlFlowCommaExpressionAssertionMultiple.ts ===
+function Narrow<T>(value: any): asserts value is T {}
+>Narrow : Symbol(Narrow, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 0, 0))
+>T : Symbol(T, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 0, 16))
+>value : Symbol(value, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 0, 19))
+>value : Symbol(value, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 0, 19))
+>T : Symbol(T, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 0, 16))
+
+function func(foo: any, bar: any) {
+>func : Symbol(func, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 0, 53))
+>foo : Symbol(foo, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 2, 14))
+>bar : Symbol(bar, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 2, 23))
+
+    Narrow<number>(foo), Narrow<string>(bar);
+>Narrow : Symbol(Narrow, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 0, 0))
+>foo : Symbol(foo, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 2, 14))
+>Narrow : Symbol(Narrow, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 0, 0))
+>bar : Symbol(bar, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 2, 23))
+
+    foo;
+>foo : Symbol(foo, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 2, 14))
+
+    bar;
+>bar : Symbol(bar, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 2, 23))
+}
+
+function func2(foo: any, bar: any, baz: any) {
+>func2 : Symbol(func2, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 6, 1))
+>foo : Symbol(foo, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 15))
+>bar : Symbol(bar, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 24))
+>baz : Symbol(baz, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 34))
+
+    Narrow<number>(foo), Narrow<string>(bar), Narrow<boolean>(baz);
+>Narrow : Symbol(Narrow, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 0, 0))
+>foo : Symbol(foo, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 15))
+>Narrow : Symbol(Narrow, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 0, 0))
+>bar : Symbol(bar, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 24))
+>Narrow : Symbol(Narrow, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 0, 0))
+>baz : Symbol(baz, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 34))
+
+    foo;
+>foo : Symbol(foo, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 15))
+
+    bar;
+>bar : Symbol(bar, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 24))
+
+    baz;
+>baz : Symbol(baz, Decl(controlFlowCommaExpressionAssertionMultiple.ts, 8, 34))
+}
+

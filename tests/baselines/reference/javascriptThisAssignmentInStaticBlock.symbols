@@ -1,0 +1,49 @@
+=== /src/a.js ===
+class Thing {
+>Thing : Symbol(Thing, Decl(a.js, 0, 0))
+
+    static {
+        this.doSomething = () => {};
+>this.doSomething : Symbol(Thing.doSomething, Decl(a.js, 1, 12))
+>this : Symbol(Thing, Decl(a.js, 0, 0))
+>doSomething : Symbol(Thing.doSomething, Decl(a.js, 1, 12))
+    }
+}
+
+Thing.doSomething();
+>Thing.doSomething : Symbol(Thing.doSomething, Decl(a.js, 1, 12))
+>Thing : Symbol(Thing, Decl(a.js, 0, 0))
+>doSomething : Symbol(Thing.doSomething, Decl(a.js, 1, 12))
+
+// GH#46468
+class ElementsArray extends Array {
+>ElementsArray : Symbol(ElementsArray, Decl(a.js, 6, 20))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    static {
+        const superisArray = super.isArray;
+>superisArray : Symbol(superisArray, Decl(a.js, 11, 13))
+>super.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(ArrayConstructor, Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+
+        const customIsArray = (arg)=> superisArray(arg);
+>customIsArray : Symbol(customIsArray, Decl(a.js, 12, 13))
+>arg : Symbol(arg, Decl(a.js, 12, 31))
+>superisArray : Symbol(superisArray, Decl(a.js, 11, 13))
+>arg : Symbol(arg, Decl(a.js, 12, 31))
+
+        this.isArray = customIsArray;
+>this.isArray : Symbol(ElementsArray.isArray, Decl(a.js, 12, 56))
+>this : Symbol(ElementsArray, Decl(a.js, 6, 20))
+>isArray : Symbol(ElementsArray.isArray, Decl(a.js, 12, 56))
+>customIsArray : Symbol(customIsArray, Decl(a.js, 12, 13))
+    }
+}
+
+ElementsArray.isArray(new ElementsArray());
+>ElementsArray.isArray : Symbol(ElementsArray.isArray, Decl(a.js, 12, 56))
+>ElementsArray : Symbol(ElementsArray, Decl(a.js, 6, 20))
+>isArray : Symbol(ElementsArray.isArray, Decl(a.js, 12, 56))
+>ElementsArray : Symbol(ElementsArray, Decl(a.js, 6, 20))
+

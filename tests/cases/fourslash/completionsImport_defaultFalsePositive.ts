@@ -30,7 +30,7 @@ verify.completions({
 verify.applyCodeActionFromCompletion("", {
     name: "concat",
     source: "/node_modules/bar/concat",
-    description: `Import 'concat' from module "bar/concat"`,
+    description: `Add import from "bar/concat"`,
     newFileContent:
 `import { concat } from "bar/concat";
 

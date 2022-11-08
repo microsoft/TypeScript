@@ -1,10 +1,10 @@
 === tests/cases/conformance/types/intersection/operatorsAndIntersectionTypes.ts ===
 type Guid = string & { $Guid };          // Tagged string type
->Guid : Guid
+>Guid : string & { $Guid: any; }
 >$Guid : any
 
 type SerialNo = number & { $SerialNo };  // Tagged number type
->SerialNo : SerialNo
+>SerialNo : number & { $SerialNo: any; }
 >$SerialNo : any
 
 function createGuid() {

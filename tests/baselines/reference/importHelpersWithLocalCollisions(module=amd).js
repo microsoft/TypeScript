@@ -24,7 +24,7 @@ define(["require", "exports", "tslib"], function (require, exports, tslib_1) {
     exports.A = void 0;
     let A = class A {
     };
-    A = (0, tslib_1.__decorate)([
+    A = tslib_1.__decorate([
         dec
     ], A);
     exports.A = A;

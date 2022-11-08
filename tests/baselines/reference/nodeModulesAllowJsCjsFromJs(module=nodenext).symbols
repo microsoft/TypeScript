@@ -1,0 +1,15 @@
+=== tests/cases/conformance/node/allowJs/foo.cjs ===
+exports.foo = "foo"
+>exports.foo : Symbol(foo, Decl(foo.cjs, 0, 0))
+>exports : Symbol(foo, Decl(foo.cjs, 0, 0))
+>foo : Symbol(foo, Decl(foo.cjs, 0, 0))
+
+=== tests/cases/conformance/node/allowJs/bar.ts ===
+import foo from "./foo.cjs"
+>foo : Symbol(foo, Decl(bar.ts, 0, 6))
+
+foo.foo;
+>foo.foo : Symbol(foo.foo, Decl(foo.cjs, 0, 0))
+>foo : Symbol(foo, Decl(bar.ts, 0, 6))
+>foo : Symbol(foo.foo, Decl(foo.cjs, 0, 0))
+

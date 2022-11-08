@@ -214,31 +214,31 @@ let y22 = nonpartial(x22);
 >nonpartial : Symbol(nonpartial, Decl(mappedTypesArraysTuples.ts, 46, 24))
 >x22 : Symbol(x22, Decl(mappedTypesArraysTuples.ts, 56, 11))
 
-type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
->Awaited : Symbol(Awaited, Decl(mappedTypesArraysTuples.ts, 57, 26))
->T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 59, 13))
->T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 59, 13))
+type __Awaited<T> = T extends PromiseLike<infer U> ? U : T;
+>__Awaited : Symbol(__Awaited, Decl(mappedTypesArraysTuples.ts, 57, 26))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 59, 15))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 59, 15))
 >PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
->U : Symbol(U, Decl(mappedTypesArraysTuples.ts, 59, 45))
->U : Symbol(U, Decl(mappedTypesArraysTuples.ts, 59, 45))
->T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 59, 13))
+>U : Symbol(U, Decl(mappedTypesArraysTuples.ts, 59, 47))
+>U : Symbol(U, Decl(mappedTypesArraysTuples.ts, 59, 47))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 59, 15))
 
-type Awaitified<T> = { [P in keyof T]: Awaited<T[P]> };
->Awaitified : Symbol(Awaitified, Decl(mappedTypesArraysTuples.ts, 59, 57))
+type Awaitified<T> = { [P in keyof T]: __Awaited<T[P]> };
+>Awaitified : Symbol(Awaitified, Decl(mappedTypesArraysTuples.ts, 59, 59))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 60, 16))
 >P : Symbol(P, Decl(mappedTypesArraysTuples.ts, 60, 24))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 60, 16))
->Awaited : Symbol(Awaited, Decl(mappedTypesArraysTuples.ts, 57, 26))
+>__Awaited : Symbol(__Awaited, Decl(mappedTypesArraysTuples.ts, 57, 26))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 60, 16))
 >P : Symbol(P, Decl(mappedTypesArraysTuples.ts, 60, 24))
 
 declare function all<T extends any[]>(...values: T): Promise<Awaitified<T>>;
->all : Symbol(all, Decl(mappedTypesArraysTuples.ts, 60, 55))
+>all : Symbol(all, Decl(mappedTypesArraysTuples.ts, 60, 57))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 62, 21))
 >values : Symbol(values, Decl(mappedTypesArraysTuples.ts, 62, 38))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 62, 21))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --))
->Awaitified : Symbol(Awaitified, Decl(mappedTypesArraysTuples.ts, 59, 57))
+>Awaitified : Symbol(Awaitified, Decl(mappedTypesArraysTuples.ts, 59, 59))
 >T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 62, 21))
 
 function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
@@ -252,25 +252,25 @@ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
 
     let x1 = all(a);
 >x1 : Symbol(x1, Decl(mappedTypesArraysTuples.ts, 65, 7))
->all : Symbol(all, Decl(mappedTypesArraysTuples.ts, 60, 55))
+>all : Symbol(all, Decl(mappedTypesArraysTuples.ts, 60, 57))
 >a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 64, 12))
 
     let x2 = all(a, b);
 >x2 : Symbol(x2, Decl(mappedTypesArraysTuples.ts, 66, 7))
->all : Symbol(all, Decl(mappedTypesArraysTuples.ts, 60, 55))
+>all : Symbol(all, Decl(mappedTypesArraysTuples.ts, 60, 57))
 >a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 64, 12))
 >b : Symbol(b, Decl(mappedTypesArraysTuples.ts, 64, 22))
 
     let x3 = all(a, b, c);
 >x3 : Symbol(x3, Decl(mappedTypesArraysTuples.ts, 67, 7))
->all : Symbol(all, Decl(mappedTypesArraysTuples.ts, 60, 55))
+>all : Symbol(all, Decl(mappedTypesArraysTuples.ts, 60, 57))
 >a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 64, 12))
 >b : Symbol(b, Decl(mappedTypesArraysTuples.ts, 64, 22))
 >c : Symbol(c, Decl(mappedTypesArraysTuples.ts, 64, 42))
 
     let x4 = all(a, b, c, d);
 >x4 : Symbol(x4, Decl(mappedTypesArraysTuples.ts, 68, 7))
->all : Symbol(all, Decl(mappedTypesArraysTuples.ts, 60, 55))
+>all : Symbol(all, Decl(mappedTypesArraysTuples.ts, 60, 57))
 >a : Symbol(a, Decl(mappedTypesArraysTuples.ts, 64, 12))
 >b : Symbol(b, Decl(mappedTypesArraysTuples.ts, 64, 22))
 >c : Symbol(c, Decl(mappedTypesArraysTuples.ts, 64, 42))

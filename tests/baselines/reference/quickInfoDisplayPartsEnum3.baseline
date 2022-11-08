@@ -69,7 +69,7 @@
         },
         {
           "text": "\"e1\"",
-          "kind": "stringLiteral"
+          "kind": "enumMemberName"
         },
         {
           "text": "]",
@@ -135,7 +135,7 @@
         },
         {
           "text": "'e2'",
-          "kind": "stringLiteral"
+          "kind": "enumMemberName"
         },
         {
           "text": "]",
@@ -201,7 +201,7 @@
         },
         {
           "text": "\"e3\"",
-          "kind": "stringLiteral"
+          "kind": "enumMemberName"
         },
         {
           "text": "]",
@@ -411,7 +411,7 @@
         },
         {
           "text": "\"e1\"",
-          "kind": "stringLiteral"
+          "kind": "enumMemberName"
         },
         {
           "text": "]",
@@ -549,7 +549,7 @@
         },
         {
           "text": "'e2'",
-          "kind": "stringLiteral"
+          "kind": "enumMemberName"
         },
         {
           "text": "]",
@@ -687,7 +687,7 @@
         },
         {
           "text": "\"e3\"",
-          "kind": "stringLiteral"
+          "kind": "enumMemberName"
         },
         {
           "text": "]",
@@ -791,7 +791,7 @@
         },
         {
           "text": "\"e1\"",
-          "kind": "stringLiteral"
+          "kind": "enumMemberName"
         },
         {
           "text": "]",
@@ -857,7 +857,7 @@
         },
         {
           "text": "'e2'",
-          "kind": "stringLiteral"
+          "kind": "enumMemberName"
         },
         {
           "text": "]",
@@ -923,7 +923,7 @@
         },
         {
           "text": "\"e3\"",
-          "kind": "stringLiteral"
+          "kind": "enumMemberName"
         },
         {
           "text": "]",
@@ -1149,7 +1149,7 @@
         },
         {
           "text": "\"e1\"",
-          "kind": "stringLiteral"
+          "kind": "enumMemberName"
         },
         {
           "text": "]",
@@ -1295,7 +1295,7 @@
         },
         {
           "text": "'e2'",
-          "kind": "stringLiteral"
+          "kind": "enumMemberName"
         },
         {
           "text": "]",
@@ -1441,7 +1441,7 @@
         },
         {
           "text": "\"e3\"",
-          "kind": "stringLiteral"
+          "kind": "enumMemberName"
         },
         {
           "text": "]",

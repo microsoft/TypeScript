@@ -26,9 +26,9 @@ class SharedClass {
     constructor() {
         /** @type {SharedId<S>} */
         this.id;
->this.id : SharedId<any>
+>this.id : SharedId<S>
 >this : this
->id : SharedId<any>
+>id : SharedId<S>
     }
 }
 /** @type {SharedId<number>} */

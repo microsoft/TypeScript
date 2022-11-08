@@ -22,7 +22,7 @@
 // @Filename: /index5.ts
 //// import f/*5*/ from "";
 
-[0, 1, 2, 3, 4, 5].forEach(marker => {
+([[0, true], [1, true], [2, false], [3, true], [4, true], [5, true]] as const).forEach(([marker, typeKeywordValid]) => {
   verify.completions({
     isNewIdentifierLocation: true,
     marker: "" + marker,
@@ -33,14 +33,19 @@
       isSnippet: true,
       replacementSpan: test.ranges()[marker],
       sourceDisplay: "./mod",
-    }, {
+    },
+    {
       name: "Foo",
       source: "./mod",
       insertText: `import { Foo$1 } from "./mod";`,
       isSnippet: true,
       replacementSpan: test.ranges()[marker],
       sourceDisplay: "./mod",
-    }],
+    },
+    ...typeKeywordValid ? [{
+      name: "type",
+      sortText: completion.SortText.GlobalsOrKeywords,
+    }] : []],
     preferences: {
       includeCompletionsForImportStatements: true,
       includeInsertTextCompletions: true,
@@ -76,7 +81,7 @@
   verify.completions({
     isNewIdentifierLocation: true,
     marker: "" + marker,
-    exact: [],
+    exact: [{ name: "type", sortText: completion.SortText.GlobalsOrKeywords }],
     preferences: {
       includeCompletionsForImportStatements: true,
       includeInsertTextCompletions: true,

@@ -7,7 +7,7 @@ type Boxified<T> = { [P in keyof T]: Box<T[P]> };
 >Boxified : Boxified<T>
 
 type T00 = Boxified<[number, string?, ...boolean[]]>;
->T00 : [Box<number>, Box<string | undefined>?, ...Box<boolean>[]]
+>T00 : [Box<number>, (Box<string | undefined> | undefined)?, ...Box<boolean>[]]
 
 type T01 = Partial<[number, string?, ...boolean[]]>;
 >T01 : [(number | undefined)?, (string | undefined)?, ...(boolean | undefined)[]]
@@ -58,15 +58,15 @@ type T31 = Partial<Boxified<string[]>>;
 >T31 : (Box<string> | undefined)[]
 
 type A = { a: string };
->A : A
+>A : { a: string; }
 >a : string
 
 type B = { b: string };
->B : B
+>B : { b: string; }
 >b : string
 
 type T40 = Boxified<A | A[] | ReadonlyArray<A> | [A, B] | string | string[]>;
->T40 : T40
+>T40 : string | Box<string>[] | Boxified<A> | readonly Box<A>[] | [Box<A>, Box<B>] | Box<A>[]
 
 type ReadWrite<T> = { -readonly [P in keyof T] : T[P] };
 >ReadWrite : ReadWrite<T>
@@ -152,10 +152,10 @@ let y22 = nonpartial(x22);
 >nonpartial : <T>(x: Partial<T>) => T
 >x22 : { a: number | undefined; b?: string[] | undefined; }
 
-type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
->Awaited : Awaited<T>
+type __Awaited<T> = T extends PromiseLike<infer U> ? U : T;
+>__Awaited : __Awaited<T>
 
-type Awaitified<T> = { [P in keyof T]: Awaited<T[P]> };
+type Awaitified<T> = { [P in keyof T]: __Awaited<T[P]> };
 >Awaitified : Awaitified<T>
 
 declare function all<T extends any[]>(...values: T): Promise<Awaitified<T>>;

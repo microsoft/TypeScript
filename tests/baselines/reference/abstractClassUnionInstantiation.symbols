@@ -1,0 +1,85 @@
+=== tests/cases/compiler/abstractClassUnionInstantiation.ts ===
+class ConcreteA {}
+>ConcreteA : Symbol(ConcreteA, Decl(abstractClassUnionInstantiation.ts, 0, 0))
+
+class ConcreteB {}
+>ConcreteB : Symbol(ConcreteB, Decl(abstractClassUnionInstantiation.ts, 0, 18))
+
+abstract class AbstractA { a: string; }
+>AbstractA : Symbol(AbstractA, Decl(abstractClassUnionInstantiation.ts, 1, 18))
+>a : Symbol(AbstractA.a, Decl(abstractClassUnionInstantiation.ts, 2, 26))
+
+abstract class AbstractB { b: string; }
+>AbstractB : Symbol(AbstractB, Decl(abstractClassUnionInstantiation.ts, 2, 39))
+>b : Symbol(AbstractB.b, Decl(abstractClassUnionInstantiation.ts, 3, 26))
+
+type Abstracts = typeof AbstractA | typeof AbstractB;
+>Abstracts : Symbol(Abstracts, Decl(abstractClassUnionInstantiation.ts, 3, 39))
+>AbstractA : Symbol(AbstractA, Decl(abstractClassUnionInstantiation.ts, 1, 18))
+>AbstractB : Symbol(AbstractB, Decl(abstractClassUnionInstantiation.ts, 2, 39))
+
+type Concretes = typeof ConcreteA | typeof ConcreteB;
+>Concretes : Symbol(Concretes, Decl(abstractClassUnionInstantiation.ts, 5, 53))
+>ConcreteA : Symbol(ConcreteA, Decl(abstractClassUnionInstantiation.ts, 0, 0))
+>ConcreteB : Symbol(ConcreteB, Decl(abstractClassUnionInstantiation.ts, 0, 18))
+
+type ConcretesOrAbstracts = Concretes | Abstracts;
+>ConcretesOrAbstracts : Symbol(ConcretesOrAbstracts, Decl(abstractClassUnionInstantiation.ts, 6, 53))
+>Concretes : Symbol(Concretes, Decl(abstractClassUnionInstantiation.ts, 5, 53))
+>Abstracts : Symbol(Abstracts, Decl(abstractClassUnionInstantiation.ts, 3, 39))
+
+declare const cls1: ConcretesOrAbstracts;
+>cls1 : Symbol(cls1, Decl(abstractClassUnionInstantiation.ts, 9, 13))
+>ConcretesOrAbstracts : Symbol(ConcretesOrAbstracts, Decl(abstractClassUnionInstantiation.ts, 6, 53))
+
+declare const cls2: Abstracts;
+>cls2 : Symbol(cls2, Decl(abstractClassUnionInstantiation.ts, 10, 13))
+>Abstracts : Symbol(Abstracts, Decl(abstractClassUnionInstantiation.ts, 3, 39))
+
+declare const cls3: Concretes;
+>cls3 : Symbol(cls3, Decl(abstractClassUnionInstantiation.ts, 11, 13))
+>Concretes : Symbol(Concretes, Decl(abstractClassUnionInstantiation.ts, 5, 53))
+
+new cls1(); // should error
+>cls1 : Symbol(cls1, Decl(abstractClassUnionInstantiation.ts, 9, 13))
+
+new cls2(); // should error
+>cls2 : Symbol(cls2, Decl(abstractClassUnionInstantiation.ts, 10, 13))
+
+new cls3(); // should work
+>cls3 : Symbol(cls3, Decl(abstractClassUnionInstantiation.ts, 11, 13))
+
+[ConcreteA, AbstractA, AbstractB].map(cls => new cls()); // should error
+>[ConcreteA, AbstractA, AbstractB].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>ConcreteA : Symbol(ConcreteA, Decl(abstractClassUnionInstantiation.ts, 0, 0))
+>AbstractA : Symbol(AbstractA, Decl(abstractClassUnionInstantiation.ts, 1, 18))
+>AbstractB : Symbol(AbstractB, Decl(abstractClassUnionInstantiation.ts, 2, 39))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>cls : Symbol(cls, Decl(abstractClassUnionInstantiation.ts, 17, 38))
+>cls : Symbol(cls, Decl(abstractClassUnionInstantiation.ts, 17, 38))
+
+[AbstractA, AbstractB, ConcreteA].map(cls => new cls()); // should error
+>[AbstractA, AbstractB, ConcreteA].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>AbstractA : Symbol(AbstractA, Decl(abstractClassUnionInstantiation.ts, 1, 18))
+>AbstractB : Symbol(AbstractB, Decl(abstractClassUnionInstantiation.ts, 2, 39))
+>ConcreteA : Symbol(ConcreteA, Decl(abstractClassUnionInstantiation.ts, 0, 0))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>cls : Symbol(cls, Decl(abstractClassUnionInstantiation.ts, 18, 38))
+>cls : Symbol(cls, Decl(abstractClassUnionInstantiation.ts, 18, 38))
+
+[ConcreteA, ConcreteB].map(cls => new cls()); // should work
+>[ConcreteA, ConcreteB].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>ConcreteA : Symbol(ConcreteA, Decl(abstractClassUnionInstantiation.ts, 0, 0))
+>ConcreteB : Symbol(ConcreteB, Decl(abstractClassUnionInstantiation.ts, 0, 18))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>cls : Symbol(cls, Decl(abstractClassUnionInstantiation.ts, 19, 27))
+>cls : Symbol(cls, Decl(abstractClassUnionInstantiation.ts, 19, 27))
+
+[AbstractA, AbstractB].map(cls => new cls()); // should error
+>[AbstractA, AbstractB].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>AbstractA : Symbol(AbstractA, Decl(abstractClassUnionInstantiation.ts, 1, 18))
+>AbstractB : Symbol(AbstractB, Decl(abstractClassUnionInstantiation.ts, 2, 39))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>cls : Symbol(cls, Decl(abstractClassUnionInstantiation.ts, 20, 27))
+>cls : Symbol(cls, Decl(abstractClassUnionInstantiation.ts, 20, 27))
+

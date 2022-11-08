@@ -3,6 +3,6 @@ class Foo {
 >Foo : Foo
 
     public banana (x: break) { }
->banana : (x: any) => void
->x : any
+>banana : (x: break) => void
+>x : break
 }

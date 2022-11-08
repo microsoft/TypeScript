@@ -1,9 +1,9 @@
 === tests/cases/compiler/classPropertyErrorOnNameOnly.ts ===
 type Values = 1 | 2 | 3 | 4 | 5 | 6
->Values : Values
+>Values : 1 | 2 | 3 | 4 | 5 | 6
 
 type FuncType = (arg: Values) => string
->FuncType : FuncType
+>FuncType : (arg: Values) => string
 >arg : Values
 
 // turn on strictNullChecks

@@ -7,7 +7,7 @@ tests/cases/conformance/salsa/a.js(29,5): error TS2322: Type '1' is not assignab
 tests/cases/conformance/salsa/a.js(30,5): error TS2322: Type 'true' is not assignable to type 'null'.
 tests/cases/conformance/salsa/a.js(31,5): error TS2322: Type '{}' is not assignable to type 'null'.
 tests/cases/conformance/salsa/a.js(32,5): error TS2322: Type '"ok"' is not assignable to type 'null'.
-tests/cases/conformance/salsa/a.js(37,5): error TS2322: Type '"error"' is not assignable to type 'number | undefined'.
+tests/cases/conformance/salsa/a.js(37,5): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/salsa/a.js (10 errors) ====
@@ -67,7 +67,7 @@ tests/cases/conformance/salsa/a.js(37,5): error TS2322: Type '"error"' is not as
         b = undefined
         b = 'error'
         ~
-!!! error TS2322: Type '"error"' is not assignable to type 'number | undefined'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
         // l should be any[]
         l.push(1)

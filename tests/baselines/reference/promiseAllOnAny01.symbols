@@ -1,0 +1,19 @@
+=== tests/cases/compiler/promiseAllOnAny01.ts ===
+async function foo(x: any) {
+>foo : Symbol(foo, Decl(promiseAllOnAny01.ts, 0, 0))
+>x : Symbol(x, Decl(promiseAllOnAny01.ts, 0, 19))
+
+    let abc = await Promise.all(x);
+>abc : Symbol(abc, Decl(promiseAllOnAny01.ts, 1, 7))
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.promise.d.ts, --, --))
+>x : Symbol(x, Decl(promiseAllOnAny01.ts, 0, 19))
+
+    let result: any[] = abc;
+>result : Symbol(result, Decl(promiseAllOnAny01.ts, 2, 7))
+>abc : Symbol(abc, Decl(promiseAllOnAny01.ts, 1, 7))
+
+    return result;
+>result : Symbol(result, Decl(promiseAllOnAny01.ts, 2, 7))
+}

@@ -3,7 +3,7 @@ import { Constructor } from "@loopback/context";
 >Constructor : any
 
 export type ControllerClass = Constructor<any>;
->ControllerClass : ControllerClass
+>ControllerClass : (...args: any[]) => any
 
 === tests/cases/compiler/monorepo/core/src/usage.ts ===
 import { ControllerClass } from './application';
@@ -47,7 +47,7 @@ export class BindingKey<T> {
 }
 
 === tests/cases/compiler/monorepo/context/index.ts ===
+
 export * from "./src/value-promise";
-No type information for this code.export * from "./src/bindingkey";
-No type information for this code.
-No type information for this code.
+export * from "./src/bindingkey";
+

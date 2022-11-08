@@ -1,0 +1,58 @@
+=== tests/cases/compiler/mixinOverMappedTypeNoCrash.ts ===
+export type ClassInterface<C> = {
+>ClassInterface : Symbol(ClassInterface, Decl(mixinOverMappedTypeNoCrash.ts, 0, 0))
+>C : Symbol(C, Decl(mixinOverMappedTypeNoCrash.ts, 0, 27))
+
+    [key in keyof C]: C[key];
+>key : Symbol(key, Decl(mixinOverMappedTypeNoCrash.ts, 1, 5))
+>C : Symbol(C, Decl(mixinOverMappedTypeNoCrash.ts, 0, 27))
+>C : Symbol(C, Decl(mixinOverMappedTypeNoCrash.ts, 0, 27))
+>key : Symbol(key, Decl(mixinOverMappedTypeNoCrash.ts, 1, 5))
+}
+
+type InstanceInterface<I> = {
+>InstanceInterface : Symbol(InstanceInterface, Decl(mixinOverMappedTypeNoCrash.ts, 2, 1))
+>I : Symbol(I, Decl(mixinOverMappedTypeNoCrash.ts, 4, 23))
+
+    new(...args: any[]): I
+>args : Symbol(args, Decl(mixinOverMappedTypeNoCrash.ts, 5, 8))
+>I : Symbol(I, Decl(mixinOverMappedTypeNoCrash.ts, 4, 23))
+
+    prototype: I
+>prototype : Symbol(prototype, Decl(mixinOverMappedTypeNoCrash.ts, 5, 26))
+>I : Symbol(I, Decl(mixinOverMappedTypeNoCrash.ts, 4, 23))
+}
+
+type Constructor<I extends Object, C = any> = ClassInterface<C> & InstanceInterface<I>
+>Constructor : Symbol(Constructor, Decl(mixinOverMappedTypeNoCrash.ts, 7, 1))
+>I : Symbol(I, Decl(mixinOverMappedTypeNoCrash.ts, 9, 17))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(mixinOverMappedTypeNoCrash.ts, 9, 34))
+>ClassInterface : Symbol(ClassInterface, Decl(mixinOverMappedTypeNoCrash.ts, 0, 0))
+>C : Symbol(C, Decl(mixinOverMappedTypeNoCrash.ts, 9, 34))
+>InstanceInterface : Symbol(InstanceInterface, Decl(mixinOverMappedTypeNoCrash.ts, 2, 1))
+>I : Symbol(I, Decl(mixinOverMappedTypeNoCrash.ts, 9, 17))
+
+function cloneClass<T extends Constructor<{}>>(OriginalClass: T): T {
+>cloneClass : Symbol(cloneClass, Decl(mixinOverMappedTypeNoCrash.ts, 9, 86))
+>T : Symbol(T, Decl(mixinOverMappedTypeNoCrash.ts, 11, 20))
+>Constructor : Symbol(Constructor, Decl(mixinOverMappedTypeNoCrash.ts, 7, 1))
+>OriginalClass : Symbol(OriginalClass, Decl(mixinOverMappedTypeNoCrash.ts, 11, 47))
+>T : Symbol(T, Decl(mixinOverMappedTypeNoCrash.ts, 11, 20))
+>T : Symbol(T, Decl(mixinOverMappedTypeNoCrash.ts, 11, 20))
+
+    class AnotherOriginalClass extends OriginalClass {
+>AnotherOriginalClass : Symbol(AnotherOriginalClass, Decl(mixinOverMappedTypeNoCrash.ts, 11, 69))
+>OriginalClass : Symbol(OriginalClass, Decl(mixinOverMappedTypeNoCrash.ts, 11, 47))
+
+        constructor(...args: any[]) {
+>args : Symbol(args, Decl(mixinOverMappedTypeNoCrash.ts, 13, 20))
+
+            super(...args)
+>super : Symbol(T, Decl(mixinOverMappedTypeNoCrash.ts, 11, 20))
+>args : Symbol(args, Decl(mixinOverMappedTypeNoCrash.ts, 13, 20))
+        }
+    }
+    return AnotherOriginalClass
+>AnotherOriginalClass : Symbol(AnotherOriginalClass, Decl(mixinOverMappedTypeNoCrash.ts, 11, 69))
+}

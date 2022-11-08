@@ -36,16 +36,15 @@
 
 verify.completions(
     // Module m / alias a
-    { marker: ["1", "7"], exact: ["F", "C", "E", "N", "V", "A"] },
-    { marker: ["1Type", "7Type"], exact: ["I", "C", "E", "A"] },
+    { marker: ["1", "7"], unsorted: ["F", "C", "E", "N", "V", "A"] },
+    { marker: ["1Type", "7Type"], unsorted: ["I", "C", "E", "A"] },
     // Class C
     {
         marker: "2",
-        exact: [
-            { name: "prototype", sortText: completion.SortText.LocationPriority },
+        exact: completion.functionMembersPlus([
             { name: "property", sortText: completion.SortText.LocalDeclarationPriority },
-            ...completion.functionMembers
-        ]
+            { name: "prototype", sortText: completion.SortText.LocationPriority },
+        ])
     },
     // Enum E
     { marker: "3", exact: "value" },

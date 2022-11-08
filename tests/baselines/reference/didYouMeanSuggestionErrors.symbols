@@ -41,9 +41,11 @@ suite("another suite", () => {
 
         const i: Iterator<any> = null as any;
 >i : Symbol(i, Decl(didYouMeanSuggestionErrors.ts, 22, 13))
+>Iterator : Symbol(Iterator)
 
         const j: AsyncIterator<any> = null as any;
 >j : Symbol(j, Decl(didYouMeanSuggestionErrors.ts, 23, 13))
+>AsyncIterator : Symbol(AsyncIterator)
 
         const k: Symbol = null as any;
 >k : Symbol(k, Decl(didYouMeanSuggestionErrors.ts, 24, 13))

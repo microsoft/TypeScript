@@ -81,6 +81,7 @@ module Generic {
 
         static foo: T; // not reflected in class type
 >foo : Symbol(C.foo, Decl(staticPropertyNotInClassType.ts, 25, 50))
+>T : Symbol(T)
     }
 
     module C {

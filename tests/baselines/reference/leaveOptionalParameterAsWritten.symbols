@@ -1,0 +1,37 @@
+=== tests/cases/conformance/declarationEmit/a.ts ===
+export interface Foo {}
+>Foo : Symbol(Foo, Decl(a.ts, 0, 0))
+
+=== tests/cases/conformance/declarationEmit/b.ts ===
+import * as a from "./a";
+>a : Symbol(a, Decl(b.ts, 0, 6))
+
+declare global {
+>global : Symbol(global, Decl(b.ts, 0, 25))
+
+  namespace teams {
+>teams : Symbol(teams, Decl(b.ts, 1, 16))
+
+    export namespace calling {
+>calling : Symbol(calling, Decl(b.ts, 2, 19))
+
+      export import Foo = a.Foo;
+>Foo : Symbol(Foo, Decl(b.ts, 3, 30))
+>a : Symbol(a, Decl(b.ts, 0, 6))
+>Foo : Symbol(Foo, Decl(a.ts, 0, 0))
+    }
+  }
+}
+
+=== tests/cases/conformance/declarationEmit/c.ts ===
+type Foo = teams.calling.Foo;
+>Foo : Symbol(Foo, Decl(c.ts, 0, 0))
+>teams : Symbol(teams, Decl(b.ts, 1, 16))
+>calling : Symbol(teams.calling, Decl(b.ts, 2, 19))
+>Foo : Symbol(teams.calling.Foo, Decl(b.ts, 3, 30))
+
+export const bar = (p?: Foo) => {}
+>bar : Symbol(bar, Decl(c.ts, 1, 12))
+>p : Symbol(p, Decl(c.ts, 1, 20))
+>Foo : Symbol(Foo, Decl(c.ts, 0, 0))
+

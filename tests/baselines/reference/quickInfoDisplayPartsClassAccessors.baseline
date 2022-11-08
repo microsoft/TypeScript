@@ -6,7 +6,7 @@
       "name": "1"
     },
     "quickInfo": {
-      "kind": "property",
+      "kind": "getter",
       "kindModifiers": "public",
       "textSpan": {
         "start": 25,
@@ -18,7 +18,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "property",
+          "text": "getter",
           "kind": "text"
         },
         {
@@ -64,7 +64,7 @@
       "name": "1s"
     },
     "quickInfo": {
-      "kind": "property",
+      "kind": "setter",
       "kindModifiers": "public",
       "textSpan": {
         "start": 72,
@@ -76,7 +76,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "property",
+          "text": "setter",
           "kind": "text"
         },
         {
@@ -122,7 +122,7 @@
       "name": "2"
     },
     "quickInfo": {
-      "kind": "property",
+      "kind": "getter",
       "kindModifiers": "private",
       "textSpan": {
         "start": 118,
@@ -134,7 +134,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "property",
+          "text": "getter",
           "kind": "text"
         },
         {
@@ -180,7 +180,7 @@
       "name": "2s"
     },
     "quickInfo": {
-      "kind": "property",
+      "kind": "setter",
       "kindModifiers": "private",
       "textSpan": {
         "start": 167,
@@ -192,7 +192,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "property",
+          "text": "setter",
           "kind": "text"
         },
         {
@@ -238,7 +238,7 @@
       "name": "21"
     },
     "quickInfo": {
-      "kind": "property",
+      "kind": "getter",
       "kindModifiers": "protected",
       "textSpan": {
         "start": 216,
@@ -250,7 +250,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "property",
+          "text": "getter",
           "kind": "text"
         },
         {
@@ -296,7 +296,7 @@
       "name": "21s"
     },
     "quickInfo": {
-      "kind": "property",
+      "kind": "setter",
       "kindModifiers": "protected",
       "textSpan": {
         "start": 269,
@@ -308,7 +308,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "property",
+          "text": "setter",
           "kind": "text"
         },
         {
@@ -354,7 +354,7 @@
       "name": "3"
     },
     "quickInfo": {
-      "kind": "property",
+      "kind": "getter",
       "kindModifiers": "static",
       "textSpan": {
         "start": 317,
@@ -366,7 +366,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "property",
+          "text": "getter",
           "kind": "text"
         },
         {
@@ -412,7 +412,7 @@
       "name": "3s"
     },
     "quickInfo": {
-      "kind": "property",
+      "kind": "setter",
       "kindModifiers": "static",
       "textSpan": {
         "start": 364,
@@ -424,7 +424,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "property",
+          "text": "setter",
           "kind": "text"
         },
         {
@@ -470,7 +470,7 @@
       "name": "4"
     },
     "quickInfo": {
-      "kind": "property",
+      "kind": "getter",
       "kindModifiers": "private,static",
       "textSpan": {
         "start": 418,
@@ -482,7 +482,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "property",
+          "text": "getter",
           "kind": "text"
         },
         {
@@ -528,7 +528,7 @@
       "name": "4s"
     },
     "quickInfo": {
-      "kind": "property",
+      "kind": "setter",
       "kindModifiers": "private,static",
       "textSpan": {
         "start": 480,
@@ -540,7 +540,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "property",
+          "text": "setter",
           "kind": "text"
         },
         {
@@ -586,7 +586,7 @@
       "name": "41"
     },
     "quickInfo": {
-      "kind": "property",
+      "kind": "getter",
       "kindModifiers": "protected,static",
       "textSpan": {
         "start": 542,
@@ -598,7 +598,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "property",
+          "text": "getter",
           "kind": "text"
         },
         {
@@ -644,7 +644,7 @@
       "name": "41s"
     },
     "quickInfo": {
-      "kind": "property",
+      "kind": "setter",
       "kindModifiers": "protected,static",
       "textSpan": {
         "start": 608,
@@ -656,7 +656,7 @@
           "kind": "punctuation"
         },
         {
-          "text": "property",
+          "text": "setter",
           "kind": "text"
         },
         {

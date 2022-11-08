@@ -134,7 +134,7 @@ var str: string;
 >str : string
 
 if(<numOrStr is string>(numOrStr === undefined)) { // Error
-><numOrStr is : any
+><numOrStr is : numOrStr
 >is : any
 >string>(numOrStr === undefined) : boolean
 >string : any
@@ -150,7 +150,7 @@ if(<numOrStr is string>(numOrStr === undefined)) { // Error
 }
 
 if((numOrStr === undefined) as numOrStr is string) { // Error
->(numOrStr === undefined) as numOrStr : any
+>(numOrStr === undefined) as numOrStr : numOrStr
 >(numOrStr === undefined) : boolean
 >numOrStr === undefined : boolean
 >numOrStr : string | number

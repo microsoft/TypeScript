@@ -122,6 +122,27 @@ class Test11 {
     }
 }
 
+class Tests12 {
+    test1() { // OK
+        type Test = typeof this;
+    }
+
+    test2() { // OK
+        for (;;) {}
+        type Test = typeof this;
+    }
+
+    test3() { // expected no compile errors
+        for (const dummy in []) {}
+        type Test = typeof this;
+    }
+
+    test4() { // expected no compile errors
+        for (const dummy of []) {}
+        type Test = typeof this;
+    }
+}
+
 //// [typeofThis.js]
 "use strict";
 var Test = /** @class */ (function () {
@@ -240,4 +261,22 @@ var Test11 = /** @class */ (function () {
         }
     };
     return Test11;
+}());
+var Tests12 = /** @class */ (function () {
+    function Tests12() {
+    }
+    Tests12.prototype.test1 = function () {
+    };
+    Tests12.prototype.test2 = function () {
+        for (;;) { }
+    };
+    Tests12.prototype.test3 = function () {
+        for (var dummy in []) { }
+    };
+    Tests12.prototype.test4 = function () {
+        for (var _i = 0, _a = []; _i < _a.length; _i++) {
+            var dummy = _a[_i];
+        }
+    };
+    return Tests12;
 }());

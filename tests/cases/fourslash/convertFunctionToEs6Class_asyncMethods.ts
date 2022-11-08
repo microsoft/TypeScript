@@ -18,10 +18,10 @@ verify.codeFix({
 `export class MyClass {
     constructor() {
     }
-    async foo() {
+    static async bar() {
         await Promise.resolve();
     }
-    static async bar() {
+    async foo() {
         await Promise.resolve();
     }
 }

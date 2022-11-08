@@ -37,4 +37,6 @@ export module c {
 export var z: c.b.I;
 >z : Symbol(z, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 15, 10))
 >c : Symbol(c, Decl(internalAliasUninitializedModuleInsideLocalModuleWithoutExportAccessError.ts, 6, 1))
+>b : Symbol(c.b)
+>I : Symbol(c.b.I)
 

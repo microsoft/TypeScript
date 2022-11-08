@@ -314,3 +314,12 @@ const aa: AA = { [sym]: '123' };
 const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
 const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
 const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
+
+// Repro from #45772
+
+type Id = string & { __tag: 'id '};
+type Rec1 = { [key: Id]: number };
+type Rec2 = Record<Id, number>;
+
+type K1 = keyof Rec1;  // Id
+type K2 = keyof Rec2;  // Id

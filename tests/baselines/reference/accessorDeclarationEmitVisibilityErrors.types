@@ -3,6 +3,6 @@ export class Q {
 >Q : Q
 
     set bet(arg: DoesNotExist) {}
->bet : any
->arg : any
+>bet : DoesNotExist
+>arg : DoesNotExist
 }

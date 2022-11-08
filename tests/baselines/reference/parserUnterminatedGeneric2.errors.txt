@@ -10,8 +10,8 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGener
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,37): error TS2693: 'any' only refers to a type, but is being used as a value here.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,41): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,43): error TS2693: 'any' only refers to a type, but is being used as a value here.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(8,23): error TS2304: Cannot find name 'IPromise'.
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(8,45): error TS2304: Cannot find name 'IPromise'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(8,23): error TS2552: Cannot find name 'IPromise'. Did you mean 'Promise'?
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(8,45): error TS2552: Cannot find name 'IPromise'. Did you mean 'Promise'?
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(8,54): error TS1005: '>' expected.
 
 
@@ -49,8 +49,8 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGener
         interface IQService {
             all(promises: IPromise < any > []): IPromise<
                           ~~~~~~~~
-!!! error TS2304: Cannot find name 'IPromise'.
+!!! error TS2552: Cannot find name 'IPromise'. Did you mean 'Promise'?
                                                 ~~~~~~~~
-!!! error TS2304: Cannot find name 'IPromise'.
+!!! error TS2552: Cannot find name 'IPromise'. Did you mean 'Promise'?
                                                          
 !!! error TS1005: '>' expected.

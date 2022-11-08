@@ -1,5 +1,5 @@
 tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,24): error TS2769: No overload matches this call.
-  Overload 1 of 3, '(iterable: Iterable<readonly [string, number]>): Map<string, number>', gave the following error.
+  Overload 1 of 4, '(iterable?: Iterable<readonly [string, number]>): Map<string, number>', gave the following error.
     Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'Iterable<readonly [string, number]>'.
       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
         Type 'IteratorResult<[string, number] | [string, boolean], any>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
@@ -9,7 +9,7 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,24): error
                 Type '[string, boolean]' is not assignable to type 'readonly [string, number]'.
                   Type at position 1 in source is not compatible with type at position 1 in target.
                     Type 'boolean' is not assignable to type 'number'.
-  Overload 2 of 3, '(entries?: readonly (readonly [string, number])[]): Map<string, number>', gave the following error.
+  Overload 2 of 4, '(entries?: readonly (readonly [string, number])[]): Map<string, number>', gave the following error.
     Type 'boolean' is not assignable to type 'number'.
 
 
@@ -18,7 +18,7 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,24): error
     takeFirstTwoEntries(...new Map([["", 0], ["hello", true]]));
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
-!!! error TS2769:   Overload 1 of 3, '(iterable: Iterable<readonly [string, number]>): Map<string, number>', gave the following error.
+!!! error TS2769:   Overload 1 of 4, '(iterable?: Iterable<readonly [string, number]>): Map<string, number>', gave the following error.
 !!! error TS2769:     Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'Iterable<readonly [string, number]>'.
 !!! error TS2769:       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
 !!! error TS2769:         Type 'IteratorResult<[string, number] | [string, boolean], any>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
@@ -28,5 +28,5 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,24): error
 !!! error TS2769:                 Type '[string, boolean]' is not assignable to type 'readonly [string, number]'.
 !!! error TS2769:                   Type at position 1 in source is not compatible with type at position 1 in target.
 !!! error TS2769:                     Type 'boolean' is not assignable to type 'number'.
-!!! error TS2769:   Overload 2 of 3, '(entries?: readonly (readonly [string, number])[]): Map<string, number>', gave the following error.
+!!! error TS2769:   Overload 2 of 4, '(entries?: readonly (readonly [string, number])[]): Map<string, number>', gave the following error.
 !!! error TS2769:     Type 'boolean' is not assignable to type 'number'.

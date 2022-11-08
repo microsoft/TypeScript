@@ -165,3 +165,29 @@ tests/cases/conformance/classes/propertyMemberDeclarations/strictPropertyInitial
         }
     }
     
+    const a = 'a';
+    const b = Symbol();
+    
+    class C12 {
+        [a]: number;
+        [b]: number;
+        ['c']: number;
+    
+        constructor() {
+            this[a] = 1;
+            this[b] = 1;
+            this['c'] = 1;
+        }
+    }
+    
+    enum E {
+        A = "A",
+        B = "B"
+    }
+    class C13 {
+        [E.A]: number;
+        constructor() {
+            this[E.A] = 1;
+        }
+    }
+    

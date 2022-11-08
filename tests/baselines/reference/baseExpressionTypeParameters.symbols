@@ -20,6 +20,7 @@ class Gen<T> extends base<T>() {}  // Error, T not in scope
 >Gen : Symbol(Gen, Decl(baseExpressionTypeParameters.ts, 7, 1))
 >T : Symbol(T, Decl(baseExpressionTypeParameters.ts, 9, 10))
 >base : Symbol(base, Decl(baseExpressionTypeParameters.ts, 0, 0))
+>T : Symbol(T)
 
 class Spec extends Gen<string> {}
 >Spec : Symbol(Spec, Decl(baseExpressionTypeParameters.ts, 9, 33))

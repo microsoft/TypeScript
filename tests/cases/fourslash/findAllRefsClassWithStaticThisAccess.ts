@@ -1,11 +1,11 @@
 /// <reference path="fourslash.ts" />
 
-////[|class [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}C|] {
+////[|class /*0*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}C|] {
 ////    static s() {
-////        [|this|];
+////        /*1*/[|this|];
 ////    }
 ////    static get f() {
-////        return [|this|];
+////        return /*2*/[|this|];
 ////
 ////        function inner() { this; }
 ////        class Inner { x = this; }
@@ -13,7 +13,6 @@
 ////}|]
 
 const [r0Def, r0, r1, r2] = test.ranges();
-verify.referenceGroups(r0, [{ definition: "class C", ranges: [r0, r1, r2] }]);
-verify.singleReferenceGroup("this: typeof C", [r1, r2]);
 
 verify.renameLocations(r0, [r0]);
+verify.baselineFindAllReferences('0', '1', '2')

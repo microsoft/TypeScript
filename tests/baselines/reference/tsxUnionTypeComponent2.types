@@ -3,7 +3,7 @@ import React = require('react');
 >React : typeof React
 
 type Invalid1 = React.ComponentClass<any> | number;
->Invalid1 : Invalid1
+>Invalid1 : number | React.ComponentClass<any>
 >React : any
 
 const X: Invalid1 = 1;

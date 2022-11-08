@@ -44,6 +44,7 @@ assertEqual(animal.type, 'cat' as const);
 >animal.type : Symbol(type, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 0, 15), Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 5, 15))
 >animal : Symbol(animal, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 14, 5))
 >type : Symbol(type, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 0, 15), Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 5, 15))
+>const : Symbol(const)
 
 animal.canMeow; // since is cat, should not be an error
 >animal.canMeow : Symbol(Cat.canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 1, 16))
@@ -61,6 +62,7 @@ assertEqual(animalOrUndef?.type, 'cat' as const);
 >animalOrUndef?.type : Symbol(type, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 0, 15), Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 5, 15))
 >animalOrUndef : Symbol(animalOrUndef, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 19, 5))
 >type : Symbol(type, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 0, 15), Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 5, 15))
+>const : Symbol(const)
 
 animalOrUndef.canMeow; // since is cat, should not be an error
 >animalOrUndef.canMeow : Symbol(Cat.canMeow, Decl(assertionFunctionsCanNarrowByDiscriminant.ts, 1, 16))

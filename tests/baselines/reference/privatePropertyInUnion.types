@@ -2,7 +2,7 @@
 // Repro from #38236
 
 type Type = string | object;
->Type : Type
+>Type : string | object
 
 class SyncableObject {
 >SyncableObject : SyncableObject

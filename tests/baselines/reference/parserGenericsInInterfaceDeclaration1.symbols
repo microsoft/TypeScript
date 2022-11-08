@@ -5,6 +5,7 @@ interface I<T> {
 
    v: A<T>;
 >v : Symbol(I.v, Decl(parserGenericsInInterfaceDeclaration1.ts, 0, 16))
+>A : Symbol(A)
 >T : Symbol(T, Decl(parserGenericsInInterfaceDeclaration1.ts, 0, 12))
 
    f1<T>(): T;

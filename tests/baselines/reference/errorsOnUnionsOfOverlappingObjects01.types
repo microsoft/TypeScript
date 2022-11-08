@@ -93,7 +93,7 @@ interface Platypus { platypus: any }
 >platypus : any
 
 type ExoticAnimal =
->ExoticAnimal : ExoticAnimal
+>ExoticAnimal : CatDog | ManBearPig | Platypus
 
     | CatDog
     | ManBearPig

@@ -3,14 +3,11 @@
 // @allowJs: true
 // @Filename: a.js
 
-/////** [|@typedef {number} [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}T|]|] */
+/////** /*1*/@typedef {number} /*2*/T */
 
-////[|const [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}T|] = 1;|]
+/////*3*/const /*4*/T = 1;
 
-/////** @type {[|T|]} */
-////const n = [|T|];
+/////** @type {/*5*/T} */
+////const n = /*6*/T;
 
-const [t0Def, t0, v0Def, v0, t1, v1] = test.ranges();
-
-verify.singleReferenceGroup("type T = number", [t0, t1]);
-verify.singleReferenceGroup("const T: 1", [v0, v1]);
+verify.baselineFindAllReferences('1', '2', '3', '4', '5', '6');

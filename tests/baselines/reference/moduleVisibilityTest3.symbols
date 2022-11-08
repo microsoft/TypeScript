@@ -33,12 +33,15 @@ module editor {
 
      constructor(p1: modes, p2: modes.Mode) {// should be an error on p2 - it's not exported
 >p1 : Symbol(p1, Decl(moduleVisibilityTest3.ts, 19, 17))
+>modes : Symbol(modes)
 >p2 : Symbol(p2, Decl(moduleVisibilityTest3.ts, 19, 27))
 >modes : Symbol(modes, Decl(moduleVisibilityTest3.ts, 12, 15))
+>Mode : Symbol(modes.Mode)
 
          var x:modes.Mode;
 >x : Symbol(x, Decl(moduleVisibilityTest3.ts, 20, 12))
 >modes : Symbol(modes, Decl(moduleVisibilityTest3.ts, 12, 15))
+>Mode : Symbol(modes.Mode)
      }
     
  }

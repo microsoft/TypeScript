@@ -1,4 +1,5 @@
 // @target: ES5
+// @lib: esnext, dom
 function foo0() {
     let a = x;
     let x;
@@ -101,4 +102,36 @@ function foo14() {
         a: x 
     }
     let x
+}
+
+function foo15() {
+    // https://github.com/microsoft/TypeScript/issues/42678
+    const [
+        a,
+        b,
+    ] = ((): [number, number] => {
+        (() => console.log(a))();  // should error
+        console.log(a);            // should error
+        const b = () => a;         // should be ok
+        return [
+            0,
+            0,
+        ];
+    })();    
+}
+
+function foo16() {
+    let [a] = (() => a)();
+}
+
+function foo17() {
+    const promise = (async () => {
+        promise
+        foo
+        await null
+        promise
+        foo
+    })()
+
+    const foo = 1;
 }

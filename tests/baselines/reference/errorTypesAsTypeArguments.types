@@ -2,5 +2,5 @@
 interface Foo<A> {
   bar(baz: Foo<B>): Foo<C>;
 >bar : (baz: Foo<B>) => Foo<C>
->baz : Foo<any>
+>baz : Foo<B>
 }

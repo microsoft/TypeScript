@@ -81,7 +81,7 @@ function use() {
 >foo : any
 
   var p3:booz.bar;
->p3 : any
+>p3 : booz.bar
 >booz : any
 
   var p22 = new provide.Provide();

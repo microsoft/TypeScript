@@ -8,6 +8,7 @@ type F1 = {
 type F2 = (n: number): string; // should be => not :
 >F2 : Symbol(F2, Decl(parseErrorIncorrectReturnToken.ts, 2, 1))
 >n : Symbol(n, Decl(parseErrorIncorrectReturnToken.ts, 3, 11))
+> : Symbol(unknown)
 
 // doesn't work in non-type contexts, where the return type is optional
 let f = (n: number) => string => n.toString();

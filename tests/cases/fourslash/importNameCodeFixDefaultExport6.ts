@@ -9,7 +9,7 @@
 verify.applyCodeActionFromCompletion("", {
   name: "a",
   source: "/a",
-  description: `Import default 'a' from module "./a"`,
+  description: `Add import from "./a"`,
   newFileContent: `import a from "./a";\n\na`,
   preferences: {
     includeCompletionsForModuleExports: true

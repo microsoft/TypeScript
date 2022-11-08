@@ -1,0 +1,38 @@
+=== tests/cases/conformance/node/subfolder/index.ts ===
+// cjs format file
+function require() {}
+>require : Symbol(require, Decl(index.ts, 0, 0))
+
+const exports = {};
+>exports : Symbol(exports, Decl(index.ts, 2, 5))
+
+class Object {}
+>Object : Symbol(Object, Decl(index.ts, 2, 19))
+
+export const __esModule = false;
+>__esModule : Symbol(__esModule, Decl(index.ts, 4, 12))
+
+export {require, exports, Object};
+>require : Symbol(require, Decl(index.ts, 5, 8))
+>exports : Symbol(exports, Decl(index.ts, 5, 16))
+>Object : Symbol(Object, Decl(index.ts, 5, 25))
+
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+function require() {}
+>require : Symbol(require, Decl(index.ts, 0, 0))
+
+const exports = {};
+>exports : Symbol(exports, Decl(index.ts, 2, 5))
+
+class Object {}
+>Object : Symbol(Object, Decl(index.ts, 2, 19))
+
+export const __esModule = false;
+>__esModule : Symbol(__esModule, Decl(index.ts, 4, 12))
+
+export {require, exports, Object};
+>require : Symbol(require, Decl(index.ts, 5, 8))
+>exports : Symbol(exports, Decl(index.ts, 5, 16))
+>Object : Symbol(Object, Decl(index.ts, 5, 25))
+

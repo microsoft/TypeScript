@@ -26,4 +26,6 @@ declare module "m2" {
 
     function Z2(): X.I;
 >Z2 : Symbol(Z2, Decl(exportSpecifierAndLocalMemberDeclaration.ts, 9, 21))
+>X : Symbol(X)
+>I : Symbol(X.I)
 }

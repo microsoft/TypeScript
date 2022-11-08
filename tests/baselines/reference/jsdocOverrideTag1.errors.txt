@@ -1,6 +1,6 @@
-tests/cases/conformance/jsdoc/0.js(27,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'A'.
-tests/cases/conformance/jsdoc/0.js(32,5): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'A'.
-tests/cases/conformance/jsdoc/0.js(40,5): error TS4112: This member cannot have an 'override' modifier because its containing class 'C' does not extend another class.
+tests/cases/conformance/jsdoc/0.js(27,5): error TS4119: This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class 'A'.
+tests/cases/conformance/jsdoc/0.js(32,5): error TS4122: This member cannot have a JSDoc comment with an '@override' tag because it is not declared in the base class 'A'.
+tests/cases/conformance/jsdoc/0.js(40,5): error TS4121: This member cannot have a JSDoc comment with an '@override' tag because its containing class 'C' does not extend another class.
 
 
 ==== tests/cases/conformance/jsdoc/0.js (3 errors) ====
@@ -32,14 +32,14 @@ tests/cases/conformance/jsdoc/0.js(40,5): error TS4112: This member cannot have 
     
         bar () {
         ~~~
-!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'A'.
+!!! error TS4119: This member must have a JSDoc comment with an '@override' tag because it overrides a member in the base class 'A'.
     
         }
     
         /** @override */
         baz () {
         ~~~
-!!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'A'.
+!!! error TS4122: This member cannot have a JSDoc comment with an '@override' tag because it is not declared in the base class 'A'.
     
         }
     }
@@ -49,7 +49,7 @@ tests/cases/conformance/jsdoc/0.js(40,5): error TS4112: This member cannot have 
         /** @override */
         foo () {
         ~~~
-!!! error TS4112: This member cannot have an 'override' modifier because its containing class 'C' does not extend another class.
+!!! error TS4121: This member cannot have a JSDoc comment with an '@override' tag because its containing class 'C' does not extend another class.
     
         }
     }

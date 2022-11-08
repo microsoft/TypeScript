@@ -216,7 +216,7 @@ declare const TabbedShowLayout: {
     };
 } & ((props?: {
     elem: string;
-} | undefined) => JSX.Element);
+}) => JSX.Element);
 //// [jsDeclarationsReactComponents4.d.ts]
 export default TabbedShowLayout;
 declare function TabbedShowLayout(prop: {

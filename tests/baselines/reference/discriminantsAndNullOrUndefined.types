@@ -8,7 +8,7 @@ interface B { kind: 'B'; }
 >kind : "B"
 
 type C = A | B | undefined;
->C : C
+>C : A | B | undefined
 
 function never(_: never): never {
 >never : (_: never) => never

@@ -27,8 +27,8 @@ verify.completions({
 verify.completions({
     marker: "2",
     exact: [
+        { name: "address" },
         { name: "bar" },
-        { name: "address" }
     ],
     preferences: { includeInsertTextCompletions: true },
 });
@@ -36,8 +36,8 @@ verify.completions({
 verify.completions({
     marker: "3",
     exact: [
+        { name: "address" },
         { name: "bar" },
-        { name: "address" }
     ],
     preferences: { includeInsertTextCompletions: true },
 });

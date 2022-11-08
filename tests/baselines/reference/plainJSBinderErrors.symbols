@@ -1,0 +1,86 @@
+=== tests/cases/conformance/salsa/plainJSBinderErrors.js ===
+export default 12
+export default 13
+const await = 1
+>await : Symbol(await, Decl(plainJSBinderErrors.js, 2, 5))
+
+const yield = 2
+>yield : Symbol(yield, Decl(plainJSBinderErrors.js, 3, 5))
+
+async function f() {
+>f : Symbol(f, Decl(plainJSBinderErrors.js, 3, 15))
+
+    const await = 3
+>await : Symbol(await, Decl(plainJSBinderErrors.js, 5, 9))
+}
+function* g() {
+>g : Symbol(g, Decl(plainJSBinderErrors.js, 6, 1))
+
+    const yield = 4
+>yield : Symbol(yield, Decl(plainJSBinderErrors.js, 8, 9))
+}
+class C {
+>C : Symbol(C, Decl(plainJSBinderErrors.js, 9, 1))
+
+    #constructor = 5
+>#constructor : Symbol(C.#constructor, Decl(plainJSBinderErrors.js, 10, 9))
+
+    deleted() {
+>deleted : Symbol(C.deleted, Decl(plainJSBinderErrors.js, 11, 20))
+
+        function container(f) {
+>container : Symbol(container, Decl(plainJSBinderErrors.js, 12, 15))
+>f : Symbol(f, Decl(plainJSBinderErrors.js, 13, 27))
+
+            delete f
+>f : Symbol(f, Decl(plainJSBinderErrors.js, 13, 27))
+        }
+        var g = 6
+>g : Symbol(g, Decl(plainJSBinderErrors.js, 16, 11))
+
+        delete g
+>g : Symbol(g, Decl(plainJSBinderErrors.js, 16, 11))
+
+        delete container
+>container : Symbol(container, Decl(plainJSBinderErrors.js, 12, 15))
+    }
+    evalArguments() {
+>evalArguments : Symbol(C.evalArguments, Decl(plainJSBinderErrors.js, 19, 5))
+
+        const eval = 7
+>eval : Symbol(eval, Decl(plainJSBinderErrors.js, 21, 13))
+
+        const arguments = 8
+>arguments : Symbol(arguments, Decl(plainJSBinderErrors.js, 22, 13))
+    }
+    withOctal() {
+>withOctal : Symbol(C.withOctal, Decl(plainJSBinderErrors.js, 23, 5))
+
+        const redundant = 010
+>redundant : Symbol(redundant, Decl(plainJSBinderErrors.js, 25, 13))
+
+        with (redundant) {
+>redundant : Symbol(redundant, Decl(plainJSBinderErrors.js, 25, 13))
+
+            return toFixed()
+        }
+    }
+    label() {
+>label : Symbol(C.label, Decl(plainJSBinderErrors.js, 29, 5))
+
+        for(;;) {
+            label: var x = 1
+>x : Symbol(x, Decl(plainJSBinderErrors.js, 32, 22))
+
+            break label
+        }
+        return x
+>x : Symbol(x, Decl(plainJSBinderErrors.js, 32, 22))
+    }
+}
+const eval = 9
+>eval : Symbol(eval, Decl(plainJSBinderErrors.js, 38, 5))
+
+const arguments = 10
+>arguments : Symbol(arguments, Decl(plainJSBinderErrors.js, 39, 5))
+

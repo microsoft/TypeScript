@@ -1,0 +1,466 @@
+=== tests/cases/compiler/awaitedType.ts ===
+type T1 = Awaited<number>;
+>T1 : Symbol(T1, Decl(awaitedType.ts, 0, 0))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+
+type T2 = Awaited<Promise<number>>;
+>T2 : Symbol(T2, Decl(awaitedType.ts, 0, 26))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type T3 = Awaited<number | Promise<number>>;
+>T3 : Symbol(T3, Decl(awaitedType.ts, 1, 35))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type T4 = Awaited<number | Promise<string>>;
+>T4 : Symbol(T4, Decl(awaitedType.ts, 2, 44))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type T5 = Awaited<{ then: number }>;
+>T5 : Symbol(T5, Decl(awaitedType.ts, 3, 44))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(then, Decl(awaitedType.ts, 4, 19))
+
+type T6 = Awaited<{ then(): void }>; // never (non-promise "thenable")
+>T6 : Symbol(T6, Decl(awaitedType.ts, 4, 36))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(then, Decl(awaitedType.ts, 5, 19))
+
+type T7 = Awaited<{ then(x: number): void }>; // never (non-promise "thenable")
+>T7 : Symbol(T7, Decl(awaitedType.ts, 5, 36))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(then, Decl(awaitedType.ts, 6, 19))
+>x : Symbol(x, Decl(awaitedType.ts, 6, 25))
+
+type T8 = Awaited<{ then(x: () => void): void }>; // unknown
+>T8 : Symbol(T8, Decl(awaitedType.ts, 6, 45))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(then, Decl(awaitedType.ts, 7, 19))
+>x : Symbol(x, Decl(awaitedType.ts, 7, 25))
+
+type T9 = Awaited<any>;
+>T9 : Symbol(T9, Decl(awaitedType.ts, 7, 49))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+
+type T10 = Awaited<never>;
+>T10 : Symbol(T10, Decl(awaitedType.ts, 8, 23))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+
+type T11 = Awaited<unknown>;
+>T11 : Symbol(T11, Decl(awaitedType.ts, 9, 26))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+
+type T12 = Awaited<Promise<Promise<number>>>;
+>T12 : Symbol(T12, Decl(awaitedType.ts, 10, 28))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type T13 = _Expect<Awaited<Promise<Promise<number>> | string | null>, /*expected*/ string | number | null>; // otherwise just prints T13 in types tests, which isn't very helpful
+>T13 : Symbol(T13, Decl(awaitedType.ts, 11, 45))
+>_Expect : Symbol(_Expect, Decl(awaitedType.ts, 156, 1))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type T14 = _Expect<Awaited<Promise<Promise<number>> | string | undefined>, /*expected*/ string | number | undefined>; // otherwise just prints T14 in types tests, which isn't very helpful
+>T14 : Symbol(T14, Decl(awaitedType.ts, 12, 107))
+>_Expect : Symbol(_Expect, Decl(awaitedType.ts, 156, 1))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+type T15 = _Expect<Awaited<Promise<Promise<number>> | string | null | undefined>, /*expected*/ string | number | null | undefined>; // otherwise just prints T15 in types tests, which isn't very helpful
+>T15 : Symbol(T15, Decl(awaitedType.ts, 13, 117))
+>_Expect : Symbol(_Expect, Decl(awaitedType.ts, 156, 1))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+interface BadPromise { then(cb: (value: BadPromise) => void): void; }
+>BadPromise : Symbol(BadPromise, Decl(awaitedType.ts, 14, 131))
+>then : Symbol(BadPromise.then, Decl(awaitedType.ts, 16, 22))
+>cb : Symbol(cb, Decl(awaitedType.ts, 16, 28))
+>value : Symbol(value, Decl(awaitedType.ts, 16, 33))
+>BadPromise : Symbol(BadPromise, Decl(awaitedType.ts, 14, 131))
+
+type T16 = Awaited<BadPromise>; // error
+>T16 : Symbol(T16, Decl(awaitedType.ts, 16, 69))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>BadPromise : Symbol(BadPromise, Decl(awaitedType.ts, 14, 131))
+
+interface BadPromise1 { then(cb: (value: BadPromise2) => void): void; }
+>BadPromise1 : Symbol(BadPromise1, Decl(awaitedType.ts, 17, 31))
+>then : Symbol(BadPromise1.then, Decl(awaitedType.ts, 19, 23))
+>cb : Symbol(cb, Decl(awaitedType.ts, 19, 29))
+>value : Symbol(value, Decl(awaitedType.ts, 19, 34))
+>BadPromise2 : Symbol(BadPromise2, Decl(awaitedType.ts, 19, 71))
+
+interface BadPromise2 { then(cb: (value: BadPromise1) => void): void; }
+>BadPromise2 : Symbol(BadPromise2, Decl(awaitedType.ts, 19, 71))
+>then : Symbol(BadPromise2.then, Decl(awaitedType.ts, 20, 23))
+>cb : Symbol(cb, Decl(awaitedType.ts, 20, 29))
+>value : Symbol(value, Decl(awaitedType.ts, 20, 34))
+>BadPromise1 : Symbol(BadPromise1, Decl(awaitedType.ts, 17, 31))
+
+type T17 = Awaited<BadPromise1>; // error
+>T17 : Symbol(T17, Decl(awaitedType.ts, 20, 71))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>BadPromise1 : Symbol(BadPromise1, Decl(awaitedType.ts, 17, 31))
+
+// https://github.com/microsoft/TypeScript/issues/46934
+type T18 = Awaited<{ then(cb: (value: number, other: { }) => void)}>; // number
+>T18 : Symbol(T18, Decl(awaitedType.ts, 21, 32))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>then : Symbol(then, Decl(awaitedType.ts, 24, 20))
+>cb : Symbol(cb, Decl(awaitedType.ts, 24, 26))
+>value : Symbol(value, Decl(awaitedType.ts, 24, 31))
+>other : Symbol(other, Decl(awaitedType.ts, 24, 45))
+
+// https://github.com/microsoft/TypeScript/issues/33562
+type MaybePromise<T> = T | Promise<T> | PromiseLike<T>
+>MaybePromise : Symbol(MaybePromise, Decl(awaitedType.ts, 27, 54), Decl(awaitedType.ts, 24, 69))
+>T : Symbol(T, Decl(awaitedType.ts, 27, 18))
+>T : Symbol(T, Decl(awaitedType.ts, 27, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>T : Symbol(T, Decl(awaitedType.ts, 27, 18))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(awaitedType.ts, 27, 18))
+
+declare function MaybePromise<T>(value: T): MaybePromise<T>;
+>MaybePromise : Symbol(MaybePromise, Decl(awaitedType.ts, 27, 54), Decl(awaitedType.ts, 24, 69))
+>T : Symbol(T, Decl(awaitedType.ts, 28, 30))
+>value : Symbol(value, Decl(awaitedType.ts, 28, 33))
+>T : Symbol(T, Decl(awaitedType.ts, 28, 30))
+>MaybePromise : Symbol(MaybePromise, Decl(awaitedType.ts, 27, 54), Decl(awaitedType.ts, 24, 69))
+>T : Symbol(T, Decl(awaitedType.ts, 28, 30))
+
+async function main() {
+>main : Symbol(main, Decl(awaitedType.ts, 28, 60))
+
+    let aaa: number;
+>aaa : Symbol(aaa, Decl(awaitedType.ts, 31, 7))
+
+    let bbb: string;
+>bbb : Symbol(bbb, Decl(awaitedType.ts, 32, 7))
+
+    [
+        aaa,
+>aaa : Symbol(aaa, Decl(awaitedType.ts, 31, 7))
+
+        bbb,
+>bbb : Symbol(bbb, Decl(awaitedType.ts, 32, 7))
+
+    ] = await Promise.all([
+>Promise.all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>all : Symbol(PromiseConstructor.all, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+        MaybePromise(1),
+>MaybePromise : Symbol(MaybePromise, Decl(awaitedType.ts, 27, 54), Decl(awaitedType.ts, 24, 69))
+
+        MaybePromise('2'),
+>MaybePromise : Symbol(MaybePromise, Decl(awaitedType.ts, 27, 54), Decl(awaitedType.ts, 24, 69))
+
+        MaybePromise(true),
+>MaybePromise : Symbol(MaybePromise, Decl(awaitedType.ts, 27, 54), Decl(awaitedType.ts, 24, 69))
+
+    ])
+}
+
+// non-generic
+async function f1(x: string) {
+>f1 : Symbol(f1, Decl(awaitedType.ts, 41, 1))
+>x : Symbol(x, Decl(awaitedType.ts, 44, 18))
+
+    // y: string
+    const y = await x;
+>y : Symbol(y, Decl(awaitedType.ts, 46, 9))
+>x : Symbol(x, Decl(awaitedType.ts, 44, 18))
+}
+
+async function f2(x: unknown) {
+>f2 : Symbol(f2, Decl(awaitedType.ts, 47, 1))
+>x : Symbol(x, Decl(awaitedType.ts, 49, 18))
+
+    // y: unknown
+    const y = await x;
+>y : Symbol(y, Decl(awaitedType.ts, 51, 9))
+>x : Symbol(x, Decl(awaitedType.ts, 49, 18))
+}
+
+async function f3(x: object) {
+>f3 : Symbol(f3, Decl(awaitedType.ts, 52, 1))
+>x : Symbol(x, Decl(awaitedType.ts, 54, 18))
+
+    // y: object
+    const y = await x;
+>y : Symbol(y, Decl(awaitedType.ts, 56, 9))
+>x : Symbol(x, Decl(awaitedType.ts, 54, 18))
+}
+
+async function f4(x: Promise<string>) {
+>f4 : Symbol(f4, Decl(awaitedType.ts, 57, 1))
+>x : Symbol(x, Decl(awaitedType.ts, 59, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    // y: string
+    const y = await x;
+>y : Symbol(y, Decl(awaitedType.ts, 61, 9))
+>x : Symbol(x, Decl(awaitedType.ts, 59, 18))
+}
+
+async function f5(x: Promise<unknown>) {
+>f5 : Symbol(f5, Decl(awaitedType.ts, 62, 1))
+>x : Symbol(x, Decl(awaitedType.ts, 64, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    // y: unknown
+    const y = await x;
+>y : Symbol(y, Decl(awaitedType.ts, 66, 9))
+>x : Symbol(x, Decl(awaitedType.ts, 64, 18))
+}
+
+async function f6(x: Promise<object>) {
+>f6 : Symbol(f6, Decl(awaitedType.ts, 67, 1))
+>x : Symbol(x, Decl(awaitedType.ts, 69, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+    // y: object
+    const y = await x;
+>y : Symbol(y, Decl(awaitedType.ts, 71, 9))
+>x : Symbol(x, Decl(awaitedType.ts, 69, 18))
+}
+
+// generic
+
+async function f7<T>(x: T) {
+>f7 : Symbol(f7, Decl(awaitedType.ts, 72, 1))
+>T : Symbol(T, Decl(awaitedType.ts, 76, 18))
+>x : Symbol(x, Decl(awaitedType.ts, 76, 21))
+>T : Symbol(T, Decl(awaitedType.ts, 76, 18))
+
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+>y : Symbol(y, Decl(awaitedType.ts, 82, 9))
+>x : Symbol(x, Decl(awaitedType.ts, 76, 21))
+}
+
+async function f8<T extends any>(x: T) {
+>f8 : Symbol(f8, Decl(awaitedType.ts, 83, 1))
+>T : Symbol(T, Decl(awaitedType.ts, 85, 18))
+>x : Symbol(x, Decl(awaitedType.ts, 85, 33))
+>T : Symbol(T, Decl(awaitedType.ts, 85, 18))
+
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+>y : Symbol(y, Decl(awaitedType.ts, 91, 9))
+>x : Symbol(x, Decl(awaitedType.ts, 85, 33))
+}
+
+async function f9<T extends unknown>(x: T) {
+>f9 : Symbol(f9, Decl(awaitedType.ts, 92, 1))
+>T : Symbol(T, Decl(awaitedType.ts, 94, 18))
+>x : Symbol(x, Decl(awaitedType.ts, 94, 37))
+>T : Symbol(T, Decl(awaitedType.ts, 94, 18))
+
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+>y : Symbol(y, Decl(awaitedType.ts, 100, 9))
+>x : Symbol(x, Decl(awaitedType.ts, 94, 37))
+}
+
+async function f10<T extends {}>(x: T) {
+>f10 : Symbol(f10, Decl(awaitedType.ts, 101, 1))
+>T : Symbol(T, Decl(awaitedType.ts, 103, 19))
+>x : Symbol(x, Decl(awaitedType.ts, 103, 33))
+>T : Symbol(T, Decl(awaitedType.ts, 103, 19))
+
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+>y : Symbol(y, Decl(awaitedType.ts, 109, 9))
+>x : Symbol(x, Decl(awaitedType.ts, 103, 33))
+}
+
+async function f11<T extends { then(onfulfilled: (value: unknown) => void): void }>(x: T) {
+>f11 : Symbol(f11, Decl(awaitedType.ts, 110, 1))
+>T : Symbol(T, Decl(awaitedType.ts, 112, 19))
+>then : Symbol(then, Decl(awaitedType.ts, 112, 30))
+>onfulfilled : Symbol(onfulfilled, Decl(awaitedType.ts, 112, 36))
+>value : Symbol(value, Decl(awaitedType.ts, 112, 50))
+>x : Symbol(x, Decl(awaitedType.ts, 112, 84))
+>T : Symbol(T, Decl(awaitedType.ts, 112, 19))
+
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+>y : Symbol(y, Decl(awaitedType.ts, 118, 9))
+>x : Symbol(x, Decl(awaitedType.ts, 112, 84))
+}
+
+async function f12<T extends string | object>(x: T) {
+>f12 : Symbol(f12, Decl(awaitedType.ts, 119, 1))
+>T : Symbol(T, Decl(awaitedType.ts, 121, 19))
+>x : Symbol(x, Decl(awaitedType.ts, 121, 46))
+>T : Symbol(T, Decl(awaitedType.ts, 121, 19))
+
+    // NOTE: T does not belong solely to the domain of primitive types and either does
+    // not have a base constraint, its base constraint is `any`, `unknown`, `{}`, or `object`,
+    // or it has a non-primitive base constraint with a callable `then`.
+
+    // y: Awaited<T>
+    const y = await x;
+>y : Symbol(y, Decl(awaitedType.ts, 127, 9))
+>x : Symbol(x, Decl(awaitedType.ts, 121, 46))
+}
+
+async function f13<T extends string>(x: T) {
+>f13 : Symbol(f13, Decl(awaitedType.ts, 128, 1))
+>T : Symbol(T, Decl(awaitedType.ts, 130, 19))
+>x : Symbol(x, Decl(awaitedType.ts, 130, 37))
+>T : Symbol(T, Decl(awaitedType.ts, 130, 19))
+
+    // NOTE: T belongs to the domain of primitive types
+
+    // y: T
+    const y = await x;
+>y : Symbol(y, Decl(awaitedType.ts, 134, 9))
+>x : Symbol(x, Decl(awaitedType.ts, 130, 37))
+}
+
+async function f14<T extends { x: number }>(x: T) {
+>f14 : Symbol(f14, Decl(awaitedType.ts, 135, 1))
+>T : Symbol(T, Decl(awaitedType.ts, 137, 19))
+>x : Symbol(x, Decl(awaitedType.ts, 137, 30))
+>x : Symbol(x, Decl(awaitedType.ts, 137, 44))
+>T : Symbol(T, Decl(awaitedType.ts, 137, 19))
+
+    // NOTE: T has a non-primitive base constraint without a callable `then`.
+
+    // y: T
+    const y = await x;
+>y : Symbol(y, Decl(awaitedType.ts, 141, 9))
+>x : Symbol(x, Decl(awaitedType.ts, 137, 44))
+}
+
+async function f15<T extends { then: number }>(x: T) {
+>f15 : Symbol(f15, Decl(awaitedType.ts, 142, 1))
+>T : Symbol(T, Decl(awaitedType.ts, 144, 19))
+>then : Symbol(then, Decl(awaitedType.ts, 144, 30))
+>x : Symbol(x, Decl(awaitedType.ts, 144, 47))
+>T : Symbol(T, Decl(awaitedType.ts, 144, 19))
+
+    // NOTE: T has a non-primitive base constraint without a callable `then`.
+
+    // y: T
+    const y = await x;
+>y : Symbol(y, Decl(awaitedType.ts, 148, 9))
+>x : Symbol(x, Decl(awaitedType.ts, 144, 47))
+}
+
+async function f16<T extends number & { then(): void }>(x: T) {
+>f16 : Symbol(f16, Decl(awaitedType.ts, 149, 1))
+>T : Symbol(T, Decl(awaitedType.ts, 151, 19))
+>then : Symbol(then, Decl(awaitedType.ts, 151, 39))
+>x : Symbol(x, Decl(awaitedType.ts, 151, 56))
+>T : Symbol(T, Decl(awaitedType.ts, 151, 19))
+
+    // NOTE: T belongs to the domain of primitive types (regardless of `then`)
+
+    // y: T
+    const y = await x;
+>y : Symbol(y, Decl(awaitedType.ts, 155, 9))
+>x : Symbol(x, Decl(awaitedType.ts, 151, 56))
+}
+
+
+// helps with tests where '.types' just prints out the type alias name
+type _Expect<TActual extends TExpected, TExpected> = TActual;
+>_Expect : Symbol(_Expect, Decl(awaitedType.ts, 156, 1))
+>TActual : Symbol(TActual, Decl(awaitedType.ts, 160, 13))
+>TExpected : Symbol(TExpected, Decl(awaitedType.ts, 160, 39))
+>TExpected : Symbol(TExpected, Decl(awaitedType.ts, 160, 39))
+>TActual : Symbol(TActual, Decl(awaitedType.ts, 160, 13))
+
+// https://github.com/microsoft/TypeScript/issues/48320
+async function f17<T extends (...args: any[]) => Promise<any>>(fn: T) {
+>f17 : Symbol(f17, Decl(awaitedType.ts, 160, 61))
+>T : Symbol(T, Decl(awaitedType.ts, 163, 19))
+>args : Symbol(args, Decl(awaitedType.ts, 163, 30))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>fn : Symbol(fn, Decl(awaitedType.ts, 163, 63))
+>T : Symbol(T, Decl(awaitedType.ts, 163, 19))
+
+    const ret: Awaited<ReturnType<T>> = await fn(1, 2, 3);
+>ret : Symbol(ret, Decl(awaitedType.ts, 164, 9))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(awaitedType.ts, 163, 19))
+>fn : Symbol(fn, Decl(awaitedType.ts, 163, 63))
+
+    return ret;
+>ret : Symbol(ret, Decl(awaitedType.ts, 164, 9))
+}
+async function f17_usage() {
+>f17_usage : Symbol(f17_usage, Decl(awaitedType.ts, 166, 1))
+
+    const x = await f17(async () => 123 as const);
+>x : Symbol(x, Decl(awaitedType.ts, 168, 9))
+>f17 : Symbol(f17, Decl(awaitedType.ts, 160, 61))
+>const : Symbol(const)
+
+    return { x };
+>x : Symbol(x, Decl(awaitedType.ts, 169, 12))
+}
+
+// https://github.com/microsoft/TypeScript/issues/47144
+type GenericStructure<
+>GenericStructure : Symbol(GenericStructure, Decl(awaitedType.ts, 170, 1))
+
+  AcceptableKeyType extends string = string
+>AcceptableKeyType : Symbol(AcceptableKeyType, Decl(awaitedType.ts, 173, 22))
+
+> = Record<AcceptableKeyType, number>;
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>AcceptableKeyType : Symbol(AcceptableKeyType, Decl(awaitedType.ts, 173, 22))
+
+async function brokenExample<AcceptableKeyType extends string = string>(structurePromise: Promise<GenericStructure<AcceptableKeyType>>, key: AcceptableKeyType): Promise<void> {
+>brokenExample : Symbol(brokenExample, Decl(awaitedType.ts, 175, 38))
+>AcceptableKeyType : Symbol(AcceptableKeyType, Decl(awaitedType.ts, 177, 29))
+>structurePromise : Symbol(structurePromise, Decl(awaitedType.ts, 177, 72))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>GenericStructure : Symbol(GenericStructure, Decl(awaitedType.ts, 170, 1))
+>AcceptableKeyType : Symbol(AcceptableKeyType, Decl(awaitedType.ts, 177, 29))
+>key : Symbol(key, Decl(awaitedType.ts, 177, 135))
+>AcceptableKeyType : Symbol(AcceptableKeyType, Decl(awaitedType.ts, 177, 29))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+  const structure = await structurePromise;
+>structure : Symbol(structure, Decl(awaitedType.ts, 178, 7))
+>structurePromise : Symbol(structurePromise, Decl(awaitedType.ts, 177, 72))
+
+  structure[key] = 1;
+>structure : Symbol(structure, Decl(awaitedType.ts, 178, 7))
+>key : Symbol(key, Decl(awaitedType.ts, 177, 135))
+}

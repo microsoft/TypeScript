@@ -48,7 +48,7 @@ declare namespace PropTypes {
 }
 
 type ReactNode = string | number | ReactComponent<{}, {}>;
->ReactNode : ReactNode
+>ReactNode : string | number | ReactComponent<{}, {}>
 
 declare class ReactComponent<P={}, S={}> {
 >ReactComponent : ReactComponent<P, S>

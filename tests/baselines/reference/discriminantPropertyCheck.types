@@ -1,6 +1,6 @@
 === tests/cases/compiler/discriminantPropertyCheck.ts ===
 type Item = Item1 | Item2;
->Item : Item
+>Item : Item1 | Item2
 
 interface Base {
     bar: boolean;
@@ -243,7 +243,7 @@ enum Types { Str = 1, Num = 2 }
 >2 : 2
 
 type Instance = StrType | NumType;
->Instance : Instance
+>Instance : StrType | NumType
 
 interface StrType {
     type: Types.Str;
@@ -335,7 +335,7 @@ interface B {
 }
 
 type U = A | B;
->U : U
+>U : A | B
 
 const u: U = {} as any;
 >u : U
@@ -381,10 +381,10 @@ u.b && u.a && f(u.a, u.b);
 // Repro from #29012
 
 type Additive = '+' | '-';
->Additive : Additive
+>Additive : "+" | "-"
 
 type Multiplicative = '*' | '/';
->Multiplicative : Multiplicative
+>Multiplicative : "*" | "/"
 
 interface AdditiveObj {
     key: Additive
@@ -397,7 +397,7 @@ interface MultiplicativeObj {
 }
 
 type Obj = AdditiveObj | MultiplicativeObj
->Obj : Obj
+>Obj : AdditiveObj | MultiplicativeObj
 
 export function foo(obj: Obj) {
 >foo : (obj: Obj) => void
@@ -450,15 +450,15 @@ const enum BarEnum {
 }
 
 type UnionOfBar = TypeBar1 | TypeBar2;
->UnionOfBar : UnionOfBar
+>UnionOfBar : TypeBar1 | TypeBar2
 
 type TypeBar1 = { type: BarEnum.bar1 };
->TypeBar1 : TypeBar1
+>TypeBar1 : { type: BarEnum.bar1; }
 >type : BarEnum.bar1
 >BarEnum : any
 
 type TypeBar2 = { type: BarEnum.bar2 };
->TypeBar2 : TypeBar2
+>TypeBar2 : { type: BarEnum.bar2; }
 >type : BarEnum.bar2
 >BarEnum : any
 
@@ -520,7 +520,7 @@ interface TypeB {
 }
 
 type Type = TypeA | TypeB;
->Type : Type
+>Type : TypeA | TypeB
 
 declare function isType(x: unknown): x is Type;
 >isType : (x: unknown) => x is Type
@@ -573,7 +573,7 @@ function DoesNotWork(data: unknown) {
 // Repro from #36777
 
 type TestA = {
->TestA : TestA
+>TestA : { type: 'testA'; bananas: 3; }
 
     type: 'testA';
 >type : "testA"
@@ -583,7 +583,7 @@ type TestA = {
 }
   
 type TestB = {
->TestB : TestB
+>TestB : { type: 'testB'; apples: 5; }
 
     type: 'testB';
 >type : "testB"
@@ -593,10 +593,10 @@ type TestB = {
 }
   
 type AllTests = TestA | TestB;
->AllTests : AllTests
+>AllTests : TestA | TestB
 
 type MapOfAllTests = Record<string, AllTests>;
->MapOfAllTests : MapOfAllTests
+>MapOfAllTests : { [x: string]: AllTests; }
 
 const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
 >doTestingStuff : (mapOfTests: MapOfAllTests, ids: string[]) => void

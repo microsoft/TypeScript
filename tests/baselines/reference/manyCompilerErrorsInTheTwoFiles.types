@@ -1,0 +1,46 @@
+=== tests/cases/compiler/a.ts ===
+const a =!@#!@$
+>a : boolean
+>! : boolean
+> : any
+> : any
+>! : boolean
+> : any
+>$ : any
+
+const b = !@#!@#!@#!
+>b : boolean
+>! : boolean
+> : any
+> : any
+>! : boolean
+> : any
+> : any
+>! : boolean
+> : any
+> : any
+>!OK! : boolean
+
+OK!
+>OK! : any
+>OK : any
+
+HERE's A shouty thing
+>HERE : any
+>'s A shouty thing : "s A shouty thing"
+
+GOTTA GO FAST
+>GOTTA : any
+>GO : any
+>FAST : any
+
+=== tests/cases/compiler/b.ts ===
+fhqwhgads
+>fhqwhgads : any
+
+to
+>to : any
+
+limit
+>limit : any
+

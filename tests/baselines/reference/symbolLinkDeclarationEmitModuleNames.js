@@ -44,7 +44,11 @@ exports.BindingKey = BindingKey;
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -67,7 +71,7 @@ exports.CONTROLLER_CLASS = context_1.BindingKey.create(null); // line in questio
 
 
 //// [value-promise.d.ts]
-export declare type Constructor<T> = (...args: any[]) => T;
+export type Constructor<T> = (...args: any[]) => T;
 //// [bindingkey.d.ts]
 import { Constructor } from "@loopback/context";
 export declare class BindingKey<T> {
@@ -79,7 +83,7 @@ export * from "./src/value-promise";
 export * from "./src/bindingkey";
 //// [application.d.ts]
 import { Constructor } from "@loopback/context";
-export declare type ControllerClass = Constructor<any>;
+export type ControllerClass = Constructor<any>;
 //// [usage.d.ts]
 import { ControllerClass } from './application';
 import { BindingKey } from '@loopback/context';

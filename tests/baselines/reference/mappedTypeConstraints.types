@@ -81,7 +81,7 @@ function f4<T extends { a: string, b: string }>(obj: Record<Exclude<keyof T, 'b'
 // Repro from #28821
 
 type TargetProps = {
->TargetProps : TargetProps
+>TargetProps : { foo: string; bar: string; }
 
     foo: string,
 >foo : string

@@ -119,4 +119,3 @@ tests/cases/compiler/reservedWords2.ts(12,17): error TS1138: Parameter declarati
                     ~
 !!! error TS1138: Parameter declaration expected.
     
-    

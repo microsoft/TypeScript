@@ -117,7 +117,7 @@
               "text": [
                 {
                   "text": "T",
-                  "kind": "text"
+                  "kind": "typeParameterName"
                 }
               ]
             },

@@ -2,11 +2,11 @@
 // Repros from #44292
 
 type Store = { a: 123 }
->Store : Store
+>Store : { a: 123; }
 >a : 123
 
 export type Cleaner = <W extends Store>(runner: FeatureRunner<W>) => Promise<any>
->Cleaner : Cleaner
+>Cleaner : <W extends Store>(runner: FeatureRunner<W>) => Promise<any>
 >runner : FeatureRunner<W>
 
 export class FeatureRunner<W extends Store> {

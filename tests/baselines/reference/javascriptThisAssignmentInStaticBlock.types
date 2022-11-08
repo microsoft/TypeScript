@@ -1,0 +1,57 @@
+=== /src/a.js ===
+class Thing {
+>Thing : Thing
+
+    static {
+        this.doSomething = () => {};
+>this.doSomething = () => {} : () => void
+>this.doSomething : () => void
+>this : typeof Thing
+>doSomething : () => void
+>() => {} : () => void
+    }
+}
+
+Thing.doSomething();
+>Thing.doSomething() : void
+>Thing.doSomething : () => void
+>Thing : typeof Thing
+>doSomething : () => void
+
+// GH#46468
+class ElementsArray extends Array {
+>ElementsArray : ElementsArray
+>Array : any[]
+
+    static {
+        const superisArray = super.isArray;
+>superisArray : (arg: any) => arg is any[]
+>super.isArray : (arg: any) => arg is any[]
+>super : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+
+        const customIsArray = (arg)=> superisArray(arg);
+>customIsArray : (arg: any) => boolean
+>(arg)=> superisArray(arg) : (arg: any) => boolean
+>arg : any
+>superisArray(arg) : boolean
+>superisArray : (arg: any) => arg is any[]
+>arg : any
+
+        this.isArray = customIsArray;
+>this.isArray = customIsArray : (arg: any) => boolean
+>this.isArray : (arg: any) => boolean
+>this : typeof ElementsArray
+>isArray : (arg: any) => boolean
+>customIsArray : (arg: any) => boolean
+    }
+}
+
+ElementsArray.isArray(new ElementsArray());
+>ElementsArray.isArray(new ElementsArray()) : boolean
+>ElementsArray.isArray : (arg: any) => boolean
+>ElementsArray : typeof ElementsArray
+>isArray : (arg: any) => boolean
+>new ElementsArray() : ElementsArray
+>ElementsArray : typeof ElementsArray
+

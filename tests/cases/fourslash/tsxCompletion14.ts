@@ -24,5 +24,5 @@
 
 verify.completions(
     { marker: ["1", "3"], exact: ["ONE", "TWO"] },
-    { marker: ["2", "4"], exact: ["Three", "Four"] },
+    { marker: ["2", "4"], exact: ["Four", "Three"] },
 );

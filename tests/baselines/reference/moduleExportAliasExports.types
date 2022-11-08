@@ -7,16 +7,16 @@
 
 exports.bigOak = 1
 >exports.bigOak = 1 : 1
->exports.bigOak : number
+>exports.bigOak : 1
 >exports : typeof import("tests/cases/conformance/salsa/Eloquent")
->bigOak : number
+>bigOak : 1
 >1 : 1
 
 exports.everywhere = 2
 >exports.everywhere = 2 : 2
->exports.everywhere : number
+>exports.everywhere : 2
 >exports : typeof import("tests/cases/conformance/salsa/Eloquent")
->everywhere : number
+>everywhere : 2
 >2 : 2
 
 module.exports = exports

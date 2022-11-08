@@ -1,10 +1,10 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 ////class C {
-////    [|get [|{|"isDefinition": true, "isWriteAccess":true, "contextRangeIndex": 0 |}#foo|](){ return 1; }|]
-////    [|set [|{|"isDefinition": true, "isWriteAccess":true, "contextRangeIndex": 2 |}#foo|](value: number){  }|]
+////    /*1*/get /*2*/#foo(){ return 1; }
+////    /*3*/set /*4*/#foo(value: number){  }
 ////    constructor() {
-////        this.[|#foo|]();
+////        this./*5*/#foo();
 ////    }
 ////}
 ////class D extends C {
@@ -14,14 +14,11 @@
 ////    }
 ////}
 ////class E {
-////    [|get [|{|"isDefinition": true, "isWriteAccess":true, "contextRangeIndex": 5 |}#foo|](){ return 1; }|]
-////    [|set [|{|"isDefinition": true, "isWriteAccess":true, "contextRangeIndex": 7 |}#foo|](value: number){  }|]
+////    /*6*/get /*7*/#foo(){ return 1; }
+////    /*8*/set /*9*/#foo(value: number){  }
 ////    constructor() {
-////        this.[|#foo|]();
+////        this./*10*/#foo();
 ////    }
 ////}
 
-const [rC0DefGet, rC0Get, rC0DefSet, rC0Set, rC1, 
-     rE0GetDef, rE0Get, rE0SetDef, rE0Set, rE1] = test.ranges();
-verify.singleReferenceGroup("(property) C.#foo: number", [rC0Get, rC0Set, rC1]);
-verify.singleReferenceGroup("(property) E.#foo: number", [rE0Get, rE0Set, rE1]);
+verify.baselineFindAllReferences('1', '2', '3', '4', '5', '6', '7', '8', '9', '10');

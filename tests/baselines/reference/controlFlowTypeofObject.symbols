@@ -1,0 +1,136 @@
+=== tests/cases/conformance/controlFlow/controlFlowTypeofObject.ts ===
+declare function obj(x: object): void;
+>obj : Symbol(obj, Decl(controlFlowTypeofObject.ts, 0, 0))
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 0, 21))
+
+function f1(x: unknown) {
+>f1 : Symbol(f1, Decl(controlFlowTypeofObject.ts, 0, 38))
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 2, 12))
+
+    if (!x) {
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 2, 12))
+
+        return;
+    }
+    if (typeof x === 'object') {
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 2, 12))
+
+        obj(x);
+>obj : Symbol(obj, Decl(controlFlowTypeofObject.ts, 0, 0))
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 2, 12))
+    }
+}
+
+function f2(x: unknown) {
+>f2 : Symbol(f2, Decl(controlFlowTypeofObject.ts, 9, 1))
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 11, 12))
+
+    if (x === null) {
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 11, 12))
+
+        return;
+    }
+    if (typeof x === 'object') {
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 11, 12))
+
+        obj(x);
+>obj : Symbol(obj, Decl(controlFlowTypeofObject.ts, 0, 0))
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 11, 12))
+    }
+}
+
+function f3(x: unknown) {
+>f3 : Symbol(f3, Decl(controlFlowTypeofObject.ts, 18, 1))
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 20, 12))
+
+    if (x == null) {
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 20, 12))
+
+        return;
+    }
+    if (typeof x === 'object') {
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 20, 12))
+
+        obj(x);
+>obj : Symbol(obj, Decl(controlFlowTypeofObject.ts, 0, 0))
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 20, 12))
+    }
+}
+
+function f4(x: unknown) {
+>f4 : Symbol(f4, Decl(controlFlowTypeofObject.ts, 27, 1))
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 29, 12))
+
+    if (x == undefined) {
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 29, 12))
+>undefined : Symbol(undefined)
+
+        return;
+    }
+    if (typeof x === 'object') {
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 29, 12))
+
+        obj(x);
+>obj : Symbol(obj, Decl(controlFlowTypeofObject.ts, 0, 0))
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 29, 12))
+    }
+}
+
+function f5(x: unknown) {
+>f5 : Symbol(f5, Decl(controlFlowTypeofObject.ts, 36, 1))
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 38, 12))
+
+    if (!!true) {
+        if (!x) {
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 38, 12))
+
+            return;
+        }
+    }
+    else {
+        if (x === null) {
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 38, 12))
+
+            return;
+        }
+    }
+    if (typeof x === 'object') {
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 38, 12))
+
+        obj(x);
+>obj : Symbol(obj, Decl(controlFlowTypeofObject.ts, 0, 0))
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 38, 12))
+    }
+}
+
+function f6(x: unknown) {
+>f6 : Symbol(f6, Decl(controlFlowTypeofObject.ts, 52, 1))
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 54, 12))
+
+    if (x === null) {
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 54, 12))
+
+        x;
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 54, 12))
+    }
+    else {
+        x;
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 54, 12))
+
+        if (typeof x === 'object') {
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 54, 12))
+
+            obj(x);
+>obj : Symbol(obj, Decl(controlFlowTypeofObject.ts, 0, 0))
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 54, 12))
+        }
+    }
+    if (typeof x === 'object') {
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 54, 12))
+
+        obj(x);  // Error
+>obj : Symbol(obj, Decl(controlFlowTypeofObject.ts, 0, 0))
+>x : Symbol(x, Decl(controlFlowTypeofObject.ts, 54, 12))
+    }
+}
+

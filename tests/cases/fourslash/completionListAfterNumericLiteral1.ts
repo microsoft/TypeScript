@@ -2,4 +2,11 @@
 
 ////5../**/
 
-verify.completions({ marker: "", exact: ["toString", "toFixed", "toExponential", "toPrecision", "valueOf", "toLocaleString"] });
+verify.completions({ marker: "", exact: [
+  "toExponential",
+  "toFixed",
+  "toLocaleString",
+  "toPrecision",
+  "toString",
+  "valueOf",
+] });

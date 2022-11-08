@@ -67,3 +67,35 @@ declare namespace BaseFactory {
 }
 declare class Base {
 }
+//// [file.d.ts]
+type couldntThinkOfAny = {
+    (): {};
+    Base: {
+        new (): {};
+    };
+};
+/** @typedef {import('./base')} BaseFactory */
+/**
+ * @callback BaseFactoryFactory
+ * @param {import('./base')} factory
+ */
+/** @enum {import('./base')} */
+declare const couldntThinkOfAny: {};
+/**
+ *
+ * @param {InstanceType<BaseFactory["Base"]>} base
+ * @returns {InstanceType<BaseFactory["Base"]>}
+ */
+declare function test(base: InstanceType<BaseFactory["Base"]>): InstanceType<BaseFactory["Base"]>;
+type BaseFactory = {
+    (): {};
+    Base: {
+        new (): {};
+    };
+};
+type BaseFactoryFactory = (factory: {
+    (): {};
+    Base: {
+        new (): {};
+    };
+}) => any;

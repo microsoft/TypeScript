@@ -7,7 +7,7 @@
  * @return {T}
  */
 function f(x) {
->f : <U>(x: U) => any
+>f : <U>(x: U) => U
 >x : U
 
     return x;
@@ -16,7 +16,7 @@ function f(x) {
 
 /** @type T - should be fine, since T will be any */
 const x = 3;
->x : any
+>x : U
 >3 : 3
 
 /**
@@ -35,6 +35,6 @@ function g(vvvvv) {
 /** @type {Cb} */
 const cb = x => {}
 >cb : Cb
->x => {} : (x: any) => any
->x : any
+>x => {} : (x: V) => any
+>x : V
 

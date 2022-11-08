@@ -6,6 +6,9 @@
 // @Filename: /package.json
 //// { "dependencies": { "@jest/types": "*", "ts-jest": "*" } }
 
+// @Filename: /node_modules/@jest/types/package.json
+//// { "name": "@jest/types" }
+
 // @Filename: /node_modules/@jest/types/index.d.ts
 //// import type * as Config from "./Config";
 //// export type { Config };

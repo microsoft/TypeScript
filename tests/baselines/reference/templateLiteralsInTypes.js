@@ -6,7 +6,7 @@ f("x").foo;
 
 //// [templateLiteralsInTypes.js]
 "use strict";
-var f = function (hdr, val) { return hdr + ":\t" + val + "\r\n"; };
+var f = function (hdr, val) { return "".concat(hdr, ":\t").concat(val, "\r\n"); };
 f("x").foo;
 
 

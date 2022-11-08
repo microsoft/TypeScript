@@ -5,6 +5,10 @@ class C {
     where(filter: Iterator<T, boolean>): Query<T> {
 >where : Symbol(C.where, Decl(parserMissingLambdaOpenBrace1.ts, 0, 9))
 >filter : Symbol(filter, Decl(parserMissingLambdaOpenBrace1.ts, 1, 10))
+>Iterator : Symbol(Iterator)
+>T : Symbol(T)
+>Query : Symbol(Query)
+>T : Symbol(T)
 
         return fromDoWhile(test =>
 >test : Symbol(test, Decl(parserMissingLambdaOpenBrace1.ts, 2, 27))

@@ -3,11 +3,13 @@
 function f(x: ()) {
 >f : Symbol(f, Decl(functionTypesLackingReturnTypes.ts, 0, 0))
 >x : Symbol(x, Decl(functionTypesLackingReturnTypes.ts, 1, 11))
+> : Symbol(unknown)
 }
 
 // Error (no '=>')
 var g: (param);
 >g : Symbol(g, Decl(functionTypesLackingReturnTypes.ts, 5, 3))
+>param : Symbol(param)
 
 // Okay
 var h: { () }

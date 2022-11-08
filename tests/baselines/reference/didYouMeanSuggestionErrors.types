@@ -102,12 +102,12 @@ suite("another suite", () => {
 >0 : 0
 
         const i: Iterator<any> = null as any;
->i : any
+>i : Iterator<any>
 >null as any : any
 >null : null
 
         const j: AsyncIterator<any> = null as any;
->j : any
+>j : AsyncIterator<any>
 >null as any : any
 >null : null
 

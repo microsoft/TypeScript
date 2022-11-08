@@ -1,9 +1,9 @@
 === tests/cases/compiler/typeUsedAsTypeLiteralIndex.ts ===
 type K = number | string;
->K : K
+>K : string | number
 
 type T = {
->T : T
+>T : {}
 
     [K]: number;  // Did you mean to use 'P in K'?
 >[K] : number
@@ -16,7 +16,7 @@ const K1 = Symbol();
 >Symbol : SymbolConstructor
 
 type T1 = {
->T1 : T1
+>T1 : { [K1]: number; }
 
     [K1]: number;
 >[K1] : number
@@ -24,10 +24,10 @@ type T1 = {
 }
 
 type K2 = "x" | "y";
->K2 : K2
+>K2 : "x" | "y"
 
 type T2 = {
->T2 : T2
+>T2 : {}
 
     [K2]: number;  // Did you mean to use 'K in K2'?
 >[K2] : number
@@ -35,10 +35,10 @@ type T2 = {
 }
 
 type K3 = number | string;
->K3 : K3
+>K3 : string | number
 
 type T3 = {
->T3 : T3
+>T3 : {}
 
     [K3]: number; // Did you mean to use 'K in K3'?
 >[K3] : number
@@ -46,10 +46,10 @@ type T3 = {
 }
 
 type K4 = number | string;
->K4 : K4
+>K4 : string | number
 
 type T4 = {
->T4 : T4
+>T4 : { k4: string; }
 
     [K4]: number;
 >[K4] : number

@@ -1,8 +1,9 @@
 [
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVar.ts",
-      "position": 4
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
+      "position": 4,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "var",
@@ -42,8 +43,9 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVar.ts",
-      "position": 37
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
+      "position": 37,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "local var",
@@ -91,8 +93,9 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVar.ts",
-      "position": 41
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
+      "position": 41,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "var",
@@ -132,8 +135,9 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVar.ts",
-      "position": 65
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
+      "position": 65,
+      "name": "4"
     },
     "quickInfo": {
       "kind": "var",
@@ -173,8 +177,9 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVar.ts",
-      "position": 88
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
+      "position": 88,
+      "name": "5"
     },
     "quickInfo": {
       "kind": "var",
@@ -222,8 +227,9 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVar.ts",
-      "position": 102
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
+      "position": 102,
+      "name": "6"
     },
     "quickInfo": {
       "kind": "var",
@@ -283,8 +289,9 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVar.ts",
-      "position": 123
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
+      "position": 123,
+      "name": "7"
     },
     "quickInfo": {
       "kind": "var",
@@ -344,8 +351,9 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVar.ts",
-      "position": 127
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
+      "position": 127,
+      "name": "8"
     },
     "quickInfo": {
       "kind": "var",
@@ -405,8 +413,9 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVar.ts",
-      "position": 130
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
+      "position": 130,
+      "name": "9"
     },
     "quickInfo": {
       "kind": "var",
@@ -466,8 +475,9 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVar.ts",
-      "position": 139
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
+      "position": 139,
+      "name": "10"
     },
     "quickInfo": {
       "kind": "var",
@@ -611,8 +621,9 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVar.ts",
-      "position": 193
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
+      "position": 193,
+      "name": "11"
     },
     "quickInfo": {
       "kind": "var",
@@ -756,8 +767,9 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVar.ts",
-      "position": 197
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
+      "position": 197,
+      "name": "12"
     },
     "quickInfo": {
       "kind": "var",
@@ -901,8 +913,9 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVar.ts",
-      "position": 200
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
+      "position": 200,
+      "name": "13"
     },
     "quickInfo": {
       "kind": "var",
@@ -1006,8 +1019,9 @@
   },
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVar.ts",
-      "position": 207
+      "fileName": "/tests/cases/fourslash/shims/quickInfoDisplayPartsVarShims.ts",
+      "position": 207,
+      "name": "14"
     },
     "quickInfo": {
       "kind": "var",

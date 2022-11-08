@@ -1,0 +1,12 @@
+tests/cases/compiler/enumWithExport.ts(5,7): error TS2304: Cannot find name 'y'.
+
+
+==== tests/cases/compiler/enumWithExport.ts (1 errors) ====
+    namespace x {
+      export let y = 123
+    }
+    enum x {
+      z = y
+          ~
+!!! error TS2304: Cannot find name 'y'.
+    }
