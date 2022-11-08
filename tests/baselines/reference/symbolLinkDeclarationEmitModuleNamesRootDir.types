@@ -19,10 +19,11 @@ export declare class BindingKey<T> {
 }
 
 === tests/cases/compiler/monorepo/context/index.d.ts ===
+
 export * from "./src/value-promise";
-No type information for this code.export * from "./src/bindingkey";
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/monorepo/core/src/application.ts ===
+export * from "./src/bindingkey";
+
+=== tests/cases/compiler/monorepo/core/src/application.ts ===
 import { Constructor } from "@loopback/context";
 >Constructor : any
 

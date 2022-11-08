@@ -4,6 +4,6 @@ const foo = import("./b");
 >"./b" : Symbol("/b", Decl(b.js, 0, 0))
 
 === /b.js ===
+
 export default 1;
-No type information for this code.
-No type information for this code.
+

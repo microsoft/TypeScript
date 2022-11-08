@@ -5,6 +5,6 @@ const foo = import("./b");
 >"./b" : "./b"
 
 === /b.js ===
+
 export default 1;
-No type information for this code.
-No type information for this code.
+

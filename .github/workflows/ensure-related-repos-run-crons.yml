@@ -22,7 +22,7 @@ jobs:
         git config --global user.email "typescriptbot@microsoft.com"
         git config --global user.name "TypeScript Bot"
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with: 
         repository: 'microsoft/TypeScript-Website'
         path: 'ts-site'
@@ -34,7 +34,7 @@ jobs:
         git config --unset-all http.https://github.com/.extraheader
         git push https://${{ secrets.TS_BOT_GITHUB_TOKEN }}@github.com/microsoft/TypeScript-Website.git
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with: 
         repository: 'microsoft/TypeScript-Make-Monaco-Builds'
         path: 'monaco-builds'
