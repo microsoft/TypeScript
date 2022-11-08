@@ -1427,6 +1427,7 @@ namespace ts {
         isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
         /*@internal*/ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
         /*@internal*/ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
+        /*@internal*/ hasExtendedUnicodeEscape?: boolean;
     }
 
     // Transient identifier node (marked by id === -1)
@@ -3920,8 +3921,8 @@ namespace ts {
     // is distinguished from a regular type by a flags value of zero. Incomplete type
     // objects are internal to the getFlowTypeOfReference function and never escape it.
     export interface IncompleteType {
-        flags: TypeFlags;  // No flags set
-        type: Type;        // The type marked incomplete
+        flags: TypeFlags | 0;  // No flags set
+        type: Type;            // The type marked incomplete
     }
 
     export interface AmdDependency {
@@ -4259,6 +4260,7 @@ namespace ts {
         /*@internal*/ sourceMapUrlPos?: number;
         /*@internal*/ buildInfo?: BuildInfo;
         /*@internal*/ diagnostics?: readonly DiagnosticWithLocation[];
+        /*@internal*/ differsOnlyInMap?: true;
     }
     export type WriteFileCallback = (
         fileName: string,
@@ -4367,6 +4369,11 @@ namespace ts {
     /*@internal*/
     export type FilePreprocessingDiagnostics = FilePreprocessingReferencedDiagnostic | FilePreprocessingFileExplainingDiagnostic;
 
+    /*@internal*/
+    export const enum EmitOnly{
+        Js,
+        Dts,
+    }
     export interface Program extends ScriptReferenceHost {
         getCurrentDirectory(): string;
         /**
@@ -4402,7 +4409,7 @@ namespace ts {
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
         /*@internal*/
-        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult; // eslint-disable-line @typescript-eslint/unified-signatures
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnly?: boolean | EmitOnly, customTransformers?: CustomTransformers, forceDtsEmit?: boolean): EmitResult; // eslint-disable-line @typescript-eslint/unified-signatures
 
         getOptionsDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
         getGlobalDiagnostics(cancellationToken?: CancellationToken): readonly Diagnostic[];
@@ -4466,7 +4473,7 @@ namespace ts {
         /*@internal*/ forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference) => T | undefined): T | undefined;
         /*@internal*/ getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined;
         /*@internal*/ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
-        /*@internal*/ getProgramBuildInfo?(): ProgramBuildInfo | undefined;
+        /*@internal*/ getBuildInfo?(bundle: BundleBuildInfo | undefined): BuildInfo;
         /*@internal*/ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
         /**
          * This implementation handles file exists to be true if file is source of project reference redirect when program is created using useSourceOfProjectReferenceRedirect
@@ -4759,6 +4766,7 @@ namespace ts {
         /* @internal */ createPromiseType(type: Type): Type;
         /* @internal */ getPromiseType(): Type;
         /* @internal */ getPromiseLikeType(): Type;
+        /* @internal */ getAsyncIterableType(): Type | undefined;
 
         /* @internal */ isTypeAssignableTo(source: Type, target: Type): boolean;
         /* @internal */ createAnonymousType(symbol: Symbol | undefined, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], indexInfos: IndexInfo[]): Type;
@@ -5524,8 +5532,8 @@ namespace ts {
         SuperInstance                            = 0x00000100,  // Instance 'super' reference
         SuperStatic                              = 0x00000200,  // Static 'super' reference
         ContextChecked                           = 0x00000400,  // Contextual types have been assigned
-        AsyncMethodWithSuper                     = 0x00000800,  // An async method that reads a value from a member of 'super'.
-        AsyncMethodWithSuperBinding              = 0x00001000,  // An async method that assigns a value to a member of 'super'.
+        MethodWithSuperPropertyAccessInAsync     = 0x00000800,  // A method that contains a SuperProperty access in an async context.
+        MethodWithSuperPropertyAssignmentInAsync = 0x00001000,  // A method that contains a SuperProperty assignment in an async context.
         CaptureArguments                         = 0x00002000,  // Lexical 'arguments' used in body
         EnumValuesComputed                       = 0x00004000,  // Values for enum members have been computed, and any errors have been reported for them.
         LexicalModuleMergesWithClass             = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
@@ -5568,7 +5576,7 @@ namespace ts {
         deferredNodes?: Set<Node>;          // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
         outerTypeParameters?: TypeParameter[]; // Outer type parameters of anonymous object type
-        isExhaustive?: boolean;             // Is node an exhaustive switch statement
+        isExhaustive?: boolean | 0;         // Is node an exhaustive switch statement (0 indicates in-process resolution)
         skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
         declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
         serializedTypes?: ESMap<string, TypeNode & {truncating?: boolean, addedLength: number}>; // Collection of types serialized at this location
@@ -5580,7 +5588,7 @@ namespace ts {
         String          = 1 << 2,
         Number          = 1 << 3,
         Boolean         = 1 << 4,
-        Enum            = 1 << 5,
+        Enum            = 1 << 5,   // Numeric computed enum member value
         BigInt          = 1 << 6,
         StringLiteral   = 1 << 7,
         NumberLiteral   = 1 << 8,
@@ -5927,9 +5935,12 @@ namespace ts {
 
     export interface TupleType extends GenericType {
         elementFlags: readonly ElementFlags[];
-        minLength: number;  // Number of required or variadic elements
-        fixedLength: number;  // Number of initial required or optional elements
-        hasRestElement: boolean;  // True if tuple has any rest or variadic elements
+        /** Number of required or variadic elements */
+        minLength: number;
+        /** Number of initial required or optional elements */
+        fixedLength: number;
+        /** True if tuple has any rest or variadic elements */
+        hasRestElement: boolean;
         combinedFlags: ElementFlags;
         readonly: boolean;
         labeledElementDeclarations?: readonly (NamedTupleMember | ParameterDeclaration)[];
@@ -6850,8 +6861,7 @@ namespace ts {
         affectsEmit?: true;                                     // true if the options affects emit
         affectsProgramStructure?: true;                         // true if program should be reconstructed from root files if option changes and does not affect module resolution as affectsModuleResolution indirectly means program needs to reconstructed
         affectsDeclarationPath?: true;                          // true if the options affects declaration file path computed
-        affectsMultiFileEmitBuildInfo?: true;                   // true if this options should be emitted in buildInfo without --out
-        affectsBundleEmitBuildInfo?: true;                      // true if this options should be emitted in buildInfo with --out
+        affectsBuildInfo?: true;                                // true if this options should be emitted in buildInfo
         transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
         extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
     }
@@ -7182,6 +7192,11 @@ namespace ts {
     /* @internal */
     export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
+    export interface ModuleResolutionInfo {
+        names: readonly StringLiteralLike[];
+        reusedNames: readonly StringLiteralLike[] | undefined;
+    }
+
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
         getSourceFileByPath?(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
@@ -7202,7 +7217,7 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
         /**
          * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
          */
@@ -7228,6 +7243,7 @@ namespace ts {
         // For testing:
         /*@internal*/ disableUseFileVersionAsSignature?: boolean;
         /*@internal*/ storeFilesChangingSignatureDuringEmit?: boolean;
+        /*@internal*/ getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
     }
 
     /** true if --out otherwise source file name */
@@ -7527,7 +7543,7 @@ namespace ts {
         getPrependNodes(): readonly (InputFiles | UnparsedSource)[];
 
         writeFile: WriteFileCallback;
-        getProgramBuildInfo(): ProgramBuildInfo | undefined;
+        getBuildInfo(bundle: BundleBuildInfo | undefined): BuildInfo | undefined;
         getSourceFileFromReference: Program["getSourceFileFromReference"];
         readonly redirectTargetsMap: RedirectTargetsMap;
         createHash?(data: string): string;
@@ -7651,7 +7667,7 @@ namespace ts {
         //
 
         createIdentifier(text: string): Identifier;
-        /* @internal */ createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
+        /* @internal */ createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind, hasExtendedUnicodeEscape?: boolean): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
         /* @internal */ updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier;
 
         /**

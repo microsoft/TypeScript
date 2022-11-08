@@ -764,7 +764,7 @@ namespace ts.Completions {
         if (preferences.includeCompletionsWithClassMemberSnippets &&
             preferences.includeCompletionsWithInsertText &&
             completionKind === CompletionKind.MemberLike &&
-            isClassLikeMemberCompletion(symbol, location)) {
+            isClassLikeMemberCompletion(symbol, location, sourceFile)) {
             let importAdder;
             ({ insertText, isSnippet, importAdder, replacementSpan } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken, formatContext));
             sortText = SortText.ClassMemberSnippets; // sortText has to be lower priority than the sortText for keywords. See #47852.
@@ -846,7 +846,7 @@ namespace ts.Completions {
         };
     }
 
-    function isClassLikeMemberCompletion(symbol: Symbol, location: Node): boolean {
+    function isClassLikeMemberCompletion(symbol: Symbol, location: Node, sourceFile: SourceFile): boolean {
         // TODO: support JS files.
         if (isInJSFile(location)) {
             return false;
@@ -884,6 +884,7 @@ namespace ts.Completions {
                     location.parent.parent &&
                     isClassElement(location.parent) &&
                     location === location.parent.name &&
+                    location.parent.getLastToken(sourceFile) === location.parent.name &&
                     isClassLike(location.parent.parent)
                 ) ||
                 (

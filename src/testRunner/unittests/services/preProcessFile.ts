@@ -205,6 +205,22 @@ describe("unittests:: services:: PreProcessFile:", () => {
             /* eslint-enable no-template-curly-in-string */
         });
 
+        it("Ignores imports in template strings", () => {
+            /* eslint-disable no-template-curly-in-string */
+            test("a ? `&${a}` : `#${b}`;\n\n `import(\"${moduleSpecifier}\").${id}`;",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ true,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+            /* eslint-enable no-template-curly-in-string */
+        });
+
         it("Correctly returns imports after a template expression", () => {
             /* eslint-disable no-template-curly-in-string */
             test("`${foo}`; import \"./foo\";",

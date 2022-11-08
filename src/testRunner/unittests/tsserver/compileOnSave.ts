@@ -592,51 +592,36 @@ namespace ts.projectSystem {
         });
 
         describe("tsserverProjectSystem emit with outFile or out setting", () => {
-            function test(opts: CompilerOptions, expectedUsesOutFile: boolean) {
-                const f1 = {
-                    path: "/a/a.ts",
-                    content: "let x = 1"
-                };
-                const f2 = {
-                    path: "/a/b.ts",
-                    content: "let y = 1"
-                };
-                const config = {
-                    path: "/a/tsconfig.json",
-                    content: JSON.stringify({
-                        compilerOptions: opts,
-                        compileOnSave: true
-                    })
-                };
-                const host = createServerHost([f1, f2, config]);
-                const session = createSession(host);
-                session.executeCommand({
-                    seq: 1,
-                    type: "request",
-                    command: "open",
-                    arguments: { file: f1.path }
-                } as protocol.OpenRequest);
-                checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
-                const { response } = session.executeCommand({
-                    seq: 2,
-                    type: "request",
-                    command: "compileOnSaveAffectedFileList",
-                    arguments: { file: f1.path }
-                } as protocol.CompileOnSaveAffectedFileListRequest);
-                assert.equal((response as protocol.CompileOnSaveAffectedFileListSingleProject[]).length, 1, "expected output for 1 project");
-                assert.equal((response as protocol.CompileOnSaveAffectedFileListSingleProject[])[0].fileNames.length, 2, "expected output for 1 project");
-                assert.equal((response as protocol.CompileOnSaveAffectedFileListSingleProject[])[0].projectUsesOutFile, expectedUsesOutFile, "usesOutFile");
+            function test(subScenario: string, opts: CompilerOptions) {
+                it(subScenario, () => {
+                    const f1 = {
+                        path: "/a/a.ts",
+                        content: "let x = 1"
+                    };
+                    const f2 = {
+                        path: "/a/b.ts",
+                        content: "let y = 1"
+                    };
+                    const config = {
+                        path: "/a/tsconfig.json",
+                        content: JSON.stringify({
+                            compilerOptions: opts,
+                            compileOnSave: true
+                        })
+                    };
+                    const host = createServerHost([f1, f2, config]);
+                    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                    openFilesForSession([f1], session);
+                    session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                        command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                        arguments: { file: f1.path }
+                    });
+                    baselineTsserverLogs("compileOnSave", subScenario, session);
+                });
             }
-
-            it("projectUsesOutFile should not be returned if not set", () => {
-                test({}, /*expectedUsesOutFile*/ false);
-            });
-            it("projectUsesOutFile should be true if outFile is set", () => {
-                test({ outFile: "/a/out.js" }, /*expectedUsesOutFile*/ true);
-            });
-            it("projectUsesOutFile should be true if out is set", () => {
-                test({ out: "/a/out.js" }, /*expectedUsesOutFile*/ true);
-            });
+            test("compileOnSaveAffectedFileList projectUsesOutFile should not be returned if not set", {});
+            test("compileOnSaveAffectedFileList projectUsesOutFile should be true if outFile is set", { outFile: "/a/out.js" });
+            test("compileOnSaveAffectedFileList projectUsesOutFile should be true if out is set", { out: "/a/out.js" });
         });
     });
 
@@ -991,36 +976,6 @@ function bar() {
     });
 
     describe("unittests:: tsserver:: compileOnSave:: CompileOnSaveAffectedFileListRequest with and without projectFileName in request", () => {
-        const core: File = {
-            path: `${tscWatch.projectRoot}/core/core.ts`,
-            content: "let z = 10;"
-        };
-        const app1: File = {
-            path: `${tscWatch.projectRoot}/app1/app.ts`,
-            content: "let x = 10;"
-        };
-        const app2: File = {
-            path: `${tscWatch.projectRoot}/app2/app.ts`,
-            content: "let y = 10;"
-        };
-        const app1Config: File = {
-            path: `${tscWatch.projectRoot}/app1/tsconfig.json`,
-            content: JSON.stringify({
-                files: ["app.ts", "../core/core.ts"],
-                compilerOptions: { outFile: "build/output.js" },
-                compileOnSave: true
-            })
-        };
-        const app2Config: File = {
-            path: `${tscWatch.projectRoot}/app2/tsconfig.json`,
-            content: JSON.stringify({
-                files: ["app.ts", "../core/core.ts"],
-                compilerOptions: { outFile: "build/output.js" },
-                compileOnSave: true
-            })
-        };
-        const files = [libFile, core, app1, app2, app1Config, app2Config];
-
         function insertString(session: TestSession, file: File) {
             session.executeCommandSeq<protocol.ChangeRequest>({
                 command: protocol.CommandTypes.Change,
@@ -1035,53 +990,62 @@ function bar() {
             });
         }
 
-        function getSession() {
-            const host = createServerHost(files);
-            const session = createSession(host);
-            openFilesForSession([app1, app2, core], session);
-            const service = session.getProjectService();
-            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 });
-            const project1 = service.configuredProjects.get(app1Config.path)!;
-            const project2 = service.configuredProjects.get(app2Config.path)!;
-            checkProjectActualFiles(project1, [libFile.path, app1.path, core.path, app1Config.path]);
-            checkProjectActualFiles(project2, [libFile.path, app2.path, core.path, app2Config.path]);
-            insertString(session, app1);
-            insertString(session, app2);
-            assert.equal(project1.dirty, true);
-            assert.equal(project2.dirty, true);
-            return session;
+        function logDirtyOfProjects(session: TestSession) {
+            session.logger.logs.push(`Project1 is dirty: ${session.getProjectService().configuredProjects.get(`${tscWatch.projectRoot}/app1/tsconfig.json`)!.dirty}`);
+            session.logger.logs.push(`Project2 is dirty: ${session.getProjectService().configuredProjects.get(`${tscWatch.projectRoot}/app2/tsconfig.json`)!.dirty}`);
         }
 
-        it("when projectFile is specified", () => {
-            const session = getSession();
-            const response = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                arguments: {
-                    file: core.path,
-                    projectFileName: app1Config.path
-                }
-            }).response;
-            assert.deepEqual(response, [
-                { projectFileName: app1Config.path, fileNames: [core.path, app1.path], projectUsesOutFile: true }
-            ]);
-            assert.equal(session.getProjectService().configuredProjects.get(app1Config.path)!.dirty, false);
-            assert.equal(session.getProjectService().configuredProjects.get(app2Config.path)!.dirty, true);
+        function verify(subScenario: string, commandArgs: protocol.FileRequestArgs) {
+            it(subScenario, () => {
+                const core: File = {
+                    path: `${tscWatch.projectRoot}/core/core.ts`,
+                    content: "let z = 10;"
+                };
+                const app1: File = {
+                    path: `${tscWatch.projectRoot}/app1/app.ts`,
+                    content: "let x = 10;"
+                };
+                const app2: File = {
+                    path: `${tscWatch.projectRoot}/app2/app.ts`,
+                    content: "let y = 10;"
+                };
+                const app1Config: File = {
+                    path: `${tscWatch.projectRoot}/app1/tsconfig.json`,
+                    content: JSON.stringify({
+                        files: ["app.ts", "../core/core.ts"],
+                        compilerOptions: { outFile: "build/output.js" },
+                        compileOnSave: true
+                    })
+                };
+                const app2Config: File = {
+                    path: `${tscWatch.projectRoot}/app2/tsconfig.json`,
+                    content: JSON.stringify({
+                        files: ["app.ts", "../core/core.ts"],
+                        compilerOptions: { outFile: "build/output.js" },
+                        compileOnSave: true
+                    })
+                };
+                const files = [libFile, core, app1, app2, app1Config, app2Config];
+                const host = createServerHost(files);
+                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                openFilesForSession([app1, app2, core], session);
+                insertString(session, app1);
+                insertString(session, app2);
+                logDirtyOfProjects(session);
+                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                    arguments: commandArgs
+                });
+                logDirtyOfProjects(session);
+                baselineTsserverLogs("compileOnSave", subScenario, session);
+            });
+        }
+        verify("CompileOnSaveAffectedFileListRequest when projectFile is specified", {
+            file: `${tscWatch.projectRoot}/core/core.ts`,
+            projectFileName: `${tscWatch.projectRoot}/app1/tsconfig.json`
         });
-
-        it("when projectFile is not specified", () => {
-            const session = getSession();
-            const response = session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
-                arguments: {
-                    file: core.path
-                }
-            }).response;
-            assert.deepEqual(response, [
-                { projectFileName: app1Config.path, fileNames: [core.path, app1.path], projectUsesOutFile: true },
-                { projectFileName: app2Config.path, fileNames: [core.path, app2.path], projectUsesOutFile: true }
-            ]);
-            assert.equal(session.getProjectService().configuredProjects.get(app1Config.path)!.dirty, false);
-            assert.equal(session.getProjectService().configuredProjects.get(app2Config.path)!.dirty, false);
+        verify("CompileOnSaveAffectedFileListRequest when projectFile is not specified", {
+            file: `${tscWatch.projectRoot}/core/core.ts`,
         });
     });
 }

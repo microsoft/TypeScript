@@ -211,19 +211,18 @@ namespace ts {
     }
 
     export function hasChangesInResolutions<T>(
-        names: readonly string[] | readonly FileReference[],
+        names: readonly StringLiteralLike[] | readonly FileReference[],
+        newSourceFile: SourceFile,
         newResolutions: readonly T[],
         oldResolutions: ModeAwareCache<T> | undefined,
-        oldSourceFile: SourceFile | undefined,
         comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
         Debug.assert(names.length === newResolutions.length);
 
         for (let i = 0; i < names.length; i++) {
             const newResolution = newResolutions[i];
             const entry = names[i];
-            // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-            const name = !isString(entry) ? entry.fileName.toLowerCase() : entry;
-            const mode = !isString(entry) ? getModeForFileReference(entry, oldSourceFile?.impliedNodeFormat) : oldSourceFile && getModeForResolutionAtIndex(oldSourceFile, i);
+            const name = getResolutionName(entry);
+            const mode = getResolutionMode(entry, newSourceFile);
             const oldResolution = oldResolutions && oldResolutions.get(name, mode);
             const changed =
                 oldResolution
@@ -7741,5 +7740,39 @@ namespace ts {
 
     export function getParameterTypeNode(parameter: ParameterDeclaration | JSDocParameterTag) {
         return parameter.kind === SyntaxKind.JSDocParameterTag ? parameter.typeExpression?.type : parameter.type;
+    }
+
+    export function isTypeDeclaration(node: Node): node is TypeParameterDeclaration | ClassDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag | EnumDeclaration | ImportClause | ImportSpecifier | ExportSpecifier {
+        switch (node.kind) {
+            case SyntaxKind.TypeParameter:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.EnumDeclaration:
+            case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocCallbackTag:
+            case SyntaxKind.JSDocEnumTag:
+                return true;
+            case SyntaxKind.ImportClause:
+                return (node as ImportClause).isTypeOnly;
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.ExportSpecifier:
+                return (node as ImportSpecifier | ExportSpecifier).parent.parent.isTypeOnly;
+            default:
+                return false;
+        }
+    }
+
+    export function canHaveExportModifier(node: Node): node is Extract<HasModifiers, Statement> {
+        return isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node)
+            || isInterfaceDeclaration(node) || isTypeDeclaration(node) || (isModuleDeclaration(node) && !isExternalModuleAugmentation(node) && !isGlobalScopeAugmentation(node));
+    }
+
+    export function isOptionalJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
+        if (!isJSDocPropertyLikeTag(node)) {
+            return false;
+        }
+        const { isBracketed, typeExpression } = node;
+        return isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
     }
 }

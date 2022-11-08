@@ -226,6 +226,15 @@ namespace ts.codefix {
     }
 
     function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression, fixedDeclarations?: Set<number>) {
+        if (isForOfStatement(insertionSite.parent) && !insertionSite.parent.awaitModifier) {
+            const exprType = checker.getTypeAtLocation(insertionSite);
+            const asyncIter = checker.getAsyncIterableType();
+            if (asyncIter && checker.isTypeAssignableTo(exprType, asyncIter)) {
+                const forOf = insertionSite.parent;
+                changeTracker.replaceNode(sourceFile, forOf, factory.updateForOfStatement(forOf, factory.createToken(SyntaxKind.AwaitKeyword), forOf.initializer, forOf.expression, forOf.statement));
+                return;
+            }
+        }
         if (isBinaryExpression(insertionSite)) {
             for (const side of [insertionSite.left, insertionSite.right]) {
                 if (fixedDeclarations && isIdentifier(side)) {

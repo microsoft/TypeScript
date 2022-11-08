@@ -284,7 +284,7 @@ namespace ts {
          *
          * If this is implemented, `getResolvedModuleWithFailedLookupLocationsFromCache` should be too.
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
         getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations | undefined;
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
         /* @internal */ hasInvalidatedResolutions?: HasInvalidatedResolutions;
@@ -575,8 +575,16 @@ namespace ts {
 
     export interface CombinedCodeFixScope { type: "file"; fileName: string; }
 
+    export const enum OrganizeImportsMode {
+        All = "All",
+        SortAndCombine = "SortAndCombine",
+        RemoveUnused = "RemoveUnused",
+    }
+
     export interface OrganizeImportsArgs extends CombinedCodeFixScope {
+        /** @deprecated Use `mode` instead */
         skipDestructiveCodeActions?: boolean;
+        mode?: OrganizeImportsMode;
     }
 
     export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";

@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "4.9";
+    const versionMajorMinor = "5.0";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -2069,7 +2069,7 @@ declare namespace ts {
     }
     export type FlowType = Type | IncompleteType;
     export interface IncompleteType {
-        flags: TypeFlags;
+        flags: TypeFlags | 0;
         type: Type;
     }
     export interface AmdDependency {
@@ -2787,8 +2787,11 @@ declare namespace ts {
     }
     export interface TupleType extends GenericType {
         elementFlags: readonly ElementFlags[];
+        /** Number of required or variadic elements */
         minLength: number;
+        /** Number of initial required or optional elements */
         fixedLength: number;
+        /** True if tuple has any rest or variadic elements */
         hasRestElement: boolean;
         combinedFlags: ElementFlags;
         readonly: boolean;
@@ -3304,6 +3307,10 @@ declare namespace ts {
         readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
         readonly failedLookupLocations: string[];
     }
+    export interface ModuleResolutionInfo {
+        names: readonly StringLiteralLike[];
+        reusedNames: readonly StringLiteralLike[] | undefined;
+    }
     export interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
         getSourceFileByPath?(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
@@ -3316,7 +3323,7 @@ declare namespace ts {
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
         readDirectory?(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[], depth?: number): string[];
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
         /**
          * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
          */
@@ -4571,7 +4578,7 @@ declare namespace ts {
     /** True if has initializer node attached to it. */
     function hasOnlyExpressionInitializer(node: Node): node is HasExpressionInitializer;
     function isObjectLiteralElement(node: Node): node is ObjectLiteralElement;
-    function isStringLiteralLike(node: Node): node is StringLiteralLike;
+    function isStringLiteralLike(node: Node | FileReference): node is StringLiteralLike;
     function isJSDocLinkLike(node: Node): node is JSDocLink | JSDocLinkCode | JSDocLinkPlain;
     function hasRestParameter(s: SignatureDeclaration | JSDocSignature): boolean;
     function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean;
@@ -4582,8 +4589,8 @@ declare namespace ts {
     function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
     function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
     function createInputFiles(javascriptText: string, declarationText: string): InputFiles;
-    function createInputFiles(readFileText: (path: string) => string | undefined, javascriptPath: string, javascriptMapPath: string | undefined, declarationPath: string, declarationMapPath: string | undefined, buildInfoPath: string | undefined): InputFiles;
     function createInputFiles(javascriptText: string, declarationText: string, javascriptMapPath: string | undefined, javascriptMapText: string | undefined, declarationMapPath: string | undefined, declarationMapText: string | undefined): InputFiles;
+    function createInputFiles(readFileText: (path: string) => string | undefined, javascriptPath: string, javascriptMapPath: string | undefined, declarationPath: string, declarationMapPath: string | undefined, buildInfoPath: string | undefined): InputFiles;
     /**
      * Create an external source map source file reference
      */
@@ -5408,9 +5415,9 @@ declare namespace ts {
         /** If provided, called with Diagnostic message that informs about change in watch status */
         onWatchStatusChange?(diagnostic: Diagnostic, newLine: string, options: CompilerOptions, errorCount?: number): void;
         /** Used to watch changes in source files, missing files needed to update the program or config file */
-        watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: CompilerOptions): FileWatcher;
+        watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number, options?: WatchOptions): FileWatcher;
         /** Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added */
-        watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: CompilerOptions): FileWatcher;
+        watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean, options?: WatchOptions): FileWatcher;
         /** If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together */
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         /** If provided, will be used to reset existing delayed compilation */
@@ -5450,7 +5457,7 @@ declare namespace ts {
         /** If provided is used to get the environment variable */
         getEnvironmentVariable?(name: string): string | undefined;
         /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
         /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
         /** If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives */
@@ -5535,6 +5542,11 @@ declare namespace ts {
         verbose?: boolean;
         incremental?: boolean;
         assumeChangesOnlyAffectDirectDependencies?: boolean;
+        declaration?: boolean;
+        declarationMap?: boolean;
+        emitDeclarationOnly?: boolean;
+        sourceMap?: boolean;
+        inlineSourceMap?: boolean;
         traceResolution?: boolean;
         [option: string]: CompilerOptionsValue | undefined;
     }
@@ -5852,7 +5864,7 @@ declare namespace ts {
         readFile(path: string, encoding?: string): string | undefined;
         fileExists(path: string): boolean;
         getTypeRootsVersion?(): number;
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
         getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations | undefined;
         resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
         getDirectories?(directoryName: string): string[];
@@ -6041,8 +6053,15 @@ declare namespace ts {
         type: "file";
         fileName: string;
     }
+    enum OrganizeImportsMode {
+        All = "All",
+        SortAndCombine = "SortAndCombine",
+        RemoveUnused = "RemoveUnused"
+    }
     interface OrganizeImportsArgs extends CombinedCodeFixScope {
+        /** @deprecated Use `mode` instead */
         skipDestructiveCodeActions?: boolean;
+        mode?: OrganizeImportsMode;
     }
     type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
     enum CompletionTriggerKind {
@@ -7625,9 +7644,16 @@ declare namespace ts.server.protocol {
         arguments: OrganizeImportsRequestArgs;
     }
     type OrganizeImportsScope = GetCombinedCodeFixScope;
+    enum OrganizeImportsMode {
+        All = "All",
+        SortAndCombine = "SortAndCombine",
+        RemoveUnused = "RemoveUnused"
+    }
     interface OrganizeImportsRequestArgs {
         scope: OrganizeImportsScope;
+        /** @deprecated Use `mode` instead */
         skipDestructiveCodeActions?: boolean;
+        mode?: OrganizeImportsMode;
     }
     interface OrganizeImportsResponse extends Response {
         body: readonly FileCodeEdits[];
@@ -7977,12 +8003,14 @@ declare namespace ts.server.protocol {
         command: CommandTypes.References;
     }
     interface ReferencesResponseItem extends FileSpanWithContext {
-        /** Text of line containing the reference.  Including this
-         *  with the response avoids latency of editor loading files
-         * to show text of reference line (the server already has
-         * loaded the referencing files).
+        /**
+         * Text of line containing the reference. Including this
+         * with the response avoids latency of editor loading files
+         * to show text of reference line (the server already has loaded the referencing files).
+         *
+         * If {@link UserPreferences.disableLineTextInReferences} is enabled, the property won't be filled
          */
-        lineText: string;
+        lineText?: string;
         /**
          * True if reference is a write location, false otherwise.
          */
@@ -9828,6 +9856,10 @@ declare namespace ts.server.protocol {
         readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
         readonly includeInlayEnumMemberValueHints?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
+        /**
+         * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
+         */
+        readonly disableLineTextInReferences?: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;
@@ -10079,7 +10111,6 @@ declare namespace ts.server {
         private externalFiles;
         private missingFilesMap;
         private generatedFilesMap;
-        private plugins;
         protected languageService: LanguageService;
         languageServiceEnabled: boolean;
         readonly trace?: (s: string) => void;
@@ -10136,7 +10167,7 @@ declare namespace ts.server {
         readFile(fileName: string): string | undefined;
         writeFile(fileName: string, content: string): void;
         fileExists(file: string): boolean;
-        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModuleFull | undefined)[];
+        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModuleFull | undefined)[];
         getModuleResolutionCache(): ModuleResolutionCache | undefined;
         getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations | undefined;
         resolveTypeReferenceDirectives(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
