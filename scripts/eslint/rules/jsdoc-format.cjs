@@ -21,9 +21,6 @@ module.exports = createRule({
     },
     defaultOptions: [],
 
-    /**
-     *
-     */
     create(context) {
         const sourceCode = context.getSourceCode();
         const atInternal = "@internal";
