@@ -1,3 +1,6 @@
+import * as evaluator from "../../_namespaces/evaluator";
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: evaluation:: esDecorators", () => {
     const options: ts.CompilerOptions = { target: ts.ScriptTarget.ES2021 };
     const exec = (array: TemplateStringsArray) => evaluator.evaluateTypeScript(array[0], options);
