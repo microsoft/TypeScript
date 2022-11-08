@@ -15,8 +15,8 @@ declare global {
 }
 export {};
 === tests/cases/compiler/f3.ts ===
+
 import "./f1";
-No type information for this code.import "./f2";
-No type information for this code.
-No type information for this code.
-No type information for this code.
+import "./f2";
+
+
