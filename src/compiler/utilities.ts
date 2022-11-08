@@ -1458,6 +1458,7 @@ export function isSuperCall(n: Node): n is SuperCall {
     return n.kind === SyntaxKind.CallExpression && (n as CallExpression).expression.kind === SyntaxKind.SuperKeyword;
 }
 
+/** @internal */
 export function isLiteralImportTypeNode(n: Node): n is LiteralImportTypeNode {
     return isImportTypeNode(n) && isLiteralTypeNode(n.argument) && isStringLiteral(n.argument.literal);
 }

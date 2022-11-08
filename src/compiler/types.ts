@@ -1935,6 +1935,7 @@ export interface ImportTypeNode extends NodeWithTypeArguments {
     readonly qualifier?: EntityName;
 }
 
+/** @internal */
 export type LiteralImportTypeNode = ImportTypeNode & { readonly argument: LiteralTypeNode & { readonly literal: StringLiteral } };
 
 export interface ThisTypeNode extends TypeNode {

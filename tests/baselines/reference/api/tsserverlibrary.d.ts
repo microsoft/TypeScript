@@ -4922,11 +4922,6 @@ declare namespace ts {
         readonly assertions?: ImportTypeAssertionContainer;
         readonly qualifier?: EntityName;
     }
-    type LiteralImportTypeNode = ImportTypeNode & {
-        readonly argument: LiteralTypeNode & {
-            readonly literal: StringLiteral;
-        };
-    };
     interface ThisTypeNode extends TypeNode {
         readonly kind: SyntaxKind.ThisType;
     }
@@ -8832,7 +8827,6 @@ declare namespace ts {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
-    function isLiteralImportTypeNode(n: Node): n is LiteralImportTypeNode;
     function createUnparsedSourceFile(text: string): UnparsedSource;
     function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
     function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
