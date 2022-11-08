@@ -321,16 +321,16 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
 
         function setBucketEntry() {
             if (!bucketEntry) {
-                bucket.set(path, entry!);
+                bucket.set(path, entry);
             }
             else if (isDocumentRegistryEntry(bucketEntry)) {
                 const scriptKindMap = new Map<ScriptKind, DocumentRegistryEntry>();
                 scriptKindMap.set(bucketEntry.sourceFile.scriptKind, bucketEntry);
-                scriptKindMap.set(scriptKind!, entry!);
+                scriptKindMap.set(scriptKind!, entry);
                 bucket.set(path, scriptKindMap);
             }
             else {
-                bucketEntry.set(scriptKind!, entry!);
+                bucketEntry.set(scriptKind!, entry);
             }
         }
     }
