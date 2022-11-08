@@ -508,28 +508,10 @@ declare namespace ts {
         FirstStatement = 240,
         LastStatement = 256,
         FirstNode = 163,
-<<<<<<< HEAD
         FirstJSDocNode = 313,
         LastJSDocNode = 351,
         FirstJSDocTagNode = 331,
-        LastJSDocTagNode = 351,
-    }
-    export type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
-    export type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
-    export type PseudoLiteralSyntaxKind = SyntaxKind.TemplateHead | SyntaxKind.TemplateMiddle | SyntaxKind.TemplateTail;
-    export type PunctuationSyntaxKind = SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.OpenParenToken | SyntaxKind.CloseParenToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.DotToken | SyntaxKind.DotDotDotToken | SyntaxKind.SemicolonToken | SyntaxKind.CommaToken | SyntaxKind.QuestionDotToken | SyntaxKind.LessThanToken | SyntaxKind.LessThanSlashToken | SyntaxKind.GreaterThanToken | SyntaxKind.LessThanEqualsToken | SyntaxKind.GreaterThanEqualsToken | SyntaxKind.EqualsEqualsToken | SyntaxKind.ExclamationEqualsToken | SyntaxKind.EqualsEqualsEqualsToken | SyntaxKind.ExclamationEqualsEqualsToken | SyntaxKind.EqualsGreaterThanToken | SyntaxKind.PlusToken | SyntaxKind.MinusToken | SyntaxKind.AsteriskToken | SyntaxKind.AsteriskAsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken | SyntaxKind.PlusPlusToken | SyntaxKind.MinusMinusToken | SyntaxKind.LessThanLessThanToken | SyntaxKind.GreaterThanGreaterThanToken | SyntaxKind.GreaterThanGreaterThanGreaterThanToken | SyntaxKind.AmpersandToken | SyntaxKind.BarToken | SyntaxKind.CaretToken | SyntaxKind.ExclamationToken | SyntaxKind.TildeToken | SyntaxKind.AmpersandAmpersandToken | SyntaxKind.BarBarToken | SyntaxKind.QuestionQuestionToken | SyntaxKind.QuestionToken | SyntaxKind.ColonToken | SyntaxKind.AtToken | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.EqualsToken | SyntaxKind.PlusEqualsToken | SyntaxKind.MinusEqualsToken | SyntaxKind.AsteriskEqualsToken | SyntaxKind.AsteriskAsteriskEqualsToken | SyntaxKind.SlashEqualsToken | SyntaxKind.PercentEqualsToken | SyntaxKind.LessThanLessThanEqualsToken | SyntaxKind.GreaterThanGreaterThanEqualsToken | SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken | SyntaxKind.AmpersandEqualsToken | SyntaxKind.BarEqualsToken | SyntaxKind.CaretEqualsToken;
-    export type KeywordSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AccessorKeyword | SyntaxKind.AnyKeyword | SyntaxKind.AsKeyword | SyntaxKind.AssertsKeyword | SyntaxKind.AssertKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.AwaitKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.BreakKeyword | SyntaxKind.CaseKeyword | SyntaxKind.CatchKeyword | SyntaxKind.ClassKeyword | SyntaxKind.ConstKeyword | SyntaxKind.ConstructorKeyword | SyntaxKind.ContinueKeyword | SyntaxKind.DebuggerKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.DeleteKeyword | SyntaxKind.DoKeyword | SyntaxKind.ElseKeyword | SyntaxKind.EnumKeyword | SyntaxKind.ExportKeyword | SyntaxKind.ExtendsKeyword | SyntaxKind.FalseKeyword | SyntaxKind.FinallyKeyword | SyntaxKind.ForKeyword | SyntaxKind.FromKeyword | SyntaxKind.FunctionKeyword | SyntaxKind.GetKeyword | SyntaxKind.GlobalKeyword | SyntaxKind.IfKeyword | SyntaxKind.ImplementsKeyword | SyntaxKind.ImportKeyword | SyntaxKind.InferKeyword | SyntaxKind.InKeyword | SyntaxKind.InstanceOfKeyword | SyntaxKind.InterfaceKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.IsKeyword | SyntaxKind.KeyOfKeyword | SyntaxKind.LetKeyword | SyntaxKind.ModuleKeyword | SyntaxKind.NamespaceKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NewKeyword | SyntaxKind.NullKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.OfKeyword | SyntaxKind.PackageKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.RequireKeyword | SyntaxKind.ReturnKeyword | SyntaxKind.SatisfiesKeyword | SyntaxKind.SetKeyword | SyntaxKind.StaticKeyword | SyntaxKind.StringKeyword | SyntaxKind.SuperKeyword | SyntaxKind.SwitchKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.ThisKeyword | SyntaxKind.ThrowKeyword | SyntaxKind.TrueKeyword | SyntaxKind.TryKeyword | SyntaxKind.TypeKeyword | SyntaxKind.TypeOfKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VarKeyword | SyntaxKind.VoidKeyword | SyntaxKind.WhileKeyword | SyntaxKind.WithKeyword | SyntaxKind.YieldKeyword;
-    export type ModifierSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AccessorKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.ConstKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.ExportKeyword | SyntaxKind.InKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.OutKeyword | SyntaxKind.OverrideKeyword | SyntaxKind.StaticKeyword;
-    export type KeywordTypeSyntaxKind = SyntaxKind.AnyKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.StringKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VoidKeyword;
-    export type TokenSyntaxKind = SyntaxKind.Unknown | SyntaxKind.EndOfFileToken | TriviaSyntaxKind | LiteralSyntaxKind | PseudoLiteralSyntaxKind | PunctuationSyntaxKind | SyntaxKind.Identifier | KeywordSyntaxKind;
-    export type JsxTokenSyntaxKind = SyntaxKind.LessThanSlashToken | SyntaxKind.EndOfFileToken | SyntaxKind.ConflictMarkerTrivia | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.OpenBraceToken | SyntaxKind.LessThanToken;
-    export type JSDocSyntaxKind = SyntaxKind.EndOfFileToken | SyntaxKind.WhitespaceTrivia | SyntaxKind.AtToken | SyntaxKind.NewLineTrivia | SyntaxKind.AsteriskToken | SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.LessThanToken | SyntaxKind.GreaterThanToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.EqualsToken | SyntaxKind.CommaToken | SyntaxKind.DotToken | SyntaxKind.Identifier | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.Unknown | KeywordSyntaxKind;
-    export enum NodeFlags {
-=======
-        FirstJSDocNode = 312,
-        LastJSDocNode = 350,
-        FirstJSDocTagNode = 330,
-        LastJSDocTagNode = 350
+        LastJSDocTagNode = 351
     }
     type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -542,7 +524,6 @@ declare namespace ts {
     type JsxTokenSyntaxKind = SyntaxKind.LessThanSlashToken | SyntaxKind.EndOfFileToken | SyntaxKind.ConflictMarkerTrivia | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.OpenBraceToken | SyntaxKind.LessThanToken;
     type JSDocSyntaxKind = SyntaxKind.EndOfFileToken | SyntaxKind.WhitespaceTrivia | SyntaxKind.AtToken | SyntaxKind.NewLineTrivia | SyntaxKind.AsteriskToken | SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.LessThanToken | SyntaxKind.GreaterThanToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.EqualsToken | SyntaxKind.CommaToken | SyntaxKind.DotToken | SyntaxKind.Identifier | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.Unknown | KeywordSyntaxKind;
     enum NodeFlags {
->>>>>>> 437b2690ed87b277520919ddc76375de13278100
         None = 0,
         Let = 1,
         Const = 2,
@@ -1475,38 +1456,24 @@ declare namespace ts {
         readonly children: NodeArray<JsxChild>;
         readonly closingElement: JsxClosingElement;
     }
-<<<<<<< HEAD
-    export type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
-    export type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
-    export type JsxAttributeName = Identifier | JsxNamespacedName;
-    export type JsxTagNameExpression = Identifier | ThisExpression | JsxTagNamePropertyAccess | JsxNamespacedName;
-    export interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
+    type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
+    type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
+    type JsxAttributeName = Identifier | JsxNamespacedName;
+    type JsxTagNameExpression = Identifier | ThisExpression | JsxTagNamePropertyAccess | JsxNamespacedName;
+    interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
         readonly expression: JsxTagNameExpression;
     }
-    export interface JsxAttributes extends PrimaryExpression, Declaration {
+    interface JsxAttributes extends PrimaryExpression, Declaration {
         readonly properties: NodeArray<JsxAttributeLike>;
         readonly kind: SyntaxKind.JsxAttributes;
         readonly parent: JsxOpeningLikeElement;
     }
-    export interface JsxNamespacedName extends PrimaryExpression {
+    interface JsxNamespacedName extends PrimaryExpression {
         readonly kind: SyntaxKind.JsxNamespacedName;
         readonly name: Identifier;
         readonly namespace: Identifier;
     }
-    export interface JsxOpeningElement extends Expression {
-=======
-    type JsxOpeningLikeElement = JsxSelfClosingElement | JsxOpeningElement;
-    type JsxAttributeLike = JsxAttribute | JsxSpreadAttribute;
-    type JsxTagNameExpression = Identifier | ThisExpression | JsxTagNamePropertyAccess;
-    interface JsxTagNamePropertyAccess extends PropertyAccessExpression {
-        readonly expression: JsxTagNameExpression;
-    }
-    interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
-        readonly kind: SyntaxKind.JsxAttributes;
-        readonly parent: JsxOpeningLikeElement;
-    }
     interface JsxOpeningElement extends Expression {
->>>>>>> 437b2690ed87b277520919ddc76375de13278100
         readonly kind: SyntaxKind.JsxOpeningElement;
         readonly parent: JsxElement;
         readonly tagName: JsxTagNameExpression;
@@ -1533,11 +1500,7 @@ declare namespace ts {
         readonly kind: SyntaxKind.JsxClosingFragment;
         readonly parent: JsxFragment;
     }
-<<<<<<< HEAD
-    export interface JsxAttribute extends Declaration {
-=======
-    interface JsxAttribute extends ObjectLiteralElement {
->>>>>>> 437b2690ed87b277520919ddc76375de13278100
+    interface JsxAttribute extends Declaration {
         readonly kind: SyntaxKind.JsxAttribute;
         readonly parent: JsxAttributes;
         readonly name: JsxAttributeName;
@@ -4930,6 +4893,8 @@ declare namespace ts {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
+    function getEscapedTextOfJsxAttributeName(node: Identifier | JsxNamespacedName): __String;
+    function getTextOfJsxAttributeName(node: Identifier | JsxNamespacedName): string;
     function createUnparsedSourceFile(text: string): UnparsedSource;
     function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
     function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
@@ -7794,15 +7759,9 @@ declare namespace ts {
     /** @deprecated Use `factory.updateJsxFragment` or the factory supplied by your transformation context instead. */
     const updateJsxFragment: typeof factory.updateJsxFragment;
     /** @deprecated Use `factory.createJsxAttribute` or the factory supplied by your transformation context instead. */
-<<<<<<< HEAD
-    const createJsxAttribute: (name: JsxAttributeName, initializer: JsxAttributeValue | undefined) => JsxAttribute;
-    /** @deprecated Use `factory.updateJsxAttribute` or the factory supplied by your transformation context instead. */
-    const updateJsxAttribute: (node: JsxAttribute, name: JsxAttributeName, initializer: JsxAttributeValue | undefined) => JsxAttribute;
-=======
     const createJsxAttribute: typeof factory.createJsxAttribute;
     /** @deprecated Use `factory.updateJsxAttribute` or the factory supplied by your transformation context instead. */
     const updateJsxAttribute: typeof factory.updateJsxAttribute;
->>>>>>> 437b2690ed87b277520919ddc76375de13278100
     /** @deprecated Use `factory.createJsxAttributes` or the factory supplied by your transformation context instead. */
     const createJsxAttributes: typeof factory.createJsxAttributes;
     /** @deprecated Use `factory.updateJsxAttributes` or the factory supplied by your transformation context instead. */
