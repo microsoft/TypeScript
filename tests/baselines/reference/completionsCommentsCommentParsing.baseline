@@ -2642,7 +2642,7 @@
           ],
           "documentation": [
             {
-              "text": "Represents a raw buffer of binary data, which is used to store data for the\r\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\r\nbut can be passed to a typed array or DataView Object to interpret the raw\r\nbuffer as needed.",
+              "text": "Represents a raw buffer of binary data, which is used to store data for the\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\nbut can be passed to a typed array or DataView Object to interpret the raw\nbuffer as needed.",
               "kind": "text"
             }
           ]
@@ -3611,7 +3611,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\r\nof bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\nof bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -3665,7 +3665,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -3911,7 +3911,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -3965,7 +3965,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -4019,7 +4019,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -4716,7 +4716,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -5191,7 +5191,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -5245,7 +5245,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -5299,7 +5299,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -5353,7 +5353,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\r\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -8227,7 +8227,7 @@
           ],
           "documentation": [
             {
-              "text": "Represents a raw buffer of binary data, which is used to store data for the\r\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\r\nbut can be passed to a typed array or DataView Object to interpret the raw\r\nbuffer as needed.",
+              "text": "Represents a raw buffer of binary data, which is used to store data for the\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\nbut can be passed to a typed array or DataView Object to interpret the raw\nbuffer as needed.",
               "kind": "text"
             }
           ]
@@ -9408,7 +9408,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\r\nof bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\nof bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -9462,7 +9462,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -9764,7 +9764,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -9818,7 +9818,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -9872,7 +9872,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -10668,7 +10668,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -11583,7 +11583,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -11637,7 +11637,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -11691,7 +11691,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -11745,7 +11745,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\r\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -14758,7 +14758,7 @@
           ],
           "documentation": [
             {
-              "text": "Represents a raw buffer of binary data, which is used to store data for the\r\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\r\nbut can be passed to a typed array or DataView Object to interpret the raw\r\nbuffer as needed.",
+              "text": "Represents a raw buffer of binary data, which is used to store data for the\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\nbut can be passed to a typed array or DataView Object to interpret the raw\nbuffer as needed.",
               "kind": "text"
             }
           ]
@@ -15727,7 +15727,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\r\nof bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\nof bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -15781,7 +15781,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -16027,7 +16027,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -16081,7 +16081,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -16135,7 +16135,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -16832,7 +16832,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -17307,7 +17307,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -17361,7 +17361,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -17415,7 +17415,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -17469,7 +17469,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\r\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -20279,7 +20279,7 @@
           ],
           "documentation": [
             {
-              "text": "Represents a raw buffer of binary data, which is used to store data for the\r\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\r\nbut can be passed to a typed array or DataView Object to interpret the raw\r\nbuffer as needed.",
+              "text": "Represents a raw buffer of binary data, which is used to store data for the\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\nbut can be passed to a typed array or DataView Object to interpret the raw\nbuffer as needed.",
               "kind": "text"
             }
           ]
@@ -21296,7 +21296,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\r\nof bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\nof bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -21350,7 +21350,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -21608,7 +21608,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -21662,7 +21662,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -21716,7 +21716,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -22485,7 +22485,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -22996,7 +22996,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -23050,7 +23050,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -23104,7 +23104,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -23158,7 +23158,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\r\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -26238,7 +26238,7 @@
           ],
           "documentation": [
             {
-              "text": "Represents a raw buffer of binary data, which is used to store data for the\r\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\r\nbut can be passed to a typed array or DataView Object to interpret the raw\r\nbuffer as needed.",
+              "text": "Represents a raw buffer of binary data, which is used to store data for the\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\nbut can be passed to a typed array or DataView Object to interpret the raw\nbuffer as needed.",
               "kind": "text"
             }
           ]
@@ -27207,7 +27207,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\r\nof bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\nof bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -27261,7 +27261,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -27507,7 +27507,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -27561,7 +27561,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -27615,7 +27615,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -28312,7 +28312,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -28787,7 +28787,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -28841,7 +28841,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -28895,7 +28895,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -28949,7 +28949,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\r\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -31823,7 +31823,7 @@
           ],
           "documentation": [
             {
-              "text": "Represents a raw buffer of binary data, which is used to store data for the\r\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\r\nbut can be passed to a typed array or DataView Object to interpret the raw\r\nbuffer as needed.",
+              "text": "Represents a raw buffer of binary data, which is used to store data for the\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\nbut can be passed to a typed array or DataView Object to interpret the raw\nbuffer as needed.",
               "kind": "text"
             }
           ]
@@ -33004,7 +33004,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\r\nof bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\nof bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -33058,7 +33058,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -33360,7 +33360,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -33414,7 +33414,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -33468,7 +33468,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -34264,7 +34264,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -35179,7 +35179,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -35233,7 +35233,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -35287,7 +35287,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -35341,7 +35341,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\r\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -38227,7 +38227,7 @@
           ],
           "documentation": [
             {
-              "text": "Represents a raw buffer of binary data, which is used to store data for the\r\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\r\nbut can be passed to a typed array or DataView Object to interpret the raw\r\nbuffer as needed.",
+              "text": "Represents a raw buffer of binary data, which is used to store data for the\ndifferent typed arrays. ArrayBuffers cannot be read from or written to directly,\nbut can be passed to a typed array or DataView Object to interpret the raw\nbuffer as needed.",
               "kind": "text"
             }
           ]
@@ -39244,7 +39244,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\r\nof bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit float values. The contents are initialized to 0. If the requested number\nof bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -39298,7 +39298,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 64-bit float values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -39556,7 +39556,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -39610,7 +39610,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -39664,7 +39664,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\r\nnumber of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -40433,7 +40433,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\r\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\r\nAll other strings are considered decimal.",
+                  "text": "A value between 2 and 36 that specifies the base of the number in `string`.\nIf this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.\nAll other strings are considered decimal.",
                   "kind": "text"
                 }
               ]
@@ -40944,7 +40944,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -40998,7 +40998,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -41052,7 +41052,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\r\nrequested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -41106,7 +41106,7 @@
           ],
           "documentation": [
             {
-              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\r\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]

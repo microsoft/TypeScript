@@ -1,5 +1,5 @@
 **/node_modules/**
-/built/local/**
+/built/**
 /tests/**
 /lib/**
 /src/lib/*.generated.d.ts

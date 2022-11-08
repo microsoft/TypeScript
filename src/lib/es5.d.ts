@@ -1012,6 +1012,11 @@ interface RegExp {
     /** Returns a Boolean value indicating the state of the multiline flag (m) used with a regular expression. Default is false. Read-only. */
     readonly multiline: boolean;
 
+    /**
+     * Gets or sets the index at which the {@link RegExp.exec()} or {@link RegExp.test()} methods start searching for a match in an arbitrary string.
+     * After each execution of {@link RegExp.exec()} or {@link RegExp.test()}, `lastIndex` will be set to the end index of the matched string,
+     * or 0 if a match was not found.
+     */
     lastIndex: number;
 
     // Non-standard extensions
@@ -2135,7 +2140,7 @@ interface Int8ArrayConstructor {
     readonly prototype: Int8Array;
     new(length?: number): Int8Array;
     new(array: ArrayLikeOrIterable<number> | ArrayBufferLike): Int8Array;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int8Array;
+    new(buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -2418,7 +2423,7 @@ interface Uint8ArrayConstructor {
     readonly prototype: Uint8Array;
     new(length?: number): Uint8Array;
     new(array: ArrayLikeOrIterable<number> | ArrayBufferLike): Uint8Array;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8Array;
+    new(buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -2700,7 +2705,7 @@ interface Uint8ClampedArrayConstructor {
     readonly prototype: Uint8ClampedArray;
     new(length?: number): Uint8ClampedArray;
     new(array: ArrayLikeOrIterable<number> | ArrayBufferLike): Uint8ClampedArray;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8ClampedArray;
+    new(buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray;
 
     /**
      * The size in bytes of each element in the array.
@@ -2980,7 +2985,7 @@ interface Int16ArrayConstructor {
     readonly prototype: Int16Array;
     new(length?: number): Int16Array;
     new(array: ArrayLikeOrIterable<number> | ArrayBufferLike): Int16Array;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int16Array;
+    new(buffer: ArrayBuffer, byteOffset?: number, length?: number): Int16Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -3263,7 +3268,7 @@ interface Uint16ArrayConstructor {
     readonly prototype: Uint16Array;
     new(length?: number): Uint16Array;
     new(array: ArrayLikeOrIterable<number> | ArrayBufferLike): Uint16Array;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint16Array;
+    new(buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint16Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -3545,7 +3550,7 @@ interface Int32ArrayConstructor {
     readonly prototype: Int32Array;
     new(length?: number): Int32Array;
     new(array: ArrayLikeOrIterable<number> | ArrayBufferLike): Int32Array;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int32Array;
+    new(buffer: ArrayBuffer, byteOffset?: number, length?: number): Int32Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -3826,7 +3831,7 @@ interface Uint32ArrayConstructor {
     readonly prototype: Uint32Array;
     new(length?: number): Uint32Array;
     new(array: ArrayLikeOrIterable<number> | ArrayBufferLike): Uint32Array;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint32Array;
+    new(buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint32Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -4108,7 +4113,7 @@ interface Float32ArrayConstructor {
     readonly prototype: Float32Array;
     new(length?: number): Float32Array;
     new(array: ArrayLikeOrIterable<number> | ArrayBufferLike): Float32Array;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float32Array;
+    new(buffer: ArrayBuffer, byteOffset?: number, length?: number): Float32Array;
 
     /**
      * The size in bytes of each element in the array.
@@ -4391,7 +4396,7 @@ interface Float64ArrayConstructor {
     readonly prototype: Float64Array;
     new(length?: number): Float64Array;
     new(array: ArrayLikeOrIterable<number> | ArrayBufferLike): Float64Array;
-    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float64Array;
+    new(buffer: ArrayBuffer, byteOffset?: number, length?: number): Float64Array;
 
     /**
      * The size in bytes of each element in the array.

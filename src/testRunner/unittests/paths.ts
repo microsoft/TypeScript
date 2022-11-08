@@ -1,3 +1,5 @@
+import * as ts from "../_namespaces/ts";
+
 describe("unittests:: core paths", () => {
     it("normalizeSlashes", () => {
         assert.strictEqual(ts.normalizeSlashes("a"), "a");
