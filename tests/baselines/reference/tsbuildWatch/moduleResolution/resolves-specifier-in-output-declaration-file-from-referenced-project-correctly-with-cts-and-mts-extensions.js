@@ -53,6 +53,7 @@ Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/index.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'node', 'import', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const.cjs', target file type 'TypeScript'.
 File name '/user/username/projects/myproject/packages/pkg2/const.cjs' has a '.cjs' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/const.cts' exist - use it as a name resolution result.
@@ -68,6 +69,7 @@ Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'node', 'import', 'types'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file type 'TypeScript'.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
@@ -91,6 +93,7 @@ File '/user/username/projects/myproject/packages/pkg2/package.json' exists accor
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
 Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'node', 'import', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.cjs', target file type 'TypeScript'.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has a '.cjs' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
@@ -211,17 +214,32 @@ export type { TheNum } from './const.cjs';
     ],
     "fileInfos": {
       "../../../../../../../a/lib/lib.es2022.full.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
         "impliedFormat": "commonjs"
       },
       "../const.cts": {
+        "original": {
+          "version": "-11202312776-export type TheNum = 42;",
+          "signature": "-13194036030-export type TheNum = 42;\n",
+          "impliedFormat": 1
+        },
         "version": "-11202312776-export type TheNum = 42;",
         "signature": "-13194036030-export type TheNum = 42;\n",
         "impliedFormat": "commonjs"
       },
       "../index.ts": {
+        "original": {
+          "version": "-9668872159-export type { TheNum } from './const.cjs';",
+          "signature": "-9835135925-export type { TheNum } from './const.cjs';\n",
+          "impliedFormat": 99
+        },
         "version": "-9668872159-export type { TheNum } from './const.cjs';",
         "signature": "-9835135925-export type { TheNum } from './const.cjs';\n",
         "impliedFormat": "esnext"
@@ -277,6 +295,7 @@ Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'node', 'require', 'types'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file type 'TypeScript'.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
@@ -307,6 +326,7 @@ Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
 Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'node', 'import', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.cjs', target file type 'TypeScript'.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has a '.cjs' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
@@ -394,6 +414,7 @@ Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'node', 'import', 'types'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file type 'TypeScript'.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
@@ -418,6 +439,7 @@ Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
 Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'node', 'import', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.cjs', target file type 'TypeScript'.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has a '.cjs' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
@@ -500,6 +522,7 @@ Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'node', 'require', 'types'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file type 'TypeScript'.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
@@ -530,6 +553,7 @@ Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
 Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'node', 'import', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.cjs', target file type 'TypeScript'.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has a '.cjs' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
@@ -619,6 +643,7 @@ Output::
 
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/index.cts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'node', 'require', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const.cjs', target file type 'TypeScript'.
 File '/user/username/projects/myproject/packages/pkg2/const.cjs.ts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/const.cjs.tsx' does not exist.
@@ -637,6 +662,7 @@ Found 'package.json' at '/user/username/projects/myproject/packages/pkg1/package
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'node', 'require', 'types'.
 File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 Loading module 'pkg2' from 'node_modules' folder, target file type 'TypeScript'.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
@@ -663,6 +689,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/build/index.d.cts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
 Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'node', 'require', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.cjs', target file type 'TypeScript'.
 File '/user/username/projects/myproject/packages/pkg2/build/const.cjs.ts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.cjs.tsx' does not exist.
@@ -761,17 +788,32 @@ exitCode:: ExitStatus.undefined
     ],
     "fileInfos": {
       "../../../../../../../a/lib/lib.es2022.full.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
         "impliedFormat": "commonjs"
       },
       "../const.cts": {
+        "original": {
+          "version": "-11202312776-export type TheNum = 42;",
+          "signature": "-13194036030-export type TheNum = 42;\n",
+          "impliedFormat": 1
+        },
         "version": "-11202312776-export type TheNum = 42;",
         "signature": "-13194036030-export type TheNum = 42;\n",
         "impliedFormat": "commonjs"
       },
       "../index.cts": {
+        "original": {
+          "version": "-9668872159-export type { TheNum } from './const.cjs';",
+          "signature": "-9835135925-export type { TheNum } from './const.cjs';\n",
+          "impliedFormat": 1
+        },
         "version": "-9668872159-export type { TheNum } from './const.cjs';",
         "signature": "-9835135925-export type { TheNum } from './const.cjs';\n",
         "impliedFormat": "commonjs"
