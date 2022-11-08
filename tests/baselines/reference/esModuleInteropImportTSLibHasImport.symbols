@@ -10,8 +10,9 @@ export const username = () => 'username';
 >username : Symbol(username, Decl(username.ts, 0, 12))
 
 === tests/cases/compiler/utils/index.ts ===
+
 export * from './username';
-No type information for this code.=== tests/cases/compiler/hello.ts ===
+=== tests/cases/compiler/hello.ts ===
 const sayHello = (name?: string) => void (`Hello, ${name}!`);
 >sayHello : Symbol(sayHello, Decl(hello.ts, 0, 5))
 >name : Symbol(name, Decl(hello.ts, 0, 18))

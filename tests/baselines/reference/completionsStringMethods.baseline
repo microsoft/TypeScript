@@ -753,7 +753,7 @@
           ],
           "documentation": [
             {
-              "text": "Determines whether the reference string comes before, after or is equivalent to the specified string in the current locale.\r\nReturns a negative integer if it comes before, a positive number if it comes after, and 0 if they are equivalent.",
+              "text": "Determines whether the reference string comes before, after or is equivalent to the specified string in the current locale.\nReturns a negative integer if it comes before, a positive number if it comes after, and 0 if they are equivalent.",
               "kind": "text"
             }
           ],
@@ -883,7 +883,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The regular expression for matching. If the provided value is not a RegExp, it is implicitly\r\nconverted to a RegExp by using `new RegExp(regexp)`.",
+                  "text": "The regular expression for matching. If the provided value is not a RegExp, it is implicitly\nconverted to a RegExp by using `new RegExp(regexp)`.",
                   "kind": "text"
                 }
               ]
@@ -1031,7 +1031,7 @@
           ],
           "documentation": [
             {
-              "text": "Replaces one or more occurrences of substrings that match a search string or a regular expression.\r\nWhen the ",
+              "text": "Replaces one or more occurrences of substrings that match a search string or a regular expression.\nWhen the ",
               "kind": "text"
             },
             {
@@ -1044,7 +1044,7 @@
               "target": {
                 "fileName": "lib.d.ts",
                 "textSpan": {
-                  "start": 19221,
+                  "start": 18787,
                   "length": 28
                 }
               }
@@ -1054,7 +1054,7 @@
               "kind": "link"
             },
             {
-              "text": " is a `RegExp`, all matches are replaced if the `g` (global) flag is set\r\n(or only those matches at the beginning, if the `y` (sticky) flag is also present).\r\nOtherwise, only the first match of ",
+              "text": " is a `RegExp`, all matches are replaced if the `g` (global) flag is set\n(or only those matches at the beginning, if the `y` (sticky) flag is also present).\nOtherwise, only the first match of ",
               "kind": "text"
             },
             {
@@ -1067,7 +1067,7 @@
               "target": {
                 "fileName": "lib.d.ts",
                 "textSpan": {
-                  "start": 19221,
+                  "start": 18787,
                   "length": 28
                 }
               }
@@ -1224,7 +1224,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The regular expression for matching. If the provided value is not a RegExp, it is implicitly\r\nconverted to a RegExp by using `new RegExp(regexp)`.",
+                  "text": "The regular expression for matching. If the provided value is not a RegExp, it is implicitly\nconverted to a RegExp by using `new RegExp(regexp)`.",
                   "kind": "text"
                 }
               ]
@@ -1370,7 +1370,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The index to the end of the specified portion of the string. The substring includes the characters up to, but not including, the character indicated by end.\r\nIf this value is not specified, the substring continues to the end of the string.",
+                  "text": "The index to the end of the specified portion of the string. The substring includes the characters up to, but not including, the character indicated by end.\nIf this value is not specified, the substring continues to the end of the string.",
                   "kind": "text"
                 }
               ]
@@ -1678,7 +1678,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The zero-based index indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.\r\nIf end is omitted, the characters from start through the end of the original string are returned.",
+                  "text": "The zero-based index indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.\nIf end is omitted, the characters from start through the end of the original string are returned.",
                   "kind": "text"
                 }
               ]

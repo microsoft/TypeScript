@@ -981,6 +981,11 @@ interface RegExp {
     /** Returns a Boolean value indicating the state of the multiline flag (m) used with a regular expression. Default is false. Read-only. */
     readonly multiline: boolean;
 
+    /**
+     * Gets or sets the index at which the {@link RegExp.exec()} or {@link RegExp.test()} methods start searching for a match in an arbitrary string.
+     * After each execution of {@link RegExp.exec()} or {@link RegExp.test()}, `lastIndex` will be set to the end index of the matched string,
+     * or 0 if a match was not found.
+     */
     lastIndex: number;
 
     // Non-standard extensions

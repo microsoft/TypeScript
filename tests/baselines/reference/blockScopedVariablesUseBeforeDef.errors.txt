@@ -153,3 +153,15 @@ tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(122,22): error TS2448: 
 !!! related TS2728 tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts:122:10: 'a' is declared here.
     }
     
+    function foo17() {
+        const promise = (async () => {
+            promise
+            foo
+            await null
+            promise
+            foo
+        })()
+    
+        const foo = 1;
+    }
+    

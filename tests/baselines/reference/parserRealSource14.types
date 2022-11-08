@@ -3805,11 +3805,11 @@ module TypeScript {
 >GetAstPathOptions : GetAstPathOptions
 
         Default = 0,
->Default : GetAstPathOptions
+>Default : GetAstPathOptions.Default
 >0 : 0
 
         EdgeInclusive = 1,
->EdgeInclusive : GetAstPathOptions
+>EdgeInclusive : GetAstPathOptions.EdgeInclusive
 >1 : 1
 
         //We need this options dealing with an AST coming from an incomplete AST. For example:
@@ -3820,7 +3820,7 @@ module TypeScript {
         // we don't find the "precomment" attached to the errorneous empty stmt.
         //TODO: It would be nice to be able to get rid of this.
         DontPruneSearchBasedOnPosition = 1 << 1,
->DontPruneSearchBasedOnPosition : GetAstPathOptions
+>DontPruneSearchBasedOnPosition : GetAstPathOptions.DontPruneSearchBasedOnPosition
 >1 << 1 : number
 >1 : 1
 >1 : 1
@@ -3835,9 +3835,9 @@ module TypeScript {
 >TypeScript : any
 >pos : number
 >options : GetAstPathOptions
->GetAstPathOptions.Default : GetAstPathOptions
+>GetAstPathOptions.Default : GetAstPathOptions.Default
 >GetAstPathOptions : typeof GetAstPathOptions
->Default : GetAstPathOptions
+>Default : GetAstPathOptions.Default
 >TypeScript : any
 
         var lookInComments = (comments: TypeScript.Comment[]) => {
@@ -3948,9 +3948,9 @@ module TypeScript {
 >hasFlag(options, GetAstPathOptions.EdgeInclusive) : any
 >hasFlag : any
 >options : GetAstPathOptions
->GetAstPathOptions.EdgeInclusive : GetAstPathOptions
+>GetAstPathOptions.EdgeInclusive : GetAstPathOptions.EdgeInclusive
 >GetAstPathOptions : typeof GetAstPathOptions
->EdgeInclusive : GetAstPathOptions
+>EdgeInclusive : GetAstPathOptions.EdgeInclusive
 
                     cur.nodeType === TypeScript.NodeType.Name ||
 >cur.nodeType === TypeScript.NodeType.Name : boolean
@@ -4075,9 +4075,9 @@ module TypeScript {
 >hasFlag(options, GetAstPathOptions.DontPruneSearchBasedOnPosition) : any
 >hasFlag : any
 >options : GetAstPathOptions
->GetAstPathOptions.DontPruneSearchBasedOnPosition : GetAstPathOptions
+>GetAstPathOptions.DontPruneSearchBasedOnPosition : GetAstPathOptions.DontPruneSearchBasedOnPosition
 >GetAstPathOptions : typeof GetAstPathOptions
->DontPruneSearchBasedOnPosition : GetAstPathOptions
+>DontPruneSearchBasedOnPosition : GetAstPathOptions.DontPruneSearchBasedOnPosition
 
                     // Don't go further down the tree if pos is outside of [minChar, limChar]
                     walker.options.goChildren = (minChar <= pos && pos <= limChar);

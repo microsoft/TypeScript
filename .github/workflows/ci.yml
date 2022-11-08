@@ -21,6 +21,13 @@ jobs:
           - "*"
           - lts/*
           - lts/-1
+        bundle:
+          - "true"
+        include:
+          - node-version: "*"
+            bundle: "false"
+
+    name: Test Node ${{ matrix.node-version }} with --bundle=${{ matrix.bundle }}
 
     steps:
     - uses: actions/checkout@v3
@@ -32,7 +39,7 @@ jobs:
     - run:  npm ci
 
     - name: Tests
-      run:  npm test
+      run:  npm run test -- --bundle=${{ matrix.bundle }}
 
   lint:
     runs-on: ubuntu-latest
@@ -62,11 +69,23 @@ jobs:
     - name: Adding playwright
       run: npm install --no-save --no-package-lock playwright
 
-    - name: Build local
-      run: gulp local
-
     - name: Validate the browser can import TypeScript
-      run: gulp test-browser-integration
+      run: npx hereby test-browser-integration
+
+  typecheck:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "*"
+        check-latest: true
+    - run:  npm ci
+
+    - name: Build src
+      run: npx hereby build-src
+
 
   misc:
     runs-on: ubuntu-latest
@@ -80,7 +99,27 @@ jobs:
     - run:  npm ci
 
     - name: Build scripts
-      run: gulp scripts
+      run: npx hereby scripts
 
     - name: ESLint tests
-      run: gulp run-eslint-rules-tests
+      run: npx hereby run-eslint-rules-tests
+
+  self-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "*"
+        check-latest: true
+    - run:  npm ci
+
+    - name: Build tsc
+      run: npx hereby tsc
+
+    - name: Clean
+      run: npx hereby clean-src
+
+    - name: Self build
+      run: npx hereby build-src --built
