@@ -580,7 +580,7 @@ export const watchOtherOutputs = task({
 export const local = task({
     name: "local",
     description: "Builds the full compiler and services",
-    dependencies: [localize, tsc, tsserver, services, lssl, otherOutputs, dts],
+    dependencies: [localize, tsc, tsserver, services, lssl, otherOutputs, dts, buildSrc],
 });
 export default local;
 
@@ -588,14 +588,14 @@ export const watchLocal = task({
     name: "watch-local",
     description: "Watches the full compiler and services",
     hiddenFromTaskList: true,
-    dependencies: [localize, watchTsc, watchTsserver, watchServices, watchLssl, watchOtherOutputs, dts],
+    dependencies: [localize, watchTsc, watchTsserver, watchServices, watchLssl, watchOtherOutputs, dts, watchSrc],
 });
 
 
 export const runTests = task({
     name: "runtests",
     description: "Runs the tests using the built run.js file.",
-    dependencies: [tests, generateLibs, dts],
+    dependencies: [tests, generateLibs, dts, buildSrc],
     run: () => runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false),
 });
 // task("runtests").flags = {
@@ -617,7 +617,7 @@ export const runTests = task({
 export const runTestsParallel = task({
     name: "runtests-parallel",
     description: "Runs all the tests in parallel using the built run.js file.",
-    dependencies: [tests, generateLibs, dts],
+    dependencies: [tests, generateLibs, dts, buildSrc],
     run: () => runConsoleTests(testRunner, "min", /*runInParallel*/ cmdLineOptions.workers > 1),
 });
 // task("runtests-parallel").flags = {
