@@ -53,15 +53,14 @@ Info 6    [00:00:23.000] Config: c:/project/tsconfig.json : {
 }
 Info 7    [00:00:24.000] DirectoryWatcher:: Added:: WatchInfo: c:/project 1 undefined Config: c:/project/tsconfig.json WatchType: Wild card directory
 Info 8    [00:00:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/project 1 undefined Config: c:/project/tsconfig.json WatchType: Wild card directory
-Info 9    [00:00:26.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 10   [00:00:27.000] FileWatcher:: Added:: WatchInfo: c:/project/file2.ts 500 undefined WatchType: Closed Script info
-Info 11   [00:00:28.000] Starting updateGraphWorker: Project: c:/project/tsconfig.json
-Info 12   [00:00:29.000] FileWatcher:: Added:: WatchInfo: c:/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 13   [00:00:30.000] DirectoryWatcher:: Added:: WatchInfo: c:/project/node_modules/@types 1 undefined Project: c:/project/tsconfig.json WatchType: Type roots
-Info 14   [00:00:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/project/node_modules/@types 1 undefined Project: c:/project/tsconfig.json WatchType: Type roots
-Info 15   [00:00:32.000] Finishing updateGraphWorker: Project: c:/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 16   [00:00:33.000] Project 'c:/project/tsconfig.json' (Configured)
-Info 17   [00:00:34.000] 	Files (3)
+Info 9    [00:00:26.000] FileWatcher:: Added:: WatchInfo: c:/project/file2.ts 500 undefined WatchType: Closed Script info
+Info 10   [00:00:27.000] Starting updateGraphWorker: Project: c:/project/tsconfig.json
+Info 11   [00:00:28.000] FileWatcher:: Added:: WatchInfo: c:/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 12   [00:00:29.000] DirectoryWatcher:: Added:: WatchInfo: c:/project/node_modules/@types 1 undefined Project: c:/project/tsconfig.json WatchType: Type roots
+Info 13   [00:00:30.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/project/node_modules/@types 1 undefined Project: c:/project/tsconfig.json WatchType: Type roots
+Info 14   [00:00:31.000] Finishing updateGraphWorker: Project: c:/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 15   [00:00:32.000] Project 'c:/project/tsconfig.json' (Configured)
+Info 16   [00:00:33.000] 	Files (3)
 	c:/a/lib/lib.d.ts
 	c:/project/file1.ts
 	c:/project/file2.ts
@@ -74,14 +73,14 @@ Info 17   [00:00:34.000] 	Files (3)
 	file2.ts
 	  Matched by default include pattern '**/*'
 
-Info 18   [00:00:35.000] -----------------------------------------------
-Info 19   [00:00:36.000] Project 'c:/project/tsconfig.json' (Configured)
-Info 19   [00:00:37.000] 	Files (3)
+Info 17   [00:00:34.000] -----------------------------------------------
+Info 18   [00:00:35.000] Project 'c:/project/tsconfig.json' (Configured)
+Info 18   [00:00:36.000] 	Files (3)
 
-Info 19   [00:00:38.000] -----------------------------------------------
-Info 19   [00:00:39.000] Open files: 
-Info 19   [00:00:40.000] 	FileName: c:/project/file1.ts ProjectRootPath: undefined
-Info 19   [00:00:41.000] 		Projects: c:/project/tsconfig.json
+Info 18   [00:00:37.000] -----------------------------------------------
+Info 18   [00:00:38.000] Open files: 
+Info 18   [00:00:39.000] 	FileName: c:/project/file1.ts ProjectRootPath: undefined
+Info 18   [00:00:40.000] 		Projects: c:/project/tsconfig.json
 After request
 
 PolledWatches::
@@ -100,7 +99,7 @@ FsWatchesRecursive::
 c:/project:
   {}
 
-Info 19   [00:00:42.000] response:
+Info 18   [00:00:41.000] response:
     {
       "responseRequired": false
     }

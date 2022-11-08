@@ -145,13 +145,27 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
     ],
     "fileInfos": {
       "../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "signature": false,
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
       "./index.ts": {
+        "original": {
+          "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n",
+          "signature": false
+        },
         "version": "-18749805970-export const someString: string = \"HELLO WORLD\";\r\nexport function leftPad(s: string, n: number) { return s + n; }\r\nexport function multiply(a: number, b: number) { return a * b; }\r\n"
       },
       "./some_decl.d.ts": {
+        "original": {
+          "version": "-9253692965-declare const dts: any;\r\n",
+          "signature": false,
+          "affectsGlobalScope": true
+        },
         "version": "-9253692965-declare const dts: any;\r\n",
         "affectsGlobalScope": true
       }
