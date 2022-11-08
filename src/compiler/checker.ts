@@ -75,7 +75,7 @@ import {
     hasQuestionToken, hasRestParameter, hasScopeMarker, hasStaticModifier, hasSyntacticModifier, hasSyntacticModifiers,
     HeritageClause, Identifier, IdentifierTypePredicate, idText, IfStatement, ImportCall, ImportClause,
     ImportDeclaration, ImportEqualsDeclaration, ImportOrExportSpecifier, ImportsNotUsedAsValues, ImportSpecifier,
-    ImportTypeAssertionContainer, ImportTypeNode, IncompleteType, IndexedAccessType, IndexedAccessTypeNode, IndexInfo,
+    ImportTypeAssertionContainer, ImportTypeNode, IndexedAccessType, IndexedAccessTypeNode, IndexInfo,
     IndexKind, indexOfNode, IndexSignatureDeclaration, IndexType, indicesOf, InferenceContext, InferenceFlags,
     InferenceInfo, InferencePriority, InferTypeNode, InstantiableType, InstantiationExpressionType,
     InterfaceDeclaration, InterfaceType, InterfaceTypeWithDeclaredMembers, InternalSymbolName, IntersectionType,
@@ -24563,7 +24563,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypeFromFlowType(flowType: FlowType) {
-        return flowType.flags === 0 ? (flowType as IncompleteType).type : flowType as Type;
+        return flowType.flags === 0 ? flowType.type : flowType as Type;
     }
 
     function createFlowType(type: Type, incomplete: boolean): FlowType {
