@@ -50,23 +50,23 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /users/username/projects/project/index.tsx (used version)
 
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
-/users/username/projects/project/index.tsx:
-  {"fileName":"/users/username/projects/project/index.tsx","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /users/username/projects/project/node_modules:
-  {"fileName":"/users/username/projects/project/node_modules","pollingInterval":500}
+  {"pollingInterval":500}
 /users/username/projects/project/node_modules/@types:
-  {"fileName":"/users/username/projects/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/users/username/projects/project/tsconfig.json:
+  {}
+/users/username/projects/project/index.tsx:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /users/username/projects/project:
-  {"directoryName":"/users/username/projects/project"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -91,6 +91,10 @@ exports.App = App;
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -174,27 +178,27 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts (used version)
 /users/username/projects/project/index.tsx (computed .d.ts)
 
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
-/users/username/projects/project/index.tsx:
-  {"fileName":"/users/username/projects/project/index.tsx","pollingInterval":250}
-/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts:
-  {"fileName":"/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/users/username/projects/project/node_modules/react/package.json:
-  {"fileName":"/users/username/projects/project/node_modules/react/package.json","pollingInterval":250}
+PolledWatches::
 /users/username/projects/project/node_modules/@types:
-  {"fileName":"/users/username/projects/project/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/users/username/projects/project/tsconfig.json:
+  {}
+/users/username/projects/project/index.tsx:
+  {}
+/users/username/projects/project/node_modules/react/jsx-runtime/index.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/node_modules/react/package.json:
+  {}
 
 FsWatchesRecursive::
 /users/username/projects/project/node_modules:
-  {"directoryName":"/users/username/projects/project/node_modules"}
+  {}
 /users/username/projects/project:
-  {"directoryName":"/users/username/projects/project"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -217,6 +221,10 @@ exitCode:: ExitStatus.undefined
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -226,6 +234,10 @@ exitCode:: ExitStatus.undefined
         "signature": "-35656056833-export namespace JSX {\n    interface Element {}\n    interface IntrinsicElements {\n        div: {\n            propA?: boolean;\n        };\n    }\n}\nexport function jsx(...args: any[]): void;\nexport function jsxs(...args: any[]): void;\nexport const Fragment: unique symbol;\n"
       },
       "./index.tsx": {
+        "original": {
+          "version": "-14760199789-export const App = () => <div propA={true}></div>;",
+          "signature": "-17269688391-export declare const App: () => import(\"react/jsx-runtime\").JSX.Element;\n"
+        },
         "version": "-14760199789-export const App = () => <div propA={true}></div>;",
         "signature": "-17269688391-export declare const App: () => import(\"react/jsx-runtime\").JSX.Element;\n"
       }

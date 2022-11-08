@@ -1,6 +1,7 @@
 === tests/cases/conformance/declarationEmit/node_modules/@types/node/index.d.ts ===
+
 /// <reference path="fs.d.ts" />
-No type information for this code.=== tests/cases/conformance/declarationEmit/node_modules/@types/node/fs.d.ts ===
+=== tests/cases/conformance/declarationEmit/node_modules/@types/node/fs.d.ts ===
 declare module "fs" {
 >"fs" : Symbol("fs", Decl(fs.d.ts, 0, 0))
 

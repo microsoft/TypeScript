@@ -106,31 +106,31 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/pkg2/index.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg0/index.ts:
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -157,11 +157,19 @@ export declare const pkg0 = 0;
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./index.ts": {
+        "original": {
+          "version": "-10197922616-export const pkg0 = 0;",
+          "signature": "-4821832606-export declare const pkg0 = 0;\n"
+        },
         "version": "-10197922616-export const pkg0 = 0;",
         "signature": "-4821832606-export declare const pkg0 = 0;\n"
       }
@@ -204,11 +212,19 @@ export declare const pkg1 = 1;
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./index.ts": {
+        "original": {
+          "version": "-10158787190-export const pkg1 = 1;",
+          "signature": "-3530363548-export declare const pkg1 = 1;\n"
+        },
         "version": "-10158787190-export const pkg1 = 1;",
         "signature": "-3530363548-export declare const pkg1 = 1;\n"
       }
@@ -251,11 +267,19 @@ export declare const pkg2 = 2;
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./index.ts": {
+        "original": {
+          "version": "-14414619060-export const pkg2 = 2;",
+          "signature": "-6533861786-export declare const pkg2 = 2;\n"
+        },
         "version": "-14414619060-export const pkg2 = 2;",
         "signature": "-6533861786-export declare const pkg2 = 2;\n"
       }
@@ -316,31 +340,31 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg0/index.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg0/index.ts:
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -364,11 +388,19 @@ var someConst2 = 10;
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./index.ts": {
+        "original": {
+          "version": "-7839887915-export const pkg0 = 0;const someConst2 = 10;",
+          "signature": "-4821832606-export declare const pkg0 = 0;\n"
+        },
         "version": "-7839887915-export const pkg0 = 0;const someConst2 = 10;",
         "signature": "-4821832606-export declare const pkg0 = 0;\n"
       }
@@ -397,31 +429,31 @@ Input::
 
 Output::
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg0/index.ts:
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -456,31 +488,31 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/pkg0/index.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg0/index.ts:
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -510,11 +542,19 @@ export declare const someConst = 10;
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./index.ts": {
+        "original": {
+          "version": "1748855762-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;",
+          "signature": "-6216230055-export declare const pkg0 = 0;\nexport declare const someConst = 10;\n"
+        },
         "version": "1748855762-export const pkg0 = 0;const someConst2 = 10;export const someConst = 10;",
         "signature": "-6216230055-export declare const pkg0 = 0;\nexport declare const someConst = 10;\n"
       }
@@ -578,31 +618,31 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg0/index.ts:
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -615,31 +655,31 @@ Input::
 
 Output::
 
-WatchedFiles::
-/user/username/projects/myproject/pkg0/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg0/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg0/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg0/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg1/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg1/index.ts","pollingInterval":250}
-/user/username/projects/myproject/pkg2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/pkg2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/pkg2/index.ts:
-  {"fileName":"/user/username/projects/myproject/pkg2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/user/username/projects/myproject/pkg0/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg0/index.ts:
+  {}
+/user/username/projects/myproject/pkg1/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg1/index.ts:
+  {}
+/user/username/projects/myproject/pkg2/tsconfig.json:
+  {}
+/user/username/projects/myproject/pkg2/index.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/pkg0:
-  {"directoryName":"/user/username/projects/myproject/pkg0"}
+  {}
 /user/username/projects/myproject/pkg1:
-  {"directoryName":"/user/username/projects/myproject/pkg1"}
+  {}
 /user/username/projects/myproject/pkg2:
-  {"directoryName":"/user/username/projects/myproject/pkg2"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

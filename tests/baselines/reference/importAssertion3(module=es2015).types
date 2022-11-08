@@ -1,7 +1,8 @@
 === tests/cases/conformance/importAssertion/0.ts ===
+
 export interface I { }
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/importAssertion/1.ts ===
+
+=== tests/cases/conformance/importAssertion/1.ts ===
 export type {} from './0' assert { type: "json" }
 >type : any
 

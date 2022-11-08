@@ -24,6 +24,18 @@
           ]
         },
         {
+          "name": "accessor",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "accessor",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "async",
           "kind": "keyword",
           "kindModifiers": "",
