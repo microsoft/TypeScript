@@ -78,6 +78,26 @@ Enable color and formatting in TypeScript's output to make compiler errors easie
 type: boolean
 default: true
 
+[94m--declaration, -d[39m
+Generate .d.ts files from TypeScript and JavaScript files in your project.
+type: boolean
+default: `false`, unless `composite` is set
+
+[94m--declarationMap[39m
+Create sourcemaps for d.ts files.
+type: boolean
+default: false
+
+[94m--emitDeclarationOnly[39m
+Only output d.ts files and not JavaScript files.
+type: boolean
+default: false
+
+[94m--sourceMap[39m
+Create source map files for emitted JavaScript files.
+type: boolean
+default: false
+
 [94m--target, -t[39m
 Set the JavaScript language version for emitted JavaScript and include compatible library declarations.
 one of: es3, es5, es6/es2015, es2016, es2017, es2018, es2019, es2020, es2021, es2022, esnext
@@ -107,26 +127,6 @@ default: false
 Specify what JSX code is generated.
 one of: preserve, react, react-native, react-jsx, react-jsxdev
 default: undefined
-
-[94m--declaration, -d[39m
-Generate .d.ts files from TypeScript and JavaScript files in your project.
-type: boolean
-default: `false`, unless `composite` is set
-
-[94m--declarationMap[39m
-Create sourcemaps for d.ts files.
-type: boolean
-default: false
-
-[94m--emitDeclarationOnly[39m
-Only output d.ts files and not JavaScript files.
-type: boolean
-default: false
-
-[94m--sourceMap[39m
-Create source map files for emitted JavaScript files.
-type: boolean
-default: false
 
 [94m--outFile[39m
 Specify a file that bundles all outputs into one JavaScript file. If 'declaration' is true, also designates a file that bundles all .d.ts output.

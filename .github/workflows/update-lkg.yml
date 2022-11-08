@@ -16,7 +16,7 @@ jobs:
         git config user.email "typescriptbot@microsoft.com"
         git config user.name "TypeScript Bot"
         npm ci
-        gulp LKG
+        npx hereby LKG
         npm test
         git diff
         git add ./lib

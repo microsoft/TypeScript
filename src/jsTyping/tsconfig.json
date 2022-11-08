@@ -1,7 +1,6 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/jsTyping.js",
         "types": [
             "node"
         ],
@@ -13,9 +12,5 @@
     "references": [
         { "path": "../compiler" }
     ],
-    "files": [
-        "shared.ts",
-        "types.ts",
-        "jsTyping.ts"
-    ]
+    "include": ["**/*"]
 }

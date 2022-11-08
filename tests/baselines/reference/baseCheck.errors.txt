@@ -21,7 +21,7 @@ tests/cases/compiler/baseCheck.ts(26,9): error TS2304: Cannot find name 'x'.
             super(0, loc);
                      ~~~
 !!! error TS2552: Cannot find name 'loc'. Did you mean 'Lock'?
-!!! related TS2728 /.ts/lib.dom.d.ts:9241:13: 'Lock' is declared here.
+!!! related TS2728 /.ts/lib.dom.d.ts:9275:13: 'Lock' is declared here.
         }
     
         m() {

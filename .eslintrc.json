@@ -87,7 +87,7 @@
         "local/simple-indent": "error",
         "local/debug-assert": "error",
         "local/no-keywords": "error",
-        "local/one-namespace-per-file": "error",
+        "local/jsdoc-format": "error",
 
         // eslint-plugin-import
         "import/no-extraneous-dependencies": ["error", { "optionalDependencies": false }],
