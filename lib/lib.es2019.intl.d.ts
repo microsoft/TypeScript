@@ -14,12 +14,12 @@ and limitations under the License.
 ***************************************************************************** */
 
 
-"use strict";
-var ts;
-(function (ts) {
-    var server;
-    (function (server) {
-        server.dynamicImport = (id) => import(id);
-    })(server = ts.server || (ts.server = {}));
-})(ts || (ts = {}));
-//# sourceMappingURL=dynamicImportCompat.js.map
+
+/// <reference no-default-lib="true"/>
+
+
+declare namespace Intl {
+    interface DateTimeFormatPartTypesRegistry {
+        unknown: any
+    }
+}
