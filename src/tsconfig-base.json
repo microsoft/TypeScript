@@ -1,16 +1,20 @@
 {
     "compilerOptions": {
-        "pretty": true,
-        "lib": ["es2015.iterable", "es2015.generator", "es5"],
-        "target": "es5",
-        "moduleResolution": "node",
         "rootDir": ".",
+        "outDir": "../built/local",
+
+        "pretty": true,
+        "lib": ["es2018"],
+        "target": "es2018",
+        "module": "CommonJS",
+        "moduleResolution": "node",
 
         "declaration": true,
         "declarationMap": true,
         "sourceMap": true,
         "composite": true,
         "noEmitOnError": true,
+        "emitDeclarationOnly": true,
 
         "strictNullChecks": true,
         "noImplicitAny": true,
