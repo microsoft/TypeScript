@@ -1,10 +1,9 @@
-/// <reference types="node" />
+import * as fs from "fs";
 
 if (process.argv.length < 3) {
     process.exit(1);
 }
 const directoryName = process.argv[2];
-const fs: { watch(directoryName: string, options: any, callback: () => {}): any } = require("fs");
 // main reason why we need separate process to check if it is safe to watch some path
 // is to guard against crashes that cannot be intercepted with protected blocks and
 // code in tsserver already can handle normal cases, like non-existing folders.
