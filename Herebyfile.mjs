@@ -6,12 +6,14 @@ import { task } from "hereby";
 import _glob from "glob";
 import util from "util";
 import chalk from "chalk";
-import { exec, readJson, getDiffTool, getDirSize, memoize, needsUpdate } from "./scripts/build/utils.mjs";
-import { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } from "./scripts/build/tests.mjs";
+import { exec, readJson, getDiffTool, getDirSize, memoize, needsUpdate, Debouncer, Deferred } from "./scripts/build/utils.mjs";
+import { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline, cleanTestDirs } from "./scripts/build/tests.mjs";
 import { buildProject as realBuildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
 import esbuild from "esbuild";
+import chokidar from "chokidar";
+import { createInterface } from "readline";
 
 const glob = util.promisify(_glob);
 
@@ -476,7 +478,7 @@ const { main: tests, watch: watchTests } = entrypointBuildTask({
             "diff",
             "mocha",
             "ms",
-        ],
+        ]
     },
 });
 export { tests, watchTests };
@@ -613,6 +615,106 @@ export const runTests = task({
 //     "   --shards": "Total number of shards running tests (default: 1)",
 //     "   --shardId": "1-based ID of this shard (default: 1)",
 // };
+
+export const runTestsAndWatch = task({
+    name: "runtests-watch",
+    dependencies: [watchTests],
+    run: async () => {
+        if (!cmdLineOptions.tests && !cmdLineOptions.failed) {
+            console.log(chalk.redBright(`You must specifiy either --tests/-t or --failed to use 'runtests-watch'.`));
+            return;
+        }
+
+        let watching = true;
+        let running = true;
+        let testsChangedDeferred = /** @type {Deferred<void>} */(new Deferred());
+        let testsChangedAbortController = new AbortController();
+        const testsChangedDebouncer = new Debouncer(1_000, async () => {
+            testsChangedDeferred.resolve();
+            testsChangedDeferred = /** @type {Deferred<void>} */(new Deferred());
+        });
+
+        // catch SIGINT to ensure we can kill the watcher
+        const rl = createInterface(process.stdin);
+        rl.on("SIGINT", () => {
+            if (running) {
+                console.log(chalk.yellowBright("[watch] aborting in-progress test run..."));
+            }
+
+            testsChangedAbortController.abort();
+            testRunnerWatcher.close();
+            testCaseWatcher.close();
+            watching = false;
+        });
+        process.on("beforeExit", () => {
+            console.log(chalk.yellowBright("[watch] exiting watch mode..."));
+        });
+
+        const testRunnerWatcher = chokidar.watch([
+            testRunner
+        ], {
+            ignoreInitial: true,
+            ignorePermissionErrors: true,
+            awaitWriteFinish: true,
+        });
+
+        const testCaseWatcher = chokidar.watch([
+            "tests/cases/**/*.*",
+            "tests/lib/**/*.*",
+            "tests/projects/**/*.*",
+        ], {
+            ignoreInitial: true,
+            ignorePermissionErrors: true,
+            awaitWriteFinish: true,
+        });
+
+        const onChange = path => {
+            if (testsChangedDebouncer.empty) {
+                console.log(chalk.yellowBright(`[watch] tests changed due to '${path}', restarting...`));
+                if (running) {
+                    console.log(chalk.yellowBright("[watch] aborting in-progress test run..."));
+                }
+
+                testsChangedAbortController.abort();
+                testsChangedAbortController = new AbortController();
+            }
+
+            testsChangedDebouncer.enqueue();
+        };
+
+        testRunnerWatcher.on("change", path => onChange(path));
+        testCaseWatcher.on("all", (_eventName, path) => onChange(path));
+
+        const dirty = cmdLineOptions.dirty;
+        cmdLineOptions.dirty = true;
+
+        while (watching) {
+            const promise = testsChangedDeferred.promise;
+            const signal = testsChangedAbortController.signal;
+
+            if (!signal.aborted && !dirty) {
+                console.log(chalk.yellowBright(`[watch] cleaning test directories...`));
+                await cleanTestDirs();
+            }
+
+            if (!signal.aborted) {
+                running = true;
+                try {
+                    console.log(chalk.yellowBright(`[watch] running tests...`));
+                    await runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, signal);
+                }
+                catch {
+                    // ignore
+                }
+                running = false;
+            }
+
+            if (watching) {
+                await promise;
+            }
+        }
+    },
+});
 
 export const runTestsParallel = task({
     name: "runtests-parallel",

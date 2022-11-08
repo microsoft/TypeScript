@@ -18,6 +18,7 @@ import JSONC from "jsonc-parser";
  * @property {boolean} [ignoreExitCode]
  * @property {boolean} [hidePrompt]
  * @property {boolean} [waitForExit=true]
+ * @property {AbortSignal} [signal]
  */
 export async function exec(cmd, args, options = {}) {
     return /**@type {Promise<{exitCode?: number}>}*/(new Promise((resolve, reject) => {
@@ -26,6 +27,10 @@ export async function exec(cmd, args, options = {}) {
         if (!options.hidePrompt) console.log(`> ${chalk.green(cmd)} ${args.join(" ")}`);
         const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? "inherit" : "ignore" });
         if (waitForExit) {
+            const onAbort = () => {
+                proc.kill();
+            };
+            options.signal?.addEventListener("abort", onAbort, { once: true });
             proc.on("exit", exitCode => {
                 if (exitCode === 0 || ignoreExitCode) {
                     resolve({ exitCode: exitCode ?? undefined });
@@ -33,9 +38,11 @@ export async function exec(cmd, args, options = {}) {
                 else {
                     reject(new Error(`Process exited with code: ${exitCode}`));
                 }
+                options?.signal?.removeEventListener("abort", onAbort);
             });
             proc.on("error", error => {
                 reject(error);
+                options?.signal?.removeEventListener("abort", onAbort);
             });
         }
         else {
@@ -150,8 +157,12 @@ export function getDirSize(root) {
         .reduce((acc, num) => acc + num, 0);
 }
 
-class Deferred {
+/**
+ * @template T
+ */
+export class Deferred {
     constructor() {
+        /** @type {Promise<T>} */
         this.promise = new Promise((resolve, reject) => {
             this.resolve = resolve;
             this.reject = reject;
@@ -168,6 +179,8 @@ export class Debouncer {
         this._timeout = timeout;
         this._action = action;
     }
+
+    get empty() { return !this._deferred; }
 
     enqueue() {
         if (this._timer) {

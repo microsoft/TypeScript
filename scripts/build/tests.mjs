@@ -17,8 +17,9 @@ export const localTest262Baseline = "internal/baselines/test262/local";
  * @param {string} runJs
  * @param {string} defaultReporter
  * @param {boolean} runInParallel
+ * @param {AbortSignal} [signal]
  */
-export async function runConsoleTests(runJs, defaultReporter, runInParallel) {
+export async function runConsoleTests(runJs, defaultReporter, runInParallel, signal) {
     let testTimeout = cmdLineOptions.timeout;
     const tests = cmdLineOptions.tests;
     const inspect = cmdLineOptions.break || cmdLineOptions.inspect;
@@ -114,7 +115,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel) {
 
     try {
         setNodeEnvToDevelopment();
-        const { exitCode } = await exec(process.execPath, args);
+        const { exitCode } = await exec(process.execPath, args, { signal });
         if (exitCode !== 0) {
             errorStatus = exitCode;
             error = new Error(`Process exited with status code ${errorStatus}.`);
