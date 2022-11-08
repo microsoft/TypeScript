@@ -1,7 +1,7 @@
 tests/cases/conformance/salsa/lovefield-ts.d.ts(4,19): error TS2503: Cannot find namespace 'query'.
 tests/cases/conformance/salsa/lovefield-ts.d.ts(5,24): error TS2503: Cannot find namespace 'schema'.
 tests/cases/conformance/salsa/lovefield-ts.d.ts(7,25): error TS2503: Cannot find namespace 'query'.
-tests/cases/conformance/salsa/lovefield-ts.d.ts(9,14): error TS2304: Cannot find name 'TransactionStats'.
+tests/cases/conformance/salsa/lovefield-ts.d.ts(9,14): error TS2552: Cannot find name 'TransactionStats'. Did you mean 'Transaction'?
 tests/cases/conformance/salsa/lovefield.js(3,23): error TS2694: Namespace 'lf' has no exported member 'schema'.
 tests/cases/conformance/salsa/lovefield.js(4,14): error TS2304: Cannot find name 'IThenable'.
 
@@ -23,7 +23,8 @@ tests/cases/conformance/salsa/lovefield.js(4,14): error TS2304: Cannot find name
         rollback(): Promise<void>
         stats(): TransactionStats
                  ~~~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'TransactionStats'.
+!!! error TS2552: Cannot find name 'TransactionStats'. Did you mean 'Transaction'?
+!!! related TS2728 tests/cases/conformance/salsa/lovefield.js:1:1: 'Transaction' is declared here.
       }
     }
 ==== tests/cases/conformance/salsa/lovefield.js (2 errors) ====

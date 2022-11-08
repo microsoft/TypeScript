@@ -157,7 +157,7 @@ Program files::
 /user/username/projects/myProject/plugin-two/index.d.ts
 /user/username/projects/myproject/plugin-one/index.ts
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 

@@ -30,3 +30,22 @@ const foo = new Foo();
 >foo : Symbol(foo, Decl(optionalChainingInTypeAssertions.ts, 4, 5))
 >m : Symbol(Foo.m, Decl(optionalChainingInTypeAssertions.ts, 0, 11))
 
+// https://github.com/microsoft/TypeScript/issues/50148
+(foo?.m as any).length;
+>foo?.m : Symbol(Foo.m, Decl(optionalChainingInTypeAssertions.ts, 0, 11))
+>foo : Symbol(foo, Decl(optionalChainingInTypeAssertions.ts, 4, 5))
+>m : Symbol(Foo.m, Decl(optionalChainingInTypeAssertions.ts, 0, 11))
+
+(<any>foo?.m).length;
+>foo?.m : Symbol(Foo.m, Decl(optionalChainingInTypeAssertions.ts, 0, 11))
+>foo : Symbol(foo, Decl(optionalChainingInTypeAssertions.ts, 4, 5))
+>m : Symbol(Foo.m, Decl(optionalChainingInTypeAssertions.ts, 0, 11))
+
+(foo?.["m"] as any).length;
+>foo : Symbol(foo, Decl(optionalChainingInTypeAssertions.ts, 4, 5))
+>"m" : Symbol(Foo.m, Decl(optionalChainingInTypeAssertions.ts, 0, 11))
+
+(<any>foo?.["m"]).length;
+>foo : Symbol(foo, Decl(optionalChainingInTypeAssertions.ts, 4, 5))
+>"m" : Symbol(Foo.m, Decl(optionalChainingInTypeAssertions.ts, 0, 11))
+

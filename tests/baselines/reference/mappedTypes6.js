@@ -198,65 +198,65 @@ x5.b = 1;
 
 
 //// [mappedTypes6.d.ts]
-declare type T00<T> = {
+type T00<T> = {
     [P in keyof T]: T[P];
 };
-declare type T01<T> = {
+type T01<T> = {
     [P in keyof T]?: T[P];
 };
-declare type T02<T> = {
+type T02<T> = {
     [P in keyof T]+?: T[P];
 };
-declare type T03<T> = {
+type T03<T> = {
     [P in keyof T]-?: T[P];
 };
-declare type T04<T> = {
+type T04<T> = {
     readonly [P in keyof T]: T[P];
 };
-declare type T05<T> = {
+type T05<T> = {
     readonly [P in keyof T]?: T[P];
 };
-declare type T06<T> = {
+type T06<T> = {
     readonly [P in keyof T]+?: T[P];
 };
-declare type T07<T> = {
+type T07<T> = {
     readonly [P in keyof T]-?: T[P];
 };
-declare type T08<T> = {
+type T08<T> = {
     +readonly [P in keyof T]: T[P];
 };
-declare type T09<T> = {
+type T09<T> = {
     +readonly [P in keyof T]?: T[P];
 };
-declare type T10<T> = {
+type T10<T> = {
     +readonly [P in keyof T]+?: T[P];
 };
-declare type T11<T> = {
+type T11<T> = {
     +readonly [P in keyof T]-?: T[P];
 };
-declare type T12<T> = {
+type T12<T> = {
     -readonly [P in keyof T]: T[P];
 };
-declare type T13<T> = {
+type T13<T> = {
     -readonly [P in keyof T]?: T[P];
 };
-declare type T14<T> = {
+type T14<T> = {
     -readonly [P in keyof T]+?: T[P];
 };
-declare type T15<T> = {
+type T15<T> = {
     -readonly [P in keyof T]-?: T[P];
 };
 declare function f1<T>(x: Required<T>, y: T, z: Partial<T>): void;
-declare type Denullified<T> = {
+type Denullified<T> = {
     [P in keyof T]-?: NonNullable<T[P]>;
 };
 declare function f2<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>): void;
 declare function f3<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>): void;
-declare type Readwrite<T> = {
+type Readwrite<T> = {
     -readonly [P in keyof T]: T[P];
 };
 declare function f10<T>(x: Readonly<T>, y: T, z: Readwrite<T>): void;
-declare type Foo = {
+type Foo = {
     a: number;
     b: number | undefined;
     c?: number;
@@ -264,7 +264,7 @@ declare type Foo = {
 };
 declare let x1: Foo;
 declare let x2: Required<Foo>;
-declare type Bar = {
+type Bar = {
     a: number;
     readonly b: number;
 };
