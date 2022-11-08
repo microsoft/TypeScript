@@ -20,7 +20,6 @@
   "configurations": [
     {
       "type": "node",
-      "protocol": "inspector",
       "request": "launch",
       "name": "Mocha Tests (currently opened test)",
       "runtimeArgs": ["--nolazy"],
@@ -43,12 +42,9 @@
       },
       "sourceMaps": true,
       "smartStep": true,
-      "preLaunchTask": "gulp: tests",
+      "preLaunchTask": "npm: build:tests",
       "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceRoot}/built/local/run.js"
-      ],
-      "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue",
+      "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue"
     },
     {
       // See: https://github.com/microsoft/TypeScript/wiki/Debugging-Language-Service-in-VS-Code
@@ -56,7 +52,7 @@
       "request": "attach",
       "name": "Attach to VS Code TS Server via Port",
       "processId": "${command:PickProcess}",
-      "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue",
+      "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue"
     }
   ]
 }

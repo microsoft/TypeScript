@@ -88,3 +88,9 @@ declare function foo<T, U>(obj: T & AB<U>): [T, U];
 declare let ab: AB<string>;
 
 let z = foo(ab);  // [AB<string>, string]
+
+// Repro from #51399
+
+declare let a: <T>() => (T extends true ? true : false) & boolean;
+declare let b: <T>() => (T extends true ? true : false) & boolean;
+a = b;

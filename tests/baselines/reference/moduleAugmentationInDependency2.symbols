@@ -5,5 +5,5 @@ declare module "ext" {
 export {};
 
 === /src/app.ts ===
+
 import "A"
-No type information for this code.

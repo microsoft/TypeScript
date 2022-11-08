@@ -10,6 +10,7 @@ const os = require("os");
     reporter?: Mocha.ReporterConstructor | keyof Mocha.reporters;
     reporterOptions?: any; // TODO(jakebailey): what?
 }} ReporterOptions */
+void 0;
 
 /**
  * .failed-tests reporter
