@@ -239,3 +239,29 @@ class C4 {
 >bar : Symbol(C4.bar, Decl(instantiationExpressionErrors.ts, 94, 36))
 }
 
+// Repro from #49551
+
+const enum MyVer { v1 = 1, v2 = 2 }
+>MyVer : Symbol(MyVer, Decl(instantiationExpressionErrors.ts, 96, 1))
+>v1 : Symbol(MyVer.v1, Decl(instantiationExpressionErrors.ts, 100, 18))
+>v2 : Symbol(MyVer.v2, Decl(instantiationExpressionErrors.ts, 100, 26))
+
+let ver = 21
+>ver : Symbol(ver, Decl(instantiationExpressionErrors.ts, 101, 3))
+
+const a = ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2)
+>a : Symbol(a, Decl(instantiationExpressionErrors.ts, 102, 5))
+>ver : Symbol(ver, Decl(instantiationExpressionErrors.ts, 101, 3))
+>MyVer.v1 : Symbol(MyVer.v1, Decl(instantiationExpressionErrors.ts, 100, 18))
+>MyVer : Symbol(MyVer, Decl(instantiationExpressionErrors.ts, 96, 1))
+>v1 : Symbol(MyVer.v1, Decl(instantiationExpressionErrors.ts, 100, 18))
+>MyVer.v2 : Symbol(MyVer.v2, Decl(instantiationExpressionErrors.ts, 100, 26))
+>MyVer : Symbol(MyVer, Decl(instantiationExpressionErrors.ts, 96, 1))
+>v2 : Symbol(MyVer.v2, Decl(instantiationExpressionErrors.ts, 100, 26))
+>MyVer.v1 : Symbol(MyVer.v1, Decl(instantiationExpressionErrors.ts, 100, 18))
+>MyVer : Symbol(MyVer, Decl(instantiationExpressionErrors.ts, 96, 1))
+>v1 : Symbol(MyVer.v1, Decl(instantiationExpressionErrors.ts, 100, 18))
+>MyVer.v2 : Symbol(MyVer.v2, Decl(instantiationExpressionErrors.ts, 100, 26))
+>MyVer : Symbol(MyVer, Decl(instantiationExpressionErrors.ts, 96, 1))
+>v2 : Symbol(MyVer.v2, Decl(instantiationExpressionErrors.ts, 100, 26))
+

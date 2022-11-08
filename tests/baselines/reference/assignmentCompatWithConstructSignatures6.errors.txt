@@ -65,6 +65,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:       Types of property 'foo' are incompatible.
 !!! error TS2322:         Type 'U' is not assignable to type 'T'.
 !!! error TS2322:           'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures6.ts:37:18: This type parameter might need an `extends T` constraint.
     var b16: new <T>(x: { a: T; b: T }) => T[]; 
     x.a16 = b16;
     b16 = x.a16;
@@ -74,3 +75,4 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:     Type '{ a: T; b: T; }' is not assignable to type '{ a: Base; b: Base; }'.
 !!! error TS2322:       Types of property 'a' are incompatible.
 !!! error TS2322:         Type 'T' is not assignable to type 'Base'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures6.ts:40:15: This type parameter might need an `extends Base` constraint.

@@ -325,3 +325,36 @@ class C4 {
 >123 : 123
 }
 
+// Repro from #49551
+
+const enum MyVer { v1 = 1, v2 = 2 }
+>MyVer : MyVer
+>v1 : MyVer.v1
+>1 : 1
+>v2 : MyVer.v2
+>2 : 2
+
+let ver = 21
+>ver : number
+>21 : 21
+
+const a = ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2)
+>a : boolean
+>ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2) : boolean
+>ver : number
+>(MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2) : MyVer
+>MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2 : MyVer
+>MyVer.v1 >= MyVer.v2 : boolean
+>MyVer.v1 : MyVer.v1
+>MyVer : typeof MyVer
+>v1 : MyVer.v1
+>MyVer.v2 : MyVer.v2
+>MyVer : typeof MyVer
+>v2 : MyVer.v2
+>MyVer.v1 : MyVer.v1
+>MyVer : typeof MyVer
+>v1 : MyVer.v1
+>MyVer.v2 : MyVer.v2
+>MyVer : typeof MyVer
+>v2 : MyVer.v2
+

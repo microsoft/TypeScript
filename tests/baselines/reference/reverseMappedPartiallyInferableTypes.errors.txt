@@ -1,4 +1,4 @@
-tests/cases/compiler/reverseMappedPartiallyInferableTypes.ts(91,20): error TS2571: Object is of type 'unknown'.
+tests/cases/compiler/reverseMappedPartiallyInferableTypes.ts(91,20): error TS18046: 'k' is of type 'unknown'.
 
 
 ==== tests/cases/compiler/reverseMappedPartiallyInferableTypes.ts (1 errors) ====
@@ -94,7 +94,7 @@ tests/cases/compiler/reverseMappedPartiallyInferableTypes.ts(91,20): error TS257
             contains(k) {
                 return k.length > 0;
                        ~
-!!! error TS2571: Object is of type 'unknown'.
+!!! error TS18046: 'k' is of type 'unknown'.
             }
         }
     });

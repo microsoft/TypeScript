@@ -53,6 +53,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:3:14: This type parameter might need an `extends U` constraint.
     }
     
     function foo2<T extends U, U>(t: T, u: U) {
@@ -60,6 +61,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:8:28: This type parameter might need an `extends T` constraint.
         u = t; // ok
     }
     
@@ -74,12 +76,14 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:41: This type parameter might need an `extends T` constraint.
         v = t; // ok
     
         u = v; // error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:41: This type parameter might need an `extends U` constraint.
         v = u; // ok
     }
     
@@ -163,16 +167,19 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:28: This type parameter might need an `extends T` constraint.
         t = v; // error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'T'.
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:31: This type parameter might need an `extends T` constraint.
     
         u = t; // ok
         u = v; // error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'V'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:31: This type parameter might need an `extends U` constraint.
     
         v = t; // error
         ~
@@ -182,4 +189,5 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'V'.
 !!! error TS2322:   'V' could be instantiated with an arbitrary type which could be unrelated to 'U'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:28: This type parameter might need an `extends V` constraint.
     }

@@ -1,0 +1,28 @@
+=== tests/cases/conformance/parser/ecmascript5/InterfaceDeclarations/parserInterfaceDeclaration9.ts ===
+interface I1 {
+    get foo(): number,
+>foo : number
+
+    set foo(value: number),
+>foo : number
+>value : number
+}
+
+interface I2 {
+    get foo(): number;
+>foo : number
+
+    set foo(value: number);
+>foo : number
+>value : number
+}
+
+interface I3 {
+    get foo(): number
+>foo : number
+
+    set foo(value: number)
+>foo : number
+>value : number
+}
+

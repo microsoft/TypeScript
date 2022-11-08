@@ -97,6 +97,12 @@ class C4 {
     protected bar = 123
 }
 
+// Repro from #49551
+
+const enum MyVer { v1 = 1, v2 = 2 }
+let ver = 21
+const a = ver < (MyVer.v1 >= MyVer.v2 ? MyVer.v1 : MyVer.v2)
+
 
 //// [instantiationExpressionErrors.js]
 "use strict";
@@ -179,6 +185,8 @@ var C4 = /** @class */ (function () {
     }
     return C4;
 }());
+var ver = 21;
+var a = ver < (1 /* MyVer.v1 */ >= 2 /* MyVer.v2 */ ? 1 /* MyVer.v1 */ : 2 /* MyVer.v2 */);
 
 
 //// [instantiationExpressionErrors.d.ts]
@@ -283,3 +291,9 @@ declare class C4 {
     };
     protected bar: number;
 }
+declare const enum MyVer {
+    v1 = 1,
+    v2 = 2
+}
+declare let ver: number;
+declare const a: boolean;

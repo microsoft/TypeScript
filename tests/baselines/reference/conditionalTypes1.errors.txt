@@ -84,7 +84,7 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'NonNullable<T>'.
 !!! error TS2322:   Type 'T' is not assignable to type '{}'.
-!!! related TS2208 tests/cases/conformance/types/conditional/conditionalTypes1.ts:10:13: This type parameter probably needs an `extends object` constraint.
+!!! related TS2208 tests/cases/conformance/types/conditional/conditionalTypes1.ts:10:13: This type parameter might need an `extends {}` constraint.
     }
     
     function f2<T extends string | undefined>(x: T, y: NonNullable<T>) {
