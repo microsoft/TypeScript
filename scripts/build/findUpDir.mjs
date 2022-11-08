@@ -26,4 +26,4 @@ export function findUpFile(name) {
 /** @type {string | undefined} */
 let findUpRootCache;
 
-export const findUpRoot = () => findUpRootCache || (findUpRootCache = dirname(findUpFile("Gulpfile.mjs")));
+export const findUpRoot = () => findUpRootCache || (findUpRootCache = dirname(findUpFile("Herebyfile.mjs")));

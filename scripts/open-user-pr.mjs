@@ -15,7 +15,7 @@ runSequence([
     ["git", ["checkout", "."]], // reset any changes
     ["git", ["fetch", baseRef === "main" ? "origin" : "fork", baseRef]], // fetch target ref in case it's not present locally
     ["git", ["checkout", baseRef]], // move head to target
-    ["node", ["./node_modules/gulp/bin/gulp.js", "baseline-accept"]], // accept baselines
+    ["node", ["./node_modules/hereby/dist/cli.js", "baseline-accept"]], // accept baselines
     ["git", ["checkout", "-b", branchName]], // create a branch
     ["git", ["add", "."]], // Add all changes
     ["git", ["commit", "-m", `"Update user baselines${+(process.env.SOURCE_ISSUE ?? 0) === 33716 ? " +cc @sandersn" : ""}"`]], // Commit all changes (ping nathan if we would post to CI thread)

@@ -19,11 +19,11 @@ jobs:
     - name: Adding playwright
       run: npm install --no-save --no-package-lock playwright
     - name: Validate the browser can import TypeScript
-      run: gulp test-browser-integration
+      run: npx hereby test-browser-integration
     - name: LKG, clean, and pack
       run: |
-        gulp LKG
-        gulp clean
+        npx hereby LKG
+        npx hereby clean
         npm pack ./
         mv typescript-*.tgz typescript.tgz
     - name: Upload built tarfile
