@@ -260,7 +260,7 @@ module.exports = {};
     "affectedFilesPendingEmit": [
       [
         "../../src/sub-project/index.js",
-        "Full"
+        "Js | Dts"
       ]
     ],
     "emitSignatures": [

@@ -60,6 +60,7 @@ const sys = (() => {
         subscript?: boolean;
     };
 }} FindReplaceOptions */
+void 0;
 
 /**
  * @param {Word.Document} doc
