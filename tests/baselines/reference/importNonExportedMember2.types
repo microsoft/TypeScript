@@ -1,8 +1,9 @@
 === tests/cases/compiler/a.ts ===
+
 export {}
-No type information for this code.interface Foo {}
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/b.ts ===
+interface Foo {}
+
+=== tests/cases/compiler/b.ts ===
 import { Foo } from './a';
 >Foo : any
 

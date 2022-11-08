@@ -10,10 +10,11 @@ export { x } from
     "./t1";
 
 === tests/cases/compiler/t3.ts ===
+
 export { } from
-No type information for this code.    "./t1";
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/t4.ts ===
+    "./t1";
+
+=== tests/cases/compiler/t4.ts ===
 export { x as a } from
 >x : string
 >a : string

@@ -18,12 +18,10 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(33,31): error TS2344: 
     Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(34,31): error TS2344: Type '[number, number, string]' does not satisfy the constraint '[number, ...number[]]'.
   Type at positions 1 through 2 in source is not compatible with type at position 1 in target.
-    Type 'string | number' is not assignable to type 'number'.
-      Type 'string' is not assignable to type 'number'.
+    Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(35,31): error TS2344: Type '[number, number, number, string]' does not satisfy the constraint '[number, ...number[]]'.
   Type at positions 1 through 3 in source is not compatible with type at position 1 in target.
-    Type 'string | number' is not assignable to type 'number'.
-      Type 'string' is not assignable to type 'number'.
+    Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2345: Argument of type '[]' is not assignable to parameter of type '[unknown, ...unknown[]]'.
   Source has 0 element(s) but target requires 1.
 
@@ -94,14 +92,12 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2345: A
                                   ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2344: Type '[number, number, string]' does not satisfy the constraint '[number, ...number[]]'.
 !!! error TS2344:   Type at positions 1 through 2 in source is not compatible with type at position 1 in target.
-!!! error TS2344:     Type 'string | number' is not assignable to type 'number'.
-!!! error TS2344:       Type 'string' is not assignable to type 'number'.
+!!! error TS2344:     Type 'string' is not assignable to type 'number'.
     assign<[number, ...number[]], [number, number, number, string]>();  // Error
                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2344: Type '[number, number, number, string]' does not satisfy the constraint '[number, ...number[]]'.
 !!! error TS2344:   Type at positions 1 through 3 in source is not compatible with type at position 1 in target.
-!!! error TS2344:     Type 'string | number' is not assignable to type 'number'.
-!!! error TS2344:       Type 'string' is not assignable to type 'number'.
+!!! error TS2344:     Type 'string' is not assignable to type 'number'.
     
     type T20 = [number, string, ...boolean[]];
     
