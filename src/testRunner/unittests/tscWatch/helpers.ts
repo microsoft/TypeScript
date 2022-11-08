@@ -392,3 +392,19 @@ export function createWatchFactorySystem(inputSystem: TestServerHost, log: (s: s
         return baseline;
     }
 }
+
+export function implementRequireForWatchFactorySystem(system: WatchFactorySystem, excludeWatchFile: boolean) {
+    system.require = (initialPath, moduleName) => {
+        system.write(`Require:: Resolving ${moduleName} from ${initialPath}\n`);
+        return {
+            module: (({ options, config }) => {
+                system.write(`Require:: Module ${moduleName} created with config: ${JSON.stringify(config)} and options: ${JSON.stringify(options)}\n`);
+                return !excludeWatchFile ?
+                    system.factoryData :
+                    { watchDirectory: system.factoryData.watchDirectory };
+            }) as ts.UserWatchFactoryModule,
+            error: undefined
+        };
+    };
+    return system;
+}

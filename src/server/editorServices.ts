@@ -46,6 +46,7 @@ import {
     forEachKey,
     forEachResolvedProjectReference,
     FormatCodeSettings,
+    formatDiagnostics,
     getAnyExtensionFromPath,
     getBaseFileName,
     getDefaultFormatCodeSettings,
@@ -3224,8 +3225,17 @@ export class ProjectService {
             }
 
             if (args.watchOptions) {
-                this.hostConfiguration.watchOptions = convertWatchOptions(args.watchOptions)?.watchOptions;
+                const result = convertWatchOptions(args.watchOptions);
+                this.hostConfiguration.watchOptions = result?.watchOptions;
                 this.logger.info(`Host watch options changed to ${JSON.stringify(this.hostConfiguration.watchOptions)}, it will be take effect for next watches.`);
+                if (result?.errors?.length) {
+                    this.logger.info(`Watch options supplied had errors: Supplied options: ${JSON.stringify(args.watchOptions)}`);
+                    this.logger.info(`Diagnostics:: ${formatDiagnostics(result.errors, {
+                        getCurrentDirectory: () => this.host.getCurrentDirectory(),
+                        getNewLine: () => this.host.newLine,
+                        getCanonicalFileName: createGetCanonicalFileName(this.host.useCaseSensitiveFileNames),
+                    })}`);
+                }
             }
         }
     }

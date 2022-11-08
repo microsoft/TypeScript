@@ -121,6 +121,12 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
         {
             json: { watchOptions: { excludeFiles: ["**/../*"] } },
         },
+        {
+            json: { watchOptions: { watchFactory: "somefactory" } },
+        },
+        {
+            json: { watchOptions: { watchFactory: "somefactory/../malicious" } },
+        },
     ]);
 
     verifyWatchOptions("watch options extending passed in watch options", () => [

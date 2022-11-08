@@ -177,3 +177,45 @@ Errors::
 [7m4[0m    "**/../*"
 [7m [0m [91m   ~~~~~~~~~[0m
 
+
+Fs::
+//// [/a.ts]
+
+
+//// [/tsconfig.json]
+{
+ "watchOptions": {
+  "watchFactory": "somefactory"
+ }
+}
+
+
+configFileName:: tsconfig.json
+Result: WatchOptions::
+{
+ "watchFactory": "somefactory"
+}
+Errors::
+
+
+Fs::
+//// [/a.ts]
+
+
+//// [/tsconfig.json]
+{
+ "watchOptions": {
+  "watchFactory": "somefactory/../malicious"
+ }
+}
+
+
+configFileName:: tsconfig.json
+Result: WatchOptions::
+{}
+Errors::
+[96mtsconfig.json[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS5109: [0m'watchFactory' name can only be a package name.
+
+[7m3[0m   "watchFactory": "somefactory/../malicious"
+[7m [0m [91m                  ~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+

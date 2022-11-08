@@ -2,7 +2,11 @@ import * as ts from "../../_namespaces/ts";
 import {
     createBaseline,
     createSolutionBuilderWithWatchHostForBaseline,
+    createWatchFactorySystem,
+    implementRequireForWatchFactorySystem,
     runWatchBaseline,
+    VerifyTscWatch,
+    verifyTscWatch,
 } from "../tscWatch/helpers";
 import {
     createWatchedSystem,
@@ -117,6 +121,205 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                 include: [],
                 references: pkgs(createPkgReference)
             }));
+        }
+    });
+
+    describe("watchFactory", () => {
+        verifyWatchFactory({
+            subScenario: `watchFactory/in config file`,
+            commandLineArgs: ["-b", "-w", "--extendedDiagnostics"],
+            sys: createSystemWithFactory,
+            edits: [
+                {
+                    caption: "Change file",
+                    edit: sys => sys.appendFile(`/user/username/projects/myproject/b.ts`, "export function foo() { }"),
+                    //     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    // },
+                    // {
+                    //     caption: "Invoke plugin watches",
+                    //     edit: sys => (sys as WatchFactorySystem).factoryData.watchedFiles.get(`/user/username/projects/myproject/b.ts`)!.forEach(({ callback }) => callback(`/user/username/projects/myproject/b.ts`, ts.FileWatcherEventKind.Changed)),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+            ]
+        }, "myplugin");
+
+        verifyWatchFactory({
+            subScenario: `watchFactory/in config file with error`,
+            commandLineArgs: ["-b", "-w", "--extendedDiagnostics"],
+            sys: createSystemWithFactory,
+            edits: [
+                {
+                    caption: "Change file",
+                    edit: sys => sys.appendFile(`/user/username/projects/myproject/b.ts`, "export function foo() { }"),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+            ]
+        }, "myplugin/../malicious");
+
+        verifyWatchFactoryCommandLine({
+            subScenario: `watchFactory/through commandline`,
+            sys: () => createSystemWithFactory(),
+            edits: [
+                {
+                    caption: "Change file",
+                    edit: sys => sys.appendFile(`/user/username/projects/myproject/b.ts`, "export function foo() { }"),
+                    //     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    // },
+                    // {
+                    //     caption: "Invoke plugin watches",
+                    //     edit: sys => (sys as WatchFactorySystem).factoryData.watchedFiles.get(`/user/username/projects/myproject/b.ts`)!.forEach(({ callback }) => callback(`/user/username/projects/myproject/b.ts`, ts.FileWatcherEventKind.Changed)),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+            ]
+        }, "myplugin");
+
+        verifyWatchFactoryCommandLine({
+            subScenario: `watchFactory/through commandline with error`,
+            sys: () => {
+                // Patch to not throw exception so the tests can run and baseline
+                const sys = createSystem();
+                sys.exit = exitCode => sys.exitCode = exitCode;
+                return sys;
+            },
+        }, "myplugin/../malicious");
+
+        verifyWatchFactory({
+            subScenario: `watchFactory/when plugin not found`,
+            commandLineArgs: ["-b", "-w", "--extendedDiagnostics"],
+            sys: watchOptions => {
+                const system = createSystem(watchOptions);
+                system.require = (initialPath, moduleName) => {
+                    system.write(`Require:: Resolving ${moduleName} from ${initialPath}\n`);
+                    return {
+                        module: undefined,
+                        error: { message: `Cannot find module myPlugin at ${initialPath}` }
+                    };
+                };
+                return system;
+            },
+            edits: [
+                {
+                    caption: "Change file",
+                    edit: sys => sys.appendFile(`/user/username/projects/myproject/b.ts`, "export function foo() { }"),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+            ]
+        }, "myplugin");
+
+        verifyWatchFactory({
+            subScenario: `watchFactory/when plugin does not implements watchFile`,
+            commandLineArgs: ["-b", "-w", "--extendedDiagnostics"],
+            sys: watchOptions => createSystemWithFactory(watchOptions, /*excludeWatchFile*/ true),
+            edits: [
+                {
+                    caption: "Change file",
+                    edit: sys => sys.appendFile(`/user/username/projects/myproject/b.ts`, "export function foo() { }"),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+                {
+                    caption: "Add file",
+                    edit: sys => sys.writeFile(`/user/username/projects/myproject/c.ts`, "export function foo() { }"),
+                    //     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    // },
+                    // {
+                    //     caption: "Invoke plugin watches",
+                    //     edit: sys => (sys as WatchFactorySystem).factoryData.watchedDirectoriesRecursive.get("/user/username/projects/myproject")!.forEach(({ callback }) => callback(`/user/username/projects/myproject/c.ts`)),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+            ]
+        }, "myplugin");
+
+        verifyWatchFactory({
+            subScenario: `watchFactory/when plugin doesnt return factory function`,
+            commandLineArgs: ["-b", "-w", "--extendedDiagnostics"],
+            sys: watchOptions => {
+                const system = createSystem(watchOptions);
+                system.require = (initialPath, moduleName) => {
+                    system.write(`Require:: Resolving ${moduleName} from ${initialPath}\n`);
+                    return {
+                        module: { watchDirectory: system.factoryData.watchDirectory },
+                        error: undefined
+                    };
+                };
+                return system;
+            },
+            edits: [
+                {
+                    caption: "Change file",
+                    edit: sys => sys.appendFile(`/user/username/projects/myproject/b.ts`, "export function foo() { }"),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+            ]
+        }, "myplugin");
+
+        verifyWatchFactory({
+            subScenario: `watchFactory/when host does not implement require`,
+            commandLineArgs: ["-b", "-w", "--extendedDiagnostics"],
+            sys: createSystem,
+            edits: [
+                {
+                    caption: "Change file",
+                    edit: sys => sys.appendFile(`/user/username/projects/myproject/b.ts`, "export function foo() { }"),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+            ]
+        }, "myplugin");
+
+        function createSystem(watchOptions?: ts.WatchOptions) {
+            const configFile: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
+                content: JSON.stringify({ watchOptions })
+            };
+            const aTs: File = {
+                path: `/user/username/projects/myproject/a.ts`,
+                content: `export class a { prop = "hello"; foo() { return this.prop; } }`
+            };
+            const bTs: File = {
+                path: `/user/username/projects/myproject/b.ts`,
+                content: `export class b { prop = "hello"; foo() { return this.prop; } }`
+            };
+
+            return createWatchFactorySystem(createWatchedSystem([aTs, bTs, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" }));
+        }
+
+        function createSystemWithFactory(watchOptions?: ts.WatchOptions, excludeWatchFile?: boolean) {
+            return implementRequireForWatchFactorySystem(createSystem(watchOptions), !!excludeWatchFile);
+        }
+
+        function verifyWatchFactory(
+            input: Omit<VerifyTscWatch, "sys" | "scenario"> & { sys: (watchOptions?: ts.WatchOptions) => TestServerHost; },
+            watchFactory: string,
+        ) {
+            verifyTscWatch({
+                scenario: "watchEnvironment",
+                ...input,
+                sys: () => input.sys({ watchFactory }),
+            });
+            verifyTscWatch({
+                scenario: "watchEnvironment",
+                ...input,
+                subScenario: `${input.subScenario} object`,
+                sys: () => input.sys({ watchFactory }),
+                // sys: () => input.sys({ watchFactory: { name: watchFactory, myconfig: "somethingelse" } as ts.PluginImport }),
+            });
+        }
+
+        function verifyWatchFactoryCommandLine(
+            input: Omit<VerifyTscWatch, "commandLineArgs" | "scenario">,
+            watchFactory: string,
+        ) {
+            verifyTscWatch({
+                scenario: "watchEnvironment",
+                ...input,
+                commandLineArgs: ["-b", "-w", "--extendedDiagnostics", "--watchFactory", watchFactory],
+            });
+            verifyTscWatch({
+                scenario: "watchEnvironment",
+                ...input,
+                subScenario: `${input.subScenario} object`,
+                commandLineArgs: ["-b", "-w", "--extendedDiagnostics", "--watchFactory", watchFactory],
+                // commandLineArgs: ["-b", "-w", "--extendedDiagnostics", "--watchFactory", JSON.stringify({ name: watchFactory, myconfig: "somethingelse" })],
+            });
         }
     });
 });

@@ -3,6 +3,7 @@ import {
     commonFile1,
     commonFile2,
     createWatchFactorySystem,
+    WatchFactorySystem,
 } from "../tscWatch/helpers";
 import {
     createServerHost,
@@ -535,6 +536,131 @@ describe("unittests:: tsserver:: watchEnvironment:: watchFactory", () => {
         baselineTsserverLogs("watchEnvironment", "plugin overriding watch", session);
     });
 
+    function verifyWatchFactory(pluginOverride: boolean, allowLocalPluginLoads: boolean, useObject: boolean) {
+        it(scenarioName("watchFactory in config file", pluginOverride, allowLocalPluginLoads, useObject), () => {
+            const { host, session, plugin, aTs } = createHostForPlugins(
+                { allowLocalPluginLoads },
+                { watchFactory: getWatchFactory("myplugin", useObject) }
+            );
+            host.require = requireReturningWatchFactory(session, plugin);
+            if (pluginOverride) configurePlugin(session, "myplugin", { init: "initialConfig" });
+            openFilesForSession([aTs], session);
+
+            // Add c.ts
+            session.logger.log("Add a file");
+            host.writeFile(`/user/username/projects/myproject/c.ts`, aTs.content);
+            // Since we have overriden watch, this shouldnt do anything
+            host.runQueuedTimeoutCallbacks();
+
+            // // Actually invoke watches
+            // session.logger.log("Invoke plugin watches");
+            // plugin.watchedDirectoriesRecursive.get("/user/username/projects/myproject")!.forEach(({ callback }) => callback(`/user/username/projects/myproject/c.ts`));
+            // Host should have updates queued
+            host.runQueuedTimeoutCallbacks();
+
+            // Configuration changed
+            configurePlugin(session, "myplugin");
+            configurePlugin(session, "randomplugin");
+
+            baselineTsserverLogs("watchEnvironment", scenarioName("watchFactory in config file", pluginOverride, allowLocalPluginLoads, useObject), session);
+        });
+
+        it(scenarioName("watchFactory as configuration of host", pluginOverride, allowLocalPluginLoads, useObject), () => {
+            const { host, session, plugin, aTs, bTs, } = createHostForPlugins({ allowLocalPluginLoads });
+            host.require = requireReturningWatchFactory(session, plugin);
+            configureGlobalWatchOptions(session, "myplugin", useObject);
+            if (pluginOverride) configurePlugin(session, "myplugin", { init: "initialConfig" });
+            openFilesForSession([aTs], session);
+
+            // Change b.ts
+            session.logger.log("Change file");
+            host.writeFile(bTs.path, aTs.content);
+            // Since we have overriden watch, this shouldnt do anything
+            host.runQueuedTimeoutCallbacks();
+
+            // // Actually invoke watches
+            // session.logger.log("Invoke plugin watches");
+            // plugin.watchedFiles.get(bTs.path)!.forEach(({ callback }) => callback(bTs.path, ts.FileWatcherEventKind.Changed));
+            // Host should have updates queued
+            host.runQueuedTimeoutCallbacks();
+
+            // Configuration changed
+            configurePlugin(session, "myplugin");
+            configurePlugin(session, "randomplugin");
+
+            baselineTsserverLogs("watchEnvironment", scenarioName("watchFactory as configuration of host", pluginOverride, allowLocalPluginLoads, useObject), session);
+        });
+
+        it(scenarioName("watchFactory in config as well as configuration of host", pluginOverride, allowLocalPluginLoads, useObject), () => {
+            const { host, session, plugin, aTs, bTs, } = createHostForPlugins(
+                { allowLocalPluginLoads },
+                { watchFactory: getWatchFactory("myplugin", useObject) }
+            );
+            const plugin2 = createFactoryFunctions(session, "myplugin2");
+            host.require = requireReturningWatchFactory(session, plugin, plugin2);
+            configureGlobalWatchOptions(session, "myplugin2", useObject);
+            if (pluginOverride) {
+                configurePlugin(session, "myplugin", { init: "initialConfig" });
+                configurePlugin(session, "myplugin2", { init2: "initialConfig2" });
+            }
+            openFilesForSession([aTs], session);
+
+            // Add c.ts
+            session.logger.log("Add a file");
+            host.writeFile(`/user/username/projects/myproject/c.ts`, aTs.content);
+            // Since we have overriden watch, this shouldnt do anything
+            host.runQueuedTimeoutCallbacks();
+
+            // // Actually invoke watches
+            // session.logger.log("Invoke plugin watches");
+            // plugin.watchedDirectoriesRecursive.get("/user/username/projects/myproject")!.forEach(({ callback }) => callback(`/user/username/projects/myproject/c.ts`));
+            // Host should have updates queued
+            host.runQueuedTimeoutCallbacks();
+
+            // Change b.ts
+            session.logger.log("Change file");
+            host.writeFile(bTs.path, aTs.content);
+            // Since we have overriden watch, this shouldnt do anything
+            host.runQueuedTimeoutCallbacks();
+
+            // // Actually invoke watches
+            // session.logger.log("Invoke plugin watches");
+            // plugin2.watchedFiles.get(bTs.path)!.forEach(({ callback }) => callback(bTs.path, ts.FileWatcherEventKind.Changed));
+            // Host should have updates queued
+            host.runQueuedTimeoutCallbacks();
+
+            // Configuration changed
+            configurePlugin(session, "myplugin");
+            configurePlugin(session, "myplugin2");
+            configurePlugin(session, "randomplugin");
+
+            baselineTsserverLogs("watchEnvironment", scenarioName("watchFactory in config as well as configuration of host", pluginOverride, allowLocalPluginLoads, useObject), session);
+        });
+
+        if (allowLocalPluginLoads || pluginOverride) return;
+        it(scenarioName("watchFactory as configuration of host with errors", pluginOverride, allowLocalPluginLoads, useObject), () => {
+            const { host, session, aTs, bTs, } = createHostForPlugins();
+            host.require = ts.notImplemented; // Should throw if called
+            configureGlobalWatchOptions(session, "myplugin/../malicious", useObject);
+            openFilesForSession([aTs], session);
+
+            // Change b.ts
+            session.logger.log("Change file");
+            host.writeFile(bTs.path, aTs.content);
+            host.runQueuedTimeoutCallbacks();
+
+            baselineTsserverLogs("watchEnvironment", scenarioName("watchFactory as configuration of host with errors", pluginOverride, allowLocalPluginLoads, useObject), session);
+        });
+    }
+    verifyWatchFactory(/*pluginOverride*/ false, /*allowLocalPluginLoads*/ false, /*useObject*/ false);
+    verifyWatchFactory(/*pluginOverride*/ false, /*allowLocalPluginLoads*/ true, /*useObject*/ false);
+    verifyWatchFactory(/*pluginOverride*/ false, /*allowLocalPluginLoads*/ false, /*useObject*/ true);
+    verifyWatchFactory(/*pluginOverride*/ false, /*allowLocalPluginLoads*/ true, /*useObject*/ true);
+    verifyWatchFactory(/*pluginOverride*/ true, /*allowLocalPluginLoads*/ false, /*useObject*/ false);
+    verifyWatchFactory(/*pluginOverride*/ true, /*allowLocalPluginLoads*/ true, /*useObject*/ false);
+    verifyWatchFactory(/*pluginOverride*/ true, /*allowLocalPluginLoads*/ false, /*useObject*/ true);
+    verifyWatchFactory(/*pluginOverride*/ true, /*allowLocalPluginLoads*/ true, /*useObject*/ true);
+
     function createHostForPlugins(opts?: Partial<TestSessionOptions>, watchOptions?: ts.WatchOptions) {
         const configFile: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
@@ -559,5 +685,53 @@ describe("unittests:: tsserver:: watchEnvironment:: watchFactory", () => {
 
     function createFactoryFunctions(session: TestSession, pluginName?: string) {
         return createWatchFactorySystem(session.testhost, s => session.logger.log(s), pluginName).factoryData;
+    }
+
+    function scenarioName(scenario: string, pluginOverride: boolean, allowLocalPluginLoads: boolean, useObject: boolean) {
+        return `${scenario}${pluginOverride ? " with pluginOverride" : ""}${allowLocalPluginLoads ? " allowLocalPluginLoads" : ""}${useObject ? " object" : ""}`;
+    }
+
+    interface PluginImport extends ts.PluginImport {
+        myconfig: "somethingelse";
+    }
+    function getWatchFactory(watchFactory: string, _useObject: boolean): PluginImport | string {
+        return watchFactory;
+        // return useObject ? { name: watchFactory, myconfig: "somethingelse" } : watchFactory;
+    }
+
+    function configureGlobalWatchOptions(session: TestSession, watchFactory: string, useObject: boolean) {
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: { watchOptions: { watchFactory: getWatchFactory(watchFactory, useObject) } }
+        });
+    }
+
+    function configurePlugin(session: TestSession, pluginName: string, configuration?: any) {
+        session.executeCommandSeq<ts.server.protocol.ConfigurePluginRequest>({
+            command: ts.server.protocol.CommandTypes.ConfigurePlugin,
+            arguments: {
+                pluginName,
+                configuration: configuration || { extraData: "myData" }
+            }
+        });
+    }
+
+    function requireReturningWatchFactory(
+        session: TestSession,
+        plugin: WatchFactorySystem["factoryData"],
+        plugin2?: WatchFactorySystem["factoryData"],
+    ): ts.System["require"] {
+        return (initialPath, moduleName) => {
+            session.logger.log(`CustomRequire:: Resolving ${moduleName} from ${initialPath}`);
+            return {
+                module: (({ options, config }) => {
+                    session.logger.log(`Require:: Module ${moduleName} created with config: ${JSON.stringify(config)} and options: ${JSON.stringify(options)}`);
+                    return !plugin2 || moduleName === "myplugin" ?
+                        plugin :
+                        plugin2;
+                }) as ts.UserWatchFactoryModule,
+                error: undefined
+            };
+        };
     }
 });

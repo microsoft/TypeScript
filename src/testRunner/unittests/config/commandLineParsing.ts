@@ -189,6 +189,8 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         assertParseResult("errors on invalid excludeDirectories", ["--excludeDirectories", "**/../*", "0.ts"]);
         assertParseResult("parse --excludeFiles", ["--excludeFiles", "**/temp/*.ts", "0.ts"]);
         assertParseResult("errors on invalid excludeFiles", ["--excludeFiles", "**/../*", "0.ts"]);
+        assertParseResult("parse --watchFactory", ["--watchFactory", "somefactory", "0.ts"]);
+        assertParseResult("errors on invalid watchFactory", ["--watchFactory", "somefactory/../malicious", "0.ts"]);
     });
 });
 
@@ -243,6 +245,8 @@ describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
         assertParseResult("errors on invalid excludeDirectories", ["--excludeDirectories", "**/../*"]);
         assertParseResult("parse --excludeFiles", ["--excludeFiles", "**/temp/*.ts"]);
         assertParseResult("errors on invalid excludeFiles", ["--excludeFiles", "**/../*"]);
+        assertParseResult("parse --watchFactory", ["--watchFactory", "somefactory"]);
+        assertParseResult("errors on invalid watchFactory", ["--watchFactory", "somefactory/../malicious"]);
     });
 });
 
