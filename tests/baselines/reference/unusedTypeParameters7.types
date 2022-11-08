@@ -4,5 +4,5 @@ class C<T> { a: T; }
 >a : T
 
 === tests/cases/compiler/b.ts ===
+
 interface C<T> { }
-No type information for this code.

@@ -9,9 +9,9 @@ enum E1 { ONE, TWO, THREE }
 
 declare enum E2 { ONE, TWO, THREE }
 >E2 : E2
->ONE : E2
->TWO : E2
->THREE : E2
+>ONE : E2.ONE
+>TWO : E2.TWO
+>THREE : E2.THREE
 
 type Bins1 = { [k in E1]?: string; }
 >Bins1 : { 0?: string | undefined; 1?: string | undefined; 2?: string | undefined; }
@@ -35,9 +35,9 @@ const e1: E1 = E1.ONE;
 
 const e2: E2 = E2.ONE;
 >e2 : E2
->E2.ONE : E2
+>E2.ONE : E2.ONE
 >E2 : typeof E2
->ONE : E2
+>ONE : E2.ONE
 
 b1[1] = "a";
 >b1[1] = "a" : "a"
@@ -64,7 +64,7 @@ b2[e2] = "b";
 >b2[e2] = "b" : "b"
 >b2[e2] : string | undefined
 >b2 : Bins2
->e2 : E2
+>e2 : E2.ONE
 >"b" : "b"
 
 // Multiple numeric enum types accrue to the same numeric index signature in a mapped type
@@ -74,24 +74,24 @@ declare function val(): number;
 
 enum N1 { A = val(), B = val() }
 >N1 : N1
->A : N1
+>A : N1.A
 >val() : number
 >val : () => number
->B : N1
+>B : N1.B
 >val() : number
 >val : () => number
 
 enum N2 { C = val(), D = val() }
 >N2 : N2
->C : N2
+>C : N2.C
 >val() : number
 >val : () => number
->D : N2
+>D : N2.D
 >val() : number
 >val : () => number
 
 type T1 = { [K in N1 | N2]: K };
->T1 : { [x: number]: N1 | N2; }
+>T1 : { [x: number]: N1.A | N1.B | N2.C | N2.D; }
 
 // Enum types with string valued members are always literal enum types and therefore
 // ONE and TWO below are not computed members but rather just numerically valued members

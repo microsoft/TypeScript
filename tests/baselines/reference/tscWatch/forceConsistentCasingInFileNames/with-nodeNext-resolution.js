@@ -33,19 +33,20 @@ Output::
 >> Screen clear
 [[90m12:00:35 AM[0m] Starting compilation in watch mode...
 
-File '/users/name/projects/web/src/package.json' does not exist.
-File '/users/name/projects/web/package.json' does not exist.
-File '/users/name/projects/package.json' does not exist.
-File '/users/name/package.json' does not exist.
-File '/users/package.json' does not exist.
+File '/Users/name/projects/web/src/package.json' does not exist.
+File '/Users/name/projects/web/package.json' does not exist.
+File '/Users/name/projects/package.json' does not exist.
+File '/Users/name/package.json' does not exist.
+File '/Users/package.json' does not exist.
 File '/package.json' does not exist.
 ======== Resolving module 'yargs' from '/Users/name/projects/web/src/bin.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
-File '/users/name/projects/web/src/package.json' does not exist according to earlier cached lookups.
-File '/users/name/projects/web/package.json' does not exist according to earlier cached lookups.
-File '/users/name/projects/package.json' does not exist according to earlier cached lookups.
-File '/users/name/package.json' does not exist according to earlier cached lookups.
-File '/users/package.json' does not exist according to earlier cached lookups.
+Resolving in CJS mode with conditions 'node', 'require', 'types'.
+File '/Users/name/projects/web/src/package.json' does not exist according to earlier cached lookups.
+File '/Users/name/projects/web/package.json' does not exist according to earlier cached lookups.
+File '/Users/name/projects/package.json' does not exist according to earlier cached lookups.
+File '/Users/name/package.json' does not exist according to earlier cached lookups.
+File '/Users/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'yargs' from 'node_modules' folder, target file type 'TypeScript'.
 Directory '/Users/name/projects/web/src/node_modules' does not exist, skipping all lookups in it.
@@ -54,10 +55,14 @@ File '/Users/name/projects/web/node_modules/yargs.tsx' does not exist.
 File '/Users/name/projects/web/node_modules/yargs.d.ts' does not exist.
 Found 'package.json' at '/Users/name/projects/web/node_modules/@types/yargs/package.json'.
 'package.json' does not have a 'typesVersions' field.
+Matched 'exports' condition 'types'.
+Saw non-matching condition 'import'.
+Matched 'exports' condition 'default'.
+Using 'exports' subpath '.' with target './index.d.ts'.
 File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exist - use it as a name resolution result.
 Resolving real path for '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts', result '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts'.
 ======== Module name 'yargs' was successfully resolved to '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' with Package ID 'yargs/index.d.ts@17.0.12'. ========
-File '/users/name/projects/web/node_modules/@types/yargs/package.json' exists according to earlier cached lookups.
+File '/Users/name/projects/web/node_modules/@types/yargs/package.json' exists according to earlier cached lookups.
 ======== Resolving type reference directive 'yargs', containing file '/Users/name/projects/web/__inferred type names__.ts', root directory '/Users/name/projects/web/node_modules/@types'. ========
 Resolving with primary search path '/Users/name/projects/web/node_modules/@types'.
 File '/Users/name/projects/web/node_modules/@types/yargs/package.json' exists according to earlier cached lookups.
@@ -100,37 +105,37 @@ Shape signatures in builder refreshed for::
 /users/name/projects/web/node_modules/@types/yargs/index.d.ts (used version)
 /users/name/projects/web/src/bin.ts (used version)
 
-WatchedFiles::
-/users/name/projects/web/tsconfig.json:
-  {"fileName":"/Users/name/projects/web/tsconfig.json","pollingInterval":250}
-/users/name/projects/web/src/bin.ts:
-  {"fileName":"/Users/name/projects/web/src/bin.ts","pollingInterval":250}
-/users/name/projects/web/node_modules/@types/yargs/index.d.ts:
-  {"fileName":"/Users/name/projects/web/node_modules/@types/yargs/index.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/users/name/projects/web/node_modules/@types/yargs/package.json:
-  {"fileName":"/Users/name/projects/web/node_modules/@types/yargs/package.json","pollingInterval":250}
+PolledWatches::
 /users/name/projects/web/src/package.json:
-  {"fileName":"/Users/name/projects/web/src/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /users/name/projects/web/package.json:
-  {"fileName":"/Users/name/projects/web/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /users/name/projects/package.json:
-  {"fileName":"/Users/name/projects/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 
 FsWatches::
+/users/name/projects/web/tsconfig.json:
+  {}
+/users/name/projects/web/src/bin.ts:
+  {}
+/users/name/projects/web/node_modules/@types/yargs/index.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /users/name/projects/web:
-  {"directoryName":"/Users/name/projects/web"}
+  {}
+/users/name/projects/web/node_modules/@types/yargs/package.json:
+  {}
 
 FsWatchesRecursive::
 /users/name/projects/web/src:
-  {"directoryName":"/users/name/projects/web/src"}
+  {}
 /users/name/projects/web/node_modules:
-  {"directoryName":"/Users/name/projects/web/node_modules"}
+  {}
 /users/name/projects/web/node_modules/@types:
-  {"directoryName":"/Users/name/projects/web/node_modules/@types"}
+  {}
 /users/name/projects/web:
-  {"directoryName":"/users/name/projects/web"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -56,19 +56,19 @@ Shape signatures in builder refreshed for::
 /a/f1.ts (used version)
 /a/d/f0.ts (used version)
 
-WatchedFiles::
-/a/d/f0.ts:
-  {"fileName":"/a/d/f0.ts","pollingInterval":250}
-/a/f1.ts:
-  {"fileName":"/a/f1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/a/d/f0.ts:
+  {}
+/a/f1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -129,19 +129,19 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/d/f0.ts (computed .d.ts)
 
-WatchedFiles::
-/a/d/f0.ts:
-  {"fileName":"/a/d/f0.ts","pollingInterval":250}
-/a/f1.ts:
-  {"fileName":"/a/f1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/a/d/f0.ts:
+  {}
+/a/f1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -187,21 +187,21 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/d/f0.ts (computed .d.ts)
 
-WatchedFiles::
-/a/d/f0.ts:
-  {"fileName":"/a/d/f0.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /node_modules:
-  {"fileName":"/node_modules","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/a/d/f0.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 /:
-  {"directoryName":""}
+  {}
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -255,19 +255,19 @@ Shape signatures in builder refreshed for::
 /a/f1.ts (computed .d.ts)
 /a/d/f0.ts (computed .d.ts)
 
-WatchedFiles::
-/a/d/f0.ts:
-  {"fileName":"/a/d/f0.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/f1.ts:
-  {"fileName":"/a/f1.ts","pollingInterval":250}
+PolledWatches::
 
 FsWatches::
+/a/d/f0.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/f1.ts:
+  {}
 
 FsWatchesRecursive::
 /a:
-  {"directoryName":"/a"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
