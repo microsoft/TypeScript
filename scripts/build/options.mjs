@@ -4,7 +4,7 @@ import os from "os";
 const ci = ["1", "true"].includes(process.env.CI ?? "");
 
 const parsed = minimist(process.argv.slice(2), {
-    boolean: ["dirty", "light", "colors", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built", "ci", "bundle"],
+    boolean: ["dirty", "light", "colors", "lkg", "soft", "fix", "failed", "keepFailed", "force", "built", "ci", "bundle", "typecheck"],
     string: ["browser", "tests", "break", "host", "reporter", "stackTraceLimit", "timeout", "shards", "shardId"],
     alias: {
         /* eslint-disable quote-props */
@@ -39,7 +39,8 @@ const parsed = minimist(process.argv.slice(2), {
         dirty: false,
         built: false,
         ci,
-        bundle: true
+        bundle: true,
+        typecheck: true,
     }
 });
 
@@ -80,5 +81,6 @@ export default options;
  * @property {string} shardId
  * @property {string} break
  * @property {boolean} bundle
+ * @property {boolean} typecheck
  */
 void 0;
