@@ -1,7 +1,6 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/loggedIO.js",
         "types": [
         ],
         "lib": [
@@ -18,7 +17,5 @@
         { "path": "../harness" },
     ],
 
-    "files": [
-        "loggedIO.ts"
-    ]
+    "include": ["**/*"]
 }

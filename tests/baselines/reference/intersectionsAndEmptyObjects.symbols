@@ -275,6 +275,6 @@ mock(import('./ex'))
 >'./ex' : Symbol("tests/cases/conformance/types/intersection/ex", Decl(ex.d.ts, 0, 0))
 
 === tests/cases/conformance/types/intersection/ex.d.ts ===
+
 export {}
-No type information for this code.
-No type information for this code.
+

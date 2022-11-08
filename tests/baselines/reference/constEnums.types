@@ -3,7 +3,7 @@ const enum Enum1 {
 >Enum1 : Enum1
 
    A0 = 100,
->A0 : Enum1
+>A0 : Enum1.A0
 >100 : 100
 }
 
@@ -12,62 +12,62 @@ const enum Enum1 {
 
     // correct cases
     A,
->A : Enum1
+>A : Enum1.A
 
     B,
->B : Enum1
+>B : Enum1.B
 
     C = 10,
->C : Enum1
+>C : Enum1.C
 >10 : 10
 
     D = A | B,
->D : Enum1
+>D : Enum1.B
 >A | B : number
->A : Enum1
->B : Enum1
+>A : Enum1.A
+>B : Enum1.B
 
     E = A | 1,
->E : Enum1
+>E : Enum1.B
 >A | 1 : number
->A : Enum1
+>A : Enum1.A
 >1 : 1
 
     F = 1 | A,
->F : Enum1
+>F : Enum1.B
 >1 | A : number
 >1 : 1
->A : Enum1
+>A : Enum1.A
 
     G = (1 & 1),
->G : Enum1
+>G : Enum1.B
 >(1 & 1) : number
 >1 & 1 : number
 >1 : 1
 >1 : 1
 
     H = ~(A | B),
->H : Enum1
+>H : Enum1.H
 >~(A | B) : number
 >(A | B) : number
 >A | B : number
->A : Enum1
->B : Enum1
+>A : Enum1.A
+>B : Enum1.B
 
     I = A >>> 1,
->I : Enum1
+>I : Enum1.A
 >A >>> 1 : number
->A : Enum1
+>A : Enum1.A
 >1 : 1
 
     J = 1 & A,
->J : Enum1
+>J : Enum1.A
 >1 & A : number
 >1 : 1
->A : Enum1
+>A : Enum1.A
 
     K = ~(1 | 5),
->K : Enum1
+>K : Enum1.K
 >~(1 | 5) : number
 >(1 | 5) : number
 >1 | 5 : number
@@ -75,107 +75,107 @@ const enum Enum1 {
 >5 : 5
 
     L = ~D,
->L : Enum1
+>L : Enum1.H
 >~D : number
->D : Enum1
+>D : Enum1.B
 
     M = E << B,
->M : Enum1
+>M : Enum1.M
 >E << B : number
->E : Enum1
->B : Enum1
+>E : Enum1.B
+>B : Enum1.B
 
     N = E << 1,
->N : Enum1
+>N : Enum1.M
 >E << 1 : number
->E : Enum1
+>E : Enum1.B
 >1 : 1
 
     O = E >> B,
->O : Enum1
+>O : Enum1.A
 >E >> B : number
->E : Enum1
->B : Enum1
+>E : Enum1.B
+>B : Enum1.B
 
     P = E >> 1,
->P : Enum1
+>P : Enum1.A
 >E >> 1 : number
->E : Enum1
+>E : Enum1.B
 >1 : 1
 
     PQ = E ** 2,
->PQ : Enum1
+>PQ : Enum1.B
 >E ** 2 : number
->E : Enum1
+>E : Enum1.B
 >2 : 2
 
     Q = -D,
->Q : Enum1
+>Q : Enum1.Q
 >-D : number
->D : Enum1
+>D : Enum1.B
 
     R = C & 5,
->R : Enum1
+>R : Enum1.A
 >C & 5 : number
->C : Enum1
+>C : Enum1.C
 >5 : 5
 
     S = 5 & C,
->S : Enum1
+>S : Enum1.A
 >5 & C : number
 >5 : 5
->C : Enum1
+>C : Enum1.C
 
     T = C | D,
->T : Enum1
+>T : Enum1.T
 >C | D : number
->C : Enum1
->D : Enum1
+>C : Enum1.C
+>D : Enum1.B
 
     U = C | 1,
->U : Enum1
+>U : Enum1.T
 >C | 1 : number
->C : Enum1
+>C : Enum1.C
 >1 : 1
 
     V = 10 | D,
->V : Enum1
+>V : Enum1.T
 >10 | D : number
 >10 : 10
->D : Enum1
+>D : Enum1.B
 
     W = Enum1.V,
->W : Enum1
->Enum1.V : Enum1
+>W : Enum1.T
+>Enum1.V : Enum1.T
 >Enum1 : typeof Enum1
->V : Enum1
+>V : Enum1.T
 
     // correct cases: reference to the enum member from different enum declaration
     W1 = A0,
->W1 : Enum1
->A0 : Enum1
+>W1 : Enum1.A0
+>A0 : Enum1.A0
 
     W2 = Enum1.A0,
->W2 : Enum1
->Enum1.A0 : Enum1
+>W2 : Enum1.A0
+>Enum1.A0 : Enum1.A0
 >Enum1 : typeof Enum1
->A0 : Enum1
+>A0 : Enum1.A0
 
     W3 = Enum1["A0"],
->W3 : Enum1
->Enum1["A0"] : Enum1
+>W3 : Enum1.A0
+>Enum1["A0"] : Enum1.A0
 >Enum1 : typeof Enum1
 >"A0" : "A0"
 
     W4 = Enum1["W"],
->W4 : Enum1
->Enum1["W"] : Enum1
+>W4 : Enum1.T
+>Enum1["W"] : Enum1.T
 >Enum1 : typeof Enum1
 >"W" : "W"
 
     W5 = Enum1[`V`],
->W5 : Enum1
->Enum1[`V`] : Enum1
+>W5 : Enum1.T
+>Enum1[`V`] : Enum1.T
 >Enum1 : typeof Enum1
 >`V` : "V"
 }
@@ -212,13 +212,13 @@ module A {
 >E : E
 
                 V1 = 1,
->V1 : E
+>V1 : E.V1
 >1 : 1
 
                 V2 = A.B.C.E.V1 | 100
->V2 : E
+>V2 : E.V2
 >A.B.C.E.V1 | 100 : number
->A.B.C.E.V1 : E
+>A.B.C.E.V1 : E.V1
 >A.B.C.E : typeof E
 >A.B.C : typeof C
 >A.B : typeof B
@@ -226,7 +226,7 @@ module A {
 >B : typeof B
 >C : typeof C
 >E : typeof E
->V1 : E
+>V1 : E.V1
 >100 : 100
             }
         }
@@ -240,9 +240,9 @@ module A {
 >E : E
 
                 V3 = A.B.C.E["V2"] & 200,
->V3 : E
+>V3 : E.V3
 >A.B.C.E["V2"] & 200 : number
->A.B.C.E["V2"] : E
+>A.B.C.E["V2"] : E.V2
 >A.B.C.E : typeof E
 >A.B.C : typeof C
 >A.B : typeof B
@@ -254,9 +254,9 @@ module A {
 >200 : 200
 
                 V4 = A.B.C.E[`V1`] << 1,
->V4 : E
+>V4 : E.V4
 >A.B.C.E[`V1`] << 1 : number
->A.B.C.E[`V1`] : E
+>A.B.C.E[`V1`] : E.V1
 >A.B.C.E : typeof E
 >A.B.C : typeof C
 >A.B : typeof B
@@ -343,16 +343,16 @@ function foo0(e: I): void {
     if (e === I.V1) {
 >e === I.V1 : boolean
 >e : I
->I.V1 : I
+>I.V1 : I.V1
 >I : typeof I
->V1 : I
+>V1 : I.V1
     }
     else if (e === I.V2) {
 >e === I.V2 : boolean
->e : I
->I.V2 : I
+>e : I.V2 | I.V3 | I.V4
+>I.V2 : I.V2
 >I : typeof I
->V2 : I
+>V2 : I.V2
     }
 }
 
@@ -425,144 +425,144 @@ function foo(x: Enum1) {
 >x : Enum1
 
         case Enum1.A:
->Enum1.A : Enum1
+>Enum1.A : Enum1.A
 >Enum1 : typeof Enum1
->A : Enum1
+>A : Enum1.A
 
         case Enum1.B:
->Enum1.B : Enum1
+>Enum1.B : Enum1.B
 >Enum1 : typeof Enum1
->B : Enum1
+>B : Enum1.B
 
         case Enum1.C:
->Enum1.C : Enum1
+>Enum1.C : Enum1.C
 >Enum1 : typeof Enum1
->C : Enum1
+>C : Enum1.C
 
         case Enum1.D:
->Enum1.D : Enum1
+>Enum1.D : Enum1.B
 >Enum1 : typeof Enum1
->D : Enum1
+>D : Enum1.B
 
         case Enum1.E:
->Enum1.E : Enum1
+>Enum1.E : Enum1.B
 >Enum1 : typeof Enum1
->E : Enum1
+>E : Enum1.B
 
         case Enum1.F:
->Enum1.F : Enum1
+>Enum1.F : Enum1.B
 >Enum1 : typeof Enum1
->F : Enum1
+>F : Enum1.B
 
         case Enum1.G:
->Enum1.G : Enum1
+>Enum1.G : Enum1.B
 >Enum1 : typeof Enum1
->G : Enum1
+>G : Enum1.B
 
         case Enum1.H:
->Enum1.H : Enum1
+>Enum1.H : Enum1.H
 >Enum1 : typeof Enum1
->H : Enum1
+>H : Enum1.H
 
         case Enum1.I:
->Enum1.I : Enum1
+>Enum1.I : Enum1.A
 >Enum1 : typeof Enum1
->I : Enum1
+>I : Enum1.A
 
         case Enum1.J:
->Enum1.J : Enum1
+>Enum1.J : Enum1.A
 >Enum1 : typeof Enum1
->J : Enum1
+>J : Enum1.A
 
         case Enum1.K:
->Enum1.K : Enum1
+>Enum1.K : Enum1.K
 >Enum1 : typeof Enum1
->K : Enum1
+>K : Enum1.K
 
         case Enum1.L:
->Enum1.L : Enum1
+>Enum1.L : Enum1.H
 >Enum1 : typeof Enum1
->L : Enum1
+>L : Enum1.H
 
         case Enum1.M:
->Enum1.M : Enum1
+>Enum1.M : Enum1.M
 >Enum1 : typeof Enum1
->M : Enum1
+>M : Enum1.M
 
         case Enum1.N:
->Enum1.N : Enum1
+>Enum1.N : Enum1.M
 >Enum1 : typeof Enum1
->N : Enum1
+>N : Enum1.M
 
         case Enum1.O:
->Enum1.O : Enum1
+>Enum1.O : Enum1.A
 >Enum1 : typeof Enum1
->O : Enum1
+>O : Enum1.A
 
         case Enum1.P:
->Enum1.P : Enum1
+>Enum1.P : Enum1.A
 >Enum1 : typeof Enum1
->P : Enum1
+>P : Enum1.A
 
         case Enum1.PQ:
->Enum1.PQ : Enum1
+>Enum1.PQ : Enum1.B
 >Enum1 : typeof Enum1
->PQ : Enum1
+>PQ : Enum1.B
 
         case Enum1.Q:
->Enum1.Q : Enum1
+>Enum1.Q : Enum1.Q
 >Enum1 : typeof Enum1
->Q : Enum1
+>Q : Enum1.Q
 
         case Enum1.R:
->Enum1.R : Enum1
+>Enum1.R : Enum1.A
 >Enum1 : typeof Enum1
->R : Enum1
+>R : Enum1.A
 
         case Enum1.S:
->Enum1.S : Enum1
+>Enum1.S : Enum1.A
 >Enum1 : typeof Enum1
->S : Enum1
+>S : Enum1.A
 
         case Enum1["T"]:
->Enum1["T"] : Enum1
+>Enum1["T"] : Enum1.T
 >Enum1 : typeof Enum1
 >"T" : "T"
 
         case Enum1[`U`]:
->Enum1[`U`] : Enum1
+>Enum1[`U`] : Enum1.T
 >Enum1 : typeof Enum1
 >`U` : "U"
 
         case Enum1.V:
->Enum1.V : Enum1
+>Enum1.V : Enum1.T
 >Enum1 : typeof Enum1
->V : Enum1
+>V : Enum1.T
 
         case Enum1.W:
->Enum1.W : Enum1
+>Enum1.W : Enum1.T
 >Enum1 : typeof Enum1
->W : Enum1
+>W : Enum1.T
 
         case Enum1.W1:
->Enum1.W1 : Enum1
+>Enum1.W1 : Enum1.A0
 >Enum1 : typeof Enum1
->W1 : Enum1
+>W1 : Enum1.A0
 
         case Enum1.W2:
->Enum1.W2 : Enum1
+>Enum1.W2 : Enum1.A0
 >Enum1 : typeof Enum1
->W2 : Enum1
+>W2 : Enum1.A0
 
         case Enum1.W3:
->Enum1.W3 : Enum1
+>Enum1.W3 : Enum1.A0
 >Enum1 : typeof Enum1
->W3 : Enum1
+>W3 : Enum1.A0
 
         case Enum1.W4:
->Enum1.W4 : Enum1
+>Enum1.W4 : Enum1.T
 >Enum1 : typeof Enum1
->W4 : Enum1
+>W4 : Enum1.T
 
             break;
     }
@@ -579,7 +579,7 @@ function bar(e: A.B.C.E): number {
 >e : I
 
         case A.B.C.E.V1: return 1;
->A.B.C.E.V1 : I
+>A.B.C.E.V1 : I.V1
 >A.B.C.E : typeof I
 >A.B.C : typeof A.B.C
 >A.B : typeof A.B
@@ -587,11 +587,11 @@ function bar(e: A.B.C.E): number {
 >B : typeof A.B
 >C : typeof A.B.C
 >E : typeof I
->V1 : I
+>V1 : I.V1
 >1 : 1
 
         case A.B.C.E.V2: return 1;
->A.B.C.E.V2 : I
+>A.B.C.E.V2 : I.V2
 >A.B.C.E : typeof I
 >A.B.C : typeof A.B.C
 >A.B : typeof A.B
@@ -599,11 +599,11 @@ function bar(e: A.B.C.E): number {
 >B : typeof A.B
 >C : typeof A.B.C
 >E : typeof I
->V2 : I
+>V2 : I.V2
 >1 : 1
 
         case A.B.C.E.V3: return 1;
->A.B.C.E.V3 : I
+>A.B.C.E.V3 : I.V3
 >A.B.C.E : typeof I
 >A.B.C : typeof A.B.C
 >A.B : typeof A.B
@@ -611,7 +611,7 @@ function bar(e: A.B.C.E): number {
 >B : typeof A.B
 >C : typeof A.B.C
 >E : typeof I
->V3 : I
+>V3 : I.V3
 >1 : 1
     }
 }
