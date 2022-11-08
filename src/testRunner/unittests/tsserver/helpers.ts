@@ -1,21 +1,9 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
 import * as Utils from "../../_namespaces/Utils";
-
-export import TI = ts.server.typingsInstaller;
-export import protocol = ts.server.protocol;
-export import CommandNames = ts.server.CommandNames;
-
-export import TestServerHost = ts.TestFSWithWatch.TestServerHost;
-export type File = ts.TestFSWithWatch.File;
-export type SymLink = ts.TestFSWithWatch.SymLink;
-export type Folder = ts.TestFSWithWatch.Folder;
-export import createServerHost = ts.TestFSWithWatch.createServerHost;
-export import checkArray = ts.TestFSWithWatch.checkArray;
-export import libFile = ts.TestFSWithWatch.libFile;
-
-export import commonFile1 = ts.tscWatch.commonFile1;
-export import commonFile2 = ts.tscWatch.commonFile2;
+import { changeToHostTrackingWrittenFiles, checkArray, createServerHost, File, FileOrFolderOrSymLink, libFile, TestServerHost, TestServerHostTrackingWrittenFiles } from "../../../harness/virtualFileSystemWithWatch";
+import { ensureErrorFreeBuild } from "../tscWatch/helpers";
+import { protocol, CommandNames } from "../../_namespaces/ts.server";
 
 const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
 export function mapOutputToJson(s: string) {
@@ -51,7 +39,7 @@ export const customTypesMap = {
 
 export interface PostExecAction {
     readonly success: boolean;
-    readonly callback: TI.RequestCompletedAction;
+    readonly callback: ts.server.typingsInstaller.RequestCompletedAction;
 }
 
 export interface Logger extends ts.server.Logger {
@@ -174,14 +162,14 @@ export function appendProjectFileText(project: ts.server.Project, logs: string[]
     logs.push("");
 }
 
-export class TestTypingsInstaller extends TI.TypingsInstaller implements ts.server.ITypingsInstaller {
+export class TestTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller implements ts.server.ITypingsInstaller {
     protected projectService!: ts.server.ProjectService;
     constructor(
         readonly globalTypingsCacheLocation: string,
         throttleLimit: number,
         installTypingHost: ts.server.ServerHost,
         readonly typesRegistry = new ts.Map<string, ts.MapLike<string>>(),
-        log?: TI.Log) {
+        log?: ts.server.typingsInstaller.Log) {
         super(installTypingHost, globalTypingsCacheLocation, "/safeList.json" as ts.Path, customTypesMap.path, throttleLimit, log);
     }
 
@@ -213,7 +201,7 @@ export class TestTypingsInstaller extends TI.TypingsInstaller implements ts.serv
         return this.installTypingHost;
     }
 
-    installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
+    installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
         this.addPostExecAction("success", cb);
     }
 
@@ -226,7 +214,7 @@ export class TestTypingsInstaller extends TI.TypingsInstaller implements ts.serv
         this.install(request);
     }
 
-    addPostExecAction(stdout: string | string[], cb: TI.RequestCompletedAction) {
+    addPostExecAction(stdout: string | string[], cb: ts.server.typingsInstaller.RequestCompletedAction) {
         const out = ts.isString(stdout) ? stdout : createNpmPackageJsonString(stdout);
         const action: PostExecAction = {
             success: !!out,
@@ -346,11 +334,11 @@ export class TestServerEventManager {
     }
 }
 
-export type TestSessionAndServiceHost = ts.TestFSWithWatch.TestServerHostTrackingWrittenFiles & {
+export type TestSessionAndServiceHost = TestServerHostTrackingWrittenFiles & {
     baselineHost(title: string): void;
 };
 function patchHostTimeouts(
-    inputHost: ts.TestFSWithWatch.TestServerHostTrackingWrittenFiles,
+    inputHost: TestServerHostTrackingWrittenFiles,
     session: TestSession | TestProjectService
 ) {
     const host = inputHost as TestSessionAndServiceHost;
@@ -414,7 +402,7 @@ export class TestSession extends ts.server.Session {
         super(opts);
         this.logger = opts.logger;
         this.testhost = patchHostTimeouts(
-            ts.TestFSWithWatch.changeToHostTrackingWrittenFiles(this.host as TestServerHost),
+            changeToHostTrackingWrittenFiles(this.host as TestServerHost),
             this
         );
     }
@@ -540,7 +528,7 @@ export class TestProjectService extends ts.server.ProjectService {
             ...opts
         });
         this.testhost = patchHostTimeouts(
-            ts.TestFSWithWatch.changeToHostTrackingWrittenFiles(this.host as TestServerHost),
+            changeToHostTrackingWrittenFiles(this.host as TestServerHost),
             this
         );
         this.testhost.baselineHost("Creating project service");
@@ -948,9 +936,9 @@ export function verifyDynamic(service: ts.server.ProjectService, path: string) {
     assert.isTrue(info.isDynamic);
 }
 
-export function createHostWithSolutionBuild(files: readonly ts.TestFSWithWatch.FileOrFolderOrSymLink[], rootNames: readonly string[]) {
-    const host = ts.projectSystem.createServerHost(files);
+export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLink[], rootNames: readonly string[]) {
+    const host = createServerHost(files);
     // ts build should succeed
-    ts.tscWatch.ensureErrorFreeBuild(host, rootNames);
+    ensureErrorFreeBuild(host, rootNames);
     return host;
 }

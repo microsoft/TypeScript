@@ -204,7 +204,7 @@ function mapEqualToCache<T>(left: ts.ESMap<string, T>, right: ts.ModeAwareCache<
 }
 
 export function checkResolvedModulesCache(program: ts.Program, fileName: string, expectedContent: ts.ESMap<string, ts.ResolvedModule | undefined> | undefined): void {
-    checkCache("resolved modules", program, fileName, expectedContent, f => f.resolvedModules, ts.checkResolvedModule);
+    checkCache("resolved modules", program, fileName, expectedContent, f => f.resolvedModules, checkResolvedModule);
 }
 
 export function checkResolvedTypeDirectivesCache(program: ts.Program, fileName: string, expectedContent: ts.ESMap<string, ts.ResolvedTypeReferenceDirective> | undefined): void {

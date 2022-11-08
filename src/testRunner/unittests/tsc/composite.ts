@@ -1,11 +1,12 @@
-import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
+import { verifyTsc } from "./helpers";
+import { loadProjectFromFiles, replaceText, verifyTscWithEdits } from "../tsbuild/helpers";
 
 describe("unittests:: tsc:: composite::", () => {
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "composite",
         subScenario: "when setting composite false on command line",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/src/main.ts": "export const x = 10;",
             "/src/project/tsconfig.json": Utils.dedent`
                     {
@@ -22,10 +23,10 @@ describe("unittests:: tsc:: composite::", () => {
         commandLineArgs: ["--composite", "false", "--p", "src/project"],
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "composite",
         subScenario: "when setting composite null on command line",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/src/main.ts": "export const x = 10;",
             "/src/project/tsconfig.json": Utils.dedent`
                     {
@@ -42,10 +43,10 @@ describe("unittests:: tsc:: composite::", () => {
         commandLineArgs: ["--composite", "null", "--p", "src/project"],
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "composite",
         subScenario: "when setting composite false on command line but has tsbuild info in config",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/src/main.ts": "export const x = 10;",
             "/src/project/tsconfig.json": Utils.dedent`
                     {
@@ -63,10 +64,10 @@ describe("unittests:: tsc:: composite::", () => {
         commandLineArgs: ["--composite", "false", "--p", "src/project"],
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "composite",
         subScenario: "when setting composite false and tsbuildinfo as null on command line but has tsbuild info in config",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/src/main.ts": "export const x = 10;",
             "/src/project/tsconfig.json": Utils.dedent`
                     {
@@ -84,10 +85,10 @@ describe("unittests:: tsc:: composite::", () => {
         commandLineArgs: ["--composite", "false", "--p", "src/project", "--tsBuildInfoFile", "null"],
     });
 
-    ts.verifyTscWithEdits({
+    verifyTscWithEdits({
         scenario: "composite",
         subScenario: "converting to modules",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/src/main.ts": "const x = 10;",
             "/src/project/tsconfig.json": JSON.stringify({
                 compilerOptions: {
@@ -100,7 +101,7 @@ describe("unittests:: tsc:: composite::", () => {
         edits: [
             {
                 subScenario: "convert to modules",
-                modifyFs: fs => ts.replaceText(fs, "/src/project/tsconfig.json", "none", "es2015"),
+                modifyFs: fs => replaceText(fs, "/src/project/tsconfig.json", "none", "es2015"),
             }
         ]
     });

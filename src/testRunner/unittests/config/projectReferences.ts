@@ -1,6 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import * as fakes from "../../_namespaces/fakes";
 import * as vfs from "../../_namespaces/vfs";
+import { libFile } from "../../../harness/virtualFileSystemWithWatch";
 
 interface TestProjectSpecification {
     configFileName?: string;
@@ -77,7 +78,7 @@ function testProjectReferences(spec: TestSpecification, entryPointConfigFileName
         }
     }
 
-    const vfsys = new vfs.FileSystem(false, { files: { "/lib.d.ts": ts.TestFSWithWatch.libFile.content } });
+    const vfsys = new vfs.FileSystem(false, { files: { "/lib.d.ts": libFile.content } });
     files.forEach((v, k) => {
         vfsys.mkdirpSync(ts.getDirectoryPath(k));
         vfsys.writeFileSync(k, v);

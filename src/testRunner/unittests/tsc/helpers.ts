@@ -2,6 +2,9 @@ import * as ts from "../../_namespaces/ts";
 import * as fakes from "../../_namespaces/fakes";
 import * as vfs from "../../_namespaces/vfs";
 import * as Harness from "../../_namespaces/Harness";
+import { TestServerHost } from "../../../harness/virtualFileSystemWithWatch";
+import { baselinePrograms } from "../tscWatch/helpers";
+import { baselineBuildInfo, generateSourceMapBaselineFiles, TestTscEdit, toPathWithSystem } from "../tsbuild/helpers";
 
 export type TscCompileSystem = fakes.System & {
     writtenFiles: ts.Set<ts.Path>;
@@ -14,11 +17,11 @@ export function compilerOptionsToConfigJson(options: ts.CompilerOptions) {
     return ts.optionMapToObject(ts.serializeCompilerOptions(options));
 }
 
-export const noChangeRun: ts.TestTscEdit = {
+export const noChangeRun: TestTscEdit = {
     subScenario: "no-change-run",
     modifyFs: ts.noop
 };
-export const noChangeWithExportsDiscrepancyRun: ts.TestTscEdit = {
+export const noChangeWithExportsDiscrepancyRun: TestTscEdit = {
     ...noChangeRun,
     discrepancyExplanation: () => [
         "Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files",
@@ -26,7 +29,6 @@ export const noChangeWithExportsDiscrepancyRun: ts.TestTscEdit = {
     ]
 };
 export const noChangeOnlyRuns = [noChangeRun];
-export const noChangeWithExportsDiscrepancyOnlyRuns = [noChangeWithExportsDiscrepancyRun];
 
 export interface TestTscCompile extends TestTscCompileLikeBase {
     baselineSourceMap?: boolean;
@@ -45,7 +47,7 @@ function isAnyProgram(program: ts.Program | ts.BuilderProgram | ts.ParsedCommand
     return !!(program as ts.Program | ts.BuilderProgram).getCompilerOptions;
 }
 export function commandLineCallbacks(
-    sys: TscCompileSystem | ts.tscWatch.WatchedSystem,
+    sys: TscCompileSystem | TestServerHost,
     originalReadCall?: ts.System["readFile"],
 ): CommandLineCallbacks {
     let programs: CommandLineProgram[] | undefined;
@@ -53,14 +55,14 @@ export function commandLineCallbacks(
     return {
         cb: program => {
             if (isAnyProgram(program)) {
-                ts.baselineBuildInfo(program.getCompilerOptions(), sys, originalReadCall);
+                baselineBuildInfo(program.getCompilerOptions(), sys, originalReadCall);
                 (programs || (programs = [])).push(ts.isBuilderProgram(program) ?
                     [program.getProgram(), program] :
                     [program]
                 );
             }
             else {
-                ts.baselineBuildInfo(program.options, sys, originalReadCall);
+                baselineBuildInfo(program.options, sys, originalReadCall);
             }
         },
         getPrograms: () => {
@@ -136,7 +138,7 @@ function makeSystemReadyForBaseline(sys: TscCompileSystem, versionToWrite?: stri
     const writtenFiles = sys.writtenFiles = new ts.Set();
     const originalWriteFile = sys.writeFile;
     sys.writeFile = (fileName, content, writeByteOrderMark) => {
-        const path = ts.toPathWithSystem(sys, fileName);
+        const path = toPathWithSystem(sys, fileName);
         // When buildinfo is same for two projects,
         // it gives error and doesnt write buildinfo but because buildInfo is written for one project,
         // readable baseline will be written two times for those two projects with same contents and is ok
@@ -147,9 +149,9 @@ function makeSystemReadyForBaseline(sys: TscCompileSystem, versionToWrite?: stri
 }
 
 export function createSolutionBuilderHostForBaseline(
-    sys: TscCompileSystem | ts.tscWatch.WatchedSystem,
+    sys: TscCompileSystem | TestServerHost,
     versionToWrite?: string,
-    originalRead?: (TscCompileSystem | ts.tscWatch.WatchedSystem)["readFile"]
+    originalRead?: (TscCompileSystem | TestServerHost)["readFile"]
 ) {
     if (sys instanceof fakes.System) makeSystemReadyForBaseline(sys, versionToWrite);
     const { cb } = commandLineCallbacks(sys, originalRead);
@@ -198,16 +200,16 @@ export function testTscCompile(input: TestTscCompile) {
     }
 
     function additionalBaseline(sys: TscCompileSystem) {
-        const { baselineSourceMap, baselineReadFileCalls, baselinePrograms, baselineDependencies } = input;
-        if (baselinePrograms) {
+        const { baselineSourceMap, baselineReadFileCalls, baselinePrograms: shouldBaselinePrograms, baselineDependencies } = input;
+        if (shouldBaselinePrograms) {
             const baseline: string[] = [];
-            ts.tscWatch.baselinePrograms(baseline, getPrograms!, ts.emptyArray, baselineDependencies);
+            baselinePrograms(baseline, getPrograms!, ts.emptyArray, baselineDependencies);
             sys.write(baseline.join("\n"));
         }
         if (baselineReadFileCalls) {
             sys.write(`readFiles:: ${JSON.stringify(actualReadFileMap, /*replacer*/ undefined, " ")} `);
         }
-        if (baselineSourceMap) ts.generateSourceMapBaselineFiles(sys);
+        if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
         actualReadFileMap = undefined;
         getPrograms = undefined;
     }

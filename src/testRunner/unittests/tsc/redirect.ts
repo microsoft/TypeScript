@@ -1,10 +1,11 @@
-import * as ts from "../../_namespaces/ts";
+import { verifyTsc } from "./helpers";
+import { loadProjectFromFiles } from "../tsbuild/helpers";
 
 describe("unittests:: tsc:: redirect::", () => {
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "redirect",
         subScenario: "when redirecting ts file",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     outDir: "out"

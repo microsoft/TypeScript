@@ -1,14 +1,16 @@
-import * as ts from "../../_namespaces/ts";
+import { createServerHost, File, libFile } from "../../../harness/virtualFileSystemWithWatch";
+import { protocol, CommandNames } from "../../_namespaces/ts.server";
+import { createSession, openFilesForSession, executeSessionRequest } from "./helpers";
 
 function setup(fileName: string, content: string) {
-    const file: ts.projectSystem.File = { path: fileName, content };
-    const host = ts.projectSystem.createServerHost([file, ts.projectSystem.libFile]);
-    const session = ts.projectSystem.createSession(host);
-    ts.projectSystem.openFilesForSession([file], session);
-    return function getSmartSelectionRange(locations: ts.projectSystem.protocol.SelectionRangeRequestArgs["locations"]) {
-        return ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.SelectionRangeRequest, ts.projectSystem.protocol.SelectionRangeResponse>(
+    const file: File = { path: fileName, content };
+    const host = createServerHost([file, libFile]);
+    const session = createSession(host);
+    openFilesForSession([file], session);
+    return function getSmartSelectionRange(locations: protocol.SelectionRangeRequestArgs["locations"]) {
+        return executeSessionRequest<protocol.SelectionRangeRequest, protocol.SelectionRangeResponse>(
             session,
-            ts.projectSystem.CommandNames.SelectionRange,
+            CommandNames.SelectionRange,
             { file: fileName, locations });
     };
 }

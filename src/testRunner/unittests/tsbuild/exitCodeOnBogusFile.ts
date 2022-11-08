@@ -1,11 +1,12 @@
-import * as ts from "../../_namespaces/ts";
+import { verifyTsc } from "../tsc/helpers";
+import { loadProjectFromFiles } from "./helpers";
 
 // https://github.com/microsoft/TypeScript/issues/33849
 describe("unittests:: tsbuild:: exitCodeOnBogusFile:: test exit code", () => {
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "exitCodeOnBogusFile",
         subScenario: `test exit code`,
-        fs: () => ts.loadProjectFromFiles({}),
+        fs: () => loadProjectFromFiles({}),
         commandLineArgs: ["-b", "bogus.json"]
     });
 });

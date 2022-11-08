@@ -3,26 +3,8 @@ import * as fakes from "../../_namespaces/fakes";
 import * as vfs from "../../_namespaces/vfs";
 import * as Harness from "../../_namespaces/Harness";
 import * as vpath from "../../_namespaces/vpath";
-
-export function errorDiagnostic(message: fakes.ExpectedDiagnosticMessage): fakes.ExpectedErrorDiagnostic {
-    return { message };
-}
-
-export function getExpectedDiagnosticForProjectsInBuild(...projects: string[]): fakes.ExpectedDiagnostic {
-    return [ts.Diagnostics.Projects_in_this_build_Colon_0, projects.map(p => "\r\n    * " + p).join("")];
-}
-
-export function changeCompilerVersion(host: fakes.SolutionBuilderHost) {
-    const originalReadFile = host.readFile;
-    host.readFile = path => {
-        const value = originalReadFile.call(host, path);
-        if (!value || !ts.isBuildInfoFile(path)) return value;
-        const buildInfo = ts.getBuildInfo(path, value);
-        if (!buildInfo) return value;
-        buildInfo.version = fakes.version;
-        return ts.getBuildInfoText(buildInfo);
-    };
-}
+import { libFile, TestServerHost } from "../../../harness/virtualFileSystemWithWatch";
+import { testTscCompile, TestTscCompile, TscCompileSystem, verifyTscBaseline } from "../tsc/helpers";
 
 export function replaceText(fs: vfs.FileSystem, path: string, oldText: string, newText: string) {
     if (!fs.statSync(path).isFile()) {
@@ -52,39 +34,7 @@ export function appendText(fs: vfs.FileSystem, path: string, additionalContent: 
     fs.writeFileSync(path, `${old}${additionalContent}`);
 }
 
-export function indexOf(fs: vfs.FileSystem, path: string, searchStr: string) {
-    if (!fs.statSync(path).isFile()) {
-        throw new Error(`File ${path} does not exist`);
-    }
-    const content = fs.readFileSync(path, "utf-8");
-    return content.indexOf(searchStr);
-}
-
-export function lastIndexOf(fs: vfs.FileSystem, path: string, searchStr: string) {
-    if (!fs.statSync(path).isFile()) {
-        throw new Error(`File ${path} does not exist`);
-    }
-    const content = fs.readFileSync(path, "utf-8");
-    return content.lastIndexOf(searchStr);
-}
-
-export function expectedLocationIndexOf(fs: vfs.FileSystem, file: string, searchStr: string): fakes.ExpectedDiagnosticLocation {
-    return {
-        file,
-        start: indexOf(fs, file, searchStr),
-        length: searchStr.length
-    };
-}
-
-export function expectedLocationLastIndexOf(fs: vfs.FileSystem, file: string, searchStr: string): fakes.ExpectedDiagnosticLocation {
-    return {
-        file,
-        start: lastIndexOf(fs, file, searchStr),
-        length: searchStr.length
-    };
-}
-
-export const libContent = `${ts.TestFSWithWatch.libFile.content}
+export const libContent = `${libFile.content}
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };`;
 
@@ -138,18 +88,6 @@ function addLibAndMakeReadonly(fs: vfs.FileSystem, libContentToAppend?: string) 
     fs.mkdirSync("/lib");
     fs.writeFileSync("/lib/lib.d.ts", libContentToAppend ? `${libContent}${libContentToAppend}` : libContent);
     fs.makeReadonly();
-}
-
-export function verifyOutputsPresent(fs: vfs.FileSystem, outputs: readonly string[]) {
-    for (const output of outputs) {
-        assert(fs.existsSync(output), `Expect file ${output} to exist`);
-    }
-}
-
-export function verifyOutputsAbsent(fs: vfs.FileSystem, outputs: readonly string[]) {
-    for (const output of outputs) {
-        assert.isFalse(fs.existsSync(output), `Expect file ${output} to not exist`);
-    }
 }
 
 export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: ts.ReadonlyCollection<ts.Path>; }) {
@@ -365,7 +303,7 @@ export function toPathWithSystem(sys: ts.System, fileName: string): ts.Path {
 
 export function baselineBuildInfo(
     options: ts.CompilerOptions,
-    sys: ts.TscCompileSystem | ts.tscWatch.WatchedSystem,
+    sys: TscCompileSystem | TestServerHost,
     originalReadCall?: ts.System["readFile"],
 ) {
     const buildInfoPath = ts.getTsBuildInfoEmitOutputFilePath(options);
@@ -391,14 +329,14 @@ export function baselineBuildInfo(
 }
 interface VerifyTscEditDiscrepanciesInput {
     index: number;
-    scenario: ts.TestTscCompile["scenario"];
-    subScenario: ts.TestTscCompile["subScenario"];
+    scenario: TestTscCompile["scenario"];
+    subScenario: TestTscCompile["subScenario"];
     baselines: string[] | undefined;
-    commandLineArgs: ts.TestTscCompile["commandLineArgs"];
-    modifyFs: ts.TestTscCompile["modifyFs"];
+    commandLineArgs: TestTscCompile["commandLineArgs"];
+    modifyFs: TestTscCompile["modifyFs"];
     editFs: TestTscEdit["modifyFs"];
     baseFs: vfs.FileSystem;
-    newSys: ts.TscCompileSystem;
+    newSys: TscCompileSystem;
     discrepancyExplanation: TestTscEdit["discrepancyExplanation"];
 }
 function verifyTscEditDiscrepancies({
@@ -406,7 +344,7 @@ function verifyTscEditDiscrepancies({
     discrepancyExplanation, baselines,
     modifyFs, editFs, baseFs, newSys
 }: VerifyTscEditDiscrepanciesInput): string[] | undefined {
-    const sys = ts.testTscCompile({
+    const sys = testTscCompile({
         scenario,
         subScenario,
         fs: () => baseFs.makeReadonly(),
@@ -600,11 +538,6 @@ function getBuildInfoForIncrementalCorrectnessCheck(text: string | undefined): {
     };
 }
 
-export enum CleanBuildDescrepancy {
-    CleanFileTextDifferent,
-    CleanFilePresent,
-}
-
 export interface TestTscEdit {
     modifyFs: (fs: vfs.FileSystem) => void;
     subScenario: string;
@@ -613,7 +546,7 @@ export interface TestTscEdit {
     discrepancyExplanation?: () => readonly string[];
 }
 
-export interface VerifyTscWithEditsInput extends ts.TestTscCompile {
+export interface VerifyTscWithEditsInput extends TestTscCompile {
     edits: TestTscEdit[];
 }
 
@@ -626,13 +559,13 @@ export function verifyTscWithEdits({
     edits
 }: VerifyTscWithEditsInput) {
     describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario} serializedEdits`, () => {
-        let sys: ts.TscCompileSystem;
+        let sys: TscCompileSystem;
         let baseFs: vfs.FileSystem;
-        let editsSys: ts.TscCompileSystem[];
+        let editsSys: TscCompileSystem[];
         before(() => {
             ts.Debug.assert(!!edits.length, `${scenario}/${subScenario}:: No incremental scenarios, you probably want to use verifyTsc instead.`);
             baseFs = fs().makeReadonly();
-            sys = ts.testTscCompile({
+            sys = testTscCompile({
                 scenario,
                 subScenario,
                 fs: () => baseFs,
@@ -646,7 +579,7 @@ export function verifyTscWithEdits({
                 { modifyFs, subScenario: editScenario, commandLineArgs: editCommandLineArgs },
                 index
             ) => {
-                (editsSys || (editsSys = [])).push(ts.testTscCompile({
+                (editsSys || (editsSys = [])).push(testTscCompile({
                     scenario,
                     subScenario: editScenario || subScenario,
                     diffWithInitial: true,
@@ -664,7 +597,7 @@ export function verifyTscWithEdits({
             sys = undefined!;
             editsSys = undefined!;
         });
-        ts.verifyTscBaseline(() => ({
+        verifyTscBaseline(() => ({
             baseLine: () => {
                 const { file, text } = sys.baseLine();
                 const texts: string[] = [text];
