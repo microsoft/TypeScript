@@ -1,8 +1,9 @@
 //// [tests/cases/compiler/APISample_transform.ts] ////
 
-//// [index.d.ts]
-declare module "typescript" {
-    export = ts;
+//// [package.json]
+{
+    "name": "typescript",
+    "types": "/.ts/typescript.d.ts"
 }
 
 //// [APISample_transform.ts]
@@ -21,6 +22,7 @@ const source = "let x: string  = 'string'";
 let result = ts.transpile(source, { module: ts.ModuleKind.CommonJS });
 
 console.log(JSON.stringify(result));
+
 
 //// [APISample_transform.js]
 "use strict";

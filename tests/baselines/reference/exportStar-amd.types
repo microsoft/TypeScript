@@ -31,11 +31,12 @@ export { x, y, z };
 >z : string
 
 === tests/cases/conformance/es6/modules/t4.ts ===
+
 export * from "./t1";
-No type information for this code.export * from "./t2";
-No type information for this code.export * from "./t3";
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/es6/modules/main.ts ===
+export * from "./t2";
+export * from "./t3";
+
+=== tests/cases/conformance/es6/modules/main.ts ===
 import hello, { x, y, z, foo } from "./t4";
 >hello : any
 >x : number

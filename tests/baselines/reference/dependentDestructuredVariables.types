@@ -106,6 +106,69 @@ function f12({ kind, payload }: Action) {
     }
 }
 
+// repro #50206
+function f13<T extends Action>({ kind, payload }: T) {
+>f13 : <T extends Action>({ kind, payload }: T) => void
+>kind : "A" | "B"
+>payload : string | number
+
+    if (kind === 'A') {
+>kind === 'A' : boolean
+>kind : "A" | "B"
+>'A' : "A"
+
+        payload.toFixed();
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload : number
+>toFixed : (fractionDigits?: number | undefined) => string
+    }
+    if (kind === 'B') {
+>kind === 'B' : boolean
+>kind : "A" | "B"
+>'B' : "B"
+
+        payload.toUpperCase();
+>payload.toUpperCase() : string
+>payload.toUpperCase : () => string
+>payload : string
+>toUpperCase : () => string
+    }
+}
+
+function f14<T extends Action>(t: T) {
+>f14 : <T extends Action>(t: T) => void
+>t : T
+
+    const { kind, payload } = t;
+>kind : "A" | "B"
+>payload : string | number
+>t : Action
+
+    if (kind === 'A') {
+>kind === 'A' : boolean
+>kind : "A" | "B"
+>'A' : "A"
+
+        payload.toFixed();
+>payload.toFixed() : string
+>payload.toFixed : (fractionDigits?: number | undefined) => string
+>payload : number
+>toFixed : (fractionDigits?: number | undefined) => string
+    }
+    if (kind === 'B') {
+>kind === 'B' : boolean
+>kind : "A" | "B"
+>'B' : "B"
+
+        payload.toUpperCase();
+>payload.toUpperCase() : string
+>payload.toUpperCase : () => string
+>payload : string
+>toUpperCase : () => string
+    }
+}
+
 type Action2 =
 >Action2 : { kind: 'A'; payload: number | undefined; } | { kind: 'B'; payload: string | undefined; }
 
