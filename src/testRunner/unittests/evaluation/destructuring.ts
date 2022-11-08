@@ -1,3 +1,6 @@
+import * as evaluator from "../../_namespaces/evaluator";
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: evaluation:: destructuring", () => {
     // https://github.com/microsoft/TypeScript/issues/39205
     describe("correct order for array destructuring evaluation and initializers", () => {

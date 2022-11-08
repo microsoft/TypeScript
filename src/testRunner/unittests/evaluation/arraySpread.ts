@@ -1,3 +1,5 @@
+import * as evaluator from "../../_namespaces/evaluator";
+
 describe("unittests:: evaluation:: arraySpread", () => {
     it("array spread preserves side-effects", async () => {
         const result = evaluator.evaluateTypeScript(`
