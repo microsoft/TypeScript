@@ -354,7 +354,7 @@ function entrypointBuildTask(options) {
 }
 
 
-const { main: tsc, watch: watchTsc } = entrypointBuildTask({
+const { main: tsc, build: buildTsc, watch: watchTsc } = entrypointBuildTask({
     name: "tsc",
     description: "Builds the command-line compiler",
     buildDeps: [generateDiagnostics],
@@ -392,7 +392,7 @@ export const dtsServices = task({
 });
 
 
-const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
+const { main: tsserver, build: buildTsserver, watch: watchTsserver } = entrypointBuildTask({
     name: "tsserver",
     description: "Builds the language server",
     buildDeps: [generateDiagnostics],
@@ -410,10 +410,15 @@ const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
 export { tsserver, watchTsserver };
 
 
+const buildMin = task({
+    name: "build-min",
+    dependencies: [buildTsc, buildTsserver],
+});
+
 export const min = task({
     name: "min",
     description: "Builds only tsc and tsserver",
-    dependencies: [tsc, tsserver],
+    dependencies: [tsc, tsserver].concat(cmdLineOptions.typecheck ? [buildMin] : []),
 });
 
 export const watchMin = task({
@@ -577,10 +582,15 @@ export const watchOtherOutputs = task({
     dependencies: [watchCancellationToken, watchTypingsInstaller, watchWatchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
 });
 
+const buildLocal = task({
+    name: "build-local",
+    dependencies: [buildTsc, buildTsserver, buildServices, buildLssl]
+});
+
 export const local = task({
     name: "local",
     description: "Builds the full compiler and services",
-    dependencies: [localize, tsc, tsserver, services, lssl, otherOutputs, dts, buildSrc],
+    dependencies: [localize, tsc, tsserver, services, lssl, otherOutputs, dts].concat(cmdLineOptions.typecheck ? [buildLocal] : []),
 });
 export default local;
 
