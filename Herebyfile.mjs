@@ -320,7 +320,7 @@ function entrypointBuildTask(options) {
             const outDir = path.dirname(options.output);
             await fs.promises.mkdir(outDir, { recursive: true });
             const moduleSpecifier = path.relative(outDir, options.builtEntrypoint);
-            await fs.promises.writeFile(options.output, `module.exports = require("./${moduleSpecifier}")`);
+            await fs.promises.writeFile(options.output, `module.exports = require("./${moduleSpecifier.replace(/[\\/]/g, "/")}")`);
         },
     });
 
