@@ -106,17 +106,17 @@ type TNumberLiteralEnum0 = "0" extends `${infer T extends NumberLiteralEnum}` ? 
 // infer from non-literal enums
 const enum NonLiteralEnum { Zero = NumberLiteralEnum.Zero, One = NumberLiteralEnum.One }
 >NonLiteralEnum : NonLiteralEnum
->Zero : NonLiteralEnum
+>Zero : NonLiteralEnum.Zero
 >NumberLiteralEnum.Zero : NumberLiteralEnum.Zero
 >NumberLiteralEnum : typeof NumberLiteralEnum
 >Zero : NumberLiteralEnum.Zero
->One : NonLiteralEnum
+>One : NonLiteralEnum.One
 >NumberLiteralEnum.One : NumberLiteralEnum.One
 >NumberLiteralEnum : typeof NumberLiteralEnum
 >One : NumberLiteralEnum.One
 
 type TNonLiteralEnum0 = "0" extends `${infer T extends NonLiteralEnum}` ? T : never; // 0
->TNonLiteralEnum0 : 0
+>TNonLiteralEnum0 : NonLiteralEnum.Zero
 
 // infer using priority:
 //     string > template-literal > (string-literal | string-literal-enum) >
@@ -346,15 +346,15 @@ type PNumber3 = "0" extends `${infer T extends number | 0n}` ? T : never; // 0
 // #region enum
 // enum > number-literal-enum
 type PEnum0 = "0" extends `${infer T extends NonLiteralEnum | NumberLiteralEnum}` ? T : never; // 0
->PEnum0 : 0
+>PEnum0 : NumberLiteralEnum.Zero
 
 // enum > bigint
 type PEnum1 = "0" extends `${infer T extends NonLiteralEnum | bigint}` ? T : never; // 0
->PEnum1 : 0
+>PEnum1 : NonLiteralEnum.Zero
 
 // enum > bigint-literal
 type PEnum2 = "0" extends `${infer T extends NonLiteralEnum | 0n}` ? T : never; // 0
->PEnum2 : 0
+>PEnum2 : NonLiteralEnum.Zero
 
 // #endregion enum
 

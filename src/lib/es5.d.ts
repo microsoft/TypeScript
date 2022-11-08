@@ -423,8 +423,8 @@ interface String {
 
     /**
      * Replaces text in a string, using a regular expression or search string.
-     * @param searchValue A string to search for.
-     * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
+     * @param searchValue A string or regular expression to search for.
+     * @param replaceValue A string containing the text to replace. When the {@linkcode searchValue} is a `RegExp`, all matches are replaced if the `g` flag is set (or only those matches at the beginning, if the `y` flag is also present). Otherwise, only the first match of {@linkcode searchValue} is replaced.
      */
     replace(searchValue: string | RegExp, replaceValue: string): string;
 
@@ -911,6 +911,7 @@ interface DateConstructor {
      * @param ms A number from 0 to 999 that specifies the milliseconds.
      */
     UTC(year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number;
+    /** Returns the number of milliseconds elapsed since midnight, January 1, 1970 Universal Coordinated Time (UTC). */
     now(): number;
 }
 
@@ -940,6 +941,10 @@ interface RegExpExecArray extends Array<string> {
      * A copy of the search string.
      */
     input: string;
+    /**
+     * The first match. This will always be present because `null` will be returned if there are no matches.
+     */
+    0: string;
 }
 
 interface RegExp {

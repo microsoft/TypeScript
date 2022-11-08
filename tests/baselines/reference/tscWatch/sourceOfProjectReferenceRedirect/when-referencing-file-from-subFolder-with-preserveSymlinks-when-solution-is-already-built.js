@@ -72,15 +72,27 @@ export declare function bar(): void;
     ],
     "fileInfos": {
       "../../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./src/foo.ts": {
+        "original": {
+          "version": "4646078106-export function foo() { }",
+          "signature": "-5677608893-export declare function foo(): void;\n"
+        },
         "version": "4646078106-export function foo() { }",
         "signature": "-5677608893-export declare function foo(): void;\n"
       },
       "./src/bar/foo.ts": {
+        "original": {
+          "version": "1045484683-export function bar() { }",
+          "signature": "-2904461644-export declare function bar(): void;\n"
+        },
         "version": "1045484683-export function bar() { }",
         "signature": "-2904461644-export declare function bar(): void;\n"
       }
@@ -136,6 +148,10 @@ export {};
     ],
     "fileInfos": {
       "../../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
@@ -149,6 +165,10 @@ export {};
         "signature": "-2904461644-export declare function bar(): void;\n"
       },
       "./src/test.ts": {
+        "original": {
+          "version": "14700910833-import { foo } from 'b/lib/foo';\nimport { bar } from 'b/lib/bar/foo';\nfoo();\nbar();\n",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "14700910833-import { foo } from 'b/lib/foo';\nimport { bar } from 'b/lib/bar/foo';\nfoo();\nbar();\n",
         "signature": "-3531856636-export {};\n"
       }
@@ -206,42 +226,41 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/a/src/test.ts (computed .d.ts)
 /user/username/projects/myproject/packages/b/src/bar/foo.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/packages/A/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/packages/B/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/packages/a/src/test.ts:
-  {"fileName":"/user/username/projects/myproject/packages/A/src/test.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/b/src/foo.ts:
-  {"fileName":"/user/username/projects/myproject/packages/B/src/foo.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/b/src/bar/foo.ts:
-  {"fileName":"/user/username/projects/myproject/packages/B/src/bar/foo.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/packages/a/node_modules:
-  {"fileName":"/user/username/projects/myproject/packages/A/node_modules","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules:
-  {"fileName":"/user/username/projects/myproject/packages/node_modules","pollingInterval":500}
-/user/username/projects/myproject/packages/b/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/B/package.json","pollingInterval":250}
+  {"pollingInterval":500}
 /user/username/projects/myproject/packages/a/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/packages/A/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/packages/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/packages/a/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/a/src/test.ts:
+  {}
+/user/username/projects/myproject/packages/b/src/foo.ts:
+  {}
+/user/username/projects/myproject/packages/b/src/bar/foo.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/packages/b/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/packages/b/src:
-  {"directoryName":"/user/username/projects/myproject/packages/b/src"}
+  {}
 /user/username/projects/myproject/packages/a/src:
-  {"directoryName":"/user/username/projects/myproject/packages/A/src"}
-  {"directoryName":"/user/username/projects/myproject/packages/a/src"}
+  {}
 /user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -266,6 +285,10 @@ exitCode:: ExitStatus.undefined
     ],
     "fileInfos": {
       "../../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
@@ -279,6 +302,10 @@ exitCode:: ExitStatus.undefined
         "signature": "1045484683-export function bar() { }"
       },
       "./src/test.ts": {
+        "original": {
+          "version": "14700910833-import { foo } from 'b/lib/foo';\nimport { bar } from 'b/lib/bar/foo';\nfoo();\nbar();\n",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "14700910833-import { foo } from 'b/lib/foo';\nimport { bar } from 'b/lib/bar/foo';\nfoo();\nbar();\n",
         "signature": "-3531856636-export {};\n"
       }

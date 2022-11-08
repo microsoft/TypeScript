@@ -12,9 +12,10 @@ export class PrismaClient<T extends PrismaClientOptions = PrismaClientOptions> {
 }
 
 === /node_modules/@prisma/client/index.d.ts ===
+
 export * from ".prisma/client";
-No type information for this code.
-No type information for this code.=== /index.ts ===
+
+=== /index.ts ===
 import { PrismaClient } from "@prisma/client";
 >PrismaClient : typeof PrismaClient
 

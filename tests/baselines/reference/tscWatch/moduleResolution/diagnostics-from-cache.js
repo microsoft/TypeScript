@@ -34,7 +34,10 @@ Found 'package.json' at '/user/username/projects/myproject/package.json'.
 'package.json' does not have a 'typesVersions' field.
 ======== Resolving module '@this/package' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
+Resolving in ESM mode with conditions 'node', 'import', 'types'.
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+Matched 'exports' condition 'default'.
+Using 'exports' subpath '.' with target './dist/index.js'.
 File '/user/username/projects/myproject/index.ts' exist - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/index.ts', result '/user/username/projects/myproject/index.ts'.
 ======== Module name '@this/package' was successfully resolved to '/user/username/projects/myproject/index.ts'. ========
@@ -60,23 +63,23 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/index.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/index.ts:
-  {"fileName":"/user/username/projects/myproject/index.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/package.json:
-  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/index.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

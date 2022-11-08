@@ -68,12 +68,12 @@ enum E {
 >E : E
 
     x = () => 4, // Error expected
->x : E
+>x : E.x
 >() => 4 : () => number
 >4 : 4
 
     y = (() => this).length // error, can't use this in enum
->y : E
+>y : E.y
 >(() => this).length : number
 >(() => this) : () => any
 >() => this : () => any
@@ -171,12 +171,12 @@ module M2 {
 >E : E
 
         x = () => 4, // Error expected
->x : E
+>x : E.x
 >() => 4 : () => number
 >4 : 4
 
         y = (() => this).length
->y : E
+>y : E.y
 >(() => this).length : number
 >(() => this) : () => any
 >() => this : () => any

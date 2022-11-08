@@ -1,10 +1,12 @@
 === /a.ts ===
+
 export default: number = 1;
-No type information for this code.
-No type information for this code.=== /b.ts ===
+
+=== /b.ts ===
+
 export default: number = "";
-No type information for this code.
-No type information for this code.=== /c.ts ===
+
+=== /c.ts ===
 export default: number = {};
 >{} : {}
 

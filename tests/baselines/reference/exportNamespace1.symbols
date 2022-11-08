@@ -7,9 +7,10 @@ export type { A } from './a';
 >A : Symbol(A, Decl(b.ts, 0, 13))
 
 === tests/cases/conformance/externalModules/typeOnly/c.ts ===
+
 export * from './b';
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/externalModules/typeOnly/d.ts ===
+
+=== tests/cases/conformance/externalModules/typeOnly/d.ts ===
 import { A } from './c';
 >A : Symbol(A, Decl(d.ts, 0, 8))
 
