@@ -62,7 +62,6 @@
         "eslint": "^8.22.0",
         "eslint-formatter-autolinkable-stylish": "^1.2.0",
         "eslint-plugin-import": "^2.26.0",
-        "eslint-plugin-jsdoc": "^39.3.6",
         "eslint-plugin-local": "^1.0.0",
         "eslint-plugin-no-null": "^1.0.2",
         "fast-xml-parser": "^4.0.11",
