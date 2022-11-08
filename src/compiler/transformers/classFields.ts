@@ -426,7 +426,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         const info = accessPrivateIdentifier(node.left);
         if (info) {
             const receiver = visitNode(node.right, visitor, isExpression);
-                Debug.assert(receiver);
+            Debug.assert(receiver);
 
             return setOriginalNode(
                 context.getEmitHelperFactory().createClassPrivateFieldInHelper(info.brandCheckIdentifier, receiver),
@@ -773,7 +773,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 let info: PrivateIdentifierInfo | undefined;
                 if (info = accessPrivateIdentifier(operand.name)) {
                     const receiver = visitNode(operand.expression, visitor, isExpression);
-                        Debug.assert(receiver);
+                    Debug.assert(receiver);
                     const { readExpression, initializeExpression } = createCopiableReceiverExpr(receiver);
 
                     let expression: Expression = createPrivateIdentifierAccess(info, readExpression);
@@ -1060,7 +1060,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                             setOriginalNode(superPropertyGet, node.left);
                             setTextRange(superPropertyGet, node.left);
 
-                                Debug.assert(expression);
+                            Debug.assert(expression);
                             expression = factory.createBinaryExpression(
                                 superPropertyGet,
                                 getNonAssignmentOperatorForCompoundAssignment(node.operatorToken.kind),
@@ -1071,12 +1071,12 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
                         const temp = valueIsDiscarded ? undefined : factory.createTempVariable(hoistVariableDeclaration);
                         if (temp) {
-                                Debug.assert(expression);
+                            Debug.assert(expression);
                             expression = factory.createAssignment(temp, expression);
                             setTextRange(temp, node);
                         }
 
-                            Debug.assert(expression);
+                        Debug.assert(expression);
                         expression = factory.createReflectSetCall(
                             superClassReference,
                             setterName,

@@ -1111,10 +1111,10 @@ export function transformDeclarations(context: TransformationContext) {
                     const trueType = visitNode(input.trueType, visitDeclarationSubtree, isTypeNode);
                     enclosingDeclaration = oldEnclosingDecl;
                     const falseType = visitNode(input.falseType, visitDeclarationSubtree, isTypeNode);
-                        Debug.assert(checkType);
-                        Debug.assert(extendsType);
-                        Debug.assert(trueType);
-                        Debug.assert(falseType);
+                    Debug.assert(checkType);
+                    Debug.assert(extendsType);
+                    Debug.assert(trueType);
+                    Debug.assert(falseType);
                     return cleanup(factory.updateConditionalTypeNode(input, checkType, extendsType, trueType, falseType));
                 }
                 case SyntaxKind.FunctionType: {

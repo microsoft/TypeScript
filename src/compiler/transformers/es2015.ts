@@ -2543,7 +2543,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         }
         else {
             const statement = visitNode(node.statement, visitor, isStatement, factory.liftToBlock);
-                Debug.assert(statement);
+            Debug.assert(statement);
             if (isBlock(statement)) {
                 return factory.updateBlock(statement, setTextRange(factory.createNodeArray(concatenate(statements, statement.statements)), statement.statements));
             }
@@ -2637,7 +2637,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
 
     function convertForOfStatementForIterable(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined, ancestorFacts: HierarchyFacts): Statement {
         const expression = visitNode(node.expression, visitor, isExpression);
-            Debug.assert(expression);
+        Debug.assert(expression);
         const iterator = isIdentifier(expression) ? factory.getGeneratedNameForNode(expression) : factory.createTempVariable(/*recordTempVariable*/ undefined);
         const result = isIdentifier(expression) ? factory.getGeneratedNameForNode(iterator) : factory.createTempVariable(/*recordTempVariable*/ undefined);
         const errorRecord = factory.createUniqueName("e");

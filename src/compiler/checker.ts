@@ -3149,7 +3149,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return valueSymbol;
         }
         const result = createSymbol(valueSymbol.flags | typeSymbol.flags, valueSymbol.escapedName);
-            Debug.assert(valueSymbol.declarations || typeSymbol.declarations);
+        Debug.assert(valueSymbol.declarations || typeSymbol.declarations);
         result.declarations = deduplicate(concatenate(valueSymbol.declarations!, typeSymbol.declarations), equateValues);
         result.parent = valueSymbol.parent || typeSymbol.parent;
         if (valueSymbol.valueDeclaration) result.valueDeclaration = valueSymbol.valueDeclaration;

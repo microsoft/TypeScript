@@ -863,7 +863,7 @@ export class TestState {
         const hints = this.languageService.provideInlayHints(this.activeFile.fileName, span, preference);
         assert.equal(hints.length, expected.length, "Number of hints");
 
-            interface HasPosition { position: number; }
+        interface HasPosition { position: number; }
         const sortHints = (a: HasPosition, b: HasPosition) => {
             return a.position - b.position;
         };

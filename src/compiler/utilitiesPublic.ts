@@ -461,11 +461,11 @@ export function getOriginalNode<T extends Node>(node: Node | undefined, nodeTest
     }
 
     if (!node || !nodeTest) {
-            return node as T | undefined;
+        return node as T | undefined;
     }
 
-        return nodeTest(node) ? node : undefined;
-    }
+    return nodeTest(node) ? node : undefined;
+}
 
 /**
  * Iterates through the parent chain of a node and performs the callback on each parent until the callback

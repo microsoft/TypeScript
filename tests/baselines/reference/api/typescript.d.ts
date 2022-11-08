@@ -105,12 +105,6 @@ declare namespace ts {
     interface Push<T> {
         push(...values: T[]): void;
     }
-    function every<T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined;
-    function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean;
-    function concatenate<T>(array1: T[] | undefined, array2: T[]): T[];
-    function concatenate<T>(array1: readonly T[], array2: readonly T[] | undefined): readonly T[];
-    function concatenate<T>(array1: T[] | undefined, array2: T[] | undefined): T[] | undefined;
-    function concatenate<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined): readonly T[] | undefined;
     type Path = string & {
         __pathBrand: any;
     };
@@ -4910,7 +4904,6 @@ declare namespace ts {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
-    function isInitializedVariable(node: Node): node is InitializedVariableDeclaration;
     function createUnparsedSourceFile(text: string): UnparsedSource;
     function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
     function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;

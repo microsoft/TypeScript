@@ -74,9 +74,9 @@ export function visitNode(
 
     let visitedNode: Node | undefined;
     if (visited === undefined) {
-            // If the visited node is undefined, then the visitor must have returned undefined,
-            // so the visitor must have been declared as able to return undefined, so TOut must be
-            // potentially undefined.
+        // If the visited node is undefined, then the visitor must have returned undefined,
+        // so the visitor must have been declared as able to return undefined, so TOut must be
+        // potentially undefined.
         return undefined;
     }
     else if (isArray(visited)) {
@@ -178,9 +178,9 @@ export function visitNodes(
         return updatedArray;
     }
 
-        // If we are here, updated === nodes. This means that it's still a NodeArray,
-        // and also that its contents passed the tests in visitArrayWorker, so has contents
-        // of type TOut.
+    // If we are here, updated === nodes. This means that it's still a NodeArray,
+    // and also that its contents passed the tests in visitArrayWorker, so has contents
+    // of type TOut.
     return nodes;
 }
 

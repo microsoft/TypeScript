@@ -9297,7 +9297,7 @@ namespace IncrementalParser {
         return;
 
         function visitNode(node: Node) {
-                Debug.type<IncrementalNode>(node);
+            Debug.type<IncrementalNode>(node);
             let text = "";
             if (aggressiveChecks && shouldCheckNode(node)) {
                 text = oldText.substring(node.pos, node.end);
@@ -9325,7 +9325,7 @@ namespace IncrementalParser {
         }
 
         function visitArray(array: NodeArray<Node>) {
-                Debug.type<IncrementalNodeArray>(array);
+            Debug.type<IncrementalNodeArray>(array);
             array._children = undefined;
             setTextRangePosEnd(array, array.pos + delta, array.end + delta);
 
@@ -9451,7 +9451,7 @@ namespace IncrementalParser {
         return;
 
         function visitNode(child: Node) {
-                Debug.type<IncrementalNode>(child);
+            Debug.type<IncrementalNode>(child);
             Debug.assert(child.pos <= child.end);
             if (child.pos > changeRangeOldEnd) {
                 // Node is entirely past the change range.  We need to move both its pos and
@@ -9485,7 +9485,7 @@ namespace IncrementalParser {
         }
 
         function visitArray(array: NodeArray<Node>) {
-                Debug.type<IncrementalNodeArray>(array);
+            Debug.type<IncrementalNodeArray>(array);
             Debug.assert(array.pos <= array.end);
             if (array.pos > changeRangeOldEnd) {
                 // Array is entirely after the change range.  We need to move it, and move any of

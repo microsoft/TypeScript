@@ -143,9 +143,9 @@ export function getFilesInErrorForSummary(diagnostics: readonly Diagnostic[]): (
                 return `${errorDiagnostic.file.fileName}`;
         });
     return filesInError.map((fileName) => {
-            if (fileName === undefined) {
-                return undefined;
-            }
+        if (fileName === undefined) {
+            return undefined;
+        }
 
         const diagnosticForFileName = find(diagnostics, diagnostic =>
             diagnostic.file !== undefined && diagnostic.file.fileName === fileName

@@ -855,7 +855,7 @@ export function transformTypeScript(context: TransformationContext) {
             const decorators: Decorator[] = [];
             for (const parameterDecorator of parameterDecorators) {
                 const expression = visitNode(parameterDecorator.expression, visitor, isExpression);
-                    Debug.assert(expression);
+                Debug.assert(expression);
                 const helper = emitHelpers().createParamHelper(expression, parameterOffset);
                 setTextRange(helper, parameterDecorator.expression);
                 setEmitFlags(helper, EmitFlags.NoComments);
@@ -1007,7 +1007,7 @@ export function transformTypeScript(context: TransformationContext) {
         //   - the property has a decorator.
         if (isComputedPropertyName(name) && ((!hasStaticModifier(member) && currentClassHasParameterProperties) || hasDecorators(member))) {
             const expression = visitNode(name.expression, visitor, isExpression);
-                Debug.assert(expression);
+            Debug.assert(expression);
             const innerExpression = skipPartiallyEmittedExpressions(expression);
             if (!isSimpleInlineableExpression(innerExpression)) {
                 const generatedName = factory.getGeneratedNameForNode(name);
@@ -1429,7 +1429,7 @@ export function transformTypeScript(context: TransformationContext) {
             // Make sure we consider all nested cast expressions, e.g.:
             // (<any><number><any>-A).x;
             const expression = visitNode(node.expression, visitor, isExpression);
-                Debug.assert(expression);
+            Debug.assert(expression);
 
             // We have an expression of the form: (<Type>SubExpr). Emitting this as (SubExpr)
             // is really not desirable. We would like to emit the subexpression as-is. Omitting
