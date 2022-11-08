@@ -19,9 +19,9 @@ declare module "./reexport" {
 >Foo : Foo
 
         A, B, C
->A : Foo
->B : Foo
->C : Foo
+>A : Foo.A
+>B : Foo.B
+>C : Foo.C
     }
 }
 
