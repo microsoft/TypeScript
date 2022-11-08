@@ -6,7 +6,21 @@
     },
     "rules": {
         "@typescript-eslint/no-unnecessary-qualifier": "error",
-        "@typescript-eslint/no-unnecessary-type-assertion": "error"
+        "@typescript-eslint/no-unnecessary-type-assertion": "error",
+        "no-restricted-globals": ["error",
+            { "name": "setTimeout" },
+            { "name": "clearTimeout" },
+            { "name": "setInterval" },
+            { "name": "clearInterval" },
+            { "name": "setImmediate" },
+            { "name": "clearImmediate" },
+            { "name": "performance" },
+            { "name": "Iterator" },
+            { "name": "Map" },
+            { "name": "ReadonlyMap" },
+            { "name": "Set" },
+            { "name": "ReadonlySet" }
+        ]
     },
     "overrides": [
         {
@@ -20,13 +34,20 @@
                 "local/no-keywords": "off",
 
                 // eslint
-                "no-var": "off"
+                "no-var": "off",
+                "no-restricted-globals": "off"
             }
         },
         {
             "files": ["lib/es2019.array.d.ts"],
             "rules": {
                 "@typescript-eslint/array-type": "off"
+            }
+        },
+        {
+            "files": ["debug/**", "harness/**", "testRunner/**"],
+            "rules": {
+                "no-restricted-globals": "off"
             }
         }
     ]
