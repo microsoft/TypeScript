@@ -4882,6 +4882,8 @@ declare namespace ts {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
+    function isJSDocOptionalParameter(node: ParameterDeclaration): boolean;
+    function isOptionalDeclaration(declaration: Declaration): boolean;
     function createUnparsedSourceFile(text: string): UnparsedSource;
     function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
     function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
