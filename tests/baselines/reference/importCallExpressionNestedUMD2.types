@@ -1,7 +1,8 @@
 === tests/cases/conformance/dynamicImport/foo.ts ===
+
 export default "./foo";
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/dynamicImport/index.ts ===
+
+=== tests/cases/conformance/dynamicImport/index.ts ===
 async function foo() {
 >foo : () => Promise<any>
 
