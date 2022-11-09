@@ -175,14 +175,15 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     private missingFilesMap: ESMap<Path, FileWatcher> | undefined;
     private generatedFilesMap: GeneratedFileWatcherMap | undefined;
 
-    /*@internal*/
+    /** @internal */
     protected readonly plugins: PluginModuleWithName[] = [];
 
-    /** @internal */
     /**
      * This is map from files to unresolved imports in it
      * Maop does not contain entries for files that do not have unresolved imports
      * This helps in containing the set of files to invalidate
+     *
+     * @internal
      */
     cachedUnresolvedImportsPerFile = new Map<Path, readonly string[]>();
 
@@ -1642,7 +1643,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return !!this.program && this.program.isSourceOfProjectReferenceRedirect(fileName);
     }
 
-    /*@internal*/
+    /** @internal */
     protected getGlobalPluginSearchPaths() {
         // Search any globally-specified probe paths, then our peer node_modules
         return [
@@ -1679,8 +1680,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /**
      * Performs the initial steps of enabling a plugin by finding and instantiating the module for a plugin synchronously using 'require'.
+     *
+     * @internal
      */
-    /** @internal */
     beginEnablePluginSync(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): BeginEnablePluginResult {
         Debug.assertIsDefined(this.projectService.host.require);
 
@@ -1696,8 +1698,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /**
      * Performs the initial steps of enabling a plugin by finding and instantiating the module for a plugin asynchronously using dynamic `import`.
+     *
+     * @internal
      */
-    /** @internal */
     async beginEnablePluginAsync(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): Promise<BeginEnablePluginResult> {
         Debug.assertIsDefined(this.projectService.host.importPlugin);
 
@@ -1719,8 +1722,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     /**
      * Performs the remaining steps of enabling a plugin after its module has been instantiated.
+     *
+     * @internal
      */
-    /** @internal */
     endEnablePlugin({ pluginConfigEntry, pluginConfigOverrides, resolvedModule, errorLogs }: BeginEnablePluginResult) {
         if (resolvedModule) {
             const configurationOverride = pluginConfigOverrides && pluginConfigOverrides.get(pluginConfigEntry.name);
@@ -2015,8 +2019,11 @@ export class InferredProject extends Project {
     /** this is canonical project root path */
     readonly projectRootPath: string | undefined;
 
-    /** @internal */
-    /** stored only if their is no projectRootPath and this isnt single inferred project */
+    /**
+     * stored only if their is no projectRootPath and this isnt single inferred project
+     *
+     * @internal
+     */
     readonly canonicalCurrentDirectory: string | undefined;
 
     /** @internal */
@@ -2412,8 +2419,11 @@ export class ConfiguredProject extends Project {
 
     private projectReferences: readonly ProjectReference[] | undefined;
 
-    /** Potential project references before the project is actually loaded (read config file) */
-    /** @internal */
+    /**
+     * Potential project references before the project is actually loaded (read config file)
+     *
+     * @internal
+     */
     potentialProjectReferences: Set<string> | undefined;
 
     /** @internal */
@@ -2630,8 +2640,11 @@ export class ConfiguredProject extends Project {
             !this.canConfigFileJsonReportNoInputFiles;
     }
 
-    /** @internal */
-    /** Find the configured project from the project references in project which contains the info directly */
+    /**
+     * Find the configured project from the project references in project which contains the info directly
+     *
+     * @internal
+     */
     getDefaultChildProjectFromProjectWithReferences(info: ScriptInfo) {
         return forEachResolvedProjectReferenceProject(
             this,
@@ -2643,8 +2656,11 @@ export class ConfiguredProject extends Project {
         );
     }
 
-    /** Returns true if the project is needed by any of the open script info/external project */
-    /** @internal */
+    /**
+     * Returns true if the project is needed by any of the open script info/external project
+     *
+     * @internal
+     */
     hasOpenRef() {
         if (!!this.externalProjectRefCount) {
             return true;

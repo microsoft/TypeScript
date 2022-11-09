@@ -172,6 +172,8 @@ module.exports = createRule({
             TSIndexSignature: checkDeclaration,
             TSMethodSignature: checkDeclaration,
             TSParameterProperty: checkDeclaration,
+            PropertyDefinition: checkDeclaration,
+            MethodDefinition: checkDeclaration,
         };
     },
 });
