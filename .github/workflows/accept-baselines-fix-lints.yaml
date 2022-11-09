@@ -17,8 +17,8 @@ jobs:
         git config user.name "TypeScript Bot"
         npm install
         git rm -r --quiet tests/baselines/reference :^tests/baselines/reference/docker :^tests/baselines/reference/user
-        gulp runtests-parallel --ci --fix || true
-        gulp baseline-accept
+        npx hereby runtests-parallel --ci --fix || true
+        npx hereby baseline-accept
         git add ./src
         git add ./tests/baselines/reference
         git diff --cached

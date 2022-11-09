@@ -8,8 +8,9 @@ const os = require("os");
     file?: string;
     keepFailed?: boolean;
     reporter?: Mocha.ReporterConstructor | keyof Mocha.reporters;
-    reporterOptions?: any; // TODO(jakebailey): what?
+    reporterOptions?: any;
 }} ReporterOptions */
+void 0;
 
 /**
  * .failed-tests reporter
