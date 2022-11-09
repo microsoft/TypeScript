@@ -1,0 +1,11 @@
+/*====== /a.ts ======*/
+
+interface Foo {
+    property: "RENAME";
+}
+/**
+ * @type {{ property: "foo"}}
+ */
+const obj: Foo = {
+    property: "RENAME",
+}

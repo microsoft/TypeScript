@@ -7,9 +7,10 @@ export {x} from "jquery";
 >x : Symbol(x, Decl(reExportX.ts, 0, 8))
 
 === tests/cases/conformance/ambient/reExportAll.ts ===
+
 export * from "jquery";
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/ambient/reExportUser.ts ===
+
+=== tests/cases/conformance/ambient/reExportUser.ts ===
 import {x} from "./reExportX";
 >x : Symbol(x, Decl(reExportUser.ts, 0, 8))
 

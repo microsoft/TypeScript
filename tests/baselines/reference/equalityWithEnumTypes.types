@@ -17,13 +17,13 @@ enum E2 {
 >E2 : E2
 
     a = 1 << 0,
->a : E2
+>a : E2.a
 >1 << 0 : number
 >1 : 1
 >0 : 0
 
     b = 1 << 1
->b : E2
+>b : E2.b
 >1 << 1 : number
 >1 : 1
 >1 : 1
@@ -85,7 +85,7 @@ function f2(v: E2) {
 >1 : 1
 
         v;
->v : E2
+>v : E2.b
     }
     if (v !== 2) {
 >v !== 2 : boolean
@@ -93,7 +93,7 @@ function f2(v: E2) {
 >2 : 2
 
         v;
->v : E2
+>v : E2.a
     }
     if (v !== 3) {
 >v !== 3 : boolean
