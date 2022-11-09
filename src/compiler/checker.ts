@@ -10162,9 +10162,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypeOfPrototypeProperty(prototype: Symbol): Type {
-        // TypeScript 1.0 spec (April 2014): 8.4
         // Every class automatically contains a static property member named 'prototype',
         // the type of which is an instantiation of the class type.
+        // Type parameters on this class are instantiated with a type based on their constraint and variance.
         // It is an error to explicitly declare a static property member with the name 'prototype'.
         const classSymbol = getParentOfSymbol(prototype)!;
         return getInstanceTypeOfClassSymbol(classSymbol);
