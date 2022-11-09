@@ -1,18 +1,18 @@
+import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { TestSession, createSession, checkNumberOfProjects, checkProjectActualFiles } from "./helpers";
 
 describe("unittests:: tsserver:: syntax operations", () => {
     function navBarFull(session: TestSession, file: File) {
-        return JSON.stringify(session.executeCommandSeq<protocol.FileRequest>({
-            command: protocol.CommandTypes.NavBarFull,
+        return JSON.stringify(session.executeCommandSeq<ts.server.protocol.FileRequest>({
+            command: ts.server.protocol.CommandTypes.NavBarFull,
             arguments: { file: file.path }
         }).response);
     }
 
     function openFile(session: TestSession, file: File) {
-        session.executeCommandSeq<protocol.OpenRequest>({
-            command: protocol.CommandTypes.Open,
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+            command: ts.server.protocol.CommandTypes.Open,
             arguments: { file: file.path, fileContent: file.content }
         });
     }
@@ -65,8 +65,8 @@ describe("Test Suite 1", () => {
         host.checkTimeoutQueueLengthAndRun(0);
         checkProjectActualFiles(project, expectedFilesWithUnitTest1);
 
-        session.executeCommandSeq<protocol.CloseRequest>({
-            command: protocol.CommandTypes.Close,
+        session.executeCommandSeq<ts.server.protocol.CloseRequest>({
+            command: ts.server.protocol.CommandTypes.Close,
             arguments: { file: unitTest1.path }
         });
         host.checkTimeoutQueueLengthAndRun(2);

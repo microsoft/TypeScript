@@ -1,7 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, libFile, Tsc_WatchDirectory } from "../virtualFileSystemWithWatch";
 import { commonFile1, commonFile2 } from "../tscWatch/helpers";
-import { protocol } from "../../_namespaces/ts.server";
 import { createSession, createLoggerWithInMemoryLogs, openFilesForSession, protocolFileLocationFromSubstring, baselineTsserverLogs, Logger, TestSession, toExternalFiles, createProjectService } from "./helpers";
 
 describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watchDirectories implementation", () => {
@@ -32,8 +31,8 @@ describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watchD
             const host = createServerHost(files, { environmentVariables });
             const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([index], session);
-            session.executeCommandSeq<protocol.CompletionsRequest>({
-                command: protocol.CommandTypes.CompletionInfo,
+            session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+                command: ts.server.protocol.CommandTypes.CompletionInfo,
                 arguments: protocolFileLocationFromSubstring(index, '"', { index: 1 })
             });
 
@@ -44,8 +43,8 @@ describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watchD
             };
             host.writeFile(file2.path, file2.content);
             host.runQueuedTimeoutCallbacks();
-            session.executeCommandSeq<protocol.CompletionsRequest>({
-                command: protocol.CommandTypes.CompletionInfo,
+            session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+                command: ts.server.protocol.CommandTypes.CompletionInfo,
                 arguments: protocolFileLocationFromSubstring(index, '"', { index: 1 })
             });
             baselineTsserverLogs("watchEnvironment", scenario, session);
@@ -192,11 +191,11 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
         const host = createServerHost(files.concat(commonFile1));
         const logger = createLoggerWithInMemoryLogs(host);
         const session = createSession(host, { logger });
-        session.executeCommandSeq<protocol.ConfigureRequest>({
-            command: protocol.CommandTypes.Configure,
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
             arguments: {
                 watchOptions: {
-                    watchFile: protocol.WatchFileKind.UseFsEvents
+                    watchFile: ts.server.protocol.WatchFileKind.UseFsEvents
                 }
             }
         });
@@ -213,11 +212,11 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
         const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true });
         const logger = createLoggerWithInMemoryLogs(host);
         const session = createSession(host, { logger });
-        session.executeCommandSeq<protocol.ConfigureRequest>({
-            command: protocol.CommandTypes.Configure,
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
             arguments: {
                 watchOptions: {
-                    watchDirectory: protocol.WatchDirectoryKind.UseFsEvents
+                    watchDirectory: ts.server.protocol.WatchDirectoryKind.UseFsEvents
                 }
             }
         });
@@ -234,11 +233,11 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
         const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
         const logger = createLoggerWithInMemoryLogs(host);
         const session = createSession(host, { logger });
-        session.executeCommandSeq<protocol.ConfigureRequest>({
-            command: protocol.CommandTypes.Configure,
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
             arguments: {
                 watchOptions: {
-                    fallbackPolling: protocol.PollingWatchKind.PriorityInterval
+                    fallbackPolling: ts.server.protocol.PollingWatchKind.PriorityInterval
                 }
             }
         });
@@ -293,11 +292,11 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
         const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
         const logger = createLoggerWithInMemoryLogs(host);
         const session = createSession(host, { logger });
-        session.executeCommandSeq<protocol.ConfigureRequest>({
-            command: protocol.CommandTypes.Configure,
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
             arguments: {
                 watchOptions: {
-                    fallbackPolling: protocol.PollingWatchKind.PriorityInterval
+                    fallbackPolling: ts.server.protocol.PollingWatchKind.PriorityInterval
                 }
             }
         });
@@ -324,8 +323,8 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
 
         function setupConfigureHost(session: TestSession, configureHost: boolean | undefined) {
             if (configureHost) {
-                session.executeCommandSeq<protocol.ConfigureRequest>({
-                    command: protocol.CommandTypes.Configure,
+                session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+                    command: ts.server.protocol.CommandTypes.Configure,
                     arguments: {
                         watchOptions: { excludeDirectories: ["node_modules"] }
                     }
@@ -362,8 +361,8 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             const host = createServerHost(files, { currentDirectory: "/user/username/projects/myproject" });
             const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             setupConfigureHost(session, configureHost);
-            session.executeCommandSeq<protocol.OpenExternalProjectRequest>({
-                command: protocol.CommandTypes.OpenExternalProject,
+            session.executeCommandSeq<ts.server.protocol.OpenExternalProjectRequest>({
+                command: ts.server.protocol.CommandTypes.OpenExternalProject,
                 arguments: {
                     projectFileName: `/user/username/projects/myproject/project.csproj`,
                     rootFiles: toExternalFiles([main.path, bar.path, foo.path]),
@@ -393,7 +392,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
                 projectFileName: `/user/username/projects/myproject/project.csproj`,
                 rootFiles: toExternalFiles([main.path, bar.path, foo.path]),
                 options: { excludeDirectories: ["**/../*"] }
-            } as protocol.ExternalProject);
+            } as ts.server.protocol.ExternalProject);
             service.openClientFile(main.path);
             const project = service.externalProjects[0];
             service.logger.info(JSON.stringify(project.getAllProjectErrors(), undefined, 2));
@@ -406,8 +405,8 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             const host = createServerHost(files, { currentDirectory: "/user/username/projects/myproject" });
             const session = createSession(host, { useInferredProjectPerProjectRoot: true, logger: createLoggerWithInMemoryLogs(host) });
             setupConfigureHost(session, configureHost);
-            session.executeCommandSeq<protocol.SetCompilerOptionsForInferredProjectsRequest>({
-                command: protocol.CommandTypes.CompilerOptionsForInferredProjects,
+            session.executeCommandSeq<ts.server.protocol.SetCompilerOptionsForInferredProjectsRequest>({
+                command: ts.server.protocol.CommandTypes.CompilerOptionsForInferredProjects,
                 arguments: {
                     options: { excludeDirectories: ["node_modules"] },
                     projectRootPath: "/user/username/projects/myproject"

@@ -2,7 +2,6 @@ import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
 import { nullLogger, checkNumberOfProjects, checkProjectActualFiles, protocolFileLocationFromSubstring, protocolTextSpanWithContextFromSubstring } from "./helpers";
-import { protocol } from "../../_namespaces/ts.server";
 
 /* eslint-disable local/boolean-trivia */
 describe("unittests:: tsserver:: webServer", () => {
@@ -61,7 +60,7 @@ describe("unittests:: tsserver:: webServer", () => {
             session.executeCommand({
                 seq: 1,
                 type: "request",
-                command: protocol.CommandTypes.Open,
+                command: ts.server.protocol.CommandTypes.Open,
                 arguments: {
                     file: file.path,
                     fileContent: file.content
@@ -79,13 +78,13 @@ describe("unittests:: tsserver:: webServer", () => {
                 session.onMessage({
                     seq: 2,
                     type: "request",
-                    command: protocol.CommandTypes.Quickinfo,
+                    command: ts.server.protocol.CommandTypes.Quickinfo,
                     arguments: start
                 });
                 assert.deepEqual(ts.last(getMessages()), {
                     seq: 0,
                     type: "response",
-                    command: protocol.CommandTypes.Quickinfo,
+                    command: ts.server.protocol.CommandTypes.Quickinfo,
                     request_seq: 2,
                     success: true,
                     performanceData: undefined,
@@ -108,13 +107,13 @@ describe("unittests:: tsserver:: webServer", () => {
                 session.onMessage({
                     seq: 3,
                     type: "request",
-                    command: protocol.CommandTypes.DefinitionAndBoundSpan,
+                    command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
                     arguments: start
                 });
                 assert.deepEqual(ts.last(getMessages()), {
                     seq: 0,
                     type: "response",
-                    command: protocol.CommandTypes.DefinitionAndBoundSpan,
+                    command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
                     request_seq: 3,
                     success: true,
                     performanceData: undefined,
@@ -181,7 +180,7 @@ describe("unittests:: tsserver:: webServer", () => {
             const { session } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importPlugin);
             const projectService = session.getProjectService();
 
-            session.executeCommand({ seq: 1, type: "request", command: protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
+            session.executeCommand({ seq: 1, type: "request", command: ts.server.protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
 
             // This should be false because `executeCommand` should have already triggered
             // plugin enablement asynchronously and there are no plugin enablements currently
@@ -223,7 +222,7 @@ describe("unittests:: tsserver:: webServer", () => {
             const { session } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a", "plugin-b"] }, importPlugin);
             const projectService = session.getProjectService();
 
-            session.executeCommand({ seq: 1, type: "request", command: protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
+            session.executeCommand({ seq: 1, type: "request", command: ts.server.protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
 
             // wait a turn
             await Promise.resolve();
@@ -257,7 +256,7 @@ describe("unittests:: tsserver:: webServer", () => {
             const { session, getMessages } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importPlugin);
             const projectService = session.getProjectService();
 
-            session.executeCommand({ seq: 1, type: "request", command: protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
+            session.executeCommand({ seq: 1, type: "request", command: ts.server.protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
 
             await projectService.waitForPendingPlugins();
 
@@ -295,7 +294,7 @@ describe("unittests:: tsserver:: webServer", () => {
             const { session } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importPlugin);
             const projectService = session.getProjectService();
 
-            session.executeCommand({ seq: 1, type: "request", command: protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
+            session.executeCommand({ seq: 1, type: "request", command: ts.server.protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
 
             const project = projectService.inferredProjects[0];
 
@@ -336,13 +335,13 @@ describe("unittests:: tsserver:: webServer", () => {
             const { session, getMessages } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importPlugin);
             const projectService = session.getProjectService();
 
-            session.executeCommand({ seq: 1, type: "request", command: protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
+            session.executeCommand({ seq: 1, type: "request", command: ts.server.protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
 
             // wait for the plugin to start loading
             await pluginALoaded.promise;
 
             // close the project
-            session.executeCommand({ seq: 2, type: "request", command: protocol.CommandTypes.Close, arguments: { file: "^memfs:/foo.ts" } });
+            session.executeCommand({ seq: 2, type: "request", command: ts.server.protocol.CommandTypes.Close, arguments: { file: "^memfs:/foo.ts" } });
 
             // continue loading the plugin
             projectClosed.resolve();

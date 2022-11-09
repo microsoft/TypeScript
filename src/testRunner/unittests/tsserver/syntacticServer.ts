@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { createSession, createLoggerWithInMemoryLogs, TestSession, openFilesForSession, closeFilesForSession, baselineTsserverLogs, protocolFileLocationFromSubstring, checkNumberOfProjects, checkProjectActualFiles } from "./helpers";
 
 describe("unittests:: tsserver:: Semantic operations on Syntax server", () => {
@@ -64,22 +63,22 @@ import { something } from "something";
         baselineTsserverLogs("syntacticServer", "files go to inferred project and semantic operations fail", session);
 
         function verifyCompletions() {
-            verifySessionException<protocol.CompletionsRequest>(session, {
-                command: protocol.CommandTypes.Completions,
+            verifySessionException<ts.server.protocol.CompletionsRequest>(session, {
+                command: ts.server.protocol.CommandTypes.Completions,
                 arguments: protocolFileLocationFromSubstring(file1, "prop", { index: 1 })
             });
         }
 
         function verifyGoToDefToB() {
-            verifySessionException<protocol.DefinitionAndBoundSpanRequest>(session, {
-                command: protocol.CommandTypes.DefinitionAndBoundSpan,
+            verifySessionException<ts.server.protocol.DefinitionAndBoundSpanRequest>(session, {
+                command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
                 arguments: protocolFileLocationFromSubstring(file1, "y")
             });
         }
 
         function verifyGoToDefToC() {
-            verifySessionException<protocol.DefinitionAndBoundSpanRequest>(session, {
-                command: protocol.CommandTypes.DefinitionAndBoundSpan,
+            verifySessionException<ts.server.protocol.DefinitionAndBoundSpanRequest>(session, {
+                command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
                 arguments: protocolFileLocationFromSubstring(file1, "cc")
             });
         }
@@ -89,10 +88,10 @@ import { something } from "something";
         const { session, file1 } = setup();
         const service = session.getProjectService();
         openFilesForSession([file1], session);
-        verifySessionException<protocol.SemanticDiagnosticsSyncRequest>(session, {
+        verifySessionException<ts.server.protocol.SemanticDiagnosticsSyncRequest>(session, {
             type: "request",
             seq: 1,
-            command: protocol.CommandTypes.SemanticDiagnosticsSync,
+            command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: { file: file1.path }
         });
 

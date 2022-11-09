@@ -1,12 +1,11 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
 import { createServerHost, File, TestServerHost } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { mapOutputToJson, TestSession, createSession, openFilesForSession } from "./helpers";
 
 describe("unittests:: tsserver:: with metadata in response", () => {
     const metadata = "Extra Info";
-    function verifyOutput(host: TestServerHost, expectedResponse: protocol.Response) {
+    function verifyOutput(host: TestServerHost, expectedResponse: ts.server.protocol.Response) {
         const output = host.getOutput().map(mapOutputToJson);
         assert.deepEqual(output, [expectedResponse]);
         host.clearOutput();
@@ -54,12 +53,12 @@ describe("unittests:: tsserver:: with metadata in response", () => {
     }
 
     describe("With completion requests", () => {
-        const completionRequestArgs: protocol.CompletionsRequestArgs = {
+        const completionRequestArgs: ts.server.protocol.CompletionsRequestArgs = {
             file: aTs.path,
             line: 1,
             offset: aTs.content.indexOf("this.") + 1 + "this.".length
         };
-        const expectedCompletionEntries: readonly protocol.CompletionEntry[] = [
+        const expectedCompletionEntries: readonly ts.server.protocol.CompletionEntry[] = [
             { name: "foo", kind: ts.ScriptElementKind.memberFunctionElement, kindModifiers: "", sortText: ts.Completions.SortText.LocationPriority },
             { name: "prop", kind: ts.ScriptElementKind.memberVariableElement, kindModifiers: "", sortText: ts.Completions.SortText.LocationPriority }
         ];
@@ -68,8 +67,8 @@ describe("unittests:: tsserver:: with metadata in response", () => {
             const host = createHostWithPlugin([aTs, tsconfig]);
             const session = createSession(host);
             openFilesForSession([aTs], session);
-            verifyCommandWithMetadata<protocol.CompletionsRequest, readonly protocol.CompletionEntry[]>(session, host, {
-                command: protocol.CommandTypes.Completions,
+            verifyCommandWithMetadata<ts.server.protocol.CompletionsRequest, readonly ts.server.protocol.CompletionEntry[]>(session, host, {
+                command: ts.server.protocol.CommandTypes.Completions,
                 arguments: completionRequestArgs
             }, expectedCompletionEntries);
         });
@@ -78,8 +77,8 @@ describe("unittests:: tsserver:: with metadata in response", () => {
             const host = createHostWithPlugin([aTs, tsconfig]);
             const session = createSession(host);
             openFilesForSession([aTs], session);
-            verifyCommandWithMetadata<protocol.CompletionsRequest, protocol.CompletionInfo>(session, host, {
-                command: protocol.CommandTypes.CompletionInfo,
+            verifyCommandWithMetadata<ts.server.protocol.CompletionsRequest, ts.server.protocol.CompletionInfo>(session, host, {
+                command: ts.server.protocol.CommandTypes.CompletionInfo,
                 arguments: completionRequestArgs
             }, {
                 flags: 0,
@@ -99,8 +98,8 @@ describe("unittests:: tsserver:: with metadata in response", () => {
             const host = createHostWithPlugin([aTs, tsconfig]);
             const session = createSession(host);
             openFilesForSession([aTs], session);
-            verifyCommandWithMetadata<protocol.CompletionsRequest>(session, host, {
-                command: protocol.CommandTypes.Completions,
+            verifyCommandWithMetadata<ts.server.protocol.CompletionsRequest>(session, host, {
+                command: ts.server.protocol.CommandTypes.Completions,
                 arguments: { file: aTs.path, line: 1, offset: aTs.content.indexOf("x") + 1 }
             }, /*expectedResponseBody*/ undefined);
         });

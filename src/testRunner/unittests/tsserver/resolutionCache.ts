@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, libFile, TestServerHost } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { createProjectService, TestTypingsInstaller, createLoggerWithInMemoryLogs, baselineTsserverLogs, checkProjectActualFiles, configuredProjectAt, createSession, openFilesForSession, makeSessionRequest, verifyGetErrRequest, toExternalFiles, checkNumberOfProjects } from "./helpers";
 
 describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra resolution pass in server host", () => {
@@ -113,7 +112,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
         };
         const host = createServerHost([file1, libFile]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
-        session.executeCommandSeq<protocol.OpenRequest>({
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.CommandNames.Open,
             arguments: {
                 file: file1.path,
@@ -146,7 +145,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
         const host = createServerHost([file]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
 
-        session.executeCommandSeq<protocol.OpenRequest>({
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.CommandNames.Open,
             arguments: { file: file.path, fileContent: file.content },
         });
@@ -165,12 +164,12 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
         const host = createServerHost([file]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
 
-        session.executeCommandSeq<protocol.OpenRequest>({
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.CommandNames.Open,
             arguments: { file: file.path, fileContent: file.content },
         });
 
-        session.executeCommandSeq<protocol.ConfigureRequest>({
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.CommandNames.Configure,
             arguments: {
                 preferences: { disableSuggestions: true }
@@ -191,13 +190,13 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
         const host = createServerHost([file]);
         const session = createSession(host, { canUseEvents: true, suppressDiagnosticEvents: true, logger: createLoggerWithInMemoryLogs(host) });
 
-        session.executeCommandSeq<protocol.OpenRequest>({
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.CommandNames.Open,
             arguments: { file: file.path, fileContent: file.content },
         });
 
         host.checkTimeoutQueueLength(0);
-        session.executeCommandSeq<protocol.GeterrRequest>({
+        session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
             command: ts.server.CommandNames.Geterr,
             arguments: {
                 delay: 0,
@@ -206,7 +205,7 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
         });
 
         host.checkTimeoutQueueLength(0);
-        session.executeCommandSeq<protocol.GeterrForProjectRequest>({
+        session.executeCommandSeq<ts.server.protocol.GeterrForProjectRequest>({
             command: ts.server.CommandNames.Geterr,
             arguments: {
                 delay: 0,

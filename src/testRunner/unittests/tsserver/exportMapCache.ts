@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { createSession, openFilesForSession, configuredProjectAt, executeSessionRequest } from "./helpers";
 
 const packageJson: File = {
@@ -99,8 +98,8 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         const symbolIdBefore = ts.getSymbolId(sigintPropBefore![0].symbol);
 
         // Update program without clearing cache
-        session.executeCommandSeq<protocol.UpdateOpenRequest>({
-            command: protocol.CommandTypes.UpdateOpen,
+        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+            command: ts.server.protocol.CommandTypes.UpdateOpen,
             arguments: {
                 changedFiles: [{
                     fileName: bTs.path,
@@ -136,12 +135,12 @@ function setup() {
     return { host, project, projectService, session, exportMapCache: project.getCachedExportInfoMap(), checker, triggerCompletions };
 
     function triggerCompletions() {
-        const requestLocation: protocol.FileLocationRequestArgs = {
+        const requestLocation: ts.server.protocol.FileLocationRequestArgs = {
             file: bTs.path,
             line: 1,
             offset: 3,
         };
-        executeSessionRequest<protocol.CompletionsRequest, protocol.CompletionInfoResponse>(session, protocol.CommandTypes.CompletionInfo, {
+        executeSessionRequest<ts.server.protocol.CompletionsRequest, ts.server.protocol.CompletionInfoResponse>(session, ts.server.protocol.CommandTypes.CompletionInfo, {
             ...requestLocation,
             includeExternalModuleExports: true,
             prefix: "foo",

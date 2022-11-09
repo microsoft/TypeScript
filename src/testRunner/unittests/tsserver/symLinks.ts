@@ -1,5 +1,5 @@
+import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, libFile, SymLink, TestServerHost } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { createSession, createLoggerWithInMemoryLogs, openFilesForSession, executeSessionRequest, protocolLocationFromSubstring, baselineTsserverLogs, verifyGetErrRequest } from "./helpers";
 
 describe("unittests:: tsserver:: symLinks", () => {
@@ -51,7 +51,7 @@ describe("unittests:: tsserver:: symLinks", () => {
                 { file: bFc, projectRootPath: folderB },
             ],
             session);
-        executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, { file: aFc, ...protocolLocationFromSubstring(cFile.content, "C") });
+        executeSessionRequest<ts.server.protocol.RenameRequest, ts.server.protocol.RenameResponse>(session, ts.server.protocol.CommandTypes.Rename, { file: aFc, ...protocolLocationFromSubstring(cFile.content, "C") });
         baselineTsserverLogs("symLinks", "rename in common file renames all project", session);
     });
 
@@ -109,8 +109,8 @@ new C();`
 
         function createSessionAndOpenFile(host: TestServerHost) {
             const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: protocol.CommandTypes.Open,
+            session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+                command: ts.server.protocol.CommandTypes.Open,
                 arguments: {
                     file: recognizersDateTimeSrcFile.path,
                     projectRootPath

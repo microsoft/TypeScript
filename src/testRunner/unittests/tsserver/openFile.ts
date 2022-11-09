@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { createProjectService, toExternalFile, checkProjectActualFiles, createSession, createLoggerWithInMemoryLogs, openFilesForSession, verifyGetErrRequest, protocolTextSpanFromSubstring, baselineTsserverLogs } from "./helpers";
 
 describe("unittests:: tsserver:: Open-file", () => {
@@ -158,8 +157,8 @@ bar();`
         // Remove first ts-ignore and check only first error is reported
         const tsIgnoreComment = `// @ts-ignore`;
         const locationOfTsIgnore = protocolTextSpanFromSubstring(file.content, tsIgnoreComment);
-        session.executeCommandSeq<protocol.UpdateOpenRequest>({
-            command: protocol.CommandTypes.UpdateOpen,
+        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+            command: ts.server.protocol.CommandTypes.UpdateOpen,
             arguments: {
                 changedFiles: [{
                     fileName: file.path,
@@ -172,8 +171,8 @@ bar();`
         });
         verifyGetErrRequest({ session, host, files: [file] });
         // Revert the change and no errors should be reported
-        session.executeCommandSeq<protocol.UpdateOpenRequest>({
-            command: protocol.CommandTypes.UpdateOpen,
+        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+            command: ts.server.protocol.CommandTypes.UpdateOpen,
             arguments: {
                 changedFiles: [{
                     fileName: file.path,

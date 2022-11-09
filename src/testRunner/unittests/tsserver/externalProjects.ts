@@ -1,7 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
 import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { createProjectService, toExternalFiles, checkProjectActualFiles, toExternalFile, createSession, checkNumberOfProjects, checkNumberOfExternalProjects, checkNumberOfInferredProjects, verifyDynamic, checkProjectRootFiles, configuredProjectAt } from "./helpers";
 
 describe("unittests:: tsserver:: ExternalProjects", () => {
@@ -26,7 +25,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
                 projectFileName: "/a/b/project.csproj",
                 rootFiles: toExternalFiles([f1.path, upperCaseConfigFilePath]),
                 options: {}
-            } as protocol.ExternalProject);
+            } as ts.server.protocol.ExternalProject);
             service.checkNumberOfProjects({ configuredProjects: 1 });
             const project = service.configuredProjects.get(config.path)!;
             if (lazyConfiguredProjectsFromExternalProject) {
@@ -95,7 +94,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
             type: "request",
             command: "openExternalProjects",
             arguments: { projects: [p1] }
-        } as protocol.OpenExternalProjectsRequest);
+        } as ts.server.protocol.OpenExternalProjectsRequest);
 
         const projectService = session.getProjectService();
         checkNumberOfProjects(projectService, { externalProjects: 1 });
@@ -109,10 +108,10 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
                 file: f1.path,
                 projectFileName: p1.projectFileName
             }
-        } as protocol.SemanticDiagnosticsSyncRequest);
+        } as ts.server.protocol.SemanticDiagnosticsSyncRequest);
 
         assert.isDefined(handlerResponse.response);
-        const response = handlerResponse.response as protocol.Diagnostic[];
+        const response = handlerResponse.response as ts.server.protocol.Diagnostic[];
         assert.equal(response.length, 1);
         assert.equal(response[0].text, "Plugin diagnostic");
     });
@@ -143,7 +142,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
             type: "request",
             command: "openExternalProjects",
             arguments: { projects: [p1, p2] }
-        } as protocol.OpenExternalProjectsRequest);
+        } as ts.server.protocol.OpenExternalProjectsRequest);
 
         const projectService = session.getProjectService();
         checkNumberOfProjects(projectService, { externalProjects: 2 });
@@ -155,7 +154,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
             type: "request",
             command: "openExternalProjects",
             arguments: { projects: [p1, p3] }
-        } as protocol.OpenExternalProjectsRequest);
+        } as ts.server.protocol.OpenExternalProjectsRequest);
         checkNumberOfProjects(projectService, { externalProjects: 2 });
         assert.equal(projectService.externalProjects[0].getProjectName(), p1.projectFileName);
         assert.equal(projectService.externalProjects[1].getProjectName(), p3.projectFileName);
@@ -165,7 +164,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
             type: "request",
             command: "openExternalProjects",
             arguments: { projects: [] }
-        } as protocol.OpenExternalProjectsRequest);
+        } as ts.server.protocol.OpenExternalProjectsRequest);
         checkNumberOfProjects(projectService, { externalProjects: 0 });
 
         session.executeCommand({
@@ -173,7 +172,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
             type: "request",
             command: "openExternalProjects",
             arguments: { projects: [p2] }
-        } as protocol.OpenExternalProjectsRequest);
+        } as ts.server.protocol.OpenExternalProjectsRequest);
         assert.equal(projectService.externalProjects[0].getProjectName(), p2.projectFileName);
     });
 
@@ -249,7 +248,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
                 toExternalFile(file.path),
                 toExternalFile(app.path)
             ],
-            options: { },
+            options: {},
         }]);
     });
 
@@ -516,7 +515,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
             const projectService = createProjectService(host);
             projectService.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject } });
 
-            const externalProject: protocol.ExternalProject = {
+            const externalProject: ts.server.protocol.ExternalProject = {
                 projectFileName,
                 rootFiles: [toExternalFile(site.path), toExternalFile(configFile.path)],
                 options: { allowJs: false },
@@ -825,7 +824,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
             projectFileName,
             rootFiles: toExternalFiles([f1.path, config.path]),
             options: {}
-        } as protocol.ExternalProject);
+        } as ts.server.protocol.ExternalProject);
         service.checkNumberOfProjects({ configuredProjects: 1 });
         const project = service.configuredProjects.get(config.path)!;
         assert.equal(project.pendingReload, ts.ConfigFileProgramReloadLevel.Full); // External project referenced configured project pending to be reloaded
@@ -842,7 +841,7 @@ describe("unittests:: tsserver:: ExternalProjects", () => {
             projectFileName,
             rootFiles: toExternalFiles([f1.path, config.path]),
             options: {}
-        } as protocol.ExternalProject);
+        } as ts.server.protocol.ExternalProject);
         service.checkNumberOfProjects({ configuredProjects: 1 });
         const project2 = service.configuredProjects.get(config.path)!;
         assert.equal(project2.pendingReload, ts.ConfigFileProgramReloadLevel.None); // External project referenced configured project loaded

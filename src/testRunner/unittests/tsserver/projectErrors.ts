@@ -1,7 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, Folder, libFile } from "../virtualFileSystemWithWatch";
 import { createSession, toExternalFiles, checkNumberOfProjects, openFilesForSession, configuredProjectAt, createProjectService, checkProjectRootFiles, createLoggerWithInMemoryLogs, appendAllScriptInfos, verifyGetErrRequest, baselineTsserverLogs, closeFilesForSession, verifyGetErrScenario, executeSessionRequest } from "./helpers";
-import { protocol } from "../../_namespaces/ts.server";
 
 describe("unittests:: tsserver:: Project Errors", () => {
     function checkProjectErrors(projectFiles: ts.server.ProjectFilesWithTSDiagnostics, expectedErrors: readonly string[]): void {
@@ -243,7 +242,7 @@ describe("unittests:: tsserver:: Project Errors are reported as appropriate", ()
             const refPathNotFound2 = "./src/somefile.d.ts";
             const fileContent = `/// <reference path="${refPathNotFound1}" />
 /// <reference path="${refPathNotFound2}" />`;
-            session.executeCommandSeq<protocol.OpenRequest>({
+            session.executeCommandSeq<ts.server.protocol.OpenRequest>({
                 command: ts.server.CommandNames.Open,
                 arguments: {
                     file: untitledFile,
@@ -286,7 +285,7 @@ describe("unittests:: tsserver:: Project Errors are reported as appropriate", ()
         const host = createServerHost([app, foo, configFile]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
 
-        session.executeCommandSeq<protocol.OpenRequest>({
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.CommandNames.Open,
             arguments: { file: app.path, }
         });
@@ -306,7 +305,7 @@ describe("unittests:: tsserver:: Project Errors are reported as appropriate", ()
         };
         const host = createServerHost([file, libFile]);
         const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
-        session.executeCommandSeq<protocol.GeterrRequest>({
+        session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
             command: ts.server.CommandNames.Geterr,
             arguments: {
                 delay: 0,
@@ -376,8 +375,8 @@ declare module '@custom/plugin' {
 
         checkErrors();
 
-        session.executeCommandSeq<protocol.ChangeRequest>({
-            command: protocol.CommandTypes.Change,
+        session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+            command: ts.server.protocol.CommandTypes.Change,
             arguments: {
                 file: aFile.path,
                 line: 3,
@@ -609,7 +608,7 @@ describe("unittests:: tsserver:: Project Errors dont include overwrite emit erro
             command: ts.server.CommandNames.CompilerOptionsDiagnosticsFull,
             seq: 2,
             arguments: { projectFileName: projectName }
-        } as ts.server.protocol.CompilerOptionsDiagnosticsRequest).response as readonly protocol.DiagnosticWithLinePosition[];
+        } as ts.server.protocol.CompilerOptionsDiagnosticsRequest).response as readonly ts.server.protocol.DiagnosticWithLinePosition[];
         assert.isTrue(diags.length === 0);
 
         session.executeCommand({
@@ -623,7 +622,7 @@ describe("unittests:: tsserver:: Project Errors dont include overwrite emit erro
             command: ts.server.CommandNames.CompilerOptionsDiagnosticsFull,
             seq: 4,
             arguments: { projectFileName: projectName }
-        } as ts.server.protocol.CompilerOptionsDiagnosticsRequest).response as readonly protocol.DiagnosticWithLinePosition[];
+        } as ts.server.protocol.CompilerOptionsDiagnosticsRequest).response as readonly ts.server.protocol.DiagnosticWithLinePosition[];
         assert.isTrue(diagsAfterUpdate.length === 0);
     });
 
@@ -641,7 +640,7 @@ describe("unittests:: tsserver:: Project Errors dont include overwrite emit erro
             projectFileName,
             rootFiles: externalFiles,
             options: {}
-        } as protocol.ExternalProject);
+        } as ts.server.protocol.ExternalProject);
 
         checkNumberOfProjects(projectService, { externalProjects: 1 });
 
@@ -751,8 +750,8 @@ describe("unittests:: tsserver:: Project Errors with config file change", () => 
         host.modifyFile(tsconfig.path, options(/*allowUnusedLabels*/ false));
         host.runQueuedTimeoutCallbacks();
 
-        const response = executeSessionRequest<protocol.SemanticDiagnosticsSyncRequest, protocol.SemanticDiagnosticsSyncResponse>(session, protocol.CommandTypes.SemanticDiagnosticsSync, { file: aTs.path }) as protocol.Diagnostic[] | undefined;
-        assert.deepEqual<protocol.Diagnostic[] | undefined>(response, [
+        const response = executeSessionRequest<ts.server.protocol.SemanticDiagnosticsSyncRequest, ts.server.protocol.SemanticDiagnosticsSyncResponse>(session, ts.server.protocol.CommandTypes.SemanticDiagnosticsSync, { file: aTs.path }) as ts.server.protocol.Diagnostic[] | undefined;
+        assert.deepEqual<ts.server.protocol.Diagnostic[] | undefined>(response, [
             {
                 start: { line: 1, offset: 1 },
                 end: { line: 1, offset: 1 + "label".length },

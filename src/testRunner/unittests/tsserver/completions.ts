@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { createSession, openFilesForSession, executeSessionRequest, TestTypingsInstaller, checkNumberOfProjects, checkProjectActualFiles } from "./helpers";
 
 describe("unittests:: tsserver:: completions", () => {
@@ -21,18 +20,18 @@ describe("unittests:: tsserver:: completions", () => {
         const session = createSession(createServerHost([aTs, bTs, tsconfig]));
         openFilesForSession([aTs, bTs], session);
 
-        const requestLocation: protocol.FileLocationRequestArgs = {
+        const requestLocation: ts.server.protocol.FileLocationRequestArgs = {
             file: bTs.path,
             line: 1,
             offset: 3,
         };
 
-        const response = executeSessionRequest<protocol.CompletionsRequest, protocol.CompletionInfoResponse>(session, protocol.CommandTypes.CompletionInfo, {
+        const response = executeSessionRequest<ts.server.protocol.CompletionsRequest, ts.server.protocol.CompletionInfoResponse>(session, ts.server.protocol.CommandTypes.CompletionInfo, {
             ...requestLocation,
             includeExternalModuleExports: true,
             prefix: "foo",
         });
-        const entry: protocol.CompletionEntry = {
+        const entry: ts.server.protocol.CompletionEntry = {
             hasAction: true,
             insertText: undefined,
             isRecommended: undefined,
@@ -55,7 +54,7 @@ describe("unittests:: tsserver:: completions", () => {
         const exportMapKey = (response?.entries[0].data as any)?.exportMapKey;
         assert.isString(exportMapKey);
         delete (response?.entries[0].data as any).exportMapKey;
-        assert.deepEqual<protocol.CompletionInfo | undefined>(response, {
+        assert.deepEqual<ts.server.protocol.CompletionInfo | undefined>(response, {
             flags: ts.CompletionInfoFlags.MayIncludeAutoImports,
             isGlobalCompletion: true,
             isIncomplete: undefined,
@@ -65,13 +64,13 @@ describe("unittests:: tsserver:: completions", () => {
             entries: [entry],
         });
 
-        const detailsRequestArgs: protocol.CompletionDetailsRequestArgs = {
+        const detailsRequestArgs: ts.server.protocol.CompletionDetailsRequestArgs = {
             ...requestLocation,
             entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
         };
 
-        const detailsResponse = executeSessionRequest<protocol.CompletionDetailsRequest, protocol.CompletionDetailsResponse>(session, protocol.CommandTypes.CompletionDetails, detailsRequestArgs);
-        const detailsCommon: protocol.CompletionEntryDetails & ts.CompletionEntryDetails = {
+        const detailsResponse = executeSessionRequest<ts.server.protocol.CompletionDetailsRequest, ts.server.protocol.CompletionDetailsResponse>(session, ts.server.protocol.CommandTypes.CompletionDetails, detailsRequestArgs);
+        const detailsCommon: ts.server.protocol.CompletionEntryDetails & ts.CompletionEntryDetails = {
             displayParts: [
                 ts.keywordPart(ts.SyntaxKind.ConstKeyword),
                 ts.spacePart(),
@@ -87,7 +86,7 @@ describe("unittests:: tsserver:: completions", () => {
             source: [{ text: "./a", kind: "text" }],
             sourceDisplay: [{ text: "./a", kind: "text" }],
         };
-        assert.deepEqual<readonly protocol.CompletionEntryDetails[] | undefined>(detailsResponse, [
+        assert.deepEqual<readonly ts.server.protocol.CompletionEntryDetails[] | undefined>(detailsResponse, [
             {
                 codeActions: [
                     {
@@ -112,14 +111,14 @@ describe("unittests:: tsserver:: completions", () => {
             },
         ]);
 
-        interface CompletionDetailsFullRequest extends protocol.FileLocationRequest {
-            readonly command: protocol.CommandTypes.CompletionDetailsFull;
-            readonly arguments: protocol.CompletionDetailsRequestArgs;
+        interface CompletionDetailsFullRequest extends ts.server.protocol.FileLocationRequest {
+            readonly command: ts.server.protocol.CommandTypes.CompletionDetailsFull;
+            readonly arguments: ts.server.protocol.CompletionDetailsRequestArgs;
         }
-        interface CompletionDetailsFullResponse extends protocol.Response {
+        interface CompletionDetailsFullResponse extends ts.server.protocol.Response {
             readonly body?: readonly ts.CompletionEntryDetails[];
         }
-        const detailsFullResponse = executeSessionRequest<CompletionDetailsFullRequest, CompletionDetailsFullResponse>(session, protocol.CommandTypes.CompletionDetailsFull, detailsRequestArgs);
+        const detailsFullResponse = executeSessionRequest<CompletionDetailsFullRequest, CompletionDetailsFullResponse>(session, ts.server.protocol.CommandTypes.CompletionDetailsFull, detailsRequestArgs);
         assert.deepEqual<readonly ts.CompletionEntryDetails[] | undefined>(detailsFullResponse, [
             {
                 codeActions: [
@@ -256,8 +255,8 @@ export interface BrowserRouterProps {
         checkNumberOfProjects(service, { inferredProjects: 1 });
         const windowsStyleLibFilePath = "c:/" + libFile.path.substring(1);
         checkProjectActualFiles(service.inferredProjects[0], filesInProject.map(f => f.path).concat(windowsStyleLibFilePath));
-        session.executeCommandSeq<protocol.CompletionsRequest>({
-            command: protocol.CommandTypes.CompletionInfo,
+        session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+            command: ts.server.protocol.CommandTypes.CompletionInfo,
             arguments: {
                 file: appFile.path,
                 line: 5,

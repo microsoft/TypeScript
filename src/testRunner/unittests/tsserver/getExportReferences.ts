@@ -1,5 +1,5 @@
+import * as ts from "../../_namespaces/ts";
 import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { createSession, openFilesForSession, makeReferenceItem, MakeReferenceItem, executeSessionRequest, protocolFileLocationFromSubstring, protocolLocationFromSubstring } from "./helpers";
 
 describe("unittests:: tsserver:: getExportReferences", () => {
@@ -32,7 +32,7 @@ ${exportNestedObject}
         return session;
     }
 
-    const referenceMainTs = (mainTs: File, text: string): protocol.ReferencesResponseItem =>
+    const referenceMainTs = (mainTs: File, text: string): ts.server.protocol.ReferencesResponseItem =>
         makeReferenceItem({
             file: mainTs,
             isDefinition: false,
@@ -45,7 +45,7 @@ ${exportNestedObject}
     const referenceModTs = (
         texts: { text: string; lineText: string; contextText?: string },
         override: Partial<MakeReferenceItem> = {},
-    ): protocol.ReferencesResponseItem =>
+    ): ts.server.protocol.ReferencesResponseItem =>
         makeReferenceItem({
             file: modTs,
             isDefinition: true,
@@ -56,9 +56,9 @@ ${exportNestedObject}
     it("should get const variable declaration references", () => {
         const session = makeSampleSession();
 
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(
+        const response = executeSessionRequest<ts.server.protocol.ReferencesRequest, ts.server.protocol.ReferencesResponse>(
             session,
-            protocol.CommandTypes.References,
+            ts.server.protocol.CommandTypes.References,
             protocolFileLocationFromSubstring(modTs, "value"),
         );
 
@@ -77,9 +77,9 @@ ${exportNestedObject}
 
     it("should get array destructuring declaration references", () => {
         const session = makeSampleSession();
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(
+        const response = executeSessionRequest<ts.server.protocol.ReferencesRequest, ts.server.protocol.ReferencesResponse>(
             session,
-            protocol.CommandTypes.References,
+            ts.server.protocol.CommandTypes.References,
             protocolFileLocationFromSubstring(modTs, "valueA"),
         );
 
@@ -102,9 +102,9 @@ ${exportNestedObject}
 
     it("should get object destructuring declaration references", () => {
         const session = makeSampleSession();
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(
+        const response = executeSessionRequest<ts.server.protocol.ReferencesRequest, ts.server.protocol.ReferencesResponse>(
             session,
-            protocol.CommandTypes.References,
+            ts.server.protocol.CommandTypes.References,
             protocolFileLocationFromSubstring(modTs, "valueC"),
         );
         const expectResponse = {
@@ -133,9 +133,9 @@ ${exportNestedObject}
 
     it("should get object declaration references that renames destructured property", () => {
         const session = makeSampleSession();
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(
+        const response = executeSessionRequest<ts.server.protocol.ReferencesRequest, ts.server.protocol.ReferencesResponse>(
             session,
-            protocol.CommandTypes.References,
+            ts.server.protocol.CommandTypes.References,
             protocolFileLocationFromSubstring(modTs, "renamedD"),
         );
 
@@ -158,9 +158,9 @@ ${exportNestedObject}
 
     it("should get nested object declaration references", () => {
         const session = makeSampleSession();
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(
+        const response = executeSessionRequest<ts.server.protocol.ReferencesRequest, ts.server.protocol.ReferencesResponse>(
             session,
-            protocol.CommandTypes.References,
+            ts.server.protocol.CommandTypes.References,
             protocolFileLocationFromSubstring(modTs, "valueF"),
         );
 

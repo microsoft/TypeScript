@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { openFilesForSession, checkNumberOfInferredProjects, checkNumberOfConfiguredProjects, createSession } from "./helpers";
 
 const angularFormsDts: File = {
@@ -247,7 +246,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
 
         const dependencies = packages.reduce((hash, p) => ({ ...hash, [JSON.parse(p[0].content).name]: "*" }), {});
         const packageJson: File = { path: "/package.json", content: JSON.stringify(dependencies) };
-        const { projectService, session } = setup([ ...ts.flatten(packages), indexTs, tsconfig, packageJson ]);
+        const { projectService, session } = setup([...ts.flatten(packages), indexTs, tsconfig, packageJson]);
 
         openFilesForSession([indexTs], session);
         const project = projectService.configuredProjects.get(tsconfig.path)!;
@@ -331,8 +330,8 @@ function setup(files: File[]) {
 
     function updateFile(path: string, newText: string) {
         ts.Debug.assertIsDefined(files.find(f => f.path === path));
-        session.executeCommandSeq<protocol.ApplyChangedToOpenFilesRequest>({
-            command: protocol.CommandTypes.ApplyChangedToOpenFiles,
+        session.executeCommandSeq<ts.server.protocol.ApplyChangedToOpenFilesRequest>({
+            command: ts.server.protocol.CommandTypes.ApplyChangedToOpenFiles,
             arguments: {
                 openFiles: [{
                     fileName: path,
@@ -344,8 +343,8 @@ function setup(files: File[]) {
 
     function findAllReferences(file: string, line: number, offset: number) {
         ts.Debug.assertIsDefined(files.find(f => f.path === file));
-        session.executeCommandSeq<protocol.ReferencesRequest>({
-            command: protocol.CommandTypes.References,
+        session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+            command: ts.server.protocol.CommandTypes.References,
             arguments: {
                 file,
                 line,

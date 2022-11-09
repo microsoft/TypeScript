@@ -1,7 +1,7 @@
+import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
 import { ensureErrorFreeBuild } from "../tscWatch/helpers";
 import { createSession, createLoggerWithInMemoryLogs, openFilesForSession, baselineTsserverLogs, protocolToLocation } from "./helpers";
-import { protocol } from "../../_namespaces/ts.server";
 
 describe("unittests:: tsserver:: with project references and compile on save", () => {
     const dependecyLocation = `/user/username/projects/myproject/dependency`;
@@ -48,20 +48,20 @@ fn2();
                 openFilesForSession([usageTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage", session);
@@ -72,20 +72,20 @@ fn2();
                 openFilesForSession([usageTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project", session);
@@ -95,27 +95,27 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 host.writeFile(dependencyTs.path, `${dependencyTs.content}${localChange}`);
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and local change to dependency", session);
@@ -125,27 +125,27 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 host.writeFile(dependencyTs.path, `${dependencyTs.content}${localChange}`);
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project and local change to dependency", session);
@@ -155,14 +155,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -173,20 +173,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and local change to usage", session);
@@ -196,14 +196,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -214,20 +214,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project and local change to usage", session);
@@ -237,27 +237,27 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 host.writeFile(dependencyTs.path, `${dependencyTs.content}${change}`);
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and change to depenedency", session);
@@ -267,27 +267,27 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 host.writeFile(dependencyTs.path, `${dependencyTs.content}${change}`);
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project and change to depenedency", session);
@@ -297,14 +297,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -315,20 +315,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage and change to usage", session);
@@ -338,14 +338,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -356,20 +356,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on usage with project and change to usage", session);
@@ -383,20 +383,20 @@ fn2();
                 openFilesForSession([usageTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency", session);
@@ -407,20 +407,20 @@ fn2();
                 openFilesForSession([usageTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project", session);
@@ -430,27 +430,27 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 host.writeFile(dependencyTs.path, `${dependencyTs.content}${localChange}`);
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency and local change to dependency", session);
@@ -460,27 +460,27 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 host.writeFile(dependencyTs.path, `${dependencyTs.content}${localChange}`);
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project and local change to dependency", session);
@@ -490,14 +490,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -508,20 +508,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency and local change to usage", session);
@@ -531,14 +531,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -549,20 +549,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project and local change to usage", session);
@@ -572,27 +572,27 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 host.writeFile(dependencyTs.path, `${dependencyTs.content}${change}`);
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency and change to dependency", session);
@@ -602,27 +602,27 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 host.writeFile(dependencyTs.path, `${dependencyTs.content}${change}`);
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project and change to dependency", session);
@@ -632,14 +632,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -650,20 +650,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency and change to usage", session);
@@ -673,14 +673,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -691,20 +691,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "when dependency project is not open and save on dependency with project and change to usage", session);
@@ -720,20 +720,20 @@ fn2();
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage", session);
@@ -744,20 +744,20 @@ fn2();
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage with project", session);
@@ -767,14 +767,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(dependencyTs.content);
                 const location = toLocation(dependencyTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path,
                         ...location,
@@ -785,20 +785,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and local change to dependency", session);
@@ -808,14 +808,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(dependencyTs.content);
                 const location = toLocation(dependencyTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path,
                         ...location,
@@ -826,20 +826,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and local change to dependency with file", session);
@@ -849,14 +849,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -867,20 +867,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and local change to usage", session);
@@ -890,14 +890,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -908,20 +908,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and local change to usage with project", session);
@@ -931,14 +931,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(dependencyTs.content);
                 const location = toLocation(dependencyTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path,
                         ...location,
@@ -949,20 +949,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and change to dependency", session);
@@ -972,14 +972,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(dependencyTs.content);
                 const location = toLocation(dependencyTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path,
                         ...location,
@@ -990,20 +990,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage with project and change to dependency", session);
@@ -1013,14 +1013,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -1031,20 +1031,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage and change to usage", session);
@@ -1054,14 +1054,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -1072,19 +1072,19 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: usageTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on usage with project and change to usage", session);
@@ -1098,20 +1098,20 @@ fn2();
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project", session);
@@ -1121,14 +1121,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(dependencyTs.content);
                 const location = toLocation(dependencyTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path,
                         ...location,
@@ -1139,20 +1139,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project and local change to dependency", session);
@@ -1162,14 +1162,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -1180,20 +1180,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project and local change to usage", session);
@@ -1203,14 +1203,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(dependencyTs.content);
                 const location = toLocation(dependencyTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path,
                         ...location,
@@ -1221,20 +1221,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project and change to dependency", session);
@@ -1244,14 +1244,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -1262,20 +1262,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: usageConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with usage project and change to usage", session);
@@ -1289,20 +1289,20 @@ fn2();
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency", session);
@@ -1313,20 +1313,20 @@ fn2();
                 openFilesForSession([usageTs, dependencyTs], session);
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project", session);
@@ -1336,14 +1336,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(dependencyTs.content);
                 const location = toLocation(dependencyTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path,
                         ...location,
@@ -1354,20 +1354,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency and local change to dependency", session);
@@ -1377,14 +1377,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(dependencyTs.content);
                 const location = toLocation(dependencyTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path,
                         ...location,
@@ -1395,20 +1395,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project and local change to dependency", session);
@@ -1418,14 +1418,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -1436,20 +1436,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency and local change to usage", session);
@@ -1459,14 +1459,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -1477,20 +1477,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project and local change to usage", session);
@@ -1500,14 +1500,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(dependencyTs.content);
                 const location = toLocation(dependencyTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path,
                         ...location,
@@ -1518,20 +1518,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency and change to dependency", session);
@@ -1541,14 +1541,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(dependencyTs.content);
                 const location = toLocation(dependencyTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path,
                         ...location,
@@ -1559,20 +1559,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project and change to dependency", session);
@@ -1582,14 +1582,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -1600,20 +1600,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency and change to usage", session);
@@ -1623,14 +1623,14 @@ fn2();
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([usageTs, dependencyTs], session);
 
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path }
                 });
                 const toLocation = protocolToLocation(usageTs.content);
                 const location = toLocation(usageTs.content.length);
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: usageTs.path,
                         ...location,
@@ -1641,20 +1641,20 @@ fn2();
                 });
 
                 // Verify CompileOnSaveAffectedFileList
-                session.executeCommandSeq<protocol.CompileOnSaveAffectedFileListRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                 });
 
                 // Verify CompileOnSaveEmit
-                session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-                    command: protocol.CommandTypes.CompileOnSaveEmitFile,
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                 });
 
                 // Verify EmitOutput
-                session.executeCommandSeq<protocol.EmitOutputRequest>({
-                    command: protocol.CommandTypes.EmitOutput,
+                session.executeCommandSeq<ts.server.protocol.EmitOutputRequest>({
+                    command: ts.server.protocol.CommandTypes.EmitOutput,
                     arguments: { file: dependencyTs.path, projectFileName: dependencyConfig.path }
                 });
                 baselineTsserverLogs("projectReferenceCompileOnSave", "save on dependency with project and change to usage", session);
@@ -1727,8 +1727,8 @@ describe("unittests:: tsserver:: with project references and compile on save wit
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([siblingSource], session);
 
-        session.executeCommandSeq<protocol.CompileOnSaveEmitFileRequest>({
-            command: protocol.CommandTypes.CompileOnSaveEmitFile,
+        session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+            command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
             arguments: {
                 file: siblingSource.path,
                 projectFileName: siblingConfig.path

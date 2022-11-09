@@ -1,6 +1,6 @@
-import { createServerHost } from "../virtualFileSystemWithWatch";
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
+import { createServerHost } from "../virtualFileSystemWithWatch";
 import { createProjectService } from "./helpers";
 
 describe("unittests:: tsserver:: languageService", () => {

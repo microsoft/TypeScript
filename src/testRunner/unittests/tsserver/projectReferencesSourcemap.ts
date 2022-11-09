@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, libFile, TestServerHost } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { TestSession, closeFilesForSession, openFilesForSession, createHostWithSolutionBuild, createSession, createLoggerWithInMemoryLogs, baselineTsserverLogs } from "./helpers";
 
 describe("unittests:: tsserver:: with project references and tsbuild source map", () => {
@@ -79,16 +78,16 @@ fn5();
         );
     }
 
-    function goToDefFromMainTs(fn: number): Partial<protocol.DefinitionAndBoundSpanRequest> {
+    function goToDefFromMainTs(fn: number): Partial<ts.server.protocol.DefinitionAndBoundSpanRequest> {
         return {
-            command: protocol.CommandTypes.DefinitionAndBoundSpan,
+            command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
             arguments: { file: mainTs.path, line: fn + 8, offset: 1 }
         };
     }
 
-    function renameFromDependencyTs(fn: number): Partial<protocol.RenameRequest> {
+    function renameFromDependencyTs(fn: number): Partial<ts.server.protocol.RenameRequest> {
         return {
-            command: protocol.CommandTypes.Rename,
+            command: ts.server.protocol.CommandTypes.Rename,
             arguments: { file: dependencyTs.path, line: fn, offset: 17 }
         };
     }
@@ -128,7 +127,7 @@ fn5();
         }
     }
 
-    function verifyAllFnAction<Req extends protocol.Request>(
+    function verifyAllFnAction<Req extends ts.server.protocol.Request>(
         session: TestSession,
         action: (fn: number) => Partial<Req>,
         existingDependencyMap: ts.server.ScriptInfo | undefined,
@@ -254,8 +253,8 @@ fn5();
     }
 
     function makeChangeToMainTs(session: TestSession) {
-        session.executeCommandSeq<protocol.ChangeRequest>({
-            command: protocol.CommandTypes.Change,
+        session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+            command: ts.server.protocol.CommandTypes.Change,
             arguments: {
                 file: mainTs.path,
                 line: 14,
@@ -268,8 +267,8 @@ fn5();
     }
 
     function makeChangeToDependencyTs(session: TestSession) {
-        session.executeCommandSeq<protocol.ChangeRequest>({
-            command: protocol.CommandTypes.Change,
+        session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+            command: ts.server.protocol.CommandTypes.Change,
             arguments: {
                 file: dependencyTs.path,
                 line: 6,
@@ -1576,8 +1575,8 @@ ${dependencyTs.content}`);
 
                 // change
                 // Make change, without rebuild of solution
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
 `}
@@ -1602,8 +1601,8 @@ ${dependencyTs.content}`);
 
                 // change
                 // Make change, without rebuild of solution
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
 `}
@@ -2600,8 +2599,8 @@ ${dependencyTs.content}`);
 
                 // change
                 // Make change, without rebuild of solution
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
 `}
@@ -2634,8 +2633,8 @@ ${dependencyTs.content}`);
 
                 // change
                 // Make change, without rebuild of solution
-                session.executeCommandSeq<protocol.ChangeRequest>({
-                    command: protocol.CommandTypes.Change,
+                session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                    command: ts.server.protocol.CommandTypes.Change,
                     arguments: {
                         file: dependencyTs.path, line: 1, offset: 1, endLine: 1, endOffset: 1, insertString: `function fooBar() { }
  `}

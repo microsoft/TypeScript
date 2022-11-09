@@ -1,5 +1,5 @@
+import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { createSession, openFilesForSession, checkNumberOfProjects, configuredProjectAt, createLoggerWithInMemoryLogs, verifyGetErrRequest, closeFilesForSession, protocolTextSpanFromSubstring, baselineTsserverLogs } from "./helpers";
 
 describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
@@ -73,8 +73,8 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
 
         // Apply edits for rename
         openFilesForSession([{ file: anotherFile, projectRootPath: "/user/username/projects/myproject" }], session);
-        session.executeCommandSeq<protocol.UpdateOpenRequest>({
-            command: protocol.CommandTypes.UpdateOpen,
+        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+            command: ts.server.protocol.CommandTypes.UpdateOpen,
             arguments: {
                 changedFiles: [{
                     fileName: anotherFile.path,
@@ -115,8 +115,8 @@ describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         openFilesForSession([{ file: anotherFile, projectRootPath: "/user/username/projects/myproject" }], session);
         verifyGetErrRequest({ session, host, files: [anotherFile] });
 
-        session.executeCommandSeq<protocol.UpdateOpenRequest>({
-            command: protocol.CommandTypes.UpdateOpen,
+        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+            command: ts.server.protocol.CommandTypes.UpdateOpen,
             arguments: {
                 changedFiles: [{
                     fileName: anotherFile.path,

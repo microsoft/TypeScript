@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { openFilesForSession, createSession } from "./helpers";
 
 function createExportingModuleFile(path: string, exportPrefix: string, exportCount: number): File {
@@ -61,14 +60,14 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
             assert.lengthOf(completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier), ts.Completions.moduleSpecifierResolutionLimit);
             assert.lengthOf(completions.entries.filter(entry => entry.source && !(entry.data as any)?.moduleSpecifier), excessFileCount);
         })
-        .continueTyping("a", completions => {
-            assert(completions.isIncomplete);
-            assert.lengthOf(completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier), ts.Completions.moduleSpecifierResolutionLimit * 2);
-        })
-        .continueTyping("_", completions => {
-            assert(!completions.isIncomplete);
-            assert.lengthOf(completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier), exportingFiles.length);
-        });
+            .continueTyping("a", completions => {
+                assert(completions.isIncomplete);
+                assert.lengthOf(completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier), ts.Completions.moduleSpecifierResolutionLimit * 2);
+            })
+            .continueTyping("_", completions => {
+                assert(!completions.isIncomplete);
+                assert.lengthOf(completions.entries.filter(entry => (entry.data as any)?.moduleSpecifier), exportingFiles.length);
+            });
     });
 
     it("resolves more when available from module specifier cache (1)", () => {
@@ -141,10 +140,10 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
             assert(sigint);
             assert(!(sigint.data as any).moduleSpecifier);
         })
-        .continueTyping("i", completions => {
-            const sigint = completions.entries.find(e => e.name === "SIGINT");
-            assert((sigint!.data as any).moduleSpecifier);
-        });
+            .continueTyping("i", completions => {
+                const sigint = completions.entries.find(e => e.name === "SIGINT");
+                assert((sigint!.data as any).moduleSpecifier);
+            });
     });
 });
 
@@ -152,8 +151,8 @@ function setup(files: File[]) {
     const host = createServerHost(files);
     const session = createSession(host);
     const projectService = session.getProjectService();
-    session.executeCommandSeq<protocol.ConfigureRequest>({
-        command: protocol.CommandTypes.Configure,
+    session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+        command: ts.server.protocol.CommandTypes.Configure,
         arguments: {
             preferences: {
                 allowIncompleteCompletions: true,
@@ -167,16 +166,16 @@ function setup(files: File[]) {
 
     return { host, session, projectService, typeToTriggerCompletions, assertCompletionDetailsOk };
 
-    function typeToTriggerCompletions(fileName: string, typedCharacters: string, cb?: (completions: protocol.CompletionInfo) => void) {
+    function typeToTriggerCompletions(fileName: string, typedCharacters: string, cb?: (completions: ts.server.protocol.CompletionInfo) => void) {
         const project = projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!;
         return type(typedCharacters, cb, /*isIncompleteContinuation*/ false);
 
-        function type(typedCharacters: string, cb: ((completions: protocol.CompletionInfo) => void) | undefined, isIncompleteContinuation: boolean) {
+        function type(typedCharacters: string, cb: ((completions: ts.server.protocol.CompletionInfo) => void) | undefined, isIncompleteContinuation: boolean) {
             const file = ts.Debug.checkDefined(project.getLanguageService(/*ensureSynchronized*/ true).getProgram()?.getSourceFile(fileName));
             const { line, character } = ts.getLineAndCharacterOfPosition(file, file.text.length);
             const oneBasedEditPosition = { line: line + 1, offset: character + 1 };
-            session.executeCommandSeq<protocol.UpdateOpenRequest>({
-                command: protocol.CommandTypes.UpdateOpen,
+            session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+                command: ts.server.protocol.CommandTypes.UpdateOpen,
                 arguments: {
                     changedFiles: [{
                         fileName,
@@ -189,22 +188,22 @@ function setup(files: File[]) {
                 },
             });
 
-            const response = session.executeCommandSeq<protocol.CompletionsRequest>({
-                command: protocol.CommandTypes.CompletionInfo,
+            const response = session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+                command: ts.server.protocol.CommandTypes.CompletionInfo,
                 arguments: {
                     file: fileName,
                     line: oneBasedEditPosition.line,
                     offset: oneBasedEditPosition.offset,
                     triggerKind: isIncompleteContinuation
-                        ? protocol.CompletionTriggerKind.TriggerForIncompleteCompletions
+                        ? ts.server.protocol.CompletionTriggerKind.TriggerForIncompleteCompletions
                         : undefined,
                 }
-            }).response as protocol.CompletionInfo;
+            }).response as ts.server.protocol.CompletionInfo;
 
             cb?.(ts.Debug.checkDefined(response));
             return {
                 backspace,
-                continueTyping: (typedCharacters: string, cb: (completions: protocol.CompletionInfo) => void) => {
+                continueTyping: (typedCharacters: string, cb: (completions: ts.server.protocol.CompletionInfo) => void) => {
                     return type(typedCharacters, cb, !!response.isIncomplete);
                 },
             };
@@ -216,8 +215,8 @@ function setup(files: File[]) {
             const endLineCharacter = ts.getLineAndCharacterOfPosition(file, file.text.length);
             const oneBasedStartPosition = { line: startLineCharacter.line + 1, offset: startLineCharacter.character + 1 };
             const oneBasedEndPosition = { line: endLineCharacter.line + 1, offset: endLineCharacter.character + 1 };
-            session.executeCommandSeq<protocol.UpdateOpenRequest>({
-                command: protocol.CommandTypes.UpdateOpen,
+            session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+                command: ts.server.protocol.CommandTypes.UpdateOpen,
                 arguments: {
                     changedFiles: [{
                         fileName,
@@ -232,19 +231,19 @@ function setup(files: File[]) {
 
             return {
                 backspace,
-                type: (typedCharacters: string, cb: (completions: protocol.CompletionInfo) => void) => {
+                type: (typedCharacters: string, cb: (completions: ts.server.protocol.CompletionInfo) => void) => {
                     return type(typedCharacters, cb, /*isIncompleteContinuation*/ false);
                 },
             };
         }
     }
 
-    function assertCompletionDetailsOk(fileName: string, entry: protocol.CompletionEntry) {
+    function assertCompletionDetailsOk(fileName: string, entry: ts.server.protocol.CompletionEntry) {
         const project = projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!;
         const file = ts.Debug.checkDefined(project.getLanguageService(/*ensureSynchronized*/ true).getProgram()?.getSourceFile(fileName));
         const { line, character } = ts.getLineAndCharacterOfPosition(file, file.text.length - 1);
-        const details = session.executeCommandSeq<protocol.CompletionDetailsRequest>({
-            command: protocol.CommandTypes.CompletionDetails,
+        const details = session.executeCommandSeq<ts.server.protocol.CompletionDetailsRequest>({
+            command: ts.server.protocol.CommandTypes.CompletionDetails,
             arguments: {
                 file: fileName,
                 line: line + 1,
@@ -255,7 +254,7 @@ function setup(files: File[]) {
                     data: entry.data,
                 }]
             }
-        }).response as protocol.CompletionEntryDetails[];
+        }).response as ts.server.protocol.CompletionEntryDetails[];
 
         assert(details[0]);
         assert(details[0].codeActions);

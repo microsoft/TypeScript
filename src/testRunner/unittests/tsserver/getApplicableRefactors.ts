@@ -1,5 +1,5 @@
+import * as ts from "../../_namespaces/ts";
 import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { createSession, openFilesForSession, executeSessionRequest } from "./helpers";
 
 describe("unittests:: tsserver:: getApplicableRefactors", () => {
@@ -7,8 +7,8 @@ describe("unittests:: tsserver:: getApplicableRefactors", () => {
         const aTs: File = { path: "/a.ts", content: "" };
         const session = createSession(createServerHost([aTs]));
         openFilesForSession([aTs], session);
-        const response = executeSessionRequest<protocol.GetApplicableRefactorsRequest, protocol.GetApplicableRefactorsResponse>(
-            session, protocol.CommandTypes.GetApplicableRefactors, { file: aTs.path, line: 1, offset: 1 });
-        assert.deepEqual<readonly protocol.ApplicableRefactorInfo[] | undefined>(response, []);
+        const response = executeSessionRequest<ts.server.protocol.GetApplicableRefactorsRequest, ts.server.protocol.GetApplicableRefactorsResponse>(
+            session, ts.server.protocol.CommandTypes.GetApplicableRefactors, { file: aTs.path, line: 1, offset: 1 });
+        assert.deepEqual<readonly ts.server.protocol.ApplicableRefactorInfo[] | undefined>(response, []);
     });
 });

@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, SymLink, TestServerHost } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { createLoggerWithInMemoryLogs, baselineTsserverLogs, executeSessionRequest, Logger, createSession, openFilesForSession, configuredProjectAt } from "./helpers";
 
 const packageJson: File = {
@@ -105,7 +104,7 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         const preferences: ts.UserPreferences = { importModuleSpecifierPreference: "project-relative" };
 
         assert.ok(getWithPreferences({}));
-        executeSessionRequest<protocol.ConfigureRequest, protocol.ConfigureResponse>(session, protocol.CommandTypes.Configure, { preferences });
+        executeSessionRequest<ts.server.protocol.ConfigureRequest, ts.server.protocol.ConfigureResponse>(session, ts.server.protocol.CommandTypes.Configure, { preferences });
         // Nothing changes yet
         assert.ok(getWithPreferences({}));
         assert.isUndefined(getWithPreferences(preferences));
@@ -115,7 +114,7 @@ describe("unittests:: tsserver:: moduleSpecifierCache", () => {
         assert.ok(getWithPreferences(preferences));
 
         // Test other affecting preference
-        executeSessionRequest<protocol.ConfigureRequest, protocol.ConfigureResponse>(session, protocol.CommandTypes.Configure, {
+        executeSessionRequest<ts.server.protocol.ConfigureRequest, ts.server.protocol.ConfigureResponse>(session, ts.server.protocol.CommandTypes.Configure, {
             preferences: { importModuleSpecifierEnding: "js" },
         });
         triggerCompletions({ file: bTs.path, line: 1, offset: 3 });
@@ -133,7 +132,7 @@ function setup(createLogger?: (host: TestServerHost) => Logger) {
     openFilesForSession([aTs, bTs, cTs], session);
     const projectService = session.getProjectService();
     const project = configuredProjectAt(projectService, 0);
-    executeSessionRequest<protocol.ConfigureRequest, protocol.ConfigureResponse>(session, protocol.CommandTypes.Configure, {
+    executeSessionRequest<ts.server.protocol.ConfigureRequest, ts.server.protocol.ConfigureResponse>(session, ts.server.protocol.CommandTypes.Configure, {
         preferences: {
             includeCompletionsForImportStatements: true,
             includeCompletionsForModuleExports: true,
@@ -145,8 +144,8 @@ function setup(createLogger?: (host: TestServerHost) => Logger) {
 
     return { host, project, projectService, session, moduleSpecifierCache: project.getModuleSpecifierCache(), triggerCompletions };
 
-    function triggerCompletions(requestLocation: protocol.FileLocationRequestArgs) {
-        executeSessionRequest<protocol.CompletionsRequest, protocol.CompletionInfoResponse>(session, protocol.CommandTypes.CompletionInfo, {
+    function triggerCompletions(requestLocation: ts.server.protocol.FileLocationRequestArgs) {
+        executeSessionRequest<ts.server.protocol.CompletionsRequest, ts.server.protocol.CompletionInfoResponse>(session, ts.server.protocol.CommandTypes.CompletionInfo, {
             ...requestLocation,
         });
     }

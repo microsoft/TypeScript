@@ -1,7 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
 import { createSession, createLoggerWithInMemoryLogs, openFilesForSession, checkNumberOfProjects, checkProjectActualFiles, baselineTsserverLogs, protocolFileLocationFromSubstring, verifyGetErrRequest, closeFilesForSession } from "./helpers";
-import { protocol } from "../../_namespaces/ts.server";
 
 describe("unittests:: tsserver:: Semantic operations on partialSemanticServer", () => {
     function setup() {
@@ -53,8 +52,8 @@ import { something } from "something";
         baselineTsserverLogs("partialSemanticServer", "files are added to inferred project", session);
 
         function verifyCompletions() {
-            session.executeCommandSeq<protocol.CompletionsRequest>({
-                command: protocol.CommandTypes.Completions,
+            session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+                command: ts.server.protocol.CommandTypes.Completions,
                 arguments: protocolFileLocationFromSubstring(file1, "prop", { index: 1 })
             });
         }
@@ -64,10 +63,10 @@ import { something } from "something";
         const { session, file1 } = setup();
         const service = session.getProjectService();
         openFilesForSession([file1], session);
-        const request: protocol.SemanticDiagnosticsSyncRequest = {
+        const request: ts.server.protocol.SemanticDiagnosticsSyncRequest = {
             type: "request",
             seq: 1,
-            command: protocol.CommandTypes.SemanticDiagnosticsSync,
+            command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: { file: file1.path }
         };
         try {
@@ -107,16 +106,16 @@ import { something } from "something";
 
         const service = session.getProjectService();
         openFilesForSession([file1], session);
-        const request: protocol.SyntacticDiagnosticsSyncRequest = {
+        const request: ts.server.protocol.SyntacticDiagnosticsSyncRequest = {
             type: "request",
             seq: 1,
-            command: protocol.CommandTypes.SyntacticDiagnosticsSync,
+            command: ts.server.protocol.CommandTypes.SyntacticDiagnosticsSync,
             arguments: { file: file1.path }
         };
-        const response = session.executeCommandSeq(request).response as protocol.SyntacticDiagnosticsSyncResponse["body"];
+        const response = session.executeCommandSeq(request).response as ts.server.protocol.SyntacticDiagnosticsSyncResponse["body"];
         assert.isDefined(response);
         assert.equal(response!.length, 1);
-        assert.equal((response![0] as protocol.Diagnostic).text, expectedErrorMessage);
+        assert.equal((response![0] as ts.server.protocol.Diagnostic).text, expectedErrorMessage);
 
         const project = service.inferredProjects[0];
         const diagnostics = project.getLanguageService().getSyntacticDiagnostics(file1.path);
@@ -220,8 +219,8 @@ function fooB() { }`
     it("should support go-to-definition on module specifiers", () => {
         const { session, file1 } = setup();
         openFilesForSession([file1], session);
-        session.executeCommandSeq<protocol.DefinitionAndBoundSpanRequest>({
-            command: protocol.CommandTypes.DefinitionAndBoundSpan,
+        session.executeCommandSeq<ts.server.protocol.DefinitionAndBoundSpanRequest>({
+            command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
             arguments: protocolFileLocationFromSubstring(file1, `"./b"`)
         });
         baselineTsserverLogs("partialSemanticServer", "should support go-to-definition on module specifiers", session);

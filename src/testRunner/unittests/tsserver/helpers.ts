@@ -3,7 +3,6 @@ import * as Harness from "../../_namespaces/Harness";
 import * as Utils from "../../_namespaces/Utils";
 import { changeToHostTrackingWrittenFiles, checkArray, createServerHost, File, FileOrFolderOrSymLink, libFile, TestServerHost, TestServerHostTrackingWrittenFiles } from "../virtualFileSystemWithWatch";
 import { ensureErrorFreeBuild } from "../tscWatch/helpers";
-import { protocol, CommandNames } from "../../_namespaces/ts.server";
 
 const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
 export function mapOutputToJson(s: string) {
@@ -251,7 +250,7 @@ export function createTypesRegistry(...list: string[]): ts.ESMap<string, ts.MapL
     return map;
 }
 
-export function toExternalFile(fileName: string): protocol.ExternalFile {
+export function toExternalFile(fileName: string): ts.server.protocol.ExternalFile {
     return { fileName };
 }
 
@@ -394,7 +393,7 @@ export interface TestSessionOptions extends ts.server.SessionOptions {
 
 export class TestSession extends ts.server.Session {
     private seq = 0;
-    public events: protocol.Event[] = [];
+    public events: ts.server.protocol.Event[] = [];
     public testhost: TestSessionAndServiceHost;
     public logger: Logger;
 
@@ -419,7 +418,7 @@ export class TestSession extends ts.server.Session {
         return this.seq + 1;
     }
 
-    public executeCommand(request: protocol.Request) {
+    public executeCommand(request: ts.server.protocol.Request) {
         return this.baseline("response", super.executeCommand(this.baseline("request", request)));
     }
 
@@ -440,7 +439,7 @@ export class TestSession extends ts.server.Session {
         this.testhost.clearOutput();
     }
 
-    private baseline<T extends protocol.Request | ts.server.HandlerResponse>(type: "request" | "response", requestOrResult: T): T {
+    private baseline<T extends ts.server.protocol.Request | ts.server.HandlerResponse>(type: "request" | "response", requestOrResult: T): T {
         if (!this.logger.hasLevel(ts.server.LogLevel.verbose)) return requestOrResult;
         if (type === "request") this.logger.info(`request:${ts.server.indent(JSON.stringify(requestOrResult, undefined, 2))}`);
         this.testhost.baselineHost(type === "request" ? "Before request" : "After request");
@@ -487,7 +486,7 @@ export function createSessionWithEventTracking<T extends ts.server.ProjectServic
     return { session, events };
 }
 
-export function createSessionWithDefaultEventHandler<T extends protocol.AnyEvent>(host: TestServerHost, eventNames: T["event"] | T["event"][], opts: Partial<TestSessionOptions> = {}) {
+export function createSessionWithDefaultEventHandler<T extends ts.server.protocol.AnyEvent>(host: TestServerHost, eventNames: T["event"] | T["event"][], opts: Partial<TestSessionOptions> = {}) {
     const session = createSession(host, { canUseEvents: true, ...opts });
 
     return {
@@ -616,13 +615,13 @@ export function getConfigFilesToWatch(folder: string) {
     ];
 }
 
-export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): protocol.Location {
+export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.Location {
     const start = nthIndexOf(str, substring, options ? options.index : 0);
     ts.Debug.assert(start !== -1);
     return protocolToLocation(str)(start);
 }
 
-export function protocolToLocation(text: string): (pos: number) => protocol.Location {
+export function protocolToLocation(text: string): (pos: number) => ts.server.protocol.Location {
     const lineStarts = ts.computeLineStarts(text);
     return pos => {
         const x = ts.computeLineAndCharacterOfPosition(lineStarts, pos);
@@ -630,7 +629,7 @@ export function protocolToLocation(text: string): (pos: number) => protocol.Loca
     };
 }
 
-export function protocolTextSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): protocol.TextSpan {
+export function protocolTextSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.TextSpan {
     const span = textSpanFromSubstring(str, substring, options);
     const toLocation = protocolToLocation(str);
     return { start: toLocation(span.start), end: toLocation(ts.textSpanEnd(span)) };
@@ -643,7 +642,7 @@ export interface DocumentSpanFromSubstring {
     contextText?: string;
     contextOptions?: SpanFromSubstringOptions;
 }
-export function protocolFileSpanFromSubstring({ file, text, options }: DocumentSpanFromSubstring): protocol.FileSpan {
+export function protocolFileSpanFromSubstring({ file, text, options }: DocumentSpanFromSubstring): ts.server.protocol.FileSpan {
     return { file: file.path, ...protocolTextSpanFromSubstring(file.content, text, options) };
 }
 
@@ -654,7 +653,7 @@ interface FileSpanWithContextFromSubString {
     contextText?: string;
     contextOptions?: SpanFromSubstringOptions;
 }
-export function protocolFileSpanWithContextFromSubstring({ contextText, contextOptions, ...rest }: FileSpanWithContextFromSubString): protocol.FileSpanWithContext {
+export function protocolFileSpanWithContextFromSubstring({ contextText, contextOptions, ...rest }: FileSpanWithContextFromSubString): ts.server.protocol.FileSpanWithContext {
     const result = protocolFileSpanFromSubstring(rest);
     const contextSpan = contextText !== undefined ?
         protocolFileSpanFromSubstring({ file: rest.file, text: contextText, options: contextOptions }) :
@@ -675,7 +674,7 @@ export interface ProtocolTextSpanWithContextFromString {
     contextText?: string;
     contextOptions?: SpanFromSubstringOptions;
 }
-export function protocolTextSpanWithContextFromSubstring({ fileText, text, options, contextText, contextOptions }: ProtocolTextSpanWithContextFromString): protocol.TextSpanWithContext {
+export function protocolTextSpanWithContextFromSubstring({ fileText, text, options, contextText, contextOptions }: ProtocolTextSpanWithContextFromString): ts.server.protocol.TextSpanWithContext {
     const span = textSpanFromSubstring(fileText, text, options);
     const toLocation = protocolToLocation(fileText);
     const contextSpan = contextText !== undefined ? textSpanFromSubstring(fileText, contextText, contextOptions) : undefined;
@@ -695,7 +694,7 @@ export interface ProtocolRenameSpanFromSubstring extends ProtocolTextSpanWithCon
         readonly suffixText?: string;
     };
 }
-export function protocolRenameSpanFromSubstring({ prefixSuffixText, ...rest }: ProtocolRenameSpanFromSubstring): protocol.RenameTextSpan {
+export function protocolRenameSpanFromSubstring({ prefixSuffixText, ...rest }: ProtocolRenameSpanFromSubstring): ts.server.protocol.RenameTextSpan {
     return {
         ...protocolTextSpanWithContextFromSubstring(rest),
         ...prefixSuffixText
@@ -708,7 +707,7 @@ export function textSpanFromSubstring(str: string, substring: string, options?: 
     return ts.createTextSpan(start, substring.length);
 }
 
-export function protocolFileLocationFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): protocol.FileLocationRequestArgs {
+export function protocolFileLocationFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.FileLocationRequestArgs {
     return { file: file.path, ...protocolLocationFromSubstring(file.content, substring, options) };
 }
 
@@ -768,7 +767,7 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
     }
 }
 
-export function makeSessionRequest<T>(command: string, args: T): protocol.Request {
+export function makeSessionRequest<T>(command: string, args: T): ts.server.protocol.Request {
     return {
         seq: 0,
         type: "request",
@@ -777,24 +776,24 @@ export function makeSessionRequest<T>(command: string, args: T): protocol.Reques
     };
 }
 
-export function executeSessionRequest<TRequest extends protocol.Request, TResponse extends protocol.Response>(session: ts.server.Session, command: TRequest["command"], args: TRequest["arguments"]): TResponse["body"] {
+export function executeSessionRequest<TRequest extends ts.server.protocol.Request, TResponse extends ts.server.protocol.Response>(session: ts.server.Session, command: TRequest["command"], args: TRequest["arguments"]): TResponse["body"] {
     return session.executeCommand(makeSessionRequest(command, args)).response as TResponse["body"];
 }
 
-export function executeSessionRequestNoResponse<TRequest extends protocol.Request>(session: ts.server.Session, command: TRequest["command"], args: TRequest["arguments"]): void {
+export function executeSessionRequestNoResponse<TRequest extends ts.server.protocol.Request>(session: ts.server.Session, command: TRequest["command"], args: TRequest["arguments"]): void {
     session.executeCommand(makeSessionRequest(command, args));
 }
 
 export function openFilesForSession(files: readonly (File | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: ts.server.Session): void {
     for (const file of files) {
-        session.executeCommand(makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open,
+        session.executeCommand(makeSessionRequest<ts.server.protocol.OpenRequestArgs>(ts.server.CommandNames.Open,
             "projectRootPath" in file ? { file: typeof file.file === "string" ? file.file : file.file.path, projectRootPath: file.projectRootPath } : { file: file.path })); // eslint-disable-line local/no-in-operator
     }
 }
 
 export function closeFilesForSession(files: readonly File[], session: ts.server.Session): void {
     for (const file of files) {
-        session.executeCommand(makeSessionRequest<protocol.FileRequestArgs>(CommandNames.Close, { file: file.path }));
+        session.executeCommand(makeSessionRequest<ts.server.protocol.FileRequestArgs>(ts.server.CommandNames.Close, { file: file.path }));
     }
 }
 
@@ -804,7 +803,7 @@ export interface MakeReferenceItem extends DocumentSpanFromSubstring {
     lineText?: string;
 }
 
-export function makeReferenceItem({ isDefinition, isWriteAccess, lineText, ...rest }: MakeReferenceItem): protocol.ReferencesResponseItem {
+export function makeReferenceItem({ isDefinition, isWriteAccess, lineText, ...rest }: MakeReferenceItem): ts.server.protocol.ReferencesResponseItem {
     return {
         ...protocolFileSpanWithContextFromSubstring(rest),
         isDefinition,
@@ -824,8 +823,8 @@ export interface VerifyGetErrRequest extends VerifyGetErrRequestBase {
 }
 export function verifyGetErrRequest(request: VerifyGetErrRequest) {
     const { session, files } = request;
-    session.executeCommandSeq<protocol.GeterrRequest>({
-        command: protocol.CommandTypes.Geterr,
+    session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
+        command: ts.server.protocol.CommandTypes.Geterr,
         arguments: { delay: 0, files: files.map(filePath) }
     });
     checkAllErrors(request);
@@ -873,8 +872,8 @@ function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, op
         openFilesForSession(openFiles(), session);
 
         for (const expected of getErrForProjectRequest()) {
-            session.executeCommandSeq<protocol.GeterrForProjectRequest>({
-                command: protocol.CommandTypes.GeterrForProject,
+            session.executeCommandSeq<ts.server.protocol.GeterrForProjectRequest>({
+                command: ts.server.protocol.CommandTypes.GeterrForProject,
                 arguments: { delay: 0, file: filePath(expected.project) }
             });
             checkAllErrors({ session, host, files: expected.files });
@@ -890,16 +889,16 @@ function verifyErrorsUsingSyncMethods({ scenario, subScenario, allFiles, openFil
         openFilesForSession(openFiles(), session);
         for (const { file, project } of syncDiagnostics()) {
             const reqArgs = { file: filePath(file), projectFileName: project && filePath(project) };
-            session.executeCommandSeq<protocol.SyntacticDiagnosticsSyncRequest>({
-                command: protocol.CommandTypes.SyntacticDiagnosticsSync,
+            session.executeCommandSeq<ts.server.protocol.SyntacticDiagnosticsSyncRequest>({
+                command: ts.server.protocol.CommandTypes.SyntacticDiagnosticsSync,
                 arguments: reqArgs
             });
-            session.executeCommandSeq<protocol.SemanticDiagnosticsSyncRequest>({
-                command: protocol.CommandTypes.SemanticDiagnosticsSync,
+            session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+                command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
                 arguments: reqArgs
             });
-            session.executeCommandSeq<protocol.SuggestionDiagnosticsSyncRequest>({
-                command: protocol.CommandTypes.SuggestionDiagnosticsSync,
+            session.executeCommandSeq<ts.server.protocol.SuggestionDiagnosticsSyncRequest>({
+                command: ts.server.protocol.CommandTypes.SuggestionDiagnosticsSync,
                 arguments: reqArgs
             });
         }

@@ -1,6 +1,5 @@
 import * as ts from "../../../_namespaces/ts";
 import { createServerHost, File, libFile, TestServerHost } from "../../virtualFileSystemWithWatch";
-import { protocol } from "../../../_namespaces/ts.server";
 import { TestSession, Logger, createLoggerWithInMemoryLogs, baselineTsserverLogs, createSessionWithEventTracking, createSessionWithDefaultEventHandler, createHasErrorMessageLogger } from "../helpers";
 
 describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
@@ -21,7 +20,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 arguments: {
                     file: file.path
                 }
-            } as protocol.OpenRequest);
+            } as ts.server.protocol.OpenRequest);
             verifyProjectsUpdatedInBackgroundEventHandler([]);
         };
     }
@@ -224,7 +223,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
                 }
 
                 function updateContentOfOpenFile(file: File, newContent: string) {
-                    session.executeCommandSeq<protocol.ChangeRequest>({
+                    session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
                         command: ts.server.CommandNames.Change,
                         arguments: {
                             file: file.path,
@@ -522,7 +521,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
 
 
         function createSessionThatUsesEvents(host: TestServerHost, logger: Logger | undefined, noGetErrOnBackgroundUpdate?: boolean): ProjectsUpdatedInBackgroundEventVerifier {
-            const { session, getEvents, clearEvents } = createSessionWithDefaultEventHandler<protocol.ProjectsUpdatedInBackgroundEvent>(
+            const { session, getEvents, clearEvents } = createSessionWithDefaultEventHandler<ts.server.protocol.ProjectsUpdatedInBackgroundEvent>(
                 host,
                 ts.server.ProjectsUpdatedInBackgroundEvent,
                 { noGetErrOnBackgroundUpdate, logger: logger || createHasErrorMessageLogger() }
@@ -535,7 +534,7 @@ describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
             };
 
             function verifyProjectsUpdatedInBackgroundEventHandler(expected: readonly ts.server.ProjectsUpdatedInBackgroundEvent[]) {
-                const expectedEvents: protocol.ProjectsUpdatedInBackgroundEventBody[] = ts.map(expected, e => {
+                const expectedEvents: ts.server.protocol.ProjectsUpdatedInBackgroundEventBody[] = ts.map(expected, e => {
                     return {
                         openFiles: e.data.openFiles
                     };

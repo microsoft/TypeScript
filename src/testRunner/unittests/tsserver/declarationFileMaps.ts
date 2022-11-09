@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { protocol, CommandNames } from "../../_namespaces/ts.server";
 import { DocumentSpanFromSubstring, textSpanFromSubstring, TestSession, openFilesForSession, closeFilesForSession, createSession, checkNumberOfProjects, checkProjectActualFiles, executeSessionRequest, protocolFileLocationFromSubstring, protocolFileSpanWithContextFromSubstring, protocolTextSpanFromSubstring, protocolFileSpanFromSubstring, makeReferenceItem, protocolLocationFromSubstring, protocolRenameSpanFromSubstring } from "./helpers";
 
 function documentSpanFromSubstring({ file, text, contextText, options, contextOptions }: DocumentSpanFromSubstring): ts.DocumentSpan {
@@ -196,7 +195,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("goToDefinition", () => {
         const session = makeSampleProjects();
-        const response = executeSessionRequest<protocol.DefinitionRequest, protocol.DefinitionResponse>(session, protocol.CommandTypes.Definition, protocolFileLocationFromSubstring(userTs, "fnA()"));
+        const response = executeSessionRequest<ts.server.protocol.DefinitionRequest, ts.server.protocol.DefinitionResponse>(session, ts.server.protocol.CommandTypes.Definition, protocolFileLocationFromSubstring(userTs, "fnA()"));
         assert.deepEqual(response, [
             protocolFileSpanWithContextFromSubstring({
                 file: aTs,
@@ -209,7 +208,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("getDefinitionAndBoundSpan", () => {
         const session = makeSampleProjects();
-        const response = executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(session, protocol.CommandTypes.DefinitionAndBoundSpan, protocolFileLocationFromSubstring(userTs, "fnA()"));
+        const response = executeSessionRequest<ts.server.protocol.DefinitionAndBoundSpanRequest, ts.server.protocol.DefinitionAndBoundSpanResponse>(session, ts.server.protocol.CommandTypes.DefinitionAndBoundSpan, protocolFileLocationFromSubstring(userTs, "fnA()"));
         assert.deepEqual(response, {
             textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA"),
             definitions: [
@@ -225,7 +224,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("getDefinitionAndBoundSpan with file navigation", () => {
         const session = makeSampleProjects(/*addUserTsConfig*/ true);
-        const response = executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(session, protocol.CommandTypes.DefinitionAndBoundSpan, protocolFileLocationFromSubstring(userTs, "fnA()"));
+        const response = executeSessionRequest<ts.server.protocol.DefinitionAndBoundSpanRequest, ts.server.protocol.DefinitionAndBoundSpanResponse>(session, ts.server.protocol.CommandTypes.DefinitionAndBoundSpan, protocolFileLocationFromSubstring(userTs, "fnA()"));
         assert.deepEqual(response, {
             textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA"),
             definitions: [
@@ -254,7 +253,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("goToType", () => {
         const session = makeSampleProjects();
-        const response = executeSessionRequest<protocol.TypeDefinitionRequest, protocol.TypeDefinitionResponse>(session, protocol.CommandTypes.TypeDefinition, protocolFileLocationFromSubstring(userTs, "instanceA"));
+        const response = executeSessionRequest<ts.server.protocol.TypeDefinitionRequest, ts.server.protocol.TypeDefinitionResponse>(session, ts.server.protocol.CommandTypes.TypeDefinition, protocolFileLocationFromSubstring(userTs, "instanceA"));
         assert.deepEqual(response, [
             protocolFileSpanWithContextFromSubstring({
                 file: aTs,
@@ -267,7 +266,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("goToImplementation", () => {
         const session = makeSampleProjects();
-        const response = executeSessionRequest<protocol.ImplementationRequest, protocol.ImplementationResponse>(session, protocol.CommandTypes.Implementation, protocolFileLocationFromSubstring(userTs, "fnA()"));
+        const response = executeSessionRequest<ts.server.protocol.ImplementationRequest, ts.server.protocol.ImplementationResponse>(session, ts.server.protocol.CommandTypes.Implementation, protocolFileLocationFromSubstring(userTs, "fnA()"));
         assert.deepEqual(response, [
             protocolFileSpanWithContextFromSubstring({
                 file: aTs,
@@ -279,7 +278,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("goToDefinition -- target does not exist", () => {
         const session = makeSampleProjects();
-        const response = executeSessionRequest<protocol.DefinitionRequest, protocol.DefinitionResponse>(session, CommandNames.Definition, protocolFileLocationFromSubstring(userTs, "fnB()"));
+        const response = executeSessionRequest<ts.server.protocol.DefinitionRequest, ts.server.protocol.DefinitionResponse>(session, ts.server.CommandNames.Definition, protocolFileLocationFromSubstring(userTs, "fnB()"));
         // bTs does not exist, so stick with bDts
         assert.deepEqual(response, [
             protocolFileSpanWithContextFromSubstring({
@@ -293,8 +292,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("navigateTo", () => {
         const session = makeSampleProjects();
-        const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { file: userTs.path, searchValue: "fn" });
-        assert.deepEqual<readonly protocol.NavtoItem[] | undefined>(response, [
+        const response = executeSessionRequest<ts.server.protocol.NavtoRequest, ts.server.protocol.NavtoResponse>(session, ts.server.CommandNames.Navto, { file: userTs.path, searchValue: "fn" });
+        assert.deepEqual<readonly ts.server.protocol.NavtoItem[] | undefined>(response, [
             // Keep the .d.ts file since the .ts file no longer exists
             // (otherwise it would be treated as not in the project)
             {
@@ -326,8 +325,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("navigateToAll -- when neither file nor project is specified", () => {
         const session = makeSampleProjects(/*addUserTsConfig*/ true, /*keepAllFiles*/ true);
-        const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { file: undefined, searchValue: "fn" });
-        assert.deepEqual<readonly protocol.NavtoItem[] | undefined>(response, [
+        const response = executeSessionRequest<ts.server.protocol.NavtoRequest, ts.server.protocol.NavtoResponse>(session, ts.server.CommandNames.Navto, { file: undefined, searchValue: "fn" });
+        assert.deepEqual<readonly ts.server.protocol.NavtoItem[] | undefined>(response, [
             {
                 ...protocolFileSpanFromSubstring({
                     file: bTs,
@@ -366,8 +365,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("navigateToAll -- when file is not specified but project is", () => {
         const session = makeSampleProjects(/*addUserTsConfig*/ true, /*keepAllFiles*/ true);
-        const response = executeSessionRequest<protocol.NavtoRequest, protocol.NavtoResponse>(session, CommandNames.Navto, { projectFileName: bTsconfig.path, file: undefined, searchValue: "fn" });
-        assert.deepEqual<readonly protocol.NavtoItem[] | undefined>(response, [
+        const response = executeSessionRequest<ts.server.protocol.NavtoRequest, ts.server.protocol.NavtoResponse>(session, ts.server.CommandNames.Navto, { projectFileName: bTsconfig.path, file: undefined, searchValue: "fn" });
+        assert.deepEqual<readonly ts.server.protocol.NavtoItem[] | undefined>(response, [
             {
                 ...protocolFileSpanFromSubstring({
                     file: bTs,
@@ -382,7 +381,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         ]);
     });
 
-    const referenceATs = (aTs: File, isDefinition: true | undefined): protocol.ReferencesResponseItem => makeReferenceItem({
+    const referenceATs = (aTs: File, isDefinition: true | undefined): ts.server.protocol.ReferencesResponseItem => makeReferenceItem({
         file: aTs,
         isDefinition,
         isWriteAccess: true,
@@ -390,7 +389,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         contextText: "export function fnA() {}",
         lineText: "export function fnA() {}"
     });
-    const referencesUserTs = (userTs: File, isDefinition: false | undefined): readonly protocol.ReferencesResponseItem[] => [
+    const referencesUserTs = (userTs: File, isDefinition: false | undefined): readonly ts.server.protocol.ReferencesResponseItem[] => [
         makeReferenceItem({
             file: userTs,
             isDefinition,
@@ -402,8 +401,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     it("findAllReferences", () => {
         const session = makeSampleProjects();
 
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(userTs, "fnA()"));
-        assert.deepEqual<protocol.ReferencesResponseBody | undefined>(response, {
+        const response = executeSessionRequest<ts.server.protocol.ReferencesRequest, ts.server.protocol.ReferencesResponse>(session, ts.server.protocol.CommandTypes.References, protocolFileLocationFromSubstring(userTs, "fnA()"));
+        assert.deepEqual<ts.server.protocol.ReferencesResponseBody | undefined>(response, {
             refs: [...referencesUserTs(userTs, /*isDefinition*/ undefined), referenceATs(aTs, /*isDefinition*/ undefined)],
             symbolName: "fnA",
             symbolStartOffset: protocolLocationFromSubstring(userTs.content, "fnA()").offset,
@@ -416,8 +415,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     it("findAllReferences -- starting at definition", () => {
         const session = makeSampleProjects();
         openFilesForSession([aTs], session); // If it's not opened, the reference isn't found.
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(aTs, "fnA"));
-        assert.deepEqual<protocol.ReferencesResponseBody | undefined>(response, {
+        const response = executeSessionRequest<ts.server.protocol.ReferencesRequest, ts.server.protocol.ReferencesResponse>(session, ts.server.protocol.CommandTypes.References, protocolFileLocationFromSubstring(aTs, "fnA"));
+        assert.deepEqual<ts.server.protocol.ReferencesResponseBody | undefined>(response, {
             refs: [referenceATs(aTs, /*isDefinition*/ true), ...referencesUserTs(userTs, /*isDefinition*/ false)],
             symbolName: "fnA",
             symbolStartOffset: protocolLocationFromSubstring(aTs.content, "fnA").offset,
@@ -426,13 +425,13 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         verifyATsConfigWhenOpened(session);
     });
 
-    interface ReferencesFullRequest extends protocol.FileLocationRequest { readonly command: protocol.CommandTypes.ReferencesFull; }
-    interface ReferencesFullResponse extends protocol.Response { readonly body: readonly ts.ReferencedSymbol[]; }
+    interface ReferencesFullRequest extends ts.server.protocol.FileLocationRequest { readonly command: ts.server.protocol.CommandTypes.ReferencesFull; }
+    interface ReferencesFullResponse extends ts.server.protocol.Response { readonly body: readonly ts.ReferencedSymbol[]; }
 
     it("findAllReferencesFull", () => {
         const session = makeSampleProjects();
 
-        const responseFull = executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, protocol.CommandTypes.ReferencesFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
+        const responseFull = executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, ts.server.protocol.CommandTypes.ReferencesFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
 
         assert.deepEqual<readonly ts.ReferencedSymbol[]>(responseFull, [
             {
@@ -485,7 +484,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         openFilesForSession([bTs], session);
         checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 }); // configured project of b is alive since a references b
 
-        const responseFull = executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, protocol.CommandTypes.ReferencesFull, protocolFileLocationFromSubstring(bTs, "f()"));
+        const responseFull = executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, ts.server.protocol.CommandTypes.ReferencesFull, protocolFileLocationFromSubstring(bTs, "f()"));
 
         assert.deepEqual<readonly ts.ReferencedSymbol[]>(responseFull, [
             {
@@ -533,8 +532,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     it("findAllReferences -- target does not exist", () => {
         const session = makeSampleProjects();
 
-        const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(userTs, "fnB()"));
-        assert.deepEqual<protocol.ReferencesResponseBody | undefined>(response, {
+        const response = executeSessionRequest<ts.server.protocol.ReferencesRequest, ts.server.protocol.ReferencesResponse>(session, ts.server.protocol.CommandTypes.References, protocolFileLocationFromSubstring(userTs, "fnB()"));
+        assert.deepEqual<ts.server.protocol.ReferencesResponseBody | undefined>(response, {
             refs: [
                 makeReferenceItem({
                     file: bDts,
@@ -556,7 +555,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         verifySingleInferredProject(session);
     });
 
-    const renameATs = (aTs: File): protocol.SpanGroup => ({
+    const renameATs = (aTs: File): ts.server.protocol.SpanGroup => ({
         file: aTs.path,
         locs: [
             protocolRenameSpanFromSubstring({
@@ -566,7 +565,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
             })
         ],
     });
-    const renameUserTs = (userTs: File): protocol.SpanGroup => ({
+    const renameUserTs = (userTs: File): ts.server.protocol.SpanGroup => ({
         file: userTs.path,
         locs: [
             protocolRenameSpanFromSubstring({
@@ -578,8 +577,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("renameLocations", () => {
         const session = makeSampleProjects();
-        const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(userTs, "fnA()"));
-        assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
+        const response = executeSessionRequest<ts.server.protocol.RenameRequest, ts.server.protocol.RenameResponse>(session, ts.server.protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(userTs, "fnA()"));
+        assert.deepEqual<ts.server.protocol.RenameResponseBody | undefined>(response, {
             info: {
                 canRename: true,
                 displayName: "fnA",
@@ -597,8 +596,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     it("renameLocations -- starting at definition", () => {
         const session = makeSampleProjects();
         openFilesForSession([aTs], session); // If it's not opened, the reference isn't found.
-        const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "fnA"));
-        assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
+        const response = executeSessionRequest<ts.server.protocol.RenameRequest, ts.server.protocol.RenameResponse>(session, ts.server.protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "fnA"));
+        assert.deepEqual<ts.server.protocol.RenameResponseBody | undefined>(response, {
             info: {
                 canRename: true,
                 displayName: "fnA",
@@ -615,7 +614,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("renameLocationsFull", () => {
         const session = makeSampleProjects();
-        const response = executeSessionRequest<protocol.RenameFullRequest, protocol.RenameFullResponse>(session, protocol.CommandTypes.RenameLocationsFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
+        const response = executeSessionRequest<ts.server.protocol.RenameFullRequest, ts.server.protocol.RenameFullResponse>(session, ts.server.protocol.CommandTypes.RenameLocationsFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
         assert.deepEqual<readonly ts.RenameLocation[]>(response, [
             renameLocation({ file: userTs, text: "fnA" }),
             renameLocation({ file: aTs, text: "fnA", contextText: "export function fnA() {}" }),
@@ -625,8 +624,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("renameLocations -- target does not exist", () => {
         const session = makeSampleProjects();
-        const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(userTs, "fnB()"));
-        assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
+        const response = executeSessionRequest<ts.server.protocol.RenameRequest, ts.server.protocol.RenameResponse>(session, ts.server.protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(userTs, "fnB()"));
+        assert.deepEqual<ts.server.protocol.RenameResponseBody | undefined>(response, {
             info: {
                 canRename: true,
                 displayName: "fnB",
@@ -663,11 +662,11 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("getEditsForFileRename", () => {
         const session = makeSampleProjects();
-        const response = executeSessionRequest<protocol.GetEditsForFileRenameRequest, protocol.GetEditsForFileRenameResponse>(session, protocol.CommandTypes.GetEditsForFileRename, {
+        const response = executeSessionRequest<ts.server.protocol.GetEditsForFileRenameRequest, ts.server.protocol.GetEditsForFileRenameResponse>(session, ts.server.protocol.CommandTypes.GetEditsForFileRename, {
             oldFilePath: aTs.path,
             newFilePath: "/a/aNew.ts",
         });
-        assert.deepEqual<readonly protocol.FileCodeEdits[]>(response, [
+        assert.deepEqual<readonly ts.server.protocol.FileCodeEdits[]>(response, [
             {
                 fileName: userTs.path,
                 textChanges: [
@@ -707,11 +706,11 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig]);
         const session = createSession(host);
         openFilesForSession([aTs, bTs], session);
-        const response = executeSessionRequest<protocol.GetEditsForFileRenameRequest, protocol.GetEditsForFileRenameResponse>(session, CommandNames.GetEditsForFileRename, {
+        const response = executeSessionRequest<ts.server.protocol.GetEditsForFileRenameRequest, ts.server.protocol.GetEditsForFileRenameResponse>(session, ts.server.CommandNames.GetEditsForFileRename, {
             oldFilePath: aTs.path,
             newFilePath: "/a/src/a1.ts",
         });
-        assert.deepEqual<readonly protocol.FileCodeEdits[]>(response, []); // Should not change anything
+        assert.deepEqual<readonly ts.server.protocol.FileCodeEdits[]>(response, []); // Should not change anything
     });
 
     it("does not jump to source if inlined sources", () => {
@@ -733,9 +732,9 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
         // Inlined so does not jump to aTs
         assert.deepEqual(
-            executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(
+            executeSessionRequest<ts.server.protocol.DefinitionAndBoundSpanRequest, ts.server.protocol.DefinitionAndBoundSpanResponse>(
                 session,
-                protocol.CommandTypes.DefinitionAndBoundSpan,
+                ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
                 protocolFileLocationFromSubstring(userTs, "fnA()")
             ),
             {
@@ -752,9 +751,9 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
         // Not inlined, jumps to bTs
         assert.deepEqual(
-            executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(
+            executeSessionRequest<ts.server.protocol.DefinitionAndBoundSpanRequest, ts.server.protocol.DefinitionAndBoundSpanResponse>(
                 session,
-                protocol.CommandTypes.DefinitionAndBoundSpan,
+                ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
                 protocolFileLocationFromSubstring(userTs, "fnB()")
             ),
             {

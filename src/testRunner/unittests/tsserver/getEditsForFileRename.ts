@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { protocol, CommandNames } from "../../_namespaces/ts.server";
 import { createProjectService, textSpanFromSubstring, createSession, openFilesForSession, executeSessionRequest, protocolTextSpanFromSubstring } from "./helpers";
 
 describe("unittests:: tsserver:: getEditsForFileRename", () => {
@@ -61,11 +60,11 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
         const session = createSession(host);
         openFilesForSession([aUserTs, bUserTs], session);
 
-        const response = executeSessionRequest<protocol.GetEditsForFileRenameRequest, protocol.GetEditsForFileRenameResponse>(session, CommandNames.GetEditsForFileRename, {
+        const response = executeSessionRequest<ts.server.protocol.GetEditsForFileRenameRequest, ts.server.protocol.GetEditsForFileRenameResponse>(session, ts.server.CommandNames.GetEditsForFileRename, {
             oldFilePath: aOldTs.path,
             newFilePath: "/a/new.ts",
         });
-        assert.deepEqual<readonly protocol.FileCodeEdits[]>(response, [
+        assert.deepEqual<readonly ts.server.protocol.FileCodeEdits[]>(response, [
             {
                 fileName: aTsconfig.path,
                 textChanges: [{ ...protocolTextSpanFromSubstring(aTsconfig.content, "./old.ts"), newText: "new.ts" }],
@@ -90,11 +89,11 @@ describe("unittests:: tsserver:: getEditsForFileRename", () => {
         const session = createSession(host);
         openFilesForSession([aTs, cTs], session);
 
-        const response = executeSessionRequest<protocol.GetEditsForFileRenameRequest, protocol.GetEditsForFileRenameResponse>(session, CommandNames.GetEditsForFileRename, {
+        const response = executeSessionRequest<ts.server.protocol.GetEditsForFileRenameRequest, ts.server.protocol.GetEditsForFileRenameResponse>(session, ts.server.CommandNames.GetEditsForFileRename, {
             oldFilePath: "/b.ts",
             newFilePath: cTs.path,
         });
-        assert.deepEqual<readonly protocol.FileCodeEdits[]>(response, [
+        assert.deepEqual<readonly ts.server.protocol.FileCodeEdits[]>(response, [
             {
                 fileName: "/tsconfig.json",
                 textChanges: [{ ...protocolTextSpanFromSubstring(tsconfig.content, "./b.ts"), newText: "c.ts" }],

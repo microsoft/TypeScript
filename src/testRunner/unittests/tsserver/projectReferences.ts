@@ -2,7 +2,6 @@ import * as ts from "../../_namespaces/ts";
 import { baselineTsserverLogs, checkProjectActualFiles, createHostWithSolutionBuild, createLoggerWithInMemoryLogs, createProjectService, createSession, makeReferenceItem, openFilesForSession, protocolFileLocationFromSubstring, protocolLocationFromSubstring, verifyGetErrRequest } from "./helpers";
 import { createServerHost, File, getTsBuildProjectFile, getTsBuildProjectFilePath, libFile, SymLink } from "../virtualFileSystemWithWatch";
 import { solutionBuildWithBaseline } from "../tscWatch/helpers";
-import { protocol } from "../../_namespaces/ts.server";
 
 describe("unittests:: tsserver:: with project references and tsbuild", () => {
     describe("with container project", () => {
@@ -32,22 +31,22 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                 options: {}
             }]);
             files.forEach(f => {
-                const args: protocol.FileRequestArgs = {
+                const args: ts.server.protocol.FileRequestArgs = {
                     file: f.path,
                     projectFileName: ts.endsWith(f.path, "tsconfig.json") ? f.path : undefined
                 };
-                session.executeCommandSeq<protocol.SyntacticDiagnosticsSyncRequest>({
-                    command: protocol.CommandTypes.SyntacticDiagnosticsSync,
+                session.executeCommandSeq<ts.server.protocol.SyntacticDiagnosticsSyncRequest>({
+                    command: ts.server.protocol.CommandTypes.SyntacticDiagnosticsSync,
                     arguments: args
                 });
-                session.executeCommandSeq<protocol.SemanticDiagnosticsSyncRequest>({
-                    command: protocol.CommandTypes.SemanticDiagnosticsSync,
+                session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+                    command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
                     arguments: args
                 });
             });
             const containerProject = service.configuredProjects.get(containerConfig.path)!;
-            session.executeCommandSeq<protocol.CompilerOptionsDiagnosticsRequest>({
-                command: protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
+            session.executeCommandSeq<ts.server.protocol.CompilerOptionsDiagnosticsRequest>({
+                command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
                 arguments: { projectFileName: containerProject.projectName }
             });
             baselineTsserverLogs("projectReferences", `does not error on container only project`, session);
@@ -58,8 +57,8 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
             const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([containerCompositeExec[1]], session);
             const myConstStart = protocolLocationFromSubstring(containerCompositeExec[1].content, "myConst");
-            session.executeCommandSeq<protocol.RenameRequest>({
-                command: protocol.CommandTypes.Rename,
+            session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+                command: ts.server.protocol.CommandTypes.Rename,
                 arguments: { file: containerCompositeExec[1].path, ...myConstStart }
             });
 
@@ -81,8 +80,8 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
 
             // Ref projects are loaded after as part of this command
             const locationOfMyConst = protocolLocationFromSubstring(containerCompositeExec[1].content, "myConst");
-            session.executeCommandSeq<protocol.RenameRequest>({
-                command: protocol.CommandTypes.Rename,
+            session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+                command: ts.server.protocol.CommandTypes.Rename,
                 arguments: {
                     file: containerCompositeExec[1].path,
                     ...locationOfMyConst
@@ -167,10 +166,10 @@ function foo() {
 
             const searchStr = "evaluateKeyboardEvent";
             const importStr = `import { evaluateKeyboardEvent } from 'common/input/keyboard';`;
-            const result = session.executeCommandSeq<protocol.ReferencesRequest>({
-                command: protocol.CommandTypes.References,
+            const result = session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+                command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(keyboardTs, searchStr)
-            }).response as protocol.ReferencesResponseBody;
+            }).response as ts.server.protocol.ReferencesResponseBody;
             assert.deepEqual(result, {
                 refs: [
                     makeReferenceItem({
@@ -342,8 +341,8 @@ function foo() {
             const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([aTest], session);
             verifyGetErrRequest({ session, host, files: [aTest] });
-            session.executeCommandSeq<protocol.UpdateOpenRequest>({
-                command: protocol.CommandTypes.UpdateOpen,
+            session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+                command: ts.server.protocol.CommandTypes.UpdateOpen,
                 arguments: {
                     changedFiles: [{
                         fileName: aTest.path,
@@ -565,15 +564,15 @@ testCompositeFunction('why hello there', 42);`
 
         // Find all references for getSourceFile
         // Shouldnt load more projects
-        session.executeCommandSeq<protocol.ReferencesRequest>({
-            command: protocol.CommandTypes.References,
+        session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+            command: ts.server.protocol.CommandTypes.References,
             arguments: protocolFileLocationFromSubstring(programFile, "getSourceFile", { index: 1 })
         });
 
         // Find all references for getSourceFiles
         // Should load more projects
-        session.executeCommandSeq<protocol.ReferencesRequest>({
-            command: protocol.CommandTypes.References,
+        session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+            command: ts.server.protocol.CommandTypes.References,
             arguments: protocolFileLocationFromSubstring(programFile, "getSourceFiles")
         });
         baselineTsserverLogs("projectReferences", `finding local reference doesnt load ancestor/sibling projects`, session);
@@ -684,15 +683,15 @@ testCompositeFunction('why hello there', 42);`
         openFilesForSession([bFile], session);
 
         // The first search will trigger project loads
-        session.executeCommandSeq<protocol.ReferencesRequest>({
-            command: protocol.CommandTypes.References,
+        session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+            command: ts.server.protocol.CommandTypes.References,
             arguments: protocolFileLocationFromSubstring(bFile, "I", { index: 1 })
         });
 
         // The second search starts with the projects already loaded
         // Formerly, this would search some projects multiple times
-        session.executeCommandSeq<protocol.ReferencesRequest>({
-            command: protocol.CommandTypes.References,
+        session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+            command: ts.server.protocol.CommandTypes.References,
             arguments: protocolFileLocationFromSubstring(bFile, "I", { index: 1 })
         });
 
@@ -758,8 +757,8 @@ ${usage}`
                 openFilesForSession([apiFile], session);
 
                 // Find all references
-                session.executeCommandSeq<protocol.ReferencesRequest>({
-                    command: protocol.CommandTypes.References,
+                session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+                    command: ts.server.protocol.CommandTypes.References,
                     arguments: protocolFileLocationFromSubstring(apiFile, referenceTerm)
                 });
 
@@ -877,8 +876,8 @@ export const foo = local;`,
 
         // Find all references
         // No new solutions/projects loaded
-        session.executeCommandSeq<protocol.ReferencesRequest>({
-            command: protocol.CommandTypes.References,
+        session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+            command: ts.server.protocol.CommandTypes.References,
             arguments: protocolFileLocationFromSubstring(programFile, "getSourceFiles")
         });
         baselineTsserverLogs("projectReferences", `with disableSolutionSearching solution and siblings are not loaded`, session);
@@ -1000,10 +999,10 @@ export function bar() {}`
             service.reloadProjects();
 
             // Find all refs
-            session.executeCommandSeq<protocol.ReferencesRequest>({
-                command: protocol.CommandTypes.References,
+            session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+                command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(main, "foo", { index: 1 })
-            }).response as protocol.ReferencesResponseBody;
+            }).response as ts.server.protocol.ReferencesResponseBody;
 
             service.closeClientFile(main.path);
             service.closeClientFile(dummyFilePath);
@@ -1012,10 +1011,10 @@ export function bar() {}`
             service.openClientFile(fileResolvingToMainDts.path);
 
             // Find all refs from dts include
-            session.executeCommandSeq<protocol.ReferencesRequest>({
-                command: protocol.CommandTypes.References,
+            session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+                command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(fileResolvingToMainDts, "foo")
-            }).response as protocol.ReferencesResponseBody;
+            }).response as ts.server.protocol.ReferencesResponseBody;
             baselineTsserverLogs("projectReferences", input.scenario, session);
         }
 
@@ -1401,8 +1400,8 @@ bar;`
             }
             const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([appIndex], session);
-            session.executeCommandSeq<protocol.CodeFixRequest>({
-                command: protocol.CommandTypes.GetCodeFixes,
+            session.executeCommandSeq<ts.server.protocol.CodeFixRequest>({
+                command: ts.server.protocol.CommandTypes.GetCodeFixes,
                 arguments: {
                     file: appIndex.path,
                     startLine: 1,
@@ -1466,8 +1465,8 @@ bar;`
         openFilesForSession([mainFile, coreFile], session);
 
         // Find all refs in coreFile
-        session.executeCommandSeq<protocol.ReferencesRequest>({
-            command: protocol.CommandTypes.References,
+        session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+            command: ts.server.protocol.CommandTypes.References,
             arguments: protocolFileLocationFromSubstring(coreFile, `coreConst`)
         });
         baselineTsserverLogs("projectReferences", `when files from two projects are open and one project references`, session);
@@ -1550,8 +1549,8 @@ const b: B = new B();`
                 const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
                 openFilesForSession([indexA, ...(projectAlreadyLoaded ? [helperB] : [])], session);
 
-                session.executeCommandSeq<protocol.ReferencesRequest>({
-                    command: protocol.CommandTypes.References,
+                session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+                    command: ts.server.protocol.CommandTypes.References,
                     arguments: protocolFileLocationFromSubstring(indexA, `B`, { index: 1 })
                 });
                 baselineTsserverLogs("projectReferences", `find refs to decl in other proj ${subScenario}`, session);

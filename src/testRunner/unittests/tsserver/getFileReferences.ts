@@ -1,5 +1,5 @@
+import * as ts from "../../_namespaces/ts";
 import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { createSession, openFilesForSession, executeSessionRequest, makeReferenceItem } from "./helpers";
 
 describe("unittests:: tsserver:: getFileReferences", () => {
@@ -39,13 +39,13 @@ describe("unittests:: tsserver:: getFileReferences", () => {
     it("should get file references", () => {
         const session = makeSampleSession();
 
-        const response = executeSessionRequest<protocol.FileReferencesRequest, protocol.FileReferencesResponse>(
+        const response = executeSessionRequest<ts.server.protocol.FileReferencesRequest, ts.server.protocol.FileReferencesResponse>(
             session,
-            protocol.CommandTypes.FileReferences,
+            ts.server.protocol.CommandTypes.FileReferences,
             { file: aTs.path },
         );
 
-        const expectResponse: protocol.FileReferencesResponseBody = {
+        const expectResponse: ts.server.protocol.FileReferencesResponseBody = {
             refs: [
                 makeReferenceItem({ file: bTs, text: "./a", lineText: importA, contextText: importA, isWriteAccess: false }),
                 makeReferenceItem({ file: cTs, text: "./a", lineText: importCurlyFromA, contextText: importCurlyFromA, isWriteAccess: false }),
@@ -62,13 +62,13 @@ describe("unittests:: tsserver:: getFileReferences", () => {
         const session = makeSampleSession();
         session.getProjectService().setHostConfiguration({ preferences: { disableLineTextInReferences: true } });
 
-        const response = executeSessionRequest<protocol.FileReferencesRequest, protocol.FileReferencesResponse>(
+        const response = executeSessionRequest<ts.server.protocol.FileReferencesRequest, ts.server.protocol.FileReferencesResponse>(
             session,
-            protocol.CommandTypes.FileReferences,
+            ts.server.protocol.CommandTypes.FileReferences,
             { file: aTs.path },
         );
 
-        const expectResponse: protocol.FileReferencesResponseBody = {
+        const expectResponse: ts.server.protocol.FileReferencesResponseBody = {
             refs: [
                 makeReferenceItem({ file: bTs, text: "./a", lineText: undefined, contextText: importA, isWriteAccess: false }),
                 makeReferenceItem({ file: cTs, text: "./a", lineText: undefined, contextText: importCurlyFromA, isWriteAccess: false }),

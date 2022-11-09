@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, libFile, SymLink, TestServerHost } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { Logger, createProjectService, createLoggerWithInMemoryLogs, baselineTsserverLogs, createSession, openFilesForSession, makeSessionRequest, checkProjectActualFiles, checkNumberOfProjects } from "./helpers";
 
 describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectSystem CachingFileSystemInformation", () => {
@@ -204,7 +203,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         const logCacheAndClear = createLoggerTrackingHostCalls(host);
 
         // Get definitions shouldnt make host requests
-        const getDefinitionRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(protocol.CommandTypes.Definition, {
+        const getDefinitionRequest = makeSessionRequest<ts.server.protocol.FileLocationRequestArgs>(ts.server.protocol.CommandTypes.Definition, {
             file: clientFile.path,
             position: clientFile.content.indexOf("/vessel") + 1,
             line: undefined!, // TODO: GH#18217

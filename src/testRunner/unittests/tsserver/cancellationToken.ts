@@ -1,6 +1,5 @@
-import { createServerHost } from "../virtualFileSystemWithWatch";
 import * as ts from "../../_namespaces/ts";
-import { protocol } from "../../_namespaces/ts.server";
+import { createServerHost } from "../virtualFileSystemWithWatch";
 import { createSession, TestServerCancellationToken } from "./helpers";
 
 describe("unittests:: tsserver:: cancellationToken", () => {
@@ -82,12 +81,12 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             session.executeCommandSeq({
                 command: "open",
                 arguments: { file: f1.path }
-            } as protocol.OpenRequest);
+            } as ts.server.protocol.OpenRequest);
             // send geterr for missing file
             session.executeCommandSeq({
                 command: "geterr",
                 arguments: { files: ["/a/missing"] }
-            } as protocol.GeterrRequest);
+            } as ts.server.protocol.GeterrRequest);
             // Queued files
             assert.equal(host.getOutput().length, 0, "expected 0 message");
             host.checkTimeoutQueueLengthAndRun(1);
@@ -101,7 +100,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             session.executeCommandSeq({
                 command: "geterr",
                 arguments: { files: [f1.path] }
-            } as protocol.GeterrRequest);
+            } as ts.server.protocol.GeterrRequest);
 
             assert.equal(host.getOutput().length, 0, "expect 0 messages");
 
@@ -109,7 +108,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             session.executeCommandSeq({
                 command: "projectInfo",
                 arguments: { file: f1.path }
-            } as protocol.ProjectInfoRequest);
+            } as ts.server.protocol.ProjectInfoRequest);
             session.clearMessages();
 
             // cancel previously issued Geterr
@@ -126,13 +125,13 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             session.executeCommandSeq({
                 command: "geterr",
                 arguments: { files: [f1.path] }
-            } as protocol.GeterrRequest);
+            } as ts.server.protocol.GeterrRequest);
             assert.equal(host.getOutput().length, 0, "expect 0 messages");
 
             // run first step
             host.runQueuedTimeoutCallbacks();
             assert.equal(host.getOutput().length, 1, "expect 1 message");
-            const e1 = getMessage(0) as protocol.Event;
+            const e1 = getMessage(0) as ts.server.protocol.Event;
             assert.equal(e1.event, "syntaxDiag");
             session.clearMessages();
 
@@ -148,26 +147,26 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             session.executeCommandSeq({
                 command: "geterr",
                 arguments: { files: [f1.path] }
-            } as protocol.GeterrRequest);
+            } as ts.server.protocol.GeterrRequest);
             assert.equal(host.getOutput().length, 0, "expect 0 messages");
 
             // run first step
             host.runQueuedTimeoutCallbacks();
             assert.equal(host.getOutput().length, 1, "expect 1 message");
-            const e1 = getMessage(0) as protocol.Event;
+            const e1 = getMessage(0) as ts.server.protocol.Event;
             assert.equal(e1.event, "syntaxDiag");
             session.clearMessages();
 
             // the semanticDiag message
             host.runQueuedImmediateCallbacks();
             assert.equal(host.getOutput().length, 1);
-            const e2 = getMessage(0) as protocol.Event;
+            const e2 = getMessage(0) as ts.server.protocol.Event;
             assert.equal(e2.event, "semanticDiag");
             session.clearMessages();
 
             host.runQueuedImmediateCallbacks(1);
             assert.equal(host.getOutput().length, 2);
-            const e3 = getMessage(0) as protocol.Event;
+            const e3 = getMessage(0) as ts.server.protocol.Event;
             assert.equal(e3.event, "suggestionDiag");
             verifyRequestCompleted(getErrId, 1);
 
@@ -178,25 +177,25 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             session.executeCommandSeq({
                 command: "geterr",
                 arguments: { files: [f1.path] }
-            } as protocol.GeterrRequest);
+            } as ts.server.protocol.GeterrRequest);
             assert.equal(host.getOutput().length, 0, "expect 0 messages");
             // run first step
             host.runQueuedTimeoutCallbacks();
             assert.equal(host.getOutput().length, 1, "expect 1 message");
-            const e1 = getMessage(0) as protocol.Event;
+            const e1 = getMessage(0) as ts.server.protocol.Event;
             assert.equal(e1.event, "syntaxDiag");
             session.clearMessages();
 
             session.executeCommandSeq({
                 command: "geterr",
                 arguments: { files: [f1.path] }
-            } as protocol.GeterrRequest);
+            } as ts.server.protocol.GeterrRequest);
             // make sure that getErr1 is completed
             verifyRequestCompleted(getErr1, 0);
         }
 
         function verifyRequestCompleted(expectedSeq: number, n: number) {
-            const event = getMessage(n) as protocol.RequestCompletedEvent;
+            const event = getMessage(n) as ts.server.protocol.RequestCompletedEvent;
             assert.equal(event.event, "requestCompleted");
             assert.equal(event.body.request_seq, expectedSeq, "expectedSeq");
             session.clearMessages();
@@ -230,31 +229,31 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             session.executeCommandSeq({
                 command: "open",
                 arguments: { file: f1.path }
-            } as protocol.OpenRequest);
+            } as ts.server.protocol.OpenRequest);
 
             // send navbar request (normal priority)
             session.executeCommandSeq({
                 command: "navbar",
                 arguments: { file: f1.path }
-            } as protocol.NavBarRequest);
+            } as ts.server.protocol.NavBarRequest);
 
             // ensure the nav bar request can be canceled
             verifyExecuteCommandSeqIsCancellable({
                 command: "navbar",
                 arguments: { file: f1.path }
-            } as protocol.NavBarRequest);
+            } as ts.server.protocol.NavBarRequest);
 
             // send outlining spans request (normal priority)
             session.executeCommandSeq({
                 command: "outliningSpans",
                 arguments: { file: f1.path }
-            } as protocol.OutliningSpansRequestFull);
+            } as ts.server.protocol.OutliningSpansRequestFull);
 
             // ensure the outlining spans request can be canceled
             verifyExecuteCommandSeqIsCancellable({
                 command: "outliningSpans",
                 arguments: { file: f1.path }
-            } as protocol.OutliningSpansRequestFull);
+            } as ts.server.protocol.OutliningSpansRequestFull);
         }
 
         function verifyExecuteCommandSeqIsCancellable<T extends ts.server.protocol.Request>(request: Partial<T>) {

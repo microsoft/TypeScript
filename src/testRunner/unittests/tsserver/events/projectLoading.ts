@@ -1,6 +1,5 @@
 import * as ts from "../../../_namespaces/ts";
 import { createServerHost, File, libFile, TestServerHost } from "../../virtualFileSystemWithWatch";
-import { protocol } from "../../../_namespaces/ts.server";
 import { TestSession, openFilesForSession, checkNumberOfProjects, protocolLocationFromSubstring, toExternalFiles, createSessionWithEventTracking, createSessionWithDefaultEventHandler } from "../helpers";
 
 describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoadingFinish events", () => {
@@ -136,8 +135,8 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                 const { service, session, verifyEventWithOpenTs, verifyEvent } = createSessionToVerifyEvent(files.concat(aDTs, aDTsMap, bTs, configB));
                 verifyEventWithOpenTs(bTs, configB.path, 1);
 
-                session.executeCommandSeq<protocol.ReferencesRequest>({
-                    command: protocol.CommandTypes.References,
+                session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+                    command: ts.server.protocol.CommandTypes.References,
                     arguments: {
                         file: bTs.path,
                         ...protocolLocationFromSubstring(bTs.content, "A()")
@@ -166,7 +165,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
                     projectFileName,
                     rootFiles: toExternalFiles([aTs.path, configA.path]),
                     options: {}
-                } as protocol.ExternalProject);
+                } as ts.server.protocol.ExternalProject);
                 checkNumberOfProjects(service, { configuredProjects: 1 });
                 return { session, service, verifyEvent, getNumberOfEvents };
 
@@ -214,7 +213,7 @@ describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoading
 
     describe("when using default event handler", () => {
         verifyProjectLoadingStartAndFinish(host => {
-            const { session, getEvents, clearEvents } = createSessionWithDefaultEventHandler<protocol.ProjectLoadingStartEvent | protocol.ProjectLoadingFinishEvent>(host, [ts.server.ProjectLoadingStartEvent, ts.server.ProjectLoadingFinishEvent]);
+            const { session, getEvents, clearEvents } = createSessionWithDefaultEventHandler<ts.server.protocol.ProjectLoadingStartEvent | ts.server.protocol.ProjectLoadingFinishEvent>(host, [ts.server.ProjectLoadingStartEvent, ts.server.ProjectLoadingFinishEvent]);
             return {
                 session,
                 getNumberOfEvents: () => getEvents().length,

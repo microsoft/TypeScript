@@ -1,7 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, libFile, SymLink } from "../virtualFileSystemWithWatch";
 import { commonFile1, commonFile2, ensureErrorFreeBuild } from "../tscWatch/helpers";
-import { protocol } from "../../_namespaces/ts.server";
 import { createProjectService, createLoggerWithInMemoryLogs, baselineTsserverLogs, checkNumberOfConfiguredProjects, configuredProjectAt, checkProjectRootFiles, checkNumberOfInferredProjects, checkNumberOfProjects, checkProjectActualFiles, createSessionWithEventTracking, createSession, openFilesForSession, verifyGetErrRequest } from "./helpers";
 
 describe("unittests:: tsserver:: ConfiguredProjects", () => {
@@ -735,7 +734,7 @@ describe("unittests:: tsserver:: ConfiguredProjects", () => {
             type: "request",
             command: "open",
             arguments: { file: f1.path }
-        } as protocol.OpenRequest);
+        } as ts.server.protocol.OpenRequest);
 
         const projectService = session.getProjectService();
         checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -859,8 +858,8 @@ declare var console: {
                 canUseEvents: true,
                 logger: createLoggerWithInMemoryLogs(host),
             });
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: protocol.CommandTypes.Open,
+            session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+                command: ts.server.protocol.CommandTypes.Open,
                 arguments: {
                     file: foo.path,
                     fileContent: foo.content,
@@ -870,8 +869,8 @@ declare var console: {
             if (!openFileBeforeCreating) {
                 host.writeFile(fooBar.path, fooBar.content);
             }
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: protocol.CommandTypes.Open,
+            session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+                command: ts.server.protocol.CommandTypes.Open,
                 arguments: {
                     file: fooBar.path,
                     fileContent: fooBar.content,
@@ -974,8 +973,8 @@ foo();`
         service.openClientFile(fooIndex.path);
         checkProjectActualFiles(service.configuredProjects.get(fooConfig.path)!, [fooIndex.path, libFile.path, fooConfig.path]);
         service.openClientFile(fooDts);
-        session.executeCommandSeq<protocol.GetApplicableRefactorsRequest>({
-            command: protocol.CommandTypes.GetApplicableRefactors,
+        session.executeCommandSeq<ts.server.protocol.GetApplicableRefactorsRequest>({
+            command: ts.server.protocol.CommandTypes.GetApplicableRefactors,
             arguments: {
                 file: fooDts,
                 startLine: 1,

@@ -1,5 +1,5 @@
+import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { protocol, CommandNames } from "../../_namespaces/ts.server";
 import { createSession, openFilesForSession, executeSessionRequest } from "./helpers";
 
 function setup(fileName: string, content: string) {
@@ -7,10 +7,10 @@ function setup(fileName: string, content: string) {
     const host = createServerHost([file, libFile]);
     const session = createSession(host);
     openFilesForSession([file], session);
-    return function getSmartSelectionRange(locations: protocol.SelectionRangeRequestArgs["locations"]) {
-        return executeSessionRequest<protocol.SelectionRangeRequest, protocol.SelectionRangeResponse>(
+    return function getSmartSelectionRange(locations: ts.server.protocol.SelectionRangeRequestArgs["locations"]) {
+        return executeSessionRequest<ts.server.protocol.SelectionRangeRequest, ts.server.protocol.SelectionRangeResponse>(
             session,
-            CommandNames.SelectionRange,
+            ts.server.CommandNames.SelectionRange,
             { file: fileName, locations });
     };
 }

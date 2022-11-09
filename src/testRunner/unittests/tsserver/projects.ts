@@ -1,7 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
 import { commonFile1, commonFile2 } from "../tscWatch/helpers";
-import { protocol, CommandNames } from "../../_namespaces/ts.server";
 import { createSession, createLoggerWithInMemoryLogs, openFilesForSession, makeSessionRequest, baselineTsserverLogs, createProjectService, configuredProjectAt, checkProjectRootFiles, checkNumberOfConfiguredProjects, checkNumberOfInferredProjects, toExternalFiles, checkNumberOfProjects, checkProjectActualFiles, customTypesMap, toExternalFile, closeFilesForSession, verifyGetErrRequest, protocolFileLocationFromSubstring } from "./helpers";
 
 describe("unittests:: tsserver:: Projects", () => {
@@ -686,7 +685,7 @@ describe("unittests:: tsserver:: Projects", () => {
 
         // Specify .html extension as mixed content
         const extraFileExtensions = [{ extension: ".html", scriptKind: ts.ScriptKind.JS, isMixedContent: true }];
-        const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
+        const configureHostRequest = makeSessionRequest<ts.server.protocol.ConfigureRequestArguments>(ts.server.CommandNames.Configure, { extraFileExtensions });
         session.executeCommand(configureHostRequest);
 
         // The configured project should now be updated to include html file
@@ -746,7 +745,7 @@ describe("unittests:: tsserver:: Projects", () => {
 
         // Specify .html extension as mixed content in a configure host request
         const extraFileExtensions = [{ extension: ".html", scriptKind: ts.ScriptKind.JS, isMixedContent: true }];
-        const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
+        const configureHostRequest = makeSessionRequest<ts.server.protocol.ConfigureRequestArguments>(ts.server.CommandNames.Configure, { extraFileExtensions });
         session.executeCommand(configureHostRequest);
 
         openFilesForSession([file1], session);
@@ -1016,20 +1015,20 @@ describe("unittests:: tsserver:: Projects", () => {
             arguments: {
                 file: f1.path
             }
-        } as protocol.OpenRequest);
+        } as ts.server.protocol.OpenRequest);
         session.executeCommandSeq({
             command: ts.server.CommandNames.Close,
             arguments: {
                 file: f1.path
             }
-        } as protocol.CloseRequest);
+        } as ts.server.protocol.CloseRequest);
         session.executeCommandSeq({
             command: ts.server.CommandNames.Geterr,
             arguments: {
                 delay: 0,
                 files: [f1.path]
             }
-        } as protocol.GeterrRequest);
+        } as ts.server.protocol.GeterrRequest);
         baselineTsserverLogs("projects", "getting errors from closed script info does not throw exception because of getting project from orphan script info", session);
     });
 
@@ -1081,40 +1080,40 @@ describe("unittests:: tsserver:: Projects", () => {
         const host = createServerHost(files);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         // Create configured project
-        session.executeCommandSeq<protocol.OpenRequest>({
-            command: protocol.CommandTypes.Open,
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+            command: ts.server.protocol.CommandTypes.Open,
             arguments: {
                 file: file.path
             }
         });
 
         // open files/file1 = should not create another project
-        session.executeCommandSeq<protocol.OpenRequest>({
-            command: protocol.CommandTypes.Open,
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+            command: ts.server.protocol.CommandTypes.Open,
             arguments: {
                 file: filesFile1.path
             }
         });
 
         // Close the file = should still have project
-        session.executeCommandSeq<protocol.CloseRequest>({
-            command: protocol.CommandTypes.Close,
+        session.executeCommandSeq<ts.server.protocol.CloseRequest>({
+            command: ts.server.protocol.CommandTypes.Close,
             arguments: {
                 file: file.path
             }
         });
 
         // Open files/file2 - should create inferred project and close configured project
-        session.executeCommandSeq<protocol.OpenRequest>({
-            command: protocol.CommandTypes.Open,
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+            command: ts.server.protocol.CommandTypes.Open,
             arguments: {
                 file: filesFile2.path
             }
         });
 
         // Actions on file1 would result in assert
-        session.executeCommandSeq<protocol.OccurrencesRequest>({
-            command: protocol.CommandTypes.Occurrences,
+        session.executeCommandSeq<ts.server.protocol.OccurrencesRequest>({
+            command: ts.server.protocol.CommandTypes.Occurrences,
             arguments: {
                 file: filesFile1.path,
                 line: 1,
@@ -1141,16 +1140,16 @@ describe("unittests:: tsserver:: Projects", () => {
         const files = [file1, file2, libFile, config];
         const host = createServerHost(files);
         const session = createSession(host);
-        session.executeCommandSeq<protocol.OpenRequest>({
-            command: protocol.CommandTypes.Open,
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+            command: ts.server.protocol.CommandTypes.Open,
             arguments: { file: file2.path, fileContent: file2.content }
         });
-        session.executeCommandSeq<protocol.OpenRequest>({
-            command: protocol.CommandTypes.Open,
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+            command: ts.server.protocol.CommandTypes.Open,
             arguments: { file: file1.path }
         });
-        session.executeCommandSeq<protocol.CloseRequest>({
-            command: protocol.CommandTypes.Close,
+        session.executeCommandSeq<ts.server.protocol.CloseRequest>({
+            command: ts.server.protocol.CommandTypes.Close,
             arguments: { file: file2.path }
         });
 
@@ -1158,8 +1157,8 @@ describe("unittests:: tsserver:: Projects", () => {
         host.writeFile(file2.path, file2.content);
         // Do not let the timeout runs, before executing command
         const startOffset = file2.content.indexOf("y") + 1;
-        session.executeCommandSeq<protocol.GetApplicableRefactorsRequest>({
-            command: protocol.CommandTypes.GetApplicableRefactors,
+        session.executeCommandSeq<ts.server.protocol.GetApplicableRefactorsRequest>({
+            command: ts.server.protocol.CommandTypes.GetApplicableRefactors,
             arguments: { file: file2.path, startLine: 1, startOffset, endLine: 1, endOffset: startOffset + 1 }
         });
     });
@@ -1183,14 +1182,14 @@ describe("unittests:: tsserver:: Projects", () => {
             const host = createServerHost([file1, file2, tsconfig]);
             const session = createSession(host);
             const projectService = session.getProjectService();
-            session.executeCommandSeq<protocol.ConfigureRequest>({
-                command: protocol.CommandTypes.Configure,
+            session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+                command: ts.server.protocol.CommandTypes.Configure,
                 arguments: { preferences: { lazyConfiguredProjectsFromExternalProject } }
             });
 
             // Configure the deferred extension.
             const extraFileExtensions = [{ extension: ".deferred", scriptKind: ts.ScriptKind.Deferred, isMixedContent: true }];
-            const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
+            const configureHostRequest = makeSessionRequest<ts.server.protocol.ConfigureRequestArguments>(ts.server.CommandNames.Configure, { extraFileExtensions });
             session.executeCommand(configureHostRequest);
 
             // Open external project
@@ -1649,18 +1648,18 @@ describe("unittests:: tsserver:: Projects", () => {
                 baselineTsserverLogs("projects", scenario, session);
             });
         }
-        runOnTs<protocol.OutliningSpansRequest>(
+        runOnTs<ts.server.protocol.OutliningSpansRequest>(
             "file opened is in configured project that will be removed",
             innerFile => ({
-                command: protocol.CommandTypes.GetOutliningSpans,
+                command: ts.server.protocol.CommandTypes.GetOutliningSpans,
                 arguments: { file: innerFile.path }
             })
         );
 
-        runOnTs<protocol.ReferencesRequest>(
+        runOnTs<ts.server.protocol.ReferencesRequest>(
             "references on file opened is in configured project that will be removed",
             innerFile => ({
-                command: protocol.CommandTypes.References,
+                command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(innerFile, "bar")
             })
         );

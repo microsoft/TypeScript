@@ -1,6 +1,5 @@
 import * as ts from "../../../_namespaces/ts";
 import { createServerHost, File, libFile } from "../../virtualFileSystemWithWatch";
-import { protocol } from "../../../_namespaces/ts.server";
 import { createSessionWithEventTracking, checkNumberOfProjects, configuredProjectAt, createProjectService, createLoggerWithInMemoryLogs, baselineTsserverLogs } from "../helpers";
 
 describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () => {
@@ -32,7 +31,7 @@ describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () 
             type: "request",
             command: "open",
             arguments: { file: f1.path }
-        } as protocol.OpenRequest);
+        } as ts.server.protocol.OpenRequest);
         const projectService = session.getProjectService();
         checkNumberOfProjects(projectService, { configuredProjects: 1 });
         const project = configuredProjectAt(projectService, 0);

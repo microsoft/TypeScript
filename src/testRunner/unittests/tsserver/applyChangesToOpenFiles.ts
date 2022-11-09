@@ -1,7 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
 import { commonFile1, commonFile2 } from "../tscWatch/helpers";
-import { protocol } from "../../_namespaces/ts.server";
 import { TestSession, createSession } from "./helpers";
 
 describe("unittests:: tsserver:: applyChangesToOpenFiles", () => {
@@ -41,16 +40,16 @@ ${file.content}`;
     function verify({ applyChangesToOpen, openFile1Again }: Verify) {
         const host = createServerHost([app, file3, commonFile1, commonFile2, libFile, configFile]);
         const session = createSession(host);
-        session.executeCommandSeq<protocol.OpenRequest>({
-            command: protocol.CommandTypes.Open,
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+            command: ts.server.protocol.CommandTypes.Open,
             arguments: { file: app.path }
         });
         const service = session.getProjectService();
         const project = service.configuredProjects.get(configFile.path)!;
         assert.isDefined(project);
         verifyProjectVersion(project, 1);
-        session.executeCommandSeq<protocol.OpenRequest>({
-            command: protocol.CommandTypes.Open,
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+            command: ts.server.protocol.CommandTypes.Open,
             arguments: {
                 file: file3.path,
                 fileContent: fileContentWithComment(file3)
@@ -89,8 +88,8 @@ ${file.content}`;
 
     it("with applyChangedToOpenFiles request", () => {
         verify({
-            applyChangesToOpen: session => session.executeCommandSeq<protocol.ApplyChangedToOpenFilesRequest>({
-                command: protocol.CommandTypes.ApplyChangedToOpenFiles,
+            applyChangesToOpen: session => session.executeCommandSeq<ts.server.protocol.ApplyChangedToOpenFilesRequest>({
+                command: ts.server.protocol.CommandTypes.ApplyChangedToOpenFiles,
                 arguments: {
                     openFiles: [
                         {
@@ -122,8 +121,8 @@ ${file.content}`;
                     ]
                 }
             }),
-            openFile1Again: session => session.executeCommandSeq<protocol.ApplyChangedToOpenFilesRequest>({
-                command: protocol.CommandTypes.ApplyChangedToOpenFiles,
+            openFile1Again: session => session.executeCommandSeq<ts.server.protocol.ApplyChangedToOpenFilesRequest>({
+                command: ts.server.protocol.CommandTypes.ApplyChangedToOpenFiles,
                 arguments: {
                     openFiles: [{
                         fileName: commonFile1.path,
@@ -136,8 +135,8 @@ ${file.content}`;
 
     it("with updateOpen request", () => {
         verify({
-            applyChangesToOpen: session => session.executeCommandSeq<protocol.UpdateOpenRequest>({
-                command: protocol.CommandTypes.UpdateOpen,
+            applyChangesToOpen: session => session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+                command: ts.server.protocol.CommandTypes.UpdateOpen,
                 arguments: {
                     openFiles: [
                         {
@@ -171,8 +170,8 @@ ${file.content}`;
                     ]
                 }
             }),
-            openFile1Again: session => session.executeCommandSeq<protocol.UpdateOpenRequest>({
-                command: protocol.CommandTypes.UpdateOpen,
+            openFile1Again: session => session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+                command: ts.server.protocol.CommandTypes.UpdateOpen,
                 arguments: {
                     openFiles: [{
                         file: commonFile1.path,

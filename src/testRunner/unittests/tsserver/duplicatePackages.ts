@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { createSession, openFilesForSession, executeSessionRequest } from "./helpers";
 
 describe("unittests:: tsserver:: duplicate packages", () => {
@@ -27,7 +26,7 @@ describe("unittests:: tsserver:: duplicate packages", () => {
         openFilesForSession([aUser, bUser], session);
 
         for (const user of [aUser, bUser]) {
-            const response = executeSessionRequest<protocol.CodeFixRequest, protocol.CodeFixResponse>(session, protocol.CommandTypes.GetCodeFixes, {
+            const response = executeSessionRequest<ts.server.protocol.CodeFixRequest, ts.server.protocol.CodeFixResponse>(session, ts.server.protocol.CommandTypes.GetCodeFixes, {
                 file: user.path,
                 startLine: 2,
                 startOffset: 1,
@@ -35,7 +34,7 @@ describe("unittests:: tsserver:: duplicate packages", () => {
                 endOffset: 4,
                 errorCodes: [ts.Diagnostics.Cannot_find_name_0.code],
             });
-            assert.deepEqual<readonly protocol.CodeFixAction[] | undefined>(response, [
+            assert.deepEqual<readonly ts.server.protocol.CodeFixAction[] | undefined>(response, [
                 {
                     description: `Add import from "foo"`,
                     fixName: "import",

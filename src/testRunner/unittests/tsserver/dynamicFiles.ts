@@ -1,7 +1,6 @@
 import * as ts from "../../_namespaces/ts";
-import { checkNumberOfProjects, checkProjectActualFiles, checkProjectRootFiles, createProjectService, createSession, executeSessionRequest, executeSessionRequestNoResponse, openFilesForSession, verifyDynamic } from "./helpers";
 import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
+import { checkNumberOfProjects, checkProjectActualFiles, checkProjectRootFiles, createProjectService, createSession, executeSessionRequest, executeSessionRequestNoResponse, openFilesForSession, verifyDynamic } from "./helpers";
 
 function verifyPathRecognizedAsDynamic(path: string) {
     const file: File = {
@@ -30,14 +29,14 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
 
         openFilesForSession([aTs], session);
 
-        executeSessionRequestNoResponse<protocol.OpenRequest>(session, protocol.CommandTypes.Open, {
+        executeSessionRequestNoResponse<ts.server.protocol.OpenRequest>(session, ts.server.protocol.CommandTypes.Open, {
             file: untitledFile,
             fileContent: `/// <reference path="../../../../../../typings/@epic/Core.d.ts" />\nlet foo = 1;\nfooo/**/`,
             scriptKindName: "TS",
             projectRootPath: "/proj",
         });
         verifyDynamic(session.getProjectService(), `/proj/untitled:^untitled-1`);
-        const response = executeSessionRequest<protocol.CodeFixRequest, protocol.CodeFixResponse>(session, protocol.CommandTypes.GetCodeFixes, {
+        const response = executeSessionRequest<ts.server.protocol.CodeFixRequest, ts.server.protocol.CodeFixResponse>(session, ts.server.protocol.CommandTypes.GetCodeFixes, {
             file: untitledFile,
             startLine: 3,
             startOffset: 1,
@@ -45,7 +44,7 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
             endOffset: 5,
             errorCodes: [ts.Diagnostics.Cannot_find_name_0_Did_you_mean_1.code],
         });
-        assert.deepEqual<readonly protocol.CodeFixAction[] | undefined>(response, [
+        assert.deepEqual<readonly ts.server.protocol.CodeFixAction[] | undefined>(response, [
             {
                 description: "Change spelling to 'foo'",
                 fixName: "spelling",
@@ -212,8 +211,8 @@ describe("unittests:: tsserver:: dynamicFiles:: ", () => {
             checkProjectActualFiles(projectService.inferredProjects[0], [file.path, libFile.path]);
             verifyDynamic(projectService, `/user/username/projects/myproject/${file.path}`);
 
-            session.executeCommandSeq<protocol.OutliningSpansRequest>({
-                command: protocol.CommandTypes.GetOutliningSpans,
+            session.executeCommandSeq<ts.server.protocol.OutliningSpansRequest>({
+                command: ts.server.protocol.CommandTypes.GetOutliningSpans,
                 arguments: {
                     file: file.path
                 }

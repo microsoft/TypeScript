@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { createSession, openFilesForSession, executeSessionRequest } from "./helpers";
 
 describe("unittests:: tsserver:: refactors", () => {
@@ -127,7 +126,7 @@ describe("unittests:: tsserver:: refactors", () => {
         const session = createSession(createServerHost([aTs, tsconfig]));
         openFilesForSession([aTs], session);
 
-        const result = executeSessionRequest<protocol.GetEditsForRefactorRequest, protocol.GetEditsForRefactorResponse>(session, protocol.CommandTypes.GetEditsForRefactor, {
+        const result = executeSessionRequest<ts.server.protocol.GetEditsForRefactorRequest, ts.server.protocol.GetEditsForRefactorResponse>(session, ts.server.protocol.CommandTypes.GetEditsForRefactor, {
             file: aTs.path,
             startLine: 1,
             startOffset: 1,
@@ -136,7 +135,7 @@ describe("unittests:: tsserver:: refactors", () => {
             refactor: "Move to a new file",
             action: "Move to a new file",
         });
-        assert.deepEqual<protocol.RefactorEditInfo | undefined>(result, {
+        assert.deepEqual<ts.server.protocol.RefactorEditInfo | undefined>(result, {
             edits: [
                 {
                     fileName: aTs.path,

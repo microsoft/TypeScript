@@ -1,6 +1,5 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { protocol } from "../../_namespaces/ts.server";
 import { createSession, openFilesForSession, executeSessionRequest, protocolFileLocationFromSubstring, protocolTextSpanFromSubstring, protocolRenameSpanFromSubstring } from "./helpers";
 
 describe("unittests:: tsserver:: rename", () => {
@@ -12,8 +11,8 @@ describe("unittests:: tsserver:: rename", () => {
         openFilesForSession([bTs], session);
 
         // rename fails with allowRenameOfImportPath disabled
-        const response1 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, 'a";'));
-        assert.deepEqual<protocol.RenameResponseBody | undefined>(response1, {
+        const response1 = executeSessionRequest<ts.server.protocol.RenameRequest, ts.server.protocol.RenameResponse>(session, ts.server.protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, 'a";'));
+        assert.deepEqual<ts.server.protocol.RenameResponseBody | undefined>(response1, {
             info: {
                 canRename: false,
                 localizedErrorMessage: "You cannot rename this element."
@@ -23,8 +22,8 @@ describe("unittests:: tsserver:: rename", () => {
 
         // rename succeeds with allowRenameOfImportPath enabled in host
         session.getProjectService().setHostConfiguration({ preferences: { allowRenameOfImportPath: true } });
-        const response2 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, 'a";'));
-        assert.deepEqual<protocol.RenameResponseBody | undefined>(response2, {
+        const response2 = executeSessionRequest<ts.server.protocol.RenameRequest, ts.server.protocol.RenameResponse>(session, ts.server.protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, 'a";'));
+        assert.deepEqual<ts.server.protocol.RenameResponseBody | undefined>(response2, {
             info: {
                 canRename: true,
                 fileToRename: aTs.path,
@@ -49,8 +48,8 @@ describe("unittests:: tsserver:: rename", () => {
         // rename succeeds with allowRenameOfImportPath enabled in file
         session.getProjectService().setHostConfiguration({ preferences: { allowRenameOfImportPath: false } });
         session.getProjectService().setHostConfiguration({ file: "/b.ts", formatOptions: {}, preferences: { allowRenameOfImportPath: true } });
-        const response3 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, 'a";'));
-        assert.deepEqual<protocol.RenameResponseBody | undefined>(response3, {
+        const response3 = executeSessionRequest<ts.server.protocol.RenameRequest, ts.server.protocol.RenameResponse>(session, ts.server.protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, 'a";'));
+        assert.deepEqual<ts.server.protocol.RenameResponseBody | undefined>(response3, {
             info: {
                 canRename: true,
                 fileToRename: aTs.path,
@@ -80,8 +79,8 @@ describe("unittests:: tsserver:: rename", () => {
         openFilesForSession([aTs], session);
 
         // rename with prefixText and suffixText disabled
-        const response1 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
-        assert.deepEqual<protocol.RenameResponseBody | undefined>(response1, {
+        const response1 = executeSessionRequest<ts.server.protocol.RenameRequest, ts.server.protocol.RenameResponse>(session, ts.server.protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
+        assert.deepEqual<ts.server.protocol.RenameResponseBody | undefined>(response1, {
             info: {
                 canRename: true,
                 fileToRename: undefined,
@@ -112,8 +111,8 @@ describe("unittests:: tsserver:: rename", () => {
 
         // rename with prefixText and suffixText enabled in host
         session.getProjectService().setHostConfiguration({ preferences: { providePrefixAndSuffixTextForRename: true } });
-        const response2 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
-        assert.deepEqual<protocol.RenameResponseBody | undefined>(response2, {
+        const response2 = executeSessionRequest<ts.server.protocol.RenameRequest, ts.server.protocol.RenameResponse>(session, ts.server.protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
+        assert.deepEqual<ts.server.protocol.RenameResponseBody | undefined>(response2, {
             info: {
                 canRename: true,
                 fileToRename: undefined,
@@ -146,8 +145,8 @@ describe("unittests:: tsserver:: rename", () => {
         // rename with prefixText and suffixText enabled for file
         session.getProjectService().setHostConfiguration({ preferences: { providePrefixAndSuffixTextForRename: false } });
         session.getProjectService().setHostConfiguration({ file: "/a.ts", formatOptions: {}, preferences: { providePrefixAndSuffixTextForRename: true } });
-        const response3 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
-        assert.deepEqual<protocol.RenameResponseBody | undefined>(response3, {
+        const response3 = executeSessionRequest<ts.server.protocol.RenameRequest, ts.server.protocol.RenameResponse>(session, ts.server.protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
+        assert.deepEqual<ts.server.protocol.RenameResponseBody | undefined>(response3, {
             info: {
                 canRename: true,
                 fileToRename: undefined,
@@ -186,8 +185,8 @@ describe("unittests:: tsserver:: rename", () => {
         openFilesForSession([bTs], session);
 
         session.getProjectService().setHostConfiguration({ preferences: { providePrefixAndSuffixTextForRename: false } });
-        const response1 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, "aTest("));
-        assert.deepEqual<protocol.RenameResponseBody | undefined>(response1, {
+        const response1 = executeSessionRequest<ts.server.protocol.RenameRequest, ts.server.protocol.RenameResponse>(session, ts.server.protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, "aTest("));
+        assert.deepEqual<ts.server.protocol.RenameResponseBody | undefined>(response1, {
             info: {
                 canRename: true,
                 fileToRename: undefined,
@@ -224,8 +223,8 @@ describe("unittests:: tsserver:: rename", () => {
 
         // rename from file with prefixText and suffixText enabled
         session.getProjectService().setHostConfiguration({ file: "/a.ts", formatOptions: {}, preferences: { providePrefixAndSuffixTextForRename: true } });
-        const response1 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
-        assert.deepEqual<protocol.RenameResponseBody | undefined>(response1, {
+        const response1 = executeSessionRequest<ts.server.protocol.RenameRequest, ts.server.protocol.RenameResponse>(session, ts.server.protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
+        assert.deepEqual<ts.server.protocol.RenameResponseBody | undefined>(response1, {
             info: {
                 canRename: true,
                 fileToRename: undefined,
@@ -257,8 +256,8 @@ describe("unittests:: tsserver:: rename", () => {
         });
 
         // rename from file with prefixText and suffixText disabled
-        const response2 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, "x"));
-        assert.deepEqual<protocol.RenameResponseBody | undefined>(response2, {
+        const response2 = executeSessionRequest<ts.server.protocol.RenameRequest, ts.server.protocol.RenameResponse>(session, ts.server.protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, "x"));
+        assert.deepEqual<ts.server.protocol.RenameResponseBody | undefined>(response2, {
             info: {
                 canRename: true,
                 fileToRename: undefined,
