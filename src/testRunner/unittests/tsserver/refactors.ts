@@ -1,4 +1,6 @@
 import * as ts from "../../_namespaces/ts";
+import { createServerHost, File } from "../virtualFileSystemWithWatch";
+import { createSession, openFilesForSession, executeSessionRequest } from "./helpers";
 
 describe("unittests:: tsserver:: refactors", () => {
     it("use formatting options", () => {
@@ -6,9 +8,9 @@ describe("unittests:: tsserver:: refactors", () => {
             path: "/a.ts",
             content: "function f() {\n  1;\n}",
         };
-        const host = ts.projectSystem.createServerHost([file]);
-        const session = ts.projectSystem.createSession(host);
-        ts.projectSystem.openFilesForSession([file], session);
+        const host = createServerHost([file]);
+        const session = createSession(host);
+        openFilesForSession([file], session);
 
         const response0 = session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -65,8 +67,8 @@ describe("unittests:: tsserver:: refactors", () => {
             content: '{ "files": ["./a.ts"] }',
         };
 
-        const session = ts.projectSystem.createSession(ts.projectSystem.createServerHost([aTs, tsconfig]));
-        ts.projectSystem.openFilesForSession([aTs], session);
+        const session = createSession(createServerHost([aTs, tsconfig]));
+        openFilesForSession([aTs], session);
 
         const response1 = session.executeCommandSeq<ts.server.protocol.GetEditsForRefactorRequest>({
             command: ts.server.protocol.CommandTypes.GetEditsForRefactor,
@@ -119,12 +121,12 @@ describe("unittests:: tsserver:: refactors", () => {
     });
 
     it("handles canonicalization of tsconfig path", () => {
-        const aTs: ts.projectSystem.File = { path: "/Foo/a.ts", content: "const x = 0;" };
-        const tsconfig: ts.projectSystem.File = { path: "/Foo/tsconfig.json", content: '{ "files": ["./a.ts"] }' };
-        const session = ts.projectSystem.createSession(ts.projectSystem.createServerHost([aTs, tsconfig]));
-        ts.projectSystem.openFilesForSession([aTs], session);
+        const aTs: File = { path: "/Foo/a.ts", content: "const x = 0;" };
+        const tsconfig: File = { path: "/Foo/tsconfig.json", content: '{ "files": ["./a.ts"] }' };
+        const session = createSession(createServerHost([aTs, tsconfig]));
+        openFilesForSession([aTs], session);
 
-        const result = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.GetEditsForRefactorRequest, ts.projectSystem.protocol.GetEditsForRefactorResponse>(session, ts.projectSystem.protocol.CommandTypes.GetEditsForRefactor, {
+        const result = executeSessionRequest<ts.server.protocol.GetEditsForRefactorRequest, ts.server.protocol.GetEditsForRefactorResponse>(session, ts.server.protocol.CommandTypes.GetEditsForRefactor, {
             file: aTs.path,
             startLine: 1,
             startOffset: 1,
@@ -133,7 +135,7 @@ describe("unittests:: tsserver:: refactors", () => {
             refactor: "Move to a new file",
             action: "Move to a new file",
         });
-        assert.deepEqual<ts.projectSystem.protocol.RefactorEditInfo | undefined>(result, {
+        assert.deepEqual<ts.server.protocol.RefactorEditInfo | undefined>(result, {
             edits: [
                 {
                     fileName: aTs.path,

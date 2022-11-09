@@ -1,6 +1,8 @@
 import * as ts from "../../_namespaces/ts";
+import { createServerHost, File } from "../virtualFileSystemWithWatch";
+import { createSession, configuredProjectAt } from "./helpers";
 
-const tsConfig: ts.projectSystem.File = {
+const tsConfig: File = {
     path: "/tsconfig.json",
     content: "{}"
 };
@@ -18,7 +20,7 @@ const packageJsonContent = {
         webpack: "*"
     }
 };
-const packageJson: ts.projectSystem.File = {
+const packageJson: File = {
     path: "/package.json",
     content: JSON.stringify(packageJsonContent, undefined, 2)
 };
@@ -102,11 +104,11 @@ describe("unittests:: tsserver:: packageJsonInfo", () => {
     });
 });
 
-function setup(files: readonly ts.projectSystem.File[] = [tsConfig, packageJson]) {
-    const host = ts.projectSystem.createServerHost(files);
-    const session = ts.projectSystem.createSession(host);
+function setup(files: readonly File[] = [tsConfig, packageJson]) {
+    const host = createServerHost(files);
+    const session = createSession(host);
     const projectService = session.getProjectService();
     projectService.openClientFile(files[0].path);
-    const project = ts.projectSystem.configuredProjectAt(projectService, 0);
+    const project = configuredProjectAt(projectService, 0);
     return { host, session, project, projectService };
 }

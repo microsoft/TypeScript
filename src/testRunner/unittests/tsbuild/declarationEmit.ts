@@ -1,6 +1,6 @@
-import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 import * as Utils from "../../_namespaces/Utils";
+import { loadProjectFromFiles, verifyTsc } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: declarationEmit", () => {
     function getFiles(): vfs.FileSet {
@@ -58,17 +58,17 @@ declare type MyNominal<T, Name extends string> = T & {
 };`,
         };
     }
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "declarationEmit",
         subScenario: "when declaration file is referenced through triple slash",
-        fs: () => ts.loadProjectFromFiles(getFiles()),
+        fs: () => loadProjectFromFiles(getFiles()),
         commandLineArgs: ["--b", "/src/solution/tsconfig.json", "--verbose"]
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "declarationEmit",
         subScenario: "when declaration file is referenced through triple slash but uses no references",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             ...getFiles(),
             "/src/solution/tsconfig.json": JSON.stringify({
                 extends: "./tsconfig.base.json",
@@ -79,10 +79,10 @@ declare type MyNominal<T, Name extends string> = T & {
         commandLineArgs: ["--b", "/src/solution/tsconfig.json", "--verbose"]
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "declarationEmit",
         subScenario: "when declaration file used inferred type from referenced project",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/tsconfig.json": JSON.stringify({
                 compilerOptions: {
                     composite: true,

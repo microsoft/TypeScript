@@ -42,6 +42,8 @@ export interface DiffOptions {
     baseIsNotShadowRoot?: boolean;
 }
 
+export const timeIncrements = 1000;
+
 /**
  * Represents a virtual POSIX-like file system.
  */
@@ -65,7 +67,7 @@ export class FileSystem {
     private _dirStack: string[] | undefined;
 
     constructor(ignoreCase: boolean, options: FileSystemOptions = {}) {
-        const { time = ts.TestFSWithWatch.timeIncrements, files, meta } = options;
+        const { time = timeIncrements, files, meta } = options;
         this.ignoreCase = ignoreCase;
         this.stringComparer = this.ignoreCase ? vpath.compareCaseInsensitive : vpath.compareCaseSensitive;
         this._time = time;
@@ -178,7 +180,7 @@ export class FileSystem {
             this._time = value;
         }
         else if (!this.isReadonly) {
-            this._time += ts.TestFSWithWatch.timeIncrements;
+            this._time += timeIncrements;
         }
         return this._time;
     }
