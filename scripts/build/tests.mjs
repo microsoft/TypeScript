@@ -6,6 +6,7 @@ import chalk from "chalk";
 import cmdLineOptions from "./options.mjs";
 import { exec } from "./utils.mjs";
 import { findUpFile, findUpRoot } from "./findUpDir.mjs";
+import { CancelError } from "@esfx/canceltoken";
 
 const mochaJs = path.resolve(findUpRoot(), "node_modules", "mocha", "bin", "_mocha");
 export const localBaseline = "tests/baselines/local/";
@@ -19,7 +20,7 @@ export const localTest262Baseline = "internal/baselines/test262/local";
  * @param {string} defaultReporter
  * @param {boolean} runInParallel
  * @param {object} options
- * @param {AbortSignal} [options.signal]
+ * @param {import("@esfx/canceltoken").CancelToken} [options.token]
  * @param {boolean} [options.watching]
  */
 export async function runConsoleTests(runJs, defaultReporter, runInParallel, options = {}) {
@@ -40,7 +41,7 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
         }
         await cleanTestDirs();
 
-        if (options.signal?.aborted) {
+        if (options.token?.signaled) {
             return;
         }
     }
@@ -65,6 +66,10 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
         testTimeout = 400000;
+    }
+
+    if (options.watching) {
+        console.log(chalk.yellowBright(`[watch] running tests...`));
     }
 
     if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed || shards || shardId) {
@@ -125,11 +130,8 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
 
     try {
         setNodeEnvToDevelopment();
-        if (options.watching) {
-            console.log(chalk.yellowBright(`[watch] running tests...`));
-        }
 
-        const { exitCode } = await exec(process.execPath, args, { signal: options.signal });
+        const { exitCode } = await exec(process.execPath, args, { token: options.token });
         if (exitCode !== 0) {
             errorStatus = exitCode;
             error = new Error(`Process exited with status code ${errorStatus}.`);
@@ -147,8 +149,12 @@ export async function runConsoleTests(runJs, defaultReporter, runInParallel, opt
     await deleteTemporaryProjectOutput();
 
     if (error !== undefined) {
+        if (error instanceof CancelError) {
+            throw error;
+        }
+
         if (options.watching) {
-            console.error(`${chalk.redBright(error.name)}: ${chalk.yellowBright(error.message)}`);
+            console.error(`${chalk.redBright(error.name)}: ${error.message}`);
         }
         else {
             process.exitCode = typeof errorStatus === "number" ? errorStatus : 2;

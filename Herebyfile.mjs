@@ -14,6 +14,7 @@ import cmdLineOptions from "./scripts/build/options.mjs";
 import esbuild from "esbuild";
 import chokidar from "chokidar";
 import { EventEmitter } from "events";
+import { CancelToken } from "@esfx/canceltoken";
 
 const glob = util.promisify(_glob);
 
@@ -633,8 +634,9 @@ export const runTestsAndWatch = task({
 
         let watching = true;
         let running = true;
+        let lastTestChangeTimeMs = Date.now();
         let testsChangedDeferred = /** @type {Deferred<void>} */(new Deferred());
-        let testsChangedAbortController = new AbortController();
+        let testsChangedCancelSource = CancelToken.source();
 
         const testsChangedDebouncer = new Debouncer(1_000, endRunTests);
         const testCaseWatcher = chokidar.watch([
@@ -642,24 +644,23 @@ export const runTestsAndWatch = task({
             "tests/lib/**/*.*",
             "tests/projects/**/*.*",
         ], {
-            ignoreInitial: true,
             ignorePermissionErrors: true,
-            awaitWriteFinish: true,
+            alwaysStat: true
         });
 
         process.on("SIGINT", endWatchMode);
         process.on("SIGKILL", endWatchMode);
         process.on("beforeExit", endWatchMode);
         watchTestsEmitter.on("rebuild", onRebuild);
-        testCaseWatcher.on("all", (_eventName, path) => beginRunTests(path));
+        testCaseWatcher.on("all", onChange);
 
         while (watching) {
             const promise = testsChangedDeferred.promise;
-            const signal = testsChangedAbortController.signal;
-            if (!signal.aborted) {
+            const token = testsChangedCancelSource.token;
+            if (!token.signaled) {
                 running = true;
                 try {
-                    await runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, { signal, watching: true });
+                    await runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, { token, watching: true });
                 }
                 catch {
                     // ignore
@@ -677,6 +678,29 @@ export const runTestsAndWatch = task({
         }
 
         /**
+         * @param {'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir'} eventName
+         * @param {string} path
+         * @param {fs.Stats | undefined} stats
+         */
+        function onChange(eventName, path, stats) {
+            switch (eventName) {
+                case "change":
+                case "unlink":
+                case "unlinkDir":
+                    break;
+                case "add":
+                case "addDir":
+                    // skip files that are detected as 'add' but haven't actually changed since the last time tests were
+                    // run.
+                    if (stats && stats.mtimeMs <= lastTestChangeTimeMs) {
+                        return;
+                    }
+                    break;
+            }
+            beginRunTests(path);
+        }
+
+        /**
          * @param {string} path
          */
         function beginRunTests(path) {
@@ -685,14 +709,15 @@ export const runTestsAndWatch = task({
                 if (running) {
                     console.log(chalk.yellowBright("[watch] aborting in-progress test run..."));
                 }
-                testsChangedAbortController.abort();
-                testsChangedAbortController = new AbortController();
+                testsChangedCancelSource.cancel();
+                testsChangedCancelSource = CancelToken.source();
             }
 
             testsChangedDebouncer.enqueue();
         }
 
         function endRunTests() {
+            lastTestChangeTimeMs = Date.now();
             testsChangedDeferred.resolve();
             testsChangedDeferred = /** @type {Deferred<void>} */(new Deferred());
         }
@@ -701,7 +726,7 @@ export const runTestsAndWatch = task({
             if (watching) {
                 watching = false;
                 console.log(chalk.yellowBright("[watch] exiting watch mode..."));
-                testsChangedAbortController.abort();
+                testsChangedCancelSource.cancel();
                 testCaseWatcher.close();
                 watchTestsEmitter.off("rebuild", onRebuild);
             }
