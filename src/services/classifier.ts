@@ -3,7 +3,7 @@ import {
     ClassificationResult, Classifications, ClassificationType, ClassificationTypeNames, ClassifiedSpan, Classifier,
     commentPragmas, couldStartTrivia, createScanner, createTextSpan, Debug, decodedTextSpanIntersectsWith,
     EndOfLineState, EnumDeclaration, getMeaningFromLocation, getModuleInstanceState, getTypeArgumentOrTypeParameterList,
-    HasJSDoc, InterfaceDeclaration, isAccessibilityModifier, isConstTypeReference, isIdentifier, isJSDoc, isKeyword,
+    HasJSDoc, InterfaceDeclaration, isAccessibilityModifier, isConstOrTupleTypeReference, isIdentifier, isJSDoc, isKeyword,
     isLineBreak, isModuleDeclaration, isPunctuation, isTemplateLiteralKind, isThisIdentifier, isToken, isTrivia, JSDoc,
     JSDocAugmentsTag, JSDocCallbackTag, JSDocEnumTag, JSDocImplementsTag, JSDocParameterTag, JSDocPropertyTag,
     JSDocReturnTag, JSDocSeeTag, JSDocTemplateTag, JSDocThisTag, JSDocTypedefTag, JSDocTypeTag, JsxAttribute,
@@ -1092,7 +1092,7 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                         return;
                 }
 
-                if (isConstTypeReference(token.parent)) {
+                if (isConstOrTupleTypeReference(token.parent)) {
                     return ClassificationType.keyword;
                 }
             }

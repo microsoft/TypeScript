@@ -5,7 +5,7 @@ import {
     getMeaningFromLocation, getNameOfDeclaration, getNodeModifiers, getObjectFlags, getParseTreeNode,
     getSourceFileOfNode, getTextOfConstantValue, getTextOfIdentifierOrLiteral, getTextOfNode, hasSyntacticModifier,
     idText, ImportEqualsDeclaration, isArrowFunction, isBindingElement, isCallExpression, isCallExpressionTarget,
-    isCallOrNewExpression, isClassExpression, isConstTypeReference, isDeprecatedDeclaration, isEnumConst,
+    isCallOrNewExpression, isClassExpression, isConstOrTupleTypeReference, isDeprecatedDeclaration, isEnumConst,
     isEnumDeclaration, isExpression, isExternalModuleImportEqualsDeclaration, isFirstDeclarationOfSymbolParameter,
     isFunctionBlock, isFunctionExpression, isFunctionLike, isFunctionLikeKind, isIdentifier, isInExpressionContext,
     isJsxOpeningLikeElement, isLet, isModuleWithStringLiteralName, isNameOfFunctionDeclaration, isNewExpressionTarget,
@@ -364,7 +364,7 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
         displayParts.push(spacePart());
         displayParts.push(operatorPart(SyntaxKind.EqualsToken));
         displayParts.push(spacePart());
-        addRange(displayParts, typeToDisplayParts(typeChecker, isConstTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
+        addRange(displayParts, typeToDisplayParts(typeChecker, isConstOrTupleTypeReference(location.parent) ? typeChecker.getTypeAtLocation(location.parent) : typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
     }
     if (symbolFlags & SymbolFlags.Enum) {
         prefixNextMeaning();

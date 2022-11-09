@@ -1,0 +1,64 @@
+tests/cases/conformance/expressions/typeAssertions/tupleAssertions.ts(11,10): error TS1484: A 'tuple' assertions can only be applied to array literals.
+tests/cases/conformance/expressions/typeAssertions/tupleAssertions.ts(12,10): error TS1484: A 'tuple' assertions can only be applied to array literals.
+tests/cases/conformance/expressions/typeAssertions/tupleAssertions.ts(13,10): error TS1484: A 'tuple' assertions can only be applied to array literals.
+tests/cases/conformance/expressions/typeAssertions/tupleAssertions.ts(14,10): error TS1484: A 'tuple' assertions can only be applied to array literals.
+tests/cases/conformance/expressions/typeAssertions/tupleAssertions.ts(16,10): error TS1484: A 'tuple' assertions can only be applied to array literals.
+tests/cases/conformance/expressions/typeAssertions/tupleAssertions.ts(17,10): error TS1484: A 'tuple' assertions can only be applied to array literals.
+tests/cases/conformance/expressions/typeAssertions/tupleAssertions.ts(21,18): error TS1484: A 'tuple' assertions can only be applied to array literals.
+tests/cases/conformance/expressions/typeAssertions/tupleAssertions.ts(22,18): error TS1484: A 'tuple' assertions can only be applied to array literals.
+tests/cases/conformance/expressions/typeAssertions/tupleAssertions.ts(23,18): error TS1484: A 'tuple' assertions can only be applied to array literals.
+tests/cases/conformance/expressions/typeAssertions/tupleAssertions.ts(25,18): error TS1484: A 'tuple' assertions can only be applied to array literals.
+
+
+==== tests/cases/conformance/expressions/typeAssertions/tupleAssertions.ts (10 errors) ====
+    let a1 = [] as tuple;
+    let a2 = [1, 2, 3] as tuple;
+    let a3 = [10, 'hello', true] as tuple;
+    let a4 = [...[1, 2, 3]] as tuple;
+    let a5 = [1, 2, 3];
+    let a6 = [...a5] as tuple;
+    let a7 = [...a6];
+    let a8 = ['abc', ...a7] as tuple;
+    let a9 = [...a8];
+    
+    let e1 = 'abc' as tuple;
+             ~~~~~
+!!! error TS1484: A 'tuple' assertions can only be applied to array literals.
+    let e2 = 10 as tuple;
+             ~~
+!!! error TS1484: A 'tuple' assertions can only be applied to array literals.
+    let e3 = { x: 10, y: 20 } as tuple;
+             ~~~~~~~~~~~~~~~~
+!!! error TS1484: A 'tuple' assertions can only be applied to array literals.
+    let e4 = `${e1}-${e2}` as tuple;
+             ~~~~~~~~~~~~~
+!!! error TS1484: A 'tuple' assertions can only be applied to array literals.
+    
+    let p1 = (10) as tuple; // Error
+             ~~~~
+!!! error TS1484: A 'tuple' assertions can only be applied to array literals.
+    let p2 = ((-10)) as tuple; // Error
+             ~~~~~~~
+!!! error TS1484: A 'tuple' assertions can only be applied to array literals.
+    let p3 = ([(10)]) as tuple; // OK
+    let p4 = [[[[10]]]] as tuple; // OK
+    
+    let q1 = <tuple> 10; // Error
+                     ~~
+!!! error TS1484: A 'tuple' assertions can only be applied to array literals.
+    let q2 = <tuple> 'abc'; // Error
+                     ~~~~~
+!!! error TS1484: A 'tuple' assertions can only be applied to array literals.
+    let q3 = <tuple> true; // Error
+                     ~~~~
+!!! error TS1484: A 'tuple' assertions can only be applied to array literals.
+    let q4 = <tuple> [1, 2, 3]; // OK
+    let q5 = <tuple> { x: 10, y: 20 }; // Error
+                     ~~~~~~~~~~~~~~~~
+!!! error TS1484: A 'tuple' assertions can only be applied to array literals.
+    
+    function accessorNames<S extends string>(propName: S) {
+        return [`get-${propName}`, `set-${propName}`] as tuple;
+    }
+    
+    const ns1 = accessorNames('foo');

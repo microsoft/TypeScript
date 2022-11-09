@@ -58,7 +58,7 @@ import {
     SymbolFlags, SymbolId, SyntaxKind, TextChange, textChanges, textPart, TextRange, TextSpan, timestamp, Token,
     TokenSyntaxKind, tokenToString, tryCast, tryGetImportFromModuleSpecifier, Type, TypeChecker, TypeElement, TypeFlags,
     typeHasCallOrConstructSignatures, TypeLiteralNode, TypeOnlyAliasDeclaration, unescapeLeadingUnderscores,
-    UnionReduction, UnionType, UserPreferences, VariableDeclaration, walkUpParenthesizedExpressions,
+    UnionReduction, UnionType, UserPreferences, VariableDeclaration, walkUpParenthesizedExpressions, isArrayLiteralExpression,
 } from "./_namespaces/ts";
 import { StringCompletions } from "./_namespaces/ts.Completions";
 
@@ -240,6 +240,7 @@ const enum KeywordCompletionFilters {
     ConstructorParameterKeywords,   // Keywords at constructor parameter
     FunctionLikeBodyKeywords,       // Keywords at function like body
     TypeAssertionKeywords,
+    TypeAssertionKeywordsAfterArray,
     TypeKeywords,
     TypeKeyword,                    // Literally just `type`
     Last = TypeKeyword
@@ -2693,7 +2694,9 @@ function getCompletionData(
         collectAutoImports();
         if (isTypeOnlyLocation) {
             keywordFilters = contextToken && isAssertionExpression(contextToken.parent)
-                ? KeywordCompletionFilters.TypeAssertionKeywords
+                ? isArrayLiteralExpression(walkUpParenthesizedExpressions(contextToken.parent.expression))
+                    ? KeywordCompletionFilters.TypeAssertionKeywordsAfterArray
+                    : KeywordCompletionFilters.TypeAssertionKeywords
                 : KeywordCompletionFilters.TypeKeywords;
         }
     }
@@ -3985,6 +3988,8 @@ function getTypescriptKeywordCompletions(keywordFilter: KeywordCompletionFilters
                 return isParameterPropertyModifier(kind);
             case KeywordCompletionFilters.TypeAssertionKeywords:
                 return isTypeKeyword(kind) || kind === SyntaxKind.ConstKeyword;
+            case KeywordCompletionFilters.TypeAssertionKeywordsAfterArray:
+                return isTypeKeyword(kind) || kind === SyntaxKind.ConstKeyword || kind === SyntaxKind.TupleKeyword;
             case KeywordCompletionFilters.TypeKeywords:
                 return isTypeKeyword(kind);
             case KeywordCompletionFilters.TypeKeyword:
@@ -4021,6 +4026,7 @@ function isTypeScriptOnlyKeyword(kind: SyntaxKind) {
         case SyntaxKind.ReadonlyKeyword:
         case SyntaxKind.StringKeyword:
         case SyntaxKind.SymbolKeyword:
+        case SyntaxKind.TupleKeyword:
         case SyntaxKind.TypeKeyword:
         case SyntaxKind.UniqueKeyword:
         case SyntaxKind.UnknownKeyword:

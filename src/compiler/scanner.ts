@@ -154,6 +154,7 @@ export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
     throw: SyntaxKind.ThrowKeyword,
     true: SyntaxKind.TrueKeyword,
     try: SyntaxKind.TryKeyword,
+    tuple: SyntaxKind.TupleKeyword,
     type: SyntaxKind.TypeKeyword,
     typeof: SyntaxKind.TypeOfKeyword,
     undefined: SyntaxKind.UndefinedKeyword,

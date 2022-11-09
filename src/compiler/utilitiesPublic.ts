@@ -1095,6 +1095,15 @@ export function isConstTypeReference(node: Node) {
         node.typeName.escapedText === "const" && !node.typeArguments;
 }
 
+export function isTupleTypeReference(node: Node) {
+    return isTypeReferenceNode(node) && isIdentifier(node.typeName) &&
+        node.typeName.escapedText === "tuple" && !node.typeArguments;
+}
+
+export function isConstOrTupleTypeReference(node: Node) {
+    return isConstTypeReference(node) || isTupleTypeReference(node);
+}
+
 export function skipPartiallyEmittedExpressions(node: Expression): Expression;
 export function skipPartiallyEmittedExpressions(node: Node): Node;
 export function skipPartiallyEmittedExpressions(node: Node) {

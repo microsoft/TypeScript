@@ -26,7 +26,7 @@ import {
     hasJSDocNodes, hasProperty, hasStaticModifier, hasSyntacticModifier, HighlightSpanKind, HostCancellationToken,
     hostGetCanonicalFileName, hostUsesCaseSensitiveFileNames, Identifier, identity, idText, ImplementationLocation,
     ImportDeclaration, IndexKind, IndexType, InlayHint, InlayHints, InlayHintsContext, insertSorted, InterfaceType,
-    IntersectionType, isArray, isBindingPattern, isComputedPropertyName, isConstTypeReference, IScriptSnapshot,
+    IntersectionType, isArray, isBindingPattern, isComputedPropertyName, isConstOrTupleTypeReference, IScriptSnapshot,
     isDeclarationName, isGetAccessor, isIdentifier, isImportMeta, isInComment, isInsideJsxElement,
     isInsideJsxElementOrAttribute, isInString, isInTemplateString, isIntrinsicJsxName, isJSDocCommentContainingNode,
     isJsxAttributes, isJsxClosingElement, isJsxElement, isJsxFragment, isJsxOpeningElement, isJsxOpeningFragment,
@@ -1795,7 +1795,7 @@ export function createLanguageService(
     function shouldGetType(sourceFile: SourceFile, node: Node, position: number): boolean {
         switch (node.kind) {
             case SyntaxKind.Identifier:
-                return !isLabelName(node) && !isTagName(node) && !isConstTypeReference(node.parent);
+                return !isLabelName(node) && !isTagName(node) && !isConstOrTupleTypeReference(node.parent);
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.QualifiedName:
                 // Don't return quickInfo if inside the comment in `a/**/.b`

@@ -1123,6 +1123,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             case SyntaxKind.StringKeyword:
             case SyntaxKind.BooleanKeyword:
             case SyntaxKind.SymbolKeyword:
+            case SyntaxKind.TupleKeyword:
             case SyntaxKind.VoidKeyword:
             case SyntaxKind.UnknownKeyword:
             case SyntaxKind.UndefinedKeyword: // `undefined` is an Identifier in the expression case.

@@ -1234,6 +1234,9 @@ export namespace Completion {
     export const typeAssertionKeywords: readonly ExpectedCompletionEntry[] =
         globalTypesPlus([keywordEntry("const")]);
 
+    export const typeAssertionKeywordsAfterArray: readonly ExpectedCompletionEntry[] =
+        globalTypesPlus([keywordEntry("const"), keywordEntry("tuple")]);
+
     function getInJsKeywords(keywords: readonly ExpectedCompletionEntryObject[]): readonly ExpectedCompletionEntryObject[] {
         return keywords.filter(keyword => {
             switch (keyword.name) {

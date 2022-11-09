@@ -1549,6 +1549,10 @@
         "category": "Message",
         "code": 1483
     },
+    "A 'tuple' assertions can only be applied to array literals.": {
+        "category": "Error",
+        "code": 1484
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",

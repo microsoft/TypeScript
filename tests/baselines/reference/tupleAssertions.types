@@ -1,0 +1,174 @@
+=== tests/cases/conformance/expressions/typeAssertions/tupleAssertions.ts ===
+let a1 = [] as tuple;
+>a1 : []
+>[] as tuple : []
+>[] : never[]
+
+let a2 = [1, 2, 3] as tuple;
+>a2 : [number, number, number]
+>[1, 2, 3] as tuple : [number, number, number]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+let a3 = [10, 'hello', true] as tuple;
+>a3 : [number, string, boolean]
+>[10, 'hello', true] as tuple : [number, string, boolean]
+>[10, 'hello', true] : (string | number | boolean)[]
+>10 : 10
+>'hello' : "hello"
+>true : true
+
+let a4 = [...[1, 2, 3]] as tuple;
+>a4 : [number, number, number]
+>[...[1, 2, 3]] as tuple : [number, number, number]
+>[...[1, 2, 3]] : number[]
+>...[1, 2, 3] : number
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+let a5 = [1, 2, 3];
+>a5 : number[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+let a6 = [...a5] as tuple;
+>a6 : number[]
+>[...a5] as tuple : number[]
+>[...a5] : number[]
+>...a5 : number
+>a5 : number[]
+
+let a7 = [...a6];
+>a7 : number[]
+>[...a6] : number[]
+>...a6 : number
+>a6 : number[]
+
+let a8 = ['abc', ...a7] as tuple;
+>a8 : [string, ...number[]]
+>['abc', ...a7] as tuple : [string, ...number[]]
+>['abc', ...a7] : (string | number)[]
+>'abc' : "abc"
+>...a7 : number
+>a7 : number[]
+
+let a9 = [...a8];
+>a9 : (string | number)[]
+>[...a8] : (string | number)[]
+>...a8 : string | number
+>a8 : [string, ...number[]]
+
+let e1 = 'abc' as tuple;
+>e1 : "abc"
+>'abc' as tuple : "abc"
+>'abc' : "abc"
+
+let e2 = 10 as tuple;
+>e2 : 10
+>10 as tuple : 10
+>10 : 10
+
+let e3 = { x: 10, y: 20 } as tuple;
+>e3 : { x: number; y: number; }
+>{ x: 10, y: 20 } as tuple : { x: number; y: number; }
+>{ x: 10, y: 20 } : { x: number; y: number; }
+>x : number
+>10 : 10
+>y : number
+>20 : 20
+
+let e4 = `${e1}-${e2}` as tuple;
+>e4 : string
+>`${e1}-${e2}` as tuple : string
+>`${e1}-${e2}` : string
+>e1 : "abc"
+>e2 : 10
+
+let p1 = (10) as tuple; // Error
+>p1 : 10
+>(10) as tuple : 10
+>(10) : 10
+>10 : 10
+
+let p2 = ((-10)) as tuple; // Error
+>p2 : -10
+>((-10)) as tuple : -10
+>((-10)) : -10
+>(-10) : -10
+>-10 : -10
+>10 : 10
+
+let p3 = ([(10)]) as tuple; // OK
+>p3 : number[]
+>([(10)]) as tuple : number[]
+>([(10)]) : number[]
+>[(10)] : number[]
+>(10) : 10
+>10 : 10
+
+let p4 = [[[[10]]]] as tuple; // OK
+>p4 : [[[[number]]]]
+>[[[[10]]]] as tuple : [[[[number]]]]
+>[[[[10]]]] : number[][][][]
+>[[[10]]] : number[][][]
+>[[10]] : number[][]
+>[10] : number[]
+>10 : 10
+
+let q1 = <tuple> 10; // Error
+>q1 : 10
+><tuple> 10 : 10
+>10 : 10
+
+let q2 = <tuple> 'abc'; // Error
+>q2 : "abc"
+><tuple> 'abc' : "abc"
+>'abc' : "abc"
+
+let q3 = <tuple> true; // Error
+>q3 : true
+><tuple> true : true
+>true : true
+
+let q4 = <tuple> [1, 2, 3]; // OK
+>q4 : [number, number, number]
+><tuple> [1, 2, 3] : [number, number, number]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+let q5 = <tuple> { x: 10, y: 20 }; // Error
+>q5 : { x: number; y: number; }
+><tuple> { x: 10, y: 20 } : { x: number; y: number; }
+>{ x: 10, y: 20 } : { x: number; y: number; }
+>x : number
+>10 : 10
+>y : number
+>20 : 20
+
+function accessorNames<S extends string>(propName: S) {
+>accessorNames : <S extends string>(propName: S) => [string, string]
+>propName : S
+
+    return [`get-${propName}`, `set-${propName}`] as tuple;
+>[`get-${propName}`, `set-${propName}`] as tuple : [string, string]
+>[`get-${propName}`, `set-${propName}`] : string[]
+>`get-${propName}` : string
+>propName : S
+>`set-${propName}` : string
+>propName : S
+}
+
+const ns1 = accessorNames('foo');
+>ns1 : [string, string]
+>accessorNames('foo') : [string, string]
+>accessorNames : <S extends string>(propName: S) => [string, string]
+>'foo' : "foo"
+

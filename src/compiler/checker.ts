@@ -89,7 +89,7 @@ import {
     isCatchClauseVariableDeclarationOrBindingElement, isCheckJsEnabledForFile, isChildOfNodeWithKind,
     isClassDeclaration, isClassElement, isClassExpression, isClassLike, isClassStaticBlockDeclaration, isCommaSequence,
     isCommonJsExportedExpression, isCommonJsExportPropertyAssignment, isComputedNonLiteralName, isComputedPropertyName,
-    isConstructorDeclaration, isConstructorTypeNode, isConstTypeReference, isDeclaration, isDeclarationName,
+    isConstructorDeclaration, isConstructorTypeNode, isConstTypeReference, isTupleTypeReference, isConstOrTupleTypeReference, isDeclaration, isDeclarationName,
     isDeclarationReadonly, isDecorator, isDefaultedExpandoInitializer, isDeleteTarget, isDottedName, isDynamicName,
     isEffectiveExternalModule, isElementAccessExpression, isEntityName, isEntityNameExpression, isEnumConst,
     isEnumDeclaration, isEnumMember, isExclusivelyTypeOnlyImportOrExport, isExportAssignment, isExportDeclaration,
@@ -2038,6 +2038,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             || (isJSDocTypeTag(location) && isConstTypeReference(location.typeExpression));
     }
 
+    function isTupleAssertion(location: Node) {
+        return (isAssertionExpression(location) && isTupleTypeReference(location.type))
+            || (isJSDocTypeTag(location) && isTupleTypeReference(location.typeExpression));
+    }
+
     /**
      * Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
      * the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
@@ -2080,7 +2085,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let isInExternalModule = false;
 
         loop: while (location) {
-            if (name === "const" && isConstAssertion(location)) {
+            if (name === "const" && isConstAssertion(location) || name === "tuple" && isTupleAssertion(location)) {
                 // `const` in an `as const` has no symbol, but issues no error because there is no *actual* lookup of the type
                 // (it refers to the constant type of the expression instead)
                 return undefined;
@@ -14322,9 +14327,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const links = getNodeLinks(node);
         if (!links.resolvedType) {
             // handle LS queries on the `const` in `x as const` by resolving to the type of `x`
-            if (isConstTypeReference(node) && isAssertionExpression(node.parent)) {
+            if (isConstOrTupleTypeReference(node) && isAssertionExpression(node.parent)) {
                 links.resolvedSymbol = unknownSymbol;
-                return links.resolvedType = checkExpressionCached(node.parent.expression);
+                return links.resolvedType = checkExpressionCached(node.parent.expression, /*checkMode*/ undefined, /*forceTuple*/ isTupleTypeReference(node));
             }
             let symbol: Symbol | undefined;
             let type: Type | undefined;
@@ -27856,7 +27861,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getContextualTypeForArgument(parent as CallExpression | NewExpression, node);
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
-                return isConstTypeReference((parent as AssertionExpression).type) ? tryFindWhenConstTypeReference(parent as AssertionExpression) : getTypeFromTypeNode((parent as AssertionExpression).type);
+                return isConstOrTupleTypeReference((parent as AssertionExpression).type) ? tryFindWhenConstOrTupleTypeReference(parent as AssertionExpression) : getTypeFromTypeNode((parent as AssertionExpression).type);
             case SyntaxKind.BinaryExpression:
                 return getContextualTypeForBinaryOperand(node, contextFlags);
             case SyntaxKind.PropertyAssignment:
@@ -27878,7 +27883,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Like in `checkParenthesizedExpression`, an `/** @type {xyz} */` comment before a parenthesized expression acts as a type cast.
                 const tag = isInJSFile(parent) ? getJSDocTypeTag(parent) : undefined;
                 return !tag ? getContextualType(parent as ParenthesizedExpression, contextFlags) :
-                    isJSDocTypeTag(tag) && isConstTypeReference(tag.typeExpression.type) ? tryFindWhenConstTypeReference(parent as ParenthesizedExpression) :
+                    isJSDocTypeTag(tag) && isConstOrTupleTypeReference(tag.typeExpression.type) ? tryFindWhenConstOrTupleTypeReference(parent as ParenthesizedExpression) :
                     getTypeFromTypeNode(tag.typeExpression.type);
             }
             case SyntaxKind.NonNullExpression:
@@ -27898,7 +27903,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         return undefined;
 
-        function tryFindWhenConstTypeReference(node: Expression) {
+        function tryFindWhenConstOrTupleTypeReference(node: Expression) {
             return getContextualType(node, contextFlags);
         }
     }
@@ -32761,7 +32766,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
+    function isValidTupleAssertionArgument(node: Node): boolean {
+        return isArrayLiteralExpression(node) || isParenthesizedExpression(node) && isValidTupleAssertionArgument(node.expression);
+    }
+
     function checkAssertionWorker(errNode: Node, type: TypeNode, expression: UnaryExpression | Expression, checkMode?: CheckMode) {
+        if (isTupleTypeReference(type)) {
+            if (!isValidTupleAssertionArgument(expression)) {
+                error(expression, Diagnostics.A_tuple_assertions_can_only_be_applied_to_array_literals);
+            }
+            return getRegularTypeOfLiteralType(checkExpression(expression, checkMode, /*forceTuple*/ true));
+        }
         let exprType = checkExpression(expression, checkMode);
         if (isConstTypeReference(type)) {
             if (!isValidConstAssertionArgument(expression)) {
@@ -35183,9 +35198,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function checkExpressionCached(node: Expression | QualifiedName, checkMode?: CheckMode): Type {
+    function checkExpressionCached(node: Expression | QualifiedName, checkMode?: CheckMode, forceTuple?: boolean): Type {
         if (checkMode) {
-            return checkExpression(node, checkMode);
+            return checkExpression(node, checkMode, forceTuple);
         }
         const links = getNodeLinks(node);
         if (!links.resolvedType) {
@@ -35196,7 +35211,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const saveFlowTypeCache = flowTypeCache;
             flowLoopStart = flowLoopCount;
             flowTypeCache = undefined;
-            links.resolvedType = checkExpression(node, checkMode);
+            links.resolvedType = checkExpression(node, checkMode, forceTuple);
             flowTypeCache = saveFlowTypeCache;
             flowLoopStart = saveFlowLoopStart;
         }
@@ -35508,7 +35523,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let expr = skipParentheses(node, /*excludeJSDocTypeAssertions*/ true);
         if (isJSDocTypeAssertion(expr)) {
             const type = getJSDocTypeAssertionType(expr);
-            if (!isConstTypeReference(type)) {
+            if (!isConstOrTupleTypeReference(type)) {
                 return getTypeFromTypeNode(type);
             }
         }
@@ -35522,7 +35537,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return type;
             }
         }
-        else if (isAssertionExpression(expr) && !isConstTypeReference(expr.type)) {
+        else if (isAssertionExpression(expr) && !isConstOrTupleTypeReference(expr.type)) {
             return getTypeFromTypeNode((expr as TypeAssertion).type);
         }
         else if (node.kind === SyntaxKind.NumericLiteral || node.kind === SyntaxKind.StringLiteral ||

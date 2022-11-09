@@ -1,0 +1,112 @@
+=== tests/cases/conformance/expressions/typeAssertions/tupleAssertions.ts ===
+let a1 = [] as tuple;
+>a1 : Symbol(a1, Decl(tupleAssertions.ts, 0, 3))
+>tuple : Symbol(tuple)
+
+let a2 = [1, 2, 3] as tuple;
+>a2 : Symbol(a2, Decl(tupleAssertions.ts, 1, 3))
+>tuple : Symbol(tuple)
+
+let a3 = [10, 'hello', true] as tuple;
+>a3 : Symbol(a3, Decl(tupleAssertions.ts, 2, 3))
+>tuple : Symbol(tuple)
+
+let a4 = [...[1, 2, 3]] as tuple;
+>a4 : Symbol(a4, Decl(tupleAssertions.ts, 3, 3))
+>tuple : Symbol(tuple)
+
+let a5 = [1, 2, 3];
+>a5 : Symbol(a5, Decl(tupleAssertions.ts, 4, 3))
+
+let a6 = [...a5] as tuple;
+>a6 : Symbol(a6, Decl(tupleAssertions.ts, 5, 3))
+>a5 : Symbol(a5, Decl(tupleAssertions.ts, 4, 3))
+>tuple : Symbol(tuple)
+
+let a7 = [...a6];
+>a7 : Symbol(a7, Decl(tupleAssertions.ts, 6, 3))
+>a6 : Symbol(a6, Decl(tupleAssertions.ts, 5, 3))
+
+let a8 = ['abc', ...a7] as tuple;
+>a8 : Symbol(a8, Decl(tupleAssertions.ts, 7, 3))
+>a7 : Symbol(a7, Decl(tupleAssertions.ts, 6, 3))
+>tuple : Symbol(tuple)
+
+let a9 = [...a8];
+>a9 : Symbol(a9, Decl(tupleAssertions.ts, 8, 3))
+>a8 : Symbol(a8, Decl(tupleAssertions.ts, 7, 3))
+
+let e1 = 'abc' as tuple;
+>e1 : Symbol(e1, Decl(tupleAssertions.ts, 10, 3))
+>tuple : Symbol(tuple)
+
+let e2 = 10 as tuple;
+>e2 : Symbol(e2, Decl(tupleAssertions.ts, 11, 3))
+>tuple : Symbol(tuple)
+
+let e3 = { x: 10, y: 20 } as tuple;
+>e3 : Symbol(e3, Decl(tupleAssertions.ts, 12, 3))
+>x : Symbol(x, Decl(tupleAssertions.ts, 12, 10))
+>y : Symbol(y, Decl(tupleAssertions.ts, 12, 17))
+>tuple : Symbol(tuple)
+
+let e4 = `${e1}-${e2}` as tuple;
+>e4 : Symbol(e4, Decl(tupleAssertions.ts, 13, 3))
+>e1 : Symbol(e1, Decl(tupleAssertions.ts, 10, 3))
+>e2 : Symbol(e2, Decl(tupleAssertions.ts, 11, 3))
+>tuple : Symbol(tuple)
+
+let p1 = (10) as tuple; // Error
+>p1 : Symbol(p1, Decl(tupleAssertions.ts, 15, 3))
+>tuple : Symbol(tuple)
+
+let p2 = ((-10)) as tuple; // Error
+>p2 : Symbol(p2, Decl(tupleAssertions.ts, 16, 3))
+>tuple : Symbol(tuple)
+
+let p3 = ([(10)]) as tuple; // OK
+>p3 : Symbol(p3, Decl(tupleAssertions.ts, 17, 3))
+>tuple : Symbol(tuple)
+
+let p4 = [[[[10]]]] as tuple; // OK
+>p4 : Symbol(p4, Decl(tupleAssertions.ts, 18, 3))
+>tuple : Symbol(tuple)
+
+let q1 = <tuple> 10; // Error
+>q1 : Symbol(q1, Decl(tupleAssertions.ts, 20, 3))
+>tuple : Symbol(tuple)
+
+let q2 = <tuple> 'abc'; // Error
+>q2 : Symbol(q2, Decl(tupleAssertions.ts, 21, 3))
+>tuple : Symbol(tuple)
+
+let q3 = <tuple> true; // Error
+>q3 : Symbol(q3, Decl(tupleAssertions.ts, 22, 3))
+>tuple : Symbol(tuple)
+
+let q4 = <tuple> [1, 2, 3]; // OK
+>q4 : Symbol(q4, Decl(tupleAssertions.ts, 23, 3))
+>tuple : Symbol(tuple)
+
+let q5 = <tuple> { x: 10, y: 20 }; // Error
+>q5 : Symbol(q5, Decl(tupleAssertions.ts, 24, 3))
+>tuple : Symbol(tuple)
+>x : Symbol(x, Decl(tupleAssertions.ts, 24, 18))
+>y : Symbol(y, Decl(tupleAssertions.ts, 24, 25))
+
+function accessorNames<S extends string>(propName: S) {
+>accessorNames : Symbol(accessorNames, Decl(tupleAssertions.ts, 24, 34))
+>S : Symbol(S, Decl(tupleAssertions.ts, 26, 23))
+>propName : Symbol(propName, Decl(tupleAssertions.ts, 26, 41))
+>S : Symbol(S, Decl(tupleAssertions.ts, 26, 23))
+
+    return [`get-${propName}`, `set-${propName}`] as tuple;
+>propName : Symbol(propName, Decl(tupleAssertions.ts, 26, 41))
+>propName : Symbol(propName, Decl(tupleAssertions.ts, 26, 41))
+>tuple : Symbol(tuple)
+}
+
+const ns1 = accessorNames('foo');
+>ns1 : Symbol(ns1, Decl(tupleAssertions.ts, 30, 5))
+>accessorNames : Symbol(accessorNames, Decl(tupleAssertions.ts, 24, 34))
+
