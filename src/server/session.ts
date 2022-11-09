@@ -22,7 +22,7 @@ import {
     RenameInfo, RenameLocation, ScriptKind, SelectionRange, SemanticClassificationFormat, Set, SignatureHelpItem,
     SignatureHelpItems, singleIterator, some, SourceFile, startsWith, stringContains, SymbolDisplayPart, SyntaxKind,
     TextChange, TextInsertion, TextRange, TextSpan, textSpanEnd, toArray, toFileNameLowerCase, tracing,
-    unmangleScopedPackageName, UserPreferences, version, WithMetadata,
+    unmangleScopedPackageName, UserPreferences, version, WithMetadata, BufferEncoding
 } from "./_namespaces/ts";
 import {
     ConfigFileDiagEvent, ConfiguredProject, convertFormatOptions, convertScriptKindName, convertUserPreferences,
