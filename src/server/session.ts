@@ -297,7 +297,7 @@ namespace ts.server {
     interface ProjectNavigateToItems {
         project: Project;
         navigateToItems: readonly NavigateToItem[];
-    };
+    }
 
     function createDocumentSpanSet(): Set<DocumentSpan> {
         return createSet(({textSpan}) => textSpan.start + 100003 * textSpan.length, documentSpansEqual);
@@ -1378,7 +1378,7 @@ namespace ts.server {
                     const packageDirectory = fileName.substring(0, nodeModulesPathParts.packageRootIndex);
                     const packageJsonCache = project.getModuleResolutionCache()?.getPackageJsonInfoCache();
                     const compilerOptions = project.getCompilationSettings();
-                    const packageJson = getPackageScopeForPath(project.toPath(packageDirectory + "/package.json"), getTemporaryModuleResolutionState(packageJsonCache, project, compilerOptions));
+                    const packageJson = getPackageScopeForPath(getNormalizedAbsolutePath(packageDirectory + "/package.json", project.getCurrentDirectory()), getTemporaryModuleResolutionState(packageJsonCache, project, compilerOptions));
                     if (!packageJson) return undefined;
                     // Use fake options instead of actual compiler options to avoid following export map if the project uses node16 or nodenext -
                     // Mapping from an export map entry across packages is out of scope for now. Returned entrypoints will only be what can be
@@ -1719,6 +1719,10 @@ namespace ts.server {
                     this.projectService.logErrorForScriptInfoNotFound(args.file);
                     return Errors.ThrowNoProject();
                 }
+                else if (!getScriptInfoEnsuringProjectsUptoDate) {
+                    // Ensure there are containing projects are present
+                    this.projectService.ensureDefaultProjectForFile(scriptInfo);
+                }
                 projects = scriptInfo.containingProjects;
                 symLinkedProjects = this.projectService.getSymlinkedProjects(scriptInfo);
             }
@@ -1803,6 +1807,7 @@ namespace ts.server {
 
             if (!simplifiedResult) return references;
 
+            const preferences = this.getPreferences(file);
             const defaultProject = this.getDefaultProject(args);
             const scriptInfo = defaultProject.getScriptInfoForNormalizedPath(file)!;
             const nameInfo = defaultProject.getLanguageService().getQuickInfoAtPosition(file, position);
@@ -1811,7 +1816,7 @@ namespace ts.server {
             const symbolStartOffset = nameSpan ? scriptInfo.positionToLineOffset(nameSpan.start).offset : 0;
             const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
             const refs: readonly protocol.ReferencesResponseItem[] = flatMap(references, referencedSymbol => {
-                return referencedSymbol.references.map(entry => referenceEntryToReferencesResponseItem(this.projectService, entry));
+                return referencedSymbol.references.map(entry => referenceEntryToReferencesResponseItem(this.projectService, entry, preferences));
             });
             return { refs, symbolName, symbolStartOffset, symbolDisplayString };
         }
@@ -1819,6 +1824,7 @@ namespace ts.server {
         private getFileReferences(args: protocol.FileRequestArgs, simplifiedResult: boolean): protocol.FileReferencesResponseBody | readonly ReferenceEntry[] {
             const projects = this.getProjects(args);
             const fileName = args.file;
+            const preferences = this.getPreferences(toNormalizedPath(fileName));
 
             const references: ReferenceEntry[] = [];
             const seen = createDocumentSpanSet();
@@ -1838,7 +1844,7 @@ namespace ts.server {
             });
 
             if (!simplifiedResult) return references;
-            const refs = references.map(entry => referenceEntryToReferencesResponseItem(this.projectService, entry));
+            const refs = references.map(entry => referenceEntryToReferencesResponseItem(this.projectService, entry, preferences));
             return {
                 refs,
                 symbolName: `"${args.file}"`
@@ -1867,13 +1873,7 @@ namespace ts.server {
         }
 
         private getFileAndLanguageServiceForSyntacticOperation(args: protocol.FileRequestArgs) {
-            // Since this is syntactic operation, there should always be project for the file
-            // we wouldnt have to ensure project but rather throw if we dont get project
-            const file = toNormalizedPath(args.file);
-            const project = this.getProject(args.projectFileName) || this.projectService.tryGetDefaultProjectForFile(file);
-            if (!project) {
-                return Errors.ThrowNoProject();
-            }
+            const { file, project } = this.getFileAndProject(args);
             return {
                 file,
                 languageService: project.getLanguageService(/*ensureSynchronized*/ false)
@@ -2535,7 +2535,7 @@ namespace ts.server {
             const changes = project.getLanguageService().organizeImports(
                 {
                     fileName: file,
-                    skipDestructiveCodeActions: args.skipDestructiveCodeActions,
+                    mode: args.mode as OrganizeImportsMode | undefined ?? (args.skipDestructiveCodeActions ? OrganizeImportsMode.SortAndCombine : undefined),
                     type: "file",
                 },
                 this.getFormatOptions(file),
@@ -3518,11 +3518,10 @@ namespace ts.server {
         return text;
     }
 
-    function referenceEntryToReferencesResponseItem(projectService: ProjectService, { fileName, textSpan, contextSpan, isWriteAccess, isDefinition }: ReferencedSymbolEntry): protocol.ReferencesResponseItem {
+    function referenceEntryToReferencesResponseItem(projectService: ProjectService, { fileName, textSpan, contextSpan, isWriteAccess, isDefinition }: ReferencedSymbolEntry, { disableLineTextInReferences }: protocol.UserPreferences): protocol.ReferencesResponseItem {
         const scriptInfo = Debug.checkDefined(projectService.getScriptInfo(fileName));
         const span = toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo);
-        const lineSpan = scriptInfo.lineToTextSpan(span.start.line - 1);
-        const lineText = scriptInfo.getSnapshot().getText(lineSpan.start, textSpanEnd(lineSpan)).replace(/\r|\n/g, "");
+        const lineText = disableLineTextInReferences ? undefined : getLineText(scriptInfo, span);
         return {
             file: fileName,
             ...span,
@@ -3530,6 +3529,11 @@ namespace ts.server {
             isWriteAccess,
             isDefinition
         };
+    }
+
+    function getLineText(scriptInfo: ScriptInfo, span: protocol.TextSpanWithContext) {
+        const lineSpan = scriptInfo.lineToTextSpan(span.start.line - 1);
+        return scriptInfo.getSnapshot().getText(lineSpan.start, textSpanEnd(lineSpan)).replace(/\r|\n/g, "");
     }
 
     function isCompletionEntryData(data: any): data is CompletionEntryData {

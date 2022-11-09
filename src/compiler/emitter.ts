@@ -257,8 +257,8 @@ namespace ts {
     /*@internal*/
     export function getFirstProjectOutput(configFile: ParsedCommandLine, ignoreCase: boolean): string {
         if (outFile(configFile.options)) {
-            const { jsFilePath } = getOutputPathsForBundle(configFile.options, /*forceDtsPaths*/ false);
-            return Debug.checkDefined(jsFilePath, `project ${configFile.options.configFilePath} expected to have at least one output`);
+            const { jsFilePath, declarationFilePath } = getOutputPathsForBundle(configFile.options, /*forceDtsPaths*/ false);
+            return Debug.checkDefined(jsFilePath || declarationFilePath, `project ${configFile.options.configFilePath} expected to have at least one output`);
         }
 
         const getCommonSourceDirectory = memoize(() => getCommonSourceDirectoryOfConfig(configFile, ignoreCase));
@@ -278,7 +278,7 @@ namespace ts {
 
     /*@internal*/
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, { scriptTransformers, declarationTransformers }: EmitTransformers, emitOnlyDtsFiles?: boolean, onlyBuildInfo?: boolean, forceDtsEmit?: boolean): EmitResult {
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, { scriptTransformers, declarationTransformers }: EmitTransformers, emitOnly?: boolean | EmitOnly, onlyBuildInfo?: boolean, forceDtsEmit?: boolean): EmitResult {
         const compilerOptions = host.getCompilerOptions();
         const sourceMapDataList: SourceMapEmitResult[] | undefined = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
         const emittedFilesList: string[] | undefined = compilerOptions.listEmittedFiles ? [] : undefined;
@@ -331,7 +331,7 @@ namespace ts {
             tracing?.pop();
 
             if (!emitSkipped && emittedFilesList) {
-                if (!emitOnlyDtsFiles) {
+                if (!emitOnly) {
                     if (jsFilePath) {
                         emittedFilesList.push(jsFilePath);
                     }
@@ -342,11 +342,13 @@ namespace ts {
                         emittedFilesList.push(buildInfoPath);
                     }
                 }
-                if (declarationFilePath) {
-                    emittedFilesList.push(declarationFilePath);
-                }
-                if (declarationMapPath) {
-                    emittedFilesList.push(declarationMapPath);
+                if (emitOnly !== EmitOnly.Js) {
+                    if (declarationFilePath) {
+                        emittedFilesList.push(declarationFilePath);
+                    }
+                    if (declarationMapPath) {
+                        emittedFilesList.push(declarationMapPath);
+                    }
                 }
             }
 
@@ -358,13 +360,11 @@ namespace ts {
         function emitBuildInfo(bundle: BundleBuildInfo | undefined, buildInfoPath: string | undefined) {
             // Write build information if applicable
             if (!buildInfoPath || targetSourceFile || emitSkipped) return;
-            const program = host.getProgramBuildInfo();
             if (host.isEmitBlocked(buildInfoPath)) {
                 emitSkipped = true;
                 return;
             }
-            const version = ts.version; // Extracted into a const so the form is stable between namespace and module
-            const buildInfo: BuildInfo = { bundle, program, version };
+            const buildInfo = host.getBuildInfo(bundle) || createBuildInfo(/*program*/ undefined, bundle);
             // Pass buildinfo as additional data to avoid having to reparse
             writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText(buildInfo), /*writeByteOrderMark*/ false, /*sourceFiles*/ undefined, { buildInfo });
         }
@@ -374,7 +374,7 @@ namespace ts {
             jsFilePath: string | undefined,
             sourceMapFilePath: string | undefined,
             relativeToBuildInfo: (path: string) => string) {
-            if (!sourceFileOrBundle || emitOnlyDtsFiles || !jsFilePath) {
+            if (!sourceFileOrBundle || emitOnly || !jsFilePath) {
                 return;
             }
 
@@ -424,16 +424,16 @@ namespace ts {
             declarationFilePath: string | undefined,
             declarationMapPath: string | undefined,
             relativeToBuildInfo: (path: string) => string) {
-            if (!sourceFileOrBundle) return;
+            if (!sourceFileOrBundle || emitOnly === EmitOnly.Js) return;
             if (!declarationFilePath) {
-                if (emitOnlyDtsFiles || compilerOptions.emitDeclarationOnly) emitSkipped = true;
+                if (emitOnly || compilerOptions.emitDeclarationOnly) emitSkipped = true;
                 return;
             }
             const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
             const filesForEmit = forceDtsEmit ? sourceFiles : filter(sourceFiles, isSourceFileNotJson);
             // Setup and perform the transformation to retrieve declarations from the input files
             const inputListOrBundle = outFile(compilerOptions) ? [factory.createBundle(filesForEmit, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : filesForEmit;
-            if (emitOnlyDtsFiles && !getEmitDeclarations(compilerOptions)) {
+            if (emitOnly && !getEmitDeclarations(compilerOptions)) {
                 // Checker wont collect the linked aliases since thats only done when declaration is enabled.
                 // Do that here when emitting only dts files
                 filesForEmit.forEach(collectLinkedAliases);
@@ -647,13 +647,19 @@ namespace ts {
     }
 
     /*@internal*/
+    export function createBuildInfo(program: ProgramBuildInfo | undefined, bundle: BundleBuildInfo | undefined): BuildInfo {
+        const version = ts.version; // Extracted into a const so the form is stable between namespace and module
+        return { bundle, program, version };
+    }
+
+    /*@internal*/
     export function getBuildInfoText(buildInfo: BuildInfo) {
         return JSON.stringify(buildInfo);
     }
 
     /*@internal*/
-    export function getBuildInfo(buildInfoText: string) {
-        return JSON.parse(buildInfoText) as BuildInfo;
+    export function getBuildInfo(buildInfoFile: string, buildInfoText: string) {
+        return readJsonOrUndefined(buildInfoFile, buildInfoText) as BuildInfo | undefined;
     }
 
     /*@internal*/
@@ -705,17 +711,7 @@ namespace ts {
     /** File that isnt present resulting in error or output files */
     export type EmitUsingBuildInfoResult = string | readonly OutputFile[];
 
-    /*@internal*/
-    export interface EmitUsingBuildInfoHost extends ModuleResolutionHost {
-        getCurrentDirectory(): string;
-        getCanonicalFileName(fileName: string): string;
-        useCaseSensitiveFileNames(): boolean;
-        getNewLine(): string;
-        createHash?(data: string): string;
-        getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
-    }
-
-    function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfoDirectory: string, host: EmitUsingBuildInfoHost): readonly SourceFile[] {
+    function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo, buildInfoDirectory: string, host: CompilerHost): readonly SourceFile[] {
         const jsBundle = Debug.checkDefined(bundle.js);
         const prologueMap = jsBundle.sources?.prologues && arrayToMap(jsBundle.sources.prologues, prologueInfo => prologueInfo.file);
         return bundle.sourceFiles.map((fileName, index) => {
@@ -745,24 +741,30 @@ namespace ts {
     /*@internal*/
     export function emitUsingBuildInfo(
         config: ParsedCommandLine,
-        host: EmitUsingBuildInfoHost,
+        host: CompilerHost,
+        getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined,
+        customTransformers?: CustomTransformers
+    ): EmitUsingBuildInfoResult {
+        tracing?.push(tracing.Phase.Emit, "emitUsingBuildInfo", {}, /*separateBeginAndEnd*/ true);
+        performance.mark("beforeEmit");
+        const result = emitUsingBuildInfoWorker(config, host, getCommandLine, customTransformers);
+        performance.mark("afterEmit");
+        performance.measure("Emit", "beforeEmit", "afterEmit");
+        tracing?.pop();
+        return result;
+    }
+
+    function emitUsingBuildInfoWorker(
+        config: ParsedCommandLine,
+        host: CompilerHost,
         getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined,
         customTransformers?: CustomTransformers
     ): EmitUsingBuildInfoResult {
         const createHash = maybeBind(host, host.createHash);
         const { buildInfoPath, jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false);
-        let buildInfo: BuildInfo;
-        if (host.getBuildInfo) {
-            // If host directly provides buildinfo we can get it directly. This allows host to cache the buildinfo
-            const hostBuildInfo = host.getBuildInfo(buildInfoPath!, config.options.configFilePath);
-            if (!hostBuildInfo) return buildInfoPath!;
-            buildInfo = hostBuildInfo;
-        }
-        else {
-            const buildInfoText = host.readFile(buildInfoPath!);
-            if (!buildInfoText) return buildInfoPath!;
-            buildInfo = getBuildInfo(buildInfoText);
-        }
+        // If host directly provides buildinfo we can get it directly. This allows host to cache the buildinfo
+        const buildInfo = host.getBuildInfo!(buildInfoPath!, config.options.configFilePath);
+        if (!buildInfo) return buildInfoPath!;
         if (!buildInfo.bundle || !buildInfo.bundle.js || (declarationFilePath && !buildInfo.bundle.dts)) return buildInfoPath!;
 
         const jsFileText = host.readFile(Debug.checkDefined(jsFilePath));
@@ -784,21 +786,21 @@ namespace ts {
         if (declarationMapPath && computeSignature(declarationMapText!, createHash) !== buildInfo.bundle.dts!.mapHash) return declarationMapPath;
 
         const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath!, host.getCurrentDirectory()));
-        const ownPrependInput = createInputFiles(
+        const ownPrependInput = createInputFilesWithFileTexts(
+            jsFilePath,
             jsFileText,
-            declarationText!,
             sourceMapFilePath,
             sourceMapText,
+            declarationFilePath,
+            declarationText!,
             declarationMapPath,
             declarationMapText,
-            jsFilePath,
-            declarationFilePath,
             buildInfoPath,
             buildInfo,
             /*onlyOwnText*/ true
         );
         const outputFiles: OutputFile[] = [];
-        const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f));
+        const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f), host);
         const sourceFilesForJsEmit = createSourceFilesFromBundleBuildInfo(buildInfo.bundle, buildInfoDirectory, host);
         let changedDtsText: string | undefined;
         let changedDtsData: WriteFileCallbackData | undefined;
@@ -826,21 +828,7 @@ namespace ts {
                         if (sourceMapText === text) return;
                         break;
                     case buildInfoPath:
-                        const newBuildInfo = data!.buildInfo!;
-                        newBuildInfo.program = buildInfo.program;
-                        if (newBuildInfo.program && changedDtsText !== undefined && config.options.composite) {
-                            // Update the output signature
-                            (newBuildInfo.program as ProgramBundleEmitBuildInfo).outSignature = computeSignature(changedDtsText, createHash, changedDtsData);
-                        }
-                        // Update sourceFileInfo
-                        const { js, dts, sourceFiles } = buildInfo.bundle!;
-                        newBuildInfo.bundle!.js!.sources = js!.sources;
-                        if (dts) {
-                            newBuildInfo.bundle!.dts!.sources = dts.sources;
-                        }
-                        newBuildInfo.bundle!.sourceFiles = sourceFiles;
-                        outputFiles.push({ name, text: getBuildInfoText(newBuildInfo), writeByteOrderMark, buildInfo: newBuildInfo });
-                        return;
+                        break;
                     case declarationFilePath:
                         if (declarationText === text) return;
                         changedDtsText = text;
@@ -852,13 +840,27 @@ namespace ts {
                     default:
                         Debug.fail(`Unexpected path: ${name}`);
                 }
-                outputFiles.push({ name, text, writeByteOrderMark });
+                outputFiles.push({ name, text, writeByteOrderMark, data });
             },
             isEmitBlocked: returnFalse,
             readFile: f => host.readFile(f),
             fileExists: f => host.fileExists(f),
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
-            getProgramBuildInfo: returnUndefined,
+            getBuildInfo: bundle => {
+                const program = buildInfo.program;
+                if (program && changedDtsText !== undefined && config.options.composite) {
+                    // Update the output signature
+                    (program as ProgramBundleEmitBuildInfo).outSignature = computeSignature(changedDtsText, createHash, changedDtsData);
+                }
+                // Update sourceFileInfo
+                const { js, dts, sourceFiles } = buildInfo.bundle!;
+                bundle!.js!.sources = js!.sources;
+                if (dts) {
+                    bundle!.dts!.sources = dts.sources;
+                }
+                bundle!.sourceFiles = sourceFiles;
+                return createBuildInfo(program, bundle);
+            },
             getSourceFileFromReference: returnUndefined,
             redirectTargetsMap: createMultiMap(),
             getFileIncludeReasons: notImplemented,
@@ -904,6 +906,10 @@ namespace ts {
         let nodeIdToGeneratedName: string[]; // Map of generated names for specific nodes.
         let autoGeneratedIdToGeneratedName: string[]; // Map of generated names for temp and loop variables.
         let generatedNames: Set<string>; // Set of names generated by the NameGenerator.
+        let formattedNameTempFlagsStack: (ESMap<string, TempFlags> | undefined)[];
+        let formattedNameTempFlags: ESMap<string, TempFlags> | undefined;
+        let privateNameTempFlagsStack: TempFlags[]; // Stack of enclosing name generation scopes.
+        let privateNameTempFlags: TempFlags; // TempFlags for the current name generation scope.
         let tempFlagsStack: TempFlags[]; // Stack of enclosing name generation scopes.
         let tempFlags: TempFlags; // TempFlags for the current name generation scope.
         let reservedNamesStack: Set<string>[]; // Stack of TempFlags reserved in enclosing name generation scopes.
@@ -1192,6 +1198,10 @@ namespace ts {
             nodeIdToGeneratedName = [];
             autoGeneratedIdToGeneratedName = [];
             generatedNames = new Set();
+            formattedNameTempFlagsStack = [];
+            formattedNameTempFlags = new Map();
+            privateNameTempFlagsStack = [];
+            privateNameTempFlags = TempFlags.Auto;
             tempFlagsStack = [];
             tempFlags = TempFlags.Auto;
             reservedNamesStack = [];
@@ -1764,6 +1774,8 @@ namespace ts {
                         return emitNonNullExpression(node as NonNullExpression);
                     case SyntaxKind.ExpressionWithTypeArguments:
                         return emitExpressionWithTypeArguments(node as ExpressionWithTypeArguments);
+                    case SyntaxKind.SatisfiesExpression:
+                        return emitSatisfiesExpression(node as SatisfiesExpression);
                     case SyntaxKind.MetaProperty:
                         return emitMetaProperty(node as MetaProperty);
                     case SyntaxKind.SyntheticExpression:
@@ -2847,6 +2859,16 @@ namespace ts {
             writeOperator("!");
         }
 
+        function emitSatisfiesExpression(node: SatisfiesExpression) {
+            emitExpression(node.expression, /*parenthesizerRules*/ undefined);
+            if (node.type) {
+                writeSpace();
+                writeKeyword("satisfies");
+                writeSpace();
+                emit(node.type);
+            }
+        }
+
         function emitMetaProperty(node: MetaProperty) {
             writeToken(node.keywordToken, node.pos, writePunctuation);
             writePunctuation(".");
@@ -3472,6 +3494,7 @@ namespace ts {
         }
 
         function emitExportDeclaration(node: ExportDeclaration) {
+            emitModifiers(node, node.modifiers);
             let nextPos = emitTokenWithComment(SyntaxKind.ExportKeyword, node.pos, writeKeyword, node);
             writeSpace();
             if (node.isTypeOnly) {
@@ -4943,7 +4966,7 @@ namespace ts {
         }
 
         function getTextOfNode(node: Identifier | PrivateIdentifier | LiteralExpression, includeTrivia?: boolean): string {
-            if (isGeneratedIdentifier(node)) {
+            if (isGeneratedIdentifier(node) || isGeneratedPrivateIdentifier(node)) {
                 return generateName(node);
             }
             if (isStringLiteral(node) && node.textSourceNode) {
@@ -4968,7 +4991,7 @@ namespace ts {
         function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined, jsxAttributeEscape: boolean): string {
             if (node.kind === SyntaxKind.StringLiteral && (node as StringLiteral).textSourceNode) {
                 const textSourceNode = (node as StringLiteral).textSourceNode!;
-                if (isIdentifier(textSourceNode) || isNumericLiteral(textSourceNode)) {
+                if (isIdentifier(textSourceNode) || isPrivateIdentifier(textSourceNode) || isNumericLiteral(textSourceNode)) {
                     const text = isNumericLiteral(textSourceNode) ? textSourceNode.text : getTextOfNode(textSourceNode);
                     return jsxAttributeEscape ? `"${escapeJsxAttributeString(text)}"` :
                         neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(text)}"` :
@@ -4995,7 +5018,11 @@ namespace ts {
                 return;
             }
             tempFlagsStack.push(tempFlags);
-            tempFlags = 0;
+            tempFlags = TempFlags.Auto;
+            privateNameTempFlagsStack.push(privateNameTempFlags);
+            privateNameTempFlags = TempFlags.Auto;
+            formattedNameTempFlagsStack.push(formattedNameTempFlags);
+            formattedNameTempFlags = undefined;
             reservedNamesStack.push(reservedNames);
         }
 
@@ -5007,6 +5034,8 @@ namespace ts {
                 return;
             }
             tempFlags = tempFlagsStack.pop()!;
+            privateNameTempFlags = privateNameTempFlagsStack.pop()!;
+            formattedNameTempFlags = formattedNameTempFlagsStack.pop();
             reservedNames = reservedNamesStack.pop()!;
         }
 
@@ -5119,7 +5148,7 @@ namespace ts {
 
         function generateNameIfNeeded(name: DeclarationName | undefined) {
             if (name) {
-                if (isGeneratedIdentifier(name)) {
+                if (isGeneratedIdentifier(name) || isGeneratedPrivateIdentifier(name)) {
                     generateName(name);
                 }
                 else if (isBindingPattern(name)) {
@@ -5131,11 +5160,11 @@ namespace ts {
         /**
          * Generate the text for a generated identifier.
          */
-        function generateName(name: GeneratedIdentifier) {
+        function generateName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
             if ((name.autoGenerateFlags & GeneratedIdentifierFlags.KindMask) === GeneratedIdentifierFlags.Node) {
                 // Node names generate unique names based on their original node
                 // and are cached based on that node's id.
-                return generateNameCached(getNodeForGeneratedName(name), name.autoGenerateFlags);
+                return generateNameCached(getNodeForGeneratedName(name), isPrivateIdentifier(name), name.autoGenerateFlags, name.autoGeneratePrefix, name.autoGenerateSuffix);
             }
             else {
                 // Auto, Loop, and Unique names are cached based on their unique
@@ -5145,9 +5174,9 @@ namespace ts {
             }
         }
 
-        function generateNameCached(node: Node, flags?: GeneratedIdentifierFlags) {
+        function generateNameCached(node: Node, privateName: boolean, flags?: GeneratedIdentifierFlags, prefix?: string | GeneratedNamePart, suffix?: string) {
             const nodeId = getNodeId(node);
-            return nodeIdToGeneratedName[nodeId] || (nodeIdToGeneratedName[nodeId] = generateNameForNode(node, flags));
+            return nodeIdToGeneratedName[nodeId] || (nodeIdToGeneratedName[nodeId] = generateNameForNode(node, privateName, flags ?? GeneratedIdentifierFlags.None, formatGeneratedNamePart(prefix, generateName), formatGeneratedNamePart(suffix)));
         }
 
         /**
@@ -5183,22 +5212,59 @@ namespace ts {
             return true;
         }
 
+        function getTempFlags(formattedNameKey: string) {
+            switch (formattedNameKey) {
+                case "":
+                    return tempFlags;
+                case "#":
+                    return privateNameTempFlags;
+                default:
+                    return formattedNameTempFlags?.get(formattedNameKey) ?? TempFlags.Auto;
+            }
+        }
+
+        function setTempFlags(formattedNameKey: string, flags: TempFlags) {
+            switch (formattedNameKey) {
+                case "":
+                    tempFlags = flags;
+                    break;
+                case "#":
+                    privateNameTempFlags = flags;
+                    break;
+                default:
+                    formattedNameTempFlags ??= new Map();
+                    formattedNameTempFlags.set(formattedNameKey, flags);
+                    break;
+            }
+        }
+
         /**
          * Return the next available name in the pattern _a ... _z, _0, _1, ...
          * TempFlags._i or TempFlags._n may be used to express a preference for that dedicated name.
          * Note that names generated by makeTempVariableName and makeUniqueName will never conflict.
          */
-        function makeTempVariableName(flags: TempFlags, reservedInNestedScopes?: boolean): string {
+        function makeTempVariableName(flags: TempFlags, reservedInNestedScopes: boolean, privateName: boolean, prefix: string, suffix: string): string {
+            if (prefix.length > 0 && prefix.charCodeAt(0) === CharacterCodes.hash) {
+                prefix = prefix.slice(1);
+            }
+
+            // Generate a key to use to acquire a TempFlags counter based on the fixed portions of the generated name.
+            const key = formatGeneratedName(privateName, prefix, "", suffix);
+            let tempFlags = getTempFlags(key);
+
             if (flags && !(tempFlags & flags)) {
                 const name = flags === TempFlags._i ? "_i" : "_n";
-                if (isUniqueName(name)) {
+                const fullName = formatGeneratedName(privateName, prefix, name, suffix);
+                if (isUniqueName(fullName)) {
                     tempFlags |= flags;
                     if (reservedInNestedScopes) {
-                        reserveNameInNestedScopes(name);
+                        reserveNameInNestedScopes(fullName);
                     }
-                    return name;
+                    setTempFlags(key, tempFlags);
+                    return fullName;
                 }
             }
+
             while (true) {
                 const count = tempFlags & TempFlags.CountMask;
                 tempFlags++;
@@ -5207,11 +5273,13 @@ namespace ts {
                     const name = count < 26
                         ? "_" + String.fromCharCode(CharacterCodes.a + count)
                         : "_" + (count - 26);
-                    if (isUniqueName(name)) {
+                    const fullName = formatGeneratedName(privateName, prefix, name, suffix);
+                    if (isUniqueName(fullName)) {
                         if (reservedInNestedScopes) {
-                            reserveNameInNestedScopes(name);
+                            reserveNameInNestedScopes(fullName);
                         }
-                        return name;
+                        setTempFlags(key, tempFlags);
+                        return fullName;
                     }
                 }
             }
@@ -5224,16 +5292,23 @@ namespace ts {
          * makeUniqueName are guaranteed to never conflict.
          * If `optimistic` is set, the first instance will use 'baseName' verbatim instead of 'baseName_1'
          */
-        function makeUniqueName(baseName: string, checkFn: (name: string) => boolean = isUniqueName, optimistic?: boolean, scoped?: boolean): string {
+        function makeUniqueName(baseName: string, checkFn: (name: string) => boolean = isUniqueName, optimistic: boolean, scoped: boolean, privateName: boolean, prefix: string, suffix: string): string {
+            if (baseName.length > 0 && baseName.charCodeAt(0) === CharacterCodes.hash) {
+                baseName = baseName.slice(1);
+            }
+            if (prefix.length > 0 && prefix.charCodeAt(0) === CharacterCodes.hash) {
+                prefix = prefix.slice(1);
+            }
             if (optimistic) {
-                if (checkFn(baseName)) {
+                const fullName = formatGeneratedName(privateName, prefix, baseName, suffix);
+                if (checkFn(fullName)) {
                     if (scoped) {
-                        reserveNameInNestedScopes(baseName);
+                        reserveNameInNestedScopes(fullName);
                     }
                     else {
-                        generatedNames.add(baseName);
+                        generatedNames.add(fullName);
                     }
-                    return baseName;
+                    return fullName;
                 }
             }
             // Find the first unique 'name_n', where n is a positive number
@@ -5242,22 +5317,22 @@ namespace ts {
             }
             let i = 1;
             while (true) {
-                const generatedName = baseName + i;
-                if (checkFn(generatedName)) {
+                const fullName = formatGeneratedName(privateName, prefix, baseName + i, suffix);
+                if (checkFn(fullName)) {
                     if (scoped) {
-                        reserveNameInNestedScopes(generatedName);
+                        reserveNameInNestedScopes(fullName);
                     }
                     else {
-                        generatedNames.add(generatedName);
+                        generatedNames.add(fullName);
                     }
-                    return generatedName;
+                    return fullName;
                 }
                 i++;
             }
         }
 
         function makeFileLevelOptimisticUniqueName(name: string) {
-            return makeUniqueName(name, isFileLevelUniqueName, /*optimistic*/ true);
+            return makeUniqueName(name, isFileLevelUniqueName, /*optimistic*/ true, /*scoped*/ false, /*privateName*/ false, /*prefix*/ "", /*suffix*/ "");
         }
 
         /**
@@ -5266,7 +5341,7 @@ namespace ts {
         function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
             const name = getTextOfNode(node.name);
             // Use module/enum name itself if it is unique, otherwise make a unique variation
-            return isUniqueLocalName(name, node) ? name : makeUniqueName(name);
+            return isUniqueLocalName(name, node) ? name : makeUniqueName(name, isUniqueName, /*optimistic*/ false, /*scoped*/ false, /*privateName*/ false, /*prefix*/ "", /*suffix*/ "");
         }
 
         /**
@@ -5276,109 +5351,98 @@ namespace ts {
             const expr = getExternalModuleName(node)!; // TODO: GH#18217
             const baseName = isStringLiteral(expr) ?
                 makeIdentifierFromModuleName(expr.text) : "module";
-            return makeUniqueName(baseName);
+            return makeUniqueName(baseName, isUniqueName, /*optimistic*/ false, /*scoped*/ false, /*privateName*/ false, /*prefix*/ "", /*suffix*/ "");
         }
 
         /**
          * Generates a unique name for a default export.
          */
         function generateNameForExportDefault() {
-            return makeUniqueName("default");
+            return makeUniqueName("default", isUniqueName, /*optimistic*/ false, /*scoped*/ false, /*privateName*/ false, /*prefix*/ "", /*suffix*/ "");
         }
 
         /**
          * Generates a unique name for a class expression.
          */
         function generateNameForClassExpression() {
-            return makeUniqueName("class");
+            return makeUniqueName("class", isUniqueName, /*optimistic*/ false, /*scoped*/ false, /*privateName*/ false, /*prefix*/ "", /*suffix*/ "");
         }
 
-        function generateNameForMethodOrAccessor(node: MethodDeclaration | AccessorDeclaration) {
+        function generateNameForMethodOrAccessor(node: MethodDeclaration | AccessorDeclaration, privateName: boolean, prefix: string, suffix: string) {
             if (isIdentifier(node.name)) {
-                return generateNameCached(node.name);
+                return generateNameCached(node.name, privateName);
             }
-            return makeTempVariableName(TempFlags.Auto);
+            return makeTempVariableName(TempFlags.Auto, /*reservedInNestedScopes*/ false, privateName, prefix, suffix);
         }
 
         /**
          * Generates a unique name from a node.
          */
-        function generateNameForNode(node: Node, flags?: GeneratedIdentifierFlags): string {
+        function generateNameForNode(node: Node, privateName: boolean, flags: GeneratedIdentifierFlags, prefix: string, suffix: string): string {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
+                case SyntaxKind.PrivateIdentifier:
                     return makeUniqueName(
                         getTextOfNode(node as Identifier),
                         isUniqueName,
-                        !!(flags! & GeneratedIdentifierFlags.Optimistic),
-                        !!(flags! & GeneratedIdentifierFlags.ReservedInNestedScopes)
+                        !!(flags & GeneratedIdentifierFlags.Optimistic),
+                        !!(flags & GeneratedIdentifierFlags.ReservedInNestedScopes),
+                        privateName,
+                        prefix,
+                        suffix
                     );
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.EnumDeclaration:
+                    Debug.assert(!prefix && !suffix && !privateName);
                     return generateNameForModuleOrEnum(node as ModuleDeclaration | EnumDeclaration);
                 case SyntaxKind.ImportDeclaration:
                 case SyntaxKind.ExportDeclaration:
+                    Debug.assert(!prefix && !suffix && !privateName);
                     return generateNameForImportOrExportDeclaration(node as ImportDeclaration | ExportDeclaration);
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ExportAssignment:
+                    Debug.assert(!prefix && !suffix && !privateName);
                     return generateNameForExportDefault();
                 case SyntaxKind.ClassExpression:
+                    Debug.assert(!prefix && !suffix && !privateName);
                     return generateNameForClassExpression();
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
-                    return generateNameForMethodOrAccessor(node as MethodDeclaration | AccessorDeclaration);
+                    return generateNameForMethodOrAccessor(node as MethodDeclaration | AccessorDeclaration, privateName, prefix, suffix);
                 case SyntaxKind.ComputedPropertyName:
-                    return makeTempVariableName(TempFlags.Auto, /*reserveInNestedScopes*/ true);
+                    return makeTempVariableName(TempFlags.Auto, /*reserveInNestedScopes*/ true, privateName, prefix, suffix);
                 default:
-                    return makeTempVariableName(TempFlags.Auto);
+                    return makeTempVariableName(TempFlags.Auto, /*reserveInNestedScopes*/ false, privateName, prefix, suffix);
             }
         }
 
         /**
          * Generates a unique identifier for a node.
          */
-        function makeName(name: GeneratedIdentifier) {
+        function makeName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
+            const prefix = formatGeneratedNamePart(name.autoGeneratePrefix, generateName);
+            const suffix = formatGeneratedNamePart (name.autoGenerateSuffix);
             switch (name.autoGenerateFlags & GeneratedIdentifierFlags.KindMask) {
                 case GeneratedIdentifierFlags.Auto:
-                    return makeTempVariableName(TempFlags.Auto, !!(name.autoGenerateFlags & GeneratedIdentifierFlags.ReservedInNestedScopes));
+                    return makeTempVariableName(TempFlags.Auto, !!(name.autoGenerateFlags & GeneratedIdentifierFlags.ReservedInNestedScopes), isPrivateIdentifier(name), prefix, suffix);
                 case GeneratedIdentifierFlags.Loop:
-                    return makeTempVariableName(TempFlags._i, !!(name.autoGenerateFlags & GeneratedIdentifierFlags.ReservedInNestedScopes));
+                    Debug.assertNode(name, isIdentifier);
+                    return makeTempVariableName(TempFlags._i, !!(name.autoGenerateFlags & GeneratedIdentifierFlags.ReservedInNestedScopes), /*privateName*/ false, prefix, suffix);
                 case GeneratedIdentifierFlags.Unique:
                     return makeUniqueName(
                         idText(name),
                         (name.autoGenerateFlags & GeneratedIdentifierFlags.FileLevel) ? isFileLevelUniqueName : isUniqueName,
                         !!(name.autoGenerateFlags & GeneratedIdentifierFlags.Optimistic),
-                        !!(name.autoGenerateFlags & GeneratedIdentifierFlags.ReservedInNestedScopes)
+                        !!(name.autoGenerateFlags & GeneratedIdentifierFlags.ReservedInNestedScopes),
+                        isPrivateIdentifier(name),
+                        prefix,
+                        suffix
                     );
             }
 
-            return Debug.fail("Unsupported GeneratedIdentifierKind.");
-        }
-
-        /**
-         * Gets the node from which a name should be generated.
-         */
-        function getNodeForGeneratedName(name: GeneratedIdentifier) {
-            const autoGenerateId = name.autoGenerateId;
-            let node = name as Node;
-            let original = node.original;
-            while (original) {
-                node = original;
-
-                // if "node" is a different generated name (having a different
-                // "autoGenerateId"), use it and stop traversing.
-                if (isIdentifier(node)
-                    && !!(node.autoGenerateFlags! & GeneratedIdentifierFlags.Node)
-                    && node.autoGenerateId !== autoGenerateId) {
-                    break;
-                }
-
-                original = node.original;
-            }
-
-            // otherwise, return the original node for the source;
-            return node;
+            return Debug.fail(`Unsupported GeneratedIdentifierKind: ${Debug.formatEnum(name.autoGenerateFlags & GeneratedIdentifierFlags.KindMask, (ts as any).GeneratedIdentifierFlags, /*isFlags*/ true)}.`);
         }
 
         // Comments

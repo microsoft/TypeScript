@@ -69,6 +69,9 @@ interface DataTransferItemList {
     [Symbol.iterator](): IterableIterator<DataTransferItem>;
 }
 
+interface EventCounts extends ReadonlyMap<string, number> {
+}
+
 interface FileList {
     [Symbol.iterator](): IterableIterator<File>;
 }
@@ -78,17 +81,11 @@ interface FontFaceSet extends Set<FontFace> {
 
 interface FormData {
     [Symbol.iterator](): IterableIterator<[string, FormDataEntryValue]>;
-    /**
-     * Returns an array of key, value pairs for every entry in the list.
-     */
+    /** Returns an array of key, value pairs for every entry in the list. */
     entries(): IterableIterator<[string, FormDataEntryValue]>;
-    /**
-     * Returns a list of keys in the list.
-     */
+    /** Returns a list of keys in the list. */
     keys(): IterableIterator<string>;
-    /**
-     * Returns a list of values in the list.
-     */
+    /** Returns a list of values in the list. */
     values(): IterableIterator<FormDataEntryValue>;
 }
 
@@ -109,30 +106,22 @@ interface HTMLFormElement {
 }
 
 interface HTMLSelectElement {
-    [Symbol.iterator](): IterableIterator<Element>;
+    [Symbol.iterator](): IterableIterator<HTMLOptionElement>;
 }
 
 interface Headers {
     [Symbol.iterator](): IterableIterator<[string, string]>;
-    /**
-     * Returns an iterator allowing to go through all key/value pairs contained in this object.
-     */
+    /** Returns an iterator allowing to go through all key/value pairs contained in this object. */
     entries(): IterableIterator<[string, string]>;
-    /**
-     * Returns an iterator allowing to go through all keys of the key/value pairs contained in this object.
-     */
+    /** Returns an iterator allowing to go through all keys of the key/value pairs contained in this object. */
     keys(): IterableIterator<string>;
-    /**
-     * Returns an iterator allowing to go through all values of the key/value pairs contained in this object.
-     */
+    /** Returns an iterator allowing to go through all values of the key/value pairs contained in this object. */
     values(): IterableIterator<string>;
 }
 
 interface IDBDatabase {
-    /**
-     * Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names.
-     */
-    transaction(storeNames: string | Iterable<string>, mode?: IDBTransactionMode): IDBTransaction;
+    /** Returns a new transaction with the given mode ("readonly" or "readwrite") and scope which can be a single object store name or an array of names. */
+    transaction(storeNames: string | Iterable<string>, mode?: IDBTransactionMode, options?: IDBTransactionOptions): IDBTransaction;
 }
 
 interface IDBObjectStore {
@@ -161,7 +150,7 @@ interface MessageEvent<T = any> {
 }
 
 interface MimeTypeArray {
-    [Symbol.iterator](): IterableIterator<any>;
+    [Symbol.iterator](): IterableIterator<MimeType>;
 }
 
 interface NamedNodeMap {
@@ -169,58 +158,44 @@ interface NamedNodeMap {
 }
 
 interface Navigator {
+    /** Available only in secure contexts. */
     requestMediaKeySystemAccess(keySystem: string, supportedConfigurations: Iterable<MediaKeySystemConfiguration>): Promise<MediaKeySystemAccess>;
     vibrate(pattern: Iterable<number>): boolean;
 }
 
 interface NodeList {
     [Symbol.iterator](): IterableIterator<Node>;
-    /**
-     * Returns an array of key, value pairs for every entry in the list.
-     */
+    /** Returns an array of key, value pairs for every entry in the list. */
     entries(): IterableIterator<[number, Node]>;
-    /**
-     * Returns an list of keys in the list.
-     */
+    /** Returns an list of keys in the list. */
     keys(): IterableIterator<number>;
-    /**
-     * Returns an list of values in the list.
-     */
+    /** Returns an list of values in the list. */
     values(): IterableIterator<Node>;
 }
 
 interface NodeListOf<TNode extends Node> {
     [Symbol.iterator](): IterableIterator<TNode>;
-    /**
-     * Returns an array of key, value pairs for every entry in the list.
-     */
+    /** Returns an array of key, value pairs for every entry in the list. */
     entries(): IterableIterator<[number, TNode]>;
-    /**
-     * Returns an list of keys in the list.
-     */
+    /** Returns an list of keys in the list. */
     keys(): IterableIterator<number>;
-    /**
-     * Returns an list of values in the list.
-     */
+    /** Returns an list of values in the list. */
     values(): IterableIterator<TNode>;
 }
 
 interface Plugin {
-    [Symbol.iterator](): IterableIterator<undefined>;
+    [Symbol.iterator](): IterableIterator<MimeType>;
 }
 
 interface PluginArray {
-    [Symbol.iterator](): IterableIterator<any>;
+    [Symbol.iterator](): IterableIterator<Plugin>;
+}
+
+interface RTCRtpTransceiver {
+    setCodecPreferences(codecs: Iterable<RTCRtpCodecCapability>): void;
 }
 
 interface RTCStatsReport extends ReadonlyMap<string, any> {
-}
-
-interface ReadableStream<R = any> {
-    [Symbol.iterator](): IterableIterator<any>;
-    entries(): IterableIterator<[number, any]>;
-    keys(): IterableIterator<number>;
-    values(): IterableIterator<any>;
 }
 
 interface SVGLengthList {
@@ -261,10 +236,10 @@ interface StyleSheetList {
 
 interface SubtleCrypto {
     deriveKey(algorithm: AlgorithmIdentifier | EcdhKeyDeriveParams | HkdfParams | Pbkdf2Params, baseKey: CryptoKey, derivedKeyType: AlgorithmIdentifier | AesDerivedKeyParams | HmacImportParams | HkdfParams | Pbkdf2Params, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKey>;
-    generateKey(algorithm: RsaHashedKeyGenParams | EcKeyGenParams, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKeyPair>;
-    generateKey(algorithm: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
+    generateKey(algorithm: RsaHashedKeyGenParams | EcKeyGenParams, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKeyPair>;
+    generateKey(algorithm: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKey>;
     generateKey(algorithm: AlgorithmIdentifier, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKeyPair | CryptoKey>;
-    importKey(format: "jwk", keyData: JsonWebKey, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: KeyUsage[]): Promise<CryptoKey>;
+    importKey(format: "jwk", keyData: JsonWebKey, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: ReadonlyArray<KeyUsage>): Promise<CryptoKey>;
     importKey(format: Exclude<KeyFormat, "jwk">, keyData: BufferSource, algorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKey>;
     unwrapKey(format: KeyFormat, wrappedKey: BufferSource, unwrappingKey: CryptoKey, unwrapAlgorithm: AlgorithmIdentifier | RsaOaepParams | AesCtrParams | AesCbcParams | AesGcmParams, unwrappedKeyAlgorithm: AlgorithmIdentifier | RsaHashedImportParams | EcKeyImportParams | HmacImportParams | AesKeyAlgorithm, extractable: boolean, keyUsages: Iterable<KeyUsage>): Promise<CryptoKey>;
 }
@@ -283,22 +258,23 @@ interface TouchList {
 
 interface URLSearchParams {
     [Symbol.iterator](): IterableIterator<[string, string]>;
-    /**
-     * Returns an array of key, value pairs for every entry in the search params.
-     */
+    /** Returns an array of key, value pairs for every entry in the search params. */
     entries(): IterableIterator<[string, string]>;
-    /**
-     * Returns a list of keys in the search params.
-     */
+    /** Returns a list of keys in the search params. */
     keys(): IterableIterator<string>;
-    /**
-     * Returns a list of values in the search params.
-     */
+    /** Returns a list of values in the search params. */
     values(): IterableIterator<string>;
 }
 
 interface WEBGL_draw_buffers {
     drawBuffersWEBGL(buffers: Iterable<GLenum>): void;
+}
+
+interface WEBGL_multi_draw {
+    multiDrawArraysInstancedWEBGL(mode: GLenum, firstsList: Int32Array | Iterable<GLint>, firstsOffset: GLuint, countsList: Int32Array | Iterable<GLsizei>, countsOffset: GLuint, instanceCountsList: Int32Array | Iterable<GLsizei>, instanceCountsOffset: GLuint, drawcount: GLsizei): void;
+    multiDrawArraysWEBGL(mode: GLenum, firstsList: Int32Array | Iterable<GLint>, firstsOffset: GLuint, countsList: Int32Array | Iterable<GLsizei>, countsOffset: GLuint, drawcount: GLsizei): void;
+    multiDrawElementsInstancedWEBGL(mode: GLenum, countsList: Int32Array | Iterable<GLint>, countsOffset: GLuint, type: GLenum, offsetsList: Int32Array | Iterable<GLsizei>, offsetsOffset: GLuint, instanceCountsList: Int32Array | Iterable<GLsizei>, instanceCountsOffset: GLuint, drawcount: GLsizei): void;
+    multiDrawElementsWEBGL(mode: GLenum, countsList: Int32Array | Iterable<GLint>, countsOffset: GLuint, type: GLenum, offsetsList: Int32Array | Iterable<GLsizei>, offsetsOffset: GLuint, drawcount: GLsizei): void;
 }
 
 interface WebGL2RenderingContextBase {

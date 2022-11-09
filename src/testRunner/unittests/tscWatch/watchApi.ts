@@ -1,23 +1,22 @@
 namespace ts.tscWatch {
     describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolution", () => {
-        const configFileJson: any = {
-            compilerOptions: { module: "commonjs", resolveJsonModule: true },
-            files: ["index.ts"]
-        };
-        const mainFile: File = {
-            path: `${projectRoot}/index.ts`,
-            content: "import settings from './settings.json';"
-        };
-        const config: File = {
-            path: `${projectRoot}/tsconfig.json`,
-            content: JSON.stringify(configFileJson)
-        };
-        const settingsJson: File = {
-            path: `${projectRoot}/settings.json`,
-            content: JSON.stringify({ content: "Print this" })
-        };
-
         it("verify that module resolution with json extension works when returned without extension", () => {
+            const configFileJson: any = {
+                compilerOptions: { module: "commonjs", resolveJsonModule: true },
+                files: ["index.ts"]
+            };
+            const mainFile: File = {
+                path: `${projectRoot}/index.ts`,
+                content: "import settings from './settings.json';"
+            };
+            const config: File = {
+                path: `${projectRoot}/tsconfig.json`,
+                content: JSON.stringify(configFileJson)
+            };
+            const settingsJson: File = {
+                path: `${projectRoot}/settings.json`,
+                content: JSON.stringify({ content: "Print this" })
+            };
             const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem(
                 [libFile, mainFile, config, settingsJson],
                 { currentDirectory: projectRoot }),
@@ -49,6 +48,64 @@ namespace ts.tscWatch {
                 changes: emptyArray,
                 watchOrSolution: watch
             });
+        });
+
+        describe("hasInvalidatedResolutions", () => {
+            function verifyWatch(subScenario: string, implementHasInvalidatedResolution: boolean) {
+                it(subScenario, () => {
+                    const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem({
+                        [`${projectRoot}/tsconfig.json`]: JSON.stringify({
+                            compilerOptions: { traceResolution: true, extendedDiagnostics: true },
+                            files: ["main.ts"]
+                        }),
+                        [`${projectRoot}/main.ts`]: `import { foo } from "./other";`,
+                        [`${projectRoot}/other.d.ts`]: "export function foo(): void;",
+                        [libFile.path]: libFile.content,
+                    }, { currentDirectory: projectRoot }));
+                    const host = createWatchCompilerHostOfConfigFileForBaseline({
+                        configFileName: `${projectRoot}/tsconfig.json`,
+                        system: sys,
+                        cb,
+                    });
+                    host.resolveModuleNames = (moduleNames, containingFile, _reusedNames, _redirectedReference, options) =>
+                        moduleNames.map(m => resolveModuleName(m, containingFile, options, host).resolvedModule);
+                    // Invalidate resolutions only when ts file is created
+                    if (implementHasInvalidatedResolution) host.hasInvalidatedResolutions = () => sys.fileExists(`${projectRoot}/other.ts`);
+                    const watch = createWatchProgram(host);
+                    runWatchBaseline({
+                        scenario: "watchApi",
+                        subScenario,
+                        commandLineArgs: ["--w"],
+                        sys,
+                        baseline,
+                        oldSnap,
+                        getPrograms,
+                        changes: [
+                            {
+                                caption: "write other with same contents",
+                                change: sys => sys.appendFile(`${projectRoot}/other.d.ts`, ""),
+                                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                            },
+                            {
+                                caption: "change other file",
+                                change: sys => sys.appendFile(`${projectRoot}/other.d.ts`, "export function bar(): void;"),
+                                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                            },
+                            {
+                                caption: "write other with same contents but write ts file",
+                                change: sys => {
+                                    sys.appendFile(`${projectRoot}/other.d.ts`, "");
+                                    sys.writeFile(`${projectRoot}/other.ts`, "export function foo() {}");
+                                },
+                                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                            },
+                        ],
+                        watchOrSolution: watch
+                    });
+                });
+            }
+            verifyWatch("host implements does not implement hasInvalidatedResolutions", /*implementHasInvalidatedResolution*/ false);
+            verifyWatch("host implements hasInvalidatedResolutions", /*implementHasInvalidatedResolution*/ true);
         });
     });
 
@@ -553,5 +610,98 @@ namespace ts.tscWatch {
                 watchOrSolution: watch
             });
         });
+    });
+
+    describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitOnlyDtsFiles", () => {
+        function verify(subScenario: string, outFile?: string) {
+            it(subScenario, () => {
+                const system = createWatchedSystem({
+                    [`${projectRoot}/tsconfig.json`]: JSON.stringify({
+                        compilerOptions: { composite: true, noEmitOnError: true, module: "amd", outFile },
+                        files: ["a.ts", "b.ts"],
+                    }),
+                    [`${projectRoot}/a.ts`]: "export const x = 10;",
+                    [`${projectRoot}/b.ts`]: "export const y: 10 = 20;",
+                    [libFile.path]: libFile.content,
+                }, { currentDirectory: projectRoot });
+                const baseline = createBaseline(system);
+                const compilerHost = createWatchCompilerHostOfConfigFileForBaseline({
+                    cb: baseline.cb,
+                    system,
+                    configFileName: `${projectRoot}/tsconfig.json`,
+                    optionsToExtend: { extendedDiagnostics: true }
+                });
+                const originalEmitProgram = compilerHost.afterProgramCreate;
+                compilerHost.afterProgramCreate = myAfterProgramCreate;
+                let callFullEmit = true;
+                const watch = createWatchProgram(compilerHost);
+                runWatchBaseline({
+                    scenario: "watchApi",
+                    subScenario,
+                    commandLineArgs: ["--w", "--extendedDiagnostics"],
+                    ...baseline,
+                    changes: [
+                        {
+                            caption: "Fix error but run emit with emitOnlyDts",
+                            change: sys => {
+                                sys.writeFile(`${projectRoot}/b.ts`, `export const y = 10;`);
+                                callFullEmit = false;
+                            },
+                            timeouts: checkSingleTimeoutQueueLengthAndRun,
+                        },
+                        {
+                            caption: "Emit with emitOnlyDts shouldnt emit anything",
+                            change: () => {
+                                const program = watch.getCurrentProgram();
+                                program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
+                                baseline.cb(program);
+                            },
+                            timeouts: sys => sys.checkTimeoutQueueLength(0),
+                        },
+                        {
+                            caption: "Emit all files",
+                            change: () => {
+                                const program = watch.getCurrentProgram();
+                                program.emit();
+                                baseline.cb(program);
+                            },
+                            timeouts: sys => sys.checkTimeoutQueueLength(0),
+                        },
+                        {
+                            caption: "Emit with emitOnlyDts shouldnt emit anything",
+                            change: () => {
+                                const program = watch.getCurrentProgram();
+                                program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
+                                baseline.cb(program);
+                            },
+                            timeouts: sys => sys.checkTimeoutQueueLength(0),
+                        },
+                        {
+                            caption: "Emit full should not emit anything",
+                            change: () => {
+                                const program = watch.getCurrentProgram();
+                                program.emit();
+                                baseline.cb(program);
+                            },
+                            timeouts: sys => sys.checkTimeoutQueueLength(0),
+                        },
+                    ],
+                    watchOrSolution: watch
+                });
+
+                function myAfterProgramCreate(program: EmitAndSemanticDiagnosticsBuilderProgram) {
+                    if (callFullEmit) {
+                        originalEmitProgram!.call(compilerHost, program);
+                    }
+                    else {
+                        program.getSemanticDiagnostics(); // Get Diagnostics
+                        program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
+                        baseline.cb(program);
+                    }
+                }
+            });
+        }
+        verify("when emitting with emitOnlyDtsFiles");
+        verify("when emitting with emitOnlyDtsFiles with outFile", "outFile.js");
     });
 }

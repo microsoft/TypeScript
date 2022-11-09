@@ -22,8 +22,8 @@ namespace ts.codefix {
         }
 
         const ctorDeclaration = ctorSymbol.valueDeclaration;
-        if (isFunctionDeclaration(ctorDeclaration)) {
-            changes.replaceNode(sourceFile, ctorDeclaration, createClassFromFunctionDeclaration(ctorDeclaration));
+        if (isFunctionDeclaration(ctorDeclaration) || isFunctionExpression(ctorDeclaration)) {
+            changes.replaceNode(sourceFile, ctorDeclaration, createClassFromFunction(ctorDeclaration));
         }
         else if (isVariableDeclaration(ctorDeclaration)) {
             const classDeclaration = createClassFromVariableDeclaration(ctorDeclaration);
@@ -233,7 +233,7 @@ namespace ts.codefix {
             return cls;
         }
 
-        function createClassFromFunctionDeclaration(node: FunctionDeclaration): ClassDeclaration {
+        function createClassFromFunction(node: FunctionDeclaration | FunctionExpression): ClassDeclaration {
             const memberElements = createClassElementsFromSymbol(ctorSymbol);
             if (node.body) {
                 memberElements.unshift(factory.createConstructorDeclaration(/*modifiers*/ undefined, node.parameters, node.body));

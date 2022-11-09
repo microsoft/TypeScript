@@ -10,40 +10,86 @@ function* f1(): Generator<any, { x: 'x' }, any> {
 >x : Symbol(x, Decl(generatorReturnContextualType.ts, 3, 10))
 }
 
-async function* f2(): AsyncGenerator<any, { x: 'x' }, any> {
->f2 : Symbol(f2, Decl(generatorReturnContextualType.ts, 4, 1))
->AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
->x : Symbol(x, Decl(generatorReturnContextualType.ts, 6, 43))
+function* g1(): Iterator<any, { x: 'x' }, any> {
+>g1 : Symbol(g1, Decl(generatorReturnContextualType.ts, 4, 1))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 6, 31))
 
   return { x: 'x' };
 >x : Symbol(x, Decl(generatorReturnContextualType.ts, 7, 10))
 }
 
-async function* f3(): AsyncGenerator<any, { x: 'x' }, any> {
->f3 : Symbol(f3, Decl(generatorReturnContextualType.ts, 8, 1))
+async function* f2(): AsyncGenerator<any, { x: 'x' }, any> {
+>f2 : Symbol(f2, Decl(generatorReturnContextualType.ts, 8, 1))
 >AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
 >x : Symbol(x, Decl(generatorReturnContextualType.ts, 10, 43))
+
+  return { x: 'x' };
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 11, 10))
+}
+
+async function* g2(): AsyncIterator<any, { x: 'x' }, any> {
+>g2 : Symbol(g2, Decl(generatorReturnContextualType.ts, 12, 1))
+>AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 14, 42))
+
+  return { x: 'x' };
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 15, 10))
+}
+
+async function* f3(): AsyncGenerator<any, { x: 'x' }, any> {
+>f3 : Symbol(f3, Decl(generatorReturnContextualType.ts, 16, 1))
+>AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 18, 43))
 
   return Promise.resolve({ x: 'x' });
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->x : Symbol(x, Decl(generatorReturnContextualType.ts, 11, 26))
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 19, 26))
+}
+
+async function* g3(): AsyncIterator<any, { x: 'x' }, any> {
+>g3 : Symbol(g3, Decl(generatorReturnContextualType.ts, 20, 1))
+>AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 22, 42))
+
+  return Promise.resolve({ x: 'x' });
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 23, 26))
 }
 
 async function* f4(): AsyncGenerator<any, { x: 'x' }, any> {
->f4 : Symbol(f4, Decl(generatorReturnContextualType.ts, 12, 1))
+>f4 : Symbol(f4, Decl(generatorReturnContextualType.ts, 24, 1))
 >AsyncGenerator : Symbol(AsyncGenerator, Decl(lib.es2018.asyncgenerator.d.ts, --, --))
->x : Symbol(x, Decl(generatorReturnContextualType.ts, 14, 43))
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 26, 43))
 
   const ret = { x: 'x' };
->ret : Symbol(ret, Decl(generatorReturnContextualType.ts, 15, 7))
->x : Symbol(x, Decl(generatorReturnContextualType.ts, 15, 15))
+>ret : Symbol(ret, Decl(generatorReturnContextualType.ts, 27, 7))
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 27, 15))
 
   return Promise.resolve(ret); // Error
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->ret : Symbol(ret, Decl(generatorReturnContextualType.ts, 15, 7))
+>ret : Symbol(ret, Decl(generatorReturnContextualType.ts, 27, 7))
+}
+
+async function* g4(): AsyncIterator<any, { x: 'x' }, any> {
+>g4 : Symbol(g4, Decl(generatorReturnContextualType.ts, 29, 1))
+>AsyncIterator : Symbol(AsyncIterator, Decl(lib.es2018.asynciterable.d.ts, --, --))
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 31, 42))
+
+  const ret = { x: 'x' };
+>ret : Symbol(ret, Decl(generatorReturnContextualType.ts, 32, 7))
+>x : Symbol(x, Decl(generatorReturnContextualType.ts, 32, 15))
+
+  return Promise.resolve(ret); // Error
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>ret : Symbol(ret, Decl(generatorReturnContextualType.ts, 32, 7))
 }
 

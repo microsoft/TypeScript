@@ -940,7 +940,7 @@ namespace ts.server {
                 // raw is now fixed and ready
                 this.safelist = raw.typesMap;
                 for (const key in raw.simpleMap) {
-                    if (raw.simpleMap.hasOwnProperty(key)) {
+                    if (hasProperty(raw.simpleMap, key)) {
                         this.legacySafelist.set(key, raw.simpleMap[key].toLowerCase());
                     }
                 }
@@ -1167,20 +1167,22 @@ namespace ts.server {
         }
 
         /* @internal */
-        tryGetDefaultProjectForFile(fileName: NormalizedPath): Project | undefined {
-            const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
+        tryGetDefaultProjectForFile(fileNameOrScriptInfo: NormalizedPath | ScriptInfo): Project | undefined {
+            const scriptInfo = isString(fileNameOrScriptInfo) ? this.getScriptInfoForNormalizedPath(fileNameOrScriptInfo) : fileNameOrScriptInfo;
             return scriptInfo && !scriptInfo.isOrphan() ? scriptInfo.getDefaultProject() : undefined;
         }
 
         /* @internal */
-        ensureDefaultProjectForFile(fileName: NormalizedPath): Project {
-            return this.tryGetDefaultProjectForFile(fileName) || this.doEnsureDefaultProjectForFile(fileName);
+        ensureDefaultProjectForFile(fileNameOrScriptInfo: NormalizedPath | ScriptInfo): Project {
+            return this.tryGetDefaultProjectForFile(fileNameOrScriptInfo) || this.doEnsureDefaultProjectForFile(fileNameOrScriptInfo);
         }
 
-        private doEnsureDefaultProjectForFile(fileName: NormalizedPath): Project {
+        private doEnsureDefaultProjectForFile(fileNameOrScriptInfo: NormalizedPath | ScriptInfo): Project {
             this.ensureProjectStructuresUptoDate();
-            const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
-            return scriptInfo ? scriptInfo.getDefaultProject() : (this.logErrorForScriptInfoNotFound(fileName), Errors.ThrowNoProject());
+            const scriptInfo = isString(fileNameOrScriptInfo) ? this.getScriptInfoForNormalizedPath(fileNameOrScriptInfo) : fileNameOrScriptInfo;
+            return scriptInfo ?
+                scriptInfo.getDefaultProject() :
+                (this.logErrorForScriptInfoNotFound(isString(fileNameOrScriptInfo) ? fileNameOrScriptInfo : fileNameOrScriptInfo.fileName), Errors.ThrowNoProject());
         }
 
         getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string) {
@@ -3648,7 +3650,7 @@ namespace ts.server {
                 return;
             }
 
-            const project = scriptInfo.getDefaultProject();
+            const project = this.ensureDefaultProjectForFile(scriptInfo);
             if (!project.languageServiceEnabled) {
                 return;
             }
@@ -4068,7 +4070,7 @@ namespace ts.server {
 
         /*@internal*/
         requestEnablePlugin(project: Project, pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined) {
-            if (!this.host.importServicePlugin && !this.host.require) {
+            if (!this.host.importPlugin && !this.host.require) {
                 this.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
                 return;
             }
@@ -4080,7 +4082,7 @@ namespace ts.server {
             }
 
             // If the host supports dynamic import, begin enabling the plugin asynchronously.
-            if (this.host.importServicePlugin) {
+            if (this.host.importPlugin) {
                 const importPromise = project.beginEnablePluginAsync(pluginConfigEntry, searchPaths, pluginConfigOverrides);
                 this.pendingPluginEnablements ??= new Map();
                 let promises = this.pendingPluginEnablements.get(project);

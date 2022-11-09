@@ -143,7 +143,8 @@ namespace ts.server {
         private missingFilesMap: ESMap<Path, FileWatcher> | undefined;
         private generatedFilesMap: GeneratedFileWatcherMap | undefined;
 
-        private plugins: PluginModuleWithName[] = [];
+        /*@internal*/
+        protected readonly plugins: PluginModuleWithName[] = [];
 
         /*@internal*/
         /**
@@ -172,7 +173,7 @@ namespace ts.server {
         readonly realpath?: (path: string) => string;
 
         /*@internal*/
-        hasInvalidatedResolution: HasInvalidatedResolution | undefined;
+        hasInvalidatedResolutions: HasInvalidatedResolutions | undefined;
 
         /*@internal*/
         resolutionCache: ResolutionCache;
@@ -256,12 +257,12 @@ namespace ts.server {
 
         /*@internal*/
         public static async importServicePluginAsync(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void, logErrors?: (message: string) => void): Promise<{} | undefined> {
-            Debug.assertIsDefined(host.importServicePlugin);
+            Debug.assertIsDefined(host.importPlugin);
             const resolvedPath = combinePaths(initialDir, "node_modules");
             log(`Dynamically importing ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
             let result: ModuleImportResult;
             try {
-                result = await host.importServicePlugin(resolvedPath, moduleName);
+                result = await host.importPlugin(resolvedPath, moduleName);
             }
             catch (e) {
                 result = { module: undefined, error: e };
@@ -505,8 +506,8 @@ namespace ts.server {
             return !this.isWatchedMissingFile(path) && this.directoryStructureHost.fileExists(file);
         }
 
-        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModuleFull | undefined)[] {
-            return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference, containingSourceFile);
+        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModuleFull | undefined)[] {
+            return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference, containingSourceFile, resolutionInfo);
         }
 
         getModuleResolutionCache(): ModuleResolutionCache | undefined {
@@ -845,6 +846,7 @@ namespace ts.server {
             this.directoryStructureHost = undefined!;
             this.exportMapCache = undefined;
             this.projectErrors = undefined;
+            this.plugins.length = 0;
 
             // Clean up file watchers waiting for missing files
             if (this.missingFilesMap) {
@@ -1176,7 +1178,7 @@ namespace ts.server {
             Debug.assert(!this.isClosed(), "Called update graph worker of closed project");
             this.writeLog(`Starting updateGraphWorker: Project: ${this.getProjectName()}`);
             const start = timestamp();
-            this.hasInvalidatedResolution = this.resolutionCache.createHasInvalidatedResolution();
+            this.hasInvalidatedResolutions = this.resolutionCache.createHasInvalidatedResolutions(returnFalse);
             this.resolutionCache.startCachingPerDirectoryResolution();
             this.program = this.languageService.getProgram(); // TODO: GH#18217
             this.dirty = false;
@@ -1604,35 +1606,38 @@ namespace ts.server {
             return !!this.program && this.program.isSourceOfProjectReferenceRedirect(fileName);
         }
 
-        protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined): void {
-            const host = this.projectService.host;
-
-            if (!host.require && !host.importServicePlugin) {
-                this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
-                return;
-            }
-
+        /*@internal*/
+        protected getGlobalPluginSearchPaths() {
             // Search any globally-specified probe paths, then our peer node_modules
-            const searchPaths = [
+            return [
                 ...this.projectService.pluginProbeLocations,
                 // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
                 combinePaths(this.projectService.getExecutingFilePath(), "../../.."),
             ];
+        }
 
-            if (this.projectService.globalPlugins) {
-                // Enable global plugins with synthetic configuration entries
-                for (const globalPluginName of this.projectService.globalPlugins) {
-                    // Skip empty names from odd commandline parses
-                    if (!globalPluginName) continue;
+        protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined): void {
+            if (!this.projectService.globalPlugins.length) return;
+            const host = this.projectService.host;
 
-                    // Skip already-locally-loaded plugins
-                    if (options.plugins && options.plugins.some(p => p.name === globalPluginName)) continue;
+            if (!host.require && !host.importPlugin) {
+                this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
+                return;
+            }
 
-                    // Provide global: true so plugins can detect why they can't find their config
-                    this.projectService.logger.info(`Loading global plugin ${globalPluginName}`);
+            // Enable global plugins with synthetic configuration entries
+            const searchPaths = this.getGlobalPluginSearchPaths();
+            for (const globalPluginName of this.projectService.globalPlugins) {
+                // Skip empty names from odd commandline parses
+                if (!globalPluginName) continue;
 
-                    this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths, pluginConfigOverrides);
-                }
+                // Skip already-locally-loaded plugins
+                if (options.plugins && options.plugins.some(p => p.name === globalPluginName)) continue;
+
+                // Provide global: true so plugins can detect why they can't find their config
+                this.projectService.logger.info(`Loading global plugin ${globalPluginName}`);
+
+                this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths, pluginConfigOverrides);
             }
         }
 
@@ -1658,7 +1663,7 @@ namespace ts.server {
          */
         /*@internal*/
         async beginEnablePluginAsync(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): Promise<BeginEnablePluginResult> {
-            Debug.assertIsDefined(this.projectService.host.importServicePlugin);
+            Debug.assertIsDefined(this.projectService.host.importPlugin);
 
             let errorLogs: string[] | undefined;
             const log = (message: string) => this.projectService.logger.info(message);
@@ -1721,7 +1726,7 @@ namespace ts.server {
                 const pluginModule = pluginModuleFactory({ typescript: ts });
                 const newLS = pluginModule.create(info);
                 for (const k of Object.keys(this.languageService)) {
-                    // eslint-disable-next-line no-in-operator
+                    // eslint-disable-next-line local/no-in-operator
                     if (!(k in newLS)) {
                         this.projectService.logger.info(`Plugin activation warning: Missing proxied method ${k} in created LS. Patching.`);
                         (newLS as any)[k] = (this.languageService as any)[k];
@@ -2521,17 +2526,15 @@ namespace ts.server {
 
         /*@internal*/
         enablePluginsWithOptions(options: CompilerOptions, pluginConfigOverrides: ESMap<string, any> | undefined): void {
+            this.plugins.length = 0;
+            if (!options.plugins?.length && !this.projectService.globalPlugins.length) return;
             const host = this.projectService.host;
-
-            if (!host.require && !host.importServicePlugin) {
+            if (!host.require && !host.importPlugin) {
                 this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
                 return;
             }
 
-            // Search our peer node_modules, then any globally-specified probe paths
-            // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
-            const searchPaths = [combinePaths(this.projectService.getExecutingFilePath(), "../../.."), ...this.projectService.pluginProbeLocations];
-
+            const searchPaths = this.getGlobalPluginSearchPaths();
             if (this.projectService.allowLocalPluginLoads) {
                 const local = getDirectoryPath(this.canonicalConfigFilePath);
                 this.projectService.logger.info(`Local plugin loading enabled; adding ${local} to search paths`);

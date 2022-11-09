@@ -1,8 +1,9 @@
 //// [tests/cases/compiler/APISample_parseConfig.ts] ////
 
-//// [index.d.ts]
-declare module "typescript" {
-    export = ts;
+//// [package.json]
+{
+    "name": "typescript",
+    "types": "/.ts/typescript.d.ts"
 }
 
 //// [APISample_parseConfig.ts]
@@ -41,6 +42,7 @@ export function createProgram(rootFiles: string[], compilerOptionsJson: string):
     }
     return ts.createProgram(rootFiles, settings.options);
 }
+
 
 //// [APISample_parseConfig.js]
 "use strict";

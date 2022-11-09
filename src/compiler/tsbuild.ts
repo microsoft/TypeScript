@@ -16,9 +16,11 @@ namespace ts {
          */
         OutOfDateWithPrepend,
         OutputMissing,
+        ErrorReadingFile,
         OutOfDateWithSelf,
         OutOfDateWithUpstream,
         OutOfDateBuildInfo,
+        OutOfDateOptions,
         UpstreamOutOfDate,
         UpstreamBlocked,
         ComputingUpstream,
@@ -37,6 +39,7 @@ namespace ts {
         | Status.UpToDate
         | Status.OutOfDateWithPrepend
         | Status.OutputMissing
+        | Status.ErrorReadingFile
         | Status.OutOfDateWithSelf
         | Status.OutOfDateWithUpstream
         | Status.OutOfDateBuildInfo
@@ -95,6 +98,12 @@ namespace ts {
             missingOutputFileName: string;
         }
 
+        /** Error reading file */
+        export interface ErrorReadingFile {
+            type: UpToDateStatusType.ErrorReadingFile;
+            fileName: string;
+        }
+
         /**
          * One or more of the project's outputs is older than its newest input.
          */
@@ -108,7 +117,7 @@ namespace ts {
          * Buildinfo indicates that build is out of date
          */
         export interface OutOfDateBuildInfo {
-            type: UpToDateStatusType.OutOfDateBuildInfo,
+            type: UpToDateStatusType.OutOfDateBuildInfo | UpToDateStatusType.OutOfDateOptions,
             buildInfoFile: string;
         }
 

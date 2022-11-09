@@ -59,7 +59,7 @@ namespace ts.formatting {
             // in other cases there should be no space between '?' and next token
             rule("NoSpaceAfterQuestionMark", SyntaxKind.QuestionToken, anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
-            rule("NoSpaceBeforeDot", anyToken, [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
+            rule("NoSpaceBeforeDot", anyToken, [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], [isNonJsxSameLineTokenContext, isNotPropertyAccessOnIntegerLiteral], RuleAction.DeleteSpace),
             rule("NoSpaceAfterDot", [SyntaxKind.DotToken, SyntaxKind.QuestionDotToken], anyToken, [isNonJsxSameLineTokenContext], RuleAction.DeleteSpace),
 
             rule("NoSpaceBetweenImportParenInImportType", SyntaxKind.ImportKeyword, SyntaxKind.OpenParenToken, [isNonJsxSameLineTokenContext, isImportTypeContext], RuleAction.DeleteSpace),
@@ -149,6 +149,7 @@ namespace ts.formatting {
                 "SpaceAfterCertainTypeScriptKeywords",
                 [
                     SyntaxKind.AbstractKeyword,
+                    SyntaxKind.AccessorKeyword,
                     SyntaxKind.ClassKeyword,
                     SyntaxKind.DeclareKeyword,
                     SyntaxKind.DefaultKeyword,
@@ -410,23 +411,23 @@ namespace ts.formatting {
     }
 
     function isOptionEnabled(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-        return (context) => context.options && context.options.hasOwnProperty(optionName) && !!context.options[optionName];
+        return (context) => context.options && hasProperty(context.options, optionName) && !!context.options[optionName];
     }
 
     function isOptionDisabled(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-        return (context) => context.options && context.options.hasOwnProperty(optionName) && !context.options[optionName];
+        return (context) => context.options && hasProperty(context.options, optionName) && !context.options[optionName];
     }
 
     function isOptionDisabledOrUndefined(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-        return (context) => !context.options || !context.options.hasOwnProperty(optionName) || !context.options[optionName];
+        return (context) => !context.options || !hasProperty(context.options, optionName) || !context.options[optionName];
     }
 
     function isOptionDisabledOrUndefinedOrTokensOnSameLine(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-        return (context) => !context.options || !context.options.hasOwnProperty(optionName) || !context.options[optionName] || context.TokensAreOnSameLine();
+        return (context) => !context.options || !hasProperty(context.options, optionName) || !context.options[optionName] || context.TokensAreOnSameLine();
     }
 
     function isOptionEnabledOrUndefined(optionName: keyof FormatCodeSettings): (context: FormattingContext) => boolean {
-        return (context) => !context.options || !context.options.hasOwnProperty(optionName) || !!context.options[optionName];
+        return (context) => !context.options || !hasProperty(context.options, optionName) || !!context.options[optionName];
     }
 
     function isForContext(context: FormattingContext): boolean {
@@ -449,6 +450,7 @@ namespace ts.formatting {
             case SyntaxKind.TypePredicate:
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
+            case SyntaxKind.SatisfiesExpression:
                 return true;
 
             // equals in binding elements: function foo([[x, y] = [1, 2]])
@@ -730,10 +732,10 @@ namespace ts.formatting {
     }
 
     function nodeIsInDecoratorContext(node: Node): boolean {
-        while (isExpressionNode(node)) {
+        while (node && isExpression(node)) {
             node = node.parent;
         }
-        return node.kind === SyntaxKind.Decorator;
+        return node && node.kind === SyntaxKind.Decorator;
     }
 
     function isStartOfVariableDeclarationList(context: FormattingContext): boolean {
@@ -891,5 +893,11 @@ namespace ts.formatting {
 
     function isSemicolonInsertionContext(context: FormattingContext): boolean {
         return positionIsASICandidate(context.currentTokenSpan.end, context.currentTokenParent, context.sourceFile);
+    }
+
+    function isNotPropertyAccessOnIntegerLiteral(context: FormattingContext): boolean {
+        return !isPropertyAccessExpression(context.contextNode)
+            || !isNumericLiteral(context.contextNode.expression)
+            || context.contextNode.expression.getText().indexOf(".") !== -1;
     }
 }

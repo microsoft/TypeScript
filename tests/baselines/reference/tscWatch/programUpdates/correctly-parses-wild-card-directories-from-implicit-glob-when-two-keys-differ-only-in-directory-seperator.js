@@ -61,23 +61,23 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/f1.ts (computed .d.ts during emit)
 /user/username/projects/myproject/f2.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/f1.ts:
-  {"fileName":"/user/username/projects/myproject/f1.ts","pollingInterval":250}
-/user/username/projects/myproject/f2.ts:
-  {"fileName":"/user/username/projects/myproject/f2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/f1.ts:
+  {}
+/user/username/projects/myproject/f2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -116,15 +116,27 @@ export declare const y = 1;
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./f1.ts": {
+        "original": {
+          "version": "-10906998252-export const x = 1",
+          "signature": "-7495133367-export declare const x = 1;\n"
+        },
         "version": "-10906998252-export const x = 1",
         "signature": "-7495133367-export declare const x = 1;\n"
       },
       "./f2.ts": {
+        "original": {
+          "version": "-10905812331-export const y = 1",
+          "signature": "-6203665398-export declare const y = 1;\n"
+        },
         "version": "-10905812331-export const y = 1",
         "signature": "-6203665398-export declare const y = 1;\n"
       }
@@ -190,25 +202,25 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/new-file.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/f1.ts:
-  {"fileName":"/user/username/projects/myproject/f1.ts","pollingInterval":250}
-/user/username/projects/myproject/f2.ts:
-  {"fileName":"/user/username/projects/myproject/f2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-/user/username/projects/myproject/new-file.ts:
-  {"fileName":"/user/username/projects/myproject/new-file.ts","pollingInterval":250}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/f1.ts:
+  {}
+/user/username/projects/myproject/f2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/new-file.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -226,19 +238,35 @@ exitCode:: ExitStatus.undefined
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./f1.ts": {
+        "original": {
+          "version": "-10906998252-export const x = 1",
+          "signature": "-7495133367-export declare const x = 1;\n"
+        },
         "version": "-10906998252-export const x = 1",
         "signature": "-7495133367-export declare const x = 1;\n"
       },
       "./f2.ts": {
+        "original": {
+          "version": "-10905812331-export const y = 1",
+          "signature": "-6203665398-export declare const y = 1;\n"
+        },
         "version": "-10905812331-export const y = 1",
         "signature": "-6203665398-export declare const y = 1;\n"
       },
       "./new-file.ts": {
+        "original": {
+          "version": "-11960320495-export const z = 1;",
+          "signature": "-9207164725-export declare const z = 1;\n"
+        },
         "version": "-11960320495-export const z = 1;",
         "signature": "-9207164725-export declare const z = 1;\n"
       }
@@ -308,25 +336,25 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/f1.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/f1.ts:
-  {"fileName":"/user/username/projects/myproject/f1.ts","pollingInterval":250}
-/user/username/projects/myproject/f2.ts:
-  {"fileName":"/user/username/projects/myproject/f2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
-/user/username/projects/myproject/new-file.ts:
-  {"fileName":"/user/username/projects/myproject/new-file.ts","pollingInterval":250}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/f1.ts:
+  {}
+/user/username/projects/myproject/f2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/new-file.ts:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -350,19 +378,35 @@ exitCode:: ExitStatus.undefined
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./new-file.ts": {
+        "original": {
+          "version": "-11960320495-export const z = 1;",
+          "signature": "-9207164725-export declare const z = 1;\n"
+        },
         "version": "-11960320495-export const z = 1;",
         "signature": "-9207164725-export declare const z = 1;\n"
       },
       "./f1.ts": {
+        "original": {
+          "version": "1363236232-import { z } from \"./new-file\";export const x = 1",
+          "signature": "-7495133367-export declare const x = 1;\n"
+        },
         "version": "1363236232-import { z } from \"./new-file\";export const x = 1",
         "signature": "-7495133367-export declare const x = 1;\n"
       },
       "./f2.ts": {
+        "original": {
+          "version": "-10905812331-export const y = 1",
+          "signature": "-6203665398-export declare const y = 1;\n"
+        },
         "version": "-10905812331-export const y = 1",
         "signature": "-6203665398-export declare const y = 1;\n"
       }

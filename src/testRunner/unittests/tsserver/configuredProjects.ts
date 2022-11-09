@@ -25,7 +25,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([configFile, libFile, file1, file2, file3]);
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             const { configFileName, configFileErrors } = projectService.openClientFile(file1.path);
 
             assert(configFileName, "should find config file");
@@ -57,7 +57,7 @@ namespace ts.projectSystem {
             };
 
             const host = createServerHost([configFile, libFile, file1, file2, file3]);
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             const { configFileName, configFileErrors } = projectService.openClientFile(file1.path);
 
             assert(configFileName, "should find config file");
@@ -84,7 +84,7 @@ namespace ts.projectSystem {
 
             const host = createServerHost([libFile, commonFile1, commonFile2]);
 
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             projectService.openClientFile(commonFile1.path);
             projectService.openClientFile(commonFile2.path);
 
@@ -105,7 +105,7 @@ namespace ts.projectSystem {
                 content: `{}`
             };
             const host = createServerHost([commonFile1, libFile, configFile]);
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             projectService.openClientFile(commonFile1.path);
 
             // add a new ts file
@@ -537,7 +537,7 @@ namespace ts.projectSystem {
 
             const files = [file1, file2, file3, file4];
             const host = createServerHost(files.concat(configFile));
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             projectService.openClientFile(file1.path);
             projectService.openClientFile(file2.path);
@@ -577,6 +577,7 @@ namespace ts.projectSystem {
                 content: "let zz = 1;"
             };
             host.writeFile(file5.path, file5.content);
+            projectService.testhost.baselineHost("File5 written");
             projectService.openClientFile(file5.path);
 
             baselineTsserverLogs("configuredProjects", "Open ref of configured project when open file gets added to the project as part of configured file update", projectService);
@@ -793,7 +794,7 @@ declare var console: {
 };`
             };
             const host = createServerHost([barConfig, barIndex, fooConfig, fooIndex, barSymLink, lib2017, libDom]);
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs() });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([fooIndex, barIndex], session);
             verifyGetErrRequest({ session, host, files: [barIndex, fooIndex] });
             baselineTsserverLogs("configuredProjects", "when multiple projects are open detects correct default project", session);
@@ -851,7 +852,7 @@ declare var console: {
                 ]);
                 const session = createSession(host, {
                     canUseEvents: true,
-                    logger: createLoggerWithInMemoryLogs(),
+                    logger: createLoggerWithInMemoryLogs(host),
                 });
                 session.executeCommandSeq<protocol.OpenRequest>({
                     command: protocol.CommandTypes.Open,
@@ -1017,7 +1018,7 @@ foo();`
                 };
 
                 const host = createServerHost([alphaExtendedConfig, aConfig, aFile, bravoExtendedConfig, bConfig, bFile, ...(additionalFiles || emptyArray)]);
-                const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+                const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
                 return { host, projectService, aFile, bFile, aConfig, bConfig, alphaExtendedConfig, bravoExtendedConfig };
             }
 
@@ -1178,7 +1179,7 @@ foo();`
             };
             const files = [file1, file2a, configFile, libFile];
             const host = createServerHost(files);
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             projectService.openClientFile(file1.path);
 
             host.writeFile(file2.path, file2.content);
@@ -1217,7 +1218,7 @@ foo();`
             nonLibFiles.forEach(f => f.path = root + f.path);
             const files = nonLibFiles.concat(libFile);
             const host = createServerHost(files);
-            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs() });
+            const projectService = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             projectService.openClientFile(file1.path);
             baselineTsserverLogs("configuredProjects", "failed lookup locations uses parent most node_modules directory", projectService);
         });

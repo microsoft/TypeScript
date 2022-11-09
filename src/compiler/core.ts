@@ -789,7 +789,8 @@ namespace ts {
             array.splice(~insertIndex, 0, insert);
             return true;
         }
-        else if (allowDuplicates) {
+
+        if (allowDuplicates) {
             array.splice(insertIndex, 0, insert);
             return true;
         }
@@ -1115,6 +1116,13 @@ namespace ts {
         return array && array.length === 1
             ? array[0]
             : undefined;
+    }
+
+    /**
+     * Returns the only element of an array if it contains only one element; throws otherwise.
+     */
+    export function single<T>(array: readonly T[]): T {
+        return Debug.checkDefined(singleOrUndefined(array));
     }
 
     /**
@@ -1929,8 +1937,10 @@ namespace ts {
         return compareValues(a?.start, b?.start) || compareValues(a?.length, b?.length);
     }
 
-    export function min<T>(a: T, b: T, compare: Comparer<T>): T {
-        return compare(a, b) === Comparison.LessThan ? a : b;
+    export function min<T>(items: readonly [T, ...T[]], compare: Comparer<T>): T;
+    export function min<T>(items: readonly T[], compare: Comparer<T>): T | undefined;
+    export function min<T>(items: readonly T[], compare: Comparer<T>): T | undefined {
+        return reduceLeft(items, (x, y) => compare(x, y) === Comparison.LessThan ? x : y);
     }
 
     /**
@@ -2363,6 +2373,9 @@ namespace ts {
         return (arg: T) => f(arg) && g(arg);
     }
 
+    export function or<P, R1 extends P, R2 extends P>(f1: (p1: P) => p1 is R1, f2: (p2: P) => p2 is R2): (p: P) => p is R1 | R2;
+    export function or<P, R1 extends P, R2 extends P, R3 extends P>(f1: (p1: P) => p1 is R1, f2: (p2: P) => p2 is R2, f3: (p3: P) => p3 is R3): (p: P) => p is R1 | R2 | R3;
+    export function or<T extends unknown[], U>(...fs: ((...args: T) => U)[]): (...args: T) => U;
     export function or<T extends unknown[], U>(...fs: ((...args: T) => U)[]): (...args: T) => U {
         return (...args) => {
             let lastResult: U;

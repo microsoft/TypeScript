@@ -36,7 +36,7 @@ namespace ts {
         }
 
         private assertHasRealPosition(message?: string) {
-            // eslint-disable-next-line debug-assert
+            // eslint-disable-next-line local/debug-assert
             Debug.assert(!positionIsSynthesized(this.pos) && !positionIsSynthesized(this.end), message || "Node must have a real position for this operation");
         }
 
@@ -511,7 +511,7 @@ namespace ts {
             return !!(this.flags & TypeFlags.UnionOrIntersection);
         }
         isLiteral(): this is LiteralType {
-            return !!(this.flags & TypeFlags.StringOrNumberLiteral);
+            return !!(this.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.BigIntLiteral));
         }
         isStringLiteral(): this is StringLiteralType {
             return !!(this.flags & TypeFlags.StringLiteral);
@@ -1300,7 +1300,7 @@ namespace ts {
 
             // Get a fresh cache of the host information
             const newSettings = host.getCompilationSettings() || getDefaultCompilerOptions();
-            const hasInvalidatedResolution: HasInvalidatedResolution = host.hasInvalidatedResolution || returnFalse;
+            const hasInvalidatedResolutions: HasInvalidatedResolutions = host.hasInvalidatedResolutions || returnFalse;
             const hasChangedAutomaticTypeDirectiveNames = maybeBind(host, host.hasChangedAutomaticTypeDirectiveNames);
             const projectReferences = host.getProjectReferences?.();
             let parsedCommandLines: ESMap<Path, ParsedCommandLine | false> | undefined;
@@ -1332,7 +1332,7 @@ namespace ts {
                 },
                 onReleaseOldSourceFile,
                 onReleaseParsedCommandLine,
-                hasInvalidatedResolution,
+                hasInvalidatedResolutions,
                 hasChangedAutomaticTypeDirectiveNames,
                 trace: maybeBind(host, host.trace),
                 resolveModuleNames: maybeBind(host, host.resolveModuleNames),
@@ -1363,8 +1363,13 @@ namespace ts {
                 onUnRecoverableConfigFileDiagnostic: noop,
             };
 
+            // The call to isProgramUptoDate below may refer back to documentRegistryBucketKey;
+            // calculate this early so it's not undefined if downleveled to a var (or, if emitted
+            // as a const variable without downleveling, doesn't crash).
+            const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
+
             // If the program is already up-to-date, we can reuse it
-            if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), fileName => compilerHost!.fileExists(fileName), hasInvalidatedResolution, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
+            if (isProgramUptoDate(program, rootFileNames, newSettings, (_path, fileName) => host.getScriptVersion(fileName), fileName => compilerHost!.fileExists(fileName), hasInvalidatedResolutions, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 return;
             }
 
@@ -1374,7 +1379,6 @@ namespace ts {
             // the program points to old source files that have been invalidated because of
             // incremental parsing.
 
-            const documentRegistryBucketKey = documentRegistry.getKeyForCompilationSettings(newSettings);
             const options: CreateProgramOptions = {
                 rootNames: rootFileNames,
                 options: newSettings,
@@ -2072,7 +2076,8 @@ namespace ts {
             const sourceFile = getValidSourceFile(args.fileName);
             const formatContext = formatting.getFormatContext(formatOptions, host);
 
-            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences, args.skipDestructiveCodeActions);
+            const mode = args.mode ?? (args.skipDestructiveCodeActions ? OrganizeImportsMode.SortAndCombine : OrganizeImportsMode.All);
+            return OrganizeImports.organizeImports(sourceFile, formatContext, host, program, preferences, mode);
         }
 
         function getEditsForFileRename(oldFilePath: string, newFilePath: string, formatOptions: FormatCodeSettings, preferences: UserPreferences = emptyOptions): readonly FileTextChanges[] {

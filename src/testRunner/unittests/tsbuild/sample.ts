@@ -154,6 +154,23 @@ namespace ts {
                 ]
             });
 
+            verifyTscWithEdits({
+                scenario: "sample1",
+                subScenario: "when declarationMap changes",
+                fs: () => projFs,
+                commandLineArgs: ["--b", "/src/tests", "--verbose"],
+                edits: [
+                    {
+                        subScenario: "Disable declarationMap",
+                        modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", `"declarationMap": true,`, `"declarationMap": false,`),
+                    },
+                    {
+                        subScenario: "Enable declarationMap",
+                        modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", `"declarationMap": false,`, `"declarationMap": true,`),
+                    },
+                ]
+            });
+
             verifyTsc({
                 scenario: "sample1",
                 subScenario: "indicates that it would skip builds during a dry build",
@@ -166,6 +183,21 @@ namespace ts {
                 subScenario: "rebuilds from start if force option is set",
                 fs: getSampleFsAfterBuild,
                 commandLineArgs: ["--b", "/src/tests", "--verbose", "--force"],
+            });
+
+            verifyTscWithEdits({
+                scenario: "sample1",
+                subScenario: "tsbuildinfo has error",
+                fs: () => loadProjectFromFiles({
+                    "/src/project/main.ts": "export const x = 10;",
+                    "/src/project/tsconfig.json": "{}",
+                    "/src/project/tsconfig.tsbuildinfo": "Some random string",
+                }),
+                commandLineArgs: ["--b", "src/project", "-i", "-v"],
+                edits: [{
+                    subScenario: "tsbuildinfo written has error",
+                    modifyFs: fs => prependText(fs, "/src/project/tsconfig.tsbuildinfo", "Some random string"),
+                }]
             });
 
             verifyTscCompileLike(testTscCompileLike, {

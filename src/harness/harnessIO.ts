@@ -177,8 +177,6 @@ namespace Harness {
     }
 
     export const libFolder = "built/local/";
-    const tcServicesFileName = ts.combinePaths(libFolder, "typescriptServices.js");
-    export const tcServicesFile = IO.readFile(tcServicesFileName) + IO.newLine() + `//# sourceURL=${IO.resolvePath(tcServicesFileName)}`;
 
     export type SourceMapEmitterCallback = (
         emittedFile: string,
@@ -335,7 +333,7 @@ namespace Harness {
 
         export function setCompilerOptionsFromHarnessSetting(settings: TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
             for (const name in settings) {
-                if (settings.hasOwnProperty(name)) {
+                if (ts.hasProperty(settings, name)) {
                     const value = settings[name];
                     if (value === undefined) {
                         throw new Error(`Cannot have undefined value for compiler option '${name}'.`);
@@ -810,21 +808,14 @@ namespace Harness {
                         typeLines += ">" + formattedLine + "\r\n";
                     }
 
-                    // Preserve legacy behavior
-                    if (lastIndexWritten === undefined) {
-                        for (const codeLine of codeLines) {
-                            typeLines += codeLine + "\r\nNo type information for this code.";
+                    lastIndexWritten ??= -1;
+                    if (lastIndexWritten + 1 < codeLines.length) {
+                        if (!((lastIndexWritten + 1 < codeLines.length) && (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))) {
+                            typeLines += "\r\n";
                         }
+                        typeLines += codeLines.slice(lastIndexWritten + 1).join("\r\n");
                     }
-                    else {
-                        if (lastIndexWritten + 1 < codeLines.length) {
-                            if (!((lastIndexWritten + 1 < codeLines.length) && (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))) {
-                                typeLines += "\r\n";
-                            }
-                            typeLines += codeLines.slice(lastIndexWritten + 1).join("\r\n");
-                        }
-                        typeLines += "\r\n";
-                    }
+                    typeLines += "\r\n";
                     yield [checkDuplicatedFileName(unitName, dupeCase), Utils.removeTestPathPrefixes(typeLines)];
                 }
             }
@@ -1496,7 +1487,7 @@ namespace Harness {
 
     export function getConfigNameFromFileName(filename: string): "tsconfig.json" | "jsconfig.json" | undefined {
         const flc = ts.getBaseFileName(filename).toLowerCase();
-        return ts.find(["tsconfig.json" as "tsconfig.json", "jsconfig.json" as "jsconfig.json"], x => x === flc);
+        return ts.find(["tsconfig.json" as const, "jsconfig.json" as const], x => x === flc);
     }
 
     if (Error) (Error as any).stackTraceLimit = 100;

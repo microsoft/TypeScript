@@ -850,6 +850,9 @@ namespace ts {
                 case SyntaxKind.BindingElement:
                     bindBindingElementFlow(node as BindingElement);
                     break;
+                case SyntaxKind.Parameter:
+                    bindParameterFlow(node as ParameterDeclaration);
+                    break;
                 case SyntaxKind.ObjectLiteralExpression:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.PropertyAssignment:
@@ -1655,20 +1658,40 @@ namespace ts {
         }
 
         function bindBindingElementFlow(node: BindingElement) {
-            if (isBindingPattern(node.name)) {
-                // When evaluating a binding pattern, the initializer is evaluated before the binding pattern, per:
-                // - https://tc39.es/ecma262/#sec-destructuring-binding-patterns-runtime-semantics-iteratorbindinginitialization
-                //   - `BindingElement: BindingPattern Initializer?`
-                // - https://tc39.es/ecma262/#sec-runtime-semantics-keyedbindinginitialization
-                //   - `BindingElement: BindingPattern Initializer?`
-                bind(node.dotDotDotToken);
-                bind(node.propertyName);
-                bind(node.initializer);
-                bind(node.name);
+            // When evaluating a binding pattern, the initializer is evaluated before the binding pattern, per:
+            // - https://tc39.es/ecma262/#sec-destructuring-binding-patterns-runtime-semantics-iteratorbindinginitialization
+            //   - `BindingElement: BindingPattern Initializer?`
+            // - https://tc39.es/ecma262/#sec-runtime-semantics-keyedbindinginitialization
+            //   - `BindingElement: BindingPattern Initializer?`
+            bind(node.dotDotDotToken);
+            bind(node.propertyName);
+            bindInitializer(node.initializer);
+            bind(node.name);
+        }
+
+        function bindParameterFlow(node: ParameterDeclaration) {
+            bindEach(node.modifiers);
+            bind(node.dotDotDotToken);
+            bind(node.questionToken);
+            bind(node.type);
+            bindInitializer(node.initializer);
+            bind(node.name);
+        }
+
+        // a BindingElement/Parameter does not have side effects if initializers are not evaluated and used. (see GH#49759)
+        function bindInitializer(node: Expression | undefined) {
+            if (!node) {
+                return;
             }
-            else {
-                bindEachChild(node);
+            const entryFlow = currentFlow;
+            bind(node);
+            if (entryFlow === unreachableFlow || entryFlow === currentFlow) {
+                return;
             }
+            const exitFlow = createBranchLabel();
+            addAntecedent(exitFlow, entryFlow);
+            addAntecedent(exitFlow, currentFlow);
+            currentFlow = finishFlowLabel(exitFlow);
         }
 
         function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag) {
@@ -2709,7 +2732,10 @@ namespace ts {
         }
 
         function bindPropertyWorker(node: PropertyDeclaration | PropertySignature) {
-            return bindPropertyOrMethodOrAccessor(node, SymbolFlags.Property | (node.questionToken ? SymbolFlags.Optional : SymbolFlags.None), SymbolFlags.PropertyExcludes);
+            const isAutoAccessor = isAutoAccessorPropertyDeclaration(node);
+            const includes = isAutoAccessor ? SymbolFlags.Accessor : SymbolFlags.Property;
+            const excludes = isAutoAccessor ? SymbolFlags.AccessorExcludes : SymbolFlags.PropertyExcludes;
+            return bindPropertyOrMethodOrAccessor(node, includes | (node.questionToken ? SymbolFlags.Optional : SymbolFlags.None), excludes);
         }
 
         function bindAnonymousTypeWorker(node: TypeLiteralNode | MappedTypeNode | JSDocTypeLiteral) {
@@ -3018,7 +3044,7 @@ namespace ts {
                 return;
             }
             const rootExpr = getLeftmostAccessExpression(node.left);
-            if (isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)!?.flags & SymbolFlags.Alias) {
+            if (isIdentifier(rootExpr) && lookupSymbolForName(container, rootExpr.escapedText)?.flags! & SymbolFlags.Alias) {
                 return;
             }
             // Fix up parent pointers since we're going to use these nodes before we bind into them

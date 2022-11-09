@@ -45,6 +45,7 @@ Found 'package.json' at '/user/username/projects/myproject/package.json'.
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileA.ts 250 undefined Source file
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'node', 'require', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
 File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
@@ -105,31 +106,31 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.es2016.full.d.ts (used version)
 /user/username/projects/myproject/src/filea.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/src/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/src/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/filea.ts:
-  {"fileName":"/user/username/projects/myproject/src/fileA.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/src/fileb.mjs:
-  {"fileName":"/user/username/projects/myproject/src/fileB.mjs","pollingInterval":500}
-/a/lib/lib.es2016.full.d.ts:
-  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
+  {"pollingInterval":500}
 /user/username/projects/myproject/src/package.json:
-  {"fileName":"/user/username/projects/myproject/src/package.json","pollingInterval":250}
-/user/username/projects/myproject/package.json:
-  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/myproject/src/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/src/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/filea.ts:
+  {}
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -169,6 +170,7 @@ File '/user/username/projects/myproject/src/package.json' does not exist accordi
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'node', 'import', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
 File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mts' does not exist.
@@ -211,29 +213,29 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/src/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/src/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/filea.ts:
-  {"fileName":"/user/username/projects/myproject/src/fileA.ts","pollingInterval":250}
-/a/lib/lib.es2016.full.d.ts:
-  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/src/package.json:
-  {"fileName":"/user/username/projects/myproject/src/package.json","pollingInterval":250}
-/user/username/projects/myproject/package.json:
-  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/myproject/src/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/src/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/filea.ts:
+  {}
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -271,6 +273,7 @@ File '/user/username/projects/myproject/src/package.json' does not exist accordi
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'node', 'require', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
 File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
@@ -318,31 +321,31 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/src/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/src/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/filea.ts:
-  {"fileName":"/user/username/projects/myproject/src/fileA.ts","pollingInterval":250}
-/a/lib/lib.es2016.full.d.ts:
-  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/src/package.json:
-  {"fileName":"/user/username/projects/myproject/src/package.json","pollingInterval":250}
-/user/username/projects/myproject/package.json:
-  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/myproject/src/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/src/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/src/fileb.mjs:
-  {"fileName":"/user/username/projects/myproject/src/fileB.mjs","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/filea.ts:
+  {}
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -415,33 +418,33 @@ Semantic diagnostics in builder refreshed for::
 
 No shapes updated in the builder::
 
-WatchedFiles::
-/user/username/projects/myproject/src/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/src/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/filea.ts:
-  {"fileName":"/user/username/projects/myproject/src/fileA.ts","pollingInterval":250}
-/a/lib/lib.es2016.full.d.ts:
-  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/src/package.json:
-  {"fileName":"/user/username/projects/myproject/src/package.json","pollingInterval":250}
-/user/username/projects/myproject/package.json:
-  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/myproject/src/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/src/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/src/fileb.mjs:
-  {"fileName":"/user/username/projects/myproject/src/fileB.mjs","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/package.json:
-  {"fileName":"/user/username/projects/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 
 FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/filea.ts:
+  {}
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -474,6 +477,7 @@ File '/user/username/projects/myproject/src/package.json' does not exist accordi
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'node', 'import', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
 File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/user/username/projects/myproject/src/fileB.mts' does not exist.
@@ -517,29 +521,29 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/src/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/src/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/filea.ts:
-  {"fileName":"/user/username/projects/myproject/src/fileA.ts","pollingInterval":250}
-/a/lib/lib.es2016.full.d.ts:
-  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/src/package.json:
-  {"fileName":"/user/username/projects/myproject/src/package.json","pollingInterval":250}
-/user/username/projects/myproject/package.json:
-  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/myproject/src/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/src/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/filea.ts:
+  {}
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -582,6 +586,7 @@ File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
+Resolving in CJS mode with conditions 'node', 'require', 'types'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
 File '/user/username/projects/myproject/src/fileB.mjs.ts' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
@@ -630,33 +635,33 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/filea.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/src/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/src/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/src/filea.ts:
-  {"fileName":"/user/username/projects/myproject/src/fileA.ts","pollingInterval":250}
-/a/lib/lib.es2016.full.d.ts:
-  {"fileName":"/a/lib/lib.es2016.full.d.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/src/package.json:
-  {"fileName":"/user/username/projects/myproject/src/package.json","pollingInterval":250}
-/user/username/projects/myproject/package.json:
-  {"fileName":"/user/username/projects/myproject/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/myproject/src/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/src/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/myproject/src/fileb.mjs:
-  {"fileName":"/user/username/projects/myproject/src/fileB.mjs","pollingInterval":500}
+  {"pollingInterval":500}
 /user/username/projects/package.json:
-  {"fileName":"/user/username/projects/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 
 FsWatches::
+/user/username/projects/myproject/src/tsconfig.json:
+  {}
+/user/username/projects/myproject/src/filea.ts:
+  {}
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
+/a/lib/lib.es2016.full.d.ts:
+  {}
+/user/username/projects/myproject/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/src:
-  {"directoryName":"/user/username/projects/myproject/src"}
+  {}
 
 exitCode:: ExitStatus.undefined
 

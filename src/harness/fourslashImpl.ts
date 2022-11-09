@@ -1,4 +1,3 @@
-
 namespace FourSlash {
     import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
@@ -529,8 +528,8 @@ namespace FourSlash {
             }
         }
 
-        public verifyOrganizeImports(newContent: string) {
-            const changes = this.languageService.organizeImports({ fileName: this.activeFile.fileName, type: "file" }, this.formatCodeSettings, ts.emptyOptions);
+        public verifyOrganizeImports(newContent: string, mode?: ts.OrganizeImportsMode) {
+            const changes = this.languageService.organizeImports({ fileName: this.activeFile.fileName, type: "file", mode }, this.formatCodeSettings, ts.emptyOptions);
             this.applyChanges(changes);
             this.verifyFileContent(this.activeFile.fileName, newContent);
         }
@@ -1452,7 +1451,7 @@ namespace FourSlash {
                 const sort = (locations: readonly ts.RenameLocation[] | undefined) =>
                     locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || r1.textSpan.start - r2.textSpan.start);
                 assert.deepEqual(sort(references), sort(ranges.map((rangeOrOptions): ts.RenameLocation => {
-                    const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions }; // eslint-disable-line no-in-operator
+                    const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions }; // eslint-disable-line local/no-in-operator
                     const { contextRangeIndex, contextRangeDelta, contextRangeId } = (range.marker && range.marker.data || {}) as RangeMarkerData;
                     let contextSpan: ts.TextSpan | undefined;
                     if (contextRangeDelta !== undefined) {
@@ -2737,7 +2736,7 @@ namespace FourSlash {
                 const identifier = this.classificationToIdentifier(a.classificationType as number);
                 const text = this.activeFile.content.slice(a.textSpan.start, a.textSpan.start + a.textSpan.length);
                 replacement.push(`    c2.semanticToken("${identifier}", "${text}"), `);
-            };
+            }
             replacement.push(");");
 
             throw new Error("You need to change the source code of fourslash test to use replaceWithSemanticClassifications");
@@ -2747,6 +2746,13 @@ namespace FourSlash {
             // const testfile = fs.readFileSync(testfilePath, "utf8");
             // const newfile = testfile.replace("verify.replaceWithSemanticClassifications(\"2020\")", replacement.join("\n"));
             // fs.writeFileSync(testfilePath, newfile);
+        }
+
+        public verifyEncodedSyntacticClassificationsLength(expected: number) {
+            const actual = this.languageService.getEncodedSyntacticClassifications(this.activeFile.fileName, ts.createTextSpan(0, this.activeFile.content.length));
+            if (actual.spans.length !== expected) {
+                this.raiseError(`encodedSyntacticClassificationsLength failed - expected total spans to be ${expected} got ${actual.spans.length}`);
+            }
         }
 
         public verifyEncodedSemanticClassificationsLength(format: ts.SemanticClassificationFormat, expected: number) {
@@ -3474,8 +3480,18 @@ namespace FourSlash {
 
         public verifyRefactorAvailable(negative: boolean, triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string) {
             let refactors = this.getApplicableRefactorsAtSelection(triggerReason);
-            refactors = refactors.filter(r =>
-                r.name === name && (actionName === undefined || r.actions.some(a => a.name === actionName)) && (actionDescription === undefined || r.actions.some(a => a.description === actionDescription)));
+            refactors = refactors.filter(r => r.name === name);
+
+            if (actionName !== undefined) {
+                refactors.forEach(r => r.actions = r.actions.filter(a => a.name === actionName));
+            }
+
+            if (actionDescription !== undefined) {
+                refactors.forEach(r => r.actions = r.actions.filter(a => a.description === actionDescription));
+            }
+
+            refactors = refactors.filter(r => r.actions.length > 0);
+
             const isAvailable = refactors.length > 0;
 
             if (negative) {
@@ -3916,7 +3932,7 @@ namespace FourSlash {
             return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, preferences, triggerReason, kind);
         }
         private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string): readonly ts.ApplicableRefactorInfo[] {
-            return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason, kind); // eslint-disable-line no-in-operator
+            return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason, kind); // eslint-disable-line local/no-in-operator
         }
         private getApplicableRefactorsWorker(positionOrRange: number | ts.TextRange, fileName: string, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason, kind?: string): readonly ts.ApplicableRefactorInfo[] {
             return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences, triggerReason, kind) || ts.emptyArray;

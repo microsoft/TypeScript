@@ -9,13 +9,6 @@ namespace ts {
     });
 
     describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in config file", () => {
-        function discrepancyExplanation() {
-            return [
-                "During incremental build, tsbuildinfo is not emitted, so declaration option is not present",
-                "Clean build has declaration option in tsbuildinfo",
-            ];
-        }
-
         verifyTscWithEdits({
             scenario: "configFileErrors",
             subScenario: "reports syntax errors in config file",
@@ -39,14 +32,16 @@ namespace ts {
                     modifyFs: fs => replaceText(fs, "/src/tsconfig.json", ",", `,
         "declaration": true,`),
                     subScenario: "reports syntax errors after change to config file",
-                    discrepancyExplanation
+                    discrepancyExplanation: () => [
+                        "During incremental build, tsbuildinfo is not emitted, so declaration option is not present",
+                        "Clean build has declaration option in tsbuildinfo",
+                    ],
                 },
                 {
                     modifyFs: fs => appendText(fs, "/src/a.ts", "export function fooBar() { }"),
                     subScenario: "reports syntax errors after change to ts file",
-                    discrepancyExplanation,
                 },
-                { ...noChangeRun, discrepancyExplanation },
+                noChangeRun,
                 {
                     modifyFs: fs => fs.writeFileSync(
                         "/src/tsconfig.json",

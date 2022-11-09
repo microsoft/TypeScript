@@ -15,12 +15,14 @@ namespace ts {
     // > alphanumerics and hyphen [0-9A-Za-z-]. Identifiers MUST NOT be empty. Numeric identifiers
     // > MUST NOT include leading zeroes.
     const prereleaseRegExp = /^(?:0|[1-9]\d*|[a-z-][a-z0-9-]*)(?:\.(?:0|[1-9]\d*|[a-z-][a-z0-9-]*))*$/i;
+    const prereleasePartRegExp = /^(?:0|[1-9]\d*|[a-z-][a-z0-9-]*)$/i;
 
     // https://semver.org/#spec-item-10
     // > Build metadata MAY be denoted by appending a plus sign and a series of dot separated
     // > identifiers immediately following the patch or pre-release version. Identifiers MUST
     // > comprise only ASCII alphanumerics and hyphen [0-9A-Za-z-]. Identifiers MUST NOT be empty.
     const buildRegExp = /^[a-z0-9-]+(?:\.[a-z0-9-]+)*$/i;
+    const buildPartRegExp = /^[a-z0-9-]+$/i;
 
     // https://semver.org/#spec-item-9
     // > Numeric identifiers MUST NOT include leading zeroes.
@@ -30,7 +32,7 @@ namespace ts {
      * Describes a precise semantic version number, https://semver.org
      */
     export class Version {
-        static readonly zero = new Version(0, 0, 0);
+        static readonly zero = new Version(0, 0, 0, ["0"]);
 
         readonly major: number;
         readonly minor: number;
@@ -39,8 +41,8 @@ namespace ts {
         readonly build: readonly string[];
 
         constructor(text: string);
-        constructor(major: number, minor?: number, patch?: number, prerelease?: string, build?: string);
-        constructor(major: number | string, minor = 0, patch = 0, prerelease = "", build = "") {
+        constructor(major: number, minor?: number, patch?: number, prerelease?: string | readonly string[], build?: string | readonly string[]);
+        constructor(major: number | string, minor = 0, patch = 0, prerelease: string | readonly string[] = "", build: string | readonly string[] = "") {
             if (typeof major === "string") {
                 const result = Debug.checkDefined(tryParseComponents(major), "Invalid version");
                 ({ major, minor, patch, prerelease, build } = result);
@@ -49,13 +51,18 @@ namespace ts {
             Debug.assert(major >= 0, "Invalid argument: major");
             Debug.assert(minor >= 0, "Invalid argument: minor");
             Debug.assert(patch >= 0, "Invalid argument: patch");
-            Debug.assert(!prerelease || prereleaseRegExp.test(prerelease), "Invalid argument: prerelease");
-            Debug.assert(!build || buildRegExp.test(build), "Invalid argument: build");
+
+            const prereleaseArray = prerelease ? isArray(prerelease) ? prerelease : prerelease.split(".") : emptyArray;
+            const buildArray = build ? isArray(build) ? build : build.split(".") : emptyArray;
+
+            Debug.assert(every(prereleaseArray, s => prereleasePartRegExp.test(s)), "Invalid argument: prerelease");
+            Debug.assert(every(buildArray, s => buildPartRegExp.test(s)), "Invalid argument: build");
+
             this.major = major;
             this.minor = minor;
             this.patch = patch;
-            this.prerelease = prerelease ? prerelease.split(".") : emptyArray;
-            this.build = build ? build.split(".") : emptyArray;
+            this.prerelease = prereleaseArray;
+            this.build = buildArray;
         }
 
         static tryParse(text: string) {
@@ -94,6 +101,17 @@ namespace ts {
                 case "patch": return new Version(this.major, this.minor, this.patch + 1);
                 default: return Debug.assertNever(field);
             }
+        }
+
+        with(fields: { major?: number, minor?: number, patch?: number, prerelease?: string | readonly string[], build?: string | readonly string[] }) {
+            const {
+                major = this.major,
+                minor = this.minor,
+                patch = this.patch,
+                prerelease = this.prerelease,
+                build = this.build
+            } = fields;
+            return new Version(major, minor, patch, prerelease, build);
         }
 
         toString() {
@@ -184,6 +202,10 @@ namespace ts {
             return undefined;
         }
 
+        /**
+         * Tests whether a version matches the range. This is equivalent to `satisfies(version, range, { includePrerelease: true })`.
+         * in `node-semver`.
+         */
         test(version: Version | string) {
             if (typeof version === "string") version = new Version(version);
             return testDisjunction(version, this._alternatives);
@@ -311,20 +333,22 @@ namespace ts {
                     break;
                 case "<":
                 case ">=":
-                    comparators.push(createComparator(operator, version));
+                    comparators.push(
+                        isWildcard(minor) || isWildcard(patch) ? createComparator(operator, version.with({ prerelease: "0" })) :
+                        createComparator(operator, version));
                     break;
                 case "<=":
                 case ">":
                     comparators.push(
-                        isWildcard(minor) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("major")) :
-                        isWildcard(patch) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("minor")) :
+                        isWildcard(minor) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("major").with({ prerelease: "0" })) :
+                        isWildcard(patch) ? createComparator(operator === "<=" ? "<" : ">=", version.increment("minor").with({ prerelease: "0" })) :
                         createComparator(operator, version));
                     break;
                 case "=":
                 case undefined:
                     if (isWildcard(minor) || isWildcard(patch)) {
-                        comparators.push(createComparator(">=", version));
-                        comparators.push(createComparator("<", version.increment(isWildcard(minor) ? "major" : "minor")));
+                        comparators.push(createComparator(">=", version.with({ prerelease: "0" })));
+                        comparators.push(createComparator("<", version.increment(isWildcard(minor) ? "major" : "minor").with({ prerelease: "0" })));
                     }
                     else {
                         comparators.push(createComparator("=", version));

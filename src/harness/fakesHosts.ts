@@ -41,6 +41,7 @@ namespace fakes {
         }
 
         public write(message: string) {
+            if (ts.Debug.isDebugging) console.log(message);
             this.output.push(message);
         }
 
@@ -506,7 +507,8 @@ ${indentText}${text}`;
         sys.readFile = (path, encoding) => {
             const value = originalReadFile.call(sys, path, encoding);
             if (!value || !ts.isBuildInfoFile(path)) return value;
-            const buildInfo = ts.getBuildInfo(value);
+            const buildInfo = ts.getBuildInfo(path, value);
+            if (!buildInfo) return value;
             ts.Debug.assert(buildInfo.version === version);
             buildInfo.version = ts.version;
             return ts.getBuildInfoText(buildInfo);
@@ -519,10 +521,14 @@ ${indentText}${text}`;
         sys.write = msg => originalWrite.call(sys, msg.replace(ts.version, version));
         const originalWriteFile = sys.writeFile;
         sys.writeFile = (fileName: string, content: string, writeByteOrderMark: boolean) => {
-            if (!ts.isBuildInfoFile(fileName)) return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
-            const buildInfo = ts.getBuildInfo(content);
-            buildInfo.version = version;
-            originalWriteFile.call(sys, fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
+            if (ts.isBuildInfoFile(fileName)) {
+                const buildInfo = ts.getBuildInfo(fileName, content);
+                if (buildInfo) {
+                    buildInfo.version = version;
+                    return originalWriteFile.call(sys, fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
+                }
+            }
+            return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
         };
         return sys;
     }

@@ -262,7 +262,7 @@ namespace ts {
                     if (file.packageJsonScope) {
                         (result ??= []).push(chainDiagnosticMessages(
                             /*details*/ undefined,
-                            file.packageJsonScope.packageJsonContent.type ?
+                            file.packageJsonScope.contents.packageJsonContent.type ?
                                 Diagnostics.File_is_CommonJS_module_because_0_has_field_type_whose_value_is_not_module :
                                 Diagnostics.File_is_CommonJS_module_because_0_does_not_have_field_type,
                             toFileName(last(file.packageJsonLocations!), fileNameConvertor)
@@ -596,26 +596,18 @@ namespace ts {
         const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
         const hostGetNewLine = memoize(() => host.getNewLine());
         return {
-            getSourceFile: (fileName, languageVersionOrOptions, onError) => {
-                let text: string | undefined;
-                try {
-                    performance.mark("beforeIORead");
-                    text = host.readFile(fileName, getCompilerOptions().charset);
-                    performance.mark("afterIORead");
-                    performance.measure("I/O Read", "beforeIORead", "afterIORead");
-                }
-                catch (e) {
-                    if (onError) {
-                        onError(e.message);
-                    }
-                    text = "";
-                }
-
-                return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions) : undefined;
-            },
+            getSourceFile: createGetSourceFile(
+                (fileName, encoding) => host.readFile(fileName, encoding),
+                getCompilerOptions,
+                /*setParentNodes*/ undefined
+            ),
             getDefaultLibLocation: maybeBind(host, host.getDefaultLibLocation),
             getDefaultLibFileName: options => host.getDefaultLibFileName(options),
-            writeFile,
+            writeFile: createWriteFileMeasuringIO(
+                (path, data, writeByteOrderMark) => host.writeFile!(path, data, writeByteOrderMark),
+                path => host.createDirectory!(path),
+                path => host.directoryExists!(path)
+            ),
             getCurrentDirectory: memoize(() => host.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
             getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
@@ -632,40 +624,52 @@ namespace ts {
             disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
             storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
         };
+    }
 
-        function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
-            try {
-                performance.mark("beforeIOWrite");
-
-                // NOTE: If patchWriteFileEnsuringDirectory has been called,
-                // the host.writeFile will do its own directory creation and
-                // the ensureDirectoriesExist call will always be redundant.
-                writeFileEnsuringDirectories(
-                    fileName,
-                    text,
-                    writeByteOrderMark,
-                    (path, data, writeByteOrderMark) => host.writeFile!(path, data, writeByteOrderMark),
-                    path => host.createDirectory!(path),
-                    path => host.directoryExists!(path));
-
-                performance.mark("afterIOWrite");
-                performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
-            }
-            catch (e) {
-                if (onError) {
-                    onError(e.message);
+    export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "createHash">, text: string) {
+        // If text can contain the sourceMapUrl ignore sourceMapUrl for calcualting hash
+        if (text.match(sourceMapCommentRegExpDontCareLineStart)) {
+            let lineEnd = text.length;
+            let lineStart = lineEnd;
+            for (let pos = lineEnd - 1; pos >= 0; pos--) {
+                const ch = text.charCodeAt(pos);
+                switch (ch) {
+                    case CharacterCodes.lineFeed:
+                        if (pos && text.charCodeAt(pos - 1) === CharacterCodes.carriageReturn) {
+                            pos--;
+                        }
+                    // falls through
+                    case CharacterCodes.carriageReturn:
+                        break;
+                    default:
+                        if (ch < CharacterCodes.maxAsciiCharacter || !isLineBreak(ch)) {
+                            lineStart = pos;
+                            continue;
+                        }
+                        break;
                 }
+                // This is start of the line
+                const line = text.substring(lineStart, lineEnd);
+                if (line.match(sourceMapCommentRegExp)) {
+                    text = text.substring(0, lineStart);
+                    break;
+                }
+                // If we see a non-whitespace/map comment-like line, break, to avoid scanning up the entire file
+                else if (!line.match(whitespaceOrMapCommentRegExp)){
+                    break;
+                }
+                lineEnd = lineStart;
             }
         }
+        return (host.createHash || generateDjb2Hash)(text);
     }
 
     export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: { createHash?(data: string): string; }) {
         const originalGetSourceFile = compilerHost.getSourceFile;
-        const computeHash = maybeBind(host, host.createHash) || generateDjb2Hash;
         compilerHost.getSourceFile = (...args) => {
             const result = originalGetSourceFile.call(compilerHost, ...args);
             if (result) {
-                result.version = computeHash(result.text);
+                result.version = getSourceFileVersionAsHashFromText(host, result.text);
             }
             return result;
         };

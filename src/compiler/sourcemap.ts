@@ -69,7 +69,7 @@ namespace ts {
             return sourceIndex;
         }
 
-        /* eslint-disable boolean-trivia, no-null/no-null */
+        /* eslint-disable local/boolean-trivia, no-null/no-null */
         function setSourceContent(sourceIndex: number, content: string | null) {
             enter();
             if (content !== null) {
@@ -81,7 +81,7 @@ namespace ts {
             }
             exit();
         }
-        /* eslint-enable boolean-trivia, no-null/no-null */
+        /* eslint-enable local/boolean-trivia, no-null/no-null */
 
         function addName(name: string) {
             enter();
@@ -322,9 +322,10 @@ namespace ts {
     }
 
     // Sometimes tools can see the following line as a source mapping url comment, so we mangle it a bit (the [M])
-    const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\r?\n?$/;
+    export const sourceMapCommentRegExpDontCareLineStart = /\/\/[@#] source[M]appingURL=(.+)\r?\n?$/;
+    export const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\r?\n?$/;
 
-    const whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
+    export const whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
 
     export interface LineInfo {
         getLineCount(): number;

@@ -790,6 +790,8 @@ namespace ts {
     }
 
     export function getContextualTypeFromParentOrAncestorTypeNode(node: Expression, checker: TypeChecker): Type | undefined {
+        if (node.flags & (NodeFlags.JSDoc & ~NodeFlags.JavaScriptFile)) return undefined;
+
         const contextualType = getContextualTypeFromParent(node, checker);
         if (contextualType) return contextualType;
 
@@ -1659,7 +1661,7 @@ namespace ts {
     /**
      * Returns true if the cursor at position in sourceFile is within a comment.
      *
-     * @param tokenAtPosition Must equal `getTokenAtPosition(sourceFile, position)
+     * @param tokenAtPosition Must equal `getTokenAtPosition(sourceFile, position)`
      * @param predicate Additional predicate to test on the comment range.
      */
     export function isInComment(sourceFile: SourceFile, position: number, tokenAtPosition?: Node): CommentRange | undefined {
@@ -2522,7 +2524,7 @@ namespace ts {
      * and code fixes (because those are triggered by explicit user actions).
      */
     export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true): T {
-        const clone = node && getSynthesizedDeepCloneWorker(node as NonNullable<T>);
+        const clone = node && getSynthesizedDeepCloneWorker(node);
         if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
         return clone;
     }
@@ -3419,6 +3421,10 @@ namespace ts {
 
     export function jsxModeNeedsExplicitImport(jsx: JsxEmit | undefined) {
         return jsx === JsxEmit.React || jsx === JsxEmit.ReactNative;
+    }
+
+    export function isSourceFileFromLibrary(program: Program, node: SourceFile) {
+        return program.isSourceFileFromExternalLibrary(node) || program.isSourceFileDefaultLibrary(node);
     }
 
     // #endregion
