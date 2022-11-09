@@ -21,13 +21,13 @@ declare module "./reexport" {
 >Root : Root
 
         A,
->A : Root
+>A : Root.A
 
         B,
->B : Root
+>B : Root.B
 
         C
->C : Root
+>C : Root.C
     }
 }
 
@@ -39,11 +39,11 @@ declare const f: ns.Root.Foo;
 const g: ns.Root = ns.Root.A;
 >g : ns.Root
 >ns : any
->ns.Root.A : ns.Root
+>ns.Root.A : ns.Root.A
 >ns.Root : typeof ns.Root
 >ns : typeof ns
 >Root : typeof ns.Root
->A : ns.Root
+>A : ns.Root.A
 
 f.x;
 >f.x : number
