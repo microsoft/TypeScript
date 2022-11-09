@@ -65,7 +65,6 @@
         "esnext.intl",
         "decorators",
         "decorators.legacy",
-        "decorators.parameters",
         // Default libraries
         "es5.full",
         "es2015.full",

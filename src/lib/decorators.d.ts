@@ -22,7 +22,7 @@ type DecoratorContext =
  * @template Class The type of the decorated class associated with this context.
  */
 interface ClassDecoratorContext<
-    Class extends abstract new (...args: any) => any = abstract new (...args: any) => any
+    Class extends abstract new (...args: any) => any = abstract new (...args: any) => any,
 > {
     /** The kind of element that was decorated. */
     readonly kind: "class";
@@ -49,52 +49,6 @@ interface ClassDecoratorContext<
      */
     addInitializer(initializer: (this: Class) => void): void;
 }
-
-/**
- * Describes a function that can be used to decorate a class.
- * @template Overrides Constrains the context to specific values for `name`.
- * @template Class The constructor type of the class.
- */
-type ClassDecoratorFunction<
-    Overrides extends { name?: string | undefined } = {},
-    Class extends abstract new (...args: any) => any = abstract new (...args: any) => any
-> =
-    /**
-     * Describes a function that can be used to decorate a class.
-     * @param target The decorated class constructor.
-     * @param context Additional context about the decorated class.
-     * @returns A replacement class constructor, or `undefined`.
-     */
-    (
-        target: Class,
-        context: ClassDecoratorContext<Class> & Overrides
-    ) => Class | void;
-
-// NOTE: If decorators eventually support type mutation, we will use this definition instead:
-// /**
-//  * Describes a function that can be used to decorate a class.
-//  * @template Overrides Constrains the context to specific values for `name`.
-//  * @template In The input constructor type of the class.
-//  * @template Out The output constructor type of the class.
-//  * @template Final The final constructor type of the class.
-//  * @remarks Decorators do not currently support type mutation, so `In`, `Out`, and `Final` should be the same type.
-//  */
-// type ClassDecoratorFunction<
-//     Overrides extends { name?: string | undefined } = {},
-//     In extends abstract new (...args: any) => any = abstract new (...args: any) => any,
-//     Out extends In = In,
-//     Final extends Out = Out,
-// > =
-//     /**
-//      * Describes a function that can be used to decorate a class.
-//      * @param target The decorated class constructor.
-//      * @param context Additional context about the decorated class.
-//      * @returns A replacement class constructor, or `undefined`.
-//      */
-//     (
-//         target: In,
-//         context: ClassDecoratorContext<Final> & Overrides
-//     ) => Out | void;
 
 /**
  * Context provided to a class method decorator.
@@ -157,56 +111,6 @@ interface ClassMethodDecoratorContext<
 }
 
 /**
- * Describes a function that can be used to decorate a class method.
- * @template Overrides Constrains the context to specific values for `name`, `private`, and `static`.
- * @template This The `this` type of the decorated class element.
- * @template Value The function type of the class method.
- */
-type ClassMethodDecoratorFunction<
-    Overrides extends { name?: string | symbol, private?: boolean, static?: boolean } = {},
-    This = unknown,
-    Value extends (this: This, ...args: any) => any = (this: This, ...args: any) => any
-> =
-    /**
-     * Describes a function that can be used to decorate a class method.
-     * @param target The function for the decorated class method.
-     * @param context Additional context about the decorated class method.
-     * @returns A replacement function, or `undefined`.
-     */
-    (
-        target: Value,
-        context: ClassMethodDecoratorContext<This, Value> & Overrides
-    ) => Value | void;
-
-// NOTE: If decorators eventually support type mutation, we will use this definition instead:
-// /**
-//  * Describes a function that can be used to decorate a class method.
-//  * @template Overrides Constrains the context to specific values for `name`, `private`, and `static`.
-//  * @template This The final `this` type of the decorated class element.
-//  * @template In The input function type of the class method.
-//  * @template Out The output function type of the class method.
-//  * @template Final The final function type of the class method.
-//  * @remarks Decorators do not currently support type mutation, so `In`, `Out`, and `Final` should be the same type.
-//  */
-// type ClassMethodDecoratorFunction<
-//     Overrides extends { name?: string | symbol, private?: boolean, static?: boolean } = {},
-//     This = unknown,
-//     In extends (this: This, ...args: any) => any = (this: This, ...args: any) => any,
-//     Out extends In = In,
-//     Final extends Out = Out,
-// > =
-//     /**
-//      * Describes a function that can be used to decorate a class method.
-//      * @param target The function for the decorated class method.
-//      * @param context Additional context about the decorated class method.
-//      * @returns A replacement function, or `undefined`.
-//      */
-//     (
-//         target: In,
-//         context: ClassMethodDecoratorContext<This, Final> & Overrides
-//     ) => Out | void;
-
-/**
  * Context provided to a class getter decorator.
  * @template This The type on which the class element will be defined. For a static class element, this will be
  * the type of the constructor. For a non-static class element, this will be the type of the instance.
@@ -248,56 +152,6 @@ interface ClassGetterDecoratorContext<
 }
 
 /**
- * Describes a function that can be used to decorate a class getter.
- * @template Overrides Constrains the context to specific values for `name`, `private`, and `static`.
- * @template This The `this` type of the decorated class element.
- * @template Value The property type of the class getter.
- */
-type ClassGetterDecoratorFunction<
-    Overrides extends { name?: string | symbol, private?: boolean, static?: boolean } = {},
-    This = unknown,
-    Value = unknown,
-> =
-    /**
-     * Describes a function that can be used to decorate a class getter.
-     * @param target The getter function for the decorated class getter.
-     * @param context Additional context about the decorated class getter.
-     * @returns A replacement getter function, or `undefined`.
-     */
-    (
-        target: (this: This) => Value,
-        context: ClassGetterDecoratorContext<This, Value> & Overrides
-    ) => ((this: This) => Value) | void;
-
-// NOTE: If decorators eventually support type mutation, we will use this definition instead:
-// /**
-//  * Describes a function that can be used to decorate a class getter.
-//  * @template Overrides Constrains the context to specific values for `name`, `private`, and `static`.
-//  * @template This The final `this` type of the decorated class element.
-//  * @template In The input property type of the class getter.
-//  * @template Out The output property type of the class getter.
-//  * @template Final The final property type of the class getter.
-//  * @remarks Decorators do not currently support type mutation, so `In`, `Out`, and `Final` should be the same type.
-//  */
-// type ClassGetterDecoratorFunction<
-//     Overrides extends { name?: string | symbol, private?: boolean, static?: boolean } = {},
-//     This = unknown,
-//     In = unknown,
-//     Out extends In = In,
-//     Final extends Out = Out,
-// > =
-//     /**
-//      * Describes a function that can be used to decorate a class getter.
-//      * @param target The getter function for the decorated class getter.
-//      * @param context Additional context about the decorated class getter.
-//      * @returns A replacement getter function, or `undefined`.
-//      */
-//     (
-//         target: (this: This) => In,
-//         context: ClassGetterDecoratorContext<This, Final> & Overrides
-//     ) => ((this: This) => Out) | void;
-
-/**
  * Context provided to a class setter decorator.
  * @template This The type on which the class element will be defined. For a static class element, this will be
  * the type of the constructor. For a non-static class element, this will be the type of the instance.
@@ -337,57 +191,6 @@ interface ClassSetterDecoratorContext<
      */
     addInitializer(initializer: (this: This) => void): void;
 }
-
-/**
- * Describes a function that can be used to decorate a class setter.
- * @template Overrides Constrains the context to specific values for `name`, `private`, and `static`.
- * @template This The `this` type of the decorated class element.
- * @template Value The property type of the class setter.
- * @remarks Decorators do not currently support type mutation, so `In`, `Out`, and `Final` should be the same type.
- */
-type ClassSetterDecoratorFunction<
-    Overrides extends { name?: string | symbol, private?: boolean, static?: boolean } = {},
-    This = unknown,
-    Value = unknown,
-> =
-    /**
-     * Describes a function that can be used to decorate a class setter.
-     * @param target The setter function for the decorated class setter.
-     * @param context Additional context about the decorated class setter.
-     * @returns A replacement setter function, or `undefined`.
-     */
-    (
-        target: (this: This, value: Value) => void,
-        context: ClassSetterDecoratorContext<This, Value> & Overrides
-    ) => ((this: This, value: Value) => void) | void;
-
-// NOTE: If decorators eventually support type mutation, we will use this definition instead:
-// /**
-//  * Describes a function that can be used to decorate a class setter.
-//  * @template Overrides Constrains the context to specific values for `name`, `private`, and `static`.
-//  * @template This The final `this` type of the decorated class element.
-//  * @template In The input property type of the class setter.
-//  * @template Out The output property type of the class setter.
-//  * @template Final The final property type of the class setter.
-//  * @remarks Decorators do not currently support type mutation, so `In`, `Out`, and `Final` should be the same type.
-//  */
-// type ClassSetterDecoratorFunction<
-//     Overrides extends { name?: string | symbol, private?: boolean, static?: boolean } = {},
-//     This = unknown,
-//     In = unknown,
-//     Out extends In = In,
-//     Final extends Out = Out,
-// > =
-//     /**
-//      * Describes a function that can be used to decorate a class setter.
-//      * @param target The setter function for the decorated class setter.
-//      * @param context Additional context about the decorated class setter.
-//      * @returns A replacement setter function, or `undefined`.
-//      */
-//     (
-//         target: (this: This, value: In) => void,
-//         context: ClassSetterDecoratorContext<This, Final> & Overrides
-//     ) => ((this: This, value: Out) => void) | void;
 
 /**
  * Context provided to a class `accessor` field decorator.
@@ -486,57 +289,6 @@ interface ClassAccessorDecoratorResult<This, Value> {
 }
 
 /**
- * Describes a function that can be used to decorate a class `accessor` field.
- * @template Overrides Constrains the context to specific values for `name`, `private`, and `static`.
- * @template This The `this` type of the decorated class element.
- * @template Value The property type of the class `accessor` field.
- * @remarks Decorators do not currently support type mutation, so `In`, `Out`, and `Final` should be the same type.
- */
-type ClassAccessorDecoratorFunction<
-    Overrides extends { name?: string | symbol, private?: boolean, static?: boolean } = {},
-    This = unknown,
-    Value = unknown,
-> =
-    /**
-     * Describes a function that can be used to decorate a class `accessor` field.
-     * @param target The {@link ClassAccessorDecoratorTarget} the decorated class `accessor` field.
-     * @param context Additional context about the decorated class `accessor` field.
-     * @returns A {@link ClassAccessorDecoratorResult} that is used to replace the getter or setter or to inject an initializer mutator, or `undefined` to use the existing getter and setter.
-     */
-    (
-        target: ClassAccessorDecoratorTarget<This, Value>,
-        context: ClassAccessorDecoratorContext<This, Value> & Overrides
-    ) => ClassAccessorDecoratorResult<This, Value> | void;
-
-// NOTE: If decorators eventually support type mutation, we will use this definition instead:
-// /**
-//  * Describes a function that can be used to decorate a class `accessor` field.
-//  * @template Overrides Constrains the context to specific values for `name`, `private`, and `static`.
-//  * @template This The final `this` type of the decorated class element.
-//  * @template In The input property type of the class `accessor` field.
-//  * @template Out The output property type of the class `accessor` field.
-//  * @template Final The final property type of the class `accessor` field.
-//  * @remarks Decorators do not currently support type mutation, so `In`, `Out`, and `Final` should be the same type.
-//  */
-// type ClassAccessorDecoratorFunction<
-//     Overrides extends { name?: string | symbol, private?: boolean, static?: boolean } = {},
-//     This = unknown,
-//     In = unknown,
-//     Out extends In = In,
-//     Final extends Out = Out,
-// > =
-//     /**
-//      * Describes a function that can be used to decorate a class `accessor` field.
-//      * @param target The {@link ClassAccessorDecoratorTarget} the decorated class `accessor` field.
-//      * @param context Additional context about the decorated class `accessor` field.
-//      * @returns A {@link ClassAccessorDecoratorResult} that is used to replace the getter or setter or to inject an initializer mutator, or `undefined` to use the existing getter and setter.
-//      */
-//     (
-//         target: ClassAccessorDecoratorTarget<This, In>,
-//         context: ClassAccessorDecoratorContext<This, Final> & Overrides
-//     ) => ClassAccessorDecoratorResult<This, Out> | void;
-
-/**
  * Context provided to a class field decorator.
  * @template This The type on which the class element will be defined. For a static class element, this will be
  * the type of the constructor. For a non-static class element, this will be the type of the instance.
@@ -578,54 +330,3 @@ interface ClassFieldDecoratorContext<
      */
     addInitializer(initializer: (this: This) => void): void;
 }
-
-/**
- * Describes a function that can be used to decorate a class field.
- * @template Overrides Constrains the context to specific values for `name`, `private`, and `static`.
- * @template This The `this` type of the decorated class element.
- * @template Value The property type of the class field.
- * @remarks Decorators do not currently support type mutation, so `In`, `Out`, and `Final` should be the same type.
- */
-type ClassFieldDecoratorFunction<
-    Overrides extends { name?: string | symbol, private?: boolean, static?: boolean } = {},
-    This = unknown,
-    Value = unknown,
-> =
-    /**
-     * Describes a function that can be used to decorate a class field.
-     * @param target Class field decorators always receive `undefined`.
-     * @param context Additional context about the decorated class field.
-     * @returns An initializer mutator function, or `undefined`.
-     */
-    (
-        target: undefined,
-        context: ClassFieldDecoratorContext<This, Value> & Overrides
-    ) => ((this: This, initialValue: Value) => Value) | void;
-
-// NOTE: If decorators eventually support type mutation, we will use this definition instead:
-// /**
-//  * Describes a function that can be used to decorate a class field.
-//  * @template Overrides Constrains the context to specific values for `name`, `private`, and `static`.
-//  * @template This The final `this` type of the decorated class element.
-//  * @template In The input property type of the class field.
-//  * @template Out The output property type of the class field.
-//  * @template Final The final property type of the class field.
-//  * @remarks Decorators do not currently support type mutation, so `In`, `Out`, and `Final` should be the same type.
-//  */
-// type ClassFieldDecoratorFunction<
-//     Overrides extends { name?: string | symbol, private?: boolean, static?: boolean } = {},
-//     This = unknown,
-//     In = unknown,
-//     Out extends In = In,
-//     Final extends Out = Out,
-// > =
-//     /**
-//      * Describes a function that can be used to decorate a class field.
-//      * @param target Class field decorators always receive `undefined`.
-//      * @param context Additional context about the decorated class field.
-//      * @returns An initializer mutator function, or `undefined`.
-//      */
-//     (
-//         target: undefined,
-//         context: ClassFieldDecoratorContext<This, Final> & Overrides
-//     ) => ((this: This, initialValue: In) => Out) | void;
