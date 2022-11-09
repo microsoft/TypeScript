@@ -141,7 +141,7 @@ const localize = task({
     dependencies: [generateDiagnostics],
     run: async () => {
         if (needsUpdate(diagnosticMessagesGeneratedJson, generatedLCGFile)) {
-            return exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
+            await exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
         }
     }
 });
@@ -386,7 +386,7 @@ export const dtsServices = task({
     dependencies: [buildServices],
     run: async () => {
         if (needsUpdate("./built/local/typescript/tsconfig.tsbuildinfo", ["./built/local/typescript.d.ts", "./built/local/typescript.internal.d.ts"])) {
-            runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/typescript.d.ts");
+            await runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/typescript.d.ts");
         }
     },
 });
