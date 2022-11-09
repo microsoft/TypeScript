@@ -320,7 +320,7 @@ function entrypointBuildTask(options) {
             const outDir = path.dirname(options.output);
             await fs.promises.mkdir(outDir, { recursive: true });
             const moduleSpecifier = path.relative(outDir, options.builtEntrypoint);
-            await fs.promises.writeFile(options.output, `module.exports = require("./${moduleSpecifier}")`);
+            await fs.promises.writeFile(options.output, `module.exports = require("./${moduleSpecifier.replace(/[\\/]/g, "/")}")`);
         },
     });
 
@@ -354,7 +354,7 @@ function entrypointBuildTask(options) {
 }
 
 
-const { main: tsc, watch: watchTsc } = entrypointBuildTask({
+const { main: tsc, build: buildTsc, watch: watchTsc } = entrypointBuildTask({
     name: "tsc",
     description: "Builds the command-line compiler",
     buildDeps: [generateDiagnostics],
@@ -392,7 +392,7 @@ export const dtsServices = task({
 });
 
 
-const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
+const { main: tsserver, build: buildTsserver, watch: watchTsserver } = entrypointBuildTask({
     name: "tsserver",
     description: "Builds the language server",
     buildDeps: [generateDiagnostics],
@@ -410,10 +410,15 @@ const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
 export { tsserver, watchTsserver };
 
 
+const buildMin = task({
+    name: "build-min",
+    dependencies: [buildTsc, buildTsserver],
+});
+
 export const min = task({
     name: "min",
     description: "Builds only tsc and tsserver",
-    dependencies: [tsc, tsserver],
+    dependencies: [tsc, tsserver].concat(cmdLineOptions.typecheck ? [buildMin] : []),
 });
 
 export const watchMin = task({
@@ -577,10 +582,15 @@ export const watchOtherOutputs = task({
     dependencies: [watchCancellationToken, watchTypingsInstaller, watchWatchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
 });
 
+const buildLocal = task({
+    name: "build-local",
+    dependencies: [buildTsc, buildTsserver, buildServices, buildLssl]
+});
+
 export const local = task({
     name: "local",
     description: "Builds the full compiler and services",
-    dependencies: [localize, tsc, tsserver, services, lssl, otherOutputs, dts, buildSrc],
+    dependencies: [localize, tsc, tsserver, services, lssl, otherOutputs, dts].concat(cmdLineOptions.typecheck ? [buildLocal] : []),
 });
 export default local;
 
@@ -591,11 +601,12 @@ export const watchLocal = task({
     dependencies: [localize, watchTsc, watchTsserver, watchServices, watchLssl, watchOtherOutputs, dts, watchSrc],
 });
 
+const runtestsDeps = [tests, generateLibs].concat(cmdLineOptions.typecheck ? [dts, buildSrc] : []);
 
 export const runTests = task({
     name: "runtests",
     description: "Runs the tests using the built run.js file.",
-    dependencies: [tests, generateLibs, dts, buildSrc],
+    dependencies: runtestsDeps,
     run: () => runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false),
 });
 // task("runtests").flags = {
@@ -617,7 +628,7 @@ export const runTests = task({
 export const runTestsParallel = task({
     name: "runtests-parallel",
     description: "Runs all the tests in parallel using the built run.js file.",
-    dependencies: [tests, generateLibs, dts, buildSrc],
+    dependencies: runtestsDeps,
     run: () => runConsoleTests(testRunner, "min", /*runInParallel*/ cmdLineOptions.workers > 1),
 });
 // task("runtests-parallel").flags = {
