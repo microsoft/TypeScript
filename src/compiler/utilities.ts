@@ -7776,6 +7776,10 @@ const allSupportedExtensions: readonly Extension[][] = [[Extension.Ts, Extension
 const allSupportedExtensionsWithJson: readonly Extension[][] = [...allSupportedExtensions, [Extension.Json]];
 /** @internal */
 export const supportedDeclarationExtensions: readonly Extension[] = [Extension.Dts, Extension.Dcts, Extension.Dmts];
+/** @internal */
+export const supportedTSImplementationExtensions: readonly Extension[] = [Extension.Ts, Extension.Cts, Extension.Mts, Extension.Tsx];
+/** @internal */
+export const supportedImplementationExtensions: readonly Extension[] = [...supportedTSImplementationExtensions, ...supportedJSExtensionsFlat];
 
 /** @internal */
 export function getSupportedExtensions(options?: CompilerOptions): readonly Extension[][];

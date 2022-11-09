@@ -273,7 +273,7 @@ describe("unittests:: Reuse program structure:: General", () => {
                 [
                     "======== Resolving module 'a' from 'file1.ts'. ========",
                     "Explicitly specified module resolution kind: 'NodeJs'.",
-                    "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.",
+                    "Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.",
                     "File 'node_modules/a/package.json' does not exist.",
                     "File 'node_modules/a.ts' does not exist.",
                     "File 'node_modules/a.tsx' does not exist.",
@@ -284,7 +284,7 @@ describe("unittests:: Reuse program structure:: General", () => {
                     "File 'node_modules/@types/a/package.json' does not exist.",
                     "File 'node_modules/@types/a.d.ts' does not exist.",
                     "File 'node_modules/@types/a/index.d.ts' does not exist.",
-                    "Loading module 'a' from 'node_modules' folder, target file type 'JavaScript'.",
+                    "Loading module 'a' from 'node_modules' folder, target file types: JavaScript.",
                     "File 'node_modules/a/package.json' does not exist according to earlier cached lookups.",
                     "File 'node_modules/a.js' does not exist.",
                     "File 'node_modules/a.jsx' does not exist.",
@@ -306,7 +306,7 @@ describe("unittests:: Reuse program structure:: General", () => {
                 [
                     "======== Resolving module 'a' from 'file1.ts'. ========",
                     "Explicitly specified module resolution kind: 'NodeJs'.",
-                    "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.",
+                    "Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.",
                     "File 'node_modules/a/package.json' does not exist.",
                     "File 'node_modules/a.ts' does not exist.",
                     "File 'node_modules/a.tsx' does not exist.",
