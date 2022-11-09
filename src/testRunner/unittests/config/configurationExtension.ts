@@ -232,7 +232,6 @@ describe("unittests:: config:: configurationExtension", () => {
         function testSuccess(name: string, entry: string, expected: ts.CompilerOptions, expectedFiles: string[]) {
             expected.configFilePath = entry;
             it(name, () => {
-                console.log(name);
                 const parsed = getParseCommandLine(entry);
                 assert(!parsed.errors.length, ts.flattenDiagnosticMessageText(parsed.errors[0] && parsed.errors[0].messageText, "\n"));
                 assert.deepEqual(parsed.options, expected);

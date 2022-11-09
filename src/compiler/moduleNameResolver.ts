@@ -1748,7 +1748,6 @@ export function getEntrypointsFromPackageJsonInfo(
     }
 
     let entrypoints: string[] | undefined;
-    // TODO: + Json?
     const extensions = Extensions.TypeScript | Extensions.Declaration | (resolveJs ? Extensions.JavaScript : 0);
     const features = getDefaultNodeResolutionFeatures(options);
     const requireState = getTemporaryModuleResolutionState(cache?.getPackageJsonInfoCache(), host, options);
@@ -1960,7 +1959,6 @@ function loadNodeModuleFromDirectoryWorker(extensions: Extensions, candidate: st
         }
 
         // Even if extensions is DtsOnly, we can still look up a .ts file as a result of package.json "types"
-        // TODO: what? Why even bother with DtsOnly?
         const expandedExtensions = extensions === Extensions.Declaration ? Extensions.TypeScript | Extensions.Declaration : extensions;
         // Don't do package.json lookup recursively, because Node.js' package lookup doesn't.
 
