@@ -173,7 +173,7 @@ export class Deferred {
 export class Debouncer {
     /**
      * @param {number} timeout
-     * @param {() => Promise<any>} action
+     * @param {() => Promise<any> | void} action
      */
     constructor(timeout, action) {
         this._timeout = timeout;

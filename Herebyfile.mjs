@@ -13,7 +13,7 @@ import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
 import esbuild from "esbuild";
 import chokidar from "chokidar";
-import { createInterface } from "readline";
+import { EventEmitter } from "events";
 
 const glob = util.promisify(_glob);
 
@@ -193,6 +193,7 @@ async function runDtsBundler(entrypoint, output) {
  * @property {string[]} [external]
  * @property {boolean} [exportIsTsObject]
  * @property {boolean} [treeShaking]
+ * @property {esbuild.WatchMode} [watchMode]
  */
 function createBundler(entrypoint, outfile, taskOptions = {}) {
     const getOptions = memoize(async () => {
@@ -271,7 +272,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
 
     return {
         build: async () => esbuild.build(await getOptions()),
-        watch: async () => esbuild.build({ ...await getOptions(), watch: true, logLevel: "info" }),
+        watch: async () => esbuild.build({ ...await getOptions(), watch: taskOptions.watchMode ?? true, logLevel: "info" }),
     };
 }
 
@@ -458,7 +459,7 @@ export const dts = task({
 
 
 const testRunner = "./built/local/run.js";
-
+const watchTestsEmitter = new EventEmitter();
 const { main: tests, watch: watchTests } = entrypointBuildTask({
     name: "tests",
     description: "Builds the test infrastructure",
@@ -478,7 +479,12 @@ const { main: tests, watch: watchTests } = entrypointBuildTask({
             "diff",
             "mocha",
             "ms",
-        ]
+        ],
+        watchMode: {
+            onRebuild() {
+                watchTestsEmitter.emit("rebuild");
+            }
+        }
     },
 });
 export { tests, watchTests };
@@ -629,35 +635,8 @@ export const runTestsAndWatch = task({
         let running = true;
         let testsChangedDeferred = /** @type {Deferred<void>} */(new Deferred());
         let testsChangedAbortController = new AbortController();
-        const testsChangedDebouncer = new Debouncer(1_000, async () => {
-            testsChangedDeferred.resolve();
-            testsChangedDeferred = /** @type {Deferred<void>} */(new Deferred());
-        });
 
-        // catch SIGINT to ensure we can kill the watcher
-        const rl = createInterface(process.stdin);
-        rl.on("SIGINT", () => {
-            if (running) {
-                console.log(chalk.yellowBright("[watch] aborting in-progress test run..."));
-            }
-
-            testsChangedAbortController.abort();
-            testRunnerWatcher.close();
-            testCaseWatcher.close();
-            watching = false;
-        });
-        process.on("beforeExit", () => {
-            console.log(chalk.yellowBright("[watch] exiting watch mode..."));
-        });
-
-        const testRunnerWatcher = chokidar.watch([
-            testRunner
-        ], {
-            ignoreInitial: true,
-            ignorePermissionErrors: true,
-            awaitWriteFinish: true,
-        });
-
+        const testsChangedDebouncer = new Debouncer(1_000, endRunTests);
         const testCaseWatcher = chokidar.watch([
             "tests/cases/**/*.*",
             "tests/lib/**/*.*",
@@ -668,49 +647,63 @@ export const runTestsAndWatch = task({
             awaitWriteFinish: true,
         });
 
-        const onChange = path => {
-            if (testsChangedDebouncer.empty) {
-                console.log(chalk.yellowBright(`[watch] tests changed due to '${path}', restarting...`));
-                if (running) {
-                    console.log(chalk.yellowBright("[watch] aborting in-progress test run..."));
-                }
-
-                testsChangedAbortController.abort();
-                testsChangedAbortController = new AbortController();
-            }
-
-            testsChangedDebouncer.enqueue();
-        };
-
-        testRunnerWatcher.on("change", path => onChange(path));
-        testCaseWatcher.on("all", (_eventName, path) => onChange(path));
-
-        const dirty = cmdLineOptions.dirty;
-        cmdLineOptions.dirty = true;
+        process.on("SIGINT", endWatchMode);
+        process.on("SIGKILL", endWatchMode);
+        process.on("beforeExit", endWatchMode);
+        watchTestsEmitter.on("rebuild", onRebuild);
+        testCaseWatcher.on("all", (_eventName, path) => beginRunTests(path));
 
         while (watching) {
             const promise = testsChangedDeferred.promise;
             const signal = testsChangedAbortController.signal;
-
-            if (!signal.aborted && !dirty) {
-                console.log(chalk.yellowBright(`[watch] cleaning test directories...`));
-                await cleanTestDirs();
-            }
-
             if (!signal.aborted) {
                 running = true;
                 try {
-                    console.log(chalk.yellowBright(`[watch] running tests...`));
-                    await runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, signal);
+                    await runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, { signal, watching: true });
                 }
                 catch {
                     // ignore
                 }
                 running = false;
             }
-
             if (watching) {
+                console.log(chalk.yellowBright(`[watch] test run complete, waiting for changes...`));
                 await promise;
+            }
+        }
+
+        function onRebuild() {
+            beginRunTests(testRunner);
+        }
+
+        /**
+         * @param {string} path
+         */
+        function beginRunTests(path) {
+            if (testsChangedDebouncer.empty) {
+                console.log(chalk.yellowBright(`[watch] tests changed due to '${path}', restarting...`));
+                if (running) {
+                    console.log(chalk.yellowBright("[watch] aborting in-progress test run..."));
+                }
+                testsChangedAbortController.abort();
+                testsChangedAbortController = new AbortController();
+            }
+
+            testsChangedDebouncer.enqueue();
+        }
+
+        function endRunTests() {
+            testsChangedDeferred.resolve();
+            testsChangedDeferred = /** @type {Deferred<void>} */(new Deferred());
+        }
+
+        function endWatchMode() {
+            if (watching) {
+                watching = false;
+                console.log(chalk.yellowBright("[watch] exiting watch mode..."));
+                testsChangedAbortController.abort();
+                testCaseWatcher.close();
+                watchTestsEmitter.off("rebuild", onRebuild);
             }
         }
     },
