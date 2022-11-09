@@ -320,7 +320,7 @@ export class TestServerEventManager {
             configFileName: "tsconfig.json",
             projectType: "configured",
             languageServiceEnabled: true,
-            version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+            version: ts.version,
             ...partial,
         });
     }

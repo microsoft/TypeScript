@@ -350,8 +350,6 @@ export abstract class TypingsInstaller {
         this.sendResponse({
             kind: EventBeginInstallTypes,
             eventId: requestId,
-            // qualified explicitly to prevent occasional shadowing
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
             typingsInstallerVersion: version,
             projectName: req.projectName
         } as BeginInstallTypes);
@@ -401,8 +399,6 @@ export abstract class TypingsInstaller {
                     projectName: req.projectName,
                     packagesToInstall: scopedTypings,
                     installSuccess: ok,
-                    // qualified explicitly to prevent occasional shadowing
-                    // eslint-disable-next-line @typescript-eslint/no-unnecessary-qualifier
                     typingsInstallerVersion: version
                 };
                 this.sendResponse(response);
