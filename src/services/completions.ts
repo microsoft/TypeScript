@@ -604,47 +604,11 @@ namespace ts.Completions {
         const switchType = checker.getTypeAtLocation(caseBlock.parent.expression);
         // >> TODO: handle unit type case?
         if (switchType && switchType.isUnion() && every(switchType.types, type => type.isLiteral())) {
-            const existingStrings = new Set<string>();
-            const existingNumbers = new Set<number>();
-            const existingBigInts = new Set<string>();
-
             // Collect constant values in existing clauses.
+            const tracker = newCaseClauseTracker(checker);
             for (const clause of clauses) {
-                if (isDefaultClause(clause)) {
-                    continue;
-                }
-                if (isLiteralExpression(clause.expression)) {
-                    const expression = clause.expression;
-                    switch (expression.kind) {
-                        case SyntaxKind.NoSubstitutionTemplateLiteral:
-                        case SyntaxKind.StringLiteral:
-                            existingStrings.add(expression.text);
-                            break;
-                        case SyntaxKind.NumericLiteral:
-                            existingNumbers.add(parseInt(expression.text)); // >> do we need to parse it??
-                            break;
-                        case SyntaxKind.BigIntLiteral:
-                            const parsedBigInt = parseBigInt(endsWith(expression.text, "n") ? expression.text.slice(0, -1) : expression.text);
-                            if (parsedBigInt) {
-                                existingBigInts.add(pseudoBigIntToString(parsedBigInt)); // >> does it work? answer: no
-                            }
-                            break;
-                    }
-                }
-                else {
-                    const symbol = checker.getSymbolAtLocation(clause.expression);
-                    if (symbol && symbol.valueDeclaration && isEnumMember(symbol.valueDeclaration)) {
-                        const enumValue = checker.getConstantValue(symbol.valueDeclaration);
-                        if (enumValue !== undefined) {
-                            switch (typeof enumValue) {
-                                case "string":
-                                    existingStrings.add(enumValue);
-                                    break;
-                                case "number":
-                                    existingNumbers.add(enumValue);
-                            }
-                        }
-                    }
+                if (!isDefaultClause(clause)) {
+                    tracker.addClause(clause);
                 }
             }
 
@@ -659,20 +623,10 @@ namespace ts.Completions {
                     // Filter existing enums by their values
                     const enumValue = type.symbol.valueDeclaration && checker.getConstantValue(type.symbol.valueDeclaration as EnumMember);
                     if (enumValue !== undefined) {
-                        switch (typeof enumValue) {
-                            case "string":
-                                if (existingStrings.has(enumValue)) {
-                                    continue;
-                                }
-                                existingStrings.add(enumValue);
-                                break;
-                            case "number":
-                                if (existingNumbers.has(enumValue)) {
-                                    continue;
-                                }
-                                existingNumbers.add(enumValue);
-                                break;
+                        if (tracker.hasValue(enumValue)) {
+                            continue;
                         }
+                        tracker.addValue(enumValue);
                     }
                     const typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, caseBlock, target);
                     if (!typeNode) {
@@ -685,24 +639,16 @@ namespace ts.Completions {
                     elements.push(expr);
                 }
                 // Literals
-                else {
+                else if (!tracker.hasValue(type.value)) {
                     switch (typeof type.value) {
                         case "object":
-                            // BigInt literal
-                            if (!existingBigInts.has(pseudoBigIntToString(type.value))) {
-                                elements.push(factory.createBigIntLiteral(type.value));
-                            }
+                            elements.push(factory.createBigIntLiteral(type.value));
                             break;
                         case "number":
-                            // number literal
-                            if (!existingNumbers.has(type.value)) {
-                                elements.push(factory.createNumericLiteral(type.value));
-                            }
+                            elements.push(factory.createNumericLiteral(type.value));
                             break;
                         case "string":
-                            if (!existingStrings.has(type.value)) {
-                                elements.push(factory.createStringLiteral(type.value));
-                            }
+                            elements.push(factory.createStringLiteral(type.value));
                             break;
                     }
                 }
@@ -746,6 +692,75 @@ namespace ts.Completions {
         }
 
         return undefined;
+    }
+
+    interface CaseClauseTracker {
+        addClause(clause: CaseClause): void;
+        addValue(value: string | number): void;
+        hasValue(value: string | number | PseudoBigInt): boolean;
+    }
+
+    function newCaseClauseTracker(checker: TypeChecker): CaseClauseTracker {
+        const existingStrings = new Set<string>();
+        const existingNumbers = new Set<number>();
+        const existingBigInts = new Set<string>();
+
+        return {
+            addValue,
+            addClause,
+            hasValue,
+        };
+
+        function addClause(clause: CaseClause) {
+            if (isLiteralExpression(clause.expression)) {
+                const expression = clause.expression;
+                switch (expression.kind) {
+                    case SyntaxKind.NoSubstitutionTemplateLiteral:
+                    case SyntaxKind.StringLiteral:
+                        existingStrings.add(expression.text);
+                        break;
+                    case SyntaxKind.NumericLiteral:
+                        existingNumbers.add(parseInt(expression.text)); // >> TODO: do we need to parse it??
+                        break;
+                    case SyntaxKind.BigIntLiteral:
+                        const parsedBigInt = parseBigInt(endsWith(expression.text, "n") ? expression.text.slice(0, -1) : expression.text);
+                        if (parsedBigInt) {
+                            existingBigInts.add(pseudoBigIntToString(parsedBigInt));
+                        }
+                        break;
+                }
+            }
+            else {
+                const symbol = checker.getSymbolAtLocation(clause.expression);
+                if (symbol && symbol.valueDeclaration && isEnumMember(symbol.valueDeclaration)) {
+                    const enumValue = checker.getConstantValue(symbol.valueDeclaration);
+                    if (enumValue !== undefined) {
+                        addValue(enumValue);
+                    }
+                }
+            }
+        }
+
+        function addValue(value: string | number) {
+            switch (typeof value) {
+                case "string":
+                    existingStrings.add(value);
+                    break;
+                case "number":
+                    existingNumbers.add(value);
+            }
+        }
+
+        function hasValue(value: string | number | PseudoBigInt): boolean {
+            switch (typeof value) {
+                case "string":
+                    return existingStrings.has(value);
+                case "number":
+                    return existingNumbers.has(value);
+                case "object":
+                    return existingBigInts.has(pseudoBigIntToString(value));
+            }
+        }
     }
 
     function typeNodeToExpression(typeNode: TypeNode, languageVersion: ScriptTarget): Expression | undefined {
