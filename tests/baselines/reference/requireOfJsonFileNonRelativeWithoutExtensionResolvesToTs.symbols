@@ -7,5 +7,5 @@ let fnumber: number = f;
 >f : Symbol(f, Decl(file1.ts, 0, 0))
 
 === /src/node_modules/f.ts ===
+
 export = 10;
-No type information for this code.

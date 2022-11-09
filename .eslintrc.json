@@ -10,7 +10,7 @@
         "es6": true
     },
     "plugins": [
-        "@typescript-eslint", "jsdoc", "no-null", "import", "eslint-plugin-local"
+        "@typescript-eslint", "no-null", "import", "eslint-plugin-local"
     ],
     "rules": {
         "@typescript-eslint/adjacent-overload-signatures": "error",
@@ -87,16 +87,13 @@
         "local/simple-indent": "error",
         "local/debug-assert": "error",
         "local/no-keywords": "error",
-        "local/one-namespace-per-file": "error",
+        "local/jsdoc-format": "error",
 
         // eslint-plugin-import
         "import/no-extraneous-dependencies": ["error", { "optionalDependencies": false }],
 
         // eslint-plugin-no-null
         "no-null/no-null": "error",
-
-        // eslint-plugin-jsdoc
-        "jsdoc/check-alignment": "error",
 
         // eslint
         "constructor-super": "error",
