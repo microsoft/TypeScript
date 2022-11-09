@@ -42,7 +42,7 @@ import {
     ObjectAssignmentElement, OmittedExpression, PrivateIdentifierAccessorDeclaration,
     PrivateIdentifierMethodDeclaration, setPrivateIdentifier, ShorthandPropertyAssignment, SpreadAssignment,
     SpreadElement, visitCommaListElements, Visitor, accessPrivateIdentifier as accessPrivateIdentifierCommon, Bundle,
-    isNamedEvaluation, AnonymousFunctionDefinition
+    isNamedEvaluation, AnonymousFunctionDefinition, ParameterDeclaration
 } from "../_namespaces/ts";
 
 const enum ClassPropertySubstitutionFlags {
@@ -281,6 +281,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return visitVariableStatement(node as VariableStatement);
             case SyntaxKind.VariableDeclaration:
                 return visitVariableDeclaration(node as VariableDeclaration);
+            case SyntaxKind.Parameter:
+                return visitParameterDeclaration(node as ParameterDeclaration);
             case SyntaxKind.BindingElement:
                 return visitBindingElement(node as BindingElement);
             case SyntaxKind.ExportAssignment:
@@ -473,7 +475,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         //        a. Let _popValue_ be ? NamedEvaluation of |AssignmentExpression| with argument _propKey_.
         //     ...
 
-        if (isNamedEvaluation(node.name, isAnonymousClassNeedingAssignedName)) {
+        if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
             const { referencedName, name } = visitReferencedPropertyName(node.name);
             const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, referencedName), isExpression);
             return factory.updatePropertyAssignment(node, name, initializer);
@@ -522,6 +524,41 @@ export function transformClassFields(context: TransformationContext): (x: Source
             const name = visitNode(node.name, visitor, isBindingName);
             const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
             return factory.updateVariableDeclaration(node, name, /*exclamationToken*/ undefined, /*type*/ undefined, initializer);
+        }
+
+        return visitEachChild(node, visitor, context);
+    }
+
+    function visitParameterDeclaration(node: ParameterDeclaration) {
+        // 8.6.3 RS: IteratorBindingInitialization
+        //   SingleNameBinding : BindingIdentifier Initializer?
+        //     ...
+        //     5. If |Initializer| is present and _v_ is *undefined*, then
+        //        a. If IsAnonymousFunctionDefinition(|Initializer|) is *true*, then
+        //           i. Set _v_ to ? NamedEvaluation of |Initializer| with argument _bindingId_.
+        //     ...
+        //
+        // 14.3.3.3 RS: KeyedBindingInitialization
+        //   SingleNameBinding : BindingIdentifier Initializer?
+        //     ...
+        //     4. If |Initializer| is present and _v_ is *undefined*, then
+        //        a. If IsAnonymousFunctionDefinition(|Initializer|) is *true*, then
+        //           i. Set _v_ to ? NamedEvaluation of |Initializer| with argument _bindingId_.
+        //     ...
+
+        if (isNamedEvaluation(node, isAnonymousClassNeedingAssignedName)) {
+            const assignedName = getAssignedNameOfIdentifier(node.name, node.initializer);
+            const name = visitNode(node.name, visitor, isBindingName);
+            const initializer = visitNode(node.initializer, node => namedEvaluationVisitor(node, assignedName), isExpression);
+            return factory.updateParameterDeclaration(
+                node,
+                /*modifiers*/ undefined,
+                /*dotDotDotToken*/ undefined,
+                name,
+                /*questionToken*/ undefined,
+                /*type*/ undefined,
+                initializer
+            );
         }
 
         return visitEachChild(node, visitor, context);

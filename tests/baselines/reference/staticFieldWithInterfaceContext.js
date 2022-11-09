@@ -60,6 +60,7 @@ function f(c) {
             }
             return class_3;
         }()),
+        __setFunctionName(_a, "c"),
         _a.x = { a: "a" },
         _a); }
 }
