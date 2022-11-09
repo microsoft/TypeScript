@@ -86,6 +86,33 @@ jobs:
     - name: Build src
       run: npx hereby build-src
 
+  smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: "*"
+        check-latest: true
+    - run:  npm ci
+
+    - run: npx hereby lkg
+    - run: |
+        npm pack
+        mv typescript*.tgz typescript.tgz
+        echo "PACKAGE=$PWD/typescript.tgz" >> $GITHUB_ENV
+
+    - name: Smoke test
+      run: |
+        cd "$(mktemp -d)"
+        npm init --yes
+        npm install $PACKAGE
+
+        npx tsc --version
+        echo '{"seq": 1, "command": "status"}' | npx tsserver
+        node -e 'console.log(require("typescript").version)'
+        node -e 'console.log(require("typescript/lib/tsserverlibrary").version)'
 
   misc:
     runs-on: ubuntu-latest
