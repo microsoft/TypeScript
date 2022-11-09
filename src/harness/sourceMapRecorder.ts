@@ -328,7 +328,7 @@ export function getSourceMapRecord(sourceMapDataList: readonly ts.SourceMapEmitR
 export function getSourceMapRecordWithSystem(sys: ts.System, sourceMapFile: string) {
     const sourceMapRecorder = new Compiler.WriterAggregator();
     let prevSourceFile: documents.TextDocument | undefined;
-    const files = new ts.Map<string, documents.TextDocument>();
+    const files = new Map<string, documents.TextDocument>();
     const sourceMap = ts.tryParseRawSourceMap(sys.readFile(sourceMapFile, "utf8")!);
     if (sourceMap) {
         const mapDirectory = ts.getDirectoryPath(sourceMapFile);

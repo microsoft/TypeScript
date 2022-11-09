@@ -3,7 +3,7 @@ import {
     EndOfLineState, forEachChild, getCombinedModifierFlags, getCombinedNodeFlags, getMeaningFromLocation,
     isBindingElement, isCallExpression, isCatchClause, isFunctionDeclaration, isIdentifier, isImportClause,
     isImportSpecifier, isInfinityOrNaNString, isJsxElement, isJsxExpression, isJsxSelfClosingElement, isNamespaceImport,
-    isPropertyAccessExpression, isQualifiedName, isSourceFile, isVariableDeclaration, Map, ModifierFlags,
+    isPropertyAccessExpression, isQualifiedName, isSourceFile, isVariableDeclaration, ModifierFlags,
     NamedDeclaration, Node, NodeFlags, ParameterDeclaration, Program, SemanticMeaning, SourceFile, Symbol, SymbolFlags,
     SyntaxKind, TextSpan, textSpanIntersectsWith, Type, TypeChecker, VariableDeclaration,
 } from "./_namespaces/ts";

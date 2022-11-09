@@ -11,7 +11,7 @@ import {
     getTextOfIdentifierOrLiteral, hasJSFileExtension, hasTSFileExtension, hostGetCanonicalFileName, Identifier,
     isAmbientModule, isApplicableVersionedTypesKey, isExternalModuleAugmentation, isExternalModuleNameRelative,
     isModuleBlock, isModuleDeclaration, isNonGlobalAmbientModule, isRootedDiskPath, isSourceFile, isString, JsxEmit,
-    map, Map, mapDefined, MapLike, matchPatternOrExact, min, ModuleDeclaration, ModuleKind, ModulePath,
+    map, mapDefined, MapLike, matchPatternOrExact, min, ModuleDeclaration, ModuleKind, ModulePath,
     ModuleResolutionHost, ModuleResolutionKind, ModuleSpecifierCache, ModuleSpecifierOptions,
     ModuleSpecifierResolutionHost, NodeFlags, NodeModulePathParts, normalizePath, Path, pathContainsNodeModules,
     pathIsBareSpecifier, pathIsRelative, PropertyAccessExpression, removeFileExtension, removeSuffix, resolvePath,
@@ -35,9 +35,9 @@ function getPreferences(host: ModuleSpecifierResolutionHost, { importModuleSpeci
     return {
         relativePreference:
             importModuleSpecifierPreference === "relative" ? RelativePreference.Relative :
-            importModuleSpecifierPreference === "non-relative" ? RelativePreference.NonRelative :
-            importModuleSpecifierPreference === "project-relative" ? RelativePreference.ExternalNonRelative :
-            RelativePreference.Shortest,
+                importModuleSpecifierPreference === "non-relative" ? RelativePreference.NonRelative :
+                    importModuleSpecifierPreference === "project-relative" ? RelativePreference.ExternalNonRelative :
+                        RelativePreference.Shortest,
         ending: getEnding(),
     };
     function getEnding(): Ending {
@@ -62,7 +62,7 @@ function getPreferencesForUpdate(compilerOptions: CompilerOptions, oldImportSpec
 
 function isFormatRequiringExtensions(compilerOptions: CompilerOptions, importingSourceFileName: Path, host: ModuleSpecifierResolutionHost) {
     if (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16
-    && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
+        && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
         return false;
     }
     return getImpliedNodeFormatForFile(importingSourceFileName, host.getPackageJsonInfoCache?.(), getModuleResolutionHost(host), compilerOptions) !== ModuleKind.CommonJS;
@@ -307,7 +307,7 @@ function computeModuleSpecifiers(
 
     return pathsSpecifiers?.length ? pathsSpecifiers :
         nodeModulesSpecifiers?.length ? nodeModulesSpecifiers :
-        Debug.checkDefined(relativeSpecifiers);
+            Debug.checkDefined(relativeSpecifiers);
 }
 
 interface Info {
@@ -736,7 +736,7 @@ function tryGetModuleNameFromExports(options: CompilerOptions, targetFilePath: s
                 const subPackageName = getNormalizedAbsolutePath(combinePaths(packageName, k), /*currentDirectory*/ undefined);
                 const mode = endsWith(k, "/") ? MatchingMode.Directory
                     : stringContains(k, "*") ? MatchingMode.Pattern
-                    : MatchingMode.Exact;
+                        : MatchingMode.Exact;
                 return tryGetModuleNameFromExports(options, targetFilePath, packageDirectory, subPackageName, (exports as MapLike<unknown>)[k], conditions, mode);
             });
         }
@@ -776,7 +776,7 @@ function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileNam
         : removeFileExtension(shortest);
 }
 
-function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, sourceDirectory }: Info, importingSourceFile: SourceFile , host: ModuleSpecifierResolutionHost, options: CompilerOptions, userPreferences: UserPreferences, packageNameOnly?: boolean, overrideMode?: ModuleKind.ESNext | ModuleKind.CommonJS): string | undefined {
+function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, sourceDirectory }: Info, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, options: CompilerOptions, userPreferences: UserPreferences, packageNameOnly?: boolean, overrideMode?: ModuleKind.ESNext | ModuleKind.CommonJS): string | undefined {
     if (!host.fileExists || !host.readFile) {
         return undefined;
     }

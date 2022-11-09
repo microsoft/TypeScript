@@ -14,7 +14,7 @@ import {
     isHeritageClause, isIdentifier, isImportCall, isImportClause, isImportMeta, isImportSpecifier, isLocalName,
     isModifierLike, isModuleOrEnumDeclaration, isNamedExports, isObjectLiteralExpression, isOmittedExpression,
     isParameterDeclaration, isPrefixUnaryExpression, isPropertyAssignment, isShorthandPropertyAssignment,
-    isSpreadElement, isStatement, isStringLiteral, isVariableDeclarationList, LabeledStatement, map, Map,
+    isSpreadElement, isStatement, isStringLiteral, isVariableDeclarationList, LabeledStatement, map,
     MergeDeclarationMarker, MetaProperty, ModifierFlags, moveEmitHelpers, Node, NodeFlags, ObjectLiteralElementLike,
     outFile, ParenthesizedExpression, PartiallyEmittedExpression, PostfixUnaryExpression, PrefixUnaryExpression,
     PropertyAssignment, setCommentRange, setEmitFlags, setTextRange, ShorthandPropertyAssignment, singleOrMany, some,

@@ -6,7 +6,7 @@ import {
     getRegexFromPattern, getSymbolId, hostGetCanonicalFileName, hostUsesCaseSensitiveFileNames, InternalSymbolName,
     isExportAssignment, isExportSpecifier, isExternalModuleNameRelative, isExternalModuleSymbol,
     isExternalOrCommonJsModule, isIdentifier, isKnownSymbol, isNonGlobalAmbientModule, isPrivateIdentifierSymbol,
-    LanguageServiceHost, Map, mapDefined, ModuleSpecifierCache, ModuleSpecifierResolutionHost, moduleSpecifiers,
+    LanguageServiceHost, mapDefined, ModuleSpecifierCache, ModuleSpecifierResolutionHost, moduleSpecifiers,
     nodeModulesPathPart, PackageJsonImportFilter, Path, Program, skipAlias, skipOuterExpressions, SourceFile,
     startsWith, Statement, stringContains, stripQuotes, Symbol, SymbolFlags, timestamp, tryCast, TypeChecker,
     unescapeLeadingUnderscores, unmangleScopedPackageName, UserPreferences,

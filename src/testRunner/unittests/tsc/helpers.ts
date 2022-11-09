@@ -6,7 +6,7 @@ import * as Harness from "../../_namespaces/Harness";
 import { libFile, TestServerHost } from "../virtualFileSystemWithWatch";
 
 export type TscCompileSystem = fakes.System & {
-    writtenFiles: ts.Set<ts.Path>;
+    writtenFiles: Set<ts.Path>;
     baseLine(): { file: string; text: string; };
     disableUseFileVersionAsSignature?: boolean;
     storeFilesChangingSignatureDuringEmit?: boolean;
@@ -134,7 +134,7 @@ function makeSystemReadyForBaseline(sys: TscCompileSystem, versionToWrite?: stri
     else {
         fakes.patchHostForBuildInfoReadWrite(sys);
     }
-    const writtenFiles = sys.writtenFiles = new ts.Set();
+    const writtenFiles = sys.writtenFiles = new Set();
     const originalWriteFile = sys.writeFile;
     sys.writeFile = (fileName, content, writeByteOrderMark) => {
         const path = toPathWithSystem(sys, fileName);
@@ -767,8 +767,8 @@ function verifyTscEditDiscrepancies({
     function verifyMapLike<T>(incremental: ts.MapLike<T> | undefined, clean: ts.MapLike<T> | undefined, verifyValue: (key: string, incrementalValue: T, cleanValue: T) => string[] | undefined, message: string) {
         verifyPresenceAbsence(incremental, clean, `Incremental and clean do not match:: ${message}`);
         if (!incremental || !clean) return;
-        const incrementalMap = new ts.Map(ts.getEntries(incremental));
-        const cleanMap = new ts.Map(ts.getEntries(clean));
+        const incrementalMap = new Map(ts.getEntries(incremental));
+        const cleanMap = new Map(ts.getEntries(clean));
         if (incrementalMap.size !== cleanMap.size) {
             addBaseline(
                 `Incremental and clean size of maps do not match:: ${message}`,

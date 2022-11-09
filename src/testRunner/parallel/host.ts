@@ -33,7 +33,7 @@ export function start() {
     let totalCost = 0;
 
     class RemoteSuite extends Mocha.Suite {
-        suiteMap = new ts.Map<string, RemoteSuite>();
+        suiteMap = new Map<string, RemoteSuite>();
         constructor(title: string) {
             super(title);
             this.pending = false;

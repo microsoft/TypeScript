@@ -3251,8 +3251,8 @@ declare namespace ts {
             setTypeAcquisition(newTypeAcquisition: TypeAcquisition | undefined): void;
             getTypeAcquisition(): ts.TypeAcquisition;
             protected removeRoot(info: ScriptInfo): void;
-            protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined): void;
-            protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): void;
+            protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<string, any> | undefined): void;
+            protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<string, any> | undefined): void;
             private enableProxy;
             /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
             refreshDiagnostics(): void;
@@ -3518,11 +3518,11 @@ declare namespace ts {
             /**
              * projects specified by a tsconfig.json file
              */
-            readonly configuredProjects: Map<ConfiguredProject>;
+            readonly configuredProjects: Map<string, ConfiguredProject>;
             /**
              * Open files: with value being project root path, and key being Path of the file that is open
              */
-            readonly openFiles: Map<NormalizedPath | undefined>;
+            readonly openFiles: Map<string, NormalizedPath | undefined>;
             /**
              * Map of open files that are opened without complete path but have projectRoot as current directory
              */
@@ -3977,65 +3977,6 @@ declare namespace ts {
     interface Collection<K> extends ReadonlyCollection<K> {
         delete(key: K): boolean;
         clear(): void;
-    }
-    /** ES6 Map interface, only read methods included. */
-    interface ReadonlyESMap<K, V> extends ReadonlyCollection<K> {
-        get(key: K): V | undefined;
-        values(): Iterator<V>;
-        entries(): Iterator<[
-            K,
-            V
-        ]>;
-        forEach(action: (value: V, key: K) => void): void;
-    }
-    /**
-     * ES6 Map interface, only read methods included.
-     */
-    interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
-    }
-    /**
-     * @deprecated Use `ts.ReadonlyESMap<K, V>` instead.
-     */
-    interface ReadonlyMap<T> extends ReadonlyESMap<string, T> {
-    }
-    /** ES6 Map interface. */
-    interface ESMap<K, V> extends ReadonlyESMap<K, V>, Collection<K> {
-        set(key: K, value: V): this;
-    }
-    /**
-     * ES6 Map interface.
-     */
-    interface Map<T> extends ESMap<string, T> {
-    }
-    /**
-     * @deprecated Use `ts.ESMap<K, V>` instead.
-     */
-    interface Map<T> extends ESMap<string, T> {
-    }
-    /** ES6 Set interface, only read methods included. */
-    interface ReadonlySet<T> extends ReadonlyCollection<T> {
-        has(value: T): boolean;
-        values(): Iterator<T>;
-        entries(): Iterator<[
-            T,
-            T
-        ]>;
-        forEach(action: (value: T, key: T) => void): void;
-    }
-    /** ES6 Set interface. */
-    interface Set<T> extends ReadonlySet<T>, Collection<T> {
-        add(value: T): this;
-        delete(value: T): boolean;
-    }
-    /** ES6 Iterator type. */
-    interface Iterator<T> {
-        next(): {
-            value: T;
-            done?: false;
-        } | {
-            value: void;
-            done: true;
-        };
     }
     /** Array that is only intended to be pushed to, never read. */
     interface Push<T> {
@@ -6666,10 +6607,10 @@ declare namespace ts {
         __escapedIdentifier: void;
     }) | InternalSymbolName;
     /** ReadonlyMap where keys are `__String`s. */
-    interface ReadonlyUnderscoreEscapedMap<T> extends ReadonlyESMap<__String, T> {
+    interface ReadonlyUnderscoreEscapedMap<T> extends ReadonlyMap<__String, T> {
     }
     /** Map where keys are `__String`s. */
-    interface UnderscoreEscapedMap<T> extends ESMap<__String, T>, ReadonlyUnderscoreEscapedMap<T> {
+    interface UnderscoreEscapedMap<T> extends Map<__String, T> {
     }
     /** SymbolTable based on ES6 Map interface. */
     type SymbolTable = UnderscoreEscapedMap<Symbol>;
@@ -6894,7 +6835,7 @@ declare namespace ts {
         isDistributive: boolean;
         inferTypeParameters?: TypeParameter[];
         outerTypeParameters?: TypeParameter[];
-        instantiations?: Map<Type>;
+        instantiations?: Map<string, Type>;
         aliasSymbol?: Symbol;
         aliasTypeArguments?: Type[];
     }
@@ -9144,7 +9085,7 @@ declare namespace ts {
     /**
      * Reads the config file, reports errors if any and exits if the config file cannot be found
      */
-    function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions | undefined, host: ParseConfigFileHost, extendedConfigCache?: Map<ExtendedConfigCacheEntry>, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): ParsedCommandLine | undefined;
+    function getParsedCommandLineOfConfigFile(configFileName: string, optionsToExtend: CompilerOptions | undefined, host: ParseConfigFileHost, extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, watchOptionsToExtend?: WatchOptions, extraFileExtensions?: readonly FileExtensionInfo[]): ParsedCommandLine | undefined;
     /**
      * Read tsconfig.json file
      * @param fileName The path to the config file
@@ -9178,7 +9119,7 @@ declare namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
+    function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
     /**
      * Parse the contents of a config file (tsconfig.json).
      * @param jsonNode The contents of the config file to parse
@@ -9186,7 +9127,7 @@ declare namespace ts {
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
      */
-    function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
+    function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine;
     function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
         options: CompilerOptions;
         errors: Diagnostic[];

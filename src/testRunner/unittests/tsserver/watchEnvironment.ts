@@ -26,7 +26,7 @@ describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watchD
             };
 
             const files = [index, file1, configFile, libFile];
-            const environmentVariables = new ts.Map<string, string>();
+            const environmentVariables = new Map<string, string>();
             environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
             const host = createServerHost(files, { environmentVariables });
             const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
@@ -114,7 +114,7 @@ it(`unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem recursive wa
         path: `${projectFolder}/node_modules/someFile.d.ts`,
         content: ""
     };
-    const environmentVariables = new ts.Map<string, string>();
+    const environmentVariables = new Map<string, string>();
     environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
     const host = createServerHost([index, file1, configFile, libFile, nodeModulesExistingUnusedFile], { environmentVariables });
     const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });

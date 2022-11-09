@@ -88,7 +88,7 @@ export function Component(x: Config): any;`
     describe("detects program upto date correctly", () => {
         function verifyProgramUptoDate(useProjectVersion: boolean) {
             let projectVersion = "1";
-            const files = new ts.Map<string, { version: string, text: string; }>();
+            const files = new Map<string, { version: string, text: string; }>();
             files.set("/project/root.ts", { version: "1", text: `import { foo } from "./other"` });
             files.set("/project/other.ts", { version: "1", text: `export function foo() { }` });
             files.set("/lib/lib.d.ts", { version: "1", text: libFile.content });

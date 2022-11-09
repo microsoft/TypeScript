@@ -1,6 +1,6 @@
 import {
     __String, AnyImportOrReExport, AssignmentDeclarationKind, BinaryExpression, BindingElement, CallExpression,
-    CancellationToken, canHaveModifiers, cast, Debug, ESMap, ExportAssignment, ExportDeclaration, FileReference,
+    CancellationToken, canHaveModifiers, cast, Debug, ExportAssignment, ExportDeclaration, FileReference,
     findAncestor, forEach, getAssignmentDeclarationKind, getFirstIdentifier, getNameOfAccessExpression,
     getSourceFileOfNode, getSymbolId, hasSyntacticModifier, Identifier, ImportCall, ImportClause, ImportDeclaration,
     ImportEqualsDeclaration, importFromModuleSpecifier, ImportSpecifier, InternalSymbolName, isAccessExpression,
@@ -9,8 +9,8 @@ import {
     isImportEqualsDeclaration, isImportTypeNode, isInJSFile, isJSDocTypedefTag, isModuleExportsAccessExpression,
     isNamedExports, isNamespaceExport, isPrivateIdentifier, isPropertyAccessExpression, isShorthandPropertyAssignment,
     isSourceFile, isStringLiteral, isVariableDeclaration, isVariableDeclarationInitializedToBareOrAccessedRequire,
-    isVariableStatement, Map, ModifierFlags, ModuleBlock, ModuleDeclaration, NamedImportsOrExports, NamespaceImport,
-    Node, nodeSeenTracker, Program, ReadonlySet, some, SourceFile, Statement, StringLiteral, StringLiteralLike, Symbol,
+    isVariableStatement, ModifierFlags, ModuleBlock, ModuleDeclaration, NamedImportsOrExports, NamespaceImport,
+    Node, nodeSeenTracker, Program, some, SourceFile, Statement, StringLiteral, StringLiteralLike, Symbol,
     symbolEscapedNameNoDefault, SymbolFlags, symbolName, SyntaxKind, TypeChecker, ValidImportTypeNode,
     VariableDeclaration, walkUpBindingElementsAndPatterns,
 } from "./_namespaces/ts";
@@ -68,7 +68,7 @@ type ImporterOrCallExpression = Importer | CallExpression;
 function getImportersForExport(
     sourceFiles: readonly SourceFile[],
     sourceFilesSet: ReadonlySet<string>,
-    allDirectImports: ESMap<string, ImporterOrCallExpression[]>,
+    allDirectImports: Map<string, ImporterOrCallExpression[]>,
     { exportingModuleSymbol, exportKind }: ExportInfo,
     checker: TypeChecker,
     cancellationToken: CancellationToken | undefined,
@@ -415,7 +415,7 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
 }
 
 /** Returns a map from a module symbol Id to all import statements that directly reference the module. */
-function getDirectImportsMap(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken | undefined): ESMap<string, ImporterOrCallExpression[]> {
+function getDirectImportsMap(sourceFiles: readonly SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken | undefined): Map<string, ImporterOrCallExpression[]> {
     const map = new Map<string, ImporterOrCallExpression[]>();
 
     for (const sourceFile of sourceFiles) {

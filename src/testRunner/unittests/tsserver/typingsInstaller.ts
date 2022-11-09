@@ -8,7 +8,7 @@ import NameValidationResult = ts.JsTyping.NameValidationResult;
 interface InstallerParams {
     globalTypingsCacheLocation?: string;
     throttleLimit?: number;
-    typesRegistry?: ts.ESMap<string, ts.MapLike<string>>;
+    typesRegistry?: Map<string, ts.MapLike<string>>;
 }
 
 class Installer extends TestTypingsInstaller {
@@ -1534,7 +1534,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: ""
         };
 
-        const safeList = new ts.Map(ts.getEntries({ jquery: "jquery", chroma: "chroma-js" }));
+        const safeList = new Map(ts.getEntries({ jquery: "jquery", chroma: "chroma-js" }));
 
         const host = createServerHost([app, jquery, chroma]);
         const logger = trackingLogger();
@@ -1554,7 +1554,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: ""
         };
         const host = createServerHost([f]);
-        const cache = new ts.Map<string, ts.JsTyping.CachedTyping>();
+        const cache = new Map<string, ts.JsTyping.CachedTyping>();
 
         for (const name of ts.JsTyping.nodeCoreModuleList) {
             const logger = trackingLogger();
@@ -1577,7 +1577,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: ""
         };
         const host = createServerHost([f, node]);
-        const cache = new ts.Map(ts.getEntries<ts.JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new ts.Version("1.3.0") } }));
+        const cache = new Map(ts.getEntries<ts.JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new ts.Version("1.3.0") } }));
         const registry = createTypesRegistry("node");
         const logger = trackingLogger();
         const result = ts.JsTyping.discoverTypings(host, logger.log, [f.path], ts.getDirectoryPath(f.path as ts.Path), emptySafeList, cache, { enable: true }, ["fs", "bar"], registry, ts.emptyOptions);
@@ -1599,7 +1599,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: ""
         };
         const host = createServerHost([f, node]);
-        const cache = new ts.Map(ts.getEntries<ts.JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new ts.Version("1.3.0") } }));
+        const cache = new Map(ts.getEntries<ts.JsTyping.CachedTyping>({ node: { typingLocation: node.path, version: new ts.Version("1.3.0") } }));
         const logger = trackingLogger();
         const result = ts.JsTyping.discoverTypings(host, logger.log, [f.path], ts.getDirectoryPath(f.path as ts.Path), emptySafeList, cache, { enable: true }, ["fs", "bar"], ts.emptyMap, ts.emptyOptions);
         assert.deepEqual(logger.finish(), [
@@ -1624,7 +1624,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: JSON.stringify({ name: "b" }),
         };
         const host = createServerHost([app, a, b]);
-        const cache = new ts.Map<string, ts.JsTyping.CachedTyping>();
+        const cache = new Map<string, ts.JsTyping.CachedTyping>();
         const logger = trackingLogger();
         const result = ts.JsTyping.discoverTypings(host, logger.log, [app.path], ts.getDirectoryPath(app.path as ts.Path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ [], ts.emptyMap, ts.emptyOptions);
         assert.deepEqual(logger.finish(), [
@@ -1650,7 +1650,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: JSON.stringify({ name: "@a/b" }),
         };
         const host = createServerHost([app, a]);
-        const cache = new ts.Map<string, ts.JsTyping.CachedTyping>();
+        const cache = new Map<string, ts.JsTyping.CachedTyping>();
         const logger = trackingLogger();
         const result = ts.JsTyping.discoverTypings(host, logger.log, [app.path], ts.getDirectoryPath(app.path as ts.Path), emptySafeList, cache, { enable: true }, /*unresolvedImports*/ [], ts.emptyMap, ts.emptyOptions);
         assert.deepEqual(logger.finish(), [
@@ -1680,7 +1680,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: "export let y: number"
         };
         const host = createServerHost([app]);
-        const cache = new ts.Map(ts.getEntries<ts.JsTyping.CachedTyping>({
+        const cache = new Map(ts.getEntries<ts.JsTyping.CachedTyping>({
             node: { typingLocation: node.path, version: new ts.Version("1.3.0") },
             commander: { typingLocation: commander.path, version: new ts.Version("1.0.0") }
         }));
@@ -1706,7 +1706,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: "export let y: number"
         };
         const host = createServerHost([app]);
-        const cache = new ts.Map(ts.getEntries<ts.JsTyping.CachedTyping>({
+        const cache = new Map(ts.getEntries<ts.JsTyping.CachedTyping>({
             node: { typingLocation: node.path, version: new ts.Version("1.0.0") }
         }));
         const registry = createTypesRegistry("node");
@@ -1737,7 +1737,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
             content: "export let y: number"
         };
         const host = createServerHost([app]);
-        const cache = new ts.Map(ts.getEntries<ts.JsTyping.CachedTyping>({
+        const cache = new Map(ts.getEntries<ts.JsTyping.CachedTyping>({
             node: { typingLocation: node.path, version: new ts.Version("1.3.0-next.0") },
             commander: { typingLocation: commander.path, version: new ts.Version("1.3.0-next.0") }
         }));

@@ -1,5 +1,5 @@
 import {
-    ApplicableRefactorInfo, arrayFrom, flatMapIterator, Map, Refactor, RefactorContext, RefactorEditInfo,
+    ApplicableRefactorInfo, arrayFrom, flatMapIterator, Refactor, RefactorContext, RefactorEditInfo,
 } from "./_namespaces/ts";
 import { refactorKindBeginsWith } from "./_namespaces/ts.refactor";
 

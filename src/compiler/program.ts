@@ -14,7 +14,7 @@ import {
     diagnosticCategoryName, DiagnosticMessage, DiagnosticMessageChain, DiagnosticReporter, Diagnostics,
     DiagnosticWithLocation, directorySeparator, DirectoryStructureHost, emitFiles, EmitFlags, EmitHost, EmitOnly,
     EmitResult, emptyArray, ensureTrailingDirectorySeparator, equateStringsCaseInsensitive, equateStringsCaseSensitive,
-    ESMap, explainIfFileIsRedirectAndImpliedFormat, ExportAssignment, ExportDeclaration, Extension, extensionFromPath,
+    explainIfFileIsRedirectAndImpliedFormat, ExportAssignment, ExportDeclaration, Extension, extensionFromPath,
     externalHelpersModuleNameText, factory, fileExtensionIs, fileExtensionIsOneOf, FileIncludeKind, FileIncludeReason,
     fileIncludeReasonToDiagnostics, FilePreprocessingDiagnostics, FilePreprocessingDiagnosticsKind, FileReference,
     filter, find, firstDefined, firstDefinedIterator, flatMap, flatten, forEach, forEachAncestorDirectory, forEachChild,
@@ -39,7 +39,7 @@ import {
     isImportDeclaration, isImportEqualsDeclaration, isImportSpecifier, isImportTypeNode, isIncrementalCompilation,
     isInJSFile, isLiteralImportTypeNode, isModifier, isModuleDeclaration, isObjectLiteralExpression, isPlainJsFile,
     isRequireCall, isRootedDiskPath, isSourceFileJS, isString, isStringLiteral, isStringLiteralLike, isTraceEnabled,
-    JsonSourceFile, JsxEmit, length, libMap, libs, Map, mapDefined, mapDefinedIterator, maybeBind, memoize,
+    JsonSourceFile, JsxEmit, length, libMap, libs, mapDefined, mapDefinedIterator, maybeBind, memoize,
     MethodDeclaration, ModifierFlags, ModifierLike, ModuleBlock, ModuleDeclaration, ModuleKind, ModuleResolutionCache,
     ModuleResolutionHost, ModuleResolutionInfo, moduleResolutionIsEqualTo, ModuleResolutionKind, Mutable, Node,
     NodeArray, NodeFlags, nodeModulesPathPart, NodeWithTypeArguments, noop, normalizePath, notImplementedResolver,
@@ -50,7 +50,7 @@ import {
     PropertyDeclaration, ReferencedFile, removeFileExtension, removePrefix, removeSuffix, resolutionExtensionIsTSOrJson,
     resolveConfigFileProjectName, ResolvedConfigFileName, ResolvedModuleFull, ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference, ResolvedTypeReferenceDirective, resolveModuleName, resolveModuleNameFromCache,
-    resolveTypeReferenceDirective, returnFalse, returnUndefined, SatisfiesExpression, ScriptKind, ScriptTarget, Set,
+    resolveTypeReferenceDirective, returnFalse, returnUndefined, SatisfiesExpression, ScriptKind, ScriptTarget,
     setParent, setParentRecursive, setResolvedModule, setResolvedTypeReferenceDirective, skipTrivia, skipTypeChecking,
     some, sortAndDeduplicateDiagnostics, SortedReadonlyArray, SourceFile, sourceFileAffectingCompilerOptions,
     sourceFileMayBeEmitted, SourceOfProjectReferenceRedirect, stableSort, startsWith, Statement, stringContains,
@@ -253,7 +253,7 @@ export function changeCompilerHostLikeToUseCache(
     const readFileCache = new Map<Path, string | false>();
     const fileExistsCache = new Map<Path, boolean>();
     const directoryExistsCache = new Map<Path, boolean>();
-    const sourceFileCache = new Map<SourceFile["impliedNodeFormat"], ESMap<Path, SourceFile>>();
+    const sourceFileCache = new Map<SourceFile["impliedNodeFormat"], Map<Path, SourceFile>>();
 
     const readFileWithCache = (fileName: string): string | undefined => {
         const key = toPath(fileName);
@@ -636,7 +636,7 @@ export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | Ex
  * @param usage The module reference string
  * @returns The final resolution mode of the import
  */
-export function getModeForUsageLocation(file: {impliedNodeFormat?: SourceFile["impliedNodeFormat"]}, usage: StringLiteralLike) {
+export function getModeForUsageLocation(file: { impliedNodeFormat?: SourceFile["impliedNodeFormat"] }, usage: StringLiteralLike) {
     if (file.impliedNodeFormat === undefined) return undefined;
     if ((isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent))) {
         const isTypeOnly = isExclusivelyTypeOnlyImportOrExport(usage.parent);
@@ -760,7 +760,7 @@ function forEachProjectReference<T>(
 export const inferredTypesContainingFile = "__inferred type names__.ts";
 
 interface DiagnosticCache<T extends Diagnostic> {
-    perFile?: ESMap<Path, readonly T[]>;
+    perFile?: Map<Path, readonly T[]>;
     allDiagnostics?: readonly T[];
 }
 
@@ -885,7 +885,7 @@ export function isProgramUptoDate(
 
     function resolvedProjectReferenceUptoDate(oldResolvedRef: ResolvedProjectReference | undefined, oldRef: ProjectReference): boolean {
         if (oldResolvedRef) {
-                // Assume true
+            // Assume true
             if (contains(seenResolvedRefs, oldResolvedRef)) return true;
 
             const refPath = resolveProjectReferencePath(oldRef);
@@ -948,8 +948,8 @@ export function getImpliedNodeFormatForFileWorker(
         case ModuleResolutionKind.NodeNext:
             return fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Mjs]) ? ModuleKind.ESNext :
                 fileExtensionIsOneOf(fileName, [Extension.Dcts, Extension.Cts, Extension.Cjs]) ? ModuleKind.CommonJS :
-                fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx]) ? lookupFromPackageJson() :
-                undefined; // other extensions, like `json` or `tsbuildinfo`, are set as `undefined` here but they should never be fed through the transformer pipeline
+                    fileExtensionIsOneOf(fileName, [Extension.Dts, Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx]) ? lookupFromPackageJson() :
+                        undefined; // other extensions, like `json` or `tsbuildinfo`, are set as `undefined` here but they should never be fed through the transformer pipeline
         default:
             return undefined;
     }
@@ -1250,9 +1250,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
     let resolvedProjectReferences: readonly (ResolvedProjectReference | undefined)[] | undefined;
-    let projectReferenceRedirects: ESMap<Path, ResolvedProjectReference | false> | undefined;
-    let mapFromFileToProjectReferenceRedirects: ESMap<Path, Path> | undefined;
-    let mapFromToProjectReferenceRedirectSource: ESMap<Path, SourceOfProjectReferenceRedirect> | undefined;
+    let projectReferenceRedirects: Map<Path, ResolvedProjectReference | false> | undefined;
+    let mapFromFileToProjectReferenceRedirects: Map<Path, Path> | undefined;
+    let mapFromToProjectReferenceRedirectSource: Map<Path, SourceOfProjectReferenceRedirect> | undefined;
 
     const useSourceOfProjectReferenceRedirect = !!host.useSourceOfProjectReferenceRedirect?.() &&
         !options.disableSourceOfProjectReferenceRedirect;
@@ -2309,7 +2309,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function getCachedSemanticDiagnostics(sourceFile?: SourceFile): readonly Diagnostic[] | undefined {
-       return sourceFile
+        return sourceFile
             ? cachedBindAndCheckDiagnosticsForFile.perFile?.get(sourceFile.path)
             : cachedBindAndCheckDiagnosticsForFile.allDiagnostics;
     }
@@ -2400,7 +2400,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             // - check JS: .js files with either // ts-check or checkJs: true
             // - external: files that are added by plugins
             const includeBindAndCheckDiagnostics = !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
-                    || sourceFile.scriptKind === ScriptKind.External || isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
+                || sourceFile.scriptKind === ScriptKind.External || isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
             let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
             let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
             if (isPlainJs) {
