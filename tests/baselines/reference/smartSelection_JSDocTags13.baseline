@@ -1,0 +1,141 @@
+let a;
+let b: {
+    /** Comment */ /**/p0: number
+    /** Comment */ p1: number
+    /** Comment */ p2: number
+};
+let c;
+
+
+                   p0        
+
+
+                   p0: number
+
+
+    /** Comment */ p0: number
+
+
+        ↲
+••••/** Comment */ p0: number
+    /** Comment */ p1: number
+    /** Comment */ p2: number↲
+
+
+       {
+    /** Comment */ p0: number
+    /** Comment */ p1: number
+    /** Comment */ p2: number
+} 
+
+
+let b: {
+    /** Comment */ p0: number
+    /** Comment */ p1: number
+    /** Comment */ p2: number
+};
+
+
+let a;
+let b: {
+    /** Comment */ p0: number
+    /** Comment */ p1: number
+    /** Comment */ p2: number
+};
+let c;
+
+================================================================================
+
+let a;
+let b: {
+    /** Comment */ p0: number
+    /** Comment */ /**/p1: number
+    /** Comment */ p2: number
+};
+let c;
+
+
+                   p1        
+
+
+                   p1: number
+
+
+    /** Comment */ p1: number
+
+
+        ↲
+••••/** Comment */ p0: number
+    /** Comment */ p1: number
+    /** Comment */ p2: number↲
+
+
+       {
+    /** Comment */ p0: number
+    /** Comment */ p1: number
+    /** Comment */ p2: number
+} 
+
+
+let b: {
+    /** Comment */ p0: number
+    /** Comment */ p1: number
+    /** Comment */ p2: number
+};
+
+
+let a;
+let b: {
+    /** Comment */ p0: number
+    /** Comment */ p1: number
+    /** Comment */ p2: number
+};
+let c;
+
+================================================================================
+
+let a;
+let b: {
+    /** Comment */ p0: number
+    /** Comment */ p1: number
+    /** Comment */ /**/p2: number
+};
+let c;
+
+
+                   p2        
+
+
+                   p2: number
+
+
+    /** Comment */ p2: number
+
+
+        ↲
+••••/** Comment */ p0: number
+    /** Comment */ p1: number
+    /** Comment */ p2: number↲
+
+
+       {
+    /** Comment */ p0: number
+    /** Comment */ p1: number
+    /** Comment */ p2: number
+} 
+
+
+let b: {
+    /** Comment */ p0: number
+    /** Comment */ p1: number
+    /** Comment */ p2: number
+};
+
+
+let a;
+let b: {
+    /** Comment */ p0: number
+    /** Comment */ p1: number
+    /** Comment */ p2: number
+};
+let c;

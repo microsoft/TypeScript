@@ -1,0 +1,32 @@
+=== tests/cases/compiler/trivialSubtypeReductionNoStructuralCheck2.ts ===
+declare const props: WizardStepProps;
+>props : Symbol(props, Decl(trivialSubtypeReductionNoStructuralCheck2.ts, 0, 13))
+>WizardStepProps : Symbol(WizardStepProps, Decl(trivialSubtypeReductionNoStructuralCheck2.ts, 8, 1))
+
+export class Wizard {
+>Wizard : Symbol(Wizard, Decl(trivialSubtypeReductionNoStructuralCheck2.ts, 0, 37))
+
+  get steps() {
+>steps : Symbol(Wizard.steps, Decl(trivialSubtypeReductionNoStructuralCheck2.ts, 1, 21))
+
+    return {
+      wizard: this as Wizard,
+>wizard : Symbol(wizard, Decl(trivialSubtypeReductionNoStructuralCheck2.ts, 3, 12))
+>this : Symbol(Wizard, Decl(trivialSubtypeReductionNoStructuralCheck2.ts, 0, 37))
+>Wizard : Symbol(Wizard, Decl(trivialSubtypeReductionNoStructuralCheck2.ts, 0, 37))
+
+      ...props,
+>props : Symbol(props, Decl(trivialSubtypeReductionNoStructuralCheck2.ts, 0, 13))
+
+    } as WizardStepProps;
+>WizardStepProps : Symbol(WizardStepProps, Decl(trivialSubtypeReductionNoStructuralCheck2.ts, 8, 1))
+  }
+}
+
+export interface WizardStepProps {
+>WizardStepProps : Symbol(WizardStepProps, Decl(trivialSubtypeReductionNoStructuralCheck2.ts, 8, 1))
+
+  wizard?: Wizard;
+>wizard : Symbol(WizardStepProps.wizard, Decl(trivialSubtypeReductionNoStructuralCheck2.ts, 10, 34))
+>Wizard : Symbol(Wizard, Decl(trivialSubtypeReductionNoStructuralCheck2.ts, 0, 37))
+}

@@ -643,11 +643,16 @@ namespace ts {
         }
 
         function visitIdentifier(node: Identifier): Identifier {
-            if (!convertedLoopState) {
-                return node;
+            if (convertedLoopState) {
+                if (resolver.isArgumentsLocalBinding(node)) {
+                    return convertedLoopState.argumentsName || (convertedLoopState.argumentsName = factory.createUniqueName("arguments"));
+                }
             }
-            if (resolver.isArgumentsLocalBinding(node)) {
-                return convertedLoopState.argumentsName || (convertedLoopState.argumentsName = factory.createUniqueName("arguments"));
+            if (node.hasExtendedUnicodeEscape) {
+                return setOriginalNode(setTextRange(
+                    factory.createIdentifier(unescapeLeadingUnderscores(node.escapedText)),
+                    node
+                ), node);
             }
             return node;
         }
@@ -819,7 +824,7 @@ namespace ts {
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
-                extendsClauseElement ? [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel))] : [],
+                extendsClauseElement ? [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, factory.createUniqueName("_super", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel))] : [],
                 /*type*/ undefined,
                 transformClassBody(node, extendsClauseElement)
             );
@@ -922,7 +927,6 @@ namespace ts {
             const constructor = getFirstConstructorWithBody(node);
             const hasSynthesizedSuper = hasSynthesizedDefaultSuperCall(constructor, extendsClauseElement !== undefined);
             const constructorFunction = factory.createFunctionDeclaration(
-                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
                 name,
@@ -1146,7 +1150,7 @@ namespace ts {
                         [
                             ...existingPrologue,
                             ...prologue,
-                            ...(superStatementIndex <= existingPrologue.length ? emptyArray : visitNodes(constructor.body.statements, visitor, isStatement, existingPrologue.length, superStatementIndex)),
+                            ...(superStatementIndex <= existingPrologue.length ? emptyArray : visitNodes(constructor.body.statements, visitor, isStatement, existingPrologue.length, superStatementIndex - existingPrologue.length)),
                             ...statements
                         ]
                     ),
@@ -1243,7 +1247,6 @@ namespace ts {
                 return setOriginalNode(
                     setTextRange(
                         factory.createParameterDeclaration(
-                            /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             /*dotDotDotToken*/ undefined,
                             factory.getGeneratedNameForNode(node),
@@ -1261,7 +1264,6 @@ namespace ts {
                 return setOriginalNode(
                     setTextRange(
                         factory.createParameterDeclaration(
-                            /*decorators*/ undefined,
                             /*modifiers*/ undefined,
                             /*dotDotDotToken*/ undefined,
                             node.name,
@@ -1905,7 +1907,6 @@ namespace ts {
             convertedLoopState = savedConvertedLoopState;
             return factory.updateFunctionDeclaration(
                 node,
-                /*decorators*/ undefined,
                 visitNodes(node.modifiers, visitor, isModifier),
                 node.asteriskToken,
                 name,
@@ -3446,7 +3447,7 @@ namespace ts {
                 }
             }
             else {
-                loopParameters.push(factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, name));
+                loopParameters.push(factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, name));
                 const checkFlags = resolver.getNodeCheckFlags(decl);
                 if (checkFlags & NodeCheckFlags.NeedsLoopOutParameter || hasCapturedBindingsInForHead) {
                     const outParamName = factory.createUniqueName("out_" + idText(name));
@@ -3649,10 +3650,10 @@ namespace ts {
             const parameters = visitParameterList(node.parameters, visitor, context);
             const body = transformFunctionBody(node);
             if (node.kind === SyntaxKind.GetAccessor) {
-                updated = factory.updateGetAccessorDeclaration(node, node.decorators, node.modifiers, node.name, parameters, node.type, body);
+                updated = factory.updateGetAccessorDeclaration(node, node.modifiers, node.name, parameters, node.type, body);
             }
             else {
-                updated = factory.updateSetAccessorDeclaration(node, node.decorators, node.modifiers, node.name, parameters, body);
+                updated = factory.updateSetAccessorDeclaration(node, node.modifiers, node.name, parameters, body);
             }
             exitSubtree(ancestorFacts, HierarchyFacts.FunctionSubtreeExcludes, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;

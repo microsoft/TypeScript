@@ -141,11 +141,11 @@ function f12(x: string | (() => string) | undefined) {
 }
 
 type Foo = { foo: string };
->Foo : Foo
+>Foo : { foo: string; }
 >foo : string
 
 type Bar = { bar: string };
->Bar : Bar
+>Bar : { bar: string; }
 >bar : string
 
 declare function fooBar(x: { foo: string, bar: string }): void;
@@ -369,7 +369,7 @@ type T3 = MaybeTrue<{ b: boolean }>;  // "yes"
 // Repro from #28824
 
 type Union = 'a' | 'b';
->Union : Union
+>Union : "b" | "a"
 
 type Product<A extends Union, B> = { f1: A, f2: B};
 >Product : Product<A, B>
@@ -377,11 +377,11 @@ type Product<A extends Union, B> = { f1: A, f2: B};
 >f2 : B
 
 type ProductUnion = Product<'a', 0> | Product<'b', 1>;
->ProductUnion : ProductUnion
+>ProductUnion : Product<"a", 0> | Product<"b", 1>
 
 // {a: "b"; b: "a"}
 type UnionComplement = {
->UnionComplement : UnionComplement
+>UnionComplement : { b: "a"; a: "b"; }
 
   [K in Union]: Exclude<Union, K>
 };
@@ -393,7 +393,7 @@ type UCB = UnionComplement['b'];
 
 // {a: "a"; b: "b"}
 type UnionComplementComplement = {
->UnionComplementComplement : UnionComplementComplement
+>UnionComplementComplement : { b: "b"; a: "a"; }
 
   [K in Union]: Exclude<Union, Exclude<Union, K>>
 };
@@ -405,7 +405,7 @@ type UCCB = UnionComplementComplement['b'];
 
 // {a: Product<'b', 1>; b: Product<'a', 0>}
 type ProductComplement = {
->ProductComplement : ProductComplement
+>ProductComplement : { b: Product<"a", 0>; a: Product<"b", 1>; }
 
   [K in Union]: Exclude<ProductUnion, { f1: K }>
 >f1 : K
@@ -419,7 +419,7 @@ type PCB = ProductComplement['b'];
 
 // {a: Product<'a', 0>; b: Product<'b', 1>}
 type ProductComplementComplement = {
->ProductComplementComplement : ProductComplementComplement
+>ProductComplementComplement : { b: Product<"b", 1>; a: Product<"a", 0>; }
 
   [K in Union]: Exclude<ProductUnion, Exclude<ProductUnion, { f1: K }>>
 >f1 : K

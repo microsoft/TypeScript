@@ -1,15 +1,15 @@
 === /a.js ===
 exports.x = 0;
 >exports.x = 0 : 0
->exports.x : number
+>exports.x : 0
 >exports : typeof import("/a")
->x : number
+>x : 0
 >0 : 0
 
 exports.x;
->exports.x : number
+>exports.x : 0
 >exports : typeof import("/a")
->x : number
+>x : 0
 
 // Works nested
 {

@@ -9,46 +9,46 @@ interface c { c }
 >c : any
 
 type T1 = ([a, b, c]);
->T1 : T1
+>T1 : [a, b, c]
 
 type F1 = ([a, b, c]) => void;
->F1 : F1
+>F1 : ([a, b, c]: [any, any, any]) => void
 >a : any
 >b : any
 >c : any
 
 type T2 = ({ a });
->T2 : T2
+>T2 : { a: any; }
 >a : any
 
 type F2 = ({ a }) => void;
->F2 : F2
+>F2 : ({ a }: { a: any; }) => void
 >a : any
 
 type T3 = ([{ a: b }, { b: a }]);
->T3 : T3
+>T3 : [{ a: b; }, { b: a; }]
 >a : b
 >b : a
 
 type F3 = ([{ a: b }, { b: a }]) => void;
->F3 : F3
+>F3 : ([{ a: b }, { b: a }]: [{ a: any; }, { b: any; }]) => void
 >a : any
 >b : any
 >b : any
 >a : any
 
 type T4 = ([{ a: [b, c] }]);
->T4 : T4
+>T4 : [{ a: [b, c]; }]
 >a : [b, c]
 
 type F4 = ([{ a: [b, c] }]) => void;
->F4 : F4
+>F4 : ([{ a: [b, c] }]: [{ a: [any, any]; }]) => void
 >a : any
 >b : any
 >c : any
 
 type C1 = new ([{ a: [b, c] }]) => void;
->C1 : C1
+>C1 : new ([{ a: [b, c] }]: [{ a: [any, any]; }]) => void
 >a : any
 >b : any
 >c : any

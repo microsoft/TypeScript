@@ -83,6 +83,7 @@ namespace ts.server.protocol {
         SignatureHelp = "signatureHelp",
         /* @internal */
         SignatureHelpFull = "signatureHelp-full",
+        FindSourceDefinition = "findSourceDefinition",
         Status = "status",
         TypeDefinition = "typeDefinition",
         ProjectInfo = "projectInfo",
@@ -680,9 +681,17 @@ namespace ts.server.protocol {
 
     export type OrganizeImportsScope = GetCombinedCodeFixScope;
 
+    export const enum OrganizeImportsMode {
+        All = "All",
+        SortAndCombine = "SortAndCombine",
+        RemoveUnused = "RemoveUnused",
+    }
+
     export interface OrganizeImportsRequestArgs {
         scope: OrganizeImportsScope;
+        /** @deprecated Use `mode` instead */
         skipDestructiveCodeActions?: boolean;
+        mode?: OrganizeImportsMode;
     }
 
     export interface OrganizeImportsResponse extends Response {
@@ -727,7 +736,7 @@ namespace ts.server.protocol {
     }
 
     // All we need is the `success` and `message` fields of Response.
-    export interface ApplyCodeActionCommandResponse extends Response {}
+    export interface ApplyCodeActionCommandResponse extends Response { }
 
     export interface FileRangeRequestArgs extends FileRequestArgs {
         /**
@@ -904,6 +913,10 @@ namespace ts.server.protocol {
         readonly command: CommandTypes.DefinitionAndBoundSpan;
     }
 
+    export interface FindSourceDefinitionRequest extends FileLocationRequest {
+        readonly command: CommandTypes.FindSourceDefinition;
+    }
+
     export interface DefinitionAndBoundSpanResponse extends Response {
         readonly body: DefinitionInfoAndBoundSpan;
     }
@@ -1062,7 +1075,7 @@ namespace ts.server.protocol {
         readonly arguments: JsxClosingTagRequestArgs;
     }
 
-    export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {}
+    export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs { }
 
     export interface JsxClosingTagResponse extends Response {
         readonly body: TextInsertion;
@@ -1145,12 +1158,14 @@ namespace ts.server.protocol {
     }
 
     export interface ReferencesResponseItem extends FileSpanWithContext {
-        /** Text of line containing the reference.  Including this
-         *  with the response avoids latency of editor loading files
-         * to show text of reference line (the server already has
-         * loaded the referencing files).
+        /**
+         * Text of line containing the reference. Including this
+         * with the response avoids latency of editor loading files
+         * to show text of reference line (the server already has loaded the referencing files).
+         *
+         * If {@link UserPreferences.disableLineTextInReferences} is enabled, the property won't be filled
          */
-        lineText: string;
+        lineText?: string;
 
         /**
          * True if reference is a write location, false otherwise.
@@ -1158,9 +1173,12 @@ namespace ts.server.protocol {
         isWriteAccess: boolean;
 
         /**
-         * True if reference is a definition, false otherwise.
+         * Present only if the search was triggered from a declaration.
+         * True indicates that the references refers to the same symbol
+         * (i.e. has the same meaning) as the declaration that began the
+         * search.
          */
-        isDefinition: boolean;
+        isDefinition?: boolean;
     }
 
     /**
@@ -2291,6 +2309,10 @@ namespace ts.server.protocol {
          */
         sourceDisplay?: SymbolDisplayPart[];
         /**
+         * Additional details for the label.
+         */
+        labelDetails?: CompletionEntryLabelDetails;
+        /**
          * If true, this completion should be highlighted as recommended. There will only be one of these.
          * This will be set when we know the user should write an expression with a certain type and that type is an enum or constructable class.
          * Then either that enum/class or a namespace containing it will be the recommended symbol.
@@ -2317,6 +2339,21 @@ namespace ts.server.protocol {
          * items with the same name.
          */
         data?: unknown;
+    }
+
+    export interface CompletionEntryLabelDetails {
+        /**
+         * An optional string which is rendered less prominently directly after
+         * {@link CompletionEntry.name name}, without any spacing. Should be
+         * used for function signatures or type annotations.
+         */
+        detail?: string;
+        /**
+         * An optional string which is rendered less prominently after
+         * {@link CompletionEntryLabelDetails.detail}. Should be used for fully qualified
+         * names or file path.
+         */
+        description?: string;
     }
 
     /**
@@ -2363,7 +2400,7 @@ namespace ts.server.protocol {
         /**
          * Human-readable description of the `source` from the CompletionEntry.
          */
-         sourceDisplay?: SymbolDisplayPart[];
+        sourceDisplay?: SymbolDisplayPart[];
     }
 
     /** @deprecated Prefer CompletionInfoResponse, which supports several top-level fields in addition to the array of entries. */
@@ -2376,6 +2413,7 @@ namespace ts.server.protocol {
     }
 
     export interface CompletionInfo {
+        readonly flags?: number;
         readonly isGlobalCompletion: boolean;
         readonly isMemberCompletion: boolean;
         readonly isNewIdentifierLocation: boolean;
@@ -3387,7 +3425,7 @@ namespace ts.server.protocol {
         /**
          * Allows completions to be formatted with snippet text, indicated by `CompletionItem["isSnippet"]`.
          */
-         readonly includeCompletionsWithSnippetText?: boolean;
+        readonly includeCompletionsWithSnippetText?: boolean;
         /**
          * If enabled, the completion list will include completions with invalid identifier names.
          * For those entries, The `insertText` and `replacementSpan` properties will be set to change from `.x` property access to `["x"]`.
@@ -3406,6 +3444,18 @@ namespace ts.server.protocol {
          * `class A { foo }`.
          */
         readonly includeCompletionsWithClassMemberSnippets?: boolean;
+        /**
+         * If enabled, object literal methods will have a method declaration completion entry in addition
+         * to the regular completion entry containing just the method name.
+         * E.g., `const objectLiteral: T = { f| }` could be completed to `const objectLiteral: T = { foo(): void {} }`,
+         * in addition to `const objectLiteral: T = { foo }`.
+         */
+        readonly includeCompletionsWithObjectLiteralMethodSnippets?: boolean;
+        /**
+         * Indicates whether {@link CompletionEntry.labelDetails completion entry label details} are supported.
+         * If not, contents of `labelDetails` may be included in the {@link CompletionEntry.name} property.
+         */
+        readonly useLabelDetailsInCompletionEntries?: boolean;
         readonly allowIncompleteCompletions?: boolean;
         readonly importModuleSpecifierPreference?: "shortest" | "project-relative" | "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
@@ -3420,6 +3470,21 @@ namespace ts.server.protocol {
 
         readonly displayPartsForJSDoc?: boolean;
         readonly generateReturnInDocTemplate?: boolean;
+
+        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
+        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
+        readonly includeInlayFunctionParameterTypeHints?: boolean,
+        readonly includeInlayVariableTypeHints?: boolean;
+        readonly includeInlayVariableTypeHintsWhenTypeMatchesName?: boolean;
+        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
+        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
+        readonly includeInlayEnumMemberValueHints?: boolean;
+        readonly autoImportFileExcludePatterns?: string[];
+
+        /**
+         * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
+         */
+        readonly disableLineTextInReferences?: boolean;
     }
 
     export interface CompilerOptions {

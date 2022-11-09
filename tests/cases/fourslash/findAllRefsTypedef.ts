@@ -5,11 +5,11 @@
 // @Filename: /a.js
 /////**
 //// * @typedef I {Object}
-//// * [|@prop [|{| "isDefinition": true, "contextRangeIndex": 0 |}p|] {number}
-//// |]*/
+//// * /*1*/@prop /*2*/p {number}
+//// */
 ////
 /////** @type {I} */
 ////let x;
-////x.[|p|];
+////x./*3*/p;
 
-verify.singleReferenceGroup("(property) p: number", "p");
+verify.baselineFindAllReferences('1', '2', '3');

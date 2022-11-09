@@ -35,7 +35,7 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(191,5): error TS2322: Typ
     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'readonly string[]'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(203,5): error TS2322: Type 'string' is not assignable to type 'keyof [1, 2, ...T]'.
   Type '"2"' is not assignable to type '"0" | "1" | keyof T[]'.
-tests/cases/conformance/types/tuple/variadicTuples1.ts(357,26): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
+tests/cases/conformance/types/tuple/variadicTuples1.ts(357,26): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Type '[false, false]' is not assignable to type '[...number[], boolean]'.
   Type at position 0 in source is not compatible with type at position 0 in target.
     Type 'boolean' is not assignable to type 'number'.
@@ -456,7 +456,7 @@ tests/cases/conformance/types/tuple/variadicTuples1.ts(397,7): error TS2322: Typ
         let v1 = f20(args);  // U
         let v2 = f20(["foo", "bar"]);  // [string]
                              ~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'number | undefined'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
         let v3 = f20(["foo", 42]);  // [string]
     }
     

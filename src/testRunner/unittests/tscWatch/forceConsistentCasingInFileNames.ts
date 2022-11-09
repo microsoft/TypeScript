@@ -20,7 +20,7 @@ namespace ts.tscWatch {
                 scenario: "forceConsistentCasingInFileNames",
                 subScenario,
                 commandLineArgs: ["--w", "--p", tsconfig.path],
-                sys: () => createWatchedSystem([loggerFile, anotherFile, tsconfig, libFile, tsconfig]),
+                sys: () => createWatchedSystem([loggerFile, anotherFile, tsconfig, libFile]),
                 changes
             });
         }
@@ -113,7 +113,7 @@ export const Fragment: unique symbol;
                     path: `${projectRoot}/tsconfig.json`,
                     content: JSON.stringify({
                         compilerOptions: { jsx: "react-jsx", jsxImportSource: "react", forceConsistentCasingInFileNames: true },
-                        files: ["node_modules/react/jsx-Runtime/index.d.ts", "index.tsx"] // NB: casing does not match disk
+                        files: ["node_modules/react/Jsx-Runtime/index.d.ts", "index.tsx"]
                     })
                 }
             ], { currentDirectory: projectRoot }),
@@ -262,5 +262,100 @@ a;b;
         verifyDirSymlink("when import matches disk but directory symlink target does not", `${projectRoot}/XY`, `${projectRoot}/XY`, `./Xy`);
         verifyDirSymlink("when import and directory symlink target agree but do not match disk", `${projectRoot}/XY`, `${projectRoot}/Xy`, `./Xy`);
         verifyDirSymlink("when import, directory symlink target, and disk are all different", `${projectRoot}/XY`, `${projectRoot}/Xy`, `./yX`);
+
+        verifyTscWatch({
+            scenario: "forceConsistentCasingInFileNames",
+            subScenario: "with nodeNext resolution",
+            commandLineArgs: ["--w", "--explainFiles"],
+            sys: () => createWatchedSystem({
+                "/Users/name/projects/web/src/bin.ts": `import { foo } from "yargs";`,
+                "/Users/name/projects/web/node_modules/@types/yargs/index.d.ts": "export function foo(): void;",
+                "/Users/name/projects/web/node_modules/@types/yargs/index.d.mts": "export function foo(): void;",
+                "/Users/name/projects/web/node_modules/@types/yargs/package.json": JSON.stringify({
+                    name: "yargs",
+                    version: "17.0.12",
+                    exports: {
+                        ".": {
+                            types: {
+                                import: "./index.d.mts",
+                                default: "./index.d.ts"
+                            }
+                        },
+                    }
+                }),
+                "/Users/name/projects/web/tsconfig.json": JSON.stringify({
+                    compilerOptions: {
+                        moduleResolution: "nodenext",
+                        forceConsistentCasingInFileNames: true,
+                        traceResolution: true,
+                    }
+                }),
+                [libFile.path]: libFile.content,
+            }, { currentDirectory: "/Users/name/projects/web" }),
+            changes: emptyArray,
+        });
+
+        verifyTscWatch({
+            scenario: "forceConsistentCasingInFileNames",
+            subScenario: "self name package reference",
+            commandLineArgs: ["-w", "--explainFiles"],
+            sys: () => createWatchedSystem({
+                "/Users/name/projects/web/package.json": JSON.stringify({
+                    name: "@this/package",
+                    type: "module",
+                    exports: {
+                        ".": "./dist/index.js"
+                    }
+                }),
+                "/Users/name/projects/web/index.ts": Utils.dedent`
+                    import * as me from "@this/package";
+                    me.thing();
+                    export function thing(): void {}
+                `,
+                "/Users/name/projects/web/tsconfig.json": JSON.stringify({
+                    compilerOptions: {
+                        module: "nodenext",
+                        outDir: "./dist",
+                        declarationDir: "./types",
+                        composite: true,
+                        forceConsistentCasingInFileNames: true,
+                        traceResolution: true,
+                    }
+                }),
+                "/a/lib/lib.esnext.full.d.ts": libFile.content,
+            }, { currentDirectory: "/Users/name/projects/web" }),
+            changes: emptyArray,
+        });
+
+
+        verifyTscWatch({
+            scenario: "forceConsistentCasingInFileNames",
+            subScenario: "package json is looked up for file",
+            commandLineArgs: ["-w", "--explainFiles"],
+            sys: () => createWatchedSystem({
+                "/Users/name/projects/lib-boilerplate/package.json": JSON.stringify({
+                    name: "lib-boilerplate",
+                    version: "0.0.2",
+                    type: "module",
+                    exports: "./src/index.ts",
+                }),
+                "/Users/name/projects/lib-boilerplate/src/index.ts": Utils.dedent`
+                    export function thing(): void {}
+                `,
+                "/Users/name/projects/lib-boilerplate/test/basic.spec.ts": Utils.dedent`
+                    import { thing } from 'lib-boilerplate'
+                `,
+                "/Users/name/projects/lib-boilerplate/tsconfig.json": JSON.stringify({
+                    compilerOptions: {
+                        module: "node16",
+                        target: "es2021",
+                        forceConsistentCasingInFileNames: true,
+                        traceResolution: true,
+                    }
+                }),
+                "/a/lib/lib.es2021.full.d.ts": libFile.content,
+            }, { currentDirectory: "/Users/name/projects/lib-boilerplate" }),
+            changes: emptyArray,
+        });
     });
 }

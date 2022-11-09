@@ -1,20 +1,17 @@
 /// <reference path='fourslash.ts'/>
 
-////[|interface [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}Foo|] {
-////}|]
+/////*1*/interface /*2*/Foo {
+////}
 ////
-////[|module [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}Foo|] {
+/////*3*/module /*4*/Foo {
 ////    export interface Bar { }
-////}|]
+////}
 ////
-////[|function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 4 |}Foo|](): void {
-////}|]
+/////*5*/function /*6*/Foo(): void {
+////}
 ////
-////var f1: [|Foo|].Bar;
-////var f2: [|Foo|];
-////[|Foo|].bind(this);
+////var f1: /*7*/Foo.Bar;
+////var f2: /*8*/Foo;
+/////*9*/Foo.bind(this);
 
-const [type1Def, type1, namespace1Def, namespace1, value1Def, value1, namespace2, type2, value2] = test.ranges();
-verify.singleReferenceGroup("interface Foo\nnamespace Foo", [type1, type2]);
-verify.singleReferenceGroup("namespace Foo", [namespace1, namespace2]);
-verify.singleReferenceGroup("namespace Foo\nfunction Foo(): void", [value1, value2]);
+verify.baselineFindAllReferences('1', '2', '3', '4', '5', '6', '7', '8', '9');

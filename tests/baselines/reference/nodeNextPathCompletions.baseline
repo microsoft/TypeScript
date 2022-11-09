@@ -1,0 +1,29 @@
+[
+  {
+    "marker": {
+      "fileName": "/src/foo.ts",
+      "position": 30,
+      "name": ""
+    },
+    "completionList": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": true,
+      "entries": [
+        {
+          "name": "dependency",
+          "kind": "external module name",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "dependency",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        }
+      ]
+    }
+  }
+]

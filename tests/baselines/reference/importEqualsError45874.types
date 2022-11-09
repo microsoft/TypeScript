@@ -3,7 +3,7 @@ namespace globals {
 >globals : typeof globals
 
   export type Foo = {};
->Foo : Foo
+>Foo : {}
 
   export const Bar = {};
 >Bar : {}

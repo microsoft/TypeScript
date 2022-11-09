@@ -177,8 +177,6 @@ namespace Harness {
     }
 
     export const libFolder = "built/local/";
-    const tcServicesFileName = ts.combinePaths(libFolder, "typescriptServices.js");
-    export const tcServicesFile = IO.readFile(tcServicesFileName) + IO.newLine() + `//# sourceURL=${IO.resolvePath(tcServicesFileName)}`;
 
     export type SourceMapEmitterCallback = (
         emittedFile: string,
@@ -335,7 +333,7 @@ namespace Harness {
 
         export function setCompilerOptionsFromHarnessSetting(settings: TestCaseParser.CompilerSettings, options: ts.CompilerOptions & HarnessOptions): void {
             for (const name in settings) {
-                if (settings.hasOwnProperty(name)) {
+                if (ts.hasProperty(settings, name)) {
                     const value = settings[name];
                     if (value === undefined) {
                         throw new Error(`Cannot have undefined value for compiler option '${name}'.`);
@@ -717,7 +715,7 @@ namespace Harness {
             // These types are equivalent, but depend on what order the compiler observed
             // certain parts of the program.
 
-            const fullWalker = new TypeWriterWalker(program, /*fullTypeCheck*/ true, !!hasErrorBaseline);
+            const fullWalker = new TypeWriterWalker(program, !!hasErrorBaseline);
 
             // Produce baselines.  The first gives the types for all expressions.
             // The second gives symbols for all identifiers.
@@ -810,21 +808,14 @@ namespace Harness {
                         typeLines += ">" + formattedLine + "\r\n";
                     }
 
-                    // Preserve legacy behavior
-                    if (lastIndexWritten === undefined) {
-                        for (const codeLine of codeLines) {
-                            typeLines += codeLine + "\r\nNo type information for this code.";
+                    lastIndexWritten ??= -1;
+                    if (lastIndexWritten + 1 < codeLines.length) {
+                        if (!((lastIndexWritten + 1 < codeLines.length) && (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))) {
+                            typeLines += "\r\n";
                         }
+                        typeLines += codeLines.slice(lastIndexWritten + 1).join("\r\n");
                     }
-                    else {
-                        if (lastIndexWritten + 1 < codeLines.length) {
-                            if (!((lastIndexWritten + 1 < codeLines.length) && (codeLines[lastIndexWritten + 1].match(/^\s*[{|}]\s*$/) || codeLines[lastIndexWritten + 1].trim() === ""))) {
-                                typeLines += "\r\n";
-                            }
-                            typeLines += codeLines.slice(lastIndexWritten + 1).join("\r\n");
-                        }
-                        typeLines += "\r\n";
-                    }
+                    typeLines += "\r\n";
                     yield [checkDuplicatedFileName(unitName, dupeCase), Utils.removeTestPathPrefixes(typeLines)];
                 }
             }
@@ -1389,20 +1380,25 @@ namespace Harness {
                 else {
                     IO.writeFile(actualFileName, encodedActual);
                 }
+                const errorMessage = getBaselineFileChangedErrorMessage(relativeFileName);
                 if (!!require && opts && opts.PrintDiff) {
                     const Diff = require("diff");
                     const patch = Diff.createTwoFilesPatch("Expected", "Actual", expected, actual, "The current baseline", "The new version");
-                    throw new Error(`The baseline file ${relativeFileName} has changed.${ts.ForegroundColorEscapeSequences.Grey}\n\n${patch}`);
+                    throw new Error(`${errorMessage}${ts.ForegroundColorEscapeSequences.Grey}\n\n${patch}`);
                 }
                 else {
                     if (!IO.fileExists(expected)) {
                         throw new Error(`New baseline created at ${IO.joinPath("tests", "baselines","local", relativeFileName)}`);
                     }
                     else {
-                        throw new Error(`The baseline file ${relativeFileName} has changed.`);
+                        throw new Error(errorMessage);
                     }
                 }
             }
+        }
+
+        function getBaselineFileChangedErrorMessage(relativeFileName: string): string {
+            return `The baseline file ${relativeFileName} has changed. (Run "gulp baseline-accept" if the new baseline is correct.)`;
         }
 
         export function runBaseline(relativeFileName: string, actual: string | null, opts?: BaselineOptions): void {
@@ -1491,7 +1487,7 @@ namespace Harness {
 
     export function getConfigNameFromFileName(filename: string): "tsconfig.json" | "jsconfig.json" | undefined {
         const flc = ts.getBaseFileName(filename).toLowerCase();
-        return ts.find(["tsconfig.json" as "tsconfig.json", "jsconfig.json" as "jsconfig.json"], x => x === flc);
+        return ts.find(["tsconfig.json" as const, "jsconfig.json" as const], x => x === flc);
     }
 
     if (Error) (Error as any).stackTraceLimit = 100;

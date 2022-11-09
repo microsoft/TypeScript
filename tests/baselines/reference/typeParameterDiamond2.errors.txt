@@ -16,6 +16,7 @@ tests/cases/compiler/typeParameterDiamond2.ts(10,13): error TS2322: Type 'Bottom
                 ~~~
 !!! error TS2322: Type 'T | U' is not assignable to type 'Top'.
 !!! error TS2322:   'Top' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
+!!! related TS2208 tests/cases/compiler/typeParameterDiamond2.ts:2:43: This type parameter might need an `extends Top` constraint.
                 middle = bottom;
                 top = bottom;
                 ~~~

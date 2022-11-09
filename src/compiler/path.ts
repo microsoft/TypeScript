@@ -452,12 +452,9 @@ namespace ts {
      * Normalize path separators, converting `\` into `/`.
      */
     export function normalizeSlashes(path: string): string {
-        const index = path.indexOf("\\");
-        if (index === -1) {
-            return path;
-        }
-        backslashRegExp.lastIndex = index; // prime regex with known position
-        return path.replace(backslashRegExp, directorySeparator);
+        return path.indexOf("\\") !== -1
+            ? path.replace(backslashRegExp, directorySeparator)
+            : path;
     }
 
     /**
@@ -583,18 +580,6 @@ namespace ts {
             ? normalizePath(fileName)
             : getNormalizedAbsolutePath(fileName, basePath);
         return getCanonicalFileName(nonCanonicalizedPath) as Path;
-    }
-
-    export function normalizePathAndParts(path: string): { path: string, parts: string[] } {
-        path = normalizeSlashes(path);
-        const [root, ...parts] = reducePathComponents(getPathComponents(path));
-        if (parts.length) {
-            const joinedParts = root + parts.join(directorySeparator);
-            return { path: hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(joinedParts) : joinedParts, parts };
-        }
-        else {
-            return { path: root, parts };
-        }
     }
 
     //// Path Mutation

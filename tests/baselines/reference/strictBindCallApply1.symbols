@@ -388,3 +388,82 @@ C.apply(c, [10, "hello", 30]);  // Error
 >apply : Symbol(NewableFunction.apply, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >c : Symbol(c, Decl(strictBindCallApply1.ts, 34, 11))
 
+function bar<T extends unknown[]>(callback: (this: 1, ...args: T) => void) {
+>bar : Symbol(bar, Decl(strictBindCallApply1.ts, 71, 30))
+>T : Symbol(T, Decl(strictBindCallApply1.ts, 73, 13))
+>callback : Symbol(callback, Decl(strictBindCallApply1.ts, 73, 34))
+>this : Symbol(this, Decl(strictBindCallApply1.ts, 73, 45))
+>args : Symbol(args, Decl(strictBindCallApply1.ts, 73, 53))
+>T : Symbol(T, Decl(strictBindCallApply1.ts, 73, 13))
+
+    callback.bind(1);
+>callback.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>callback : Symbol(callback, Decl(strictBindCallApply1.ts, 73, 34))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+
+    callback.bind(2); // Error
+>callback.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>callback : Symbol(callback, Decl(strictBindCallApply1.ts, 73, 34))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+}
+
+function baz<T extends 1 | 2>(callback: (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void) {
+>baz : Symbol(baz, Decl(strictBindCallApply1.ts, 76, 1))
+>T : Symbol(T, Decl(strictBindCallApply1.ts, 78, 13))
+>callback : Symbol(callback, Decl(strictBindCallApply1.ts, 78, 30))
+>this : Symbol(this, Decl(strictBindCallApply1.ts, 78, 41))
+>args : Symbol(args, Decl(strictBindCallApply1.ts, 78, 49))
+>T : Symbol(T, Decl(strictBindCallApply1.ts, 78, 13))
+
+    callback.bind(1);
+>callback.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>callback : Symbol(callback, Decl(strictBindCallApply1.ts, 78, 30))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+
+    callback.bind(2); // Error
+>callback.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>callback : Symbol(callback, Decl(strictBindCallApply1.ts, 78, 30))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+}
+
+// Repro from #32964
+class Foo<T extends unknown[]> {
+>Foo : Symbol(Foo, Decl(strictBindCallApply1.ts, 81, 1))
+>T : Symbol(T, Decl(strictBindCallApply1.ts, 84, 10))
+
+    constructor() {
+        this.fn.bind(this);
+>this.fn.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>this.fn : Symbol(Foo.fn, Decl(strictBindCallApply1.ts, 87, 5))
+>this : Symbol(Foo, Decl(strictBindCallApply1.ts, 81, 1))
+>fn : Symbol(Foo.fn, Decl(strictBindCallApply1.ts, 87, 5))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>this : Symbol(Foo, Decl(strictBindCallApply1.ts, 81, 1))
+    }
+
+    fn(...args: T): void {}
+>fn : Symbol(Foo.fn, Decl(strictBindCallApply1.ts, 87, 5))
+>args : Symbol(args, Decl(strictBindCallApply1.ts, 89, 7))
+>T : Symbol(T, Decl(strictBindCallApply1.ts, 84, 10))
+}
+
+class Bar<T extends 1 | 2> {
+>Bar : Symbol(Bar, Decl(strictBindCallApply1.ts, 90, 1))
+>T : Symbol(T, Decl(strictBindCallApply1.ts, 92, 10))
+
+    constructor() {
+        this.fn.bind(this);
+>this.fn.bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>this.fn : Symbol(Bar.fn, Decl(strictBindCallApply1.ts, 95, 5))
+>this : Symbol(Bar, Decl(strictBindCallApply1.ts, 90, 1))
+>fn : Symbol(Bar.fn, Decl(strictBindCallApply1.ts, 95, 5))
+>bind : Symbol(CallableFunction.bind, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>this : Symbol(Bar, Decl(strictBindCallApply1.ts, 90, 1))
+    }
+
+    fn(...args: T extends 1 ? [unknown] : [unknown, unknown]) {}
+>fn : Symbol(Bar.fn, Decl(strictBindCallApply1.ts, 95, 5))
+>args : Symbol(args, Decl(strictBindCallApply1.ts, 97, 7))
+>T : Symbol(T, Decl(strictBindCallApply1.ts, 92, 10))
+}
+

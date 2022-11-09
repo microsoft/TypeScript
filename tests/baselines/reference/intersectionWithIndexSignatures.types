@@ -1,10 +1,10 @@
 === tests/cases/conformance/types/intersection/intersectionWithIndexSignatures.ts ===
 type A = { a: string };
->A : A
+>A : { a: string; }
 >a : string
 
 type B = { b: string };
->B : B
+>B : { b: string; }
 >b : string
 
 declare let sa1: { x: A & B };
@@ -65,7 +65,7 @@ type constr<Source, Tgt> = { [K in keyof Source]: string } & Pick<Tgt, Exclude<k
 >constr : constr<Source, Tgt>
 
 type s = constr<{}, { [key: string]: { a: string } }>;
->s : s
+>s : {} & Pick<{ [key: string]: { a: string; }; }, string | number>
 >key : string
 >a : string
 

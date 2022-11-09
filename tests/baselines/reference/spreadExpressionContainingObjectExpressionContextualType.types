@@ -1,0 +1,45 @@
+=== tests/cases/compiler/spreadExpressionContainingObjectExpressionContextualType.ts ===
+// repro #49585
+
+const { value } = (() => ({
+>value : string
+>(() => ({  value: "",  ...(true ? {} : {}),}))() : { value: string; }
+>(() => ({  value: "",  ...(true ? {} : {}),})) : () => { value: string; }
+>() => ({  value: "",  ...(true ? {} : {}),}) : () => { value: string; }
+>({  value: "",  ...(true ? {} : {}),}) : { value: string; }
+>{  value: "",  ...(true ? {} : {}),} : { value: string; }
+
+  value: "",
+>value : string
+>"" : ""
+
+  ...(true ? {} : {}),
+>(true ? {} : {}) : {}
+>true ? {} : {} : {}
+>true : true
+>{} : {}
+>{} : {}
+
+}))();
+
+// repro 49684#discussion_r920545763
+
+const { value2 } = {
+>value2 : string
+>{  value2: "",  ...(() => true ? {} : {})(),} : { value2: string; }
+
+  value2: "",
+>value2 : string
+>"" : ""
+
+  ...(() => true ? {} : {})(),
+>(() => true ? {} : {})() : {}
+>(() => true ? {} : {}) : () => {}
+>() => true ? {} : {} : () => {}
+>true ? {} : {} : {}
+>true : true
+>{} : {}
+>{} : {}
+
+};
+

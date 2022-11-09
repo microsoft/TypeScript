@@ -1,6 +1,6 @@
 === tests/cases/conformance/controlFlow/neverReturningFunctions1.ts ===
 function fail(message?: string): never {
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >message : string | undefined
 
     throw new Error(message);
@@ -62,9 +62,9 @@ function f03(x: string) {
 }
 
 function f11(x: string | undefined, fail: (message?: string) => never) {
->f11 : (x: string | undefined, fail: (message?: string | undefined) => never) => void
+>f11 : (x: string | undefined, fail: (message?: string) => never) => void
 >x : string | undefined
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >message : string | undefined
 
     if (x === undefined) fail("undefined argument");
@@ -82,9 +82,9 @@ function f11(x: string | undefined, fail: (message?: string) => never) {
 }
 
 function f12(x: number, fail: (message?: string) => never): number {
->f12 : (x: number, fail: (message?: string | undefined) => never) => number
+>f12 : (x: number, fail: (message?: string) => never) => number
 >x : number
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >message : string | undefined
 
     if (x >= 0) return x;
@@ -103,9 +103,9 @@ function f12(x: number, fail: (message?: string) => never): number {
 }
 
 function f13(x: string, fail: (message?: string) => never) {
->f13 : (x: string, fail: (message?: string | undefined) => never) => void
+>f13 : (x: string, fail: (message?: string) => never) => void
 >x : string
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >message : string | undefined
 
     x;  // string
@@ -123,7 +123,7 @@ namespace Debug {
 >Debug : typeof Debug
 
     export declare function fail(message?: string): never;
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >message : string | undefined
 }
 
@@ -208,7 +208,7 @@ class Test {
 >Test : Test
 
     fail(message?: string): never {
->fail : (message?: string | undefined) => never
+>fail : (message?: string) => never
 >message : string | undefined
 
         throw new Error(message);
@@ -496,7 +496,7 @@ export interface Component<T extends object = any> {
 >system : any
 
 	init(data?: T): void;
->init : (data?: T | undefined) => void
+>init : (data?: T) => void
 >data : T | undefined
 
 	pause(): void;

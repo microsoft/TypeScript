@@ -14,7 +14,7 @@ namespace Harness.Parallel.Host {
         const { statSync } = require("fs") as typeof import("fs");
 
         // NOTE: paths for module and types for FailedTestReporter _do not_ line up due to our use of --outFile for run.js
-        const FailedTestReporter = require(Utils.findUpFile("scripts/failed-tests.js")) as typeof import("../../../scripts/failed-tests");
+        const FailedTestReporter = require(Utils.findUpFile("scripts/failed-tests.cjs")) as typeof import("../../../scripts/failed-tests.cjs");
 
         const perfdataFileNameFragment = ".parallelperf";
         const perfData = readSavedPerfData(configOption);
@@ -45,7 +45,7 @@ namespace Harness.Parallel.Host {
             constructor(info: ErrorInfo | TestInfo) {
                 super(info.name[info.name.length - 1]);
                 this.info = info;
-                this.state = "error" in info ? "failed" : "passed"; // eslint-disable-line no-in-operator
+                this.state = "error" in info ? "failed" : "passed"; // eslint-disable-line local/no-in-operator
                 this.pending = false;
             }
         }
@@ -512,7 +512,7 @@ namespace Harness.Parallel.Host {
                 function replayTest(runner: Mocha.Runner, test: RemoteTest) {
                     runner.emit("test", test);
                     if (test.isFailed()) {
-                        runner.emit("fail", test, "error" in test.info ? rebuildError(test.info) : new Error("Unknown error")); // eslint-disable-line no-in-operator
+                        runner.emit("fail", test, "error" in test.info ? rebuildError(test.info) : new Error("Unknown error")); // eslint-disable-line local/no-in-operator
                     }
                     else {
                         runner.emit("pass", test);
@@ -534,7 +534,7 @@ namespace Harness.Parallel.Host {
                 patchStats(consoleReporter.stats);
 
                 let xunitReporter: import("mocha").reporters.XUnit | undefined;
-                let failedTestReporter: import("../../../scripts/failed-tests") | undefined;
+                let failedTestReporter: import("../../../scripts/failed-tests.cjs") | undefined;
                 if (process.env.CI === "true") {
                     xunitReporter = new Mocha.reporters.XUnit(replayRunner, {
                         reporterOptions: {

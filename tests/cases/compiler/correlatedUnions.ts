@@ -183,3 +183,56 @@ function f3<K extends keyof ArgMap>(funcs: Funcs, key: K, arg: ArgMap[K]) {
 function f4<K extends keyof ArgMap>(x: Funcs[keyof ArgMap], y: Funcs[K]) {
     x = y;
 }
+
+// Repro from #47890
+
+interface MyObj {
+    someKey: {
+      name: string;
+    }
+    someOtherKey: {
+      name: number;
+    }
+}
+
+const ref: MyObj = {
+    someKey: { name: "" },
+    someOtherKey: { name: 42 }
+};
+
+function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
+    const myObj: Partial<MyObj>[K] = ref[k];
+    if (myObj) {
+      return myObj.name;
+    }
+    const myObj2: Partial<MyObj>[keyof MyObj] = ref[k];
+    if (myObj2) {
+      return myObj2.name;
+    }
+    return undefined;
+}
+
+// Repro from #48157
+
+interface Foo {
+    bar?: string
+}
+
+function foo<T extends keyof Foo>(prop: T, f: Required<Foo>) {
+    bar(f[prop]);
+}
+
+declare function bar(t: string): void;
+
+// Repro from #48246
+
+declare function makeCompleteLookupMapping<T extends ReadonlyArray<any>, Attr extends keyof T[number]>(
+    ops: T, attr: Attr): { [Item in T[number]as Item[Attr]]: Item };
+
+const ALL_BARS = [{ name: 'a'}, {name: 'b'}] as const;
+
+const BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
+
+type BarLookup = typeof BAR_LOOKUP;
+
+type Baz = { [K in keyof BarLookup]: BarLookup[K]['name'] };

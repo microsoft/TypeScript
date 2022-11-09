@@ -14,7 +14,7 @@ const B = Symbol("B");
 >"B" : "B"
 
 type Action =
->Action : Action
+>Action : { type: typeof A; data: string; } | { type: typeof B; data: number; }
 
     | {type: typeof A, data: string}
 >type : unique symbol

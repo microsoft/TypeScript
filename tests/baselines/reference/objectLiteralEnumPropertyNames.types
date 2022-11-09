@@ -12,7 +12,7 @@ enum Strs {
 >'b' : "b"
 }
 type TestStrs = { [key in Strs]: string }
->TestStrs : TestStrs
+>TestStrs : { a: string; b: string; }
 
 const x: TestStrs = {
 >x : TestStrs
@@ -111,7 +111,7 @@ enum Nums {
 >B : Nums.B
 }
 type TestNums = { 0: number, 1: number }
->TestNums : TestNums
+>TestNums : { 0: number; 1: number; }
 >0 : number
 >1 : number
 

@@ -13,11 +13,11 @@ namespace ts.codefix {
         Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type.code,
         Diagnostics.Operator_0_cannot_be_applied_to_type_1.code,
         Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code,
-        Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code,
+        Diagnostics.This_comparison_appears_to_be_unintentional_because_the_types_0_and_1_have_no_overlap.code,
         Diagnostics.This_condition_will_always_return_true_since_this_0_is_always_defined.code,
         Diagnostics.Type_0_is_not_an_array_type.code,
         Diagnostics.Type_0_is_not_an_array_type_or_a_string_type.code,
-        Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_Use_compiler_option_downlevelIteration_to_allow_iterating_of_iterators.code,
+        Diagnostics.Type_0_can_only_be_iterated_through_when_using_the_downlevelIteration_flag_or_with_a_target_of_es2015_or_higher.code,
         Diagnostics.Type_0_is_not_an_array_type_or_a_string_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator.code,
         Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator.code,
         Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator.code,
@@ -93,7 +93,7 @@ namespace ts.codefix {
     }
 
     function isMissingAwaitError(sourceFile: SourceFile, errorCode: number, span: TextSpan, cancellationToken: CancellationToken, program: Program) {
-        const checker = program.getDiagnosticsProducingTypeChecker();
+        const checker = program.getTypeChecker();
         const diagnostics = checker.getDiagnostics(sourceFile, cancellationToken);
         return some(diagnostics, ({ start, length, relatedInformation, code }) =>
             isNumber(start) && isNumber(length) && textSpansEqual({ start, length }, span) &&
@@ -226,6 +226,15 @@ namespace ts.codefix {
     }
 
     function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression, fixedDeclarations?: Set<number>) {
+        if (isForOfStatement(insertionSite.parent) && !insertionSite.parent.awaitModifier) {
+            const exprType = checker.getTypeAtLocation(insertionSite);
+            const asyncIter = checker.getAsyncIterableType();
+            if (asyncIter && checker.isTypeAssignableTo(exprType, asyncIter)) {
+                const forOf = insertionSite.parent;
+                changeTracker.replaceNode(sourceFile, forOf, factory.updateForOfStatement(forOf, factory.createToken(SyntaxKind.AwaitKeyword), forOf.initializer, forOf.expression, forOf.statement));
+                return;
+            }
+        }
         if (isBinaryExpression(insertionSite)) {
             for (const side of [insertionSite.left, insertionSite.right]) {
                 if (fixedDeclarations && isIdentifier(side)) {

@@ -4,93 +4,88 @@ namespace ts.tscWatch {
             path: `${projectRoot}/tsconfig.json`,
             content: `{}`
         };
-        interface VerifyEmitAndErrorUpdatesWorker extends VerifyEmitAndErrorUpdates {
-            configFile: () => File;
-        }
-        function verifyEmitAndErrorUpdatesWorker({
-            subScenario,
-            files,
-            currentDirectory,
-            lib,
-            configFile,
-            changes,
-            baselineIncremental
-        }: VerifyEmitAndErrorUpdatesWorker) {
-            verifyTscWatch({
-                scenario: "emitAndErrorUpdates",
-                subScenario,
-                commandLineArgs: ["--w"],
-                sys: () => createWatchedSystem(
-                    [...files(), configFile(), lib?.() || libFile],
-                    { currentDirectory: currentDirectory || projectRoot }
-                ),
-                changes,
-                baselineIncremental
-            });
-            verifyTscWatch({
-                scenario: "emitAndErrorUpdates",
-                subScenario: `incremental/${subScenario}`,
-                commandLineArgs: ["--w", "--i"],
-                sys: () => createWatchedSystem(
-                    [...files(), configFile(), lib?.() || libFile],
-                    { currentDirectory: currentDirectory || projectRoot }
-                ),
-                changes,
-                baselineIncremental
-            });
-        }
-
-        function changeCompilerOptions(input: VerifyEmitAndErrorUpdates, additionalOptions: CompilerOptions): File {
-            const configFile = input.configFile?.() || config;
-            const content = JSON.parse(configFile.content);
-            content.compilerOptions = { ...content.compilerOptions, ...additionalOptions };
-            return { path: configFile.path, content: JSON.stringify(content) };
-        }
-
         interface VerifyEmitAndErrorUpdates {
             subScenario: string
             files: () => File[];
             currentDirectory?: string;
-            lib?: () => File;
             changes: TscWatchCompileChange[];
-            configFile?: () => File;
-            baselineIncremental?: boolean
         }
-        function verifyEmitAndErrorUpdates(input: VerifyEmitAndErrorUpdates) {
-            verifyEmitAndErrorUpdatesWorker({
-                ...input,
-                subScenario: `default/${input.subScenario}`,
-                configFile: () => input.configFile?.() || config
+        function verifyEmitAndErrorUpdates({
+            subScenario,
+            files,
+            currentDirectory,
+            changes,
+        }: VerifyEmitAndErrorUpdates) {
+            verifyTscWatch({
+                scenario: "emitAndErrorUpdates",
+                subScenario: `default/${subScenario}`,
+                commandLineArgs: ["--w"],
+                sys: () => createWatchedSystem(
+                    files(),
+                    { currentDirectory: currentDirectory || projectRoot }
+                ),
+                changes,
+                baselineIncremental: true
             });
 
-            verifyEmitAndErrorUpdatesWorker({
-                ...input,
-                subScenario: `defaultAndD/${input.subScenario}`,
-                configFile: () => changeCompilerOptions(input, { declaration: true })
+            verifyTscWatch({
+                scenario: "emitAndErrorUpdates",
+                subScenario: `defaultAndD/${subScenario}`,
+                commandLineArgs: ["--w", "--d"],
+                sys: () => createWatchedSystem(
+                    files(),
+                    { currentDirectory: currentDirectory || projectRoot }
+                ),
+                changes,
+                baselineIncremental: true
             });
 
-            verifyEmitAndErrorUpdatesWorker({
-                ...input,
-                subScenario: `isolatedModules/${input.subScenario}`,
-                configFile: () => changeCompilerOptions(input, { isolatedModules: true })
+            verifyTscWatch({
+                scenario: "emitAndErrorUpdates",
+                subScenario: `isolatedModules/${subScenario}`,
+                commandLineArgs: ["--w", "--isolatedModules"],
+                sys: () => createWatchedSystem(
+                    files(),
+                    { currentDirectory: currentDirectory || projectRoot }
+                ),
+                changes,
+                baselineIncremental: true
             });
 
-            verifyEmitAndErrorUpdatesWorker({
-                ...input,
-                subScenario: `isolatedModulesAndD/${input.subScenario}`,
-                configFile: () => changeCompilerOptions(input, { isolatedModules: true, declaration: true })
+            verifyTscWatch({
+                scenario: "emitAndErrorUpdates",
+                subScenario: `isolatedModulesAndD/${subScenario}`,
+                commandLineArgs: ["--w", "--isolatedModules", "--d"],
+                sys: () => createWatchedSystem(
+                    files(),
+                    { currentDirectory: currentDirectory || projectRoot }
+                ),
+                changes,
+                baselineIncremental: true
             });
 
-            verifyEmitAndErrorUpdatesWorker({
-                ...input,
-                subScenario: `assumeChangesOnlyAffectDirectDependencies/${input.subScenario}`,
-                configFile: () => changeCompilerOptions(input, { assumeChangesOnlyAffectDirectDependencies: true })
+            verifyTscWatch({
+                scenario: "emitAndErrorUpdates",
+                subScenario: `assumeChangesOnlyAffectDirectDependencies/${subScenario}`,
+                commandLineArgs: ["--w", "--assumeChangesOnlyAffectDirectDependencies"],
+                sys: () => createWatchedSystem(
+                    files(),
+                    { currentDirectory: currentDirectory || projectRoot }
+                ),
+                changes,
+                baselineIncremental: true
             });
 
-            verifyEmitAndErrorUpdatesWorker({
-                ...input,
-                subScenario: `assumeChangesOnlyAffectDirectDependenciesAndD/${input.subScenario}`,
-                configFile: () => changeCompilerOptions(input, { assumeChangesOnlyAffectDirectDependencies: true, declaration: true })
+            verifyTscWatch({
+                scenario: "emitAndErrorUpdates",
+                subScenario: `assumeChangesOnlyAffectDirectDependenciesAndD/${subScenario}`,
+                commandLineArgs: ["--w", "--assumeChangesOnlyAffectDirectDependencies", "--d"],
+                sys: () => createWatchedSystem(
+                    files(),
+                    { currentDirectory: currentDirectory || projectRoot }
+                ),
+                changes,
+                baselineIncremental: true
             });
         }
 
@@ -106,7 +101,7 @@ console.log(b.c.d);`
             function verifyDeepImportChange(subScenario: string, bFile: File, cFile: File) {
                 verifyEmitAndErrorUpdates({
                     subScenario: `deepImportChanges/${subScenario}`,
-                    files: () => [aFile, bFile, cFile],
+                    files: () => [aFile, bFile, cFile, config, libFile],
                     changes: [
                         {
                             caption: "Rename property d to d2 of class C to initialize signatures",
@@ -214,7 +209,7 @@ getPoint().c.x;`
             };
             verifyEmitAndErrorUpdates({
                 subScenario: "file not exporting a deep multilevel import that changes",
-                files: () => [aFile, bFile, cFile, dFile, eFile],
+                files: () => [aFile, bFile, cFile, dFile, eFile, config, libFile],
                 changes: [
                     {
                         caption: "Rename property x2 to x of interface Coords to initialize signatures",
@@ -285,8 +280,7 @@ export class Data {
             function verifyTransitiveExports(subScenario: string, files: readonly File[]) {
                 verifyEmitAndErrorUpdates({
                     subScenario: `transitive exports/${subScenario}`,
-                    files: () => [lib1ToolsInterface, lib1ToolsPublic, app, lib2Public, lib1Public, ...files],
-                    configFile: () => config,
+                    files: () => [lib1ToolsInterface, lib1ToolsPublic, app, lib2Public, lib1Public, ...files, config, libFile],
                     changes: [
                         {
                             caption: "Rename property title to title2 of interface ITest to initialize signatures",
@@ -357,10 +351,8 @@ export class Data2 {
             verifyEmitAndErrorUpdates({
                 subScenario: "with noEmitOnError",
                 currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/noEmitOnError`,
-                files: () => ["shared/types/db.ts", "src/main.ts", "src/other.ts"]
-                    .map(f => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", f)),
-                lib: () => ({ path: libFile.path, content: libContent }),
-                configFile: () => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", "tsconfig.json"),
+                files: () => ["shared/types/db.ts", "src/main.ts", "src/other.ts", "tsconfig.json"]
+                    .map(f => TestFSWithWatch.getTsBuildProjectFile("noEmitOnError", f)).concat({ path: libFile.path, content: libContent }),
                 changes: [
                     noChange,
                     change("Fix Syntax error", `import { A } from "../shared/types/db";
@@ -374,7 +366,6 @@ const a: string = 10;`),
 const a: string = "hello";`),
                     noChange,
                 ],
-                baselineIncremental: true
             });
         });
     });

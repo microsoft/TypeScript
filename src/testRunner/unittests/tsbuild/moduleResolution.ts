@@ -66,96 +66,6 @@ namespace ts.tscWatch {
             changes: emptyArray
         });
 
-        verifyTscWatch({
-            scenario: "moduleResolution",
-            subScenario: `resolves specifier in output declaration file from referenced project correctly with cts and mts extensions`,
-            sys: () => createWatchedSystem([
-                {
-                    path: `${projectRoot}/packages/pkg1/package.json`,
-                    content: JSON.stringify({
-                        name: "pkg1",
-                        version: "1.0.0",
-                        main: "build/index.js",
-                        type: "module"
-                    })
-                },
-                {
-                    path: `${projectRoot}/packages/pkg1/index.ts`,
-                    content: Utils.dedent`
-                    import type { TheNum } from 'pkg2'
-                    export const theNum: TheNum = 42;`
-                },
-                {
-                    path: `${projectRoot}/packages/pkg1/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            outDir: "build",
-                            module: "node12",
-                        },
-                        references: [{ path: "../pkg2" }]
-                    })
-                },
-                {
-                    path: `${projectRoot}/packages/pkg2/const.cts`,
-                    content: `export type TheNum = 42;`
-                },
-                {
-                    path: `${projectRoot}/packages/pkg2/index.ts`,
-                    content: `export type { TheNum } from './const.cjs';`
-                },
-                {
-                    path: `${projectRoot}/packages/pkg2/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            composite: true,
-                            outDir: "build",
-                            module: "node12",
-                        }
-                    })
-                },
-                {
-                    path: `${projectRoot}/packages/pkg2/package.json`,
-                    content: JSON.stringify({
-                        name: "pkg2",
-                        version: "1.0.0",
-                        main: "build/index.js",
-                        type: "module"
-                    })
-                },
-                {
-                    path: `${projectRoot}/node_modules/pkg2`,
-                    symLink: `${projectRoot}/packages/pkg2`,
-                },
-                { ...libFile, path: `/a/lib/lib.es2020.full.d.ts` }
-            ], { currentDirectory: projectRoot }),
-            commandLineArgs: ["-b", "packages/pkg1", "-w", "--verbose", "--traceResolution"],
-            changes: [
-                {
-                    caption: "reports import errors after change to package file",
-                    change: sys => replaceFileText(sys, `${projectRoot}/packages/pkg1/package.json`, `"module"`, `"commonjs"`),
-                    timeouts: runQueuedTimeoutCallbacks,
-                },
-                {
-                    caption: "removes those errors when a package file is changed back",
-                    change: sys => replaceFileText(sys, `${projectRoot}/packages/pkg1/package.json`, `"commonjs"`, `"module"`),
-                    timeouts: runQueuedTimeoutCallbacks,
-                },
-                {
-                    caption: "reports import errors after change to package file",
-                    change: sys => replaceFileText(sys, `${projectRoot}/packages/pkg1/package.json`, `"module"`, `"commonjs"`),
-                    timeouts: runQueuedTimeoutCallbacks,
-                },
-                {
-                    caption: "removes those errors when a package file is changed to cjs extensions",
-                    change: sys => {
-                        replaceFileText(sys, `${projectRoot}/packages/pkg2/package.json`, `"build/index.js"`, `"build/index.cjs"`);
-                        sys.renameFile(`${projectRoot}/packages/pkg2/index.ts`, `${projectRoot}/packages/pkg2/index.cts`);
-                    },
-                    timeouts: runQueuedTimeoutCallbacks,
-                },
-            ]
-        });
-
         verifyTsc({
             scenario: "moduleResolution",
             subScenario: `type reference resolution uses correct options for different resolution options referenced project`,
@@ -175,151 +85,37 @@ namespace ts.tscWatch {
             }),
             commandLineArgs: ["-b", "/src/packages/pkg1.tsconfig.json", "/src/packages/pkg2.tsconfig.json", "--verbose", "--traceResolution"],
         });
+    });
 
-        verifyTscWatch({
+    describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs between projects for shared file", () => {
+        verifyTscWithEdits({
             scenario: "moduleResolution",
-            subScenario: `watches for changes to package-json main fields`,
-            sys: () => createWatchedSystem([
-                {
-                    path: `${projectRoot}/packages/pkg1/package.json`,
-                    content: JSON.stringify({
-                        name: "pkg1",
-                        version: "1.0.0",
-                        main: "build/index.js",
-                    })
-                },
-                {
-                    path: `${projectRoot}/packages/pkg1/index.ts`,
-                    content: Utils.dedent`
-                    import type { TheNum } from 'pkg2'
-                    export const theNum: TheNum = 42;`
-                },
-                {
-                    path: `${projectRoot}/packages/pkg1/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            outDir: "build",
-                        },
-                    })
-                },
-                {
-                    path: `${projectRoot}/packages/pkg2/build/const.d.ts`,
-                    content: `export type TheNum = 42;`
-                },
-                {
-                    path: `${projectRoot}/packages/pkg2/build/index.d.ts`,
-                    content: `export type { TheNum } from './const.js';`
-                },
-                {
-                    path: `${projectRoot}/packages/pkg2/build/other.d.ts`,
-                    content: `export type TheStr = string;`
-                },
-                {
-                    path: `${projectRoot}/packages/pkg2/package.json`,
-                    content: JSON.stringify({
-                        name: "pkg2",
-                        version: "1.0.0",
-                        main: "build/index.js",
-                    })
-                },
-                {
-                    path: `${projectRoot}/node_modules/pkg2`,
-                    symLink: `${projectRoot}/packages/pkg2`,
-                },
-                libFile
-            ], { currentDirectory: projectRoot }),
-            commandLineArgs: ["--project", "./packages/pkg1/tsconfig.json", "-w", "--traceResolution"],
-            changes: [
-                {
-                    caption: "reports import errors after change to package file",
-                    change: sys => replaceFileText(sys, `${projectRoot}/packages/pkg2/package.json`, `index.js`, `other.js`),
-                    timeouts: runQueuedTimeoutCallbacks,
-                },
-                {
-                    caption: "removes those errors when a package file is changed back",
-                    change: sys => replaceFileText(sys, `${projectRoot}/packages/pkg2/package.json`, `other.js`, `index.js`),
-                    timeouts: runQueuedTimeoutCallbacks,
-                },
-            ]
-        });
-
-
-        verifyTscWatch({
-            scenario: "moduleResolution",
-            subScenario: `build mode watches for changes to package-json main fields`,
-            sys: () => createWatchedSystem([
-                {
-                    path: `${projectRoot}/packages/pkg1/package.json`,
-                    content: JSON.stringify({
-                        name: "pkg1",
-                        version: "1.0.0",
-                        main: "build/index.js",
-                    })
-                },
-                {
-                    path: `${projectRoot}/packages/pkg1/index.ts`,
-                    content: Utils.dedent`
-                    import type { TheNum } from 'pkg2'
-                    export const theNum: TheNum = 42;`
-                },
-                {
-                    path: `${projectRoot}/packages/pkg1/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            outDir: "build",
-                        },
-                        references: [{ path: "../pkg2" }]
-                    })
-                },
-                {
-                    path: `${projectRoot}/packages/pkg2/tsconfig.json`,
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            composite: true,
-                            outDir: "build",
-                            baseUrl: ".",
-                        }
-                    })
-                },
-                {
-                    path: `${projectRoot}/packages/pkg2/const.ts`,
-                    content: `export type TheNum = 42;`
-                },
-                {
-                    path: `${projectRoot}/packages/pkg2/index.ts`,
-                    content: `export type { TheNum } from './const.js';`
-                },
-                {
-                    path: `${projectRoot}/packages/pkg2/other.ts`,
-                    content: `export type TheStr = string;`
-                },
-                {
-                    path: `${projectRoot}/packages/pkg2/package.json`,
-                    content: JSON.stringify({
-                        name: "pkg2",
-                        version: "1.0.0",
-                        main: "build/index.js",
-                    })
-                },
-                {
-                    path: `${projectRoot}/node_modules/pkg2`,
-                    symLink: `${projectRoot}/packages/pkg2`,
-                },
-                libFile
-            ], { currentDirectory: projectRoot }),
-            commandLineArgs: ["-b", "packages/pkg1", "--verbose", "-w", "--traceResolution"],
-            changes: [
-                {
-                    caption: "reports import errors after change to package file",
-                    change: sys => replaceFileText(sys, `${projectRoot}/packages/pkg2/package.json`, `index.js`, `other.js`),
-                    timeouts: runQueuedTimeoutCallbacks,
-                },
-                {
-                    caption: "removes those errors when a package file is changed back",
-                    change: sys => replaceFileText(sys, `${projectRoot}/packages/pkg2/package.json`, `other.js`, `index.js`),
-                    timeouts: runQueuedTimeoutCallbacks,
-                },
-            ]
+            subScenario: "impliedNodeFormat differs between projects for shared file",
+            fs: () => loadProjectFromFiles({
+                "/src/projects/a/src/index.ts": "",
+                "/src/projects/a/tsconfig.json": JSON.stringify({
+                    compilerOptions: { strict: true }
+                }),
+                "/src/projects/b/src/index.ts": Utils.dedent`
+                    import pg from "pg";
+                    pg.foo();
+                `,
+                "/src/projects/b/tsconfig.json": JSON.stringify({
+                    compilerOptions: { strict: true, module: "node16" }
+                }),
+                "/src/projects/b/package.json": JSON.stringify({
+                    name: "b",
+                    type: "module"
+                }),
+                "/src/projects/node_modules/@types/pg/index.d.ts": "export function foo(): void;",
+                "/src/projects/node_modules/@types/pg/package.json": JSON.stringify({
+                    name: "@types/pg",
+                    types: "index.d.ts",
+                }),
+            }),
+            modifyFs: fs => fs.writeFileSync("/lib/lib.es2022.full.d.ts", libFile.content),
+            commandLineArgs: ["-b", "/src/projects/a", "/src/projects/b", "--verbose", "--traceResolution", "--explainFiles"],
+            edits: noChangeOnlyRuns
         });
     });
 }

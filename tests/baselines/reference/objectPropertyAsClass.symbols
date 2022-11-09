@@ -1,0 +1,52 @@
+=== tests/cases/compiler/index.js ===
+const a1 = {
+>a1 : Symbol(a1, Decl(index.js, 0, 5))
+
+    foo() {
+>foo : Symbol(foo, Decl(index.js, 0, 12))
+
+        this.x = 0;
+>this : Symbol(a1, Decl(index.js, 0, 10))
+>x : Symbol(x, Decl(index.js, 1, 11))
+    }
+}
+
+const a2 = {
+>a2 : Symbol(a2, Decl(index.js, 6, 5))
+
+    foo: function() {
+>foo : Symbol(foo, Decl(index.js, 6, 12))
+
+        this.x = 0;
+>this : Symbol(a2, Decl(index.js, 6, 10))
+>x : Symbol(foo.x, Decl(index.js, 7, 21))
+    }
+}
+
+const b1 = {
+>b1 : Symbol(b1, Decl(index.js, 12, 5))
+
+    /** @class */
+    foo() {
+>foo : Symbol(foo, Decl(index.js, 12, 12))
+
+        this.x = 0;
+>this : Symbol(b1, Decl(index.js, 12, 10))
+>x : Symbol(x, Decl(index.js, 14, 11))
+    }
+}
+
+const b2 = {
+>b2 : Symbol(b2, Decl(index.js, 19, 5))
+
+    /** @class */
+    foo: function() {
+>foo : Symbol(foo, Decl(index.js, 19, 12))
+
+        this.x = 0;
+>this.x : Symbol(foo.x, Decl(index.js, 21, 21))
+>this : Symbol(foo, Decl(index.js, 21, 8))
+>x : Symbol(foo.x, Decl(index.js, 21, 21))
+    }
+}
+

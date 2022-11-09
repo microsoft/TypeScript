@@ -90,11 +90,24 @@ namespace ts.codefix {
                 return transformJSDocFunctionType(node as JSDocFunctionType);
             case SyntaxKind.TypeReference:
                 return transformJSDocTypeReference(node as TypeReferenceNode);
+            case SyntaxKind.JSDocTypeLiteral:
+                return transformJSDocTypeLiteral(node as JSDocTypeLiteral);
             default:
                 const visited = visitEachChild(node, transformJSDocType, nullTransformationContext);
                 setEmitFlags(visited, EmitFlags.SingleLine);
                 return visited;
         }
+    }
+
+    function transformJSDocTypeLiteral(node: JSDocTypeLiteral) {
+        const typeNode = factory.createTypeLiteralNode(map(node.jsDocPropertyTags, tag =>
+            factory.createPropertySignature(
+                /*modifiers*/ undefined,
+                isIdentifier(tag.name) ? tag.name : tag.name.right,
+                isOptionalJSDocPropertyLikeTag(tag) ? factory.createToken(SyntaxKind.QuestionToken) : undefined,
+                tag.typeExpression && visitNode(tag.typeExpression.type, transformJSDocType) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword))));
+        setEmitFlags(typeNode, EmitFlags.SingleLine);
+        return typeNode;
     }
 
     function transformJSDocOptionalType(node: JSDocOptionalType) {
@@ -120,7 +133,7 @@ namespace ts.codefix {
         const isRest = node.type!.kind === SyntaxKind.JSDocVariadicType && index === node.parent.parameters.length - 1; // TODO: GH#18217
         const name = node.name || (isRest ? "rest" : "arg" + index);
         const dotdotdot = isRest ? factory.createToken(SyntaxKind.DotDotDotToken) : node.dotDotDotToken;
-        return factory.createParameterDeclaration(node.decorators, node.modifiers, dotdotdot, name, node.questionToken, visitNode(node.type, transformJSDocType), node.initializer);
+        return factory.createParameterDeclaration(node.modifiers, dotdotdot, name, node.questionToken, visitNode(node.type, transformJSDocType), node.initializer);
     }
 
     function transformJSDocTypeReference(node: TypeReferenceNode) {
@@ -157,14 +170,13 @@ namespace ts.codefix {
 
     function transformJSDocIndexSignature(node: TypeReferenceNode) {
         const index = factory.createParameterDeclaration(
-            /*decorators*/ undefined,
             /*modifiers*/ undefined,
             /*dotDotDotToken*/ undefined,
             node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "n" : "s",
             /*questionToken*/ undefined,
             factory.createTypeReferenceNode(node.typeArguments![0].kind === SyntaxKind.NumberKeyword ? "number" : "string", []),
             /*initializer*/ undefined);
-        const indexSignature = factory.createTypeLiteralNode([factory.createIndexSignature(/*decorators*/ undefined, /*modifiers*/ undefined, [index], node.typeArguments![1])]);
+        const indexSignature = factory.createTypeLiteralNode([factory.createIndexSignature(/*modifiers*/ undefined, [index], node.typeArguments![1])]);
         setEmitFlags(indexSignature, EmitFlags.SingleLine);
         return indexSignature;
     }

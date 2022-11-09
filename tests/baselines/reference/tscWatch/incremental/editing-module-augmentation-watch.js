@@ -57,31 +57,29 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/src/index.ts (used version)
 /users/username/projects/project/src/types/classnames.d.ts (used version)
 
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
-/users/username/projects/project/src/index.ts:
-  {"fileName":"/users/username/projects/project/src/index.ts","pollingInterval":250}
-/users/username/projects/project/node_modules/classnames/index.d.ts:
-  {"fileName":"/users/username/projects/project/node_modules/classnames/index.d.ts","pollingInterval":250}
-/users/username/projects/project/src/types/classnames.d.ts:
-  {"fileName":"/users/username/projects/project/src/types/classnames.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/users/username/projects/project/node_modules/classnames/package.json:
-  {"fileName":"/users/username/projects/project/node_modules/classnames/package.json","pollingInterval":250}
+PolledWatches::
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/users/username/projects/project/tsconfig.json:
+  {}
+/users/username/projects/project/src/index.ts:
+  {}
+/users/username/projects/project/node_modules/classnames/index.d.ts:
+  {}
+/users/username/projects/project/src/types/classnames.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /users/username/projects/project/src:
-  {"directoryName":"/users/username/projects/project/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /users/username/projects/project/node_modules:
-  {"directoryName":"/users/username/projects/project/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/users/username/projects/project/node_modules/@types:
-  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /users/username/projects/project:
-  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -115,6 +113,10 @@ var classnames_1 = require("classnames");
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -202,31 +204,29 @@ Shape signatures in builder refreshed for::
 /users/username/projects/project/src/types/classnames.d.ts (used version)
 /users/username/projects/project/src/index.ts (computed .d.ts)
 
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"fileName":"/users/username/projects/project/tsconfig.json","pollingInterval":250}
-/users/username/projects/project/src/index.ts:
-  {"fileName":"/users/username/projects/project/src/index.ts","pollingInterval":250}
-/users/username/projects/project/node_modules/classnames/index.d.ts:
-  {"fileName":"/users/username/projects/project/node_modules/classnames/index.d.ts","pollingInterval":250}
-/users/username/projects/project/src/types/classnames.d.ts:
-  {"fileName":"/users/username/projects/project/src/types/classnames.d.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/users/username/projects/project/node_modules/classnames/package.json:
-  {"fileName":"/users/username/projects/project/node_modules/classnames/package.json","pollingInterval":250}
+PolledWatches::
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/users/username/projects/project/tsconfig.json:
+  {}
+/users/username/projects/project/src/index.ts:
+  {}
+/users/username/projects/project/node_modules/classnames/index.d.ts:
+  {}
+/users/username/projects/project/src/types/classnames.d.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /users/username/projects/project/src:
-  {"directoryName":"/users/username/projects/project/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /users/username/projects/project/node_modules:
-  {"directoryName":"/users/username/projects/project/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/users/username/projects/project/node_modules/@types:
-  {"directoryName":"/users/username/projects/project/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /users/username/projects/project:
-  {"directoryName":"/users/username/projects/project","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -254,6 +254,10 @@ exitCode:: ExitStatus.undefined
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -263,6 +267,10 @@ exitCode:: ExitStatus.undefined
         "signature": "1239706283-export interface Result {} export default function classNames(): Result;"
       },
       "./src/index.ts": {
+        "original": {
+          "version": "-5756287633-import classNames from \"classnames\"; classNames().foo;",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "-5756287633-import classNames from \"classnames\"; classNames().foo;",
         "signature": "-3531856636-export {};\n"
       },

@@ -9,7 +9,7 @@ namespace ts {
                 return transformECMAScriptModule;
             case ModuleKind.System:
                 return transformSystemModule;
-            case ModuleKind.Node12:
+            case ModuleKind.Node16:
             case ModuleKind.NodeNext:
                 return transformNodeModule;
             default:
@@ -31,15 +31,15 @@ namespace ts {
 
     export const noTransformers: EmitTransformers = { scriptTransformers: emptyArray, declarationTransformers: emptyArray };
 
-    export function getTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnlyDtsFiles?: boolean): EmitTransformers {
+    export function getTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnly?: boolean | EmitOnly): EmitTransformers {
         return {
-            scriptTransformers: getScriptTransformers(compilerOptions, customTransformers, emitOnlyDtsFiles),
+            scriptTransformers: getScriptTransformers(compilerOptions, customTransformers, emitOnly),
             declarationTransformers: getDeclarationTransformers(customTransformers),
         };
     }
 
-    function getScriptTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnlyDtsFiles?: boolean) {
-        if (emitOnlyDtsFiles) return emptyArray;
+    function getScriptTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers, emitOnly?: boolean | EmitOnly) {
+        if (emitOnly) return emptyArray;
 
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
@@ -48,6 +48,7 @@ namespace ts {
         addRange(transformers, customTransformers && map(customTransformers.before, wrapScriptTransformerFactory));
 
         transformers.push(transformTypeScript);
+        transformers.push(transformLegacyDecorators);
         transformers.push(transformClassFields);
 
         if (getJSXTransformEnabled(compilerOptions)) {

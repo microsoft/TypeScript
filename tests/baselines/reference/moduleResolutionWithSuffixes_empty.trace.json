@@ -1,0 +1,7 @@
+[
+    "======== Resolving module './foo' from '/index.ts'. ========",
+    "Explicitly specified module resolution kind: 'NodeJs'.",
+    "Loading module as file / folder, candidate module location '/foo', target file type 'TypeScript'.",
+    "File '/foo.ts' exist - use it as a name resolution result.",
+    "======== Module name './foo' was successfully resolved to '/foo.ts'. ========"
+]

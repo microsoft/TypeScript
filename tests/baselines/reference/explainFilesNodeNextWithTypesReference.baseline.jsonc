@@ -29,8 +29,7 @@
           "length": 5
         },
         "fileName": "/node_modules/react-hook-form/dist/index.d.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

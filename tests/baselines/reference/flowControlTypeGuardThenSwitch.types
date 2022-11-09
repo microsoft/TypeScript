@@ -33,7 +33,7 @@ interface B extends Base {
 }
 
 type Both = A | B;
->Both : Both
+>Both : A | B
 
 function isBoth(x: Base): x is Both {
 >isBoth : (x: Base) => x is Both

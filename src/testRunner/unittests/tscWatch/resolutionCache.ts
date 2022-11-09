@@ -1,7 +1,7 @@
 namespace ts.tscWatch {
     describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution caching", () => {
         const scenario = "resolutionCache";
-        it("works", () => {
+        it("caching works", () => {
             const root = {
                 path: "/a/d/f0.ts",
                 content: `import {x} from "f1"`
@@ -11,80 +11,76 @@ namespace ts.tscWatch {
                 content: `foo()`
             };
 
-            const files = [root, imported, libFile];
-            const host = createWatchedSystem(files);
-            const watch = createWatchOfFilesAndCompilerOptions([root.path], host, { module: ModuleKind.AMD });
-
-            const f1IsNotModule = getDiagnosticOfFileFromProgram(watch.getCurrentProgram().getProgram(), root.path, root.content.indexOf('"f1"'), '"f1"'.length, Diagnostics.File_0_is_not_a_module, imported.path);
-            const cannotFindFoo = getDiagnosticOfFileFromProgram(watch.getCurrentProgram().getProgram(), imported.path, imported.content.indexOf("foo"), "foo".length, Diagnostics.Cannot_find_name_0, "foo");
-
-            // ensure that imported file was found
-            checkOutputErrorsInitial(host, [f1IsNotModule, cannotFindFoo]);
-
+            const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([root, imported, libFile]));
+            const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
+                rootFiles: [root.path],
+                system: sys,
+                options: { module: ModuleKind.AMD },
+                cb,
+                watchOptions: undefined
+            });
             const originalFileExists = host.fileExists;
-            {
-                const newContent = `import {x} from "f1"
-                var x: string = 1;`;
-                root.content = newContent;
-                host.writeFile(root.path, root.content);
-
-                // patch fileExists to make sure that disk is not touched
-                host.fileExists = notImplemented;
-
-                // trigger synchronization to make sure that import will be fetched from the cache
-                host.runQueuedTimeoutCallbacks();
-
-                // ensure file has correct number of errors after edit
-                checkOutputErrorsIncremental(host, [
-                    f1IsNotModule,
-                    getDiagnosticOfFileFromProgram(watch.getCurrentProgram().getProgram(), root.path, newContent.indexOf("var x") + "var ".length, "x".length, Diagnostics.Type_0_is_not_assignable_to_type_1, "number", "string"),
-                    cannotFindFoo
-                ]);
-            }
-            {
-                let fileExistsIsCalled = false;
-                host.fileExists = (fileName): boolean => {
-                    if (fileName === "lib.d.ts") {
-                        return false;
-                    }
-                    fileExistsIsCalled = true;
-                    assert.isTrue(fileName.indexOf("/f2.") !== -1);
-                    return originalFileExists.call(host, fileName);
-                };
-
-                root.content = `import {x} from "f2"`;
-                host.writeFile(root.path, root.content);
-
-                // trigger synchronization to make sure that system will try to find 'f2' module on disk
-                host.runQueuedTimeoutCallbacks();
-
-                // ensure file has correct number of errors after edit
-                checkOutputErrorsIncremental(host, [
-                    getDiagnosticModuleNotFoundOfFile(watch.getCurrentProgram().getProgram(), root, "f2")
-                ]);
-
-                assert.isTrue(fileExistsIsCalled);
-            }
-            {
-                let fileExistsCalled = false;
-                host.fileExists = (fileName): boolean => {
-                    if (fileName === "lib.d.ts") {
-                        return false;
-                    }
-                    fileExistsCalled = true;
-                    assert.isTrue(fileName.indexOf("/f1.") !== -1);
-                    return originalFileExists.call(host, fileName);
-                };
-
-                const newContent = `import {x} from "f1"`;
-                root.content = newContent;
-
-                host.writeFile(root.path, root.content);
-                host.runQueuedTimeoutCallbacks();
-
-                checkOutputErrorsIncremental(host, [f1IsNotModule, cannotFindFoo]);
-                assert.isTrue(fileExistsCalled);
-            }
+            const watch = createWatchProgram(host);
+            let fileExistsIsCalled = false;
+            runWatchBaseline({
+                scenario: "resolutionCache",
+                subScenario: "caching works",
+                commandLineArgs: ["--w", root.path],
+                sys,
+                baseline,
+                oldSnap,
+                getPrograms,
+                changes: [
+                    {
+                        caption: "Adding text doesnt re-resole the imports",
+                        change: sys => {
+                            // patch fileExists to make sure that disk is not touched
+                            host.fileExists = notImplemented;
+                            sys.writeFile(root.path, `import {x} from "f1"
+                            var x: string = 1;`);
+                        },
+                        timeouts: runQueuedTimeoutCallbacks
+                    },
+                    {
+                        caption: "Resolves f2",
+                        change: sys => {
+                            host.fileExists = (fileName): boolean => {
+                                if (fileName === "lib.d.ts") {
+                                    return false;
+                                }
+                                fileExistsIsCalled = true;
+                                assert.isTrue(fileName.indexOf("/f2.") !== -1);
+                                return originalFileExists.call(host, fileName);
+                            };
+                            sys.writeFile(root.path, `import {x} from "f2"`);
+                        },
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks();
+                            assert.isTrue(fileExistsIsCalled);
+                        },
+                    },
+                    {
+                        caption: "Resolve f1",
+                        change: sys => {
+                            fileExistsIsCalled = false;
+                            host.fileExists = (fileName): boolean => {
+                                if (fileName === "lib.d.ts") {
+                                    return false;
+                                }
+                                fileExistsIsCalled = true;
+                                assert.isTrue(fileName.indexOf("/f1.") !== -1);
+                                return originalFileExists.call(host, fileName);
+                            };
+                            sys.writeFile(root.path, `import {x} from "f1"`);
+                        },
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks();
+                            assert.isTrue(fileExistsIsCalled);
+                        }
+                    },
+                ],
+                watchOrSolution: watch
+            });
         });
 
         it("loads missing files from disk", () => {
@@ -98,10 +94,15 @@ namespace ts.tscWatch {
                 content: `export const y = 1;`
             };
 
-            const files = [root, libFile];
-            const host = createWatchedSystem(files);
+            const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([root, libFile]));
+            const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
+                rootFiles: [root.path],
+                system: sys,
+                options: { module: ModuleKind.AMD },
+                cb,
+                watchOptions: undefined
+            });
             const originalFileExists = host.fileExists;
-
             let fileExistsCalledForBar = false;
             host.fileExists = fileName => {
                 if (fileName === "lib.d.ts") {
@@ -114,21 +115,30 @@ namespace ts.tscWatch {
                 return originalFileExists.call(host, fileName);
             };
 
-            const watch = createWatchOfFilesAndCompilerOptions([root.path], host, { module: ModuleKind.AMD });
-
+            const watch = createWatchProgram(host);
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
-            checkOutputErrorsInitial(host, [
-                getDiagnosticModuleNotFoundOfFile(watch.getCurrentProgram().getProgram(), root, "bar")
-            ]);
-
-            fileExistsCalledForBar = false;
-            root.content = `import {y} from "bar"`;
-            host.writeFile(root.path, root.content);
-            host.writeFile(imported.path, imported.content);
-
-            host.runQueuedTimeoutCallbacks();
-            checkOutputErrorsIncremental(host, emptyArray);
-            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
+            runWatchBaseline({
+                scenario: "resolutionCache",
+                subScenario: "loads missing files from disk",
+                commandLineArgs: ["--w", root.path],
+                sys,
+                baseline,
+                oldSnap,
+                getPrograms,
+                changes: [{
+                    caption: "write imported file",
+                    change: sys => {
+                        fileExistsCalledForBar = false;
+                        sys.writeFile(root.path,`import {y} from "bar"`);
+                        sys.writeFile(imported.path, imported.content);
+                    },
+                    timeouts: sys => {
+                        sys.runQueuedTimeoutCallbacks();
+                        assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
+                    }
+                }],
+                watchOrSolution: watch
+            });
         });
 
         it("should compile correctly when resolved module goes missing and then comes back (module is not part of the root)", () => {
@@ -142,7 +152,14 @@ namespace ts.tscWatch {
                 content: `export const y = 1;export const x = 10;`
             };
 
-            const host = createWatchedSystem([root, libFile, imported]);
+            const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([root, imported, libFile]));
+            const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
+                rootFiles: [root.path],
+                system: sys,
+                options: { module: ModuleKind.AMD },
+                cb,
+                watchOptions: undefined
+            });
             const originalFileExists = host.fileExists;
             let fileExistsCalledForBar = false;
             host.fileExists = fileName => {
@@ -154,26 +171,43 @@ namespace ts.tscWatch {
                 }
                 return originalFileExists.call(host, fileName);
             };
-
-            const watch = createWatchOfFilesAndCompilerOptions([root.path], host, { module: ModuleKind.AMD });
-
+            const watch = createWatchProgram(host);
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
-            checkOutputErrorsInitial(host, emptyArray);
-
-            fileExistsCalledForBar = false;
-            host.deleteFile(imported.path);
-            host.runQueuedTimeoutCallbacks();
-            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
-            checkOutputErrorsIncremental(host, [
-                getDiagnosticModuleNotFoundOfFile(watch.getCurrentProgram().getProgram(), root, "bar")
-            ]);
-
-            fileExistsCalledForBar = false;
-            host.writeFile(imported.path, imported.content);
-            host.checkTimeoutQueueLengthAndRun(1); // Scheduled invalidation of resolutions
-            host.checkTimeoutQueueLengthAndRun(1); // Actual update
-            checkOutputErrorsIncremental(host, emptyArray);
-            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
+            runWatchBaseline({
+                scenario: "resolutionCache",
+                subScenario: "should compile correctly when resolved module goes missing and then comes back",
+                commandLineArgs: ["--w", root.path],
+                sys,
+                baseline,
+                oldSnap,
+                getPrograms,
+                changes: [
+                    {
+                        caption: "Delete imported file",
+                        change: sys => {
+                            fileExistsCalledForBar = false;
+                            sys.deleteFile(imported.path);
+                        },
+                        timeouts: sys => {
+                            sys.runQueuedTimeoutCallbacks();
+                            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
+                        },
+                    },
+                    {
+                        caption: "Create imported file",
+                        change: sys => {
+                            fileExistsCalledForBar = false;
+                            sys.writeFile(imported.path, imported.content);
+                        },
+                        timeouts: sys => {
+                            sys.checkTimeoutQueueLengthAndRun(1); // Scheduled invalidation of resolutions
+                            sys.checkTimeoutQueueLengthAndRun(1); // Actual update
+                            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
+                        },
+                    },
+                ],
+                watchOrSolution: watch
+            });
         });
 
         verifyTscWatch({
@@ -402,7 +436,7 @@ declare namespace myapp {
                     change: noop,
                     timeouts: (sys, [[oldProgram, oldBuilderProgram]], watchorSolution) => {
                         sys.checkTimeoutQueueLength(0);
-                        const newProgram = (watchorSolution as Watch).getProgram();
+                        const newProgram = (watchorSolution as WatchOfConfigFile<EmitAndSemanticDiagnosticsBuilderProgram>).getProgram();
                         assert.strictEqual(newProgram, oldBuilderProgram, "No change so builder program should be same");
                         assert.strictEqual(newProgram.getProgram(), oldProgram, "No change so program should be same");
                     }

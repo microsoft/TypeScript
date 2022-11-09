@@ -307,10 +307,13 @@ namespace ts.SignatureHelp {
         // for optional function condition.
         const nonNullableContextualType = contextualType.getNonNullableType();
 
-        const signatures = nonNullableContextualType.getCallSignatures();
-        if (signatures.length !== 1) return undefined;
+        const symbol = nonNullableContextualType.symbol;
+        if (symbol === undefined) return undefined;
 
-        const invocation: ContextualInvocation = { kind: InvocationKind.Contextual, signature: first(signatures), node: startingToken, symbol: chooseBetterSymbol(nonNullableContextualType.symbol) };
+        const signature = lastOrUndefined(nonNullableContextualType.getCallSignatures());
+        if (signature === undefined) return undefined;
+
+        const invocation: ContextualInvocation = { kind: InvocationKind.Contextual, signature, node: startingToken, symbol: chooseBetterSymbol(symbol) };
         return { isTypeParameterList: false, invocation, argumentsSpan, argumentIndex, argumentCount };
     }
 
@@ -404,11 +407,11 @@ namespace ts.SignatureHelp {
         //          not enough to put us in the substitution expression; we should consider ourselves part of
         //          the *next* span's expression by offsetting the index (argIndex = (spanIndex + 1) + 1).
         //
-        /* eslint-disable no-double-space */
+        /* eslint-disable local/no-double-space */
         // Example: f  `# abcd $#{#  1 + 1#  }# efghi ${ #"#hello"#  }  #  `
         //              ^       ^ ^       ^   ^          ^ ^      ^     ^
         // Case:        1       1 3       2   1          3 2      2     1
-        /* eslint-enable no-double-space */
+        /* eslint-enable local/no-double-space */
         Debug.assert(position >= node.getStart(), "Assumed 'position' could not occur before node.");
         if (isTemplateLiteralToken(node)) {
             if (isInsideTemplateLiteral(node, position, sourceFile)) {

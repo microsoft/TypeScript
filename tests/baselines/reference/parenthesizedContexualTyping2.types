@@ -6,7 +6,7 @@
 // back if contextual typing is not taking effect.
 
 type FuncType = (x: <T>(p: T) => T) => typeof x;
->FuncType : FuncType
+>FuncType : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x : <T>(p: T) => T
 >p : T
 >x : <T>(p: T) => T
@@ -303,7 +303,7 @@ var lambda2: FuncType = (x => { x<number>(undefined); return x; });
 >x : <T>(p: T) => T
 
 type ObjType = { x: (p: number) => string; y: (p: string) => number };
->ObjType : ObjType
+>ObjType : { x: (p: number) => string; y: (p: string) => number; }
 >x : (p: number) => string
 >p : number
 >y : (p: string) => number

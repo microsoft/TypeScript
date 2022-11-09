@@ -431,7 +431,7 @@ namespace Debug {
                     const above = lane > 0 ? connectors[column][lane - 1] : 0;
                     let connector = connectors[column][lane];
                     if (!connector) {
-                        if (left & Connection.Right) connector |= Connection.LeftRight;
+                        if (left & Connection.Right) connector = Connection.LeftRight;
                         if (above & Connection.Down) connector |= Connection.UpDown;
                         connectors[column][lane] = connector;
                     }

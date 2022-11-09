@@ -40,7 +40,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/username/project/typescript.ts (used version)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 
@@ -59,7 +59,7 @@ Input::
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 
@@ -77,7 +77,7 @@ var zz30 = 100;
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 
@@ -92,9 +92,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:45 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:49 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -112,7 +112,7 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/username/project/typescript.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 
@@ -131,7 +131,7 @@ Input::
 
 Output::
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 

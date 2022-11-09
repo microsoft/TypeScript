@@ -49,15 +49,15 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (used version)
 /a/b/commonfile2.ts (used version)
 
-WatchedFiles::
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -76,15 +76,15 @@ Input::
 
 Output::
 
-WatchedFiles::
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -98,15 +98,15 @@ var zz30 = 100;
 
 Output::
 
-WatchedFiles::
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -117,9 +117,9 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:00:26 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:33 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:39 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -140,15 +140,15 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (computed .d.ts)
 /a/b/commonfile2.ts (computed .d.ts)
 
-WatchedFiles::
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -164,15 +164,15 @@ Input::
 
 Output::
 
-WatchedFiles::
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 

@@ -224,25 +224,58 @@ namespace ts {
         for (const file of program.getSourceFiles()) {
             write(`${toFileName(file, relativeFileName)}`);
             reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, reason, relativeFileName).messageText}`));
-            explainIfFileIsRedirect(file, relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
+            explainIfFileIsRedirectAndImpliedFormat(file, relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
         }
     }
 
-    export function explainIfFileIsRedirect(file: SourceFile, fileNameConvertor?: (fileName: string) => string): DiagnosticMessageChain[] | undefined {
+    export function explainIfFileIsRedirectAndImpliedFormat(
+        file: SourceFile,
+        fileNameConvertor?: (fileName: string) => string,
+    ): DiagnosticMessageChain[] | undefined {
         let result: DiagnosticMessageChain[] | undefined;
         if (file.path !== file.resolvedPath) {
-            (result ||= []).push(chainDiagnosticMessages(
+            (result ??= []).push(chainDiagnosticMessages(
                 /*details*/ undefined,
                 Diagnostics.File_is_output_of_project_reference_source_0,
                 toFileName(file.originalFileName, fileNameConvertor)
             ));
         }
         if (file.redirectInfo) {
-            (result ||= []).push(chainDiagnosticMessages(
+            (result ??= []).push(chainDiagnosticMessages(
                 /*details*/ undefined,
                 Diagnostics.File_redirects_to_file_0,
                 toFileName(file.redirectInfo.redirectTarget, fileNameConvertor)
             ));
+        }
+        if (isExternalOrCommonJsModule(file)) {
+            switch (file.impliedNodeFormat) {
+                case ModuleKind.ESNext:
+                    if (file.packageJsonScope) {
+                        (result ??= []).push(chainDiagnosticMessages(
+                            /*details*/ undefined,
+                            Diagnostics.File_is_ECMAScript_module_because_0_has_field_type_with_value_module,
+                            toFileName(last(file.packageJsonLocations!), fileNameConvertor)
+                        ));
+                    }
+                    break;
+                case ModuleKind.CommonJS:
+                    if (file.packageJsonScope) {
+                        (result ??= []).push(chainDiagnosticMessages(
+                            /*details*/ undefined,
+                            file.packageJsonScope.contents.packageJsonContent.type ?
+                                Diagnostics.File_is_CommonJS_module_because_0_has_field_type_whose_value_is_not_module :
+                                Diagnostics.File_is_CommonJS_module_because_0_does_not_have_field_type,
+                            toFileName(last(file.packageJsonLocations!), fileNameConvertor)
+                        ));
+                    }
+                    else if (file.packageJsonLocations?.length) {
+                        (result ??= []).push(chainDiagnosticMessages(
+                            /*details*/ undefined,
+                            Diagnostics.File_is_CommonJS_module_because_package_json_was_not_found,
+                        ));
+                    }
+                    break;
+            }
         }
         return result;
     }
@@ -260,6 +293,9 @@ namespace ts {
     export function getMatchedIncludeSpec(program: Program, fileName: string) {
         const configFile = program.getCompilerOptions().configFile;
         if (!configFile?.configFileSpecs?.validatedIncludeSpecs) return undefined;
+
+        // Return true if its default include spec
+        if (configFile.configFileSpecs.isDefaultIncludeSpec) return true;
 
         const isJsonFile = fileExtensionIs(fileName, Extension.Json);
         const basePath = getDirectoryPath(getNormalizedAbsolutePath(configFile.fileName, program.getCurrentDirectory()));
@@ -327,15 +363,18 @@ namespace ts {
                 const matchedByFiles = getMatchedFileSpec(program, fileName);
                 if (matchedByFiles) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Part_of_files_list_in_tsconfig_json);
                 const matchedByInclude = getMatchedIncludeSpec(program, fileName);
-                return matchedByInclude ?
+                return isString(matchedByInclude) ?
                     chainDiagnosticMessages(
                         /*details*/ undefined,
                         Diagnostics.Matched_by_include_pattern_0_in_1,
                         matchedByInclude,
                         toFileName(options.configFile, fileNameConvertor)
                     ) :
-                    // Could be additional files specified as roots
-                    chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Root_file_specified_for_compilation);
+                    // Could be additional files specified as roots or matched by default include
+                    chainDiagnosticMessages(/*details*/ undefined, matchedByInclude ?
+                        Diagnostics.Matched_by_default_include_pattern_Asterisk_Asterisk_Slash_Asterisk :
+                        Diagnostics.Root_file_specified_for_compilation
+                    );
             case FileIncludeKind.SourceFromProjectReference:
             case FileIncludeKind.OutputFromProjectReference:
                 const isOutput = reason.kind === FileIncludeKind.OutputFromProjectReference;
@@ -502,11 +541,19 @@ namespace ts {
         MissingFile: "Missing file",
         WildcardDirectory: "Wild card directory",
         FailedLookupLocations: "Failed Lookup Locations",
+        AffectingFileLocation: "File location affecting resolution",
         TypeRoots: "Type roots",
         ConfigFileOfReferencedProject: "Config file of referened project",
         ExtendedConfigOfReferencedProject: "Extended config file of referenced project",
         WildcardDirectoryOfReferencedProject: "Wild card directory of referenced project",
         PackageJson: "package.json file",
+        ClosedScriptInfo: "Closed Script info",
+        ConfigFileForInferredRoot: "Config file for the inferred project root",
+        NodeModules: "node_modules for closed script infos and package.jsons affecting module specifier cache",
+        MissingSourceMapFile: "Missing source map file",
+        NoopConfigFileForInferredRoot: "Noop Config file for the inferred project root",
+        MissingGeneratedFile: "Missing generated file",
+        NodeModulesForModuleSpecifierCache: "node_modules for module specifier cache invalidation",
     };
 
     export interface WatchTypeRegistry {
@@ -516,11 +563,21 @@ namespace ts {
         MissingFile: "Missing file",
         WildcardDirectory: "Wild card directory",
         FailedLookupLocations: "Failed Lookup Locations",
+        AffectingFileLocation: "File location affecting resolution",
         TypeRoots: "Type roots",
         ConfigFileOfReferencedProject: "Config file of referened project",
         ExtendedConfigOfReferencedProject: "Extended config file of referenced project",
         WildcardDirectoryOfReferencedProject: "Wild card directory of referenced project",
         PackageJson: "package.json file",
+
+        // Additional tsserver specific watch information
+        ClosedScriptInfo: "Closed Script info",
+        ConfigFileForInferredRoot: "Config file for the inferred project root",
+        NodeModules: "node_modules for closed script infos and package.jsons affecting module specifier cache",
+        MissingSourceMapFile: "Missing source map file",
+        NoopConfigFileForInferredRoot: "Noop Config file for the inferred project root",
+        MissingGeneratedFile: "Missing generated file",
+        NodeModulesForModuleSpecifierCache: "node_modules for module specifier cache invalidation",
     }
 
     interface WatchFactory<X, Y = undefined> extends ts.WatchFactory<X, Y> {
@@ -539,26 +596,18 @@ namespace ts {
         const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
         const hostGetNewLine = memoize(() => host.getNewLine());
         return {
-            getSourceFile: (fileName, languageVersion, onError) => {
-                let text: string | undefined;
-                try {
-                    performance.mark("beforeIORead");
-                    text = host.readFile(fileName, getCompilerOptions().charset);
-                    performance.mark("afterIORead");
-                    performance.measure("I/O Read", "beforeIORead", "afterIORead");
-                }
-                catch (e) {
-                    if (onError) {
-                        onError(e.message);
-                    }
-                    text = "";
-                }
-
-                return text !== undefined ? createSourceFile(fileName, text, languageVersion) : undefined;
-            },
+            getSourceFile: createGetSourceFile(
+                (fileName, encoding) => host.readFile(fileName, encoding),
+                getCompilerOptions,
+                /*setParentNodes*/ undefined
+            ),
             getDefaultLibLocation: maybeBind(host, host.getDefaultLibLocation),
             getDefaultLibFileName: options => host.getDefaultLibFileName(options),
-            writeFile,
+            writeFile: createWriteFileMeasuringIO(
+                (path, data, writeByteOrderMark) => host.writeFile!(path, data, writeByteOrderMark),
+                path => host.createDirectory!(path),
+                path => host.directoryExists!(path)
+            ),
             getCurrentDirectory: memoize(() => host.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
             getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
@@ -573,41 +622,54 @@ namespace ts {
             createHash: maybeBind(host, host.createHash),
             readDirectory: maybeBind(host, host.readDirectory),
             disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
+            storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
         };
+    }
 
-        function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
-            try {
-                performance.mark("beforeIOWrite");
-
-                // NOTE: If patchWriteFileEnsuringDirectory has been called,
-                // the host.writeFile will do its own directory creation and
-                // the ensureDirectoriesExist call will always be redundant.
-                writeFileEnsuringDirectories(
-                    fileName,
-                    text,
-                    writeByteOrderMark,
-                    (path, data, writeByteOrderMark) => host.writeFile!(path, data, writeByteOrderMark),
-                    path => host.createDirectory!(path),
-                    path => host.directoryExists!(path));
-
-                performance.mark("afterIOWrite");
-                performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
-            }
-            catch (e) {
-                if (onError) {
-                    onError(e.message);
+    export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "createHash">, text: string) {
+        // If text can contain the sourceMapUrl ignore sourceMapUrl for calcualting hash
+        if (text.match(sourceMapCommentRegExpDontCareLineStart)) {
+            let lineEnd = text.length;
+            let lineStart = lineEnd;
+            for (let pos = lineEnd - 1; pos >= 0; pos--) {
+                const ch = text.charCodeAt(pos);
+                switch (ch) {
+                    case CharacterCodes.lineFeed:
+                        if (pos && text.charCodeAt(pos - 1) === CharacterCodes.carriageReturn) {
+                            pos--;
+                        }
+                    // falls through
+                    case CharacterCodes.carriageReturn:
+                        break;
+                    default:
+                        if (ch < CharacterCodes.maxAsciiCharacter || !isLineBreak(ch)) {
+                            lineStart = pos;
+                            continue;
+                        }
+                        break;
                 }
+                // This is start of the line
+                const line = text.substring(lineStart, lineEnd);
+                if (line.match(sourceMapCommentRegExp)) {
+                    text = text.substring(0, lineStart);
+                    break;
+                }
+                // If we see a non-whitespace/map comment-like line, break, to avoid scanning up the entire file
+                else if (!line.match(whitespaceOrMapCommentRegExp)){
+                    break;
+                }
+                lineEnd = lineStart;
             }
         }
+        return (host.createHash || generateDjb2Hash)(text);
     }
 
     export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: { createHash?(data: string): string; }) {
         const originalGetSourceFile = compilerHost.getSourceFile;
-        const computeHash = maybeBind(host, host.createHash) || generateDjb2Hash;
         compilerHost.getSourceFile = (...args) => {
             const result = originalGetSourceFile.call(compilerHost, ...args);
             if (result) {
-                result.version = computeHash(result.text);
+                result.version = getSourceFileVersionAsHashFromText(host, result.text);
             }
             return result;
         };
@@ -637,6 +699,8 @@ namespace ts {
             createHash: maybeBind(system, system.createHash),
             createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>,
             disableUseFileVersionAsSignature: system.disableUseFileVersionAsSignature,
+            storeFilesChangingSignatureDuringEmit: system.storeFilesChangingSignatureDuringEmit,
+            now: maybeBind(system, system.now),
         };
     }
 

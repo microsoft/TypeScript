@@ -1,0 +1,295 @@
+// === /tests/cases/fourslash/isDefinitionShorthandProperty.ts ===
+// const /*FIND ALL REFS*/[|x|] = 1;
+// const y: { x: number } = { [|x|] };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/isDefinitionShorthandProperty.ts",
+      "kind": "const",
+      "name": "const x: 1",
+      "textSpan": {
+        "start": 6,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 12
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 6,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/isDefinitionShorthandProperty.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 12
+        },
+        "isWriteAccess": true,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 40,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/isDefinitionShorthandProperty.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/isDefinitionShorthandProperty.ts ===
+// const x = 1;
+// const y: { /*FIND ALL REFS*/[|x|]: number } = { [|x|] };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/isDefinitionShorthandProperty.ts",
+      "kind": "property",
+      "name": "(property) x: number",
+      "textSpan": {
+        "start": 24,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 24,
+        "length": 9
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 24,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/isDefinitionShorthandProperty.ts",
+        "contextSpan": {
+          "start": 24,
+          "length": 9
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 40,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/isDefinitionShorthandProperty.ts",
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]
+
+// === /tests/cases/fourslash/isDefinitionShorthandProperty.ts ===
+// const [|x|] = 1;
+// const y: { [|x|]: number } = { /*FIND ALL REFS*/[|x|] };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/isDefinitionShorthandProperty.ts",
+      "kind": "const",
+      "name": "const x: 1",
+      "textSpan": {
+        "start": 6,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "1",
+          "kind": "stringLiteral"
+        }
+      ],
+      "contextSpan": {
+        "start": 0,
+        "length": 12
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 6,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/isDefinitionShorthandProperty.ts",
+        "contextSpan": {
+          "start": 0,
+          "length": 12
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  },
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/isDefinitionShorthandProperty.ts",
+      "kind": "property",
+      "name": "(property) x: number",
+      "textSpan": {
+        "start": 24,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "x",
+          "kind": "propertyName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 24,
+        "length": 9
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 24,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/isDefinitionShorthandProperty.ts",
+        "contextSpan": {
+          "start": 24,
+          "length": 9
+        },
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 40,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/isDefinitionShorthandProperty.ts",
+        "isWriteAccess": true,
+        "isDefinition": true
+      }
+    ]
+  }
+]

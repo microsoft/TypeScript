@@ -29,7 +29,7 @@ namespace ts.tscWatch {
                     },
                     // not ideal, but currently because of d.ts but no new file is written
                     // There will be timeout queued even though file contents are same
-                    timeouts: checkSingleTimeoutQueueLengthAndRun
+                    timeouts: sys => sys.checkTimeoutQueueLength(0),
                 },
                 {
                     caption: "non local edit in logic ts, and build logic",
@@ -409,6 +409,37 @@ X;`,
                 },
             ],
             baselineDependencies: true,
+        });
+
+        verifyTscWatch({
+            scenario: "projectsWithReferences",
+            subScenario: "when declarationMap changes for dependency",
+            sys: () => createSystemWithSolutionBuild(
+                ["core"],
+                [
+                    libFile,
+                    TestFSWithWatch.getTsBuildProjectFile("sample1", "core/tsconfig.json"),
+                    TestFSWithWatch.getTsBuildProjectFile("sample1", "core/index.ts"),
+                    TestFSWithWatch.getTsBuildProjectFile("sample1", "core/anotherModule.ts"),
+                    TestFSWithWatch.getTsBuildProjectFile("sample1", "core/some_decl.d.ts"),
+                    TestFSWithWatch.getTsBuildProjectFile("sample1", "logic/tsconfig.json"),
+                    TestFSWithWatch.getTsBuildProjectFile("sample1", "logic/index.ts"),
+                ],
+                { currentDirectory: `${TestFSWithWatch.tsbuildProjectsLocation}/sample1` }
+            ),
+            commandLineArgs: ["-w", "-p", "logic"],
+            changes: [
+                {
+                    caption: "change declration map in core",
+                    change: sys => {
+                        replaceFileText(sys, TestFSWithWatch.getTsBuildProjectFilePath("sample1", "core/tsconfig.json"), `"declarationMap": true,`, `"declarationMap": false,`);
+                        const solutionBuilder = createSolutionBuilder(sys, ["core"]);
+                        solutionBuilder.build();
+                    },
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(0),
+                },
+            ],
+            baselineDependencies: true
         });
     });
 }

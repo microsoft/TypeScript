@@ -39,6 +39,8 @@ export function Component(x: Config): any;`
                 getDefaultLibFileName(options) {
                     return getDefaultLibFilePath(options);
                 },
+                fileExists: name => !!files[name],
+                readFile: name => files[name]
             });
         }
         // Regression test for GH #18245 - bug in single line comment writer caused a debug assertion when attempting
@@ -60,7 +62,6 @@ export function Component(x: Config): any;`
                     emitSkipped: true,
                     diagnostics: emptyArray,
                     outputFiles: emptyArray,
-                    exportedModulesFromDeclarationEmit: undefined
                 }
             );
 
@@ -78,7 +79,6 @@ export function Component(x: Config): any;`
                         text: "export {};\r\n",
                         writeByteOrderMark: false
                     }],
-                    exportedModulesFromDeclarationEmit: undefined
                 }
             );
         });
@@ -94,6 +94,7 @@ export function Component(x: Config): any;`
                     useCaseSensitiveFileNames: returnTrue,
                     getCompilationSettings: getDefaultCompilerOptions,
                     fileExists: path => files.has(path),
+                    readFile: path => files.get(path)?.text,
                     getProjectVersion: !useProjectVersion ? undefined : () => projectVersion,
                     getScriptFileNames: () => ["/project/root.ts"],
                     getScriptVersion: path => files.get(path)?.version || "",
@@ -189,6 +190,7 @@ export function Component(x: Config): any;`
                     useSourceOfProjectReferenceRedirect,
                     getCompilationSettings: () => result.options,
                     fileExists: path => system.fileExists(path),
+                    readFile: path => system.readFile(path),
                     getScriptFileNames: () => result.fileNames,
                     getScriptVersion: path => {
                         const text = system.readFile(path);

@@ -1,8 +1,9 @@
 //// [tests/cases/compiler/APISample_watcher.ts] ////
 
-//// [index.d.ts]
-declare module "typescript" {
-    export = ts;
+//// [package.json]
+{
+    "name": "typescript",
+    "types": "/.ts/typescript.d.ts"
 }
 
 //// [APISample_watcher.ts]
@@ -47,6 +48,8 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
         getCurrentDirectory: () => process.cwd(),
         getCompilationSettings: () => options,
         getDefaultLibFileName: (options) => ts.getDefaultLibFilePath(options),
+        fileExists: fileName => fs.existsSync(fileName),
+        readFile: fileName => fs.readFileSync(fileName),
     };
 
     // Create the language service files
@@ -143,7 +146,9 @@ function watch(rootFileNames, options) {
         },
         getCurrentDirectory: function () { return process.cwd(); },
         getCompilationSettings: function () { return options; },
-        getDefaultLibFileName: function (options) { return ts.getDefaultLibFilePath(options); }
+        getDefaultLibFileName: function (options) { return ts.getDefaultLibFilePath(options); },
+        fileExists: function (fileName) { return fs.existsSync(fileName); },
+        readFile: function (fileName) { return fs.readFileSync(fileName); }
     };
     // Create the language service files
     var services = ts.createLanguageService(servicesHost, ts.createDocumentRegistry());

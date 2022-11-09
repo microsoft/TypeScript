@@ -14,7 +14,7 @@ interface Fail {
 }
 
 type Item = Success | Fail;
->Item : Item
+>Item : Success | Fail
 
 function f1(a: Item[]) {
 >f1 : (a: Item[]) => void

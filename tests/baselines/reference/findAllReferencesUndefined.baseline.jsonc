@@ -40,8 +40,7 @@
           "length": 9
         },
         "fileName": "/a.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -49,8 +48,7 @@
           "length": 9
         },
         "fileName": "/a.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       },
       {
         "textSpan": {
@@ -58,8 +56,7 @@
           "length": 9
         },
         "fileName": "/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }

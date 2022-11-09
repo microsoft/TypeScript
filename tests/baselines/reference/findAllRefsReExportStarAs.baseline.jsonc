@@ -176,8 +176,7 @@
           "start": 0,
           "length": 35
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -185,8 +184,7 @@
           "length": 5
         },
         "fileName": "/importing.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   }
@@ -463,8 +461,7 @@
           "start": 0,
           "length": 35
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -472,8 +469,7 @@
           "length": 4
         },
         "fileName": "/importing.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -518,8 +514,7 @@
           "start": 0,
           "length": 37
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }

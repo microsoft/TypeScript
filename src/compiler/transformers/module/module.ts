@@ -193,8 +193,8 @@ namespace ts {
                                             /*name*/ undefined,
                                             /*typeParameters*/ undefined,
                                             [
-                                                factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
-                                                factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
+                                                factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
+                                                factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
                                                 ...importAliasNames
                                             ],
                                             /*type*/ undefined,
@@ -225,7 +225,7 @@ namespace ts {
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
-                [factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "factory")],
+                [factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "factory")],
                 /*type*/ undefined,
                 setTextRange(
                     factory.createBlock(
@@ -333,8 +333,8 @@ namespace ts {
                                         /*name*/ undefined,
                                         /*typeParameters*/ undefined,
                                         [
-                                            factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
-                                            factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
+                                            factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
+                                            factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
                                             ...importAliasNames
                                         ],
                                         /*type*/ undefined,
@@ -374,7 +374,7 @@ namespace ts {
             for (const amdDependency of node.amdDependencies) {
                 if (amdDependency.name) {
                     aliasedModuleNames.push(factory.createStringLiteral(amdDependency.path));
-                    importAliasNames.push(factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, amdDependency.name));
+                    importAliasNames.push(factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, amdDependency.name));
                 }
                 else {
                     unaliasedModuleNames.push(factory.createStringLiteral(amdDependency.path));
@@ -396,7 +396,7 @@ namespace ts {
                         // This is so that when printer will not substitute the identifier
                         setEmitFlags(importAliasName, EmitFlags.NoSubstitution);
                         aliasedModuleNames.push(externalModuleName);
-                        importAliasNames.push(factory.createParameterDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, importAliasName));
+                        importAliasNames.push(factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, importAliasName));
                     }
                     else {
                         unaliasedModuleNames.push(externalModuleName);
@@ -721,7 +721,7 @@ namespace ts {
                     return createImportCallExpressionUMD(argument ?? factory.createVoidZero(), containsLexicalThis);
                 case ModuleKind.CommonJS:
                 default:
-                    return createImportCallExpressionCommonJS(argument, containsLexicalThis);
+                    return createImportCallExpressionCommonJS(argument);
             }
         }
 
@@ -745,7 +745,7 @@ namespace ts {
                 return factory.createConditionalExpression(
                     /*condition*/ factory.createIdentifier("__syncRequire"),
                     /*questionToken*/ undefined,
-                    /*whenTrue*/ createImportCallExpressionCommonJS(arg, containsLexicalThis),
+                    /*whenTrue*/ createImportCallExpressionCommonJS(arg),
                     /*colonToken*/ undefined,
                     /*whenFalse*/ createImportCallExpressionAMD(argClone, containsLexicalThis)
                 );
@@ -755,7 +755,7 @@ namespace ts {
                 return factory.createComma(factory.createAssignment(temp, arg), factory.createConditionalExpression(
                     /*condition*/ factory.createIdentifier("__syncRequire"),
                     /*questionToken*/ undefined,
-                    /*whenTrue*/ createImportCallExpressionCommonJS(temp, containsLexicalThis),
+                    /*whenTrue*/ createImportCallExpressionCommonJS(temp, /* isInlineable */ true),
                     /*colonToken*/ undefined,
                     /*whenFalse*/ createImportCallExpressionAMD(temp, containsLexicalThis)
                 ));
@@ -772,8 +772,8 @@ namespace ts {
             const resolve = factory.createUniqueName("resolve");
             const reject = factory.createUniqueName("reject");
             const parameters = [
-                factory.createParameterDeclaration(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve),
-                factory.createParameterDeclaration(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject)
+                factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve),
+                factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject)
             ];
             const body = factory.createBlock([
                 factory.createExpressionStatement(
@@ -820,14 +820,25 @@ namespace ts {
             return promise;
         }
 
-        function createImportCallExpressionCommonJS(arg: Expression | undefined, containsLexicalThis: boolean): Expression {
-            // import("./blah")
+        function createImportCallExpressionCommonJS(arg: Expression | undefined, isInlineable?: boolean): Expression {
+            // import(x)
             // emit as
-            // Promise.resolve().then(function () { return require(x); }) /*CommonJs Require*/
+            // var _a;
+            // (_a = x, Promise.resolve().then(() => require(_a)) /*CommonJs Require*/
             // We have to wrap require in then callback so that require is done in asynchronously
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
-            const promiseResolveCall = factory.createCallExpression(factory.createPropertyAccessExpression(factory.createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []);
-            let requireCall: Expression = factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, arg ? [arg] : []);
+            // If the arg is not inlineable, we have to evaluate it in the current scope with a temp var
+            const temp = arg && !isSimpleInlineableExpression(arg) && !isInlineable ? factory.createTempVariable(hoistVariableDeclaration) : undefined;
+            const promiseResolveCall = factory.createCallExpression(
+                factory.createPropertyAccessExpression(factory.createIdentifier("Promise"), "resolve"),
+                /*typeArguments*/ undefined,
+                /*argumentsArray*/ [],
+            );
+            let requireCall: Expression = factory.createCallExpression(
+                factory.createIdentifier("require"),
+                /*typeArguments*/ undefined,
+                temp ? [temp] : arg ? [arg] : [],
+            );
             if (getESModuleInterop(compilerOptions)) {
                 requireCall = emitHelpers().createImportStarHelper(requireCall);
             }
@@ -851,16 +862,11 @@ namespace ts {
                     /*parameters*/ [],
                     /*type*/ undefined,
                     factory.createBlock([factory.createReturnStatement(requireCall)]));
-
-                // if there is a lexical 'this' in the import call arguments, ensure we indicate
-                // that this new function expression indicates it captures 'this' so that the
-                // es2015 transformer will properly substitute 'this' with '_this'.
-                if (containsLexicalThis) {
-                    setEmitFlags(func, EmitFlags.CapturesThis);
-                }
             }
 
-            return factory.createCallExpression(factory.createPropertyAccessExpression(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
+            const downleveledImport = factory.createCallExpression(factory.createPropertyAccessExpression(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
+
+            return temp === undefined ? downleveledImport : factory.createCommaListExpression([factory.createAssignment(temp, arg!), downleveledImport]);
         }
 
         function getHelperExpressionForExport(node: ExportDeclaration, innerExpr: Expression) {
@@ -1228,7 +1234,6 @@ namespace ts {
                     setOriginalNode(
                         setTextRange(
                             factory.createFunctionDeclaration(
-                                /*decorators*/ undefined,
                                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                                 node.asteriskToken,
                                 factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
@@ -1271,8 +1276,7 @@ namespace ts {
                     setOriginalNode(
                         setTextRange(
                             factory.createClassDeclaration(
-                                /*decorators*/ undefined,
-                                visitNodes(node.modifiers, modifierVisitor, isModifier),
+                                visitNodes(node.modifiers, modifierVisitor, isModifierLike),
                                 factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
                                 visitNodes(node.heritageClauses, visitor),

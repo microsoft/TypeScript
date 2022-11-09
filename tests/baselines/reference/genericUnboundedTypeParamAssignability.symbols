@@ -1,0 +1,58 @@
+=== tests/cases/compiler/genericUnboundedTypeParamAssignability.ts ===
+function f1<T>(o: T) {
+>f1 : Symbol(f1, Decl(genericUnboundedTypeParamAssignability.ts, 0, 0))
+>T : Symbol(T, Decl(genericUnboundedTypeParamAssignability.ts, 0, 12))
+>o : Symbol(o, Decl(genericUnboundedTypeParamAssignability.ts, 0, 15))
+>T : Symbol(T, Decl(genericUnboundedTypeParamAssignability.ts, 0, 12))
+
+  o.toString(); // error
+>o : Symbol(o, Decl(genericUnboundedTypeParamAssignability.ts, 0, 15))
+}
+
+function f2<T extends {}>(o: T) {
+>f2 : Symbol(f2, Decl(genericUnboundedTypeParamAssignability.ts, 2, 1))
+>T : Symbol(T, Decl(genericUnboundedTypeParamAssignability.ts, 4, 12))
+>o : Symbol(o, Decl(genericUnboundedTypeParamAssignability.ts, 4, 26))
+>T : Symbol(T, Decl(genericUnboundedTypeParamAssignability.ts, 4, 12))
+
+  o.toString(); // no error
+>o.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>o : Symbol(o, Decl(genericUnboundedTypeParamAssignability.ts, 4, 26))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+}
+
+function f3<T extends Record<string, any>>(o: T) {
+>f3 : Symbol(f3, Decl(genericUnboundedTypeParamAssignability.ts, 6, 1))
+>T : Symbol(T, Decl(genericUnboundedTypeParamAssignability.ts, 8, 12))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>o : Symbol(o, Decl(genericUnboundedTypeParamAssignability.ts, 8, 43))
+>T : Symbol(T, Decl(genericUnboundedTypeParamAssignability.ts, 8, 12))
+
+  o.toString(); // no error
+>o.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>o : Symbol(o, Decl(genericUnboundedTypeParamAssignability.ts, 8, 43))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+}
+
+function user<T>(t: T) {
+>user : Symbol(user, Decl(genericUnboundedTypeParamAssignability.ts, 10, 1))
+>T : Symbol(T, Decl(genericUnboundedTypeParamAssignability.ts, 12, 14))
+>t : Symbol(t, Decl(genericUnboundedTypeParamAssignability.ts, 12, 17))
+>T : Symbol(T, Decl(genericUnboundedTypeParamAssignability.ts, 12, 14))
+
+  f1(t);
+>f1 : Symbol(f1, Decl(genericUnboundedTypeParamAssignability.ts, 0, 0))
+>t : Symbol(t, Decl(genericUnboundedTypeParamAssignability.ts, 12, 17))
+
+  f2(t); // error in strict, unbounded T doesn't satisfy the constraint
+>f2 : Symbol(f2, Decl(genericUnboundedTypeParamAssignability.ts, 2, 1))
+>t : Symbol(t, Decl(genericUnboundedTypeParamAssignability.ts, 12, 17))
+
+  f3(t); // error in strict, unbounded T doesn't satisfy the constraint
+>f3 : Symbol(f3, Decl(genericUnboundedTypeParamAssignability.ts, 6, 1))
+>t : Symbol(t, Decl(genericUnboundedTypeParamAssignability.ts, 12, 17))
+
+  t.toString();  // error, for the same reason as f1()
+>t : Symbol(t, Decl(genericUnboundedTypeParamAssignability.ts, 12, 17))
+}
+

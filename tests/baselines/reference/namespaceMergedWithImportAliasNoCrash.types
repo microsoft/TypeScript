@@ -1,7 +1,7 @@
 === tests/cases/compiler/file1.ts ===
 export namespace Library {
     export type Bar = { a: number };
->Bar : Bar
+>Bar : { a: number; }
 >a : number
 }
 var x: Library.Bar; // should work

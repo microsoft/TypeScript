@@ -197,7 +197,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface PackageJsonInfo {
+    export interface ProjectPackageJsonInfo {
         fileName: string;
         parseable: boolean;
         dependencies?: ESMap<string, string>;
@@ -240,7 +240,7 @@ namespace ts {
     //
     // Public interface of the host of a language service instance.
     //
-    export interface LanguageServiceHost extends GetEffectiveTypeRootsHost {
+    export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalResolutionCacheHost {
         getCompilationSettings(): CompilerOptions;
         getNewLine?(): string;
         getProjectVersion?(): string;
@@ -263,9 +263,14 @@ namespace ts {
          * Without these methods, only completions for ambient modules will be provided.
          */
         readDirectory?(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
-        readFile?(path: string, encoding?: string): string | undefined;
         realpath?(path: string): string;
-        fileExists?(path: string): boolean;
+
+        /*
+         * Unlike `realpath and `readDirectory`, `readFile` and `fileExists` are now _required_
+         * to properly acquire and setup source files under module: node16+ modes.
+         */
+        readFile(path: string, encoding?: string): string | undefined;
+        fileExists(path: string): boolean;
 
         /*
          * LS host can optionally implement these methods to support automatic updating when new type libraries are installed
@@ -279,10 +284,10 @@ namespace ts {
          *
          * If this is implemented, `getResolvedModuleWithFailedLookupLocationsFromCache` should be too.
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
         getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations | undefined;
-        resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions): (ResolvedTypeReferenceDirective | undefined)[];
-        /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
+        resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
+        /* @internal */ hasInvalidatedResolutions?: HasInvalidatedResolutions;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
         /* @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
         /* @internal */ getSymlinkCache?(files?: readonly SourceFile[]): SymlinkCache;
@@ -306,9 +311,9 @@ namespace ts {
 
         /* @internal */ getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
         /* @internal */ getSourceFileLike?(fileName: string): SourceFileLike | undefined;
-        /* @internal */ getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */ getPackageJsonsVisibleToFile?(fileName: string, rootDir?: string): readonly ProjectPackageJsonInfo[];
         /* @internal */ getNearestAncestorDirectoryWithPackageJson?(fileName: string): string | undefined;
-        /* @internal */ getPackageJsonsForAutoImport?(rootDir?: string): readonly PackageJsonInfo[];
+        /* @internal */ getPackageJsonsForAutoImport?(rootDir?: string): readonly ProjectPackageJsonInfo[];
         /* @internal */ getCachedExportInfoMap?(): ExportInfoMap;
         /* @internal */ getModuleSpecifierCache?(): ModuleSpecifierCache;
         /* @internal */ setCompilerHost?(host: CompilerHost): void;
@@ -462,11 +467,20 @@ namespace ts {
 
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
 
+        getRenameInfo(fileName: string, position: number, preferences: UserPreferences): RenameInfo;
+        /** @deprecated Use the signature with `UserPreferences` instead. */
         getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
+
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): readonly RenameLocation[] | undefined;
 
         getSmartSelectionRange(fileName: string, position: number): SelectionRange;
 
+        /*@internal*/
+        // eslint-disable-next-line @typescript-eslint/unified-signatures
+        getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: false, stopAtAlias: boolean): readonly DefinitionInfo[] | undefined;
+        /*@internal*/
+        // eslint-disable-next-line @typescript-eslint/unified-signatures
+        getDefinitionAtPosition(fileName: string, position: number, searchOtherFilesOnly: boolean, stopAtAlias: false): readonly DefinitionInfo[] | undefined;
         getDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
         getTypeDefinitionAtPosition(fileName: string, position: number): readonly DefinitionInfo[] | undefined;
@@ -537,9 +551,15 @@ namespace ts {
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, forceDtsEmit?: boolean): EmitOutput;
 
         getProgram(): Program | undefined;
+        /*@internal*/ getCurrentProgram(): Program | undefined;
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
         /* @internal */ getAutoImportProvider(): Program | undefined;
+
+        /// Returns true if a suitable symbol was found in the project.
+        /// May set isDefinition properties in `referencedSymbols` to false.
+        /// May add elements to `knownSymbolSpans`.
+        /* @internal */ updateIsDefinitionOfReferencedSymbols(referencedSymbols: readonly ReferencedSymbol[], knownSymbolSpans: Set<DocumentSpan>): boolean;
 
         toggleLineComment(fileName: string, textRange: TextRange): TextChange[];
         toggleMultilineComment(fileName: string, textRange: TextRange): TextChange[];
@@ -555,8 +575,16 @@ namespace ts {
 
     export interface CombinedCodeFixScope { type: "file"; fileName: string; }
 
+    export const enum OrganizeImportsMode {
+        All = "All",
+        SortAndCombine = "SortAndCombine",
+        RemoveUnused = "RemoveUnused",
+    }
+
     export interface OrganizeImportsArgs extends CombinedCodeFixScope {
+        /** @deprecated Use `mode` instead */
         skipDestructiveCodeActions?: boolean;
+        mode?: OrganizeImportsMode;
     }
 
     export type CompletionsTriggerCharacter = "." | '"' | "'" | "`" | "/" | "@" | "<" | "#" | " ";
@@ -583,16 +611,6 @@ namespace ts {
         includeExternalModuleExports?: boolean;
         /** @deprecated Use includeCompletionsWithInsertText */
         includeInsertTextCompletions?: boolean;
-    }
-
-    export interface InlayHintsOptions extends UserPreferences {
-        readonly includeInlayParameterNameHints?: "none" | "literals" | "all";
-        readonly includeInlayParameterNameHintsWhenArgumentMatchesName?: boolean;
-        readonly includeInlayFunctionParameterTypeHints?: boolean,
-        readonly includeInlayVariableTypeHints?: boolean;
-        readonly includeInlayPropertyDeclarationTypeHints?: boolean;
-        readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
-        readonly includeInlayEnumMemberValueHints?: boolean;
     }
 
     export type SignatureHelpTriggerCharacter = "," | "(" | "<";
@@ -891,7 +909,6 @@ namespace ts {
 
     export interface ReferenceEntry extends DocumentSpan {
         isWriteAccess: boolean;
-        isDefinition: boolean;
         isInString?: true;
     }
 
@@ -939,7 +956,7 @@ namespace ts {
         Remove = "remove",
     }
 
-    /* @deprecated - consider using EditorSettings instead */
+    /** @deprecated - consider using EditorSettings instead */
     export interface EditorOptions {
         BaseIndentSize?: number;
         IndentSize: number;
@@ -960,7 +977,7 @@ namespace ts {
         trimTrailingWhitespace?: boolean;
     }
 
-    /* @deprecated - consider using FormatCodeSettings instead */
+    /** @deprecated - consider using FormatCodeSettings instead */
     export interface FormatCodeOptions extends EditorOptions {
         InsertSpaceAfterCommaDelimiter: boolean;
         InsertSpaceAfterSemicolonInForStatements: boolean;
@@ -1037,7 +1054,14 @@ namespace ts {
         containerKind: ScriptElementKind;
         containerName: string;
         unverified?: boolean;
-        /* @internal */ isLocal?: boolean;
+        /** @internal
+         * Initially, this value is determined syntactically, but it is updated by the checker to cover
+         * cases like declarations that are exported in subsequent statements.  As a result, the value
+         * may be "incomplete" if this span has yet to be checked.
+         */
+        isLocal?: boolean;
+        /* @internal */ isAmbient?: boolean;
+        /* @internal */ failedAliasResolution?: boolean;
     }
 
     export interface DefinitionInfoAndBoundSpan {
@@ -1051,7 +1075,11 @@ namespace ts {
 
     export interface ReferencedSymbol {
         definition: ReferencedSymbolDefinitionInfo;
-        references: ReferenceEntry[];
+        references: ReferencedSymbolEntry[];
+    }
+
+    export interface ReferencedSymbolEntry extends ReferenceEntry {
+        isDefinition?: boolean;
     }
 
     export enum SymbolDisplayPartKind {
@@ -1124,6 +1152,9 @@ namespace ts {
         localizedErrorMessage: string;
     }
 
+    /**
+     * @deprecated Use `UserPreferences` instead.
+     */
     export interface RenameInfoOptions {
         readonly allowRenameOfImportPath?: boolean;
     }
@@ -1173,12 +1204,25 @@ namespace ts {
         argumentCount: number;
     }
 
+    // Do not change existing values, as they exist in telemetry.
+    export const enum CompletionInfoFlags {
+        None = 0,
+        MayIncludeAutoImports = 1 << 0,
+        IsImportStatementCompletion = 1 << 1,
+        IsContinuation = 1 << 2,
+        ResolvedModuleSpecifiers = 1 << 3,
+        ResolvedModuleSpecifiersBeyondLimit = 1 << 4,
+        MayIncludeMethodSnippets = 1 << 5,
+    }
+
     export interface CompletionInfo {
+        /** For performance telemetry. */
+        flags?: CompletionInfoFlags;
         /** Not true for all global completions. This will be true if the enclosing scope matches a few syntax kinds. See `isSnippetScope`. */
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
         /**
-         * In the absence of `CompletionEntry["replacementSpan"], the editor may choose whether to use
+         * In the absence of `CompletionEntry["replacementSpan"]`, the editor may choose whether to use
          * this span or its default one. If `CompletionEntry["replacementSpan"]` is defined, that span
          * must be used to commit that completion entry.
          */
@@ -1237,6 +1281,7 @@ namespace ts {
         hasAction?: true;
         source?: string;
         sourceDisplay?: SymbolDisplayPart[];
+        labelDetails?: CompletionEntryLabelDetails;
         isRecommended?: true;
         isFromUncheckedFile?: true;
         isPackageJsonImport?: true;
@@ -1250,6 +1295,11 @@ namespace ts {
          * is an auto-import.
          */
         data?: CompletionEntryData;
+    }
+
+    export interface CompletionEntryLabelDetails {
+        detail?: string;
+        description?: string;
     }
 
     export interface CompletionEntryDetails {
@@ -1424,6 +1474,9 @@ namespace ts {
          * interface Y { foo:number; }
          */
         memberVariableElement = "property",
+
+        /** class X { [public|private]* accessor foo: number; } */
+        memberAccessorVariableElement = "accessor",
 
         /**
          * class X { constructor() { } }
@@ -1620,6 +1673,6 @@ namespace ts {
         cancellationToken: CancellationToken;
         host: LanguageServiceHost;
         span: TextSpan;
-        preferences: InlayHintsOptions;
+        preferences: UserPreferences;
     }
 }

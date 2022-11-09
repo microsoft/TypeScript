@@ -536,8 +536,7 @@
           "start": 0,
           "length": 28
         },
-        "isWriteAccess": true,
-        "isDefinition": true
+        "isWriteAccess": true
       },
       {
         "textSpan": {
@@ -545,8 +544,7 @@
           "length": 5
         },
         "fileName": "/tests/cases/fourslash/b.ts",
-        "isWriteAccess": false,
-        "isDefinition": false
+        "isWriteAccess": false
       }
     ]
   },
@@ -591,8 +589,7 @@
           "start": 0,
           "length": 22
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   },
@@ -669,8 +666,7 @@
           "start": 0,
           "length": 28
         },
-        "isWriteAccess": true,
-        "isDefinition": false
+        "isWriteAccess": true
       }
     ]
   }

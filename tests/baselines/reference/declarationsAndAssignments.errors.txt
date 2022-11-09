@@ -1,6 +1,4 @@
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(5,16): error TS2493: Tuple type '[number, string]' of length '2' has no element at index '2'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(22,17): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(22,23): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(23,25): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(24,19): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(28,28): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
@@ -22,7 +20,7 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,6): 
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts (22 errors) ====
+==== tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts (20 errors) ====
     function f0() {
         var [] = [1, "hello"];
         var [x] = [1, "hello"];
@@ -46,11 +44,7 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): 
     }
     
     function f2() {
-        var { } = { x: 5, y: "hello" };       // Error, no x and y in target
-                    ~
-!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
-                          ~
-!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
+        var { } = { x: 5, y: "hello" };       // Ok, empty binding pattern means nothing
         var { x } = { x: 5, y: "hello" };     // Error, no y in target
                             ~
 !!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.

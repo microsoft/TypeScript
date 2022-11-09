@@ -39,17 +39,17 @@ function f1() {
 }
 
 type B1 = -1 | 0 | 1;
->B1 : B1
+>B1 : 0 | 1 | -1
 >-1 : -1
 >1 : 1
 
 type B2 = 1 | 0 | -1;
->B2 : B2
+>B2 : 0 | 1 | -1
 >-1 : -1
 >1 : 1
 
 type B3 = 0 | -1 | 1;
->B3 : B3
+>B3 : 0 | 1 | -1
 >-1 : -1
 >1 : 1
 
@@ -260,7 +260,7 @@ function assertNever(x: never): never {
 }
 
 type Tag = 0 | 1 | 2;
->Tag : Tag
+>Tag : 0 | 1 | 2
 
 function f10(x: Tag) {
 >f10 : (x: Tag) => "a" | "b" | "c"
@@ -406,7 +406,7 @@ function f15(x: 0 | false, y: 1 | "one") {
 }
 
 type Item =
->Item : Item
+>Item : { kind: 0; a: string; } | { kind: 1; b: string; } | { kind: 2; c: string; }
 
     { kind: 0, a: string } |
 >kind : 0

@@ -80,7 +80,7 @@ namespace ts.codefix {
                 changeTracker.insertNodeAfter(sourceFile, constructor, newElement);
             }
             else {
-                changeTracker.insertNodeAtClassStart(sourceFile, cls, newElement);
+                changeTracker.insertMemberAtStart(sourceFile, cls, newElement);
             }
         }
     }

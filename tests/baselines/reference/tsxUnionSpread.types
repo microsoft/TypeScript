@@ -4,16 +4,16 @@ namespace JSX {
 }
 
 export type CatInfo = { type: 'Cat'; subType: string; };
->CatInfo : CatInfo
+>CatInfo : { type: 'Cat'; subType: string; }
 >type : "Cat"
 >subType : string
 
 export type DogInfo = { type: 'Dog'; };
->DogInfo : DogInfo
+>DogInfo : { type: 'Dog'; }
 >type : "Dog"
 
 export type AnimalInfo = CatInfo | DogInfo;
->AnimalInfo : AnimalInfo
+>AnimalInfo : CatInfo | DogInfo
 
 function AnimalComponent(info: AnimalInfo): JSX.Element {
 >AnimalComponent : (info: AnimalInfo) => JSX.Element
