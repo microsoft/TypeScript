@@ -846,7 +846,7 @@ export const importDefinitelyTypedTests = task({
 export const produceLKG = task({
     name: "LKG",
     description: "Makes a new LKG out of the built js files",
-    dependencies: [localize, tsc, tsserver, services, lssl, otherOutputs, dts],
+    dependencies: [local],
     run: async () => {
         if (!cmdLineOptions.bundle) {
             throw new Error("LKG cannot be created when --bundle=false");
