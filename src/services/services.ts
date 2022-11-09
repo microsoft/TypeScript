@@ -13,7 +13,7 @@ import {
     createTextSpanFromRange, Debug, Declaration, deduplicate, DefinitionInfo, DefinitionInfoAndBoundSpan, Diagnostic,
     DiagnosticWithLocation, directoryProbablyExists, DocCommentTemplateOptions, DocumentHighlights, DocumentRegistry,
     DocumentSpan, EditorOptions, EditorSettings, ElementAccessExpression, EmitTextWriter, emptyArray, emptyOptions,
-    EndOfFileToken, EntityName, equateValues, ESMap, ExportDeclaration, FileReference, FileTextChanges, filter, find,
+    EndOfFileToken, EntityName, equateValues, ExportDeclaration, FileReference, FileTextChanges, filter, find,
     FindAllReferences, findChildOfKind, findPrecedingToken, first, firstDefined, firstOrOnly, flatMap, forEach,
     forEachChild, FormatCodeOptions, FormatCodeSettings, formatting, FunctionLikeDeclaration, GeneratedIdentifierFlags,
     getAdjustedRenameLocation, getAllSuperTypeNodes, getAssignmentDeclarationKind, GetCompletionsAtPositionOptions,
@@ -36,7 +36,7 @@ import {
     isRightSideOfQualifiedName, isSetAccessor, isStringOrNumericLiteralLike, isTagName, isTextWhiteSpaceLike,
     isThisTypeParameter, JsDoc, JSDoc, JSDocContainer, JSDocTagInfo, JsonSourceFile, JsxAttributes, JsxClosingTagInfo,
     JsxElement, JsxEmit, JsxFragment, LanguageService, LanguageServiceHost, LanguageServiceMode, LanguageVariant,
-    lastOrUndefined, length, LineAndCharacter, lineBreakPart, LiteralType, map, Map, mapDefined, MapLike, mapOneOrMany,
+    lastOrUndefined, length, LineAndCharacter, lineBreakPart, LiteralType, map, mapDefined, MapLike, mapOneOrMany,
     maybeBind, maybeSetLocalizedDiagnosticMessages, ModeAwareCache, ModifierFlags, ModuleDeclaration, NavigateToItem,
     NavigationBarItem, NavigationTree, Node, NodeArray, NodeFlags, noop, normalizePath, NumberLiteralType,
     NumericLiteral, ObjectAllocator, ObjectFlags, ObjectLiteralElement, ObjectLiteralExpression,
@@ -46,7 +46,7 @@ import {
     QuickInfo, refactor, RefactorContext, RefactorEditInfo, RefactorTriggerReason, ReferencedSymbol, ReferenceEntry,
     Rename, RenameInfo, RenameInfoOptions, RenameLocation, ResolvedModuleFull, ResolvedProjectReference,
     ResolvedTypeReferenceDirective, returnFalse, scanner, ScriptElementKind, ScriptElementKindModifier, ScriptKind,
-    ScriptTarget, SelectionRange, SemanticClassificationFormat, Set, setObjectAllocator, Signature,
+    ScriptTarget, SelectionRange, SemanticClassificationFormat, setObjectAllocator, Signature,
     SignatureDeclaration, SignatureFlags, SignatureHelp, SignatureHelpItems, SignatureHelpItemsOptions, SignatureKind,
     singleElementArray, SmartSelectionRange, SortedArray, SourceFile, SourceFileLike, SourceMapSource, Statement,
     stringContains, StringLiteral, StringLiteralLike, StringLiteralType, Symbol, SymbolDisplay, SymbolDisplayPart,
@@ -760,13 +760,13 @@ class SourceFileObject extends NodeObject implements SourceFile {
     public scriptKind!: ScriptKind;
     public languageVersion!: ScriptTarget;
     public languageVariant!: LanguageVariant;
-    public identifiers!: ESMap<string, string>;
+    public identifiers!: Map<string, string>;
     public nameTable: UnderscoreEscapedMap<number> | undefined;
     public resolvedModules: ModeAwareCache<ResolvedModuleFull> | undefined;
     public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirective>;
     public imports!: readonly StringLiteralLike[];
     public moduleAugmentations!: StringLiteral[];
-    private namedDeclarations: ESMap<string, Declaration[]> | undefined;
+    private namedDeclarations: Map<string, Declaration[]> | undefined;
     public ambientModuleNames!: string[];
     public checkJsDirective: CheckJsDirective | undefined;
     public errorExpectations: TextRange[] | undefined;
@@ -812,7 +812,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
         return fullText[lastCharPos] === "\n" && fullText[lastCharPos - 1] === "\r" ? lastCharPos - 1 : lastCharPos;
     }
 
-    public getNamedDeclarations(): ESMap<string, Declaration[]> {
+    public getNamedDeclarations(): Map<string, Declaration[]> {
         if (!this.namedDeclarations) {
             this.namedDeclarations = this.computeNamedDeclarations();
         }
@@ -820,7 +820,7 @@ class SourceFileObject extends NodeObject implements SourceFile {
         return this.namedDeclarations;
     }
 
-    private computeNamedDeclarations(): ESMap<string, Declaration[]> {
+    private computeNamedDeclarations(): Map<string, Declaration[]> {
         const result = createMultiMap<Declaration>();
 
         this.forEachChild(visit);
@@ -1364,7 +1364,7 @@ export function createLanguageService(
         const hasInvalidatedResolutions: HasInvalidatedResolutions = host.hasInvalidatedResolutions || returnFalse;
         const hasChangedAutomaticTypeDirectiveNames = maybeBind(host, host.hasChangedAutomaticTypeDirectiveNames);
         const projectReferences = host.getProjectReferences?.();
-        let parsedCommandLines: ESMap<Path, ParsedCommandLine | false> | undefined;
+        let parsedCommandLines: Map<Path, ParsedCommandLine | false> | undefined;
 
         // Now create a new compiler
         let compilerHost: CompilerHost | undefined = {

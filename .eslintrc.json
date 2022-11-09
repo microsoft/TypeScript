@@ -10,7 +10,7 @@
         "es6": true
     },
     "plugins": [
-        "@typescript-eslint", "jsdoc", "no-null", "import", "eslint-plugin-local"
+        "@typescript-eslint", "no-null", "import", "eslint-plugin-local"
     ],
     "rules": {
         "@typescript-eslint/adjacent-overload-signatures": "error",
@@ -94,9 +94,6 @@
 
         // eslint-plugin-no-null
         "no-null/no-null": "error",
-
-        // eslint-plugin-jsdoc
-        "jsdoc/check-alignment": "error",
 
         // eslint
         "constructor-super": "error",

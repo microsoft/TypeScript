@@ -13,7 +13,7 @@ import {
     isExternalModuleReference, isIdentifier, isImportDeclaration, isImportEqualsDeclaration, isNamedDeclaration,
     isObjectLiteralExpression, isOmittedExpression, isPrologueDirective, isPropertyAccessExpression,
     isPropertyAssignment, isRequireCall, isSourceFile, isStringLiteral, isStringLiteralLike, isVariableDeclaration,
-    isVariableDeclarationList, isVariableStatement, LanguageServiceHost, last, length, makeImportIfNecessary, Map,
+    isVariableDeclarationList, isVariableStatement, LanguageServiceHost, last, length, makeImportIfNecessary,
     mapDefined, ModifierFlags, ModifierLike, ModuleDeclaration, NamedImportBindings, Node, NodeFlags, nodeSeenTracker,
     normalizePath, ObjectBindingElementWithoutPropertyName, Program, PropertyAccessExpression, PropertyAssignment,
     QuotePreference, rangeContainsRange, RefactorContext, RefactorEditInfo, removeFileExtension, RequireOrImportCall,

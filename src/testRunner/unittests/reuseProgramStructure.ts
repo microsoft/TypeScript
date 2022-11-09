@@ -1,6 +1,7 @@
 import * as ts from "../_namespaces/ts";
 
-import { checkResolvedModulesCache, checkResolvedTypeDirectivesCache, createTestCompilerHost, NamedSourceText, newLine, newProgram, ProgramWithSourceTexts, SourceText, TestCompilerHost, updateProgram, updateProgramText } from "./helpers";
+import { checkResolvedModulesCache, checkResolvedTypeDirectivesCache, createResolvedModule, createTestCompilerHost, NamedSourceText, newLine, newProgram, ProgramWithSourceTexts, SourceText, TestCompilerHost, updateProgram, updateProgramText } from "./helpers";
+import { createWatchedSystem, File, libFile } from "./virtualFileSystemWithWatch";
 
 describe("unittests:: Reuse program structure:: General", () => {
     const target = ts.ScriptTarget.Latest;
@@ -155,7 +156,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         const options: ts.CompilerOptions = { target };
 
         const program1 = newProgram(files, ["a.ts"], options);
-        checkResolvedModulesCache(program1, "a.ts", new ts.Map(ts.getEntries({ b: ts.createResolvedModule("b.ts") })));
+        checkResolvedModulesCache(program1, "a.ts", new Map(ts.getEntries({ b: createResolvedModule("b.ts") })));
         checkResolvedModulesCache(program1, "b.ts", /*expectedContent*/ undefined);
 
         const program2 = updateProgram(program1, ["a.ts"], options, files => {
@@ -164,7 +165,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         assert.equal(program2.structureIsReused, ts.StructureIsReused.Completely);
 
         // content of resolution cache should not change
-        checkResolvedModulesCache(program1, "a.ts", new ts.Map(ts.getEntries({ b: ts.createResolvedModule("b.ts") })));
+        checkResolvedModulesCache(program1, "a.ts", new Map(ts.getEntries({ b: createResolvedModule("b.ts") })));
         checkResolvedModulesCache(program1, "b.ts", /*expectedContent*/ undefined);
 
         // imports has changed - program is not reused
@@ -181,7 +182,7 @@ describe("unittests:: Reuse program structure:: General", () => {
             files[0].text = files[0].text.updateImportsAndExports(newImports);
         });
         assert.equal(program4.structureIsReused, ts.StructureIsReused.SafeModules);
-        checkResolvedModulesCache(program4, "a.ts", new ts.Map(ts.getEntries({ b: ts.createResolvedModule("b.ts"), c: undefined })));
+        checkResolvedModulesCache(program4, "a.ts", new Map(ts.getEntries({ b: createResolvedModule("b.ts"), c: undefined })));
     });
 
     it("set the resolvedImports after re-using an ambient external module declaration", () => {
@@ -229,7 +230,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         const options: ts.CompilerOptions = { target, typeRoots: ["/types"] };
 
         const program1 = newProgram(files, ["/a.ts"], options);
-        checkResolvedTypeDirectivesCache(program1, "/a.ts", new ts.Map(ts.getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
+        checkResolvedTypeDirectivesCache(program1, "/a.ts", new Map(ts.getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
         checkResolvedTypeDirectivesCache(program1, "/types/typedefs/index.d.ts", /*expectedContent*/ undefined);
 
         const program2 = updateProgram(program1, ["/a.ts"], options, files => {
@@ -238,7 +239,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         assert.equal(program2.structureIsReused, ts.StructureIsReused.Completely);
 
         // content of resolution cache should not change
-        checkResolvedTypeDirectivesCache(program1, "/a.ts", new ts.Map(ts.getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
+        checkResolvedTypeDirectivesCache(program1, "/a.ts", new Map(ts.getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
         checkResolvedTypeDirectivesCache(program1, "/types/typedefs/index.d.ts", /*expectedContent*/ undefined);
 
         // type reference directives has changed - program is not reused
@@ -256,7 +257,7 @@ describe("unittests:: Reuse program structure:: General", () => {
             files[0].text = files[0].text.updateReferences(newReferences);
         });
         assert.equal(program4.structureIsReused, ts.StructureIsReused.SafeModules);
-        checkResolvedTypeDirectivesCache(program1, "/a.ts", new ts.Map(ts.getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
+        checkResolvedTypeDirectivesCache(program1, "/a.ts", new Map(ts.getEntries({ typedefs: { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } })));
     });
 
     it("fetches imports after npm install", () => {
@@ -692,9 +693,6 @@ describe("unittests:: Reuse program structure:: host is optional", () => {
     });
 });
 
-type File = ts.TestFSWithWatch.File;
-import createTestSystem = ts.TestFSWithWatch.createWatchedSystem;
-import libFile = ts.TestFSWithWatch.libFile;
 
 describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
     function getWhetherProgramIsUptoDate(
@@ -748,7 +746,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
         }
 
         function verifyProgram(files: File[], rootFiles: string[], options: ts.CompilerOptions, configFile: string) {
-            const system = createTestSystem(files);
+            const system = createWatchedSystem(files);
             verifyProgramWithoutConfigFile(system, rootFiles, options);
             verifyProgramWithConfigFile(system, configFile);
         }
@@ -863,7 +861,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
                 path: "/src/tsconfig.json",
                 content: JSON.stringify({ compilerOptions, include: ["packages/**/*.ts"] })
             };
-            verifyProgramWithConfigFile(createTestSystem([app, module1, module2, module3, libFile, configFile]), configFile.path);
+            verifyProgramWithConfigFile(createWatchedSystem([app, module1, module2, module3, libFile, configFile]), configFile.path);
         });
         it("has the same root file names", () => {
             const module1: File = {
@@ -879,7 +877,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
                 content: "class classD { method() { return 10; } }\nexport default classD;"
             };
             const rootFiles = [module1.path, module2.path, module3.path];
-            const system = createTestSystem([module1, module2, module3]);
+            const system = createWatchedSystem([module1, module2, module3]);
             const options = {};
             const program = ts.createWatchProgram(ts.createWatchCompilerHostOfFilesAndCompilerOptions({
                 rootFiles,
@@ -915,7 +913,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
             };
             const rootFiles = [module1.path, module2.path];
             const newRootFiles = [module1.path, module2.path, module3.path];
-            const system = createTestSystem([module1, module2, module3]);
+            const system = createWatchedSystem([module1, module2, module3]);
             const options = {};
             const program = ts.createWatchProgram(ts.createWatchCompilerHostOfFilesAndCompilerOptions({
                 rootFiles,
@@ -940,7 +938,7 @@ describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
             };
             const rootFiles = [module1.path, module2.path];
             const newRootFiles = [module2.path, module3.path];
-            const system = createTestSystem([module1, module2, module3]);
+            const system = createWatchedSystem([module1, module2, module3]);
             const options = {};
             const program = ts.createWatchProgram(ts.createWatchCompilerHostOfFilesAndCompilerOptions({
                 rootFiles,

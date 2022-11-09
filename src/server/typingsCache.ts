@@ -1,5 +1,5 @@
 import {
-    ApplyCodeActionCommandResult, arrayIsEqualTo, CompilerOptions, getAllowJSCompilerOption, InstallPackageOptions, Map,
+    ApplyCodeActionCommandResult, arrayIsEqualTo, CompilerOptions, getAllowJSCompilerOption, InstallPackageOptions,
     noop, notImplemented, Path, returnFalse, sort, SortedReadonlyArray, TypeAcquisition,
 } from "./_namespaces/ts";
 import { emptyArray, Project, ProjectService } from "./_namespaces/ts.server";

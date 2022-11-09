@@ -2,14 +2,14 @@ import {
     append, appendIfUnique, arrayFrom, changeAnyExtension, CharacterCodes, combinePaths, comparePaths, Comparison,
     CompilerOptions, contains, containsPath, createCompilerDiagnostic, Debug, Diagnostic, DiagnosticMessage,
     DiagnosticReporter, Diagnostics, directoryProbablyExists, directorySeparator, emptyArray, endsWith,
-    ensureTrailingDirectorySeparator, ESMap, every, Extension, extensionIsTS, fileExtensionIs, fileExtensionIsOneOf,
+    ensureTrailingDirectorySeparator, every, Extension, extensionIsTS, fileExtensionIs, fileExtensionIsOneOf,
     FileReference, filter, firstDefined, forEach, forEachAncestorDirectory, formatMessage, getBaseFileName,
     GetCanonicalFileName, getCommonSourceDirectory, getDirectoryPath, GetEffectiveTypeRootsHost, getEmitModuleKind,
     getEmitModuleResolutionKind, getModeForUsageLocation, getNormalizedAbsolutePath, getOwnKeys, getPathComponents,
     getPathFromPathComponents, getPathsBasePath, getPossibleOriginalInputExtensionForExtension,
     getRelativePathFromDirectory, getRootLength, hasJSFileExtension, hasProperty, hasTrailingDirectorySeparator,
     hostGetCanonicalFileName, isArray, isExternalModuleNameRelative, isRootedDiskPath, isString,
-    isStringLiteralLike, lastOrUndefined, length, Map, MapLike, matchedText, MatchingKeys, matchPatternOrExact,
+    isStringLiteralLike, lastOrUndefined, length, MapLike, matchedText, MatchingKeys, matchPatternOrExact,
     ModuleKind, ModuleResolutionHost, ModuleResolutionKind, noop, noopPush, normalizePath, normalizeSlashes,
     optionsHaveModuleResolutionChanges, PackageId, packageIdToString, ParsedCommandLine, Path, pathIsRelative, Pattern,
     patternText, perfLogger, Push, readJson, removeExtension, removeFileExtension, removePrefix,
@@ -620,7 +620,7 @@ export interface PackageJsonInfoCache {
     /** @internal */ getPackageJsonInfo(packageJsonPath: string): PackageJsonInfo | boolean | undefined;
     /** @internal */ setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfo | boolean): void;
     /** @internal */ entries(): [Path, PackageJsonInfo | boolean][];
-    /** @internal */ getInternalMap(): ESMap<Path, PackageJsonInfo | boolean> | undefined;
+    /** @internal */ getInternalMap(): Map<Path, PackageJsonInfo | boolean> | undefined;
     clear(): void;
 }
 
@@ -631,18 +631,18 @@ export interface PerModuleNameCache {
 
 /** @internal */
 export interface CacheWithRedirects<T> {
-    getOwnMap: () => ESMap<string, T>;
-    redirectsMap: ESMap<Path, ESMap<string, T>>;
-    getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): ESMap<string, T>;
+    getOwnMap: () => Map<string, T>;
+    redirectsMap: Map<Path, Map<string, T>>;
+    getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<string, T>;
     clear(): void;
     setOwnOptions(newOptions: CompilerOptions): void;
-    setOwnMap(newOwnMap: ESMap<string, T>): void;
+    setOwnMap(newOwnMap: Map<string, T>): void;
 }
 
 /** @internal */
 export function createCacheWithRedirects<T>(options?: CompilerOptions): CacheWithRedirects<T> {
-    let ownMap: ESMap<string, T> = new Map();
-    const redirectsMap = new Map<Path, ESMap<string, T>>();
+    let ownMap: Map<string, T> = new Map();
+    const redirectsMap = new Map<Path, Map<string, T>>();
     return {
         getOwnMap,
         redirectsMap,
@@ -660,7 +660,7 @@ export function createCacheWithRedirects<T>(options?: CompilerOptions): CacheWit
         options = newOptions;
     }
 
-    function setOwnMap(newOwnMap: ESMap<string, T>) {
+    function setOwnMap(newOwnMap: Map<string, T>) {
         ownMap = newOwnMap;
     }
 
@@ -685,7 +685,7 @@ export function createCacheWithRedirects<T>(options?: CompilerOptions): CacheWit
 }
 
 function createPackageJsonInfoCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): PackageJsonInfoCache {
-    let cache: ESMap<Path, PackageJsonInfo | boolean> | undefined;
+    let cache: Map<Path, PackageJsonInfo | boolean> | undefined;
     return { getPackageJsonInfo, setPackageJsonInfo, clear, entries, getInternalMap };
     function getPackageJsonInfo(packageJsonPath: string) {
         return cache?.get(toPath(packageJsonPath, currentDirectory, getCanonicalFileName));
@@ -1321,8 +1321,8 @@ export enum NodeResolutionFeatures {
 }
 
 function node16ModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions,
-        host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference,
-        resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations {
+    host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference,
+    resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations {
     return nodeNextModuleNameResolverWorker(
         NodeResolutionFeatures.Node16Default,
         moduleName,
@@ -1336,8 +1336,8 @@ function node16ModuleNameResolver(moduleName: string, containingFile: string, co
 }
 
 function nodeNextModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions,
-        host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference,
-        resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations {
+    host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference,
+    resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations {
     return nodeNextModuleNameResolverWorker(
         NodeResolutionFeatures.NodeNextDefault,
         moduleName,
@@ -1874,7 +1874,7 @@ export interface PackageJsonInfoContents {
  *
  * @internal
  */
- export function getPackageScopeForPath(fileName: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
+export function getPackageScopeForPath(fileName: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
     const parts = getPathComponents(fileName);
     parts.pop();
     while (parts.length > 0) {
@@ -2145,24 +2145,24 @@ function loadModuleFromImportsOrExports(extensions: Extensions, state: ModuleRes
     const loadModuleFromTargetImportOrExport = getLoadModuleFromTargetImportOrExport(extensions, state, cache, redirectedReference, moduleName, scope, isImports);
 
     if (!endsWith(moduleName, directorySeparator) && moduleName.indexOf("*") === -1 && hasProperty(lookupTable, moduleName)) {
-        const target = (lookupTable as {[idx: string]: unknown})[moduleName];
+        const target = (lookupTable as { [idx: string]: unknown })[moduleName];
         return loadModuleFromTargetImportOrExport(target, /*subpath*/ "", /*pattern*/ false, moduleName);
     }
     const expandingKeys = sort(filter(getOwnKeys(lookupTable as MapLike<unknown>), k => k.indexOf("*") !== -1 || endsWith(k, "/")), comparePatternKeys);
     for (const potentialTarget of expandingKeys) {
         if (state.features & NodeResolutionFeatures.ExportsPatternTrailers && matchesPatternWithTrailer(potentialTarget, moduleName)) {
-            const target = (lookupTable as {[idx: string]: unknown})[potentialTarget];
+            const target = (lookupTable as { [idx: string]: unknown })[potentialTarget];
             const starPos = potentialTarget.indexOf("*");
             const subpath = moduleName.substring(potentialTarget.substring(0, starPos).length, moduleName.length - (potentialTarget.length - 1 - starPos));
             return loadModuleFromTargetImportOrExport(target, subpath, /*pattern*/ true, potentialTarget);
         }
         else if (endsWith(potentialTarget, "*") && startsWith(moduleName, potentialTarget.substring(0, potentialTarget.length - 1))) {
-            const target = (lookupTable as {[idx: string]: unknown})[potentialTarget];
+            const target = (lookupTable as { [idx: string]: unknown })[potentialTarget];
             const subpath = moduleName.substring(potentialTarget.length - 1);
             return loadModuleFromTargetImportOrExport(target, subpath, /*pattern*/ true, potentialTarget);
         }
         else if (startsWith(moduleName, potentialTarget)) {
-            const target = (lookupTable as {[idx: string]: unknown})[potentialTarget];
+            const target = (lookupTable as { [idx: string]: unknown })[potentialTarget];
             const subpath = moduleName.substring(potentialTarget.length);
             return loadModuleFromTargetImportOrExport(target, subpath, /*pattern*/ false, potentialTarget);
         }
@@ -2290,7 +2290,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
         function useCaseSensitiveFileNames() {
             return !state.host.useCaseSensitiveFileNames ? true :
                 typeof state.host.useCaseSensitiveFileNames === "boolean" ? state.host.useCaseSensitiveFileNames :
-                state.host.useCaseSensitiveFileNames();
+                    state.host.useCaseSensitiveFileNames();
         }
 
         function tryLoadInputFileForPath(finalPath: string, entry: string, packagePath: string, isImports: boolean) {

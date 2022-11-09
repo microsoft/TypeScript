@@ -1,7 +1,7 @@
 import {
     CodeFixAllContext, Diagnostics, factory, getJSDocTypeTag, getTokenAtPosition, idText, isCallExpression,
     isIdentifier, isInJSFile, isNewExpression, isParameter, isParenthesizedExpression, isParenthesizedTypeNode,
-    isTypeReferenceNode, isUnionTypeNode, NewExpression, ParameterDeclaration, Program, Set, skipTrivia, some,
+    isTypeReferenceNode, isUnionTypeNode, NewExpression, ParameterDeclaration, Program, skipTrivia, some,
     SourceFile, SyntaxKind, textChanges, TextSpan, TypeFlags,
 } from "../_namespaces/ts";
 import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";

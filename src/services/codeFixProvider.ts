@@ -1,7 +1,7 @@
 import {
     arrayFrom, cast, CodeActionCommand, CodeFixAction, CodeFixAllContext, CodeFixContext, CodeFixContextBase,
     CodeFixRegistration, CombinedCodeActions, computeSuggestionDiagnostics, contains, createMultiMap, Debug, Diagnostic,
-    DiagnosticAndArguments, diagnosticToString, DiagnosticWithLocation, FileTextChanges, flatMap, isString, map, Map,
+    DiagnosticAndArguments, diagnosticToString, DiagnosticWithLocation, FileTextChanges, flatMap, isString, map,
     Push, TextChange, textChanges,
 } from "./_namespaces/ts";
 

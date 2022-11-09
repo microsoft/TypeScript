@@ -8,7 +8,7 @@ import {
     computePositionOfLineAndCharacter, contains, createTextSpanFromBounds, Debug, directorySeparator,
     DocumentPositionMapper, DocumentRegistryBucketKeyWithMode, emptyOptions, FileWatcher, FileWatcherEventKind, forEach,
     FormatCodeSettings, getBaseFileName, getDefaultFormatCodeSettings, getLineInfo, getScriptKindFromFileName,
-    getSnapshotText, hasTSFileExtension, IScriptSnapshot, isString, LineInfo, Path, ScriptKind, ScriptSnapshot, Set,
+    getSnapshotText, hasTSFileExtension, IScriptSnapshot, isString, LineInfo, Path, ScriptKind, ScriptSnapshot,
     some, SourceFile, SourceFileLike, stringContains, TextSpan, unorderedRemoveItem,
 } from "./_namespaces/ts";
 
@@ -317,8 +317,11 @@ export class ScriptInfo {
     /** @internal */
     readonly isDynamic: boolean;
 
-    /** @internal */
-    /** Set to real path if path is different from info.path */
+    /**
+     * Set to real path if path is different from info.path
+     *
+     * @internal
+     */
     private realpath: Path | undefined;
 
     /** @internal */

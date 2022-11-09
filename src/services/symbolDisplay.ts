@@ -13,7 +13,7 @@ import {
     JsxOpeningLikeElement, keywordPart, length, lineBreakPart, ListFormat, mapToDisplayParts, ModifierFlags,
     ModuleDeclaration, NewExpression, Node, NodeBuilderFlags, ObjectFlags, operatorPart, Printer,
     PropertyAccessExpression, PropertyDeclaration, punctuationPart, ScriptElementKind, ScriptElementKindModifier,
-    SemanticMeaning, Set, SetAccessorDeclaration, Signature, SignatureDeclaration, SignatureFlags,
+    SemanticMeaning, SetAccessorDeclaration, Signature, SignatureDeclaration, SignatureFlags,
     signatureToDisplayParts, some, SourceFile, spacePart, Symbol, SymbolDisplayPart, SymbolDisplayPartKind, SymbolFlags,
     SymbolFormatFlags, symbolToDisplayParts, SyntaxKind, TaggedTemplateExpression, textOrKeywordPart, textPart,
     TransientSymbol, Type, TypeChecker, TypeFormatFlags, TypeParameter, typeToDisplayParts, VariableDeclaration,

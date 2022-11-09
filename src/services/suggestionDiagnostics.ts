@@ -6,7 +6,7 @@ import {
     getAssignmentDeclarationKind, getFunctionFlags, getModeForUsageLocation, getResolvedModule, hasInitializer,
     hasPropertyAccessExpressionWithName, Identifier, importFromModuleSpecifier, isAsyncFunction, isBinaryExpression,
     isBlock, isCallExpression, isExportAssignment, isFunctionLike, isIdentifier, isPropertyAccessExpression,
-    isRequireCall, isReturnStatement, isSourceFileJS, isStringLiteral, isVariableDeclaration, isVariableStatement, Map,
+    isRequireCall, isReturnStatement, isSourceFileJS, isStringLiteral, isVariableDeclaration, isVariableStatement,
     MethodDeclaration, ModuleKind, Node, NodeFlags, Program, programContainsEsModules, PropertyAccessExpression, Push,
     ReturnStatement, skipAlias, some, SourceFile, SyntaxKind, TypeChecker, VariableStatement,
 } from "./_namespaces/ts";

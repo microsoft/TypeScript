@@ -10,7 +10,7 @@ import {
     isFunctionLikeDeclaration, isIdentifier, isModifierLike, isNodeWithPossibleHoistedDeclaration, isOmittedExpression,
     isPropertyAccessExpression, isStatement, isSuperProperty, isToken, isVariableDeclarationList,
     LeftHandSideExpression, map, MethodDeclaration, Node, NodeCheckFlags, NodeFactory, NodeFlags, ParameterDeclaration,
-    PropertyAccessExpression, PropertyAssignment, ScriptTarget, Set, SetAccessorDeclaration, setEmitFlags,
+    PropertyAccessExpression, PropertyAssignment, ScriptTarget, SetAccessorDeclaration, setEmitFlags,
     setOriginalNode, setSourceMapRange, setTextRange, some, SourceFile, Statement, SyntaxKind, TextRange,
     TransformationContext, TransformFlags, TypeNode, TypeReferenceSerializationKind, unescapeLeadingUnderscores,
     VariableDeclaration, VariableDeclarationList, VariableStatement, visitEachChild, visitFunctionBody,
@@ -837,7 +837,7 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
             factory.createArrowFunction(
                 /* modifiers */ undefined,
                 /* typeParameters */ undefined,
-                /* parameters */ [],
+                /* parameters */[],
                 /* type */ undefined,
                 /* equalsGreaterThanToken */ undefined,
                 setEmitFlags(
@@ -859,7 +859,7 @@ export function createSuperAccessVariableStatement(factory: NodeFactory, resolve
                     factory.createArrowFunction(
                         /* modifiers */ undefined,
                         /* typeParameters */ undefined,
-                        /* parameters */ [
+                        /* parameters */[
                             factory.createParameterDeclaration(
                                 /* modifiers */ undefined,
                                 /* dotDotDotToken */ undefined,

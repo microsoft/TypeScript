@@ -3,7 +3,7 @@ import {
     base64decode, computeLineAndCharacterOfPosition, createDocumentPositionMapper, createGetCanonicalFileName,
     DocumentPosition, DocumentPositionMapper, DocumentPositionMapperHost, Extension,
     getDeclarationEmitOutputFilePathWorker, getDirectoryPath, getLineInfo, getLineStarts, getNormalizedAbsolutePath,
-    identitySourceMapConsumer, isDeclarationFileName, isString, LineAndCharacter, LineInfo, Map, outFile, Program,
+    identitySourceMapConsumer, isDeclarationFileName, isString, LineAndCharacter, LineInfo, outFile, Program,
     removeFileExtension, SourceFileLike, sys, tryGetSourceMappingURL, tryParseRawSourceMap,
 } from "./_namespaces/ts";
 

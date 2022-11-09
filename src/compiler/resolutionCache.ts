@@ -3,18 +3,18 @@ import {
     arrayToMap, CachedDirectoryStructureHost, CacheWithRedirects, CharacterCodes, clearMap, closeFileWatcher,
     closeFileWatcherOf, CompilerOptions, contains, createCacheWithRedirects, createModeAwareCache,
     createModuleResolutionCache, createMultiMap, createTypeReferenceDirectiveResolutionCache, Debug, Diagnostics,
-    directorySeparator, DirectoryWatcherCallback, emptyArray, emptyIterator, endsWith, ESMap, Extension, extensionIsTS,
+    directorySeparator, DirectoryWatcherCallback, emptyArray, emptyIterator, endsWith, Extension, extensionIsTS,
     fileExtensionIs, fileExtensionIsOneOf, FileReference, FileWatcher, FileWatcherCallback, firstDefinedIterator,
     GetCanonicalFileName, getDirectoryPath, getEffectiveTypeRoots, getModeForFileReference, getModeForResolutionAtIndex,
     getModeForUsageLocation, getNormalizedAbsolutePath, getResolutionName, getRootLength, HasInvalidatedResolutions,
     ignoredPaths, inferredTypesContainingFile, isEmittedFileOfProgram, isExternalModuleNameRelative,
     isExternalOrCommonJsModule, isNodeModulesDirectory, isRootedDiskPath, isString, isStringLiteralLike, isTraceEnabled,
-    length, loadModuleFromGlobalCache, Map, memoize, MinimalResolutionCacheHost, ModeAwareCache, ModuleKind,
+    length, loadModuleFromGlobalCache, memoize, MinimalResolutionCacheHost, ModeAwareCache, ModuleKind,
     ModuleResolutionCache, ModuleResolutionHost, ModuleResolutionInfo, mutateMap, noopFileWatcher, normalizePath,
     PackageId, packageIdToString, parseNodeModuleFromPath, Path, pathContainsNodeModules, PerModuleNameCache, Program,
-    ReadonlyESMap, removeSuffix, removeTrailingDirectorySeparator, resolutionExtensionIsTSOrJson, ResolvedModuleFull,
+    removeSuffix, removeTrailingDirectorySeparator, resolutionExtensionIsTSOrJson, ResolvedModuleFull,
     ResolvedModuleWithFailedLookupLocations, ResolvedProjectReference, ResolvedTypeReferenceDirective,
-    ResolvedTypeReferenceDirectiveWithFailedLookupLocations, returnTrue, Set, some, SourceFile, startsWith,
+    ResolvedTypeReferenceDirectiveWithFailedLookupLocations, returnTrue, some, SourceFile, startsWith,
     stringContains, trace, TypeReferenceDirectiveResolutionInfo, unorderedRemoveItem, WatchDirectoryFlags,
 } from "./_namespaces/ts";
 
@@ -48,7 +48,7 @@ export interface ResolutionCache {
     invalidateResolutionOfFile(filePath: Path): void;
     removeResolutionsOfFile(filePath: Path): void;
     removeResolutionsFromProjectReferenceRedirects(filePath: Path): void;
-    setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: ESMap<Path, readonly string[]>): void;
+    setFilesWithInvalidatedNonRelativeUnresolvedImports(filesWithUnresolvedImports: Map<Path, readonly string[]>): void;
     createHasInvalidatedResolutions(customHasInvalidatedResolutions: HasInvalidatedResolutions): HasInvalidatedResolutions;
     hasChangedAutomaticTypeDirectiveNames(): boolean;
     isFileWithInvalidatedNonRelativeUnresolvedImports(path: Path): boolean;
@@ -201,7 +201,7 @@ type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocat
 export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootDirForResolution: string | undefined, logChangesWhenResolvingModule: boolean): ResolutionCache {
     let filesWithChangedSetOfUnresolvedImports: Path[] | undefined;
     let filesWithInvalidatedResolutions: Set<Path> | undefined;
-    let filesWithInvalidatedNonRelativeUnresolvedImports: ReadonlyESMap<Path, readonly string[]> | undefined;
+    let filesWithInvalidatedNonRelativeUnresolvedImports: ReadonlyMap<Path, readonly string[]> | undefined;
     const nonRelativeExternalModuleResolutions = createMultiMap<ResolutionWithFailedLookupLocations>();
 
     const resolutionsWithFailedLookups: ResolutionWithFailedLookupLocations[] = [];
@@ -445,7 +445,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         names: readonly string[] | readonly FileReference[];
         containingFile: string;
         redirectedReference: ResolvedProjectReference | undefined;
-        cache: ESMap<Path, ModeAwareCache<T>>;
+        cache: Map<Path, ModeAwareCache<T>>;
         perDirectoryCacheWithRedirects: CacheWithRedirects<ModeAwareCache<T>>;
         loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, containingSourceFile?: SourceFile, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext | undefined) => T;
         getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>;
@@ -517,8 +517,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                             loader === resolveModuleName as unknown ?
                                 resolved?.resolvedFileName ?
                                     resolved.packagetId ?
-                                        Diagnostics.Reusing_resolution_of_module_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3_with_Package_ID_4:
-                                        Diagnostics.Reusing_resolution_of_module_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3:
+                                        Diagnostics.Reusing_resolution_of_module_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3_with_Package_ID_4 :
+                                        Diagnostics.Reusing_resolution_of_module_0_from_1_found_in_cache_from_location_2_it_was_successfully_resolved_to_3 :
                                     Diagnostics.Reusing_resolution_of_module_0_from_1_found_in_cache_from_location_2_it_was_not_resolved :
                                 resolved?.resolvedFileName ?
                                     resolved.packagetId ?
@@ -966,7 +966,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     }
 
     function removeResolutionsOfFileFromCache<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
-        cache: ESMap<string, ModeAwareCache<T>>,
+        cache: Map<string, ModeAwareCache<T>>,
         filePath: Path,
         getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
     ) {
@@ -1023,7 +1023,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         }
     }
 
-    function setFilesWithInvalidatedNonRelativeUnresolvedImports(filesMap: ReadonlyESMap<Path, readonly string[]>) {
+    function setFilesWithInvalidatedNonRelativeUnresolvedImports(filesMap: ReadonlyMap<Path, readonly string[]>) {
         Debug.assert(filesWithInvalidatedNonRelativeUnresolvedImports === filesMap || filesWithInvalidatedNonRelativeUnresolvedImports === undefined);
         filesWithInvalidatedNonRelativeUnresolvedImports = filesMap;
     }
