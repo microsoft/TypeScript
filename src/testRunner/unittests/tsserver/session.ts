@@ -186,7 +186,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             };
 
             const expected: ts.server.protocol.StatusResponseBody = {
-                version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                version: ts.version,
             };
             assert.deepEqual(session.executeCommand(req).response, expected);
         });
