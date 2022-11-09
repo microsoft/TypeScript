@@ -1,26 +1,28 @@
 import * as ts from "../../_namespaces/ts";
+import { createServerHost, File } from "../virtualFileSystemWithWatch";
+import { createSession, openFilesForSession, checkNumberOfInferredProjects } from "./helpers";
 
-const aTs: ts.projectSystem.File = {
+const aTs: File = {
     path: "/a.ts",
     content: `import { B } from "./b";`
 };
-const bDts: ts.projectSystem.File = {
+const bDts: File = {
     path: "/b.d.ts",
     content: `export declare class B {}`
 };
-const bJs: ts.projectSystem.File = {
+const bJs: File = {
     path: "/b.js",
     content: `export class B {}`
 };
 describe("unittests:: tsserver:: auxiliaryProject", () => {
     it("AuxiliaryProject does not remove scrips from InferredProject", () => {
-        const host = ts.projectSystem.createServerHost([aTs, bDts, bJs]);
-        const session = ts.projectSystem.createSession(host);
+        const host = createServerHost([aTs, bDts, bJs]);
+        const session = createSession(host);
         const projectService = session.getProjectService();
-        ts.projectSystem.openFilesForSession([aTs], session);
+        openFilesForSession([aTs], session);
 
         // Open file is in inferred project
-        ts.projectSystem.checkNumberOfInferredProjects(projectService, 1);
+        checkNumberOfInferredProjects(projectService, 1);
         const inferredProject = projectService.inferredProjects[0];
 
         // getNoDtsResolutionProject will create an AuxiliaryProject with a.ts and b.js
@@ -39,7 +41,7 @@ describe("unittests:: tsserver:: auxiliaryProject", () => {
 
         // When b.js is opened in the editor, it should be put into an InferredProject
         // even though it's still contained by the AuxiliaryProject.
-        ts.projectSystem.openFilesForSession([bJs], session);
+        openFilesForSession([bJs], session);
         assert(!bJsScriptInfo.isOrphan());
         assert(bJsScriptInfo.isContainedByBackgroundProject());
         assert.equal(bJsScriptInfo.getDefaultProject().projectKind, ts.server.ProjectKind.Inferred);

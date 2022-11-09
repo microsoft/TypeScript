@@ -1,4 +1,4 @@
-import * as Harness from "./_namespaces/Harness";
+import * as Harness from "../_namespaces/Harness";
 import {
     arrayFrom, arrayToMap, clear, clone, combinePaths, compareStringsCaseSensitive, createGetCanonicalFileName,
     createMultiMap, createSystemWatchFunctions, Debug, directorySeparator, FileSystemEntryKind, FileWatcher,
@@ -6,9 +6,9 @@ import {
     FsWatchWorkerWatcher, generateDjb2Hash, getBaseFileName, getDirectoryPath, getNormalizedAbsolutePath,
     getRelativePathToDirectoryOrUrl, hasProperty, HostWatchDirectory, HostWatchFile, identity, insertSorted, isArray,
     isNumber, isString, mapDefined, matchFiles, ModuleResolutionHost, MultiMap, noop,
-    patchWriteFileEnsuringDirectory, Path, PollingInterval, RequireResult, SortedArray, sys, toPath,
-} from "./_namespaces/ts";
-import { ServerHost } from "./_namespaces/ts.server";
+    patchWriteFileEnsuringDirectory, Path, PollingInterval, RequireResult, server, SortedArray, sys, toPath,
+} from "../_namespaces/ts";
+import { timeIncrements } from "../_namespaces/vfs";
 
 export const libFile: File = {
     path: "/a/lib/lib.d.ts",
@@ -205,26 +205,6 @@ export function checkArray(caption: string, actual: readonly string[], expected:
     checkMap(caption, arrayToMap(actual, identity), expected, /*eachKeyCount*/ undefined);
 }
 
-export function checkOutputContains(host: TestServerHost, expected: readonly string[]) {
-    const mapExpected = new Set(expected);
-    const mapSeen = new Set<string>();
-    for (const f of host.getOutput()) {
-        assert.isFalse(mapSeen.has(f), `Already found ${f} in ${JSON.stringify(host.getOutput())}`);
-        if (mapExpected.has(f)) {
-            mapExpected.delete(f);
-            mapSeen.add(f);
-        }
-    }
-    assert.equal(mapExpected.size, 0, `Output has missing ${JSON.stringify(arrayFrom(mapExpected.keys()))} in ${JSON.stringify(host.getOutput())}`);
-}
-
-export function checkOutputDoesNotContain(host: TestServerHost, expectedToBeAbsent: string[] | readonly string[]) {
-    const mapExpectedToBeAbsent = new Set(expectedToBeAbsent);
-    for (const f of host.getOutput()) {
-        assert.isFalse(mapExpectedToBeAbsent.has(f), `Contains ${f} in ${JSON.stringify(host.getOutput())}`);
-    }
-}
-
 interface CallbackData {
     cb: TimeOutCallback;
     args: any[];
@@ -327,7 +307,6 @@ export enum Tsc_WatchDirectory {
     DynamicPolling = "RecursiveDirectoryUsingDynamicPriorityPolling"
 }
 
-export const timeIncrements = 1000;
 export interface TestServerHostOptions {
     useCaseSensitiveFileNames: boolean;
     executingFilePath: string;
@@ -337,7 +316,7 @@ export interface TestServerHostOptions {
     environmentVariables?: Map<string, string>;
 }
 
-export class TestServerHost implements ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
+export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
     args: string[] = [];
 
     private readonly output: string[] = [];
@@ -995,6 +974,11 @@ export class TestServerHost implements ServerHost, FormatDiagnosticsHost, Module
         this.modifyFile(path, this.readFile(path) + content, options);
     }
 
+    replaceFileText(file: string, searchValue: string | RegExp, replaceValue: string) {
+        const content = Debug.checkDefined(this.readFile(file));
+        this.writeFile(file, content.replace(searchValue, replaceValue));
+    }
+
     write(message: string) {
         if (Debug.isDebugging) console.log(message);
         this.output.push(message);
@@ -1190,9 +1174,9 @@ export function changeToHostTrackingWrittenFiles(inputHost: TestServerHost) {
     };
     return host;
 }
-export const tsbuildProjectsLocation = "/user/username/projects";
+
 export function getTsBuildProjectFilePath(project: string, file: string) {
-    return `${tsbuildProjectsLocation}/${project}/${file}`;
+    return `/user/username/projects/${project}/${file}`;
 }
 
 export function getTsBuildProjectFile(project: string, file: string): File {

@@ -8,6 +8,42 @@ interface File {
     symlinks?: string[];
 }
 
+function getDiagnosticMessageChain(message: ts.DiagnosticMessage, args?: (string | number)[], next?: ts.DiagnosticMessageChain[]): ts.DiagnosticMessageChain {
+    let text = ts.getLocaleSpecificMessage(message);
+    if (args?.length) {
+        text = ts.formatStringFromArgs(text, args);
+    }
+    return {
+        messageText: text,
+        category: message.category,
+        code: message.code,
+        next
+    };
+}
+
+function isDiagnosticMessageChain(message: ts.DiagnosticMessage | ts.DiagnosticMessageChain): message is ts.DiagnosticMessageChain {
+    return !!(message as ts.DiagnosticMessageChain).messageText;
+}
+
+function getDiagnosticOfFileFrom(file: ts.SourceFile | undefined, start: number | undefined, length: number | undefined, message: ts.DiagnosticMessage | ts.DiagnosticMessageChain, ...args: (string | number)[]): ts.Diagnostic {
+    return {
+        file,
+        start,
+        length,
+
+        messageText: isDiagnosticMessageChain(message) ?
+            message :
+            getDiagnosticMessageChain(message, args).messageText,
+        category: message.category,
+        code: message.code,
+    };
+}
+
+function getDiagnosticOfFileFromProgram(program: ts.Program, filePath: string, start: number, length: number, message: ts.DiagnosticMessage | ts.DiagnosticMessageChain, ...args: (string | number)[]): ts.Diagnostic {
+    return getDiagnosticOfFileFrom(program.getSourceFileByPath(ts.toPath(filePath, program.getCurrentDirectory(), s => s.toLowerCase())),
+        start, length, message, ...args);
+}
+
 function createModuleResolutionHost(hasDirectoryExists: boolean, ...files: File[]): ts.ModuleResolutionHost {
     const map = new Map<string, File>();
     for (const file of files) {
@@ -596,21 +632,21 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
             /*useCaseSensitiveFileNames*/ false,
             ["c.ts", "d.ts"],
             program => [{
-                ...ts.tscWatch.getDiagnosticOfFileFromProgram(
+                ...getDiagnosticOfFileFromProgram(
                     program,
                     "c.ts",
                     `/// <reference path="D.ts"/>`.indexOf(`D.ts`),
                     "D.ts".length,
-                    ts.tscWatch.getDiagnosticMessageChain(
+                    getDiagnosticMessageChain(
                         ts.Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
                         ["D.ts", "d.ts"],
                         [
-                            ts.tscWatch.getDiagnosticMessageChain(
+                            getDiagnosticMessageChain(
                                 ts.Diagnostics.The_file_is_in_the_program_because_Colon,
                                 ts.emptyArray,
                                 [
-                                    ts.tscWatch.getDiagnosticMessageChain(ts.Diagnostics.Referenced_via_0_from_file_1, ["D.ts", "c.ts"]),
-                                    ts.tscWatch.getDiagnosticMessageChain(ts.Diagnostics.Root_file_specified_for_compilation)
+                                    getDiagnosticMessageChain(ts.Diagnostics.Referenced_via_0_from_file_1, ["D.ts", "c.ts"]),
+                                    getDiagnosticMessageChain(ts.Diagnostics.Root_file_specified_for_compilation)
                                 ]
                             )
                         ],
@@ -633,21 +669,21 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
             /*useCaseSensitiveFileNames*/ false,
             ["c.ts", "d.ts"],
             program => [{
-                ...ts.tscWatch.getDiagnosticOfFileFromProgram(
+                ...getDiagnosticOfFileFromProgram(
                     program,
                     "c.ts",
                     `import {x} from "D"`.indexOf(`"D"`),
                     `"D"`.length,
-                    ts.tscWatch.getDiagnosticMessageChain(
+                    getDiagnosticMessageChain(
                         ts.Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
                         ["/a/b/D.ts", "d.ts"],
                         [
-                            ts.tscWatch.getDiagnosticMessageChain(
+                            getDiagnosticMessageChain(
                                 ts.Diagnostics.The_file_is_in_the_program_because_Colon,
                                 ts.emptyArray,
                                 [
-                                    ts.tscWatch.getDiagnosticMessageChain(ts.Diagnostics.Imported_via_0_from_file_1, [`"D"`, "c.ts"]),
-                                    ts.tscWatch.getDiagnosticMessageChain(ts.Diagnostics.Root_file_specified_for_compilation)
+                                    getDiagnosticMessageChain(ts.Diagnostics.Imported_via_0_from_file_1, [`"D"`, "c.ts"]),
+                                    getDiagnosticMessageChain(ts.Diagnostics.Root_file_specified_for_compilation)
                                 ]
                             )
                         ],
@@ -670,21 +706,21 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
             /*useCaseSensitiveFileNames*/ false,
             ["moduleA.ts", "moduleB.ts"],
             program => [{
-                ...ts.tscWatch.getDiagnosticOfFileFromProgram(
+                ...getDiagnosticOfFileFromProgram(
                     program,
                     "moduleA.ts",
                     `import {x} from "./ModuleB"`.indexOf(`"./ModuleB"`),
                     `"./ModuleB"`.length,
-                    ts.tscWatch.getDiagnosticMessageChain(
+                    getDiagnosticMessageChain(
                         ts.Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
                         ["ModuleB.ts", "moduleB.ts"],
                         [
-                            ts.tscWatch.getDiagnosticMessageChain(
+                            getDiagnosticMessageChain(
                                 ts.Diagnostics.The_file_is_in_the_program_because_Colon,
                                 ts.emptyArray,
                                 [
-                                    ts.tscWatch.getDiagnosticMessageChain(ts.Diagnostics.Imported_via_0_from_file_1, [`"./ModuleB"`, "moduleA.ts"]),
-                                    ts.tscWatch.getDiagnosticMessageChain(ts.Diagnostics.Root_file_specified_for_compilation)
+                                    getDiagnosticMessageChain(ts.Diagnostics.Imported_via_0_from_file_1, [`"./ModuleB"`, "moduleA.ts"]),
+                                    getDiagnosticMessageChain(ts.Diagnostics.Root_file_specified_for_compilation)
                                 ]
                             )
                         ],
@@ -708,21 +744,21 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
             /*useCaseSensitiveFileNames*/ true,
             ["c.ts", "d.ts"],
             program => [{
-                ...ts.tscWatch.getDiagnosticOfFileFromProgram(
+                ...getDiagnosticOfFileFromProgram(
                     program,
                     "c.ts",
                     `import {x} from "D"`.indexOf(`"D"`),
                     `"D"`.length,
-                    ts.tscWatch.getDiagnosticMessageChain(
+                    getDiagnosticMessageChain(
                         ts.Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
                         ["/a/b/D.ts", "d.ts"],
                         [
-                            ts.tscWatch.getDiagnosticMessageChain(
+                            getDiagnosticMessageChain(
                                 ts.Diagnostics.The_file_is_in_the_program_because_Colon,
                                 ts.emptyArray,
                                 [
-                                    ts.tscWatch.getDiagnosticMessageChain(ts.Diagnostics.Imported_via_0_from_file_1, [`"D"`, "c.ts"]),
-                                    ts.tscWatch.getDiagnosticMessageChain(ts.Diagnostics.Root_file_specified_for_compilation)
+                                    getDiagnosticMessageChain(ts.Diagnostics.Imported_via_0_from_file_1, [`"D"`, "c.ts"]),
+                                    getDiagnosticMessageChain(ts.Diagnostics.Root_file_specified_for_compilation)
                                 ]
                             )
                         ],
@@ -747,7 +783,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
             ["moduleA.ts", "moduleB.ts", "moduleC.ts"],
             program => {
                 const importInA = {
-                    ...ts.tscWatch.getDiagnosticOfFileFromProgram(
+                    ...getDiagnosticOfFileFromProgram(
                         program,
                         "moduleA.ts",
                         `import a = require("./ModuleC")`.indexOf(`"./ModuleC"`),
@@ -758,7 +794,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
                     reportsDeprecated: undefined
                 };
                 const importInB = {
-                    ...ts.tscWatch.getDiagnosticOfFileFromProgram(
+                    ...getDiagnosticOfFileFromProgram(
                         program,
                         "moduleB.ts",
                         `import a = require("./moduleC")`.indexOf(`"./moduleC"`),
@@ -768,20 +804,20 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
                     reportsUnnecessary: undefined,
                     reportsDeprecated: undefined
                 };
-                const importHereInA = ts.tscWatch.getDiagnosticMessageChain(ts.Diagnostics.Imported_via_0_from_file_1, [`"./ModuleC"`, "moduleA.ts"]);
-                const importHereInB = ts.tscWatch.getDiagnosticMessageChain(ts.Diagnostics.Imported_via_0_from_file_1, [`"./moduleC"`, "moduleB.ts"]);
-                const details = [ts.tscWatch.getDiagnosticMessageChain(
+                const importHereInA = getDiagnosticMessageChain(ts.Diagnostics.Imported_via_0_from_file_1, [`"./ModuleC"`, "moduleA.ts"]);
+                const importHereInB = getDiagnosticMessageChain(ts.Diagnostics.Imported_via_0_from_file_1, [`"./moduleC"`, "moduleB.ts"]);
+                const details = [getDiagnosticMessageChain(
                     ts.Diagnostics.The_file_is_in_the_program_because_Colon,
                     ts.emptyArray,
-                    [importHereInA, importHereInB, ts.tscWatch.getDiagnosticMessageChain(ts.Diagnostics.Root_file_specified_for_compilation)]
+                    [importHereInA, importHereInB, getDiagnosticMessageChain(ts.Diagnostics.Root_file_specified_for_compilation)]
                 )];
                 return [
                     {
-                        ...ts.tscWatch.getDiagnosticOfFileFrom(
+                        ...getDiagnosticOfFileFrom(
                             importInA.file,
                             importInA.start,
                             importInA.length,
-                            ts.tscWatch.getDiagnosticMessageChain(
+                            getDiagnosticMessageChain(
                                 ts.Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing,
                                 ["ModuleC.ts", "moduleC.ts" ],
                                 details,
@@ -790,11 +826,11 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
                         relatedInformation: [importInB]
                     },
                     {
-                        ...ts.tscWatch.getDiagnosticOfFileFrom(
+                        ...getDiagnosticOfFileFrom(
                             importInB.file,
                             importInB.start,
                             importInB.length,
-                            ts.tscWatch.getDiagnosticMessageChain(
+                            getDiagnosticMessageChain(
                                 ts.Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
                                 ["moduleC.ts", "ModuleC.ts"],
                                 details,
@@ -824,21 +860,21 @@ import b = require("./moduleB");
             /*useCaseSensitiveFileNames*/ false,
             ["moduleD.ts"],
             program => [{
-                ...ts.tscWatch.getDiagnosticOfFileFromProgram(
+                ...getDiagnosticOfFileFromProgram(
                     program,
                     "moduleB.ts",
                     `import a = require("./moduleC")`.indexOf(`"./moduleC"`),
                     `"./moduleC"`.length,
-                    ts.tscWatch.getDiagnosticMessageChain(
+                    getDiagnosticMessageChain(
                         ts.Diagnostics.File_name_0_differs_from_already_included_file_name_1_only_in_casing,
                         ["/a/B/c/moduleC.ts", "/a/B/c/ModuleC.ts"],
                         [
-                            ts.tscWatch.getDiagnosticMessageChain(
+                            getDiagnosticMessageChain(
                                 ts.Diagnostics.The_file_is_in_the_program_because_Colon,
                                 ts.emptyArray,
                                 [
-                                    ts.tscWatch.getDiagnosticMessageChain(ts.Diagnostics.Imported_via_0_from_file_1, [`"./ModuleC"`, "/a/B/c/moduleA.ts"]),
-                                    ts.tscWatch.getDiagnosticMessageChain(ts.Diagnostics.Imported_via_0_from_file_1, [`"./moduleC"`, "/a/B/c/moduleB.ts"])
+                                    getDiagnosticMessageChain(ts.Diagnostics.Imported_via_0_from_file_1, [`"./ModuleC"`, "/a/B/c/moduleA.ts"]),
+                                    getDiagnosticMessageChain(ts.Diagnostics.Imported_via_0_from_file_1, [`"./moduleC"`, "/a/B/c/moduleB.ts"])
                                 ]
                             )
                         ],
@@ -846,7 +882,7 @@ import b = require("./moduleB");
                 ),
                 relatedInformation: [
                     {
-                        ...ts.tscWatch.getDiagnosticOfFileFromProgram(
+                        ...getDiagnosticOfFileFromProgram(
                             program,
                             "moduleA.ts",
                             `import a = require("./ModuleC")`.indexOf(`"./ModuleC"`),

@@ -39,6 +39,7 @@
         "!**/.gitattributes"
     ],
     "devDependencies": {
+        "@esfx/canceltoken": "^1.0.0",
         "@octokit/rest": "latest",
         "@types/chai": "latest",
         "@types/fs-extra": "^9.0.13",
@@ -56,6 +57,7 @@
         "azure-devops-node-api": "^11.2.0",
         "chai": "latest",
         "chalk": "^4.1.2",
+        "chokidar": "^3.5.3",
         "del": "^6.1.1",
         "diff": "^5.1.0",
         "esbuild": "^0.15.13",
