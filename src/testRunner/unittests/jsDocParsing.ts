@@ -6,7 +6,7 @@ describe("unittests:: JSDocParsing", () => {
     describe("TypeExpressions", () => {
         function parsesCorrectly(name: string, content: string) {
             it(name, () => {
-                const typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content);
+                const typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content, /*start*/ undefined, /*end*/ undefined);
                 assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0, "no errors issued");
 
                 Harness.Baseline.runBaseline("JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json",
@@ -16,7 +16,7 @@ describe("unittests:: JSDocParsing", () => {
 
         function parsesIncorrectly(name: string, content: string) {
             it(name, () => {
-                const type = ts.parseJSDocTypeExpressionForTests(content);
+                const type = ts.parseJSDocTypeExpressionForTests(content, /*start*/ undefined, /*end*/ undefined);
                 assert.isTrue(!type || type.diagnostics.length > 0);
             });
         }

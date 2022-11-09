@@ -9421,3 +9421,21 @@ export interface Queue<T> {
     dequeue(): T;
     isEmpty(): boolean;
 }
+
+/** @internal */
+export interface IncrementalElement extends ReadonlyTextRange {
+    readonly parent: Node;
+    intersectsChange: boolean;
+    length?: number;
+    _children: Node[] | undefined;
+}
+
+/** @internal */
+export interface IncrementalNode extends Node, IncrementalElement {
+    hasBeenIncrementallyParsed: boolean;
+}
+
+/** @internal */
+export interface SyntaxCursor {
+    currentNode(position: number): IncrementalNode;
+}
