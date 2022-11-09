@@ -600,17 +600,10 @@ namespace ts.Completions {
         formatContext: formatting.FormatContext | undefined): { entry: CompletionEntry, importAdder: codefix.ImportAdder } | undefined {
 
         const clauses = caseBlock.clauses;
-        // >> TODO: Only offer this completion if we're not positioned *after* a default clause
-        // const defaultClauseIndex = findIndex(clauses, isDefaultClause);
-        // const currentIndex = findIndex(clauses, c => c === caseClause);
-        // if (defaultClauseIndex !== -1 && currentIndex > defaultClauseIndex) {
-        //     return undefined;
-        // }
         const checker = program.getTypeChecker();
-        // const switchType = getSwitchedType(caseClause, checker);
         const switchType = checker.getTypeAtLocation(caseBlock.parent.expression);
         // >> TODO: handle unit type case?
-        if (switchType && switchType.isUnion() && every(switchType.types, type => type.isLiteral())) {// >> TODO: does this work for enum members? aliases?
+        if (switchType && switchType.isUnion() && every(switchType.types, type => type.isLiteral())) {
             const existingStrings = new Set<string>();
             const existingNumbers = new Set<number>();
             const existingBigInts = new Set<string>();
@@ -685,7 +678,7 @@ namespace ts.Completions {
                     if (!typeNode) {
                         return undefined;
                     }
-                    const expr = foo(typeNode, target);
+                    const expr = typeNodeToExpression(typeNode, target);
                     if (!expr) {
                         return undefined;
                     }
@@ -742,9 +735,8 @@ namespace ts.Completions {
             return {
                 entry: {
                     name: `${firstClause} ...`, // >> TODO: what should this be?
-                    // isRecommended: true, // >> I assume that is ok because if there's another recommended, it will be sorted after this one
                     kind: ScriptElementKind.unknown, // >> TODO: what should this be?
-                    sortText: SortText.GlobalsOrKeywords, // >> TODO: sort *right after* case keyword
+                    sortText: SortText.GlobalsOrKeywords,
                     insertText,
                     hasAction: importAdder.hasFixes() || undefined,
                     source: CompletionSource.SwitchCases,
@@ -756,30 +748,48 @@ namespace ts.Completions {
         return undefined;
     }
 
-    function foo(typeNode: TypeNode, languageVersion: ScriptTarget): Expression | undefined {
+    function typeNodeToExpression(typeNode: TypeNode, languageVersion: ScriptTarget): Expression | undefined {
         switch (typeNode.kind) {
             case SyntaxKind.TypeReference:
                 const typeName = (typeNode as TypeReferenceNode).typeName;
-                return bar(typeName);
+                return entityNameToExpression(typeName, languageVersion);
             case SyntaxKind.ImportType:
                 Debug.fail(`We should not get an import type after calling 'codefix.typeToAutoImportableTypeNode'.`);
             case SyntaxKind.IndexedAccessType:
-                return undefined; // >> TODO: do we need this case?
+                const objectExpression = typeNodeToExpression((typeNode as IndexedAccessTypeNode).objectType, languageVersion);
+                const indexExpression = typeNodeToExpression((typeNode as IndexedAccessTypeNode).indexType, languageVersion);
+                return objectExpression
+                    && indexExpression
+                    && factory.createElementAccessExpression(objectExpression, indexExpression);
+            case SyntaxKind.LiteralType:
+                const literal = (typeNode as LiteralTypeNode).literal;
+                switch (literal.kind) {
+                    case SyntaxKind.StringLiteral:
+                        return factory.createStringLiteral(literal.text); // >> TODO: where to get 'issinglequote' from?
+                    case SyntaxKind.NumericLiteral:
+                        return factory.createNumericLiteral(literal.text, (literal as NumericLiteral).numericLiteralFlags);
+                }
+                return undefined;
+            case SyntaxKind.ParenthesizedType:
+                const exp = typeNodeToExpression((typeNode as ParenthesizedTypeNode).type, languageVersion);
+                return exp && (isIdentifier(exp) ? exp : factory.createParenthesizedExpression(exp));
+            case SyntaxKind.TypeQuery:
+                return entityNameToExpression((typeNode as TypeQueryNode).exprName, languageVersion);
         }
 
         return undefined;
+    }
 
-        function bar(entityName: EntityName): Expression {
-            if (isIdentifier(entityName)) {
-                return entityName;
-            }
-            const realName = unescapeLeadingUnderscores(entityName.right.escapedText);
-            if (canUsePropertyAccess(realName, languageVersion)) {
-                return factory.createPropertyAccessExpression(bar(entityName.left), realName);
-            }
-            else {
-                return factory.createElementAccessExpression(bar(entityName.left), factory.createStringLiteral(`"${realName}"`)); // >> TODO: this is wrong
-            }
+    function entityNameToExpression(entityName: EntityName, languageVersion: ScriptTarget): Expression {
+        if (isIdentifier(entityName)) {
+            return entityName;
+        }
+        const realName = unescapeLeadingUnderscores(entityName.right.escapedText);
+        if (canUsePropertyAccess(realName, languageVersion)) {
+            return factory.createPropertyAccessExpression(entityNameToExpression(entityName.left, languageVersion), realName);
+        }
+        else {
+            return factory.createElementAccessExpression(entityNameToExpression(entityName.left, languageVersion), factory.createStringLiteral(`"${realName}"`)); // >> TODO: this is wrong
         }
     }
 
