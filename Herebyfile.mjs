@@ -6,12 +6,15 @@ import { task } from "hereby";
 import _glob from "glob";
 import util from "util";
 import chalk from "chalk";
-import { exec, readJson, getDiffTool, getDirSize, memoize, needsUpdate } from "./scripts/build/utils.mjs";
-import { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } from "./scripts/build/tests.mjs";
+import { exec, readJson, getDiffTool, getDirSize, memoize, needsUpdate, Debouncer, Deferred } from "./scripts/build/utils.mjs";
+import { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline, cleanTestDirs } from "./scripts/build/tests.mjs";
 import { buildProject as realBuildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
 import esbuild from "esbuild";
+import chokidar from "chokidar";
+import { EventEmitter } from "events";
+import { CancelToken } from "@esfx/canceltoken";
 
 const glob = util.promisify(_glob);
 
@@ -141,7 +144,7 @@ const localize = task({
     dependencies: [generateDiagnostics],
     run: async () => {
         if (needsUpdate(diagnosticMessagesGeneratedJson, generatedLCGFile)) {
-            return exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
+            await exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
         }
     }
 });
@@ -191,6 +194,7 @@ async function runDtsBundler(entrypoint, output) {
  * @property {string[]} [external]
  * @property {boolean} [exportIsTsObject]
  * @property {boolean} [treeShaking]
+ * @property {esbuild.WatchMode} [watchMode]
  */
 function createBundler(entrypoint, outfile, taskOptions = {}) {
     const getOptions = memoize(async () => {
@@ -269,7 +273,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
 
     return {
         build: async () => esbuild.build(await getOptions()),
-        watch: async () => esbuild.build({ ...await getOptions(), watch: true, logLevel: "info" }),
+        watch: async () => esbuild.build({ ...await getOptions(), watch: taskOptions.watchMode ?? true, logLevel: "info" }),
     };
 }
 
@@ -386,7 +390,7 @@ export const dtsServices = task({
     dependencies: [buildServices],
     run: async () => {
         if (needsUpdate("./built/local/typescript/tsconfig.tsbuildinfo", ["./built/local/typescript.d.ts", "./built/local/typescript.internal.d.ts"])) {
-            runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/typescript.d.ts");
+            await runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/typescript.d.ts");
         }
     },
 });
@@ -461,7 +465,7 @@ export const dts = task({
 
 
 const testRunner = "./built/local/run.js";
-
+const watchTestsEmitter = new EventEmitter();
 const { main: tests, watch: watchTests } = entrypointBuildTask({
     name: "tests",
     description: "Builds the test infrastructure",
@@ -482,6 +486,11 @@ const { main: tests, watch: watchTests } = entrypointBuildTask({
             "mocha",
             "ms",
         ],
+        watchMode: {
+            onRebuild() {
+                watchTestsEmitter.emit("rebuild");
+            }
+        }
     },
 });
 export { tests, watchTests };
@@ -624,6 +633,117 @@ export const runTests = task({
 //     "   --shards": "Total number of shards running tests (default: 1)",
 //     "   --shardId": "1-based ID of this shard (default: 1)",
 // };
+
+export const runTestsAndWatch = task({
+    name: "runtests-watch",
+    dependencies: [watchTests],
+    run: async () => {
+        if (!cmdLineOptions.tests && !cmdLineOptions.failed) {
+            console.log(chalk.redBright(`You must specifiy either --tests/-t or --failed to use 'runtests-watch'.`));
+            return;
+        }
+
+        let watching = true;
+        let running = true;
+        let lastTestChangeTimeMs = Date.now();
+        let testsChangedDeferred = /** @type {Deferred<void>} */(new Deferred());
+        let testsChangedCancelSource = CancelToken.source();
+
+        const testsChangedDebouncer = new Debouncer(1_000, endRunTests);
+        const testCaseWatcher = chokidar.watch([
+            "tests/cases/**/*.*",
+            "tests/lib/**/*.*",
+            "tests/projects/**/*.*",
+        ], {
+            ignorePermissionErrors: true,
+            alwaysStat: true
+        });
+
+        process.on("SIGINT", endWatchMode);
+        process.on("SIGKILL", endWatchMode);
+        process.on("beforeExit", endWatchMode);
+        watchTestsEmitter.on("rebuild", onRebuild);
+        testCaseWatcher.on("all", onChange);
+
+        while (watching) {
+            const promise = testsChangedDeferred.promise;
+            const token = testsChangedCancelSource.token;
+            if (!token.signaled) {
+                running = true;
+                try {
+                    await runConsoleTests(testRunner, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, { token, watching: true });
+                }
+                catch {
+                    // ignore
+                }
+                running = false;
+            }
+            if (watching) {
+                console.log(chalk.yellowBright(`[watch] test run complete, waiting for changes...`));
+                await promise;
+            }
+        }
+
+        function onRebuild() {
+            beginRunTests(testRunner);
+        }
+
+        /**
+         * @param {'add' | 'addDir' | 'change' | 'unlink' | 'unlinkDir'} eventName
+         * @param {string} path
+         * @param {fs.Stats | undefined} stats
+         */
+        function onChange(eventName, path, stats) {
+            switch (eventName) {
+                case "change":
+                case "unlink":
+                case "unlinkDir":
+                    break;
+                case "add":
+                case "addDir":
+                    // skip files that are detected as 'add' but haven't actually changed since the last time tests were
+                    // run.
+                    if (stats && stats.mtimeMs <= lastTestChangeTimeMs) {
+                        return;
+                    }
+                    break;
+            }
+            beginRunTests(path);
+        }
+
+        /**
+         * @param {string} path
+         */
+        function beginRunTests(path) {
+            if (testsChangedDebouncer.empty) {
+                console.log(chalk.yellowBright(`[watch] tests changed due to '${path}', restarting...`));
+                if (running) {
+                    console.log(chalk.yellowBright("[watch] aborting in-progress test run..."));
+                }
+                testsChangedCancelSource.cancel();
+                testsChangedCancelSource = CancelToken.source();
+            }
+
+            testsChangedDebouncer.enqueue();
+        }
+
+        function endRunTests() {
+            lastTestChangeTimeMs = Date.now();
+            testsChangedDeferred.resolve();
+            testsChangedDeferred = /** @type {Deferred<void>} */(new Deferred());
+        }
+
+        function endWatchMode() {
+            if (watching) {
+                watching = false;
+                console.log(chalk.yellowBright("[watch] exiting watch mode..."));
+                testsChangedCancelSource.cancel();
+                testCaseWatcher.close();
+                watchTestsEmitter.off("rebuild", onRebuild);
+            }
+        }
+    },
+});
 
 export const runTestsParallel = task({
     name: "runtests-parallel",

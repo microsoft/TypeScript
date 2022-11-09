@@ -1,4 +1,6 @@
 import * as ts from "../../_namespaces/ts";
+import { createServerHost, File } from "../virtualFileSystemWithWatch";
+import { createSession, openFilesForSession, makeSessionRequest } from "./helpers";
 
 describe("unittests:: tsserver:: typeOnlyImportChains", () => {
     it("named export -> type-only namespace import -> named export -> named import", () => {
@@ -150,15 +152,15 @@ describe("unittests:: tsserver:: typeOnlyImportChains", () => {
     });
 });
 
-function assertUsageError(files: readonly ts.TestFSWithWatch.File[], openFile: ts.TestFSWithWatch.File, diagnostic: ts.DiagnosticMessage) {
-    const host = ts.projectSystem.createServerHost(files);
-    const session = ts.projectSystem.createSession(host);
-    ts.projectSystem.openFilesForSession([openFile], session);
-    const req = ts.projectSystem.makeSessionRequest<ts.projectSystem.protocol.SemanticDiagnosticsSyncRequestArgs>(
-        ts.projectSystem.protocol.CommandTypes.SemanticDiagnosticsSync,
+function assertUsageError(files: readonly File[], openFile: File, diagnostic: ts.DiagnosticMessage) {
+    const host = createServerHost(files);
+    const session = createSession(host);
+    openFilesForSession([openFile], session);
+    const req = makeSessionRequest<ts.server.protocol.SemanticDiagnosticsSyncRequestArgs>(
+        ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
         { file: openFile.path }
     );
-    const diagnostics = session.executeCommand(req).response as ts.projectSystem.protocol.Diagnostic[];
+    const diagnostics = session.executeCommand(req).response as ts.server.protocol.Diagnostic[];
     assert.lengthOf(diagnostics, 1);
     assert.equal(diagnostics[0].code, diagnostic.code);
 }

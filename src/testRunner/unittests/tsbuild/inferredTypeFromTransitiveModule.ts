@@ -1,16 +1,16 @@
-import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
+import { appendText, loadProjectFromDisk, replaceText, verifyTscWithEdits } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
     let projFs: vfs.FileSystem;
     before(() => {
-        projFs = ts.loadProjectFromDisk("tests/projects/inferredTypeFromTransitiveModule");
+        projFs = loadProjectFromDisk("tests/projects/inferredTypeFromTransitiveModule");
     });
     after(() => {
         projFs = undefined!;
     });
 
-    ts.verifyTscWithEdits({
+    verifyTscWithEdits({
         scenario: "inferredTypeFromTransitiveModule",
         subScenario: "inferred type from transitive module",
         fs: () => projFs,
@@ -27,7 +27,7 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
         ],
     });
 
-    ts.verifyTscWithEdits({
+    verifyTscWithEdits({
         subScenario: "inferred type from transitive module with isolatedModules",
         fs: () => projFs,
         scenario: "inferredTypeFromTransitiveModule",
@@ -45,14 +45,14 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
         ]
     });
 
-    ts.verifyTscWithEdits({
+    verifyTscWithEdits({
         scenario: "inferredTypeFromTransitiveModule",
         subScenario: "reports errors in files affected by change in signature with isolatedModules",
         fs: () => projFs,
         commandLineArgs: ["--b", "/src", "--verbose"],
         modifyFs: fs => {
             changeToIsolatedModules(fs);
-            ts.appendText(fs, "/src/lazyIndex.ts", `
+            appendText(fs, "/src/lazyIndex.ts", `
 import { default as bar } from './bar';
 bar("hello");`);
         },
@@ -71,20 +71,20 @@ bar("hello");`);
             },
             {
                 subScenario: "Fix Error",
-                modifyFs: fs => ts.replaceText(fs, "/src/lazyIndex.ts", `bar("hello")`, "bar()")
+                modifyFs: fs => replaceText(fs, "/src/lazyIndex.ts", `bar("hello")`, "bar()")
             },
         ]
     });
 });
 
 function changeToIsolatedModules(fs: vfs.FileSystem) {
-    ts.replaceText(fs, "/src/tsconfig.json", `"incremental": true`, `"incremental": true, "isolatedModules": true`);
+    replaceText(fs, "/src/tsconfig.json", `"incremental": true`, `"incremental": true, "isolatedModules": true`);
 }
 
 function changeBarParam(fs: vfs.FileSystem) {
-    ts.replaceText(fs, "/src/bar.ts", "param: string", "");
+    replaceText(fs, "/src/bar.ts", "param: string", "");
 }
 
 function changeBarParamBack(fs: vfs.FileSystem) {
-    ts.replaceText(fs, "/src/bar.ts", "foobar()", "foobar(param: string)");
+    replaceText(fs, "/src/bar.ts", "foobar()", "foobar(param: string)");
 }

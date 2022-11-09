@@ -1,5 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import { createServerHost, File } from "../virtualFileSystemWithWatch";
+import { createProjectService } from "../tsserver/helpers";
+import { newLineCharacter } from "./extract/helpers";
 
 describe("unittests:: services:: organizeImports", () => {
     describe("Sort imports", () => {
@@ -1004,15 +1007,15 @@ export * from "lib";
                 libFile);
         });
 
-        function testOrganizeExports(testName: string, testFile: ts.TestFSWithWatch.File, ...otherFiles: ts.TestFSWithWatch.File[]) {
+        function testOrganizeExports(testName: string, testFile: File, ...otherFiles: File[]) {
             testOrganizeImports(`${testName}.exports`, /*skipDestructiveCodeActions*/ true, testFile, ...otherFiles);
         }
 
-        function testOrganizeImports(testName: string, skipDestructiveCodeActions: boolean, testFile: ts.TestFSWithWatch.File, ...otherFiles: ts.TestFSWithWatch.File[]) {
+        function testOrganizeImports(testName: string, skipDestructiveCodeActions: boolean, testFile: File, ...otherFiles: File[]) {
             it(testName, () => runBaseline(`organizeImports/${testName}.ts`, skipDestructiveCodeActions, testFile, ...otherFiles));
         }
 
-        function runBaseline(baselinePath: string, skipDestructiveCodeActions: boolean, testFile: ts.TestFSWithWatch.File, ...otherFiles: ts.TestFSWithWatch.File[]) {
+        function runBaseline(baselinePath: string, skipDestructiveCodeActions: boolean, testFile: File, ...otherFiles: File[]) {
             const { path: testPath, content: testContent } = testFile;
             const languageService = makeLanguageService(testFile, ...otherFiles);
             const changes = languageService.organizeImports({ skipDestructiveCodeActions, type: "file", fileName: testPath }, ts.testFormatSettings, ts.emptyOptions);
@@ -1025,12 +1028,12 @@ export * from "lib";
                 testContent,
                 "// ==ORGANIZED==",
                 newText,
-            ].join(ts.newLineCharacter));
+            ].join(newLineCharacter));
         }
 
-        function makeLanguageService(...files: ts.TestFSWithWatch.File[]) {
-            const host = ts.projectSystem.createServerHost(files);
-            const projectService = ts.projectSystem.createProjectService(host, { useSingleInferredProject: true });
+        function makeLanguageService(...files: File[]) {
+            const host = createServerHost(files);
+            const projectService = createProjectService(host, { useSingleInferredProject: true });
             projectService.setCompilerOptionsForInferredProjects({ jsx: files.some(f => f.path.endsWith("x")) ? ts.JsxEmit.React : ts.JsxEmit.None });
             files.forEach(f => projectService.openClientFile(f.path));
             return projectService.inferredProjects[0].getLanguageService();

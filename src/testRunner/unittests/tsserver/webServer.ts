@@ -1,5 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
+import { nullLogger, checkNumberOfProjects, checkProjectActualFiles, protocolFileLocationFromSubstring, protocolTextSpanWithContextFromSubstring } from "./helpers";
 
 /* eslint-disable local/boolean-trivia */
 describe("unittests:: tsserver:: webServer", () => {
@@ -32,7 +34,7 @@ describe("unittests:: tsserver:: webServer", () => {
     }
 
     function setup(logLevel: ts.server.LogLevel | undefined, options?: Partial<ts.server.StartSessionOptions>, importPlugin?: ts.server.ServerHost["importPlugin"]) {
-        const host = ts.projectSystem.createServerHost([ts.projectSystem.libFile], { windowsStyleRoot: "c:/" });
+        const host = createServerHost([libFile], { windowsStyleRoot: "c:/" });
         const messages: any[] = [];
         const webHost: ts.server.WebHost = {
             readFile: s => host.readFile(s),
@@ -41,7 +43,7 @@ describe("unittests:: tsserver:: webServer", () => {
         };
         const webSys = ts.server.createWebSystem(webHost, ts.emptyArray, () => host.getExecutingFilePath());
         webSys.importPlugin = importPlugin;
-        const logger = logLevel !== undefined ? new ts.server.MainProcessLogger(logLevel, webHost) : ts.projectSystem.nullLogger();
+        const logger = logLevel !== undefined ? new ts.server.MainProcessLogger(logLevel, webHost) : nullLogger();
         const session = new TestWorkerSession(webSys, webHost, { serverMode: ts.LanguageServiceMode.PartialSemantic, ...options }, logger);
         return { getMessages: () => messages, clearMessages: () => messages.length = 0, session };
 
@@ -51,38 +53,38 @@ describe("unittests:: tsserver:: webServer", () => {
         function verify(logLevel: ts.server.LogLevel | undefined) {
             const { session, clearMessages, getMessages } = setup(logLevel);
             const service = session.getProjectService();
-            const file: ts.projectSystem.File = {
+            const file: File = {
                 path: "^memfs:/sample-folder/large.ts",
                 content: "export const numberConst = 10; export const arrayConst: Array<string> = [];"
             };
             session.executeCommand({
                 seq: 1,
                 type: "request",
-                command: ts.projectSystem.protocol.CommandTypes.Open,
+                command: ts.server.protocol.CommandTypes.Open,
                 arguments: {
                     file: file.path,
                     fileContent: file.content
                 }
             });
-            ts.projectSystem.checkNumberOfProjects(service, { inferredProjects: 1 });
+            checkNumberOfProjects(service, { inferredProjects: 1 });
             const project = service.inferredProjects[0];
-            ts.projectSystem.checkProjectActualFiles(project, ["/lib.d.ts", file.path]); // Lib files are rooted
+            checkProjectActualFiles(project, ["/lib.d.ts", file.path]); // Lib files are rooted
             verifyQuickInfo();
             verifyGotoDefInLib();
 
             function verifyQuickInfo() {
                 clearMessages();
-                const start = ts.projectSystem.protocolFileLocationFromSubstring(file, "numberConst");
+                const start = protocolFileLocationFromSubstring(file, "numberConst");
                 session.onMessage({
                     seq: 2,
                     type: "request",
-                    command: ts.projectSystem.protocol.CommandTypes.Quickinfo,
+                    command: ts.server.protocol.CommandTypes.Quickinfo,
                     arguments: start
                 });
                 assert.deepEqual(ts.last(getMessages()), {
                     seq: 0,
                     type: "response",
-                    command: ts.projectSystem.protocol.CommandTypes.Quickinfo,
+                    command: ts.server.protocol.CommandTypes.Quickinfo,
                     request_seq: 2,
                     success: true,
                     performanceData: undefined,
@@ -101,25 +103,25 @@ describe("unittests:: tsserver:: webServer", () => {
 
             function verifyGotoDefInLib() {
                 clearMessages();
-                const start = ts.projectSystem.protocolFileLocationFromSubstring(file, "Array");
+                const start = protocolFileLocationFromSubstring(file, "Array");
                 session.onMessage({
                     seq: 3,
                     type: "request",
-                    command: ts.projectSystem.protocol.CommandTypes.DefinitionAndBoundSpan,
+                    command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
                     arguments: start
                 });
                 assert.deepEqual(ts.last(getMessages()), {
                     seq: 0,
                     type: "response",
-                    command: ts.projectSystem.protocol.CommandTypes.DefinitionAndBoundSpan,
+                    command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
                     request_seq: 3,
                     success: true,
                     performanceData: undefined,
                     body: {
                         definitions: [{
                             file: "/lib.d.ts",
-                            ...ts.projectSystem.protocolTextSpanWithContextFromSubstring({
-                                fileText: ts.projectSystem.libFile.content,
+                            ...protocolTextSpanWithContextFromSubstring({
+                                fileText: libFile.content,
                                 text: "Array",
                                 contextText: "interface Array<T> { length: number; [n: number]: T; }"
                             })
@@ -178,7 +180,7 @@ describe("unittests:: tsserver:: webServer", () => {
             const { session } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importPlugin);
             const projectService = session.getProjectService();
 
-            session.executeCommand({ seq: 1, type: "request", command: ts.projectSystem.protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
+            session.executeCommand({ seq: 1, type: "request", command: ts.server.protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
 
             // This should be false because `executeCommand` should have already triggered
             // plugin enablement asynchronously and there are no plugin enablements currently
@@ -220,7 +222,7 @@ describe("unittests:: tsserver:: webServer", () => {
             const { session } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a", "plugin-b"] }, importPlugin);
             const projectService = session.getProjectService();
 
-            session.executeCommand({ seq: 1, type: "request", command: ts.projectSystem.protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
+            session.executeCommand({ seq: 1, type: "request", command: ts.server.protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
 
             // wait a turn
             await Promise.resolve();
@@ -254,7 +256,7 @@ describe("unittests:: tsserver:: webServer", () => {
             const { session, getMessages } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importPlugin);
             const projectService = session.getProjectService();
 
-            session.executeCommand({ seq: 1, type: "request", command: ts.projectSystem.protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
+            session.executeCommand({ seq: 1, type: "request", command: ts.server.protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
 
             await projectService.waitForPendingPlugins();
 
@@ -292,7 +294,7 @@ describe("unittests:: tsserver:: webServer", () => {
             const { session } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importPlugin);
             const projectService = session.getProjectService();
 
-            session.executeCommand({ seq: 1, type: "request", command: ts.projectSystem.protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
+            session.executeCommand({ seq: 1, type: "request", command: ts.server.protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
 
             const project = projectService.inferredProjects[0];
 
@@ -333,13 +335,13 @@ describe("unittests:: tsserver:: webServer", () => {
             const { session, getMessages } = setup(/*logLevel*/ undefined, { globalPlugins: ["plugin-a"] }, importPlugin);
             const projectService = session.getProjectService();
 
-            session.executeCommand({ seq: 1, type: "request", command: ts.projectSystem.protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
+            session.executeCommand({ seq: 1, type: "request", command: ts.server.protocol.CommandTypes.Open, arguments: { file: "^memfs:/foo.ts", content: "" } });
 
             // wait for the plugin to start loading
             await pluginALoaded.promise;
 
             // close the project
-            session.executeCommand({ seq: 2, type: "request", command: ts.projectSystem.protocol.CommandTypes.Close, arguments: { file: "^memfs:/foo.ts" } });
+            session.executeCommand({ seq: 2, type: "request", command: ts.server.protocol.CommandTypes.Close, arguments: { file: "^memfs:/foo.ts" } });
 
             // continue loading the plugin
             projectClosed.resolve();

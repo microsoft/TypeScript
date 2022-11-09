@@ -2,6 +2,7 @@ import { expect } from "chai";
 
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import { nullLogger, createHasErrorMessageLogger } from "./helpers";
 
 let lastWrittenToHost: string;
 const noopFileWatcher: ts.FileWatcher = { close: ts.noop };
@@ -50,7 +51,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             typingsInstaller: undefined!, // TODO: GH#18217
             byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
-            logger: ts.projectSystem.nullLogger(),
+            logger: nullLogger(),
             canUseEvents: true
         };
         return new TestSession(opts);
@@ -472,7 +473,7 @@ describe("unittests:: tsserver:: Session:: exceptions", () => {
                 typingsInstaller: undefined!, // TODO: GH#18217
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
-                logger: ts.projectSystem.nullLogger(),
+                logger: nullLogger(),
                 canUseEvents: true
             });
             this.addProtocolHandler(command, this.exceptionRaisingHandler);
@@ -519,7 +520,7 @@ describe("unittests:: tsserver:: Session:: how Session is extendable via subclas
                 typingsInstaller: undefined!, // TODO: GH#18217
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
-                logger: ts.projectSystem.createHasErrorMessageLogger(),
+                logger: createHasErrorMessageLogger(),
                 canUseEvents: true
             });
             this.addProtocolHandler(this.customHandler, () => {
@@ -587,7 +588,7 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
                 typingsInstaller: undefined!, // TODO: GH#18217
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
-                logger: ts.projectSystem.createHasErrorMessageLogger(),
+                logger: createHasErrorMessageLogger(),
                 canUseEvents: true
             });
             this.addProtocolHandler("echo", (req: ts.server.protocol.Request) => ({

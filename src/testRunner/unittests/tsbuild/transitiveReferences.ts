@@ -1,10 +1,10 @@
-import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
+import { loadProjectFromDisk, verifyTsc } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: when project reference is referenced transitively", () => {
     let projFs: vfs.FileSystem;
     before(() => {
-        projFs = ts.loadProjectFromDisk("tests/projects/transitiveReferences");
+        projFs = loadProjectFromDisk("tests/projects/transitiveReferences");
     });
     after(() => {
         projFs = undefined!; // Release the contents
@@ -23,14 +23,14 @@ export const b = new A();`);
         }));
     }
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "transitiveReferences",
         subScenario: "builds correctly",
         fs: () => projFs,
         commandLineArgs: ["--b", "/src/tsconfig.c.json", "--listFiles"],
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "transitiveReferences",
         subScenario: "builds correctly when the referenced project uses different module resolution",
         fs: () => projFs,
@@ -38,7 +38,7 @@ export const b = new A();`);
         modifyFs: fs => modifyFsBTsToNonRelativeImport(fs, "classic"),
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "transitiveReferences",
         subScenario: "reports error about module not found with node resolution with external module name",
         fs: () => projFs,

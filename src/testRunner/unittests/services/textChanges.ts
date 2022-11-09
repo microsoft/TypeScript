@@ -1,5 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import { notImplementedHost } from "./extract/helpers";
 
 // Some tests have trailing whitespace
 
@@ -21,7 +22,7 @@ describe("unittests:: services:: textChanges", () => {
     const newLineCharacter = ts.getNewLineCharacter(printerOptions);
 
     function getRuleProvider(placeOpenBraceOnNewLineForFunctions: boolean): ts.formatting.FormatContext {
-        return ts.formatting.getFormatContext(placeOpenBraceOnNewLineForFunctions ? { ...ts.testFormatSettings, placeOpenBraceOnNewLineForFunctions: true } : ts.testFormatSettings, ts.notImplementedHost);
+        return ts.formatting.getFormatContext(placeOpenBraceOnNewLineForFunctions ? { ...ts.testFormatSettings, placeOpenBraceOnNewLineForFunctions: true } : ts.testFormatSettings, notImplementedHost);
     }
 
     // validate that positions that were recovered from the printed text actually match positions that will be created if the same text is parsed.
