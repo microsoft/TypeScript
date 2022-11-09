@@ -718,8 +718,9 @@ export class ProjectService {
 
     /**
      * Container of all known scripts
+     *
+     * @internal
      */
-    /** @internal */
     readonly filenameToScriptInfo = new Map<string, ScriptInfo>();
     private readonly nodeModulesWatchers = new Map<string, NodeModulesWatcher>();
     /**
@@ -733,8 +734,9 @@ export class ProjectService {
 
     /**
      * Map to the real path of the infos
+     *
+     * @internal
      */
-    /** @internal */
     readonly realpathToScriptInfos: MultiMap<Path, ScriptInfo> | undefined;
     /**
      * maps external project file name to list of config files that were the part of this project
@@ -786,8 +788,11 @@ export class ProjectService {
      *   In this case the exists could be true/false based on config file is present or not
      * - Or it is present if we have configured project open with config file at that location
      *   In this case the exists property is always true
+     *
+     *
+     * @internal
      */
-    /** @internal */ readonly configFileExistenceInfoCache = new Map<NormalizedPath, ConfigFileExistenceInfo>();
+    readonly configFileExistenceInfoCache = new Map<NormalizedPath, ConfigFileExistenceInfo>();
     /** @internal */ readonly throttledOperations: ThrottledOperations;
 
     private readonly hostConfiguration: HostConfiguration;
@@ -1344,8 +1349,9 @@ export class ProjectService {
 
     /**
      * This is to watch whenever files are added or removed to the wildcard directories
+     *
+     * @internal
      */
-    /** @internal */
     private watchWildcardDirectory(directory: Path, flags: WatchDirectoryFlags, configFileName: NormalizedPath, config: ParsedConfig) {
         return this.watchFactory.watchDirectory(
             directory,
@@ -1774,8 +1780,9 @@ export class ProjectService {
     /**
      * Close the config file watcher in the cached ConfigFileExistenceInfo
      *   if there arent any open files that are root of inferred project and there is no parsed config held by any project
+     *
+     * @internal
      */
-    /** @internal */
     private closeConfigFileWatcherOnReleaseOfOpenFile(configFileExistenceInfo: ConfigFileExistenceInfo) {
         // Close the config file watcher if there are no more open files that are root of inferred project
         // or if there are no projects that need to watch this config file existence info
@@ -1822,8 +1829,9 @@ export class ProjectService {
 
     /**
      * This is called by inferred project whenever script info is added as a root
+     *
+     * @internal
      */
-    /** @internal */
     startWatchingConfigFilesForInferredProjectRoot(info: ScriptInfo) {
         Debug.assert(info.isScriptOpen());
         this.forEachConfigFileLocation(info, (canonicalConfigFilePath, configFileName) => {
@@ -1852,8 +1860,9 @@ export class ProjectService {
 
     /**
      * This is called by inferred project whenever root script info is removed from it
+     *
+     * @internal
      */
-    /** @internal */
     stopWatchingConfigFilesForInferredProjectRoot(info: ScriptInfo) {
         this.forEachConfigFileLocation(info, canonicalConfigFilePath => {
             const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
@@ -2168,8 +2177,9 @@ export class ProjectService {
 
     /**
      * Read the config file of the project, and update the project root file names.
+     *
+     * @internal
      */
-    /** @internal */
     private loadConfiguredProject(project: ConfiguredProject, reason: string) {
         tracing?.push(tracing.Phase.Session, "loadConfiguredProject", { configFilePath: project.canonicalConfigFilePath });
         this.sendProjectLoadingStartEvent(project, reason);
@@ -2434,8 +2444,9 @@ export class ProjectService {
 
     /**
      * Reload the file names from config file specs and update the project graph
+     *
+     * @internal
      */
-    /** @internal */
     reloadFileNamesOfConfiguredProject(project: ConfiguredProject) {
         const fileNames = this.reloadFileNamesOfParsedConfig(project.getConfigFilePath(), this.configFileExistenceInfoCache.get(project.canonicalConfigFilePath)!.config!);
         project.updateErrorOnNoInputFiles(fileNames);
@@ -2466,8 +2477,9 @@ export class ProjectService {
 
     /**
      * Read the config file of the project again by clearing the cache and update the project graph
+     *
+     * @internal
      */
-    /** @internal */
     reloadConfiguredProject(project: ConfiguredProject, reason: string, isInitialLoad: boolean, clearSemanticCache: boolean) {
         // At this point, there is no reason to not have configFile in the host
         const host = project.getCachedDirectoryStructureHost();
@@ -2632,8 +2644,9 @@ export class ProjectService {
     /**
      * Returns the projects that contain script info through SymLink
      * Note that this does not return projects in info.containingProjects
+     *
+     * @internal
      */
-    /** @internal */
     getSymlinkedProjects(info: ScriptInfo): MultiMap<Path, Project> | undefined {
         let projects: MultiMap<Path, Project> | undefined;
         if (this.realpathToScriptInfos) {
@@ -4149,8 +4162,9 @@ export class ProjectService {
 
     /**
      * Waits for any ongoing plugin enablement requests to complete.
+     *
+     * @internal
      */
-    /** @internal */
     async waitForPendingPlugins() {
         while (this.currentPluginEnablementPromise) {
             await this.currentPluginEnablementPromise;
@@ -4159,8 +4173,9 @@ export class ProjectService {
 
     /**
      * Starts enabling any requested plugins without waiting for the result.
+     *
+     * @internal
      */
-    /** @internal */
     enableRequestedPlugins() {
         if (this.pendingPluginEnablements) {
             void this.enableRequestedPluginsAsync();

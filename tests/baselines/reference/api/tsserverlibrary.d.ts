@@ -3127,7 +3127,6 @@ declare namespace ts {
             private externalFiles;
             private missingFilesMap;
             private generatedFilesMap;
-            protected readonly plugins: PluginModuleWithName[];
             protected languageService: LanguageService;
             languageServiceEnabled: boolean;
             readonly trace?: (s: string) => void;
@@ -3252,7 +3251,6 @@ declare namespace ts {
             setTypeAcquisition(newTypeAcquisition: TypeAcquisition | undefined): void;
             getTypeAcquisition(): ts.TypeAcquisition;
             protected removeRoot(info: ScriptInfo): void;
-            protected getGlobalPluginSearchPaths(): string[];
             protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined): void;
             protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): void;
             private enableProxy;
