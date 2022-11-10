@@ -18445,7 +18445,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             /*errorReporter*/ undefined, /*errorReporter*/ undefined, compareTypesAssignable, /*reportUnreliableMarkers*/ undefined) !== Ternary.False;
     }
 
-    type ErrorReporter = (message: DiagnosticMessage, arg0?: string, arg1?: string) => void;
+    type ErrorReporter = (message: DiagnosticMessage, arg0?: string | number, arg1?: string | number) => void;
 
     /**
      * Returns true if `s` is `(...args: any[]) => any` or `(this: any, ...args: any[]) => any`
@@ -18481,7 +18481,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (checkMode & SignatureCheckMode.StrictArity ? hasEffectiveRestParameter(source) || getParameterCount(source) > targetCount : getMinArgumentCount(source) > targetCount);
         if (sourceHasMoreParameters) {
             if (reportErrors) {
-                errorReporter!(Diagnostics.Call_signature_0_expects_more_arguments_than_call_signature_1, signatureToString(source), signatureToString(target));
+                Debug.assert(!(checkMode & SignatureCheckMode.StrictArity), "no error reporting when comparing signatures by strict arity, which is only done for subtype reduction");
+                errorReporter!(Diagnostics.The_source_signature_requires_more_arguments_0_than_are_provided_by_the_target_1, getMinArgumentCount(source), targetCount.toString());
             }
             return Ternary.False;
         }
