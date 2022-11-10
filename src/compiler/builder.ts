@@ -313,7 +313,13 @@ function createBuilderProgramState(newProgram: Program, getCanonicalFileName: Ge
     });
 
     // If the global file is removed, add all files as changed
-    if (useOldState && forEachEntry(oldState!.fileInfos, (info, sourceFilePath) => (outFilePath || info.affectsGlobalScope) && !state.fileInfos.has(sourceFilePath))) {
+    if (useOldState && forEachEntry(oldState!.fileInfos, (info, sourceFilePath) => {
+        if (state.fileInfos.has(sourceFilePath)) return false;
+        if (outFilePath || info.affectsGlobalScope) return true;
+        // if file is deleted we need to write buildInfo again
+        state.buildInfoEmitPending = true;
+        return false;
+    })) {
         BuilderState.getAllFilesExcludingDefaultLibraryFile(state, newProgram, /*firstSourceFile*/ undefined)
             .forEach(file => addFileToChangeSet(state, file.resolvedPath));
     }
