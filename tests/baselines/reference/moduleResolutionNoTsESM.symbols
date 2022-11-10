@@ -1,12 +1,14 @@
 === tests/cases/compiler/x.ts ===
+
 // ESM output
-No type information for this code.
-No type information for this code.export default 0;
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/y.tsx ===
+
 export default 0;
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/z.d.ts ===
+
+=== tests/cases/compiler/y.tsx ===
+
+export default 0;
+
+=== tests/cases/compiler/z.d.ts ===
 declare const x: number;
 >x : Symbol(x, Decl(z.d.ts, 0, 13))
 

@@ -45,7 +45,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -83,12 +83,12 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 function fn(a, b, c, d, e, f, g) {
-    var c_1, c_1_1;
-    var e_1, _a;
+    var _a, c_1, c_1_1;
+    var _b, e_1, _c, _d;
     return __awaiter(this, void 0, void 0, function () {
         var _i, c_2, s, s, e_1_1;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
                     // All errors
                     a | b;
@@ -104,29 +104,36 @@ function fn(a, b, c, d, e, f, g) {
                         fn(b, b, c, d, e, f, g);
                         d.prop;
                     }
-                    _b.label = 1;
+                    _e.label = 1;
                 case 1:
-                    _b.trys.push([1, 6, 7, 12]);
-                    c_1 = __asyncValues(c);
-                    _b.label = 2;
+                    _e.trys.push([1, 6, 7, 12]);
+                    _a = true, c_1 = __asyncValues(c);
+                    _e.label = 2;
                 case 2: return [4 /*yield*/, c_1.next()];
                 case 3:
-                    if (!(c_1_1 = _b.sent(), !c_1_1.done)) return [3 /*break*/, 5];
-                    s = c_1_1.value;
-                    _b.label = 4;
+                    if (!(c_1_1 = _e.sent(), _b = c_1_1.done, !_b)) return [3 /*break*/, 5];
+                    _d = c_1_1.value;
+                    _a = false;
+                    try {
+                        s = _d;
+                    }
+                    finally {
+                        _a = true;
+                    }
+                    _e.label = 4;
                 case 4: return [3 /*break*/, 2];
                 case 5: return [3 /*break*/, 12];
                 case 6:
-                    e_1_1 = _b.sent();
+                    e_1_1 = _e.sent();
                     e_1 = { error: e_1_1 };
                     return [3 /*break*/, 12];
                 case 7:
-                    _b.trys.push([7, , 10, 11]);
-                    if (!(c_1_1 && !c_1_1.done && (_a = c_1["return"]))) return [3 /*break*/, 9];
-                    return [4 /*yield*/, _a.call(c_1)];
+                    _e.trys.push([7, , 10, 11]);
+                    if (!(!_a && !_b && (_c = c_1["return"]))) return [3 /*break*/, 9];
+                    return [4 /*yield*/, _c.call(c_1)];
                 case 8:
-                    _b.sent();
-                    _b.label = 9;
+                    _e.sent();
+                    _e.label = 9;
                 case 9: return [3 /*break*/, 11];
                 case 10:
                     if (e_1) throw e_1.error;
