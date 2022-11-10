@@ -94,6 +94,10 @@ File '/user/username/projects/myproject/node_modules/pkg1/require.ts' does not e
 File '/user/username/projects/myproject/node_modules/pkg1/require.tsx' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg1/require.d.ts' does not exist.
 Directory '/user/username/projects/myproject/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/user/username/node_modules' does not exist, skipping all lookups in it.
+Directory '/user/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
 File '/user/username/projects/myproject/node_modules/pkg1/package.json' exists according to earlier cached lookups.
 Saw non-matching condition 'import'.
 Matched 'exports' condition 'require'.
