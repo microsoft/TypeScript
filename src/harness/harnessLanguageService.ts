@@ -885,7 +885,7 @@ class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
         return mockHash(s);
     }
 
-    require(_initialDir: string, _moduleName: string): ts.RequireResult {
+    require(_initialDir: string, _moduleName: string): ts.ModuleImportResult {
         switch (_moduleName) {
             // Adds to the Quick Info a fixed string and a string from the config file
             // and replaces the first display part
