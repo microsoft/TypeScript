@@ -18,7 +18,7 @@ import {
     createDiagnosticForFileFromMessageChain, createDiagnosticForNode, createDiagnosticForNodeArray,
     createDiagnosticForNodeFromMessageChain, createDiagnosticMessageChainFromDiagnostic, createEmptyExports,
     createFileDiagnostic, createGetCanonicalFileName, createGetSymbolWalker, createPrinter,
-    createPropertyNameNodeForIdentifierOrLiteral, createScanner, createSymbolTable, createTextWriter,
+    createPropertyNameNodeForIdentifierOrLiteral, createSymbolTable, createTextWriter,
     createUnderscoreEscapedMultiMap, Debug, Declaration, DeclarationName, declarationNameToString, DeclarationStatement,
     DeclarationWithTypeParameterChildren, DeclarationWithTypeParameters, Decorator, deduplicate, DefaultClause,
     defaultMaximumTruncationLength, DeferredTypeReference, DeleteExpression, Diagnostic, DiagnosticCategory,
@@ -101,7 +101,7 @@ import {
     isFunctionExpressionOrArrowFunction, isFunctionLike, isFunctionLikeDeclaration,
     isFunctionLikeOrClassStaticBlockDeclaration, isFunctionOrModuleBlock, isFunctionTypeNode, isGeneratedIdentifier,
     isGetAccessor, isGetAccessorDeclaration, isGetOrSetAccessorDeclaration, isGlobalScopeAugmentation, isHeritageClause,
-    isIdentifier, isIdentifierStart, isIdentifierText, isIdentifierTypePredicate, isIdentifierTypeReference,
+    isIdentifier, isIdentifierText, isIdentifierTypePredicate, isIdentifierTypeReference,
     isIfStatement, isImportCall, isImportClause, isImportDeclaration, isImportEqualsDeclaration, isImportKeyword,
     isImportOrExportSpecifier, isImportSpecifier, isImportTypeNode, isIndexedAccessTypeNode, isInExpressionContext,
     isInfinityOrNaNString, isInJSDoc, isInJSFile, isInJsonFile, isInterfaceDeclaration,
@@ -195,7 +195,7 @@ import {
     usingSingleLineStringWriter, VariableDeclaration, VariableDeclarationList, VariableLikeDeclaration,
     VariableStatement, VarianceFlags, visitEachChild, visitNode, visitNodes, Visitor, VisitResult, VoidExpression,
     walkUpBindingElementsAndPatterns, walkUpParenthesizedExpressions, walkUpParenthesizedTypes,
-    walkUpParenthesizedTypesAndGetParentAndChild, WhileStatement, WideningContext, WithStatement, YieldExpression,
+    walkUpParenthesizedTypesAndGetParentAndChild, WhileStatement, WideningContext, WithStatement, YieldExpression, canUsePropertyAccess, parseValidBigInt, isValidBigIntString,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
@@ -6878,12 +6878,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 let firstChar = symbolName.charCodeAt(0);
 
-                    if (isSingleOrDoubleQuote(firstChar) && some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
-                        return factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context));
-                    }
-                    if (index === 0 || canUsePropertyAccess(symbolName, languageVersion)) {
-                        const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
-                        identifier.symbol = symbol;
+                if (isSingleOrDoubleQuote(firstChar) && some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
+                    return factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context));
+                }
+                if (index === 0 || canUsePropertyAccess(symbolName, languageVersion)) {
+                    const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                    identifier.symbol = symbol;
 
                     return index > 0 ? factory.createPropertyAccessExpression(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
                 }
@@ -6892,17 +6892,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         symbolName = symbolName.substring(1, symbolName.length - 1);
                         firstChar = symbolName.charCodeAt(0);
                     }
-<<<<<<< HEAD
-                    if (index === 0 || canUsePropertyAccess(symbolName, languageVersion)) {
-                        const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
-                        identifier.symbol = symbol;
-
-                        return index > 0 ? factory.createPropertyAccessExpression(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
-=======
                     let expression: Expression | undefined;
                     if (isSingleOrDoubleQuote(firstChar) && !(symbol.flags & SymbolFlags.EnumMember)) {
                         expression = factory.createStringLiteral(stripQuotes(symbolName).replace(/\\./g, s => s.substring(1)), firstChar === CharacterCodes.singleQuote);
->>>>>>> main
                     }
                     else if (("" + +symbolName) === symbolName) {
                         expression = factory.createNumericLiteral(+symbolName);
@@ -21159,37 +21151,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
         }
 
-<<<<<<< HEAD
-        /**
-         * @param text a valid bigint string excluding a trailing `n`, but including a possible prefix `-`. Use `isValidBigIntString(text, roundTripOnly)` before calling this function.
-         */
-        function parseBigIntLiteralType(text: string) {
-            return getBigIntLiteralType(parseValidBigInt(text));
-        }
-
-        function isMemberOfStringMapping(source: Type, target: Type): boolean {
-            if (target.flags & (TypeFlags.String | TypeFlags.AnyOrUnknown)) {
-                return true;
-            }
-            if (target.flags & TypeFlags.TemplateLiteral) {
-                return isTypeAssignableTo(source, target);
-            }
-            if (target.flags & TypeFlags.StringMapping) {
-                // We need to see whether applying the same mappings of the target
-                // onto the source would produce an identical type *and* that
-                // it's compatible with the inner-most non-string-mapped type.
-                //
-                // The intuition here is that if same mappings don't affect the source at all,
-                // and the source is compatible with the unmapped target, then they must
-                // still reside in the same domain.
-                const mappingStack = [];
-                while (target.flags & TypeFlags.StringMapping) {
-                    mappingStack.unshift(target.symbol);
-                    target = (target as StringMappingType).type;
-                }
-                const mappedSource = reduceLeft(mappingStack, (memo, value) => getStringMappingType(value, memo), source);
-                return mappedSource === source && isMemberOfStringMapping(source, target);
-=======
         if (type.flags & TypeFlags.UnionOrIntersection) {
             return !!forEach((type as IntersectionType).types, typeCouldHaveTopLevelSingletonTypes);
         }
@@ -21198,7 +21159,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const constraint = getConstraintOfType(type);
             if (constraint && constraint !== type) {
                 return typeCouldHaveTopLevelSingletonTypes(constraint);
->>>>>>> main
             }
         }
 
@@ -22731,12 +22691,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isFinite(n) && (!roundTripOnly || "" + n === s);
     }
 
-        /**
-         * @param text a valid bigint string excluding a trailing `n`, but including a possible prefix `-`. Use `isValidBigIntString(text, roundTripOnly)` before calling this function.
-         */
-        function parseBigIntLiteralType(text: string) {
-            return getBigIntLiteralType(parseValidBigInt(text));
-        }
+    /**
+     * @param text a valid bigint string excluding a trailing `n`, but including a possible prefix `-`. Use `isValidBigIntString(text, roundTripOnly)` before calling this function.
+     */
+    function parseBigIntLiteralType(text: string) {
+        return getBigIntLiteralType(parseValidBigInt(text));
+    }
 
     function isMemberOfStringMapping(source: Type, target: Type): boolean {
         if (target.flags & (TypeFlags.String | TypeFlags.Any)) {
@@ -40051,18 +40011,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-<<<<<<< HEAD
-        function checkSwitchStatement(node: SwitchStatement) {
-            // Grammar checking
-            checkGrammarStatementInAmbientContext(node);
-
-            let firstDefaultClause: CaseOrDefaultClause | undefined = undefined;
-            let hasDuplicateDefaultClause = false;
-=======
     function checkSwitchStatement(node: SwitchStatement) {
         // Grammar checking
         checkGrammarStatementInAmbientContext(node);
->>>>>>> main
 
         let firstDefaultClause: CaseOrDefaultClause;
         let hasDuplicateDefaultClause = false;

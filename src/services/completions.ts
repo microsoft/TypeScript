@@ -58,7 +58,7 @@ import {
     SymbolFlags, SymbolId, SyntaxKind, TextChange, textChanges, textPart, TextRange, TextSpan, timestamp, Token,
     TokenSyntaxKind, tokenToString, tryCast, tryGetImportFromModuleSpecifier, Type, TypeChecker, TypeElement, TypeFlags,
     typeHasCallOrConstructSignatures, TypeLiteralNode, TypeOnlyAliasDeclaration, unescapeLeadingUnderscores,
-    UnionReduction, UnionType, UserPreferences, VariableDeclaration, walkUpParenthesizedExpressions,
+    UnionReduction, UnionType, UserPreferences, VariableDeclaration, walkUpParenthesizedExpressions, CaseBlock, canUsePropertyAccess, CaseClause, endsWith, EntityName, EnumMember, IndexedAccessTypeNode, isCaseBlock, isDefaultClause, isEnumMember, isLiteralExpression, LiteralType, LiteralTypeNode, map, NumericLiteral, ParenthesizedTypeNode, parseBigInt, TypeNode, TypeQueryNode, TypeReferenceNode,
 } from "./_namespaces/ts";
 import { StringCompletions } from "./_namespaces/ts.Completions";
 
@@ -516,7 +516,6 @@ function keywordToCompletionEntry(keyword: TokenSyntaxKind) {
         sortText: SortText.GlobalsOrKeywords,
     };
 }
->>>>>>> main
 
 function specificKeywordCompletionInfo(entries: readonly CompletionEntry[], isNewIdentifierLocation: boolean): CompletionInfo {
     return {

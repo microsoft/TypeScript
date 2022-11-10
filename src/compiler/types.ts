@@ -8358,7 +8358,6 @@ export interface NodeFactory {
     //
     // Compound Nodes
     //
->>>>>>> main
 
     createImmediatelyInvokedFunctionExpression(statements: readonly Statement[]): CallExpression;
     createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;

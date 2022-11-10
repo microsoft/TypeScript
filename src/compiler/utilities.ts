@@ -90,7 +90,7 @@ import {
     TypePredicate, TypePredicateKind, TypeReferenceNode, unescapeLeadingUnderscores, UnionOrIntersectionTypeNode,
     ValidImportTypeNode, VariableDeclaration, VariableDeclarationInitializedTo, VariableDeclarationList,
     VariableLikeDeclaration, VariableStatement, version, WhileStatement, WithStatement, WriteFileCallback,
-    WriteFileCallbackData, YieldExpression,
+    WriteFileCallbackData, YieldExpression, isIdentifierStart,
 } from "./_namespaces/ts";
 
 /** @internal */
