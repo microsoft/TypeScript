@@ -237,9 +237,10 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                     }
                 },
                 {
-                    name: "fix-require",
+                    name: "output-compat-fixups",
                     setup: (build) => {
                         build.onEnd(async () => {
+                            let contents = await fs.promises.readFile(outfile, "utf-8");
                             // esbuild converts calls to "require" to "__require"; this function
                             // calls the real require if it exists, or throws if it does not (rather than
                             // throwing an error like "require not defined"). But, since we want typescript
@@ -250,8 +251,21 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                             // source maps working (though this only really matters for the line the require is on).
                             //
                             // See: https://github.com/evanw/esbuild/issues/1905
-                            let contents = await fs.promises.readFile(outfile, "utf-8");
                             contents = contents.replace(/__require\(/g, "  require(");
+
+                            // Pre-modules, our CJS export looked like this:
+                            //
+                            //     var ts;
+                            //     (function(ts) { ... })(ts || (ts = {}));
+                            //     module.exports = ts;
+                            //
+                            // This means that __esModule was not set in our code. But, esbuild will create this
+                            // property on our new output object. This causes runtime behavior differences when
+                            // paired with __importDefault.
+                            //
+                            // For compatibility, just skip this step.
+                            contents = contents.replace(/__toCommonJS\((\w+)\)/g, "$1");
+
                             await fs.promises.writeFile(outfile, contents);
                         });
                     },

@@ -81,7 +81,7 @@ interface ExecSyncOptions {
 }
 type ExecSync = (command: string, options: ExecSyncOptions) => string;
 
-export class NodeTypingsInstaller extends TypingsInstaller {
+class NodeTypingsInstaller extends TypingsInstaller {
     private readonly nodeExecSync: ExecSync;
     private readonly npmPath: string;
     readonly typesRegistry: Map<string, MapLike<string>>;
