@@ -1,10 +1,10 @@
 import {
     CancellationToken, CompilerHost, CompilerOptions, CustomTransformers, Diagnostic, DiagnosticWithLocation,
-    DocumentHighlights, DocumentPositionMapper, EmitOutput, ESMap, ExportInfoMap, FileReference,
+    DocumentHighlights, DocumentPositionMapper, EmitOutput, ExportInfoMap, FileReference,
     GetEffectiveTypeRootsHost, HasChangedAutomaticTypeDirectiveNames, HasInvalidatedResolutions, LineAndCharacter,
     MinimalResolutionCacheHost, ModuleKind, ModuleResolutionCache, ModuleResolutionInfo, ModuleSpecifierCache,
     ParsedCommandLine, Path, Program, ProjectReference, ResolvedModule, ResolvedModuleWithFailedLookupLocations,
-    ResolvedProjectReference, ResolvedTypeReferenceDirective, ScriptKind, Set, SourceFile, SourceFileLike, SourceMapper,
+    ResolvedProjectReference, ResolvedTypeReferenceDirective, ScriptKind, SourceFile, SourceFileLike, SourceMapper,
     Symbol, SymlinkCache, TextChangeRange, textChanges, TextRange, TextSpan, TypeReferenceDirectiveResolutionInfo, UserPreferences,
 } from "./_namespaces/ts";
 
@@ -128,7 +128,7 @@ declare module "../compiler/types" {
         /** @internal */ scriptSnapshot: IScriptSnapshot | undefined;
         /** @internal */ nameTable: UnderscoreEscapedMap<number> | undefined;
 
-        /** @internal */ getNamedDeclarations(): ESMap<string, readonly Declaration[]>;
+        /** @internal */ getNamedDeclarations(): Map<string, readonly Declaration[]>;
 
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
         getLineEndOfPosition(pos: number): number;
@@ -228,9 +228,9 @@ export interface InstallPackageOptions {
 
 /** @internal */
 export const enum PackageJsonDependencyGroup {
-    Dependencies         = 1 << 0,
-    DevDependencies      = 1 << 1,
-    PeerDependencies     = 1 << 2,
+    Dependencies = 1 << 0,
+    DevDependencies = 1 << 1,
+    PeerDependencies = 1 << 2,
     OptionalDependencies = 1 << 3,
     All = Dependencies | DevDependencies | PeerDependencies | OptionalDependencies,
 }
@@ -239,10 +239,10 @@ export const enum PackageJsonDependencyGroup {
 export interface ProjectPackageJsonInfo {
     fileName: string;
     parseable: boolean;
-    dependencies?: ESMap<string, string>;
-    devDependencies?: ESMap<string, string>;
-    peerDependencies?: ESMap<string, string>;
-    optionalDependencies?: ESMap<string, string>;
+    dependencies?: Map<string, string>;
+    devDependencies?: Map<string, string>;
+    peerDependencies?: Map<string, string>;
+    optionalDependencies?: Map<string, string>;
     get(dependencyName: string, inGroups?: PackageJsonDependencyGroup): string | undefined;
     has(dependencyName: string, inGroups?: PackageJsonDependencyGroup): boolean;
 }
@@ -909,7 +909,7 @@ export interface RefactorActionInfo {
  */
 export interface RefactorEditInfo {
     edits: FileTextChanges[];
-    renameFilename?: string ;
+    renameFilename?: string;
     renameLocation?: number;
     commands?: CodeActionCommand[];
 }

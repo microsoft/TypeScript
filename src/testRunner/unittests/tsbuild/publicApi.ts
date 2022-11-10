@@ -1,11 +1,12 @@
 import * as ts from "../../_namespaces/ts";
 import * as fakes from "../../_namespaces/fakes";
 import * as vfs from "../../_namespaces/vfs";
+import { baselinePrograms, commandLineCallbacks, loadProjectFromFiles, toPathWithSystem, TscCompileSystem, verifyTscBaseline } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
-    let sys: ts.TscCompileSystem;
+    let sys: TscCompileSystem;
     before(() => {
-        const inputFs = ts.loadProjectFromFiles({
+        const inputFs = loadProjectFromFiles({
             "/src/tsconfig.json": JSON.stringify({
                 references: [
                     { path: "./shared/tsconfig.json" },
@@ -36,20 +37,20 @@ export function f22() { } // trailing`,
         const fs = inputFs.shadow();
 
         // Create system
-        sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as ts.TscCompileSystem;
+        sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
         fakes.patchHostForBuildInfoReadWrite(sys);
         const commandLineArgs = ["--b", "/src/tsconfig.json"];
         sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
         sys.exit = exitCode => sys.exitCode = exitCode;
-        const writtenFiles = sys.writtenFiles = new ts.Set();
+        const writtenFiles = sys.writtenFiles = new Set();
         const originalWriteFile = sys.writeFile;
         sys.writeFile = (fileName, content, writeByteOrderMark) => {
-            const path = ts.toPathWithSystem(sys, fileName);
+            const path = toPathWithSystem(sys, fileName);
             assert.isFalse(writtenFiles.has(path));
             writtenFiles.add(path);
             return originalWriteFile.call(sys, fileName, content, writeByteOrderMark);
         };
-        const { cb, getPrograms } = ts.commandLineCallbacks(sys, /*originalReadCall*/ undefined);
+        const { cb, getPrograms } = commandLineCallbacks(sys, /*originalReadCall*/ undefined);
         const buildHost = ts.createSolutionBuilderHost(
             sys,
                 /*createProgram*/ undefined,
@@ -64,7 +65,7 @@ export function f22() { } // trailing`,
         sys.exit(exitStatus);
         sys.write(`exitCode:: ExitStatus.${ts.ExitStatus[sys.exitCode as ts.ExitStatus]}\n`);
         const baseline: string[] = [];
-        ts.tscWatch.baselinePrograms(baseline, getPrograms, ts.emptyArray, /*baselineDependencies*/ false);
+        baselinePrograms(baseline, getPrograms, ts.emptyArray, /*baselineDependencies*/ false);
         sys.write(baseline.join("\n"));
         fs.makeReadonly();
         sys.baseLine = () => {
@@ -120,5 +121,5 @@ ${patch ? vfs.formatPatch(patch) : ""}`
     after(() => {
         sys = undefined!;
     });
-    ts.verifyTscBaseline(() => sys);
+    verifyTscBaseline(() => sys);
 });

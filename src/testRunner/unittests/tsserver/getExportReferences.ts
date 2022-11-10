@@ -1,4 +1,6 @@
 import * as ts from "../../_namespaces/ts";
+import { createServerHost, File } from "../virtualFileSystemWithWatch";
+import { createSession, openFilesForSession, makeReferenceItem, MakeReferenceItem, executeSessionRequest, protocolFileLocationFromSubstring, protocolLocationFromSubstring } from "./helpers";
 
 describe("unittests:: tsserver:: getExportReferences", () => {
     const exportVariable = "export const value = 0;";
@@ -6,11 +8,11 @@ describe("unittests:: tsserver:: getExportReferences", () => {
     const exportObjectDestructured = "export const { valueC, valueD: renamedD } = { valueC: 0, valueD: 1 };";
     const exportNestedObject = "export const { nest: [valueE, { valueF }] } = { nest: [0, { valueF: 1 }] };";
 
-    const mainTs: ts.projectSystem.File = {
+    const mainTs: File = {
         path: "/main.ts",
         content: 'import { value, valueA, valueB, valueC, renamedD, valueE, valueF } from "./mod";',
     };
-    const modTs: ts.projectSystem.File = {
+    const modTs: File = {
         path: "/mod.ts",
         content: `${exportVariable}
 ${exportArrayDestructured}
@@ -18,20 +20,20 @@ ${exportObjectDestructured}
 ${exportNestedObject}
 `,
     };
-    const tsconfig: ts.projectSystem.File = {
+    const tsconfig: File = {
         path: "/tsconfig.json",
         content: "{}",
     };
 
     function makeSampleSession() {
-        const host = ts.projectSystem.createServerHost([mainTs, modTs, tsconfig]);
-        const session = ts.projectSystem.createSession(host);
-        ts.projectSystem.openFilesForSession([mainTs, modTs], session);
+        const host = createServerHost([mainTs, modTs, tsconfig]);
+        const session = createSession(host);
+        openFilesForSession([mainTs, modTs], session);
         return session;
     }
 
-    const referenceMainTs = (mainTs: ts.projectSystem.File, text: string): ts.projectSystem.protocol.ReferencesResponseItem =>
-        ts.projectSystem.makeReferenceItem({
+    const referenceMainTs = (mainTs: File, text: string): ts.server.protocol.ReferencesResponseItem =>
+        makeReferenceItem({
             file: mainTs,
             isDefinition: false,
             isWriteAccess: true,
@@ -42,9 +44,9 @@ ${exportNestedObject}
 
     const referenceModTs = (
         texts: { text: string; lineText: string; contextText?: string },
-        override: Partial<ts.projectSystem.MakeReferenceItem> = {},
-    ): ts.projectSystem.protocol.ReferencesResponseItem =>
-        ts.projectSystem.makeReferenceItem({
+        override: Partial<MakeReferenceItem> = {},
+    ): ts.server.protocol.ReferencesResponseItem =>
+        makeReferenceItem({
             file: modTs,
             isDefinition: true,
             ...texts,
@@ -54,10 +56,10 @@ ${exportNestedObject}
     it("should get const variable declaration references", () => {
         const session = makeSampleSession();
 
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.ReferencesRequest, ts.projectSystem.protocol.ReferencesResponse>(
+        const response = executeSessionRequest<ts.server.protocol.ReferencesRequest, ts.server.protocol.ReferencesResponse>(
             session,
-            ts.projectSystem.protocol.CommandTypes.References,
-            ts.projectSystem.protocolFileLocationFromSubstring(modTs, "value"),
+            ts.server.protocol.CommandTypes.References,
+            protocolFileLocationFromSubstring(modTs, "value"),
         );
 
         const expectResponse = {
@@ -67,7 +69,7 @@ ${exportNestedObject}
             ],
             symbolDisplayString: "const value: 0",
             symbolName: "value",
-            symbolStartOffset: ts.projectSystem.protocolLocationFromSubstring(modTs.content, "value").offset,
+            symbolStartOffset: protocolLocationFromSubstring(modTs.content, "value").offset,
         };
 
         assert.deepEqual(response, expectResponse);
@@ -75,10 +77,10 @@ ${exportNestedObject}
 
     it("should get array destructuring declaration references", () => {
         const session = makeSampleSession();
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.ReferencesRequest, ts.projectSystem.protocol.ReferencesResponse>(
+        const response = executeSessionRequest<ts.server.protocol.ReferencesRequest, ts.server.protocol.ReferencesResponse>(
             session,
-            ts.projectSystem.protocol.CommandTypes.References,
-            ts.projectSystem.protocolFileLocationFromSubstring(modTs, "valueA"),
+            ts.server.protocol.CommandTypes.References,
+            protocolFileLocationFromSubstring(modTs, "valueA"),
         );
 
         const expectResponse = {
@@ -92,7 +94,7 @@ ${exportNestedObject}
             ],
             symbolDisplayString: "const valueA: number",
             symbolName: "valueA",
-            symbolStartOffset: ts.projectSystem.protocolLocationFromSubstring(modTs.content, "valueA").offset,
+            symbolStartOffset: protocolLocationFromSubstring(modTs.content, "valueA").offset,
         };
 
         assert.deepEqual(response, expectResponse);
@@ -100,10 +102,10 @@ ${exportNestedObject}
 
     it("should get object destructuring declaration references", () => {
         const session = makeSampleSession();
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.ReferencesRequest, ts.projectSystem.protocol.ReferencesResponse>(
+        const response = executeSessionRequest<ts.server.protocol.ReferencesRequest, ts.server.protocol.ReferencesResponse>(
             session,
-            ts.projectSystem.protocol.CommandTypes.References,
-            ts.projectSystem.protocolFileLocationFromSubstring(modTs, "valueC"),
+            ts.server.protocol.CommandTypes.References,
+            protocolFileLocationFromSubstring(modTs, "valueC"),
         );
         const expectResponse = {
             refs: [
@@ -123,7 +125,7 @@ ${exportNestedObject}
             ],
             symbolDisplayString: "const valueC: number",
             symbolName: "valueC",
-            symbolStartOffset: ts.projectSystem.protocolLocationFromSubstring(modTs.content, "valueC").offset,
+            symbolStartOffset: protocolLocationFromSubstring(modTs.content, "valueC").offset,
         };
 
         assert.deepEqual(response, expectResponse);
@@ -131,10 +133,10 @@ ${exportNestedObject}
 
     it("should get object declaration references that renames destructured property", () => {
         const session = makeSampleSession();
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.ReferencesRequest, ts.projectSystem.protocol.ReferencesResponse>(
+        const response = executeSessionRequest<ts.server.protocol.ReferencesRequest, ts.server.protocol.ReferencesResponse>(
             session,
-            ts.projectSystem.protocol.CommandTypes.References,
-            ts.projectSystem.protocolFileLocationFromSubstring(modTs, "renamedD"),
+            ts.server.protocol.CommandTypes.References,
+            protocolFileLocationFromSubstring(modTs, "renamedD"),
         );
 
         const expectResponse = {
@@ -148,7 +150,7 @@ ${exportNestedObject}
             ],
             symbolDisplayString: "const renamedD: number",
             symbolName: "renamedD",
-            symbolStartOffset: ts.projectSystem.protocolLocationFromSubstring(modTs.content, "renamedD").offset,
+            symbolStartOffset: protocolLocationFromSubstring(modTs.content, "renamedD").offset,
         };
 
         assert.deepEqual(response, expectResponse);
@@ -156,10 +158,10 @@ ${exportNestedObject}
 
     it("should get nested object declaration references", () => {
         const session = makeSampleSession();
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.ReferencesRequest, ts.projectSystem.protocol.ReferencesResponse>(
+        const response = executeSessionRequest<ts.server.protocol.ReferencesRequest, ts.server.protocol.ReferencesResponse>(
             session,
-            ts.projectSystem.protocol.CommandTypes.References,
-            ts.projectSystem.protocolFileLocationFromSubstring(modTs, "valueF"),
+            ts.server.protocol.CommandTypes.References,
+            protocolFileLocationFromSubstring(modTs, "valueF"),
         );
 
         const expectResponse = {
@@ -185,7 +187,7 @@ ${exportNestedObject}
             ],
             symbolDisplayString: "const valueF: number",
             symbolName: "valueF",
-            symbolStartOffset: ts.projectSystem.protocolLocationFromSubstring(modTs.content, "valueF").offset,
+            symbolStartOffset: protocolLocationFromSubstring(modTs.content, "valueF").offset,
         };
 
         assert.deepEqual(response, expectResponse);

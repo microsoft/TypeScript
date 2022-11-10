@@ -12,7 +12,7 @@ import {
     isPropertyAccessExpression, isPropertyName, isStatement, isSuperProperty, isToken, isVariableDeclarationList,
     LabeledStatement, LeftHandSideExpression, MethodDeclaration, ModifierFlags, Node, NodeCheckFlags, NodeFlags,
     ObjectLiteralElementLike, ObjectLiteralExpression, ParameterDeclaration, ParenthesizedExpression, ProcessLevel,
-    processTaggedTemplateExpression, PropertyAccessExpression, ReturnStatement, ScriptTarget, Set,
+    processTaggedTemplateExpression, PropertyAccessExpression, ReturnStatement, ScriptTarget,
     SetAccessorDeclaration, setEmitFlags, setOriginalNode, setSourceMapRange, setTextRange, SignatureDeclaration,
     skipParentheses, some, SourceFile, startOnNewLine, Statement, SyntaxKind, TaggedTemplateExpression, TextRange,
     Token, TransformationContext, TransformFlags, unwrapInnermostStatementOfLabel, VariableDeclaration,
@@ -751,21 +751,21 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             setTextRange(
                 factory.createForStatement(
                     /*initializer*/ setEmitFlags(
-                        setTextRange(
-                            factory.createVariableDeclarationList([
-                                factory.createVariableDeclaration(nonUserCode, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createTrue()),
-                                setTextRange(factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer), node.expression),
-                                factory.createVariableDeclaration(result)
-                            ]),
-                            node.expression
-                        ),
-                        EmitFlags.NoHoisting
+                    setTextRange(
+                        factory.createVariableDeclarationList([
+                            factory.createVariableDeclaration(nonUserCode, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createTrue()),
+                            setTextRange(factory.createVariableDeclaration(iterator, /*exclamationToken*/ undefined, /*type*/ undefined, initializer), node.expression),
+                            factory.createVariableDeclaration(result)
+                        ]),
+                        node.expression
                     ),
+                    EmitFlags.NoHoisting
+                ),
                     /*condition*/ factory.inlineExpressions([
-                        factory.createAssignment(result, createDownlevelAwait(callNext)),
-                        factory.createAssignment(done, getDone),
-                        factory.createLogicalNot(done)
-                    ]),
+                    factory.createAssignment(result, createDownlevelAwait(callNext)),
+                    factory.createAssignment(done, getDone),
+                    factory.createLogicalNot(done)
+                ]),
                     /*incrementor*/ undefined,
                     /*statement*/ convertForOfStatementHead(node, getValue, nonUserCode)
                 ),
@@ -801,38 +801,38 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
             factory.createBlock([
                 factory.createTryStatement(
                     /*tryBlock*/ factory.createBlock([
+                    setEmitFlags(
+                        factory.createIfStatement(
+                            factory.createLogicalAnd(
+                                factory.createLogicalAnd(
+                                    factory.createLogicalNot(nonUserCode),
+                                    factory.createLogicalNot(done),
+                                ),
+                                factory.createAssignment(
+                                    returnMethod,
+                                    factory.createPropertyAccessExpression(iterator, "return")
+                                )
+                            ),
+                            factory.createExpressionStatement(createDownlevelAwait(callReturn))
+                        ),
+                        EmitFlags.SingleLine
+                    )
+                ]),
+                    /*catchClause*/ undefined,
+                    /*finallyBlock*/ setEmitFlags(
+                    factory.createBlock([
                         setEmitFlags(
                             factory.createIfStatement(
-                                factory.createLogicalAnd(
-                                    factory.createLogicalAnd(
-                                        factory.createLogicalNot(nonUserCode),
-                                        factory.createLogicalNot(done),
-                                    ),
-                                    factory.createAssignment(
-                                        returnMethod,
-                                        factory.createPropertyAccessExpression(iterator, "return")
-                                    )
-                                ),
-                                factory.createExpressionStatement(createDownlevelAwait(callReturn))
+                                errorRecord,
+                                factory.createThrowStatement(
+                                    factory.createPropertyAccessExpression(errorRecord, "error")
+                                )
                             ),
                             EmitFlags.SingleLine
                         )
                     ]),
-                    /*catchClause*/ undefined,
-                    /*finallyBlock*/ setEmitFlags(
-                        factory.createBlock([
-                            setEmitFlags(
-                                factory.createIfStatement(
-                                    errorRecord,
-                                    factory.createThrowStatement(
-                                        factory.createPropertyAccessExpression(errorRecord, "error")
-                                    )
-                                ),
-                                EmitFlags.SingleLine
-                            )
-                        ]),
-                        EmitFlags.SingleLine
-                    )
+                    EmitFlags.SingleLine
+                )
                 )
             ])
         );
@@ -1051,7 +1051,7 @@ export function transformES2018(context: TransformationContext): (x: SourceFile 
                     factory.createToken(SyntaxKind.AsteriskToken),
                     node.name && factory.getGeneratedNameForNode(node.name),
                     /*typeParameters*/ undefined,
-                    /*parameters*/ [],
+                    /*parameters*/[],
                     /*type*/ undefined,
                     factory.updateBlock(
                         node.body!,

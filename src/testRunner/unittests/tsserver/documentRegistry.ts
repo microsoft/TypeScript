@@ -1,29 +1,31 @@
 import * as ts from "../../_namespaces/ts";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
+import { TestProjectService, checkProjectActualFiles, createProjectService } from "./helpers";
 
 describe("unittests:: tsserver:: document registry in project service", () => {
     const importModuleContent = `import {a} from "./module1"`;
-    const file: ts.projectSystem.File = {
-        path: `${ts.tscWatch.projectRoot}/index.ts`,
+    const file: File = {
+        path: `/user/username/projects/myproject/index.ts`,
         content: importModuleContent
     };
-    const moduleFile: ts.projectSystem.File = {
-        path: `${ts.tscWatch.projectRoot}/module1.d.ts`,
+    const moduleFile: File = {
+        path: `/user/username/projects/myproject/module1.d.ts`,
         content: "export const a: number;"
     };
-    const configFile: ts.projectSystem.File = {
-        path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+    const configFile: File = {
+        path: `/user/username/projects/myproject/tsconfig.json`,
         content: JSON.stringify({ files: ["index.ts"] })
     };
 
-    function getProject(service: ts.projectSystem.TestProjectService) {
+    function getProject(service: TestProjectService) {
         return service.configuredProjects.get(configFile.path)!;
     }
 
-    function checkProject(service: ts.projectSystem.TestProjectService, moduleIsOrphan: boolean) {
+    function checkProject(service: TestProjectService, moduleIsOrphan: boolean) {
         // Update the project
         const project = getProject(service);
         project.getLanguageService();
-        ts.projectSystem.checkProjectActualFiles(project, [file.path, ts.projectSystem.libFile.path, configFile.path, ...(moduleIsOrphan ? [] : [moduleFile.path])]);
+        checkProjectActualFiles(project, [file.path, libFile.path, configFile.path, ...(moduleIsOrphan ? [] : [moduleFile.path])]);
         const moduleInfo = service.getScriptInfo(moduleFile.path)!;
         assert.isDefined(moduleInfo);
         assert.equal(moduleInfo.isOrphan(), moduleIsOrphan);
@@ -32,20 +34,20 @@ describe("unittests:: tsserver:: document registry in project service", () => {
     }
 
     function createServiceAndHost() {
-        const host = ts.projectSystem.createServerHost([file, moduleFile, ts.projectSystem.libFile, configFile]);
-        const service = ts.projectSystem.createProjectService(host);
+        const host = createServerHost([file, moduleFile, libFile, configFile]);
+        const service = createProjectService(host);
         service.openClientFile(file.path);
         checkProject(service, /*moduleIsOrphan*/ false);
         return { host, service };
     }
 
-    function changeFileToNotImportModule(service: ts.projectSystem.TestProjectService) {
+    function changeFileToNotImportModule(service: TestProjectService) {
         const info = service.getScriptInfo(file.path)!;
         service.applyChangesToFile(info, ts.singleIterator({ span: { start: 0, length: importModuleContent.length }, newText: "" }));
         checkProject(service, /*moduleIsOrphan*/ true);
     }
 
-    function changeFileToImportModule(service: ts.projectSystem.TestProjectService) {
+    function changeFileToImportModule(service: TestProjectService) {
         const info = service.getScriptInfo(file.path)!;
         service.applyChangesToFile(info, ts.singleIterator({ span: { start: 0, length: 0 }, newText: importModuleContent }));
         checkProject(service, /*moduleIsOrphan*/ false);

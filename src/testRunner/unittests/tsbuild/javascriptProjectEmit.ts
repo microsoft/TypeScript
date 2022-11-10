@@ -1,11 +1,11 @@
-import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
+import { loadProjectFromFiles, replaceText, symbolLibContent, verifyTsc, verifyTscWithEdits } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "javascriptProjectEmit",
         subScenario: `loads js-based projects and emits them correctly`,
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/common/nominal.js": Utils.dedent`
                     /**
                      * @template T, Name
@@ -86,14 +86,14 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                             "declaration": true
                         }
                     }`,
-        }, ts.symbolLibContent),
+        }, symbolLibContent),
         commandLineArgs: ["-b", "/src"]
     });
 
-    ts.verifyTscWithEdits({
+    verifyTscWithEdits({
         scenario: "javascriptProjectEmit",
         subScenario: `modifies outfile js projects and concatenates them correctly`,
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/common/nominal.js": Utils.dedent`
                     /**
                      * @template T, Name
@@ -176,18 +176,18 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                             "declaration": true
                         }
                     }`,
-        }, ts.symbolLibContent),
+        }, symbolLibContent),
         commandLineArgs: ["-b", "/src"],
         edits: [{
             subScenario: "incremental-declaration-doesnt-change",
-            modifyFs: fs => ts.replaceText(fs, "/src/sub-project/index.js", "null", "undefined")
+            modifyFs: fs => replaceText(fs, "/src/sub-project/index.js", "null", "undefined")
         }]
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "javascriptProjectEmit",
         subScenario: `loads js-based projects with non-moved json files and emits them correctly`,
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/common/obj.json": Utils.dedent`
                     {
                         "val": 42
@@ -267,7 +267,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
                             "declaration": true
                         }
                     }`,
-        }, ts.symbolLibContent),
+        }, symbolLibContent),
         commandLineArgs: ["-b", "/src"]
     });
 });

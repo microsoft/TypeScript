@@ -1,6 +1,6 @@
 import {
     addToSeen, cast, ClassElement, ClassLikeDeclaration, Diagnostics, first, getEffectiveBaseTypeNode, getNodeId,
-    getSyntacticModifierFlags, getTokenAtPosition, isClassLike, Map, ModifierFlags, SourceFile, Symbol, textChanges,
+    getSyntacticModifierFlags, getTokenAtPosition, isClassLike, ModifierFlags, SourceFile, Symbol, textChanges,
     UserPreferences,
 } from "../_namespaces/ts";
 import {

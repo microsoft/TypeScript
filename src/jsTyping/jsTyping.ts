@@ -1,9 +1,9 @@
 import {
     CharacterCodes, combinePaths, compareStringsCaseSensitive, CompilerOptions, Debug, deduplicate,
     equateStringsCaseSensitive, Extension, fileExtensionIs, flatMap, forEach, getBaseFileName, getDirectoryPath,
-    getEntries, getNormalizedAbsolutePath, getOwnKeys, getPathComponents, getProperty, hasJSFileExtension, Map,
-    mapDefined, MapLike, normalizePath, Path, readConfigFile, ReadonlyESMap, removeFileExtension,
-    removeMinAndVersionNumbers, Set, some, TypeAcquisition, Version, versionMajorMinor,
+    getEntries, getNormalizedAbsolutePath, getOwnKeys, getPathComponents, getProperty, hasJSFileExtension,
+    mapDefined, MapLike, normalizePath, Path, readConfigFile, removeFileExtension,
+    removeMinAndVersionNumbers, some, TypeAcquisition, Version, versionMajorMinor,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -105,7 +105,7 @@ export function nonRelativeModuleNameForTypingCache(moduleName: string) {
  *
  * @internal
  */
-export type SafeList = ReadonlyESMap<string, string>;
+export type SafeList = ReadonlyMap<string, string>;
 
 /** @internal */
 export function loadSafeList(host: TypingResolutionHost, safeListPath: Path): SafeList {
@@ -139,10 +139,10 @@ export function discoverTypings(
     fileNames: string[],
     projectRootPath: Path,
     safeList: SafeList,
-    packageNameToTypingLocation: ReadonlyESMap<string, CachedTyping>,
+    packageNameToTypingLocation: ReadonlyMap<string, CachedTyping>,
     typeAcquisition: TypeAcquisition,
     unresolvedImports: readonly string[],
-    typesRegistry: ReadonlyESMap<string, MapLike<string>>,
+    typesRegistry: ReadonlyMap<string, MapLike<string>>,
     compilerOptions: CompilerOptions):
     { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 

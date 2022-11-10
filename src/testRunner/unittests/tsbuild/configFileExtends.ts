@@ -1,8 +1,8 @@
-import * as ts from "../../_namespaces/ts";
+import { loadProjectFromFiles, verifyTsc } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: configFileExtends:: when tsconfig extends another config", () => {
     function getConfigExtendsWithIncludeFs() {
-        return ts.loadProjectFromFiles({
+        return loadProjectFromFiles({
             "/src/tsconfig.json": JSON.stringify({
                 references: [
                     { path: "./shared/tsconfig.json" },
@@ -37,13 +37,13 @@ describe("unittests:: tsbuild:: configFileExtends:: when tsconfig extends anothe
             "/src/webpack/index.ts": `export const b: Unrestricted = 1;`,
         });
     }
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "configFileExtends",
         subScenario: "when building solution with projects extends config with include",
         fs: getConfigExtendsWithIncludeFs,
         commandLineArgs: ["--b", "/src/tsconfig.json", "--v", "--listFiles"],
     });
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "configFileExtends",
         subScenario: "when building project uses reference and both extend config with include",
         fs: getConfigExtendsWithIncludeFs,

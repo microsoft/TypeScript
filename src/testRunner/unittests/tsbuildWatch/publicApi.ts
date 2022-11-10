@@ -1,8 +1,10 @@
 import * as ts from "../../_namespaces/ts";
+import { createWatchedSystem, File, libFile } from "../virtualFileSystemWithWatch";
+import { createBaseline, createSolutionBuilderWithWatchHostForBaseline, runWatchBaseline } from "../tscWatch/helpers";
 
 it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers", () => {
-    const solution: ts.tscWatch.File = {
-        path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+    const solution: File = {
+        path: `/user/username/projects/myproject/tsconfig.json`,
         content: JSON.stringify({
             references: [
                 { path: "./shared/tsconfig.json" },
@@ -11,29 +13,29 @@ it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers",
             files: []
         })
     };
-    const sharedConfig: ts.tscWatch.File = {
-        path: `${ts.tscWatch.projectRoot}/shared/tsconfig.json`,
+    const sharedConfig: File = {
+        path: `/user/username/projects/myproject/shared/tsconfig.json`,
         content: JSON.stringify({
             compilerOptions: { composite: true },
         })
     };
-    const sharedIndex: ts.tscWatch.File = {
-        path: `${ts.tscWatch.projectRoot}/shared/index.ts`,
+    const sharedIndex: File = {
+        path: `/user/username/projects/myproject/shared/index.ts`,
         content: `export function f1() { }
 export class c { }
 export enum e { }
 // leading
 export function f2() { } // trailing`
     };
-    const webpackConfig: ts.tscWatch.File = {
-        path: `${ts.tscWatch.projectRoot}/webpack/tsconfig.json`,
+    const webpackConfig: File = {
+        path: `/user/username/projects/myproject/webpack/tsconfig.json`,
         content: JSON.stringify({
             compilerOptions: { composite: true, },
             references: [{ path: "../shared/tsconfig.json" }]
         })
     };
-    const webpackIndex: ts.tscWatch.File = {
-        path: `${ts.tscWatch.projectRoot}/webpack/index.ts`,
+    const webpackIndex: File = {
+        path: `/user/username/projects/myproject/webpack/index.ts`,
         content: `export function f2() { }
 export class c2 { }
 export enum e2 { }
@@ -41,12 +43,12 @@ export enum e2 { }
 export function f22() { } // trailing`
     };
     const commandLineArgs = ["--b", "--w"];
-    const { sys, baseline, oldSnap, cb, getPrograms } = ts.tscWatch.createBaseline(ts.tscWatch.createWatchedSystem([ts.tscWatch.libFile, solution, sharedConfig, sharedIndex, webpackConfig, webpackIndex], { currentDirectory: ts.tscWatch.projectRoot }));
-    const buildHost = ts.tscWatch.createSolutionBuilderWithWatchHostForBaseline(sys, cb);
+    const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, solution, sharedConfig, sharedIndex, webpackConfig, webpackIndex], { currentDirectory: "/user/username/projects/myproject" }));
+    const buildHost = createSolutionBuilderWithWatchHostForBaseline(sys, cb);
     buildHost.getCustomTransformers = getCustomTransformers;
     const builder = ts.createSolutionBuilderWithWatch(buildHost, [solution.path], { verbose: true });
     builder.build();
-    ts.tscWatch.runWatchBaseline({
+    runWatchBaseline({
         scenario: "publicApi",
         subScenario: "with custom transformers",
         commandLineArgs,

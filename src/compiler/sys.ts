@@ -1,9 +1,9 @@
 import {
     AssertionLevel, closeFileWatcher, closeFileWatcherOf, combinePaths, Comparison, contains, containsPath,
     createGetCanonicalFileName, createMultiMap, Debug, directorySeparator, emptyArray, emptyFileSystemEntries, endsWith,
-    enumerateInsertsAndDeletes, ESMap, FileSystemEntries, getDirectoryPath, getFallbackOptions,
+    enumerateInsertsAndDeletes, FileSystemEntries, getDirectoryPath, getFallbackOptions,
     getNormalizedAbsolutePath, getRelativePathToDirectoryOrUrl, getRootLength, getStringComparer, isArray, isNodeLikeSystem, isString,
-    Map, mapDefined, matchesExclude, matchFiles, memoize, noop, normalizePath, normalizeSlashes, orderedRemoveItem,
+    mapDefined, matchesExclude, matchFiles, memoize, noop, normalizePath, normalizeSlashes, orderedRemoveItem,
     Path, perfLogger, PollingWatchKind, RequireResult, resolveJSModule, some, startsWith, stringContains, timestamp,
     unorderedRemoveItem, WatchDirectoryKind, WatchFileKind, WatchOptions, writeFileEnsuringDirectories,
 } from "./_namespaces/ts";
@@ -434,7 +434,7 @@ interface SingleFileWatcher<T extends FileWatcherCallback | FsWatchCallback>{
     callbacks: T[];
 }
 function createSingleWatcherPerName<T extends FileWatcherCallback | FsWatchCallback>(
-    cache: Map<SingleFileWatcher<T>>,
+    cache: Map<string, SingleFileWatcher<T>>,
     useCaseSensitiveFileNames: boolean,
     name: string,
     callback: T,
@@ -610,7 +610,7 @@ function createDirectoryWatcherSupportingRecursive({
         };
     }
 
-    type InvokeMap = ESMap<Path, string[] | true>;
+    type InvokeMap = Map<Path, string[] | true>;
     function invokeCallbacks(dirPath: Path, fileName: string): void;
     function invokeCallbacks(dirPath: Path, invokeMap: InvokeMap, fileNames: string[] | undefined): void;
     function invokeCallbacks(dirPath: Path, fileNameOrInvokeMap: string | InvokeMap, fileNames?: string[]) {

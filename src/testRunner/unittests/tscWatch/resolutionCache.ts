@@ -1,4 +1,6 @@
 import * as ts from "../../_namespaces/ts";
+import { createWatchedSystem, File, libFile, SymLink } from "../virtualFileSystemWithWatch";
+import { createBaseline, createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline, runWatchBaseline, verifyTscWatch } from "./helpers";
 
 describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution caching", () => {
     const scenario = "resolutionCache";
@@ -12,8 +14,8 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             content: `foo()`
         };
 
-        const { sys, baseline, oldSnap, cb, getPrograms } = ts.tscWatch.createBaseline(ts.tscWatch.createWatchedSystem([root, imported, ts.tscWatch.libFile]));
-        const host = ts.tscWatch.createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
+        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([root, imported, libFile]));
+        const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [root.path],
             system: sys,
             options: { module: ts.ModuleKind.AMD },
@@ -23,7 +25,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
         const originalFileExists = host.fileExists;
         const watch = ts.createWatchProgram(host);
         let fileExistsIsCalled = false;
-        ts.tscWatch.runWatchBaseline({
+        runWatchBaseline({
             scenario: "resolutionCache",
             subScenario: "caching works",
             commandLineArgs: ["--w", root.path],
@@ -40,7 +42,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
                         sys.writeFile(root.path, `import {x} from "f1"
                             var x: string = 1;`);
                     },
-                    timeouts: ts.tscWatch.runQueuedTimeoutCallbacks
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks()
                 },
                 {
                     caption: "Resolves f2",
@@ -95,8 +97,8 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             content: `export const y = 1;`
         };
 
-        const { sys, baseline, oldSnap, cb, getPrograms } = ts.tscWatch.createBaseline(ts.tscWatch.createWatchedSystem([root, ts.tscWatch.libFile]));
-        const host = ts.tscWatch.createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
+        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([root, libFile]));
+        const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [root.path],
             system: sys,
             options: { module: ts.ModuleKind.AMD },
@@ -118,7 +120,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
 
         const watch = ts.createWatchProgram(host);
         assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
-        ts.tscWatch.runWatchBaseline({
+        runWatchBaseline({
             scenario: "resolutionCache",
             subScenario: "loads missing files from disk",
             commandLineArgs: ["--w", root.path],
@@ -153,8 +155,8 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             content: `export const y = 1;export const x = 10;`
         };
 
-        const { sys, baseline, oldSnap, cb, getPrograms } = ts.tscWatch.createBaseline(ts.tscWatch.createWatchedSystem([root, imported, ts.tscWatch.libFile]));
-        const host = ts.tscWatch.createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
+        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([root, imported, libFile]));
+        const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [root.path],
             system: sys,
             options: { module: ts.ModuleKind.AMD },
@@ -174,7 +176,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
         };
         const watch = ts.createWatchProgram(host);
         assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
-        ts.tscWatch.runWatchBaseline({
+        runWatchBaseline({
             scenario: "resolutionCache",
             subScenario: "should compile correctly when resolved module goes missing and then comes back",
             commandLineArgs: ["--w", root.path],
@@ -211,14 +213,14 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
         });
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "works when module resolution changes to ambient module",
         commandLineArgs: ["-w", "/a/b/foo.ts"],
-        sys: () => ts.tscWatch.createWatchedSystem([{
+        sys: () => createWatchedSystem([{
             path: "/a/b/foo.ts",
             content: `import * as fs from "fs";`
-        }, ts.tscWatch.libFile], { currentDirectory: "/a/b" }),
+        }, libFile], { currentDirectory: "/a/b" }),
         changes: [
             {
                 caption: "npm install node types",
@@ -241,12 +243,12 @@ declare module "fs" {
 }`
                     });
                 },
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "works when included file with ambient module changes",
         commandLineArgs: ["--w", "/a/b/foo.ts", "/a/b/bar.d.ts"],
@@ -269,7 +271,7 @@ declare module "url" {
 }
 `
             };
-            return ts.tscWatch.createWatchedSystem([root, file, ts.tscWatch.libFile], { currentDirectory: "/a/b" });
+            return createWatchedSystem([root, file, libFile], { currentDirectory: "/a/b" });
         },
         changes: [
             {
@@ -281,30 +283,30 @@ declare module "fs" {
     }
 }
 `),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "works when reusing program with files from external library",
         commandLineArgs: ["--w", "-p", "/a/b/projects/myProject/src"],
         sys: () => {
             const configDir = "/a/b/projects/myProject/src/";
-            const file1: ts.tscWatch.File = {
+            const file1: File = {
                 path: configDir + "file1.ts",
                 content: 'import module1 = require("module1");\nmodule1("hello");'
             };
-            const file2: ts.tscWatch.File = {
+            const file2: File = {
                 path: configDir + "file2.ts",
                 content: 'import module11 = require("module1");\nmodule11("hello");'
             };
-            const module1: ts.tscWatch.File = {
+            const module1: File = {
                 path: "/a/b/projects/myProject/node_modules/module1/index.js",
                 content: "module.exports = options => { return options.toString(); }"
             };
-            const configFile: ts.tscWatch.File = {
+            const configFile: File = {
                 path: configDir + "tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: {
@@ -316,67 +318,67 @@ declare module "fs" {
                     }
                 })
             };
-            return ts.tscWatch.createWatchedSystem([file1, file2, module1, ts.tscWatch.libFile, configFile], { currentDirectory: "/a/b/projects/myProject/" });
+            return createWatchedSystem([file1, file2, module1, libFile, configFile], { currentDirectory: "/a/b/projects/myProject/" });
         },
         changes: [
             {
                 caption: "Add new line to file1",
                 change: sys => sys.appendFile("/a/b/projects/myProject/src/file1.ts", "\n;"),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "works when renaming node_modules folder that already contains @types folder",
-        commandLineArgs: ["--w", `${ts.tscWatch.projectRoot}/a.ts`],
+        commandLineArgs: ["--w", `/user/username/projects/myproject/a.ts`],
         sys: () => {
-            const file: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/a.ts`,
+            const file: File = {
+                path: `/user/username/projects/myproject/a.ts`,
                 content: `import * as q from "qqq";`
             };
-            const module: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/node_modules2/@types/qqq/index.d.ts`,
+            const module: File = {
+                path: `/user/username/projects/myproject/node_modules2/@types/qqq/index.d.ts`,
                 content: "export {}"
             };
-            return ts.tscWatch.createWatchedSystem([file, ts.tscWatch.libFile, module], { currentDirectory: ts.tscWatch.projectRoot });
+            return createWatchedSystem([file, libFile, module], { currentDirectory: "/user/username/projects/myproject" });
         },
         changes: [
             {
                 caption: "npm install",
-                change: sys => sys.renameFolder(`${ts.tscWatch.projectRoot}/node_modules2`, `${ts.tscWatch.projectRoot}/node_modules`),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                change: sys => sys.renameFolder(`/user/username/projects/myproject/node_modules2`, `/user/username/projects/myproject/node_modules`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
 
     describe("ignores files/folder changes in node_modules that start with '.'", () => {
         function verifyIgnore(subScenario: string, commandLineArgs: readonly string[]) {
-            ts.tscWatch.verifyTscWatch({
+            verifyTscWatch({
                 scenario,
                 subScenario: `ignores changes in node_modules that start with dot/${subScenario}`,
                 commandLineArgs,
                 sys: () => {
-                    const file1: ts.tscWatch.File = {
-                        path: `${ts.tscWatch.projectRoot}/test.ts`,
+                    const file1: File = {
+                        path: `/user/username/projects/myproject/test.ts`,
                         content: `import { x } from "somemodule";`
                     };
-                    const file2: ts.tscWatch.File = {
-                        path: `${ts.tscWatch.projectRoot}/node_modules/somemodule/index.d.ts`,
+                    const file2: File = {
+                        path: `/user/username/projects/myproject/node_modules/somemodule/index.d.ts`,
                         content: `export const x = 10;`
                     };
-                    const config: ts.tscWatch.File = {
-                        path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+                    const config: File = {
+                        path: `/user/username/projects/myproject/tsconfig.json`,
                         content: "{}"
                     };
-                    return ts.tscWatch.createWatchedSystem([ts.tscWatch.libFile, file1, file2, config]);
+                    return createWatchedSystem([libFile, file1, file2, config]);
                 },
                 changes: [
                     {
                         caption: "npm install file and folder that start with '.'",
                         change: sys => sys.ensureFileOrFolder({
-                            path: `${ts.tscWatch.projectRoot}/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
+                            path: `/user/username/projects/myproject/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
                             content: JSON.stringify({ something: 10 })
                         }),
                         timeouts: sys => sys.checkTimeoutQueueLength(0),
@@ -384,21 +386,21 @@ declare module "fs" {
                 ]
             });
         }
-        verifyIgnore("watch without configFile", ["--w", `${ts.tscWatch.projectRoot}/test.ts`]);
-        verifyIgnore("watch with configFile", ["--w", "-p", `${ts.tscWatch.projectRoot}/tsconfig.json`]);
+        verifyIgnore("watch without configFile", ["--w", `/user/username/projects/myproject/test.ts`]);
+        verifyIgnore("watch with configFile", ["--w", "-p", `/user/username/projects/myproject/tsconfig.json`]);
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "when types in compiler option are global and installed at later point",
-        commandLineArgs: ["--w", "-p", `${ts.tscWatch.projectRoot}/tsconfig.json`],
+        commandLineArgs: ["--w", "-p", `/user/username/projects/myproject/tsconfig.json`],
         sys: () => {
-            const app: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/lib/app.ts`,
+            const app: File = {
+                path: `/user/username/projects/myproject/lib/app.ts`,
                 content: `myapp.component("hello");`
             };
-            const tsconfig: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+            const tsconfig: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         module: "none",
@@ -406,21 +408,21 @@ declare module "fs" {
                     }
                 })
             };
-            return ts.tscWatch.createWatchedSystem([app, tsconfig, ts.tscWatch.libFile]);
+            return createWatchedSystem([app, tsconfig, libFile]);
         },
         changes: [
             {
                 caption: "npm install ts-types",
                 change: sys => {
                     sys.ensureFileOrFolder({
-                        path: `${ts.tscWatch.projectRoot}/node_modules/@myapp/ts-types/package.json`,
+                        path: `/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json`,
                         content: JSON.stringify({
                             version: "1.65.1",
                             types: "types/somefile.define.d.ts"
                         })
                     });
                     sys.ensureFileOrFolder({
-                        path: `${ts.tscWatch.projectRoot}/node_modules/@myapp/ts-types/types/somefile.define.d.ts`,
+                        path: `/user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts`,
                         content: `
 declare namespace myapp {
     function component(str: string): number;
@@ -445,63 +447,63 @@ declare namespace myapp {
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "with modules linked to sibling folder",
         commandLineArgs: ["-w"],
         sys: () => {
-            const mainPackageRoot = `${ts.tscWatch.projectRoot}/main`;
-            const linkedPackageRoot = `${ts.tscWatch.projectRoot}/linked-package`;
-            const mainFile: ts.tscWatch.File = {
+            const mainPackageRoot = `/user/username/projects/myproject/main`;
+            const linkedPackageRoot = `/user/username/projects/myproject/linked-package`;
+            const mainFile: File = {
                 path: `${mainPackageRoot}/index.ts`,
                 content: "import { Foo } from '@scoped/linked-package'"
             };
-            const config: ts.tscWatch.File = {
+            const config: File = {
                 path: `${mainPackageRoot}/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { module: "commonjs", moduleResolution: "node", baseUrl: ".", rootDir: "." },
                     files: ["index.ts"]
                 })
             };
-            const linkedPackageInMain: ts.tscWatch.SymLink = {
+            const linkedPackageInMain: SymLink = {
                 path: `${mainPackageRoot}/node_modules/@scoped/linked-package`,
                 symLink: `${linkedPackageRoot}`
             };
-            const linkedPackageJson: ts.tscWatch.File = {
+            const linkedPackageJson: File = {
                 path: `${linkedPackageRoot}/package.json`,
                 content: JSON.stringify({ name: "@scoped/linked-package", version: "0.0.1", types: "dist/index.d.ts", main: "dist/index.js" })
             };
-            const linkedPackageIndex: ts.tscWatch.File = {
+            const linkedPackageIndex: File = {
                 path: `${linkedPackageRoot}/dist/index.d.ts`,
                 content: "export * from './other';"
             };
-            const linkedPackageOther: ts.tscWatch.File = {
+            const linkedPackageOther: File = {
                 path: `${linkedPackageRoot}/dist/other.d.ts`,
                 content: 'export declare const Foo = "BAR";'
             };
-            const files = [ts.tscWatch.libFile, mainFile, config, linkedPackageInMain, linkedPackageJson, linkedPackageIndex, linkedPackageOther];
-            return ts.tscWatch.createWatchedSystem(files, { currentDirectory: mainPackageRoot });
+            const files = [libFile, mainFile, config, linkedPackageInMain, linkedPackageJson, linkedPackageIndex, linkedPackageOther];
+            return createWatchedSystem(files, { currentDirectory: mainPackageRoot });
         },
         changes: ts.emptyArray
     });
 
     describe("works when installing something in node_modules or @types when there is no notification from fs for index file", () => {
         function getNodeAtTypes() {
-            const nodeAtTypesIndex: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/node_modules/@types/node/index.d.ts`,
+            const nodeAtTypesIndex: File = {
+                path: `/user/username/projects/myproject/node_modules/@types/node/index.d.ts`,
                 content: `/// <reference path="base.d.ts" />`
             };
-            const nodeAtTypesBase: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/node_modules/@types/node/base.d.ts`,
+            const nodeAtTypesBase: File = {
+                path: `/user/username/projects/myproject/node_modules/@types/node/base.d.ts`,
                 content: `// Base definitions for all NodeJS modules that are not specific to any version of TypeScript:
 /// <reference path="ts3.6/base.d.ts" />`
             };
-            const nodeAtTypes36Base: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/node_modules/@types/node/ts3.6/base.d.ts`,
+            const nodeAtTypes36Base: File = {
+                path: `/user/username/projects/myproject/node_modules/@types/node/ts3.6/base.d.ts`,
                 content: `/// <reference path="../globals.d.ts" />`
             };
-            const nodeAtTypesGlobals: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/node_modules/@types/node/globals.d.ts`,
+            const nodeAtTypesGlobals: File = {
+                path: `/user/username/projects/myproject/node_modules/@types/node/globals.d.ts`,
                 content: `declare var process: NodeJS.Process;
 declare namespace NodeJS {
     interface Process {
@@ -511,40 +513,40 @@ declare namespace NodeJS {
             };
             return { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals };
         }
-        ts.tscWatch.verifyTscWatch({
+        verifyTscWatch({
             scenario,
             subScenario: "works when installing something in node_modules or @types when there is no notification from fs for index file",
             commandLineArgs: ["--w", `--extendedDiagnostics`],
             sys: () => {
-                const file: ts.tscWatch.File = {
-                    path: `${ts.tscWatch.projectRoot}/worker.ts`,
+                const file: File = {
+                    path: `/user/username/projects/myproject/worker.ts`,
                     content: `process.on("uncaughtException");`
                 };
-                const tsconfig: ts.tscWatch.File = {
-                    path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+                const tsconfig: File = {
+                    path: `/user/username/projects/myproject/tsconfig.json`,
                     content: "{}"
                 };
                 const { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals } = getNodeAtTypes();
-                return ts.tscWatch.createWatchedSystem([file, ts.tscWatch.libFile, tsconfig, nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals], { currentDirectory: ts.tscWatch.projectRoot });
+                return createWatchedSystem([file, libFile, tsconfig, nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals], { currentDirectory: "/user/username/projects/myproject" });
             },
             changes: [
                 {
                     caption: "npm ci step one: remove all node_modules files",
-                    change: sys => sys.deleteFolder(`${ts.tscWatch.projectRoot}/node_modules/@types`, /*recursive*/ true),
-                    timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                    change: sys => sys.deleteFolder(`/user/username/projects/myproject/node_modules/@types`, /*recursive*/ true),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: `npm ci step two: create atTypes but something else in the @types folder`,
                     change: sys => sys.ensureFileOrFolder({
-                        path: `${ts.tscWatch.projectRoot}/node_modules/@types/mocha/index.d.ts`,
+                        path: `/user/username/projects/myproject/node_modules/@types/mocha/index.d.ts`,
                         content: `export const foo = 10;`
                     }),
-                    timeouts: ts.tscWatch.runQueuedTimeoutCallbacks
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks()
                 },
                 {
                     caption: `npm ci step three: create atTypes node folder`,
-                    change: sys => sys.ensureFileOrFolder({ path: `${ts.tscWatch.projectRoot}/node_modules/@types/node` }),
-                    timeouts: ts.tscWatch.runQueuedTimeoutCallbacks
+                    change: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/node_modules/@types/node` }),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks()
                 },
                 {
                     caption: `npm ci step four: create atTypes write all the files but dont invoke watcher for index.d.ts`,

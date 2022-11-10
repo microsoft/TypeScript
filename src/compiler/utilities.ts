@@ -19,7 +19,7 @@ import {
     directorySeparator, DoStatement, DynamicNamedBinaryExpression, DynamicNamedDeclaration, ElementAccessExpression,
     EmitFlags, EmitHost, EmitResolver, EmitTextWriter, emptyArray, ensurePathIsNonModuleName,
     ensureTrailingDirectorySeparator, EntityName, EntityNameExpression, EntityNameOrEntityNameExpression,
-    EnumDeclaration, EqualityComparer, equalOwnProperties, EqualsToken, equateValues, escapeLeadingUnderscores, ESMap,
+    EnumDeclaration, EqualityComparer, equalOwnProperties, EqualsToken, equateValues, escapeLeadingUnderscores,
     every, ExportAssignment, ExportDeclaration, ExportSpecifier, Expression, ExpressionStatement,
     ExpressionWithTypeArguments, Extension, ExternalModuleReference, factory, FileExtensionInfo, fileExtensionIs,
     fileExtensionIsOneOf, FileReference, FileWatcher, filter, find, findAncestor, findBestPatternMatch, findIndex,
@@ -63,7 +63,7 @@ import {
     JSDocTemplateTag, JSDocTypedefTag, JsonSourceFile, JsxChild, JsxElement, JsxEmit, JsxFragment, JsxOpeningElement,
     JsxOpeningLikeElement, JsxSelfClosingElement, JsxTagNameExpression, KeywordSyntaxKind, LabeledStatement,
     LanguageVariant, last, lastOrUndefined, LateVisibilityPaintedStatement, length, LiteralImportTypeNode,
-    LiteralLikeElementAccessExpression, LiteralLikeNode, LogicalOrCoalescingAssignmentOperator, map, Map, mapDefined,
+    LiteralLikeElementAccessExpression, LiteralLikeNode, LogicalOrCoalescingAssignmentOperator, map, mapDefined,
     MapLike, MemberName, MethodDeclaration, ModeAwareCache, ModifierFlags, ModifierLike, ModuleBlock, ModuleDeclaration,
     ModuleDetectionKind, ModuleKind, ModuleResolutionKind, moduleResolutionOptionDeclarations, MultiMap,
     NamedDeclaration, NamedExports, NamedImports, NamedImportsOrExports, NamespaceExport, NamespaceImport,
@@ -74,7 +74,7 @@ import {
     parseConfigFileTextToJson, PartiallyEmittedExpression, Path, pathIsRelative, Pattern, PostfixUnaryExpression,
     PrefixUnaryExpression, PrinterOptions, PrintHandlers, PrivateIdentifier, ProjectReference, PrologueDirective,
     PropertyAccessEntityNameExpression, PropertyAccessExpression, PropertyAssignment, PropertyDeclaration, PropertyName,
-    PropertyNameLiteral, PseudoBigInt, QualifiedName, ReadonlyCollection, ReadonlyESMap, ReadonlyTextRange,
+    PropertyNameLiteral, PseudoBigInt, QualifiedName, ReadonlyCollection, ReadonlyTextRange,
     removeTrailingDirectorySeparator, RequireOrImportCall, RequireVariableStatement, ResolvedModuleFull,
     ResolvedTypeReferenceDirective, ReturnStatement, SatisfiesExpression, ScriptKind, ScriptTarget,
     semanticDiagnosticsOptionDeclarations, SetAccessorDeclaration, ShorthandPropertyAssignment, Signature,
@@ -219,7 +219,7 @@ export function forEachAncestor<T>(node: Node, callback: (n: Node) => T | undefi
  *
  * @internal
  */
-export function forEachEntry<K, V, U>(map: ReadonlyESMap<K, V>, callback: (value: V, key: K) => U | undefined): U | undefined {
+export function forEachEntry<K, V, U>(map: ReadonlyMap<K, V>, callback: (value: V, key: K) => U | undefined): U | undefined {
     const iterator = map.entries();
     for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
         const [key, value] = iterResult.value;
@@ -252,7 +252,7 @@ export function forEachKey<K, T>(map: ReadonlyCollection<K>, callback: (key: K) 
  *
  * @internal
  */
-export function copyEntries<K, V>(source: ReadonlyESMap<K, V>, target: ESMap<K, V>): void {
+export function copyEntries<K, V>(source: ReadonlyMap<K, V>, target: Map<K, V>): void {
     source.forEach((value, key) => {
         target.set(key, value);
     });
@@ -6355,7 +6355,7 @@ export function compareDataObjects(dst: any, src: any): boolean {
  *
  * @internal
  */
-export function clearMap<K, T>(map: { forEach: ESMap<K, T>["forEach"]; clear: ESMap<K, T>["clear"]; }, onDeleteValue: (valueInMap: T, key: K) => void) {
+export function clearMap<K, T>(map: { forEach: Map<K, T>["forEach"]; clear: Map<K, T>["clear"]; }, onDeleteValue: (valueInMap: T, key: K) => void) {
     // Remove all
     map.forEach(onDeleteValue);
     map.clear();
@@ -6380,8 +6380,8 @@ export interface MutateMapSkippingNewValuesOptions<K, T, U> {
  * @internal
  */
 export function mutateMapSkippingNewValues<K, T, U>(
-    map: ESMap<K, T>,
-    newMap: ReadonlyESMap<K, U>,
+    map: Map<K, T>,
+    newMap: ReadonlyMap<K, U>,
     options: MutateMapSkippingNewValuesOptions<K, T, U>
 ) {
     const { onDeleteValue, onExistingValue } = options;
@@ -6410,7 +6410,7 @@ export interface MutateMapOptions<K, T, U> extends MutateMapSkippingNewValuesOpt
  *
  * @internal
  */
-export function mutateMap<K, T, U>(map: ESMap<K, T>, newMap: ReadonlyESMap<K, U>, options: MutateMapOptions<K, T, U>) {
+export function mutateMap<K, T, U>(map: Map<K, T>, newMap: ReadonlyMap<K, U>, options: MutateMapOptions<K, T, U>) {
     // Needs update
     mutateMapSkippingNewValues(map, newMap, options);
 
@@ -6487,11 +6487,11 @@ export function getLastChild(node: Node): Node | undefined {
  *
  * @internal
  */
-export function addToSeen<K>(seen: ESMap<K, true>, key: K): boolean;
+export function addToSeen<K>(seen: Map<K, true>, key: K): boolean;
 /** @internal */
-export function addToSeen<K, T>(seen: ESMap<K, T>, key: K, value: T): boolean;
+export function addToSeen<K, T>(seen: Map<K, T>, key: K, value: T): boolean;
 /** @internal */
-export function addToSeen<K, T>(seen: ESMap<K, T>, key: K, value: T = true as any): boolean {
+export function addToSeen<K, T>(seen: Map<K, T>, key: K, value: T = true as any): boolean {
     if (seen.has(key)) {
         return false;
     }
@@ -7286,11 +7286,11 @@ export interface SymlinkedDirectory {
 /** @internal */
 export interface SymlinkCache {
     /** Gets a map from symlink to realpath. Keys have trailing directory separators. */
-    getSymlinkedDirectories(): ReadonlyESMap<Path, SymlinkedDirectory | false> | undefined;
+    getSymlinkedDirectories(): ReadonlyMap<Path, SymlinkedDirectory | false> | undefined;
     /** Gets a map from realpath to symlinks. Keys have trailing directory separators. */
     getSymlinkedDirectoriesByRealpath(): MultiMap<Path, string> | undefined;
     /** Gets a map from symlink to realpath */
-    getSymlinkedFiles(): ReadonlyESMap<Path, string> | undefined;
+    getSymlinkedFiles(): ReadonlyMap<Path, string> | undefined;
     setSymlinkedDirectory(symlink: string, real: SymlinkedDirectory | false): void;
     setSymlinkedFile(symlinkPath: Path, real: string): void;
     /**
@@ -7309,9 +7309,9 @@ export interface SymlinkCache {
 
 /** @internal */
 export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonicalFileName): SymlinkCache {
-    let symlinkedDirectories: ESMap<Path, SymlinkedDirectory | false> | undefined;
+    let symlinkedDirectories: Map<Path, SymlinkedDirectory | false> | undefined;
     let symlinkedDirectoriesByRealpath: MultiMap<Path, string> | undefined;
-    let symlinkedFiles: ESMap<Path, string> | undefined;
+    let symlinkedFiles: Map<Path, string> | undefined;
     let hasProcessedResolutions = false;
     return {
         getSymlinkedFiles: () => symlinkedFiles,
