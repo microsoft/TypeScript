@@ -389,7 +389,7 @@ export const dtsServices = task({
     description: "Bundles typescript.d.ts",
     dependencies: [buildServices],
     run: async () => {
-        if (needsUpdate("./built/local/typescript/tsconfig.tsbuildinfo", ["./built/local/typescript.d.ts", "./built/local/typescript.internal.d.ts"])) {
+        if (needsUpdate(["./built/local/typescript/tsconfig.tsbuildinfo", "./scripts/dtsBundler.mjs"], ["./built/local/typescript.d.ts", "./built/local/typescript.internal.d.ts"])) {
             await runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/typescript.d.ts");
         }
     },
@@ -452,7 +452,7 @@ export const dtsLssl = task({
     description: "Bundles tsserverlibrary.d.ts",
     dependencies: [buildLssl],
     run: async () => {
-        if (needsUpdate("./built/local/tsserverlibrary/tsconfig.tsbuildinfo", ["./built/local/tsserverlibrary.d.ts", "./built/local/tsserverlibrary.internal.d.ts"])) {
+        if (needsUpdate(["./built/local/tsserverlibrary/tsconfig.tsbuildinfo", "./scripts/dtsBundler.mjs"], ["./built/local/tsserverlibrary.d.ts", "./built/local/tsserverlibrary.internal.d.ts"])) {
             await runDtsBundler("./built/local/tsserverlibrary/tsserverlibrary.d.ts", "./built/local/tsserverlibrary.d.ts");
         }
     }
