@@ -581,12 +581,13 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             resolvedModules.push(getResolutionWithResolvedFileName(resolution));
         }
 
-        if (containingSourceFile && resolutionInfo) {
+        // If resolving type reference directive we dont need containingSourceFile to determine if we can use resolutionInfo
+        if (resolutionInfo && (loader === resolveTypeReferenceDirective as unknown || containingSourceFile)) {
             resolutionInfo.reusedNames?.forEach(entry => seenNamesInFile.set(
                 getResolutionName(entry),
                 !isString(entry) && isStringLiteralLike(entry) ?
-                    getModeForUsageLocation(containingSourceFile, entry) :
-                    getModeForFileReference(entry, containingSourceFile.impliedNodeFormat),
+                    getModeForUsageLocation(containingSourceFile!, entry) :
+                    getModeForFileReference(entry, containingSourceFileMode),
                 true,
             ));
             reusedNames = undefined;

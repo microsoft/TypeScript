@@ -565,14 +565,7 @@ CreatingProgramWith::
   options: {"composite":true,"traceResolution":true,"outDir":"/src/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/src/project/tsconfig.json"}
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg1' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg1/index.d.ts'.
-======== Resolving type reference directive 'pkg2', containing file '/src/project/fileWithTypeRefs.ts', root directory not set. ========
-Root directory cannot be determined, skipping primary search paths.
-Looking up in 'node_modules' folder, initial location '/src/project'.
-File '/src/project/node_modules/pkg2/package.json' does not exist according to earlier cached lookups.
-File '/src/project/node_modules/pkg2.d.ts' does not exist.
-File '/src/project/node_modules/pkg2/index.d.ts' exist - use it as a name resolution result.
-Resolving real path for '/src/project/node_modules/pkg2/index.d.ts', result '/src/project/node_modules/pkg2/index.d.ts'.
-======== Type reference directive 'pkg2' was successfully resolved to '/src/project/node_modules/pkg2/index.d.ts', primary: false. ========
+Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWithTypeRefs.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg2/index.d.ts'.
 ======== Resolving type reference directive 'pkg3', containing file '/src/project/fileWithTypeRefs.ts', root directory not set. ========
 Root directory cannot be determined, skipping primary search paths.
 Looking up in 'node_modules' folder, initial location '/src/project'.
