@@ -90,7 +90,7 @@ import {
     TypePredicate, TypePredicateKind, TypeReferenceNode, unescapeLeadingUnderscores, UnionOrIntersectionTypeNode,
     ValidImportTypeNode, VariableDeclaration, VariableDeclarationInitializedTo, VariableDeclarationList,
     VariableLikeDeclaration, VariableStatement, version, WhileStatement, WithStatement, WriteFileCallback,
-    WriteFileCallbackData, YieldExpression,
+    WriteFileCallbackData, YieldExpression, ResolutionMode,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -277,12 +277,12 @@ export function getFullWidth(node: Node) {
 }
 
 /** @internal */
-export function getResolvedModule(sourceFile: SourceFile | undefined, moduleNameText: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): ResolvedModuleFull | undefined {
+export function getResolvedModule(sourceFile: SourceFile | undefined, moduleNameText: string, mode: ResolutionMode): ResolvedModuleFull | undefined {
     return sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText, mode);
 }
 
 /** @internal */
-export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull | undefined, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): void {
+export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull | undefined, mode: ResolutionMode): void {
     if (!sourceFile.resolvedModules) {
         sourceFile.resolvedModules = createModeAwareCache();
     }
@@ -291,7 +291,7 @@ export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string
 }
 
 /** @internal */
-export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): void {
+export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined, mode: ResolutionMode): void {
     if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
         sourceFile.resolvedTypeReferenceDirectiveNames = createModeAwareCache();
     }
@@ -300,7 +300,7 @@ export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeRe
 }
 
 /** @internal */
-export function getResolvedTypeReferenceDirective(sourceFile: SourceFile | undefined, typeReferenceDirectiveName: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): ResolvedTypeReferenceDirective | undefined {
+export function getResolvedTypeReferenceDirective(sourceFile: SourceFile | undefined, typeReferenceDirectiveName: string, mode: ResolutionMode): ResolvedTypeReferenceDirective | undefined {
     return sourceFile?.resolvedTypeReferenceDirectiveNames?.get(typeReferenceDirectiveName, mode);
 }
 
