@@ -2410,15 +2410,35 @@ function loadModuleFromNearestNodeModulesDirectoryTypesScope(moduleName: string,
 
 function loadModuleFromNearestNodeModulesDirectoryWorker(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, typesScopeOnly: boolean, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): SearchResult<Resolved> {
     const perModuleNameCache = cache && cache.getOrCreateCacheForModuleName(moduleName, state.features === 0 ? undefined : state.features & NodeResolutionFeatures.EsmMode ? ModuleKind.ESNext : ModuleKind.CommonJS, redirectedReference);
-    return forEachAncestorDirectory(normalizeSlashes(directory), ancestorDirectory => {
-        if (getBaseFileName(ancestorDirectory) !== "node_modules") {
-            const resolutionFromCache = tryFindNonRelativeModuleNameInCache(perModuleNameCache, moduleName, ancestorDirectory, state);
-            if (resolutionFromCache) {
-                return resolutionFromCache;
+    // Do (up to) two passes through node_modules:
+    //   1. For each ancestor node_modules directory, try to find:
+    //      i.  TS/DTS files in the implementation package
+    //      ii. DTS files in the @types package
+    //   2. For each ancestor node_modules directory, try to find:
+    //      i.  JS files in the implementation package
+    const priorityExtensions = extensions & (Extensions.TypeScript | Extensions.Declaration);
+    const secondaryExtensions = extensions & ~(Extensions.TypeScript | Extensions.Declaration);
+    // (1)
+    if (priorityExtensions) {
+        const result = lookup(priorityExtensions);
+        if (result) return result;
+    }
+    // (2)
+    if (secondaryExtensions && !typesScopeOnly) {
+        return lookup(secondaryExtensions);
+    }
+
+    function lookup(extensions: Extensions) {
+        return forEachAncestorDirectory(normalizeSlashes(directory), ancestorDirectory => {
+            if (getBaseFileName(ancestorDirectory) !== "node_modules") {
+                const resolutionFromCache = tryFindNonRelativeModuleNameInCache(perModuleNameCache, moduleName, ancestorDirectory, state);
+                if (resolutionFromCache) {
+                    return resolutionFromCache;
+                }
+                return toSearchResult(loadModuleFromImmediateNodeModulesDirectory(extensions, moduleName, ancestorDirectory, state, typesScopeOnly, cache, redirectedReference));
             }
-            return toSearchResult(loadModuleFromImmediateNodeModulesDirectory(extensions, moduleName, ancestorDirectory, state, typesScopeOnly, cache, redirectedReference));
-        }
-    });
+        });
+    }
 }
 
 function loadModuleFromImmediateNodeModulesDirectory(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, typesScopeOnly: boolean, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): Resolved | undefined {
@@ -2428,22 +2448,13 @@ function loadModuleFromImmediateNodeModulesDirectory(extensions: Extensions, mod
         trace(state.host, Diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, nodeModulesFolder);
     }
 
-    // Search with the following priority:
-    //   1. TS/DTS files in the implementation package
-    //   2. DTS files in the @types package
-    //   3. JS files in the implementation package
-    const priorityExtensions = extensions & (Extensions.TypeScript | Extensions.Declaration);
-    const secondaryExtensions = extensions & ~(Extensions.TypeScript | Extensions.Declaration);
-
-    // (1)
-    if (!typesScopeOnly && priorityExtensions) {
-        const tsInImplementationPackageResult = loadModuleFromSpecificNodeModulesDirectory(priorityExtensions, moduleName, nodeModulesFolder, nodeModulesFolderExists, state, cache, redirectedReference);
-        if (tsInImplementationPackageResult) {
-            return tsInImplementationPackageResult;
+    if (!typesScopeOnly) {
+        const packageResult = loadModuleFromSpecificNodeModulesDirectory(extensions, moduleName, nodeModulesFolder, nodeModulesFolderExists, state, cache, redirectedReference);
+        if (packageResult) {
+            return packageResult;
         }
     }
 
-    // (2)
     if (extensions & Extensions.Declaration) {
         const nodeModulesAtTypes = combinePaths(nodeModulesFolder, "@types");
         let nodeModulesAtTypesExists = nodeModulesFolderExists;
@@ -2453,15 +2464,7 @@ function loadModuleFromImmediateNodeModulesDirectory(extensions: Extensions, mod
             }
             nodeModulesAtTypesExists = false;
         }
-        const dtsInTypesPackageResult = loadModuleFromSpecificNodeModulesDirectory(Extensions.Declaration, mangleScopedPackageNameWithTrace(moduleName, state), nodeModulesAtTypes, nodeModulesAtTypesExists, state, cache, redirectedReference);
-        if (dtsInTypesPackageResult) {
-            return dtsInTypesPackageResult;
-        }
-    }
-
-    // (3)
-    if (secondaryExtensions) {
-        return loadModuleFromSpecificNodeModulesDirectory(secondaryExtensions, moduleName, nodeModulesFolder, nodeModulesFolderExists, state, cache, redirectedReference);
+        return loadModuleFromSpecificNodeModulesDirectory(Extensions.Declaration, mangleScopedPackageNameWithTrace(moduleName, state), nodeModulesAtTypes, nodeModulesAtTypesExists, state, cache, redirectedReference);
     }
 }
 
