@@ -1425,7 +1425,18 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
         trace(host, Diagnostics.Resolving_in_0_mode_with_conditions_1, features & NodeResolutionFeatures.EsmMode ? "ESM" : "CJS", conditions.map(c => `'${c}'`).join(", "));
     }
 
-    const result = tryResolve(extensions);
+    let result;
+    if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs) {
+        const priorityExtensions = extensions & (Extensions.TypeScript | Extensions.Declaration);
+        const secondaryExtensions = extensions & ~(Extensions.TypeScript | Extensions.Declaration);
+        result =
+            priorityExtensions && tryResolve(priorityExtensions) ||
+            secondaryExtensions && tryResolve(secondaryExtensions) ||
+            undefined;
+    }
+    else {
+        result = tryResolve(extensions);
+    }
 
     return createResolvedModuleWithFailedLookupLocations(
         result?.value?.resolved,
