@@ -18442,7 +18442,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         target: Signature,
         ignoreReturnTypes: boolean): boolean {
         return compareSignaturesRelated(source, target, ignoreReturnTypes ? SignatureCheckMode.IgnoreReturnTypes : 0, /*reportErrors*/ false,
-            /*errorReporter*/ undefined, /*incompatibleErrorReporter*/ undefined, /*signatureKindForErrors*/ undefined, compareTypesAssignable, /*reportUnreliableMarkers*/ undefined) !== Ternary.False;
+            /*errorReporter*/ undefined, /*errorReporter*/ undefined, compareTypesAssignable, /*reportUnreliableMarkers*/ undefined) !== Ternary.False;
     }
 
     type ErrorReporter = (message: DiagnosticMessage, arg0?: string, arg1?: string) => void;
@@ -18465,7 +18465,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         reportErrors: boolean,
         errorReporter: ErrorReporter | undefined,
         incompatibleErrorReporter: ((source: Type, target: Type) => void) | undefined,
-        signatureKindForErrors: SignatureKind | undefined,
         compareTypes: TypeComparer,
         reportUnreliableMarkers: TypeMapper | undefined): Ternary {
         // TODO (drosen): De-duplicate code between related functions.
@@ -18482,8 +18481,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (checkMode & SignatureCheckMode.StrictArity ? hasEffectiveRestParameter(source) || getParameterCount(source) > targetCount : getMinArgumentCount(source) > targetCount);
         if (sourceHasMoreParameters) {
             if (reportErrors) {
-                const diagnostic = signatureKindForErrors! === SignatureKind.Call ? Diagnostics.Call_signature_0_expects_more_arguments_than_call_signature_1 : Diagnostics.Construct_signature_0_expects_more_arguments_than_construct_signature_1;
-                errorReporter!(diagnostic, signatureToString(source), signatureToString(target));
+                errorReporter!(Diagnostics.Call_signature_0_expects_more_arguments_than_call_signature_1, signatureToString(source), signatureToString(target));
             }
             return Ternary.False;
         }
@@ -18542,7 +18540,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const callbacks = sourceSig && targetSig && !getTypePredicateOfSignature(sourceSig) && !getTypePredicateOfSignature(targetSig) &&
                     (getTypeFacts(sourceType) & TypeFacts.IsUndefinedOrNull) === (getTypeFacts(targetType) & TypeFacts.IsUndefinedOrNull);
                 let related = callbacks ?
-                    compareSignaturesRelated(targetSig, sourceSig, (checkMode & SignatureCheckMode.StrictArity) | (strictVariance ? SignatureCheckMode.StrictCallback : SignatureCheckMode.BivariantCallback), reportErrors, errorReporter, incompatibleErrorReporter, signatureKindForErrors, compareTypes, reportUnreliableMarkers) :
+                    compareSignaturesRelated(targetSig, sourceSig, (checkMode & SignatureCheckMode.StrictArity) | (strictVariance ? SignatureCheckMode.StrictCallback : SignatureCheckMode.BivariantCallback), reportErrors, errorReporter, incompatibleErrorReporter, compareTypes, reportUnreliableMarkers) :
                     !(checkMode & SignatureCheckMode.Callback) && !strictVariance && compareTypes(sourceType, targetType, /*reportErrors*/ false) || compareTypes(targetType, sourceType, reportErrors);
                 // With strict arity, (x: number | undefined) => void is a subtype of (x?: number | undefined) => void
                 if (related && checkMode & SignatureCheckMode.StrictArity && i >= getMinArgumentCount(source) && i < getMinArgumentCount(target) && compareTypes(sourceType, targetType, /*reportErrors*/ false)) {
@@ -20916,7 +20914,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // of the much more expensive N * M comparison matrix we explore below. We erase type parameters
                 // as they are known to always be the same.
                 for (let i = 0; i < targetSignatures.length; i++) {
-                    const related = signatureRelatedTo(sourceSignatures[i], targetSignatures[i], /*erase*/ true, reportErrors, incompatibleReporter(sourceSignatures[i], targetSignatures[i]), kind);
+                    const related = signatureRelatedTo(sourceSignatures[i], targetSignatures[i], /*erase*/ true, reportErrors, incompatibleReporter(sourceSignatures[i], targetSignatures[i]));
                     if (!related) {
                         return Ternary.False;
                     }
@@ -20932,7 +20930,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const eraseGenerics = relation === comparableRelation || !!compilerOptions.noStrictGenericChecks;
                 const sourceSignature = first(sourceSignatures);
                 const targetSignature = first(targetSignatures);
-                result = signatureRelatedTo(sourceSignature, targetSignature, eraseGenerics, reportErrors, incompatibleReporter(sourceSignature, targetSignature), kind);
+                result = signatureRelatedTo(sourceSignature, targetSignature, eraseGenerics, reportErrors, incompatibleReporter(sourceSignature, targetSignature));
                 if (!result && reportErrors && kind === SignatureKind.Construct && (sourceObjectFlags & targetObjectFlags) &&
                     (targetSignature.declaration?.kind === SyntaxKind.Constructor || sourceSignature.declaration?.kind === SyntaxKind.Constructor)) {
                     const constructSignatureToString = (signature: Signature) =>
@@ -20948,7 +20946,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Only elaborate errors from the first failure
                     let shouldElaborateErrors = reportErrors;
                     for (const s of sourceSignatures) {
-                        const related = signatureRelatedTo(s, t, /*erase*/ true, shouldElaborateErrors, incompatibleReporter(s, t), kind);
+                        const related = signatureRelatedTo(s, t, /*erase*/ true, shouldElaborateErrors, incompatibleReporter(s, t));
                         if (related) {
                             result &= related;
                             resetErrorInfo(saveErrorInfo);
@@ -20998,9 +20996,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         /**
          * See signatureAssignableTo, compareSignaturesIdentical
          */
-        function signatureRelatedTo(source: Signature, target: Signature, erase: boolean, reportErrors: boolean, incompatibleReporter: (source: Type, target: Type) => void, signatureKind: SignatureKind): Ternary {
+        function signatureRelatedTo(source: Signature, target: Signature, erase: boolean, reportErrors: boolean, incompatibleReporter: (source: Type, target: Type) => void): Ternary {
             return compareSignaturesRelated(erase ? getErasedSignature(source) : source, erase ? getErasedSignature(target) : target,
-                relation === strictSubtypeRelation ? SignatureCheckMode.StrictArity : 0, reportErrors, reportError, incompatibleReporter, signatureKind, isRelatedToWorker, reportUnreliableMapper);
+                relation === strictSubtypeRelation ? SignatureCheckMode.StrictArity : 0, reportErrors, reportError, incompatibleReporter, isRelatedToWorker, reportUnreliableMapper);
         }
 
         function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind): Ternary {
