@@ -23,7 +23,7 @@
 ////     E = 1 << 1,
 ////     F = 1 << 2,
 //// }
-//// // Computed enum; not supported (TODO: review this after new enum merge)
+////
 //// declare const f: F;
 //// switch (f) {
 ////     case/*3*/
@@ -69,7 +69,17 @@ case E.C:`,
     {
         marker: "3",
         isNewIdentifierLocation: false,
-        exact: ["e", "E", "f", { name: "F", isRecommended: true }, "u", ...completion.globals],
+        includes: [
+            {
+                name: "case F.D: ...",
+                source: completion.CompletionSource.SwitchCases,
+                sortText: completion.SortText.GlobalsOrKeywords,
+                insertText:
+`case F.D:
+case F.E:
+case F.F:`,
+            },
+        ],
         preferences: {
             includeCompletionsWithInsertText: true,
         },

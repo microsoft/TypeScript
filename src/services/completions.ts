@@ -682,7 +682,6 @@ function getExhaustiveCaseSnippets(
     const clauses = caseBlock.clauses;
     const checker = program.getTypeChecker();
     const switchType = checker.getTypeAtLocation(caseBlock.parent.expression);
-    // >> TODO: handle unit type case?
     if (switchType && switchType.isUnion() && every(switchType.types, type => type.isLiteral())) {
         // Collect constant values in existing clauses.
         const tracker = newCaseClauseTracker(checker);
@@ -698,8 +697,8 @@ function getExhaustiveCaseSnippets(
         for (const type of switchType.types as LiteralType[]) {
             // Enums
             if (type.flags & TypeFlags.EnumLiteral) {
-                Debug.assert(type.symbol, "TODO: should this hold always?");
-                Debug.assert(type.symbol.parent, "TODO: should this hold always too?");
+                Debug.assert(type.symbol, "An enum member type should have a symbol");
+                Debug.assert(type.symbol.parent, "An enum member type should have a parent symbol (the enum symbol)");
                 // Filter existing enums by their values
                 const enumValue = type.symbol.valueDeclaration && checker.getConstantValue(type.symbol.valueDeclaration as EnumMember);
                 if (enumValue !== undefined) {
@@ -760,8 +759,8 @@ function getExhaustiveCaseSnippets(
         const firstClause = printer.printSnippetList(ListFormat.SingleLine, factory.createNodeArray([first(newClauses)!]), sourceFile);
         return {
             entry: {
-                name: `${firstClause} ...`, // >> TODO: what should this be?
-                kind: ScriptElementKind.unknown, // >> TODO: what should this be?
+                name: `${firstClause} ...`,
+                kind: ScriptElementKind.unknown,
                 sortText: SortText.GlobalsOrKeywords,
                 insertText,
                 hasAction: importAdder.hasFixes() || undefined,
