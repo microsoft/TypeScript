@@ -847,8 +847,6 @@ function typeNodeToExpression(typeNode: TypeNode, languageVersion: ScriptTarget)
         case SyntaxKind.TypeReference:
             const typeName = (typeNode as TypeReferenceNode).typeName;
             return entityNameToExpression(typeName, languageVersion);
-        case SyntaxKind.ImportType:
-            Debug.fail(`We should not get an import type after calling 'codefix.typeToAutoImportableTypeNode'.`);
         case SyntaxKind.IndexedAccessType:
             const objectExpression = typeNodeToExpression((typeNode as IndexedAccessTypeNode).objectType, languageVersion);
             const indexExpression = typeNodeToExpression((typeNode as IndexedAccessTypeNode).indexType, languageVersion);
@@ -869,6 +867,8 @@ function typeNodeToExpression(typeNode: TypeNode, languageVersion: ScriptTarget)
             return exp && (isIdentifier(exp) ? exp : factory.createParenthesizedExpression(exp));
         case SyntaxKind.TypeQuery:
             return entityNameToExpression((typeNode as TypeQueryNode).exprName, languageVersion);
+        case SyntaxKind.ImportType:
+            Debug.fail(`We should not get an import type after calling 'codefix.typeToAutoImportableTypeNode'.`);
     }
 
     return undefined;

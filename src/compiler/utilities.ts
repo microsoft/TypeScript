@@ -8138,9 +8138,9 @@ export function parseBigInt(text: string): PseudoBigInt | undefined {
 }
 
 /**
+ * @internal
  *  @param text a valid bigint string excluding a trailing `n`, but including a possible prefix `-`. Use `isValidBigIntString(text, roundTripOnly)` before calling this function.
  */
-/** @internal */
 export function parseValidBigInt(text: string): PseudoBigInt {
     const negative = text.startsWith("-");
     const base10Value = parsePseudoBigInt(`${negative ? text.slice(1) : text}n`);
@@ -8148,11 +8148,11 @@ export function parseValidBigInt(text: string): PseudoBigInt {
 }
 
 /**
+ * @internal
  * Tests whether the provided string can be parsed as a bigint.
  * @param s The string to test.
  * @param roundTripOnly Indicates the resulting bigint matches the input when converted back to a string.
  */
-/** @internal */
 export function isValidBigIntString(s: string, roundTripOnly: boolean): boolean {
     if (s === "") return false;
     const scanner = createScanner(ScriptTarget.ESNext, /*skipTrivia*/ false);
