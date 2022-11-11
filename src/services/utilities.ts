@@ -43,7 +43,7 @@ import {
     isVariableDeclarationList, isVoidExpression, isWhiteSpaceLike, isWhiteSpaceSingleLine, isYieldExpression,
     IterationStatement, JSDocLink, JSDocLinkCode, JSDocLinkDisplayPart, JSDocLinkPlain, JSDocTypedefTag, JsTyping,
     JsxEmit, JsxOpeningLikeElement, LabeledStatement, LanguageServiceHost, last, lastOrUndefined, LiteralExpression,
-    map, Map, maybeBind, Modifier, ModifierFlags, ModuleDeclaration, ModuleInstanceState, ModuleResolutionKind,
+    map, maybeBind, Modifier, ModifierFlags, ModuleDeclaration, ModuleInstanceState, ModuleResolutionKind,
     ModuleSpecifierResolutionHost, moduleSpecifiers, Mutable, NewExpression, NewLineKind, Node, NodeArray,
     NodeBuilderFlags, NodeFlags, nodeIsMissing, nodeIsPresent, nodeIsSynthesized, noop, normalizePath,
     NoSubstitutionTemplateLiteral, notImplemented, nullTransformationContext, NumericLiteral, or, OrganizeImports,

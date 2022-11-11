@@ -2,7 +2,7 @@ import {
     __String, addToSeen, append, AssignmentDeclarationKind, BinaryExpression, BindingElement, Block, CallExpression,
     CancellationToken, cast, CheckFlags, ClassLikeDeclaration, climbPastPropertyAccess, compareValues,
     ConstructorDeclaration, contains, createQueue, createTextSpan, createTextSpanFromBounds, createTextSpanFromRange,
-    Debug, Declaration, displayPart, DocumentSpan, emptyArray, emptyOptions, escapeLeadingUnderscores, ESMap,
+    Debug, Declaration, displayPart, DocumentSpan, emptyArray, emptyOptions, escapeLeadingUnderscores,
     ExportSpecifier, Expression, FileIncludeReason, FileReference, filter, find, findAncestor, findChildOfKind,
     findIndex, first, firstDefined, firstOrUndefined, flatMap, forEachChild, forEachReturnStatement, ForInOrOfStatement,
     FunctionDeclaration, FunctionExpression, FunctionLikeDeclaration, GetAccessorDeclaration,
@@ -34,12 +34,12 @@ import {
     isShorthandPropertyAssignment, isSourceFile, isStatement, isStatic, isStaticModifier, isStringLiteralLike,
     isSuperProperty, isThis, isTypeAliasDeclaration, isTypeElement, isTypeKeyword, isTypeLiteralNode, isTypeNode,
     isTypeOperatorNode, isUnionTypeNode, isVariableDeclarationInitializedToBareOrAccessedRequire,
-    isVariableDeclarationList, isVariableLike, isVariableStatement, isVoidExpression, isWriteAccess, JSDocTag, map, Map,
+    isVariableDeclarationList, isVariableLike, isVariableStatement, isVoidExpression, isWriteAccess, JSDocTag, map,
     mapDefined, MethodDeclaration, ModifierFlags, ModuleDeclaration, MultiMap, NamedDeclaration, Node, NodeFlags,
     nodeSeenTracker, NumericLiteral, ParameterDeclaration, ParenthesizedExpression, Path, PrivateIdentifier, Program,
     PropertyAccessExpression, PropertyAssignment, PropertyDeclaration, punctuationPart, Push, rangeIsOnSingleLine,
-    ReadonlySet, ReferencedSymbol, ReferencedSymbolDefinitionInfo, ReferencedSymbolEntry, ReferenceEntry,
-    RenameLocation, ScriptElementKind, ScriptTarget, SemanticMeaning, Set, SetAccessorDeclaration, SignatureDeclaration,
+    ReferencedSymbol, ReferencedSymbolDefinitionInfo, ReferencedSymbolEntry, ReferenceEntry,
+    RenameLocation, ScriptElementKind, ScriptTarget, SemanticMeaning, SetAccessorDeclaration, SignatureDeclaration,
     skipAlias, some, SourceFile, Statement, StringLiteral, StringLiteralLike, stripQuotes, Symbol, SymbolDisplay,
     SymbolDisplayPart, SymbolDisplayPartKind, SymbolFlags, SymbolId, symbolName, SyntaxKind, textPart, TextSpan,
     tokenToString, tryAddToSet, tryCast, tryGetClassExtendingExpressionWithTypeArguments,
@@ -2030,7 +2030,7 @@ export namespace Core {
      * @param parent        Another class or interface Symbol
      * @param cachedResults A map of symbol id pairs (i.e. "child,parent") to booleans indicating previous results
      */
-    function explicitlyInheritsFrom(symbol: Symbol, parent: Symbol, cachedResults: ESMap<string, boolean>, checker: TypeChecker): boolean {
+    function explicitlyInheritsFrom(symbol: Symbol, parent: Symbol, cachedResults: Map<string, boolean>, checker: TypeChecker): boolean {
         if (symbol === parent) {
             return true;
         }

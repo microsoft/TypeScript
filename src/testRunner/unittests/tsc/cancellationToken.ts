@@ -1,46 +1,49 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import * as Harness from "../../_namespaces/Harness";
+import { createWatchedSystem, File, libFile } from "../virtualFileSystemWithWatch";
+import { baselineBuildInfo, CommandLineProgram } from "../tsc/helpers";
+import { applyChange, createBaseline, watchBaseline } from "../tscWatch/helpers";
 
 describe("unittests:: tsc:: builder cancellationToken", () => {
     verifyCancellation(/*useBuildInfo*/ true, "when emitting buildInfo");
     verifyCancellation(/*useBuildInfo*/ false, "when using state");
     function verifyCancellation(useBuildInfo: boolean, scenario: string) {
         it(scenario, () => {
-            const aFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/a.ts`,
+            const aFile: File = {
+                path: `/user/username/projects/myproject/a.ts`,
                 content: Utils.dedent`
                     import {B} from './b';
                     declare var console: any;
                     let b = new B();
                     console.log(b.c.d);`
             };
-            const bFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/b.ts`,
+            const bFile: File = {
+                path: `/user/username/projects/myproject/b.ts`,
                 content: Utils.dedent`
                     import {C} from './c';
                     export class B {
                         c = new C();
                     }`
             };
-            const cFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/c.ts`,
+            const cFile: File = {
+                path: `/user/username/projects/myproject/c.ts`,
                 content: Utils.dedent`
                     export class C {
                         d = 1;
                     }`
             };
-            const dFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/d.ts`,
+            const dFile: File = {
+                path: `/user/username/projects/myproject/d.ts`,
                 content: "export class D { }"
             };
-            const config: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+            const config: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({ compilerOptions: { incremental: true, declaration: true } })
             };
-            const { sys, baseline, oldSnap: originalSnap } = ts.tscWatch.createBaseline(ts.tscWatch.createWatchedSystem(
-                [aFile, bFile, cFile, dFile, config, ts.tscWatch.libFile],
-                { currentDirectory: ts.tscWatch.projectRoot }
+            const { sys, baseline, oldSnap: originalSnap } = createBaseline(createWatchedSystem(
+                [aFile, bFile, cFile, dFile, config, libFile],
+                { currentDirectory: "/user/username/projects/myproject" }
             ));
             sys.exit = exitCode => sys.exitCode = exitCode;
             const reportDiagnostic = ts.createDiagnosticReporter(sys, /*pretty*/ true);
@@ -53,8 +56,8 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                 reportDiagnostic
             )!;
             const host = ts.createIncrementalCompilerHost(parsedConfig.options, sys);
-            let programs: ts.CommandLineProgram[] = ts.emptyArray;
-            let oldPrograms: ts.CommandLineProgram[] = ts.emptyArray;
+            let programs: CommandLineProgram[] = ts.emptyArray;
+            let oldPrograms: CommandLineProgram[] = ts.emptyArray;
             let builderProgram: ts.EmitAndSemanticDiagnosticsBuilderProgram = undefined!;
             let oldSnap = originalSnap;
             let cancel = false;
@@ -73,7 +76,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
 
             // Cancel on first semantic operation
             // Change
-            oldSnap = ts.tscWatch.applyChange(
+            oldSnap = applyChange(
                 sys,
                 baseline,
                 sys => sys.appendFile(cFile.path, "export function foo() {}"),
@@ -91,8 +94,8 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
             }
             cancel = false;
             builderProgram.emitBuildInfo();
-            ts.baselineBuildInfo(builderProgram.getCompilerOptions(), sys);
-            ts.tscWatch.watchBaseline({
+            baselineBuildInfo(builderProgram.getCompilerOptions(), sys);
+            watchBaseline({
                 baseline,
                 getPrograms: () => programs,
                 oldPrograms,
@@ -111,7 +114,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
             Harness.Baseline.runBaseline(`tsc/cancellationToken/${scenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
 
             function noChange(caption: string) {
-                oldSnap = ts.tscWatch.applyChange(sys, baseline, ts.noop, caption);
+                oldSnap = applyChange(sys, baseline, ts.noop, caption);
             }
 
             function updatePrograms() {
@@ -139,8 +142,8 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
 
             function emitAndBaseline() {
                 ts.emitFilesAndReportErrorsAndGetExitStatus(builderProgram, reportDiagnostic);
-                ts.baselineBuildInfo(builderProgram.getCompilerOptions(), sys);
-                ts.tscWatch.watchBaseline({
+                baselineBuildInfo(builderProgram.getCompilerOptions(), sys);
+                watchBaseline({
                     baseline,
                     getPrograms: () => programs,
                     oldPrograms,

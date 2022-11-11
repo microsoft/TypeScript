@@ -36,7 +36,7 @@ interface FourSlashData {
     symlinks: vfs.FileSet | undefined;
 
     // A mapping from marker names to name/position pairs
-    markerPositions: ts.ESMap<string, Marker>;
+    markerPositions: Map<string, Marker>;
 
     markers: Marker[];
 
@@ -184,7 +184,7 @@ export class TestState {
 
     public formatCodeSettings: ts.FormatCodeSettings;
 
-    private inputFiles = new ts.Map<string, string>();  // Map between inputFile's fileName and its content for easily looking up when resolving references
+    private inputFiles = new Map<string, string>();  // Map between inputFile's fileName and its content for easily looking up when resolving references
 
     private static getDisplayPartsJson(displayParts: ts.SymbolDisplayPart[] | undefined) {
         let result = "";
@@ -911,7 +911,7 @@ export class TestState {
                 "Expected 'optionalReplacementSpan' properties to match");
         }
 
-        const nameToEntries = new ts.Map<string, ts.CompletionEntry[]>();
+        const nameToEntries = new Map<string, ts.CompletionEntry[]>();
         for (const entry of actualCompletions.entries) {
             const entries = nameToEntries.get(entry.name);
             if (!entries) {
@@ -1126,7 +1126,7 @@ export class TestState {
     }
 
     public setTypesRegistry(map: ts.MapLike<void>): void {
-        this.languageServiceAdapterHost.typesRegistry = new ts.Map(ts.getEntries(map));
+        this.languageServiceAdapterHost.typesRegistry = new Map(ts.getEntries(map));
     }
 
     public verifyTypeOfSymbolAtLocation(range: Range, symbol: ts.Symbol, expected: string): void {
@@ -2522,7 +2522,7 @@ export class TestState {
         return this.getRanges().filter(r => r.fileName === fileName);
     }
 
-    public rangesByText(): ts.ESMap<string, Range[]> {
+    public rangesByText(): Map<string, Range[]> {
         if (this.testData.rangesByText) return this.testData.rangesByText;
         const result = ts.createMultiMap<Range>();
         this.testData.rangesByText = result;
@@ -3161,7 +3161,7 @@ export class TestState {
 
     public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
 
-        const openBraceMap = new ts.Map(ts.getEntries<ts.CharacterCodes>({
+        const openBraceMap = new Map(ts.getEntries<ts.CharacterCodes>({
             "(": ts.CharacterCodes.openParen,
             "{": ts.CharacterCodes.openBrace,
             "[": ts.CharacterCodes.openBracket,
@@ -3710,7 +3710,7 @@ export class TestState {
         return text;
     }
 
-    private formatCallHierarchyItem(file: FourSlashFile, callHierarchyItem: ts.CallHierarchyItem, direction: CallHierarchyItemDirection, seen: ts.ESMap<string, boolean>, prefix: string, trailingPrefix: string = prefix) {
+    private formatCallHierarchyItem(file: FourSlashFile, callHierarchyItem: ts.CallHierarchyItem, direction: CallHierarchyItemDirection, seen: Map<string, boolean>, prefix: string, trailingPrefix: string = prefix) {
         const key = `${callHierarchyItem.file}|${JSON.stringify(callHierarchyItem.span)}|${direction}`;
         const alreadySeen = seen.has(key);
         seen.set(key, true);
@@ -3799,7 +3799,7 @@ export class TestState {
         let text = "";
         if (callHierarchyItem) {
             const file = this.findFile(callHierarchyItem.file);
-            text += this.formatCallHierarchyItem(file, callHierarchyItem, CallHierarchyItemDirection.Root, new ts.Map(), "");
+            text += this.formatCallHierarchyItem(file, callHierarchyItem, CallHierarchyItemDirection.Root, new Map(), "");
         }
         return text;
     }
@@ -4144,7 +4144,7 @@ function parseTestData(basePath: string, contents: string, fileName: string): Fo
     const lines = contents.split("\n");
     let i = 0;
 
-    const markerPositions = new ts.Map<string, Marker>();
+    const markerPositions = new Map<string, Marker>();
     const markers: Marker[] = [];
     const ranges: Range[] = [];
 
@@ -4283,7 +4283,7 @@ function reportError(fileName: string, line: number, col: number, message: strin
     throw new Error(errorMessage);
 }
 
-function recordObjectMarker(fileName: string, location: LocationInformation, text: string, markerMap: ts.ESMap<string, Marker>, markers: Marker[]): Marker | undefined {
+function recordObjectMarker(fileName: string, location: LocationInformation, text: string, markerMap: Map<string, Marker>, markers: Marker[]): Marker | undefined {
     let markerValue: any;
     try {
         // Attempt to parse the marker value as JSON
@@ -4314,7 +4314,7 @@ function recordObjectMarker(fileName: string, location: LocationInformation, tex
     return marker;
 }
 
-function recordMarker(fileName: string, location: LocationInformation, name: string, markerMap: ts.ESMap<string, Marker>, markers: Marker[]): Marker | undefined {
+function recordMarker(fileName: string, location: LocationInformation, name: string, markerMap: Map<string, Marker>, markers: Marker[]): Marker | undefined {
     const marker: Marker = {
         fileName,
         position: location.position
@@ -4333,7 +4333,7 @@ function recordMarker(fileName: string, location: LocationInformation, name: str
     }
 }
 
-function parseFileContent(content: string, fileName: string, markerMap: ts.ESMap<string, Marker>, markers: Marker[], ranges: Range[]): FourSlashFile {
+function parseFileContent(content: string, fileName: string, markerMap: Map<string, Marker>, markers: Marker[], ranges: Range[]): FourSlashFile {
     content = chompLeadingSpace(content);
 
     // Any slash-star comment with a character not in this string is not a marker.
@@ -4533,7 +4533,7 @@ function stringify(data: any, replacer?: (key: string, value: any) => any): stri
 
 /** Collects an array of unique outputs. */
 function unique<T>(inputs: readonly T[], getOutput: (t: T) => string): string[] {
-    const set = new ts.Map<string, true>();
+    const set = new Map<string, true>();
     for (const input of inputs) {
         const out = getOutput(input);
         set.set(out, true);

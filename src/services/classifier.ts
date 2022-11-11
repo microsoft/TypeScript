@@ -8,7 +8,7 @@ import {
     JSDocAugmentsTag, JSDocCallbackTag, JSDocEnumTag, JSDocImplementsTag, JSDocParameterTag, JSDocPropertyTag,
     JSDocReturnTag, JSDocSeeTag, JSDocTemplateTag, JSDocThisTag, JSDocTypedefTag, JSDocTypeTag, JsxAttribute,
     JsxClosingElement, JsxOpeningElement, JsxSelfClosingElement, lastOrUndefined, ModuleDeclaration,
-    ModuleInstanceState, Node, nodeIsMissing, ParameterDeclaration, parseIsolatedJSDocComment, Push, ReadonlySet,
+    ModuleInstanceState, Node, nodeIsMissing, ParameterDeclaration, parseIsolatedJSDocComment, Push,
     Scanner, ScriptTarget, SemanticMeaning, setParent, some, SourceFile, Symbol, SymbolFlags, SyntaxKind, TextSpan,
     textSpanIntersectsWith, TokenClass, TypeChecker, TypeParameterDeclaration,
 } from "./_namespaces/ts";

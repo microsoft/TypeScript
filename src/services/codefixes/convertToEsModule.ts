@@ -3,17 +3,17 @@ import {
 } from "../_namespaces/ts.codefix";
 import {
     __String, arrayFrom, ArrowFunction, BinaryExpression, BindingElement, BindingName, ClassDeclaration,
-    ClassExpression, concatenate, copyEntries, createMultiMap, createRange, Debug, Diagnostics, emptyMap, ESMap,
+    ClassExpression, concatenate, copyEntries, createMultiMap, createRange, Debug, Diagnostics, emptyMap,
     ExportDeclaration, ExportSpecifier, Expression, ExpressionStatement, factory, filter, findChildOfKind, flatMap,
     forEach, FunctionDeclaration, FunctionExpression, getEmitScriptTarget, getModeForUsageLocation, getQuotePreference,
     getResolvedModule, getSynthesizedDeepClone, getSynthesizedDeepClones, getSynthesizedDeepClonesWithReplacements,
     getSynthesizedDeepCloneWithReplacements, Identifier, ImportDeclaration, importFromModuleSpecifier, ImportSpecifier,
     InternalSymbolName, isArray, isArrowFunction, isBinaryExpression, isClassExpression,
     isExportsOrModuleExportsOrAlias, isFunctionExpression, isIdentifier, isNonContextualKeyword,
-    isObjectLiteralExpression, isPropertyAccessExpression, isRequireCall, isVariableStatement, makeImport, map, Map,
+    isObjectLiteralExpression, isPropertyAccessExpression, isRequireCall, isVariableStatement, makeImport, map,
     mapAllOrFail, mapIterator, MethodDeclaration, Modifier, Node, NodeArray, NodeFlags, ObjectLiteralElementLike,
     ObjectLiteralExpression, PropertyAccessExpression, QuotePreference, rangeContainsRange, ReadonlyCollection,
-    ReadonlyESMap, ScriptTarget, Set, some, SourceFile, Statement, StringLiteralLike, SymbolFlags, SyntaxKind,
+    ScriptTarget, some, SourceFile, Statement, StringLiteralLike, SymbolFlags, SyntaxKind,
     textChanges, TypeChecker, VariableStatement,
 } from "../_namespaces/ts";
 
@@ -61,7 +61,7 @@ function convertFileToEsModule(sourceFile: SourceFile, checker: TypeChecker, cha
     const exports = collectExportRenames(sourceFile, checker, identifiers);
     convertExportsAccesses(sourceFile, exports, changes);
     let moduleExportsChangedToDefault = false;
-    let useSitesToUnqualify: ESMap<Node, Node> | undefined;
+    let useSitesToUnqualify: Map<Node, Node> | undefined;
     // Process variable statements first to collect use sites that need to be updated inside other transformations
     for (const statement of filter(sourceFile.statements, isVariableStatement)) {
         const newUseSites = convertVariableStatement(sourceFile, statement, changes, checker, identifiers, target, quotePreference);
@@ -91,7 +91,7 @@ function convertFileToEsModule(sourceFile: SourceFile, checker: TypeChecker, cha
  *     export { _x as x };
  * This conversion also must place if the exported name is not a valid identifier, e.g. `exports.class = 0;`.
  */
-type ExportRenames = ReadonlyESMap<string, string>;
+type ExportRenames = ReadonlyMap<string, string>;
 
 function collectExportRenames(sourceFile: SourceFile, checker: TypeChecker, identifiers: Identifiers): ExportRenames {
     const res = new Map<string, string>();
@@ -137,7 +137,7 @@ function convertStatement(
     identifiers: Identifiers,
     target: ScriptTarget,
     exports: ExportRenames,
-    useSitesToUnqualify: ESMap<Node, Node> | undefined,
+    useSitesToUnqualify: Map<Node, Node> | undefined,
     quotePreference: QuotePreference
 ): ModuleExportsChanged {
     switch (statement.kind) {
@@ -174,7 +174,7 @@ function convertVariableStatement(
     identifiers: Identifiers,
     target: ScriptTarget,
     quotePreference: QuotePreference,
-): ESMap<Node, Node> | undefined {
+): Map<Node, Node> | undefined {
     const { declarationList } = statement;
     let foundImport = false;
     const converted = map(declarationList.declarations, decl => {
@@ -200,7 +200,7 @@ function convertVariableStatement(
     if (foundImport) {
         // useNonAdjustedEndPosition to ensure we don't eat the newline after the statement.
         changes.replaceNodeWithNodes(sourceFile, statement, flatMap(converted, c => c.newImports));
-        let combinedUseSites: ESMap<Node, Node> | undefined;
+        let combinedUseSites: Map<Node, Node> | undefined;
         forEach(converted, c => {
             if (c.useSitesToUnqualify) {
                 copyEntries(c.useSitesToUnqualify, combinedUseSites ??= new Map());
@@ -237,7 +237,7 @@ function convertAssignment(
     assignment: BinaryExpression,
     changes: textChanges.ChangeTracker,
     exports: ExportRenames,
-    useSitesToUnqualify: ESMap<Node, Node> | undefined,
+    useSitesToUnqualify: Map<Node, Node> | undefined,
 ): ModuleExportsChanged {
     const { left, right } = assignment;
     if (!isPropertyAccessExpression(left)) {
@@ -274,7 +274,7 @@ function convertAssignment(
  * Convert `module.exports = { ... }` to individual exports..
  * We can't always do this if the module has interesting members -- then it will be a default export instead.
  */
-function tryChangeModuleExportsObject(object: ObjectLiteralExpression, useSitesToUnqualify: ESMap<Node, Node> | undefined): [readonly Statement[], ModuleExportsChanged] | undefined {
+function tryChangeModuleExportsObject(object: ObjectLiteralExpression, useSitesToUnqualify: Map<Node, Node> | undefined): [readonly Statement[], ModuleExportsChanged] | undefined {
     const statements = mapAllOrFail(object.properties, prop => {
         switch (prop.kind) {
             case SyntaxKind.GetAccessor:
@@ -357,7 +357,7 @@ function convertExportsPropertyAssignment({ left, right, parent }: BinaryExpress
 }
 
 // TODO: GH#22492 this will cause an error if a change has been made inside the body of the node.
-function convertExportsDotXEquals_replaceNode(name: string | undefined, exported: Expression, useSitesToUnqualify: ESMap<Node, Node> | undefined): Statement {
+function convertExportsDotXEquals_replaceNode(name: string | undefined, exported: Expression, useSitesToUnqualify: Map<Node, Node> | undefined): Statement {
     const modifiers = [factory.createToken(SyntaxKind.ExportKeyword)];
     switch (exported.kind) {
         case SyntaxKind.FunctionExpression: {
@@ -385,9 +385,9 @@ function convertExportsDotXEquals_replaceNode(name: string | undefined, exported
     }
 }
 
-function replaceImportUseSites<T extends Node>(node: T, useSitesToUnqualify: ESMap<Node, Node> | undefined): T;
-function replaceImportUseSites<T extends Node>(nodes: NodeArray<T>, useSitesToUnqualify: ESMap<Node, Node> | undefined): NodeArray<T>;
-function replaceImportUseSites<T extends Node>(nodeOrNodes: T | NodeArray<T>, useSitesToUnqualify: ESMap<Node, Node> | undefined) {
+function replaceImportUseSites<T extends Node>(node: T, useSitesToUnqualify: Map<Node, Node> | undefined): T;
+function replaceImportUseSites<T extends Node>(nodes: NodeArray<T>, useSitesToUnqualify: Map<Node, Node> | undefined): NodeArray<T>;
+function replaceImportUseSites<T extends Node>(nodeOrNodes: T | NodeArray<T>, useSitesToUnqualify: Map<Node, Node> | undefined) {
     if (!useSitesToUnqualify || !some(arrayFrom(useSitesToUnqualify.keys()), original => rangeContainsRange(nodeOrNodes, original))) {
         return nodeOrNodes;
     }
@@ -461,7 +461,7 @@ function convertSingleIdentifierImport(name: Identifier, moduleSpecifier: String
     const namedBindingsNames = new Map<string, string>();
     // True if there is some non-property use like `x()` or `f(x)`.
     let needDefaultImport = false;
-    let useSitesToUnqualify: ESMap<Node, Node> | undefined;
+    let useSitesToUnqualify: Map<Node, Node> | undefined;
 
     for (const use of identifiers.original.get(name.text)!) {
         if (checker.getSymbolAtLocation(use) !== nameSymbol || use === name) {
@@ -527,7 +527,7 @@ interface Identifiers {
     readonly additional: Set<string>;
 }
 
-type FreeIdentifiers = ReadonlyESMap<string, readonly Identifier[]>;
+type FreeIdentifiers = ReadonlyMap<string, readonly Identifier[]>;
 function collectFreeIdentifiers(file: SourceFile): FreeIdentifiers {
     const map = createMultiMap<Identifier>();
     forEachFreeIdentifier(file, id => map.add(id.text, id));
@@ -559,7 +559,7 @@ function isFreeIdentifier(node: Identifier): boolean {
 
 // Node helpers
 
-function functionExpressionToDeclaration(name: string | undefined, additionalModifiers: readonly Modifier[], fn: FunctionExpression | ArrowFunction | MethodDeclaration, useSitesToUnqualify: ESMap<Node, Node> | undefined): FunctionDeclaration {
+function functionExpressionToDeclaration(name: string | undefined, additionalModifiers: readonly Modifier[], fn: FunctionExpression | ArrowFunction | MethodDeclaration, useSitesToUnqualify: Map<Node, Node> | undefined): FunctionDeclaration {
     return factory.createFunctionDeclaration(
         concatenate(additionalModifiers, getSynthesizedDeepClones(fn.modifiers)),
         getSynthesizedDeepClone(fn.asteriskToken),
@@ -570,7 +570,7 @@ function functionExpressionToDeclaration(name: string | undefined, additionalMod
         factory.converters.convertToFunctionBlock(replaceImportUseSites(fn.body!, useSitesToUnqualify)));
 }
 
-function classExpressionToDeclaration(name: string | undefined, additionalModifiers: readonly Modifier[], cls: ClassExpression, useSitesToUnqualify: ESMap<Node, Node> | undefined): ClassDeclaration {
+function classExpressionToDeclaration(name: string | undefined, additionalModifiers: readonly Modifier[], cls: ClassExpression, useSitesToUnqualify: Map<Node, Node> | undefined): ClassDeclaration {
     return factory.createClassDeclaration(
         concatenate(additionalModifiers, getSynthesizedDeepClones(cls.modifiers)),
         name,
@@ -607,10 +607,10 @@ function makeExportDeclaration(exportSpecifiers: ExportSpecifier[] | undefined, 
 
 interface ConvertedImports {
     newImports: readonly Node[];
-    useSitesToUnqualify?: ESMap<Node, Node>;
+    useSitesToUnqualify?: Map<Node, Node>;
 }
 
-function convertedImports(newImports: readonly Node[], useSitesToUnqualify?: ESMap<Node, Node>): ConvertedImports {
+function convertedImports(newImports: readonly Node[], useSitesToUnqualify?: Map<Node, Node>): ConvertedImports {
     return {
         newImports,
         useSitesToUnqualify

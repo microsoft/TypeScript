@@ -21,7 +21,7 @@ import {
     isNamespaceExport, isObjectLiteralElement, isParameterPropertyDeclaration, isPrivateIdentifier,
     isPropertyAccessExpression, isPropertyName, isShorthandPropertyAssignment, isSimpleInlineableExpression,
     isSourceFile, isStatement, JsxOpeningElement, JsxSelfClosingElement, lastOrUndefined, LeftHandSideExpression, map,
-    Map, mapDefined, MethodDeclaration, ModifierFlags, ModifierLike, modifierToFlag, ModuleBlock, ModuleDeclaration,
+    mapDefined, MethodDeclaration, ModifierFlags, ModifierLike, modifierToFlag, ModuleBlock, ModuleDeclaration,
     ModuleKind, moveRangePastDecorators, moveRangePastModifiers, moveRangePos, NamedExportBindings, NamedExports,
     NamedImportBindings, NamespaceExport, NewExpression, Node, NodeFlags, nodeIsMissing, NonNullExpression,
     ObjectLiteralElementLike, ObjectLiteralExpression, OuterExpressionKinds, ParameterDeclaration,

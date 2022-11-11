@@ -1,10 +1,10 @@
-import * as ts from "../../_namespaces/ts";
+import { loadProjectFromFiles, verifyTsc } from "./helpers";
 
 describe("unittests:: tsc:: projectReferences::", () => {
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "projectReferences",
         subScenario: "when project contains invalid project reference",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/src/main.ts": "export const x = 10;",
             "/src/project/tsconfig.json": JSON.stringify({
                 compilerOptions: {
@@ -19,10 +19,10 @@ describe("unittests:: tsc:: projectReferences::", () => {
         commandLineArgs: ["--p", "src/project"],
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "projectReferences",
         subScenario: "when project references composite project with noEmit",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/utils/index.ts": "export const x = 10;",
             "/src/utils/tsconfig.json": JSON.stringify({
                 compilerOptions: {

@@ -1,5 +1,5 @@
 import {
-    Debug, Map, noop, Performance, PerformanceHooks, sys, System, timestamp, tryGetNativePerformanceHooks,
+    Debug, noop, Performance, PerformanceHooks, sys, System, timestamp, tryGetNativePerformanceHooks,
 } from "./_namespaces/ts";
 
 /** Performance measurements for the compiler. */

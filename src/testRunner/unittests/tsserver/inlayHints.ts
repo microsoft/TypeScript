@@ -1,24 +1,27 @@
 import * as ts from "../../_namespaces/ts";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
+import { commonFile1, commonFile2 } from "../tscWatch/helpers";
+import { createSession, TestSession } from "./helpers";
 
 describe("unittests:: tsserver:: inlayHints", () => {
-    const configFile: ts.projectSystem.File = {
+    const configFile: File = {
         path: "/a/b/tsconfig.json",
         content: "{}"
     };
-    const app: ts.projectSystem.File = {
+    const app: File = {
         path: "/a/b/app.ts",
         content: "declare function foo(param: any): void;\nfoo(12);"
     };
 
     it("with updateOpen request does not corrupt documents", () => {
-        const host = ts.projectSystem.createServerHost([app, ts.projectSystem.commonFile1, ts.projectSystem.commonFile2, ts.projectSystem.libFile, configFile]);
-        const session = ts.projectSystem.createSession(host);
-        session.executeCommandSeq<ts.projectSystem.protocol.OpenRequest>({
-            command: ts.projectSystem.protocol.CommandTypes.Open,
+        const host = createServerHost([app, commonFile1, commonFile2, libFile, configFile]);
+        const session = createSession(host);
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+            command: ts.server.protocol.CommandTypes.Open,
             arguments: { file: app.path }
         });
-        session.executeCommandSeq<ts.projectSystem.protocol.ConfigureRequest>({
-            command: ts.projectSystem.protocol.CommandTypes.Configure,
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
             arguments: {
                 preferences: {
                     includeInlayParameterNameHints: "all"
@@ -26,33 +29,33 @@ describe("unittests:: tsserver:: inlayHints", () => {
             }
         });
         verifyInlayHintResponse(session);
-        session.executeCommandSeq<ts.projectSystem.protocol.UpdateOpenRequest>({
-            command: ts.projectSystem.protocol.CommandTypes.UpdateOpen,
+        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+            command: ts.server.protocol.CommandTypes.UpdateOpen,
             arguments: {
                 changedFiles: [{ fileName: app.path, textChanges: [{ start: { line: 1, offset: 39 }, end: { line: 1, offset: 39 }, newText: "//" }] }]
             }
         });
         verifyInlayHintResponse(session);
-        session.executeCommandSeq<ts.projectSystem.protocol.UpdateOpenRequest>({
-            command: ts.projectSystem.protocol.CommandTypes.UpdateOpen,
+        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+            command: ts.server.protocol.CommandTypes.UpdateOpen,
             arguments: {
                 changedFiles: [{ fileName: app.path, textChanges: [{ start: { line: 1, offset: 41 }, end: { line: 1, offset: 41 }, newText: "c" }] }]
             }
         });
         verifyInlayHintResponse(session);
 
-        function verifyInlayHintResponse(session: ts.projectSystem.TestSession) {
-            verifyParamInlayHint(session.executeCommandSeq<ts.projectSystem.protocol.InlayHintsRequest>({
-                command: ts.projectSystem.protocol.CommandTypes.ProvideInlayHints,
+        function verifyInlayHintResponse(session: TestSession) {
+            verifyParamInlayHint(session.executeCommandSeq<ts.server.protocol.InlayHintsRequest>({
+                command: ts.server.protocol.CommandTypes.ProvideInlayHints,
                 arguments: {
                     file: app.path,
                     start: 0,
                     length: app.content.length,
                 }
-            }).response as ts.projectSystem.protocol.InlayHintItem[] | undefined);
+            }).response as ts.server.protocol.InlayHintItem[] | undefined);
         }
 
-        function verifyParamInlayHint(response: ts.projectSystem.protocol.InlayHintItem[] | undefined) {
+        function verifyParamInlayHint(response: ts.server.protocol.InlayHintItem[] | undefined) {
             ts.Debug.assert(response);
             ts.Debug.assert(response[0]);
             ts.Debug.assertEqual(response[0].text, "param:");
