@@ -5,8 +5,6 @@ import {
     TodoComment, TodoCommentDescriptor, TypeAcquisition,
 } from "./_namespaces/ts";
 
-/* eslint-disable @typescript-eslint/no-unnecessary-qualifier */
-
 /**
  * Declaration module describing the TypeScript Server protocol
  */

@@ -1,9 +1,11 @@
 import * as ts from "../../_namespaces/ts";
+import { File } from "../virtualFileSystemWithWatch";
+import { TestServerEventManager, checkNumberOfProjects, fileStats, toExternalFiles } from "./helpers";
 
 describe("unittests:: tsserver:: project telemetry", () => {
     it("does nothing for inferred project", () => {
         const file = makeFile("/a.js");
-        const et = new ts.projectSystem.TestServerEventManager([file]);
+        const et = new TestServerEventManager([file]);
         et.service.openClientFile(file.path);
         et.hasZeroEvent(ts.server.ProjectInfoTelemetryEvent);
     });
@@ -13,20 +15,20 @@ describe("unittests:: tsserver:: project telemetry", () => {
         const file2 = makeFile("/b.ts");
         const tsconfig = makeFile("/a/tsconfig.json", {});
 
-        const et = new ts.projectSystem.TestServerEventManager([file, file2, tsconfig]);
+        const et = new TestServerEventManager([file, file2, tsconfig]);
         et.service.openClientFile(file.path);
         et.assertProjectInfoTelemetryEvent({}, tsconfig.path);
 
         et.service.closeClientFile(file.path);
-        ts.projectSystem.checkNumberOfProjects(et.service, { configuredProjects: 1 });
+        checkNumberOfProjects(et.service, { configuredProjects: 1 });
 
         et.service.openClientFile(file2.path);
-        ts.projectSystem.checkNumberOfProjects(et.service, { inferredProjects: 1 });
+        checkNumberOfProjects(et.service, { inferredProjects: 1 });
 
         et.hasZeroEvent(ts.server.ProjectInfoTelemetryEvent);
 
         et.service.openClientFile(file.path);
-        ts.projectSystem.checkNumberOfProjects(et.service, { configuredProjects: 1, inferredProjects: 1 });
+        checkNumberOfProjects(et.service, { configuredProjects: 1, inferredProjects: 1 });
 
         et.hasZeroEvent(ts.server.ProjectInfoTelemetryEvent);
     });
@@ -37,10 +39,10 @@ describe("unittests:: tsserver:: project telemetry", () => {
         const compilerOptions: ts.CompilerOptions = { allowJs: true };
         const tsconfig = makeFile("/tsconfig.json", { compilerOptions, include: ["src"] });
 
-        const et = new ts.projectSystem.TestServerEventManager([...files, notIncludedFile, tsconfig]);
+        const et = new TestServerEventManager([...files, notIncludedFile, tsconfig]);
         et.service.openClientFile(files[0].path);
         et.assertProjectInfoTelemetryEvent({
-            fileStats: ts.projectSystem.fileStats({ ts: 2, tsx: 1, js: 1, jsx: 1, dts: 1 }),
+            fileStats: fileStats({ ts: 2, tsx: 1, js: 1, jsx: 1, dts: 1 }),
             compilerOptions,
             include: true,
         });
@@ -48,7 +50,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
 
     it("works with external project", () => {
         const file1 = makeFile("/a.ts");
-        const et = new ts.projectSystem.TestServerEventManager([file1]);
+        const et = new TestServerEventManager([file1]);
         const compilerOptions: ts.server.protocol.CompilerOptions = { strict: true };
 
         const projectFileName = "/hunter2/foo.csproj";
@@ -72,18 +74,18 @@ describe("unittests:: tsserver:: project telemetry", () => {
         et.service.closeClientFile(file1.path);
 
         et.service.closeExternalProject(projectFileName);
-        ts.projectSystem.checkNumberOfProjects(et.service, { externalProjects: 0 });
+        checkNumberOfProjects(et.service, { externalProjects: 0 });
 
         open();
         assert.equal(et.getEvents().length, 0);
 
         function open(): void {
             et.service.openExternalProject({
-                rootFiles: ts.projectSystem.toExternalFiles([file1.path]),
+                rootFiles: toExternalFiles([file1.path]),
                 options: compilerOptions,
                 projectFileName,
             });
-            ts.projectSystem.checkNumberOfProjects(et.service, { externalProjects: 1 });
+            checkNumberOfProjects(et.service, { externalProjects: 1 });
             et.service.openClientFile(file1.path); // Only on file open the project will be updated
         }
     });
@@ -147,7 +149,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
         (compilerOptions as any).unknownCompilerOption = "hunter2"; // These are always ignored.
         const tsconfig = makeFile("/tsconfig.json", { compilerOptions, files: ["/a.ts"] });
 
-        const et = new ts.projectSystem.TestServerEventManager([file, tsconfig]);
+        const et = new TestServerEventManager([file, tsconfig]);
         et.service.openClientFile(file.path);
 
         et.assertProjectInfoTelemetryEvent({
@@ -167,7 +169,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
             compileOnSave: true,
         });
 
-        const et = new ts.projectSystem.TestServerEventManager([tsconfig, file]);
+        const et = new TestServerEventManager([tsconfig, file]);
         et.service.openClientFile(file.path);
         et.assertProjectInfoTelemetryEvent({
             extends: true,
@@ -198,10 +200,10 @@ describe("unittests:: tsserver:: project telemetry", () => {
                 exclude: [],
             },
         });
-        const et = new ts.projectSystem.TestServerEventManager([jsconfig, file]);
+        const et = new TestServerEventManager([jsconfig, file]);
         et.service.openClientFile(file.path);
         et.assertProjectInfoTelemetryEvent({
-            fileStats: ts.projectSystem.fileStats({ js: 1 }),
+            fileStats: fileStats({ js: 1 }),
             compilerOptions: autoJsCompilerOptions,
             typeAcquisition: {
                 enable: true,
@@ -218,10 +220,10 @@ describe("unittests:: tsserver:: project telemetry", () => {
         const tsconfig = makeFile("/jsconfig.json", {
             compilerOptions: autoJsCompilerOptions
         });
-        const et = new ts.projectSystem.TestServerEventManager([tsconfig, jsFile, tsFile]);
+        const et = new TestServerEventManager([tsconfig, jsFile, tsFile]);
         et.service.openClientFile(jsFile.path);
         et.assertProjectInfoTelemetryEvent({
-            fileStats: ts.projectSystem.fileStats({ js: 1, jsSize: 1, ts: 1, tsSize: 2 }),
+            fileStats: fileStats({ js: 1, jsSize: 1, ts: 1, tsSize: 2 }),
             compilerOptions: autoJsCompilerOptions,
             typeAcquisition: {
                 enable: true,
@@ -235,13 +237,13 @@ describe("unittests:: tsserver:: project telemetry", () => {
     it("detects whether language service was disabled", () => {
         const file = makeFile("/a.js");
         const tsconfig = makeFile("/jsconfig.json", {});
-        const et = new ts.projectSystem.TestServerEventManager([tsconfig, file]);
+        const et = new TestServerEventManager([tsconfig, file]);
         const fileSize = ts.server.maxProgramSizeForNonTsFiles + 1;
         et.host.getFileSize = () => fileSize;
         et.service.openClientFile(file.path);
         et.getEvent<ts.server.ProjectLanguageServiceStateEvent>(ts.server.ProjectLanguageServiceStateEvent);
         et.assertProjectInfoTelemetryEvent({
-            fileStats: ts.projectSystem.fileStats({ js: 1, jsSize: fileSize }),
+            fileStats: fileStats({ js: 1, jsSize: fileSize }),
             compilerOptions: autoJsCompilerOptions,
             configFileName: "jsconfig.json",
             typeAcquisition: {
@@ -257,7 +259,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
         it("sends event for inferred project", () => {
             const ajs = makeFile("/a.js", "// @ts-check\nconst x = 0;");
             const bjs = makeFile("/b.js");
-            const et = new ts.projectSystem.TestServerEventManager([ajs, bjs]);
+            const et = new TestServerEventManager([ajs, bjs]);
 
             et.service.openClientFile(ajs.path);
             et.assertOpenFileTelemetryEvent({ checkJs: true });
@@ -272,7 +274,7 @@ describe("unittests:: tsserver:: project telemetry", () => {
 
         it("not for '.ts' file", () => {
             const ats = makeFile("/a.ts", "");
-            const et = new ts.projectSystem.TestServerEventManager([ats]);
+            const et = new TestServerEventManager([ats]);
 
             et.service.openClientFile(ats.path);
             et.assertNoOpenFilesTelemetryEvent();
@@ -282,13 +284,13 @@ describe("unittests:: tsserver:: project telemetry", () => {
             const file = makeFile("/a.js");
             const compilerOptions: ts.CompilerOptions = { checkJs: true };
             const jsconfig = makeFile("/jsconfig.json", { compilerOptions });
-            const et = new ts.projectSystem.TestServerEventManager([jsconfig, file]);
+            const et = new TestServerEventManager([jsconfig, file]);
             et.service.openClientFile(file.path);
             et.assertOpenFileTelemetryEvent({ checkJs: false });
         });
     });
 });
 
-function makeFile(path: string, content: {} = ""): ts.projectSystem.File {
+function makeFile(path: string, content: {} = ""): File {
     return { path, content: ts.isString(content) ? content : JSON.stringify(content) };
 }

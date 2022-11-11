@@ -1,6 +1,6 @@
 import {
     Diagnostics, every, Expression, findAncestor, getTokenAtPosition, isArrayLiteralExpression, isAssignmentExpression,
-    isBinaryExpression, isExpressionStatement, isForInOrOfStatement, isIdentifier, Node, Program, Set, SourceFile,
+    isBinaryExpression, isExpressionStatement, isForInOrOfStatement, isIdentifier, Node, Program, SourceFile,
     SyntaxKind, textChanges, tryAddToSet, TypeChecker,
 } from "../_namespaces/ts";
 import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";

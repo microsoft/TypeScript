@@ -1,5 +1,5 @@
 import {
-    Debug, ESMap, FileWatcher, Map, ModulePath, ModuleSpecifierCache, ModuleSpecifierOptions, nodeModulesPathPart, Path,
+    Debug, FileWatcher, ModulePath, ModuleSpecifierCache, ModuleSpecifierOptions, nodeModulesPathPart, Path,
     ResolvedModuleSpecifierInfo, UserPreferences,
 } from "./_namespaces/ts";
 
@@ -10,8 +10,8 @@ export interface ModuleSpecifierResolutionCacheHost {
 
 /** @internal */
 export function createModuleSpecifierCache(host: ModuleSpecifierResolutionCacheHost): ModuleSpecifierCache {
-    let containedNodeModulesWatchers: ESMap<string, FileWatcher> | undefined;
-    let cache: ESMap<Path, ResolvedModuleSpecifierInfo> | undefined;
+    let containedNodeModulesWatchers: Map<string, FileWatcher> | undefined;
+    let cache: Map<Path, ResolvedModuleSpecifierInfo> | undefined;
     let currentKey: string | undefined;
     const result: ModuleSpecifierCache = {
         get(fromFileName, toFileName, preferences, options) {

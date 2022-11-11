@@ -1,7 +1,7 @@
 import {
     addToSeen, CallExpression, ConstructorDeclaration, Diagnostics, ExpressionStatement, forEachChild,
     getContainingFunction, getNodeId, getTokenAtPosition, isExpressionStatement, isFunctionLike,
-    isPropertyAccessExpression, isSuperCall, Map, Node, SourceFile, SyntaxKind, textChanges,
+    isPropertyAccessExpression, isSuperCall, Node, SourceFile, SyntaxKind, textChanges,
 } from "../_namespaces/ts";
 import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
 

@@ -2,14 +2,14 @@ import {
     AccessorDeclaration, addEmitHelpers, addSyntheticTrailingComment, ArrayLiteralExpression, Associativity,
     BinaryExpression, Block, BreakStatement, Bundle, CallExpression, CaseClause, chainBundle, CommaListExpression,
     ConditionalExpression, ContinueStatement, createExpressionForObjectLiteralElementLike, Debug, DoStatement,
-    ElementAccessExpression, EmitFlags, EmitHint, ESMap, Expression, ExpressionStatement, forEach, ForInStatement,
+    ElementAccessExpression, EmitFlags, EmitHint, Expression, ExpressionStatement, forEach, ForInStatement,
     ForStatement, FunctionDeclaration, FunctionExpression, getEmitFlags, getEmitScriptTarget,
     getExpressionAssociativity, getInitializedVariables, getNonAssignmentOperatorForCompoundAssignment, getOriginalNode,
     getOriginalNodeId, Identifier, idText, IfStatement, InitializedVariableDeclaration,
     insertStatementsAfterStandardPrologue, isBinaryExpression, isBlock, isCompoundAssignment, isExpression,
     isFunctionLikeDeclaration, isGeneratedIdentifier, isIdentifier, isImportCall, isLeftHandSideExpression,
     isLogicalOperator, isObjectLiteralElementLike, isStatement, isVariableDeclarationList, LabeledStatement,
-    lastOrUndefined, LeftHandSideExpression, LiteralExpression, map, Map, Mutable, NewExpression, Node, NodeArray,
+    lastOrUndefined, LeftHandSideExpression, LiteralExpression, map, Mutable, NewExpression, Node, NodeArray,
     NumericLiteral, ObjectLiteralElementLike, ObjectLiteralExpression, PropertyAccessExpression, reduceLeft,
     ReturnStatement, setCommentRange, setEmitFlags, setOriginalNode, setParent, setSourceMapRange, setTextRange,
     SourceFile, startOnNewLine, Statement, SwitchStatement, SyntaxKind, TextRange, ThrowStatement,
@@ -263,7 +263,7 @@ export function transformGenerators(context: TransformationContext): (x: SourceF
     const previousOnSubstituteNode = context.onSubstituteNode;
     context.onSubstituteNode = onSubstituteNode;
 
-    let renamedCatchVariables: ESMap<string, boolean>;
+    let renamedCatchVariables: Map<string, boolean>;
     let renamedCatchVariableDeclarations: Identifier[];
 
     let inGeneratorFunctionBody: boolean;

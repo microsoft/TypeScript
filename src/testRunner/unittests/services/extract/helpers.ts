@@ -1,5 +1,7 @@
 import * as ts from "../../../_namespaces/ts";
 import * as Harness from "../../../_namespaces/Harness";
+import { createServerHost, libFile } from "../../virtualFileSystemWithWatch";
+import { createProjectService } from "../../tsserver/helpers";
 
 interface Range {
     pos: number;
@@ -9,7 +11,7 @@ interface Range {
 
 interface Test {
     source: string;
-    ranges: ts.ESMap<string, Range>;
+    ranges: Map<string, Range>;
 }
 
 export function extractTest(source: string): Test {
@@ -17,7 +19,7 @@ export function extractTest(source: string): Test {
     let text = "";
     let lastPos = 0;
     let pos = 0;
-    const ranges = new ts.Map<string, Range>();
+    const ranges = new Map<string, Range>();
 
     while (pos < source.length) {
         if (source.charCodeAt(pos) === ts.CharacterCodes.openBracket &&
@@ -132,8 +134,8 @@ export function testExtractSymbol(caption: string, text: string, baselineFolder:
     }
 
     function makeProgram(f: {path: string, content: string }, includeLib?: boolean) {
-        const host = ts.projectSystem.createServerHost(includeLib ? [f, ts.projectSystem.libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
-        const projectService = ts.projectSystem.createProjectService(host);
+        const host = createServerHost(includeLib ? [f, libFile] : [f]); // libFile is expensive to parse repeatedly - only test when required
+        const projectService = createProjectService(host);
         projectService.openClientFile(f.path);
         const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
         const autoImportProvider = projectService.inferredProjects[0].getLanguageService().getAutoImportProvider();
@@ -157,8 +159,8 @@ export function testExtractSymbolFailed(caption: string, text: string, descripti
             path: "/a.ts",
             content: t.source
         };
-        const host = ts.projectSystem.createServerHost([f, ts.projectSystem.libFile]);
-        const projectService = ts.projectSystem.createProjectService(host);
+        const host = createServerHost([f, libFile]);
+        const projectService = createProjectService(host);
         projectService.openClientFile(f.path);
         const program = projectService.inferredProjects[0].getLanguageService().getProgram()!;
         const sourceFile = program.getSourceFile(f.path)!;

@@ -2,17 +2,18 @@ import {
     append, appendIfUnique, arrayFrom, changeAnyExtension, CharacterCodes, combinePaths, comparePaths, Comparison,
     CompilerOptions, contains, containsPath, createCompilerDiagnostic, Debug, Diagnostic, DiagnosticMessage,
     DiagnosticReporter, Diagnostics, directoryProbablyExists, directorySeparator, emptyArray, endsWith,
-    ensureTrailingDirectorySeparator, ESMap, every, Extension, extensionIsTS, fileExtensionIs, fileExtensionIsOneOf,
+    ensureTrailingDirectorySeparator, every, Extension, extensionIsTS, fileExtensionIs, fileExtensionIsOneOf,
     FileReference, filter, firstDefined, forEach, forEachAncestorDirectory, formatMessage, getBaseFileName,
     GetCanonicalFileName, getCommonSourceDirectory, getDirectoryPath, GetEffectiveTypeRootsHost, getEmitModuleKind,
     getEmitModuleResolutionKind, getModeForUsageLocation, getNormalizedAbsolutePath, getOwnKeys, getPathComponents,
     getPathFromPathComponents, getPathsBasePath, getPossibleOriginalInputExtensionForExtension,
     getRelativePathFromDirectory, getRootLength, hasJSFileExtension, hasProperty, hasTrailingDirectorySeparator,
     hasTSFileExtension, hostGetCanonicalFileName, isArray, isExternalModuleNameRelative, isRootedDiskPath, isString,
-    isStringLiteralLike, lastOrUndefined, length, Map, MapLike, matchedText, MatchingKeys, matchPatternOrExact,
+    isStringLiteralLike, lastOrUndefined, length, MapLike, matchedText, MatchingKeys, matchPatternOrExact,
     ModuleKind, ModuleResolutionHost, ModuleResolutionKind, noop, noopPush, normalizePath, normalizeSlashes,
     optionsHaveModuleResolutionChanges, PackageId, packageIdToString, ParsedCommandLine, Path, pathIsRelative, Pattern,
     patternText, perfLogger, Push, readJson, removeExtension, removeFileExtension, removePrefix,
+    ResolutionMode,
     ResolvedModuleWithFailedLookupLocations, ResolvedProjectReference, ResolvedTypeReferenceDirective,
     ResolvedTypeReferenceDirectiveWithFailedLookupLocations, some, sort, SourceFile, startsWith, stringContains,
     StringLiteralLike, supportedTSExtensionsFlat, toFileNameLowerCase, toPath, tryExtractTSExtension, tryGetExtensionFromPath,
@@ -333,7 +334,7 @@ function arePathsEqual(path1: string, path2: string, host: ModuleResolutionHost)
  * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
  * is assumed to be the same as root directory of the project.
  */
-export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, cache?: TypeReferenceDirectiveResolutionCache, resolutionMode?: SourceFile["impliedNodeFormat"]): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
+export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, cache?: TypeReferenceDirectiveResolutionCache, resolutionMode?: ResolutionMode): ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
     Debug.assert(typeof typeReferenceDirectiveName === "string", "Non-string value passed to `ts.resolveTypeReferenceDirective`, likely by a wrapping package working with an outdated `resolveTypeReferenceDirectives` signature. This is probably not a problem in TS itself.");
     const traceEnabled = isTraceEnabled(options, host);
     if (redirectedReference) {
@@ -571,11 +572,11 @@ export interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResol
 }
 
 export interface ModeAwareCache<T> {
-    get(key: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): T | undefined;
-    set(key: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined, value: T): this;
-    delete(key: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): this;
-    has(key: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined): boolean;
-    forEach(cb: (elem: T, key: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined) => void): void;
+    get(key: string, mode: ResolutionMode): T | undefined;
+    set(key: string, mode: ResolutionMode, value: T): this;
+    delete(key: string, mode: ResolutionMode): this;
+    has(key: string, mode: ResolutionMode): boolean;
+    forEach(cb: (elem: T, key: string, mode: ResolutionMode) => void): void;
     size(): number;
 }
 
@@ -603,14 +604,14 @@ export interface ModuleResolutionCache extends PerDirectoryResolutionCache<Resol
  * We support only non-relative module names because resolution of relative module names is usually more deterministic and thus less expensive.
  */
 export interface NonRelativeModuleNameResolutionCache extends PackageJsonInfoCache {
-    getOrCreateCacheForModuleName(nonRelativeModuleName: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined, redirectedReference?: ResolvedProjectReference): PerModuleNameCache;
+    getOrCreateCacheForModuleName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerModuleNameCache;
 }
 
 export interface PackageJsonInfoCache {
     /** @internal */ getPackageJsonInfo(packageJsonPath: string): PackageJsonInfo | boolean | undefined;
     /** @internal */ setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfo | boolean): void;
     /** @internal */ entries(): [Path, PackageJsonInfo | boolean][];
-    /** @internal */ getInternalMap(): ESMap<Path, PackageJsonInfo | boolean> | undefined;
+    /** @internal */ getInternalMap(): Map<Path, PackageJsonInfo | boolean> | undefined;
     clear(): void;
 }
 
@@ -621,18 +622,18 @@ export interface PerModuleNameCache {
 
 /** @internal */
 export interface CacheWithRedirects<T> {
-    getOwnMap: () => ESMap<string, T>;
-    redirectsMap: ESMap<Path, ESMap<string, T>>;
-    getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): ESMap<string, T>;
+    getOwnMap: () => Map<string, T>;
+    redirectsMap: Map<Path, Map<string, T>>;
+    getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<string, T>;
     clear(): void;
     setOwnOptions(newOptions: CompilerOptions): void;
-    setOwnMap(newOwnMap: ESMap<string, T>): void;
+    setOwnMap(newOwnMap: Map<string, T>): void;
 }
 
 /** @internal */
 export function createCacheWithRedirects<T>(options?: CompilerOptions): CacheWithRedirects<T> {
-    let ownMap: ESMap<string, T> = new Map();
-    const redirectsMap = new Map<Path, ESMap<string, T>>();
+    let ownMap: Map<string, T> = new Map();
+    const redirectsMap = new Map<Path, Map<string, T>>();
     return {
         getOwnMap,
         redirectsMap,
@@ -650,7 +651,7 @@ export function createCacheWithRedirects<T>(options?: CompilerOptions): CacheWit
         options = newOptions;
     }
 
-    function setOwnMap(newOwnMap: ESMap<string, T>) {
+    function setOwnMap(newOwnMap: Map<string, T>) {
         ownMap = newOwnMap;
     }
 
@@ -675,7 +676,7 @@ export function createCacheWithRedirects<T>(options?: CompilerOptions): CacheWit
 }
 
 function createPackageJsonInfoCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): PackageJsonInfoCache {
-    let cache: ESMap<Path, PackageJsonInfo | boolean> | undefined;
+    let cache: Map<Path, PackageJsonInfo | boolean> | undefined;
     return { getPackageJsonInfo, setPackageJsonInfo, clear, entries, getInternalMap };
     function getPackageJsonInfo(packageJsonPath: string) {
         return cache?.get(toPath(packageJsonPath, currentDirectory, getCanonicalFileName));
@@ -758,7 +759,7 @@ function createPerDirectoryResolutionCache<T>(currentDirectory: string, getCanon
 export function createModeAwareCache<T>(): ModeAwareCache<T> {
     const underlying = new Map<ModeAwareCacheKey, T>();
     type ModeAwareCacheKey = string & { __modeAwareCacheKey: any; };
-    const memoizedReverseKeys = new Map<ModeAwareCacheKey, [specifier: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined]>();
+    const memoizedReverseKeys = new Map<ModeAwareCacheKey, [specifier: string, mode: ResolutionMode]>();
 
     const cache: ModeAwareCache<T> = {
         get(specifier, mode) {
@@ -787,7 +788,7 @@ export function createModeAwareCache<T>(): ModeAwareCache<T> {
     };
     return cache;
 
-    function getUnderlyingCacheKey(specifier: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined) {
+    function getUnderlyingCacheKey(specifier: string, mode: ResolutionMode) {
         const result = (mode === undefined ? specifier : `${mode}|${specifier}`) as ModeAwareCacheKey;
         memoizedReverseKeys.set(result, [specifier, mode]);
         return result;
@@ -864,7 +865,7 @@ export function createModuleResolutionCache(
         updateRedirectsMap(options, directoryToModuleNameMap!, moduleNameToDirectoryMap);
     }
 
-    function getOrCreateCacheForModuleName(nonRelativeModuleName: string, mode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined, redirectedReference?: ResolvedProjectReference): PerModuleNameCache {
+    function getOrCreateCacheForModuleName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerModuleNameCache {
         Debug.assert(!isExternalModuleNameRelative(nonRelativeModuleName));
         return getOrCreateCache(moduleNameToDirectoryMap!, redirectedReference, mode === undefined ? nonRelativeModuleName : `${mode}|${nonRelativeModuleName}`, createPerModuleNameCache);
     }
@@ -983,14 +984,14 @@ export function createTypeReferenceDirectiveResolutionCache(
     }
 }
 
-export function resolveModuleNameFromCache(moduleName: string, containingFile: string, cache: ModuleResolutionCache, mode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations | undefined {
+export function resolveModuleNameFromCache(moduleName: string, containingFile: string, cache: ModuleResolutionCache, mode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined {
     const containingDirectory = getDirectoryPath(containingFile);
     const perFolderCache = cache && cache.getOrCreateCacheForDirectory(containingDirectory);
     if (!perFolderCache) return undefined;
     return perFolderCache.get(moduleName, mode);
 }
 
-export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations {
+export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations {
     const traceEnabled = isTraceEnabled(compilerOptions, host);
     if (redirectedReference) {
         compilerOptions = redirectedReference.commandLine.options;
@@ -1311,8 +1312,8 @@ export enum NodeResolutionFeatures {
 }
 
 function node16ModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions,
-        host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference,
-        resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations {
+    host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference,
+    resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations {
     return nodeNextModuleNameResolverWorker(
         NodeResolutionFeatures.Node16Default,
         moduleName,
@@ -1326,8 +1327,8 @@ function node16ModuleNameResolver(moduleName: string, containingFile: string, co
 }
 
 function nodeNextModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions,
-        host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference,
-        resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations {
+    host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference,
+    resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations {
     return nodeNextModuleNameResolverWorker(
         NodeResolutionFeatures.NodeNextDefault,
         moduleName,
@@ -1344,7 +1345,7 @@ const jsOnlyExtensions = [Extensions.JavaScript];
 const tsExtensions = [Extensions.TypeScript, Extensions.JavaScript];
 const tsPlusJsonExtensions = [...tsExtensions, Extensions.Json];
 const tsconfigExtensions = [Extensions.TSConfig];
-function nodeNextModuleNameResolverWorker(features: NodeResolutionFeatures, moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations {
+function nodeNextModuleNameResolverWorker(features: NodeResolutionFeatures, moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations {
     const containingDirectory = getDirectoryPath(containingFile);
 
     // es module file or cjs-like input file, use a variant of the legacy cjs resolver that supports the selected modern features
@@ -1860,7 +1861,7 @@ export interface PackageJsonInfoContents {
  *
  * @internal
  */
- export function getPackageScopeForPath(fileName: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
+export function getPackageScopeForPath(fileName: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
     const parts = getPathComponents(fileName);
     parts.pop();
     while (parts.length > 0) {
@@ -2148,24 +2149,24 @@ function loadModuleFromImportsOrExports(extensions: Extensions, state: ModuleRes
     const loadModuleFromTargetImportOrExport = getLoadModuleFromTargetImportOrExport(extensions, state, cache, redirectedReference, moduleName, scope, isImports);
 
     if (!endsWith(moduleName, directorySeparator) && moduleName.indexOf("*") === -1 && hasProperty(lookupTable, moduleName)) {
-        const target = (lookupTable as {[idx: string]: unknown})[moduleName];
+        const target = (lookupTable as { [idx: string]: unknown })[moduleName];
         return loadModuleFromTargetImportOrExport(target, /*subpath*/ "", /*pattern*/ false, moduleName);
     }
     const expandingKeys = sort(filter(getOwnKeys(lookupTable as MapLike<unknown>), k => k.indexOf("*") !== -1 || endsWith(k, "/")), comparePatternKeys);
     for (const potentialTarget of expandingKeys) {
         if (state.features & NodeResolutionFeatures.ExportsPatternTrailers && matchesPatternWithTrailer(potentialTarget, moduleName)) {
-            const target = (lookupTable as {[idx: string]: unknown})[potentialTarget];
+            const target = (lookupTable as { [idx: string]: unknown })[potentialTarget];
             const starPos = potentialTarget.indexOf("*");
             const subpath = moduleName.substring(potentialTarget.substring(0, starPos).length, moduleName.length - (potentialTarget.length - 1 - starPos));
             return loadModuleFromTargetImportOrExport(target, subpath, /*pattern*/ true, potentialTarget);
         }
         else if (endsWith(potentialTarget, "*") && startsWith(moduleName, potentialTarget.substring(0, potentialTarget.length - 1))) {
-            const target = (lookupTable as {[idx: string]: unknown})[potentialTarget];
+            const target = (lookupTable as { [idx: string]: unknown })[potentialTarget];
             const subpath = moduleName.substring(potentialTarget.length - 1);
             return loadModuleFromTargetImportOrExport(target, subpath, /*pattern*/ true, potentialTarget);
         }
         else if (startsWith(moduleName, potentialTarget)) {
-            const target = (lookupTable as {[idx: string]: unknown})[potentialTarget];
+            const target = (lookupTable as { [idx: string]: unknown })[potentialTarget];
             const subpath = moduleName.substring(potentialTarget.length);
             return loadModuleFromTargetImportOrExport(target, subpath, /*pattern*/ false, potentialTarget);
         }
@@ -2293,7 +2294,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
         function useCaseSensitiveFileNames() {
             return !state.host.useCaseSensitiveFileNames ? true :
                 typeof state.host.useCaseSensitiveFileNames === "boolean" ? state.host.useCaseSensitiveFileNames :
-                state.host.useCaseSensitiveFileNames();
+                    state.host.useCaseSensitiveFileNames();
         }
 
         function tryLoadInputFileForPath(finalPath: string, entry: string, packagePath: string, isImports: boolean) {

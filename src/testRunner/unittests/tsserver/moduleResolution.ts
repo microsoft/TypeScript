@@ -1,11 +1,12 @@
-import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
+import { createSession, createLoggerWithInMemoryLogs, openFilesForSession, verifyGetErrRequest, baselineTsserverLogs } from "./helpers";
 
 describe("unittests:: tsserver:: moduleResolution", () => {
     describe("package json file is edited", () => {
         function setup(packageFileContents: string) {
-            const configFile: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/src/tsconfig.json`,
+            const configFile: File = {
+                path: `/user/username/projects/myproject/src/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         target: "es2016",
@@ -15,30 +16,30 @@ describe("unittests:: tsserver:: moduleResolution", () => {
                     }
                 })
             };
-            const packageFile: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/package.json`,
+            const packageFile: File = {
+                path: `/user/username/projects/myproject/package.json`,
                 content: packageFileContents
             };
-            const fileA: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/src/fileA.ts`,
+            const fileA: File = {
+                path: `/user/username/projects/myproject/src/fileA.ts`,
                 content: Utils.dedent`
                         import { foo } from "./fileB.mjs";
                         foo();
                     `
             };
-            const fileB: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/src/fileB.mts`,
+            const fileB: File = {
+                path: `/user/username/projects/myproject/src/fileB.mts`,
                 content: Utils.dedent`
                         export function foo() {
                         }
                     `
             };
-            const host = ts.projectSystem.createServerHost([configFile, fileA, fileB, packageFile, { ...ts.projectSystem.libFile, path: "/a/lib/lib.es2016.full.d.ts" }]);
-            const session = ts.projectSystem.createSession(host, { canUseEvents: true, logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
-            ts.projectSystem.openFilesForSession([fileA], session);
+            const host = createServerHost([configFile, fileA, fileB, packageFile, { ...libFile, path: "/a/lib/lib.es2016.full.d.ts" }]);
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+            openFilesForSession([fileA], session);
             return {
                 host, session, packageFile,
-                verifyErr: () => ts.projectSystem.verifyGetErrRequest({ files: [fileA], session, host }),
+                verifyErr: () => verifyGetErrRequest({ files: [fileA], session, host }),
             };
         }
         it("package json file is edited", () => {
@@ -78,7 +79,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             host.runQueuedTimeoutCallbacks(); // Actual update
             verifyErr();
 
-            ts.projectSystem.baselineTsserverLogs("moduleResolution", "package json file is edited", session);
+            baselineTsserverLogs("moduleResolution", "package json file is edited", session);
         });
 
         it("package json file is edited when package json with type module exists", () => {
@@ -116,7 +117,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             host.runQueuedTimeoutCallbacks(); // Actual update
             verifyErr();
 
-            ts.projectSystem.baselineTsserverLogs("moduleResolution", "package json file is edited when package json with type module exists", session);
+            baselineTsserverLogs("moduleResolution", "package json file is edited when package json with type module exists", session);
         });
     });
 });

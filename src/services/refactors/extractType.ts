@@ -6,7 +6,7 @@ import {
     isIdentifier, isInferTypeNode, isIntersectionTypeNode, isJSDocTypeExpression, isParenthesizedTypeNode,
     isSourceFileJS, isStatement, isThisIdentifier, isThisTypeNode, isTupleTypeNode, isTypeLiteralNode, isTypeNode,
     isTypeParameterDeclaration, isTypePredicateNode, isTypeQueryNode, isTypeReferenceNode, JSDocTag, JSDocTemplateTag,
-    Map, Node, nodeOverlapsWithStartEnd, pushIfUnique, rangeContainsStartEnd, RefactorContext, RefactorEditInfo,
+    Node, nodeOverlapsWithStartEnd, pushIfUnique, rangeContainsStartEnd, RefactorContext, RefactorEditInfo,
     setEmitFlags, setTextRange, skipTrivia, SourceFile, Statement, SymbolFlags, textChanges, TextRange, TypeChecker,
     TypeElement, TypeNode, TypeParameterDeclaration,
 } from "../_namespaces/ts";

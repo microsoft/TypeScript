@@ -1,25 +1,25 @@
-import * as ts from "../../_namespaces/ts";
+import { loadProjectFromFiles, verifyTsc } from "./helpers";
 
 describe("unittests:: tsc:: runWithoutArgs::", () => {
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "runWithoutArgs",
         subScenario: "show help with ExitStatus.DiagnosticsPresent_OutputsSkipped",
-        fs: () => ts.loadProjectFromFiles({}),
+        fs: () => loadProjectFromFiles({}),
         commandLineArgs: [],
         environmentVariables: { TS_TEST_TERMINAL_WIDTH: "120" }
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "runWithoutArgs",
         subScenario: "show help with ExitStatus.DiagnosticsPresent_OutputsSkipped when host can't provide terminal width",
-        fs: () => ts.loadProjectFromFiles({}),
+        fs: () => loadProjectFromFiles({}),
         commandLineArgs: [],
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "runWithoutArgs",
         subScenario: "does not add color when NO_COLOR is set",
-        fs: () => ts.loadProjectFromFiles({}),
+        fs: () => loadProjectFromFiles({}),
         commandLineArgs: [],
         environmentVariables: { NO_COLOR: "true" }
     });

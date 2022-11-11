@@ -1,18 +1,20 @@
 import * as ts from "../../_namespaces/ts";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
+import { createProjectService, checkNumberOfInferredProjects } from "./helpers";
 
 describe("unittests:: tsserver:: maxNodeModuleJsDepth for inferred projects", () => {
     it("should be set to 2 if the project has js root files", () => {
-        const file1: ts.projectSystem.File = {
+        const file1: File = {
             path: "/a/b/file1.js",
             content: `var t = require("test"); t.`
         };
-        const moduleFile: ts.projectSystem.File = {
+        const moduleFile: File = {
             path: "/a/b/node_modules/test/index.js",
             content: `var v = 10; module.exports = v;`
         };
 
-        const host = ts.projectSystem.createServerHost([file1, moduleFile]);
-        const projectService = ts.projectSystem.createProjectService(host);
+        const host = createServerHost([file1, moduleFile]);
+        const projectService = createProjectService(host);
         projectService.openClientFile(file1.path);
 
         let project = projectService.inferredProjects[0];
@@ -36,11 +38,11 @@ describe("unittests:: tsserver:: maxNodeModuleJsDepth for inferred projects", ()
             content: "let x =1;"
         };
 
-        const host = ts.projectSystem.createServerHost([file1, file2, ts.projectSystem.libFile]);
-        const projectService = ts.projectSystem.createProjectService(host, { useSingleInferredProject: true });
+        const host = createServerHost([file1, file2, libFile]);
+        const projectService = createProjectService(host, { useSingleInferredProject: true });
 
         projectService.openClientFile(file1.path);
-        ts.projectSystem.checkNumberOfInferredProjects(projectService, 1);
+        checkNumberOfInferredProjects(projectService, 1);
         let project = projectService.inferredProjects[0];
         assert.isUndefined(project.getCompilationSettings().maxNodeModuleJsDepth);
 

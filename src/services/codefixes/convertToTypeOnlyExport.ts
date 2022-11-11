@@ -1,6 +1,6 @@
 import {
     addToSeen, CodeFixContextBase, contains, createTextSpanFromNode, Diagnostics, ExportSpecifier, factory, filter,
-    findDiagnosticForNode, getDiagnosticsWithinSpan, getNodeId, getTokenAtPosition, isExportSpecifier, Map, SourceFile,
+    findDiagnosticForNode, getDiagnosticsWithinSpan, getNodeId, getTokenAtPosition, isExportSpecifier, SourceFile,
     SyntaxKind, textChanges, TextSpan, tryCast,
 } from "../_namespaces/ts";
 import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";

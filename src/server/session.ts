@@ -5,7 +5,7 @@ import {
     computeLineAndCharacterOfPosition, computeLineStarts, concatenate, createQueue, createSet, createTextSpan,
     createTextSpanFromBounds, Debug, decodedTextSpanIntersectsWith, deduplicate, DefinitionInfo,
     DefinitionInfoAndBoundSpan, Diagnostic, diagnosticCategoryName, DiagnosticRelatedInformation, displayPartsToString,
-    DocumentHighlights, DocumentPosition, DocumentSpan, documentSpansEqual, EmitOutput, equateValues, ESMap,
+    DocumentHighlights, DocumentPosition, DocumentSpan, documentSpansEqual, EmitOutput, equateValues,
     FileTextChanges, filter, find, FindAllReferences, first, firstOrUndefined, flatMap, flatMapToMutable,
     flattenDiagnosticMessageText, forEachNameInAccessChainWalkingLeft, FormatCodeSettings, formatting,
     getDeclarationFromName, getDeclarationOfKind, getEmitDeclarations, getEntries, getEntrypointsFromPackageJsonInfo,
@@ -14,12 +14,12 @@ import {
     getSnapshotText, getSupportedCodeFixes, getTemporaryModuleResolutionState, getTextOfIdentifierOrLiteral,
     getTouchingPropertyName, GoToDefinition, HostCancellationToken, identity, ImplementationLocation, ImportSpecifier,
     isAccessExpression, isArray, isDeclarationFileName, isIdentifier, isString, isStringLiteralLike,
-    JSDocLinkDisplayPart, JSDocTagInfo, LanguageServiceMode, LineAndCharacter, map, Map, mapDefined, mapDefinedIterator,
+    JSDocLinkDisplayPart, JSDocTagInfo, LanguageServiceMode, LineAndCharacter, map, mapDefined, mapDefinedIterator,
     mapIterator, mapOneOrMany, memoize, ModuleResolutionKind, MultiMap, NavigateToItem, NavigationBarItem,
     NavigationTree, nodeModulesPathPart, normalizePath, OperationCanceledException, OrganizeImportsMode, outFile,
     OutliningSpan, Path, perfLogger, PerformanceEvent, PossibleProgramFileInfo, Program, QuickInfo, RefactorEditInfo,
     ReferencedSymbol, ReferencedSymbolDefinitionInfo, ReferencedSymbolEntry, ReferenceEntry, removeFileExtension,
-    RenameInfo, RenameLocation, ScriptKind, SelectionRange, SemanticClassificationFormat, Set, SignatureHelpItem,
+    RenameInfo, RenameLocation, ScriptKind, SelectionRange, SemanticClassificationFormat, SignatureHelpItem,
     SignatureHelpItems, singleIterator, some, SourceFile, startsWith, stringContains, SymbolDisplayPart, SyntaxKind,
     TextChange, TextInsertion, TextRange, TextSpan, textSpanEnd, toArray, toFileNameLowerCase, tracing,
     unmangleScopedPackageName, UserPreferences, version, WithMetadata,
@@ -537,7 +537,7 @@ function getPerProjectReferences<TResult>(
     isForRename: boolean,
     getResultsForPosition: (project: Project, location: DocumentPosition) => readonly TResult[] | undefined,
     forPositionInResult: (result: TResult, cb: (location: DocumentPosition) => void) => void,
-): readonly TResult[] | ESMap<Project, readonly TResult[]> {
+): readonly TResult[] | Map<Project, readonly TResult[]> {
     // If `getResultsForPosition` returns results for a project, they go in here
     const resultsMap = new Map<Project, readonly TResult[]>();
 
