@@ -15,10 +15,11 @@ import {
     getLocaleTimeString, getNormalizedAbsolutePath, getParsedCommandLineOfConfigFile, getPendingEmitKind,
     getSourceFileVersionAsHashFromText, getTsBuildInfoEmitOutputFilePath, getWatchErrorSummaryDiagnosticMessage,
     hasProperty, identity, isArray, isIgnoredFileFromWildCardWatching, isIncrementalCompilation, isString, listFiles,
-    loadWithModeAwareCache, loadWithTypeDirectiveCache, map, maybeBind, missingFileModifiedTime, ModuleKind,
+    loadWithModeAwareCache, loadWithTypeDirectiveCache, map, maybeBind, missingFileModifiedTime,
     ModuleResolutionCache, mutateMap, mutateMapSkippingNewValues, noop, outFile, OutputFile, ParseConfigFileHost,
     parseConfigHostFromCompilerHostLike, ParsedCommandLine, Path, PollingInterval, Program, ProgramBuildInfo,
     ProgramBundleEmitBuildInfo, ProgramHost, ProgramMultiFileEmitBuildInfo, readBuilderProgram, ReadBuildProgramHost,
+    ResolutionMode,
     resolveConfigFileProjectName, ResolvedConfigFileName, ResolvedProjectReference, ResolvedTypeReferenceDirective,
     resolveModuleName, resolvePath, resolveProjectReferencePath, resolveTypeReferenceDirective, returnUndefined,
     SemanticDiagnosticsBuilderProgram, setGetSourceFileAsHashVersioned, SharedExtendedConfigFileWatcher, some,
@@ -339,14 +340,14 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
     const moduleResolutionCache = !compilerHost.resolveModuleNames ? createModuleResolutionCache(currentDirectory, getCanonicalFileName) : undefined;
     const typeReferenceDirectiveResolutionCache = !compilerHost.resolveTypeReferenceDirectives ? createTypeReferenceDirectiveResolutionCache(currentDirectory, getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache()) : undefined;
     if (!compilerHost.resolveModuleNames) {
-        const loader = (moduleName: string, resolverMode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) =>
+        const loader = (moduleName: string, resolverMode: ResolutionMode, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) =>
             resolveModuleName(moduleName, containingFile, state.projectCompilerOptions, compilerHost, moduleResolutionCache, redirectedReference, resolverMode).resolvedModule;
         compilerHost.resolveModuleNames = (moduleNames, containingFile, _reusedNames, redirectedReference, _options, containingSourceFile, resolutionInfo) =>
             loadWithModeAwareCache(Debug.checkEachDefined(moduleNames), Debug.checkDefined(containingSourceFile), containingFile, redirectedReference, resolutionInfo, loader);
         compilerHost.getModuleResolutionCache = () => moduleResolutionCache;
     }
     if (!compilerHost.resolveTypeReferenceDirectives) {
-        const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined, containingFileMode: SourceFile["impliedNodeFormat"] | undefined) => resolveTypeReferenceDirective(moduleName, containingFile, state.projectCompilerOptions, compilerHost, redirectedReference, state.typeReferenceDirectiveResolutionCache, containingFileMode).resolvedTypeReferenceDirective!;
+        const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined, containingFileMode: ResolutionMode) => resolveTypeReferenceDirective(moduleName, containingFile, state.projectCompilerOptions, compilerHost, redirectedReference, state.typeReferenceDirectiveResolutionCache, containingFileMode).resolvedTypeReferenceDirective!;
         compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile, redirectedReference, _options, containingFileMode) =>
             loadWithTypeDirectiveCache<ResolvedTypeReferenceDirective>(Debug.checkEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, containingFileMode, loader);
     }

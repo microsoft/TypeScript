@@ -31,7 +31,7 @@ import {
     ModifierFlags, ModuleBody, ModuleDeclaration, NamedDeclaration, NamespaceDeclaration,
     needsScopeMarker, Node, NodeArray, NodeBuilderFlags, NodeFlags, NodeId, normalizeSlashes, OmittedExpression,
     orderedRemoveItem, ParameterDeclaration, parseNodeFactory, pathContainsNodeModules, pathIsRelative,
-    PropertyDeclaration, PropertySignature, pushIfUnique, removeAllComments, SetAccessorDeclaration,
+    PropertyDeclaration, PropertySignature, pushIfUnique, removeAllComments, ResolutionMode, SetAccessorDeclaration,
     setCommentRange, setEmitFlags, setOriginalNode, setParent, setTextRange, SignatureDeclaration, skipTrivia, some,
     SourceFile, startsWith, Statement, stringContains, StringLiteral, Symbol, SymbolAccessibility,
     SymbolAccessibilityResult, SymbolFlags, SymbolTracker, SyntaxKind, toFileNameLowerCase, toPath,
@@ -103,7 +103,7 @@ export function transformDeclarations(context: TransformationContext) {
     let needsScopeFixMarker = false;
     let resultHasScopeMarker = false;
     let enclosingDeclaration: Node;
-    let necessaryTypeReferences: Set<[specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined]> | undefined;
+    let necessaryTypeReferences: Set<[specifier: string, mode: ResolutionMode]> | undefined;
     let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
     let lateStatementReplacementMap: Map<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
     let suppressNewDiagnosticContexts: boolean;
@@ -138,7 +138,7 @@ export function transformDeclarations(context: TransformationContext) {
     const { noResolve, stripInternal } = options;
     return transformRoot;
 
-    function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined][] | undefined): void {
+    function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly [specifier: string, mode: ResolutionMode][] | undefined): void {
         if (!typeReferenceDirectives) {
             return;
         }
@@ -408,7 +408,7 @@ export function transformDeclarations(context: TransformationContext) {
             return necessaryTypeReferences ? mapDefined(arrayFrom(necessaryTypeReferences.keys()), getFileReferenceForSpecifierModeTuple) : [];
         }
 
-        function getFileReferenceForSpecifierModeTuple([typeName, mode]: [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined]): FileReference | undefined {
+        function getFileReferenceForSpecifierModeTuple([typeName, mode]: [specifier: string, mode: ResolutionMode]): FileReference | undefined {
             // Elide type references for which we have imports
             if (emittedImports) {
                 for (const importStatement of emittedImports) {

@@ -51,7 +51,7 @@ import {
     PragmaPseudoMap, PragmaPseudoMapEntry, PrefixUnaryExpression, PrefixUnaryOperator, PrimaryExpression,
     PrivateIdentifier, PropertyAccessEntityNameExpression, PropertyAccessExpression, PropertyAssignment,
     PropertyDeclaration, PropertyName, PropertySignature, QualifiedName, QuestionDotToken, QuestionToken,
-    ReadonlyKeyword, ReadonlyPragmaMap, ReadonlyTextRange, RestTypeNode, ReturnStatement, SatisfiesExpression,
+    ReadonlyKeyword, ReadonlyPragmaMap, ReadonlyTextRange, ResolutionMode, RestTypeNode, ReturnStatement, SatisfiesExpression,
     ScriptKind, ScriptTarget, SetAccessorDeclaration, setParent, setParentRecursive, setTextRange, setTextRangePos,
     setTextRangePosEnd, setTextRangePosWidth, ShorthandPropertyAssignment, skipTrivia, some, SourceFile,
     SpreadAssignment, SpreadElement, startsWith, Statement, StringLiteral, supportedDeclarationExtensions,
@@ -989,7 +989,7 @@ export interface CreateSourceFileOptions {
      * and files on disk, but needs to be done with a module resolution cache in scope to be performant.
      * This is usually `undefined` for compilations that do not have `moduleResolution` values of `node16` or `nodenext`.
      */
-    impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
+    impliedNodeFormat?: ResolutionMode;
     /**
      * Controls how module-y-ness is set for the given file. Usually the result of calling
      * `getSetExternalModuleIndicator` on a valid `CompilerOptions` object. If not present, the default
@@ -9791,7 +9791,7 @@ export interface PragmaContext {
     moduleName?: string;
 }
 
-function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ModuleKind.ESNext | ModuleKind.CommonJS | undefined {
+function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ResolutionMode {
     if (!mode) {
         return undefined;
     }

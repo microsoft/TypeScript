@@ -58,7 +58,7 @@ import {
     targetOptionDeclaration, toFileNameLowerCase, tokenToString, trace, tracing, trimStringEnd, TsConfigSourceFile,
     TypeChecker, typeDirectiveIsEqualTo, TypeReferenceDirectiveResolutionCache, UnparsedSource, VariableDeclaration,
     VariableStatement, walkUpParenthesizedExpressions, WriteFileCallback, WriteFileCallbackData,
-    writeFileEnsuringDirectories, zipToModeAwareCache, TypeReferenceDirectiveResolutionInfo, getResolvedTypeReferenceDirective,
+    writeFileEnsuringDirectories, zipToModeAwareCache, TypeReferenceDirectiveResolutionInfo, getResolvedTypeReferenceDirective, ResolutionMode,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -253,7 +253,7 @@ export function changeCompilerHostLikeToUseCache(
     const readFileCache = new Map<Path, string | false>();
     const fileExistsCache = new Map<Path, boolean>();
     const directoryExistsCache = new Map<Path, boolean>();
-    const sourceFileCache = new Map<SourceFile["impliedNodeFormat"], Map<Path, SourceFile>>();
+    const sourceFileCache = new Map<ResolutionMode, Map<Path, SourceFile>>();
 
     const readFileWithCache = (fileName: string): string | undefined => {
         const key = toPath(fileName);
@@ -280,7 +280,7 @@ export function changeCompilerHostLikeToUseCache(
 
     const getSourceFileWithCache: CompilerHost["getSourceFile"] | undefined = getSourceFile ? (fileName, languageVersionOrOptions, onError, shouldCreateNewSourceFile) => {
         const key = toPath(fileName);
-        const impliedNodeFormat: SourceFile["impliedNodeFormat"] = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.impliedNodeFormat : undefined;
+        const impliedNodeFormat: ResolutionMode = typeof languageVersionOrOptions === "object" ? languageVersionOrOptions.impliedNodeFormat : undefined;
         const forImpliedNodeFormat = sourceFileCache.get(impliedNodeFormat);
         const value = forImpliedNodeFormat?.get(key);
         if (value) return value;
@@ -555,7 +555,7 @@ export function flattenDiagnosticMessageText(diag: string | DiagnosticMessageCha
 }
 
 /** @internal */
-export function loadWithTypeDirectiveCache<T>(names: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, containingFileMode: SourceFile["impliedNodeFormat"], loader: (name: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined, resolutionMode: SourceFile["impliedNodeFormat"]) => T): T[] {
+export function loadWithTypeDirectiveCache<T>(names: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, containingFileMode: ResolutionMode, loader: (name: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined, resolutionMode: ResolutionMode) => T): T[] {
     if (names.length === 0) {
         return [];
     }
@@ -587,14 +587,14 @@ export function loadWithTypeDirectiveCache<T>(names: string[] | readonly FileRef
 export interface SourceFileImportsList {
     /** @internal */ imports: SourceFile["imports"];
     /** @internal */ moduleAugmentations: SourceFile["moduleAugmentations"];
-    impliedNodeFormat?: SourceFile["impliedNodeFormat"];
+    impliedNodeFormat?: ResolutionMode;
 }
 
 /**
  * Calculates the resulting resolution mode for some reference in some file - this is generally the explicitly
  * provided resolution mode in the reference, unless one is not present, in which case it is the mode of the containing file.
  */
-export function getModeForFileReference(ref: FileReference | string, containingFileMode: SourceFile["impliedNodeFormat"]) {
+export function getModeForFileReference(ref: FileReference | string, containingFileMode: ResolutionMode) {
     return (isString(ref) ? containingFileMode : ref.resolutionMode) || containingFileMode;
 }
 
@@ -605,11 +605,11 @@ export function getModeForFileReference(ref: FileReference | string, containingF
  * @param file File to fetch the resolution mode within
  * @param index Index into the file's complete resolution list to get the resolution of - this is a concatenation of the file's imports and module augmentations
  */
-export function getModeForResolutionAtIndex(file: SourceFile, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
+export function getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
 /** @internal */
 // eslint-disable-next-line @typescript-eslint/unified-signatures
-export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined;
-export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number): ModuleKind.CommonJS | ModuleKind.ESNext | undefined {
+export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number): ResolutionMode;
+export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number): ResolutionMode {
     if (file.impliedNodeFormat === undefined) return undefined;
     // we ensure all elements of file.imports and file.moduleAugmentations have the relevant parent pointers set during program setup,
     // so it's safe to use them even pre-bind
@@ -636,7 +636,7 @@ export function isExclusivelyTypeOnlyImportOrExport(decl: ImportDeclaration | Ex
  * @param usage The module reference string
  * @returns The final resolution mode of the import
  */
-export function getModeForUsageLocation(file: { impliedNodeFormat?: SourceFile["impliedNodeFormat"] }, usage: StringLiteralLike) {
+export function getModeForUsageLocation(file: { impliedNodeFormat?: ResolutionMode }, usage: StringLiteralLike) {
     if (file.impliedNodeFormat === undefined) return undefined;
     if ((isImportDeclaration(usage.parent) || isExportDeclaration(usage.parent))) {
         const isTypeOnly = isExclusivelyTypeOnlyImportOrExport(usage.parent);
@@ -685,7 +685,7 @@ export function getResolutionModeOverrideForClause(clause: AssertClause | undefi
 }
 
 /** @internal */
-export function loadWithModeAwareCache<T>(names: readonly StringLiteralLike[] | readonly string[], containingFile: SourceFile, containingFileName: string, redirectedReference: ResolvedProjectReference | undefined, resolutionInfo: ModuleResolutionInfo | undefined, loader: (name: string, resolverMode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined, containingFileName: string, redirectedReference: ResolvedProjectReference | undefined) => T): T[] {
+export function loadWithModeAwareCache<T>(names: readonly StringLiteralLike[] | readonly string[], containingFile: SourceFile, containingFileName: string, redirectedReference: ResolvedProjectReference | undefined, resolutionInfo: ModuleResolutionInfo | undefined, loader: (name: string, resolverMode: ResolutionMode, containingFileName: string, redirectedReference: ResolvedProjectReference | undefined) => T): T[] {
     if (names.length === 0) {
         return [];
     }
@@ -931,7 +931,7 @@ export function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCom
  * @param options The compiler options to perform the analysis under - relevant options are `moduleResolution` and `traceResolution`
  * @returns `undefined` if the path has no relevant implied format, `ModuleKind.ESNext` for esm format, and `ModuleKind.CommonJS` for cjs format
  */
-export function getImpliedNodeFormatForFile(fileName: Path, packageJsonInfoCache: PackageJsonInfoCache | undefined, host: ModuleResolutionHost, options: CompilerOptions): ModuleKind.ESNext | ModuleKind.CommonJS | undefined {
+export function getImpliedNodeFormatForFile(fileName: Path, packageJsonInfoCache: PackageJsonInfoCache | undefined, host: ModuleResolutionHost, options: CompilerOptions): ResolutionMode {
     const result = getImpliedNodeFormatForFileWorker(fileName, packageJsonInfoCache, host, options);
     return typeof result === "object" ? result.impliedNodeFormat : result;
 }
@@ -1195,7 +1195,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
     else {
         moduleResolutionCache = createModuleResolutionCache(currentDirectory, getCanonicalFileName, options);
-        const loader = (moduleName: string, resolverMode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined, containingFileName: string, redirectedReference: ResolvedProjectReference | undefined) =>
+        const loader = (moduleName: string, resolverMode: ResolutionMode, containingFileName: string, redirectedReference: ResolvedProjectReference | undefined) =>
             resolveModuleName(moduleName, containingFileName, options, host, moduleResolutionCache, redirectedReference, resolverMode).resolvedModule;
         actualResolveModuleNamesWorker = (moduleNames, containingFile, containingFileName, redirectedReference, resolutionInfo) =>
             loadWithModeAwareCache(moduleNames, containingFile, containingFileName, redirectedReference, resolutionInfo, loader);
@@ -1205,7 +1205,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         typeDirectiveNames: string[] | readonly FileReference[],
         containingFile: string,
         redirectedReference: ResolvedProjectReference | undefined,
-        containingFileMode: SourceFile["impliedNodeFormat"] | undefined,
+        containingFileMode: ResolutionMode | undefined,
         resolutionInfo: TypeReferenceDirectiveResolutionInfo | undefined,
     ) => (ResolvedTypeReferenceDirective | undefined)[];
     if (host.resolveTypeReferenceDirectives) {
@@ -1214,7 +1214,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
     else {
         typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(currentDirectory, getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache());
-        const loader = (typesRef: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined, resolutionMode: SourceFile["impliedNodeFormat"] | undefined) => resolveTypeReferenceDirective(
+        const loader = (typesRef: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined, resolutionMode: ResolutionMode | undefined) => resolveTypeReferenceDirective(
             typesRef,
             containingFile,
             options,
@@ -1581,7 +1581,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return libs.length + 2;
     }
 
-    function getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, mode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations | undefined {
+    function getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, mode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined {
         return moduleResolutionCache && resolveModuleNameFromCache(moduleName, containingFile, moduleResolutionCache, mode);
     }
 
@@ -3342,7 +3342,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function processTypeReferenceDirective(
         typeReferenceDirective: string,
-        mode: SourceFile["impliedNodeFormat"] | undefined,
+        mode: ResolutionMode | undefined,
         resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined,
         reason: FileIncludeReason
     ): void {
@@ -3353,7 +3353,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function processTypeReferenceDirectiveWorker(
         typeReferenceDirective: string,
-        mode: SourceFile["impliedNodeFormat"] | undefined,
+        mode: ResolutionMode | undefined,
         resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined,
         reason: FileIncludeReason
     ): void {
