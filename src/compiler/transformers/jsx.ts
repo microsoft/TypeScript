@@ -7,7 +7,7 @@ import {
     isIntrinsicJsxName, isJsxAttribute, isJsxElement, isJsxFragment, isJsxSelfClosingElement, isJsxSpreadAttribute,
     isLineBreak, isSourceFile, isStringDoubleQuoted, isWhiteSpaceSingleLine, JsxAttribute, JsxAttributeValue, JsxChild,
     JsxElement, JsxEmit, JsxExpression, JsxFragment, JsxOpeningFragment, JsxOpeningLikeElement, JsxSelfClosingElement,
-    JsxSpreadAttribute, JsxText, length, map, Map, mapDefined, Node, NodeFlags, PropertyAssignment, ScriptTarget,
+    JsxSpreadAttribute, JsxText, length, map, mapDefined, Node, NodeFlags, PropertyAssignment, ScriptTarget,
     setParentRecursive, setTextRange, singleOrUndefined, SourceFile, spanMap, SpreadAssignment, startOnNewLine,
     Statement, StringLiteral, SyntaxKind, TextRange, TransformationContext, TransformFlags, utf16EncodeAsString,
     VariableDeclaration, visitEachChild, visitNode, VisitResult,
@@ -18,7 +18,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     interface PerFileState {
         importSpecifier?: string;
         filenameDeclaration?: VariableDeclaration & { name: Identifier; };
-        utilizedImplicitRuntimeImports?: Map<Map<ImportSpecifier>>;
+        utilizedImplicitRuntimeImports?: Map<string, Map<string, ImportSpecifier>>;
     }
 
     const {

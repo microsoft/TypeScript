@@ -527,7 +527,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
             optionsToExtend: { extendedDiagnostics: true }
         });
         compilerHost.useSourceOfProjectReferenceRedirect = useSourceOfProjectReferenceRedirect;
-        const calledGetParsedCommandLine = new ts.Set<string>();
+        const calledGetParsedCommandLine = new Set<string>();
         compilerHost.getParsedCommandLine = fileName => {
             assert.isFalse(calledGetParsedCommandLine.has(fileName), `Already called on ${fileName}`);
             calledGetParsedCommandLine.add(fileName);

@@ -177,7 +177,7 @@ export function checkResolvedTypeDirective(actual: ts.ResolvedTypeReferenceDirec
     return true;
 }
 
-function checkCache<T>(caption: string, program: ts.Program, fileName: string, expectedContent: ts.ESMap<string, T | undefined> | undefined, getCache: (f: ts.SourceFile) => ts.ModeAwareCache<T | undefined> | undefined, entryChecker: (expected: T | undefined, original: T | undefined) => boolean): void {
+function checkCache<T>(caption: string, program: ts.Program, fileName: string, expectedContent: Map<string, T | undefined> | undefined, getCache: (f: ts.SourceFile) => ts.ModeAwareCache<T | undefined> | undefined, entryChecker: (expected: T | undefined, original: T | undefined) => boolean): void {
     const file = program.getSourceFile(fileName);
     assert.isTrue(file !== undefined, `cannot find file ${fileName}`);
     const cache = getCache(file!);
@@ -191,7 +191,7 @@ function checkCache<T>(caption: string, program: ts.Program, fileName: string, e
 }
 
 /** True if the maps have the same keys and values. */
-function mapEqualToCache<T>(left: ts.ESMap<string, T>, right: ts.ModeAwareCache<T>, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
+function mapEqualToCache<T>(left: Map<string, T>, right: ts.ModeAwareCache<T>, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
     if (left as any === right) return true; // given the type mismatch (the tests never pass a cache), this'll never be true
     if (!left || !right) return false;
     const someInLeftHasNoMatch = ts.forEachEntry(left, (leftValue, leftKey) => {
@@ -205,11 +205,11 @@ function mapEqualToCache<T>(left: ts.ESMap<string, T>, right: ts.ModeAwareCache<
     return !someInRightHasNoMatch;
 }
 
-export function checkResolvedModulesCache(program: ts.Program, fileName: string, expectedContent: ts.ESMap<string, ts.ResolvedModuleFull | undefined> | undefined): void {
+export function checkResolvedModulesCache(program: ts.Program, fileName: string, expectedContent: Map<string, ts.ResolvedModuleFull | undefined> | undefined): void {
     checkCache("resolved modules", program, fileName, expectedContent, f => f.resolvedModules, checkResolvedModule);
 }
 
-export function checkResolvedTypeDirectivesCache(program: ts.Program, fileName: string, expectedContent: ts.ESMap<string, ts.ResolvedTypeReferenceDirective> | undefined): void {
+export function checkResolvedTypeDirectivesCache(program: ts.Program, fileName: string, expectedContent: Map<string, ts.ResolvedTypeReferenceDirective> | undefined): void {
     checkCache("resolved type directives", program, fileName, expectedContent, f => f.resolvedTypeReferenceDirectiveNames, checkResolvedTypeDirective);
 }
 

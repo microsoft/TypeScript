@@ -10,7 +10,7 @@ import {
     isReturnStatement, isSwitchStatement, isThrowStatement, isTryStatement, isTypeAliasDeclaration, isTypeNode,
     isVariableStatement, isWhiteSpaceSingleLine, isYieldExpression, IterationStatement, mapDefined, MethodDeclaration,
     Modifier, ModifierFlags, modifierToFlag, ModuleBlock, Node, ObjectLiteralExpression, ObjectTypeDeclaration, Program,
-    Push, ReturnStatement, Set, SourceFile, SwitchStatement, SyntaxKind, ThrowStatement, toArray, toPath, TryStatement, ClassElement, TypeElement,
+    Push, ReturnStatement, SourceFile, SwitchStatement, SyntaxKind, ThrowStatement, toArray, toPath, TryStatement, ClassElement, TypeElement,
 } from "./_namespaces/ts";
 
 export interface DocumentHighlights {

@@ -6,7 +6,7 @@ describe("unittests:: customTransforms", () => {
         it(name, () => {
             const roots = sources.map(source => ts.createSourceFile(source.file, source.text, ts.ScriptTarget.ES2015));
             const fileMap = ts.arrayToMap(roots, file => file.fileName);
-            const outputs = new ts.Map<string, string>();
+            const outputs = new Map<string, string>();
             const host: ts.CompilerHost = {
                 getSourceFile: (fileName) => fileMap.get(fileName),
                 getDefaultLibFileName: () => "lib.d.ts",

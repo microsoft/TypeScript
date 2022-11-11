@@ -8,7 +8,7 @@ import {
     isExpressionNode, isExpressionStatement, isFunctionExpression, isGetAccessorDeclaration, isIdentifier, isInJSFile,
     isParameter, isParameterPropertyModifier, isPropertyAccessExpression, isPropertyDeclaration, isPropertySignature,
     isRestParameter, isRightSideOfQualifiedNameOrPropertyAccess, isSetAccessorDeclaration, isVariableDeclaration,
-    isVariableStatement, LanguageServiceHost, last, length, map, Map, mapDefined, mapEntries, NewExpression, Node,
+    isVariableStatement, LanguageServiceHost, last, length, map, mapDefined, mapEntries, NewExpression, Node,
     nodeSeenTracker, NodeSeenTracker, ObjectFlags, ParameterDeclaration, PrefixUnaryExpression, PrivateIdentifier,
     Program, PropertyAccessExpression, PropertyAssignment, PropertyDeclaration, PropertyName, PropertySignature,
     returnTrue, ScriptTarget, SetAccessorDeclaration, setEmitFlags, ShorthandPropertyAssignment, Signature,

@@ -7,12 +7,12 @@ import {
     createBuildInfo, createGetCanonicalFileName, createProgram, CustomTransformers, Debug, Diagnostic,
     DiagnosticCategory, DiagnosticMessageChain, DiagnosticRelatedInformation, DiagnosticWithLocation,
     EmitAndSemanticDiagnosticsBuilderProgram, EmitOnly, EmitResult, emitSkippedWithNoDiagnostics, emptyArray,
-    ensurePathIsNonModuleName, ESMap, filterSemanticDiagnostics, forEach, forEachEntry, forEachKey, generateDjb2Hash,
+    ensurePathIsNonModuleName, filterSemanticDiagnostics, forEach, forEachEntry, forEachKey, generateDjb2Hash,
     GetCanonicalFileName, getDirectoryPath, getEmitDeclarations, getNormalizedAbsolutePath, getOptionsNameMap,
     getOwnKeys, getRelativePathFromDirectory, getTsBuildInfoEmitOutputFilePath, handleNoEmitOptions, isArray,
-    isDeclarationFileName, isJsonSourceFile, isNumber, isString, map, Map, mapDefined, maybeBind, noop, notImplemented,
-    outFile, Path, Program, ProjectReference, ReadBuildProgramHost, ReadonlyCollection, ReadonlyESMap, ReadonlySet,
-    returnFalse, returnUndefined, SemanticDiagnosticsBuilderProgram, Set, skipTypeChecking, some, SourceFile,
+    isDeclarationFileName, isJsonSourceFile, isNumber, isString, map, mapDefined, maybeBind, noop, notImplemented,
+    outFile, Path, Program, ProjectReference, ReadBuildProgramHost, ReadonlyCollection,
+    returnFalse, returnUndefined, SemanticDiagnosticsBuilderProgram, skipTypeChecking, some, SourceFile,
     sourceFileMayBeEmitted, SourceMapEmitResult, toPath, tryAddToSet, WriteFileCallback, WriteFileCallbackData,
 } from "./_namespaces/ts";
 
@@ -51,7 +51,7 @@ export interface ReusableBuilderProgramState extends BuilderState {
     /**
      * Cache of bind and check diagnostics for files with their Path being the key
      */
-    semanticDiagnosticsPerFile?: ESMap<Path, readonly ReusableDiagnostic[] | readonly Diagnostic[]> | undefined;
+    semanticDiagnosticsPerFile?: Map<Path, readonly ReusableDiagnostic[] | readonly Diagnostic[]> | undefined;
     /**
      * The map has key by source file's path that has been changed
      */
@@ -67,7 +67,7 @@ export interface ReusableBuilderProgramState extends BuilderState {
     /**
      * Files pending to be emitted
      */
-    affectedFilesPendingEmit?: ReadonlyESMap<Path, BuilderFileEmit>;
+    affectedFilesPendingEmit?: ReadonlyMap<Path, BuilderFileEmit>;
     /**
      * emitKind pending for a program with --out
      */
@@ -79,7 +79,7 @@ export interface ReusableBuilderProgramState extends BuilderState {
     /**
      * Hash of d.ts emitted for the file, use to track when emit of d.ts changes
      */
-    emitSignatures?: ESMap<Path, EmitSignature>;
+    emitSignatures?: Map<Path, EmitSignature>;
     /**
      * Hash of d.ts emit with --out
      */
@@ -118,7 +118,7 @@ export interface BuilderProgramState extends BuilderState, ReusableBuilderProgra
     /**
      * Cache of bind and check diagnostics for files with their Path being the key
      */
-    semanticDiagnosticsPerFile: ESMap<Path, readonly Diagnostic[]> | undefined;
+    semanticDiagnosticsPerFile: Map<Path, readonly Diagnostic[]> | undefined;
     /**
      * The map has key by source file's path that has been changed
      */
@@ -154,7 +154,7 @@ export interface BuilderProgramState extends BuilderState, ReusableBuilderProgra
     /**
      * Files pending to be emitted
      */
-    affectedFilesPendingEmit?: ESMap<Path, BuilderFileEmit>;
+    affectedFilesPendingEmit?: Map<Path, BuilderFileEmit>;
     /**
      * true if build info is emitted
      */
@@ -162,7 +162,7 @@ export interface BuilderProgramState extends BuilderState, ReusableBuilderProgra
     /**
      * Already seen emitted files
      */
-    seenEmittedFiles: ESMap<Path, BuilderFileEmit> | undefined;
+    seenEmittedFiles: Map<Path, BuilderFileEmit> | undefined;
     /** Stores list of files that change signature during emit - test only */
     filesChangingSignature?: Set<Path>;
 }
@@ -313,7 +313,13 @@ function createBuilderProgramState(newProgram: Program, getCanonicalFileName: Ge
     });
 
     // If the global file is removed, add all files as changed
-    if (useOldState && forEachEntry(oldState!.fileInfos, (info, sourceFilePath) => (outFilePath || info.affectsGlobalScope) && !state.fileInfos.has(sourceFilePath))) {
+    if (useOldState && forEachEntry(oldState!.fileInfos, (info, sourceFilePath) => {
+        if (state.fileInfos.has(sourceFilePath)) return false;
+        if (outFilePath || info.affectsGlobalScope) return true;
+        // if file is deleted we need to write buildInfo again
+        state.buildInfoEmitPending = true;
+        return false;
+    })) {
         BuilderState.getAllFilesExcludingDefaultLibraryFile(state, newProgram, /*firstSourceFile*/ undefined)
             .forEach(file => addFileToChangeSet(state, file.resolvedPath));
     }
@@ -954,7 +960,7 @@ function getBuildInfo(state: BuilderProgramState, getCanonicalFileName: GetCanon
     }
 
     let fileIdsList: (readonly ProgramBuildInfoFileId[])[] | undefined;
-    let fileNamesToFileIdListId: ESMap<string, ProgramBuildInfoFileIdListId> | undefined;
+    let fileNamesToFileIdListId: Map<string, ProgramBuildInfoFileIdListId> | undefined;
     let emitSignatures: ProgramBuildInfoEmitSignature[] | undefined;
     const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): ProgramMultiFileEmitBuildInfoFileInfo => {
         // Ensure fileId
@@ -1733,7 +1739,7 @@ export function getBuildInfoFileVersionMap(
     program: ProgramBuildInfo,
     buildInfoPath: string,
     host: Pick<ReadBuildProgramHost, "useCaseSensitiveFileNames" | "getCurrentDirectory">
-): ESMap<Path, string> {
+): Map<Path, string> {
     const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath, host.getCurrentDirectory()));
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
     const fileInfos = new Map<Path, string>();

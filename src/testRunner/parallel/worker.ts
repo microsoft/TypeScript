@@ -1,4 +1,3 @@
-import * as ts from "../_namespaces/ts";
 import {
     ErrorInfo, ParallelClientMessage, ParallelHostMessage, RunnerTask, shimNoopTestInterface, Task, TaskResult,
     TestInfo, UnitTestTask,
@@ -152,13 +151,13 @@ export function start() {
 
     function executeUnitTests(task: UnitTestTask, fn: (payload: TaskResult) => void) {
         if (!unitTestSuiteMap && unitTestSuite.suites.length) {
-            unitTestSuiteMap = new ts.Map<string, Mocha.Suite>();
+            unitTestSuiteMap = new Map<string, Mocha.Suite>();
             for (const suite of unitTestSuite.suites) {
                 unitTestSuiteMap.set(suite.title, suite);
             }
         }
         if (!unitTestTestMap && unitTestSuite.tests.length) {
-            unitTestTestMap = new ts.Map<string, Mocha.Test>();
+            unitTestTestMap = new Map<string, Mocha.Test>();
             for (const test of unitTestSuite.tests) {
                 unitTestTestMap.set(test.title, test);
             }
@@ -301,13 +300,13 @@ export function start() {
     }
 
     // A cache of test harness Runner instances.
-    const runners = new ts.Map<string, RunnerBase>();
+    const runners = new Map<string, RunnerBase>();
 
     // The root suite for all unit tests.
     let unitTestSuite: Suite;
-    let unitTestSuiteMap: ts.ESMap<string, Mocha.Suite>;
+    let unitTestSuiteMap: Map<string, Mocha.Suite>;
     // (Unit) Tests directly within the root suite
-    let unitTestTestMap: ts.ESMap<string, Mocha.Test>;
+    let unitTestTestMap: Map<string, Mocha.Test>;
 
     if (runUnitTests) {
         unitTestSuite = new Suite("", new Mocha.Context());

@@ -48,7 +48,7 @@ import {
     JsxAttributeValue, JsxChild, JsxClosingElement, JsxClosingFragment, JsxElement, JsxExpression, JsxFragment,
     JsxOpeningElement, JsxOpeningFragment, JsxSelfClosingElement, JsxSpreadAttribute, JsxTagNameExpression, JsxText,
     KeywordSyntaxKind, KeywordToken, KeywordTypeNode, KeywordTypeSyntaxKind, LabeledStatement, LanguageVariant,
-    lastOrUndefined, LeftHandSideExpression, LiteralToken, LiteralTypeNode, map, Map, MappedTypeNode,
+    lastOrUndefined, LeftHandSideExpression, LiteralToken, LiteralTypeNode, map, MappedTypeNode,
     memoize, memoizeOne, MergeDeclarationMarker, MetaProperty, MethodDeclaration, MethodSignature, MinusToken,
     MissingDeclaration, Modifier, ModifierFlags, ModifierLike, modifiersToFlags, ModifierSyntaxKind, ModifierToken,
     ModuleBlock, ModuleBody, ModuleDeclaration, ModuleKind, ModuleName, ModuleReference, Mutable, MutableNodeArray,
