@@ -40,7 +40,7 @@ export interface ResolutionCache {
         typeDirectiveNames: string[] | readonly FileReference[],
         containingFile: string,
         redirectedReference: ResolvedProjectReference | undefined,
-        containingFileMode: ResolutionMode | undefined,
+        containingFileMode: ResolutionMode,
         resolutionInfo: TypeReferenceDirectiveResolutionInfo | undefined,
     ): (ResolvedTypeReferenceDirective | undefined)[];
 
@@ -437,7 +437,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         return primaryResult;
     }
 
-    function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, _containingSourceFile?: SourceFile, resolutionMode?: ResolutionMode | undefined): CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations {
+    function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference, _containingSourceFile?: SourceFile, resolutionMode?: ResolutionMode): CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         return ts.resolveTypeReferenceDirective(typeReferenceDirectiveName, containingFile, options, host, redirectedReference, typeReferenceDirectiveResolutionCache, resolutionMode);
     }
 

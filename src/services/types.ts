@@ -325,7 +325,7 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
      */
     resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
     getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
-    resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode | undefined, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
     /** @internal */ hasInvalidatedResolutions?: HasInvalidatedResolutions;
     /** @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
     /** @internal */ getGlobalTypingsCacheLocation?(): string | undefined;

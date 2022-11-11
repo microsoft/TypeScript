@@ -555,7 +555,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return this.resolutionCache.getResolvedModuleWithFailedLookupLocationsFromCache(moduleName, containingFile, resolutionMode);
     }
 
-    resolveTypeReferenceDirectives(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingFileMode?: ResolutionMode | undefined, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[] {
+    resolveTypeReferenceDirectives(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingFileMode?: ResolutionMode, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[] {
         return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference, containingFileMode, resolutionInfo);
     }
 
