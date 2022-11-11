@@ -27,3 +27,10 @@ tests/cases/compiler/inKeywordAndUnknown.ts(12,18): error TS2638: Type '{}' may 
         return !!table && table instanceof Object && 'html' in table;
     }
     
+    function tryGetHtmlPropFromTable(table: unknown) {
+        if (!!table && table instanceof Object && 'html' in table && table.html instanceof Object) {
+            return table.html;
+        }
+        return undefined;
+    }
+    

@@ -22,3 +22,10 @@ function f(x: {}, y: unknown) {
 function isHTMLTable(table: unknown): boolean {
     return !!table && table instanceof Object && 'html' in table;
 }
+
+function tryGetHtmlPropFromTable(table: unknown) {
+    if (!!table && table instanceof Object && 'html' in table && table.html instanceof Object) {
+        return table.html;
+    }
+    return undefined;
+}

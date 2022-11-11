@@ -60,3 +60,35 @@ function isHTMLTable(table: unknown): boolean {
 >table : Object
 }
 
+function tryGetHtmlPropFromTable(table: unknown) {
+>tryGetHtmlPropFromTable : (table: unknown) => Object | undefined
+>table : unknown
+
+    if (!!table && table instanceof Object && 'html' in table && table.html instanceof Object) {
+>!!table && table instanceof Object && 'html' in table && table.html instanceof Object : boolean
+>!!table && table instanceof Object && 'html' in table : boolean
+>!!table && table instanceof Object : boolean
+>!!table : boolean
+>!table : boolean
+>table : unknown
+>table instanceof Object : boolean
+>table : {}
+>Object : ObjectConstructor
+>'html' in table : boolean
+>'html' : "html"
+>table : Object
+>table.html instanceof Object : boolean
+>table.html : unknown
+>table : Object & Record<"html", unknown>
+>html : unknown
+>Object : ObjectConstructor
+
+        return table.html;
+>table.html : Object
+>table : Object & Record<"html", unknown>
+>html : Object
+    }
+    return undefined;
+>undefined : undefined
+}
+

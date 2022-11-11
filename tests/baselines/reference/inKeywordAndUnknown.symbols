@@ -44,3 +44,26 @@ function isHTMLTable(table: unknown): boolean {
 >table : Symbol(table, Decl(inKeywordAndUnknown.ts, 19, 21))
 }
 
+function tryGetHtmlPropFromTable(table: unknown) {
+>tryGetHtmlPropFromTable : Symbol(tryGetHtmlPropFromTable, Decl(inKeywordAndUnknown.ts, 21, 1))
+>table : Symbol(table, Decl(inKeywordAndUnknown.ts, 23, 33))
+
+    if (!!table && table instanceof Object && 'html' in table && table.html instanceof Object) {
+>table : Symbol(table, Decl(inKeywordAndUnknown.ts, 23, 33))
+>table : Symbol(table, Decl(inKeywordAndUnknown.ts, 23, 33))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>table : Symbol(table, Decl(inKeywordAndUnknown.ts, 23, 33))
+>table.html : Symbol(html)
+>table : Symbol(table, Decl(inKeywordAndUnknown.ts, 23, 33))
+>html : Symbol(html)
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        return table.html;
+>table.html : Symbol(html)
+>table : Symbol(table, Decl(inKeywordAndUnknown.ts, 23, 33))
+>html : Symbol(html)
+    }
+    return undefined;
+>undefined : Symbol(undefined)
+}
+
