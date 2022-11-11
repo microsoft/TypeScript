@@ -901,7 +901,7 @@ export interface Node extends ReadonlyTextRange {
 
     /** @internal */ locals?: SymbolTable;                 // Locals associated with node (initialized by binding)
     /** @internal */ nextContainer?: Node;                 // Next container in declaration order (initialized by binding)
-    /** @internal */ localSymbol?: Symbol;                 // Local symbol declared by node (initialized by binding only for exported nodes)
+
     /** @internal */ flowNode?: FlowNode;                  // Associated FlowNode (initialized by binding)
     /** @internal */ emitNode?: EmitNode;                  // Associated EmitNode (initialized by transforms)
     /** @internal */ contextualType?: Type;                // Used to temporarily assign a contextual type during overload resolution
@@ -1666,7 +1666,8 @@ export type DeclarationName =
 
 export interface Declaration extends Node {
     _declarationBrand: any;
-    /** @internal */ symbol: Symbol;                        // Symbol declared by node (initialized by binding)
+    /** @internal */ symbol: Symbol;                       // Symbol declared by node (initialized by binding)
+    /** @internal */ localSymbol?: Symbol;                 // Local symbol declared by node (initialized by binding only for exported nodes)
 }
 
 export interface NamedDeclaration extends Declaration {
