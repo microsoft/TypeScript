@@ -2,7 +2,7 @@ import {
     arrayFrom, CompilerOptions, createGetCanonicalFileName, createLanguageServiceSourceFile, CreateSourceFileOptions,
     Debug, ensureScriptKind, firstDefinedIterator, forEachEntry, getCompilerOptionValue, getEmitScriptTarget,
     getImpliedNodeFormatForFile, getOrUpdate, getSetExternalModuleIndicator, hasProperty, identity, isArray,
-    IScriptSnapshot, isDeclarationFileName, map, MinimalResolutionCacheHost, ModuleKind, Path, ScriptKind,
+    IScriptSnapshot, isDeclarationFileName, map, MinimalResolutionCacheHost, Path, ResolutionMode, ScriptKind,
     ScriptTarget, SourceFile, sourceFileAffectingCompilerOptions, toPath, tracing, updateLanguageServiceSourceFile,
 } from "./_namespaces/ts";
 
@@ -119,11 +119,11 @@ export interface DocumentRegistry {
      * @param scriptKind The script kind of the file to be released
      * @param impliedNodeFormat The implied source file format of the file to be released
      */
-    releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind: ScriptKind, impliedNodeFormat: SourceFile["impliedNodeFormat"]): void; // eslint-disable-line @typescript-eslint/unified-signatures
+    releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind: ScriptKind, impliedNodeFormat: ResolutionMode): void; // eslint-disable-line @typescript-eslint/unified-signatures
     /**
      * @deprecated pass scriptKind for and impliedNodeFormat correctness */
     releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind?: ScriptKind): void;
-    releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind: ScriptKind, impliedNodeFormat: SourceFile["impliedNodeFormat"]): void; // eslint-disable-line @typescript-eslint/unified-signatures
+    releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind: ScriptKind, impliedNodeFormat: ResolutionMode): void; // eslint-disable-line @typescript-eslint/unified-signatures
 
     /** @internal */
     getLanguageServiceRefCounts(path: Path, scriptKind: ScriptKind): [string, number | undefined][];
@@ -335,13 +335,13 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
         }
     }
 
-    function releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind?: ScriptKind, impliedNodeFormat?: SourceFile["impliedNodeFormat"]): void {
+    function releaseDocument(fileName: string, compilationSettings: CompilerOptions, scriptKind?: ScriptKind, impliedNodeFormat?: ResolutionMode): void {
         const path = toPath(fileName, currentDirectory, getCanonicalFileName);
         const key = getKeyForCompilationSettings(compilationSettings);
         return releaseDocumentWithKey(path, key, scriptKind, impliedNodeFormat);
     }
 
-    function releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind?: ScriptKind, impliedNodeFormat?: SourceFile["impliedNodeFormat"]): void {
+    function releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey, scriptKind?: ScriptKind, impliedNodeFormat?: ResolutionMode): void {
         const bucket = Debug.checkDefined(buckets.get(getDocumentRegistryBucketKeyWithMode(key, impliedNodeFormat)));
         const bucketEntry = bucket.get(path)!;
         const entry = getDocumentRegistryEntry(bucketEntry, scriptKind)!;
@@ -402,6 +402,6 @@ function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegist
     return sourceFileAffectingCompilerOptions.map(option => compilerOptionValueToString(getCompilerOptionValue(settings, option))).join("|") + (settings.pathsBasePath ? `|${settings.pathsBasePath}` : undefined) as DocumentRegistryBucketKey;
 }
 
-function getDocumentRegistryBucketKeyWithMode(key: DocumentRegistryBucketKey, mode: ModuleKind.ESNext | ModuleKind.CommonJS | undefined) {
+function getDocumentRegistryBucketKeyWithMode(key: DocumentRegistryBucketKey, mode: ResolutionMode) {
     return (mode ? `${key}|${mode}` : key) as DocumentRegistryBucketKeyWithMode;
 }

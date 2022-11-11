@@ -819,4 +819,26 @@ console.log(a);`,
             baselinePrograms: true,
         });
     });
+
+    verifyTscWithEdits({
+        scenario: "incremental",
+        subScenario: "when file is deleted",
+        commandLineArgs: ["-p", `/src/project`],
+        fs: () => loadProjectFromFiles({
+            "/src/project/tsconfig.json": JSON.stringify({
+                compilerOptions: {
+                    composite: true,
+                    outDir: "outDir",
+                },
+            }),
+            "/src/project/file1.ts": `export class  C { }`,
+            "/src/project/file2.ts": `export class D { }`,
+        }),
+        edits: [
+            {
+                subScenario: "delete file with imports",
+                modifyFs: fs => fs.unlinkSync("/src/project/file2.ts"),
+            },
+        ]
+    });
 });
