@@ -1331,7 +1331,6 @@ export interface KeywordToken<TKind extends KeywordSyntaxKind> extends Token<TKi
 export type AssertsKeyword = KeywordToken<SyntaxKind.AssertsKeyword>;
 export type AssertKeyword = KeywordToken<SyntaxKind.AssertKeyword>;
 export type AwaitKeyword = KeywordToken<SyntaxKind.AwaitKeyword>;
-export type CaseKeyword = KeywordToken<SyntaxKind.CaseKeyword>;
 
 /** @deprecated Use `AwaitKeyword` instead. */
 export type AwaitKeywordToken = AwaitKeyword;
@@ -7854,12 +7853,12 @@ export interface NodeFactory {
     // Signature elements
     //
 
-        createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
-        updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
-        createParameterDeclaration(modifiers: readonly ModifierLike[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): ParameterDeclaration;
-        updateParameterDeclaration(node: ParameterDeclaration, modifiers: readonly ModifierLike[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): ParameterDeclaration;
-        createDecorator(expression: Expression): Decorator;
-        updateDecorator(node: Decorator, expression: Expression): Decorator;
+    createTypeParameterDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
+    updateTypeParameterDeclaration(node: TypeParameterDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
+    createParameterDeclaration(modifiers: readonly ModifierLike[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): ParameterDeclaration;
+    updateParameterDeclaration(node: ParameterDeclaration, modifiers: readonly ModifierLike[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): ParameterDeclaration;
+    createDecorator(expression: Expression): Decorator;
+    updateDecorator(node: Decorator, expression: Expression): Decorator;
 
     //
     // Type Elements

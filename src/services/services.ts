@@ -600,17 +600,17 @@ class TypeObject implements Type {
     }
 }
 
-    class SignatureObject implements Signature {
-        flags: SignatureFlags;
-        checker: TypeChecker;
-        declaration!: SignatureDeclaration;
-        typeParameters?: TypeParameter[];
-        parameters!: Symbol[];
-        thisParameter!: Symbol;
-        resolvedReturnType!: Type;
-        resolvedTypePredicate: TypePredicate | undefined;
-        minTypeArgumentCount!: number;
-        minArgumentCount!: number;
+class SignatureObject implements Signature {
+    flags: SignatureFlags;
+    checker: TypeChecker;
+    declaration!: SignatureDeclaration;
+    typeParameters?: TypeParameter[];
+    parameters!: Symbol[];
+    thisParameter!: Symbol;
+    resolvedReturnType!: Type;
+    resolvedTypePredicate: TypePredicate | undefined;
+    minTypeArgumentCount!: number;
+    minArgumentCount!: number;
 
     // Undefined is used to indicate the value has not been computed. If, after computing, the
     // symbol has no doc comment, then the empty array will be returned.
@@ -622,28 +622,28 @@ class TypeObject implements Type {
         this.flags = flags;
     }
 
-        getDeclaration(): SignatureDeclaration {
-            return this.declaration;
-        }
-        getTypeParameters(): TypeParameter[] | undefined {
-            return this.typeParameters;
-        }
-        getParameters(): Symbol[] {
-            return this.parameters;
-        }
-        getReturnType(): Type {
-            return this.checker.getReturnTypeOfSignature(this);
-        }
-        getTypeParameterAtPosition(pos: number): Type {
-            const type = this.checker.getParameterType(this, pos);
-            if (type.isIndexType() && isThisTypeParameter(type.type)) {
-                const constraint = type.type.getConstraint();
-                if (constraint) {
-                    return this.checker.getIndexType(constraint);
-                }
+    getDeclaration(): SignatureDeclaration {
+        return this.declaration;
+    }
+    getTypeParameters(): TypeParameter[] | undefined {
+        return this.typeParameters;
+    }
+    getParameters(): Symbol[] {
+        return this.parameters;
+    }
+    getReturnType(): Type {
+        return this.checker.getReturnTypeOfSignature(this);
+    }
+    getTypeParameterAtPosition(pos: number): Type {
+        const type = this.checker.getParameterType(this, pos);
+        if (type.isIndexType() && isThisTypeParameter(type.type)) {
+            const constraint = type.type.getConstraint();
+            if (constraint) {
+                return this.checker.getIndexType(constraint);
             }
-            return type;
         }
+        return type;
+    }
 
     getDocumentationComment(): SymbolDisplayPart[] {
         return this.documentationComment || (this.documentationComment = getDocumentationComment(singleElementArray(this.declaration), this.checker));

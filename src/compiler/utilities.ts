@@ -8139,7 +8139,7 @@ export function parseBigInt(text: string): PseudoBigInt | undefined {
 
 /**
  * @internal
- *  @param text a valid bigint string excluding a trailing `n`, but including a possible prefix `-`. Use `isValidBigIntString(text, roundTripOnly)` before calling this function.
+ * @param text a valid bigint string excluding a trailing `n`, but including a possible prefix `-`. Use `isValidBigIntString(text, roundTripOnly)` before calling this function.
  */
 export function parseValidBigInt(text: string): PseudoBigInt {
     const negative = text.startsWith("-");

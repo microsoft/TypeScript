@@ -149,13 +149,13 @@ export interface SymbolOriginInfo {
     fileName?: string;
 }
 
-    interface SymbolOriginInfoExport extends SymbolOriginInfo {
-        symbolName: string;
-        moduleSymbol: Symbol;
-        isDefaultExport: boolean;
-        exportName: string;
-        exportMapKey: string;
-    }
+interface SymbolOriginInfoExport extends SymbolOriginInfo {
+    symbolName: string;
+    moduleSymbol: Symbol;
+    isDefaultExport: boolean;
+    exportName: string;
+    exportMapKey: string;
+}
 
 interface SymbolOriginInfoResolvedExport extends SymbolOriginInfo {
     symbolName: string;
@@ -504,9 +504,9 @@ function continuePreviousIncompleteResponse(
     return previousResponse;
 }
 
-    function jsdocCompletionInfo(entries: CompletionEntry[]): CompletionInfo {
-        return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
-    }
+function jsdocCompletionInfo(entries: CompletionEntry[]): CompletionInfo {
+    return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries };
+}
 
 function keywordToCompletionEntry(keyword: TokenSyntaxKind) {
     return {
@@ -799,7 +799,7 @@ function newCaseClauseTracker(checker: TypeChecker): CaseClauseTracker {
                     existingStrings.add(expression.text);
                     break;
                 case SyntaxKind.NumericLiteral:
-                    existingNumbers.add(parseInt(expression.text)); // >> TODO: do we need to parse it??
+                    existingNumbers.add(parseInt(expression.text));
                     break;
                 case SyntaxKind.BigIntLiteral:
                     const parsedBigInt = parseBigInt(endsWith(expression.text, "n") ? expression.text.slice(0, -1) : expression.text);
@@ -883,7 +883,7 @@ function entityNameToExpression(entityName: EntityName, languageVersion: ScriptT
         return factory.createPropertyAccessExpression(entityNameToExpression(entityName.left, languageVersion), realName);
     }
     else {
-        return factory.createElementAccessExpression(entityNameToExpression(entityName.left, languageVersion), factory.createStringLiteral(`"${realName}"`)); // >> TODO: this is wrong
+        return factory.createElementAccessExpression(entityNameToExpression(entityName.left, languageVersion), factory.createStringLiteral(`"${realName}"`)); // >> TODO: this is wrong, use appropriate quotes
     }
 }
 
@@ -1122,10 +1122,10 @@ function createCompletionEntry(
         return undefined;
     }
 
-        if (originIsExport(origin) || originIsResolvedExport(origin)) {
-            data = originToCompletionEntryData(origin);
-            hasAction = !importStatementCompletion;
-        }
+    if (originIsExport(origin) || originIsResolvedExport(origin)) {
+        data = originToCompletionEntryData(origin);
+        hasAction = !importStatementCompletion;
+    }
 
     // TODO(drosen): Right now we just permit *all* semantic meanings when calling
     // 'getSymbolKind' which is permissible given that it is backwards compatible; but
@@ -1846,26 +1846,26 @@ function getLabelStatementCompletions(node: Node): CompletionEntry[] {
     const uniques = new Map<string, true>();
     let current = node;
 
-        while (current) {
-            if (isFunctionLike(current)) {
-                break;
-            }
-            if (isLabeledStatement(current)) {
-                const name = current.label.text;
-                if (!uniques.has(name)) {
-                    uniques.set(name, true);
-                    entries.push({
-                        name,
-                        kindModifiers: ScriptElementKindModifier.none,
-                        kind: ScriptElementKind.label,
-                        sortText: SortText.LocationPriority
-                    });
-                }
-            }
-            current = current.parent;
+    while (current) {
+        if (isFunctionLike(current)) {
+            break;
         }
-        return entries;
+        if (isLabeledStatement(current)) {
+            const name = current.label.text;
+            if (!uniques.has(name)) {
+                uniques.set(name, true);
+                entries.push({
+                    name,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    kind: ScriptElementKind.label,
+                    sortText: SortText.LocationPriority
+                });
+            }
+        }
+        current = current.parent;
     }
+    return entries;
+}
 
 interface SymbolCompletion {
     type: "symbol";
@@ -1906,14 +1906,14 @@ function getSymbolCompletionFromEntryId(
         }
     }
 
-        const compilerOptions = program.getCompilerOptions();
-        const completionData = getCompletionData(program, log, sourceFile, compilerOptions, position, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, entryId, host, /*formatContext*/ undefined);
-        if (!completionData) {
-            return { type: "none" };
-        }
-        if (completionData.kind !== CompletionDataKind.Data) {
-            return { type: "request", request: completionData };
-        }
+    const compilerOptions = program.getCompilerOptions();
+    const completionData = getCompletionData(program, log, sourceFile, compilerOptions, position, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, entryId, host, /*formatContext*/ undefined);
+    if (!completionData) {
+        return { type: "none" };
+    }
+    if (completionData.kind !== CompletionDataKind.Data) {
+        return { type: "request", request: completionData };
+    }
 
     const { symbols, literals, location, completionKind, symbolToOriginInfoMap, contextToken, previousToken, isJsxInitializer, isTypeOnlyLocation } = completionData;
 

@@ -84,11 +84,6 @@ verify.completions(
         includes: [
             exhaustiveCaseCompletion,
         ],
-        // exact: [
-        //     { name: "E", isRecommended: true },
-        //     "u",
-        //     ...completion.globals,
-        // ],
         preferences: {
             includeCompletionsWithInsertText: true,
         }
@@ -99,7 +94,7 @@ verify.completions(
             "E",
             "u",
             ...completion.globals,
-            exhaustiveCaseCompletion, // TODO: shouldn't be here but is
+            exhaustiveCaseCompletion,
         ],
         preferences: {
             includeCompletionsWithInsertText: true,

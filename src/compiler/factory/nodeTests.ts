@@ -85,7 +85,7 @@ export function isDotDotDotToken(node: Node): node is DotDotDotToken {
     return node.kind === SyntaxKind.DotDotDotToken;
 }
 
-/** @internal*/
+/** @internal */
 export function isCommaToken(node: Node): node is Token<SyntaxKind.CommaToken> {
     return node.kind === SyntaxKind.CommaToken;
 }
