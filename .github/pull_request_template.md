@@ -4,7 +4,7 @@ Thank you for submitting a pull request!
 Please verify that:
 * [ ] There is an associated issue in the `Backlog` milestone (**required**)
 * [ ] Code is up-to-date with the `main` branch
-* [ ] You've successfully run `gulp runtests` locally
+* [ ] You've successfully run `hereby runtests` locally
 * [ ] There are new or updated unit tests validating the change
 
 Refer to CONTRIBUTING.MD for more details.
