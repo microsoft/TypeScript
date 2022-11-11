@@ -1,8 +1,9 @@
 //// [tests/cases/compiler/APISample_linter.ts] ////
 
-//// [index.d.ts]
-declare module "typescript" {
-    export = ts;
+//// [package.json]
+{
+    "name": "typescript",
+    "types": "/.ts/typescript.d.ts"
 }
 
 //// [APISample_linter.ts]
@@ -69,6 +70,7 @@ fileNames.forEach(fileName => {
     // delint it
     delint(sourceFile);
 });
+
 
 //// [APISample_linter.js]
 "use strict";
