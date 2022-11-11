@@ -1,4 +1,5 @@
 import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
 import { createWatchedSystem, File, libFile, SymLink } from "../virtualFileSystemWithWatch";
 import { createBaseline, createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline, runWatchBaseline, verifyTscWatch } from "./helpers";
 
@@ -564,5 +565,51 @@ declare namespace NodeJS {
                 },
             ]
         });
+    });
+
+    verifyTscWatch({
+        scenario,
+        subScenario: "reusing type ref resolution",
+        sys: () => createWatchedSystem({
+            "/src/project/tsconfig.json": JSON.stringify({
+                compilerOptions: {
+                    composite: true,
+                    traceResolution: true,
+                    outDir: "outDir",
+                },
+            }),
+            "/src/project/fileWithImports.ts": Utils.dedent`
+                import type { Import0 } from "pkg0";
+                import type { Import1 } from "pkg1";
+            `,
+            "/src/project/node_modules/pkg0/index.d.ts": `export interface Import0 {}`,
+            "/src/project/fileWithTypeRefs.ts": Utils.dedent`
+                /// <reference types="pkg2"/>
+                /// <reference types="pkg3"/>
+                interface LocalInterface extends Import2, Import3 {}
+                export {}
+            `,
+            "/src/project/node_modules/pkg2/index.d.ts": `interface Import2 {}`,
+            [libFile.path]: libFile.content,
+        }, { currentDirectory: "/src/project" }),
+        commandLineArgs: ["-w", "--explainFiles", "--extendedDiagnostics"],
+        changes: [
+            {
+                caption: "write file not resolved by import",
+                change: sys => sys.ensureFileOrFolder({ path: "/src/project/node_modules/pkg1/index.d.ts", content: `export interface Import1 {}` }),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks(); // failed lookup
+                    sys.runQueuedTimeoutCallbacks(); // actual update
+                }
+            },
+            {
+                caption: "write file not resolved by typeRef",
+                change: sys => sys.ensureFileOrFolder({ path: "/src/project/node_modules/pkg3/index.d.ts", content: `export interface Import3 {}` }),
+                timeouts: sys => {
+                    sys.runQueuedTimeoutCallbacks(); // failed lookup
+                    sys.runQueuedTimeoutCallbacks(); // actual update
+                }
+            },
+        ]
     });
 });
