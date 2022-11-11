@@ -692,6 +692,7 @@ function getExhaustiveCaseSnippets(
         }
 
         const target = getEmitScriptTarget(options);
+        const quotePreference = getQuotePreference(sourceFile, preferences);
         const importAdder = codefix.createImportAdder(sourceFile, program, preferences, host);
         const elements: Expression[] = [];
         for (const type of switchType.types as LiteralType[]) {
@@ -711,7 +712,7 @@ function getExhaustiveCaseSnippets(
                 if (!typeNode) {
                     return undefined;
                 }
-                const expr = typeNodeToExpression(typeNode, target);
+                const expr = typeNodeToExpression(typeNode, target, quotePreference);
                 if (!expr) {
                     return undefined;
                 }
@@ -842,14 +843,16 @@ function newCaseClauseTracker(checker: TypeChecker): CaseClauseTracker {
     }
 }
 
-function typeNodeToExpression(typeNode: TypeNode, languageVersion: ScriptTarget): Expression | undefined {
+function typeNodeToExpression(typeNode: TypeNode, languageVersion: ScriptTarget, quotePreference: QuotePreference): Expression | undefined {
     switch (typeNode.kind) {
         case SyntaxKind.TypeReference:
             const typeName = (typeNode as TypeReferenceNode).typeName;
-            return entityNameToExpression(typeName, languageVersion);
+            return entityNameToExpression(typeName, languageVersion, quotePreference);
         case SyntaxKind.IndexedAccessType:
-            const objectExpression = typeNodeToExpression((typeNode as IndexedAccessTypeNode).objectType, languageVersion);
-            const indexExpression = typeNodeToExpression((typeNode as IndexedAccessTypeNode).indexType, languageVersion);
+            const objectExpression =
+                typeNodeToExpression((typeNode as IndexedAccessTypeNode).objectType, languageVersion, quotePreference);
+            const indexExpression =
+                typeNodeToExpression((typeNode as IndexedAccessTypeNode).indexType, languageVersion, quotePreference);
             return objectExpression
                 && indexExpression
                 && factory.createElementAccessExpression(objectExpression, indexExpression);
@@ -857,16 +860,16 @@ function typeNodeToExpression(typeNode: TypeNode, languageVersion: ScriptTarget)
             const literal = (typeNode as LiteralTypeNode).literal;
             switch (literal.kind) {
                 case SyntaxKind.StringLiteral:
-                    return factory.createStringLiteral(literal.text); // >> TODO: where to get 'issinglequote' from?
+                    return factory.createStringLiteral(literal.text, quotePreference === QuotePreference.Single);
                 case SyntaxKind.NumericLiteral:
                     return factory.createNumericLiteral(literal.text, (literal as NumericLiteral).numericLiteralFlags);
             }
             return undefined;
         case SyntaxKind.ParenthesizedType:
-            const exp = typeNodeToExpression((typeNode as ParenthesizedTypeNode).type, languageVersion);
+            const exp = typeNodeToExpression((typeNode as ParenthesizedTypeNode).type, languageVersion, quotePreference);
             return exp && (isIdentifier(exp) ? exp : factory.createParenthesizedExpression(exp));
         case SyntaxKind.TypeQuery:
-            return entityNameToExpression((typeNode as TypeQueryNode).exprName, languageVersion);
+            return entityNameToExpression((typeNode as TypeQueryNode).exprName, languageVersion, quotePreference);
         case SyntaxKind.ImportType:
             Debug.fail(`We should not get an import type after calling 'codefix.typeToAutoImportableTypeNode'.`);
     }
@@ -874,16 +877,20 @@ function typeNodeToExpression(typeNode: TypeNode, languageVersion: ScriptTarget)
     return undefined;
 }
 
-function entityNameToExpression(entityName: EntityName, languageVersion: ScriptTarget): Expression {
+function entityNameToExpression(entityName: EntityName, languageVersion: ScriptTarget, quotePreference: QuotePreference): Expression {
     if (isIdentifier(entityName)) {
         return entityName;
     }
     const realName = unescapeLeadingUnderscores(entityName.right.escapedText);
     if (canUsePropertyAccess(realName, languageVersion)) {
-        return factory.createPropertyAccessExpression(entityNameToExpression(entityName.left, languageVersion), realName);
+        return factory.createPropertyAccessExpression(
+            entityNameToExpression(entityName.left, languageVersion, quotePreference),
+            realName);
     }
     else {
-        return factory.createElementAccessExpression(entityNameToExpression(entityName.left, languageVersion), factory.createStringLiteral(`"${realName}"`)); // >> TODO: this is wrong, use appropriate quotes
+        return factory.createElementAccessExpression(
+            entityNameToExpression(entityName.left, languageVersion, quotePreference),
+            factory.createStringLiteral(realName, quotePreference === QuotePreference.Single));
     }
 }
 
