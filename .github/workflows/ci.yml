@@ -112,7 +112,7 @@ jobs:
         npx tsc --version
         echo '{"seq": 1, "command": "status"}' | npx tsserver
 
-        cat > smoke.js << EOF
+        cat > smoke.js << 'EOF'
         const { __importDefault, __importStar } = require("tslib");
         const ts = require(process.argv[2]);
 
