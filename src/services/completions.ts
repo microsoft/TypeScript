@@ -1119,11 +1119,11 @@ function createCompletionEntry(
             }
         }
 
-            if (useBraces) {
-                insertText = `${escapeSnippetText(name)}={$1}`;
-                isSnippet = true;
-            }
+        if (useBraces) {
+            insertText = `${escapeSnippetText(name)}={$1}`;
+            isSnippet = true;
         }
+    }
 
     if (insertText !== undefined && !preferences.includeCompletionsWithInsertText) {
         return undefined;
