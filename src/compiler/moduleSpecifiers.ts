@@ -285,12 +285,12 @@ function computeModuleSpecifiers(
             return nodeModulesSpecifiers!;
         }
 
-        if (!specifier && !modulePath.isRedirect) {
+        if (!specifier) {
             const local = getLocalModuleSpecifier(modulePath.path, info, compilerOptions, host, options.overrideImportMode || importingSourceFile.impliedNodeFormat, preferences);
             if (pathIsBareSpecifier(local)) {
                 pathsSpecifiers = append(pathsSpecifiers, local);
             }
-            else if (!importedFileIsInNodeModules || modulePath.isInNodeModules) {
+            else if (!modulePath.isRedirect && (!importedFileIsInNodeModules || modulePath.isInNodeModules)) {
                 // Why this extra conditional, not just an `else`? If some path to the file contained
                 // 'node_modules', but we can't create a non-relative specifier (e.g. "@foo/bar/path/to/file"),
                 // that means we had to go through a *sibling's* node_modules, not one we can access directly.
@@ -338,16 +338,16 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
     }
 
     const fromPaths = paths && tryGetModuleNameFromPaths(relativeToBaseUrl, paths, getAllowedEndings(ending, compilerOptions, importMode), host, compilerOptions);
-    const nonRelative = fromPaths === undefined && baseUrl !== undefined ? removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions) : fromPaths;
-    if (!nonRelative) {
+    const maybeNonRelative = fromPaths === undefined && baseUrl !== undefined ? removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions) : fromPaths;
+    if (!maybeNonRelative) {
         return relativePath;
     }
 
-    if (relativePreference === RelativePreference.NonRelative) {
-        return nonRelative;
+    if (relativePreference === RelativePreference.NonRelative && !pathIsRelative(maybeNonRelative)) {
+        return maybeNonRelative;
     }
 
-    if (relativePreference === RelativePreference.ExternalNonRelative) {
+    if (relativePreference === RelativePreference.ExternalNonRelative && !pathIsRelative(maybeNonRelative)) {
         const projectDirectory = compilerOptions.configFilePath ?
             toPath(getDirectoryPath(compilerOptions.configFilePath), host.getCurrentDirectory(), info.getCanonicalFileName) :
             info.getCanonicalFileName(host.getCurrentDirectory());
@@ -363,7 +363,7 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
             //      lib/              | (path crosses tsconfig.json)
             //        imported.ts <---
             //
-            return nonRelative;
+            return maybeNonRelative;
         }
 
         const nearestTargetPackageJson = getNearestAncestorDirectoryWithPackageJson(host, getDirectoryPath(modulePath));
@@ -378,16 +378,14 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
             //        package.json     |
             //        component.ts <---
             //
-            return nonRelative;
+            return maybeNonRelative;
         }
 
         return relativePath;
     }
 
-    if (relativePreference !== RelativePreference.Shortest) Debug.assertNever(relativePreference);
-
     // Prefer a relative import over a baseUrl import if it has fewer components.
-    return isPathRelativeToParent(nonRelative) || countPathComponents(relativePath) < countPathComponents(nonRelative) ? relativePath : nonRelative;
+    return isPathRelativeToParent(maybeNonRelative) || countPathComponents(relativePath) < countPathComponents(maybeNonRelative) ? relativePath : maybeNonRelative;
 }
 
 /** @internal */
