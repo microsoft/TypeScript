@@ -16,7 +16,7 @@ import {
     isStringLiteral, isStringLiteralLike, isTypeReferenceNode, isUrl, JsxAttribute, LanguageServiceHost,
     length, LiteralExpression, LiteralTypeNode, mapDefined, MapLike, ModuleKind, ModuleResolutionKind,
     moduleSpecifiers, Node, normalizePath, normalizeSlashes, ObjectLiteralExpression, Path, Program, PropertyAssignment,
-    rangeContainsPosition, readJson, removeFileExtension, removePrefix, removeTrailingDirectorySeparator, resolvePath,
+    rangeContainsPosition, readJson, removeFileExtension, removePrefix, removeTrailingDirectorySeparator, ResolutionMode, resolvePath,
     ScriptElementKind, ScriptElementKindModifier, ScriptTarget, Signature, signatureHasRestParameter, SignatureHelp,
     singleElementArray, skipConstraint, skipParentheses, SourceFile, startsWith, stringContains, StringLiteralLike,
     StringLiteralType, stripQuotes, Symbol, SyntaxKind, textPart, TextSpan, tryAndIgnoreErrors, tryDirectoryExists,
@@ -660,7 +660,7 @@ function addCompletionEntriesFromPathsOrExports(
 function getCompletionEntriesForNonRelativeModules(
     fragment: string,
     scriptPath: string,
-    mode: SourceFile["impliedNodeFormat"],
+    mode: ResolutionMode,
     compilerOptions: CompilerOptions,
     host: LanguageServiceHost,
     includeExtensionsOption: IncludeExtensionsOption,

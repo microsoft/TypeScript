@@ -3,7 +3,7 @@ import {
     ExportedModulesFromDeclarationEmit, GetCanonicalFileName, getDirectoryPath, getSourceFileOfNode,
     isDeclarationFileName, isExternalOrCommonJsModule, isGlobalScopeAugmentation, isJsonSourceFile,
     isModuleWithStringLiteralName, isStringLiteral, mapDefined, mapDefinedIterator, ModuleDeclaration,
-    ModuleKind, outFile, OutputFile, Path, Program, some, SourceFile, StringLiteralLike, Symbol,
+    ModuleKind, outFile, OutputFile, Path, Program, ResolutionMode, some, SourceFile, StringLiteralLike, Symbol,
     toPath, TypeChecker,
 } from "./_namespaces/ts";
 
@@ -75,7 +75,7 @@ export namespace BuilderState {
         readonly version: string;
         signature: string | undefined;
         affectsGlobalScope: true | undefined;
-        impliedFormat: SourceFile["impliedNodeFormat"];
+        impliedFormat: ResolutionMode;
     }
 
     export interface ReadonlyManyToManyPathMap {
