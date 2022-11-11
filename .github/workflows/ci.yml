@@ -132,7 +132,10 @@ jobs:
             success = !!fn();
           }
           catch {}
-          if (success !== shouldSucceed) {
+          if (success === shouldSucceed) {
+            console.log(`${fn.toString()} behaved as expected.`);
+          }
+          else {
             if (success) {
               console.error(`${fn.toString()} unexpectedly succeeded.`);
             }
@@ -142,6 +145,7 @@ jobs:
             process.exitCode = 1;
           }
         }
+        console.log("ok");
         EOF
 
         node ./smoke.js typescript
