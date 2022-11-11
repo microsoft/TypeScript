@@ -275,6 +275,7 @@ function computeModuleSpecifiers(
     //   4. Relative paths
     let nodeModulesSpecifiers: string[] | undefined;
     let pathsSpecifiers: string[] | undefined;
+    let redirectPathsSpecifiers: string[] | undefined;
     let relativeSpecifiers: string[] | undefined;
     for (const modulePath of modulePaths) {
         const specifier = tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode);
@@ -286,11 +287,25 @@ function computeModuleSpecifiers(
         }
 
         if (!specifier) {
-            const local = getLocalModuleSpecifier(modulePath.path, info, compilerOptions, host, options.overrideImportMode || importingSourceFile.impliedNodeFormat, preferences);
-            if (pathIsBareSpecifier(local)) {
+            const local = getLocalModuleSpecifier(
+                modulePath.path,
+                info,
+                compilerOptions,
+                host,
+                options.overrideImportMode || importingSourceFile.impliedNodeFormat,
+                preferences,
+                /*pathsOnly*/ modulePath.isRedirect,
+            );
+            if (!local) {
+                continue;
+            }
+            if (modulePath.isRedirect) {
+                redirectPathsSpecifiers = append(redirectPathsSpecifiers, local);
+            }
+            else if (pathIsBareSpecifier(local)) {
                 pathsSpecifiers = append(pathsSpecifiers, local);
             }
-            else if (!modulePath.isRedirect && (!importedFileIsInNodeModules || modulePath.isInNodeModules)) {
+            else if (!importedFileIsInNodeModules || modulePath.isInNodeModules) {
                 // Why this extra conditional, not just an `else`? If some path to the file contained
                 // 'node_modules', but we can't create a non-relative specifier (e.g. "@foo/bar/path/to/file"),
                 // that means we had to go through a *sibling's* node_modules, not one we can access directly.
@@ -306,8 +321,9 @@ function computeModuleSpecifiers(
     }
 
     return pathsSpecifiers?.length ? pathsSpecifiers :
+        redirectPathsSpecifiers?.length ? redirectPathsSpecifiers :
         nodeModulesSpecifiers?.length ? nodeModulesSpecifiers :
-            Debug.checkDefined(relativeSpecifiers);
+        Debug.checkDefined(relativeSpecifiers);
 }
 
 interface Info {
@@ -322,22 +338,32 @@ function getInfo(importingSourceFileName: Path, host: ModuleSpecifierResolutionH
     return { getCanonicalFileName, importingSourceFileName, sourceDirectory };
 }
 
-function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, { ending, relativePreference }: Preferences): string {
+function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, { ending, relativePreference }: Preferences): string;
+function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, { ending, relativePreference }: Preferences, pathsOnly?: boolean): string | undefined;
+function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, { ending, relativePreference }: Preferences, pathsOnly?: boolean): string | undefined {
     const { baseUrl, paths, rootDirs } = compilerOptions;
+    if (pathsOnly && !paths) {
+        return undefined;
+    }
+
     const { sourceDirectory, getCanonicalFileName } = info;
     const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, ending, compilerOptions) ||
         removeExtensionAndIndexPostFix(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), ending, compilerOptions);
     if (!baseUrl && !paths || relativePreference === RelativePreference.Relative) {
-        return relativePath;
+        return pathsOnly ? undefined : relativePath;
     }
 
     const baseDirectory = getNormalizedAbsolutePath(getPathsBasePath(compilerOptions, host) || baseUrl!, host.getCurrentDirectory());
     const relativeToBaseUrl = getRelativePathIfInDirectory(moduleFileName, baseDirectory, getCanonicalFileName);
     if (!relativeToBaseUrl) {
-        return relativePath;
+        return pathsOnly ? undefined : relativePath;
     }
 
     const fromPaths = paths && tryGetModuleNameFromPaths(relativeToBaseUrl, paths, getAllowedEndings(ending, compilerOptions, importMode), host, compilerOptions);
+    if (pathsOnly) {
+        return fromPaths;
+    }
+
     const maybeNonRelative = fromPaths === undefined && baseUrl !== undefined ? removeExtensionAndIndexPostFix(relativeToBaseUrl, ending, compilerOptions) : fromPaths;
     if (!maybeNonRelative) {
         return relativePath;
