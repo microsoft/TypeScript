@@ -16,6 +16,7 @@ import {
     ProgramBuildInfo,
     Push,
     SymlinkCache,
+    ThisContainer,
 } from "./_namespaces/ts";
 
 // branded string type used to store absolute, normalized and canonicalized paths
@@ -897,7 +898,7 @@ export interface Node extends ReadonlyTextRange {
     /** @internal */ id?: NodeId;                          // Unique id (used to look up NodeLinks)
     readonly parent: Node;                                // Parent node (initialized by binding)
     /** @internal */ original?: Node;                      // The original node if this is an updated node.
-    /** @internal */ symbol: Symbol;                       // Symbol declared by node (initialized by binding)
+
     /** @internal */ locals?: SymbolTable;                 // Locals associated with node (initialized by binding)
     /** @internal */ nextContainer?: Node;                 // Next container in declaration order (initialized by binding)
     /** @internal */ localSymbol?: Symbol;                 // Local symbol declared by node (initialized by binding only for exported nodes)
@@ -907,7 +908,8 @@ export interface Node extends ReadonlyTextRange {
     /** @internal */ inferenceContext?: InferenceContext;  // Inference context for contextual type
 }
 
-export interface JSDocContainer {
+export interface JSDocContainer extends Node {
+    _jsdocContainerBrand: any;
     /** @internal */ jsDoc?: JSDoc[];                      // JSDoc that directly precedes this node
     /** @internal */ jsDocCache?: readonly JSDocTag[];     // Cache for getJSDocTags
 }
@@ -1306,6 +1308,184 @@ export type HasIllegalModifiers =
     | NamespaceExportDeclaration
     ;
 
+/**
+ * Declarations that can contain other declarations. Corresponds with `ContainerFlags.IsContainer` in binder.ts.
+ *
+ * @internal
+ */
+export type IsContainer =
+    | ClassExpression
+    | ClassDeclaration
+    | EnumDeclaration
+    | ObjectLiteralExpression
+    | TypeLiteralNode
+    | JSDocTypeLiteral
+    | JsxAttributes
+    | InterfaceDeclaration
+    | ModuleDeclaration
+    | TypeAliasDeclaration
+    | MappedTypeNode
+    | IndexSignatureDeclaration
+    | SourceFile
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | MethodDeclaration
+    | ConstructorDeclaration
+    | FunctionDeclaration
+    | MethodSignature
+    | CallSignatureDeclaration
+    | JSDocSignature
+    | JSDocFunctionType
+    | FunctionTypeNode
+    | ConstructSignatureDeclaration
+    | ConstructorTypeNode
+    | ClassStaticBlockDeclaration
+    | FunctionExpression
+    | ArrowFunction
+    ;
+
+/**
+ * Nodes that introduce a new block scope. Corresponds with `ContainerFlags.IsBlockScopedContainer` in binder.ts.
+ *
+ * @internal
+ */
+export type IsBlockScopedContainer =
+    | IsContainer
+    | CatchClause
+    | ForStatement
+    | ForInStatement
+    | ForOfStatement
+    | CaseBlock
+    | Block
+    ;
+
+/**
+ * Corresponds with `ContainerFlags.IsControlFlowContainer` in binder.ts.
+ *
+ * @internal
+ */
+export type IsControlFlowContainer =
+    | SourceFile
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | MethodDeclaration
+    | ConstructorDeclaration
+    | FunctionDeclaration
+    | MethodSignature
+    | CallSignatureDeclaration
+    | JSDocSignature
+    | JSDocFunctionType
+    | FunctionTypeNode
+    | ConstructSignatureDeclaration
+    | ConstructorTypeNode
+    | ClassStaticBlockDeclaration
+    | FunctionExpression
+    | ArrowFunction
+    | ModuleBlock
+    | PropertyDeclaration
+    ;
+
+/**
+ * Corresponds with `ContainerFlags.IsFunctionLike` in binder.ts.
+ *
+ * @internal
+ */
+export type IsFunctionLike =
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | MethodDeclaration
+    | ConstructorDeclaration
+    | FunctionDeclaration
+    | MethodSignature
+    | CallSignatureDeclaration
+    | JSDocSignature
+    | JSDocFunctionType
+    | FunctionTypeNode
+    | ConstructSignatureDeclaration
+    | ConstructorTypeNode
+    | ClassStaticBlockDeclaration
+    | FunctionExpression
+    | ArrowFunction
+    ;
+
+/**
+ * Corresponds with `ContainerFlags.IsFunctionExpression` in binder.ts.
+ *
+ * @internal
+ */
+export type IsFunctionExpression =
+    | FunctionExpression
+    | ArrowFunction
+    ;
+
+/**
+ * Nodes that can have local symbols. Corresponds with `ContainerFlags.HasLocals`.
+ *
+ * @internal
+ */
+export type HasLocals =
+    | ModuleDeclaration
+    | TypeAliasDeclaration
+    | MappedTypeNode
+    | IndexSignatureDeclaration
+    | SourceFile
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | MethodDeclaration
+    | ConstructorDeclaration
+    | FunctionDeclaration
+    | MethodSignature
+    | CallSignatureDeclaration
+    | JSDocSignature
+    | JSDocFunctionType
+    | FunctionTypeNode
+    | ConstructSignatureDeclaration
+    | ConstructorTypeNode
+    | ClassStaticBlockDeclaration
+    | FunctionExpression
+    | ArrowFunction
+    | JSDocTypedefTag //
+    | JSDocEnumTag
+    | JSDocCallbackTag
+    | ConditionalTypeNode
+    ;
+
+/**
+ * Corresponds with `ContainerFlags.IsInterface` in binder.ts.
+ *
+ * @internal
+ */
+export type IsInterface =
+    | InterfaceDeclaration
+    ;
+
+/**
+ * Corresponds with `ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor` in binder.ts.
+ *
+ * @internal
+ */
+export type IsObjectLiteralOrClassExpressionMethodOrAccessor =
+    | GetAccessorDeclaration
+    | SetAccessorDeclaration
+    | MethodDeclaration
+    ;
+
+/**
+ * Corresponds with `ContainerFlags` in binder.ts.
+ *
+ * @internal
+ */
+export type HasContainerFlags =
+    | IsContainer
+    | IsBlockScopedContainer
+    | IsControlFlowContainer
+    | IsFunctionLike
+    | IsFunctionExpression
+    | HasLocals
+    | IsInterface
+    | IsObjectLiteralOrClassExpressionMethodOrAccessor
+    ;
+
 /** @internal */
 export interface MutableNodeArray<T extends Node> extends Array<T>, TextRange {
     hasTrailingComma: boolean;
@@ -1486,6 +1666,7 @@ export type DeclarationName =
 
 export interface Declaration extends Node {
     _declarationBrand: any;
+    /** @internal */ symbol: Symbol;                        // Symbol declared by node (initialized by binding)
 }
 
 export interface NamedDeclaration extends Declaration {
@@ -1647,6 +1828,7 @@ export type BindingElementGrandparent = BindingElement["parent"]["parent"];
 
 export interface PropertySignature extends TypeElement, JSDocContainer {
     readonly kind: SyntaxKind.PropertySignature;
+    readonly parent: TypeLiteralNode | InterfaceDeclaration;
     readonly modifiers?: NodeArray<Modifier>;
     readonly name: PropertyName;                 // Declared property name
     readonly questionToken?: QuestionToken;      // Present on optional property
@@ -1766,10 +1948,6 @@ export type VariableLikeDeclaration =
     | JSDocPropertyTag
     | JSDocParameterTag;
 
-export interface PropertyLikeDeclaration extends NamedDeclaration {
-    readonly name: PropertyName;
-}
-
 export interface ObjectBindingPattern extends Node {
     readonly kind: SyntaxKind.ObjectBindingPattern;
     readonly parent: VariableDeclaration | ParameterDeclaration | BindingElement;
@@ -1828,7 +2006,7 @@ export interface FunctionDeclaration extends FunctionLikeDeclarationBase, Declar
 
 export interface MethodSignature extends SignatureDeclarationBase, TypeElement {
     readonly kind: SyntaxKind.MethodSignature;
-    readonly parent: ObjectTypeDeclaration;
+    readonly parent: TypeLiteralNode | InterfaceDeclaration;
     readonly modifiers?: NodeArray<Modifier>;
     readonly name: PropertyName;
 }
@@ -2724,7 +2902,7 @@ export interface PropertyAccessEntityNameExpression extends PropertyAccessExpres
     readonly name: Identifier;
 }
 
-export interface ElementAccessExpression extends MemberExpression {
+export interface ElementAccessExpression extends MemberExpression, Declaration {
     readonly kind: SyntaxKind.ElementAccessExpression;
     readonly expression: LeftHandSideExpression;
     readonly questionDotToken?: QuestionDotToken;
@@ -3858,7 +4036,7 @@ export interface JSDocParameterTag extends JSDocPropertyLikeTag {
     readonly kind: SyntaxKind.JSDocParameterTag;
 }
 
-export interface JSDocTypeLiteral extends JSDocType {
+export interface JSDocTypeLiteral extends JSDocType, Declaration {
     readonly kind: SyntaxKind.JSDocTypeLiteral;
     readonly jsDocPropertyTags?: readonly JSDocPropertyLikeTag[];
     /** If true, then this type literal represents an *array* of its type. */
@@ -4947,7 +5125,7 @@ export interface TypeChecker {
      *
      * @internal
      */
-    tryGetThisTypeAt(node: Node, includeGlobalThis?: boolean, container?: Node): Type | undefined;
+    tryGetThisTypeAt(node: Node, includeGlobalThis?: boolean, container?: ThisContainer): Type | undefined;
     /** @internal */ getTypeArgumentConstraint(node: TypeNode): Type | undefined;
 
     /**
@@ -7863,11 +8041,12 @@ export interface NodeFactory {
     createToken(token: SyntaxKind.NullKeyword): NullLiteral;
     createToken(token: SyntaxKind.TrueKeyword): TrueLiteral;
     createToken(token: SyntaxKind.FalseKeyword): FalseLiteral;
+    createToken(token: SyntaxKind.EndOfFileToken): EndOfFileToken;
+    createToken(token: SyntaxKind.Unknown): Token<SyntaxKind.Unknown>;
     createToken<TKind extends PunctuationSyntaxKind>(token: TKind): PunctuationToken<TKind>;
     createToken<TKind extends KeywordTypeSyntaxKind>(token: TKind): KeywordTypeNode<TKind>;
     createToken<TKind extends ModifierSyntaxKind>(token: TKind): ModifierToken<TKind>;
     createToken<TKind extends KeywordSyntaxKind>(token: TKind): KeywordToken<TKind>;
-    createToken<TKind extends SyntaxKind.Unknown | SyntaxKind.EndOfFileToken>(token: TKind): Token<TKind>;
     /** @internal */ createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;
 
     //

@@ -2058,6 +2058,81 @@ export function isModuleOrEnumDeclaration(node: Node): node is ModuleDeclaration
     return node.kind === SyntaxKind.ModuleDeclaration || node.kind === SyntaxKind.EnumDeclaration;
 }
 
+/** @internal */
+export function canHaveSymbol(node: Node): node is Declaration {
+    // NOTE: This should cover all possible declarations except MissingDeclaration and SemicolonClassElement
+    //       since they aren't actually declarations and can't have a symbol.
+    switch (node.kind) {
+        case SyntaxKind.ArrowFunction:
+        case SyntaxKind.BinaryExpression:
+        case SyntaxKind.BindingElement:
+        case SyntaxKind.CallExpression:
+        case SyntaxKind.CallSignature:
+        case SyntaxKind.ClassDeclaration:
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.ClassStaticBlockDeclaration:
+        case SyntaxKind.Constructor:
+        case SyntaxKind.ConstructorType:
+        case SyntaxKind.ConstructSignature:
+        case SyntaxKind.ElementAccessExpression:
+        case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.EnumMember:
+        case SyntaxKind.ExportAssignment:
+        case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.ExportSpecifier:
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.FunctionType:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.Identifier:
+        case SyntaxKind.ImportClause:
+        case SyntaxKind.ImportEqualsDeclaration:
+        case SyntaxKind.ImportSpecifier:
+        case SyntaxKind.IndexSignature:
+        case SyntaxKind.InterfaceDeclaration:
+        case SyntaxKind.JSDocCallbackTag:
+        case SyntaxKind.JSDocEnumTag:
+        case SyntaxKind.JSDocFunctionType:
+        case SyntaxKind.JSDocParameterTag:
+        case SyntaxKind.JSDocPropertyTag:
+        case SyntaxKind.JSDocSignature:
+        case SyntaxKind.JSDocTypedefTag:
+        case SyntaxKind.JSDocTypeLiteral:
+        case SyntaxKind.JsxAttribute:
+        case SyntaxKind.JsxAttributes:
+        case SyntaxKind.JsxSpreadAttribute:
+        case SyntaxKind.MappedType:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.NamedTupleMember:
+        case SyntaxKind.NamespaceExport:
+        case SyntaxKind.NamespaceExportDeclaration:
+        case SyntaxKind.NamespaceImport:
+        case SyntaxKind.NewExpression:
+        case SyntaxKind.NoSubstitutionTemplateLiteral:
+        case SyntaxKind.NumericLiteral:
+        case SyntaxKind.ObjectLiteralExpression:
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertyAccessExpression:
+        case SyntaxKind.PropertyAssignment:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.ShorthandPropertyAssignment:
+        case SyntaxKind.SourceFile:
+        case SyntaxKind.SpreadAssignment:
+        case SyntaxKind.StringLiteral:
+        case SyntaxKind.TypeAliasDeclaration:
+        case SyntaxKind.TypeLiteral:
+        case SyntaxKind.TypeParameter:
+        case SyntaxKind.VariableDeclaration:
+            return true;
+        default:
+            return false;
+    }
+}
+
 function isDeclarationKind(kind: SyntaxKind) {
     return kind === SyntaxKind.ArrowFunction
         || kind === SyntaxKind.BindingElement

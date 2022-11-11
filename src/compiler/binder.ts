@@ -21,6 +21,7 @@ import {
     BreakOrContinueStatement,
     CallChain,
     CallExpression,
+    canHaveSymbol,
     CaseBlock,
     CaseClause,
     cast,
@@ -104,8 +105,10 @@ import {
     getTextOfIdentifierOrLiteral,
     getThisContainer,
     getTokenPosOfNode,
+    HasContainerFlags,
     hasDynamicName,
     hasJSDocNodes,
+    HasLocals,
     hasSyntacticModifier,
     Identifier,
     idText,
@@ -126,9 +129,11 @@ import {
     isBindingPattern,
     isBlock,
     isBlockOrCatchScoped,
+    IsBlockScopedContainer,
     isCallExpression,
     isClassStaticBlockDeclaration,
     isConditionalTypeNode,
+    IsContainer,
     isDeclaration,
     isDeclarationStatement,
     isDestructuringAssignment,
@@ -250,6 +255,7 @@ import {
     PrefixUnaryExpression,
     PrivateIdentifier,
     PropertyAccessChain,
+    PropertyAccessEntityNameExpression,
     PropertyAccessExpression,
     PropertyDeclaration,
     PropertySignature,
@@ -486,10 +492,10 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     let options: CompilerOptions;
     let languageVersion: ScriptTarget;
     let parent: Node;
-    let container: Node;
-    let thisParentContainer: Node; // Container one level up
-    let blockScopeContainer: Node;
-    let lastContainer: Node;
+    let container: IsContainer | EntityNameExpression;
+    let thisParentContainer: IsContainer | EntityNameExpression; // Container one level up
+    let blockScopeContainer: IsBlockScopedContainer;
+    let lastContainer: IsBlockScopedContainer;
     let delayedTypeAliases: (JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag)[];
     let seenThisKeyword: boolean;
 
@@ -909,7 +915,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     // All container nodes are kept on a linked list in declaration order. This list is used by
     // the getLocalNameOfContainer function in the type checker to validate that the local name
     // used for a container is unique.
-    function bindContainer(node: Mutable<Node>, containerFlags: ContainerFlags) {
+    function bindContainer(node: Mutable<HasContainerFlags>, containerFlags: ContainerFlags) {
         // Before we recurse into a node's children, we first save the existing parent, container
         // and block-container.  Then after we pop out of processing the children, we restore
         // these saved values.
@@ -938,14 +944,14 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             if (node.kind !== SyntaxKind.ArrowFunction) {
                 thisParentContainer = container;
             }
-            container = blockScopeContainer = node;
+            container = blockScopeContainer = node as IsContainer;
             if (containerFlags & ContainerFlags.HasLocals) {
                 container.locals = createSymbolTable();
             }
-            addToContainerChain(container);
+            addToContainerChain(blockScopeContainer);
         }
         else if (containerFlags & ContainerFlags.IsBlockScopedContainer) {
-            blockScopeContainer = node;
+            blockScopeContainer = node as IsBlockScopedContainer;
             blockScopeContainer.locals = undefined;
         }
         if (containerFlags & ContainerFlags.IsControlFlowContainer) {
@@ -2121,88 +2127,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
     }
 
-    function getContainerFlags(node: Node): ContainerFlags {
-        switch (node.kind) {
-            case SyntaxKind.ClassExpression:
-            case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.EnumDeclaration:
-            case SyntaxKind.ObjectLiteralExpression:
-            case SyntaxKind.TypeLiteral:
-            case SyntaxKind.JSDocTypeLiteral:
-            case SyntaxKind.JsxAttributes:
-                return ContainerFlags.IsContainer;
-
-            case SyntaxKind.InterfaceDeclaration:
-                return ContainerFlags.IsContainer | ContainerFlags.IsInterface;
-
-            case SyntaxKind.ModuleDeclaration:
-            case SyntaxKind.TypeAliasDeclaration:
-            case SyntaxKind.MappedType:
-            case SyntaxKind.IndexSignature:
-                return ContainerFlags.IsContainer | ContainerFlags.HasLocals;
-
-            case SyntaxKind.SourceFile:
-                return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
-
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
-            case SyntaxKind.MethodDeclaration:
-                if (isObjectLiteralOrClassExpressionMethodOrAccessor(node)) {
-                    return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor;
-                }
-                // falls through
-            case SyntaxKind.Constructor:
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.MethodSignature:
-            case SyntaxKind.CallSignature:
-            case SyntaxKind.JSDocSignature:
-            case SyntaxKind.JSDocFunctionType:
-            case SyntaxKind.FunctionType:
-            case SyntaxKind.ConstructSignature:
-            case SyntaxKind.ConstructorType:
-            case SyntaxKind.ClassStaticBlockDeclaration:
-                return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
-
-            case SyntaxKind.FunctionExpression:
-            case SyntaxKind.ArrowFunction:
-                return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsFunctionExpression;
-
-            case SyntaxKind.ModuleBlock:
-                return ContainerFlags.IsControlFlowContainer;
-            case SyntaxKind.PropertyDeclaration:
-                return (node as PropertyDeclaration).initializer ? ContainerFlags.IsControlFlowContainer : 0;
-
-            case SyntaxKind.CatchClause:
-            case SyntaxKind.ForStatement:
-            case SyntaxKind.ForInStatement:
-            case SyntaxKind.ForOfStatement:
-            case SyntaxKind.CaseBlock:
-                return ContainerFlags.IsBlockScopedContainer;
-
-            case SyntaxKind.Block:
-                // do not treat blocks directly inside a function as a block-scoped-container.
-                // Locals that reside in this block should go to the function locals. Otherwise 'x'
-                // would not appear to be a redeclaration of a block scoped local in the following
-                // example:
-                //
-                //      function foo() {
-                //          var x;
-                //          let x;
-                //      }
-                //
-                // If we placed 'var x' into the function locals and 'let x' into the locals of
-                // the block, then there would be no collision.
-                //
-                // By not creating a new block-scoped-container here, we ensure that both 'var x'
-                // and 'let x' go into the Function-container's locals, and we do get a collision
-                // conflict.
-                return isFunctionLike(node.parent) || isClassStaticBlockDeclaration(node.parent) ? ContainerFlags.None : ContainerFlags.IsBlockScopedContainer;
-        }
-
-        return ContainerFlags.None;
-    }
-
-    function addToContainerChain(next: Node) {
+    function addToContainerChain(next: IsBlockScopedContainer) {
         if (lastContainer) {
             lastContainer.nextContainer = next;
         }
@@ -2256,8 +2181,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.JSDocFunctionType:
-            case SyntaxKind.JSDocTypedefTag:
-            case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.ClassStaticBlockDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.MappedType:
@@ -2413,8 +2336,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         const saveCurrentFlow = currentFlow;
         for (const typeAlias of delayedTypeAliases) {
             const host = typeAlias.parent.parent;
-            container = findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) || file;
-            blockScopeContainer = getEnclosingBlockScopeContainer(host) || file;
+            container = findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) as IsContainer | undefined || file;
+            blockScopeContainer = getEnclosingBlockScopeContainer(host) as IsBlockScopedContainer | undefined || file;
             currentFlow = initFlowNode({ flags: FlowFlags.Start });
             parent = typeAlias;
             bind(typeAlias.typeExpression);
@@ -2440,7 +2363,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                             container = declName.parent.expression;
                             break;
                         case AssignmentDeclarationKind.PrototypeProperty:
-                            container = (declName.parent.expression as PropertyAccessExpression).name;
+                            container = (declName.parent.expression as PropertyAccessEntityNameExpression).name;
                             break;
                         case AssignmentDeclarationKind.Property:
                             container = isExportsOrModuleExportsOrAlias(file, declName.parent.expression) ? file
@@ -2733,7 +2656,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 bindChildren(node);
             }
             else {
-                bindContainer(node, containerFlags);
+                bindContainer(node as HasContainerFlags, containerFlags);
             }
             parent = saveParent;
         }
@@ -3208,7 +3131,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         if (hasPrivateIdentifier) {
             return;
         }
-        const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false);
+        const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false, /*includeClassComputedPropertyName*/ false);
         switch (thisContainer.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
@@ -3257,7 +3180,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 if (hasDynamicName(node)) {
                     break;
                 }
-                else if ((thisContainer as SourceFile).commonJsModuleIndicator) {
+                else if (thisContainer.commonJsModuleIndicator) {
                     declareSymbol(thisContainer.symbol.exports!, thisContainer.symbol, node, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
                 }
                 else {
@@ -3497,7 +3420,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         return expr.parent;
     }
 
-    function lookupSymbolForPropertyAccess(node: BindableStaticNameExpression, lookupContainer: Node = container): Symbol | undefined {
+    function lookupSymbolForPropertyAccess(node: BindableStaticNameExpression, lookupContainer: IsContainer | IsBlockScopedContainer | EntityNameExpression = container): Symbol | undefined {
         if (isIdentifier(node)) {
             return lookupSymbolForName(lookupContainer, node.escapedText);
         }
@@ -3687,11 +3610,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     function bindTypeParameter(node: TypeParameterDeclaration) {
         if (isJSDocTemplateTag(node.parent)) {
-            const container = getEffectiveContainerForJSDocTemplateTag(node.parent);
+            const container: HasLocals | undefined = getEffectiveContainerForJSDocTemplateTag(node.parent);
             if (container) {
-                if (!container.locals) {
-                    container.locals = createSymbolTable();
-                }
+                container.locals ??= createSymbolTable();
                 declareSymbol(container.locals, /*parent*/ undefined, node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
             }
             else {
@@ -3699,11 +3620,9 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             }
         }
         else if (node.parent.kind === SyntaxKind.InferType) {
-            const container = getInferTypeContainer(node.parent);
+            const container: HasLocals | undefined = getInferTypeContainer(node.parent);
             if (container) {
-                if (!container.locals) {
-                    container.locals = createSymbolTable();
-                }
+                container.locals ??= createSymbolTable();
                 declareSymbol(container.locals, /*parent*/ undefined, node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
             }
             else {
@@ -3823,13 +3742,96 @@ export function isExportsOrModuleExportsOrAlias(sourceFile: SourceFile, node: Ex
     return false;
 }
 
+function getContainerFlags(node: Node): ContainerFlags {
+    switch (node.kind) {
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.ClassDeclaration:
+        case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.ObjectLiteralExpression:
+        case SyntaxKind.TypeLiteral:
+        case SyntaxKind.JSDocTypeLiteral:
+        case SyntaxKind.JsxAttributes:
+            return ContainerFlags.IsContainer;
+
+        case SyntaxKind.InterfaceDeclaration:
+            return ContainerFlags.IsContainer | ContainerFlags.IsInterface;
+
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.TypeAliasDeclaration:
+        case SyntaxKind.MappedType:
+        case SyntaxKind.IndexSignature:
+            return ContainerFlags.IsContainer | ContainerFlags.HasLocals;
+
+        case SyntaxKind.SourceFile:
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
+
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.MethodDeclaration:
+            if (isObjectLiteralOrClassExpressionMethodOrAccessor(node)) {
+                return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsObjectLiteralOrClassExpressionMethodOrAccessor;
+            }
+            // falls through
+        case SyntaxKind.Constructor:
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.CallSignature:
+        case SyntaxKind.JSDocSignature:
+        case SyntaxKind.JSDocFunctionType:
+        case SyntaxKind.FunctionType:
+        case SyntaxKind.ConstructSignature:
+        case SyntaxKind.ConstructorType:
+        case SyntaxKind.ClassStaticBlockDeclaration:
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
+
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.ArrowFunction:
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsFunctionExpression;
+
+        case SyntaxKind.ModuleBlock:
+            return ContainerFlags.IsControlFlowContainer;
+        case SyntaxKind.PropertyDeclaration:
+            return (node as PropertyDeclaration).initializer ? ContainerFlags.IsControlFlowContainer : 0;
+
+        case SyntaxKind.CatchClause:
+        case SyntaxKind.ForStatement:
+        case SyntaxKind.ForInStatement:
+        case SyntaxKind.ForOfStatement:
+        case SyntaxKind.CaseBlock:
+            return ContainerFlags.IsBlockScopedContainer;
+
+        case SyntaxKind.Block:
+            // do not treat blocks directly inside a function as a block-scoped-container.
+            // Locals that reside in this block should go to the function locals. Otherwise 'x'
+            // would not appear to be a redeclaration of a block scoped local in the following
+            // example:
+            //
+            //      function foo() {
+            //          var x;
+            //          let x;
+            //      }
+            //
+            // If we placed 'var x' into the function locals and 'let x' into the locals of
+            // the block, then there would be no collision.
+            //
+            // By not creating a new block-scoped-container here, we ensure that both 'var x'
+            // and 'let x' go into the Function-container's locals, and we do get a collision
+            // conflict.
+            return isFunctionLike(node.parent) || isClassStaticBlockDeclaration(node.parent) ? ContainerFlags.None : ContainerFlags.IsBlockScopedContainer;
+    }
+
+    return ContainerFlags.None;
+}
+
 function lookupSymbolForName(container: Node, name: __String): Symbol | undefined {
-    const local = container.locals && container.locals.get(name);
+    const local = container.locals?.get(name);
     if (local) {
-        return local.exportSymbol || local;
+        return local.exportSymbol ?? local;
     }
     if (isSourceFile(container) && container.jsGlobalAugmentations && container.jsGlobalAugmentations.has(name)) {
         return container.jsGlobalAugmentations.get(name);
     }
-    return container.symbol && container.symbol.exports && container.symbol.exports.get(name);
+    if (canHaveSymbol(container)) {
+        return container.symbol?.exports?.get(name);
+    }
 }

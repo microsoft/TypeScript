@@ -29,6 +29,7 @@ import {
     BreakStatement,
     CallExpression,
     CallSignatureDeclaration,
+    canHaveJSDoc,
     canHaveModifiers,
     CaseBlock,
     CaseClause,
@@ -166,7 +167,6 @@ import {
     JSDocCallbackTag,
     JSDocClassTag,
     JSDocComment,
-    JSDocContainer,
     JSDocDeprecatedTag,
     JSDocEnumTag,
     JSDocFunctionType,
@@ -1582,7 +1582,7 @@ namespace Parser {
         // Prime the scanner.
         nextToken();
         const pos = getNodePos();
-        let statements, endOfFileToken;
+        let statements, endOfFileToken: EndOfFileToken;
         if (token() === SyntaxKind.EndOfFileToken) {
             statements = createNodeArray([], pos, pos);
             endOfFileToken = parseTokenNode<EndOfFileToken>();
@@ -1641,7 +1641,7 @@ namespace Parser {
             const statement = factory.createExpressionStatement(expression) as JsonObjectExpressionStatement;
             finishNode(statement, pos);
             statements = createNodeArray([statement], pos);
-            endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token);
+            endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token) as EndOfFileToken;
         }
 
         // Set source file so that errors will be reported with this file name
@@ -3068,9 +3068,9 @@ namespace Parser {
             return undefined;
         }
 
-        if ((node as JSDocContainer).jsDocCache) {
+        if (canHaveJSDoc(node) && node.jsDocCache) {
             // jsDocCache may include tags from parent nodes, which might have been modified.
-            (node as JSDocContainer).jsDocCache = undefined;
+            node.jsDocCache = undefined;
         }
 
         return node;

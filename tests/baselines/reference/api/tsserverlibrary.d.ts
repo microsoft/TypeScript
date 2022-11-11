@@ -4512,7 +4512,8 @@ declare namespace ts {
          */
         readonly modifiers?: NodeArray<ModifierLike> | undefined;
     }
-    interface JSDocContainer {
+    interface JSDocContainer extends Node {
+        _jsdocContainerBrand: any;
     }
     type HasJSDoc = ParameterDeclaration | CallSignatureDeclaration | ClassStaticBlockDeclaration | ConstructSignatureDeclaration | MethodSignature | PropertySignature | ArrowFunction | ParenthesizedExpression | SpreadAssignment | ShorthandPropertyAssignment | PropertyAssignment | FunctionExpression | EmptyStatement | DebuggerStatement | Block | VariableStatement | ExpressionStatement | IfStatement | DoStatement | WhileStatement | ForStatement | ForInStatement | ForOfStatement | BreakStatement | ContinueStatement | ReturnStatement | WithStatement | SwitchStatement | LabeledStatement | ThrowStatement | TryStatement | FunctionDeclaration | ConstructorDeclaration | MethodDeclaration | VariableDeclaration | PropertyDeclaration | AccessorDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumMember | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | ImportDeclaration | NamespaceExportDeclaration | ExportAssignment | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | ExportDeclaration | NamedTupleMember | ExportSpecifier | CaseClause | EndOfFileToken;
     type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
@@ -4691,6 +4692,7 @@ declare namespace ts {
     }
     interface PropertySignature extends TypeElement, JSDocContainer {
         readonly kind: SyntaxKind.PropertySignature;
+        readonly parent: TypeLiteralNode | InterfaceDeclaration;
         readonly modifiers?: NodeArray<Modifier>;
         readonly name: PropertyName;
         readonly questionToken?: QuestionToken;
@@ -4752,9 +4754,6 @@ declare namespace ts {
         readonly expression: Expression;
     }
     type VariableLikeDeclaration = VariableDeclaration | ParameterDeclaration | BindingElement | PropertyDeclaration | PropertyAssignment | PropertySignature | JsxAttribute | ShorthandPropertyAssignment | EnumMember | JSDocPropertyTag | JSDocParameterTag;
-    interface PropertyLikeDeclaration extends NamedDeclaration {
-        readonly name: PropertyName;
-    }
     interface ObjectBindingPattern extends Node {
         readonly kind: SyntaxKind.ObjectBindingPattern;
         readonly parent: VariableDeclaration | ParameterDeclaration | BindingElement;
@@ -4793,7 +4792,7 @@ declare namespace ts {
     }
     interface MethodSignature extends SignatureDeclarationBase, TypeElement {
         readonly kind: SyntaxKind.MethodSignature;
-        readonly parent: ObjectTypeDeclaration;
+        readonly parent: TypeLiteralNode | InterfaceDeclaration;
         readonly modifiers?: NodeArray<Modifier>;
         readonly name: PropertyName;
     }
@@ -5250,7 +5249,7 @@ declare namespace ts {
         readonly expression: EntityNameExpression;
         readonly name: Identifier;
     }
-    interface ElementAccessExpression extends MemberExpression {
+    interface ElementAccessExpression extends MemberExpression, Declaration {
         readonly kind: SyntaxKind.ElementAccessExpression;
         readonly expression: LeftHandSideExpression;
         readonly questionDotToken?: QuestionDotToken;
@@ -5963,7 +5962,7 @@ declare namespace ts {
     interface JSDocParameterTag extends JSDocPropertyLikeTag {
         readonly kind: SyntaxKind.JSDocParameterTag;
     }
-    interface JSDocTypeLiteral extends JSDocType {
+    interface JSDocTypeLiteral extends JSDocType, Declaration {
         readonly kind: SyntaxKind.JSDocTypeLiteral;
         readonly jsDocPropertyTags?: readonly JSDocPropertyLikeTag[];
         /** If true, then this type literal represents an *array* of its type. */
@@ -7469,11 +7468,12 @@ declare namespace ts {
         createToken(token: SyntaxKind.NullKeyword): NullLiteral;
         createToken(token: SyntaxKind.TrueKeyword): TrueLiteral;
         createToken(token: SyntaxKind.FalseKeyword): FalseLiteral;
+        createToken(token: SyntaxKind.EndOfFileToken): EndOfFileToken;
+        createToken(token: SyntaxKind.Unknown): Token<SyntaxKind.Unknown>;
         createToken<TKind extends PunctuationSyntaxKind>(token: TKind): PunctuationToken<TKind>;
         createToken<TKind extends KeywordTypeSyntaxKind>(token: TKind): KeywordTypeNode<TKind>;
         createToken<TKind extends ModifierSyntaxKind>(token: TKind): ModifierToken<TKind>;
         createToken<TKind extends KeywordSyntaxKind>(token: TKind): KeywordToken<TKind>;
-        createToken<TKind extends SyntaxKind.Unknown | SyntaxKind.EndOfFileToken>(token: TKind): Token<TKind>;
         createSuper(): SuperExpression;
         createThis(): ThisExpression;
         createNull(): NullLiteral;
