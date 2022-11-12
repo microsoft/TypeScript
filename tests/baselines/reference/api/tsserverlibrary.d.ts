@@ -4599,7 +4599,6 @@ declare namespace ts {
          * Text of identifier, but if the identifier begins with two underscores, this will begin with three.
          */
         readonly escapedText: __String;
-        readonly originalKeywordKind?: SyntaxKind;
         isInJSDocNamespace?: boolean;
     }
     interface Identifier {
