@@ -105,7 +105,6 @@ import {
     isHoistedFunction,
     isHoistedVariableStatement,
     isIdentifier,
-    isIdentifierANonContextualKeyword,
     isIfStatement,
     isInternalName,
     isIterationStatement,
@@ -122,6 +121,7 @@ import {
     isSpreadElement,
     isStatement,
     isStatic,
+    isStringANonContextualKeyword,
     isSuperProperty,
     isSwitchStatement,
     isTryStatement,
@@ -1074,7 +1074,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
     function transformClassBody(node: ClassExpression | ClassDeclaration, extendsClauseElement: ExpressionWithTypeArguments | undefined): Block {
         const statements: Statement[] = [];
         const name = factory.getInternalName(node);
-        const constructorLikeName = isIdentifierANonContextualKeyword(name) ? factory.getGeneratedNameForNode(name) : name;
+        const constructorLikeName = isStringANonContextualKeyword(idText(name)) ? factory.getGeneratedNameForNode(name) : name;
         startLexicalEnvironment();
         addExtendsHelperIfNeeded(statements, node, extendsClauseElement);
         addConstructor(statements, node, constructorLikeName, extendsClauseElement);

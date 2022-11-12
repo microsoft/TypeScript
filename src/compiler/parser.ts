@@ -3194,7 +3194,7 @@ namespace Parser {
                     // into an actual .ConstructorDeclaration.
                     const methodDeclaration = node as MethodDeclaration;
                     const nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier &&
-                        methodDeclaration.name.originalKeywordKind === SyntaxKind.ConstructorKeyword;
+                        methodDeclaration.name.escapedText === "constructor";
 
                     return !nameIsConstructor;
             }

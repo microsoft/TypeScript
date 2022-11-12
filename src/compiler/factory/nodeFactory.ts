@@ -407,7 +407,6 @@ import {
     startsWith,
     Statement,
     StringLiteral,
-    stringToToken,
     SuperExpression,
     SwitchStatement,
     SyntaxKind,
@@ -1150,16 +1149,15 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // Identifiers
     //
 
-    function createBaseIdentifier(escapedText: __String, originalKeywordKind: SyntaxKind | undefined) {
+    function createBaseIdentifier(escapedText: __String) {
         const node = baseFactory.createBaseIdentifierNode(SyntaxKind.Identifier) as Mutable<Identifier>;
-        node.originalKeywordKind = originalKeywordKind;
         node.escapedText = escapedText;
         node.autoGenerateFlags = GeneratedIdentifierFlags.None;
         return node;
     }
 
     function createBaseGeneratedIdentifier(text: string, autoGenerateFlags: GeneratedIdentifierFlags, prefix: string | GeneratedNamePart | undefined, suffix: string | undefined) {
-        const node = createBaseIdentifier(escapeLeadingUnderscores(text), /*originalKeywordKind*/ undefined) as Mutable<GeneratedIdentifier>;
+        const node = createBaseIdentifier(escapeLeadingUnderscores(text)) as Mutable<GeneratedIdentifier>;
         node.autoGenerateFlags = autoGenerateFlags;
         node.autoGenerateId = nextAutoGenerateId;
         node.autoGeneratePrefix = prefix;
@@ -1168,16 +1166,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node;
     }
 
-    // @api
-    function createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind, hasExtendedUnicodeEscape?: boolean): Identifier {
-        if (originalKeywordKind === undefined && text) {
-            originalKeywordKind = stringToToken(text);
-        }
-        if (originalKeywordKind === SyntaxKind.Identifier) {
-            originalKeywordKind = undefined;
-        }
-
-        const node = createBaseIdentifier(escapeLeadingUnderscores(text), originalKeywordKind);
+    /**
+     *
+     * @param text
+     * @param typeArguments
+     * @param originalKeywordKind ONLY provided by the parser.
+     * @param hasExtendedUnicodeEscape ONLY provided by the parser.
+     * @returns
+     */
+   // @api
+   function createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind, hasExtendedUnicodeEscape?: boolean): Identifier {
+        const node = createBaseIdentifier(escapeLeadingUnderscores(text));
         node.typeArguments = asNodeArray(typeArguments);
         node.hasExtendedUnicodeEscape = hasExtendedUnicodeEscape;
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
@@ -1186,7 +1185,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.symbol = undefined!; // initialized by checker
 
         // NOTE: we do not include transform flags of typeArguments in an identifier as they do not contribute to transformations
-        if (node.originalKeywordKind === SyntaxKind.AwaitKeyword) {
+        if (originalKeywordKind === SyntaxKind.AwaitKeyword) {
             node.transformFlags |= TransformFlags.ContainsPossibleTopLevelAwait;
         }
         if (node.hasExtendedUnicodeEscape) {
@@ -6372,7 +6371,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     function cloneGeneratedIdentifier(node: GeneratedIdentifier): GeneratedIdentifier {
-        const clone = createBaseIdentifier(node.escapedText, /*originalKeywordKind*/ undefined) as Mutable<GeneratedIdentifier>;
+        const clone = createBaseIdentifier(node.escapedText) as Mutable<GeneratedIdentifier>;
         clone.flags |= node.flags & ~NodeFlags.Synthesized;
         clone.autoGenerateFlags = node.autoGenerateFlags;
         clone.autoGenerateId = node.autoGenerateId;
@@ -6384,7 +6383,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     function cloneIdentifier(node: Identifier): Identifier {
-        const clone = createBaseIdentifier(node.escapedText, node.originalKeywordKind);
+        const clone = createBaseIdentifier(node.escapedText);
         clone.flags |= node.flags & ~NodeFlags.Synthesized;
         clone.typeArguments = node.typeArguments;
         clone.hasExtendedUnicodeEscape = node.hasExtendedUnicodeEscape;

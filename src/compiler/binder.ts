@@ -283,6 +283,7 @@ import {
     SpreadElement,
     Statement,
     StringLiteral,
+    stringToToken,
     SuperExpression,
     SwitchStatement,
     Symbol,
@@ -2419,14 +2420,20 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             !(node.flags & NodeFlags.JSDoc) &&
             !isIdentifierName(node)) {
 
+
+            const originalKeywordKind = stringToToken(node.escapedText as string);
+            if (originalKeywordKind === undefined) {
+                return;
+            }
+
             // strict mode identifiers
             if (inStrictMode &&
-                node.originalKeywordKind! >= SyntaxKind.FirstFutureReservedWord &&
-                node.originalKeywordKind! <= SyntaxKind.LastFutureReservedWord) {
+                originalKeywordKind >= SyntaxKind.FirstFutureReservedWord &&
+                originalKeywordKind <= SyntaxKind.LastFutureReservedWord) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node,
                     getStrictModeIdentifierMessage(node), declarationNameToString(node)));
             }
-            else if (node.originalKeywordKind === SyntaxKind.AwaitKeyword) {
+            else if (originalKeywordKind === SyntaxKind.AwaitKeyword) {
                 if (isExternalModule(file) && isInTopLevelContext(node)) {
                     file.bindDiagnostics.push(createDiagnosticForNode(node,
                         Diagnostics.Identifier_expected_0_is_a_reserved_word_at_the_top_level_of_a_module,
@@ -2438,7 +2445,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                         declarationNameToString(node)));
                 }
             }
-            else if (node.originalKeywordKind === SyntaxKind.YieldKeyword && node.flags & NodeFlags.YieldContext) {
+            else if (originalKeywordKind === SyntaxKind.YieldKeyword && node.flags & NodeFlags.YieldContext) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node,
                     Diagnostics.Identifier_expected_0_is_a_reserved_word_that_cannot_be_used_here,
                     declarationNameToString(node)));

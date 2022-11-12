@@ -206,15 +206,10 @@ export function sourceFileToJSON(file: ts.Node): string {
                     break;
 
                 case "hasExtendedUnicodeEscape":
-                    if ((n as any).hasExtendedUnicodeEscape) {
+                    if ((n as ts.Identifier).hasExtendedUnicodeEscape) {
                         o.hasExtendedUnicodeEscape = true;
                     }
                     break;
-
-                case "originalKeywordKind":
-                    o[propertyName] = getKindName((n as any)[propertyName]);
-                    break;
-
                 case "flags":
                     // Clear the flags that are produced by aggregating child values. That is ephemeral
                     // data we don't care about in the dump. We only care what the parser set directly
