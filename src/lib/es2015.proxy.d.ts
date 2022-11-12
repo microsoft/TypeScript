@@ -1,23 +1,27 @@
+type ProxyParameters<T> = T extends (...args: infer P) => any ? P : never;
+type ProxyConstructorParameters<T> = T extends abstract new (...args: infer P) => any ? P : never;
+type ProxyConstructorFunction<T> = T extends { constructor: infer C } ? C : never;
+
 interface ProxyHandler<T extends object> {
     /**
      * A trap method for a function call.
      * @param target The original callable object which is being proxied.
      */
-    apply?(target: T, thisArg: any, argArray: any[]): any;
+    apply?(target: T, thisArg: any, argArray: ProxyParameters<T>): any;
 
     /**
      * A trap for the `new` operator.
      * @param target The original object which is being proxied.
      * @param newTarget The constructor that was originally called.
      */
-    construct?(target: T, argArray: any[], newTarget: Function): object;
+    construct?(target: T, argArray: ProxyConstructorParameters<T>, newTarget: ProxyConstructorFunction<T>): object;
 
     /**
      * A trap for `Object.defineProperty()`.
      * @param target The original object which is being proxied.
      * @returns A `Boolean` indicating whether or not the property has been defined.
      */
-    defineProperty?(target: T, property: string | symbol, attributes: PropertyDescriptor): boolean;
+    defineProperty?(target: T, property: keyof T, attributes: PropertyDescriptor): boolean;
 
     /**
      * A trap for the `delete` operator.
@@ -25,7 +29,7 @@ interface ProxyHandler<T extends object> {
      * @param p The name or `Symbol` of the property to delete.
      * @returns A `Boolean` indicating whether or not the property was deleted.
      */
-    deleteProperty?(target: T, p: string | symbol): boolean;
+    deleteProperty?(target: T, p: keyof T): boolean;
 
     /**
      * A trap for getting a property value.
@@ -33,14 +37,14 @@ interface ProxyHandler<T extends object> {
      * @param p The name or `Symbol` of the property to get.
      * @param receiver The proxy or an object that inherits from the proxy.
      */
-    get?(target: T, p: string | symbol, receiver: any): any;
+    get?(target: T, p: keyof T, receiver: any): any;
 
     /**
      * A trap for `Object.getOwnPropertyDescriptor()`.
      * @param target The original object which is being proxied.
      * @param p The name of the property whose description should be retrieved.
      */
-    getOwnPropertyDescriptor?(target: T, p: string | symbol): PropertyDescriptor | undefined;
+    getOwnPropertyDescriptor?(target: T, p: keyof T): PropertyDescriptor | undefined;
 
     /**
      * A trap for the `[[GetPrototypeOf]]` internal method.
@@ -53,7 +57,7 @@ interface ProxyHandler<T extends object> {
      * @param target The original object which is being proxied.
      * @param p The name or `Symbol` of the property to check for existence.
      */
-    has?(target: T, p: string | symbol): boolean;
+    has?(target: T, p: keyof T): boolean;
 
     /**
      * A trap for `Object.isExtensible()`.
@@ -65,7 +69,7 @@ interface ProxyHandler<T extends object> {
      * A trap for `Reflect.ownKeys()`.
      * @param target The original object which is being proxied.
      */
-    ownKeys?(target: T): ArrayLike<string | symbol>;
+    ownKeys?(target: T): ArrayLike<keyof T>;
 
     /**
      * A trap for `Object.preventExtensions()`.
@@ -80,7 +84,7 @@ interface ProxyHandler<T extends object> {
      * @param receiver The object to which the assignment was originally directed.
      * @returns A `Boolean` indicating whether or not the property was set.
      */
-    set?(target: T, p: string | symbol, newValue: any, receiver: any): boolean;
+    set?(target: T, p: keyof T, newValue: any, receiver: any): boolean;
 
     /**
      * A trap for `Object.setPrototypeOf()`.
