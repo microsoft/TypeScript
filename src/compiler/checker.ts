@@ -18480,8 +18480,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const sourceHasMoreParameters = !hasEffectiveRestParameter(target) &&
             (checkMode & SignatureCheckMode.StrictArity ? hasEffectiveRestParameter(source) || getParameterCount(source) > targetCount : getMinArgumentCount(source) > targetCount);
         if (sourceHasMoreParameters) {
-            if (reportErrors) {
-                Debug.assert(!(checkMode & SignatureCheckMode.StrictArity), "no error reporting when comparing signatures by strict arity, which is only done for subtype reduction");
+            if (reportErrors && !(checkMode & SignatureCheckMode.StrictArity)) {
+                // the second condition should be redundant, because there is no error reporting when comparing signatures by strict arity
+                // since it is only done for subtype reduction
                 errorReporter!(Diagnostics.The_source_signature_requires_more_arguments_0_than_are_provided_by_the_target_1, getMinArgumentCount(source), targetCount.toString());
             }
             return Ternary.False;
