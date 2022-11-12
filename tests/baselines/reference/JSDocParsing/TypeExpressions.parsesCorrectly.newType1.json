@@ -20,8 +20,8 @@
                 "flags": "JSDoc",
                 "modifierFlagsCache": 0,
                 "transformFlags": 0,
-                "originalKeywordKind": "NewKeyword",
-                "escapedText": "new"
+                "escapedText": "new",
+                "originalKeywordKind": "NewKeyword"
             },
             "type": {
                 "kind": "TypeReference",
