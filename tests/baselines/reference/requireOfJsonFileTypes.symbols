@@ -87,17 +87,21 @@ booleanLiteral = g[0];
 }
 
 === tests/cases/compiler/c.json ===
+
 ["a", null, "string"]
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/d.json ===
+
+=== tests/cases/compiler/d.json ===
+
 "dConfig"
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/e.json ===
+
+=== tests/cases/compiler/e.json ===
+
 -10
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/f.json ===
+
+=== tests/cases/compiler/f.json ===
+
 [-10, 30]
-No type information for this code.
-No type information for this code.=== tests/cases/compiler/g.json ===
+
+=== tests/cases/compiler/g.json ===
+
 [true, false]
-No type information for this code.

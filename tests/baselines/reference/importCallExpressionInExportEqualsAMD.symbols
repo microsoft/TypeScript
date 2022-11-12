@@ -1,7 +1,8 @@
 === tests/cases/conformance/dynamicImport/something.ts ===
+
 export = 42;
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/dynamicImport/index.ts ===
+
+=== tests/cases/conformance/dynamicImport/index.ts ===
 export = async function() {
     const something = await import("./something");
 >something : Symbol(something, Decl(index.ts, 1, 9))
