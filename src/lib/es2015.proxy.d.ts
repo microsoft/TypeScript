@@ -1,27 +1,25 @@
-type ProxyParameters<T> = T extends (...args: infer P) => any ? P : never;
-type ProxyConstructorParameters<T> = T extends abstract new (...args: infer P) => any ? P : never;
-type ProxyConstructorFunction<T> = T extends { constructor: infer C } ? C : never;
+type ApplyTrap<T> = T extends (...args: infer P) => any ? (target: T, thisArg: any, argArray: P) => any : never;
 
 interface ProxyHandler<T extends object> {
     /**
      * A trap method for a function call.
      * @param target The original callable object which is being proxied.
      */
-    apply?(target: T, thisArg: any, argArray: ProxyParameters<T>): any;
+    apply?: ApplyTrap<T>;
 
     /**
      * A trap for the `new` operator.
      * @param target The original object which is being proxied.
      * @param newTarget The constructor that was originally called.
      */
-    construct?(target: T, argArray: ProxyConstructorParameters<T>, newTarget: ProxyConstructorFunction<T>): object;
+    construct?(target: T, argArray: any[], newTarget: Function): object;
 
     /**
      * A trap for `Object.defineProperty()`.
      * @param target The original object which is being proxied.
      * @returns A `Boolean` indicating whether or not the property has been defined.
      */
-    defineProperty?(target: T, property: keyof T, attributes: PropertyDescriptor): boolean;
+    defineProperty?(target: T, property: string | symbol, attributes: PropertyDescriptor): boolean;
 
     /**
      * A trap for the `delete` operator.
@@ -69,7 +67,7 @@ interface ProxyHandler<T extends object> {
      * A trap for `Reflect.ownKeys()`.
      * @param target The original object which is being proxied.
      */
-    ownKeys?(target: T): ArrayLike<keyof T>;
+    ownKeys?(target: T): ArrayLike<string | symbol>;
 
     /**
      * A trap for `Object.preventExtensions()`.
