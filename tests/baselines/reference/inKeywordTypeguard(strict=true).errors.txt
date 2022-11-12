@@ -441,3 +441,9 @@ tests/cases/compiler/inKeywordTypeguard.ts(186,21): error TS2638: Type 'NonNulla
     const checkIsTouchDevice = () =>
         "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
     
+    // Repro from #51501
+    
+    function isHTMLTable<T extends object | null>(table: T): boolean {
+      return !!table && 'html' in table;
+    }
+    
