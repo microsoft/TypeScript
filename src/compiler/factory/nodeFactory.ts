@@ -949,8 +949,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             originalKeywordKind = undefined;
         }
         const node = baseFactory.createBaseIdentifierNode(SyntaxKind.Identifier) as Mutable<Identifier>;
-        node.originalKeywordKind = originalKeywordKind;
         node.escapedText = escapeLeadingUnderscores(text);
+        if (originalKeywordKind !== undefined) {
+            node.originalKeywordKind = originalKeywordKind;
+        }
         return node;
     }
 
