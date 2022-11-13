@@ -1,0 +1,55 @@
+=== tests/cases/compiler/dependentContextualInference2.ts ===
+declare const m: <T extends M<T>>(m: T) => T
+>m : Symbol(m, Decl(dependentContextualInference2.ts, 0, 13))
+>T : Symbol(T, Decl(dependentContextualInference2.ts, 0, 18))
+>M : Symbol(M, Decl(dependentContextualInference2.ts, 0, 44))
+>T : Symbol(T, Decl(dependentContextualInference2.ts, 0, 18))
+>m : Symbol(m, Decl(dependentContextualInference2.ts, 0, 34))
+>T : Symbol(T, Decl(dependentContextualInference2.ts, 0, 18))
+>T : Symbol(T, Decl(dependentContextualInference2.ts, 0, 18))
+
+type M<Self> =
+>M : Symbol(M, Decl(dependentContextualInference2.ts, 0, 44))
+>Self : Symbol(Self, Decl(dependentContextualInference2.ts, 1, 7))
+
+  { a?: number
+>a : Symbol(a, Decl(dependentContextualInference2.ts, 2, 3))
+
+  , b?: number
+>b : Symbol(b, Decl(dependentContextualInference2.ts, 3, 3))
+
+  , c?: number
+>c : Symbol(c, Decl(dependentContextualInference2.ts, 4, 3))
+
+  , d?: number
+>d : Symbol(d, Decl(dependentContextualInference2.ts, 5, 3))
+
+  , k?: Exclude<keyof Self, "k" | "t">
+>k : Symbol(k, Decl(dependentContextualInference2.ts, 6, 3))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Self : Symbol(Self, Decl(dependentContextualInference2.ts, 1, 7))
+
+  , t?: (k: Exclude<keyof Self, "k" | "t">) => void
+>t : Symbol(t, Decl(dependentContextualInference2.ts, 7, 3))
+>k : Symbol(k, Decl(dependentContextualInference2.ts, 7, 9))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Self : Symbol(Self, Decl(dependentContextualInference2.ts, 1, 7))
+  }
+
+m({
+>m : Symbol(m, Decl(dependentContextualInference2.ts, 0, 13))
+
+  a: 1,
+>a : Symbol(a, Decl(dependentContextualInference2.ts, 10, 3))
+
+  b: 2,
+>b : Symbol(b, Decl(dependentContextualInference2.ts, 11, 7))
+
+  k: "a", 
+>k : Symbol(k, Decl(dependentContextualInference2.ts, 12, 7))
+
+  t: k => {}
+>t : Symbol(t, Decl(dependentContextualInference2.ts, 13, 9))
+>k : Symbol(k, Decl(dependentContextualInference2.ts, 14, 4))
+
+})

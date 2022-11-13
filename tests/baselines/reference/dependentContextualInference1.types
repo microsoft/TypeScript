@@ -1,0 +1,38 @@
+=== tests/cases/compiler/dependentContextualInference1.ts ===
+declare const f:
+>f : <T extends F<T>>(t: T) => T
+
+  <T extends F<T>>(t: T) => T
+>t : T
+
+type F<T> =
+>F : F<T>
+
+  { a: unknown
+>a : unknown
+
+  , b: (a: T["a" & keyof T]) => unknown
+>b : (a: T["a" & keyof T]) => unknown
+>a : T["a" & keyof T]
+  }
+
+f({
+>f({  a: "hello",  b: x => x.toUpperCase()}) : { a: string; b: (x: string) => string; }
+>f : <T extends F<T>>(t: T) => T
+>{  a: "hello",  b: x => x.toUpperCase()} : { a: string; b: (x: string) => string; }
+
+  a: "hello",
+>a : string
+>"hello" : "hello"
+
+  b: x => x.toUpperCase()
+>b : (x: string) => string
+>x => x.toUpperCase() : (x: string) => string
+>x : string
+>x.toUpperCase() : string
+>x.toUpperCase : () => string
+>x : string
+>toUpperCase : () => string
+
+})
+

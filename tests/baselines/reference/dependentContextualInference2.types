@@ -1,0 +1,51 @@
+=== tests/cases/compiler/dependentContextualInference2.ts ===
+declare const m: <T extends M<T>>(m: T) => T
+>m : <T extends M<T>>(m: T) => T
+>m : T
+
+type M<Self> =
+>M : M<Self>
+
+  { a?: number
+>a : number
+
+  , b?: number
+>b : number
+
+  , c?: number
+>c : number
+
+  , d?: number
+>d : number
+
+  , k?: Exclude<keyof Self, "k" | "t">
+>k : Exclude<keyof Self, "k" | "t">
+
+  , t?: (k: Exclude<keyof Self, "k" | "t">) => void
+>t : (k: Exclude<keyof Self, "k" | "t">) => void
+>k : Exclude<keyof Self, "k" | "t">
+  }
+
+m({
+>m({  a: 1,  b: 2,  k: "a",   t: k => {}}) : { a: number; b: number; k: "a"; t: (k: "a" | "b") => void; }
+>m : <T extends M<T>>(m: T) => T
+>{  a: 1,  b: 2,  k: "a",   t: k => {}} : { a: number; b: number; k: "a"; t: (k: "a" | "b") => void; }
+
+  a: 1,
+>a : number
+>1 : 1
+
+  b: 2,
+>b : number
+>2 : 2
+
+  k: "a", 
+>k : "a"
+>"a" : "a"
+
+  t: k => {}
+>t : (k: "a" | "b") => void
+>k => {} : (k: "a" | "b") => void
+>k : "a" | "b"
+
+})

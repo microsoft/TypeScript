@@ -28417,6 +28417,47 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkObjectLiteral(node: ObjectLiteralExpression, checkMode?: CheckMode): Type {
+        const contextualType = getContextualType(node, /*contextFlags*/ undefined);
+        const isContextualTypeDependent = 
+            contextualType &&
+            contextualType.immediateBaseConstraint && 
+            contextualType.immediateBaseConstraint.aliasTypeArguments &&
+            contextualType.immediateBaseConstraint.aliasTypeArguments.length === 1 &&
+            contextualType.immediateBaseConstraint.aliasTypeArguments[0].id === contextualType.id;
+
+        if (!isContextualTypeDependent) {
+            return checkObjectLiteralNonDependently(node, checkMode);
+        }
+
+        let valueType = checkObjectLiteralNonDependently(node, checkMode);
+
+        let newContextualType = cloneTypeParameter(contextualType);
+        newContextualType.immediateBaseConstraint =
+            instantiateType(
+                contextualType.immediateBaseConstraint,
+                createTypeMapper([contextualType], [valueType])
+            );
+        if (newContextualType.immediateBaseConstraint!.flags & TypeFlags.StructuredType) {
+            newContextualType.immediateBaseConstraint = resolveStructuredTypeMembers(newContextualType.immediateBaseConstraint as StructuredType);
+        }
+
+        forEachChildRecursively(node, node => {
+            let nodeLinks = getNodeLinks(node);
+            nodeLinks.flags &= ~NodeCheckFlags.TypeChecked;
+            nodeLinks.flags &= ~NodeCheckFlags.ContextChecked;
+            nodeLinks.resolvedType = undefined;
+            nodeLinks.resolvedEnumType = undefined;
+            nodeLinks.resolvedSignature = undefined;
+            nodeLinks.resolvedSymbol = undefined;
+            nodeLinks.resolvedIndexInfo = undefined;
+            nodeLinks.contextFreeType = undefined
+        })
+
+        node.contextualType = newContextualType;
+        return checkObjectLiteralNonDependently(node);
+    }
+
+    function checkObjectLiteralNonDependently(node: ObjectLiteralExpression, checkMode?: CheckMode): Type {
         const inDestructuringPattern = isAssignmentTarget(node);
         // Grammar checking
         checkGrammarObjectLiteralExpression(node, inDestructuringPattern);
