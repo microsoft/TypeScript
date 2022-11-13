@@ -28418,9 +28418,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkObjectLiteral(node: ObjectLiteralExpression, checkMode?: CheckMode): Type {
         const contextualType = getContextualType(node, /*contextFlags*/ undefined);
-        const isContextualTypeDependent = 
+        const isContextualTypeDependent =
             contextualType &&
-            contextualType.immediateBaseConstraint && 
+            contextualType.immediateBaseConstraint &&
             contextualType.immediateBaseConstraint.aliasTypeArguments &&
             contextualType.immediateBaseConstraint.aliasTypeArguments.length === 1 &&
             contextualType.immediateBaseConstraint.aliasTypeArguments[0].id === contextualType.id;
@@ -28429,9 +28429,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return checkObjectLiteralNonDependently(node, checkMode);
         }
 
-        let valueType = checkObjectLiteralNonDependently(node, checkMode);
+        const valueType = checkObjectLiteralNonDependently(node, checkMode);
 
-        let newContextualType = cloneTypeParameter(contextualType);
+        const newContextualType = cloneTypeParameter(contextualType);
         newContextualType.immediateBaseConstraint =
             instantiateType(
                 contextualType.immediateBaseConstraint,
@@ -28442,7 +28442,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         forEachChildRecursively(node, node => {
-            let nodeLinks = getNodeLinks(node);
+            const nodeLinks = getNodeLinks(node);
             nodeLinks.flags &= ~NodeCheckFlags.TypeChecked;
             nodeLinks.flags &= ~NodeCheckFlags.ContextChecked;
             nodeLinks.resolvedType = undefined;
@@ -28450,8 +28450,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             nodeLinks.resolvedSignature = undefined;
             nodeLinks.resolvedSymbol = undefined;
             nodeLinks.resolvedIndexInfo = undefined;
-            nodeLinks.contextFreeType = undefined
-        })
+            nodeLinks.contextFreeType = undefined;
+        });
 
         node.contextualType = newContextualType;
         return checkObjectLiteralNonDependently(node);
