@@ -32828,6 +32828,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 // by suppressing the initial return type at the end of the flow
                                 const fakeReference = factory.cloneNode(node.expression);
                                 setParent(fakeReference, node.parent);
+                                setTextRange(fakeReference, node.expression);
                                 fakeReference.flowNode = node.expression.flowNode;
                                 const flowType = getFlowTypeOfReference(fakeReference, exprType, undefinedType, flowContainer);
                                 if (containsUndefinedType(flowType)) {
