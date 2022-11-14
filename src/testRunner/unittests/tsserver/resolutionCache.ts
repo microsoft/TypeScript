@@ -1,10 +1,14 @@
 import * as ts from "../../_namespaces/ts";
+import * as Utils from "../../_namespaces/Utils";
 import {
     createServerHost,
     File,
     libFile,
     TestServerHost,
 } from "../virtualFileSystemWithWatch";
+import {
+    compilerOptionsToConfigJson,
+} from "../tsc/helpers";
 import {
     baselineTsserverLogs,
     checkNumberOfProjects,
@@ -628,5 +632,75 @@ export const x = 10;`
             host.checkTimeoutQueueLengthAndRun(0);
             baselineTsserverLogs("resolutionCache", "avoid unnecessary lookup invalidation on save", service);
         });
+    });
+});
+
+describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem with project references", () => {
+    it("sharing across references", () => {
+        const host = createServerHost({
+            "/src/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
+            "/src/projects/common/tsconfig.json": JSON.stringify({
+                compilerOptions: compilerOptionsToConfigJson({
+                    composite: true,
+                    traceResolution: true,
+                }),
+            }),
+            "/src/projects/common/moduleA.ts": "export const a = 10;",
+            "/src/projects/common/moduleB.ts": Utils.dedent`
+                import { x } from "moduleX";
+                export const b = x;
+            `,
+            "/src/projects/app/tsconfig.json": JSON.stringify({
+                compilerOptions: compilerOptionsToConfigJson({
+                    composite: true,
+                    traceResolution: true,
+                }),
+                references: [{ path: "../common" }],
+            }),
+            "/src/projects/app/appA.ts": Utils.dedent`
+                import { x } from "moduleX";
+                export const y = x;
+            `,
+            "/src/projects/app/appB.ts": Utils.dedent`
+                import { x } from "../common/moduleB";
+                export const y = x;
+            `,
+        });
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession(["/src/projects/app/appB.ts"], session);
+        baselineTsserverLogs("resolutionCache", "sharing across references", session);
+    });
+
+    it("not sharing across references", () => {
+        const host = createServerHost({
+            "/src/projects/node_modules/moduleX/index.d.ts": "export const x = 10;",
+            "/src/projects/common/tsconfig.json": JSON.stringify({
+                compilerOptions: { composite: true, traceResolution: true },
+            }),
+            "/src/projects/common/moduleA.ts": "export const a = 10;",
+            "/src/projects/common/moduleB.ts": Utils.dedent`
+                import { x } from "moduleX";
+                export const b = x;
+            `,
+            "/src/projects/app/tsconfig.json": JSON.stringify({
+                compilerOptions: {
+                    composite: true,
+                    traceResolution: true,
+                    typeRoots: [], // Just some sample option that is different across the projects
+                },
+                references: [{ path: "../common" }],
+            }),
+            "/src/projects/app/appA.ts": Utils.dedent`
+                import { x } from "moduleX";
+                export const y = x;
+            `,
+            "/src/projects/app/appB.ts": Utils.dedent`
+                import { x } from "../common/moduleB";
+                export const y = x;
+            `,
+        });
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession(["/src/projects/app/appB.ts"], session);
+        baselineTsserverLogs("resolutionCache", "not sharing across references", session);
     });
 });
