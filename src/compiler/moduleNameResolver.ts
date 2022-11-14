@@ -604,7 +604,7 @@ export interface ModuleResolutionCache extends PerDirectoryResolutionCache<Resol
  * We support only non-relative module names because resolution of relative module names is usually more deterministic and thus less expensive.
  */
 export interface NonRelativeModuleNameResolutionCache extends PackageJsonInfoCache {
-    getOrCreateCacheForModuleName(nonRelativeModuleName: string, mode: ResolutionMode | undefined, redirectedReference?: ResolvedProjectReference): PerModuleNameCache;
+    getOrCreateCacheForModuleName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerModuleNameCache;
 }
 
 export interface PackageJsonInfoCache {
