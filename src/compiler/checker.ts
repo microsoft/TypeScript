@@ -44306,7 +44306,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
         }
 
-        function addReferencedFilesToTypeDirective(file: SourceFile, key: string, mode: SourceFile["impliedNodeFormat"] | undefined) {
+        function addReferencedFilesToTypeDirective(file: SourceFile, key: string, mode: ResolutionMode | undefined) {
             if (fileToDirective.has(file.path)) return;
             fileToDirective.set(file.path, [key, mode]);
             for (const { fileName, resolutionMode } of file.referencedFiles) {

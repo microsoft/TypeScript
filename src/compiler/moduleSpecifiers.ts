@@ -322,7 +322,7 @@ function getInfo(importingSourceFileName: Path, host: ModuleSpecifierResolutionH
     return { getCanonicalFileName, importingSourceFileName, sourceDirectory };
 }
 
-function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: SourceFile["impliedNodeFormat"], { ending, relativePreference }: Preferences): string {
+function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, { ending, relativePreference }: Preferences): string {
     const { baseUrl, paths, rootDirs } = compilerOptions;
     const { sourceDirectory, getCanonicalFileName } = info;
     const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, ending, compilerOptions) ||
@@ -589,7 +589,7 @@ function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeCh
     }
 }
 
-function getAllowedEndings(preferredEnding: Ending, compilerOptions: CompilerOptions, importMode: SourceFile["impliedNodeFormat"]) {
+function getAllowedEndings(preferredEnding: Ending, compilerOptions: CompilerOptions, importMode: ResolutionMode) {
     if (getEmitModuleResolutionKind(compilerOptions) >= ModuleResolutionKind.Node16 && importMode === ModuleKind.ESNext) {
         return [Ending.JsExtension];
     }
