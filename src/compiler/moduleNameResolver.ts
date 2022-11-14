@@ -1312,8 +1312,8 @@ export enum NodeResolutionFeatures {
 }
 
 function node16ModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions,
-    host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference,
-    resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations {
+        host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference,
+        resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations {
     return nodeNextModuleNameResolverWorker(
         NodeResolutionFeatures.Node16Default,
         moduleName,
@@ -1327,8 +1327,8 @@ function node16ModuleNameResolver(moduleName: string, containingFile: string, co
 }
 
 function nodeNextModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions,
-    host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference,
-    resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations {
+        host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference,
+        resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations {
     return nodeNextModuleNameResolverWorker(
         NodeResolutionFeatures.NodeNextDefault,
         moduleName,
@@ -1861,7 +1861,7 @@ export interface PackageJsonInfoContents {
  *
  * @internal
  */
-export function getPackageScopeForPath(fileName: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
+ export function getPackageScopeForPath(fileName: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
     const parts = getPathComponents(fileName);
     parts.pop();
     while (parts.length > 0) {
@@ -2294,7 +2294,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
         function useCaseSensitiveFileNames() {
             return !state.host.useCaseSensitiveFileNames ? true :
                 typeof state.host.useCaseSensitiveFileNames === "boolean" ? state.host.useCaseSensitiveFileNames :
-                    state.host.useCaseSensitiveFileNames();
+                state.host.useCaseSensitiveFileNames();
         }
 
         function tryLoadInputFileForPath(finalPath: string, entry: string, packagePath: string, isImports: boolean) {
