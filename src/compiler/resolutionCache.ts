@@ -292,13 +292,14 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     const moduleResolutionCache = createModuleResolutionCache(
         getCurrentDirectory(),
         resolutionHost.getCanonicalFileName,
+        resolutionHost.getCompilationSettings(),
     );
 
     const resolvedTypeReferenceDirectives = new Map<Path, ModeAwareCache<CachedResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
     const typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(
         getCurrentDirectory(),
         resolutionHost.getCanonicalFileName,
-        /*options*/ undefined,
+        resolutionHost.getCompilationSettings(),
         moduleResolutionCache.getPackageJsonInfoCache(),
     );
 
@@ -377,6 +378,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         affectingPathChecksForFile = undefined;
         moduleResolutionCache.clear();
         typeReferenceDirectiveResolutionCache.clear();
+        moduleResolutionCache.update(resolutionHost.getCompilationSettings());
+        typeReferenceDirectiveResolutionCache.update(resolutionHost.getCompilationSettings());
         impliedFormatPackageJsons.clear();
         hasChangedAutomaticTypeDirectiveNames = false;
     }

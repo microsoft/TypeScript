@@ -108,23 +108,16 @@ Info 37   [00:01:06.000] Using compiler options of project reference redirect '/
 Info 38   [00:01:07.000] Module resolution kind is not specified, using 'NodeJs'.
 Info 39   [00:01:08.000] Loading module 'moduleX' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info 40   [00:01:09.000] Directory '/src/projects/common/node_modules' does not exist, skipping all lookups in it.
-Info 41   [00:01:10.000] File '/src/projects/node_modules/moduleX/package.json' does not exist according to earlier cached lookups.
-Info 42   [00:01:11.000] File '/src/projects/node_modules/moduleX.ts' does not exist.
-Info 43   [00:01:12.000] File '/src/projects/node_modules/moduleX.tsx' does not exist.
-Info 44   [00:01:13.000] File '/src/projects/node_modules/moduleX.d.ts' does not exist.
-Info 45   [00:01:14.000] File '/src/projects/node_modules/moduleX/index.ts' does not exist.
-Info 46   [00:01:15.000] File '/src/projects/node_modules/moduleX/index.tsx' does not exist.
-Info 47   [00:01:16.000] File '/src/projects/node_modules/moduleX/index.d.ts' exist - use it as a name resolution result.
-Info 48   [00:01:17.000] Resolving real path for '/src/projects/node_modules/moduleX/index.d.ts', result '/src/projects/node_modules/moduleX/index.d.ts'.
-Info 49   [00:01:18.000] ======== Module name 'moduleX' was successfully resolved to '/src/projects/node_modules/moduleX/index.d.ts'. ========
-Info 50   [00:01:19.000] DirectoryWatcher:: Added:: WatchInfo: /src/projects/app/node_modules 1 undefined Project: /src/projects/app/tsconfig.json WatchType: Failed Lookup Locations
-Info 51   [00:01:20.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/projects/app/node_modules 1 undefined Project: /src/projects/app/tsconfig.json WatchType: Failed Lookup Locations
-Info 52   [00:01:21.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /src/projects/app/tsconfig.json WatchType: Missing file
-Info 53   [00:01:22.000] DirectoryWatcher:: Added:: WatchInfo: /src/projects/app/node_modules/@types 1 undefined Project: /src/projects/app/tsconfig.json WatchType: Type roots
-Info 54   [00:01:23.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/projects/app/node_modules/@types 1 undefined Project: /src/projects/app/tsconfig.json WatchType: Type roots
-Info 55   [00:01:24.000] Finishing updateGraphWorker: Project: /src/projects/app/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 56   [00:01:25.000] Project '/src/projects/app/tsconfig.json' (Configured)
-Info 57   [00:01:26.000] 	Files (4)
+Info 41   [00:01:10.000] Resolution for module 'moduleX' was found in cache from location '/src/projects'.
+Info 42   [00:01:11.000] ======== Module name 'moduleX' was successfully resolved to '/src/projects/node_modules/moduleX/index.d.ts'. ========
+Info 43   [00:01:12.000] DirectoryWatcher:: Added:: WatchInfo: /src/projects/app/node_modules 1 undefined Project: /src/projects/app/tsconfig.json WatchType: Failed Lookup Locations
+Info 44   [00:01:13.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/projects/app/node_modules 1 undefined Project: /src/projects/app/tsconfig.json WatchType: Failed Lookup Locations
+Info 45   [00:01:14.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /src/projects/app/tsconfig.json WatchType: Missing file
+Info 46   [00:01:15.000] DirectoryWatcher:: Added:: WatchInfo: /src/projects/app/node_modules/@types 1 undefined Project: /src/projects/app/tsconfig.json WatchType: Type roots
+Info 47   [00:01:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/projects/app/node_modules/@types 1 undefined Project: /src/projects/app/tsconfig.json WatchType: Type roots
+Info 48   [00:01:17.000] Finishing updateGraphWorker: Project: /src/projects/app/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 49   [00:01:18.000] Project '/src/projects/app/tsconfig.json' (Configured)
+Info 50   [00:01:19.000] 	Files (4)
 	/src/projects/node_modules/moduleX/index.d.ts
 	/src/projects/app/appA.ts
 	/src/projects/common/moduleB.ts
@@ -141,16 +134,16 @@ Info 57   [00:01:26.000] 	Files (4)
 	appB.ts
 	  Matched by default include pattern '**/*'
 
-Info 58   [00:01:27.000] -----------------------------------------------
-Info 59   [00:01:28.000] Search path: /src/projects/app
-Info 60   [00:01:29.000] For info: /src/projects/app/tsconfig.json :: No config files found.
-Info 61   [00:01:30.000] Project '/src/projects/app/tsconfig.json' (Configured)
-Info 61   [00:01:31.000] 	Files (4)
+Info 51   [00:01:20.000] -----------------------------------------------
+Info 52   [00:01:21.000] Search path: /src/projects/app
+Info 53   [00:01:22.000] For info: /src/projects/app/tsconfig.json :: No config files found.
+Info 54   [00:01:23.000] Project '/src/projects/app/tsconfig.json' (Configured)
+Info 54   [00:01:24.000] 	Files (4)
 
-Info 61   [00:01:32.000] -----------------------------------------------
-Info 61   [00:01:33.000] Open files: 
-Info 61   [00:01:34.000] 	FileName: /src/projects/app/appB.ts ProjectRootPath: undefined
-Info 61   [00:01:35.000] 		Projects: /src/projects/app/tsconfig.json
+Info 54   [00:01:25.000] -----------------------------------------------
+Info 54   [00:01:26.000] Open files: 
+Info 54   [00:01:27.000] 	FileName: /src/projects/app/appB.ts ProjectRootPath: undefined
+Info 54   [00:01:28.000] 		Projects: /src/projects/app/tsconfig.json
 After request
 
 PolledWatches::
@@ -179,7 +172,7 @@ FsWatchesRecursive::
 /src/projects/node_modules:
   {}
 
-Info 61   [00:01:36.000] response:
+Info 54   [00:01:29.000] response:
     {
       "responseRequired": false
     }

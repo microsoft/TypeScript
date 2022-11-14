@@ -5,6 +5,7 @@ import {
     changeAnyExtension,
     CharacterCodes,
     combinePaths,
+    CommandLineOption,
     comparePaths,
     Comparison,
     CompilerOptions,
@@ -35,6 +36,7 @@ import {
     getBaseFileName,
     GetCanonicalFileName,
     getCommonSourceDirectory,
+    getCompilerOptionValue,
     getDirectoryPath,
     GetEffectiveTypeRootsHost,
     getEmitModuleKind,
@@ -66,14 +68,13 @@ import {
     ModuleKind,
     ModuleResolutionHost,
     ModuleResolutionKind,
+    moduleResolutionOptionDeclarations,
     noop,
     noopPush,
     normalizePath,
     normalizeSlashes,
-    optionsHaveModuleResolutionChanges,
     PackageId,
     packageIdToString,
-    ParsedCommandLine,
     Path,
     pathIsRelative,
     Pattern,
@@ -718,58 +719,97 @@ export interface PerModuleNameCache {
     set(directory: string, result: ResolvedModuleWithFailedLookupLocations): void;
 }
 
-/** @internal */
-export interface CacheWithRedirects<K, V> {
-    getOwnMap: () => Map<K, V>;
-    redirectsMap: Map<Path, Map<K, V>>;
-    getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V>;
-    clear(): void;
-    setOwnOptions(newOptions: CompilerOptions): void;
-    setOwnMap(newOwnMap: Map<K, V>): void;
+function compilerOptionValueToString(value: unknown): string {
+    if (value === null || typeof value !== "object") { // eslint-disable-line no-null/no-null
+        return "" + value;
+    }
+    if (isArray(value)) {
+        return `[${value.map(e => compilerOptionValueToString(e))?.join(",")}]`;
+    }
+    let str = "{";
+    for (const key in value) {
+        if (hasProperty(value, key)) {
+            str += `${key}: ${compilerOptionValueToString((value as any)[key])}`;
+        }
+    }
+    return str + "}";
 }
 
 /** @internal */
-export function createCacheWithRedirects<K, V>(options?: CompilerOptions): CacheWithRedirects<K, V> {
-    let ownMap: Map<K, V> = new Map();
-    const redirectsMap = new Map<Path, Map<K, V>>();
+export function getKeyForCompilerOptions(options: CompilerOptions, affectingOptionDeclarations: readonly CommandLineOption[]) {
+    return affectingOptionDeclarations.map(option => compilerOptionValueToString(getCompilerOptionValue(options, option))).join("|") + (options.pathsBasePath ? `|${options.pathsBasePath}` : undefined);
+}
+
+/** @internal */
+export interface CacheWithRedirects<K, V> {
+    getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V>;
+    update(newOptions: CompilerOptions): void;
+    clear(): void;
+}
+
+/** @internal */
+export function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | undefined): CacheWithRedirects<K, V> {
+    type RedirectsCacheKey = string & { __compilerOptionsKey: any; };
+    const redirectsMap = new Map<CompilerOptions, Map<K, V>>();
+    const optionsToRedirectsKey = new Map<CompilerOptions, RedirectsCacheKey>();
+    const redirectsKeyToMap = new Map<RedirectsCacheKey, Map<K, V>>();
+    let ownMap = new Map<K, V>();
+    if (ownOptions) redirectsMap.set(ownOptions, ownMap);
     return {
-        getOwnMap,
-        redirectsMap,
         getOrCreateMapOfCacheRedirects,
+        update,
         clear,
-        setOwnOptions,
-        setOwnMap
     };
 
-    function getOwnMap() {
-        return ownMap;
+    function getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V> {
+        return redirectedReference ?
+            getOrCreateMap(redirectedReference.commandLine.options) :
+            ownMap;
     }
 
-    function setOwnOptions(newOptions: CompilerOptions) {
-        options = newOptions;
-    }
-
-    function setOwnMap(newOwnMap: Map<K, V>) {
-        ownMap = newOwnMap;
-    }
-
-    function getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined) {
-        if (!redirectedReference) {
-            return ownMap;
+    function update(newOptions: CompilerOptions) {
+        if (ownOptions !== newOptions) {
+            if (ownOptions) ownMap = getOrCreateMap(newOptions); // set new map for new options as ownMap
+            else redirectsMap.set(newOptions, ownMap); // Use existing map if oldOptions = undefined
+            ownOptions = newOptions;
         }
-        const path = redirectedReference.sourceFile.path;
-        let redirects = redirectsMap.get(path);
-        if (!redirects) {
-            // Reuse map if redirected reference map uses same resolution
-            redirects = !options || optionsHaveModuleResolutionChanges(options, redirectedReference.commandLine.options) ? new Map() : ownMap;
-            redirectsMap.set(path, redirects);
+    }
+
+    function getOrCreateMap(redirectOptions: CompilerOptions): Map<K, V> {
+        let result = redirectsMap.get(redirectOptions);
+        if (result) return result;
+        const key = getRedirectsCacheKey(redirectOptions);
+        result = redirectsKeyToMap.get(key);
+        if (!result) {
+            if (ownOptions) {
+                const ownKey = getRedirectsCacheKey(ownOptions);
+                if (ownKey === key) result = ownMap;
+                else if (!redirectsKeyToMap.has(ownKey)) redirectsKeyToMap.set(ownKey, ownMap);
+            }
+            redirectsKeyToMap.set(key, result ??= new Map());
         }
-        return redirects;
+        redirectsMap.set(redirectOptions, result);
+        return result;
     }
 
     function clear() {
+        const ownKey = ownOptions && optionsToRedirectsKey.get(ownOptions);
         ownMap.clear();
         redirectsMap.clear();
+        optionsToRedirectsKey.clear();
+        redirectsKeyToMap.clear();
+        if (ownOptions) {
+            if (ownKey) optionsToRedirectsKey.set(ownOptions, ownKey);
+            redirectsMap.set(ownOptions, ownMap);
+        }
+    }
+
+    function getRedirectsCacheKey(options: CompilerOptions) {
+        let result = optionsToRedirectsKey.get(options);
+        if (!result) {
+            optionsToRedirectsKey.set(options, result = getKeyForCompilerOptions(options, moduleResolutionOptionDeclarations) as RedirectsCacheKey);
+        }
+        return result;
     }
 }
 
@@ -804,34 +844,6 @@ function getOrCreateCache<K, V>(cacheWithRedirects: CacheWithRedirects<K, V>, re
     return result;
 }
 
-function updateRedirectsMap<T>(
-    options: CompilerOptions,
-    directoryToModuleNameMap: CacheWithRedirects<Path, ModeAwareCache<T>>,
-    moduleNameToDirectoryMap?: CacheWithRedirects<string, PerModuleNameCache>
-) {
-    if (!options.configFile) return;
-    if (directoryToModuleNameMap.redirectsMap.size === 0) {
-        // The own map will be for projectCompilerOptions
-        Debug.assert(!moduleNameToDirectoryMap || moduleNameToDirectoryMap.redirectsMap.size === 0);
-        Debug.assert(directoryToModuleNameMap.getOwnMap().size === 0);
-        Debug.assert(!moduleNameToDirectoryMap || moduleNameToDirectoryMap.getOwnMap().size === 0);
-        directoryToModuleNameMap.redirectsMap.set(options.configFile.path, directoryToModuleNameMap.getOwnMap());
-        moduleNameToDirectoryMap?.redirectsMap.set(options.configFile.path, moduleNameToDirectoryMap.getOwnMap());
-    }
-    else {
-        // Set correct own map
-        Debug.assert(!moduleNameToDirectoryMap || moduleNameToDirectoryMap.redirectsMap.size > 0);
-        const ref: ResolvedProjectReference = {
-            sourceFile: options.configFile,
-            commandLine: { options } as ParsedCommandLine
-        };
-        directoryToModuleNameMap.setOwnMap(directoryToModuleNameMap.getOrCreateMapOfCacheRedirects(ref));
-        moduleNameToDirectoryMap?.setOwnMap(moduleNameToDirectoryMap.getOrCreateMapOfCacheRedirects(ref));
-    }
-    directoryToModuleNameMap.setOwnOptions(options);
-    moduleNameToDirectoryMap?.setOwnOptions(options);
-}
-
 function createPerDirectoryResolutionCache<T>(currentDirectory: string, getCanonicalFileName: GetCanonicalFileName, directoryToModuleNameMap: CacheWithRedirects<Path, ModeAwareCache<T>>): PerDirectoryResolutionCache<T> {
     return {
         getOrCreateCacheForDirectory,
@@ -844,7 +856,7 @@ function createPerDirectoryResolutionCache<T>(currentDirectory: string, getCanon
     }
 
     function update(options: CompilerOptions) {
-        updateRedirectsMap(options, directoryToModuleNameMap);
+        directoryToModuleNameMap.update(options);
     }
 
     function getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference) {
@@ -951,7 +963,8 @@ export function createModuleResolutionCache(
     }
 
     function update(options: CompilerOptions) {
-        updateRedirectsMap(options, directoryToModuleNameMap, moduleNameToDirectoryMap);
+        directoryToModuleNameMap.update(options);
+        moduleNameToDirectoryMap.update(options);
     }
 
     function getOrCreateCacheForModuleName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerModuleNameCache {
