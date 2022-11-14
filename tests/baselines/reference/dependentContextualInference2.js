@@ -16,6 +16,7 @@ m({
   t: k => {}
 })
 
+
 //// [dependentContextualInference2.js]
 m({
     a: 1,
