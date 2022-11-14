@@ -8,7 +8,7 @@ export function setEnableDeprecationWarnings(value: boolean) {
 
 let typeScriptVersion: Version | undefined;
 
-export function getTypeScriptVersion() {
+function getTypeScriptVersion() {
     return typeScriptVersion ?? (typeScriptVersion = new Version(version));
 }
 

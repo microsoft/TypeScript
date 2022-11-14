@@ -14,7 +14,7 @@ import {
     ObjectFlags, ObjectType, RelationComparisonResult, Signature, SignatureCheckMode,
     SignatureFlags, SnippetKind, SortedReadonlyArray, stableSort, Symbol, SymbolFlags, symbolName, SyntaxKind,
     TransformFlags, Type, TypeFacts, TypeFlags, TypeMapKind, TypeMapper, unescapeLeadingUnderscores, VarianceFlags,
-    version, Version, zipWith,
+    zipWith,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -33,20 +33,14 @@ export interface LoggingHost {
 
 /** @internal */
 export namespace Debug {
-    let typeScriptVersion: Version | undefined;
-
     /* eslint-disable prefer-const */
     let currentAssertionLevel = AssertionLevel.None;
     export let currentLogLevel = LogLevel.Warning;
     export let isDebugging = false;
     export let loggingHost: LoggingHost | undefined;
-    export let enableDeprecationWarnings = true;
     /* eslint-enable prefer-const */
 
     type AssertionKeys = MatchingKeys<typeof Debug, AnyFunction>;
-    export function getTypeScriptVersion() {
-        return typeScriptVersion ?? (typeScriptVersion = new Version(version));
-    }
 
     export function shouldLog(level: LogLevel): boolean {
         return currentLogLevel <= level;
