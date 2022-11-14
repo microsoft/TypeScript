@@ -35,9 +35,9 @@ function getPreferences(host: ModuleSpecifierResolutionHost, { importModuleSpeci
     return {
         relativePreference:
             importModuleSpecifierPreference === "relative" ? RelativePreference.Relative :
-                importModuleSpecifierPreference === "non-relative" ? RelativePreference.NonRelative :
-                    importModuleSpecifierPreference === "project-relative" ? RelativePreference.ExternalNonRelative :
-                        RelativePreference.Shortest,
+            importModuleSpecifierPreference === "non-relative" ? RelativePreference.NonRelative :
+            importModuleSpecifierPreference === "project-relative" ? RelativePreference.ExternalNonRelative :
+            RelativePreference.Shortest,
         ending: getEnding(),
     };
     function getEnding(): Ending {
@@ -62,7 +62,7 @@ function getPreferencesForUpdate(compilerOptions: CompilerOptions, oldImportSpec
 
 function isFormatRequiringExtensions(compilerOptions: CompilerOptions, importingSourceFileName: Path, host: ModuleSpecifierResolutionHost) {
     if (getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Node16
-        && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
+    && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeNext) {
         return false;
     }
     return getImpliedNodeFormatForFile(importingSourceFileName, host.getPackageJsonInfoCache?.(), getModuleResolutionHost(host), compilerOptions) !== ModuleKind.CommonJS;
@@ -307,7 +307,7 @@ function computeModuleSpecifiers(
 
     return pathsSpecifiers?.length ? pathsSpecifiers :
         nodeModulesSpecifiers?.length ? nodeModulesSpecifiers :
-            Debug.checkDefined(relativeSpecifiers);
+        Debug.checkDefined(relativeSpecifiers);
 }
 
 interface Info {
@@ -322,7 +322,7 @@ function getInfo(importingSourceFileName: Path, host: ModuleSpecifierResolutionH
     return { getCanonicalFileName, importingSourceFileName, sourceDirectory };
 }
 
-function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, { ending, relativePreference }: Preferences): string {
+function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: SourceFile["impliedNodeFormat"], { ending, relativePreference }: Preferences): string {
     const { baseUrl, paths, rootDirs } = compilerOptions;
     const { sourceDirectory, getCanonicalFileName } = info;
     const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, ending, compilerOptions) ||
@@ -589,7 +589,7 @@ function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeCh
     }
 }
 
-function getAllowedEndings(preferredEnding: Ending, compilerOptions: CompilerOptions, importMode: ResolutionMode) {
+function getAllowedEndings(preferredEnding: Ending, compilerOptions: CompilerOptions, importMode: SourceFile["impliedNodeFormat"]) {
     if (getEmitModuleResolutionKind(compilerOptions) >= ModuleResolutionKind.Node16 && importMode === ModuleKind.ESNext) {
         return [Ending.JsExtension];
     }
@@ -736,7 +736,7 @@ function tryGetModuleNameFromExports(options: CompilerOptions, targetFilePath: s
                 const subPackageName = getNormalizedAbsolutePath(combinePaths(packageName, k), /*currentDirectory*/ undefined);
                 const mode = endsWith(k, "/") ? MatchingMode.Directory
                     : stringContains(k, "*") ? MatchingMode.Pattern
-                        : MatchingMode.Exact;
+                    : MatchingMode.Exact;
                 return tryGetModuleNameFromExports(options, targetFilePath, packageDirectory, subPackageName, (exports as MapLike<unknown>)[k], conditions, mode);
             });
         }
