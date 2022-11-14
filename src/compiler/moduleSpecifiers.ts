@@ -16,7 +16,7 @@ import {
     ModuleSpecifierResolutionHost, NodeFlags, NodeModulePathParts, normalizePath, Path, pathContainsNodeModules,
     pathIsBareSpecifier, pathIsRelative, PropertyAccessExpression, removeFileExtension, removeSuffix, resolvePath,
     ScriptKind, some, SourceFile, startsWith, startsWithDirectory, stringContains, StringLiteral, Symbol, SymbolFlags,
-    toPath, tryGetExtensionFromPath, tryParsePatterns, TypeChecker, UserPreferences,
+    toPath, tryGetExtensionFromPath, tryParsePatterns, TypeChecker, UserPreferences, ResolutionMode,
 } from "./_namespaces/ts";
 
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
@@ -322,7 +322,7 @@ function getInfo(importingSourceFileName: Path, host: ModuleSpecifierResolutionH
     return { getCanonicalFileName, importingSourceFileName, sourceDirectory };
 }
 
-function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: SourceFile["impliedNodeFormat"], { ending, relativePreference }: Preferences): string {
+function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, { ending, relativePreference }: Preferences): string {
     const { baseUrl, paths, rootDirs } = compilerOptions;
     const { sourceDirectory, getCanonicalFileName } = info;
     const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, ending, compilerOptions) ||
@@ -589,7 +589,7 @@ function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeCh
     }
 }
 
-function getAllowedEndings(preferredEnding: Ending, compilerOptions: CompilerOptions, importMode: SourceFile["impliedNodeFormat"]) {
+function getAllowedEndings(preferredEnding: Ending, compilerOptions: CompilerOptions, importMode: ResolutionMode) {
     if (getEmitModuleResolutionKind(compilerOptions) >= ModuleResolutionKind.Node16 && importMode === ModuleKind.ESNext) {
         return [Ending.JsExtension];
     }
@@ -776,7 +776,7 @@ function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileNam
         : removeFileExtension(shortest);
 }
 
-function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, sourceDirectory }: Info, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, options: CompilerOptions, userPreferences: UserPreferences, packageNameOnly?: boolean, overrideMode?: ModuleKind.ESNext | ModuleKind.CommonJS): string | undefined {
+function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, sourceDirectory }: Info, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, options: CompilerOptions, userPreferences: UserPreferences, packageNameOnly?: boolean, overrideMode?: ResolutionMode): string | undefined {
     if (!host.fileExists || !host.readFile) {
         return undefined;
     }

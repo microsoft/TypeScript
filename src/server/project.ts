@@ -19,11 +19,11 @@ import {
     getNormalizedAbsolutePath, getOrUpdate, getStringComparer, HasInvalidatedResolutions, HostCancellationToken,
     inferredTypesContainingFile, InstallPackageOptions, IScriptSnapshot, isDeclarationFileName,
     isExternalModuleNameRelative, isInsideNodeModules, JsTyping, LanguageService, LanguageServiceHost,
-    LanguageServiceMode, map, mapDefined, maybeBind, ModuleKind, ModuleResolutionCache, ModuleResolutionHost,
+    LanguageServiceMode, map, mapDefined, maybeBind, ModuleResolutionCache, ModuleResolutionHost,
     ModuleResolutionInfo, noop, noopFileWatcher, normalizePath, normalizeSlashes, orderedRemoveItem, outFile,
     PackageJsonAutoImportPreference, PackageJsonInfo, ParsedCommandLine, parsePackageName, Path, perfLogger,
     PerformanceEvent, PluginImport, PollingInterval, Program, ProjectPackageJsonInfo, ProjectReference,
-    removeFileExtension, ResolutionCache, resolutionExtensionIsTSOrJson, ResolvedModuleFull,
+    removeFileExtension, ResolutionCache, resolutionExtensionIsTSOrJson, ResolutionMode, ResolvedModuleFull,
     ResolvedModuleWithFailedLookupLocations, ResolvedProjectReference, ResolvedTypeReferenceDirective,
     resolvePackageNameToPackageJson, returnFalse, returnTrue, ScriptKind, some, sort, sortAndDeduplicate,
     SortedReadonlyArray, SourceFile, SourceMapper, startsWith, stripQuotes, StructureIsReused, SymlinkCache,
@@ -551,11 +551,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return this.resolutionCache.getModuleResolutionCache();
     }
 
-    getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, resolutionMode?: ModuleKind.CommonJS | ModuleKind.ESNext): ResolvedModuleWithFailedLookupLocations | undefined {
+    getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined {
         return this.resolutionCache.getResolvedModuleWithFailedLookupLocationsFromCache(moduleName, containingFile, resolutionMode);
     }
 
-    resolveTypeReferenceDirectives(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[] {
+    resolveTypeReferenceDirectives(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingFileMode?: ResolutionMode, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[] {
         return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference, containingFileMode, resolutionInfo);
     }
 
