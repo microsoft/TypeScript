@@ -1,4 +1,4 @@
-//// [noUnnecessaryCasts1.ts]
+//// [noUnnecessaryTypeAssertions1.ts]
 const a = {};
 let b: {};
 b = a as {};
@@ -36,7 +36,7 @@ let y: number;
 y! = 2;
 
 
-//// [noUnnecessaryCasts1.js]
+//// [noUnnecessaryTypeAssertions1.js]
 "use strict";
 var a = {};
 var b;

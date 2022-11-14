@@ -1,4 +1,4 @@
-// @noUnnecessaryCasts: true
+// @noUnnecessaryTypeAssertions: true
 // @strict: true
 // @lib: es6
 const a = {};

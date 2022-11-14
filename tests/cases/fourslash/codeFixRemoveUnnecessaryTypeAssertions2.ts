@@ -19,7 +19,7 @@
 ////const bCls2: B = <A>aCls;
 
 verify.codeFix({
-  description: ts.Diagnostics.Remove_unnecessary_type_cast.message,
+  description: ts.Diagnostics.Remove_unnecessary_type_assertion.message,
   index: 0,
   newFileContent:
 `const a = {};
@@ -43,8 +43,8 @@ const bCls2: B = <A>aCls;`
 });
 
 verify.codeFixAll({
-  fixAllDescription: ts.Diagnostics.Remove_all_unnecessary_type_casts.message,
-  fixId: "removeUnnecessaryCast",
+  fixAllDescription: ts.Diagnostics.Remove_all_unnecessary_type_assertions.message,
+  fixId: "removeUnnecessaryTypeAssertion",
   newFileContent:
 `const a = {};
 let b: {};

@@ -5,7 +5,7 @@
 ////a?.toString!.call(2);
 
 verify.codeFix({
-    description: ts.Diagnostics.Remove_unnecessary_type_cast.message,
+    description: ts.Diagnostics.Remove_unnecessary_type_assertion.message,
     index: 0,
     newFileContent: `function foo(x: number): number {
     return x;
@@ -15,8 +15,8 @@ a?.toString!.call(2);`
 });
 
 verify.codeFixAll({
-    fixAllDescription: ts.Diagnostics.Remove_all_unnecessary_type_casts.message,
-    fixId: "removeUnnecessaryCast",
+    fixAllDescription: ts.Diagnostics.Remove_all_unnecessary_type_assertions.message,
+    fixId: "removeUnnecessaryTypeAssertion",
     newFileContent: `function foo(x: number): number {
     return x;
 }

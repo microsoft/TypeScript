@@ -32796,7 +32796,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // if the expression type was widenable, we shouldn't assume the cast is extraneous.
                 // (Generally speaking, such casts are better served with `as const` casts nowadays though!)
                 else if (widenedType === exprType && isTypeIdenticalTo(targetType, widenedType)) {
-                    errorOrSuggestion(!!compilerOptions.noUnnecessaryCasts, errNode, Diagnostics.Type_cast_has_no_effect_on_the_type_of_this_expression);
+                    errorOrSuggestion(!!compilerOptions.noUnnecessaryTypeAssertions, errNode, Diagnostics.Type_assertion_has_no_effect_on_the_type_of_this_expression);
                 }
             });
         }
@@ -32837,7 +32837,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                         }
                     }
-                    errorOrSuggestion(!!compilerOptions.noUnnecessaryCasts, node, Diagnostics.Type_cast_has_no_effect_on_the_type_of_this_expression);
+                    errorOrSuggestion(!!compilerOptions.noUnnecessaryTypeAssertions, node, Diagnostics.Type_assertion_has_no_effect_on_the_type_of_this_expression);
                 }
             });
         }

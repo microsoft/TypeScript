@@ -1,0 +1,63 @@
+tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts(3,5): error TS80009: Type assertion has no effect on the type of this expression.
+tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts(8,19): error TS80009: Type assertion has no effect on the type of this expression.
+tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts(17,18): error TS80009: Type assertion has no effect on the type of this expression.
+tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts(18,18): error TS80009: Type assertion has no effect on the type of this expression.
+tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts(20,12): error TS80009: Type assertion has no effect on the type of this expression.
+tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts(23,1): error TS80009: Type assertion has no effect on the type of this expression.
+tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts(33,1): error TS2322: Type 'undefined' is not assignable to type '{}'.
+tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts(35,1): error TS80009: Type assertion has no effect on the type of this expression.
+
+
+==== tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts (8 errors) ====
+    const a = {};
+    let b: {};
+    b = a as {};
+        ~~~~~~~
+!!! error TS80009: Type assertion has no effect on the type of this expression.
+    interface Foo {
+        x?: string;
+    }
+    const foo1: Foo = { x: "ok" } as Foo; // cast technically erases type information, not a no-op
+    const foo2: Foo = foo1 as Foo;
+                      ~~~~~~~~~~~
+!!! error TS80009: Type assertion has no effect on the type of this expression.
+    class A {
+        item: any;
+    }
+    class B {
+        item: any;
+    }
+    const aCls = new A();
+    const bCls = new B();
+    const aCls2: A = bCls as A;
+                     ~~~~~~~~~
+!!! error TS80009: Type assertion has no effect on the type of this expression.
+    const bCls2: B = aCls as A;
+                     ~~~~~~~~~
+!!! error TS80009: Type assertion has no effect on the type of this expression.
+    function foo(x: number): number {
+        return x!;
+               ~~
+!!! error TS80009: Type assertion has no effect on the type of this expression.
+    }
+    const a1 = 2;
+    a1?.toString!.call(2);
+    ~~~~~~~~~~~~~
+!!! error TS80009: Type assertion has no effect on the type of this expression.
+    function testRequired() {
+        let resolve: (value: unknown) => void
+        new Promise(resolve0 => {
+            resolve = resolve0
+        })
+        return resolve! // this non-null assertion is required, removing it causes compiler to hard fail
+    }
+    let x: unknown;
+    x! = 2;
+    x! = undefined;
+    ~~
+!!! error TS2322: Type 'undefined' is not assignable to type '{}'.
+    let y: number;
+    y! = 2;
+    ~~
+!!! error TS80009: Type assertion has no effect on the type of this expression.
+    

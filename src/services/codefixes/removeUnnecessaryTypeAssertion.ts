@@ -4,17 +4,17 @@ import {
 } from "../_namespaces/ts";
 import { codeFixAll, createCodeFixAction, findAncestorMatchingSpan, registerCodeFix } from "../_namespaces/ts.codefix";
 
-const fixId = "removeUnnecessaryCast";
+const fixId = "removeUnnecessaryTypeAssertion";
 const errorCodes = [
-    Diagnostics.Type_cast_has_no_effect_on_the_type_of_this_expression.code,
+    Diagnostics.Type_assertion_has_no_effect_on_the_type_of_this_expression.code,
 ];
 
 registerCodeFix({
     errorCodes,
-    getCodeActions: function getCodeActionsToRemoveUnnecessaryCast(context) {
+    getCodeActions: function getCodeActionsToRemoveUnnecessaryTypeAssertion(context) {
         const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span));
         if (changes.length > 0) {
-            return [createCodeFixAction(fixId, changes, Diagnostics.Remove_unnecessary_type_cast, fixId, Diagnostics.Remove_all_unnecessary_type_casts)];
+            return [createCodeFixAction(fixId, changes, Diagnostics.Remove_unnecessary_type_assertion, fixId, Diagnostics.Remove_all_unnecessary_type_assertions)];
         }
     },
     fixIds: [fixId],

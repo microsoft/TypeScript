@@ -5919,7 +5919,7 @@
         "category": "Message",
         "code": 6803
     },
-    "Raise an error when a type cast does not affect the type of an expression.": {
+    "Raise an error when a type assertion does not affect the type of an expression.": {
         "category": "Message",
         "code": 6804
     },
@@ -6538,7 +6538,7 @@
         "category": "Suggestion",
         "code": 80008
     },
-    "Type cast has no effect on the type of this expression.": {
+    "Type assertion has no effect on the type of this expression.": {
         "category": "Error",
         "code": 80009
     },
@@ -7400,11 +7400,11 @@
         "category": "Message",
         "code": 95175
     },
-    "Remove unnecessary type cast.": {
+    "Remove unnecessary type assertion.": {
         "category": "Message",
         "code": 95176
     },
-    "Remove all unnecessary type casts.": {
+    "Remove all unnecessary type assertions.": {
         "category": "Message",
         "code": 95177
     },

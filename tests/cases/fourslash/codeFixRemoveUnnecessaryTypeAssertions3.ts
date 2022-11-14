@@ -39,7 +39,7 @@
 
 goTo.file(1);
 verify.codeFix({
-  description: ts.Diagnostics.Remove_unnecessary_type_cast.message,
+  description: ts.Diagnostics.Remove_unnecessary_type_assertion.message,
   index: 2,
   newFileContent:
 `const a = {};
@@ -70,8 +70,8 @@ const fn = () => /** @type {{}} */({});`
 });
 
 verify.codeFixAll({
-  fixAllDescription: ts.Diagnostics.Remove_all_unnecessary_type_casts.message,
-  fixId: "removeUnnecessaryCast",
+  fixAllDescription: ts.Diagnostics.Remove_all_unnecessary_type_assertions.message,
+  fixId: "removeUnnecessaryTypeAssertion",
   newFileContent:
 `const a = {};
 /**

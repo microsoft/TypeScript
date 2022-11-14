@@ -801,12 +801,12 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         defaultValueDescription: false,
     },
     {
-        name: "noUnnecessaryCasts",
+        name: "noUnnecessaryTypeAssertions",
         type: "boolean",
         affectsSemanticDiagnostics: true,
         affectsBuildInfo: true,
         category: Diagnostics.Type_Checking,
-        description: Diagnostics.Raise_an_error_when_a_type_cast_does_not_affect_the_type_of_an_expression,
+        description: Diagnostics.Raise_an_error_when_a_type_assertion_does_not_affect_the_type_of_an_expression,
         defaultValueDescription: false,
     },
     {

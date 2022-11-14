@@ -1,4 +1,4 @@
-=== tests/cases/conformance/additionalChecks/noUnnecessaryCasts1.ts ===
+=== tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts ===
 const a = {};
 >a : {}
 >{} : {}

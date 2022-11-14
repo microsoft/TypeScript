@@ -20,7 +20,7 @@
 ////const tup = [0] as [0]; // required to preserve literalness
 
 verify.codeFix({
-  description: ts.Diagnostics.Remove_unnecessary_type_cast.message,
+  description: ts.Diagnostics.Remove_unnecessary_type_assertion.message,
   index: 0,
   newFileContent:
 `const a = {};
@@ -45,8 +45,8 @@ const tup = [0] as [0]; // required to preserve literalness`
 });
 
 verify.codeFixAll({
-  fixAllDescription: ts.Diagnostics.Remove_all_unnecessary_type_casts.message,
-  fixId: "removeUnnecessaryCast",
+  fixAllDescription: ts.Diagnostics.Remove_all_unnecessary_type_assertions.message,
+  fixId: "removeUnnecessaryTypeAssertion",
   newFileContent:
 `const a = {};
 let b: {};

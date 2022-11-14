@@ -66,7 +66,7 @@ export * from "../codefixes/wrapJsxInFragment";
 export * from "../codefixes/convertToMappedObjectType";
 export * from "../codefixes/removeAccidentalCallParentheses";
 export * from "../codefixes/removeUnnecessaryAwait";
-export * from "../codefixes/removeUnnecessaryCast";
+export * from "../codefixes/removeUnnecessaryTypeAssertion";
 export * from "../codefixes/splitTypeOnlyImport";
 export * from "../codefixes/convertConstToLet";
 export * from "../codefixes/fixExpectedComma";
