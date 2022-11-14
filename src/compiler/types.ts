@@ -7275,11 +7275,11 @@ export const enum Extension {
 export interface ResolvedModuleWithFailedLookupLocations {
     readonly resolvedModule: ResolvedModuleFull | undefined;
     /** @internal */
-    readonly failedLookupLocations: string[];
+    failedLookupLocations?: string[];
     /** @internal */
-    readonly affectingLocations: string[];
+    affectingLocations?: string[];
     /** @internal */
-    readonly resolutionDiagnostics: Diagnostic[]
+    resolutionDiagnostics?: Diagnostic[]
 }
 
 export interface ResolvedTypeReferenceDirective {
@@ -7300,9 +7300,9 @@ export interface ResolvedTypeReferenceDirective {
 
 export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
     readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
-    readonly failedLookupLocations: string[];
-    /** @internal */ readonly affectingLocations: string[];
-    /** @internal */ resolutionDiagnostics: Diagnostic[];
+    /** @internal */ failedLookupLocations?: string[];
+    /** @internal */ affectingLocations?: string[];
+    /** @internal */ resolutionDiagnostics?: Diagnostic[];
 }
 
 /** @internal */

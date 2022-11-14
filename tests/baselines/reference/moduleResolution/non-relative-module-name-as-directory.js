@@ -48,9 +48,7 @@ Resolution:: {
     "/a/node_modules/foo.d.ts",
     "/a/node_modules/foo/index.ts",
     "/a/node_modules/foo/index.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "foo" from /a/node_modules/b/c/node_modules/d/e.ts with host that doesnt have directoryExists
@@ -103,7 +101,5 @@ Resolution:: {
     "/a/node_modules/foo.d.ts",
     "/a/node_modules/foo/index.ts",
     "/a/node_modules/foo/index.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }

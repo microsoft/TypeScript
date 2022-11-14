@@ -3382,7 +3382,6 @@ declare namespace ts {
     }
     interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
-        readonly failedLookupLocations: string[];
     }
     interface ResolutionInfo<T> {
         names: readonly T[];

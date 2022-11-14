@@ -10,10 +10,7 @@ Resolution:: {
     "primary": false,
     "resolvedFileName": "/root/src/typedefs/filesystem.d.ts",
     "isExternalLibraryImport": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 //// [/root/src/background/app.ts]
@@ -28,8 +25,5 @@ Resolution:: {
     "primary": false,
     "resolvedFileName": "/root/src/typedefs/filesystem.d.ts",
     "isExternalLibraryImport": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
