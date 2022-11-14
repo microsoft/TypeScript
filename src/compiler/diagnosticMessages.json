@@ -5919,6 +5919,10 @@
         "category": "Message",
         "code": 6803
     },
+    "Raise an error when a type cast does not affect the type of an expression.": {
+        "category": "Message",
+        "code": 6804
+    },
 
     "one of:": {
         "category": "Message",
@@ -6533,6 +6537,10 @@
     "Numeric literals with absolute values equal to 2^53 or greater are too large to be represented accurately as integers.": {
         "category": "Suggestion",
         "code": 80008
+    },
+    "Type cast has no effect on the type of this expression.": {
+        "category": "Error",
+        "code": 80009
     },
 
     "Add missing 'super()' call": {
@@ -7391,6 +7399,14 @@
     "Use `Number.isNaN` in all conditions.": {
         "category": "Message",
         "code": 95175
+    },
+    "Remove unnecessary type cast.": {
+        "category": "Message",
+        "code": 95176
+    },
+    "Remove all unnecessary type casts.": {
+        "category": "Message",
+        "code": 95177
     },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {

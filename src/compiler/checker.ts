@@ -19882,6 +19882,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 if (sourceFlags & TypeFlags.Conditional) {
+                    if ((source as ConditionalType).root === (target as ConditionalType).root) {
+                        // Two instantiations of the same conditional type, just check instantiated outer type parameter equality
+                        const params = (source as ConditionalType).root.outerTypeParameters || [];
+                        const sourceTypeArguments = map(params, t => (source as ConditionalType).mapper ? getMappedType(t, (source as ConditionalType).mapper!) : t);
+                        const targetTypeArguments = map(params, t => (target as ConditionalType).mapper ? getMappedType(t, (target as ConditionalType).mapper!) : t);
+                        return typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, map(params, () => VarianceFlags.Unmeasurable), /*reportErrors*/ false, IntersectionState.None);
+                    }
                     if ((source as ConditionalType).root.isDistributive === (target as ConditionalType).root.isDistributive) {
                         if (result = isRelatedTo((source as ConditionalType).checkType, (target as ConditionalType).checkType, RecursionFlags.Both, /*reportErrors*/ false)) {
                             if (result &= isRelatedTo((source as ConditionalType).extendsType, (target as ConditionalType).extendsType, RecursionFlags.Both, /*reportErrors*/ false)) {
@@ -26071,6 +26078,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             node.kind === SyntaxKind.PropertyDeclaration)!;
     }
 
+    function getControlFlowContainerForIdentifier(node: Identifier, declaration: Declaration, symbol: Symbol, typeFromSymbol: Type) {
+        // The declaration container is the innermost function that encloses the declaration of the variable
+        // or parameter. The flow container is the innermost function starting with which we analyze the control
+        // flow graph to determine the control flow based type.
+        const isParameter = getRootDeclaration(declaration).kind === SyntaxKind.Parameter;
+        const declarationContainer = getControlFlowContainer(declaration);
+        let flowContainer = getControlFlowContainer(node);
+        // When the control flow originates in a function expression or arrow function and we are referencing
+        // a const variable or parameter from an outer function, we extend the origin of the control flow
+        // analysis to include the immediately enclosing function.
+        while (flowContainer !== declarationContainer && (flowContainer.kind === SyntaxKind.FunctionExpression ||
+            flowContainer.kind === SyntaxKind.ArrowFunction || isObjectLiteralOrClassExpressionMethodOrAccessor(flowContainer)) &&
+            (isConstVariable(symbol) && typeFromSymbol !== autoArrayType || isParameter && !isSymbolAssigned(symbol))) {
+            flowContainer = getControlFlowContainer(flowContainer);
+        }
+        return flowContainer;
+    }
+
     // Check if a parameter or catch variable is assigned anywhere
     function isSymbolAssigned(symbol: Symbol) {
         if (!symbol.valueDeclaration) {
@@ -26432,24 +26457,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         type = getNarrowableTypeForReference(type, node, checkMode);
-
-        // The declaration container is the innermost function that encloses the declaration of the variable
-        // or parameter. The flow container is the innermost function starting with which we analyze the control
-        // flow graph to determine the control flow based type.
         const isParameter = getRootDeclaration(declaration).kind === SyntaxKind.Parameter;
         const declarationContainer = getControlFlowContainer(declaration);
-        let flowContainer = getControlFlowContainer(node);
-        const isOuterVariable = flowContainer !== declarationContainer;
-        const isSpreadDestructuringAssignmentTarget = node.parent && node.parent.parent && isSpreadAssignment(node.parent) && isDestructuringAssignmentTarget(node.parent.parent);
+        const flowContainer = getControlFlowContainerForIdentifier(node, declaration, localOrExportSymbol, type);
         const isModuleExports = symbol.flags & SymbolFlags.ModuleExports;
-        // When the control flow originates in a function expression or arrow function and we are referencing
-        // a const variable or parameter from an outer function, we extend the origin of the control flow
-        // analysis to include the immediately enclosing function.
-        while (flowContainer !== declarationContainer && (flowContainer.kind === SyntaxKind.FunctionExpression ||
-            flowContainer.kind === SyntaxKind.ArrowFunction || isObjectLiteralOrClassExpressionMethodOrAccessor(flowContainer)) &&
-            (isConstVariable(localOrExportSymbol) && type !== autoArrayType || isParameter && !isSymbolAssigned(localOrExportSymbol))) {
-            flowContainer = getControlFlowContainer(flowContainer);
-        }
+        const isOuterVariable = getControlFlowContainer(node) !== declarationContainer;
+        const isSpreadDestructuringAssignmentTarget = node.parent && node.parent.parent && isSpreadAssignment(node.parent) && isDestructuringAssignmentTarget(node.parent.parent);
         // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
         // the entire control flow graph from the variable's declaration (i.e. when the flow container and
         // declaration container are the same).
@@ -32762,7 +32775,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkAssertionWorker(errNode: Node, type: TypeNode, expression: UnaryExpression | Expression, checkMode?: CheckMode) {
-        let exprType = checkExpression(expression, checkMode);
+        const exprType = checkExpression(expression, checkMode);
         if (isConstTypeReference(type)) {
             if (!isValidConstAssertionArgument(expression)) {
                 error(expression, Diagnostics.A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
@@ -32770,14 +32783,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getRegularTypeOfLiteralType(exprType);
         }
         checkSourceElement(type);
-        exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(exprType));
         const targetType = getTypeFromTypeNode(type);
         if (!isErrorType(targetType)) {
             addLazyDiagnostic(() => {
-                const widenedType = getWidenedType(exprType);
+                const regularType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(exprType));
+                const widenedType = getWidenedType(regularType);
                 if (!isTypeComparableTo(targetType, widenedType)) {
-                    checkTypeComparableTo(exprType, targetType, errNode,
+                    checkTypeComparableTo(regularType, targetType, errNode,
                         Diagnostics.Conversion_of_type_0_to_type_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_the_expression_to_unknown_first);
+                }
+                // Assertions, as a side effect, disable widening - some casts may rely on this, so
+                // if the expression type was widenable, we shouldn't assume the cast is extraneous.
+                // (Generally speaking, such casts are better served with `as const` casts nowadays though!)
+                else if (widenedType === exprType && isTypeIdenticalTo(targetType, widenedType)) {
+                    errorOrSuggestion(!!compilerOptions.noUnnecessaryCasts, errNode, Diagnostics.Type_cast_has_no_effect_on_the_type_of_this_expression);
                 }
             });
         }
@@ -32791,8 +32810,37 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkNonNullAssertion(node: NonNullExpression) {
-        return node.flags & NodeFlags.OptionalChain ? checkNonNullChain(node as NonNullChain) :
-            getNonNullableType(checkExpression(node.expression));
+        const exprType = checkExpression(node.expression);
+        const resultType = node.flags & NodeFlags.OptionalChain ? checkNonNullChain(node as NonNullChain) : getNonNullableType(exprType);
+        if (!isErrorType(resultType)) {
+            addLazyDiagnostic(() => {
+                if (isTypeIdenticalTo(exprType, resultType)) {
+                    // A non-null assertion on an identifier may also suppress a used-before definition, so may still be useful even if the type is unchanged by it
+                    // Identifiers on the left-hand-side of an assignment expression, ofc, can't do this, since they're for the assigned type itself.
+                    if (isIdentifier(node.expression) && !containsUndefinedType(exprType) && !(isAssignmentExpression(node.parent) && node.parent.left === node)) {
+                        const symbol = getSymbolAtLocation(node.expression);
+                        const declaration = symbol?.valueDeclaration;
+                        if (declaration) {
+                            const isParameter = getRootDeclaration(declaration).kind === SyntaxKind.Parameter;
+                            if (!isParameter) {
+                                const flowContainer = getControlFlowContainerForIdentifier(node.expression, declaration, symbol, exprType);
+                                // We need a fake reference that isn't parented to the nonnull expression, since the non-null will affect control flow's result
+                                // by suppressing the initial return type at the end of the flow
+                                const fakeReference = factory.cloneNode(node.expression);
+                                setParent(fakeReference, node.parent);
+                                fakeReference.flowNode = node.expression.flowNode;
+                                const flowType = getFlowTypeOfReference(fakeReference, exprType, undefinedType, flowContainer);
+                                if (containsUndefinedType(flowType)) {
+                                    return; // Cast is required to suppress a use before assignment control flow error
+                                }
+                            }
+                        }
+                    }
+                    errorOrSuggestion(!!compilerOptions.noUnnecessaryCasts, node, Diagnostics.Type_cast_has_no_effect_on_the_type_of_this_expression);
+                }
+            });
+        }
+        return resultType;
     }
 
     function checkExpressionWithTypeArguments(node: ExpressionWithTypeArguments | TypeQueryNode) {

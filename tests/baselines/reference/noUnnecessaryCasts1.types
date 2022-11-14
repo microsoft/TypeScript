@@ -1,0 +1,131 @@
+=== tests/cases/conformance/additionalChecks/noUnnecessaryCasts1.ts ===
+const a = {};
+>a : {}
+>{} : {}
+
+let b: {};
+>b : {}
+
+b = a as {};
+>b = a as {} : {}
+>b : {}
+>a as {} : {}
+>a : {}
+
+interface Foo {
+    x?: string;
+>x : string | undefined
+}
+const foo1: Foo = { x: "ok" } as Foo; // cast technically erases type information, not a no-op
+>foo1 : Foo
+>{ x: "ok" } as Foo : Foo
+>{ x: "ok" } : { x: string; }
+>x : string
+>"ok" : "ok"
+
+const foo2: Foo = foo1 as Foo;
+>foo2 : Foo
+>foo1 as Foo : Foo
+>foo1 : Foo
+
+class A {
+>A : A
+
+    item: any;
+>item : any
+}
+class B {
+>B : B
+
+    item: any;
+>item : any
+}
+const aCls = new A();
+>aCls : A
+>new A() : A
+>A : typeof A
+
+const bCls = new B();
+>bCls : B
+>new B() : B
+>B : typeof B
+
+const aCls2: A = bCls as A;
+>aCls2 : A
+>bCls as A : A
+>bCls : B
+
+const bCls2: B = aCls as A;
+>bCls2 : B
+>aCls as A : A
+>aCls : A
+
+function foo(x: number): number {
+>foo : (x: number) => number
+>x : number
+
+    return x!;
+>x! : number
+>x : number
+}
+const a1 = 2;
+>a1 : 2
+>2 : 2
+
+a1?.toString!.call(2);
+>a1?.toString!.call(2) : string
+>a1?.toString!.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>a1?.toString! : (radix?: number | undefined) => string
+>a1?.toString : (radix?: number | undefined) => string
+>a1 : 2
+>toString : (radix?: number | undefined) => string
+>call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>2 : 2
+
+function testRequired() {
+>testRequired : () => (value: unknown) => void
+
+    let resolve: (value: unknown) => void
+>resolve : (value: unknown) => void
+>value : unknown
+
+    new Promise(resolve0 => {
+>new Promise(resolve0 => {        resolve = resolve0    }) : Promise<unknown>
+>Promise : PromiseConstructor
+>resolve0 => {        resolve = resolve0    } : (resolve0: (value: unknown) => void) => void
+>resolve0 : (value: unknown) => void
+
+        resolve = resolve0
+>resolve = resolve0 : (value: unknown) => void
+>resolve : (value: unknown) => void
+>resolve0 : (value: unknown) => void
+
+    })
+    return resolve! // this non-null assertion is required, removing it causes compiler to hard fail
+>resolve! : (value: unknown) => void
+>resolve : (value: unknown) => void
+}
+let x: unknown;
+>x : unknown
+
+x! = 2;
+>x! = 2 : 2
+>x! : {}
+>x : unknown
+>2 : 2
+
+x! = undefined;
+>x! = undefined : undefined
+>x! : {}
+>x : unknown
+>undefined : undefined
+
+let y: number;
+>y : number
+
+y! = 2;
+>y! = 2 : 2
+>y! : number
+>y : number
+>2 : 2
+
