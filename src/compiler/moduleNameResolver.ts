@@ -924,21 +924,9 @@ export function createModuleResolutionCache(
     currentDirectory: string,
     getCanonicalFileName: (s: string) => string,
     options?: CompilerOptions
-): ModuleResolutionCache;
-/** @internal */
-export function createModuleResolutionCache(
-    currentDirectory: string,
-    getCanonicalFileName: GetCanonicalFileName,
-    options: undefined,
-    directoryToModuleNameMap: CacheWithRedirects<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>>,
-): ModuleResolutionCache;
-export function createModuleResolutionCache(
-    currentDirectory: string,
-    getCanonicalFileName: GetCanonicalFileName,
-    options?: CompilerOptions,
-    directoryToModuleNameMap?: CacheWithRedirects<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>>,
 ): ModuleResolutionCache {
-    const perDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ||= createCacheWithRedirects(options));
+    const directoryToModuleNameMap = createCacheWithRedirects<Path, ModeAwareCache<ResolvedModuleWithFailedLookupLocations>>(options);
+    const perDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap);
     const moduleNameToDirectoryMap = createCacheWithRedirects<ModeAwareCacheKey, PerModuleNameCache>(options);
     const packageJsonInfoCache = createPackageJsonInfoCache(currentDirectory, getCanonicalFileName);
 
@@ -963,7 +951,7 @@ export function createModuleResolutionCache(
     }
 
     function update(options: CompilerOptions) {
-        updateRedirectsMap(options, directoryToModuleNameMap!, moduleNameToDirectoryMap);
+        updateRedirectsMap(options, directoryToModuleNameMap, moduleNameToDirectoryMap);
     }
 
     function getOrCreateCacheForModuleName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerModuleNameCache {
@@ -1049,23 +1037,9 @@ export function createTypeReferenceDirectiveResolutionCache(
     getCanonicalFileName: (s: string) => string,
     options?: CompilerOptions,
     packageJsonInfoCache?: PackageJsonInfoCache,
-): TypeReferenceDirectiveResolutionCache;
-/** @internal */
-export function createTypeReferenceDirectiveResolutionCache(
-    currentDirectory: string,
-    getCanonicalFileName: GetCanonicalFileName,
-    options: undefined,
-    packageJsonInfoCache: PackageJsonInfoCache | undefined,
-    directoryToModuleNameMap: CacheWithRedirects<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>,
-): TypeReferenceDirectiveResolutionCache;
-export function createTypeReferenceDirectiveResolutionCache(
-    currentDirectory: string,
-    getCanonicalFileName: GetCanonicalFileName,
-    options?: CompilerOptions,
-    packageJsonInfoCache?: PackageJsonInfoCache | undefined,
-    directoryToModuleNameMap?: CacheWithRedirects<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>,
 ): TypeReferenceDirectiveResolutionCache {
-    const perDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap ||= createCacheWithRedirects(options));
+    const directoryToModuleNameMap = createCacheWithRedirects<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>(options);
+    const perDirectoryResolutionCache = createPerDirectoryResolutionCache(currentDirectory, getCanonicalFileName, directoryToModuleNameMap);
     packageJsonInfoCache ||= createPackageJsonInfoCache(currentDirectory, getCanonicalFileName);
 
     return {
