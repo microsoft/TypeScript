@@ -111,3 +111,21 @@ let y: number;
 y! = 2;
 >y : Symbol(y, Decl(noUnnecessaryTypeAssertions1.ts, 33, 3))
 
+function generic<T extends object | null, U extends object>(x: T, y: U) {
+>generic : Symbol(generic, Decl(noUnnecessaryTypeAssertions1.ts, 34, 7))
+>T : Symbol(T, Decl(noUnnecessaryTypeAssertions1.ts, 36, 17))
+>U : Symbol(U, Decl(noUnnecessaryTypeAssertions1.ts, 36, 41))
+>x : Symbol(x, Decl(noUnnecessaryTypeAssertions1.ts, 36, 60))
+>T : Symbol(T, Decl(noUnnecessaryTypeAssertions1.ts, 36, 17))
+>y : Symbol(y, Decl(noUnnecessaryTypeAssertions1.ts, 36, 65))
+>U : Symbol(U, Decl(noUnnecessaryTypeAssertions1.ts, 36, 41))
+
+    const a: object = x!;
+>a : Symbol(a, Decl(noUnnecessaryTypeAssertions1.ts, 37, 9))
+>x : Symbol(x, Decl(noUnnecessaryTypeAssertions1.ts, 36, 60))
+
+    const b: object = y!;
+>b : Symbol(b, Decl(noUnnecessaryTypeAssertions1.ts, 38, 9))
+>y : Symbol(y, Decl(noUnnecessaryTypeAssertions1.ts, 36, 65))
+}
+

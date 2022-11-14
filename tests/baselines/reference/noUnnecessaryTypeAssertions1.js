@@ -35,6 +35,11 @@ x! = undefined;
 let y: number;
 y! = 2;
 
+function generic<T extends object | null, U extends object>(x: T, y: U) {
+    const a: object = x!;
+    const b: object = y!;
+}
+
 
 //// [noUnnecessaryTypeAssertions1.js]
 "use strict";
@@ -74,3 +79,7 @@ x = 2;
 x = undefined;
 var y;
 y = 2;
+function generic(x, y) {
+    var a = x;
+    var b = y;
+}

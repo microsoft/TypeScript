@@ -6,9 +6,10 @@ tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts(20,12):
 tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts(23,1): error TS80009: Type assertion has no effect on the type of this expression.
 tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts(33,1): error TS2322: Type 'undefined' is not assignable to type '{}'.
 tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts(35,1): error TS80009: Type assertion has no effect on the type of this expression.
+tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts(39,23): error TS80009: Type assertion has no effect on the type of this expression.
 
 
-==== tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts (8 errors) ====
+==== tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts (9 errors) ====
     const a = {};
     let b: {};
     b = a as {};
@@ -60,4 +61,11 @@ tests/cases/conformance/additionalChecks/noUnnecessaryTypeAssertions1.ts(35,1): 
     y! = 2;
     ~~
 !!! error TS80009: Type assertion has no effect on the type of this expression.
+    
+    function generic<T extends object | null, U extends object>(x: T, y: U) {
+        const a: object = x!;
+        const b: object = y!;
+                          ~~
+!!! error TS80009: Type assertion has no effect on the type of this expression.
+    }
     

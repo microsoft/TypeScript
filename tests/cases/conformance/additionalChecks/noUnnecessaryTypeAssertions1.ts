@@ -36,3 +36,8 @@ x! = 2;
 x! = undefined;
 let y: number;
 y! = 2;
+
+function generic<T extends object | null, U extends object>(x: T, y: U) {
+    const a: object = x!;
+    const b: object = y!;
+}

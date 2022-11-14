@@ -129,3 +129,20 @@ y! = 2;
 >y : number
 >2 : 2
 
+function generic<T extends object | null, U extends object>(x: T, y: U) {
+>generic : <T extends object | null, U extends object>(x: T, y: U) => void
+>null : null
+>x : T
+>y : U
+
+    const a: object = x!;
+>a : object
+>x! : object
+>x : object | null
+
+    const b: object = y!;
+>b : object
+>y! : U
+>y : U
+}
+
