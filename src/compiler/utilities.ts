@@ -6675,51 +6675,61 @@ function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
     }
 }
 
-function Signature(this: Signature, checker: TypeChecker, flags: SignatureFlags) {
-    this.flags = flags;
+function Signature(checker: TypeChecker, flags: SignatureFlags): Signature {
+    const result = Object.create(null) as Signature; // eslint-disable-line local/boolean-trivia no-null/no-null
+    result.flags = flags;
     if (Debug.isDebugging) {
-        this.checker = checker;
+        result.checker = checker;
     }
+    return result;
 }
 
-function Node(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
-    this.pos = pos;
-    this.end = end;
-    this.kind = kind;
-    this.id = 0;
-    this.flags = NodeFlags.None;
-    this.modifierFlagsCache = ModifierFlags.None;
-    this.transformFlags = TransformFlags.None;
-    this.parent = undefined!;
-    this.original = undefined;
+function Node(kind: SyntaxKind, pos: number, end: number): Node {
+    const result = Object.create(null) as Mutable<Node>; // eslint-disable-line local/boolean-trivia no-null/no-null
+    result.pos = pos;
+    result.end = end;
+    result.kind = kind;
+    result.id = 0;
+    result.flags = NodeFlags.None;
+    result.modifierFlagsCache = ModifierFlags.None;
+    result.transformFlags = TransformFlags.None;
+    result.parent = undefined!;
+    result.original = undefined;
+    return result;
 }
 
-function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
-    this.pos = pos;
-    this.end = end;
-    this.kind = kind;
-    this.id = 0;
-    this.flags = NodeFlags.None;
-    this.transformFlags = TransformFlags.None;
-    this.parent = undefined!;
+function Token(kind: SyntaxKind, pos: number, end: number): Node {
+    const result = Object.create(/*prototype*/ null) as Mutable<Node>; // eslint-disable-line local/boolean-trivia no-null/no-null
+    result.pos = pos;
+    result.end = end;
+    result.kind = kind;
+    result.id = 0;
+    result.flags = NodeFlags.None;
+    result.transformFlags = TransformFlags.None;
+    result.parent = undefined!;
+    return result;
 }
 
-function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
-    this.pos = pos;
-    this.end = end;
-    this.kind = kind;
-    this.id = 0;
-    this.flags = NodeFlags.None;
-    this.transformFlags = TransformFlags.None;
-    this.parent = undefined!;
-    this.original = undefined;
-    this.flowNode = undefined;
+function Identifier(kind: SyntaxKind.Identifier, pos: number, end: number): Identifier {
+    const result = Object.create(null) as Mutable<Identifier>; // eslint-disable-line local/boolean-trivia no-null/no-null
+    result.pos = pos;
+    result.end = end;
+    result.kind = kind;
+    result.id = 0;
+    result.flags = NodeFlags.None;
+    result.transformFlags = TransformFlags.None;
+    result.parent = undefined!;
+    result.original = undefined;
+    result.flowNode = undefined;
+    return result;
 }
 
-function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
-    this.fileName = fileName;
-    this.text = text;
-    this.skipTrivia = skipTrivia || (pos => pos);
+function SourceMapSource(fileName: string, text: string, skipTrivia?: (pos: number) => number) {
+    const result = Object.create(null) as SourceMapSource; // eslint-disable-line local/boolean-trivia no-null/no-null
+    result.fileName = fileName;
+    result.text = text;
+    result.skipTrivia = skipTrivia || (pos => pos);
+    return result;
 }
 
 // eslint-disable-next-line prefer-const
