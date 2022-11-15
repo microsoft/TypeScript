@@ -6676,7 +6676,7 @@ function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
 }
 
 function Signature(checker: TypeChecker, flags: SignatureFlags): Signature {
-    const result = Object.create(null) as Signature; // eslint-disable-line local/boolean-trivia no-null/no-null
+    const result = { __proto__: null } as any as Signature; // eslint-disable-line no-null/no-null
     result.flags = flags;
     if (Debug.isDebugging) {
         result.checker = checker;
@@ -6685,7 +6685,7 @@ function Signature(checker: TypeChecker, flags: SignatureFlags): Signature {
 }
 
 function Node(kind: SyntaxKind, pos: number, end: number): Node {
-    const result = Object.create(null) as Mutable<Node>; // eslint-disable-line local/boolean-trivia no-null/no-null
+    const result = { __proto__: null } as any as Mutable<Node>; // eslint-disable-line no-null/no-null
     result.pos = pos;
     result.end = end;
     result.kind = kind;
@@ -6699,7 +6699,7 @@ function Node(kind: SyntaxKind, pos: number, end: number): Node {
 }
 
 function Token(kind: SyntaxKind, pos: number, end: number): Node {
-    const result = Object.create(/*prototype*/ null) as Mutable<Node>; // eslint-disable-line local/boolean-trivia no-null/no-null
+    const result = { __proto__: null } as any as Mutable<Node>; // eslint-disable-line no-null/no-null
     result.pos = pos;
     result.end = end;
     result.kind = kind;
@@ -6711,7 +6711,7 @@ function Token(kind: SyntaxKind, pos: number, end: number): Node {
 }
 
 function Identifier(kind: SyntaxKind.Identifier, pos: number, end: number): Identifier {
-    const result = Object.create(null) as Mutable<Identifier>; // eslint-disable-line local/boolean-trivia no-null/no-null
+    const result = { __proto__: null } as any as Mutable<Identifier>; // eslint-disable-line no-null/no-null
     result.pos = pos;
     result.end = end;
     result.kind = kind;
@@ -6725,7 +6725,7 @@ function Identifier(kind: SyntaxKind.Identifier, pos: number, end: number): Iden
 }
 
 function SourceMapSource(fileName: string, text: string, skipTrivia?: (pos: number) => number) {
-    const result = Object.create(null) as SourceMapSource; // eslint-disable-line local/boolean-trivia no-null/no-null
+    const result = { __proto__: null } as any as SourceMapSource; // eslint-disable-line no-null/no-null
     result.fileName = fileName;
     result.text = text;
     result.skipTrivia = skipTrivia || (pos => pos);
