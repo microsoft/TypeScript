@@ -6658,21 +6658,28 @@ export interface ObjectAllocator {
     getSourceMapSourceConstructor(): new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 }
 
-function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
-    this.flags = flags;
-    this.escapedName = name;
-    this.declarations = undefined;
-    this.valueDeclaration = undefined;
-    this.id = undefined;
-    this.mergeId = undefined;
-    this.parent = undefined;
+function Symbol(flags: SymbolFlags, name: __String): Symbol {
+    return {
+        flags: flags,
+        escapedName: name,
+        declarations: undefined,
+        valueDeclaration: undefined,
+        id: undefined,
+        mergeId: undefined,
+        parent: undefined,
+    };
 }
 
-function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
-    this.flags = flags;
+function Type(this: Type, checker: TypeChecker, flags: TypeFlags): Type {
     if (Debug.isDebugging || tracing) {
-        this.checker = checker;
+        return {
+            flags,
+            checker,
+        } as Type;
     }
+    return {
+        flags,
+    } as Type;
 }
 
 function Signature(this: Signature, checker: TypeChecker, flags: SignatureFlags) {
@@ -6682,38 +6689,44 @@ function Signature(this: Signature, checker: TypeChecker, flags: SignatureFlags)
     }
 }
 
-function Node(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
-    this.pos = pos;
-    this.end = end;
-    this.kind = kind;
-    this.id = 0;
-    this.flags = NodeFlags.None;
-    this.modifierFlagsCache = ModifierFlags.None;
-    this.transformFlags = TransformFlags.None;
-    this.parent = undefined!;
-    this.original = undefined;
+function Node(kind: SyntaxKind, pos: number, end: number): Node {
+    return {
+        pos,
+        end,
+        kind,
+        id: 0,
+        flags: NodeFlags.None,
+        modifierFlagsCache: ModifierFlags.None,
+        transformFlags: TransformFlags.None,
+        parent: undefined!,
+        original: undefined,
+    } as Omit<Node, "symbol"> as Node;
 }
 
-function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
-    this.pos = pos;
-    this.end = end;
-    this.kind = kind;
-    this.id = 0;
-    this.flags = NodeFlags.None;
-    this.transformFlags = TransformFlags.None;
-    this.parent = undefined!;
+function Token<K extends SyntaxKind>(kind: K, pos: number, end: number): Token<K> {
+    return {
+        pos,
+        end,
+        kind,
+        id: 0,
+        flags: NodeFlags.None,
+        transformFlags: TransformFlags.None,
+        parent: undefined!,
+    } as Omit<Node, "symbol" | "modifierFlagsCache"> as Token<K>;
 }
 
-function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
-    this.pos = pos;
-    this.end = end;
-    this.kind = kind;
-    this.id = 0;
-    this.flags = NodeFlags.None;
-    this.transformFlags = TransformFlags.None;
-    this.parent = undefined!;
-    this.original = undefined;
-    this.flowNode = undefined;
+function Identifier(this: Mutable<Node>, kind: SyntaxKind.Identifier, pos: number, end: number): Identifier {
+    return {
+        pos,
+        end,
+        kind,
+        id: 0,
+        flags: NodeFlags.None,
+        transformFlags: TransformFlags.None,
+        parent: undefined!,
+        original: undefined,
+        flowNode: undefined,
+    } as unknown as Identifier;
 }
 
 function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
