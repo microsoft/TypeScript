@@ -90,7 +90,7 @@ import {
     TypePredicate, TypePredicateKind, TypeReferenceNode, unescapeLeadingUnderscores, UnionOrIntersectionTypeNode,
     ValidImportTypeNode, VariableDeclaration, VariableDeclarationInitializedTo, VariableDeclarationList,
     VariableLikeDeclaration, VariableStatement, version, WhileStatement, WithStatement, WriteFileCallback,
-    WriteFileCallbackData, YieldExpression, ResolutionMode,
+    WriteFileCallbackData, YieldExpression, ResolutionMode, FlowNode,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -6658,92 +6658,136 @@ export interface ObjectAllocator {
     getSourceMapSourceConstructor(): new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
 }
 
-function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
-    this.flags = flags;
-    this.escapedName = name;
-    this.declarations = undefined;
-    this.valueDeclaration = undefined;
-    this.id = undefined;
-    this.mergeId = undefined;
-    this.parent = undefined;
-}
-
-function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
-    this.flags = flags;
-    if (Debug.isDebugging || tracing) {
-        this.checker = checker;
+class SymbolImpl {
+    flags: SymbolFlags;
+    escapedName: __String;
+    declarations: undefined;
+    valueDeclaration: undefined;
+    id: number | undefined;
+    mergeId: any;
+    parent: Node | undefined;
+    constructor(flags: SymbolFlags, name: __String) {
+        this.flags = flags;
+        this.escapedName = name;
+        this.declarations = undefined;
+        this.valueDeclaration = undefined;
+        this.id = undefined;
+        this.mergeId = undefined;
+        this.parent = undefined;
     }
 }
 
-function Signature(checker: TypeChecker, flags: SignatureFlags): Signature {
-    const result = { __proto__: null } as any as Signature; // eslint-disable-line no-null/no-null
-    result.flags = flags;
-    if (Debug.isDebugging) {
-        result.checker = checker;
+class TypeImpl {
+    flags: TypeFlags;
+    checker?: TypeChecker;
+    constructor(checker: TypeChecker, flags: TypeFlags) {
+        this.flags = flags;
+        if (Debug.isDebugging || tracing) {
+            this.checker = checker;
+        }
     }
-    return result;
 }
 
-function Node(kind: SyntaxKind, pos: number, end: number): Node {
-    const result = { __proto__: null } as any as Mutable<Node>; // eslint-disable-line no-null/no-null
-    result.pos = pos;
-    result.end = end;
-    result.kind = kind;
-    result.id = 0;
-    result.flags = NodeFlags.None;
-    result.modifierFlagsCache = ModifierFlags.None;
-    result.transformFlags = TransformFlags.None;
-    result.parent = undefined!;
-    result.original = undefined;
-    return result;
+class SignatureImpl {
+    flags: SignatureFlags;
+    checker?: TypeChecker;
+    constructor(checker: TypeChecker, flags: SignatureFlags) {
+        this.flags = flags;
+        if (Debug.isDebugging) {
+            this.checker = checker;
+        }
+    }
 }
 
-function Token(kind: SyntaxKind, pos: number, end: number): Node {
-    const result = { __proto__: null } as any as Mutable<Node>; // eslint-disable-line no-null/no-null
-    result.pos = pos;
-    result.end = end;
-    result.kind = kind;
-    result.id = 0;
-    result.flags = NodeFlags.None;
-    result.transformFlags = TransformFlags.None;
-    result.parent = undefined!;
-    return result;
+class NodeImpl {
+    pos: number;
+    end: number;
+    kind: SyntaxKind;
+    id: number;
+    flags: NodeFlags;
+    modifierFlagsCache: ModifierFlags;
+    transformFlags: TransformFlags;
+    parent: Node | undefined;
+    original: undefined;
+    constructor(kind: SyntaxKind, pos: number, end: number) {
+        this.pos = pos;
+        this.end = end;
+        this.kind = kind;
+        this.id = 0;
+        this.flags = NodeFlags.None;
+        this.modifierFlagsCache = ModifierFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.parent = undefined!;
+        this.original = undefined;
+    }
 }
 
-function Identifier(kind: SyntaxKind.Identifier, pos: number, end: number): Identifier {
-    const result = { __proto__: null } as any as Mutable<Identifier>; // eslint-disable-line no-null/no-null
-    result.pos = pos;
-    result.end = end;
-    result.kind = kind;
-    result.id = 0;
-    result.flags = NodeFlags.None;
-    result.transformFlags = TransformFlags.None;
-    result.parent = undefined!;
-    result.original = undefined;
-    result.flowNode = undefined;
-    return result;
+class TokenImpl {
+    pos: number;
+    end: number;
+    kind: SyntaxKind;
+    id: number;
+    flags: NodeFlags;
+    transformFlags: TransformFlags;
+    parent: Node | undefined;
+    constructor(kind: SyntaxKind, pos: number, end: number) {
+        this.pos = pos;
+        this.end = end;
+        this.kind = kind;
+        this.id = 0;
+        this.flags = NodeFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.parent = undefined!;
+    }
 }
 
-function SourceMapSource(fileName: string, text: string, skipTrivia?: (pos: number) => number) {
-    const result = { __proto__: null } as any as SourceMapSource; // eslint-disable-line no-null/no-null
-    result.fileName = fileName;
-    result.text = text;
-    result.skipTrivia = skipTrivia || (pos => pos);
-    return result;
+class IdentifierImpl {
+    parent: any;
+    pos: number;
+    end: number;
+    kind: SyntaxKind;
+    id: number;
+    flags: NodeFlags;
+    transformFlags: TransformFlags;
+    original: Node | undefined;
+    flowNode: FlowNode | undefined;
+    constructor(kind: SyntaxKind, pos: number, end: number) {
+        this.pos = pos;
+        this.end = end;
+        this.kind = kind;
+        this.id = 0;
+        this.flags = NodeFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.parent = undefined!;
+        this.original = undefined;
+        this.flowNode = undefined;
+    }
+}
+
+class SourceMapSourceImpl {
+    fileName: string;
+    text: string;
+    skipTrivia: (pos: any) => any;
+    /** @internal */ lineMap!: readonly number[];
+    constructor(fileName: string, text: string, skipTrivia?: (pos: number) => number) {
+        this.fileName = fileName;
+        this.text = text;
+        this.skipTrivia = skipTrivia || (pos => pos);
+    }
 }
 
 // eslint-disable-next-line prefer-const
 /** @internal */
 export const objectAllocator: ObjectAllocator = {
-    getNodeConstructor: () => Node as any,
-    getTokenConstructor: () => Token as any,
-    getIdentifierConstructor: () => Identifier as any,
-    getPrivateIdentifierConstructor: () => Node as any,
-    getSourceFileConstructor: () => Node as any,
-    getSymbolConstructor: () => Symbol as any,
-    getTypeConstructor: () => Type as any,
-    getSignatureConstructor: () => Signature as any,
-    getSourceMapSourceConstructor: () => SourceMapSource as any,
+    getNodeConstructor: () => NodeImpl as any,
+    getTokenConstructor: () => TokenImpl as any,
+    getIdentifierConstructor: () => IdentifierImpl as any,
+    getPrivateIdentifierConstructor: () => NodeImpl as any,
+    getSourceFileConstructor: () => NodeImpl as any,
+    getSymbolConstructor: () => SymbolImpl as any,
+    getTypeConstructor: () => TypeImpl as any,
+    getSignatureConstructor: () => SignatureImpl as any,
+    getSourceMapSourceConstructor: () => SourceMapSourceImpl as any,
 };
 
 /** @internal */
