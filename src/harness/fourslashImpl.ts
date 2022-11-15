@@ -3041,6 +3041,10 @@ export class TestState {
      * @param fileName Path to file where error should be retrieved from.
      */
     private getCodeFixes(fileName: string, errorCode?: number, preferences: ts.UserPreferences = ts.emptyOptions, position?: number): readonly ts.CodeFixAction[] {
+        if (this.testType === FourSlashTestType.Server) {
+            this.configure(preferences);
+        }
+
         const diagnosticsForCodeFix = this.getDiagnostics(fileName, /*includeSuggestions*/ true).map(diagnostic => ({
             start: diagnostic.start,
             length: diagnostic.length,
