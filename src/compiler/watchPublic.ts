@@ -8,15 +8,16 @@ import {
     createEmitAndSemanticDiagnosticsBuilderProgram, createGetCanonicalFileName, createResolutionCache,
     CreateSourceFileOptions, createWatchCompilerHostOfConfigFile, createWatchCompilerHostOfFilesAndCompilerOptions,
     createWatchFactory, Debug, Diagnostic, DiagnosticMessage, DiagnosticReporter, Diagnostics, DirectoryStructureHost,
-    DirectoryWatcherCallback, EmitAndSemanticDiagnosticsBuilderProgram, ESMap, ExtendedConfigCacheEntry,
+    DirectoryWatcherCallback, EmitAndSemanticDiagnosticsBuilderProgram, ExtendedConfigCacheEntry,
     FileExtensionInfo, FileReference, FileWatcher, FileWatcherCallback, FileWatcherEventKind, getBuildInfo,
     getConfigFileParsingDiagnostics, getDirectoryPath, getEntries, getFileNamesFromConfigSpecs, getNewLineCharacter,
     getNormalizedAbsolutePath, getParsedCommandLineOfConfigFile, getTsBuildInfoEmitOutputFilePath,
-    HasInvalidatedResolutions, isArray, isIgnoredFileFromWildCardWatching, isProgramUptoDate, Map, MapLike, maybeBind,
+    HasInvalidatedResolutions, isArray, isIgnoredFileFromWildCardWatching, isProgramUptoDate, MapLike, maybeBind,
     ModuleResolutionCache, ModuleResolutionInfo, noop, noopFileWatcher, parseConfigHostFromCompilerHostLike,
-    ParsedCommandLine, Path, perfLogger, PollingInterval, ProjectReference, ResolutionCacheHost, ResolvedModule,
+    ParsedCommandLine, Path, perfLogger, PollingInterval, ProjectReference, ResolutionCacheHost, ResolutionMode, ResolvedModule,
     ResolvedProjectReference, ResolvedTypeReferenceDirective, returnFalse, returnTrue, ScriptTarget,
     setGetSourceFileAsHashVersioned, SharedExtendedConfigFileWatcher, SourceFile, sys, System, toPath,
+    TypeReferenceDirectiveResolutionInfo,
     updateErrorForNoInputFiles, updateMissingFilePathsWatch, updateSharedExtendedConfigFileWatcher,
     updateWatchingWildcardDirectories, version, WatchDirectoryFlags, WatchOptions, WatchType, WatchTypeRegistry,
     WildcardDirectoryWatcher,
@@ -134,7 +135,7 @@ export interface ProgramHost<T extends BuilderProgram> {
     /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
     resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
     /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
-    resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
     /** If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives */
     hasInvalidatedResolutions?(filePath: Path): boolean;
     /**
@@ -212,7 +213,7 @@ export interface WatchCompilerHostOfConfigFile<T extends BuilderProgram> extends
  */
 export interface WatchCompilerHostOfConfigFile<T extends BuilderProgram> extends WatchCompilerHost<T> {
     configFileParsingResult?: ParsedCommandLine;
-    extendedConfigCache?: Map<ExtendedConfigCacheEntry>;
+    extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>;
 }
 
 export interface Watch<T> {
@@ -280,7 +281,7 @@ interface ParsedConfig {
     /** File watcher of the config file */
     watcher?: FileWatcher;
     /** Wild card directories watched from this config file */
-    watchedDirectories?: Map<WildcardDirectoryWatcher>;
+    watchedDirectories?: Map<string, WildcardDirectoryWatcher>;
     /** Reload to be done for this config file */
     reloadLevel?: ConfigFileProgramReloadLevel.Partial | ConfigFileProgramReloadLevel.Full;
 }
@@ -309,12 +310,12 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
 
     let builderProgram: T;
     let reloadLevel: ConfigFileProgramReloadLevel;                      // level to indicate if the program needs to be reloaded from config file/just filenames etc
-    let missingFilesMap: ESMap<Path, FileWatcher>;                       // Map of file watchers for the missing files
-    let watchedWildcardDirectories: ESMap<string, WildcardDirectoryWatcher>; // map of watchers for the wild card directories in the config file
+    let missingFilesMap: Map<Path, FileWatcher>;                        // Map of file watchers for the missing files
+    let watchedWildcardDirectories: Map<string, WildcardDirectoryWatcher>; // map of watchers for the wild card directories in the config file
     let timerToUpdateProgram: any;                                      // timer callback to recompile the program
     let timerToInvalidateFailedLookupResolutions: any;                  // timer callback to invalidate resolutions for changes in failed lookup locations
-    let parsedConfigs: ESMap<Path, ParsedConfig> | undefined;           // Parsed commandline and watching cached for referenced projects
-    let sharedExtendedConfigFileWatchers: ESMap<Path, SharedExtendedConfigFileWatcher<Path>>; // Map of file watchers for extended files, shared between different referenced projects
+    let parsedConfigs: Map<Path, ParsedConfig> | undefined;             // Parsed commandline and watching cached for referenced projects
+    let sharedExtendedConfigFileWatchers: Map<Path, SharedExtendedConfigFileWatcher<Path>>; // Map of file watchers for extended files, shared between different referenced projects
     let extendedConfigCache = host.extendedConfigCache;                 // Cache for extended config evaluation
     let reportFileChangeDetectedOnCreateProgram = false;                // True if synchronizeProgram should report "File change detected..." when a new program is created
 
@@ -397,7 +398,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         ((moduleNames, containingFile, reusedNames, redirectedReference, _options, sourceFile, resolutionInfo) => resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference, sourceFile, resolutionInfo));
     compilerHost.resolveTypeReferenceDirectives = host.resolveTypeReferenceDirectives ?
         ((...args) => host.resolveTypeReferenceDirectives!(...args)) :
-        ((typeDirectiveNames, containingFile, redirectedReference, _options, containingFileMode) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference, containingFileMode));
+        ((typeDirectiveNames, containingFile, redirectedReference, _options, containingFileMode, resolutionInfo) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference, containingFileMode, resolutionInfo));
     compilerHost.getModuleResolutionCache = host.resolveModuleNames ?
         maybeBind(host, host.getModuleResolutionCache) :
         (() => resolutionCache.getModuleResolutionCache());

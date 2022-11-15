@@ -257,7 +257,7 @@ export namespace Compiler {
     export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
     // Cache of lib files from "built/local"
-    let libFileNameSourceFileMap: ts.ESMap<string, ts.SourceFile> | undefined;
+    let libFileNameSourceFileMap: Map<string, ts.SourceFile> | undefined;
 
     export function getDefaultLibrarySourceFile(fileName = defaultLibFileName): ts.SourceFile | undefined {
         if (!isDefaultLibraryFile(fileName)) {
@@ -265,7 +265,7 @@ export namespace Compiler {
         }
 
         if (!libFileNameSourceFileMap) {
-            libFileNameSourceFileMap = new ts.Map(ts.getEntries({
+            libFileNameSourceFileMap = new Map(ts.getEntries({
                 [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, /*languageVersion*/ ts.ScriptTarget.Latest)
             }));
         }
@@ -327,10 +327,10 @@ export namespace Compiler {
         { name: "fullEmitPaths", type: "boolean", defaultValueDescription: false },
     ];
 
-    let optionsIndex: ts.ESMap<string, ts.CommandLineOption>;
+    let optionsIndex: Map<string, ts.CommandLineOption>;
     function getCommandLineOption(name: string): ts.CommandLineOption | undefined {
         if (!optionsIndex) {
-            optionsIndex = new ts.Map<string, ts.CommandLineOption>();
+            optionsIndex = new Map<string, ts.CommandLineOption>();
             const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
             for (const option of optionDeclarations) {
                 optionsIndex.set(option.name.toLowerCase(), option);
@@ -609,7 +609,7 @@ export namespace Compiler {
         errorsReported = 0;
 
         // 'merge' the lines of each input file with any errors associated with it
-        const dupeCase = new ts.Map<string, number>();
+        const dupeCase = new Map<string, number>();
         for (const inputFile of inputFiles.filter(f => f.content !== undefined)) {
             // Filter down to the errors in the file
             const fileErrors = diagnostics.filter((e): e is ts.DiagnosticWithLocation => {
@@ -789,7 +789,7 @@ export namespace Compiler {
             if (skipBaseline) {
                 return;
             }
-            const dupeCase = new ts.Map<string, number>();
+            const dupeCase = new Map<string, number>();
 
             for (const file of allFiles) {
                 const { unitName } = file;
@@ -953,7 +953,7 @@ export namespace Compiler {
         // Collect, test, and sort the fileNames
         const files = Array.from(outputFiles);
         files.slice().sort((a, b) => ts.compareStringsCaseSensitive(cleanName(a.file), cleanName(b.file)));
-        const dupeCase = new ts.Map<string, number>();
+        const dupeCase = new Map<string, number>();
         // Yield them
         for (const outputFile of files) {
             yield [checkDuplicatedFileName(outputFile.file, dupeCase), "/*====== " + outputFile.file + " ======*/\r\n" + Utils.removeByteOrderMark(outputFile.text)];
@@ -965,7 +965,7 @@ export namespace Compiler {
         }
     }
 
-    function checkDuplicatedFileName(resultName: string, dupeCase: ts.ESMap<string, number>): string {
+    function checkDuplicatedFileName(resultName: string, dupeCase: Map<string, number>): string {
         resultName = sanitizeTestFilePath(resultName);
         if (dupeCase.has(resultName)) {
             // A different baseline filename should be manufactured if the names differ only in case, for windows compat
@@ -1073,16 +1073,16 @@ function computeFileBasedTestConfigurationVariations(configurations: FileBasedTe
     }
 }
 
-let booleanVaryByStarSettingValues: ts.ESMap<string, string | number> | undefined;
+let booleanVaryByStarSettingValues: Map<string, string | number> | undefined;
 
-function getVaryByStarSettingValues(varyBy: string): ts.ReadonlyESMap<string, string | number> | undefined {
+function getVaryByStarSettingValues(varyBy: string): ReadonlyMap<string, string | number> | undefined {
     const option = ts.forEach(ts.optionDeclarations, decl => ts.equateStringsCaseInsensitive(decl.name, varyBy) ? decl : undefined);
     if (option) {
         if (typeof option.type === "object") {
             return option.type;
         }
         if (option.type === "boolean") {
-            return booleanVaryByStarSettingValues || (booleanVaryByStarSettingValues = new ts.Map(ts.getEntries({
+            return booleanVaryByStarSettingValues || (booleanVaryByStarSettingValues = new Map(ts.getEntries({
                 true: 1,
                 false: 0
             })));
@@ -1420,7 +1420,7 @@ export namespace Baseline {
 
     export function runMultifileBaseline(relativeFileBase: string, extension: string, generateContent: () => IterableIterator<[string, string, number]> | IterableIterator<[string, string]> | null, opts?: BaselineOptions, referencedExtensions?: string[]): void {
         const gen = generateContent();
-        const writtenFiles = new ts.Map<string, true>();
+        const writtenFiles = new Map<string, true>();
         const errors: Error[] = [];
 
         // eslint-disable-next-line no-null/no-null

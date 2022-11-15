@@ -2,12 +2,12 @@ import * as ts from "./_namespaces/ts";
 import {
     arrayToMap, binarySearch, BuilderProgram, closeFileWatcher, compareStringsCaseSensitive, CompilerOptions,
     createGetCanonicalFileName, Debug, DirectoryWatcherCallback, emptyArray, emptyFileSystemEntries,
-    ensureTrailingDirectorySeparator, ESMap, ExtendedConfigCacheEntry, Extension, FileExtensionInfo,
+    ensureTrailingDirectorySeparator, ExtendedConfigCacheEntry, Extension, FileExtensionInfo,
     fileExtensionIsOneOf, FileSystemEntries, FileWatcher, FileWatcherCallback, FileWatcherEventKind, find,
     getBaseFileName, getDirectoryPath, getNormalizedAbsolutePath, hasExtension, identity, insertSorted, isArray,
-    isDeclarationFileName, isExcludedFile, isSupportedSourceFileName, map, Map, matchesExclude, matchFiles, mutateMap,
+    isDeclarationFileName, isExcludedFile, isSupportedSourceFileName, map, matchesExclude, matchFiles, mutateMap,
     noop, normalizePath, outFile, Path, PollingInterval, Program, removeFileExtension, removeIgnoredPath,
-    returnNoopFileWatcher, returnTrue, Set, setSysLog, SortedArray, SortedReadonlyArray, supportedJSExtensionsFlat,
+    returnNoopFileWatcher, returnTrue, setSysLog, SortedArray, SortedReadonlyArray, supportedJSExtensionsFlat,
     timestamp, WatchDirectoryFlags, WatchFileKind, WatchOptions,
 } from "./_namespaces/ts";
 
@@ -342,7 +342,7 @@ export interface SharedExtendedConfigFileWatcher<T> extends FileWatcher {
 export function updateSharedExtendedConfigFileWatcher<T>(
     projectPath: T,
     options: CompilerOptions | undefined,
-    extendedConfigFilesMap: ESMap<Path, SharedExtendedConfigFileWatcher<T>>,
+    extendedConfigFilesMap: Map<Path, SharedExtendedConfigFileWatcher<T>>,
     createExtendedConfigFileWatch: (extendedConfigPath: string, extendedConfigFilePath: Path) => FileWatcher,
     toPath: (fileName: string) => Path,
 ) {
@@ -383,7 +383,7 @@ export function updateSharedExtendedConfigFileWatcher<T>(
  */
 export function clearSharedExtendedConfigFileWatcher<T>(
     projectPath: T,
-    extendedConfigFilesMap: ESMap<Path, SharedExtendedConfigFileWatcher<T>>,
+    extendedConfigFilesMap: Map<Path, SharedExtendedConfigFileWatcher<T>>,
 ) {
     extendedConfigFilesMap.forEach(watcher => {
         if (watcher.projects.delete(projectPath)) watcher.close();
@@ -396,7 +396,7 @@ export function clearSharedExtendedConfigFileWatcher<T>(
  * @internal
  */
 export function cleanExtendedConfigCache(
-    extendedConfigCache: ESMap<string, ExtendedConfigCacheEntry>,
+    extendedConfigCache: Map<string, ExtendedConfigCacheEntry>,
     extendedConfigFilePath: Path,
     toPath: (fileName: string) => Path,
 ) {
@@ -415,7 +415,7 @@ export function cleanExtendedConfigCache(
  */
 export function updatePackageJsonWatch(
     lookups: readonly (readonly [Path, object | boolean])[],
-    packageJsonWatches: ESMap<Path, FileWatcher>,
+    packageJsonWatches: Map<Path, FileWatcher>,
     createPackageJsonWatch: (packageJsonPath: Path, data: object | boolean) => FileWatcher,
 ) {
     const newMap = new Map(lookups);
@@ -436,7 +436,7 @@ export function updatePackageJsonWatch(
  */
 export function updateMissingFilePathsWatch(
     program: Program,
-    missingFileWatches: ESMap<Path, FileWatcher>,
+    missingFileWatches: Map<Path, FileWatcher>,
     createMissingFileWatch: (missingFilePath: Path) => FileWatcher,
 ) {
     const missingFilePaths = program.getMissingFilePaths();
@@ -471,8 +471,8 @@ export interface WildcardDirectoryWatcher {
  * @internal
  */
 export function updateWatchingWildcardDirectories(
-    existingWatchedForWildcards: ESMap<string, WildcardDirectoryWatcher>,
-    wildcardDirectories: ESMap<string, WatchDirectoryFlags>,
+    existingWatchedForWildcards: Map<string, WildcardDirectoryWatcher>,
+    wildcardDirectories: Map<string, WatchDirectoryFlags>,
     watchDirectory: (directory: string, flags: WatchDirectoryFlags) => FileWatcher
 ) {
     mutateMap(

@@ -3,7 +3,7 @@ import {
     createExpressionFromEntityName, Debug, EmitFlags, EmitHelper, EmitHelperUniqueNameCallback, EmitNode, EntityName,
     Expression, FunctionExpression, GeneratedIdentifierFlags, getEmitFlags, getEmitScriptTarget,
     getPropertyNameOfBindingOrAssignmentElement, Identifier, isCallExpression, isComputedPropertyName, isIdentifier,
-    memoize, PrivateIdentifierKind, ReadonlyESMap, ScriptTarget, setEmitFlags, setTextRange, SyntaxKind, TextRange,
+    memoize, PrivateIdentifierKind, ScriptTarget, setEmitFlags, setTextRange, SyntaxKind, TextRange,
     TransformationContext, UnscopedEmitHelper,
 } from "../_namespaces/ts";
 
@@ -1034,7 +1034,7 @@ export const classPrivateFieldInHelper: UnscopedEmitHelper = {
             };`
 };
 
-let allUnscopedEmitHelpers: ReadonlyESMap<string, UnscopedEmitHelper> | undefined;
+let allUnscopedEmitHelpers: ReadonlyMap<string, UnscopedEmitHelper> | undefined;
 
 /** @internal */
 export function getAllUnscopedEmitHelpers() {

@@ -1,11 +1,11 @@
-import * as ts from "../../_namespaces/ts";
+import { loadProjectFromFiles, noChangeRun, verifyTscWithEdits } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: noEmit", () => {
     function verifyNoEmitWorker(subScenario: string, aTsContent: string, commandLineArgs: readonly string[]) {
-        ts.verifyTscWithEdits({
+        verifyTscWithEdits({
             scenario: "noEmit",
             subScenario,
-            fs: () => ts.loadProjectFromFiles({
+            fs: () => loadProjectFromFiles({
                 "/src/a.ts": aTsContent,
                 "/src/tsconfig.json": JSON.stringify({
                     compilerOptions: { noEmit: true }
@@ -13,12 +13,12 @@ describe("unittests:: tsbuild:: noEmit", () => {
             }),
             commandLineArgs,
             edits: [
-                ts.noChangeRun,
+                noChangeRun,
                 {
                     subScenario: "Fix error",
                     modifyFs: fs => fs.writeFileSync("/src/a.ts", `const a = "hello"`),
                 },
-                ts.noChangeRun,
+                noChangeRun,
             ],
             baselinePrograms: true,
         });

@@ -2,7 +2,7 @@ import {
     AccessorDeclaration, AllDecorators, append, BinaryOperator, BindingElement, Bundle, cast, ClassDeclaration,
     ClassElement, ClassExpression, ClassLikeDeclaration, ClassStaticBlockDeclaration, CompilerOptions,
     CompoundAssignmentOperator, CoreTransformationContext, createExternalHelpersImportDeclarationIfNeeded,
-    createMultiMap, Decorator, EmitResolver, ESMap, ExportAssignment, ExportDeclaration, ExportSpecifier, Expression,
+    createMultiMap, Decorator, EmitResolver, ExportAssignment, ExportDeclaration, ExportSpecifier, Expression,
     filter, FunctionDeclaration, FunctionLikeDeclaration, getAllAccessorDeclarations, getDecorators,
     getFirstConstructorWithBody, getNamespaceDeclarationNode, getNodeId, getOriginalNode, hasDecorators,
     hasStaticModifier, hasSyntacticModifier, Identifier, idText, ImportDeclaration, ImportEqualsDeclaration,
@@ -10,7 +10,7 @@ import {
     isBindingPattern, isClassStaticBlockDeclaration, isDefaultImport, isExpressionStatement, isGeneratedIdentifier,
     isIdentifier, isKeyword, isMethodOrAccessor, isNamedExports, isNamedImports, isOmittedExpression,
     isPrivateIdentifier, isPropertyDeclaration, isStatic, isStringLiteralLike, isSuperCall, LogicalOperatorOrHigher,
-    map, Map, MethodDeclaration, ModifierFlags, NamedImportBindings, NamespaceExport, Node, NodeArray,
+    map, MethodDeclaration, ModifierFlags, NamedImportBindings, NamespaceExport, Node, NodeArray,
     parameterIsThisKeyword, PrivateIdentifierAccessorDeclaration, PrivateIdentifierAutoAccessorPropertyDeclaration,
     PrivateIdentifierMethodDeclaration, PropertyDeclaration, skipParentheses, some, SourceFile, Statement, SuperCall, SyntaxKind,
     TransformationContext, VariableDeclaration, VariableStatement,
@@ -26,7 +26,7 @@ export function getOriginalNodeId(node: Node) {
 export interface ExternalModuleInfo {
     externalImports: (ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration)[]; // imports of other external modules
     externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
-    exportSpecifiers: ESMap<string, ExportSpecifier[]>; // file-local export specifiers by name (no reexports)
+    exportSpecifiers: Map<string, ExportSpecifier[]>; // file-local export specifiers by name (no reexports)
     exportedBindings: Identifier[][]; // exported names of local declarations
     exportedNames: Identifier[] | undefined; // all exported names in the module, both local and reexported
     exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
@@ -244,7 +244,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     }
 }
 
-function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: ESMap<string, boolean>, exportedNames: Identifier[] | undefined) {
+function collectExportedVariableInfo(decl: VariableDeclaration | BindingElement, uniqueExports: Map<string, boolean>, exportedNames: Identifier[] | undefined) {
     if (isBindingPattern(decl.name)) {
         for (const element of decl.name.elements) {
             if (!isOmittedExpression(element)) {

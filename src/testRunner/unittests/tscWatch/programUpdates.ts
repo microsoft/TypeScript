@@ -1,19 +1,22 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import { createWatchedSystem, File, libFile, SymLink, TestServerHost } from "../virtualFileSystemWithWatch";
+import { commonFile1, commonFile2, createBaseline, createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline, noopChange, runWatchBaseline, TscWatchCompileChange, verifyTscWatch, watchBaseline } from "./helpers";
+import { commandLineCallbacks, compilerOptionsToConfigJson } from "../tsc/helpers";
 
 describe("unittests:: tsc-watch:: program updates", () => {
     const scenario = "programUpdates";
     const configFilePath = "/a/b/tsconfig.json";
-    const configFile: ts.tscWatch.File = {
+    const configFile: File = {
         path: configFilePath,
         content: `{}`
     };
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "create watch without config file",
         commandLineArgs: ["-w", "/a/b/c/app.ts"],
         sys: () => {
-            const appFile: ts.tscWatch.File = {
+            const appFile: File = {
                 path: "/a/b/c/app.ts",
                 content: `
                 import {f} from "./module"
@@ -21,16 +24,16 @@ describe("unittests:: tsc-watch:: program updates", () => {
                 `
             };
 
-            const moduleFile: ts.tscWatch.File = {
+            const moduleFile: File = {
                 path: "/a/b/c/module.d.ts",
                 content: `export let x: number`
             };
-            return ts.tscWatch.createWatchedSystem([appFile, moduleFile, ts.tscWatch.libFile]);
+            return createWatchedSystem([appFile, moduleFile, libFile]);
         },
         changes: ts.emptyArray
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "can handle tsconfig file name with difference casing",
         commandLineArgs: ["-w", "-p", "/A/B/tsconfig.json"],
@@ -45,17 +48,17 @@ describe("unittests:: tsc-watch:: program updates", () => {
                     include: ["app.ts"]
                 })
             };
-            return ts.tscWatch.createWatchedSystem([f1, ts.tscWatch.libFile, config], { useCaseSensitiveFileNames: false });
+            return createWatchedSystem([f1, libFile, config], { useCaseSensitiveFileNames: false });
         },
         changes: ts.emptyArray
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "create configured project without file list",
         commandLineArgs: ["-w", "-p", configFilePath],
         sys: () => {
-            const configFile: ts.tscWatch.File = {
+            const configFile: File = {
                 path: configFilePath,
                 content: `
                 {
@@ -65,43 +68,43 @@ describe("unittests:: tsc-watch:: program updates", () => {
                     ]
                 }`
             };
-            const file1: ts.tscWatch.File = {
+            const file1: File = {
                 path: "/a/b/c/f1.ts",
                 content: "let x = 1"
             };
-            const file2: ts.tscWatch.File = {
+            const file2: File = {
                 path: "/a/b/d/f2.ts",
                 content: "let y = 1"
             };
-            const file3: ts.tscWatch.File = {
+            const file3: File = {
                 path: "/a/b/e/f3.ts",
                 content: "let z = 1"
             };
-            return ts.tscWatch.createWatchedSystem([configFile, ts.tscWatch.libFile, file1, file2, file3]);
+            return createWatchedSystem([configFile, libFile, file1, file2, file3]);
         },
         changes: ts.emptyArray
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "add new files to a configured program without file list",
         commandLineArgs: ["-w", "-p", configFilePath],
-        sys: () => ts.tscWatch.createWatchedSystem([ts.tscWatch.commonFile1, ts.tscWatch.libFile, configFile]),
+        sys: () => createWatchedSystem([commonFile1, libFile, configFile]),
         changes: [
             {
                 caption: "Create commonFile2",
-                change: sys => sys.writeFile(ts.tscWatch.commonFile2.path, ts.tscWatch.commonFile2.content),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                change: sys => sys.writeFile(commonFile2.path, commonFile2.content),
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "should ignore non-existing files specified in the config file",
         commandLineArgs: ["-w", "-p", configFilePath],
         sys: () => {
-            const configFile: ts.tscWatch.File = {
+            const configFile: File = {
                 path: configFilePath,
                 content: `{
                     "compilerOptions": {},
@@ -111,131 +114,131 @@ describe("unittests:: tsc-watch:: program updates", () => {
                     ]
                 }`
             };
-            return ts.tscWatch.createWatchedSystem([ts.tscWatch.commonFile1, ts.tscWatch.commonFile2, ts.tscWatch.libFile, configFile]);
+            return createWatchedSystem([commonFile1, commonFile2, libFile, configFile]);
         },
         changes: ts.emptyArray
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "handle recreated files correctly",
         commandLineArgs: ["-w", "-p", configFilePath, "--explainFiles"],
         sys: () => {
-            return ts.tscWatch.createWatchedSystem([ts.tscWatch.libFile, ts.tscWatch.commonFile1, ts.tscWatch.commonFile2, configFile]);
+            return createWatchedSystem([libFile, commonFile1, commonFile2, configFile]);
         },
         changes: [
             {
                 caption: "change file to ensure signatures are updated",
-                change: sys => sys.appendFile(ts.tscWatch.commonFile2.path, ";let xy = 10;"),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                change: sys => sys.appendFile(commonFile2.path, ";let xy = 10;"),
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "delete file2",
-                change: sys => sys.deleteFile(ts.tscWatch.commonFile2.path),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                change: sys => sys.deleteFile(commonFile2.path),
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "recreate file2",
-                change: sys => sys.writeFile(ts.tscWatch.commonFile2.path, ts.tscWatch.commonFile2.content),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                change: sys => sys.writeFile(commonFile2.path, commonFile2.content),
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "handles the missing files - that were added to program because they were added with tripleSlashRefs",
         commandLineArgs: ["-w", "/a/b/commonFile1.ts"],
         sys: () => {
-            const file1: ts.tscWatch.File = {
-                path: ts.tscWatch.commonFile1.path,
+            const file1: File = {
+                path: commonFile1.path,
                 content: `/// <reference path="commonFile2.ts"/>
                     let x = y`
             };
-            return ts.tscWatch.createWatchedSystem([file1, ts.tscWatch.libFile]);
+            return createWatchedSystem([file1, libFile]);
         },
         changes: [
             {
                 caption: "create file2",
-                change: sys => sys.writeFile(ts.tscWatch.commonFile2.path, ts.tscWatch.commonFile2.content),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                change: sys => sys.writeFile(commonFile2.path, commonFile2.content),
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "should reflect change in config file",
         commandLineArgs: ["-w", "-p", configFilePath, "--explainFiles"],
         sys: () => {
-            const configFile: ts.tscWatch.File = {
+            const configFile: File = {
                 path: configFilePath,
                 content: `{
                     "compilerOptions": {},
-                    "files": ["${ts.tscWatch.commonFile1.path}", "${ts.tscWatch.commonFile2.path}"]
+                    "files": ["${commonFile1.path}", "${commonFile2.path}"]
                 }`
             };
-            return ts.tscWatch.createWatchedSystem([ts.tscWatch.libFile, ts.tscWatch.commonFile1, ts.tscWatch.commonFile2, configFile]);
+            return createWatchedSystem([libFile, commonFile1, commonFile2, configFile]);
         },
         changes: [
             {
                 caption: "change file to ensure signatures are updated",
-                change: sys => sys.appendFile(ts.tscWatch.commonFile2.path, ";let xy = 10;"),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                change: sys => sys.appendFile(commonFile2.path, ";let xy = 10;"),
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "Change config",
                 change: sys => sys.writeFile(configFilePath, `{
                         "compilerOptions": {},
-                        "files": ["${ts.tscWatch.commonFile1.path}"]
+                        "files": ["${commonFile1.path}"]
                     }`),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "works correctly when config file is changed but its content havent",
         commandLineArgs: ["-w", "-p", configFilePath],
         sys: () => {
-            const configFile: ts.tscWatch.File = {
+            const configFile: File = {
                 path: configFilePath,
                 content: `{
                         "compilerOptions": {},
-                        "files": ["${ts.tscWatch.commonFile1.path}", "${ts.tscWatch.commonFile2.path}"]
+                        "files": ["${commonFile1.path}", "${commonFile2.path}"]
                     }`
             };
-            return ts.tscWatch.createWatchedSystem([ts.tscWatch.libFile, ts.tscWatch.commonFile1, ts.tscWatch.commonFile2, configFile]);
+            return createWatchedSystem([libFile, commonFile1, commonFile2, configFile]);
         },
         changes: [
             {
                 caption: "Modify config without changing content",
                 change: sys => sys.modifyFile(configFilePath, `{
                         "compilerOptions": {},
-                        "files": ["${ts.tscWatch.commonFile1.path}", "${ts.tscWatch.commonFile2.path}"]
+                        "files": ["${commonFile1.path}", "${commonFile2.path}"]
                     }`),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "Updates diagnostics when '--noUnusedLabels' changes",
         commandLineArgs: ["-w", "-p", "/tsconfig.json"],
         sys: () => {
-            const aTs: ts.tscWatch.File = {
+            const aTs: File = {
                 path: "/a.ts",
                 content: "label: while (1) {}"
             };
-            const tsconfig: ts.tscWatch.File = {
+            const tsconfig: File = {
                 path: "/tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: { allowUnusedLabels: true }
                 })
             };
-            return ts.tscWatch.createWatchedSystem([ts.tscWatch.libFile, aTs, tsconfig]);
+            return createWatchedSystem([libFile, aTs, tsconfig]);
         },
         changes: [
             {
@@ -243,24 +246,24 @@ describe("unittests:: tsc-watch:: program updates", () => {
                 change: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
                     compilerOptions: { allowUnusedLabels: false }
                 })),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
             },
             {
                 caption: "Enable  allowUnsusedLabels",
                 change: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
                     compilerOptions: { allowUnusedLabels: true }
                 })),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "updates diagnostics and emit for decorators",
         commandLineArgs: ["-w"],
         sys: () => {
-            const aTs: ts.tscWatch.File = {
+            const aTs: File = {
                 path: "/a.ts",
                 content: `import {B} from './b'
 @((_) => {})
@@ -268,17 +271,17 @@ export class A {
     constructor(p: B) {}
 }`,
             };
-            const bTs: ts.tscWatch.File = {
+            const bTs: File = {
                 path: "/b.ts",
                 content: `export class B {}`,
             };
-            const tsconfig: ts.tscWatch.File = {
+            const tsconfig: File = {
                 path: "/tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: { target: "es6", importsNotUsedAsValues: "error" }
                 })
             };
-            return ts.tscWatch.createWatchedSystem([ts.tscWatch.libFile, aTs, bTs, tsconfig]);
+            return createWatchedSystem([libFile, aTs, bTs, tsconfig]);
         },
         changes: [
             {
@@ -286,7 +289,7 @@ export class A {
                 change: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
                     compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true }
                 })),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
 
             },
             {
@@ -294,50 +297,50 @@ export class A {
                 change: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
                     compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true, emitDecoratorMetadata: true }
                 })),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "files explicitly excluded in config file",
         commandLineArgs: ["-w", "-p", configFilePath],
         sys: () => {
-            const configFile: ts.tscWatch.File = {
+            const configFile: File = {
                 path: configFilePath,
                 content: `{
                     "compilerOptions": {},
                     "exclude": ["/a/c"]
                 }`
             };
-            const excludedFile1: ts.tscWatch.File = {
+            const excludedFile1: File = {
                 path: "/a/c/excluedFile1.ts",
                 content: `let t = 1;`
             };
-            return ts.tscWatch.createWatchedSystem([ts.tscWatch.libFile, ts.tscWatch.commonFile1, ts.tscWatch.commonFile2, excludedFile1, configFile]);
+            return createWatchedSystem([libFile, commonFile1, commonFile2, excludedFile1, configFile]);
         },
         changes: ts.emptyArray
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "should properly handle module resolution changes in config file",
         commandLineArgs: ["-w", "-p", configFilePath],
         sys: () => {
-            const file1: ts.tscWatch.File = {
+            const file1: File = {
                 path: "/a/b/file1.ts",
                 content: `import { T } from "module1";`
             };
-            const nodeModuleFile: ts.tscWatch.File = {
+            const nodeModuleFile: File = {
                 path: "/a/b/node_modules/module1.ts",
                 content: `export interface T {}`
             };
-            const classicModuleFile: ts.tscWatch.File = {
+            const classicModuleFile: File = {
                 path: "/a/module1.ts",
                 content: `export interface T {}`
             };
-            const configFile: ts.tscWatch.File = {
+            const configFile: File = {
                 path: configFilePath,
                 content: `{
                     "compilerOptions": {
@@ -346,7 +349,7 @@ export class A {
                     "files": ["${file1.path}"]
                 }`
             };
-            return ts.tscWatch.createWatchedSystem([ts.tscWatch.libFile, file1, nodeModuleFile, classicModuleFile, configFile]);
+            return createWatchedSystem([libFile, file1, nodeModuleFile, classicModuleFile, configFile]);
         },
         changes: [
             {
@@ -357,17 +360,17 @@ export class A {
                         },
                         "files": ["/a/b/file1.ts"]
                     }`),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "should tolerate config file errors and still try to build a project",
         commandLineArgs: ["-w", "-p", configFilePath],
         sys: () => {
-            const configFile: ts.tscWatch.File = {
+            const configFile: File = {
                 path: configFilePath,
                 content: `{
                         "compilerOptions": {
@@ -377,12 +380,12 @@ export class A {
                         "someOtherProperty": {}
                     }`
             };
-            return ts.tscWatch.createWatchedSystem([ts.tscWatch.commonFile1, ts.tscWatch.commonFile2, ts.tscWatch.libFile, configFile]);
+            return createWatchedSystem([commonFile1, commonFile2, libFile, configFile]);
         },
         changes: ts.emptyArray
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "changes in files are reflected in project structure",
         commandLineArgs: ["-w", "/a/b/f1.ts", "--explainFiles"],
@@ -399,19 +402,19 @@ export class A {
                 path: "/a/c/f3.ts",
                 content: `export let y = 1;`
             };
-            return ts.tscWatch.createWatchedSystem([file1, file2, file3, ts.tscWatch.libFile]);
+            return createWatchedSystem([file1, file2, file3, libFile]);
         },
         changes: [
             {
                 caption: "Modify f2 to include f3",
                 // now inferred project should inclule file3
                 change: sys => sys.modifyFile("/a/b/f2.ts", `export * from "../c/f3"`),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "deleted files affect project structure",
         commandLineArgs: ["-w", "/a/b/f1.ts", "--noImplicitAny"],
@@ -428,18 +431,18 @@ export class A {
                 path: "/a/c/f3.ts",
                 content: `export let y = 1;`
             };
-            return ts.tscWatch.createWatchedSystem([file1, file2, file3, ts.tscWatch.libFile]);
+            return createWatchedSystem([file1, file2, file3, libFile]);
         },
         changes: [
             {
                 caption: "Delete f2",
                 change: sys => sys.deleteFile("/a/b/f2.ts"),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "deleted files affect project structure-2",
         commandLineArgs: ["-w", "/a/b/f1.ts", "/a/c/f3.ts", "--noImplicitAny"],
@@ -456,18 +459,18 @@ export class A {
                 path: "/a/c/f3.ts",
                 content: `export let y = 1;`
             };
-            return ts.tscWatch.createWatchedSystem([file1, file2, file3, ts.tscWatch.libFile]);
+            return createWatchedSystem([file1, file2, file3, libFile]);
         },
         changes: [
             {
                 caption: "Delete f2",
                 change: sys => sys.deleteFile("/a/b/f2.ts"),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "config file includes the file",
         commandLineArgs: ["-w", "-p", "/a/c/tsconfig.json"],
@@ -488,12 +491,12 @@ export class A {
                 path: "/a/c/tsconfig.json",
                 content: JSON.stringify({ compilerOptions: {}, files: ["f2.ts", "f3.ts"] })
             };
-            return ts.tscWatch.createWatchedSystem([file1, file2, file3, ts.tscWatch.libFile, configFile]);
+            return createWatchedSystem([file1, file2, file3, libFile, configFile]);
         },
         changes: ts.emptyArray
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "change module to none",
         commandLineArgs: ["-w", "-p", configFilePath],
@@ -502,11 +505,11 @@ export class A {
                 path: "/a/b/f1.ts",
                 content: "export {}\ndeclare global {}"
             };
-            return ts.tscWatch.createWatchedSystem([file1, ts.tscWatch.libFile, configFile]);
+            return createWatchedSystem([file1, libFile, configFile]);
         },
         changes: [{
             caption: "change `module` to 'none'",
-            timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+            timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             change: sys => {
                 sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: { module: "none" } }));
             }
@@ -528,8 +531,8 @@ export class A {
             path: "/a/d/f3.ts",
             content: "export let y = 1;"
         };
-        const { sys, baseline, oldSnap, cb, getPrograms } = ts.tscWatch.createBaseline(ts.tscWatch.createWatchedSystem([ts.tscWatch.libFile, file1, file2, file3]));
-        const host = ts.tscWatch.createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
+        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, file1, file2, file3]));
+        const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [file2.path, file3.path],
             system: sys,
             options: { allowNonTsExtensions: true },
@@ -538,7 +541,7 @@ export class A {
         });
         ts.createWatchProgram(host);
         baseline.push(`${sys.getExecutingFilePath()} --w ${file2.path} ${file3.path}`);
-        ts.tscWatch.watchBaseline({
+        watchBaseline({
             baseline,
             getPrograms,
             oldPrograms: ts.emptyArray,
@@ -546,17 +549,17 @@ export class A {
             oldSnap,
         });
 
-        const {cb: cb2, getPrograms: getPrograms2 } = ts.commandLineCallbacks(sys);
+        const {cb: cb2, getPrograms: getPrograms2 } = commandLineCallbacks(sys);
         const oldSnap2 = sys.snap();
         baseline.push("createing separate watcher");
-        ts.createWatchProgram(ts.tscWatch.createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
+        ts.createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles:[file1.path],
             system: sys,
             options: { allowNonTsExtensions: true },
             cb: cb2,
             watchOptions: undefined
         }));
-        ts.tscWatch.watchBaseline({
+        watchBaseline({
             baseline,
             getPrograms: getPrograms2,
             oldPrograms: ts.emptyArray,
@@ -570,7 +573,7 @@ export class A {
         Harness.Baseline.runBaseline(`tscWatch/${scenario}/two-watch-programs-are-not-affected-by-each-other.js`, baseline.join("\r\n"));
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "can correctly update configured project when set of root files has changed (new file on disk)",
         commandLineArgs: ["-w", "-p", configFilePath],
@@ -579,18 +582,18 @@ export class A {
                 path: "/a/b/f1.ts",
                 content: "let x = 1"
             };
-            return ts.tscWatch.createWatchedSystem([file1, ts.tscWatch.libFile, configFile]);
+            return createWatchedSystem([file1, libFile, configFile]);
         },
         changes: [
             {
                 caption: "Write f2",
                 change: sys => sys.writeFile("/a/b/f2.ts", "let y = 1"),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "can correctly update configured project when set of root files has changed (new file in list of files)",
         commandLineArgs: ["-w", "-p", configFilePath],
@@ -607,75 +610,75 @@ export class A {
                 path: configFilePath,
                 content: JSON.stringify({ compilerOptions: {}, files: ["f1.ts"] })
             };
-            return ts.tscWatch.createWatchedSystem([file1, file2, ts.tscWatch.libFile, configFile]);
+            return createWatchedSystem([file1, file2, libFile, configFile]);
         },
         changes: [
             {
                 caption: "Modify config to make f2 as root too",
                 change: sys => sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "correctly parses wild card directories from implicit glob when two keys differ only in directory seperator",
         commandLineArgs: ["-w", "--extendedDiagnostics"],
         sys: () => {
             const file1 = {
-                path: `${ts.tscWatch.projectRoot}/f1.ts`,
+                path: `/user/username/projects/myproject/f1.ts`,
                 content: "export const x = 1"
             };
             const file2 = {
-                path: `${ts.tscWatch.projectRoot}/f2.ts`,
+                path: `/user/username/projects/myproject/f2.ts`,
                 content: "export const y = 1"
             };
             const configFile = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+                path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({ compilerOptions: { composite: true }, include: ["./", "./**/*.json"] })
             };
-            return ts.tscWatch.createWatchedSystem([file1, file2, ts.tscWatch.libFile, configFile], { currentDirectory: ts.tscWatch.projectRoot });
+            return createWatchedSystem([file1, file2, libFile, configFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         changes: [
             {
                 caption: "Add new file",
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/new-file.ts`, "export const z = 1;"),
+                change: sys => sys.writeFile(`/user/username/projects/myproject/new-file.ts`, "export const z = 1;"),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "Import new file",
-                change: sys => sys.prependFile(`${ts.tscWatch.projectRoot}/f1.ts`, `import { z } from "./new-file";`),
+                change: sys => sys.prependFile(`/user/username/projects/myproject/f1.ts`, `import { z } from "./new-file";`),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "can correctly update configured project when set of root files has changed through include",
         commandLineArgs: ["-w", "-p", "."],
         sys: () => {
             const file1 = {
-                path: `${ts.tscWatch.projectRoot}/Project/file1.ts`,
+                path: `/user/username/projects/myproject/Project/file1.ts`,
                 content: "export const x = 10;"
             };
             const configFile = {
-                path: `${ts.tscWatch.projectRoot}/Project/tsconfig.json`,
+                path: `/user/username/projects/myproject/Project/tsconfig.json`,
                 content: JSON.stringify({ include: [".", "./**/*.json"] })
             };
-            return ts.tscWatch.createWatchedSystem([file1, ts.tscWatch.libFile, configFile], { currentDirectory: `${ts.tscWatch.projectRoot}/Project` });
+            return createWatchedSystem([file1, libFile, configFile], { currentDirectory: `/user/username/projects/myproject/Project` });
         },
         changes: [
             {
                 caption: "Write file2",
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/Project/file2.ts`, "export const y = 10;"),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun
+                change: sys => sys.writeFile(`/user/username/projects/myproject/Project/file2.ts`, "export const y = 10;"),
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "can update configured project when set of root files was not changed",
         commandLineArgs: ["-w", "-p", configFilePath],
@@ -692,18 +695,18 @@ export class A {
                 path: configFilePath,
                 content: JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })
             };
-            return ts.tscWatch.createWatchedSystem([file1, file2, ts.tscWatch.libFile, configFile]);
+            return createWatchedSystem([file1, file2, libFile, configFile]);
         },
         changes: [
             {
                 caption: "Modify config to set outFile option",
                 change: sys => sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] })),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "file in files is deleted",
         commandLineArgs: ["-w", "-p", configFilePath],
@@ -720,18 +723,18 @@ export class A {
                 path: configFilePath,
                 content: JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })
             };
-            return ts.tscWatch.createWatchedSystem([file1, file2, ts.tscWatch.libFile, configFile]);
+            return createWatchedSystem([file1, file2, libFile, configFile]);
         },
         changes: [
             {
                 caption: "Delete f2",
                 change: sys => sys.deleteFile("/a/b/f2.ts"),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "config file is deleted",
         commandLineArgs: ["-w", "-p", configFilePath],
@@ -744,18 +747,18 @@ export class A {
                 path: "/a/b/f2.ts",
                 content: "let y = 2;"
             };
-            return ts.tscWatch.createWatchedSystem([file1, file2, ts.tscWatch.libFile, configFile]);
+            return createWatchedSystem([file1, file2, libFile, configFile]);
         },
         changes: [
             {
                 caption: "Delete config file",
                 change: sys => sys.deleteFile(configFilePath),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "Proper errors document is not contained in project",
         commandLineArgs: ["-w", "-p", configFilePath],
@@ -768,19 +771,19 @@ export class A {
                 path: configFilePath,
                 content: "{"
             };
-            return ts.tscWatch.createWatchedSystem([file1, ts.tscWatch.libFile, corruptedConfig]);
+            return createWatchedSystem([file1, libFile, corruptedConfig]);
         },
         changes: ts.emptyArray
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "correctly handles changes in lib section of config file",
         commandLineArgs: ["-w", "-p", "/src/tsconfig.json"],
         sys: () => {
             const libES5 = {
                 path: "/compiler/lib.es5.d.ts",
-                content: `${ts.tscWatch.libFile.content}
+                content: `${libFile.content}
 declare const eval: any`
             };
             const libES2015Promise = {
@@ -806,7 +809,7 @@ declare const eval: any`
                         }
                     })
             };
-            return ts.tscWatch.createWatchedSystem([libES5, libES2015Promise, app, config1], { executingFilePath: "/compiler/tsc.js" });
+            return createWatchedSystem([libES5, libES2015Promise, app, config1], { executingFilePath: "/compiler/tsc.js" });
         },
         changes: [
             {
@@ -825,12 +828,12 @@ declare const eval: any`
                         }
                     })
                 ),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "should handle non-existing directories in config file",
         commandLineArgs: ["-w", "-p", "/a/tsconfig.json"],
@@ -849,17 +852,17 @@ declare const eval: any`
                     ]
                 })
             };
-            return ts.tscWatch.createWatchedSystem([f, config, ts.tscWatch.libFile]);
+            return createWatchedSystem([f, config, libFile]);
         },
         changes: ts.emptyArray
     });
 
-    function runQueuedTimeoutCallbacksTwice(sys: ts.tscWatch.WatchedSystem) {
+    function runQueuedTimeoutCallbacksTwice(sys: TestServerHost) {
         sys.runQueuedTimeoutCallbacks(); // Scheduled invalidation of resolutions
         sys.runQueuedTimeoutCallbacks(); // Actual update
     }
 
-    const changeModuleFileToModuleFile1: ts.tscWatch.TscWatchCompileChange = {
+    const changeModuleFileToModuleFile1: TscWatchCompileChange = {
         caption: "Rename moduleFile to moduleFile1",
         change: sys => {
             sys.renameFile("/a/b/moduleFile.ts", "/a/b/moduleFile1.ts");
@@ -867,13 +870,13 @@ declare const eval: any`
         },
         timeouts: runQueuedTimeoutCallbacksTwice
     };
-    const changeModuleFile1ToModuleFile: ts.tscWatch.TscWatchCompileChange = {
+    const changeModuleFile1ToModuleFile: TscWatchCompileChange = {
         caption: "Rename moduleFile1 back to moduleFile",
         change: sys => sys.renameFile("/a/b/moduleFile1.ts", "/a/b/moduleFile.ts"),
         timeouts: runQueuedTimeoutCallbacksTwice,
     };
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "rename a module file and rename back should restore the states for inferred projects",
         commandLineArgs: ["-w", "/a/b/file1.ts"],
@@ -886,7 +889,7 @@ declare const eval: any`
                 path: "/a/b/file1.ts",
                 content: 'import * as T from "./moduleFile"; T.bar();'
             };
-            return ts.tscWatch.createWatchedSystem([moduleFile, file1, ts.tscWatch.libFile]);
+            return createWatchedSystem([moduleFile, file1, libFile]);
         },
         changes: [
             changeModuleFileToModuleFile1,
@@ -894,7 +897,7 @@ declare const eval: any`
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "rename a module file and rename back should restore the states for configured projects",
         commandLineArgs: ["-w", "-p", configFilePath],
@@ -907,7 +910,7 @@ declare const eval: any`
                 path: "/a/b/file1.ts",
                 content: 'import * as T from "./moduleFile"; T.bar();'
             };
-            return ts.tscWatch.createWatchedSystem([moduleFile, file1, configFile, ts.tscWatch.libFile]);
+            return createWatchedSystem([moduleFile, file1, configFile, libFile]);
         },
         changes: [
             changeModuleFileToModuleFile1,
@@ -915,7 +918,7 @@ declare const eval: any`
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "types should load from config file path if config exists",
         commandLineArgs: ["-w", "-p", configFilePath],
@@ -935,12 +938,12 @@ declare const eval: any`
             const cwd = {
                 path: "/a/c"
             };
-            return ts.tscWatch.createWatchedSystem([f1, config, node, cwd, ts.tscWatch.libFile], { currentDirectory: cwd.path });
+            return createWatchedSystem([f1, config, node, cwd, libFile], { currentDirectory: cwd.path });
         },
         changes: ts.emptyArray
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "add the missing module file for inferred project-should remove the module not found error",
         commandLineArgs: ["-w", "/a/b/file1.ts"],
@@ -949,7 +952,7 @@ declare const eval: any`
                 path: "/a/b/file1.ts",
                 content: 'import * as T from "./moduleFile"; T.bar();'
             };
-            return ts.tscWatch.createWatchedSystem([file1, ts.tscWatch.libFile]);
+            return createWatchedSystem([file1, libFile]);
         },
         changes: [
             {
@@ -960,7 +963,7 @@ declare const eval: any`
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "Configure file diagnostics events are generated when the config file has errors",
         commandLineArgs: ["-w", "-p", configFilePath],
@@ -978,12 +981,12 @@ declare const eval: any`
                         }
                     }`
             };
-            return ts.tscWatch.createWatchedSystem([file, configFile, ts.tscWatch.libFile]);
+            return createWatchedSystem([file, configFile, libFile]);
         },
         changes: ts.emptyArray
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "if config file doesnt have errors, they are not reported",
         commandLineArgs: ["-w", "-p", configFilePath],
@@ -998,12 +1001,12 @@ declare const eval: any`
                         "compilerOptions": {}
                     }`
             };
-            return ts.tscWatch.createWatchedSystem([file, configFile, ts.tscWatch.libFile]);
+            return createWatchedSystem([file, configFile, libFile]);
         },
         changes: ts.emptyArray
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "Reports errors when the config file changes",
         commandLineArgs: ["-w", "-p", configFilePath],
@@ -1012,7 +1015,7 @@ declare const eval: any`
                 path: "/a/b/app.ts",
                 content: "let x = 10"
             };
-            return ts.tscWatch.createWatchedSystem([file, configFile, ts.tscWatch.libFile]);
+            return createWatchedSystem([file, configFile, libFile]);
         },
         changes: [
             {
@@ -1022,7 +1025,7 @@ declare const eval: any`
                             "haha": 123
                         }
                     }`),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "change config file to remove error",
@@ -1030,12 +1033,12 @@ declare const eval: any`
                         "compilerOptions": {
                         }
                     }`),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "non-existing directories listed in config file input array should be tolerated without crashing the server",
         commandLineArgs: ["-w", "-p", configFilePath],
@@ -1051,12 +1054,12 @@ declare const eval: any`
                 path: "/a/b/file1.ts",
                 content: "let t = 10;"
             };
-            return ts.tscWatch.createWatchedSystem([file1, configFile, ts.tscWatch.libFile]);
+            return createWatchedSystem([file1, configFile, libFile]);
         },
         changes: ts.emptyArray
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "non-existing directories listed in config file input array should be able to handle @types if input file list is empty",
         commandLineArgs: ["-w", "-p", "/a/tsconfig.json"],
@@ -1080,7 +1083,7 @@ declare const eval: any`
                 path: "/a/node_modules/@types/typings/lib.d.ts",
                 content: `export const x: number`
             };
-            return ts.tscWatch.createWatchedSystem([f, config, t1, t2, ts.tscWatch.libFile], { currentDirectory: ts.getDirectoryPath(f.path) });
+            return createWatchedSystem([f, config, t1, t2, libFile], { currentDirectory: ts.getDirectoryPath(f.path) });
         },
         changes: ts.emptyArray
     });
@@ -1090,15 +1093,15 @@ declare const eval: any`
             path: "/a/compile",
             content: "let x = 1"
         };
-        const { sys, baseline, oldSnap, cb, getPrograms } = ts.tscWatch.createBaseline(ts.tscWatch.createWatchedSystem([f, ts.tscWatch.libFile]));
-        const watch = ts.createWatchProgram(ts.tscWatch.createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
+        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([f, libFile]));
+        const watch = ts.createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [f.path],
             system: sys,
             options: { allowNonTsExtensions: true },
             cb,
             watchOptions: undefined
         }));
-        ts.tscWatch.runWatchBaseline({
+        runWatchBaseline({
             scenario,
             subScenario: "should support files without extensions",
             commandLineArgs: ["--w", f.path],
@@ -1111,7 +1114,7 @@ declare const eval: any`
         });
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "Options Diagnostic locations reported correctly with changes in configFile contents when options change",
         commandLineArgs: ["-w", "-p", configFilePath],
@@ -1132,7 +1135,7 @@ declare const eval: any`
     }
 }`
             };
-            return ts.tscWatch.createWatchedSystem([file, ts.tscWatch.libFile, configFile]);
+            return createWatchedSystem([file, libFile, configFile]);
         },
         changes: [
             {
@@ -1144,42 +1147,42 @@ declare const eval: any`
         "mapRoot": "./"
     }
 }`),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
 
     describe("should not trigger recompilation because of program emit", () => {
         function verifyWithOptions(subScenario: string, options: ts.CompilerOptions) {
-            ts.tscWatch.verifyTscWatch({
+            verifyTscWatch({
                 scenario,
                 subScenario: `should not trigger recompilation because of program emit/${subScenario}`,
-                commandLineArgs: ["-w", "-p", `${ts.tscWatch.projectRoot}/tsconfig.json`],
+                commandLineArgs: ["-w", "-p", `/user/username/projects/myproject/tsconfig.json`],
                 sys: () => {
-                    const file1: ts.tscWatch.File = {
-                        path: `${ts.tscWatch.projectRoot}/file1.ts`,
+                    const file1: File = {
+                        path: `/user/username/projects/myproject/file1.ts`,
                         content: "export const c = 30;"
                     };
-                    const file2: ts.tscWatch.File = {
-                        path: `${ts.tscWatch.projectRoot}/src/file2.ts`,
+                    const file2: File = {
+                        path: `/user/username/projects/myproject/src/file2.ts`,
                         content: `import {c} from "file1"; export const d = 30;`
                     };
-                    const tsconfig: ts.tscWatch.File = {
-                        path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+                    const tsconfig: File = {
+                        path: `/user/username/projects/myproject/tsconfig.json`,
                         content: JSON.stringify({
-                            compilerOptions: ts.compilerOptionsToConfigJson(options)
+                            compilerOptions: compilerOptionsToConfigJson(options)
                         })
                     };
-                    return ts.tscWatch.createWatchedSystem([file1, file2, ts.tscWatch.libFile, tsconfig], { currentDirectory: ts.tscWatch.projectRoot });
+                    return createWatchedSystem([file1, file2, libFile, tsconfig], { currentDirectory: "/user/username/projects/myproject" });
                 },
                 changes: [
-                    ts.tscWatch.noopChange,
+                    noopChange,
                     {
                         caption: "Add new file",
-                        change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/src/file3.ts`, `export const y = 10;`),
+                        change: sys => sys.writeFile(`/user/username/projects/myproject/src/file3.ts`, `export const y = 10;`),
                         timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2), // To update program and failed lookups
                     },
-                    ts.tscWatch.noopChange,
+                    noopChange,
                 ]
             });
         }
@@ -1215,12 +1218,12 @@ declare const eval: any`
         );
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "shouldnt report error about unused function incorrectly when file changes from global to module",
         commandLineArgs: ["-w", "/a/b/file.ts", "--noUnusedLocals"],
         sys: () => {
-            const file: ts.tscWatch.File = {
+            const file: File = {
                 path: "/a/b/file.ts",
                 content: `function one() {}
 function two() {
@@ -1229,7 +1232,7 @@ function two() {
     }
 }`
             };
-            return ts.tscWatch.createWatchedSystem([file, ts.tscWatch.libFile]);
+            return createWatchedSystem([file, libFile]);
         },
         changes: [
             {
@@ -1240,64 +1243,64 @@ export function two() {
         one();
     }
 }`),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
 
             }
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "watched files when file is deleted and new file is added as part of change",
         commandLineArgs: ["-w", "-p", "/home/username/project/tsconfig.json"],
         sys: () => {
             const projectLocation = "/home/username/project";
-            const file: ts.tscWatch.File = {
+            const file: File = {
                 path: `${projectLocation}/src/file1.ts`,
                 content: "var a = 10;"
             };
-            const configFile: ts.tscWatch.File = {
+            const configFile: File = {
                 path: `${projectLocation}/tsconfig.json`,
                 content: "{}"
             };
-            return ts.tscWatch.createWatchedSystem([file, ts.tscWatch.libFile, configFile]);
+            return createWatchedSystem([file, libFile, configFile]);
         },
         changes: [
             {
                 caption: "Rename file1 to file2",
                 change: sys => sys.renameFile("/home/username/project/src/file1.ts", "/home/username/project/src/file2.ts"),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
     });
 
-    function changeParameterTypeOfBFile(parameterName: string, toType: string): ts.tscWatch.TscWatchCompileChange {
+    function changeParameterTypeOfBFile(parameterName: string, toType: string): TscWatchCompileChange {
         return {
             caption: `Changed ${parameterName} type to ${toType}`,
-            change: sys => ts.tscWatch.replaceFileText(sys, `${ts.tscWatch.projectRoot}/b.ts`, new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`),
-            timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+            change: sys => sys.replaceFileText(`/user/username/projects/myproject/b.ts`, new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`),
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
         };
     }
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "updates errors correctly when declaration emit is disabled in compiler options",
         commandLineArgs: ["-w"],
         sys: () => {
-            const aFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/a.ts`,
+            const aFile: File = {
+                path: `/user/username/projects/myproject/a.ts`,
                 content: `import test from './b';
 test(4, 5);`
             };
-            const bFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/b.ts`,
+            const bFile: File = {
+                path: `/user/username/projects/myproject/b.ts`,
                 content: `function test(x: number, y: number) {
     return x + y / 5;
 }
 export default test;`
             };
-            const tsconfigFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+            const tsconfigFile: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         module: "commonjs",
@@ -1306,7 +1309,7 @@ export default test;`
                     }
                 })
             };
-            return ts.tscWatch.createWatchedSystem([aFile, bFile, ts.tscWatch.libFile, tsconfigFile], { currentDirectory: ts.tscWatch.projectRoot });
+            return createWatchedSystem([aFile, bFile, libFile, tsconfigFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         changes: [
             changeParameterTypeOfBFile("x", "string"),
@@ -1316,48 +1319,48 @@ export default test;`
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "updates errors when strictNullChecks changes",
         commandLineArgs: ["-w"],
         sys: () => {
-            const aFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/a.ts`,
+            const aFile: File = {
+                path: `/user/username/projects/myproject/a.ts`,
                 content: `declare function foo(): null | { hello: any };
 foo().hello`
             };
-            const config: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+            const config: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({ compilerOptions: {} })
             };
-            return ts.tscWatch.createWatchedSystem([aFile, config, ts.tscWatch.libFile], { currentDirectory: ts.tscWatch.projectRoot });
+            return createWatchedSystem([aFile, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         changes: [
             {
                 caption: "Enable strict null checks",
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { strictNullChecks: true } })),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { strictNullChecks: true } })),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Set always strict false",
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { strict: true, alwaysStrict: false } })), // Avoid changing 'alwaysStrict' or must re-bind
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { strict: true, alwaysStrict: false } })), // Avoid changing 'alwaysStrict' or must re-bind
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Disable strict",
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: {} })),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: {} })),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "updates errors when noErrorTruncation changes",
         commandLineArgs: ["-w"],
         sys: () => {
-            const aFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/a.ts`,
+            const aFile: File = {
+                path: `/user/username/projects/myproject/a.ts`,
                 content: `declare var v: {
     reallyLongPropertyName1: string | number | boolean | object | symbol | bigint;
     reallyLongPropertyName2: string | number | boolean | object | symbol | bigint;
@@ -1369,172 +1372,172 @@ foo().hello`
 };
 v === 'foo';`
             };
-            const config: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+            const config: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({ compilerOptions: {} })
             };
-            return ts.tscWatch.createWatchedSystem([aFile, config, ts.tscWatch.libFile], { currentDirectory: ts.tscWatch.projectRoot });
+            return createWatchedSystem([aFile, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         changes: [
             {
                 caption: "Enable noErrorTruncation",
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { noErrorTruncation: true } })),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { noErrorTruncation: true } })),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "updates diagnostics and emit when useDefineForClassFields changes",
         commandLineArgs: ["-w"],
         sys: () => {
-            const aFile: ts.tscWatch.File = {
+            const aFile: File = {
                 path: `/a.ts`,
                 content: `class C { get prop() { return 1; } }
 class D extends C { prop = 1; }`
             };
-            const config: ts.tscWatch.File = {
+            const config: File = {
                 path: `/tsconfig.json`,
                 content: JSON.stringify({ compilerOptions: { target: "es6" } })
             };
-            return ts.tscWatch.createWatchedSystem([aFile, config, ts.tscWatch.libFile]);
+            return createWatchedSystem([aFile, config, libFile]);
         },
         changes: [
             {
                 caption: "Enable useDefineForClassFields",
                 change: sys => sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { target: "es6", useDefineForClassFields: true } })),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "updates errors and emit when importsNotUsedAsValues changes",
         commandLineArgs: ["-w"],
         sys: () => {
-            const aFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/a.ts`,
+            const aFile: File = {
+                path: `/user/username/projects/myproject/a.ts`,
                 content: `export class C {}`
             };
-            const bFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/b.ts`,
+            const bFile: File = {
+                path: `/user/username/projects/myproject/b.ts`,
                 content: `import {C} from './a';
 export function f(p: C) { return p; }`
             };
-            const config: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+            const config: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({ compilerOptions: {} })
             };
-            return ts.tscWatch.createWatchedSystem([aFile, bFile, config, ts.tscWatch.libFile], { currentDirectory: ts.tscWatch.projectRoot });
+            return createWatchedSystem([aFile, bFile, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         changes: [
             {
                 caption: 'Set to "remove"',
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "remove" } })),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "remove" } })),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: 'Set to "error"',
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "error" } })),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "error" } })),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: 'Set to "preserve"',
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "preserve" } })),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "preserve" } })),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
     });
 
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "updates errors when forceConsistentCasingInFileNames changes",
         commandLineArgs: ["-w"],
         sys: () => {
-            const aFile: ts.tscWatch.File = {
+            const aFile: File = {
                 path: `/a.ts`,
                 content: `export class C {}`
             };
-            const bFile: ts.tscWatch.File = {
+            const bFile: File = {
                 path: `/b.ts`,
                 content: `import {C} from './a'; import * as A from './A';`
             };
-            const config: ts.tscWatch.File = {
+            const config: File = {
                 path: `/tsconfig.json`,
                 content: JSON.stringify({ compilerOptions: {} })
             };
-            return ts.tscWatch.createWatchedSystem([aFile, bFile, config, ts.tscWatch.libFile], { useCaseSensitiveFileNames: false });
+            return createWatchedSystem([aFile, bFile, config, libFile], { useCaseSensitiveFileNames: false });
         },
         changes: [
             {
                 caption: "Enable forceConsistentCasingInFileNames",
                 change: sys => sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: true } })),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "updates moduleResolution when resolveJsonModule changes",
         commandLineArgs: ["-w"],
         sys: () => {
-            const aFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/a.ts`,
+            const aFile: File = {
+                path: `/user/username/projects/myproject/a.ts`,
                 content: `import * as data from './data.json'`
             };
-            const jsonFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/data.json`,
+            const jsonFile: File = {
+                path: `/user/username/projects/myproject/data.json`,
                 content: `{ "foo": 1 }`
             };
-            const config: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+            const config: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({ compilerOptions: { moduleResolution: "node" } })
             };
-            return ts.tscWatch.createWatchedSystem([aFile, jsonFile, config, ts.tscWatch.libFile], { currentDirectory: ts.tscWatch.projectRoot });
+            return createWatchedSystem([aFile, jsonFile, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         changes: [
             {
                 caption: "Enable resolveJsonModule",
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/tsconfig.json`, JSON.stringify({ compilerOptions: { moduleResolution: "node", resolveJsonModule: true } })),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { moduleResolution: "node", resolveJsonModule: true } })),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "updates errors when ambient modules of program changes",
         commandLineArgs: ["-w"],
         sys: () => {
-            const aFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/a.ts`,
+            const aFile: File = {
+                path: `/user/username/projects/myproject/a.ts`,
                 content: `declare module 'a' {
   type foo = number;
 }`
             };
-            const config: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+            const config: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
                 content: "{}"
             };
-            return ts.tscWatch.createWatchedSystem([aFile, config, ts.tscWatch.libFile], { currentDirectory: ts.tscWatch.projectRoot });
+            return createWatchedSystem([aFile, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         changes: [
             {
                 caption: "Create b.ts with same content",
                 // Create bts with same file contents
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/b.ts`, `declare module 'a' {
+                change: sys => sys.writeFile(`/user/username/projects/myproject/b.ts`, `declare module 'a' {
   type foo = number;
 }`),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Delete b.ts",
-                change: sys => sys.deleteFile(`${ts.tscWatch.projectRoot}/b.ts`),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                change: sys => sys.deleteFile(`/user/username/projects/myproject/b.ts`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
     });
@@ -1545,31 +1548,31 @@ export function f(p: C) { return p; }`
     ${field}: boolean;
 }`;
 
-        const libFileWithDocument: ts.tscWatch.File = {
-            path: ts.tscWatch.libFile.path,
-            content: `${ts.tscWatch.libFile.content}
+        const libFileWithDocument: File = {
+            path: libFile.path,
+            content: `${libFile.content}
 interface Document {
     readonly ${field}: boolean;
 }`
         };
 
-        function verifyLibFileErrorsWith(subScenario: string, aFile: ts.tscWatch.File) {
+        function verifyLibFileErrorsWith(subScenario: string, aFile: File) {
             function verifyLibErrors(subScenario: string, commandLineOptions: readonly string[]) {
-                ts.tscWatch.verifyTscWatch({
+                verifyTscWatch({
                     scenario,
                     subScenario: `updates errors in lib file/${subScenario}`,
                     commandLineArgs: ["-w", aFile.path, ...commandLineOptions],
-                    sys: () => ts.tscWatch.createWatchedSystem([aFile, libFileWithDocument], { currentDirectory: ts.tscWatch.projectRoot }),
+                    sys: () => createWatchedSystem([aFile, libFileWithDocument], { currentDirectory: "/user/username/projects/myproject" }),
                     changes: [
                         {
                             caption: "Remove document declaration from file",
                             change: sys => sys.writeFile(aFile.path, aFile.content.replace(fieldWithoutReadonly, "var x: string;")),
-                            timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                         },
                         {
                             caption: "Rever the file to contain document declaration",
                             change: sys => sys.writeFile(aFile.path, aFile.content),
-                            timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                         },
                     ]
                 });
@@ -1581,8 +1584,8 @@ interface Document {
         }
 
         describe("when non module file changes", () => {
-            const aFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/a.ts`,
+            const aFile: File = {
+                path: `/user/username/projects/myproject/a.ts`,
                 content: `${fieldWithoutReadonly}
 var y: number;`
             };
@@ -1590,8 +1593,8 @@ var y: number;`
         });
 
         describe("when module file with global definitions changes", () => {
-            const aFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/a.ts`,
+            const aFile: File = {
+                path: `/user/username/projects/myproject/a.ts`,
                 content: `export {}
 declare global {
 ${fieldWithoutReadonly}
@@ -1602,45 +1605,45 @@ var y: number;
         });
     });
 
-    function changeWhenLibCheckChanges(compilerOptions: ts.CompilerOptions): ts.tscWatch.TscWatchCompileChange {
+    function changeWhenLibCheckChanges(compilerOptions: ts.CompilerOptions): TscWatchCompileChange {
         const configFileContent = JSON.stringify({ compilerOptions });
         return {
             caption: `Changing config to ${configFileContent}`,
-            change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/tsconfig.json`, configFileContent),
-            timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+            change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, configFileContent),
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
         };
     }
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "when skipLibCheck and skipDefaultLibCheck changes",
         commandLineArgs: ["-w"],
         sys: () => {
             const field = "fullscreen";
-            const aFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/a.ts`,
+            const aFile: File = {
+                path: `/user/username/projects/myproject/a.ts`,
                 content: `interface Document {
     ${field}: boolean;
 }`
             };
-            const bFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/b.d.ts`,
+            const bFile: File = {
+                path: `/user/username/projects/myproject/b.d.ts`,
                 content: `interface Document {
     ${field}: boolean;
 }`
             };
-            const libFileWithDocument: ts.tscWatch.File = {
-                path: ts.tscWatch.libFile.path,
-                content: `${ts.tscWatch.libFile.content}
+            const libFileWithDocument: File = {
+                path: libFile.path,
+                content: `${libFile.content}
 interface Document {
     readonly ${field}: boolean;
 }`
             };
-            const configFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+            const configFile: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
                 content: "{}"
             };
-            return ts.tscWatch.createWatchedSystem([aFile, bFile, configFile, libFileWithDocument], { currentDirectory: ts.tscWatch.projectRoot });
+            return createWatchedSystem([aFile, bFile, configFile, libFileWithDocument], { currentDirectory: "/user/username/projects/myproject" });
         },
         changes: [
             changeWhenLibCheckChanges({ skipLibCheck: true }),
@@ -1652,54 +1655,54 @@ interface Document {
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "reports errors correctly with isolatedModules",
         commandLineArgs: ["-w"],
         sys: () => {
-            const aFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/a.ts`,
+            const aFile: File = {
+                path: `/user/username/projects/myproject/a.ts`,
                 content: `export const a: string = "";`
             };
-            const bFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/b.ts`,
+            const bFile: File = {
+                path: `/user/username/projects/myproject/b.ts`,
                 content: `import { a } from "./a";
 const b: string = a;`
             };
-            const configFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+            const configFile: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         isolatedModules: true
                     }
                 })
             };
-            return ts.tscWatch.createWatchedSystem([aFile, bFile, configFile, ts.tscWatch.libFile], { currentDirectory: ts.tscWatch.projectRoot });
+            return createWatchedSystem([aFile, bFile, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         changes: [
             {
                 caption: "Change shape of a",
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/a.ts`, `export const a: number = 1`),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                change: sys => sys.writeFile(`/user/username/projects/myproject/a.ts`, `export const a: number = 1`),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "reports errors correctly with file not in rootDir",
         commandLineArgs: ["-w"],
         sys: () => {
-            const aFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/a.ts`,
+            const aFile: File = {
+                path: `/user/username/projects/myproject/a.ts`,
                 content: `import { x } from "../b";`
             };
-            const bFile: ts.tscWatch.File = {
+            const bFile: File = {
                 path: `/user/username/projects/b.ts`,
                 content: `export const x = 10;`
             };
-            const configFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+            const configFile: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         rootDir: ".",
@@ -1707,53 +1710,53 @@ const b: string = a;`
                     }
                 })
             };
-            return ts.tscWatch.createWatchedSystem([aFile, bFile, configFile, ts.tscWatch.libFile], { currentDirectory: ts.tscWatch.projectRoot });
+            return createWatchedSystem([aFile, bFile, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         changes: [
             {
                 caption: "Make changes to file a",
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/a.ts`, `
+                change: sys => sys.writeFile(`/user/username/projects/myproject/a.ts`, `
 
 import { x } from "../b";`),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "updates emit on jsx option change",
         commandLineArgs: ["-w"],
         sys: () => {
-            const index: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/index.tsx`,
+            const index: File = {
+                path: `/user/username/projects/myproject/index.tsx`,
                 content: `declare var React: any;\nconst d = <div />;`
             };
-            const configFile: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+            const configFile: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         jsx: "preserve"
                     }
                 })
             };
-            return ts.tscWatch.createWatchedSystem([index, configFile, ts.tscWatch.libFile], { currentDirectory: ts.tscWatch.projectRoot });
+            return createWatchedSystem([index, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         changes: [
             {
                 caption: "Update 'jsx' to 'react'",
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/tsconfig.json`, '{ "compilerOptions": { "jsx": "react" } }'),
-                timeouts: ts.tscWatch.runQueuedTimeoutCallbacks,
+                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, '{ "compilerOptions": { "jsx": "react" } }'),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "extended source files are watched",
         commandLineArgs: ["-w", "-p", configFilePath],
         sys: () => {
-            const firstExtendedConfigFile: ts.tscWatch.File = {
+            const firstExtendedConfigFile: File = {
                 path: "/a/b/first.tsconfig.json",
                 content: JSON.stringify({
                     compilerOptions: {
@@ -1761,21 +1764,21 @@ import { x } from "../b";`),
                     }
                 })
             };
-            const secondExtendedConfigFile: ts.tscWatch.File = {
+            const secondExtendedConfigFile: File = {
                 path: "/a/b/second.tsconfig.json",
                 content: JSON.stringify({
                     extends: "./first.tsconfig.json"
                 })
             };
-            const configFile: ts.tscWatch.File = {
+            const configFile: File = {
                 path: configFilePath,
                 content: JSON.stringify({
                     compilerOptions: {},
-                    files: [ts.tscWatch.commonFile1.path, ts.tscWatch.commonFile2.path]
+                    files: [commonFile1.path, commonFile2.path]
                 })
             };
-            return ts.tscWatch.createWatchedSystem([
-                ts.tscWatch.libFile, ts.tscWatch.commonFile1, ts.tscWatch.commonFile2, configFile, firstExtendedConfigFile, secondExtendedConfigFile
+            return createWatchedSystem([
+                libFile, commonFile1, commonFile2, configFile, firstExtendedConfigFile, secondExtendedConfigFile
             ]);
         },
         changes: [
@@ -1784,9 +1787,9 @@ import { x } from "../b";`),
                 change: sys => sys.modifyFile(configFilePath, JSON.stringify({
                     extends: "./second.tsconfig.json",
                     compilerOptions: {},
-                    files: [ts.tscWatch.commonFile1.path, ts.tscWatch.commonFile2.path]
+                    files: [commonFile1.path, commonFile2.path]
                 })),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "Change first extended config",
@@ -1795,7 +1798,7 @@ import { x } from "../b";`),
                         strict: false,
                     }
                 })),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "Change second extended config",
@@ -1805,38 +1808,38 @@ import { x } from "../b";`),
                         strictNullChecks: true,
                     }
                 })),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "Change config to stop extending another config",
                 change: sys => sys.modifyFile(configFilePath, JSON.stringify({
                     compilerOptions: {},
-                    files: [ts.tscWatch.commonFile1.path, ts.tscWatch.commonFile2.path]
+                    files: [commonFile1.path, commonFile2.path]
                 })),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "when creating new file in symlinked folder",
         commandLineArgs: ["-w", "-p", ".", "--extendedDiagnostics"],
         sys: () => {
-            const module1: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/client/folder1/module1.ts`,
+            const module1: File = {
+                path: `/user/username/projects/myproject/client/folder1/module1.ts`,
                 content: `export class Module1Class { }`
             };
-            const module2: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/folder2/module2.ts`,
+            const module2: File = {
+                path: `/user/username/projects/myproject/folder2/module2.ts`,
                 content: `import * as M from "folder1/module1";`
             };
-            const symlink: ts.tscWatch.SymLink = {
-                path: `${ts.tscWatch.projectRoot}/client/linktofolder2`,
-                symLink: `${ts.tscWatch.projectRoot}/folder2`,
+            const symlink: SymLink = {
+                path: `/user/username/projects/myproject/client/linktofolder2`,
+                symLink: `/user/username/projects/myproject/folder2`,
             };
-            const config: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+            const config: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         baseUrl: "client",
@@ -1845,24 +1848,24 @@ import { x } from "../b";`),
                     include: ["client/**/*", "folder2"]
                 })
             };
-            return ts.tscWatch.createWatchedSystem([module1, module2, symlink, config, ts.tscWatch.libFile], { currentDirectory: ts.tscWatch.projectRoot });
+            return createWatchedSystem([module1, module2, symlink, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         changes: [
             {
                 caption: "Add module3 to folder2",
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/client/linktofolder2/module3.ts`, `import * as M from "folder1/module1";`),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                change: sys => sys.writeFile(`/user/username/projects/myproject/client/linktofolder2/module3.ts`, `import * as M from "folder1/module1";`),
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "when new file is added to the referenced project",
-        commandLineArgs: ["-w", "-p", `${ts.tscWatch.projectRoot}/projects/project2/tsconfig.json`, "--extendedDiagnostics"],
+        commandLineArgs: ["-w", "-p", `/user/username/projects/myproject/projects/project2/tsconfig.json`, "--extendedDiagnostics"],
         sys: () => {
-            const config1: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/projects/project1/tsconfig.json`,
+            const config1: File = {
+                path: `/user/username/projects/myproject/projects/project1/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         module: "none",
@@ -1871,17 +1874,17 @@ import { x } from "../b";`),
                     exclude: ["temp"]
                 })
             };
-            const class1: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/projects/project1/class1.ts`,
+            const class1: File = {
+                path: `/user/username/projects/myproject/projects/project1/class1.ts`,
                 content: `class class1 {}`
             };
             // Built file
-            const class1Dt: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/projects/project1/class1.d.ts`,
+            const class1Dt: File = {
+                path: `/user/username/projects/myproject/projects/project1/class1.d.ts`,
                 content: `declare class class1 {}`
             };
-            const config2: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/projects/project2/tsconfig.json`,
+            const config2: File = {
+                path: `/user/username/projects/myproject/projects/project2/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         module: "none",
@@ -1892,61 +1895,61 @@ import { x } from "../b";`),
                     ]
                 })
             };
-            const class2: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/projects/project2/class2.ts`,
+            const class2: File = {
+                path: `/user/username/projects/myproject/projects/project2/class2.ts`,
                 content: `class class2 {}`
             };
-            return ts.tscWatch.createWatchedSystem([config1, class1, config2, class2, ts.tscWatch.libFile, class1Dt]);
+            return createWatchedSystem([config1, class1, config2, class2, libFile, class1Dt]);
         },
         changes: [
             {
                 caption: "Add class3 to project1",
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/projects/project1/class3.ts`, `class class3 {}`),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                change: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.ts`, `class class3 {}`),
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "Add output of class3",
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/projects/project1/class3.d.ts`, `declare class class3 {}`),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                change: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "Add excluded file to project1",
-                change: sys => sys.ensureFileOrFolder({ path: `${ts.tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
+                change: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
                 timeouts: sys => sys.checkTimeoutQueueLength(0),
             },
             {
                 caption: "Delete output of class3",
-                change: sys => sys.deleteFile(`${ts.tscWatch.projectRoot}/projects/project1/class3.d.ts`),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                change: sys => sys.deleteFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`),
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "Add output of class3",
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/projects/project1/class3.d.ts`, `declare class class3 {}`),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                change: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "when creating extensionless file",
         commandLineArgs: ["-w", "-p", ".", "--extendedDiagnostics"],
         sys: () => {
-            const module1: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/index.ts`,
+            const module1: File = {
+                path: `/user/username/projects/myproject/index.ts`,
                 content: ``
             };
-            const config: ts.tscWatch.File = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+            const config: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
                 content: `{}`
             };
-            return ts.tscWatch.createWatchedSystem([module1, config, ts.tscWatch.libFile], { currentDirectory: ts.tscWatch.projectRoot });
+            return createWatchedSystem([module1, config, libFile], { currentDirectory: "/user/username/projects/myproject" });
         },
         changes: [
             {
                 caption: "Create foo in project root",
-                change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/foo`, ``),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                change: sys => sys.writeFile(`/user/username/projects/myproject/foo`, ``),
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
         ]
     });

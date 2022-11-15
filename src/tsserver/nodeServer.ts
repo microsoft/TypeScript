@@ -12,8 +12,8 @@ import {
 } from "./_namespaces/ts.server";
 import {
     ApplyCodeActionCommandResult, assertType, CharacterCodes, combinePaths, createQueue, Debug, directorySeparator,
-    DirectoryWatcherCallback, ESMap, FileWatcher, getDirectoryPath, getEntries, getNodeMajorVersion, getRootLength,
-    JsTyping, LanguageServiceMode, Map, MapLike, noop, noopFileWatcher, normalizePath, normalizeSlashes, resolveJSModule,
+    DirectoryWatcherCallback, FileWatcher, getDirectoryPath, getEntries, getNodeMajorVersion, getRootLength,
+    JsTyping, LanguageServiceMode, MapLike, noop, noopFileWatcher, normalizePath, normalizeSlashes, resolveJSModule,
     SortedReadonlyArray, startTracing, stripQuotes, sys, toFileNameLowerCase, tracing, TypeAcquisition,
     validateLocaleAndSetLanguage, versionMajorMinor, WatchOptions,
 } from "./_namespaces/ts";
@@ -441,7 +441,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
         private requestMap = new Map<string, QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
         /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
         private requestedRegistry = false;
-        private typesRegistryCache: ESMap<string, MapLike<string>> | undefined;
+        private typesRegistryCache: Map<string, MapLike<string>> | undefined;
 
         // This number is essentially arbitrary.  Processing more than one typings request
         // at a time makes sense, but having too many in the pipe results in a hang

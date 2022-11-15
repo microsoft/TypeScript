@@ -1,6 +1,6 @@
 import {
-    CharacterCodes, compareBooleans, compareValues, Comparison, createTextSpan, ESMap, isUnicodeIdentifierStart, last,
-    Map, min, ScriptTarget, startsWith, TextSpan,
+    CharacterCodes, compareBooleans, compareValues, Comparison, createTextSpan, isUnicodeIdentifierStart, last,
+    min, ScriptTarget, startsWith, TextSpan,
 } from "./_namespaces/ts";
 
 // Note(cyrusn): this enum is ordered from strongest match type to weakest match type.
@@ -122,7 +122,7 @@ export function createPatternMatcher(pattern: string): PatternMatcher | undefine
     };
 }
 
-function getFullMatch(candidateContainers: readonly string[], candidate: string, dotSeparatedSegments: readonly Segment[], stringToWordSpans: ESMap<string, TextSpan[]>): PatternMatch | undefined {
+function getFullMatch(candidateContainers: readonly string[], candidate: string, dotSeparatedSegments: readonly Segment[], stringToWordSpans: Map<string, TextSpan[]>): PatternMatch | undefined {
     // First, check that the last part of the dot separated pattern matches the name of the
     // candidate.  If not, then there's no point in proceeding and doing the more
     // expensive work.
@@ -148,7 +148,7 @@ function getFullMatch(candidateContainers: readonly string[], candidate: string,
     return bestMatch;
 }
 
-function getWordSpans(word: string, stringToWordSpans: ESMap<string, TextSpan[]>): TextSpan[] {
+function getWordSpans(word: string, stringToWordSpans: Map<string, TextSpan[]>): TextSpan[] {
     let spans = stringToWordSpans.get(word);
     if (!spans) {
         stringToWordSpans.set(word, spans = breakIntoWordSpans(word));
@@ -156,7 +156,7 @@ function getWordSpans(word: string, stringToWordSpans: ESMap<string, TextSpan[]>
     return spans;
 }
 
-function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: ESMap<string, TextSpan[]>): PatternMatch | undefined {
+function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: Map<string, TextSpan[]>): PatternMatch | undefined {
     const index = indexOfIgnoringCase(candidate, chunk.textLowerCase);
     if (index === 0) {
         // a) Check if the word is a prefix of the candidate, in a case insensitive or
@@ -208,7 +208,7 @@ function matchTextChunk(candidate: string, chunk: TextChunk, stringToWordSpans: 
     }
 }
 
-function matchSegment(candidate: string, segment: Segment, stringToWordSpans: ESMap<string, TextSpan[]>): PatternMatch | undefined {
+function matchSegment(candidate: string, segment: Segment, stringToWordSpans: Map<string, TextSpan[]>): PatternMatch | undefined {
     // First check if the segment matches as is.  This is also useful if the segment contains
     // characters we would normally strip when splitting into parts that we also may want to
     // match in the candidate.  For example if the segment is "@int" and the candidate is
