@@ -4330,7 +4330,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             let mode: "modifiers" | "decorators" | undefined;
             let start = 0;
             let pos = 0;
-                let lastModifier: ModifierLike | undefined;
+            let lastModifier: ModifierLike | undefined;
             while (start < modifiers.length) {
                 while (pos < modifiers.length) {
                     lastModifier = modifiers[pos];
@@ -4615,11 +4615,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 //          /* End of parameter a */ -> this comment isn't considered to be trailing comment of parameter "a" due to newline
                 //          ,
                 if (format & ListFormat.DelimitersMask && previousSibling.end !== (parentNode ? parentNode.end : -1)) {
-                        const previousSiblingEmitFlags = getEmitFlags(previousSibling);
-                        if (!(previousSiblingEmitFlags & EmitFlags.NoTrailingComments)) {
+                    const previousSiblingEmitFlags = getEmitFlags(previousSibling);
+                    if (!(previousSiblingEmitFlags & EmitFlags.NoTrailingComments)) {
                         emitLeadingCommentsOfPosition(previousSibling.end);
                     }
-                    }
+                }
 
                 writeDelimiter(format);
                 recordBundleFileInternalSectionEnd(previousSourceFileTextKind);
@@ -5284,7 +5284,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     function generateNameCached(node: Node, privateName: boolean, flags?: GeneratedIdentifierFlags, prefix?: string | GeneratedNamePart, suffix?: string) {
         const nodeId = getNodeId(node);
         const cache = privateName ? nodeIdToGeneratedPrivateName : nodeIdToGeneratedName;
-            return cache[nodeId] || (cache[nodeId] = generateNameForNode(node, privateName, flags ?? GeneratedIdentifierFlags.None, formatGeneratedNamePart(prefix, generateName), formatGeneratedNamePart(suffix)));
+        return cache[nodeId] || (cache[nodeId] = generateNameForNode(node, privateName, flags ?? GeneratedIdentifierFlags.None, formatGeneratedNamePart(prefix, generateName), formatGeneratedNamePart(suffix)));
     }
 
     /**
