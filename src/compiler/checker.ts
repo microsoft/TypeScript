@@ -40048,7 +40048,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let hasDuplicateDefaultClause = false;
 
         const expressionType = checkExpression(node.expression);
-        
+
         forEach(node.caseBlock.clauses, clause => {
             // Grammar check for duplicate default clauses, skip if we already report duplicate default clause
             if (clause.kind === SyntaxKind.DefaultClause && !hasDuplicateDefaultClause) {
