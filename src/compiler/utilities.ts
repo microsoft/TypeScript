@@ -1080,7 +1080,6 @@ export function isBlockScope(node: Node, parentNode: Node | undefined): boolean 
 
 /** @internal */
 export function isDeclarationWithTypeParameters(node: Node): node is DeclarationWithTypeParameters {
-/** @internal */
     Debug.type<DeclarationWithTypeParameters>(node);
     switch (node.kind) {
         case SyntaxKind.JSDocCallbackTag:
@@ -1095,7 +1094,6 @@ export function isDeclarationWithTypeParameters(node: Node): node is Declaration
 
 /** @internal */
 export function isDeclarationWithTypeParameterChildren(node: Node): node is DeclarationWithTypeParameterChildren {
-/** @internal */
     Debug.type<DeclarationWithTypeParameterChildren>(node);
     switch (node.kind) {
         case SyntaxKind.CallSignature:
