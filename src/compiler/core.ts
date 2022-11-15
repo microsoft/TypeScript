@@ -1,26 +1,26 @@
 import {
-    __String, CharacterCodes, Comparer, Comparison, Debug, EqualityComparer, ESMap, isWhiteSpaceLike, Iterator, Map,
-    MapLike, Push, Queue, ReadonlyESMap, ReadonlySet, Set, SortedArray, SortedReadonlyArray, TextSpan,
+    __String, CharacterCodes, Comparer, Comparison, Debug, EqualityComparer, isWhiteSpaceLike,
+    MapLike, Push, Queue, SortedArray, SortedReadonlyArray, TextSpan,
     UnderscoreEscapedMap,
 } from "./_namespaces/ts";
 
 /** @internal */
-export function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined>(iterable: I): Iterator<
-    I extends ReadonlyESMap<infer K, infer V> ? [K, V] :
+export function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined>(iterable: I): Iterator<
+    I extends ReadonlyMap<infer K, infer V> ? [K, V] :
     I extends ReadonlySet<infer T> ? T :
     I extends readonly (infer T)[] ? T :
     I extends undefined ? undefined :
     never>;
 /** @internal */
-export function getIterator<K, V>(iterable: ReadonlyESMap<K, V>): Iterator<[K, V]>;
+export function getIterator<K, V>(iterable: ReadonlyMap<K, V>): Iterator<[K, V]>;
 /** @internal */
-export function getIterator<K, V>(iterable: ReadonlyESMap<K, V> | undefined): Iterator<[K, V]> | undefined;
+export function getIterator<K, V>(iterable: ReadonlyMap<K, V> | undefined): Iterator<[K, V]> | undefined;
 /** @internal */
 export function getIterator<T>(iterable: readonly T[] | ReadonlySet<T>): Iterator<T>;
 /** @internal */
 export function getIterator<T>(iterable: readonly T[] | ReadonlySet<T> | undefined): Iterator<T> | undefined;
 /** @internal */
-export function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyESMap<any, any> | undefined): Iterator<any> | undefined {
+export function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined): Iterator<any> | undefined {
     if (iterable) {
         if (isArray(iterable)) return arrayIterator(iterable);
         if (iterable instanceof Map) return iterable.entries();
@@ -32,7 +32,7 @@ export function getIterator(iterable: readonly any[] | ReadonlySet<any> | Readon
 /** @internal */
 export const emptyArray: never[] = [] as never[];
 /** @internal */
-export const emptyMap: ReadonlyESMap<never, never> = new Map<never, never>();
+export const emptyMap: ReadonlyMap<never, never> = new Map<never, never>();
 /** @internal */
 export const emptySet: ReadonlySet<never> = new Set<never>();
 
@@ -147,7 +147,7 @@ export function zipToIterator<T, U>(arrayA: readonly T[], arrayB: readonly U[]):
 }
 
 /** @internal */
-export function zipToMap<K, V>(keys: readonly K[], values: readonly V[]): ESMap<K, V> {
+export function zipToMap<K, V>(keys: readonly K[], values: readonly V[]): Map<K, V> {
     Debug.assert(keys.length === values.length);
     const map = new Map<K, V>();
     for (let i = 0; i < keys.length; ++i) {
@@ -608,11 +608,11 @@ export function mapDefinedIterator<T, U>(iter: Iterator<T>, mapFn: (x: T) => U |
 }
 
 /** @internal */
-export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2] | undefined): ESMap<K2, V2>;
+export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2] | undefined): Map<K2, V2>;
 /** @internal */
-export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): ESMap<K2, V2> | undefined;
+export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): Map<K2, V2> | undefined;
 /** @internal */
-export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): ESMap<K2, V2> | undefined {
+export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2 | undefined, V2 | undefined] | undefined): Map<K2, V2> | undefined {
     if (!map) {
         return undefined;
     }
@@ -650,7 +650,7 @@ export function mapDefinedValues<V1, V2>(set: ReadonlySet<V1> | undefined, f: (v
 }
 
 /** @internal */
-export function getOrUpdate<K, V>(map: ESMap<K, V>, key: K, callback: () => V) {
+export function getOrUpdate<K, V>(map: Map<K, V>, key: K, callback: () => V) {
     if (map.has(key)) {
         return map.get(key)!;
     }
@@ -737,11 +737,11 @@ export function spanMap<T, K, U>(array: readonly T[] | undefined, keyfn: (x: T, 
 }
 
 /** @internal */
-export function mapEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2]): ESMap<K2, V2>;
+export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1>, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2>;
 /** @internal */
-export function mapEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): ESMap<K2, V2> | undefined;
+export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2> | undefined;
 /** @internal */
-export function mapEntries<K1, V1, K2, V2>(map: ReadonlyESMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): ESMap<K2, V2> | undefined {
+export function mapEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | undefined, f: (key: K1, value: V1) => readonly [K2, V2]): Map<K2, V2> | undefined {
     if (!map) {
         return undefined;
     }
@@ -1569,15 +1569,15 @@ export function equalOwnProperties<T>(left: MapLike<T> | undefined, right: MapLi
  *
  * @internal
  */
-export function arrayToMap<K, V>(array: readonly V[], makeKey: (value: V) => K | undefined): ESMap<K, V>;
+export function arrayToMap<K, V>(array: readonly V[], makeKey: (value: V) => K | undefined): Map<K, V>;
 /** @internal */
-export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V2): ESMap<K, V2>;
+export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V2): Map<K, V2>;
 /** @internal */
-export function arrayToMap<T>(array: readonly T[], makeKey: (value: T) => string | undefined): ESMap<string, T>;
+export function arrayToMap<T>(array: readonly T[], makeKey: (value: T) => string | undefined): Map<string, T>;
 /** @internal */
-export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): ESMap<string, U>;
+export function arrayToMap<T, U>(array: readonly T[], makeKey: (value: T) => string | undefined, makeValue: (value: T) => U): Map<string, U>;
 /** @internal */
-export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V1 | V2 = identity): ESMap<K, V1 | V2> {
+export function arrayToMap<K, V1, V2>(array: readonly V1[], makeKey: (value: V1) => K | undefined, makeValue: (value: V1) => V1 | V2 = identity): Map<K, V1 | V2> {
     const result = new Map<K, V1 | V2>();
     for (const value of array) {
         const key = makeKey(value);
@@ -1675,7 +1675,7 @@ export function maybeBind<T, A extends any[], R>(obj: T, fn: ((this: T, ...args:
 }
 
 /** @internal */
-export interface MultiMap<K, V> extends ESMap<K, V[]> {
+export interface MultiMap<K, V> extends Map<K, V[]> {
     /**
      * Adds the value to an array of values associated with the key, and returns the array.
      * Creates the array if it does not already exist.
@@ -1798,10 +1798,10 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
     const multiMap = new Map<THash, TElement | TElement[]>();
     let size = 0;
 
-    function getElementIterator(): Iterator<TElement> {
+    function getElementIterator(): IterableIterator<TElement> {
         const valueIt = multiMap.values();
         let arrayIt: Iterator<TElement> | undefined;
-        return {
+        const it: IterableIterator<TElement> = {
             next: () => {
                 while (true) {
                     if (arrayIt) {
@@ -1822,8 +1822,12 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
                         arrayIt = arrayIterator(n.value);
                     }
                 }
+            },
+            [Symbol.iterator]: () => {
+                return it;
             }
         };
+        return it;
     }
 
     const set: Set<TElement> = {
@@ -1904,34 +1908,40 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
         get size() {
             return size;
         },
-        forEach(action: (value: TElement, key: TElement) => void): void {
+        forEach(action: (value: TElement, key: TElement, set: Set<TElement>) => void): void {
             for (const elements of arrayFrom(multiMap.values())) {
                 if (isArray(elements)) {
                     for (const element of elements) {
-                        action(element, element);
+                        action(element, element, set);
                     }
                 }
                 else {
                     const element = elements;
-                    action(element, element);
+                    action(element, element, set);
                 }
             }
         },
-        keys(): Iterator<TElement> {
+        keys(): IterableIterator<TElement> {
             return getElementIterator();
         },
-        values(): Iterator<TElement> {
+        values(): IterableIterator<TElement> {
             return getElementIterator();
         },
-        entries(): Iterator<[TElement, TElement]> {
+        entries(): IterableIterator<[TElement, TElement]> {
             const it = getElementIterator();
-            return {
+            const it2: IterableIterator<[TElement, TElement]> = {
                 next: () => {
                     const n = it.next();
                     return n.done ? n : { value: [ n.value, n.value ] };
-                }
+                },
+                [Symbol.iterator]: () => it2,
             };
+            return it2;
         },
+        [Symbol.iterator]: () => {
+            return getElementIterator();
+        },
+        [Symbol.toStringTag]: multiMap[Symbol.toStringTag],
     };
 
     return set;

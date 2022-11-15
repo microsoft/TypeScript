@@ -1,23 +1,23 @@
-import * as ts from "../../_namespaces/ts";
-import * as Utils from "../../_namespaces/Utils";
+import { appendText, loadProjectFromDisk, loadProjectFromFiles, noChangeRun, replaceText, verifyTsc, verifyTscWithEdits } from "../tsc/helpers";
+import { dedent } from "../../_namespaces/Utils";
 
 describe("unittests:: tsbuild:: configFileErrors:: when tsconfig extends the missing file", () => {
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "configFileErrors",
         subScenario: "when tsconfig extends the missing file",
-        fs: () => ts.loadProjectFromDisk("tests/projects/missingExtendedConfig"),
+        fs: () => loadProjectFromDisk("tests/projects/missingExtendedConfig"),
         commandLineArgs: ["--b", "/src/tsconfig.json"],
     });
 });
 
 describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in config file", () => {
-    ts.verifyTscWithEdits({
+    verifyTscWithEdits({
         scenario: "configFileErrors",
         subScenario: "reports syntax errors in config file",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/a.ts": "export function foo() { }",
             "/src/b.ts": "export function bar() { }",
-            "/src/tsconfig.json": Utils.dedent`
+            "/src/tsconfig.json": dedent`
 {
     "compilerOptions": {
         "composite": true,
@@ -31,7 +31,7 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
         commandLineArgs: ["--b", "/src/tsconfig.json"],
         edits: [
             {
-                modifyFs: fs => ts.replaceText(fs, "/src/tsconfig.json", ",", `,
+                modifyFs: fs => replaceText(fs, "/src/tsconfig.json", ",", `,
         "declaration": true,`),
                 subScenario: "reports syntax errors after change to config file",
                 discrepancyExplanation: () => [
@@ -40,10 +40,10 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
                 ],
             },
             {
-                modifyFs: fs => ts.appendText(fs, "/src/a.ts", "export function fooBar() { }"),
+                modifyFs: fs => appendText(fs, "/src/a.ts", "export function fooBar() { }"),
                 subScenario: "reports syntax errors after change to ts file",
             },
-            ts.noChangeRun,
+            noChangeRun,
             {
                 modifyFs: fs => fs.writeFileSync(
                     "/src/tsconfig.json",

@@ -1,4 +1,6 @@
+import { createServerHost, libFile } from "../virtualFileSystemWithWatch";
 import * as ts from "../../_namespaces/ts";
+import { createSession, checkNumberOfProjects } from "./helpers";
 
 describe("unittests:: tsserver:: reload", () => {
     it("should work with temp file", () => {
@@ -10,8 +12,8 @@ describe("unittests:: tsserver:: reload", () => {
             path: "/a/b/app.tmp",
             content: "const y = 42"
         };
-        const host = ts.projectSystem.createServerHost([f1, tmp]);
-        const session = ts.projectSystem.createSession(host);
+        const host = createServerHost([f1, tmp]);
+        const session = createSession(host);
 
         // send open request
         session.executeCommand({
@@ -57,8 +59,8 @@ describe("unittests:: tsserver:: reload", () => {
             path: "/a/b/app.tmp",
             content: "const y = 42"
         };
-        const host = ts.projectSystem.createServerHost([f1, tmp, ts.projectSystem.libFile]);
-        const session = ts.projectSystem.createSession(host);
+        const host = createServerHost([f1, tmp, libFile]);
+        const session = createSession(host);
         const openContent = "let z = 1";
         // send open request
         session.executeCommandSeq({
@@ -67,7 +69,7 @@ describe("unittests:: tsserver:: reload", () => {
         } as ts.server.protocol.OpenRequest);
 
         const projectService = session.getProjectService();
-        ts.projectSystem.checkNumberOfProjects(projectService, { inferredProjects: 1 });
+        checkNumberOfProjects(projectService, { inferredProjects: 1 });
         const info = projectService.getScriptInfo(f1.path)!;
         assert.isDefined(info);
         checkScriptInfoContents(openContent, "contents set during open request");
@@ -138,7 +140,7 @@ describe("unittests:: tsserver:: reload", () => {
         }
 
         function checkScriptInfoAndProjects(contentsOfInfo: string, captionForContents: string) {
-            ts.projectSystem.checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
             assert.strictEqual(projectService.getScriptInfo(f1.path), info);
             checkScriptInfoContents(contentsOfInfo, captionForContents);
         }

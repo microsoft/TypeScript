@@ -9,7 +9,7 @@ import {
     createSymbolTable, Debug, Declaration, declarationNameToString, DeleteExpression, DestructuringAssignment,
     DiagnosticCategory, DiagnosticMessage, DiagnosticRelatedInformation, Diagnostics, DiagnosticWithLocation,
     DoStatement, DynamicNamedDeclaration, ElementAccessChain, ElementAccessExpression, EntityNameExpression,
-    EnumDeclaration, escapeLeadingUnderscores, ESMap, every, ExportAssignment, exportAssignmentIsAlias,
+    EnumDeclaration, escapeLeadingUnderscores, every, ExportAssignment, exportAssignmentIsAlias,
     ExportDeclaration, ExportSpecifier, Expression, ExpressionStatement, findAncestor, FlowFlags, FlowLabel, FlowNode,
     FlowReduceLabel, forEach, forEachChild, ForInOrOfStatement, ForStatement, FunctionDeclaration, FunctionExpression,
     FunctionLikeDeclaration, GetAccessorDeclaration, getAssignedExpandoInitializer, getAssignmentDeclarationKind,
@@ -45,12 +45,12 @@ import {
     isVariableDeclaration, isVariableDeclarationInitializedToBareOrAccessedRequire, isVariableStatement,
     JSDocCallbackTag, JSDocClassTag, JSDocEnumTag, JSDocFunctionType, JSDocParameterTag, JSDocPropertyLikeTag,
     JSDocSignature, JSDocTypedefTag, JSDocTypeLiteral, JsxAttribute, JsxAttributes, LabeledStatement, length,
-    LiteralLikeElementAccessExpression, Map, MappedTypeNode, MethodDeclaration, ModifierFlags, ModuleBlock,
+    LiteralLikeElementAccessExpression, MappedTypeNode, MethodDeclaration, ModifierFlags, ModuleBlock,
     ModuleDeclaration, Mutable, NamespaceExportDeclaration, Node, NodeArray, NodeFlags, nodeHasName, nodeIsMissing,
     nodeIsPresent, NonNullChain, NonNullExpression, NumericLiteral, objectAllocator, ObjectLiteralExpression,
     OptionalChain, ParameterDeclaration, ParenthesizedExpression, Pattern, PatternAmbientModule, perfLogger,
     PostfixUnaryExpression, PrefixUnaryExpression, PrivateIdentifier, PropertyAccessChain, PropertyAccessExpression,
-    PropertyDeclaration, PropertySignature, removeFileExtension, ReturnStatement, ScriptTarget, Set,
+    PropertyDeclaration, PropertySignature, removeFileExtension, ReturnStatement, ScriptTarget,
     SetAccessorDeclaration, setParent, setParentRecursive, setValueDeclaration, ShorthandPropertyAssignment,
     shouldPreserveConstEnums, SignatureDeclaration, skipParentheses, sliceAfter, some, SourceFile, SpreadElement,
     Statement, StringLiteral, SwitchStatement, Symbol, SymbolFlags, symbolName, SymbolTable, SyntaxKind, TextRange,
@@ -76,7 +76,7 @@ interface ActiveLabel {
 }
 
 /** @internal */
-export function getModuleInstanceState(node: ModuleDeclaration, visited?: ESMap<number, ModuleInstanceState | undefined>): ModuleInstanceState {
+export function getModuleInstanceState(node: ModuleDeclaration, visited?: Map<number, ModuleInstanceState | undefined>): ModuleInstanceState {
     if (node.body && !node.body.parent) {
         // getModuleInstanceStateForAliasTarget needs to walk up the parent chain, so parent pointers must be set on this tree already
         setParent(node.body, node);
@@ -96,7 +96,7 @@ function getModuleInstanceStateCached(node: Node, visited = new Map<number, Modu
     return result;
 }
 
-function getModuleInstanceStateWorker(node: Node, visited: ESMap<number, ModuleInstanceState | undefined>): ModuleInstanceState {
+function getModuleInstanceStateWorker(node: Node, visited: Map<number, ModuleInstanceState | undefined>): ModuleInstanceState {
     // A module is uninstantiated if it contains only
     switch (node.kind) {
         // 1. interface declarations, type alias declarations
@@ -168,7 +168,7 @@ function getModuleInstanceStateWorker(node: Node, visited: ESMap<number, ModuleI
     return ModuleInstanceState.Instantiated;
 }
 
-function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: ESMap<number, ModuleInstanceState | undefined>) {
+function getModuleInstanceStateForAliasTarget(specifier: ExportSpecifier, visited: Map<number, ModuleInstanceState | undefined>) {
     const name = specifier.propertyName || specifier.name;
     let p: Node | undefined = specifier.parent;
     while (p) {

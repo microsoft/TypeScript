@@ -1,15 +1,17 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import { createServerHost, File, TestServerHost } from "../virtualFileSystemWithWatch";
+import { mapOutputToJson, TestSession, createSession, openFilesForSession } from "./helpers";
 
 describe("unittests:: tsserver:: with metadata in response", () => {
     const metadata = "Extra Info";
-    function verifyOutput(host: ts.projectSystem.TestServerHost, expectedResponse: ts.projectSystem.protocol.Response) {
-        const output = host.getOutput().map(ts.projectSystem.mapOutputToJson);
+    function verifyOutput(host: TestServerHost, expectedResponse: ts.server.protocol.Response) {
+        const output = host.getOutput().map(mapOutputToJson);
         assert.deepEqual(output, [expectedResponse]);
         host.clearOutput();
     }
 
-    function verifyCommandWithMetadata<T extends ts.server.protocol.Request, U = undefined>(session: ts.projectSystem.TestSession, host: ts.projectSystem.TestServerHost, command: Partial<T>, expectedResponseBody: U) {
+    function verifyCommandWithMetadata<T extends ts.server.protocol.Request, U = undefined>(session: TestSession, host: TestServerHost, command: Partial<T>, expectedResponseBody: U) {
         command.seq = session.getSeq();
         command.type = "request";
         session.onMessage(JSON.stringify(command));
@@ -19,15 +21,15 @@ describe("unittests:: tsserver:: with metadata in response", () => {
         );
     }
 
-    const aTs: ts.projectSystem.File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
-    const tsconfig: ts.projectSystem.File = {
+    const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
+    const tsconfig: File = {
         path: "/tsconfig.json",
         content: JSON.stringify({
             compilerOptions: { plugins: [{ name: "myplugin" }] }
         })
     };
-    function createHostWithPlugin(files: readonly ts.projectSystem.File[]) {
-        const host = ts.projectSystem.createServerHost(files);
+    function createHostWithPlugin(files: readonly File[]) {
+        const host = createServerHost(files);
         host.require = (_initialPath, moduleName) => {
             assert.equal(moduleName, "myplugin");
             return {
@@ -51,32 +53,32 @@ describe("unittests:: tsserver:: with metadata in response", () => {
     }
 
     describe("With completion requests", () => {
-        const completionRequestArgs: ts.projectSystem.protocol.CompletionsRequestArgs = {
+        const completionRequestArgs: ts.server.protocol.CompletionsRequestArgs = {
             file: aTs.path,
             line: 1,
             offset: aTs.content.indexOf("this.") + 1 + "this.".length
         };
-        const expectedCompletionEntries: readonly ts.projectSystem.protocol.CompletionEntry[] = [
+        const expectedCompletionEntries: readonly ts.server.protocol.CompletionEntry[] = [
             { name: "foo", kind: ts.ScriptElementKind.memberFunctionElement, kindModifiers: "", sortText: ts.Completions.SortText.LocationPriority },
             { name: "prop", kind: ts.ScriptElementKind.memberVariableElement, kindModifiers: "", sortText: ts.Completions.SortText.LocationPriority }
         ];
 
         it("can pass through metadata when the command returns array", () => {
             const host = createHostWithPlugin([aTs, tsconfig]);
-            const session = ts.projectSystem.createSession(host);
-            ts.projectSystem.openFilesForSession([aTs], session);
-            verifyCommandWithMetadata<ts.projectSystem.protocol.CompletionsRequest, readonly ts.projectSystem.protocol.CompletionEntry[]>(session, host, {
-                command: ts.projectSystem.protocol.CommandTypes.Completions,
+            const session = createSession(host);
+            openFilesForSession([aTs], session);
+            verifyCommandWithMetadata<ts.server.protocol.CompletionsRequest, readonly ts.server.protocol.CompletionEntry[]>(session, host, {
+                command: ts.server.protocol.CommandTypes.Completions,
                 arguments: completionRequestArgs
             }, expectedCompletionEntries);
         });
 
         it("can pass through metadata when the command returns object", () => {
             const host = createHostWithPlugin([aTs, tsconfig]);
-            const session = ts.projectSystem.createSession(host);
-            ts.projectSystem.openFilesForSession([aTs], session);
-            verifyCommandWithMetadata<ts.projectSystem.protocol.CompletionsRequest, ts.projectSystem.protocol.CompletionInfo>(session, host, {
-                command: ts.projectSystem.protocol.CommandTypes.CompletionInfo,
+            const session = createSession(host);
+            openFilesForSession([aTs], session);
+            verifyCommandWithMetadata<ts.server.protocol.CompletionsRequest, ts.server.protocol.CompletionInfo>(session, host, {
+                command: ts.server.protocol.CommandTypes.CompletionInfo,
                 arguments: completionRequestArgs
             }, {
                 flags: 0,
@@ -92,12 +94,12 @@ describe("unittests:: tsserver:: with metadata in response", () => {
         });
 
         it("returns undefined correctly", () => {
-            const aTs: ts.projectSystem.File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { const x = 0; } }` };
+            const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { const x = 0; } }` };
             const host = createHostWithPlugin([aTs, tsconfig]);
-            const session = ts.projectSystem.createSession(host);
-            ts.projectSystem.openFilesForSession([aTs], session);
-            verifyCommandWithMetadata<ts.projectSystem.protocol.CompletionsRequest>(session, host, {
-                command: ts.projectSystem.protocol.CommandTypes.Completions,
+            const session = createSession(host);
+            openFilesForSession([aTs], session);
+            verifyCommandWithMetadata<ts.server.protocol.CompletionsRequest>(session, host, {
+                command: ts.server.protocol.CommandTypes.Completions,
                 arguments: { file: aTs.path, line: 1, offset: aTs.content.indexOf("x") + 1 }
             }, /*expectedResponseBody*/ undefined);
         });

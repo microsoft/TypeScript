@@ -2,7 +2,7 @@
     "======== Resolving module 'dual' from '/main.ts'. ========",
     "Explicitly specified module resolution kind: 'Hybrid'.",
     "File '/package.json' does not exist.",
-    "Loading module 'dual' from 'node_modules' folder, target file type 'TypeScript'.",
+    "Loading module 'dual' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.",
     "Found 'package.json' at '/node_modules/dual/package.json'.",
     "'package.json' does not have a 'typesVersions' field.",
     "Matched 'exports' condition 'import'.",

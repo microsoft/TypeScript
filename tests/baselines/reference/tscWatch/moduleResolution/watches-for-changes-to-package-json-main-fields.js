@@ -43,7 +43,7 @@ Output::
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'pkg2' from 'node_modules' folder, target file type 'TypeScript'.
+Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -55,7 +55,7 @@ File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'build/index.js' that references '/user/username/projects/myproject/node_modules/pkg2/build/index.js'.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.js' does not exist.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/node_modules/pkg2/build/index.js', target file type 'TypeScript'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/node_modules/pkg2/build/index.js', target file types: TypeScript, Declaration.
 File name '/user/username/projects/myproject/node_modules/pkg2/build/index.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.tsx' does not exist.
@@ -64,7 +64,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file type 'TypeScript'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file types: TypeScript, Declaration.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
@@ -152,7 +152,7 @@ Output::
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'pkg2' from 'node_modules' folder, target file type 'TypeScript'.
+Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -164,7 +164,7 @@ File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'build/other.js' that references '/user/username/projects/myproject/node_modules/pkg2/build/other.js'.
 File '/user/username/projects/myproject/node_modules/pkg2/build/other.js' does not exist.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/node_modules/pkg2/build/other.js', target file type 'TypeScript'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/node_modules/pkg2/build/other.js', target file types: TypeScript, Declaration.
 File name '/user/username/projects/myproject/node_modules/pkg2/build/other.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg2/build/other.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/other.tsx' does not exist.
@@ -243,7 +243,7 @@ Output::
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'pkg2' from 'node_modules' folder, target file type 'TypeScript'.
+Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
@@ -255,7 +255,7 @@ File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'build/index.js' that references '/user/username/projects/myproject/node_modules/pkg2/build/index.js'.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.js' does not exist.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/node_modules/pkg2/build/index.js', target file type 'TypeScript'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/node_modules/pkg2/build/index.js', target file types: TypeScript, Declaration.
 File name '/user/username/projects/myproject/node_modules/pkg2/build/index.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.tsx' does not exist.
@@ -264,7 +264,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file type 'TypeScript'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/build/const.js', target file types: TypeScript, Declaration.
 File name '/user/username/projects/myproject/packages/pkg2/build/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.

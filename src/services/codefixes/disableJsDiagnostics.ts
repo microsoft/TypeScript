@@ -1,6 +1,6 @@
 import {
     CodeFixAction, createTextChange, createTextSpan, createTextSpanFromBounds, DiagnosticCategory, Diagnostics,
-    getLineAndCharacterOfPosition, getNewLineOrDefaultFromHost, isCheckJsEnabledForFile, isInJSFile, mapDefined, Set,
+    getLineAndCharacterOfPosition, getNewLineOrDefaultFromHost, isCheckJsEnabledForFile, isInJSFile, mapDefined,
     SourceFile, textChanges, tryAddToSet,
 } from "../_namespaces/ts";
 import {

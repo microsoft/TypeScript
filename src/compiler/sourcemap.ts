@@ -1,8 +1,8 @@
 import {
     arrayFrom, binarySearchKey, CharacterCodes, combinePaths, compareValues, Debug, DocumentPosition,
-    DocumentPositionMapper, DocumentPositionMapperHost, EmitHost, emptyArray, ESMap, every, getDirectoryPath,
+    DocumentPositionMapper, DocumentPositionMapperHost, EmitHost, emptyArray, every, getDirectoryPath,
     getNormalizedAbsolutePath, getPositionOfLineAndCharacter, getRelativePathToDirectoryOrUrl, identity, isArray,
-    isString, Iterator, LineAndCharacter, Map, RawSourceMap, some, sortAndDeduplicate, SortedReadonlyArray,
+    isString, LineAndCharacter, RawSourceMap, some, sortAndDeduplicate, SortedReadonlyArray,
     SourceMapGenerator, trimStringEnd,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
@@ -25,7 +25,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
     let sourcesContent: (string | null)[] | undefined;
 
     const names: string[] = [];
-    let nameToNameIndexMap: ESMap<string, number> | undefined;
+    let nameToNameIndexMap: Map<string, number> | undefined;
     const mappingCharCodes: number[] = [];
     let mappings = "";
 

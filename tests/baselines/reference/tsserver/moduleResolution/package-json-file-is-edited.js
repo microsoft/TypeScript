@@ -74,7 +74,7 @@ Info 14   [00:00:41.000] 'package.json' does not have a 'typesVersions' field.
 Info 15   [00:00:42.000] ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Info 16   [00:00:43.000] Module resolution kind is not specified, using 'Node16'.
 Info 17   [00:00:44.000] Resolving in CJS mode with conditions 'node', 'require', 'types'.
-Info 18   [00:00:45.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
+Info 18   [00:00:45.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file types: TypeScript, JavaScript, Declaration.
 Info 19   [00:00:46.000] File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 Info 20   [00:00:47.000] File '/user/username/projects/myproject/src/fileB.mts' exist - use it as a name resolution result.
 Info 21   [00:00:48.000] ======== Module name './fileB.mjs' was successfully resolved to '/user/username/projects/myproject/src/fileB.mts'. ========
@@ -245,7 +245,7 @@ Info 59   [00:01:35.000] File '/user/username/projects/myproject/package.json' e
 Info 60   [00:01:36.000] ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Info 61   [00:01:37.000] Module resolution kind is not specified, using 'Node16'.
 Info 62   [00:01:38.000] Resolving in ESM mode with conditions 'node', 'import', 'types'.
-Info 63   [00:01:39.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
+Info 63   [00:01:39.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file types: TypeScript, JavaScript, Declaration.
 Info 64   [00:01:40.000] File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 Info 65   [00:01:41.000] File '/user/username/projects/myproject/src/fileB.mts' exist - use it as a name resolution result.
 Info 66   [00:01:42.000] ======== Module name './fileB.mjs' was successfully resolved to '/user/username/projects/myproject/src/fileB.mts'. ========
@@ -611,7 +611,7 @@ Info 101  [00:02:32.000] File '/user/username/projects/myproject/package.json' e
 Info 102  [00:02:33.000] ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Info 103  [00:02:34.000] Module resolution kind is not specified, using 'Node16'.
 Info 104  [00:02:35.000] Resolving in CJS mode with conditions 'node', 'require', 'types'.
-Info 105  [00:02:36.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file type 'TypeScript'.
+Info 105  [00:02:36.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/src/fileB.mjs', target file types: TypeScript, JavaScript, Declaration.
 Info 106  [00:02:37.000] File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
 Info 107  [00:02:38.000] File '/user/username/projects/myproject/src/fileB.mts' exist - use it as a name resolution result.
 Info 108  [00:02:39.000] ======== Module name './fileB.mjs' was successfully resolved to '/user/username/projects/myproject/src/fileB.mts'. ========

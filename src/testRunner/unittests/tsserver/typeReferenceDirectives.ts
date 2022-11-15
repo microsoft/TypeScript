@@ -1,9 +1,10 @@
-import * as ts from "../../_namespaces/ts";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
+import { createProjectService, checkNumberOfProjects, checkProjectActualFiles } from "./helpers";
 
 describe("unittests:: tsserver:: typeReferenceDirectives", () => {
     it("when typeReferenceDirective contains UpperCasePackage", () => {
-        const libProjectLocation = `${ts.tscWatch.projectRoot}/lib`;
-        const typeLib: ts.projectSystem.File = {
+        const libProjectLocation = `/user/username/projects/myproject/lib`;
+        const typeLib: File = {
             path: `${libProjectLocation}/@types/UpperCasePackage/index.d.ts`,
             content: `declare class BrokenTest {
     constructor(name: string, width: number, height: number, onSelect: Function);
@@ -11,7 +12,7 @@ describe("unittests:: tsserver:: typeReferenceDirectives", () => {
     SelectedFile: string;
 }`
         };
-        const appLib: ts.projectSystem.File = {
+        const appLib: File = {
             path: `${libProjectLocation}/@app/lib/index.d.ts`,
             content: `/// <reference types="UpperCasePackage" />
 declare class TestLib {
@@ -20,8 +21,8 @@ declare class TestLib {
     test(): void;
 }`
         };
-        const testProjectLocation = `${ts.tscWatch.projectRoot}/test`;
-        const testFile: ts.projectSystem.File = {
+        const testProjectLocation = `/user/username/projects/myproject/test`;
+        const testFile: File = {
             path: `${testProjectLocation}/test.ts`,
             content: `class TestClass1 {
 
@@ -36,7 +37,7 @@ declare class TestLib {
     }
 }`
         };
-        const testConfig: ts.projectSystem.File = {
+        const testConfig: File = {
             path: `${testProjectLocation}/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
@@ -46,24 +47,24 @@ declare class TestLib {
             })
         };
 
-        const files = [typeLib, appLib, testFile, testConfig, ts.projectSystem.libFile];
-        const host = ts.projectSystem.createServerHost(files);
-        const service = ts.projectSystem.createProjectService(host);
+        const files = [typeLib, appLib, testFile, testConfig, libFile];
+        const host = createServerHost(files);
+        const service = createProjectService(host);
         service.openClientFile(testFile.path);
-        ts.projectSystem.checkNumberOfProjects(service, { configuredProjects: 1 });
+        checkNumberOfProjects(service, { configuredProjects: 1 });
         const project = service.configuredProjects.get(testConfig.path)!;
-        ts.projectSystem.checkProjectActualFiles(project, files.map(f => f.path));
+        checkProjectActualFiles(project, files.map(f => f.path));
         host.writeFile(appLib.path, appLib.content.replace("test()", "test2()"));
         host.checkTimeoutQueueLengthAndRun(2);
     });
 
     it("when typeReferenceDirective is relative path and in a sibling folder", () => {
-        const projectPath = `${ts.tscWatch.projectRoot}/background`;
-        const file: ts.projectSystem.File = {
+        const projectPath = `/user/username/projects/myproject/background`;
+        const file: File = {
             path: `${projectPath}/a.ts`,
             content: "let x = 10;"
         };
-        const tsconfig: ts.projectSystem.File = {
+        const tsconfig: File = {
             path: `${projectPath}/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
@@ -73,13 +74,13 @@ declare class TestLib {
                 }
             })
         };
-        const filesystem: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/typedefs/filesystem.d.ts`,
+        const filesystem: File = {
+            path: `/user/username/projects/myproject/typedefs/filesystem.d.ts`,
             content: `interface LocalFileSystem { someProperty: string; }`
         };
-        const files = [file, tsconfig, filesystem, ts.projectSystem.libFile];
-        const host = ts.projectSystem.createServerHost(files);
-        const service = ts.projectSystem.createProjectService(host);
+        const files = [file, tsconfig, filesystem, libFile];
+        const host = createServerHost(files);
+        const service = createProjectService(host);
         service.openClientFile(file.path);
     });
 });
