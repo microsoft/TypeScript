@@ -741,7 +741,7 @@ interface Date {
     toLocaleTimeString(): string;
     /** Returns the stored time value in milliseconds since midnight, January 1, 1970 UTC. */
     valueOf(): number;
-    /** Gets the time value in milliseconds. */
+    /** Returns the stored time value in milliseconds since midnight, January 1, 1970 UTC. */
     getTime(): number;
     /** Gets the year, using local time. */
     getFullYear(): number;
