@@ -216,6 +216,9 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             ],
             logLevel: "warning",
             // legalComments: "none", // If we add copyright headers to the source files, uncomment.
+            supported: {
+                "object-rest-spread": false,
+            },
             plugins: [
                 {
                     name: "no-node-modules",
