@@ -1,11 +1,12 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
     File,
-    libFile,
     TestServerHost,
+    createServerHost,
+    libFile,
 } from "../virtualFileSystemWithWatch";
 import {
+    TestTypingsInstaller,
     baselineTsserverLogs,
     checkNumberOfProjects,
     checkProjectActualFiles,
@@ -15,7 +16,6 @@ import {
     createSession,
     makeSessionRequest,
     openFilesForSession,
-    TestTypingsInstaller,
     toExternalFiles,
     verifyGetErrRequest,
 } from "./helpers";

@@ -1,10 +1,10 @@
 import {
     Diagnostics,
+    SourceFile,
+    UserPreferences,
     hasProperty,
     quote,
-    SourceFile,
     textChanges,
-    UserPreferences,
 } from "../_namespaces/ts";
 import {
     codeFixAll,

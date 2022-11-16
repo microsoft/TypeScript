@@ -3,13 +3,13 @@ import {
     CodeFixContext,
     Debug,
     Diagnostics,
+    SourceFile,
     getSourceFileOfNode,
     getTextOfPropertyName,
     getTokenAtPosition,
     isAccessor,
     isClassLike,
     singleOrUndefined,
-    SourceFile,
     unescapeLeadingUnderscores,
 } from "../_namespaces/ts";
 import {

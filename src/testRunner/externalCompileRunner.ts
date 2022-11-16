@@ -6,9 +6,9 @@ import * as ts from "./_namespaces/ts";
 import {
     Baseline,
     IO,
-    isWorker,
     RunnerBase,
     TestRunnerKind,
+    isWorker,
 } from "./_namespaces/Harness";
 
 interface ExecResult {

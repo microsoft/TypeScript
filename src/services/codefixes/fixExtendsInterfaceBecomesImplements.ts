@@ -1,13 +1,13 @@
 import {
     Diagnostics,
-    factory,
-    getContainingClass,
-    getTokenAtPosition,
     HeritageClause,
-    isWhiteSpaceSingleLine,
     Node,
     SourceFile,
     SyntaxKind,
+    factory,
+    getContainingClass,
+    getTokenAtPosition,
+    isWhiteSpaceSingleLine,
     textChanges,
 } from "../_namespaces/ts";
 import {

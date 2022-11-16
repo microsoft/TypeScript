@@ -2,33 +2,33 @@ import * as fs from "fs";
 import * as path from "path";
 
 import {
-    installNpmPackages,
     Log,
     RequestCompletedAction,
     TypingsInstaller,
+    installNpmPackages,
 } from "./_namespaces/ts.server.typingsInstaller";
 import {
     ActionPackageInstalled,
     Arguments,
     EventTypesRegistry,
-    findArgument,
-    hasArgument,
     InitializationFailedResponse,
     InstallTypingHost,
-    nowString,
     PackageInstalledResponse,
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
     TypingInstallerResponseUnion,
+    findArgument,
+    hasArgument,
+    nowString,
 } from "./_namespaces/ts.server";
 import {
+    Debug,
+    MapLike,
     combinePaths,
     createGetCanonicalFileName,
-    Debug,
     forEachAncestorDirectory,
     getDirectoryPath,
     getEntries,
-    MapLike,
     normalizePath,
     normalizeSlashes,
     stringContains,

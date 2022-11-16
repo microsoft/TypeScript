@@ -1,11 +1,11 @@
 import { TextRangeWithKind } from "../_namespaces/ts.formatting";
 import {
     Debug,
-    findChildOfKind,
     FormatCodeSettings,
     Node,
     SourceFileLike,
     SyntaxKind,
+    findChildOfKind,
 } from "../_namespaces/ts";
 
 /** @internal */

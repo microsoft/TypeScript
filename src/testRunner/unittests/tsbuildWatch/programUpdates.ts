@@ -1,20 +1,20 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createWatchedSystem,
     File,
+    TestServerHost,
+    createWatchedSystem,
     getTsBuildProjectFile,
     getTsBuildProjectFilePath,
     libFile,
-    TestServerHost,
 } from "../virtualFileSystemWithWatch";
 import {
+    TscWatchCompileChange,
     commonFile1,
     commonFile2,
     createBaseline,
     createSolutionBuilderWithWatchHostForBaseline,
     noopChange,
     runWatchBaseline,
-    TscWatchCompileChange,
     verifyTscWatch,
 } from "../tscWatch/helpers";
 

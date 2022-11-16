@@ -1,10 +1,10 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import {
-    createWatchedSystem,
     File,
-    libFile,
     SymLink,
+    createWatchedSystem,
+    libFile,
 } from "../virtualFileSystemWithWatch";
 import {
     TscWatchCompileChange,

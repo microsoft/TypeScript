@@ -1,9 +1,9 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    TestServerHost,
     getTsBuildProjectFile,
     getTsBuildProjectFilePath,
     libFile,
-    TestServerHost,
 } from "../virtualFileSystemWithWatch";
 import {
     createSolutionBuilder,

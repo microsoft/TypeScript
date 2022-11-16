@@ -1,17 +1,17 @@
 import {
     AwaitKeywordToken,
     Diagnostics,
+    Node,
+    SourceFile,
+    SyntaxKind,
+    TextSpan,
     findPrecedingToken,
     getLeftmostExpression,
     getTokenAtPosition,
     isAwaitExpression,
     isIdentifier,
     isParenthesizedExpression,
-    Node,
-    SourceFile,
-    SyntaxKind,
     textChanges,
-    TextSpan,
     tryCast,
 } from "../_namespaces/ts";
 import {

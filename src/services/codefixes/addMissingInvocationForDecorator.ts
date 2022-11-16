@@ -1,11 +1,11 @@
 import {
     Debug,
     Diagnostics,
+    SourceFile,
     factory,
     findAncestor,
     getTokenAtPosition,
     isDecorator,
-    SourceFile,
     textChanges,
 } from "../_namespaces/ts";
 import {

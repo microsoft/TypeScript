@@ -1,8 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import {
-    createWatchedSystem,
     FileOrFolderOrSymLink,
+    createWatchedSystem,
     isSymLink,
     libFile,
 } from "../virtualFileSystemWithWatch";

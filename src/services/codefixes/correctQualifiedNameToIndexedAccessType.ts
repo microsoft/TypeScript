@@ -1,14 +1,14 @@
 import {
     Debug,
     Diagnostics,
+    Identifier,
+    QualifiedName,
+    SourceFile,
     factory,
     findAncestor,
     getTokenAtPosition,
-    Identifier,
     isIdentifier,
     isQualifiedName,
-    QualifiedName,
-    SourceFile,
     textChanges,
 } from "../_namespaces/ts";
 import {

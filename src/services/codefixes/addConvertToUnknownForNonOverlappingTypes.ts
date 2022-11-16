@@ -1,16 +1,16 @@
 import {
     AsExpression,
     Diagnostics,
+    SourceFile,
+    SyntaxKind,
+    TypeAssertion,
     factory,
     findAncestor,
     getTokenAtPosition,
     isAsExpression,
     isInJSFile,
     isTypeAssertionExpression,
-    SourceFile,
-    SyntaxKind,
     textChanges,
-    TypeAssertion,
 } from "../_namespaces/ts";
 import {
     codeFixAll,

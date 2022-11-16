@@ -8,12 +8,12 @@ import {
     CodeFixAction,
     Diagnostics,
     Expression,
+    ModuleKind,
+    ScriptTarget,
     factory,
     getEmitModuleKind,
     getEmitScriptTarget,
     getTsConfigObjectLiteralExpression,
-    ModuleKind,
-    ScriptTarget,
     textChanges,
 } from "../_namespaces/ts";
 

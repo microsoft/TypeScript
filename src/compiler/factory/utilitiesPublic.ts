@@ -2,9 +2,9 @@ import {
     HasDecorators,
     HasModifiers,
     Node,
-    setTextRangePosEnd,
     SyntaxKind,
     TextRange,
+    setTextRangePosEnd,
 } from "../_namespaces/ts";
 
 export function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T {

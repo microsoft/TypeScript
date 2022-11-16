@@ -1,17 +1,17 @@
 import * as ts from "../../../_namespaces/ts";
 import {
-    createServerHost,
     File,
-    libFile,
     TestServerHost,
+    createServerHost,
+    libFile,
 } from "../../virtualFileSystemWithWatch";
 import {
+    TestSession,
     checkNumberOfProjects,
     createSessionWithDefaultEventHandler,
     createSessionWithEventTracking,
     openFilesForSession,
     protocolLocationFromSubstring,
-    TestSession,
     toExternalFiles,
 } from "../helpers";
 

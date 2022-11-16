@@ -1,11 +1,11 @@
 import {
     Debug,
     Diagnostics,
+    Identifier,
+    SourceFile,
     factory,
     getTokenAtPosition,
-    Identifier,
     isParameter,
-    SourceFile,
     textChanges,
 } from "../_namespaces/ts";
 import {

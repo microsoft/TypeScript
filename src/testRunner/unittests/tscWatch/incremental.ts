@@ -1,19 +1,19 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
 import {
-    createWatchedSystem,
     File,
-    libFile,
     TestServerHost,
+    createWatchedSystem,
+    libFile,
 } from "../virtualFileSystemWithWatch";
 import {
     CommandLineProgram,
     libContent,
 } from "../tsc/helpers";
 import {
+    SystemSnap,
     applyChange,
     createBaseline,
-    SystemSnap,
     verifyTscWatch,
     watchBaseline,
 } from "./helpers";

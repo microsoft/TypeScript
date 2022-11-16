@@ -1,11 +1,11 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createWatchedSystem,
     File,
     FileOrFolderOrSymLink,
+    SymLink,
+    createWatchedSystem,
     getTsBuildProjectFile,
     libFile,
-    SymLink,
 } from "../virtualFileSystemWithWatch";
 import { libContent } from "../tsc/helpers";
 import {

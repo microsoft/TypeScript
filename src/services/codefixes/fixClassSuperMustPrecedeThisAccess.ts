@@ -1,9 +1,12 @@
 import {
-    addToSeen,
     CallExpression,
     ConstructorDeclaration,
     Diagnostics,
     ExpressionStatement,
+    Node,
+    SourceFile,
+    SyntaxKind,
+    addToSeen,
     forEachChild,
     getContainingFunction,
     getNodeId,
@@ -12,9 +15,6 @@ import {
     isFunctionLike,
     isPropertyAccessExpression,
     isSuperCall,
-    Node,
-    SourceFile,
-    SyntaxKind,
     textChanges,
 } from "../_namespaces/ts";
 import {

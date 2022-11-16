@@ -1,15 +1,15 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
 import {
-    createServerHost,
     File,
     TestServerHost,
+    createServerHost,
 } from "../virtualFileSystemWithWatch";
 import {
+    TestSession,
     createSession,
     mapOutputToJson,
     openFilesForSession,
-    TestSession,
 } from "./helpers";
 
 describe("unittests:: tsserver:: with metadata in response", () => {

@@ -1,16 +1,16 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
     File,
+    createServerHost,
     libFile,
 } from "../virtualFileSystemWithWatch";
 import {
+    TestTypingsInstaller,
     checkNumberOfProjects,
     checkProjectActualFiles,
     createSession,
     executeSessionRequest,
     openFilesForSession,
-    TestTypingsInstaller,
 } from "./helpers";
 
 describe("unittests:: tsserver:: completions", () => {

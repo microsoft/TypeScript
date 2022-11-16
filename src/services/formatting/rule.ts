@@ -1,7 +1,7 @@
 import { FormattingContext } from "../_namespaces/ts.formatting";
 import {
-    emptyArray,
     SyntaxKind,
+    emptyArray,
 } from "../_namespaces/ts";
 
 /** @internal */

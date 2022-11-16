@@ -1,21 +1,21 @@
 import * as ts from "../_namespaces/ts";
 import {
+    NamedSourceText,
+    ProgramWithSourceTexts,
+    SourceText,
+    TestCompilerHost,
     checkResolvedModulesCache,
     checkResolvedTypeDirectivesCache,
     createResolvedModule,
     createTestCompilerHost,
-    NamedSourceText,
     newLine,
     newProgram,
-    ProgramWithSourceTexts,
-    SourceText,
-    TestCompilerHost,
     updateProgram,
     updateProgramText,
 } from "./helpers";
 import {
-    createWatchedSystem,
     File,
+    createWatchedSystem,
     libFile,
 } from "./virtualFileSystemWithWatch";
 

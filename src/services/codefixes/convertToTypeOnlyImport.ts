@@ -1,13 +1,13 @@
 import {
     CodeFixContextBase,
     Diagnostics,
+    ImportDeclaration,
+    SourceFile,
+    TextSpan,
     factory,
     getTokenAtPosition,
-    ImportDeclaration,
     isImportDeclaration,
-    SourceFile,
     textChanges,
-    TextSpan,
     tryCast,
 } from "../_namespaces/ts";
 import {

@@ -1,7 +1,7 @@
 import * as Utils from "../../_namespaces/Utils";
 import {
-    createWatchedSystem,
     File,
+    createWatchedSystem,
     libFile,
 } from "../virtualFileSystemWithWatch";
 import { verifyTscWatch } from "./helpers";

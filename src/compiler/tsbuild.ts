@@ -1,8 +1,8 @@
 import {
-    combinePaths,
     Extension,
-    fileExtensionIs,
     ResolvedConfigFileName,
+    combinePaths,
+    fileExtensionIs,
 } from "./_namespaces/ts";
 
 /** @internal */
