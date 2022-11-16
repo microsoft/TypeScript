@@ -4386,7 +4386,8 @@ export type FileIncludeReason =
 /** @internal */
 export const enum FilePreprocessingDiagnosticsKind {
     FilePreprocessingReferencedDiagnostic,
-    FilePreprocessingFileExplainingDiagnostic
+    FilePreprocessingFileExplainingDiagnostic,
+    ResolutionDiagnostics,
 }
 
 /** @internal */
@@ -4407,7 +4408,13 @@ export interface FilePreprocessingFileExplainingDiagnostic {
 }
 
 /** @internal */
-export type FilePreprocessingDiagnostics = FilePreprocessingReferencedDiagnostic | FilePreprocessingFileExplainingDiagnostic;
+export interface ResolutionDiagnostics {
+    kind: FilePreprocessingDiagnosticsKind.ResolutionDiagnostics;
+    diagnostics: readonly Diagnostic[];
+}
+
+/** @internal */
+export type FilePreprocessingDiagnostics = FilePreprocessingReferencedDiagnostic | FilePreprocessingFileExplainingDiagnostic | ResolutionDiagnostics;
 
 /** @internal */
 export const enum EmitOnly{

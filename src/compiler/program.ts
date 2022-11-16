@@ -131,8 +131,6 @@ import {
     getPositionOfLineAndCharacter,
     getPropertyArrayElementValue,
     getPropertyAssignment,
-    getResolutionMode,
-    getResolutionName,
     getResolvedModule,
     getRootLength,
     getSetExternalModuleIndicator,
@@ -1461,6 +1459,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let skipDefaultLib = options.noLib;
     const getDefaultLibraryFileName = memoize(() => host.getDefaultLibFileName(options));
     const defaultLibraryPath = host.getDefaultLibLocation ? host.getDefaultLibLocation() : getDirectoryPath(getDefaultLibraryFileName());
+    /**
+     * Diagnostics for the program
+     * Only add diagnostics directly if it always would be done irrespective of program structure reuse.
+     * Otherwise fileProcessingDiagnostics is correct locations so that the diagnostics can be reported in all structure use scenarios
+     */
     const programDiagnostics = createDiagnosticCollection();
     const currentDirectory = host.getCurrentDirectory();
     const supportedExtensions = getSupportedExtensions(options);
@@ -1807,6 +1810,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             case FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic:
                 const { file, pos, end } = getReferencedFileLocation(getSourceFileByPath, diagnostic.reason) as ReferenceFileLocation;
                 return programDiagnostics.add(createFileDiagnostic(file, Debug.checkDefined(pos), Debug.checkDefined(end) - pos, diagnostic.diagnostic, ...diagnostic.args || emptyArray));
+            case FilePreprocessingDiagnosticsKind.ResolutionDiagnostics:
+                return diagnostic.diagnostics.forEach(d => programDiagnostics.add(d));
             default:
                 Debug.assertNever(diagnostic);
         }
@@ -1819,31 +1824,28 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     return program;
 
-    function addResolutionDiagnostics(list: Diagnostic[] | undefined) {
-        if (!list) return;
-        for (const elem of list) {
-            programDiagnostics.add(elem);
-        }
+    function addResolutionDiagnostics(resolution: ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations) {
+        if (!resolution.resolutionDiagnostics?.length) return;
+        (fileProcessingDiagnostics ??= []).push({
+            kind: FilePreprocessingDiagnosticsKind.ResolutionDiagnostics,
+            diagnostics: resolution.resolutionDiagnostics
+        });
     }
 
-    function pullDiagnosticsFromCache(names: readonly StringLiteralLike[] | readonly FileReference[], containingFile: SourceFile) {
-        if (!moduleResolutionCache) return;
+    function addResolutionDiagnosticsFromResolutionOrCache(containingFile: SourceFile, name: string, resolution: ResolvedModuleWithFailedLookupLocations, mode: ResolutionMode) {
+        // diagnostics directly from the resolution
+        if (host.resolveModuleNameLiterals || !host.resolveModuleNames) return addResolutionDiagnostics(resolution);
+        if (!moduleResolutionCache || isExternalModuleNameRelative(name)) return;
         const containingFileName = getNormalizedAbsolutePath(containingFile.originalFileName, currentDirectory);
         const containingDir = getDirectoryPath(containingFileName);
         const redirectedReference = getRedirectReferenceForResolution(containingFile);
-        for (const n of names) {
-            // mimics logic done in the resolution cache, should be resilient to upgrading it to use `FileReference`s for non-type-reference modal lookups to make it rely on the index in the list less
-            const mode = getResolutionMode(n, containingFile);
-            const name = getResolutionName(n);
-            // only nonrelative names hit the cache, and, at least as of right now, only nonrelative names can issue diagnostics
-            // (Since diagnostics are only issued via import or export map lookup)
-            // This may totally change if/when the issue of output paths not mapping to input files is fixed in a broader context
-            // When it is, how we extract diagnostics from the module name resolver will have the be refined - the current cache
-            // APIs wrapping the underlying resolver make it almost impossible to smuggle the diagnostics out in a generalized way
-            if (isExternalModuleNameRelative(name)) continue;
-            const diags = moduleResolutionCache.getOrCreateCacheForModuleName(name, mode, redirectedReference).get(containingDir)?.resolutionDiagnostics;
-            addResolutionDiagnostics(diags);
-        }
+        // only nonrelative names hit the cache, and, at least as of right now, only nonrelative names can issue diagnostics
+        // (Since diagnostics are only issued via import or export map lookup)
+        // This may totally change if/when the issue of output paths not mapping to input files is fixed in a broader context
+        // When it is, how we extract diagnostics from the module name resolver will have the be refined - the current cache
+        // APIs wrapping the underlying resolver make it almost impossible to smuggle the diagnostics out in a generalized way
+        const fromCache = moduleResolutionCache.getOrCreateCacheForModuleName(name, mode, redirectedReference).get(containingDir);
+        if (fromCache) addResolutionDiagnostics(fromCache);
     }
 
     function resolveModuleNamesWorker(moduleNames: readonly StringLiteralLike[], containingFile: SourceFile, reusedNames: readonly StringLiteralLike[] | undefined): readonly ResolvedModuleWithFailedLookupLocations[] {
@@ -1856,7 +1858,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         performance.mark("afterResolveModule");
         performance.measure("ResolveModule", "beforeResolveModule", "afterResolveModule");
         tracing?.pop();
-        pullDiagnosticsFromCache(moduleNames, containingFile);
         return result;
     }
 
@@ -3671,7 +3672,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             setResolvedTypeReferenceDirective(file, fileName, resolvedTypeReferenceDirective, getModeForFileReference(ref, file.impliedNodeFormat));
             const mode = ref.resolutionMode || file.impliedNodeFormat;
             if (mode && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext) {
-                programDiagnostics.add(createDiagnosticForRange(file, ref, Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext));
+                (fileProcessingDiagnostics ??= []).push({
+                    kind: FilePreprocessingDiagnosticsKind.ResolutionDiagnostics,
+                    diagnostics: [
+                        createDiagnosticForRange(file, ref, Diagnostics.resolution_mode_assertions_are_only_supported_when_moduleResolution_is_node16_or_nodenext)
+                    ]
+                });
             }
             processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index, });
         }
@@ -3694,6 +3700,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         resolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
         reason: FileIncludeReason
     ): void {
+        addResolutionDiagnostics(resolution);
         // If we already found this library as a primary reference - nothing to do
         const previousResolution = resolvedTypeReferenceDirectives.get(typeReferenceDirective, mode)?.resolvedTypeReferenceDirective;
         if (previousResolution && previousResolution.primary) {
@@ -3800,7 +3807,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const optionsForFile = (useSourceOfProjectReferenceRedirect ? getRedirectReferenceForResolution(file)?.commandLine.options : undefined) || options;
             for (let index = 0; index < moduleNames.length; index++) {
                 const resolution = resolutions[index].resolvedModule;
-                setResolvedModule(file, moduleNames[index].text, resolutions[index], getModeForUsageLocation(file, moduleNames[index]));
+                const moduleName = moduleNames[index].text;
+                const mode = getModeForUsageLocation(file, moduleNames[index]);
+                setResolvedModule(file, moduleName, resolutions[index], mode);
+                addResolutionDiagnosticsFromResolutionOrCache(file, moduleName, resolutions[index], mode);
 
                 if (!resolution) {
                     continue;
