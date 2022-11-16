@@ -1,7 +1,7 @@
 import * as ts from "./_namespaces/ts";
 import {
     AnyFunction, AssertionLevel, BigIntLiteralType, CheckMode, compareValues, EmitFlags, every, FlowFlags, FlowLabel, FlowNode,
-    FlowNodeBase, FlowSwitchClause, formatStringFromArgs, getEffectiveModifierFlagsNoCache, getEmitFlags, getOwnKeys,
+    FlowNodeBase, FlowSwitchClause, getEffectiveModifierFlagsNoCache, getEmitFlags, getOwnKeys,
     getParseTreeNode, getSourceFileOfNode, getSourceTextOfNodeFromSourceFile, hasProperty, idText, IntrinsicType,
     isArrayTypeNode, isBigIntLiteral, isCallSignatureDeclaration, isConditionalTypeNode, isConstructorDeclaration,
     isConstructorTypeNode, isConstructSignatureDeclaration, isDefaultClause, isFunctionTypeNode, isGeneratedIdentifier,
@@ -14,7 +14,7 @@ import {
     ObjectFlags, ObjectType, RelationComparisonResult, Signature, SignatureCheckMode,
     SignatureFlags, SnippetKind, SortedReadonlyArray, stableSort, Symbol, SymbolFlags, symbolName, SyntaxKind,
     TransformFlags, Type, TypeFacts, TypeFlags, TypeMapKind, TypeMapper, unescapeLeadingUnderscores, VarianceFlags,
-    version, Version, zipWith,
+    zipWith,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -32,32 +32,15 @@ export interface LoggingHost {
 }
 
 /** @internal */
-export interface DeprecationOptions {
-    message?: string;
-    error?: boolean;
-    since?: Version | string;
-    warnAfter?: Version | string;
-    errorAfter?: Version | string;
-    typeScriptVersion?: Version | string;
-    name?: string;
-}
-
-/** @internal */
 export namespace Debug {
-    let typeScriptVersion: Version | undefined;
-
     /* eslint-disable prefer-const */
     let currentAssertionLevel = AssertionLevel.None;
     export let currentLogLevel = LogLevel.Warning;
     export let isDebugging = false;
     export let loggingHost: LoggingHost | undefined;
-    export let enableDeprecationWarnings = true;
     /* eslint-enable prefer-const */
 
     type AssertionKeys = MatchingKeys<typeof Debug, AnyFunction>;
-    export function getTypeScriptVersion() {
-        return typeScriptVersion ?? (typeScriptVersion = new Version(version));
-    }
 
     export function shouldLog(level: LogLevel): boolean {
         return currentLogLevel <= level;
@@ -695,58 +678,6 @@ export namespace Debug {
         }
 
         isDebugInfoEnabled = true;
-    }
-
-    function formatDeprecationMessage(name: string, error: boolean | undefined, errorAfter: Version | undefined, since: Version | undefined, message: string | undefined) {
-        let deprecationMessage = error ? "DeprecationError: " : "DeprecationWarning: ";
-        deprecationMessage += `'${name}' `;
-        deprecationMessage += since ? `has been deprecated since v${since}` : "is deprecated";
-        deprecationMessage += error ? " and can no longer be used." : errorAfter ? ` and will no longer be usable after v${errorAfter}.` : ".";
-        deprecationMessage += message ? ` ${formatStringFromArgs(message, [name], 0)}` : "";
-        return deprecationMessage;
-    }
-
-    function createErrorDeprecation(name: string, errorAfter: Version | undefined, since: Version | undefined, message: string | undefined) {
-        const deprecationMessage = formatDeprecationMessage(name, /*error*/ true, errorAfter, since, message);
-        return () => {
-            throw new TypeError(deprecationMessage);
-        };
-    }
-
-    function createWarningDeprecation(name: string, errorAfter: Version | undefined, since: Version | undefined, message: string | undefined) {
-        let hasWrittenDeprecation = false;
-        return () => {
-            if (enableDeprecationWarnings && !hasWrittenDeprecation) {
-                log.warn(formatDeprecationMessage(name, /*error*/ false, errorAfter, since, message));
-                hasWrittenDeprecation = true;
-            }
-        };
-    }
-
-    export function createDeprecation(name: string, options: DeprecationOptions & { error: true }): () => never;
-    export function createDeprecation(name: string, options?: DeprecationOptions): () => void;
-    export function createDeprecation(name: string, options: DeprecationOptions = {}) {
-        const version = typeof options.typeScriptVersion === "string" ? new Version(options.typeScriptVersion) : options.typeScriptVersion ?? getTypeScriptVersion();
-        const errorAfter = typeof options.errorAfter === "string" ? new Version(options.errorAfter) : options.errorAfter;
-        const warnAfter = typeof options.warnAfter === "string" ? new Version(options.warnAfter) : options.warnAfter;
-        const since = typeof options.since === "string" ? new Version(options.since) : options.since ?? warnAfter;
-        const error = options.error || errorAfter && version.compareTo(errorAfter) <= 0;
-        const warn = !warnAfter || version.compareTo(warnAfter) >= 0;
-        return error ? createErrorDeprecation(name, errorAfter, since, options.message) :
-            warn ? createWarningDeprecation(name, errorAfter, since, options.message) :
-            noop;
-    }
-
-    function wrapFunction<F extends (...args: any[]) => any>(deprecation: () => void, func: F): F {
-        return function (this: unknown) {
-            deprecation();
-            return func.apply(this, arguments);
-        } as F;
-    }
-
-    export function deprecate<F extends (...args: any[]) => any>(func: F, options?: DeprecationOptions): F {
-        const deprecation = createDeprecation(options?.name ?? getFunctionName(func), options);
-        return wrapFunction(deprecation, func);
     }
 
     export function formatVariance(varianceFlags: VarianceFlags) {
