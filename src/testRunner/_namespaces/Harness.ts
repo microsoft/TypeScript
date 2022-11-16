@@ -3,8 +3,7 @@
 export * from "../../harness/_namespaces/Harness";
 export * from "../../loggedIO/_namespaces/Harness";
 
-import * as Parallel from "./Harness.Parallel";
-export { Parallel };
+export * as Parallel from "./Harness.Parallel";
 
 export * from "../fourslashRunner";
 export * from "../compilerRunner";
