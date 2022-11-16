@@ -1,7 +1,21 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import * as vfs from "../../_namespaces/vfs";
-import { appendText, compilerOptionsToConfigJson, libContent, loadProjectFromDisk, loadProjectFromFiles, noChangeOnlyRuns, noChangeRun, noChangeWithExportsDiscrepancyRun, prependText, replaceText, TestTscEdit, verifyTsc, verifyTscWithEdits } from "./helpers";
+import {
+    appendText,
+    compilerOptionsToConfigJson,
+    libContent,
+    loadProjectFromDisk,
+    loadProjectFromFiles,
+    noChangeOnlyRuns,
+    noChangeRun,
+    noChangeWithExportsDiscrepancyRun,
+    prependText,
+    replaceText,
+    TestTscEdit,
+    verifyTsc,
+    verifyTscWithEdits,
+} from "./helpers";
 
 describe("unittests:: tsc:: incremental::", () => {
     verifyTscWithEdits({

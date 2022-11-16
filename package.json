@@ -67,6 +67,7 @@
         "eslint-plugin-local": "^1.0.0",
         "eslint-plugin-no-null": "^1.0.2",
         "fast-xml-parser": "^4.0.11",
+        "format-imports": "^3.1.2",
         "fs-extra": "^9.1.0",
         "glob": "latest",
         "hereby": "^1.6.4",

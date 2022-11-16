@@ -1,4 +1,11 @@
-import { Debug, DeprecationOptions, formatStringFromArgs, noop, version, Version } from "./_namespaces/ts";
+import {
+    Debug,
+    DeprecationOptions,
+    formatStringFromArgs,
+    noop,
+    version,
+    Version,
+} from "./_namespaces/ts";
 
 export let enableDeprecationWarnings = true;
 

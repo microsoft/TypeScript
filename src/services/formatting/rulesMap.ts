@@ -1,6 +1,18 @@
-import { Debug, every, FormatCodeSettings, FormattingHost, SyntaxKind } from "../_namespaces/ts";
 import {
-    anyContext, FormatContext, FormattingContext, getAllRules, Rule, RuleAction, RuleSpec,
+    Debug,
+    every,
+    FormatCodeSettings,
+    FormattingHost,
+    SyntaxKind,
+} from "../_namespaces/ts";
+import {
+    anyContext,
+    FormatContext,
+    FormattingContext,
+    getAllRules,
+    Rule,
+    RuleAction,
+    RuleSpec,
 } from "../_namespaces/ts.formatting";
 
 /** @internal */

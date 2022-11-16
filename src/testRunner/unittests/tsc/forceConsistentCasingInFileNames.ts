@@ -1,5 +1,8 @@
 import * as Utils from "../../_namespaces/Utils";
-import { loadProjectFromFiles, verifyTsc } from "./helpers";
+import {
+    loadProjectFromFiles,
+    verifyTsc,
+} from "./helpers";
 
 describe("unittests:: tsc:: forceConsistentCasingInFileNames::", () => {
     verifyTsc({

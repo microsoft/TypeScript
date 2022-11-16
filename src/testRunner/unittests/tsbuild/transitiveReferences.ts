@@ -1,5 +1,8 @@
 import * as vfs from "../../_namespaces/vfs";
-import { loadProjectFromDisk, verifyTsc } from "../tsc/helpers";
+import {
+    loadProjectFromDisk,
+    verifyTsc,
+} from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: when project reference is referenced transitively", () => {
     let projFs: vfs.FileSystem;

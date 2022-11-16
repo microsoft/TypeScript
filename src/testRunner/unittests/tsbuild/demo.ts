@@ -1,5 +1,10 @@
 import * as vfs from "../../_namespaces/vfs";
-import { loadProjectFromDisk, prependText, replaceText, verifyTsc } from "../tsc/helpers";
+import {
+    loadProjectFromDisk,
+    prependText,
+    replaceText,
+    verifyTsc,
+} from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: on demo project", () => {
     let projFs: vfs.FileSystem;
