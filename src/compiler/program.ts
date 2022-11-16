@@ -917,9 +917,15 @@ const emptyResolution: ResolvedModuleWithFailedLookupLocations & ResolvedTypeRef
 };
 
 /** @internal */
-export interface ResolutionLoader<Entry, Resolution> {
+export interface ResolutionNameAndModeGetter<Entry, SourceFile> {
     getName(entry: Entry): string;
-    getMode(entry: Entry): ResolutionMode;
+    getMode(entry: Entry, file: SourceFile): ResolutionMode;
+}
+
+
+/** @internal */
+export interface ResolutionLoader<Entry, Resolution, SourceFile> {
+    nameAndMode: ResolutionNameAndModeGetter<Entry, SourceFile>;
     resolve(name: string, mode: ResolutionMode): Resolution;
 }
 
@@ -928,17 +934,21 @@ function getModuleResolutionName(literal: StringLiteralLike) {
 }
 
 /** @internal */
+export const moduleResolutionNameAndModeGetter: ResolutionNameAndModeGetter<StringLiteralLike, SourceFile> = {
+    getName: getModuleResolutionName,
+    getMode: (entry, file) => getModeForUsageLocation(file, entry),
+};
+
+/** @internal */
 export function createModuleResolutionLoader(
     containingFile: string,
     redirectedReference: ResolvedProjectReference | undefined,
     options: CompilerOptions,
-    containingSourceFile: SourceFile,
     host: ModuleResolutionHost,
     cache: ModuleResolutionCache | undefined,
-): ResolutionLoader<StringLiteralLike, ResolvedModuleWithFailedLookupLocations> {
+): ResolutionLoader<StringLiteralLike, ResolvedModuleWithFailedLookupLocations, SourceFile> {
     return {
-        getName: getModuleResolutionName,
-        getMode: entry => getModeForUsageLocation(containingSourceFile, entry),
+        nameAndMode: moduleResolutionNameAndModeGetter,
         resolve: (moduleName, resoluionMode) => resolveModuleName(
             moduleName,
             containingFile,
@@ -957,17 +967,21 @@ function getTypeReferenceResolutionName<T extends FileReference | string>(entry:
 }
 
 /** @internal */
+export const typeReferenceResolutionNameAndModeGetter: ResolutionNameAndModeGetter<FileReference | string, SourceFile | undefined> = {
+    getName: getTypeReferenceResolutionName,
+    getMode: (entry, file) => getModeForFileReference(entry, file?.impliedNodeFormat),
+};
+
+/** @internal */
 export function createTypeReferenceResolutionLoader<T extends FileReference | string>(
     containingFile: string,
     redirectedReference: ResolvedProjectReference | undefined,
     options: CompilerOptions,
-    containingSourceFile: SourceFile | undefined,
     host: ModuleResolutionHost,
     cache: TypeReferenceDirectiveResolutionCache | undefined,
-): ResolutionLoader<T, ResolvedTypeReferenceDirectiveWithFailedLookupLocations> {
+): ResolutionLoader<T, ResolvedTypeReferenceDirectiveWithFailedLookupLocations, SourceFile | undefined> {
     return {
-        getName: getTypeReferenceResolutionName,
-        getMode: entry => getModeForFileReference(entry, containingSourceFile?.impliedNodeFormat),
+        nameAndMode: typeReferenceResolutionNameAndModeGetter,
         resolve: (typeRef, resoluionMode) => resolveTypeReferenceDirective(
             typeRef,
             containingFile,
@@ -993,18 +1007,17 @@ export function loadWithModeAwareCache<Entry, SourceFile, ResolutionCache, Resol
         containingFile: string,
         redirectedReference: ResolvedProjectReference | undefined,
         options: CompilerOptions,
-        containingSourceFile: SourceFile,
         host: ModuleResolutionHost,
         resolutionCache: ResolutionCache | undefined,
-    ) => ResolutionLoader<Entry, Resolution>,
+    ) => ResolutionLoader<Entry, Resolution, SourceFile>,
 ): readonly Resolution[] {
     if (entries.length === 0) return emptyArray;
     const resolutions: Resolution[] = [];
     const cache = new Map<ModeAwareCacheKey, Resolution>();
-    const loader = createLoader(containingFile, redirectedReference, options, containingSourceFile, host, resolutionCache);
+    const loader = createLoader(containingFile, redirectedReference, options, host, resolutionCache);
     for (const entry of entries) {
-        const name = loader.getName(entry);
-        const mode = loader.getMode(entry);
+        const name = loader.nameAndMode.getName(entry);
+        const mode = loader.nameAndMode.getMode(entry, containingSourceFile);
         const key = createModeAwareCacheKey(name, mode);
         let result = cache.get(key);
         if (!result) {
@@ -2377,10 +2390,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const moduleNames = getModuleNames(newSourceFile);
             const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFile);
             // ensure that module resolution results are still correct
-            const resolutionsChanged = hasChangesInResolutions(moduleNames, newSourceFile, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
+            const resolutionsChanged = hasChangesInResolutions(moduleNames, newSourceFile, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo, moduleResolutionNameAndModeGetter);
             if (resolutionsChanged) {
                 structureIsReused = StructureIsReused.SafeModules;
-                newSourceFile.resolvedModules = zipToModeAwareCache(newSourceFile, moduleNames, resolutions);
+                newSourceFile.resolvedModules = zipToModeAwareCache(newSourceFile, moduleNames, resolutions, moduleResolutionNameAndModeGetter);
             }
             else {
                 newSourceFile.resolvedModules = oldSourceFile.resolvedModules;
@@ -2388,10 +2401,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const typesReferenceDirectives = newSourceFile.typeReferenceDirectives;
             const typeReferenceResolutions = resolveTypeReferenceDirectiveNamesReusingOldState(typesReferenceDirectives, newSourceFile);
             // ensure that types resolutions are still correct
-            const typeReferenceResolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, newSourceFile, typeReferenceResolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, typeDirectiveIsEqualTo);
+            const typeReferenceResolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, newSourceFile, typeReferenceResolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, typeDirectiveIsEqualTo, typeReferenceResolutionNameAndModeGetter);
             if (typeReferenceResolutionsChanged) {
                 structureIsReused = StructureIsReused.SafeModules;
-                newSourceFile.resolvedTypeReferenceDirectiveNames = zipToModeAwareCache(newSourceFile, typesReferenceDirectives, typeReferenceResolutions);
+                newSourceFile.resolvedTypeReferenceDirectiveNames = zipToModeAwareCache(newSourceFile, typesReferenceDirectives, typeReferenceResolutions, typeReferenceResolutionNameAndModeGetter);
             }
             else {
                 newSourceFile.resolvedTypeReferenceDirectiveNames = oldSourceFile.resolvedTypeReferenceDirectiveNames;

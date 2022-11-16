@@ -27,7 +27,6 @@ import {
     extensionIsTS,
     fileExtensionIs,
     fileExtensionIsOneOf,
-    FileReference,
     filter,
     firstDefined,
     forEach,
@@ -41,7 +40,6 @@ import {
     GetEffectiveTypeRootsHost,
     getEmitModuleKind,
     getEmitModuleResolutionKind,
-    getModeForUsageLocation,
     getNormalizedAbsolutePath,
     getOwnKeys,
     getPathComponents,
@@ -58,7 +56,6 @@ import {
     isExternalModuleNameRelative,
     isRootedDiskPath,
     isString,
-    isStringLiteralLike,
     lastOrUndefined,
     length,
     MapLike,
@@ -86,6 +83,7 @@ import {
     removeFileExtension,
     removePrefix,
     ResolutionMode,
+    ResolutionNameAndModeGetter,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
     ResolvedTypeReferenceDirective,
@@ -95,10 +93,8 @@ import {
     SourceFile,
     startsWith,
     stringContains,
-    StringLiteralLike,
     supportedDeclarationExtensions,
     supportedTSImplementationExtensions,
-    toFileNameLowerCase,
     toPath,
     tryExtractTSExtension,
     tryGetExtensionFromPath,
@@ -927,23 +923,17 @@ export function createModeAwareCache<T>(): ModeAwareCache<T> {
 }
 
 /** @internal */
-export function getResolutionName(entry: string | FileReference | StringLiteralLike) {
-    // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-    return !isString(entry) ? isStringLiteralLike(entry) ? entry.text : toFileNameLowerCase(entry.fileName) : entry;
-}
-
-/** @internal */
-export function getResolutionMode(entry: FileReference | StringLiteralLike, file: SourceFile) {
-    return isStringLiteralLike(entry) ? getModeForUsageLocation(file, entry) : entry.resolutionMode || file.impliedNodeFormat;
-}
-
-/** @internal */
-export function zipToModeAwareCache<V>(file: SourceFile, keys: readonly StringLiteralLike[] | readonly FileReference[], values: readonly V[]): ModeAwareCache<V> {
+export function zipToModeAwareCache<K, V>(
+    file: SourceFile,
+    keys: readonly K[],
+    values: readonly V[],
+    nameAndModeGetter: ResolutionNameAndModeGetter<K, SourceFile>,
+): ModeAwareCache<V> {
     Debug.assert(keys.length === values.length);
     const map = createModeAwareCache<V>();
     for (let i = 0; i < keys.length; ++i) {
         const entry = keys[i];
-        map.set(getResolutionName(entry), getResolutionMode(entry, file), values[i]);
+        map.set(nameAndModeGetter.getName(entry), nameAndModeGetter.getMode(entry, file), values[i]);
     }
     return map;
 }

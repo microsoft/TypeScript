@@ -30,7 +30,6 @@ import {
     GetCanonicalFileName,
     getDirectoryPath,
     getEffectiveTypeRoots,
-    getModeForUsageLocation,
     getNormalizedAbsolutePath,
     getRootLength,
     HasInvalidatedResolutions,
@@ -48,6 +47,7 @@ import {
     MinimalResolutionCacheHost,
     ModeAwareCache,
     ModuleResolutionCache,
+    moduleResolutionNameAndModeGetter,
     mutateMap,
     noopFileWatcher,
     normalizePath,
@@ -503,11 +503,9 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         containingFile: string,
         redirectedReference: ResolvedProjectReference | undefined,
         options: CompilerOptions,
-        containingSourceFile: SourceFile,
-    ): ResolutionLoader<StringLiteralLike, ResolvedModuleWithFailedLookupLocations> {
+    ): ResolutionLoader<StringLiteralLike, ResolvedModuleWithFailedLookupLocations, SourceFile> {
         return {
-            getName: literal => literal.text,
-            getMode: entry => getModeForUsageLocation(containingSourceFile, entry),
+            nameAndMode: moduleResolutionNameAndModeGetter,
             resolve: (moduleName, resoluionMode) => resolveModuleName(
                 moduleName,
                 containingFile,
@@ -518,24 +516,25 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         };
     }
 
-    interface ResolveNamesWithLocalCacheInput<Entry, T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName> {
+    interface ResolveNamesWithLocalCacheInput<Entry, SourceFile, T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName> {
         entries: readonly Entry[];
         containingFile: string;
+        containingSourceFile: SourceFile;
         redirectedReference: ResolvedProjectReference | undefined;
         options: CompilerOptions;
         reusedNames?: readonly Entry[];
         perFileCache: Map<Path, ModeAwareCache<T>>;
-        loader: ResolutionLoader<Entry, T>;
+        loader: ResolutionLoader<Entry, T, SourceFile>;
         getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>;
         shouldRetryResolution: (t: T) => boolean;
         logChanges?: boolean;
     }
-    function resolveNamesWithLocalCache<Entry, T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>({
-        entries, containingFile, redirectedReference, options,
+    function resolveNamesWithLocalCache<Entry, SourceFile, T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>({
+        entries, containingFile, containingSourceFile, redirectedReference, options,
         perFileCache, reusedNames,
         loader, getResolutionWithResolvedFileName,
         shouldRetryResolution, logChanges,
-    }: ResolveNamesWithLocalCacheInput<Entry, T, R>): readonly T[] {
+    }: ResolveNamesWithLocalCacheInput<Entry, SourceFile, T, R>): readonly T[] {
         const path = resolutionHost.toPath(containingFile);
         const resolutionsInFile = perFileCache.get(path) || perFileCache.set(path, createModeAwareCache()).get(path)!;
         const resolvedModules: T[] = [];
@@ -550,8 +549,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
         const seenNamesInFile = createModeAwareCache<true>();
         for (const entry of entries) {
-            const name = loader.getName(entry);
-            const mode = loader.getMode(entry);
+            const name = loader.nameAndMode.getName(entry);
+            const mode = loader.nameAndMode.getMode(entry, containingSourceFile);
             let resolution = resolutionsInFile.get(name, mode);
             // Resolution is valid if it is present and not invalidated
             if (!seenNamesInFile.has(name, mode) &&
@@ -604,8 +603,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             resolvedModules.push(resolution);
         }
         reusedNames?.forEach(entry => seenNamesInFile.set(
-            loader.getName(entry),
-            loader.getMode(entry),
+            loader.nameAndMode.getName(entry),
+            loader.nameAndMode.getMode(entry, containingSourceFile),
             true,
         ));
         if (resolutionsInFile.size() !== seenNamesInFile.size()) {
@@ -649,6 +648,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         return resolveNamesWithLocalCache({
             entries: typeDirectiveReferences,
             containingFile,
+            containingSourceFile,
             redirectedReference,
             options,
             reusedNames,
@@ -657,7 +657,6 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 containingFile,
                 redirectedReference,
                 options,
-                containingSourceFile,
                 resolutionHost.getCompilerHost?.() || resolutionHost,
                 typeReferenceDirectiveResolutionCache
             ),
@@ -677,6 +676,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         return resolveNamesWithLocalCache({
             entries: moduleLiterals,
             containingFile,
+            containingSourceFile,
             redirectedReference,
             options,
             reusedNames,
@@ -685,7 +685,6 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 containingFile,
                 redirectedReference,
                 options,
-                containingSourceFile,
             ),
             getResolutionWithResolvedFileName: getResolvedModule,
             shouldRetryResolution: resolution => !resolution.resolvedModule || !resolutionExtensionIsTSOrJson(resolution.resolvedModule.extension),

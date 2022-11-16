@@ -124,7 +124,6 @@ import {
     FileExtensionInfo,
     fileExtensionIs,
     fileExtensionIsOneOf,
-    FileReference,
     FileWatcher,
     filter,
     find,
@@ -184,16 +183,14 @@ import {
     getPathComponents,
     getPathFromPathComponents,
     getRelativePathToDirectoryOrUrl,
-    getResolutionMode,
-    getResolutionName,
     getRootLength,
     getStringComparer,
     getSymbolId,
     getTrailingCommentRanges,
     HasExpressionInitializer,
     hasExtension,
-    hasInitializer,
     HasInitializer,
+    hasInitializer,
     HasJSDoc,
     hasJSDocNodes,
     HasModifiers,
@@ -423,6 +420,7 @@ import {
     RequireOrImportCall,
     RequireVariableStatement,
     ResolutionMode,
+    ResolutionNameAndModeGetter,
     ResolvedModuleFull,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedTypeReferenceDirective,
@@ -776,19 +774,21 @@ export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirec
 }
 
 /** @internal */
-export function hasChangesInResolutions<T>(
-    names: readonly StringLiteralLike[] | readonly FileReference[],
+export function hasChangesInResolutions<K, V>(
+    names: readonly K[],
     newSourceFile: SourceFile,
-    newResolutions: readonly T[],
-    oldResolutions: ModeAwareCache<T> | undefined,
-    comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
+    newResolutions: readonly V[],
+    oldResolutions: ModeAwareCache<V> | undefined,
+    comparer: (oldResolution: V, newResolution: V) => boolean,
+    nameAndModeGetter: ResolutionNameAndModeGetter<K, SourceFile>,
+): boolean {
     Debug.assert(names.length === newResolutions.length);
 
     for (let i = 0; i < names.length; i++) {
         const newResolution = newResolutions[i];
         const entry = names[i];
-        const name = getResolutionName(entry);
-        const mode = getResolutionMode(entry, newSourceFile);
+        const name = nameAndModeGetter.getName(entry);
+        const mode = nameAndModeGetter.getMode(entry, newSourceFile);
         const oldResolution = oldResolutions && oldResolutions.get(name, mode);
         const changed =
             oldResolution
