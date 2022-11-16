@@ -18759,12 +18759,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (relation === assignableRelation || relation === comparableRelation) {
             if (s & TypeFlags.Any) return true;
             // Type number is assignable to any computed numeric enum type or any numeric enum literal type, and
-            // a numeric literal type is assignable to any numeric enum literal type with a matching value. These
-            // rules exist such that enums can be used for bit-flag purposes.
+            // a numeric literal type is assignable any computed numeric enum type or any numeric enum literal type
+            // with a matching value. These rules exist such that enums can be used for bit-flag purposes.
             if (s & TypeFlags.Number && (t & TypeFlags.Enum || t & TypeFlags.NumberLiteral && t & TypeFlags.EnumLiteral)) return true;
-            if (s & TypeFlags.NumberLiteral && !(s & TypeFlags.EnumLiteral) &&
+            if (s & TypeFlags.NumberLiteral && !(s & TypeFlags.EnumLiteral) && (t & TypeFlags.Enum ||
                 t & TypeFlags.NumberLiteral && t & TypeFlags.EnumLiteral &&
-                (source as NumberLiteralType).value === (target as NumberLiteralType).value) return true;
+                (source as NumberLiteralType).value === (target as NumberLiteralType).value)) return true;
             // Anything is assignable to a union containing undefined, null, and {}
             if (isUnknownLikeUnionType(target)) return true;
         }
