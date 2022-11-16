@@ -1063,7 +1063,7 @@ function isHTMLTable<T extends object | null>(table: T): boolean {
 >null : null
 >table : T
 
-  return !!table && 'html' in table;
+    return !!table && 'html' in table;
 >!!table && 'html' in table : boolean
 >!!table : boolean
 >!table : boolean
@@ -1072,4 +1072,18 @@ function isHTMLTable<T extends object | null>(table: T): boolean {
 >'html' : "html"
 >table : T
 }
+
+// Repro from #51549
+
+const f = <P extends object>(a: P & {}) => {
+>f : <P extends object>(a: P & {}) => void
+><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P & {}) => void
+>a : P & {}
+
+    "foo" in a;
+>"foo" in a : boolean
+>"foo" : "foo"
+>a : P & {}
+
+};
 

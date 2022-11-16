@@ -345,8 +345,14 @@ const checkIsTouchDevice = () =>
 // Repro from #51501
 
 function isHTMLTable<T extends object | null>(table: T): boolean {
-  return !!table && 'html' in table;
+    return !!table && 'html' in table;
 }
+
+// Repro from #51549
+
+const f = <P extends object>(a: P & {}) => {
+    "foo" in a;
+};
 
 
 //// [inKeywordTypeguard.js]
@@ -665,3 +671,7 @@ const checkIsTouchDevice = () => "ontouchstart" in window || "msMaxTouchPoints" 
 function isHTMLTable(table) {
     return !!table && 'html' in table;
 }
+// Repro from #51549
+const f = (a) => {
+    "foo" in a;
+};
