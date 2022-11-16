@@ -551,7 +551,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         if (this.program && !this.symlinks.hasProcessedResolutions()) {
             this.symlinks.setSymlinksFromResolutions(
                 this.program.getSourceFiles(),
-                this.program.getResolvedTypeReferenceDirectives());
+                this.program.getAutomaticTypeDirectiveResolutions());
         }
         return this.symlinks;
     }
