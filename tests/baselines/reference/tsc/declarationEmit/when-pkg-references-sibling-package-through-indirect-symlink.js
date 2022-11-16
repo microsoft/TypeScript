@@ -94,7 +94,7 @@ Program files::
 /user/username/projects/myproject/pkg3/src/keys.ts
 /user/username/projects/myproject/pkg3/src/index.ts
 
-WatchedFiles::
+PolledWatches::
 
 FsWatches::
 

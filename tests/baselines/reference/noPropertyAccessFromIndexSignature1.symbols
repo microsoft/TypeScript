@@ -51,7 +51,9 @@ a["foo"]
 
 // access index signature
 b.foo;
+>b.foo : Symbol(B.__index, Decl(noPropertyAccessFromIndexSignature1.ts, 4, 13))
 >b : Symbol(b, Decl(noPropertyAccessFromIndexSignature1.ts, 14, 13))
+>foo : Symbol(B.__index, Decl(noPropertyAccessFromIndexSignature1.ts, 4, 13))
 
 b["foo"];
 >b : Symbol(b, Decl(noPropertyAccessFromIndexSignature1.ts, 14, 13))
@@ -68,7 +70,9 @@ c["foo"]
 
 // access index signature
 c.bar;
+>c.bar : Symbol(C.__index, Decl(noPropertyAccessFromIndexSignature1.ts, 9, 15))
 >c : Symbol(c, Decl(noPropertyAccessFromIndexSignature1.ts, 15, 13))
+>bar : Symbol(C.__index, Decl(noPropertyAccessFromIndexSignature1.ts, 9, 15))
 
 c["bar"];
 >c : Symbol(c, Decl(noPropertyAccessFromIndexSignature1.ts, 15, 13))
@@ -85,7 +89,9 @@ d?.["foo"]
 
 // optional access index signature
 d?.bar;
+>d?.bar : Symbol(C.__index, Decl(noPropertyAccessFromIndexSignature1.ts, 9, 15))
 >d : Symbol(d, Decl(noPropertyAccessFromIndexSignature1.ts, 16, 13))
+>bar : Symbol(C.__index, Decl(noPropertyAccessFromIndexSignature1.ts, 9, 15))
 
 d?.["bar"];
 >d : Symbol(d, Decl(noPropertyAccessFromIndexSignature1.ts, 16, 13))

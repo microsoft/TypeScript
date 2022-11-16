@@ -504,3 +504,135 @@ class B extends A {
     }
 }
 
+// https://github.com/microsoft/TypeScript/issues/46828
+class Base {
+>Base : Base
+
+    set setter(x: any) {}
+>setter : any
+>x : any
+
+    get getter(): any { return; }
+>getter : any
+
+    method(x: string): any {}
+>method : (x: string) => any
+>x : string
+
+    static set setter(x: any) {}
+>setter : any
+>x : any
+
+    static get getter(): any { return; }
+>getter : any
+
+    static method(x: string): any {}
+>method : (x: string) => any
+>x : string
+}
+
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    a() { return async () => super.method('') }
+>a : () => () => Promise<any>
+>async () => super.method('') : () => Promise<any>
+>super.method('') : any
+>super.method : (x: string) => any
+>super : Base
+>method : (x: string) => any
+>'' : ""
+
+    b() { return async () => super.getter }
+>b : () => () => Promise<any>
+>async () => super.getter : () => Promise<any>
+>super.getter : any
+>super : Base
+>getter : any
+
+    c() { return async () => super.setter = '' }
+>c : () => () => Promise<string>
+>async () => super.setter = '' : () => Promise<string>
+>super.setter = '' : ""
+>super.setter : any
+>super : Base
+>setter : any
+>'' : ""
+
+    d() { return async () => super["method"]('') }
+>d : () => () => Promise<any>
+>async () => super["method"]('') : () => Promise<any>
+>super["method"]('') : any
+>super["method"] : (x: string) => any
+>super : Base
+>"method" : "method"
+>'' : ""
+
+    e() { return async () => super["getter"] }
+>e : () => () => Promise<any>
+>async () => super["getter"] : () => Promise<any>
+>super["getter"] : any
+>super : Base
+>"getter" : "getter"
+
+    f() { return async () => super["setter"] = '' }
+>f : () => () => Promise<string>
+>async () => super["setter"] = '' : () => Promise<string>
+>super["setter"] = '' : ""
+>super["setter"] : any
+>super : Base
+>"setter" : "setter"
+>'' : ""
+
+    static a() { return async () => super.method('') }
+>a : () => () => Promise<any>
+>async () => super.method('') : () => Promise<any>
+>super.method('') : any
+>super.method : (x: string) => any
+>super : typeof Base
+>method : (x: string) => any
+>'' : ""
+
+    static b() { return async () => super.getter }
+>b : () => () => Promise<any>
+>async () => super.getter : () => Promise<any>
+>super.getter : any
+>super : typeof Base
+>getter : any
+
+    static c() { return async () => super.setter = '' }
+>c : () => () => Promise<string>
+>async () => super.setter = '' : () => Promise<string>
+>super.setter = '' : ""
+>super.setter : any
+>super : typeof Base
+>setter : any
+>'' : ""
+
+    static d() { return async () => super["method"]('') }
+>d : () => () => Promise<any>
+>async () => super["method"]('') : () => Promise<any>
+>super["method"]('') : any
+>super["method"] : (x: string) => any
+>super : typeof Base
+>"method" : "method"
+>'' : ""
+
+    static e() { return async () => super["getter"] }
+>e : () => () => Promise<any>
+>async () => super["getter"] : () => Promise<any>
+>super["getter"] : any
+>super : typeof Base
+>"getter" : "getter"
+
+    static f() { return async () => super["setter"] = '' }
+>f : () => () => Promise<string>
+>async () => super["setter"] = '' : () => Promise<string>
+>super["setter"] = '' : ""
+>super["setter"] : any
+>super : typeof Base
+>"setter" : "setter"
+>'' : ""
+}
+

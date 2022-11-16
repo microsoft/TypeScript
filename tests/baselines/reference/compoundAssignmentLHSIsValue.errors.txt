@@ -17,7 +17,7 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(40,1): error TS2630: Cannot assign to 'foo' because it is a function.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(41,1): error TS2630: Cannot assign to 'foo' because it is a function.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(44,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(44,1): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(44,1): error TS18050: The value 'null' cannot be used here.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(45,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(46,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(47,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
@@ -160,7 +160,7 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
     ~~~~
 !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
     ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS18050: The value 'null' cannot be used here.
     null += value;
     ~~~~
 !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.

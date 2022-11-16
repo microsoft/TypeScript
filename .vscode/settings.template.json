@@ -1,16 +1,23 @@
 // Rename this file 'settings.json' or merge its
 // contents into your existing settings.
 {
-    "eslint.validate": [
-        "typescript"
-    ],
-    "eslint.options": {
-        "rulePaths": ["./scripts/eslint/built/rules/"],
-        "extensions": [".ts"]
-    },
     // To use the last-known-good (LKG) compiler version:
     // "typescript.tsdk": "lib"
 
     // To use the locally built compiler, after 'npm run build':
     // "typescript.tsdk": "built/local"
+
+    // To ignore commits listed in .git-blame-ignore-revs in GitLens:
+    // "gitlens.advanced.blame.customArguments": [
+    //     "--ignore-revs-file",
+    //     ".git-blame-ignore-revs"
+    // ]
+
+    // These options search the repo recursively and slow down
+    // the build task menu. We define our own in tasks.json.
+    "typescript.tsc.autoDetect": "off",
+    "npm.autoDetect": "off",
+    "grunt.autoDetect": "off",
+    "jake.autoDetect": "off",
+    "gulp.autoDetect": "off"
 }
