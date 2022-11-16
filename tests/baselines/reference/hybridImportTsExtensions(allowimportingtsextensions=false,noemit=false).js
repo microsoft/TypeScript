@@ -27,6 +27,15 @@ WOMP WOMP BINARY DATA
 //// [e.ts]
 export {};
 
+//// [e.txt]
+The letter e is for elephant
+This poem is not about elephants
+It is about the letter e
+- Authored by GitHub Copilot, Nov 2022
+
+//// [e.txt.ts]
+export {};
+
 //// [main.ts]
 import {} from "./a";
 import {} from "./a.js";
@@ -45,7 +54,11 @@ import {} from "./d";
 import {} from "./d/index";
 import {} from "./d/index.ts";
 
+// These should not resolve, but preventing them has
+// relatively little utility compared to the cost of
+// the filesystem hits.
 import {} from "./e";
+import {} from "./e.txt";
 
 //// [types.d.ts]
 import {} from "./a.ts";
@@ -59,6 +72,9 @@ exports.__esModule = true;
 "use strict";
 exports.__esModule = true;
 //// [e.js]
+"use strict";
+exports.__esModule = true;
+//// [e.txt.js]
 "use strict";
 exports.__esModule = true;
 //// [main.js]

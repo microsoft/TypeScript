@@ -30,6 +30,10 @@ export {};
 
 export {};
 
+=== /project/e.txt.ts ===
+
+export {};
+
 === /project/main.ts ===
 
 import {} from "./a";
@@ -49,7 +53,11 @@ import {} from "./d";
 import {} from "./d/index";
 import {} from "./d/index.ts";
 
+// These should not resolve, but preventing them has
+// relatively little utility compared to the cost of
+// the filesystem hits.
 import {} from "./e";
+import {} from "./e.txt";
 
 === /project/types.d.ts ===
 
