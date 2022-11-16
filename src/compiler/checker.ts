@@ -5772,12 +5772,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 function deepCloneOrReuseNodes(
-                        nodes: NodeArray<Node> | undefined,
+                    nodes: NodeArray<Node> | undefined,
                     visitor: Visitor | undefined,
-                        test?: (node: Node) => boolean,
-                        start?: number,
+                    test?: (node: Node) => boolean,
+                    start?: number,
                     count?: number,
-                    ): NodeArray<Node> | undefined {
+                ): NodeArray<Node> | undefined {
                     if (nodes && nodes.length === 0) {
                         // Ensure we explicitly make a copy of an empty array; visitNodes will not do this unless the array has elements,
                         // which can lead to us reusing the same empty NodeArray more than once within the same AST during type noding.
