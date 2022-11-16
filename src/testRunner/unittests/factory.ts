@@ -1,4 +1,5 @@
 import * as ts from "../_namespaces/ts";
+import { setEnableDeprecationWarnings } from "../../deprecatedCompat/deprecate";
 
 describe("unittests:: FactoryAPI", () => {
     function assertSyntaxKind(node: ts.Node, expected: ts.SyntaxKind) {
@@ -85,11 +86,11 @@ describe("unittests:: FactoryAPI", () => {
 
     describe("deprecations", () => {
         beforeEach(() => {
-            ts.Debug.enableDeprecationWarnings = false;
+            setEnableDeprecationWarnings(false);
         });
 
         afterEach(() => {
-            ts.Debug.enableDeprecationWarnings = true;
+            setEnableDeprecationWarnings(true);
         });
 
         // https://github.com/microsoft/TypeScript/issues/50259
