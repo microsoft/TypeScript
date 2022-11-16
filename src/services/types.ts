@@ -16,7 +16,6 @@ import {
     LineAndCharacter,
     MinimalResolutionCacheHost,
     ModuleResolutionCache,
-    ModuleResolutionInfo,
     ModuleSpecifierCache,
     ParsedCommandLine,
     Path,
@@ -39,7 +38,6 @@ import {
     textChanges,
     TextRange,
     TextSpan,
-    TypeReferenceDirectiveResolutionInfo,
     UserPreferences,
 } from "./_namespaces/ts";
 
@@ -360,10 +358,10 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
      * If this is implemented, `getResolvedModuleWithFailedLookupLocationsFromCache` should be too.
      */
     /** @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolutions */
-    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
+    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
     getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
     /** @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolutions */
-    resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode): (ResolvedTypeReferenceDirective | undefined)[];
     resolveModuleNameLiterals?(
         moduleLiterals: readonly StringLiteralLike[],
         containingFile: string,

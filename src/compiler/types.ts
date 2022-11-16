@@ -7317,13 +7317,6 @@ export type HasInvalidatedResolutions = (sourceFile: Path) => boolean;
 /** @internal */
 export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
 
-export interface ResolutionInfo<T> {
-    names: readonly T[];
-    reusedNames: readonly T[] | undefined;
-}
-export type ModuleResolutionInfo = ResolutionInfo<StringLiteralLike>;
-export type TypeReferenceDirectiveResolutionInfo = ResolutionInfo<string | FileReference>;
-
 export interface CompilerHost extends ModuleResolutionHost {
     getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
     getSourceFileByPath?(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
@@ -7345,7 +7338,7 @@ export interface CompilerHost extends ModuleResolutionHost {
      * 'throw new Error("NotImplemented")'
      */
     /** @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolutions */
-    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
+    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
     /**
      * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
      */
@@ -7355,7 +7348,7 @@ export interface CompilerHost extends ModuleResolutionHost {
      *
      * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
      */
-    resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode): (ResolvedTypeReferenceDirective | undefined)[];
     resolveModuleNameLiterals?(
         moduleLiterals: readonly StringLiteralLike[],
         containingFile: string,

@@ -1509,7 +1509,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 redirectedReference,
                 options,
                 containingSourceFile,
-                { names: moduleNames, reusedNames },
             ).map(resolved => resolved ?
                 ((resolved as ResolvedModuleFull).extension !== undefined) ?
                     { resolvedModule: resolved as ResolvedModuleFull } :
@@ -1546,14 +1545,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         actualResolveTypeReferenceDirectiveNamesWorker = host.resolveTypeReferenceDirectiveReferences.bind(host);
     }
     else if (host.resolveTypeReferenceDirectives) {
-        actualResolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference, options, containingSourceFile, reusedNames) =>
+        actualResolveTypeReferenceDirectiveNamesWorker = (typeDirectiveNames, containingFile, redirectedReference, options, containingSourceFile) =>
             host.resolveTypeReferenceDirectives!(
                 typeDirectiveNames.map(getTypeReferenceResolutionName),
                 containingFile,
                 redirectedReference,
                 options,
                 containingSourceFile?.impliedNodeFormat,
-                { names: typeDirectiveNames, reusedNames },
             ).map(resolvedTypeReferenceDirective => ({ resolvedTypeReferenceDirective }));
     }
     else {
