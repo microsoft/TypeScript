@@ -12,7 +12,7 @@ import {
     isPropertyAccessExpression, isPropertyName, isStatement, isSuperProperty, isToken, isVariableDeclarationList,
     LabeledStatement, LeftHandSideExpression, MethodDeclaration, ModifierFlags, Node, NodeCheckFlags, NodeFlags,
     ObjectLiteralElementLike, ObjectLiteralExpression, ParameterDeclaration, ParenthesizedExpression, ProcessLevel,
-    processTaggedTemplateExpression, PropertyAccessExpression, ReturnStatement, ScriptTarget, Set,
+    processTaggedTemplateExpression, PropertyAccessExpression, ReturnStatement, ScriptTarget,
     SetAccessorDeclaration, setEmitFlags, setOriginalNode, setSourceMapRange, setTextRange, SignatureDeclaration,
     skipParentheses, some, SourceFile, startOnNewLine, Statement, SyntaxKind, TaggedTemplateExpression, TextRange,
     Token, TransformationContext, TransformFlags, unwrapInnermostStatementOfLabel, VariableDeclaration,

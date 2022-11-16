@@ -12,7 +12,7 @@ import {
     createDetachedDiagnostic, createNodeFactory, createScanner, createTextChangeRange, createTextSpanFromBounds, Debug,
     Decorator, DefaultClause, DeleteExpression, Diagnostic, DiagnosticMessage, Diagnostics,
     DiagnosticWithDetachedLocation, DoStatement, DotDotDotToken, ElementAccessExpression, emptyArray, emptyMap,
-    EndOfFileToken, ensureScriptKind, EntityName, EnumDeclaration, EnumMember, ESMap, ExclamationToken,
+    EndOfFileToken, ensureScriptKind, EntityName, EnumDeclaration, EnumMember, ExclamationToken,
     ExportAssignment, ExportDeclaration, ExportSpecifier, Expression, ExpressionStatement, ExpressionWithTypeArguments,
     ExternalModuleReference, fileExtensionIsOneOf, FileReference, filter, findIndex, first, firstOrUndefined, forEach, ForEachChildNodes,
     ForInOrOfStatement, ForInStatement, ForOfStatement, ForStatement, FunctionDeclaration, FunctionExpression,
@@ -39,7 +39,7 @@ import {
     JsxExpression, JsxFragment, JsxOpeningElement, JsxOpeningFragment, JsxOpeningLikeElement, JsxSelfClosingElement,
     JsxSpreadAttribute, JsxTagNameExpression, JsxTagNamePropertyAccess, JsxText, JsxTokenSyntaxKind, LabeledStatement,
     LanguageVariant, last, lastOrUndefined, LeftHandSideExpression, LiteralExpression, LiteralLikeNode, LiteralTypeNode, map,
-    Map, mapDefined, MappedTypeNode, MemberExpression, MetaProperty, MethodDeclaration, MethodSignature, MinusToken,
+    mapDefined, MappedTypeNode, MemberExpression, MetaProperty, MethodDeclaration, MethodSignature, MinusToken,
     MissingDeclaration, Modifier, ModifierFlags, ModifierLike, modifiersToFlags, ModuleBlock,
     ModuleDeclaration, ModuleKind, Mutable, NamedExportBindings, NamedExports, NamedImports, NamedImportsOrExports,
     NamedTupleMember, NamespaceDeclaration, NamespaceExport, NamespaceExportDeclaration, NamespaceImport, NewExpression,
@@ -51,8 +51,8 @@ import {
     PragmaPseudoMap, PragmaPseudoMapEntry, PrefixUnaryExpression, PrefixUnaryOperator, PrimaryExpression,
     PrivateIdentifier, PropertyAccessEntityNameExpression, PropertyAccessExpression, PropertyAssignment,
     PropertyDeclaration, PropertyName, PropertySignature, QualifiedName, QuestionDotToken, QuestionToken,
-    ReadonlyKeyword, ReadonlyPragmaMap, ReadonlyTextRange, RestTypeNode, ReturnStatement, SatisfiesExpression,
-    ScriptKind, ScriptTarget, Set, SetAccessorDeclaration, setParent, setParentRecursive, setTextRange, setTextRangePos,
+    ReadonlyKeyword, ReadonlyPragmaMap, ReadonlyTextRange, ResolutionMode, RestTypeNode, ReturnStatement, SatisfiesExpression,
+    ScriptKind, ScriptTarget, SetAccessorDeclaration, setParent, setParentRecursive, setTextRange, setTextRangePos,
     setTextRangePosEnd, setTextRangePosWidth, ShorthandPropertyAssignment, skipTrivia, some, SourceFile,
     SpreadAssignment, SpreadElement, startsWith, Statement, StringLiteral, supportedDeclarationExtensions,
     SwitchStatement, SyntaxKind, TaggedTemplateExpression, TemplateExpression, TemplateHead, TemplateLiteralToken,
@@ -973,7 +973,7 @@ export interface CreateSourceFileOptions {
      * and files on disk, but needs to be done with a module resolution cache in scope to be performant.
      * This is usually `undefined` for compilations that do not have `moduleResolution` values of `node16` or `nodenext`.
      */
-    impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
+    impliedNodeFormat?: ResolutionMode;
     /**
      * Controls how module-y-ness is set for the given file. Usually the result of calling
      * `getSetExternalModuleIndicator` on a valid `CompilerOptions` object. If not present, the default
@@ -1116,8 +1116,8 @@ namespace Parser {
 
     let currentToken: SyntaxKind;
     let nodeCount: number;
-    let identifiers: ESMap<string, string>;
-    let privateIdentifiers: ESMap<string, string>;
+    let identifiers: Map<string, string>;
+    let privateIdentifiers: Map<string, string>;
     let identifierCount: number;
 
     let parsingContext: ParsingContext;
@@ -9796,7 +9796,7 @@ export interface PragmaContext {
     moduleName?: string;
 }
 
-function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ModuleKind.ESNext | ModuleKind.CommonJS | undefined {
+function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ResolutionMode {
     if (!mode) {
         return undefined;
     }

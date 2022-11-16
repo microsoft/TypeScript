@@ -1,4 +1,5 @@
-import { Debug, isMemberName, MemberName, Node } from "../_namespaces/ts";
+import { isMemberName, MemberName, Node } from "../_namespaces/ts";
+import { deprecate } from "../deprecate";
 
 // DEPRECATION: Renamed node tests
 // DEPRECATION PLAN:
@@ -8,7 +9,7 @@ import { Debug, isMemberName, MemberName, Node } from "../_namespaces/ts";
 /**
  * @deprecated Use `isMemberName` instead.
  */
-export const isIdentifierOrPrivateIdentifier = Debug.deprecate(function isIdentifierOrPrivateIdentifier(node: Node): node is MemberName {
+export const isIdentifierOrPrivateIdentifier = deprecate(function isIdentifierOrPrivateIdentifier(node: Node): node is MemberName {
     return isMemberName(node);
 }, {
     since: "4.2",

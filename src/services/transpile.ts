@@ -2,7 +2,7 @@ import {
     addRange, cloneCompilerOptions, CommandLineOptionOfCustomType, CompilerHost, CompilerOptions,
     createCompilerDiagnosticForInvalidCustomType, createProgram, createSourceFile, CustomTransformers, Debug,
     Diagnostic, fileExtensionIs, filter, forEachEntry, getDefaultCompilerOptions, getEmitScriptTarget, getEntries,
-    getImpliedNodeFormatForFile, getNewLineCharacter, getSetExternalModuleIndicator, hasProperty, isString, Map,
+    getImpliedNodeFormatForFile, getNewLineCharacter, getSetExternalModuleIndicator, hasProperty, isString,
     MapLike, normalizePath, optionDeclarations, parseCustomTypeOption, toPath, transpileOptionValueCompilerOptions,
 } from "./_namespaces/ts";
 

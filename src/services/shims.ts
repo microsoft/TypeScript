@@ -2,12 +2,12 @@ import {
     Classifications, Classifier, clear, CompilerOptions, CompletionEntryData, createClassifier, createDocumentRegistry,
     createGetCanonicalFileName, createLanguageService, createTextChangeRange, createTextSpan, Diagnostic,
     diagnosticCategoryName, DocCommentTemplateOptions, DocumentRegistry, EditorOptions, EmitOutput, emptyOptions,
-    EndOfLineState, ESMap, Extension, extensionFromPath, FileReference, filter, flattenDiagnosticMessageText,
+    EndOfLineState, Extension, extensionFromPath, FileReference, filter, flattenDiagnosticMessageText,
     FormatCodeOptions, FormatCodeSettings, getAutomaticTypeDirectiveNames, GetCompletionsAtPositionOptions,
     getDefaultCompilerOptions, getDirectoryPath, getFileMatcherPatterns, getNewLineOrDefaultFromHost, getProperty,
     getSnapshotText, HostCancellationToken, IScriptSnapshot, isString, JsTyping, LanguageService, LanguageServiceHost,
     map, MapLike, ModuleResolutionHost, normalizeSlashes, OperationCanceledException, ParseConfigHost,
-    parseJsonSourceFileConfigFileContent, parseJsonText, preProcessFile, ReadonlyESMap, ResolvedModuleFull,
+    parseJsonSourceFileConfigFileContent, parseJsonText, preProcessFile, ResolvedModuleFull,
     ResolvedTypeReferenceDirective, resolveModuleName, resolveTypeReferenceDirective, ScriptKind,
     SemanticClassificationFormat, servicesVersion, SignatureHelpItemsOptions, TextChangeRange, TextRange, TextSpan,
     ThrottledCancellationToken, timestamp, toFileNameLowerCase, toPath, TypeAcquisition, UserPreferences,
@@ -40,11 +40,11 @@ interface DiscoverTypingsInfo {
     fileNames: string[];                            // The file names that belong to the same project.
     projectRootPath: string;                        // The path to the project root directory
     safeListPath: string;                           // The path used to retrieve the safe list
-    packageNameToTypingLocation: ESMap<string, JsTyping.CachedTyping>;       // The map of package names to their cached typing locations and installed versions
+    packageNameToTypingLocation: Map<string, JsTyping.CachedTyping>;       // The map of package names to their cached typing locations and installed versions
     typeAcquisition: TypeAcquisition;               // Used to customize the type acquisition process
     compilerOptions: CompilerOptions;               // Used as a source for typing inference
     unresolvedImports: readonly string[];       // List of unresolved module ids from imports
-    typesRegistry: ReadonlyESMap<string, MapLike<string>>;    // The map of available typings in npm to maps of TS versions to their latest supported versions
+    typesRegistry: ReadonlyMap<string, MapLike<string>>;    // The map of available typings in npm to maps of TS versions to their latest supported versions
 }
 
 /** @internal */

@@ -1,7 +1,7 @@
 import {
     addToSeen, createTextSpan, DiagnosticMessageChain, Diagnostics, factory, find, flattenDiagnosticMessageText,
     getEmitScriptTarget, getNodeId, getTokenAtPosition, isExpression, isIdentifier, isMappedTypeNode, isString,
-    isTypeNode, isTypeParameterDeclaration, LanguageServiceHost, Map, Node, Program, SourceFile, textChanges, TextSpan,
+    isTypeNode, isTypeParameterDeclaration, LanguageServiceHost, Node, Program, SourceFile, textChanges, TextSpan,
     Type, TypeChecker, TypeParameterDeclaration, UserPreferences,
 } from "../_namespaces/ts";
 import {

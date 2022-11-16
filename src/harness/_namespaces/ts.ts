@@ -9,5 +9,3 @@ export * from "../../deprecatedCompat/_namespaces/ts";
 export * from "../harnessGlobals";
 import * as server from "./ts.server";
 export { server };
-import * as TestFSWithWatch from "./ts.TestFSWithWatch";
-export { TestFSWithWatch };

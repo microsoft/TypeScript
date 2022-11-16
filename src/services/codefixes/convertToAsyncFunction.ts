@@ -1,15 +1,15 @@
 import {
     ArrowFunction, AwaitExpression, BindingName, BindingPattern, Block, CallExpression, canBeConvertedToAsync,
-    CodeFixContext, concatenate, createMultiMap, Debug, Diagnostics, elementAt, emptyArray, ESMap, every, Expression,
+    CodeFixContext, concatenate, createMultiMap, Debug, Diagnostics, elementAt, emptyArray, every, Expression,
     factory, firstOrUndefined, flatMap, forEach, forEachChild, forEachReturnStatement, FunctionExpression,
     FunctionLikeDeclaration, GeneratedIdentifierFlags, getContainingFunction, getNodeId, getObjectFlags,
     getOriginalNode, getSymbolId, getSynthesizedDeepClone, getSynthesizedDeepCloneWithReplacements, getTokenAtPosition,
     hasPropertyAccessExpressionWithName, Identifier, idText, isBindingElement, isBlock, isCallExpression, isExpression,
     isFixablePromiseHandler, isFunctionLike, isFunctionLikeDeclaration, isGeneratedIdentifier, isIdentifier, isInJSFile,
     isObjectBindingPattern, isOmittedExpression, isParameter, isPropertyAccessExpression, isReturnStatement,
-    isReturnStatementWithFixablePromiseHandler, isVariableDeclaration, lastOrUndefined, Map, moveRangePastModifiers,
-    Node, NodeFlags, ObjectFlags, PropertyAccessExpression, ReadonlyESMap, ReadonlySet, returnsPromise, ReturnStatement,
-    returnTrue, Set, Signature, SignatureKind, skipTrivia, SourceFile, Statement, Symbol, SyntaxKind, textChanges,
+    isReturnStatementWithFixablePromiseHandler, isVariableDeclaration, lastOrUndefined, moveRangePastModifiers,
+    Node, NodeFlags, ObjectFlags, PropertyAccessExpression, returnsPromise, ReturnStatement,
+    returnTrue, Signature, SignatureKind, skipTrivia, SourceFile, Statement, Symbol, SyntaxKind, textChanges,
     tryCast, TryStatement, Type, TypeChecker, TypeNode, TypeReference, UnionReduction,
 } from "../_namespaces/ts";
 import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
@@ -53,7 +53,7 @@ interface SynthIdentifier {
 
 interface Transformer {
     readonly checker: TypeChecker;
-    readonly synthNamesMap: ESMap<string, SynthIdentifier>; // keys are the symbol id of the identifier
+    readonly synthNamesMap: Map<string, SynthIdentifier>; // keys are the symbol id of the identifier
     readonly setOfExpressionsToReturn: ReadonlySet<number>; // keys are the node ids of the expressions
     readonly isInJSFile: boolean;
 }
@@ -213,7 +213,7 @@ function isPromiseTypedExpression(node: Node, checker: TypeChecker): node is Exp
     This function collects all existing identifier names and names of identifiers that will be created in the refactor.
     It then checks for any collisions and renames them through getSynthesizedDeepClone
 */
-function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: ESMap<string, SynthIdentifier>): FunctionLikeDeclaration {
+function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker: TypeChecker, synthNamesMap: Map<string, SynthIdentifier>): FunctionLikeDeclaration {
     const identsToRenameMap = new Map<string, Identifier>(); // key is the symbol id
     const collidingSymbolMap = createMultiMap<Symbol>();
     forEachChild(nodeToRename, function visit(node: Node) {
@@ -286,7 +286,7 @@ function renameCollidingVarNames(nodeToRename: FunctionLikeDeclaration, checker:
     });
 }
 
-function getNewNameIfConflict(name: Identifier, originalNames: ReadonlyESMap<string, Symbol[]>): SynthIdentifier {
+function getNewNameIfConflict(name: Identifier, originalNames: ReadonlyMap<string, Symbol[]>): SynthIdentifier {
     const numVarsSameName = (originalNames.get(name.text) || emptyArray).length;
     const identifier = numVarsSameName === 0 ? name : factory.createIdentifier(name.text + "_" + numVarsSameName);
     return createSynthIdentifier(identifier);

@@ -89,7 +89,7 @@ Module resolution kind is not specified, using 'Node16'.
 Resolving in ESM mode with conditions 'node', 'import', 'types'.
 File '/src/projects/b/src/package.json' does not exist according to earlier cached lookups.
 File '/src/projects/b/package.json' exists according to earlier cached lookups.
-Loading module 'pg' from 'node_modules' folder, target file type 'TypeScript'.
+Loading module 'pg' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
 Directory '/src/projects/b/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/src/projects/b/node_modules' does not exist, skipping all lookups in it.
 File '/src/projects/node_modules/@types/pg/package.json' exists according to earlier cached lookups.

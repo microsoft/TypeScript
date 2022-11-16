@@ -4,7 +4,7 @@ import {
     Block, BreakOrContinueStatement, CallExpression, CaseBlock, CaseClause, cast, CatchClause, chainBundle,
     ClassDeclaration, ClassElement, ClassExpression, ClassLikeDeclaration, CommaListExpression, ComputedPropertyName,
     concatenate, ConstructorDeclaration, createExpressionForPropertyName, createMemberAccessForPropertyName,
-    createRange, createTokenRange, Debug, Declaration, DoStatement, elementAt, EmitFlags, EmitHint, emptyArray, ESMap,
+    createRange, createTokenRange, Debug, Declaration, DoStatement, elementAt, EmitFlags, EmitHint, emptyArray,
     Expression, ExpressionStatement, ExpressionWithTypeArguments, filter, first, firstOrUndefined, flatMap, flatten,
     flattenDestructuringAssignment, flattenDestructuringBinding, FlattenLevel, ForInStatement, ForOfStatement,
     ForStatement, FunctionBody, FunctionDeclaration, FunctionExpression, FunctionLikeDeclaration,
@@ -22,7 +22,7 @@ import {
     isPrologueDirective, isPropertyDeclaration, isPropertyName, isReturnStatement, isSpreadElement, isStatement,
     isStatic, isSuperProperty, isSwitchStatement, isTryStatement, isVariableDeclarationList, isVariableStatement,
     isWithStatement, IterationStatement, LabeledStatement, last, lastOrUndefined, LeftHandSideExpression,
-    LiteralExpression, map, Map, MetaProperty, MethodDeclaration, ModifierFlags, moveRangeEnd, moveRangePos,
+    LiteralExpression, map, MetaProperty, MethodDeclaration, ModifierFlags, moveRangeEnd, moveRangePos,
     moveSyntheticComments, NamedDeclaration, NewExpression, Node, NodeArray, NodeCheckFlags, NodeFlags,
     nodeIsSynthesized, NumericLiteral, ObjectLiteralElementLike, ObjectLiteralExpression, ParameterDeclaration,
     ParenthesizedExpression, PrimaryExpression, ProcessLevel, processTaggedTemplateExpression, PropertyAssignment,
@@ -108,15 +108,15 @@ interface ConvertedLoopState {
      * set of labels that occurred inside the converted loop
      * used to determine if labeled jump can be emitted as is or it should be dispatched to calling code
      */
-    labels?: ESMap<string, boolean>;
+    labels?: Map<string, boolean>;
     /*
      * collection of labeled jumps that transfer control outside the converted loop.
      * maps store association 'label -> labelMarker' where
      * - label - value of label as it appear in code
      * - label marker - return value that should be interpreted by calling code as 'jump to <label>'
      */
-    labeledNonLocalBreaks?: ESMap<string, string>;
-    labeledNonLocalContinues?: ESMap<string, string>;
+    labeledNonLocalBreaks?: Map<string, string>;
+    labeledNonLocalContinues?: Map<string, string>;
 
     /*
      * set of non-labeled jumps that transfer control outside the converted loop
@@ -3453,7 +3453,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
         }
     }
 
-    function processLabeledJumps(table: ESMap<string, string>, isBreak: boolean, loopResultName: Identifier, outerLoop: ConvertedLoopState | undefined, caseClauses: CaseClause[]): void {
+    function processLabeledJumps(table: Map<string, string>, isBreak: boolean, loopResultName: Identifier, outerLoop: ConvertedLoopState | undefined, caseClauses: CaseClause[]): void {
         if (!table) {
             return;
         }

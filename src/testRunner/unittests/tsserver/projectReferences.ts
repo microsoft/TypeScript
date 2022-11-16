@@ -1,12 +1,14 @@
 import * as ts from "../../_namespaces/ts";
-import { createHostWithSolutionBuild } from "./helpers";
+import { baselineTsserverLogs, checkProjectActualFiles, createHostWithSolutionBuild, createLoggerWithInMemoryLogs, createProjectService, createSession, makeReferenceItem, openFilesForSession, protocolFileLocationFromSubstring, protocolLocationFromSubstring, verifyGetErrRequest } from "./helpers";
+import { createServerHost, File, getTsBuildProjectFile, getTsBuildProjectFilePath, libFile, SymLink } from "../virtualFileSystemWithWatch";
+import { solutionBuildWithBaseline } from "../tscWatch/helpers";
 
 describe("unittests:: tsserver:: with project references and tsbuild", () => {
     describe("with container project", () => {
-        function getProjectFiles(project: string): [ts.projectSystem.File, ts.projectSystem.File] {
+        function getProjectFiles(project: string): [File, File] {
             return [
-                ts.TestFSWithWatch.getTsBuildProjectFile(project, "tsconfig.json"),
-                ts.TestFSWithWatch.getTsBuildProjectFile(project, "index.ts"),
+                getTsBuildProjectFile(project, "tsconfig.json"),
+                getTsBuildProjectFile(project, "index.ts"),
             ];
         }
 
@@ -14,72 +16,72 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
         const containerLib = getProjectFiles("container/lib");
         const containerExec = getProjectFiles("container/exec");
         const containerCompositeExec = getProjectFiles("container/compositeExec");
-        const containerConfig = ts.TestFSWithWatch.getTsBuildProjectFile(project, "tsconfig.json");
-        const files = [ts.projectSystem.libFile, ...containerLib, ...containerExec, ...containerCompositeExec, containerConfig];
+        const containerConfig = getTsBuildProjectFile(project, "tsconfig.json");
+        const files = [libFile, ...containerLib, ...containerExec, ...containerCompositeExec, containerConfig];
 
         it("does not error on container only project", () => {
             const host = createHostWithSolutionBuild(files, [containerConfig.path]);
 
             // Open external project for the folder
-            const session = ts.projectSystem.createSession(host, { logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             const service = session.getProjectService();
             service.openExternalProjects([{
-                projectFileName: ts.TestFSWithWatch.getTsBuildProjectFilePath(project, project),
+                projectFileName: getTsBuildProjectFilePath(project, project),
                 rootFiles: files.map(f => ({ fileName: f.path })),
                 options: {}
             }]);
             files.forEach(f => {
-                const args: ts.projectSystem.protocol.FileRequestArgs = {
+                const args: ts.server.protocol.FileRequestArgs = {
                     file: f.path,
                     projectFileName: ts.endsWith(f.path, "tsconfig.json") ? f.path : undefined
                 };
-                session.executeCommandSeq<ts.projectSystem.protocol.SyntacticDiagnosticsSyncRequest>({
-                    command: ts.projectSystem.protocol.CommandTypes.SyntacticDiagnosticsSync,
+                session.executeCommandSeq<ts.server.protocol.SyntacticDiagnosticsSyncRequest>({
+                    command: ts.server.protocol.CommandTypes.SyntacticDiagnosticsSync,
                     arguments: args
                 });
-                session.executeCommandSeq<ts.projectSystem.protocol.SemanticDiagnosticsSyncRequest>({
-                    command: ts.projectSystem.protocol.CommandTypes.SemanticDiagnosticsSync,
+                session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+                    command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
                     arguments: args
                 });
             });
             const containerProject = service.configuredProjects.get(containerConfig.path)!;
-            session.executeCommandSeq<ts.projectSystem.protocol.CompilerOptionsDiagnosticsRequest>({
-                command: ts.projectSystem.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
+            session.executeCommandSeq<ts.server.protocol.CompilerOptionsDiagnosticsRequest>({
+                command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
                 arguments: { projectFileName: containerProject.projectName }
             });
-            ts.projectSystem.baselineTsserverLogs("projectReferences", `does not error on container only project`, session);
+            baselineTsserverLogs("projectReferences", `does not error on container only project`, session);
         });
 
         it("can successfully find references with --out options", () => {
             const host = createHostWithSolutionBuild(files, [containerConfig.path]);
-            const session = ts.projectSystem.createSession(host, { logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
-            ts.projectSystem.openFilesForSession([containerCompositeExec[1]], session);
-            const myConstStart = ts.projectSystem.protocolLocationFromSubstring(containerCompositeExec[1].content, "myConst");
-            session.executeCommandSeq<ts.projectSystem.protocol.RenameRequest>({
-                command: ts.projectSystem.protocol.CommandTypes.Rename,
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            openFilesForSession([containerCompositeExec[1]], session);
+            const myConstStart = protocolLocationFromSubstring(containerCompositeExec[1].content, "myConst");
+            session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+                command: ts.server.protocol.CommandTypes.Rename,
                 arguments: { file: containerCompositeExec[1].path, ...myConstStart }
             });
 
-            ts.projectSystem.baselineTsserverLogs("projectReferences", `can successfully find references with out option`, session);
+            baselineTsserverLogs("projectReferences", `can successfully find references with out option`, session);
         });
 
         it("ancestor and project ref management", () => {
-            const tempFile: ts.projectSystem.File = {
+            const tempFile: File = {
                 path: `/user/username/projects/temp/temp.ts`,
                 content: "let x = 10"
             };
             const host = createHostWithSolutionBuild(files.concat([tempFile]), [containerConfig.path]);
-            const session = ts.projectSystem.createSession(host, { logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
-            ts.projectSystem.openFilesForSession([containerCompositeExec[1]], session);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            openFilesForSession([containerCompositeExec[1]], session);
             const service = session.getProjectService();
 
             // Open temp file and verify all projects alive
-            ts.projectSystem.openFilesForSession([tempFile], session);
+            openFilesForSession([tempFile], session);
 
             // Ref projects are loaded after as part of this command
-            const locationOfMyConst = ts.projectSystem.protocolLocationFromSubstring(containerCompositeExec[1].content, "myConst");
-            session.executeCommandSeq<ts.projectSystem.protocol.RenameRequest>({
-                command: ts.projectSystem.protocol.CommandTypes.Rename,
+            const locationOfMyConst = protocolLocationFromSubstring(containerCompositeExec[1].content, "myConst");
+            session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+                command: ts.server.protocol.CommandTypes.Rename,
                 arguments: {
                     file: containerCompositeExec[1].path,
                     ...locationOfMyConst
@@ -88,20 +90,20 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
 
             // Open temp file and verify all projects alive
             service.closeClientFile(tempFile.path);
-            ts.projectSystem.openFilesForSession([tempFile], session);
+            openFilesForSession([tempFile], session);
 
             // Close all files and open temp file, only inferred project should be alive
             service.closeClientFile(containerCompositeExec[1].path);
             service.closeClientFile(tempFile.path);
-            ts.projectSystem.openFilesForSession([tempFile], session);
-            ts.projectSystem.baselineTsserverLogs("projectReferences", `ancestor and project ref management`, session);
+            openFilesForSession([tempFile], session);
+            baselineTsserverLogs("projectReferences", `ancestor and project ref management`, session);
         });
     });
 
     describe("when root file is file from referenced project", () => {
         function verify(disableSourceOfProjectReferenceRedirect: boolean) {
             const projectLocation = `/user/username/projects/project`;
-            const commonConfig: ts.projectSystem.File = {
+            const commonConfig: File = {
                 path: `${projectLocation}/src/common/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
@@ -114,12 +116,12 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                     include: ["./**/*"]
                 })
             };
-            const keyboardTs: ts.projectSystem.File = {
+            const keyboardTs: File = {
                 path: `${projectLocation}/src/common/input/keyboard.ts`,
                 content: `function bar() { return "just a random function so .d.ts location doesnt match"; }
 export function evaluateKeyboardEvent() { }`
             };
-            const keyboardTestTs: ts.projectSystem.File = {
+            const keyboardTestTs: File = {
                 path: `${projectLocation}/src/common/input/keyboard.test.ts`,
                 content: `import { evaluateKeyboardEvent } from 'common/input/keyboard';
 function testEvaluateKeyboardEvent() {
@@ -127,7 +129,7 @@ function testEvaluateKeyboardEvent() {
 }
 `
             };
-            const srcConfig: ts.projectSystem.File = {
+            const srcConfig: File = {
                 path: `${projectLocation}/src/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
@@ -147,7 +149,7 @@ function testEvaluateKeyboardEvent() {
                     ]
                 })
             };
-            const terminalTs: ts.projectSystem.File = {
+            const terminalTs: File = {
                 path: `${projectLocation}/src/terminal.ts`,
                 content: `import { evaluateKeyboardEvent } from 'common/input/keyboard';
 function foo() {
@@ -156,28 +158,28 @@ function foo() {
 `
             };
             const host = createHostWithSolutionBuild(
-                [commonConfig, keyboardTs, keyboardTestTs, srcConfig, terminalTs, ts.projectSystem.libFile],
+                [commonConfig, keyboardTs, keyboardTestTs, srcConfig, terminalTs, libFile],
                 [srcConfig.path]
             );
-            const session = ts.projectSystem.createSession(host, { logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
-            ts.projectSystem.openFilesForSession([keyboardTs, terminalTs], session);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            openFilesForSession([keyboardTs, terminalTs], session);
 
             const searchStr = "evaluateKeyboardEvent";
             const importStr = `import { evaluateKeyboardEvent } from 'common/input/keyboard';`;
-            const result = session.executeCommandSeq<ts.projectSystem.protocol.ReferencesRequest>({
-                command: ts.projectSystem.protocol.CommandTypes.References,
-                arguments: ts.projectSystem.protocolFileLocationFromSubstring(keyboardTs, searchStr)
-            }).response as ts.projectSystem.protocol.ReferencesResponseBody;
+            const result = session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+                command: ts.server.protocol.CommandTypes.References,
+                arguments: protocolFileLocationFromSubstring(keyboardTs, searchStr)
+            }).response as ts.server.protocol.ReferencesResponseBody;
             assert.deepEqual(result, {
                 refs: [
-                    ts.projectSystem.makeReferenceItem({
+                    makeReferenceItem({
                         file: keyboardTs,
                         text: searchStr,
                         contextText: `export function evaluateKeyboardEvent() { }`,
                         isDefinition: true,
                         lineText: `export function evaluateKeyboardEvent() { }`
                     }),
-                    ts.projectSystem.makeReferenceItem({
+                    makeReferenceItem({
                         file: keyboardTestTs,
                         text: searchStr,
                         contextText: importStr,
@@ -185,14 +187,14 @@ function foo() {
                         isWriteAccess: true,
                         lineText: importStr
                     }),
-                    ts.projectSystem.makeReferenceItem({
+                    makeReferenceItem({
                         file: keyboardTestTs,
                         text: searchStr,
                         options: { index: 1 },
                         isDefinition: false,
                         lineText: `    return evaluateKeyboardEvent();`
                     }),
-                    ts.projectSystem.makeReferenceItem({
+                    makeReferenceItem({
                         file: terminalTs,
                         text: searchStr,
                         contextText: importStr,
@@ -200,7 +202,7 @@ function foo() {
                         isWriteAccess: true,
                         lineText: importStr
                     }),
-                    ts.projectSystem.makeReferenceItem({
+                    makeReferenceItem({
                         file: terminalTs,
                         text: searchStr,
                         options: { index: 1 },
@@ -209,10 +211,10 @@ function foo() {
                     }),
                 ],
                 symbolName: searchStr,
-                symbolStartOffset: ts.projectSystem.protocolLocationFromSubstring(keyboardTs.content, searchStr).offset,
+                symbolStartOffset: protocolLocationFromSubstring(keyboardTs.content, searchStr).offset,
                 symbolDisplayString: "function evaluateKeyboardEvent(): void"
             });
-            ts.projectSystem.baselineTsserverLogs("projectReferences", `root file is file from referenced project${disableSourceOfProjectReferenceRedirect ? " and using declaration maps" : ""}`, session);
+            baselineTsserverLogs("projectReferences", `root file is file from referenced project${disableSourceOfProjectReferenceRedirect ? " and using declaration maps" : ""}`, session);
         }
 
         it(`when using declaration file maps to navigate between projects`, () => {
@@ -224,8 +226,8 @@ function foo() {
     });
 
     it("reusing d.ts files from composite and non composite projects", () => {
-        const configA: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/compositea/tsconfig.json`,
+        const configA: File = {
+            path: `/user/username/projects/myproject/compositea/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
                     composite: true,
@@ -236,28 +238,28 @@ function foo() {
                 }
             })
         };
-        const aTs: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/compositea/a.ts`,
+        const aTs: File = {
+            path: `/user/username/projects/myproject/compositea/a.ts`,
             content: `import { b } from "@ref/compositeb/b";`
         };
-        const a2Ts: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/compositea/a2.ts`,
+        const a2Ts: File = {
+            path: `/user/username/projects/myproject/compositea/a2.ts`,
             content: `export const x = 10;`
         };
-        const configB: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/compositeb/tsconfig.json`,
+        const configB: File = {
+            path: `/user/username/projects/myproject/compositeb/tsconfig.json`,
             content: configA.content
         };
-        const bTs: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/compositeb/b.ts`,
+        const bTs: File = {
+            path: `/user/username/projects/myproject/compositeb/b.ts`,
             content: "export function b() {}"
         };
-        const bDts: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/dist/compositeb/b.d.ts`,
+        const bDts: File = {
+            path: `/user/username/projects/myproject/dist/compositeb/b.d.ts`,
             content: "export declare function b(): void;"
         };
-        const configC: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/compositec/tsconfig.json`,
+        const configC: File = {
+            path: `/user/username/projects/myproject/compositec/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
                     composite: true,
@@ -269,27 +271,27 @@ function foo() {
                 references: [{ path: "../compositeb" }]
             })
         };
-        const cTs: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/compositec/c.ts`,
+        const cTs: File = {
+            path: `/user/username/projects/myproject/compositec/c.ts`,
             content: aTs.content
         };
-        const files = [ts.projectSystem.libFile, aTs, a2Ts, configA, bDts, bTs, configB, cTs, configC];
-        const host = ts.projectSystem.createServerHost(files);
-        const service = ts.projectSystem.createProjectService(host);
+        const files = [libFile, aTs, a2Ts, configA, bDts, bTs, configB, cTs, configC];
+        const host = createServerHost(files);
+        const service = createProjectService(host);
         service.openClientFile(aTs.path);
         service.checkNumberOfProjects({ configuredProjects: 1 });
 
         // project A referencing b.d.ts without project reference
         const projectA = service.configuredProjects.get(configA.path)!;
         assert.isDefined(projectA);
-        ts.projectSystem.checkProjectActualFiles(projectA, [aTs.path, a2Ts.path, bDts.path, ts.projectSystem.libFile.path, configA.path]);
+        checkProjectActualFiles(projectA, [aTs.path, a2Ts.path, bDts.path, libFile.path, configA.path]);
 
         // reuses b.d.ts but sets the path and resolved path since projectC has project references
         // as the real resolution was to b.ts
         service.openClientFile(cTs.path);
         service.checkNumberOfProjects({ configuredProjects: 2 });
         const projectC = service.configuredProjects.get(configC.path)!;
-        ts.projectSystem.checkProjectActualFiles(projectC, [cTs.path, bTs.path, ts.projectSystem.libFile.path, configC.path]);
+        checkProjectActualFiles(projectC, [cTs.path, bTs.path, libFile.path, configC.path]);
 
         // Now new project for project A tries to reuse b but there is no filesByName mapping for b's source location
         host.writeFile(a2Ts.path, `${a2Ts.content}export const y = 30;`);
@@ -299,11 +301,11 @@ function foo() {
 
     describe("when references are monorepo like with symlinks", () => {
         interface Packages {
-            bPackageJson: ts.projectSystem.File;
-            aTest: ts.projectSystem.File;
-            bFoo: ts.projectSystem.File;
-            bBar: ts.projectSystem.File;
-            bSymlink: ts.projectSystem.SymLink;
+            bPackageJson: File;
+            aTest: File;
+            bFoo: File;
+            bBar: File;
+            bSymlink: SymLink;
         }
         function verifySymlinkScenario(scenario: string, packages: () => Packages) {
             describe(`${scenario}: when solution is not built`, () => {
@@ -330,17 +332,17 @@ function foo() {
         function verifySession(scenario: string, { bPackageJson, aTest, bFoo, bBar, bSymlink }: Packages, alreadyBuilt: boolean, extraOptions: ts.CompilerOptions) {
             const aConfig = config("A", extraOptions, ["../B"]);
             const bConfig = config("B", extraOptions);
-            const files = [ts.projectSystem.libFile, bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink];
+            const files = [libFile, bPackageJson, aConfig, bConfig, aTest, bFoo, bBar, bSymlink];
             const host = alreadyBuilt ?
                 createHostWithSolutionBuild(files, [aConfig.path]) :
-                ts.projectSystem.createServerHost(files);
+                createServerHost(files);
 
             // Create symlink in node module
-            const session = ts.projectSystem.createSession(host, { canUseEvents: true, logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
-            ts.projectSystem.openFilesForSession([aTest], session);
-            ts.projectSystem.verifyGetErrRequest({ session, host, files: [aTest] });
-            session.executeCommandSeq<ts.projectSystem.protocol.UpdateOpenRequest>({
-                command: ts.projectSystem.protocol.CommandTypes.UpdateOpen,
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+            openFilesForSession([aTest], session);
+            verifyGetErrRequest({ session, host, files: [aTest] });
+            session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+                command: ts.server.protocol.CommandTypes.UpdateOpen,
                 arguments: {
                     changedFiles: [{
                         fileName: aTest.path,
@@ -352,13 +354,13 @@ function foo() {
                     }]
                 }
             });
-            ts.projectSystem.verifyGetErrRequest({ session, host, files: [aTest] });
-            ts.projectSystem.baselineTsserverLogs("projectReferences", `monorepo like with symlinks ${scenario} and solution is ${alreadyBuilt ? "built" : "not built"}${extraOptions.preserveSymlinks ? " with preserveSymlinks" : ""}`, session);
+            verifyGetErrRequest({ session, host, files: [aTest] });
+            baselineTsserverLogs("projectReferences", `monorepo like with symlinks ${scenario} and solution is ${alreadyBuilt ? "built" : "not built"}${extraOptions.preserveSymlinks ? " with preserveSymlinks" : ""}`, session);
         }
 
-        function config(packageName: string, extraOptions: ts.CompilerOptions, references?: string[]): ts.projectSystem.File {
+        function config(packageName: string, extraOptions: ts.CompilerOptions, references?: string[]): File {
             return {
-                path: `${ts.tscWatch.projectRoot}/packages/${packageName}/tsconfig.json`,
+                path: `/user/username/projects/myproject/packages/${packageName}/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         outDir: "lib",
@@ -372,9 +374,9 @@ function foo() {
             };
         }
 
-        function file(packageName: string, fileName: string, content: string): ts.projectSystem.File {
+        function file(packageName: string, fileName: string, content: string): File {
             return {
-                path: `${ts.tscWatch.projectRoot}/packages/${packageName}/src/${fileName}`,
+                path: `/user/username/projects/myproject/packages/${packageName}/src/${fileName}`,
                 content
             };
         }
@@ -382,7 +384,7 @@ function foo() {
         function verifyMonoRepoLike(scope = "") {
             verifySymlinkScenario(`when packageJson has types field and has index.ts${scope ? " with scoped package" : ""}`, () => ({
                 bPackageJson: {
-                    path: `${ts.tscWatch.projectRoot}/packages/B/package.json`,
+                    path: `/user/username/projects/myproject/packages/B/package.json`,
                     content: JSON.stringify({
                         main: "lib/index.js",
                         types: "lib/index.d.ts"
@@ -396,14 +398,14 @@ bar();
                 bFoo: file("B", "index.ts", `export function foo() { }`),
                 bBar: file("B", "bar.ts", `export function bar() { }`),
                 bSymlink: {
-                    path: `${ts.tscWatch.projectRoot}/node_modules/${scope}b`,
-                    symLink: `${ts.tscWatch.projectRoot}/packages/B`
+                    path: `/user/username/projects/myproject/node_modules/${scope}b`,
+                    symLink: `/user/username/projects/myproject/packages/B`
                 }
             }));
 
             verifySymlinkScenario(`when referencing file from subFolder${scope ? " with scoped package" : ""}`, () => ({
                 bPackageJson: {
-                    path: `${ts.tscWatch.projectRoot}/packages/B/package.json`,
+                    path: `/user/username/projects/myproject/packages/B/package.json`,
                     content: "{}"
                 },
                 aTest: file("A", "test.ts", `import { foo } from '${scope}b/lib/foo';
@@ -414,8 +416,8 @@ bar();
                 bFoo: file("B", "foo.ts", `export function foo() { }`),
                 bBar: file("B", "bar/foo.ts", `export function bar() { }`),
                 bSymlink: {
-                    path: `${ts.tscWatch.projectRoot}/node_modules/${scope}b`,
-                    symLink: `${ts.tscWatch.projectRoot}/packages/B`
+                    path: `/user/username/projects/myproject/node_modules/${scope}b`,
+                    symLink: `/user/username/projects/myproject/packages/B`
                 }
             }));
         }
@@ -429,8 +431,8 @@ bar();
     });
 
     it("when the referenced projects have allowJs and emitDeclarationOnly", () => {
-        const compositeConfig: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/packages/emit-composite/tsconfig.json`,
+        const compositeConfig: File = {
+            path: `/user/username/projects/myproject/packages/emit-composite/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
                     composite: true,
@@ -442,8 +444,8 @@ bar();
                 include: ["src"]
             })
         };
-        const compositePackageJson: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/packages/emit-composite/package.json`,
+        const compositePackageJson: File = {
+            path: `/user/username/projects/myproject/packages/emit-composite/package.json`,
             content: JSON.stringify({
                 name: "emit-composite",
                 version: "1.0.0",
@@ -451,15 +453,15 @@ bar();
                 typings: "lib/index.d.ts"
             })
         };
-        const compositeIndex: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/packages/emit-composite/src/index.js`,
+        const compositeIndex: File = {
+            path: `/user/username/projects/myproject/packages/emit-composite/src/index.js`,
             content: `const testModule = require('./testModule');
 module.exports = {
     ...testModule
 }`
         };
-        const compositeTestModule: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/packages/emit-composite/src/testModule.js`,
+        const compositeTestModule: File = {
+            path: `/user/username/projects/myproject/packages/emit-composite/src/testModule.js`,
             content: `/**
  * @param {string} arg
  */
@@ -469,33 +471,33 @@ module.exports = {
     testCompositeFunction
 }`
         };
-        const consumerConfig: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/packages/consumer/tsconfig.json`,
+        const consumerConfig: File = {
+            path: `/user/username/projects/myproject/packages/consumer/tsconfig.json`,
             content: JSON.stringify({
                 include: ["src"],
                 references: [{ path: "../emit-composite" }]
             })
         };
-        const consumerIndex: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/packages/consumer/src/index.ts`,
+        const consumerIndex: File = {
+            path: `/user/username/projects/myproject/packages/consumer/src/index.ts`,
             content: `import { testCompositeFunction } from 'emit-composite';
 testCompositeFunction('why hello there');
 testCompositeFunction('why hello there', 42);`
         };
-        const symlink: ts.projectSystem.SymLink = {
-            path: `${ts.tscWatch.projectRoot}/node_modules/emit-composite`,
-            symLink: `${ts.tscWatch.projectRoot}/packages/emit-composite`
+        const symlink: SymLink = {
+            path: `/user/username/projects/myproject/node_modules/emit-composite`,
+            symLink: `/user/username/projects/myproject/packages/emit-composite`
         };
-        const host = ts.projectSystem.createServerHost([ts.projectSystem.libFile, compositeConfig, compositePackageJson, compositeIndex, compositeTestModule, consumerConfig, consumerIndex, symlink], { useCaseSensitiveFileNames: true });
-        const session = ts.projectSystem.createSession(host, { canUseEvents: true, logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
-        ts.projectSystem.openFilesForSession([consumerIndex], session);
-        ts.projectSystem.verifyGetErrRequest({ host, session, files: [consumerIndex] });
-        ts.projectSystem.baselineTsserverLogs("projectReferences", `when the referenced projects have allowJs and emitDeclarationOnly`, session);
+        const host = createServerHost([libFile, compositeConfig, compositePackageJson, compositeIndex, compositeTestModule, consumerConfig, consumerIndex, symlink], { useCaseSensitiveFileNames: true });
+        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([consumerIndex], session);
+        verifyGetErrRequest({ host, session, files: [consumerIndex] });
+        baselineTsserverLogs("projectReferences", `when the referenced projects have allowJs and emitDeclarationOnly`, session);
     });
 
     it("when finding local reference doesnt load ancestor/sibling projects", () => {
         const solutionLocation = "/user/username/projects/solution";
-        const solution: ts.projectSystem.File = {
+        const solution: File = {
             path: `${solutionLocation}/tsconfig.json`,
             content: JSON.stringify({
                 files: [],
@@ -506,7 +508,7 @@ testCompositeFunction('why hello there', 42);`
                 ]
             })
         };
-        const compilerConfig: ts.projectSystem.File = {
+        const compilerConfig: File = {
             path: `${solutionLocation}/compiler/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
@@ -516,7 +518,7 @@ testCompositeFunction('why hello there', 42);`
                 files: ["./types.ts", "./program.ts"]
             })
         };
-        const typesFile: ts.projectSystem.File = {
+        const typesFile: File = {
             path: `${solutionLocation}/compiler/types.ts`,
             content: `
                 namespace ts {
@@ -525,7 +527,7 @@ testCompositeFunction('why hello there', 42);`
                     }
                 }`
         };
-        const programFile: ts.projectSystem.File = {
+        const programFile: File = {
             path: `${solutionLocation}/compiler/program.ts`,
             content: `
                 namespace ts {
@@ -535,7 +537,7 @@ testCompositeFunction('why hello there', 42);`
                     function getSourceFile() { return "something"; }
                 }`
         };
-        const servicesConfig: ts.projectSystem.File = {
+        const servicesConfig: File = {
             path: `${solutionLocation}/services/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
@@ -547,7 +549,7 @@ testCompositeFunction('why hello there', 42);`
                 ]
             })
         };
-        const servicesFile: ts.projectSystem.File = {
+        const servicesFile: File = {
             path: `${solutionLocation}/services/services.ts`,
             content: `
                 namespace ts {
@@ -555,30 +557,30 @@ testCompositeFunction('why hello there', 42);`
                 }`
         };
 
-        const files = [ts.projectSystem.libFile, solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile, ts.projectSystem.libFile];
-        const host = ts.projectSystem.createServerHost(files);
-        const session = ts.projectSystem.createSession(host, { logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
-        ts.projectSystem.openFilesForSession([programFile], session);
+        const files = [libFile, solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile, libFile];
+        const host = createServerHost(files);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([programFile], session);
 
         // Find all references for getSourceFile
         // Shouldnt load more projects
-        session.executeCommandSeq<ts.projectSystem.protocol.ReferencesRequest>({
-            command: ts.projectSystem.protocol.CommandTypes.References,
-            arguments: ts.projectSystem.protocolFileLocationFromSubstring(programFile, "getSourceFile", { index: 1 })
+        session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+            command: ts.server.protocol.CommandTypes.References,
+            arguments: protocolFileLocationFromSubstring(programFile, "getSourceFile", { index: 1 })
         });
 
         // Find all references for getSourceFiles
         // Should load more projects
-        session.executeCommandSeq<ts.projectSystem.protocol.ReferencesRequest>({
-            command: ts.projectSystem.protocol.CommandTypes.References,
-            arguments: ts.projectSystem.protocolFileLocationFromSubstring(programFile, "getSourceFiles")
+        session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+            command: ts.server.protocol.CommandTypes.References,
+            arguments: protocolFileLocationFromSubstring(programFile, "getSourceFiles")
         });
-        ts.projectSystem.baselineTsserverLogs("projectReferences", `finding local reference doesnt load ancestor/sibling projects`, session);
+        baselineTsserverLogs("projectReferences", `finding local reference doesnt load ancestor/sibling projects`, session);
     });
 
     it("when finding references in overlapping projects", () => {
         const solutionLocation = "/user/username/projects/solution";
-        const solutionConfig: ts.projectSystem.File = {
+        const solutionConfig: File = {
             path: `${solutionLocation}/tsconfig.json`,
             content: JSON.stringify({
                 files: [],
@@ -591,7 +593,7 @@ testCompositeFunction('why hello there', 42);`
                 ]
             })
         };
-        const aConfig: ts.projectSystem.File = {
+        const aConfig: File = {
             path: `${solutionLocation}/a/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
@@ -601,7 +603,7 @@ testCompositeFunction('why hello there', 42);`
                 files: ["./index.ts"]
             })
         };
-        const aFile: ts.projectSystem.File = {
+        const aFile: File = {
             path: `${solutionLocation}/a/index.ts`,
             content: `
                 export interface I {
@@ -609,7 +611,7 @@ testCompositeFunction('why hello there', 42);`
                 }`
         };
 
-        const bConfig: ts.projectSystem.File = {
+        const bConfig: File = {
             path: `${solutionLocation}/b/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
@@ -621,7 +623,7 @@ testCompositeFunction('why hello there', 42);`
                 ]
             })
         };
-        const bFile: ts.projectSystem.File = {
+        const bFile: File = {
             path: `${solutionLocation}/b/index.ts`,
             content: `
                 import { I } from "../a";
@@ -631,7 +633,7 @@ testCompositeFunction('why hello there', 42);`
                 }`
         };
 
-        const cConfig: ts.projectSystem.File = {
+        const cConfig: File = {
             path: `${solutionLocation}/c/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
@@ -643,7 +645,7 @@ testCompositeFunction('why hello there', 42);`
                 ]
             })
         };
-        const cFile: ts.projectSystem.File = {
+        const cFile: File = {
             path: `${solutionLocation}/c/index.ts`,
             content: `
                 import { I } from "../a";
@@ -653,7 +655,7 @@ testCompositeFunction('why hello there', 42);`
                 `
         };
 
-        const dConfig: ts.projectSystem.File = {
+        const dConfig: File = {
             path: `${solutionLocation}/d/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
@@ -665,7 +667,7 @@ testCompositeFunction('why hello there', 42);`
                 ]
             })
         };
-        const dFile: ts.projectSystem.File = {
+        const dFile: File = {
             path: `${solutionLocation}/d/index.ts`,
             content: `
                 import { I } from "../a";
@@ -675,32 +677,32 @@ testCompositeFunction('why hello there', 42);`
                 `
         };
 
-        const files = [ts.projectSystem.libFile, solutionConfig, aConfig, aFile, bConfig, bFile, cConfig, cFile, dConfig, dFile, ts.projectSystem.libFile];
-        const host = ts.projectSystem.createServerHost(files);
-        const session = ts.projectSystem.createSession(host, { logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
-        ts.projectSystem.openFilesForSession([bFile], session);
+        const files = [libFile, solutionConfig, aConfig, aFile, bConfig, bFile, cConfig, cFile, dConfig, dFile, libFile];
+        const host = createServerHost(files);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([bFile], session);
 
         // The first search will trigger project loads
-        session.executeCommandSeq<ts.projectSystem.protocol.ReferencesRequest>({
-            command: ts.projectSystem.protocol.CommandTypes.References,
-            arguments: ts.projectSystem.protocolFileLocationFromSubstring(bFile, "I", { index: 1 })
+        session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+            command: ts.server.protocol.CommandTypes.References,
+            arguments: protocolFileLocationFromSubstring(bFile, "I", { index: 1 })
         });
 
         // The second search starts with the projects already loaded
         // Formerly, this would search some projects multiple times
-        session.executeCommandSeq<ts.projectSystem.protocol.ReferencesRequest>({
-            command: ts.projectSystem.protocol.CommandTypes.References,
-            arguments: ts.projectSystem.protocolFileLocationFromSubstring(bFile, "I", { index: 1 })
+        session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+            command: ts.server.protocol.CommandTypes.References,
+            arguments: protocolFileLocationFromSubstring(bFile, "I", { index: 1 })
         });
 
-        ts.projectSystem.baselineTsserverLogs("projectReferences", `finding references in overlapping projects`, session);
+        baselineTsserverLogs("projectReferences", `finding references in overlapping projects`, session);
     });
 
     describe("special handling of localness of the definitions for findAllRefs", () => {
         function verify(scenario: string, definition: string, usage: string, referenceTerm: string) {
             it(scenario, () => {
                 const solutionLocation = "/user/username/projects/solution";
-                const solution: ts.projectSystem.File = {
+                const solution: File = {
                     path: `${solutionLocation}/tsconfig.json`,
                     content: JSON.stringify({
                         files: [],
@@ -710,7 +712,7 @@ testCompositeFunction('why hello there', 42);`
                         ]
                     })
                 };
-                const apiConfig: ts.projectSystem.File = {
+                const apiConfig: File = {
                     path: `${solutionLocation}/api/tsconfig.json`,
                     content: JSON.stringify({
                         compilerOptions: {
@@ -722,20 +724,20 @@ testCompositeFunction('why hello there', 42);`
                         references: [{ path: "../shared" }]
                     })
                 };
-                const apiFile: ts.projectSystem.File = {
+                const apiFile: File = {
                     path: `${solutionLocation}/api/src/server.ts`,
                     content: `import * as shared from "../../shared/dist";
 ${usage}`
                 };
-                const appConfig: ts.projectSystem.File = {
+                const appConfig: File = {
                     path: `${solutionLocation}/app/tsconfig.json`,
                     content: apiConfig.content
                 };
-                const appFile: ts.projectSystem.File = {
+                const appFile: File = {
                     path: `${solutionLocation}/app/src/app.ts`,
                     content: apiFile.content
                 };
-                const sharedConfig: ts.projectSystem.File = {
+                const sharedConfig: File = {
                     path: `${solutionLocation}/shared/tsconfig.json`,
                     content: JSON.stringify({
                         compilerOptions: {
@@ -746,21 +748,21 @@ ${usage}`
                         include: ["src"]
                     })
                 };
-                const sharedFile: ts.projectSystem.File = {
+                const sharedFile: File = {
                     path: `${solutionLocation}/shared/src/index.ts`,
                     content: definition
                 };
-                const host = ts.projectSystem.createServerHost([ts.projectSystem.libFile, solution, ts.projectSystem.libFile, apiConfig, apiFile, appConfig, appFile, sharedConfig, sharedFile]);
-                const session = ts.projectSystem.createSession(host, { logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
-                ts.projectSystem.openFilesForSession([apiFile], session);
+                const host = createServerHost([libFile, solution, libFile, apiConfig, apiFile, appConfig, appFile, sharedConfig, sharedFile]);
+                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                openFilesForSession([apiFile], session);
 
                 // Find all references
-                session.executeCommandSeq<ts.projectSystem.protocol.ReferencesRequest>({
-                    command: ts.projectSystem.protocol.CommandTypes.References,
-                    arguments: ts.projectSystem.protocolFileLocationFromSubstring(apiFile, referenceTerm)
+                session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+                    command: ts.server.protocol.CommandTypes.References,
+                    arguments: protocolFileLocationFromSubstring(apiFile, referenceTerm)
                 });
 
-                ts.projectSystem.baselineTsserverLogs("projectReferences", `special handling of localness ${scenario}`, session);
+                baselineTsserverLogs("projectReferences", `special handling of localness ${scenario}`, session);
             });
         }
 
@@ -806,7 +808,7 @@ export const foo = local;`,
 
     it("when disableSolutionSearching is true, solution and siblings are not loaded", () => {
         const solutionLocation = "/user/username/projects/solution";
-        const solution: ts.projectSystem.File = {
+        const solution: File = {
             path: `${solutionLocation}/tsconfig.json`,
             content: JSON.stringify({
                 files: [],
@@ -817,7 +819,7 @@ export const foo = local;`,
                 ]
             })
         };
-        const compilerConfig: ts.projectSystem.File = {
+        const compilerConfig: File = {
             path: `${solutionLocation}/compiler/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
@@ -828,7 +830,7 @@ export const foo = local;`,
                 files: ["./types.ts", "./program.ts"]
             })
         };
-        const typesFile: ts.projectSystem.File = {
+        const typesFile: File = {
             path: `${solutionLocation}/compiler/types.ts`,
             content: `
                 namespace ts {
@@ -837,7 +839,7 @@ export const foo = local;`,
                     }
                 }`
         };
-        const programFile: ts.projectSystem.File = {
+        const programFile: File = {
             path: `${solutionLocation}/compiler/program.ts`,
             content: `
                 namespace ts {
@@ -847,7 +849,7 @@ export const foo = local;`,
                     function getSourceFile() { return "something"; }
                 }`
         };
-        const servicesConfig: ts.projectSystem.File = {
+        const servicesConfig: File = {
             path: `${solutionLocation}/services/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
@@ -859,7 +861,7 @@ export const foo = local;`,
                 ]
             })
         };
-        const servicesFile: ts.projectSystem.File = {
+        const servicesFile: File = {
             path: `${solutionLocation}/services/services.ts`,
             content: `
                 namespace ts {
@@ -867,18 +869,18 @@ export const foo = local;`,
                 }`
         };
 
-        const files = [ts.projectSystem.libFile, solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile, ts.projectSystem.libFile];
-        const host = ts.projectSystem.createServerHost(files);
-        const session = ts.projectSystem.createSession(host, { logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
-        ts.projectSystem.openFilesForSession([programFile], session);
+        const files = [libFile, solution, compilerConfig, typesFile, programFile, servicesConfig, servicesFile, libFile];
+        const host = createServerHost(files);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([programFile], session);
 
         // Find all references
         // No new solutions/projects loaded
-        session.executeCommandSeq<ts.projectSystem.protocol.ReferencesRequest>({
-            command: ts.projectSystem.protocol.CommandTypes.References,
-            arguments: ts.projectSystem.protocolFileLocationFromSubstring(programFile, "getSourceFiles")
+        session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+            command: ts.server.protocol.CommandTypes.References,
+            arguments: protocolFileLocationFromSubstring(programFile, "getSourceFiles")
         });
-        ts.projectSystem.baselineTsserverLogs("projectReferences", `with disableSolutionSearching solution and siblings are not loaded`, session);
+        baselineTsserverLogs("projectReferences", `with disableSolutionSearching solution and siblings are not loaded`, session);
     });
 
     describe("when default project is solution project", () => {
@@ -887,55 +889,55 @@ export const foo = local;`,
             solutionOptions?: ts.CompilerOptions;
             solutionFiles?: string[];
             configRefs: string[];
-            additionalFiles: readonly ts.projectSystem.File[];
+            additionalFiles: readonly File[];
         }
-        const main: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/src/main.ts`,
+        const main: File = {
+            path: `/user/username/projects/myproject/src/main.ts`,
             content: `import { foo } from 'helpers/functions';
 export { foo };`
         };
-        const helper: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/src/helpers/functions.ts`,
+        const helper: File = {
+            path: `/user/username/projects/myproject/src/helpers/functions.ts`,
             content: `export const foo = 1;`
         };
-        const mainDts: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/target/src/main.d.ts`,
+        const mainDts: File = {
+            path: `/user/username/projects/myproject/target/src/main.d.ts`,
             content: `import { foo } from 'helpers/functions';
 export { foo };
 //# sourceMappingURL=main.d.ts.map`
         };
-        const mainDtsMap: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/target/src/main.d.ts.map`,
+        const mainDtsMap: File = {
+            path: `/user/username/projects/myproject/target/src/main.d.ts.map`,
             content: `{"version":3,"file":"main.d.ts","sourceRoot":"","sources":["../../src/main.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,GAAG,EAAE,MAAM,mBAAmB,CAAC;AAExC,OAAO,EAAC,GAAG,EAAC,CAAC"}`
         };
-        const helperDts: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/target/src/helpers/functions.d.ts`,
+        const helperDts: File = {
+            path: `/user/username/projects/myproject/target/src/helpers/functions.d.ts`,
             content: `export declare const foo = 1;
 //# sourceMappingURL=functions.d.ts.map`
         };
-        const helperDtsMap: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/target/src/helpers/functions.d.ts.map`,
+        const helperDtsMap: File = {
+            path: `/user/username/projects/myproject/target/src/helpers/functions.d.ts.map`,
             content: `{"version":3,"file":"functions.d.ts","sourceRoot":"","sources":["../../../src/helpers/functions.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,GAAG,IAAI,CAAC"}`
         };
-        const tsconfigIndirect3: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/indirect3/tsconfig.json`,
+        const tsconfigIndirect3: File = {
+            path: `/user/username/projects/myproject/indirect3/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
                     baseUrl: "../target/src/"
                 },
             })
         };
-        const fileResolvingToMainDts: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/indirect3/main.ts`,
+        const fileResolvingToMainDts: File = {
+            path: `/user/username/projects/myproject/indirect3/main.ts`,
             content: `import { foo } from 'main';
 foo;
 export function bar() {}`
         };
-        const tsconfigSrcPath = `${ts.tscWatch.projectRoot}/tsconfig-src.json`;
-        const tsconfigPath = `${ts.tscWatch.projectRoot}/tsconfig.json`;
+        const tsconfigSrcPath = `/user/username/projects/myproject/tsconfig-src.json`;
+        const tsconfigPath = `/user/username/projects/myproject/tsconfig.json`;
         const dummyFilePath = "/dummy/dummy.ts";
         function setup({ solutionFiles, solutionOptions, configRefs, additionalFiles }: Setup) {
-            const tsconfigSrc: ts.projectSystem.File = {
+            const tsconfigSrc: File = {
                 path: tsconfigSrcPath,
                 content: JSON.stringify({
                     compilerOptions: {
@@ -946,7 +948,7 @@ export function bar() {}`
                     include: ["./src/**/*"]
                 })
             };
-            const tsconfig: ts.projectSystem.File = {
+            const tsconfig: File = {
                 path: tsconfigPath,
                 content: JSON.stringify({
                     ... (solutionOptions ? { compilerOptions: solutionOptions } : {}),
@@ -954,17 +956,17 @@ export function bar() {}`
                     files: solutionFiles || []
                 })
             };
-            const dummyFile: ts.projectSystem.File = {
+            const dummyFile: File = {
                 path: dummyFilePath,
                 content: "let a = 10;"
             };
-            const host = ts.projectSystem.createServerHost([
+            const host = createServerHost([
                 tsconfigSrc, tsconfig, main, helper,
-                ts.projectSystem.libFile, dummyFile,
+                libFile, dummyFile,
                 mainDts, mainDtsMap, helperDts, helperDtsMap,
                 tsconfigIndirect3, fileResolvingToMainDts,
                 ...additionalFiles]);
-            const session = ts.projectSystem.createSession(host, { canUseEvents: true, logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
+            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
             const service = session.getProjectService();
             service.openClientFile(main.path);
             return { session, service, host };
@@ -980,7 +982,7 @@ export function bar() {}`
             session.logger.endGroup();
 
             // Verify errors
-            ts.projectSystem.verifyGetErrRequest({ session, host, files: [main] });
+            verifyGetErrRequest({ session, host, files: [main] });
 
             // Verify collection of script infos
             service.openClientFile(dummyFilePath);
@@ -997,10 +999,10 @@ export function bar() {}`
             service.reloadProjects();
 
             // Find all refs
-            session.executeCommandSeq<ts.projectSystem.protocol.ReferencesRequest>({
-                command: ts.projectSystem.protocol.CommandTypes.References,
-                arguments: ts.projectSystem.protocolFileLocationFromSubstring(main, "foo", { index: 1 })
-            }).response as ts.projectSystem.protocol.ReferencesResponseBody;
+            session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+                command: ts.server.protocol.CommandTypes.References,
+                arguments: protocolFileLocationFromSubstring(main, "foo", { index: 1 })
+            }).response as ts.server.protocol.ReferencesResponseBody;
 
             service.closeClientFile(main.path);
             service.closeClientFile(dummyFilePath);
@@ -1009,16 +1011,16 @@ export function bar() {}`
             service.openClientFile(fileResolvingToMainDts.path);
 
             // Find all refs from dts include
-            session.executeCommandSeq<ts.projectSystem.protocol.ReferencesRequest>({
-                command: ts.projectSystem.protocol.CommandTypes.References,
-                arguments: ts.projectSystem.protocolFileLocationFromSubstring(fileResolvingToMainDts, "foo")
-            }).response as ts.projectSystem.protocol.ReferencesResponseBody;
-            ts.projectSystem.baselineTsserverLogs("projectReferences", input.scenario, session);
+            session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+                command: ts.server.protocol.CommandTypes.References,
+                arguments: protocolFileLocationFromSubstring(fileResolvingToMainDts, "foo")
+            }).response as ts.server.protocol.ReferencesResponseBody;
+            baselineTsserverLogs("projectReferences", input.scenario, session);
         }
 
         function getIndirectProject(postfix: string, optionsToExtend?: ts.CompilerOptions) {
-            const tsconfigIndirect: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig-indirect${postfix}.json`,
+            const tsconfigIndirect: File = {
+                path: `/user/username/projects/myproject/tsconfig-indirect${postfix}.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         composite: true,
@@ -1030,8 +1032,8 @@ export function bar() {}`
                     references: [{ path: "./tsconfig-src.json" }]
                 })
             };
-            const indirect: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/indirect${postfix}/main.ts`,
+            const indirect: File = {
+                path: `/user/username/projects/myproject/indirect${postfix}/main.ts`,
                 content: fileResolvingToMainDts.content
             };
             return { tsconfigIndirect, indirect };
@@ -1057,7 +1059,7 @@ export function bar() {}`
 
             // Verify Reload projects
             service.reloadProjects();
-            ts.projectSystem.baselineTsserverLogs("projectReferences", input.scenario, session);
+            baselineTsserverLogs("projectReferences", input.scenario, session);
         }
 
         it("when project is directly referenced by solution", () => {
@@ -1108,8 +1110,8 @@ export function bar() {}`
 
         describe("when solution is project that contains its own files", () => {
             it("when the project found is not solution but references open file through project reference", () => {
-                const ownMain: ts.projectSystem.File = {
-                    path: `${ts.tscWatch.projectRoot}/own/main.ts`,
+                const ownMain: File = {
+                    path: `/user/username/projects/myproject/own/main.ts`,
                     content: fileResolvingToMainDts.content
                 };
                 verifySolutionScenario({
@@ -1125,8 +1127,8 @@ export function bar() {}`
             });
 
             it("when project is indirectly referenced by solution", () => {
-                const ownMain: ts.projectSystem.File = {
-                    path: `${ts.tscWatch.projectRoot}/own/main.ts`,
+                const ownMain: File = {
+                    path: `/user/username/projects/myproject/own/main.ts`,
                     content: `import { bar } from 'main';
 bar;`
                 };
@@ -1145,8 +1147,8 @@ bar;`
             });
 
             it("disables looking into the child project if disableReferencedProjectLoad is set", () => {
-                const ownMain: ts.projectSystem.File = {
-                    path: `${ts.tscWatch.projectRoot}/own/main.ts`,
+                const ownMain: File = {
+                    path: `/user/username/projects/myproject/own/main.ts`,
                     content: fileResolvingToMainDts.content
                 };
                 verifyDisableReferencedProjectLoad({
@@ -1163,8 +1165,8 @@ bar;`
             });
 
             it("disables looking into the child project if disableReferencedProjectLoad is set in indirect project", () => {
-                const ownMain: ts.projectSystem.File = {
-                    path: `${ts.tscWatch.projectRoot}/own/main.ts`,
+                const ownMain: File = {
+                    path: `/user/username/projects/myproject/own/main.ts`,
                     content: `import { bar } from 'main';
 bar;`
                 };
@@ -1182,8 +1184,8 @@ bar;`
             });
 
             it("disables looking into the child project if disableReferencedProjectLoad is set in first indirect project but not in another one", () => {
-                const ownMain: ts.projectSystem.File = {
-                    path: `${ts.tscWatch.projectRoot}/own/main.ts`,
+                const ownMain: File = {
+                    path: `/user/username/projects/myproject/own/main.ts`,
                     content: `import { bar } from 'main';
 bar;`
                 };
@@ -1205,8 +1207,8 @@ bar;`
 
     describe("when new file is added to the referenced project", () => {
         function setup(extendOptionsProject2?: ts.CompilerOptions) {
-            const config1: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/projects/project1/tsconfig.json`,
+            const config1: File = {
+                path: `/user/username/projects/myproject/projects/project1/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         module: "none",
@@ -1215,16 +1217,16 @@ bar;`
                     exclude: ["temp"]
                 })
             };
-            const class1: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/projects/project1/class1.ts`,
+            const class1: File = {
+                path: `/user/username/projects/myproject/projects/project1/class1.ts`,
                 content: `class class1 {}`
             };
-            const class1Dts: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/projects/project1/class1.d.ts`,
+            const class1Dts: File = {
+                path: `/user/username/projects/myproject/projects/project1/class1.d.ts`,
                 content: `declare class class1 {}`
             };
-            const config2: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/projects/project2/tsconfig.json`,
+            const config2: File = {
+                path: `/user/username/projects/myproject/projects/project2/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         module: "none",
@@ -1236,13 +1238,13 @@ bar;`
                     ]
                 })
             };
-            const class2: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/projects/project2/class2.ts`,
+            const class2: File = {
+                path: `/user/username/projects/myproject/projects/project2/class2.ts`,
                 content: `class class2 {}`
             };
-            const host = ts.projectSystem.createServerHost([config1, class1, class1Dts, config2, class2, ts.projectSystem.libFile]);
-            const session = ts.projectSystem.createSession(host, { logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
-            ts.projectSystem.openFilesForSession([class2], session);
+            const host = createServerHost([config1, class1, class1Dts, config2, class2, libFile]);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            openFilesForSession([class2], session);
             return { host, session, class1 };
         }
 
@@ -1250,52 +1252,52 @@ bar;`
             const { host, session } = setup();
 
             // Add new class to referenced project
-            const class3 = `${ts.tscWatch.projectRoot}/projects/project1/class3.ts`;
+            const class3 = `/user/username/projects/myproject/projects/project1/class3.ts`;
             host.writeFile(class3, `class class3 {}`);
             host.checkTimeoutQueueLengthAndRun(2);
 
             // Add excluded file to referenced project
-            host.ensureFileOrFolder({ path: `${ts.tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            host.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
             host.checkTimeoutQueueLengthAndRun(0);
 
             // Add output from new class to referenced project
-            const class3Dts = `${ts.tscWatch.projectRoot}/projects/project1/class3.d.ts`;
+            const class3Dts = `/user/username/projects/myproject/projects/project1/class3.d.ts`;
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.checkTimeoutQueueLengthAndRun(0);
-            ts.projectSystem.baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is not open`, session);
+            baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is not open`, session);
         });
 
         it("when referenced project is open", () => {
             const { host, session, class1 } = setup();
-            ts.projectSystem.openFilesForSession([class1], session);
+            openFilesForSession([class1], session);
 
             // Add new class to referenced project
-            const class3 = `${ts.tscWatch.projectRoot}/projects/project1/class3.ts`;
+            const class3 = `/user/username/projects/myproject/projects/project1/class3.ts`;
             host.writeFile(class3, `class class3 {}`);
             host.checkTimeoutQueueLengthAndRun(3);
             // Add excluded file to referenced project
-            host.ensureFileOrFolder({ path: `${ts.tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            host.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
             host.checkTimeoutQueueLengthAndRun(0);
             // Add output from new class to referenced project
-            const class3Dts = `${ts.tscWatch.projectRoot}/projects/project1/class3.d.ts`;
+            const class3Dts = `/user/username/projects/myproject/projects/project1/class3.d.ts`;
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.checkTimeoutQueueLengthAndRun(0);
-            ts.projectSystem.baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is open`, session);
+            baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is open`, session);
         });
 
         it("when referenced project is not open with disableSourceOfProjectReferenceRedirect", () => {
             const { host, session } = setup({ disableSourceOfProjectReferenceRedirect: true });
 
             // Add new class to referenced project
-            const class3 = `${ts.tscWatch.projectRoot}/projects/project1/class3.ts`;
+            const class3 = `/user/username/projects/myproject/projects/project1/class3.ts`;
             host.writeFile(class3, `class class3 {}`);
             host.checkTimeoutQueueLengthAndRun(2);
             // Add output of new class to referenced project
-            const class3Dts = `${ts.tscWatch.projectRoot}/projects/project1/class3.d.ts`;
+            const class3Dts = `/user/username/projects/myproject/projects/project1/class3.d.ts`;
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.checkTimeoutQueueLengthAndRun(2);
             // Add excluded file to referenced project
-            host.ensureFileOrFolder({ path: `${ts.tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            host.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
             host.checkTimeoutQueueLengthAndRun(0);
             // Delete output from new class to referenced project
             host.deleteFile(class3Dts);
@@ -1303,23 +1305,23 @@ bar;`
             // Write back output of new class to referenced project
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.checkTimeoutQueueLengthAndRun(2);
-            ts.projectSystem.baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is not open with disableSourceOfProjectReferenceRedirect`, session);
+            baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is not open with disableSourceOfProjectReferenceRedirect`, session);
         });
 
         it("when referenced project is open with disableSourceOfProjectReferenceRedirect", () => {
             const { host, session, class1 } = setup({ disableSourceOfProjectReferenceRedirect: true });
-            ts.projectSystem.openFilesForSession([class1], session);
+            openFilesForSession([class1], session);
 
             // Add new class to referenced project
-            const class3 = `${ts.tscWatch.projectRoot}/projects/project1/class3.ts`;
+            const class3 = `/user/username/projects/myproject/projects/project1/class3.ts`;
             host.writeFile(class3, `class class3 {}`);
             host.checkTimeoutQueueLengthAndRun(3);
             // Add output of new class to referenced project
-            const class3Dts = `${ts.tscWatch.projectRoot}/projects/project1/class3.d.ts`;
+            const class3Dts = `/user/username/projects/myproject/projects/project1/class3.d.ts`;
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.checkTimeoutQueueLengthAndRun(2);
             // Add excluded file to referenced project
-            host.ensureFileOrFolder({ path: `${ts.tscWatch.projectRoot}/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
+            host.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` });
             host.checkTimeoutQueueLengthAndRun(0);
             // Delete output from new class to referenced project
             host.deleteFile(class3Dts);
@@ -1327,14 +1329,14 @@ bar;`
             // Write back output of new class to referenced project
             host.writeFile(class3Dts, `declare class class3 {}`);
             host.checkTimeoutQueueLengthAndRun(2);
-            ts.projectSystem.baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is open with disableSourceOfProjectReferenceRedirect`, session);
+            baselineTsserverLogs("projectReferences", `new file is added to the referenced project when referenced project is open with disableSourceOfProjectReferenceRedirect`, session);
         });
     });
 
     describe("auto import with referenced project", () => {
         function verifyAutoImport(built: boolean, disableSourceOfProjectReferenceRedirect?: boolean) {
-            const solnConfig: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+            const solnConfig: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({
                     files: [],
                     references: [
@@ -1343,8 +1345,8 @@ bar;`
                     ]
                 })
             };
-            const sharedConfig: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/shared/src/library/tsconfig.json`,
+            const sharedConfig: File = {
+                path: `/user/username/projects/myproject/shared/src/library/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         composite: true,
@@ -1352,12 +1354,12 @@ bar;`
                     }
                 })
             };
-            const sharedIndex: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/shared/src/library/index.ts`,
+            const sharedIndex: File = {
+                path: `/user/username/projects/myproject/shared/src/library/index.ts`,
                 content: `export function foo() {}`
             };
-            const sharedPackage: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/shared/package.json`,
+            const sharedPackage: File = {
+                path: `/user/username/projects/myproject/shared/package.json`,
                 content: JSON.stringify({
                     name: "shared",
                     version: "1.0.0",
@@ -1365,8 +1367,8 @@ bar;`
                     types: "bld/library/index.d.ts"
                 })
             };
-            const appConfig: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/app/src/program/tsconfig.json`,
+            const appConfig: File = {
+                path: `/user/username/projects/myproject/app/src/program/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         composite: true,
@@ -1378,28 +1380,28 @@ bar;`
                     ]
                 })
             };
-            const appBar: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/app/src/program/bar.ts`,
+            const appBar: File = {
+                path: `/user/username/projects/myproject/app/src/program/bar.ts`,
                 content: `import {foo} from "shared";`
             };
-            const appIndex: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/app/src/program/index.ts`,
+            const appIndex: File = {
+                path: `/user/username/projects/myproject/app/src/program/index.ts`,
                 content: `foo`
             };
-            const sharedSymlink: ts.projectSystem.SymLink = {
-                path: `${ts.tscWatch.projectRoot}/node_modules/shared`,
-                symLink: `${ts.tscWatch.projectRoot}/shared`
+            const sharedSymlink: SymLink = {
+                path: `/user/username/projects/myproject/node_modules/shared`,
+                symLink: `/user/username/projects/myproject/shared`
             };
-            const files = [solnConfig, sharedConfig, sharedIndex, sharedPackage, appConfig, appBar, appIndex, sharedSymlink, ts.projectSystem.libFile];
-            const host = ts.projectSystem.createServerHost(files);
+            const files = [solnConfig, sharedConfig, sharedIndex, sharedPackage, appConfig, appBar, appIndex, sharedSymlink, libFile];
+            const host = createServerHost(files);
             if (built) {
-                ts.tscWatch.solutionBuildWithBaseline(host, [solnConfig.path]);
+                solutionBuildWithBaseline(host, [solnConfig.path]);
                 host.clearOutput();
             }
-            const session = ts.projectSystem.createSession(host, { logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
-            ts.projectSystem.openFilesForSession([appIndex], session);
-            session.executeCommandSeq<ts.projectSystem.protocol.CodeFixRequest>({
-                command: ts.projectSystem.protocol.CommandTypes.GetCodeFixes,
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+            openFilesForSession([appIndex], session);
+            session.executeCommandSeq<ts.server.protocol.CodeFixRequest>({
+                command: ts.server.protocol.CommandTypes.GetCodeFixes,
                 arguments: {
                     file: appIndex.path,
                     startLine: 1,
@@ -1409,7 +1411,7 @@ bar;`
                     errorCodes: [ts.Diagnostics.Cannot_find_name_0.code],
                 }
             });
-            ts.projectSystem.baselineTsserverLogs("projectReferences", `auto import with referenced project${built ? " when built" : ""}${disableSourceOfProjectReferenceRedirect ? " with disableSourceOfProjectReferenceRedirect": ""}`, session);
+            baselineTsserverLogs("projectReferences", `auto import with referenced project${built ? " when built" : ""}${disableSourceOfProjectReferenceRedirect ? " with disableSourceOfProjectReferenceRedirect": ""}`, session);
         }
 
         it("when project is built", () => {
@@ -1424,13 +1426,13 @@ bar;`
     });
 
     it("when files from two projects are open and one project references", () => {
-        function getPackageAndFile(packageName: string, references?: string[], optionsToExtend?: ts.CompilerOptions): [file: ts.projectSystem.File, config: ts.projectSystem.File] {
-            const file: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/${packageName}/src/file1.ts`,
+        function getPackageAndFile(packageName: string, references?: string[], optionsToExtend?: ts.CompilerOptions): [file: File, config: File] {
+            const file: File = {
+                path: `/user/username/projects/myproject/${packageName}/src/file1.ts`,
                 content: `export const ${packageName}Const = 10;`
             };
-            const config: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/${packageName}/tsconfig.json`,
+            const config: File = {
+                path: `/user/username/projects/myproject/${packageName}/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { composite: true, ...optionsToExtend || {} },
                     references: references?.map(path => ({ path: `../${path}` }))
@@ -1451,35 +1453,35 @@ bar;`
         const [indirectNoCoreRefFile, indirectNoCoreRefConfig] = getPackageAndFile("indirectNoCoreRef", ["noCoreRef2"]);
         const [noCoreRef2File, noCoreRef2Config] = getPackageAndFile("noCoreRef2");
 
-        const host = ts.projectSystem.createServerHost([
-            ts.projectSystem.libFile, mainFile, mainConfig, coreFile, coreConfig, noCoreRef1File, noCoreRef1Config,
+        const host = createServerHost([
+            libFile, mainFile, mainConfig, coreFile, coreConfig, noCoreRef1File, noCoreRef1Config,
             indirectFile, indirectConfig, coreRef1File, coreRef1Config,
             indirectDisabledChildLoad1File, indirectDisabledChildLoad1Config, coreRef2File, coreRef2Config,
             indirectDisabledChildLoad2File, indirectDisabledChildLoad2Config, coreRef3File, coreRef3Config,
             refToCoreRef3File, refToCoreRef3Config,
             indirectNoCoreRefFile, indirectNoCoreRefConfig, noCoreRef2File, noCoreRef2Config
         ], { useCaseSensitiveFileNames: true });
-        const session = ts.projectSystem.createSession(host, { logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
-        ts.projectSystem.openFilesForSession([mainFile, coreFile], session);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([mainFile, coreFile], session);
 
         // Find all refs in coreFile
-        session.executeCommandSeq<ts.projectSystem.protocol.ReferencesRequest>({
-            command: ts.projectSystem.protocol.CommandTypes.References,
-            arguments: ts.projectSystem.protocolFileLocationFromSubstring(coreFile, `coreConst`)
+        session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+            command: ts.server.protocol.CommandTypes.References,
+            arguments: protocolFileLocationFromSubstring(coreFile, `coreConst`)
         });
-        ts.projectSystem.baselineTsserverLogs("projectReferences", `when files from two projects are open and one project references`, session);
+        baselineTsserverLogs("projectReferences", `when files from two projects are open and one project references`, session);
     });
 
     describe("find refs to decl in other proj", () => {
-        const indexA: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/a/index.ts`,
+        const indexA: File = {
+            path: `/user/username/projects/myproject/a/index.ts`,
             content: `import { B } from "../b/lib";
 
 const b: B = new B();`
         };
 
-        const configB: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/b/tsconfig.json`,
+        const configB: File = {
+            path: `/user/username/projects/myproject/b/tsconfig.json`,
             content: `{
 "compilerOptions": {
     "declarationMap": true,
@@ -1489,30 +1491,30 @@ const b: B = new B();`
 }`
         };
 
-        const indexB: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/b/index.ts`,
+        const indexB: File = {
+            path: `/user/username/projects/myproject/b/index.ts`,
             content: `export class B {
     M() {}
 }`
         };
 
-        const helperB: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/b/helper.ts`,
+        const helperB: File = {
+            path: `/user/username/projects/myproject/b/helper.ts`,
             content: `import { B } from ".";
 
 const b: B = new B();`
         };
 
-        const dtsB: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/b/lib/index.d.ts`,
+        const dtsB: File = {
+            path: `/user/username/projects/myproject/b/lib/index.d.ts`,
             content: `export declare class B {
     M(): void;
 }
 //# sourceMappingURL=index.d.ts.map`
         };
 
-        const dtsMapB: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/b/lib/index.d.ts.map`,
+        const dtsMapB: File = {
+            path: `/user/username/projects/myproject/b/lib/index.d.ts.map`,
             content: `{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../index.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;IACV,CAAC;CACJ"}`
         };
 
@@ -1535,23 +1537,23 @@ const b: B = new B();`
             };
 
             it(subScenario, () => {
-                const configA: ts.projectSystem.File = {
-                    path: `${ts.tscWatch.projectRoot}/a/tsconfig.json`,
+                const configA: File = {
+                    path: `/user/username/projects/myproject/a/tsconfig.json`,
                     content: `{
         "compilerOptions": ${JSON.stringify(compilerOptions)},
         "references": [{ "path": "../b" }]
     }`
                 };
 
-                const host = ts.projectSystem.createServerHost([configA, indexA, configB, indexB, helperB, dtsB, ...(dtsMapPresent ? [dtsMapB] : [])]);
-                const session = ts.projectSystem.createSession(host, { logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
-                ts.projectSystem.openFilesForSession([indexA, ...(projectAlreadyLoaded ? [helperB] : [])], session);
+                const host = createServerHost([configA, indexA, configB, indexB, helperB, dtsB, ...(dtsMapPresent ? [dtsMapB] : [])]);
+                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                openFilesForSession([indexA, ...(projectAlreadyLoaded ? [helperB] : [])], session);
 
-                session.executeCommandSeq<ts.projectSystem.protocol.ReferencesRequest>({
-                    command: ts.projectSystem.protocol.CommandTypes.References,
-                    arguments: ts.projectSystem.protocolFileLocationFromSubstring(indexA, `B`, { index: 1 })
+                session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
+                    command: ts.server.protocol.CommandTypes.References,
+                    arguments: protocolFileLocationFromSubstring(indexA, `B`, { index: 1 })
                 });
-                ts.projectSystem.baselineTsserverLogs("projectReferences", `find refs to decl in other proj ${subScenario}`, session);
+                baselineTsserverLogs("projectReferences", `find refs to decl in other proj ${subScenario}`, session);
             });
         }
 

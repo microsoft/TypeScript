@@ -1,23 +1,25 @@
 import * as ts from "../../_namespaces/ts";
+import { createWatchedSystem, File, libFile, TestServerHost } from "../virtualFileSystemWithWatch";
+import { createBaseline, createSolutionBuilderWithWatchHostForBaseline, runWatchBaseline } from "../tscWatch/helpers";
 
 describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: with different watch environments", () => {
     it("watchFile on same file multiple times because file is part of multiple projects", () => {
-        const project = `${ts.TestFSWithWatch.tsbuildProjectsLocation}/myproject`;
+        const project = `/user/username/projects/myproject`;
         let maxPkgs = 4;
         const configPath = `${project}/tsconfig.json`;
-        const typing: ts.tscWatch.File = {
+        const typing: File = {
             path: `${project}/typings/xterm.d.ts`,
             content: "export const typing = 10;"
         };
 
         const allPkgFiles = pkgs(pkgFiles);
-        const system = ts.tscWatch.createWatchedSystem([ts.tscWatch.libFile, typing, ...flatArray(allPkgFiles)], { currentDirectory: project });
+        const system = createWatchedSystem([libFile, typing, ...flatArray(allPkgFiles)], { currentDirectory: project });
         writePkgReferences(system);
-        const { sys, baseline, oldSnap, cb, getPrograms } = ts.tscWatch.createBaseline(system);
-        const host = ts.tscWatch.createSolutionBuilderWithWatchHostForBaseline(sys, cb);
+        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(system);
+        const host = createSolutionBuilderWithWatchHostForBaseline(sys, cb);
         const solutionBuilder = ts.createSolutionBuilderWithWatch(host, ["tsconfig.json"], { watch: true, verbose: true });
         solutionBuilder.build();
-        ts.tscWatch.runWatchBaseline({
+        runWatchBaseline({
             scenario: "watchEnvironment",
             subScenario: `same file in multiple projects with single watcher per file`,
             commandLineArgs: ["--b", "--w"],
@@ -31,7 +33,8 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                     change: sys => sys.writeFile(typing.path, `${typing.content}export const typing1 = 10;`),
                     timeouts: sys => {
                         sys.checkTimeoutQueueLengthAndRun(1);
-                        ts.tscWatch.checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout(sys);
+                        sys.checkTimeoutQueueLengthAndRun(1);
+                        sys.checkTimeoutQueueLength(0);
                     }
                 },
                 {
@@ -41,14 +44,15 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                         maxPkgs--;
                         writePkgReferences(sys);
                     },
-                    timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
                 },
                 {
                     caption: "modify typing file",
                     change: sys => sys.writeFile(typing.path, typing.content),
                     timeouts: sys => {
                         sys.checkTimeoutQueueLengthAndRun(1);
-                        ts.tscWatch.checkSingleTimeoutQueueLengthAndRunAndVerifyNoTimeout(sys);
+                        sys.checkTimeoutQueueLengthAndRun(1);
+                        sys.checkTimeoutQueueLength(0);
                     }
                 },
                 {
@@ -58,7 +62,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                         maxPkgs = 0;
                         writePkgReferences(sys);
                     },
-                    timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
                 },
                 {
                     caption: "modify typing file",
@@ -82,7 +86,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
         function createPkgReference(index: number) {
             return { path: `./pkg${index}` };
         }
-        function pkgFiles(index: number): ts.tscWatch.File[] {
+        function pkgFiles(index: number): File[] {
             return [
                 {
                     path: `${project}/pkg${index}/index.ts`,
@@ -100,7 +104,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                 }
             ];
         }
-        function writePkgReferences(system: ts.TestFSWithWatch.TestServerHost) {
+        function writePkgReferences(system: TestServerHost) {
             system.writeFile(configPath, JSON.stringify({
                 files: [],
                 include: [],

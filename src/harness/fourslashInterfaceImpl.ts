@@ -33,7 +33,7 @@ export class Test {
         return this.ranges().map(r => ts.createTextSpan(r.pos, r.end - r.pos));
     }
 
-    public rangesByText(): ts.ESMap<string, FourSlash.Range[]> {
+    public rangesByText(): Map<string, FourSlash.Range[]> {
         return this.state.rangesByText();
     }
 

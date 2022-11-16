@@ -4,7 +4,7 @@ import {
     ClassDeclaration, ClassElement, ClassExpression, ClassLikeDeclaration, classOrConstructorParameterIsDecorated,
     ClassStaticBlockDeclaration, CommaListExpression, ComputedPropertyName, ConstructorDeclaration,
     createAccessorPropertyBackingField, Debug, Decorator, ElementAccessExpression, EmitFlags,
-    ESDecorateClassElementContext, ESDecorateName, ESMap, expandPreOrPostfixIncrementOrDecrementExpression,
+    ESDecorateClassElementContext, ESDecorateName, expandPreOrPostfixIncrementOrDecrementExpression,
     ExportAssignment, Expression, ExpressionStatement, findComputedPropertyNameCacheAssignment, firstOrUndefined,
     forEachEntry, ForStatement, GeneratedIdentifierFlags, GetAccessorDeclaration, getAllDecoratorsOfClass,
     getAllDecoratorsOfClassElement, getCommentRange, getEffectiveBaseTypeNode, getFirstConstructorWithBody,
@@ -21,7 +21,7 @@ import {
     isPropertyAssignment, isPropertyDeclaration, isPropertyName, isPropertyNameLiteral, isSetAccessor,
     isSetAccessorDeclaration, isShorthandPropertyAssignment, isSimpleInlineableExpression, isSpreadAssignment,
     isSpreadElement, isStatement, isStatic, isStaticModifier, isStringLiteral, isSuperProperty, isTemplateLiteral,
-    LeftHandSideExpression, Map, map, MethodDeclaration, ModifierFlags, ModifiersArray, moveRangePastDecorators,
+    LeftHandSideExpression, map, MethodDeclaration, ModifierFlags, ModifiersArray, moveRangePastDecorators,
     moveRangePastModifiers, Node, NodeArray, NodeFlags, nodeOrChildIsDecorated, ObjectAssignmentElement,
     OmittedExpression, ParameterDeclaration, ParenthesizedExpression, PartiallyEmittedExpression,
     PostfixUnaryExpression, PrefixUnaryExpression, PrivateIdentifier, PrivateIdentifierGetAccessorDeclaration,
@@ -76,7 +76,7 @@ interface ClassInfo {
     classThis?: Identifier; // `_classThis`, if needed.
     classSuper?: Identifier; // `_classSuper`, if needed.
 
-    memberInfos?: ESMap<ClassElement, MemberInfo>; // used in step 4.a, 12, and construction
+    memberInfos?: Map<ClassElement, MemberInfo>; // used in step 4.a, 12, and construction
 
     instanceExtraInitializersName: Identifier | undefined; // used in construction
     staticExtraInitializersName: Identifier | undefined; // used in step 11

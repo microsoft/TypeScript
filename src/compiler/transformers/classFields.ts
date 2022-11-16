@@ -24,7 +24,7 @@ import {
     isPropertyAssignment, isPropertyDeclaration, isPropertyName, isSetAccessor, isSetAccessorDeclaration,
     isShorthandPropertyAssignment, isSimpleCopiableExpression, isSimpleInlineableExpression, isSpreadAssignment,
     isSpreadElement, isStatement, isStatic, isStaticModifier, isSuperProperty, isTemplateLiteral, isThisProperty,
-    LeftHandSideExpression, map, Map, MethodDeclaration, Modifier, ModifierFlags, moveRangePastModifiers, moveRangePos,
+    LeftHandSideExpression, map, MethodDeclaration, Modifier, ModifierFlags, moveRangePastModifiers, moveRangePos,
     Node, NodeCheckFlags, nodeIsSynthesized, PostfixUnaryExpression, PrefixUnaryExpression,
     PrivateIdentifier, PrivateIdentifierPropertyAccessExpression, PrivateIdentifierPropertyDeclaration,
     PropertyAccessExpression, PropertyDeclaration, PropertyName, ScriptTarget, SetAccessorDeclaration, setCommentRange,

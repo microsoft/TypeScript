@@ -1,18 +1,19 @@
-import * as ts from "../../_namespaces/ts";
+import { createServerHost, File, getTsBuildProjectFile, libFile } from "../virtualFileSystemWithWatch";
+import { createLoggerWithInMemoryLogs, createProjectService, baselineTsserverLogs, checkNumberOfProjects } from "./helpers";
 
 describe("unittests:: tsserver:: projects with references: invoking when references are already built", () => {
     it("on sample project", () => {
-        const coreConfig = ts.TestFSWithWatch.getTsBuildProjectFile("sample1", "core/tsconfig.json");
-        const coreIndex = ts.TestFSWithWatch.getTsBuildProjectFile("sample1", "core/index.ts");
-        const coreAnotherModule = ts.TestFSWithWatch.getTsBuildProjectFile("sample1", "core/anotherModule.ts");
-        const coreSomeDecl = ts.TestFSWithWatch.getTsBuildProjectFile("sample1", "core/some_decl.d.ts");
-        const logicConfig = ts.TestFSWithWatch.getTsBuildProjectFile("sample1", "logic/tsconfig.json");
-        const logicIndex = ts.TestFSWithWatch.getTsBuildProjectFile("sample1", "logic/index.ts");
-        const testsConfig = ts.TestFSWithWatch.getTsBuildProjectFile("sample1", "tests/tsconfig.json");
-        const testsIndex = ts.TestFSWithWatch.getTsBuildProjectFile("sample1", "tests/index.ts");
-        const host = ts.projectSystem.createServerHost([ts.projectSystem.libFile, coreConfig, coreIndex, coreAnotherModule, coreSomeDecl, logicConfig, logicIndex, testsConfig, testsIndex]);
-        const logger = ts.projectSystem.createLoggerWithInMemoryLogs(host);
-        const service = ts.projectSystem.createProjectService(host, { logger });
+        const coreConfig = getTsBuildProjectFile("sample1", "core/tsconfig.json");
+        const coreIndex = getTsBuildProjectFile("sample1", "core/index.ts");
+        const coreAnotherModule = getTsBuildProjectFile("sample1", "core/anotherModule.ts");
+        const coreSomeDecl = getTsBuildProjectFile("sample1", "core/some_decl.d.ts");
+        const logicConfig = getTsBuildProjectFile("sample1", "logic/tsconfig.json");
+        const logicIndex = getTsBuildProjectFile("sample1", "logic/index.ts");
+        const testsConfig = getTsBuildProjectFile("sample1", "tests/tsconfig.json");
+        const testsIndex = getTsBuildProjectFile("sample1", "tests/index.ts");
+        const host = createServerHost([libFile, coreConfig, coreIndex, coreAnotherModule, coreSomeDecl, logicConfig, logicIndex, testsConfig, testsIndex]);
+        const logger = createLoggerWithInMemoryLogs(host);
+        const service = createProjectService(host, { logger });
         service.openClientFile(testsIndex.path);
 
         // local edit in ts file
@@ -29,75 +30,75 @@ describe("unittests:: tsserver:: projects with references: invoking when referen
             references: [{ path: "../core" }]
         }));
         host.checkTimeoutQueueLengthAndRun(2);
-        ts.projectSystem.baselineTsserverLogs("projectsWithReferences", "sample project", service);
+        baselineTsserverLogs("projectsWithReferences", "sample project", service);
     });
 
     describe("on transitive references in different folders", () => {
         function createService() {
-            const aConfig: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/a/tsconfig.json`,
+            const aConfig: File = {
+                path: `/user/username/projects/myproject/a/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { composite: true },
                     files: ["index.ts"]
                 }),
             };
-            const bConfig: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/b/tsconfig.json`,
+            const bConfig: File = {
+                path: `/user/username/projects/myproject/b/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                     files: ["index.ts"],
                     references: [{ path: `../a` }]
                 }),
             };
-            const cConfig: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/c/tsconfig.json`,
+            const cConfig: File = {
+                path: `/user/username/projects/myproject/c/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { baseUrl: "./", paths: { "@ref/*": ["../refs/*"] } },
                     files: ["index.ts"],
                     references: [{ path: `../b` }]
                 }),
             };
-            const aTs: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/a/index.ts`,
+            const aTs: File = {
+                path: `/user/username/projects/myproject/a/index.ts`,
                 content: `export class A {}`,
             };
-            const bTs: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/b/index.ts`,
+            const bTs: File = {
+                path: `/user/username/projects/myproject/b/index.ts`,
                 content: `import {A} from '@ref/a';
 export const b = new A();`,
             };
-            const cTs: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/c/index.ts`,
+            const cTs: File = {
+                path: `/user/username/projects/myproject/c/index.ts`,
                 content: `import {b} from '../b';
 import {X} from "@ref/a";
 b;
 X;`,
             };
-            const refsTs: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/refs/a.d.ts`,
+            const refsTs: File = {
+                path: `/user/username/projects/myproject/refs/a.d.ts`,
                 content: `export class X {}
 export class A {}`
             };
-            const host = ts.projectSystem.createServerHost([ts.projectSystem.libFile, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
-            const service = ts.projectSystem.createProjectService(host, { logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
+            const host = createServerHost([libFile, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
+            const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             service.openClientFile(cTs.path);
             return { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs };
         }
 
         it("non local edit", () => {
             const { host, service, bTs } = createService();
-            ts.projectSystem.checkNumberOfProjects(service, { configuredProjects: 1 });
+            checkNumberOfProjects(service, { configuredProjects: 1 });
 
             // non local edit
             host.appendFile(bTs.path, `export function gFoo() { }`);
             host.checkTimeoutQueueLengthAndRun(2);
-            ts.projectSystem.baselineTsserverLogs("projectsWithReferences", "transitive references with non local edit", service);
+            baselineTsserverLogs("projectsWithReferences", "transitive references with non local edit", service);
         });
 
         it("edit on config file", () => {
             const { host, service, cConfig, refsTs } = createService();
-            const nRefsTs: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/nrefs/a.d.ts`,
+            const nRefsTs: File = {
+                path: `/user/username/projects/myproject/nrefs/a.d.ts`,
                 content: refsTs.content
             };
             const cTsConfigJson = JSON.parse(cConfig.content);
@@ -109,13 +110,13 @@ export class A {}`
             // revert the edit on config file
             host.writeFile(cConfig.path, cConfig.content);
             host.checkTimeoutQueueLengthAndRun(2);
-            ts.projectSystem.baselineTsserverLogs("projectsWithReferences", "transitive references with edit on config file", service);
+            baselineTsserverLogs("projectsWithReferences", "transitive references with edit on config file", service);
         });
 
         it("edit in referenced config file", () => {
             const { host, service, bConfig, refsTs } = createService();
-            const nRefsTs: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/nrefs/a.d.ts`,
+            const nRefsTs: File = {
+                path: `/user/username/projects/myproject/nrefs/a.d.ts`,
                 content: refsTs.content
             };
             const bTsConfigJson = JSON.parse(bConfig.content);
@@ -127,7 +128,7 @@ export class A {}`
             // revert the edit on config file
             host.writeFile(bConfig.path, bConfig.content);
             host.checkTimeoutQueueLengthAndRun(2);
-            ts.projectSystem.baselineTsserverLogs("projectsWithReferences", "transitive references with edit in referenced config file", service);
+            baselineTsserverLogs("projectsWithReferences", "transitive references with edit in referenced config file", service);
         });
 
         it("deleting referenced config file", () => {
@@ -138,7 +139,7 @@ export class A {}`
             // revert
             host.writeFile(bConfig.path, bConfig.content);
             host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
-            ts.projectSystem.baselineTsserverLogs("projectsWithReferences", "transitive references with deleting referenced config file", service);
+            baselineTsserverLogs("projectsWithReferences", "transitive references with deleting referenced config file", service);
         });
 
         it("deleting transitively referenced config file", () => {
@@ -149,53 +150,53 @@ export class A {}`
             // revert
             host.writeFile(aConfig.path, aConfig.content);
             host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
-            ts.projectSystem.baselineTsserverLogs("projectsWithReferences", "transitive references with deleting transitively referenced config file", service);
+            baselineTsserverLogs("projectsWithReferences", "transitive references with deleting transitively referenced config file", service);
         });
     });
 
     describe("on transitive references in different folders without files", () => {
         function createService() {
-            const aConfig: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/a/tsconfig.json`,
+            const aConfig: File = {
+                path: `/user/username/projects/myproject/a/tsconfig.json`,
                 content: JSON.stringify({ compilerOptions: { composite: true } }),
             };
-            const bConfig: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/b/tsconfig.json`,
+            const bConfig: File = {
+                path: `/user/username/projects/myproject/b/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { composite: true, baseUrl: "./", paths: { "@ref/*": ["../*"] } },
                     references: [{ path: `../a` }]
                 }),
             };
-            const cConfig: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/c/tsconfig.json`,
+            const cConfig: File = {
+                path: `/user/username/projects/myproject/c/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { baseUrl: "./", paths: { "@ref/*": ["../refs/*"] } },
                     references: [{ path: `../b` }]
                 }),
             };
-            const aTs: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/a/index.ts`,
+            const aTs: File = {
+                path: `/user/username/projects/myproject/a/index.ts`,
                 content: `export class A {}`,
             };
-            const bTs: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/b/index.ts`,
+            const bTs: File = {
+                path: `/user/username/projects/myproject/b/index.ts`,
                 content: `import {A} from '@ref/a';
 export const b = new A();`,
             };
-            const cTs: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/c/index.ts`,
+            const cTs: File = {
+                path: `/user/username/projects/myproject/c/index.ts`,
                 content: `import {b} from '../b';
 import {X} from "@ref/a";
 b;
 X;`,
             };
-            const refsTs: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/refs/a.d.ts`,
+            const refsTs: File = {
+                path: `/user/username/projects/myproject/refs/a.d.ts`,
                 content: `export class X {}
 export class A {}`
             };
-            const host = ts.projectSystem.createServerHost([ts.projectSystem.libFile, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
-            const service = ts.projectSystem.createProjectService(host, { logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
+            const host = createServerHost([libFile, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
+            const service = createProjectService(host, { logger: createLoggerWithInMemoryLogs(host) });
             service.openClientFile(cTs.path);
             return { host, service, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs };
         }
@@ -206,13 +207,13 @@ export class A {}`
             // non local edit
             host.appendFile(bTs.path, `export function gFoo() { }`);
             host.checkTimeoutQueueLengthAndRun(2);
-            ts.projectSystem.baselineTsserverLogs("projectsWithReferences", "trasitive references without files with non local edit", service);
+            baselineTsserverLogs("projectsWithReferences", "trasitive references without files with non local edit", service);
         });
 
         it("edit on config file", () => {
             const { host, service, cConfig, refsTs } = createService();
-            const nRefsTs: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/nrefs/a.d.ts`,
+            const nRefsTs: File = {
+                path: `/user/username/projects/myproject/nrefs/a.d.ts`,
                 content: refsTs.content
             };
             const cTsConfigJson = JSON.parse(cConfig.content);
@@ -224,13 +225,13 @@ export class A {}`
             // revert the edit on config file
             host.writeFile(cConfig.path, cConfig.content);
             host.checkTimeoutQueueLengthAndRun(2);
-            ts.projectSystem.baselineTsserverLogs("projectsWithReferences", "trasitive references without files with edit on config file", service);
+            baselineTsserverLogs("projectsWithReferences", "trasitive references without files with edit on config file", service);
         });
 
         it("edit in referenced config file", () => {
             const { host, service, bConfig, refsTs } = createService();
-            const nRefsTs: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/nrefs/a.d.ts`,
+            const nRefsTs: File = {
+                path: `/user/username/projects/myproject/nrefs/a.d.ts`,
                 content: refsTs.content
             };
             const bTsConfigJson = JSON.parse(bConfig.content);
@@ -242,7 +243,7 @@ export class A {}`
             // revert the edit on config file
             host.writeFile(bConfig.path, bConfig.content);
             host.checkTimeoutQueueLengthAndRun(2);
-            ts.projectSystem.baselineTsserverLogs("projectsWithReferences", "trasitive references without files with edit in referenced config file", service);
+            baselineTsserverLogs("projectsWithReferences", "trasitive references without files with edit in referenced config file", service);
         });
 
         it("deleting referenced config file", () => {
@@ -253,7 +254,7 @@ export class A {}`
             // revert
             host.writeFile(bConfig.path, bConfig.content);
             host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
-            ts.projectSystem.baselineTsserverLogs("projectsWithReferences", "trasitive references without files with deleting referenced config file", service);
+            baselineTsserverLogs("projectsWithReferences", "trasitive references without files with deleting referenced config file", service);
         });
 
         it("deleting transitively referenced config file", () => {
@@ -264,7 +265,7 @@ export class A {}`
             // revert
             host.writeFile(aConfig.path, aConfig.content);
             host.checkTimeoutQueueLengthAndRun(3); // Schedules failed lookup invalidation
-            ts.projectSystem.baselineTsserverLogs("projectsWithReferences", "trasitive references without files with deleting transitively referenced config file", service);
+            baselineTsserverLogs("projectsWithReferences", "trasitive references without files with deleting transitively referenced config file", service);
         });
     });
 });

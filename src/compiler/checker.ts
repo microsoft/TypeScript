@@ -26,7 +26,7 @@ import {
     DoStatement, DynamicNamedDeclaration, ElementAccessChain, ElementAccessExpression, ElementFlags, EmitFlags,
     EmitHint, EmitResolver, EmitTextWriter, emptyArray, endsWith, EntityName, EntityNameExpression,
     EntityNameOrEntityNameExpression, entityNameToString, EnumDeclaration, EnumMember, equateValues,
-    escapeLeadingUnderscores, escapeString, ESMap, every, EvolvingArrayType, ExclamationToken, ExportAssignment,
+    escapeLeadingUnderscores, escapeString, every, EvolvingArrayType, ExclamationToken, ExportAssignment,
     exportAssignmentIsAlias, ExportDeclaration, ExportSpecifier, Expression, expressionResultIsUnused,
     ExpressionStatement, ExpressionWithTypeArguments, Extension, ExternalEmitHelpers, externalHelpersModuleNameText,
     factory, fileExtensionIs, fileExtensionIsOneOf, filter, find, findAncestor, findBestPatternMatch, findIndex,
@@ -151,7 +151,7 @@ import {
     JsxOpeningElement, JsxOpeningFragment, JsxOpeningLikeElement, JsxReferenceKind, JsxSelfClosingElement,
     JsxSpreadAttribute, JsxTagNameExpression, KeywordTypeNode, LabeledStatement, last, lastOrUndefined,
     LateBoundBinaryExpressionDeclaration, LateBoundDeclaration, LateBoundName, LateVisibilityPaintedStatement,
-    LeftHandSideExpression, length, LiteralExpression, LiteralType, LiteralTypeNode, mangleScopedPackageName, map, Map,
+    LeftHandSideExpression, length, LiteralExpression, LiteralType, LiteralTypeNode, mangleScopedPackageName, map,
     mapDefined, MappedSymbol, MappedType, MappedTypeNode, MatchingKeys, maybeBind, MemberName, MemberOverrideStatus,
     memoize, MetaProperty, MethodDeclaration, MethodSignature, minAndMax, MinusToken, Modifier, ModifierFlags,
     modifiersToFlags, modifierToFlag, ModuleBlock, ModuleDeclaration, ModuleInstanceState, ModuleKind,
@@ -168,10 +168,10 @@ import {
     PrefixUnaryExpression, PrivateIdentifier, Program, PromiseOrAwaitableType, PropertyAccessChain,
     PropertyAccessEntityNameExpression, PropertyAccessExpression, PropertyAssignment, PropertyDeclaration, PropertyName,
     PropertySignature, PseudoBigInt, pseudoBigIntToString, pushIfUnique, QualifiedName, QuestionToken, rangeEquals,
-    rangeOfNode, rangeOfTypeParameters, ReadonlyESMap, ReadonlyKeyword, reduceLeft, RelationComparisonResult,
+    rangeOfNode, rangeOfTypeParameters, ReadonlyKeyword, reduceLeft, RelationComparisonResult,
     relativeComplement, removeExtension, removePrefix, replaceElement, resolutionExtensionIsTSOrJson,
     ResolvedModuleFull, ResolvedType, resolveTripleslashReference, resolvingEmptyArray, RestTypeNode, ReturnStatement,
-    ReverseMappedSymbol, ReverseMappedType, sameMap, SatisfiesExpression, ScriptKind, ScriptTarget, Set,
+    ReverseMappedSymbol, ReverseMappedType, sameMap, SatisfiesExpression, ScriptKind, ScriptTarget,
     SetAccessorDeclaration, setCommentRange, setEmitFlags, setNodeFlags, setOriginalNode, setParent,
     setSyntheticLeadingComments, setTextRange, setTextRangePosEnd, setValueDeclaration, ShorthandPropertyAssignment,
     shouldPreserveConstEnums, Signature, SignatureDeclaration, SignatureFlags, SignatureKind, singleElementArray,
@@ -195,7 +195,7 @@ import {
     usingSingleLineStringWriter, VariableDeclaration, VariableDeclarationList, VariableLikeDeclaration,
     VariableStatement, VarianceFlags, visitEachChild, visitNode, visitNodes, Visitor, VisitResult, VoidExpression,
     walkUpBindingElementsAndPatterns, walkUpParenthesizedExpressions, walkUpParenthesizedTypes,
-    walkUpParenthesizedTypesAndGetParentAndChild, WhileStatement, WideningContext, WithStatement, YieldExpression,
+    walkUpParenthesizedTypesAndGetParentAndChild, WhileStatement, WideningContext, WithStatement, YieldExpression, ResolutionMode,
     createDiagnosticForNodeArrayFromMessageChain, isSetAccessorDeclaration, isNamedEvaluationSource,
     walkUpOuterExpressions, classOrConstructorParameterIsDecorated, classElementOrClassElementParameterIsDecorated,
     isInitializedProperty, getDecorators,
@@ -348,7 +348,7 @@ export const enum TypeFacts {
     AndFactsMask = All & ~OrFactsMask,
 }
 
-const typeofNEFacts: ReadonlyESMap<string, TypeFacts> = new Map(getEntries({
+const typeofNEFacts: ReadonlyMap<string, TypeFacts> = new Map(getEntries({
     string: TypeFacts.TypeofNEString,
     number: TypeFacts.TypeofNENumber,
     bigint: TypeFacts.TypeofNEBigInt,
@@ -468,7 +468,7 @@ const enum IntrinsicTypeKind {
     Uncapitalize
 }
 
-const intrinsicTypeKinds: ReadonlyESMap<string, IntrinsicTypeKind> = new Map(getEntries({
+const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(getEntries({
     Uppercase: IntrinsicTypeKind.Uppercase,
     Lowercase: IntrinsicTypeKind.Lowercase,
     Capitalize: IntrinsicTypeKind.Capitalize,
@@ -1154,10 +1154,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         readonly firstFile: SourceFile;
         readonly secondFile: SourceFile;
         /** Key is symbol name. */
-        readonly conflictingSymbols: ESMap<string, DuplicateInfoForSymbol>;
+        readonly conflictingSymbols: Map<string, DuplicateInfoForSymbol>;
     }
     /** Key is "/path/to/a.ts|/path/to/b.ts". */
-    let amalgamatedDuplicates: ESMap<string, DuplicateInfoForFiles> | undefined;
+    let amalgamatedDuplicates: Map<string, DuplicateInfoForFiles> | undefined;
     const reverseMappedCache = new Map<string, Type | undefined>();
     let inInferTypeForHomomorphicMappedType = false;
     let ambientModulesCache: Symbol[] | undefined;
@@ -1167,7 +1167,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * This is only used if there is no exact match.
      */
     let patternAmbientModules: PatternAmbientModule[];
-    let patternAmbientModuleAugmentations: ESMap<string, Symbol> | undefined;
+    let patternAmbientModuleAugmentations: Map<string, Symbol> | undefined;
 
     let globalObjectType: ObjectType;
     let globalFunctionType: ObjectType;
@@ -1249,7 +1249,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     const mergedSymbols: Symbol[] = [];
     const symbolLinks: SymbolLinks[] = [];
     const nodeLinks: NodeLinks[] = [];
-    const flowLoopCaches: ESMap<string, Type>[] = [];
+    const flowLoopCaches: Map<string, Type>[] = [];
     const flowLoopNodes: FlowNode[] = [];
     const flowLoopKeys: string[] = [];
     const flowLoopTypes: Type[][] = [];
@@ -2995,7 +2995,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isStringLiteralLike(usage) ? getModeForUsageLocation(getSourceFileOfNode(usage), usage) : undefined;
     }
 
-    function isESMFormatImportImportingCommonjsFormatFile(usageMode: SourceFile["impliedNodeFormat"], targetMode: SourceFile["impliedNodeFormat"]) {
+    function isESMFormatImportImportingCommonjsFormatFile(usageMode: ResolutionMode, targetMode: ResolutionMode) {
         return usageMode === ModuleKind.ESNext && targetMode === ModuleKind.CommonJS;
     }
 
@@ -4716,7 +4716,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return rightMeaning === SymbolFlags.Value ? SymbolFlags.Value : SymbolFlags.Namespace;
     }
 
-    function getAccessibleSymbolChain(symbol: Symbol | undefined, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean, visitedSymbolTablesMap: ESMap<SymbolId, SymbolTable[]> = new Map()): Symbol[] | undefined {
+    function getAccessibleSymbolChain(symbol: Symbol | undefined, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean, visitedSymbolTablesMap: Map<SymbolId, SymbolTable[]> = new Map()): Symbol[] | undefined {
         if (!(symbol && !isPropertyOrMethodDeclarationSymbol(symbol))) {
             return undefined;
         }
@@ -6583,7 +6583,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return top;
         }
 
-        function getSpecifierForModuleSymbol(symbol: Symbol, context: NodeBuilderContext, overrideImportMode?: SourceFile["impliedNodeFormat"]) {
+        function getSpecifierForModuleSymbol(symbol: Symbol, context: NodeBuilderContext, overrideImportMode?: ResolutionMode) {
             let file = getDeclarationOfKind<SourceFile>(symbol, SyntaxKind.SourceFile);
             if (!file) {
                 const equivalentFileSymbol = firstDefined(symbol.declarations, d => getFileSymbolIfFileSymbolExportEqualsContainer(d, symbol));
@@ -6647,7 +6647,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return specifier;
 
-            function getSpecifierCacheKey(path: string, mode: SourceFile["impliedNodeFormat"] | undefined) {
+            function getSpecifierCacheKey(path: string, mode: ResolutionMode | undefined) {
                 return mode === undefined ? path : `${mode}|${path}`;
             }
         }
@@ -7282,7 +7282,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const enclosingDeclaration = context.enclosingDeclaration!;
             let results: Statement[] = [];
             const visitedSymbols = new Set<number>();
-            const deferredPrivatesStack: ESMap<SymbolId, Symbol>[] = [];
+            const deferredPrivatesStack: Map<SymbolId, Symbol>[] = [];
             const oldcontext = context;
             context = {
                 ...oldcontext,
@@ -8744,16 +8744,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         encounteredError: boolean;
         reportedDiagnostic: boolean;
         visitedTypes: Set<number> | undefined;
-        symbolDepth: ESMap<string, number> | undefined;
+        symbolDepth: Map<string, number> | undefined;
         inferTypeParameters: TypeParameter[] | undefined;
         approximateLength: number;
         truncating?: boolean;
         typeParameterSymbolList?: Set<number>;
-        typeParameterNames?: ESMap<TypeId, Identifier>;
+        typeParameterNames?: Map<TypeId, Identifier>;
         typeParameterNamesByText?: Set<string>;
-        typeParameterNamesByTextNextNameCount?: ESMap<string, number>;
+        typeParameterNamesByTextNextNameCount?: Map<string, number>;
         usedSymbolNames?: Set<string>;
-        remappedSymbolNames?: ESMap<SymbolId, string>;
+        remappedSymbolNames?: Map<SymbolId, string>;
         reverseMappedStack?: ReverseMappedSymbol[];
     }
 
@@ -12764,7 +12764,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String, skipObjectFunctionPropertyAugment?: boolean): Symbol | undefined {
         let singleProp: Symbol | undefined;
-        let propSet: ESMap<SymbolId, Symbol> | undefined;
+        let propSet: Map<SymbolId, Symbol> | undefined;
         let indexTypes: Type[] | undefined;
         const isUnion = containingType.flags & TypeFlags.Union;
         // Flags we want to propagate to the result if they exist in all source symbols
@@ -15315,7 +15315,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.resolvedType;
     }
 
-    function addTypeToIntersection(typeSet: ESMap<string, Type>, includes: TypeFlags, type: Type) {
+    function addTypeToIntersection(typeSet: Map<string, Type>, includes: TypeFlags, type: Type) {
         const flags = type.flags;
         if (flags & TypeFlags.Intersection) {
             return addTypesToIntersection(typeSet, includes, (type as IntersectionType).types);
@@ -15351,7 +15351,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // Add the given types to the given type set. Order is preserved, freshness is removed from literal
     // types, duplicates are removed, and nested types of the given kind are flattened into the set.
-    function addTypesToIntersection(typeSet: ESMap<string, Type>, includes: TypeFlags, types: readonly Type[]) {
+    function addTypesToIntersection(typeSet: Map<string, Type>, includes: TypeFlags, types: readonly Type[]) {
         for (const type of types) {
             includes = addTypeToIntersection(typeSet, includes, getRegularTypeOfLiteralType(type));
         }
@@ -15494,7 +15494,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Also, unlike union types, the order of the constituent types is preserved in order that overload resolution
     // for intersections of types with signatures can be deterministic.
     function getIntersectionType(types: readonly Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], noSupertypeReduction?: boolean): Type {
-        const typeMembershipMap: ESMap<string, Type> = new Map();
+        const typeMembershipMap: Map<string, Type> = new Map();
         const includes = addTypesToIntersection(typeMembershipMap, 0, types);
         const typeSet: Type[] = arrayFrom(typeMembershipMap.values());
         // An intersection type is considered empty if it contains
@@ -18041,7 +18041,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkTypeRelatedToAndOptionallyElaborate(
         source: Type,
         target: Type,
-        relation: ESMap<string, RelationComparisonResult>,
+        relation: Map<string, RelationComparisonResult>,
         errorNode: Node | undefined,
         expr: Expression | undefined,
         headMessage: DiagnosticMessage | undefined,
@@ -18063,7 +18063,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         node: Expression | undefined,
         source: Type,
         target: Type,
-        relation: ESMap<string, RelationComparisonResult>,
+        relation: Map<string, RelationComparisonResult>,
         headMessage: DiagnosticMessage | undefined,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
         errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
@@ -18100,7 +18100,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         node: Expression,
         source: Type,
         target: Type,
-        relation: ESMap<string, RelationComparisonResult>,
+        relation: Map<string, RelationComparisonResult>,
         headMessage: DiagnosticMessage | undefined,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
         errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
@@ -18129,7 +18129,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         node: ArrowFunction,
         source: Type,
         target: Type,
-        relation: ESMap<string, RelationComparisonResult>,
+        relation: Map<string, RelationComparisonResult>,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
         errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
     ): boolean {
@@ -18216,7 +18216,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         iterator: ElaborationIterator,
         source: Type,
         target: Type,
-        relation: ESMap<string, RelationComparisonResult>,
+        relation: Map<string, RelationComparisonResult>,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
         errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
     ) {
@@ -18334,7 +18334,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         node: JsxAttributes,
         source: Type,
         target: Type,
-        relation: ESMap<string, RelationComparisonResult>,
+        relation: Map<string, RelationComparisonResult>,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
         errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
     ) {
@@ -18435,7 +18435,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         node: ArrayLiteralExpression,
         source: Type,
         target: Type,
-        relation: ESMap<string, RelationComparisonResult>,
+        relation: Map<string, RelationComparisonResult>,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
         errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
     ) {
@@ -18488,7 +18488,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         node: ObjectLiteralExpression,
         source: Type,
         target: Type,
-        relation: ESMap<string, RelationComparisonResult>,
+        relation: Map<string, RelationComparisonResult>,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
         errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
     ) {
@@ -18793,7 +18793,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return true;
     }
 
-    function isSimpleTypeRelatedTo(source: Type, target: Type, relation: ESMap<string, RelationComparisonResult>, errorReporter?: ErrorReporter) {
+    function isSimpleTypeRelatedTo(source: Type, target: Type, relation: Map<string, RelationComparisonResult>, errorReporter?: ErrorReporter) {
         const s = source.flags;
         const t = target.flags;
         if (t & TypeFlags.AnyOrUnknown || s & TypeFlags.Never || source === wildcardType) return true;
@@ -18834,7 +18834,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function isTypeRelatedTo(source: Type, target: Type, relation: ESMap<string, RelationComparisonResult>) {
+    function isTypeRelatedTo(source: Type, target: Type, relation: Map<string, RelationComparisonResult>) {
         if (isFreshLiteralType(source)) {
             source = (source as FreshableType).regularType;
         }
@@ -18911,7 +18911,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkTypeRelatedTo(
         source: Type,
         target: Type,
-        relation: ESMap<string, RelationComparisonResult>,
+        relation: Map<string, RelationComparisonResult>,
         errorNode: Node | undefined,
         headMessage?: DiagnosticMessage,
         containingMessageChain?: () => DiagnosticMessageChain | undefined,
@@ -21465,7 +21465,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * To improve caching, the relation key for two generic types uses the target's id plus ids of the type parameters.
      * For other cases, the types ids are used.
      */
-    function getRelationKey(source: Type, target: Type, intersectionState: IntersectionState, relation: ESMap<string, RelationComparisonResult>, ignoreConstraints: boolean) {
+    function getRelationKey(source: Type, target: Type, intersectionState: IntersectionState, relation: Map<string, RelationComparisonResult>, ignoreConstraints: boolean) {
         if (relation === identityRelation && source.id > target.id) {
             const temp = source;
             source = target;
@@ -22934,7 +22934,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let propagationType: Type;
         let inferencePriority: number = InferencePriority.MaxValue;
         let allowComplexConstraintInference = true;
-        let visited: ESMap<string, number>;
+        let visited: Map<string, number>;
         let sourceStack: object[];
         let targetStack: object[];
         let expandingFlags = ExpandingFlags.None;
@@ -30943,7 +30943,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkApplicableSignatureForJsxOpeningLikeElement(
         node: JsxOpeningLikeElement,
         signature: Signature,
-        relation: ESMap<string, RelationComparisonResult>,
+        relation: Map<string, RelationComparisonResult>,
         checkMode: CheckMode,
         reportErrors: boolean,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
@@ -31046,7 +31046,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         node: CallLikeExpression,
         args: readonly Expression[],
         signature: Signature,
-        relation: ESMap<string, RelationComparisonResult>,
+        relation: Map<string, RelationComparisonResult>,
         checkMode: CheckMode,
         reportErrors: boolean,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
@@ -31643,7 +31643,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             candidateForTypeArgumentError = oldCandidateForTypeArgumentError;
         }
 
-        function chooseOverload(candidates: Signature[], relation: ESMap<string, RelationComparisonResult>, isSingleNonGenericCandidate: boolean, signatureHelpTrailingComma = false) {
+        function chooseOverload(candidates: Signature[], relation: Map<string, RelationComparisonResult>, isSingleNonGenericCandidate: boolean, signatureHelpTrailingComma = false) {
             candidatesForArgumentError = undefined;
             candidateForArgumentArityError = undefined;
             candidateForTypeArgumentError = undefined;
@@ -38731,7 +38731,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !(getMergedSymbol(typeParameter.symbol).isReferenced! & SymbolFlags.TypeParameter) && !isIdentifierThatStartsWithUnderscore(typeParameter.name);
     }
 
-    function addToGroup<K, V>(map: ESMap<string, [K, V[]]>, key: K, value: V, getKey: (key: K) => number | string): void {
+    function addToGroup<K, V>(map: Map<string, [K, V[]]>, key: K, value: V, getKey: (key: K) => number | string): void {
         const keyString = String(getKey(key));
         const group = map.get(keyString);
         if (group) {
@@ -40888,9 +40888,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const containsArguments = containsArgumentsReference(node);
         if (containsArguments) {
-            const lastJSDocParam = lastOrUndefined(jsdocParameters);
+            const lastJSDocParamIndex = jsdocParameters.length - 1;
+            const lastJSDocParam = jsdocParameters[lastJSDocParamIndex];
             if (isJs && lastJSDocParam && isIdentifier(lastJSDocParam.name) && lastJSDocParam.typeExpression &&
-                lastJSDocParam.typeExpression.type && !parameters.has(lastJSDocParam.name.escapedText) && !isArrayType(getTypeFromTypeNode(lastJSDocParam.typeExpression.type))) {
+                lastJSDocParam.typeExpression.type && !parameters.has(lastJSDocParam.name.escapedText) && !excludedParameters.has(lastJSDocParamIndex) && !isArrayType(getTypeFromTypeNode(lastJSDocParam.typeExpression.type))) {
                 error(lastJSDocParam.name, Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name_It_would_match_arguments_if_it_had_an_array_type, idText(lastJSDocParam.name));
             }
         }
@@ -44738,10 +44739,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // this variable and functions that use it are deliberately moved here from the outer scope
         // to avoid scope pollution
         const resolvedTypeReferenceDirectives = host.getResolvedTypeReferenceDirectives();
-        let fileToDirective: ESMap<string, [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined]>;
+        let fileToDirective: Map<string, [specifier: string, mode: ResolutionMode | undefined]>;
         if (resolvedTypeReferenceDirectives) {
             // populate reverse mapping: file path -> type reference directive that was resolved to this file
-            fileToDirective = new Map<string, [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined]>();
+            fileToDirective = new Map<string, [specifier: string, mode: ResolutionMode | undefined]>();
             resolvedTypeReferenceDirectives.forEach((resolvedDirective, key, mode) => {
                 if (!resolvedDirective || !resolvedDirective.resolvedFileName) {
                     return;
@@ -44873,7 +44874,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // defined here to avoid outer scope pollution
-        function getTypeReferenceDirectivesForEntityName(node: EntityNameOrEntityNameExpression): [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined][] | undefined {
+        function getTypeReferenceDirectivesForEntityName(node: EntityNameOrEntityNameExpression): [specifier: string, mode: ResolutionMode | undefined][] | undefined {
             // program does not have any files with type reference directives - bail out
             if (!fileToDirective) {
                 return undefined;
@@ -44898,13 +44899,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // defined here to avoid outer scope pollution
-        function getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined][] | undefined {
+        function getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: ResolutionMode | undefined][] | undefined {
             // program does not have any files with type reference directives - bail out
             if (!fileToDirective || !isSymbolFromTypeDeclarationFile(symbol)) {
                 return undefined;
             }
             // check what declarations in the symbol can contribute to the target meaning
-            let typeReferenceDirectives: [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined][] | undefined;
+            let typeReferenceDirectives: [specifier: string, mode: ResolutionMode | undefined][] | undefined;
             for (const decl of symbol.declarations!) {
                 // check meaning of the local symbol to see if declaration needs to be analyzed further
                 if (decl.symbol && decl.symbol.flags & meaning!) {
@@ -44955,7 +44956,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
         }
 
-        function addReferencedFilesToTypeDirective(file: SourceFile, key: string, mode: SourceFile["impliedNodeFormat"] | undefined) {
+        function addReferencedFilesToTypeDirective(file: SourceFile, key: string, mode: ResolutionMode | undefined) {
             if (fileToDirective.has(file.path)) return;
             fileToDirective.set(file.path, [key, mode]);
             for (const { fileName, resolutionMode } of file.referencedFiles) {
