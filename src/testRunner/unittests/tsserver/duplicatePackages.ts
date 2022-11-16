@@ -1,30 +1,32 @@
 import * as ts from "../../_namespaces/ts";
+import { createServerHost, File } from "../virtualFileSystemWithWatch";
+import { createSession, openFilesForSession, executeSessionRequest } from "./helpers";
 
 describe("unittests:: tsserver:: duplicate packages", () => {
     // Tests that 'moduleSpecifiers.ts' will import from the redirecting file, and not from the file it redirects to, if that can provide a global module specifier.
     it("works with import fixes", () => {
         const packageContent = "export const foo: number;";
         const packageJsonContent = JSON.stringify({ name: "foo", version: "1.2.3" });
-        const aFooIndex: ts.projectSystem.File = { path: "/a/node_modules/foo/index.d.ts", content: packageContent };
-        const aFooPackage: ts.projectSystem.File = { path: "/a/node_modules/foo/package.json", content: packageJsonContent };
-        const bFooIndex: ts.projectSystem.File = { path: "/b/node_modules/foo/index.d.ts", content: packageContent };
-        const bFooPackage: ts.projectSystem.File = { path: "/b/node_modules/foo/package.json", content: packageJsonContent };
+        const aFooIndex: File = { path: "/a/node_modules/foo/index.d.ts", content: packageContent };
+        const aFooPackage: File = { path: "/a/node_modules/foo/package.json", content: packageJsonContent };
+        const bFooIndex: File = { path: "/b/node_modules/foo/index.d.ts", content: packageContent };
+        const bFooPackage: File = { path: "/b/node_modules/foo/package.json", content: packageJsonContent };
 
         const userContent = 'import("foo");\nfoo';
-        const aUser: ts.projectSystem.File = { path: "/a/user.ts", content: userContent };
-        const bUser: ts.projectSystem.File = { path: "/b/user.ts", content: userContent };
-        const tsconfig: ts.projectSystem.File = {
+        const aUser: File = { path: "/a/user.ts", content: userContent };
+        const bUser: File = { path: "/b/user.ts", content: userContent };
+        const tsconfig: File = {
             path: "/tsconfig.json",
             content: "{}",
         };
 
-        const host = ts.projectSystem.createServerHost([aFooIndex, aFooPackage, bFooIndex, bFooPackage, aUser, bUser, tsconfig]);
-        const session = ts.projectSystem.createSession(host);
+        const host = createServerHost([aFooIndex, aFooPackage, bFooIndex, bFooPackage, aUser, bUser, tsconfig]);
+        const session = createSession(host);
 
-        ts.projectSystem.openFilesForSession([aUser, bUser], session);
+        openFilesForSession([aUser, bUser], session);
 
         for (const user of [aUser, bUser]) {
-            const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.CodeFixRequest, ts.projectSystem.protocol.CodeFixResponse>(session, ts.projectSystem.protocol.CommandTypes.GetCodeFixes, {
+            const response = executeSessionRequest<ts.server.protocol.CodeFixRequest, ts.server.protocol.CodeFixResponse>(session, ts.server.protocol.CommandTypes.GetCodeFixes, {
                 file: user.path,
                 startLine: 2,
                 startOffset: 1,
@@ -32,7 +34,7 @@ describe("unittests:: tsserver:: duplicate packages", () => {
                 endOffset: 4,
                 errorCodes: [ts.Diagnostics.Cannot_find_name_0.code],
             });
-            assert.deepEqual<readonly ts.projectSystem.protocol.CodeFixAction[] | undefined>(response, [
+            assert.deepEqual<readonly ts.server.protocol.CodeFixAction[] | undefined>(response, [
                 {
                     description: `Add import from "foo"`,
                     fixName: "import",

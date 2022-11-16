@@ -5,7 +5,7 @@ import {
     classOrConstructorParameterIsDecorated, ClassStaticBlockDeclaration, compact, ComputedPropertyName,
     ConstructorDeclaration, createAccessorPropertyBackingField, createAccessorPropertyGetRedirector,
     createAccessorPropertySetRedirector, createMemberAccessForPropertyName, Debug, ElementAccessExpression, EmitFlags,
-    EmitHint, ESMap, expandPreOrPostfixIncrementOrDecrementExpression, Expression, ExpressionStatement,
+    EmitHint, expandPreOrPostfixIncrementOrDecrementExpression, Expression, ExpressionStatement,
     ExpressionWithTypeArguments, factory, filter, findSuperStatementIndex, ForStatement, GeneratedIdentifier,
     GeneratedIdentifierFlags, GeneratedNamePart, GeneratedPrivateIdentifier, GetAccessorDeclaration, getCommentRange,
     getEffectiveBaseTypeNode, getEmitFlags, getEmitScriptTarget, getInitializerOfBindingOrAssignmentElement,
@@ -24,7 +24,7 @@ import {
     isPropertyAssignment, isPropertyDeclaration, isPropertyName, isSetAccessor, isSetAccessorDeclaration,
     isShorthandPropertyAssignment, isSimpleCopiableExpression, isSimpleInlineableExpression, isSpreadAssignment,
     isSpreadElement, isStatement, isStatic, isStaticModifier, isSuperProperty, isTemplateLiteral, isThisProperty,
-    LeftHandSideExpression, map, Map, MethodDeclaration, Modifier, ModifierFlags, moveRangePastModifiers, moveRangePos,
+    LeftHandSideExpression, map, MethodDeclaration, Modifier, ModifierFlags, moveRangePastModifiers, moveRangePos,
     Node, NodeCheckFlags, nodeIsSynthesized, ObjectLiteralElementLike, PostfixUnaryExpression, PrefixUnaryExpression,
     PrivateIdentifier, PrivateIdentifierPropertyAccessExpression, PrivateIdentifierPropertyDeclaration,
     PropertyAccessExpression, PropertyDeclaration, PropertyName, ScriptTarget, SetAccessorDeclaration, setCommentRange,
@@ -135,7 +135,7 @@ interface PrivateIdentifierEnvironment {
     /**
      * A mapping of generated private names to information needed for transformation.
      */
-    generatedIdentifiers?: ESMap<Node, PrivateIdentifierInfo>;
+    generatedIdentifiers?: Map<Node, PrivateIdentifierInfo>;
 }
 
 interface ClassLexicalEnvironment {

@@ -1,5 +1,5 @@
 import {
-    addToSeen, Diagnostics, factory, findChildOfKind, getSymbolId, getTokenAtPosition, isVariableDeclarationList, Map,
+    addToSeen, Diagnostics, factory, findChildOfKind, getSymbolId, getTokenAtPosition, isVariableDeclarationList,
     Program, SourceFile, Symbol, SyntaxKind, textChanges, Token, tryCast,
 } from "../_namespaces/ts";
 import {

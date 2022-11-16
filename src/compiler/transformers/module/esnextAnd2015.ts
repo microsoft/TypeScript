@@ -1,10 +1,10 @@
 import {
     addRange, append, Bundle, chainBundle, createEmptyExports, createExternalHelpersImportDeclarationIfNeeded, Debug, EmitFlags,
-    EmitHint, ESMap, ExportAssignment, ExportDeclaration, Expression, GeneratedIdentifierFlags, getEmitFlags,
+    EmitHint, ExportAssignment, ExportDeclaration, Expression, GeneratedIdentifierFlags, getEmitFlags,
     getEmitModuleKind, getEmitScriptTarget, getExternalModuleNameLiteral, hasSyntacticModifier, Identifier, idText,
     ImportDeclaration, ImportEqualsDeclaration, insertStatementsAfterCustomPrologue,
     isExportNamespaceAsDefaultDeclaration, isExternalModule, isExternalModuleImportEqualsDeclaration,
-    isExternalModuleIndicator, isIdentifier, isNamespaceExport, isSourceFile, isStatement, Map, ModifierFlags,
+    isExternalModuleIndicator, isIdentifier, isNamespaceExport, isSourceFile, isStatement, ModifierFlags,
     ModuleKind, Node, NodeFlags, ScriptTarget, setOriginalNode, setTextRange, singleOrMany, some, SourceFile, Statement,
     SyntaxKind, TransformationContext, VariableStatement, visitEachChild, visitNodes, VisitResult,
 } from "../../_namespaces/ts";
@@ -26,7 +26,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
     context.enableEmitNotification(SyntaxKind.SourceFile);
     context.enableSubstitution(SyntaxKind.Identifier);
 
-    let helperNameSubstitutions: ESMap<string, Identifier> | undefined;
+    let helperNameSubstitutions: Map<string, Identifier> | undefined;
     let currentSourceFile: SourceFile | undefined;
     let importRequireStatements: [ImportDeclaration, VariableStatement] | undefined;
     return chainBundle(context, transformSourceFile);

@@ -1324,9 +1324,9 @@ const visitEachChildTable: VisitEachChildTable = {
     },
 
     // Top-level nodes
-    [SyntaxKind.SourceFile]: function visitEachChildOfSourceFile(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
+    [SyntaxKind.SourceFile]: function visitEachChildOfSourceFile(node, visitor, context, _nodesVisitor, _nodeVisitor, _tokenVisitor) {
         return context.factory.updateSourceFile(node,
-            visitLexicalEnvironment(node.statements, visitor, context, /*start*/ undefined, /*ensureUseStrict*/ undefined, nodesVisitor));
+            visitLexicalEnvironment(node.statements, visitor, context));
     },
 
     // Transformation nodes

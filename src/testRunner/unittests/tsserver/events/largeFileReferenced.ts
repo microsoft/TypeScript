@@ -1,4 +1,6 @@
 import * as ts from "../../../_namespaces/ts";
+import { createServerHost, File, libFile } from "../../virtualFileSystemWithWatch";
+import { createSessionWithEventTracking, checkProjectActualFiles, openFilesForSession, checkNumberOfProjects } from "../helpers";
 
 describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large file", () => {
 
@@ -6,20 +8,20 @@ describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large fi
         return `src/large.${useLargeTsFile ? "ts" : "js"}`;
     }
 
-    function createSessionWithEventHandler(files: ts.projectSystem.File[], useLargeTsFile: boolean) {
-        const largeFile: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/${getLargeFile(useLargeTsFile)}`,
+    function createSessionWithEventHandler(files: File[], useLargeTsFile: boolean) {
+        const largeFile: File = {
+            path: `/user/username/projects/myproject/${getLargeFile(useLargeTsFile)}`,
             content: "export var x = 10;",
             fileSize: ts.server.maxFileSize + 1
         };
         files.push(largeFile);
-        const host = ts.projectSystem.createServerHost(files);
-        const { session, events: largeFileReferencedEvents } = ts.projectSystem.createSessionWithEventTracking<ts.server.LargeFileReferencedEvent>(host, ts.server.LargeFileReferencedEvent);
+        const host = createServerHost(files);
+        const { session, events: largeFileReferencedEvents } = createSessionWithEventTracking<ts.server.LargeFileReferencedEvent>(host, ts.server.LargeFileReferencedEvent);
 
         return { session, verifyLargeFile };
 
         function verifyLargeFile(project: ts.server.Project) {
-            ts.projectSystem.checkProjectActualFiles(project, files.map(f => f.path));
+            checkProjectActualFiles(project, files.map(f => f.path));
 
             // large file for non ts file should be empty and for ts file should have content
             const service = session.getProjectService();
@@ -35,32 +37,32 @@ describe("unittests:: tsserver:: events:: LargeFileReferencedEvent with large fi
 
     function verifyLargeFile(useLargeTsFile: boolean) {
         it("when large file is included by tsconfig", () => {
-            const file: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/src/file.ts`,
+            const file: File = {
+                path: `/user/username/projects/myproject/src/file.ts`,
                 content: "export var y = 10;"
             };
-            const tsconfig: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+            const tsconfig: File = {
+                path: `/user/username/projects/myproject/tsconfig.json`,
                 content: JSON.stringify({ files: ["src/file.ts", getLargeFile(useLargeTsFile)], compilerOptions: { target: 1, allowJs: true } })
             };
-            const files = [file, ts.projectSystem.libFile, tsconfig];
+            const files = [file, libFile, tsconfig];
             const { session, verifyLargeFile } = createSessionWithEventHandler(files, useLargeTsFile);
             const service = session.getProjectService();
-            ts.projectSystem.openFilesForSession([file], session);
-            ts.projectSystem.checkNumberOfProjects(service, { configuredProjects: 1 });
+            openFilesForSession([file], session);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
             verifyLargeFile(service.configuredProjects.get(tsconfig.path)!);
         });
 
         it("when large file is included by module resolution", () => {
-            const file: ts.projectSystem.File = {
-                path: `${ts.tscWatch.projectRoot}/src/file.ts`,
+            const file: File = {
+                path: `/user/username/projects/myproject/src/file.ts`,
                 content: `export var y = 10;import {x} from "./large"`
             };
-            const files = [file, ts.projectSystem.libFile];
+            const files = [file, libFile];
             const { session, verifyLargeFile } = createSessionWithEventHandler(files, useLargeTsFile);
             const service = session.getProjectService();
-            ts.projectSystem.openFilesForSession([file], session);
-            ts.projectSystem.checkNumberOfProjects(service, { inferredProjects: 1 });
+            openFilesForSession([file], session);
+            checkNumberOfProjects(service, { inferredProjects: 1 });
             verifyLargeFile(service.inferredProjects[0]);
         });
     }

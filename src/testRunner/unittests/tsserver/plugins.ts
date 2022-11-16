@@ -1,13 +1,15 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
+import { createProjectService, createSession, createLoggerWithInMemoryLogs, openFilesForSession, baselineTsserverLogs } from "./helpers";
 
 describe("unittests:: tsserver:: plugins loading", () => {
     const testProtocolCommand = "testProtocolCommand";
     const testProtocolCommandRequest = "testProtocolCommandRequest";
     const testProtocolCommandResponse = "testProtocolCommandResponse";
 
-    function createHostWithPlugin(files: readonly ts.projectSystem.File[]) {
-        const host = ts.projectSystem.createServerHost(files);
+    function createHostWithPlugin(files: readonly File[]) {
+        const host = createServerHost(files);
         const pluginsLoaded: string[] = [];
         const protocolHandlerRequests: [string, string][] = [];
         host.require = (_initialPath, moduleName) => {
@@ -33,8 +35,8 @@ describe("unittests:: tsserver:: plugins loading", () => {
     it("With local plugins", () => {
         const expectedToLoad = ["@myscoped/plugin", "unscopedPlugin"];
         const notToLoad = ["../myPlugin", "myPlugin/../malicious"];
-        const aTs: ts.projectSystem.File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
-        const tsconfig: ts.projectSystem.File = {
+        const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
+        const tsconfig: File = {
             path: "/tsconfig.json",
             content: JSON.stringify({
                 compilerOptions: {
@@ -45,8 +47,8 @@ describe("unittests:: tsserver:: plugins loading", () => {
                 }
             })
         };
-        const { host, pluginsLoaded } = createHostWithPlugin([aTs, tsconfig, ts.projectSystem.libFile]);
-        const service = ts.projectSystem.createProjectService(host);
+        const { host, pluginsLoaded } = createHostWithPlugin([aTs, tsconfig, libFile]);
+        const service = createProjectService(host);
         service.openClientFile(aTs.path);
         assert.deepEqual(pluginsLoaded, expectedToLoad);
     });
@@ -54,13 +56,13 @@ describe("unittests:: tsserver:: plugins loading", () => {
     it("With global plugins", () => {
         const expectedToLoad = ["@myscoped/plugin", "unscopedPlugin"];
         const notToLoad = ["../myPlugin", "myPlugin/../malicious"];
-        const aTs: ts.projectSystem.File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
-        const tsconfig: ts.projectSystem.File = {
+        const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
+        const tsconfig: File = {
             path: "/tsconfig.json",
             content: "{}"
         };
-        const { host, pluginsLoaded } = createHostWithPlugin([aTs, tsconfig, ts.projectSystem.libFile]);
-        const service = ts.projectSystem.createProjectService(host, { globalPlugins: [...expectedToLoad, ...notToLoad] });
+        const { host, pluginsLoaded } = createHostWithPlugin([aTs, tsconfig, libFile]);
+        const service = createProjectService(host, { globalPlugins: [...expectedToLoad, ...notToLoad] });
         service.openClientFile(aTs.path);
         assert.deepEqual(pluginsLoaded, expectedToLoad);
     });
@@ -68,8 +70,8 @@ describe("unittests:: tsserver:: plugins loading", () => {
     it("With session and custom protocol message", () => {
         const pluginName = "some-plugin";
         const expectedToLoad = [pluginName];
-        const aTs: ts.projectSystem.File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
-        const tsconfig: ts.projectSystem.File = {
+        const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
+        const tsconfig: File = {
             path: "/tsconfig.json",
             content: JSON.stringify({
                 compilerOptions: {
@@ -80,10 +82,10 @@ describe("unittests:: tsserver:: plugins loading", () => {
             })
         };
 
-        const { host, pluginsLoaded, protocolHandlerRequests } = createHostWithPlugin([aTs, tsconfig, ts.projectSystem.libFile]);
-        const session = ts.projectSystem.createSession(host);
+        const { host, pluginsLoaded, protocolHandlerRequests } = createHostWithPlugin([aTs, tsconfig, libFile]);
+        const session = createSession(host);
 
-        const service = ts.projectSystem.createProjectService(host, { session });
+        const service = createProjectService(host, { session });
         service.openClientFile(aTs.path);
         assert.deepEqual(pluginsLoaded, expectedToLoad);
 
@@ -104,9 +106,9 @@ describe("unittests:: tsserver:: plugins loading", () => {
     });
 
     it("gets external files with config file reload", () => {
-        const aTs: ts.projectSystem.File = { path: `${ts.tscWatch.projectRoot}/a.ts`, content: `export const x = 10;` };
-        const tsconfig: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+        const aTs: File = { path: `/user/username/projects/myproject/a.ts`, content: `export const x = 10;` };
+        const tsconfig: File = {
+            path: `/user/username/projects/myproject/tsconfig.json`,
             content: JSON.stringify({
                 compilerOptions: {
                     plugins: [{ name: "some-plugin" }]
@@ -119,7 +121,7 @@ describe("unittests:: tsserver:: plugins loading", () => {
             "some-other-plugin": ["someOtherFile.txt"],
         };
 
-        const host = ts.projectSystem.createServerHost([aTs, tsconfig, ts.projectSystem.libFile]);
+        const host = createServerHost([aTs, tsconfig, libFile]);
         host.require = (_initialPath, moduleName) => {
             session.logger.logs.push(`Require:: ${moduleName}`);
             return {
@@ -133,8 +135,8 @@ describe("unittests:: tsserver:: plugins loading", () => {
                 error: undefined
             };
         };
-        const session = ts.projectSystem.createSession(host, { logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
-        ts.projectSystem.openFilesForSession([aTs], session);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([aTs], session);
         session.logger.logs.push(`ExternalFiles:: ${JSON.stringify(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
 
         host.writeFile(tsconfig.path, JSON.stringify({
@@ -145,6 +147,6 @@ describe("unittests:: tsserver:: plugins loading", () => {
         host.runQueuedTimeoutCallbacks();
         session.logger.logs.push(`ExternalFiles:: ${JSON.stringify(session.getProjectService().configuredProjects.get(tsconfig.path)!.getExternalFiles())}`);
 
-        ts.projectSystem.baselineTsserverLogs("plugins", "gets external files with config file reload", session);
+        baselineTsserverLogs("plugins", "gets external files with config file reload", session);
     });
 });

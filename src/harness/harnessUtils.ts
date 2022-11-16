@@ -54,7 +54,7 @@ export function readTestFile(path: string) {
 }
 
 export function memoize<T extends ts.AnyFunction>(f: T, memoKey: (...anything: any[]) => string): T {
-    const cache = new ts.Map<string, any>();
+    const cache = new Map<string, any>();
 
     return (function (this: any, ...args: any[]) {
         const key = memoKey(...args);

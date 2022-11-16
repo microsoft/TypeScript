@@ -3,8 +3,8 @@ import {
     findAncestor, findNextToken, getAllowSyntheticDefaultImports, getLocaleSpecificMessage, getOwnValues,
     getParentNodeInSpan, getRefactorContextSpan, getTokenAtPosition, getUniqueName, Identifier, ImportClause,
     ImportDeclaration, ImportKind, ImportSpecifier, isExportSpecifier, isImportDeclaration, isPropertyAccessExpression,
-    isPropertyAccessOrQualifiedName, isShorthandPropertyAssignment, isStringLiteral, Map, NamedImports, NamespaceImport,
-    Program, PropertyAccessExpression, QualifiedName, RefactorContext, RefactorEditInfo, ScriptTarget, Set, some,
+    isPropertyAccessOrQualifiedName, isShorthandPropertyAssignment, isStringLiteral, NamedImports, NamespaceImport,
+    Program, PropertyAccessExpression, QualifiedName, RefactorContext, RefactorEditInfo, ScriptTarget, some,
     SourceFile, Symbol, SymbolFlags, SyntaxKind, textChanges, TypeChecker,
 } from "../_namespaces/ts";
 import { isRefactorErrorInfo, RefactorErrorInfo, registerRefactor } from "../_namespaces/ts.refactor";

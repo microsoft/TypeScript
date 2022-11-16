@@ -3,10 +3,6 @@
     "compilerOptions": {
         "types": [
             "node", "mocha", "chai"
-        ],
-        "lib": [
-            "es6",
-            "scripthost"
         ]
     },
     "references": [

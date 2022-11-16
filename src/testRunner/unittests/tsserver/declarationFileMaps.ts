@@ -1,19 +1,21 @@
 import * as ts from "../../_namespaces/ts";
+import { createServerHost, File } from "../virtualFileSystemWithWatch";
+import { DocumentSpanFromSubstring, textSpanFromSubstring, TestSession, openFilesForSession, closeFilesForSession, createSession, checkNumberOfProjects, checkProjectActualFiles, executeSessionRequest, protocolFileLocationFromSubstring, protocolFileSpanWithContextFromSubstring, protocolTextSpanFromSubstring, protocolFileSpanFromSubstring, makeReferenceItem, protocolLocationFromSubstring, protocolRenameSpanFromSubstring } from "./helpers";
 
-function documentSpanFromSubstring({ file, text, contextText, options, contextOptions }: ts.projectSystem.DocumentSpanFromSubstring): ts.DocumentSpan {
+function documentSpanFromSubstring({ file, text, contextText, options, contextOptions }: DocumentSpanFromSubstring): ts.DocumentSpan {
     const contextSpan = contextText !== undefined ? documentSpanFromSubstring({ file, text: contextText, options: contextOptions }) : undefined;
     return {
         fileName: file.path,
-        textSpan: ts.projectSystem.textSpanFromSubstring(file.content, text, options),
+        textSpan: textSpanFromSubstring(file.content, text, options),
         ...contextSpan && { contextSpan: contextSpan.textSpan }
     };
 }
 
-function renameLocation(input: ts.projectSystem.DocumentSpanFromSubstring): ts.RenameLocation {
+function renameLocation(input: DocumentSpanFromSubstring): ts.RenameLocation {
     return documentSpanFromSubstring(input);
 }
 
-interface MakeReferenceEntry extends ts.projectSystem.DocumentSpanFromSubstring {
+interface MakeReferenceEntry extends DocumentSpanFromSubstring {
     isDefinition?: boolean;
     isWriteAccess?: boolean;
 }
@@ -30,19 +32,19 @@ function makeReferencedSymbolEntry({ isDefinition, isWriteAccess, ...rest }: Mak
     return result;
 }
 
-function checkDeclarationFiles(file: ts.projectSystem.File, session: ts.projectSystem.TestSession, expectedFiles: readonly ts.projectSystem.File[]): void {
-    ts.projectSystem.openFilesForSession([file], session);
+function checkDeclarationFiles(file: File, session: TestSession, expectedFiles: readonly File[]): void {
+    openFilesForSession([file], session);
     const project = ts.Debug.checkDefined(session.getProjectService().getDefaultProjectForFile(file.path as ts.server.NormalizedPath, /*ensureProject*/ false));
     const program = project.getCurrentProgram()!;
     const output = ts.getFileEmitOutput(program, ts.Debug.checkDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
-    ts.projectSystem.closeFilesForSession([file], session);
+    closeFilesForSession([file], session);
 
     ts.Debug.assert(!output.emitSkipped);
     assert.deepEqual(output.outputFiles, expectedFiles.map((e): ts.OutputFile => ({ name: e.path, text: e.content, writeByteOrderMark: false })));
 }
 
 describe("unittests:: tsserver:: with declaration file maps:: project references", () => {
-    const aTs: ts.projectSystem.File = {
+    const aTs: File = {
         path: "/a/a.ts",
         content: "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};",
     };
@@ -53,7 +55,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         composite: true,
     };
     const configContent = JSON.stringify({ compilerOptions });
-    const aTsconfig: ts.projectSystem.File = { path: "/a/tsconfig.json", content: configContent };
+    const aTsconfig: File = { path: "/a/tsconfig.json", content: configContent };
 
     const aDtsMapContent: ts.RawSourceMap = {
         version: 3,
@@ -63,21 +65,21 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         names: [],
         mappings: "AAAA,wBAAgB,GAAG,SAAK;AACxB,MAAM,WAAW,MAAM;CAAG;AAC1B,eAAO,MAAM,SAAS,EAAE,MAAW,CAAC"
     };
-    const aDtsMap: ts.projectSystem.File = {
+    const aDtsMap: File = {
         path: "/a/bin/a.d.ts.map",
         content: JSON.stringify(aDtsMapContent),
     };
-    const aDts: ts.projectSystem.File = {
+    const aDts: File = {
         path: "/a/bin/a.d.ts",
         // ${""} is needed to mangle the sourceMappingURL part or it breaks the build
         content: `export declare function fnA(): void;\nexport interface IfaceA {\n}\nexport declare const instanceA: IfaceA;\n//# source${""}MappingURL=a.d.ts.map`,
     };
 
-    const bTs: ts.projectSystem.File = {
+    const bTs: File = {
         path: "/b/b.ts",
         content: "export function fnB() {}",
     };
-    const bTsconfig: ts.projectSystem.File = { path: "/b/tsconfig.json", content: configContent };
+    const bTsconfig: File = { path: "/b/tsconfig.json", content: configContent };
 
     const bDtsMapContent: ts.RawSourceMap = {
         version: 3,
@@ -87,32 +89,32 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         names: [],
         mappings: "AAAA,wBAAgB,GAAG,SAAK",
     };
-    const bDtsMap: ts.projectSystem.File = {
+    const bDtsMap: File = {
         path: "/b/bin/b.d.ts.map",
         content: JSON.stringify(bDtsMapContent),
     };
-    const bDts: ts.projectSystem.File = {
+    const bDts: File = {
         // ${""} is need to mangle the sourceMappingURL part so it doesn't break the build
         path: "/b/bin/b.d.ts",
         content: `export declare function fnB(): void;\n//# source${""}MappingURL=b.d.ts.map`,
     };
 
-    const dummyFile: ts.projectSystem.File = {
+    const dummyFile: File = {
         path: "/dummy/dummy.ts",
         content: "let a = 10;"
     };
 
-    const userTs: ts.projectSystem.File = {
+    const userTs: File = {
         path: "/user/user.ts",
         content: 'import * as a from "../a/bin/a";\nimport * as b from "../b/bin/b";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }',
     };
 
-    const userTsForConfigProject: ts.projectSystem.File = {
+    const userTsForConfigProject: File = {
         path: "/user/user.ts",
         content: 'import * as a from "../a/a";\nimport * as b from "../b/b";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }',
     };
 
-    const userTsconfig: ts.projectSystem.File = {
+    const userTsconfig: File = {
         path: "/user/tsconfig.json",
         content: JSON.stringify({
             file: ["user.ts"],
@@ -121,8 +123,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     };
 
     function makeSampleProjects(addUserTsConfig?: boolean, keepAllFiles?: boolean) {
-        const host = ts.projectSystem.createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, ...(addUserTsConfig ? [userTsForConfigProject, userTsconfig] : [userTs]), dummyFile]);
-        const session = ts.projectSystem.createSession(host);
+        const host = createServerHost([aTs, aTsconfig, aDtsMap, aDts, bTsconfig, bTs, bDtsMap, bDts, ...(addUserTsConfig ? [userTsForConfigProject, userTsconfig] : [userTs]), dummyFile]);
+        const session = createSession(host);
 
         checkDeclarationFiles(aTs, session, [aDtsMap, aDts]);
         checkDeclarationFiles(bTs, session, [bDtsMap, bDts]);
@@ -132,70 +134,70 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
             host.deleteFile(bTs.path);
         }
 
-        ts.projectSystem.openFilesForSession([userTs], session);
+        openFilesForSession([userTs], session);
         const service = session.getProjectService();
         // If config file then userConfig project and bConfig project since it is referenced
-        ts.projectSystem.checkNumberOfProjects(service, addUserTsConfig ? { configuredProjects: 2 } : { inferredProjects: 1 });
+        checkNumberOfProjects(service, addUserTsConfig ? { configuredProjects: 2 } : { inferredProjects: 1 });
         return session;
     }
 
-    function verifyInferredProjectUnchanged(session: ts.projectSystem.TestSession) {
-        ts.projectSystem.checkProjectActualFiles(session.getProjectService().inferredProjects[0], [userTs.path, aDts.path, bDts.path]);
+    function verifyInferredProjectUnchanged(session: TestSession) {
+        checkProjectActualFiles(session.getProjectService().inferredProjects[0], [userTs.path, aDts.path, bDts.path]);
     }
 
-    function verifyDummyProject(session: ts.projectSystem.TestSession) {
-        ts.projectSystem.checkProjectActualFiles(session.getProjectService().inferredProjects[0], [dummyFile.path]);
+    function verifyDummyProject(session: TestSession) {
+        checkProjectActualFiles(session.getProjectService().inferredProjects[0], [dummyFile.path]);
     }
 
-    function verifyOnlyOrphanInferredProject(session: ts.projectSystem.TestSession) {
-        ts.projectSystem.openFilesForSession([dummyFile], session);
-        ts.projectSystem.checkNumberOfProjects(session.getProjectService(), { inferredProjects: 1 });
+    function verifyOnlyOrphanInferredProject(session: TestSession) {
+        openFilesForSession([dummyFile], session);
+        checkNumberOfProjects(session.getProjectService(), { inferredProjects: 1 });
         verifyDummyProject(session);
     }
 
-    function verifySingleInferredProject(session: ts.projectSystem.TestSession) {
-        ts.projectSystem.checkNumberOfProjects(session.getProjectService(), { inferredProjects: 1 });
+    function verifySingleInferredProject(session: TestSession) {
+        checkNumberOfProjects(session.getProjectService(), { inferredProjects: 1 });
         verifyInferredProjectUnchanged(session);
 
         // Close user file should close all the projects after opening dummy file
-        ts.projectSystem.closeFilesForSession([userTs], session);
+        closeFilesForSession([userTs], session);
         verifyOnlyOrphanInferredProject(session);
     }
 
-    function verifyATsConfigProject(session: ts.projectSystem.TestSession) {
-        ts.projectSystem.checkProjectActualFiles(session.getProjectService().configuredProjects.get(aTsconfig.path)!, [aTs.path, aTsconfig.path]);
+    function verifyATsConfigProject(session: TestSession) {
+        checkProjectActualFiles(session.getProjectService().configuredProjects.get(aTsconfig.path)!, [aTs.path, aTsconfig.path]);
     }
 
-    function verifyATsConfigOriginalProject(session: ts.projectSystem.TestSession) {
-        ts.projectSystem.checkNumberOfProjects(session.getProjectService(), { inferredProjects: 1, configuredProjects: 1 });
+    function verifyATsConfigOriginalProject(session: TestSession) {
+        checkNumberOfProjects(session.getProjectService(), { inferredProjects: 1, configuredProjects: 1 });
         verifyInferredProjectUnchanged(session);
         verifyATsConfigProject(session);
         // Close user file should close all the projects
-        ts.projectSystem.closeFilesForSession([userTs], session);
+        closeFilesForSession([userTs], session);
         verifyOnlyOrphanInferredProject(session);
     }
 
-    function verifyATsConfigWhenOpened(session: ts.projectSystem.TestSession) {
-        ts.projectSystem.checkNumberOfProjects(session.getProjectService(), { inferredProjects: 1, configuredProjects: 1 });
+    function verifyATsConfigWhenOpened(session: TestSession) {
+        checkNumberOfProjects(session.getProjectService(), { inferredProjects: 1, configuredProjects: 1 });
         verifyInferredProjectUnchanged(session);
         verifyATsConfigProject(session);
 
-        ts.projectSystem.closeFilesForSession([userTs], session);
-        ts.projectSystem.openFilesForSession([dummyFile], session);
-        ts.projectSystem.checkNumberOfProjects(session.getProjectService(), { inferredProjects: 1, configuredProjects: 1 });
+        closeFilesForSession([userTs], session);
+        openFilesForSession([dummyFile], session);
+        checkNumberOfProjects(session.getProjectService(), { inferredProjects: 1, configuredProjects: 1 });
         verifyDummyProject(session);
         verifyATsConfigProject(session); // ATsConfig should still be alive
     }
 
-    function verifyUserTsConfigProject(session: ts.projectSystem.TestSession) {
-        ts.projectSystem.checkProjectActualFiles(session.getProjectService().configuredProjects.get(userTsconfig.path)!, [userTs.path, aTs.path, userTsconfig.path]);
+    function verifyUserTsConfigProject(session: TestSession) {
+        checkProjectActualFiles(session.getProjectService().configuredProjects.get(userTsconfig.path)!, [userTs.path, aTs.path, userTsconfig.path]);
     }
 
     it("goToDefinition", () => {
         const session = makeSampleProjects();
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.DefinitionRequest, ts.projectSystem.protocol.DefinitionResponse>(session, ts.projectSystem.protocol.CommandTypes.Definition, ts.projectSystem.protocolFileLocationFromSubstring(userTs, "fnA()"));
+        const response = executeSessionRequest<ts.server.protocol.DefinitionRequest, ts.server.protocol.DefinitionResponse>(session, ts.server.protocol.CommandTypes.Definition, protocolFileLocationFromSubstring(userTs, "fnA()"));
         assert.deepEqual(response, [
-            ts.projectSystem.protocolFileSpanWithContextFromSubstring({
+            protocolFileSpanWithContextFromSubstring({
                 file: aTs,
                 text: "fnA",
                 contextText: "export function fnA() {}"
@@ -206,11 +208,11 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("getDefinitionAndBoundSpan", () => {
         const session = makeSampleProjects();
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.DefinitionAndBoundSpanRequest, ts.projectSystem.protocol.DefinitionAndBoundSpanResponse>(session, ts.projectSystem.protocol.CommandTypes.DefinitionAndBoundSpan, ts.projectSystem.protocolFileLocationFromSubstring(userTs, "fnA()"));
+        const response = executeSessionRequest<ts.server.protocol.DefinitionAndBoundSpanRequest, ts.server.protocol.DefinitionAndBoundSpanResponse>(session, ts.server.protocol.CommandTypes.DefinitionAndBoundSpan, protocolFileLocationFromSubstring(userTs, "fnA()"));
         assert.deepEqual(response, {
-            textSpan: ts.projectSystem.protocolTextSpanFromSubstring(userTs.content, "fnA"),
+            textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA"),
             definitions: [
-                ts.projectSystem.protocolFileSpanWithContextFromSubstring({
+                protocolFileSpanWithContextFromSubstring({
                     file: aTs,
                     text: "fnA",
                     contextText: "export function fnA() {}"
@@ -222,38 +224,38 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("getDefinitionAndBoundSpan with file navigation", () => {
         const session = makeSampleProjects(/*addUserTsConfig*/ true);
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.DefinitionAndBoundSpanRequest, ts.projectSystem.protocol.DefinitionAndBoundSpanResponse>(session, ts.projectSystem.protocol.CommandTypes.DefinitionAndBoundSpan, ts.projectSystem.protocolFileLocationFromSubstring(userTs, "fnA()"));
+        const response = executeSessionRequest<ts.server.protocol.DefinitionAndBoundSpanRequest, ts.server.protocol.DefinitionAndBoundSpanResponse>(session, ts.server.protocol.CommandTypes.DefinitionAndBoundSpan, protocolFileLocationFromSubstring(userTs, "fnA()"));
         assert.deepEqual(response, {
-            textSpan: ts.projectSystem.protocolTextSpanFromSubstring(userTs.content, "fnA"),
+            textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA"),
             definitions: [
-                ts.projectSystem.protocolFileSpanWithContextFromSubstring({
+                protocolFileSpanWithContextFromSubstring({
                     file: aTs,
                     text: "fnA",
                     contextText: "export function fnA() {}"
                 })
             ],
         });
-        ts.projectSystem.checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 });
+        checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 });
         verifyUserTsConfigProject(session);
 
         // Navigate to the definition
-        ts.projectSystem.closeFilesForSession([userTs], session);
-        ts.projectSystem.openFilesForSession([aTs], session);
+        closeFilesForSession([userTs], session);
+        openFilesForSession([aTs], session);
 
         // UserTs configured project should be alive
-        ts.projectSystem.checkNumberOfProjects(session.getProjectService(), { configuredProjects: 3 });
+        checkNumberOfProjects(session.getProjectService(), { configuredProjects: 3 });
         verifyUserTsConfigProject(session);
         verifyATsConfigProject(session);
 
-        ts.projectSystem.closeFilesForSession([aTs], session);
+        closeFilesForSession([aTs], session);
         verifyOnlyOrphanInferredProject(session);
     });
 
     it("goToType", () => {
         const session = makeSampleProjects();
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.TypeDefinitionRequest, ts.projectSystem.protocol.TypeDefinitionResponse>(session, ts.projectSystem.protocol.CommandTypes.TypeDefinition, ts.projectSystem.protocolFileLocationFromSubstring(userTs, "instanceA"));
+        const response = executeSessionRequest<ts.server.protocol.TypeDefinitionRequest, ts.server.protocol.TypeDefinitionResponse>(session, ts.server.protocol.CommandTypes.TypeDefinition, protocolFileLocationFromSubstring(userTs, "instanceA"));
         assert.deepEqual(response, [
-            ts.projectSystem.protocolFileSpanWithContextFromSubstring({
+            protocolFileSpanWithContextFromSubstring({
                 file: aTs,
                 text: "IfaceA",
                 contextText: "export interface IfaceA {}"
@@ -264,9 +266,9 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("goToImplementation", () => {
         const session = makeSampleProjects();
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.ImplementationRequest, ts.projectSystem.protocol.ImplementationResponse>(session, ts.projectSystem.protocol.CommandTypes.Implementation, ts.projectSystem.protocolFileLocationFromSubstring(userTs, "fnA()"));
+        const response = executeSessionRequest<ts.server.protocol.ImplementationRequest, ts.server.protocol.ImplementationResponse>(session, ts.server.protocol.CommandTypes.Implementation, protocolFileLocationFromSubstring(userTs, "fnA()"));
         assert.deepEqual(response, [
-            ts.projectSystem.protocolFileSpanWithContextFromSubstring({
+            protocolFileSpanWithContextFromSubstring({
                 file: aTs,
                 text: "fnA",
                 contextText: "export function fnA() {}"
@@ -276,10 +278,10 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("goToDefinition -- target does not exist", () => {
         const session = makeSampleProjects();
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.DefinitionRequest, ts.projectSystem.protocol.DefinitionResponse>(session, ts.projectSystem.CommandNames.Definition, ts.projectSystem.protocolFileLocationFromSubstring(userTs, "fnB()"));
+        const response = executeSessionRequest<ts.server.protocol.DefinitionRequest, ts.server.protocol.DefinitionResponse>(session, ts.server.CommandNames.Definition, protocolFileLocationFromSubstring(userTs, "fnB()"));
         // bTs does not exist, so stick with bDts
         assert.deepEqual(response, [
-            ts.projectSystem.protocolFileSpanWithContextFromSubstring({
+            protocolFileSpanWithContextFromSubstring({
                 file: bDts,
                 text: "fnB",
                 contextText: "export declare function fnB(): void;"
@@ -290,12 +292,12 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("navigateTo", () => {
         const session = makeSampleProjects();
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.NavtoRequest, ts.projectSystem.protocol.NavtoResponse>(session, ts.projectSystem.CommandNames.Navto, { file: userTs.path, searchValue: "fn" });
-        assert.deepEqual<readonly ts.projectSystem.protocol.NavtoItem[] | undefined>(response, [
+        const response = executeSessionRequest<ts.server.protocol.NavtoRequest, ts.server.protocol.NavtoResponse>(session, ts.server.CommandNames.Navto, { file: userTs.path, searchValue: "fn" });
+        assert.deepEqual<readonly ts.server.protocol.NavtoItem[] | undefined>(response, [
             // Keep the .d.ts file since the .ts file no longer exists
             // (otherwise it would be treated as not in the project)
             {
-                ...ts.projectSystem.protocolFileSpanFromSubstring({
+                ...protocolFileSpanFromSubstring({
                     file: bDts,
                     text: "export declare function fnB(): void;"
                 }),
@@ -306,7 +308,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
                 kindModifiers: "export,declare",
             },
             {
-                ...ts.projectSystem.protocolFileSpanFromSubstring({
+                ...protocolFileSpanFromSubstring({
                     file: userTs,
                     text: "export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
                 }),
@@ -323,10 +325,10 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("navigateToAll -- when neither file nor project is specified", () => {
         const session = makeSampleProjects(/*addUserTsConfig*/ true, /*keepAllFiles*/ true);
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.NavtoRequest, ts.projectSystem.protocol.NavtoResponse>(session, ts.projectSystem.CommandNames.Navto, { file: undefined, searchValue: "fn" });
-        assert.deepEqual<readonly ts.projectSystem.protocol.NavtoItem[] | undefined>(response, [
+        const response = executeSessionRequest<ts.server.protocol.NavtoRequest, ts.server.protocol.NavtoResponse>(session, ts.server.CommandNames.Navto, { file: undefined, searchValue: "fn" });
+        assert.deepEqual<readonly ts.server.protocol.NavtoItem[] | undefined>(response, [
             {
-                ...ts.projectSystem.protocolFileSpanFromSubstring({
+                ...protocolFileSpanFromSubstring({
                     file: bTs,
                     text: "export function fnB() {}"
                 }),
@@ -337,7 +339,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
                 kindModifiers: "export",
             },
             {
-                ...ts.projectSystem.protocolFileSpanFromSubstring({
+                ...protocolFileSpanFromSubstring({
                     file: aTs,
                     text: "export function fnA() {}"
                 }),
@@ -348,7 +350,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
                 kindModifiers: "export",
             },
             {
-                ...ts.projectSystem.protocolFileSpanFromSubstring({
+                ...protocolFileSpanFromSubstring({
                     file: userTs,
                     text: "export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
                 }),
@@ -363,10 +365,10 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("navigateToAll -- when file is not specified but project is", () => {
         const session = makeSampleProjects(/*addUserTsConfig*/ true, /*keepAllFiles*/ true);
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.NavtoRequest, ts.projectSystem.protocol.NavtoResponse>(session, ts.projectSystem.CommandNames.Navto, { projectFileName: bTsconfig.path, file: undefined, searchValue: "fn" });
-        assert.deepEqual<readonly ts.projectSystem.protocol.NavtoItem[] | undefined>(response, [
+        const response = executeSessionRequest<ts.server.protocol.NavtoRequest, ts.server.protocol.NavtoResponse>(session, ts.server.CommandNames.Navto, { projectFileName: bTsconfig.path, file: undefined, searchValue: "fn" });
+        assert.deepEqual<readonly ts.server.protocol.NavtoItem[] | undefined>(response, [
             {
-                ...ts.projectSystem.protocolFileSpanFromSubstring({
+                ...protocolFileSpanFromSubstring({
                     file: bTs,
                     text: "export function fnB() {}"
                 }),
@@ -379,7 +381,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         ]);
     });
 
-    const referenceATs = (aTs: ts.projectSystem.File, isDefinition: true | undefined): ts.projectSystem.protocol.ReferencesResponseItem => ts.projectSystem.makeReferenceItem({
+    const referenceATs = (aTs: File, isDefinition: true | undefined): ts.server.protocol.ReferencesResponseItem => makeReferenceItem({
         file: aTs,
         isDefinition,
         isWriteAccess: true,
@@ -387,8 +389,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
         contextText: "export function fnA() {}",
         lineText: "export function fnA() {}"
     });
-    const referencesUserTs = (userTs: ts.projectSystem.File, isDefinition: false | undefined): readonly ts.projectSystem.protocol.ReferencesResponseItem[] => [
-        ts.projectSystem.makeReferenceItem({
+    const referencesUserTs = (userTs: File, isDefinition: false | undefined): readonly ts.server.protocol.ReferencesResponseItem[] => [
+        makeReferenceItem({
             file: userTs,
             isDefinition,
             text: "fnA",
@@ -399,11 +401,11 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     it("findAllReferences", () => {
         const session = makeSampleProjects();
 
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.ReferencesRequest, ts.projectSystem.protocol.ReferencesResponse>(session, ts.projectSystem.protocol.CommandTypes.References, ts.projectSystem.protocolFileLocationFromSubstring(userTs, "fnA()"));
-        assert.deepEqual<ts.projectSystem.protocol.ReferencesResponseBody | undefined>(response, {
+        const response = executeSessionRequest<ts.server.protocol.ReferencesRequest, ts.server.protocol.ReferencesResponse>(session, ts.server.protocol.CommandTypes.References, protocolFileLocationFromSubstring(userTs, "fnA()"));
+        assert.deepEqual<ts.server.protocol.ReferencesResponseBody | undefined>(response, {
             refs: [...referencesUserTs(userTs, /*isDefinition*/ undefined), referenceATs(aTs, /*isDefinition*/ undefined)],
             symbolName: "fnA",
-            symbolStartOffset: ts.projectSystem.protocolLocationFromSubstring(userTs.content, "fnA()").offset,
+            symbolStartOffset: protocolLocationFromSubstring(userTs.content, "fnA()").offset,
             symbolDisplayString: "function fnA(): void",
         });
 
@@ -412,24 +414,24 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("findAllReferences -- starting at definition", () => {
         const session = makeSampleProjects();
-        ts.projectSystem.openFilesForSession([aTs], session); // If it's not opened, the reference isn't found.
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.ReferencesRequest, ts.projectSystem.protocol.ReferencesResponse>(session, ts.projectSystem.protocol.CommandTypes.References, ts.projectSystem.protocolFileLocationFromSubstring(aTs, "fnA"));
-        assert.deepEqual<ts.projectSystem.protocol.ReferencesResponseBody | undefined>(response, {
+        openFilesForSession([aTs], session); // If it's not opened, the reference isn't found.
+        const response = executeSessionRequest<ts.server.protocol.ReferencesRequest, ts.server.protocol.ReferencesResponse>(session, ts.server.protocol.CommandTypes.References, protocolFileLocationFromSubstring(aTs, "fnA"));
+        assert.deepEqual<ts.server.protocol.ReferencesResponseBody | undefined>(response, {
             refs: [referenceATs(aTs, /*isDefinition*/ true), ...referencesUserTs(userTs, /*isDefinition*/ false)],
             symbolName: "fnA",
-            symbolStartOffset: ts.projectSystem.protocolLocationFromSubstring(aTs.content, "fnA").offset,
+            symbolStartOffset: protocolLocationFromSubstring(aTs.content, "fnA").offset,
             symbolDisplayString: "function fnA(): void",
         });
         verifyATsConfigWhenOpened(session);
     });
 
-    interface ReferencesFullRequest extends ts.projectSystem.protocol.FileLocationRequest { readonly command: ts.projectSystem.protocol.CommandTypes.ReferencesFull; }
-    interface ReferencesFullResponse extends ts.projectSystem.protocol.Response { readonly body: readonly ts.ReferencedSymbol[]; }
+    interface ReferencesFullRequest extends ts.server.protocol.FileLocationRequest { readonly command: ts.server.protocol.CommandTypes.ReferencesFull; }
+    interface ReferencesFullResponse extends ts.server.protocol.Response { readonly body: readonly ts.ReferencedSymbol[]; }
 
     it("findAllReferencesFull", () => {
         const session = makeSampleProjects();
 
-        const responseFull = ts.projectSystem.executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, ts.projectSystem.protocol.CommandTypes.ReferencesFull, ts.projectSystem.protocolFileLocationFromSubstring(userTs, "fnA()"));
+        const responseFull = executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, ts.server.protocol.CommandTypes.ReferencesFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
 
         assert.deepEqual<readonly ts.ReferencedSymbol[]>(responseFull, [
             {
@@ -464,25 +466,25 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     });
 
     it("findAllReferencesFull definition is in mapped file", () => {
-        const aTs: ts.projectSystem.File = { path: "/a/a.ts", content: `function f() {}` };
-        const aTsconfig: ts.projectSystem.File = {
+        const aTs: File = { path: "/a/a.ts", content: `function f() {}` };
+        const aTsconfig: File = {
             path: "/a/tsconfig.json",
             content: JSON.stringify({ compilerOptions: { declaration: true, declarationMap: true, outFile: "../bin/a.js" } }),
         };
-        const bTs: ts.projectSystem.File = { path: "/b/b.ts", content: `f();` };
-        const bTsconfig: ts.projectSystem.File = { path: "/b/tsconfig.json", content: JSON.stringify({ references: [{ path: "../a" }] }) };
-        const aDts: ts.projectSystem.File = { path: "/bin/a.d.ts", content: `declare function f(): void;\n//# sourceMappingURL=a.d.ts.map` };
-        const aDtsMap: ts.projectSystem.File = {
+        const bTs: File = { path: "/b/b.ts", content: `f();` };
+        const bTsconfig: File = { path: "/b/tsconfig.json", content: JSON.stringify({ references: [{ path: "../a" }] }) };
+        const aDts: File = { path: "/bin/a.d.ts", content: `declare function f(): void;\n//# sourceMappingURL=a.d.ts.map` };
+        const aDtsMap: File = {
             path: "/bin/a.d.ts.map",
             content: JSON.stringify({ version: 3, file: "a.d.ts", sourceRoot: "", sources: ["../a/a.ts"], names: [], mappings: "AAAA,iBAAS,CAAC,SAAK" }),
         };
 
-        const session = ts.projectSystem.createSession(ts.projectSystem.createServerHost([aTs, aTsconfig, bTs, bTsconfig, aDts, aDtsMap]));
+        const session = createSession(createServerHost([aTs, aTsconfig, bTs, bTsconfig, aDts, aDtsMap]));
         checkDeclarationFiles(aTs, session, [aDtsMap, aDts]);
-        ts.projectSystem.openFilesForSession([bTs], session);
-        ts.projectSystem.checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 }); // configured project of b is alive since a references b
+        openFilesForSession([bTs], session);
+        checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 }); // configured project of b is alive since a references b
 
-        const responseFull = ts.projectSystem.executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, ts.projectSystem.protocol.CommandTypes.ReferencesFull, ts.projectSystem.protocolFileLocationFromSubstring(bTs, "f()"));
+        const responseFull = executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, ts.server.protocol.CommandTypes.ReferencesFull, protocolFileLocationFromSubstring(bTs, "f()"));
 
         assert.deepEqual<readonly ts.ReferencedSymbol[]>(responseFull, [
             {
@@ -530,43 +532,43 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     it("findAllReferences -- target does not exist", () => {
         const session = makeSampleProjects();
 
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.ReferencesRequest, ts.projectSystem.protocol.ReferencesResponse>(session, ts.projectSystem.protocol.CommandTypes.References, ts.projectSystem.protocolFileLocationFromSubstring(userTs, "fnB()"));
-        assert.deepEqual<ts.projectSystem.protocol.ReferencesResponseBody | undefined>(response, {
+        const response = executeSessionRequest<ts.server.protocol.ReferencesRequest, ts.server.protocol.ReferencesResponse>(session, ts.server.protocol.CommandTypes.References, protocolFileLocationFromSubstring(userTs, "fnB()"));
+        assert.deepEqual<ts.server.protocol.ReferencesResponseBody | undefined>(response, {
             refs: [
-                ts.projectSystem.makeReferenceItem({
+                makeReferenceItem({
                     file: bDts,
                     isWriteAccess: true,
                     text: "fnB",
                     contextText: "export declare function fnB(): void;",
                     lineText: "export declare function fnB(): void;"
                 }),
-                ts.projectSystem.makeReferenceItem({
+                makeReferenceItem({
                     file: userTs,
                     text: "fnB",
                     lineText: "export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"
                 }),
             ],
             symbolName: "fnB",
-            symbolStartOffset: ts.projectSystem.protocolLocationFromSubstring(userTs.content, "fnB()").offset,
+            symbolStartOffset: protocolLocationFromSubstring(userTs.content, "fnB()").offset,
             symbolDisplayString: "function fnB(): void",
         });
         verifySingleInferredProject(session);
     });
 
-    const renameATs = (aTs: ts.projectSystem.File): ts.projectSystem.protocol.SpanGroup => ({
+    const renameATs = (aTs: File): ts.server.protocol.SpanGroup => ({
         file: aTs.path,
         locs: [
-            ts.projectSystem.protocolRenameSpanFromSubstring({
+            protocolRenameSpanFromSubstring({
                 fileText: aTs.content,
                 text: "fnA",
                 contextText: "export function fnA() {}"
             })
         ],
     });
-    const renameUserTs = (userTs: ts.projectSystem.File): ts.projectSystem.protocol.SpanGroup => ({
+    const renameUserTs = (userTs: File): ts.server.protocol.SpanGroup => ({
         file: userTs.path,
         locs: [
-            ts.projectSystem.protocolRenameSpanFromSubstring({
+            protocolRenameSpanFromSubstring({
                 fileText: userTs.content,
                 text: "fnA"
             })
@@ -575,8 +577,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("renameLocations", () => {
         const session = makeSampleProjects();
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.RenameRequest, ts.projectSystem.protocol.RenameResponse>(session, ts.projectSystem.protocol.CommandTypes.Rename, ts.projectSystem.protocolFileLocationFromSubstring(userTs, "fnA()"));
-        assert.deepEqual<ts.projectSystem.protocol.RenameResponseBody | undefined>(response, {
+        const response = executeSessionRequest<ts.server.protocol.RenameRequest, ts.server.protocol.RenameResponse>(session, ts.server.protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(userTs, "fnA()"));
+        assert.deepEqual<ts.server.protocol.RenameResponseBody | undefined>(response, {
             info: {
                 canRename: true,
                 displayName: "fnA",
@@ -584,7 +586,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
                 fullDisplayName: '"/a/bin/a".fnA', // Ideally this would use the original source's path instead of the declaration file's path.
                 kind: ts.ScriptElementKind.functionElement,
                 kindModifiers: [ts.ScriptElementKindModifier.exportedModifier, ts.ScriptElementKindModifier.ambientModifier].join(","),
-                triggerSpan: ts.projectSystem.protocolTextSpanFromSubstring(userTs.content, "fnA"),
+                triggerSpan: protocolTextSpanFromSubstring(userTs.content, "fnA"),
             },
             locs: [renameUserTs(userTs), renameATs(aTs)],
         });
@@ -593,9 +595,9 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("renameLocations -- starting at definition", () => {
         const session = makeSampleProjects();
-        ts.projectSystem.openFilesForSession([aTs], session); // If it's not opened, the reference isn't found.
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.RenameRequest, ts.projectSystem.protocol.RenameResponse>(session, ts.projectSystem.protocol.CommandTypes.Rename, ts.projectSystem.protocolFileLocationFromSubstring(aTs, "fnA"));
-        assert.deepEqual<ts.projectSystem.protocol.RenameResponseBody | undefined>(response, {
+        openFilesForSession([aTs], session); // If it's not opened, the reference isn't found.
+        const response = executeSessionRequest<ts.server.protocol.RenameRequest, ts.server.protocol.RenameResponse>(session, ts.server.protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "fnA"));
+        assert.deepEqual<ts.server.protocol.RenameResponseBody | undefined>(response, {
             info: {
                 canRename: true,
                 displayName: "fnA",
@@ -603,7 +605,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
                 fullDisplayName: '"/a/a".fnA',
                 kind: ts.ScriptElementKind.functionElement,
                 kindModifiers: ts.ScriptElementKindModifier.exportedModifier,
-                triggerSpan: ts.projectSystem.protocolTextSpanFromSubstring(aTs.content, "fnA"),
+                triggerSpan: protocolTextSpanFromSubstring(aTs.content, "fnA"),
             },
             locs: [renameATs(aTs), renameUserTs(userTs)],
         });
@@ -612,7 +614,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("renameLocationsFull", () => {
         const session = makeSampleProjects();
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.RenameFullRequest, ts.projectSystem.protocol.RenameFullResponse>(session, ts.projectSystem.protocol.CommandTypes.RenameLocationsFull, ts.projectSystem.protocolFileLocationFromSubstring(userTs, "fnA()"));
+        const response = executeSessionRequest<ts.server.protocol.RenameFullRequest, ts.server.protocol.RenameFullResponse>(session, ts.server.protocol.CommandTypes.RenameLocationsFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
         assert.deepEqual<readonly ts.RenameLocation[]>(response, [
             renameLocation({ file: userTs, text: "fnA" }),
             renameLocation({ file: aTs, text: "fnA", contextText: "export function fnA() {}" }),
@@ -622,8 +624,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("renameLocations -- target does not exist", () => {
         const session = makeSampleProjects();
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.RenameRequest, ts.projectSystem.protocol.RenameResponse>(session, ts.projectSystem.protocol.CommandTypes.Rename, ts.projectSystem.protocolFileLocationFromSubstring(userTs, "fnB()"));
-        assert.deepEqual<ts.projectSystem.protocol.RenameResponseBody | undefined>(response, {
+        const response = executeSessionRequest<ts.server.protocol.RenameRequest, ts.server.protocol.RenameResponse>(session, ts.server.protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(userTs, "fnB()"));
+        assert.deepEqual<ts.server.protocol.RenameResponseBody | undefined>(response, {
             info: {
                 canRename: true,
                 displayName: "fnB",
@@ -631,13 +633,13 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
                 fullDisplayName: '"/b/bin/b".fnB',
                 kind: ts.ScriptElementKind.functionElement,
                 kindModifiers: [ts.ScriptElementKindModifier.exportedModifier, ts.ScriptElementKindModifier.ambientModifier].join(","),
-                triggerSpan: ts.projectSystem.protocolTextSpanFromSubstring(userTs.content, "fnB"),
+                triggerSpan: protocolTextSpanFromSubstring(userTs.content, "fnB"),
             },
             locs: [
                 {
                     file: bDts.path,
                     locs: [
-                        ts.projectSystem.protocolRenameSpanFromSubstring({
+                        protocolRenameSpanFromSubstring({
                             fileText: bDts.content,
                             text: "fnB",
                             contextText: "export declare function fnB(): void;"
@@ -647,7 +649,7 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
                 {
                     file: userTs.path,
                     locs: [
-                        ts.projectSystem.protocolRenameSpanFromSubstring({
+                        protocolRenameSpanFromSubstring({
                             fileText: userTs.content,
                             text: "fnB"
                         })
@@ -660,15 +662,15 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
     it("getEditsForFileRename", () => {
         const session = makeSampleProjects();
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.GetEditsForFileRenameRequest, ts.projectSystem.protocol.GetEditsForFileRenameResponse>(session, ts.projectSystem.protocol.CommandTypes.GetEditsForFileRename, {
+        const response = executeSessionRequest<ts.server.protocol.GetEditsForFileRenameRequest, ts.server.protocol.GetEditsForFileRenameResponse>(session, ts.server.protocol.CommandTypes.GetEditsForFileRename, {
             oldFilePath: aTs.path,
             newFilePath: "/a/aNew.ts",
         });
-        assert.deepEqual<readonly ts.projectSystem.protocol.FileCodeEdits[]>(response, [
+        assert.deepEqual<readonly ts.server.protocol.FileCodeEdits[]>(response, [
             {
                 fileName: userTs.path,
                 textChanges: [
-                    { ...ts.projectSystem.protocolTextSpanFromSubstring(userTs.content, "../a/bin/a"), newText: "../a/bin/aNew" },
+                    { ...protocolTextSpanFromSubstring(userTs.content, "../a/bin/a"), newText: "../a/bin/aNew" },
                 ],
             },
         ]);
@@ -676,8 +678,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
     });
 
     it("getEditsForFileRename when referencing project doesnt include file and its renamed", () => {
-        const aTs: ts.projectSystem.File = { path: "/a/src/a.ts", content: "" };
-        const aTsconfig: ts.projectSystem.File = {
+        const aTs: File = { path: "/a/src/a.ts", content: "" };
+        const aTsconfig: File = {
             path: "/a/tsconfig.json",
             content: JSON.stringify({
                 compilerOptions: {
@@ -688,8 +690,8 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
                 }
             }),
         };
-        const bTs: ts.projectSystem.File = { path: "/b/src/b.ts", content: "" };
-        const bTsconfig: ts.projectSystem.File = {
+        const bTs: File = { path: "/b/src/b.ts", content: "" };
+        const bTsconfig: File = {
             path: "/b/tsconfig.json",
             content: JSON.stringify({
                 compilerOptions: {
@@ -701,14 +703,14 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
             }),
         };
 
-        const host = ts.projectSystem.createServerHost([aTs, aTsconfig, bTs, bTsconfig]);
-        const session = ts.projectSystem.createSession(host);
-        ts.projectSystem.openFilesForSession([aTs, bTs], session);
-        const response = ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.GetEditsForFileRenameRequest, ts.projectSystem.protocol.GetEditsForFileRenameResponse>(session, ts.projectSystem.CommandNames.GetEditsForFileRename, {
+        const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig]);
+        const session = createSession(host);
+        openFilesForSession([aTs, bTs], session);
+        const response = executeSessionRequest<ts.server.protocol.GetEditsForFileRenameRequest, ts.server.protocol.GetEditsForFileRenameResponse>(session, ts.server.CommandNames.GetEditsForFileRename, {
             oldFilePath: aTs.path,
             newFilePath: "/a/src/a1.ts",
         });
-        assert.deepEqual<readonly ts.projectSystem.protocol.FileCodeEdits[]>(response, []); // Should not change anything
+        assert.deepEqual<readonly ts.server.protocol.FileCodeEdits[]>(response, []); // Should not change anything
     });
 
     it("does not jump to source if inlined sources", () => {
@@ -716,29 +718,29 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
             ...aDtsMapContent,
             sourcesContent: [aTs.content]
         };
-        const aDtsMapInlinedSources: ts.projectSystem.File = {
+        const aDtsMapInlinedSources: File = {
             path: aDtsMap.path,
             content: JSON.stringify(aDtsInlinedSources)
         };
-        const host = ts.projectSystem.createServerHost([aTs, aDtsMapInlinedSources, aDts, bTs, bDtsMap, bDts, userTs, dummyFile]);
-        const session = ts.projectSystem.createSession(host);
+        const host = createServerHost([aTs, aDtsMapInlinedSources, aDts, bTs, bDtsMap, bDts, userTs, dummyFile]);
+        const session = createSession(host);
 
-        ts.projectSystem.openFilesForSession([userTs], session);
+        openFilesForSession([userTs], session);
         const service = session.getProjectService();
         // If config file then userConfig project and bConfig project since it is referenced
-        ts.projectSystem.checkNumberOfProjects(service, { inferredProjects: 1 });
+        checkNumberOfProjects(service, { inferredProjects: 1 });
 
         // Inlined so does not jump to aTs
         assert.deepEqual(
-            ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.DefinitionAndBoundSpanRequest, ts.projectSystem.protocol.DefinitionAndBoundSpanResponse>(
+            executeSessionRequest<ts.server.protocol.DefinitionAndBoundSpanRequest, ts.server.protocol.DefinitionAndBoundSpanResponse>(
                 session,
-                ts.projectSystem.protocol.CommandTypes.DefinitionAndBoundSpan,
-                ts.projectSystem.protocolFileLocationFromSubstring(userTs, "fnA()")
+                ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
+                protocolFileLocationFromSubstring(userTs, "fnA()")
             ),
             {
-                textSpan: ts.projectSystem.protocolTextSpanFromSubstring(userTs.content, "fnA"),
+                textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA"),
                 definitions: [
-                    ts.projectSystem.protocolFileSpanWithContextFromSubstring({
+                    protocolFileSpanWithContextFromSubstring({
                         file: aDts,
                         text: "fnA",
                         contextText: "export declare function fnA(): void;"
@@ -749,15 +751,15 @@ describe("unittests:: tsserver:: with declaration file maps:: project references
 
         // Not inlined, jumps to bTs
         assert.deepEqual(
-            ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.DefinitionAndBoundSpanRequest, ts.projectSystem.protocol.DefinitionAndBoundSpanResponse>(
+            executeSessionRequest<ts.server.protocol.DefinitionAndBoundSpanRequest, ts.server.protocol.DefinitionAndBoundSpanResponse>(
                 session,
-                ts.projectSystem.protocol.CommandTypes.DefinitionAndBoundSpan,
-                ts.projectSystem.protocolFileLocationFromSubstring(userTs, "fnB()")
+                ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
+                protocolFileLocationFromSubstring(userTs, "fnB()")
             ),
             {
-                textSpan: ts.projectSystem.protocolTextSpanFromSubstring(userTs.content, "fnB"),
+                textSpan: protocolTextSpanFromSubstring(userTs.content, "fnB"),
                 definitions: [
-                    ts.projectSystem.protocolFileSpanWithContextFromSubstring({
+                    protocolFileSpanWithContextFromSubstring({
                         file: bTs,
                         text: "fnB",
                         contextText: "export function fnB() {}"

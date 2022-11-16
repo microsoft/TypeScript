@@ -11,9 +11,9 @@ import {
     isMemberName, isMethodDeclaration, isMethodSignature, isModuleDeclaration, isObjectLiteralExpression, isParameter,
     isPrivateIdentifier, isPropertyAccessExpression, isPropertyDeclaration, isReturnStatement, isSourceFile,
     isSourceFileFromLibrary, isSourceFileJS, isTransientSymbol, isTypeLiteralNode, JsxOpeningLikeElement,
-    LanguageVariant, length, map, Map, MethodDeclaration, ModifierFlags, ModuleDeclaration, Node, NodeBuilderFlags,
+    LanguageVariant, length, map, MethodDeclaration, ModifierFlags, ModuleDeclaration, Node, NodeBuilderFlags,
     NumberLiteralType, ObjectFlags, ObjectLiteralExpression, or, PrivateIdentifier, Program, PropertyDeclaration,
-    QuotePreference, ReturnStatement, ScriptTarget, Set, setParent, Signature, SignatureKind, singleElementArray,
+    QuotePreference, ReturnStatement, ScriptTarget, setParent, Signature, SignatureKind, singleElementArray,
     singleOrUndefined, skipConstraint, some, SourceFile, startsWithUnderscore, StringLiteralType, Symbol, SymbolFlags,
     SyntaxKind, textChanges, tryCast, Type, TypeChecker, TypeFlags, TypeLiteralNode, TypeNode, TypeReference, UnionType,
 } from "../_namespaces/ts";

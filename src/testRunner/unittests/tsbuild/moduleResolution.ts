@@ -1,32 +1,35 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
+import { createWatchedSystem, libFile } from "../virtualFileSystemWithWatch";
+import { loadProjectFromFiles, noChangeOnlyRuns, verifyTsc, verifyTscWithEdits } from "../tsc/helpers";
+import { verifyTscWatch } from "../tscWatch/helpers";
 
 describe("unittests:: tsbuild:: moduleResolution:: handles the modules and options from referenced project correctly", () => {
     function sys(optionsToExtend?: ts.CompilerOptions) {
-        return ts.tscWatch.createWatchedSystem([
+        return createWatchedSystem([
             {
-                path: `${ts.tscWatch.projectRoot}/packages/pkg1/index.ts`,
+                path: `/user/username/projects/myproject/packages/pkg1/index.ts`,
                 content: Utils.dedent`
                     import type { TheNum } from 'pkg2'
                     export const theNum: TheNum = 42;`
             },
             {
-                path: `${ts.tscWatch.projectRoot}/packages/pkg1/tsconfig.json`,
+                path: `/user/username/projects/myproject/packages/pkg1/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: { outDir: "build", ...optionsToExtend },
                     references: [{ path: "../pkg2" }]
                 })
             },
             {
-                path: `${ts.tscWatch.projectRoot}/packages/pkg2/const.ts`,
+                path: `/user/username/projects/myproject/packages/pkg2/const.ts`,
                 content: `export type TheNum = 42;`
             },
             {
-                path: `${ts.tscWatch.projectRoot}/packages/pkg2/index.ts`,
+                path: `/user/username/projects/myproject/packages/pkg2/index.ts`,
                 content: `export type { TheNum } from 'const';`
             },
             {
-                path: `${ts.tscWatch.projectRoot}/packages/pkg2/tsconfig.json`,
+                path: `/user/username/projects/myproject/packages/pkg2/tsconfig.json`,
                 content: JSON.stringify({
                     compilerOptions: {
                         composite: true,
@@ -37,7 +40,7 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
                 })
             },
             {
-                path: `${ts.tscWatch.projectRoot}/packages/pkg2/package.json`,
+                path: `/user/username/projects/myproject/packages/pkg2/package.json`,
                 content: JSON.stringify({
                     name: "pkg2",
                     version: "1.0.0",
@@ -45,14 +48,14 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
                 })
             },
             {
-                path: `${ts.tscWatch.projectRoot}/node_modules/pkg2`,
-                symLink: `${ts.tscWatch.projectRoot}/packages/pkg2`,
+                path: `/user/username/projects/myproject/node_modules/pkg2`,
+                symLink: `/user/username/projects/myproject/packages/pkg2`,
             },
-            ts.tscWatch.libFile
-        ], { currentDirectory: ts.tscWatch.projectRoot });
+            libFile
+        ], { currentDirectory: "/user/username/projects/myproject" });
     }
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario: "moduleResolution",
         subScenario: `resolves specifier in output declaration file from referenced project correctly`,
         sys,
@@ -60,7 +63,7 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
         changes: ts.emptyArray
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario: "moduleResolution",
         subScenario: `resolves specifier in output declaration file from referenced project correctly with preserveSymlinks`,
         sys: () => sys({ preserveSymlinks: true }),
@@ -68,10 +71,10 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
         changes: ts.emptyArray
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "moduleResolution",
         subScenario: `type reference resolution uses correct options for different resolution options referenced project`,
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/packages/pkg1_index.ts": `export const theNum: TheNum = "type1";`,
             "/src/packages/pkg1.tsconfig.json": JSON.stringify({
                 compilerOptions: { composite: true, typeRoots: ["./typeroot1"] },
@@ -90,10 +93,10 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
 });
 
 describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs between projects for shared file", () => {
-    ts.verifyTscWithEdits({
+    verifyTscWithEdits({
         scenario: "moduleResolution",
         subScenario: "impliedNodeFormat differs between projects for shared file",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/projects/a/src/index.ts": "",
             "/src/projects/a/tsconfig.json": JSON.stringify({
                 compilerOptions: { strict: true }
@@ -115,8 +118,8 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
                 types: "index.d.ts",
             }),
         }),
-        modifyFs: fs => fs.writeFileSync("/lib/lib.es2022.full.d.ts", ts.tscWatch.libFile.content),
+        modifyFs: fs => fs.writeFileSync("/lib/lib.es2022.full.d.ts", libFile.content),
         commandLineArgs: ["-b", "/src/projects/a", "/src/projects/b", "--verbose", "--traceResolution", "--explainFiles"],
-        edits: ts.noChangeOnlyRuns
+        edits: noChangeOnlyRuns
     });
 });
