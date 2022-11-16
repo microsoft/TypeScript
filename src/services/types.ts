@@ -303,6 +303,7 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
      */
     readDirectory?(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
     realpath?(path: string): string;
+    /** @internal */ createHash?(data: string): string;
 
     /*
      * Unlike `realpath and `readDirectory`, `readFile` and `fileExists` are now _required_
