@@ -30990,7 +30990,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (thisType && thisType !== voidType && !(isNewExpression(node) || isCallExpression(node) && isSuperProperty(node.expression))) {
             // If the called expression is not of the form `x.f` or `x["f"]`, then sourceType = voidType
             // If the signature's 'this' type is voidType, then the check is skipped -- anything is compatible.
-            // If the expression is a new expression, then the check is skipped.
+            // If the expression is a new expression or super call expression, then the check is skipped.
             const thisArgumentNode = getThisArgumentOfCall(node);
             const thisArgumentType = getThisArgumentType(thisArgumentNode);
             const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
