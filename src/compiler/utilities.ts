@@ -6309,7 +6309,7 @@ function accessKindForUsageChecks(node: Node) {
 }
 function accessKind(node: Node): AccessKind {
     const { parent } = node;
- 
+
     switch (parent?.kind) {
         case SyntaxKind.ParenthesizedExpression:
             return accessKind(parent);
