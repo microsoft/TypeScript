@@ -5,4 +5,5 @@ export * from "../../jsTyping/_namespaces/ts";
 export * from "../../services/_namespaces/ts";
 // Pull this in here so that plugins loaded by the server see compat wrappers.
 export * from "../../deprecatedCompat/_namespaces/ts";
-export * as server from "./ts.server";
+import * as server from "./ts.server";
+export { server };

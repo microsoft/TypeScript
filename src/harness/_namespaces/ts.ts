@@ -7,4 +7,5 @@ export * from "../../server/_namespaces/ts";
 export * from "../../typingsInstallerCore/_namespaces/ts";
 export * from "../../deprecatedCompat/_namespaces/ts";
 export * from "../harnessGlobals";
-export * as server from "./ts.server";
+import * as server from "./ts.server";
+export { server };

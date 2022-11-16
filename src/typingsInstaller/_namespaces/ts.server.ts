@@ -2,4 +2,5 @@
 
 export * from "../../jsTyping/_namespaces/ts.server";
 export * from "../../typingsInstallerCore/_namespaces/ts.server";
-export * as typingsInstaller from "./ts.server.typingsInstaller";
+import * as typingsInstaller from "./ts.server.typingsInstaller";
+export { typingsInstaller };

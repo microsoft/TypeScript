@@ -6,4 +6,5 @@ export * from "../../jsTyping/_namespaces/ts";
 export * from "../../server/_namespaces/ts";
 export * from "../../typingsInstallerCore/_namespaces/ts";
 export * from "../../harness/_namespaces/ts";
-export * as server from "./ts.server";
+import * as server from "./ts.server";
+export { server };
