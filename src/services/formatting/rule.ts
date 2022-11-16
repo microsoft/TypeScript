@@ -17,6 +17,7 @@ export const anyContext: readonly ContextPredicate[] = emptyArray;
 
 /** @internal */
 export const enum RuleAction {
+    None                       = 0,
     StopProcessingSpaceActions = 1 << 0,
     StopProcessingTokenActions = 1 << 1,
     InsertSpace                = 1 << 2,
