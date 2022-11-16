@@ -1,12 +1,12 @@
-import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
+import { loadProjectFromFiles, verifyTsc } from "./helpers";
 
 describe("unittests:: tsc:: forceConsistentCasingInFileNames::", () => {
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "forceConsistentCasingInFileNames",
         subScenario: "with relative and non relative file resolutions",
         commandLineArgs: ["/src/project/src/struct.d.ts", "--forceConsistentCasingInFileNames", "--explainFiles"],
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/project/src/struct.d.ts": Utils.dedent`
                     import * as xs1 from "fp-ts/lib/Struct";
                     import * as xs2 from "fp-ts/lib/struct";

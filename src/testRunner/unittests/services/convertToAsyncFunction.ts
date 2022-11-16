@@ -1,7 +1,10 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import { createServerHost, File } from "../virtualFileSystemWithWatch";
+import { createProjectService } from "../tsserver/helpers";
+import { extractTest, newLineCharacter, notImplementedHost } from "./extract/helpers";
 
-const libFile: ts.TestFSWithWatch.File = {
+const libFile: File = {
     path: "/a/lib/lib.d.ts",
     content: `/// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -264,7 +267,7 @@ interface String { charAt: any; }
 interface Array<T> {}`
 };
 
-const moduleFile: ts.TestFSWithWatch.File = {
+const moduleFile: File = {
     path: "/module.ts",
     content:
 `export function fn(res: any): any {
@@ -310,7 +313,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
     ts.Debug.assert(!(expectSuggestionDiagnostic && expectNoSuggestionDiagnostic), "Cannot combine both 'ExpectSuggestionDiagnostic' and 'ExpectNoSuggestionDiagnostic'");
     ts.Debug.assert(!(expectAction && expectNoAction), "Cannot combine both 'ExpectAction' and 'ExpectNoAction'");
 
-    const t = ts.extractTest(text);
+    const t = extractTest(text);
     const selectionRange = t.ranges.get("selection")!;
     if (!selectionRange) {
         throw new Error(`Test ${caption} does not specify selection range`);
@@ -345,8 +348,8 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
             program,
             cancellationToken: { throwIfCancellationRequested: ts.noop, isCancellationRequested: ts.returnFalse },
             preferences: ts.emptyOptions,
-            host: ts.notImplementedHost,
-            formatContext: ts.formatting.getFormatContext(ts.testFormatSettings, ts.notImplementedHost)
+            host: notImplementedHost,
+            formatContext: ts.formatting.getFormatContext(ts.testFormatSettings, notImplementedHost)
         };
 
         const diagnostics = languageService.getSuggestionDiagnostics(f.path);
@@ -369,7 +372,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
 
             const diagProgram = makeLanguageService({ path, content: newText }, includeLib, includeModule).getProgram()!;
             assert.isFalse(hasSyntacticDiagnostics(diagProgram));
-            outputText = data.join(ts.newLineCharacter);
+            outputText = data.join(newLineCharacter);
         }
         else {
             // eslint-disable-next-line no-null/no-null
@@ -395,7 +398,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
         }
     }
 
-    function makeLanguageService(file: ts.TestFSWithWatch.File, includeLib?: boolean, includeModule?: boolean) {
+    function makeLanguageService(file: File, includeLib?: boolean, includeModule?: boolean) {
         const files = [file];
         if (includeLib) {
             files.push(libFile); // libFile is expensive to parse repeatedly - only test when required
@@ -403,8 +406,8 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
         if (includeModule) {
             files.push(moduleFile);
         }
-        const host = ts.projectSystem.createServerHost(files);
-        const projectService = ts.projectSystem.createProjectService(host);
+        const host = createServerHost(files);
+        const projectService = createProjectService(host);
         projectService.openClientFile(file.path);
         return ts.first(projectService.inferredProjects).getLanguageService();
     }

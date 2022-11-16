@@ -1,43 +1,43 @@
-import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
+import { loadProjectFromFiles, noChangeRun, verifyTsc, verifyTscWithEdits } from "./helpers";
 
 describe("unittests:: tsc:: listFilesOnly::", () => {
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "listFilesOnly",
         subScenario: "combined with watch",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/test.ts": Utils.dedent`
                         export const x = 1;`,
         }),
         commandLineArgs: ["/src/test.ts", "--watch", "--listFilesOnly"]
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "listFilesOnly",
         subScenario: "loose file",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/test.ts": Utils.dedent`
                         export const x = 1;`,
         }),
         commandLineArgs: ["/src/test.ts", "--listFilesOnly"]
     });
 
-    ts.verifyTscWithEdits({
+    verifyTscWithEdits({
         scenario: "listFilesOnly",
         subScenario: "combined with incremental",
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/test.ts": `export const x = 1;`,
             "/src/tsconfig.json": "{}"
         }),
         commandLineArgs: ["-p", "/src", "--incremental", "--listFilesOnly"],
         edits: [
             {
-                ...ts.noChangeRun,
+                ...noChangeRun,
                 commandLineArgs: ["-p", "/src", "--incremental"],
             },
-            ts.noChangeRun,
+            noChangeRun,
             {
-                ...ts.noChangeRun,
+                ...noChangeRun,
                 commandLineArgs: ["-p", "/src", "--incremental"],
             }
         ]

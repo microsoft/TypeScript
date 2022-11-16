@@ -1,4 +1,6 @@
 import * as ts from "../../_namespaces/ts";
+import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
+import { createProjectService, toExternalFile, checkProjectActualFiles, createSession, createLoggerWithInMemoryLogs, openFilesForSession, verifyGetErrRequest, protocolTextSpanFromSubstring, baselineTsserverLogs } from "./helpers";
 
 describe("unittests:: tsserver:: Open-file", () => {
     it("can be reloaded with empty content", () => {
@@ -7,10 +9,10 @@ describe("unittests:: tsserver:: Open-file", () => {
             content: "let x = 1"
         };
         const projectFileName = "externalProject";
-        const host = ts.projectSystem.createServerHost([f]);
-        const projectService = ts.projectSystem.createProjectService(host);
+        const host = createServerHost([f]);
+        const projectService = createProjectService(host);
         // create a project
-        projectService.openExternalProject({ projectFileName, rootFiles: [ts.projectSystem.toExternalFile(f.path)], options: {} });
+        projectService.openExternalProject({ projectFileName, rootFiles: [toExternalFile(f.path)], options: {} });
         projectService.checkNumberOfProjects({ externalProjects: 1 });
 
         const p = projectService.externalProjects[0];
@@ -29,26 +31,26 @@ describe("unittests:: tsserver:: Open-file", () => {
     }
 
     function verifyOpenFileWorks(useCaseSensitiveFileNames: boolean) {
-        const file1: ts.projectSystem.File = {
+        const file1: File = {
             path: "/a/b/src/app.ts",
             content: "let x = 10;"
         };
-        const file2: ts.projectSystem.File = {
+        const file2: File = {
             path: "/a/B/lib/module2.ts",
             content: "let z = 10;"
         };
-        const configFile: ts.projectSystem.File = {
+        const configFile: File = {
             path: "/a/b/tsconfig.json",
             content: ""
         };
-        const configFile2: ts.projectSystem.File = {
+        const configFile2: File = {
             path: "/a/tsconfig.json",
             content: ""
         };
-        const host = ts.projectSystem.createServerHost([file1, file2, configFile, configFile2], {
+        const host = createServerHost([file1, file2, configFile, configFile2], {
             useCaseSensitiveFileNames
         });
-        const service = ts.projectSystem.createProjectService(host);
+        const service = createProjectService(host);
 
         // Open file1 -> configFile
         verifyConfigFileName(file1, "/a", configFile);
@@ -60,7 +62,7 @@ describe("unittests:: tsserver:: Open-file", () => {
         verifyConfigFileName(file2, "/a/b", useCaseSensitiveFileNames ? configFile2 : configFile);
         verifyConfigFileName(file2, "/a/B", useCaseSensitiveFileNames ? undefined : configFile);
 
-        function verifyConfigFileName(file: ts.projectSystem.File, projectRoot: string, expectedConfigFile: ts.projectSystem.File | undefined) {
+        function verifyConfigFileName(file: File, projectRoot: string, expectedConfigFile: File | undefined) {
             const { configFileName } = service.openClientFile(file.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, projectRoot);
             assert.equal(configFileName, expectedConfigFile && expectedConfigFile.path);
             service.closeClientFile(file.path);
@@ -76,21 +78,21 @@ describe("unittests:: tsserver:: Open-file", () => {
 
     it("uses existing project even if project refresh is pending", () => {
         const projectFolder = "/user/someuser/projects/myproject";
-        const aFile: ts.projectSystem.File = {
+        const aFile: File = {
             path: `${projectFolder}/src/a.ts`,
             content: "export const x = 0;"
         };
-        const configFile: ts.projectSystem.File = {
+        const configFile: File = {
             path: `${projectFolder}/tsconfig.json`,
             content: "{}"
         };
-        const files = [aFile, configFile, ts.projectSystem.libFile];
-        const host = ts.projectSystem.createServerHost(files);
-        const service = ts.projectSystem.createProjectService(host);
+        const files = [aFile, configFile, libFile];
+        const host = createServerHost(files);
+        const service = createProjectService(host);
         service.openClientFile(aFile.path, /*fileContent*/ undefined, ts.ScriptKind.TS, projectFolder);
         verifyProject();
 
-        const bFile: ts.projectSystem.File = {
+        const bFile: File = {
             path: `${projectFolder}/src/b.ts`,
             content: `export {}; declare module "./a" {  export const y: number; }`
         };
@@ -102,37 +104,37 @@ describe("unittests:: tsserver:: Open-file", () => {
         function verifyProject() {
             assert.isDefined(service.configuredProjects.get(configFile.path));
             const project = service.configuredProjects.get(configFile.path)!;
-            ts.projectSystem.checkProjectActualFiles(project, files.map(f => f.path));
+            checkProjectActualFiles(project, files.map(f => f.path));
         }
     });
 
     it("can open same file again", () => {
         const projectFolder = "/user/someuser/projects/myproject";
-        const aFile: ts.projectSystem.File = {
+        const aFile: File = {
             path: `${projectFolder}/src/a.ts`,
             content: "export const x = 0;"
         };
-        const configFile: ts.projectSystem.File = {
+        const configFile: File = {
             path: `${projectFolder}/tsconfig.json`,
             content: "{}"
         };
-        const files = [aFile, configFile, ts.projectSystem.libFile];
-        const host = ts.projectSystem.createServerHost(files);
-        const service = ts.projectSystem.createProjectService(host);
+        const files = [aFile, configFile, libFile];
+        const host = createServerHost(files);
+        const service = createProjectService(host);
         verifyProject(aFile.content);
         verifyProject(`${aFile.content}export const y = 10;`);
 
         function verifyProject(aFileContent: string) {
             service.openClientFile(aFile.path, aFileContent, ts.ScriptKind.TS, projectFolder);
             const project = service.configuredProjects.get(configFile.path)!;
-            ts.projectSystem.checkProjectActualFiles(project, files.map(f => f.path));
+            checkProjectActualFiles(project, files.map(f => f.path));
             assert.equal(project.getCurrentProgram()?.getSourceFile(aFile.path)!.text, aFileContent);
         }
     });
 
     it("when file makes edits to add/remove comment directives, they are handled correcrly", () => {
-        const file: ts.projectSystem.File = {
-            path: `${ts.tscWatch.projectRoot}/file.ts`,
+        const file: File = {
+            path: `/user/username/projects/myproject/file.ts`,
             content: `const x = 10;
 function foo() {
     // @ts-ignore
@@ -147,16 +149,16 @@ function bar() {
 foo();
 bar();`
         };
-        const host = ts.projectSystem.createServerHost([file, ts.projectSystem.libFile]);
-        const session = ts.projectSystem.createSession(host, { canUseEvents: true, logger: ts.projectSystem.createLoggerWithInMemoryLogs(host) });
-        ts.projectSystem.openFilesForSession([file], session);
-        ts.projectSystem.verifyGetErrRequest({ session, host, files: [file] });
+        const host = createServerHost([file, libFile]);
+        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([file], session);
+        verifyGetErrRequest({ session, host, files: [file] });
 
         // Remove first ts-ignore and check only first error is reported
         const tsIgnoreComment = `// @ts-ignore`;
-        const locationOfTsIgnore = ts.projectSystem.protocolTextSpanFromSubstring(file.content, tsIgnoreComment);
-        session.executeCommandSeq<ts.projectSystem.protocol.UpdateOpenRequest>({
-            command: ts.projectSystem.protocol.CommandTypes.UpdateOpen,
+        const locationOfTsIgnore = protocolTextSpanFromSubstring(file.content, tsIgnoreComment);
+        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+            command: ts.server.protocol.CommandTypes.UpdateOpen,
             arguments: {
                 changedFiles: [{
                     fileName: file.path,
@@ -167,10 +169,10 @@ bar();`
                 }]
             }
         });
-        ts.projectSystem.verifyGetErrRequest({ session, host, files: [file] });
+        verifyGetErrRequest({ session, host, files: [file] });
         // Revert the change and no errors should be reported
-        session.executeCommandSeq<ts.projectSystem.protocol.UpdateOpenRequest>({
-            command: ts.projectSystem.protocol.CommandTypes.UpdateOpen,
+        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+            command: ts.server.protocol.CommandTypes.UpdateOpen,
             arguments: {
                 changedFiles: [{
                     fileName: file.path,
@@ -181,7 +183,7 @@ bar();`
                 }]
             }
         });
-        ts.projectSystem.verifyGetErrRequest({ session, host, files: [file] });
-        ts.projectSystem.baselineTsserverLogs("openfile", "when file makes edits to add/remove comment directives, they are handled correcrly", session);
+        verifyGetErrRequest({ session, host, files: [file] });
+        baselineTsserverLogs("openfile", "when file makes edits to add/remove comment directives, they are handled correcrly", session);
     });
 });

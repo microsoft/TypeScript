@@ -3,7 +3,7 @@ import {
     factory, FileTextChanges, find, FindAllReferences, findAncestor, findPrecedingToken, forEach, getAncestor,
     getFixableErrorSpanExpression, getSymbolId, hasSyntacticModifier, Identifier, isArrowFunction, isBinaryExpression,
     isBlock, isCallOrNewExpression, isForOfStatement, isIdentifier, isNumber, isPropertyAccessExpression,
-    isVariableDeclaration, ModifierFlags, Node, NodeFlags, positionIsASICandidate, Program, Set, some, SourceFile,
+    isVariableDeclaration, ModifierFlags, Node, NodeFlags, positionIsASICandidate, Program, some, SourceFile,
     Symbol, SyntaxKind, textChanges, TextSpan, textSpansEqual, tryAddToSet, tryCast, TypeChecker, TypeFlags,
 } from "../_namespaces/ts";
 import {

@@ -2,7 +2,7 @@ import {
     addToSeen, and, ClassElement, ClassLikeDeclaration, CodeFixAction, createSymbolTable, Debug, Diagnostics,
     ExpressionWithTypeArguments, find, getContainingClass, getEffectiveBaseTypeNode, getEffectiveImplementsTypeNodes,
     getEffectiveModifierFlags, getNodeId, getTokenAtPosition, IndexKind, InterfaceDeclaration, InterfaceType,
-    isConstructorDeclaration, Map, mapDefined, ModifierFlags, SourceFile, Symbol, SymbolTable, textChanges, TypeChecker,
+    isConstructorDeclaration, mapDefined, ModifierFlags, SourceFile, Symbol, SymbolTable, textChanges, TypeChecker,
     UserPreferences,
 } from "../_namespaces/ts";
 import {

@@ -1,4 +1,6 @@
+import { createServerHost } from "../virtualFileSystemWithWatch";
 import * as ts from "../../_namespaces/ts";
+import { createProjectService, toExternalFile, TestTypingsInstaller, checkProjectActualFiles, configuredProjectAt } from "./helpers";
 
 describe("unittests:: tsserver:: autoDiscovery", () => {
     it("does not depend on extension", () => {
@@ -10,11 +12,11 @@ describe("unittests:: tsserver:: autoDiscovery", () => {
             path: "/a/b/app.d.ts",
             content: ""
         };
-        const host = ts.projectSystem.createServerHost([file1, file2]);
-        const projectService = ts.projectSystem.createProjectService(host);
+        const host = createServerHost([file1, file2]);
+        const projectService = createProjectService(host);
         projectService.openExternalProject({
             projectFileName: "/a/b/proj.csproj",
-            rootFiles: [ts.projectSystem.toExternalFile(file2.path), { fileName: file1.path, hasMixedContent: true, scriptKind: ts.ScriptKind.JS }],
+            rootFiles: [toExternalFile(file2.path), { fileName: file1.path, hasMixedContent: true, scriptKind: ts.ScriptKind.JS }],
             options: {}
         });
         projectService.checkNumberOfProjects({ externalProjects: 1 });
@@ -42,11 +44,11 @@ describe("unittests:: tsserver:: prefer typings to js", () => {
             path: "/a/b/jsconfig.json",
             content: JSON.stringify({ compilerOptions: { allowJs: true }, exclude: ["node_modules"] })
         };
-        const host = ts.projectSystem.createServerHost([f1, barjs, barTypings, config]);
-        const projectService = ts.projectSystem.createProjectService(host, { typingsInstaller: new ts.projectSystem.TestTypingsInstaller(typingsCacheLocation, /*throttleLimit*/ 5, host) });
+        const host = createServerHost([f1, barjs, barTypings, config]);
+        const projectService = createProjectService(host, { typingsInstaller: new TestTypingsInstaller(typingsCacheLocation, /*throttleLimit*/ 5, host) });
 
         projectService.openClientFile(f1.path);
         projectService.checkNumberOfProjects({ configuredProjects: 1 });
-        ts.projectSystem.checkProjectActualFiles(ts.projectSystem.configuredProjectAt(projectService, 0), [f1.path, barTypings.path, config.path]);
+        checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, barTypings.path, config.path]);
     });
 });

@@ -1,34 +1,36 @@
 import * as ts from "../../_namespaces/ts";
+import { createServerHost, File } from "../virtualFileSystemWithWatch";
+import { createSession, openFilesForSession, configuredProjectAt, executeSessionRequest } from "./helpers";
 
-const packageJson: ts.projectSystem.File = {
+const packageJson: File = {
     path: "/package.json",
     content: `{ "dependencies": { "mobx": "*" } }`
 };
-const aTs: ts.projectSystem.File = {
+const aTs: File = {
     path: "/a.ts",
     content: "export const foo = 0;",
 };
-const bTs: ts.projectSystem.File = {
+const bTs: File = {
     path: "/b.ts",
     content: "foo",
 };
-const tsconfig: ts.projectSystem.File = {
+const tsconfig: File = {
     path: "/tsconfig.json",
     content: "{}",
 };
-const ambientDeclaration: ts.projectSystem.File = {
+const ambientDeclaration: File = {
     path: "/ambient.d.ts",
     content: "declare module 'ambient' {}"
 };
-const mobxPackageJson: ts.projectSystem.File = {
+const mobxPackageJson: File = {
     path: "/node_modules/mobx/package.json",
     content: `{ "name": "mobx", "version": "1.0.0" }`
 };
-const mobxDts: ts.projectSystem.File = {
+const mobxDts: File = {
     path: "/node_modules/mobx/index.d.ts",
     content: "export declare function observable(): unknown;"
 };
-const exportEqualsMappedType: ts.projectSystem.File = {
+const exportEqualsMappedType: File = {
     path: "/lib/foo/constants.d.ts",
     content: `
             type Signals = "SIGINT" | "SIGABRT";
@@ -96,8 +98,8 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         const symbolIdBefore = ts.getSymbolId(sigintPropBefore![0].symbol);
 
         // Update program without clearing cache
-        session.executeCommandSeq<ts.projectSystem.protocol.UpdateOpenRequest>({
-            command: ts.projectSystem.protocol.CommandTypes.UpdateOpen,
+        session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
+            command: ts.server.protocol.CommandTypes.UpdateOpen,
             arguments: {
                 changedFiles: [{
                     fileName: bTs.path,
@@ -123,22 +125,22 @@ describe("unittests:: tsserver:: exportMapCache", () => {
 });
 
 function setup() {
-    const host = ts.projectSystem.createServerHost([aTs, bTs, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts, exportEqualsMappedType]);
-    const session = ts.projectSystem.createSession(host);
-    ts.projectSystem.openFilesForSession([aTs, bTs], session);
+    const host = createServerHost([aTs, bTs, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts, exportEqualsMappedType]);
+    const session = createSession(host);
+    openFilesForSession([aTs, bTs], session);
     const projectService = session.getProjectService();
-    const project = ts.projectSystem.configuredProjectAt(projectService, 0);
+    const project = configuredProjectAt(projectService, 0);
     triggerCompletions();
     const checker = project.getLanguageService().getProgram()!.getTypeChecker();
     return { host, project, projectService, session, exportMapCache: project.getCachedExportInfoMap(), checker, triggerCompletions };
 
     function triggerCompletions() {
-        const requestLocation: ts.projectSystem.protocol.FileLocationRequestArgs = {
+        const requestLocation: ts.server.protocol.FileLocationRequestArgs = {
             file: bTs.path,
             line: 1,
             offset: 3,
         };
-        ts.projectSystem.executeSessionRequest<ts.projectSystem.protocol.CompletionsRequest, ts.projectSystem.protocol.CompletionInfoResponse>(session, ts.projectSystem.protocol.CommandTypes.CompletionInfo, {
+        executeSessionRequest<ts.server.protocol.CompletionsRequest, ts.server.protocol.CompletionInfoResponse>(session, ts.server.protocol.CommandTypes.CompletionInfo, {
             ...requestLocation,
             includeExternalModuleExports: true,
             prefix: "foo",

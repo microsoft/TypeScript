@@ -16,7 +16,7 @@ import {
     ElementAccessExpression, emitDetachedComments, EmitFileNames, EmitFlags, EmitHint, EmitHost,
     emitNewLineBeforeLeadingCommentOfPosition, EmitOnly, EmitResolver, EmitResult, EmitTextWriter, EmitTransformers,
     emptyArray, ensurePathIsNonModuleName, ensureTrailingDirectorySeparator, EntityName, EnumDeclaration, EnumMember,
-    escapeJsxAttributeString, escapeLeadingUnderscores, escapeNonAsciiString, escapeString, ESMap, every,
+    escapeJsxAttributeString, escapeLeadingUnderscores, escapeNonAsciiString, escapeString, every,
     ExportAssignment, ExportDeclaration, ExportSpecifier, Expression, ExpressionStatement, ExpressionWithTypeArguments,
     Extension, ExternalModuleReference, factory, fileExtensionIs, fileExtensionIsOneOf, FileReference, filter,
     findIndex, firstOrUndefined, forEach, forEachChild, forEachLeadingCommentRange, forEachTrailingCommentRange,
@@ -52,7 +52,7 @@ import {
     JSDocTypeTag, JSDocVariadicType, JsxAttribute, JsxAttributes, JsxClosingElement, JsxClosingFragment, JsxElement,
     JsxEmit, JsxExpression, JsxFragment, JsxOpeningElement, JsxOpeningFragment, JsxSelfClosingElement,
     JsxSpreadAttribute, JsxTagNameExpression, JsxText, LabeledStatement, last, lastOrUndefined, LateBoundDeclaration,
-    length, ListFormat, LiteralExpression, LiteralLikeNode, LiteralTypeNode, makeIdentifierFromModuleName, Map,
+    length, ListFormat, LiteralExpression, LiteralLikeNode, LiteralTypeNode, makeIdentifierFromModuleName,
     MappedTypeNode, maybeBind, memoize, MetaProperty, MethodDeclaration, MethodSignature, Modifier, ModifierLike,
     ModuleBlock, ModuleDeclaration, ModuleKind, ModuleReference, NamedDeclaration, NamedExports, NamedImports,
     NamedImportsOrExports, NamedTupleMember, NamespaceExport, NamespaceExportDeclaration, NamespaceImport,
@@ -65,7 +65,7 @@ import {
     PropertyAssignment, PropertyDeclaration, PropertySignature, QualifiedName, rangeEndIsOnSameLineAsRangeStart,
     rangeEndPositionsAreOnSameLine, rangeIsOnSingleLine, rangeStartPositionsAreOnSameLine, readJsonOrUndefined,
     removeFileExtension, resolvePath, RestTypeNode, returnFalse, ReturnStatement, returnUndefined, SatisfiesExpression,
-    ScriptTarget, Set, setEachParent, setOriginalNode, setParent, setTextRange, setTextRangePosEnd,
+    ScriptTarget, setEachParent, setOriginalNode, setParent, setTextRange, setTextRangePosEnd,
     setTextRangePosWidth, ShorthandPropertyAssignment, SignatureDeclaration, singleOrUndefined,
     skipPartiallyEmittedExpressions, skipTrivia, SnippetElement, SnippetKind, some, SourceFile,
     SourceFilePrologueDirective, SourceFilePrologueInfo, SourceMapEmitResult, SourceMapGenerator, SourceMapSource,
@@ -637,7 +637,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             if (sourceMapFilePath) {
                 const sourceMap = sourceMapGenerator.toString();
                 writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap, /*writeByteOrderMark*/ false, sourceFiles);
-                if (printer.bundleFileInfo) printer.bundleFileInfo.mapHash = computeSignature(sourceMap, maybeBind(host, host.createHash));
+                if (printer.bundleFileInfo) printer.bundleFileInfo.mapHash = computeSignature(sourceMap, host);
             }
         }
         else {
@@ -649,7 +649,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         writeFile(host, emitterDiagnostics, jsFilePath, text, !!compilerOptions.emitBOM, sourceFiles, { sourceMapUrlPos, diagnostics: transform.diagnostics });
         // We store the hash of the text written in the buildinfo to ensure that text of the referenced d.ts file is same as whats in the buildinfo
         // This is needed because incremental can be toggled between two runs and we might use stale file text to do text manipulation in prepend mode
-        if (printer.bundleFileInfo) printer.bundleFileInfo.hash = computeSignature(text, maybeBind(host, host.createHash));
+        if (printer.bundleFileInfo) printer.bundleFileInfo.hash = computeSignature(text, host);
 
         // Reset state
         writer.clear();
@@ -846,7 +846,6 @@ function emitUsingBuildInfoWorker(
     getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined,
     customTransformers?: CustomTransformers
 ): EmitUsingBuildInfoResult {
-    const createHash = maybeBind(host, host.createHash);
     const { buildInfoPath, jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false);
     // If host directly provides buildinfo we can get it directly. This allows host to cache the buildinfo
     const buildInfo = host.getBuildInfo!(buildInfoPath!, config.options.configFilePath);
@@ -856,20 +855,20 @@ function emitUsingBuildInfoWorker(
     const jsFileText = host.readFile(Debug.checkDefined(jsFilePath));
     if (!jsFileText) return jsFilePath!;
     // If the jsFileText is not same has what it was created with, tsbuildinfo is stale so dont use it
-    if (computeSignature(jsFileText, createHash) !== buildInfo.bundle.js.hash) return jsFilePath!;
+    if (computeSignature(jsFileText, host) !== buildInfo.bundle.js.hash) return jsFilePath!;
     const sourceMapText = sourceMapFilePath && host.readFile(sourceMapFilePath);
     // error if no source map or for now if inline sourcemap
     if ((sourceMapFilePath && !sourceMapText) || config.options.inlineSourceMap) return sourceMapFilePath || "inline sourcemap decoding";
-    if (sourceMapFilePath && computeSignature(sourceMapText!, createHash) !== buildInfo.bundle.js.mapHash) return sourceMapFilePath;
+    if (sourceMapFilePath && computeSignature(sourceMapText!, host) !== buildInfo.bundle.js.mapHash) return sourceMapFilePath;
 
     // read declaration text
     const declarationText = declarationFilePath && host.readFile(declarationFilePath);
     if (declarationFilePath && !declarationText) return declarationFilePath;
-    if (declarationFilePath && computeSignature(declarationText!, createHash) !== buildInfo.bundle.dts!.hash) return declarationFilePath;
+    if (declarationFilePath && computeSignature(declarationText!, host) !== buildInfo.bundle.dts!.hash) return declarationFilePath;
     const declarationMapText = declarationMapPath && host.readFile(declarationMapPath);
     // error if no source map or for now if inline sourcemap
     if ((declarationMapPath && !declarationMapText) || config.options.inlineSourceMap) return declarationMapPath || "inline sourcemap decoding";
-    if (declarationMapPath && computeSignature(declarationMapText!, createHash) !== buildInfo.bundle.dts!.mapHash) return declarationMapPath;
+    if (declarationMapPath && computeSignature(declarationMapText!, host) !== buildInfo.bundle.dts!.mapHash) return declarationMapPath;
 
     const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath!, host.getCurrentDirectory()));
     const ownPrependInput = createInputFilesWithFileTexts(
@@ -936,7 +935,7 @@ function emitUsingBuildInfoWorker(
             const program = buildInfo.program;
             if (program && changedDtsText !== undefined && config.options.composite) {
                 // Update the output signature
-                (program as ProgramBundleEmitBuildInfo).outSignature = computeSignature(changedDtsText, createHash, changedDtsData);
+                (program as ProgramBundleEmitBuildInfo).outSignature = computeSignature(changedDtsText, host, changedDtsData);
             }
             // Update sourceFileInfo
             const { js, dts, sourceFiles } = buildInfo.bundle!;
@@ -950,7 +949,7 @@ function emitUsingBuildInfoWorker(
         getSourceFileFromReference: returnUndefined,
         redirectTargetsMap: createMultiMap(),
         getFileIncludeReasons: notImplemented,
-        createHash,
+        createHash: maybeBind(host, host.createHash),
     };
     emitFiles(
         notImplementedResolver,
@@ -992,8 +991,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     let nodeIdToGeneratedName: string[]; // Map of generated names for specific nodes.
     let autoGeneratedIdToGeneratedName: string[]; // Map of generated names for temp and loop variables.
     let generatedNames: Set<string>; // Set of names generated by the NameGenerator.
-    let formattedNameTempFlagsStack: (ESMap<string, TempFlags> | undefined)[];
-    let formattedNameTempFlags: ESMap<string, TempFlags> | undefined;
+    let formattedNameTempFlagsStack: (Map<string, TempFlags> | undefined)[];
+    let formattedNameTempFlags: Map<string, TempFlags> | undefined;
     let privateNameTempFlagsStack: TempFlags[]; // Stack of enclosing name generation scopes.
     let privateNameTempFlags: TempFlags; // TempFlags for the current name generation scope.
     let tempFlagsStack: TempFlags[]; // Stack of enclosing name generation scopes.

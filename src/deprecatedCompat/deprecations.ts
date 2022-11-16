@@ -1,8 +1,21 @@
-import { Debug, DeprecationOptions, hasProperty, UnionToIntersection } from "./_namespaces/ts";
+import { hasProperty, UnionToIntersection, Version } from "./_namespaces/ts";
+import { deprecate } from "./deprecate";
+
+/** @internal */
+export interface DeprecationOptions {
+    message?: string;
+    error?: boolean;
+    since?: Version | string;
+    warnAfter?: Version | string;
+    errorAfter?: Version | string;
+    typeScriptVersion?: Version | string;
+    name?: string;
+}
+
 
 // The following are deprecations for the public API. Deprecated exports are removed from the compiler itself
 // and compatible implementations are added here, along with an appropriate deprecation warning using
-// the `@deprecated` JSDoc tag as well as the `Debug.deprecate` API.
+// the `@deprecated` JSDoc tag as well as the `deprecate` API.
 //
 // Deprecations fall into one of three categories:
 //
@@ -69,7 +82,7 @@ export function createOverload<T extends OverloadDefinitions>(name: string, over
         for (const key of Object.keys(deprecations)) {
             const index = +key as (keyof T & number);
             if (!isNaN(index) && hasProperty(overloads, `${index}`)) {
-                overloads[index] = Debug.deprecate(overloads[index], { ...deprecations[index], name });
+                overloads[index] = deprecate(overloads[index], { ...deprecations[index], name });
             }
         }
     }

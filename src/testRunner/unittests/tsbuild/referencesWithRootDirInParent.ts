@@ -1,32 +1,32 @@
-import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
+import { loadProjectFromDisk, replaceText, verifyTsc } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: with rootDir of project reference in parentDirectory", () => {
     let projFs: vfs.FileSystem;
     before(() => {
-        projFs = ts.loadProjectFromDisk("tests/projects/projectReferenceWithRootDirInParent");
+        projFs = loadProjectFromDisk("tests/projects/projectReferenceWithRootDirInParent");
     });
 
     after(() => {
         projFs = undefined!; // Release the contents
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "projectReferenceWithRootDirInParent",
         subScenario: "builds correctly",
         fs: () => projFs,
         commandLineArgs: ["--b", "/src/src/main", "/src/src/other"],
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "projectReferenceWithRootDirInParent",
         subScenario: "reports error for same tsbuildinfo file because no rootDir in the base",
         fs: () => projFs,
         commandLineArgs: ["--b", "/src/src/main", "--verbose"],
-        modifyFs: fs => ts.replaceText(fs, "/src/tsconfig.base.json", `"rootDir": "./src/",`, ""),
+        modifyFs: fs => replaceText(fs, "/src/tsconfig.base.json", `"rootDir": "./src/",`, ""),
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "projectReferenceWithRootDirInParent",
         subScenario: "reports error for same tsbuildinfo file",
         fs: () => projFs,
@@ -42,7 +42,7 @@ describe("unittests:: tsbuild:: with rootDir of project reference in parentDirec
         },
     });
 
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "projectReferenceWithRootDirInParent",
         subScenario: "reports no error when tsbuildinfo differ",
         fs: () => projFs,

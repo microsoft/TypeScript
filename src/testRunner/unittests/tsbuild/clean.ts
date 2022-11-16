@@ -1,11 +1,10 @@
-import * as ts from "../../_namespaces/ts";
-
+import { loadProjectFromFiles, verifyTsc } from "../tsc/helpers";
 describe("unittests:: tsbuild - clean", () => {
-    ts.verifyTsc({
+    verifyTsc({
         scenario: "clean",
         subScenario: `file name and output name clashing`,
         commandLineArgs: ["--b", "/src/tsconfig.json", "-clean"],
-        fs: () => ts.loadProjectFromFiles({
+        fs: () => loadProjectFromFiles({
             "/src/index.js": "",
             "/src/bar.ts": "",
             "/src/tsconfig.json": JSON.stringify({

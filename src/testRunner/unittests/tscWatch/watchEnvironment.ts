@@ -1,21 +1,22 @@
 import * as ts from "../../_namespaces/ts";
+import { createWatchedSystem, File, libFile, SymLink, TestServerHost, Tsc_WatchDirectory, Tsc_WatchFile } from "../virtualFileSystemWithWatch";
+import { commonFile1, commonFile2, noopChange, verifyTscWatch } from "./helpers";
 
-import Tsc_WatchDirectory = ts.TestFSWithWatch.Tsc_WatchDirectory;
 describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different polling/non polling options", () => {
     const scenario = "watchEnvironment";
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "watchFile/using dynamic priority polling",
         commandLineArgs: ["--w", `/a/username/project/typescript.ts`],
         sys: () => {
             const projectFolder = "/a/username/project";
-            const file1: ts.tscWatch.File = {
+            const file1: File = {
                 path: `${projectFolder}/typescript.ts`,
                 content: "var z = 10;"
             };
-            const environmentVariables = new ts.Map<string, string>();
-            environmentVariables.set("TSC_WATCHFILE", ts.TestFSWithWatch.Tsc_WatchFile.DynamicPolling);
-            return ts.tscWatch.createWatchedSystem([file1, ts.tscWatch.libFile], { environmentVariables });
+            const environmentVariables = new Map<string, string>();
+            environmentVariables.set("TSC_WATCHFILE", Tsc_WatchFile.DynamicPolling);
+            return createWatchedSystem([file1, libFile], { environmentVariables });
         },
         changes: [
             {
@@ -37,7 +38,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 // Make a change to file
                 change: sys => sys.writeFile("/a/username/project/typescript.ts", "var zz30 = 100;"),
                 // During this timeout the file would be detected as unchanged
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "Callbacks: medium priority + high priority queue and scheduled program update",
@@ -67,12 +68,12 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         ]
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: "watchFile/using fixed chunk size polling",
         commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
         sys: () => {
-            const configFile: ts.tscWatch.File = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: JSON.stringify({
                     watchOptions: {
@@ -80,8 +81,8 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     }
                 })
             };
-            const files = [ts.tscWatch.libFile, ts.tscWatch.commonFile1, ts.tscWatch.commonFile2, configFile];
-            return ts.tscWatch.createWatchedSystem(files);
+            const files = [libFile, commonFile1, commonFile2, configFile];
+            return createWatchedSystem(files);
         },
         changes: [
             {
@@ -99,8 +100,8 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             {
                 caption: "Make change to file but should detect as changed and schedule program update",
                 // Make a change to file
-                change: sys => sys.writeFile(ts.tscWatch.commonFile1.path, "var zz30 = 100;"),
-                timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun,
+                change: sys => sys.writeFile(commonFile1.path, "var zz30 = 100;"),
+                timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "Callbacks: queue and scheduled program update",
@@ -125,7 +126,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         function verifyRenamingFileInSubFolder(subScenario: string, tscWatchDirectory: Tsc_WatchDirectory) {
             const projectFolder = "/a/username/project";
             const projectSrcFolder = `${projectFolder}/src`;
-            const configFile: ts.tscWatch.File = {
+            const configFile: File = {
                 path: `${projectFolder}/tsconfig.json`,
                 content: JSON.stringify({
                     watchOptions: {
@@ -133,19 +134,19 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     }
                 })
             };
-            const file: ts.tscWatch.File = {
+            const file: File = {
                 path: `${projectSrcFolder}/file1.ts`,
                 content: ""
             };
-            ts.tscWatch.verifyTscWatch({
+            verifyTscWatch({
                 scenario,
                 subScenario: `watchDirectories/${subScenario}`,
                 commandLineArgs: ["--w", "-p", configFile.path],
                 sys: () => {
-                    const files = [file, configFile, ts.tscWatch.libFile];
-                    const environmentVariables = new ts.Map<string, string>();
+                    const files = [file, configFile, libFile];
+                    const environmentVariables = new Map<string, string>();
                     environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
-                    return ts.tscWatch.createWatchedSystem(files, { environmentVariables });
+                    return createWatchedSystem(files, { environmentVariables });
                 },
                 changes: [
                     {
@@ -172,71 +173,71 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
 
         verifyRenamingFileInSubFolder("uses non recursive dynamic polling when renaming file in subfolder", Tsc_WatchDirectory.DynamicPolling);
 
-        ts.tscWatch.verifyTscWatch({
+        verifyTscWatch({
             scenario,
             subScenario: "watchDirectories/when there are symlinks to folders in recursive folders",
             commandLineArgs: ["--w"],
             sys: () => {
                 const cwd = "/home/user/projects/myproject";
-                const file1: ts.tscWatch.File = {
+                const file1: File = {
                     path: `${cwd}/src/file.ts`,
                     content: `import * as a from "a"`
                 };
-                const tsconfig: ts.tscWatch.File = {
+                const tsconfig: File = {
                     path: `${cwd}/tsconfig.json`,
                     content: `{ "compilerOptions": { "extendedDiagnostics": true, "traceResolution": true }}`
                 };
-                const realA: ts.tscWatch.File = {
+                const realA: File = {
                     path: `${cwd}/node_modules/reala/index.d.ts`,
                     content: `export {}`
                 };
-                const realB: ts.tscWatch.File = {
+                const realB: File = {
                     path: `${cwd}/node_modules/realb/index.d.ts`,
                     content: `export {}`
                 };
-                const symLinkA: ts.tscWatch.SymLink = {
+                const symLinkA: SymLink = {
                     path: `${cwd}/node_modules/a`,
                     symLink: `${cwd}/node_modules/reala`
                 };
-                const symLinkB: ts.tscWatch.SymLink = {
+                const symLinkB: SymLink = {
                     path: `${cwd}/node_modules/b`,
                     symLink: `${cwd}/node_modules/realb`
                 };
-                const symLinkBInA: ts.tscWatch.SymLink = {
+                const symLinkBInA: SymLink = {
                     path: `${cwd}/node_modules/reala/node_modules/b`,
                     symLink: `${cwd}/node_modules/b`
                 };
-                const symLinkAInB: ts.tscWatch.SymLink = {
+                const symLinkAInB: SymLink = {
                     path: `${cwd}/node_modules/realb/node_modules/a`,
                     symLink: `${cwd}/node_modules/a`
                 };
-                const files = [ts.tscWatch.libFile, file1, tsconfig, realA, realB, symLinkA, symLinkB, symLinkBInA, symLinkAInB];
-                const environmentVariables = new ts.Map<string, string>();
+                const files = [libFile, file1, tsconfig, realA, realB, symLinkA, symLinkB, symLinkBInA, symLinkAInB];
+                const environmentVariables = new Map<string, string>();
                 environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
-                return ts.tscWatch.createWatchedSystem(files, { environmentVariables, currentDirectory: cwd });
+                return createWatchedSystem(files, { environmentVariables, currentDirectory: cwd });
             },
             changes: ts.emptyArray
         });
 
-        ts.tscWatch.verifyTscWatch({
+        verifyTscWatch({
             scenario,
             subScenario: "watchDirectories/with non synchronous watch directory",
-            commandLineArgs: ["--w", "-p", `${ts.tscWatch.projectRoot}/tsconfig.json`],
+            commandLineArgs: ["--w", "-p", `/user/username/projects/myproject/tsconfig.json`],
             sys: () => {
-                const configFile: ts.tscWatch.File = {
-                    path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+                const configFile: File = {
+                    path: `/user/username/projects/myproject/tsconfig.json`,
                     content: "{}"
                 };
-                const file1: ts.tscWatch.File = {
-                    path: `${ts.tscWatch.projectRoot}/src/file1.ts`,
+                const file1: File = {
+                    path: `/user/username/projects/myproject/src/file1.ts`,
                     content: `import { x } from "file2";`
                 };
-                const file2: ts.tscWatch.File = {
-                    path: `${ts.tscWatch.projectRoot}/node_modules/file2/index.d.ts`,
+                const file2: File = {
+                    path: `/user/username/projects/myproject/node_modules/file2/index.d.ts`,
                     content: `export const x = 10;`
                 };
-                const files = [ts.tscWatch.libFile, file1, file2, configFile];
-                return ts.tscWatch.createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                const files = [libFile, file1, file2, configFile];
+                return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
             },
             changes: [
                 {
@@ -250,7 +251,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 {
                     caption: "Remove directory node_modules",
                     // Remove directory node_modules
-                    change: sys => sys.deleteFolder(`${ts.tscWatch.projectRoot}/node_modules`, /*recursive*/ true),
+                    change: sys => sys.deleteFolder(`/user/username/projects/myproject/node_modules`, /*recursive*/ true),
                     timeouts: sys => {
                         sys.checkTimeoutQueueLength(3); // 1. Failed lookup invalidation 2. For updating program and 3. for updating child watches
                         sys.runQueuedTimeoutCallbacks(sys.getNextTimeoutId() - 2); // Update program
@@ -269,17 +270,17 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 {
                     caption: "Start npm install",
                     // npm install
-                    change: sys => sys.createDirectory(`${ts.tscWatch.projectRoot}/node_modules`),
+                    change: sys => sys.createDirectory(`/user/username/projects/myproject/node_modules`),
                     timeouts: sys => sys.checkTimeoutQueueLength(1), // To update folder structure
                 },
                 {
                     caption: "npm install folder creation of file2",
-                    change: sys => sys.createDirectory(`${ts.tscWatch.projectRoot}/node_modules/file2`),
+                    change: sys => sys.createDirectory(`/user/username/projects/myproject/node_modules/file2`),
                     timeouts: sys => sys.checkTimeoutQueueLength(1), // To update folder structure
                 },
                 {
                     caption: "npm install index file in file2",
-                    change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/node_modules/file2/index.d.ts`, `export const x = 10;`),
+                    change: sys => sys.writeFile(`/user/username/projects/myproject/node_modules/file2/index.d.ts`, `export const x = 10;`),
                     timeouts: sys => sys.checkTimeoutQueueLength(1), // To update folder structure
                 },
                 {
@@ -309,32 +310,32 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             ],
         });
 
-        ts.tscWatch.verifyTscWatch({
+        verifyTscWatch({
             scenario,
             subScenario: "watchDirectories/with non synchronous watch directory with outDir and declaration enabled",
-            commandLineArgs: ["--w", "-p", `${ts.tscWatch.projectRoot}/tsconfig.json`],
+            commandLineArgs: ["--w", "-p", `/user/username/projects/myproject/tsconfig.json`],
             sys: () => {
-                const configFile: ts.tscWatch.File = {
-                    path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+                const configFile: File = {
+                    path: `/user/username/projects/myproject/tsconfig.json`,
                     content: JSON.stringify({ compilerOptions: { outDir: "dist", declaration: true } })
                 };
-                const file1: ts.tscWatch.File = {
-                    path: `${ts.tscWatch.projectRoot}/src/file1.ts`,
+                const file1: File = {
+                    path: `/user/username/projects/myproject/src/file1.ts`,
                     content: `import { x } from "file2";`
                 };
-                const file2: ts.tscWatch.File = {
-                    path: `${ts.tscWatch.projectRoot}/node_modules/file2/index.d.ts`,
+                const file2: File = {
+                    path: `/user/username/projects/myproject/node_modules/file2/index.d.ts`,
                     content: `export const x = 10;`
                 };
-                const files = [ts.tscWatch.libFile, file1, file2, configFile];
-                return ts.tscWatch.createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                const files = [libFile, file1, file2, configFile];
+                return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
             },
             changes: [
-                ts.tscWatch.noopChange,
+                noopChange,
                 {
                     caption: "Add new file, should schedule and run timeout to update directory watcher",
-                    change: sys => sys.writeFile(`${ts.tscWatch.projectRoot}/src/file3.ts`, `export const y = 10;`),
-                    timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun, // Update the child watch
+                    change: sys => sys.writeFile(`/user/username/projects/myproject/src/file3.ts`, `export const y = 10;`),
+                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1), // Update the child watch
                 },
                 {
                     caption: "Actual program update to include new file",
@@ -344,37 +345,37 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 {
                     caption: "After program emit with new file, should schedule and run timeout to update directory watcher",
                     change: ts.noop,
-                    timeouts: ts.tscWatch.checkSingleTimeoutQueueLengthAndRun, // Update the child watch
+                    timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1), // Update the child watch
                 },
-                ts.tscWatch.noopChange,
+                noopChange,
             ],
         });
 
-        ts.tscWatch.verifyTscWatch({
+        verifyTscWatch({
             scenario,
             subScenario: "watchDirectories/with non synchronous watch directory renaming a file",
-            commandLineArgs: ["--w", "-p", `${ts.tscWatch.projectRoot}/tsconfig.json`],
+            commandLineArgs: ["--w", "-p", `/user/username/projects/myproject/tsconfig.json`],
             sys: () => {
-                const configFile: ts.tscWatch.File = {
-                    path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+                const configFile: File = {
+                    path: `/user/username/projects/myproject/tsconfig.json`,
                     content: JSON.stringify({ compilerOptions: { outDir: "dist" } })
                 };
-                const file1: ts.tscWatch.File = {
-                    path: `${ts.tscWatch.projectRoot}/src/file1.ts`,
+                const file1: File = {
+                    path: `/user/username/projects/myproject/src/file1.ts`,
                     content: `import { x } from "./file2";`
                 };
-                const file2: ts.tscWatch.File = {
-                    path: `${ts.tscWatch.projectRoot}/src/file2.ts`,
+                const file2: File = {
+                    path: `/user/username/projects/myproject/src/file2.ts`,
                     content: `export const x = 10;`
                 };
-                const files = [ts.tscWatch.libFile, file1, file2, configFile];
-                return ts.tscWatch.createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                const files = [libFile, file1, file2, configFile];
+                return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
             },
             changes: [
-                ts.tscWatch.noopChange,
+                noopChange,
                 {
                     caption: "rename the file",
-                    change: sys => sys.renameFile(`${ts.tscWatch.projectRoot}/src/file2.ts`, `${ts.tscWatch.projectRoot}/src/renamed.ts`),
+                    change: sys => sys.renameFile(`/user/username/projects/myproject/src/file2.ts`, `/user/username/projects/myproject/src/renamed.ts`),
                     timeouts: sys => {
                         sys.checkTimeoutQueueLength(2); // 1. For updating program and 2. for updating child watches
                         sys.runQueuedTimeoutCallbacks(1); // Update program
@@ -395,12 +396,12 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
     });
 
     describe("handles watch compiler options", () => {
-        ts.tscWatch.verifyTscWatch({
+        verifyTscWatch({
             scenario,
             subScenario: "watchOptions/with watchFile option",
             commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
             sys: () => {
-                const configFile: ts.tscWatch.File = {
+                const configFile: File = {
                     path: "/a/b/tsconfig.json",
                     content: JSON.stringify({
                         watchOptions: {
@@ -408,18 +409,18 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         }
                     })
                 };
-                const files = [ts.tscWatch.libFile, ts.tscWatch.commonFile1, ts.tscWatch.commonFile2, configFile];
-                return ts.tscWatch.createWatchedSystem(files);
+                const files = [libFile, commonFile1, commonFile2, configFile];
+                return createWatchedSystem(files);
             },
             changes: ts.emptyArray
         });
 
-        ts.tscWatch.verifyTscWatch({
+        verifyTscWatch({
             scenario,
             subScenario: "watchOptions/with watchDirectory option",
             commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
             sys: () => {
-                const configFile: ts.tscWatch.File = {
+                const configFile: File = {
                     path: "/a/b/tsconfig.json",
                     content: JSON.stringify({
                         watchOptions: {
@@ -427,18 +428,18 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         }
                     })
                 };
-                const files = [ts.tscWatch.libFile, ts.tscWatch.commonFile1, ts.tscWatch.commonFile2, configFile];
-                return ts.tscWatch.createWatchedSystem(files, { runWithoutRecursiveWatches: true });
+                const files = [libFile, commonFile1, commonFile2, configFile];
+                return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
             },
             changes: ts.emptyArray
         });
 
-        ts.tscWatch.verifyTscWatch({
+        verifyTscWatch({
             scenario,
             subScenario: "watchOptions/with fallbackPolling option",
             commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json"],
             sys: () => {
-                const configFile: ts.tscWatch.File = {
+                const configFile: File = {
                     path: "/a/b/tsconfig.json",
                     content: JSON.stringify({
                         watchOptions: {
@@ -446,59 +447,59 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         }
                     })
                 };
-                const files = [ts.tscWatch.libFile, ts.tscWatch.commonFile1, ts.tscWatch.commonFile2, configFile];
-                return ts.tscWatch.createWatchedSystem(files, { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
+                const files = [libFile, commonFile1, commonFile2, configFile];
+                return createWatchedSystem(files, { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
             },
             changes: ts.emptyArray
         });
 
-        ts.tscWatch.verifyTscWatch({
+        verifyTscWatch({
             scenario,
             subScenario: "watchOptions/with watchFile as watch options to extend",
             commandLineArgs: ["-w", "-p", "/a/b/tsconfig.json", "--watchFile", "UseFsEvents"],
             sys: () => {
-                const configFile: ts.tscWatch.File = {
+                const configFile: File = {
                     path: "/a/b/tsconfig.json",
                     content: "{}"
                 };
-                const files = [ts.tscWatch.libFile, ts.tscWatch.commonFile1, ts.tscWatch.commonFile2, configFile];
-                return ts.tscWatch.createWatchedSystem(files);
+                const files = [libFile, commonFile1, commonFile2, configFile];
+                return createWatchedSystem(files);
             },
             changes: ts.emptyArray
         });
 
         describe("exclude options", () => {
-            function sys(watchOptions: ts.WatchOptions, runWithoutRecursiveWatches?: boolean): ts.tscWatch.WatchedSystem {
-                const configFile: ts.tscWatch.File = {
-                    path: `${ts.tscWatch.projectRoot}/tsconfig.json`,
+            function sys(watchOptions: ts.WatchOptions, runWithoutRecursiveWatches?: boolean): TestServerHost {
+                const configFile: File = {
+                    path: `/user/username/projects/myproject/tsconfig.json`,
                     content: JSON.stringify({ exclude: ["node_modules"], watchOptions })
                 };
-                const main: ts.tscWatch.File = {
-                    path: `${ts.tscWatch.projectRoot}/src/main.ts`,
+                const main: File = {
+                    path: `/user/username/projects/myproject/src/main.ts`,
                     content: `import { foo } from "bar"; foo();`
                 };
-                const bar: ts.tscWatch.File = {
-                    path: `${ts.tscWatch.projectRoot}/node_modules/bar/index.d.ts`,
+                const bar: File = {
+                    path: `/user/username/projects/myproject/node_modules/bar/index.d.ts`,
                     content: `export { foo } from "./foo";`
                 };
-                const foo: ts.tscWatch.File = {
-                    path: `${ts.tscWatch.projectRoot}/node_modules/bar/foo.d.ts`,
+                const foo: File = {
+                    path: `/user/username/projects/myproject/node_modules/bar/foo.d.ts`,
                     content: `export function foo(): string;`
                 };
-                const fooBar: ts.tscWatch.File = {
-                    path: `${ts.tscWatch.projectRoot}/node_modules/bar/fooBar.d.ts`,
+                const fooBar: File = {
+                    path: `/user/username/projects/myproject/node_modules/bar/fooBar.d.ts`,
                     content: `export function fooBar(): string;`
                 };
-                const temp: ts.tscWatch.File = {
-                    path: `${ts.tscWatch.projectRoot}/node_modules/bar/temp/index.d.ts`,
+                const temp: File = {
+                    path: `/user/username/projects/myproject/node_modules/bar/temp/index.d.ts`,
                     content: "export function temp(): string;"
                 };
-                const files = [ts.tscWatch.libFile, main, bar, foo, fooBar, temp, configFile];
-                return ts.tscWatch.createWatchedSystem(files, { currentDirectory: ts.tscWatch.projectRoot, runWithoutRecursiveWatches });
+                const files = [libFile, main, bar, foo, fooBar, temp, configFile];
+                return createWatchedSystem(files, { currentDirectory: "/user/username/projects/myproject", runWithoutRecursiveWatches });
             }
 
             function verifyWorker(...additionalFlags: string[]) {
-                ts.tscWatch.verifyTscWatch({
+                verifyTscWatch({
                     scenario,
                     subScenario: `watchOptions/with excludeFiles option${additionalFlags.join("")}`,
                     commandLineArgs: ["-w", ...additionalFlags],
@@ -506,13 +507,13 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     changes: [
                         {
                             caption: "Change foo",
-                            change: sys => ts.tscWatch.replaceFileText(sys, `${ts.tscWatch.projectRoot}/node_modules/bar/foo.d.ts`, "foo", "fooBar"),
+                            change: sys => sys.replaceFileText(`/user/username/projects/myproject/node_modules/bar/foo.d.ts`, "foo", "fooBar"),
                             timeouts: sys => sys.checkTimeoutQueueLength(0),
                         }
                     ]
                 });
 
-                ts.tscWatch.verifyTscWatch({
+                verifyTscWatch({
                     scenario,
                     subScenario: `watchOptions/with excludeDirectories option${additionalFlags.join("")}`,
                     commandLineArgs: ["-w", ...additionalFlags],
@@ -520,12 +521,12 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     changes: [
                         {
                             caption: "delete fooBar",
-                            change: sys => sys.deleteFile(`${ts.tscWatch.projectRoot}/node_modules/bar/fooBar.d.ts`),
+                            change: sys => sys.deleteFile(`/user/username/projects/myproject/node_modules/bar/fooBar.d.ts`),
                             timeouts: sys => sys.checkTimeoutQueueLength(0),                            }
                     ]
                 });
 
-                ts.tscWatch.verifyTscWatch({
+                verifyTscWatch({
                     scenario,
                     subScenario: `watchOptions/with excludeDirectories option with recursive directory watching${additionalFlags.join("")}`,
                     commandLineArgs: ["-w", ...additionalFlags],
@@ -541,7 +542,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                         },
                         {
                             caption: "add new folder to temp",
-                            change: sys => sys.ensureFileOrFolder({ path: `${ts.tscWatch.projectRoot}/node_modules/bar/temp/fooBar/index.d.ts`, content: "export function temp(): string;" }),
+                            change: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts`, content: "export function temp(): string;" }),
                             timeouts: sys => sys.checkTimeoutQueueLength(0),
                         }
                     ]
@@ -553,28 +554,28 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
         });
     });
 
-    ts.tscWatch.verifyTscWatch({
+    verifyTscWatch({
         scenario,
         subScenario: `fsWatch/when using file watching thats when rename occurs when file is still on the disk`,
         commandLineArgs: ["-w", "--extendedDiagnostics"],
-        sys: () => ts.tscWatch.createWatchedSystem(
+        sys: () => createWatchedSystem(
             {
-                [ts.tscWatch.libFile.path]: ts.tscWatch.libFile.content,
-                [`${ts.tscWatch.projectRoot}/main.ts`]: `import { foo } from "./foo"; foo();`,
-                [`${ts.tscWatch.projectRoot}/foo.ts`]: `export declare function foo(): string;`,
-                [`${ts.tscWatch.projectRoot}/tsconfig.json`]: JSON.stringify({
+                [libFile.path]: libFile.content,
+                [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
+                [`/user/username/projects/myproject/foo.ts`]: `export declare function foo(): string;`,
+                [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({
                     watchOptions: { watchFile: "useFsEvents" },
                     files: ["foo.ts", "main.ts"]
                 }),
             },
-            { currentDirectory: ts.tscWatch.projectRoot, }
+            { currentDirectory: "/user/username/projects/myproject", }
         ),
         changes: [
             {
                 caption: "Introduce error such that when callback happens file is already appeared",
                 // vm's wq generates this kind of event
                 // Skip delete event so inode changes but when the create's rename occurs file is on disk
-                change: sys => sys.modifyFile(`${ts.tscWatch.projectRoot}/foo.ts`, `export declare function foo2(): string;`, {
+                change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo2(): string;`, {
                     invokeFileDeleteCreateAsPartInsteadOfChange: true,
                     ignoreDelete: true,
                 }),
@@ -582,89 +583,89 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             },
             {
                 caption: "Replace file with rename event that fixes error",
-                change: sys => sys.modifyFile(`${ts.tscWatch.projectRoot}/foo.ts`, `export declare function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, }),
+                change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, }),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
         ]
     });
 
     describe("with fsWatch on inodes", () => {
-        ts.tscWatch.verifyTscWatch({
+        verifyTscWatch({
             scenario,
             subScenario: `fsWatch/when using file watching thats on inode`,
             commandLineArgs: ["-w", "--extendedDiagnostics"],
-            sys: () => ts.tscWatch.createWatchedSystem(
+            sys: () => createWatchedSystem(
                 {
-                    [ts.tscWatch.libFile.path]: ts.tscWatch.libFile.content,
-                    [`${ts.tscWatch.projectRoot}/main.ts`]: `import { foo } from "./foo"; foo();`,
-                    [`${ts.tscWatch.projectRoot}/foo.d.ts`]: `export function foo(): string;`,
-                    [`${ts.tscWatch.projectRoot}/tsconfig.json`]: JSON.stringify({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
+                    [libFile.path]: libFile.content,
+                    [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
+                    [`/user/username/projects/myproject/foo.d.ts`]: `export function foo(): string;`,
+                    [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
                 },
                 {
-                    currentDirectory: ts.tscWatch.projectRoot,
+                    currentDirectory: "/user/username/projects/myproject",
                     inodeWatching: true
                 }
             ),
             changes: [
                 {
                     caption: "Replace file with rename event that introduces error",
-                    change: sys => sys.modifyFile(`${ts.tscWatch.projectRoot}/foo.d.ts`, `export function foo2(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
+                    change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo2(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
                     timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2),
                 },
                 {
                     caption: "Replace file with rename event that fixes error",
-                    change: sys => sys.modifyFile(`${ts.tscWatch.projectRoot}/foo.d.ts`, `export function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
+                    change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
                     timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2),
                 },
             ]
         });
 
-        ts.tscWatch.verifyTscWatch({
+        verifyTscWatch({
             scenario,
             subScenario: `fsWatch/when using file watching thats on inode when rename event ends with tilde`,
             commandLineArgs: ["-w", "--extendedDiagnostics"],
-            sys: () => ts.tscWatch.createWatchedSystem(
+            sys: () => createWatchedSystem(
                 {
-                    [ts.tscWatch.libFile.path]: ts.tscWatch.libFile.content,
-                    [`${ts.tscWatch.projectRoot}/main.ts`]: `import { foo } from "./foo"; foo();`,
-                    [`${ts.tscWatch.projectRoot}/foo.d.ts`]: `export function foo(): string;`,
-                    [`${ts.tscWatch.projectRoot}/tsconfig.json`]: JSON.stringify({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
+                    [libFile.path]: libFile.content,
+                    [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
+                    [`/user/username/projects/myproject/foo.d.ts`]: `export function foo(): string;`,
+                    [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({ watchOptions: { watchFile: "useFsEvents" }, files: ["foo.d.ts", "main.ts"] }),
                 },
                 {
-                    currentDirectory: ts.tscWatch.projectRoot,
+                    currentDirectory: "/user/username/projects/myproject",
                     inodeWatching: true
                 }
             ),
             changes: [
                 {
                     caption: "Replace file with rename event that introduces error",
-                    change: sys => sys.modifyFile(`${ts.tscWatch.projectRoot}/foo.d.ts`, `export function foo2(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, useTildeAsSuffixInRenameEventFileName: true }),
+                    change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo2(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, useTildeAsSuffixInRenameEventFileName: true }),
                     timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2),
                 },
                 {
                     caption: "Replace file with rename event that fixes error",
-                    change: sys => sys.modifyFile(`${ts.tscWatch.projectRoot}/foo.d.ts`, `export function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, useTildeAsSuffixInRenameEventFileName: true }),
+                    change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, useTildeAsSuffixInRenameEventFileName: true }),
                     timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2),
                 },
             ]
         });
 
-        ts.tscWatch.verifyTscWatch({
+        verifyTscWatch({
             scenario,
             subScenario: `fsWatch/when using file watching thats on inode when rename occurs when file is still on the disk`,
             commandLineArgs: ["-w", "--extendedDiagnostics"],
-            sys: () => ts.tscWatch.createWatchedSystem(
+            sys: () => createWatchedSystem(
                 {
-                    [ts.tscWatch.libFile.path]: ts.tscWatch.libFile.content,
-                    [`${ts.tscWatch.projectRoot}/main.ts`]: `import { foo } from "./foo"; foo();`,
-                    [`${ts.tscWatch.projectRoot}/foo.ts`]: `export declare function foo(): string;`,
-                    [`${ts.tscWatch.projectRoot}/tsconfig.json`]: JSON.stringify({
+                    [libFile.path]: libFile.content,
+                    [`/user/username/projects/myproject/main.ts`]: `import { foo } from "./foo"; foo();`,
+                    [`/user/username/projects/myproject/foo.ts`]: `export declare function foo(): string;`,
+                    [`/user/username/projects/myproject/tsconfig.json`]: JSON.stringify({
                         watchOptions: { watchFile: "useFsEvents" },
                         files: ["foo.ts", "main.ts"]
                     }),
                 },
                 {
-                    currentDirectory: ts.tscWatch.projectRoot,
+                    currentDirectory: "/user/username/projects/myproject",
                     inodeWatching: true,
                 }
             ),
@@ -673,7 +674,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     caption: "Introduce error such that when callback happens file is already appeared",
                     // vm's wq generates this kind of event
                     // Skip delete event so inode changes but when the create's rename occurs file is on disk
-                    change: sys => sys.modifyFile(`${ts.tscWatch.projectRoot}/foo.ts`, `export declare function foo2(): string;`, {
+                    change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo2(): string;`, {
                         invokeFileDeleteCreateAsPartInsteadOfChange: true,
                         ignoreDelete: true,
                         skipInodeCheckOnCreate: true
@@ -682,7 +683,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 },
                 {
                     caption: "Replace file with rename event that fixes error",
-                    change: sys => sys.modifyFile(`${ts.tscWatch.projectRoot}/foo.ts`, `export declare function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, }),
+                    change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.ts`, `export declare function foo(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, }),
                     timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
                 },
             ]
