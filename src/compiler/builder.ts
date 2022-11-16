@@ -1439,41 +1439,22 @@ function toPerDirectoryAndNonRelativeNameCache<T>(
     cache: ModeAwareCache<T> | undefined,
     fOrPath: SourceFile | Path,
 ) {
-    if (!cache?.size()) return perDirectoryAndNonRelativeNameCache;
-    let dirPath: Path, redirectedReference: ResolvedProjectReference | undefined;
-    if (!isString(fOrPath)) {
-        redirectedReference = state.program!.getRedirectReferenceForResolution(fOrPath);
-        dirPath = getDirectoryPath(fOrPath.path);
-    }
-    else {
-        dirPath = getDirectoryPath(fOrPath);
-    }
-    const mapForRedirects = perDirectoryAndNonRelativeNameCache?.perDirectory.perDirectoryMap.getMapOfCacheRedirects(redirectedReference);
-    let dirCache = mapForRedirects?.get(dirPath);
-    cache.forEach((resolution, name, mode) => {
-        if (!getResolvedFileName(resolution)) return;
-        if (dirCache?.has(name, mode)) return;
-        // If there was already external module resolution that is same, set for child directory, dont set resolution for this directory
-        if (!isExternalModuleNameRelative(name) &&
-            perDirectoryAndNonRelativeNameCache?.nonRelativeName.getFromNonRelativeNameCacheWithPath(name, mode, dirPath, redirectedReference)) {
-            return;
-        }
-        (dirCache ??= (perDirectoryAndNonRelativeNameCache ??= createPerDirectoryAndNonRelativeNameCache(
-            state.program!.getCurrentDirectory(),
-            state.program!.getCanonicalFileName,
-            state.compilerOptions,
-            getResolvedFileName,
-        )).perDirectory.getOrCreateCacheForDirectoryWithPath(dirPath, redirectedReference)).set(name, mode, resolution);
-        // put result in per-module name cache and delete everything that is not needed
-        if (!isExternalModuleNameRelative(name)) {
-            perDirectoryAndNonRelativeNameCache!.nonRelativeName.getOrCreateCacheForNonRelativeName(name, mode, redirectedReference).setWithPath(
-                dirPath,
-                resolution,
-                ancestorPath => mapForRedirects?.get(ancestorPath)?.delete(name, mode),
-            );
-        }
-    });
-    return perDirectoryAndNonRelativeNameCache;
+    return ts.toPerDirectoryAndNonRelativeNameCache(
+        state.program!,
+        perDirectoryAndNonRelativeNameCache,
+        getResolvedFileName,
+        cache,
+        fOrPath,
+        noop,
+        (resolution, name, mode, dirPath, redirectedReference) =>
+            // If this is not resolved, dont put in per dir Cache
+            !getResolvedFileName(resolution) ||
+            // If there was already external module resolution that is same, set for child directory, dont set resolution for this directory
+            (!isExternalModuleNameRelative(name) &&
+                !!perDirectoryAndNonRelativeNameCache?.nonRelativeName.getFromNonRelativeNameCacheWithPath(name, mode, dirPath, redirectedReference)),
+        // when adding non relative mode resolution, delete everything that is not needed
+        (ancestorPath, mapOfRedirects, name, mode) => mapOfRedirects?.get(ancestorPath)?.delete(name, mode),
+    );
 }
 
 /** @internal */

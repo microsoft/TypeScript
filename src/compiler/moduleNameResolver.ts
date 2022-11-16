@@ -77,6 +77,7 @@ import {
     Pattern,
     patternText,
     perfLogger,
+    Program,
     Push,
     readJson,
     removeExtension,
@@ -1182,6 +1183,49 @@ export function createPerDirectoryAndNonRelativeNameCache<T>(currentDirectory: s
         }
         return result;
     }
+}
+
+/** @internal */
+export function toPerDirectoryAndNonRelativeNameCache<T, U, V>(
+    program: Program,
+    perDirectoryAndNonRelativeNameCache: PerDirectoryAndNonRelativeNameCache<T> | undefined,
+    getResolvedFileName: (resolved: T) => string | undefined,
+    cache: ModeAwareCache<T> | undefined,
+    fOrPath: SourceFile | Path,
+    withRedirects: (redirectedReference: ResolvedProjectReference | undefined) => U,
+    forEachResolution: (r: T, name: string, mode: ResolutionMode, dirPath: Path, redirectedReference: ResolvedProjectReference | undefined, redirectsResult: U) => V | undefined,
+    ancestoryWorker: (ancestorPath: Path, mapOfRedirects: Map<Path, ModeAwareCache<T>> | undefined, name: string, mode: ResolutionMode) => void,
+) {
+    if (!cache?.size()) return perDirectoryAndNonRelativeNameCache;
+    let dirPath: Path, redirectedReference: ResolvedProjectReference | undefined;
+    if (!isString(fOrPath)) {
+        redirectedReference = program.getRedirectReferenceForResolution(fOrPath);
+        dirPath = getDirectoryPath(fOrPath.path);
+    }
+    else {
+        dirPath = getDirectoryPath(fOrPath);
+    }
+    const redirectsResult = withRedirects(redirectedReference);
+    const mapForRedirects = perDirectoryAndNonRelativeNameCache?.perDirectory.perDirectoryMap.getMapOfCacheRedirects(redirectedReference);
+    let dirCache = mapForRedirects?.get(dirPath);
+    cache.forEach((resolution, name, mode) => {
+        if (forEachResolution(resolution, name, mode, dirPath, redirectedReference, redirectsResult)) return;
+        if (dirCache?.has(name, mode)) return;
+        (dirCache ??= (perDirectoryAndNonRelativeNameCache ??= createPerDirectoryAndNonRelativeNameCache(
+            program.getCurrentDirectory(),
+            program.getCanonicalFileName,
+            program.getCompilerOptions(),
+            getResolvedFileName,
+        )).perDirectory.getOrCreateCacheForDirectoryWithPath(dirPath, redirectedReference)).set(name, mode, resolution);
+        if (!isExternalModuleNameRelative(name)) {
+            perDirectoryAndNonRelativeNameCache!.nonRelativeName.getOrCreateCacheForNonRelativeName(name, mode, redirectedReference).setWithPath(
+                dirPath,
+                resolution,
+                ancestoryWorker === noop ? noop : ancestorPath => ancestoryWorker(ancestorPath, mapForRedirects, name, mode),
+            );
+        }
+    });
+    return perDirectoryAndNonRelativeNameCache;
 }
 
 interface ModuleOrTypeReferenceResolutionCache<T> extends PerDirectoryResolutionCache<T>, NonRelativeNameResolutionCache<T>, PackageJsonInfoCache {

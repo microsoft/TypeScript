@@ -259,7 +259,7 @@ function baselineCache<T>(baseline: string[], cacheType: string, cache: ts.ModeA
     if (!cache?.size()) return;
     baseline.push(`${cacheType}:`);
     cache.forEach((resolved, key, mode) => baseline.push(`${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${JSON.stringify(
-        { ...resolved, files: undefined, isInvalidated: undefined, },
+        { ...resolved, files: undefined, isInvalidated: undefined, watchedFailed: undefined, watchedAffected: undefined, setAtRoot: undefined },
         /*replacer*/ undefined,
         2,
     )}`));

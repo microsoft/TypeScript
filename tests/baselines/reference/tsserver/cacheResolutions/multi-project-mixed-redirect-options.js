@@ -1424,10 +1424,7 @@ Info 64   [00:02:47.000] Reusing resolution of module 'pkg0' from '/src/project/
 Info 65   [00:02:48.000] Reusing resolution of module './aRandomFileForImport' from '/src/project/aFileWithImports.ts' of old program, it was successfully resolved to '/src/project/aRandomFileForImport.ts'.
 Info 66   [00:02:49.000] Reusing resolution of module './aRandomFileForImport2' from '/src/project/aFileWithImports.ts' of old program, it was successfully resolved to '/src/project/aRandomFileForImport2.ts'.
 Info 67   [00:02:50.000] ======== Resolving module 'pkg0' from '/src/project/cRandomFileForImport.ts'. ========
-Info 68   [00:02:51.000] Module resolution kind is not specified, using 'Classic'.
-Info 69   [00:02:52.000] File '/src/project/pkg0.ts' does not exist.
-Info 70   [00:02:53.000] File '/src/project/pkg0.tsx' does not exist.
-Info 71   [00:02:54.000] File '/src/project/pkg0.d.ts' exist - use it as a name resolution result.
-Info 72   [00:02:55.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/pkg0.d.ts'. ========
-Info 73   [00:02:56.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
-Info 74   [00:02:57.000] Different program with same set of files
+Info 68   [00:02:51.000] Resolution for module 'pkg0' was found in cache from location '/src/project'.
+Info 69   [00:02:52.000] ======== Module name 'pkg0' was successfully resolved to '/src/project/pkg0.d.ts'. ========
+Info 70   [00:02:53.000] Finishing updateGraphWorker: Project: /src/project/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info 71   [00:02:54.000] Different program with same set of files
