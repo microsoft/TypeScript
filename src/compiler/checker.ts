@@ -18757,11 +18757,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive && !(relation === strictSubtypeRelation && isEmptyAnonymousObjectType(source) && !(getObjectFlags(source) & ObjectFlags.FreshLiteral))) return true;
         if (relation === assignableRelation || relation === comparableRelation) {
             if (s & TypeFlags.Any) return true;
-            // Type number or any numeric literal type is assignable to any numeric enum type or any
-            // numeric enum literal type. This rule exists for backwards compatibility reasons because
-            // bit-flag enum types sometimes look like literal enum types with numeric literal values.
-            if (s & (TypeFlags.Number | TypeFlags.NumberLiteral) && !(s & TypeFlags.EnumLiteral) && (
-                t & TypeFlags.Enum || relation === assignableRelation && t & TypeFlags.NumberLiteral && t & TypeFlags.EnumLiteral)) return true;
+            // Type number is assignable to any computed numeric enum type or any numeric enum literal type, and
+            // a numeric literal type is assignable to any numeric enum literal type with a matching value. These
+            // rules exist such that enums can be used for bit-flag purposes.
+            if (s & TypeFlags.Number && (t & TypeFlags.Enum || t & TypeFlags.NumberLiteral && t & TypeFlags.EnumLiteral)) return true;
+            if (s & TypeFlags.NumberLiteral && !(s & TypeFlags.EnumLiteral) &&
+                t & TypeFlags.NumberLiteral && t & TypeFlags.EnumLiteral &&
+                (source as NumberLiteralType).value === (target as NumberLiteralType).value) return true;
             // Anything is assignable to a union containing undefined, null, and {}
             if (isUnknownLikeUnionType(target)) return true;
         }
