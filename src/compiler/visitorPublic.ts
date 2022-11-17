@@ -66,7 +66,7 @@ export function visitNode(
     lift?: (node: readonly Node[]) => Node,
 ): Node | undefined {
     if (node === undefined) {
-            // If the input type is undefined, then the output type can be undefined.
+        // If the input type is undefined, then the output type can be undefined.
         return node;
     }
 
@@ -224,23 +224,21 @@ export function visitArray(
     return visitArrayWorker(nodes, visitor, test, start, count);
 }
 
-/** @internal */
-export function visitArrayWorker<TIn extends Node, TInArray extends readonly TIn[], TOut extends Node>(
+function visitArrayWorker<TIn extends Node, TInArray extends readonly TIn[], TOut extends Node>(
     nodes: TInArray,
     visitor: Visitor<TIn, Node | undefined> | undefined,
     test: (node: Node) => node is TOut,
     start: number,
     count: number,
 ): readonly TOut[];
-/** @internal */
-export function visitArrayWorker<TIn extends Node, TInArray extends readonly TIn[]>(
+function visitArrayWorker<TIn extends Node, TInArray extends readonly TIn[]>(
     nodes: TInArray,
     visitor: Visitor<TIn, Node | undefined> | undefined,
     test: ((node: Node) => boolean) | undefined,
     start: number,
     count: number,
 ): readonly Node[];
-export function visitArrayWorker(
+function visitArrayWorker(
     nodes: readonly Node[],
     visitor: Visitor | undefined,
     test: ((node: Node) => boolean) | undefined,
@@ -460,7 +458,7 @@ export function visitIterationBody(body: Statement, visitor: Visitor, context: T
 export function visitIterationBody(body: Statement, visitor: Visitor, context: TransformationContext, nodeVisitor: NodeVisitor = visitNode): Statement {
     context.startBlockScope();
     const updated = nodeVisitor(body, visitor, isStatement, context.factory.liftToBlock);
-        Debug.assert(updated);
+    Debug.assert(updated);
     const declarations = context.endBlockScope();
     if (some(declarations)) {
         if (isBlock(updated)) {
