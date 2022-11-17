@@ -9323,7 +9323,6 @@ declare namespace ts {
      * @param count An optional value indicating the maximum number of nodes to visit.
      */
     function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined> | undefined, test?: (node: Node) => boolean, start?: number, count?: number): NodeArray<Node> | (TInArray & undefined);
-    function visitArray<TIn extends Node, TInArray extends readonly TIn[] | undefined>(nodes: TInArray, visitor: Visitor<TIn, Node | undefined> | undefined, test?: (node: Node) => boolean, start?: number, count?: number): readonly Node[] | (TInArray & undefined);
     /**
      * Starts a new lexical environment and visits a statement list, ending the lexical environment
      * and merging hoisted declarations upon completion.

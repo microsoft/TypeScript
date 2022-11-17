@@ -192,6 +192,7 @@ export function visitArray<TIn extends Node, TInArray extends readonly TIn[] | u
     start?: number,
     count?: number,
 ): readonly TOut[] | (TInArray & undefined);
+/** @internal */
 export function visitArray<TIn extends Node, TInArray extends readonly TIn[] | undefined>(
     nodes: TInArray,
     visitor: Visitor<TIn, Node | undefined> | undefined,
