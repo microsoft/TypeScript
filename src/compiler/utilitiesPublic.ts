@@ -24,6 +24,7 @@ import {
     CallExpression,
     CallLikeExpression,
     canHaveIllegalTypeParameters,
+    canHaveJSDoc,
     CaseOrDefaultClause,
     CharacterCodes,
     ClassElement,
@@ -1142,14 +1143,15 @@ export function getJSDocReturnType(node: Node): TypeNode | undefined {
 }
 
 function getJSDocTagsWorker(node: Node, noCache?: boolean): readonly JSDocTag[] {
-    let tags = (node as JSDocContainer).jsDocCache;
+    if (!canHaveJSDoc(node)) return emptyArray;
+    let tags = node.jsDocCache;
     // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
     if (tags === undefined || noCache) {
         const comments = getJSDocCommentsAndTags(node, noCache);
         Debug.assert(comments.length < 2 || comments[0] !== comments[1]);
         tags = flatMap(comments, j => isJSDoc(j) ? j.tags : j);
         if (!noCache) {
-            (node as JSDocContainer).jsDocCache = tags;
+            node.jsDocCache = tags;
         }
     }
     return tags;
@@ -2364,6 +2366,8 @@ export function isGetAccessor(node: Node): node is GetAccessorDeclaration {
  */
 // TODO: GH#19856 Would like to return `node is Node & { jsDoc: JSDoc[] }` but it causes long compile times
 export function hasJSDocNodes(node: Node): node is HasJSDoc {
+    if (!canHaveJSDoc(node)) return false;
+
     const { jsDoc } = node as JSDocContainer;
     return !!jsDoc && jsDoc.length > 0;
 }

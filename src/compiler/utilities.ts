@@ -3619,64 +3619,71 @@ function getNestedModuleDeclaration(node: Node): Node | undefined {
 /** @internal */
 export function canHaveJSDoc(node: Node): node is HasJSDoc {
     switch (node.kind) {
-        case SyntaxKind.Parameter:
-        case SyntaxKind.CallSignature:
-        case SyntaxKind.ClassStaticBlockDeclaration:
-        case SyntaxKind.ConstructSignature:
-        case SyntaxKind.MethodSignature:
-        case SyntaxKind.PropertySignature:
         case SyntaxKind.ArrowFunction:
-        case SyntaxKind.ParenthesizedExpression:
-        case SyntaxKind.SpreadAssignment:
-        case SyntaxKind.ShorthandPropertyAssignment:
-        case SyntaxKind.PropertyAssignment:
-        case SyntaxKind.FunctionExpression:
-        case SyntaxKind.EmptyStatement:
-        case SyntaxKind.DebuggerStatement:
+        case SyntaxKind.BinaryExpression:
         case SyntaxKind.Block:
-        case SyntaxKind.VariableStatement:
-        case SyntaxKind.ExpressionStatement:
-        case SyntaxKind.IfStatement:
+        case SyntaxKind.BreakStatement:
+        case SyntaxKind.CallSignature:
+        case SyntaxKind.CaseClause:
+        case SyntaxKind.ClassDeclaration:
+        case SyntaxKind.ClassExpression:
+        case SyntaxKind.ClassStaticBlockDeclaration:
+        case SyntaxKind.Constructor:
+        case SyntaxKind.ConstructorType:
+        case SyntaxKind.ConstructSignature:
+        case SyntaxKind.ContinueStatement:
+        case SyntaxKind.DebuggerStatement:
         case SyntaxKind.DoStatement:
-        case SyntaxKind.WhileStatement:
-        case SyntaxKind.ForStatement:
+        case SyntaxKind.ElementAccessExpression:
+        case SyntaxKind.EmptyStatement:
+        case SyntaxKind.EndOfFileToken:
+        case SyntaxKind.EnumDeclaration:
+        case SyntaxKind.EnumMember:
+        case SyntaxKind.ExportAssignment:
+        case SyntaxKind.ExportDeclaration:
+        case SyntaxKind.ExportSpecifier:
+        case SyntaxKind.ExpressionStatement:
         case SyntaxKind.ForInStatement:
         case SyntaxKind.ForOfStatement:
-        case SyntaxKind.BreakStatement:
-        case SyntaxKind.ContinueStatement:
-        case SyntaxKind.ReturnStatement:
-        case SyntaxKind.WithStatement:
-        case SyntaxKind.SwitchStatement:
+        case SyntaxKind.ForStatement:
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.FunctionType:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.Identifier:
+        case SyntaxKind.IfStatement:
+        case SyntaxKind.ImportDeclaration:
+        case SyntaxKind.ImportEqualsDeclaration:
+        case SyntaxKind.IndexSignature:
+        case SyntaxKind.InterfaceDeclaration:
+        case SyntaxKind.JSDocFunctionType:
+        case SyntaxKind.JSDocSignature:
         case SyntaxKind.LabeledStatement:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.NamedTupleMember:
+        case SyntaxKind.NamespaceExportDeclaration:
+        case SyntaxKind.ObjectLiteralExpression:
+        case SyntaxKind.Parameter:
+        case SyntaxKind.ParenthesizedExpression:
+        case SyntaxKind.PropertyAccessExpression:
+        case SyntaxKind.PropertyAssignment:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.ReturnStatement:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.ShorthandPropertyAssignment:
+        case SyntaxKind.SpreadAssignment:
+        case SyntaxKind.SwitchStatement:
         case SyntaxKind.ThrowStatement:
         case SyntaxKind.TryStatement:
-        case SyntaxKind.FunctionDeclaration:
-        case SyntaxKind.Constructor:
-        case SyntaxKind.MethodDeclaration:
-        case SyntaxKind.VariableDeclaration:
-        case SyntaxKind.PropertyDeclaration:
-        case SyntaxKind.GetAccessor:
-        case SyntaxKind.SetAccessor:
-        case SyntaxKind.ClassExpression:
-        case SyntaxKind.ClassDeclaration:
-        case SyntaxKind.InterfaceDeclaration:
         case SyntaxKind.TypeAliasDeclaration:
-        case SyntaxKind.EnumMember:
-        case SyntaxKind.EnumDeclaration:
-        case SyntaxKind.ModuleDeclaration:
-        case SyntaxKind.ImportEqualsDeclaration:
-        case SyntaxKind.ImportDeclaration:
-        case SyntaxKind.NamespaceExportDeclaration:
-        case SyntaxKind.ExportAssignment:
-        case SyntaxKind.IndexSignature:
-        case SyntaxKind.FunctionType:
-        case SyntaxKind.ConstructorType:
-        case SyntaxKind.JSDocFunctionType:
-        case SyntaxKind.ExportDeclaration:
-        case SyntaxKind.NamedTupleMember:
-        case SyntaxKind.ExportSpecifier:
-        case SyntaxKind.CaseClause:
-        case SyntaxKind.EndOfFileToken:
+        case SyntaxKind.TypeParameter:
+        case SyntaxKind.VariableDeclaration:
+        case SyntaxKind.VariableStatement:
+        case SyntaxKind.WhileStatement:
+        case SyntaxKind.WithStatement:
             return true;
         default:
             return false;

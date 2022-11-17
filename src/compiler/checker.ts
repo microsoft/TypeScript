@@ -53,6 +53,7 @@ import {
     canHaveExportModifier,
     canHaveIllegalDecorators,
     canHaveIllegalModifiers,
+    canHaveJSDoc,
     canHaveModifiers,
     canUsePropertyAccess,
     canHaveSymbol,
@@ -704,7 +705,6 @@ import {
     JSDocAugmentsTag,
     JSDocCallbackTag,
     JSDocComment,
-    JSDocContainer,
     JSDocEnumTag,
     JSDocFunctionType,
     JSDocImplementsTag,
@@ -43041,15 +43041,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkSourceElementWorker(node: Node): void {
-        forEach((node as JSDocContainer).jsDoc, ({ comment, tags }) => {
-            checkJSDocCommentWorker(comment);
-            forEach(tags, tag => {
-                checkJSDocCommentWorker(tag.comment);
-                if (isInJSFile(node)) {
-                    checkSourceElement(tag);
-                }
+        if (canHaveJSDoc(node)) {
+            forEach(node.jsDoc, ({ comment, tags }) => {
+                checkJSDocCommentWorker(comment);
+                forEach(tags, tag => {
+                    checkJSDocCommentWorker(tag.comment);
+                    if (isInJSFile(node)) {
+                        checkSourceElement(tag);
+                    }
+                });
             });
-        });
+        }
 
         const kind = node.kind;
         if (cancellationToken) {

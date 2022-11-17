@@ -581,7 +581,7 @@ declare namespace ts {
     interface JSDocContainer extends Node {
         _jsdocContainerBrand: any;
     }
-    type HasJSDoc = ParameterDeclaration | CallSignatureDeclaration | ClassStaticBlockDeclaration | ConstructSignatureDeclaration | MethodSignature | PropertySignature | ArrowFunction | ParenthesizedExpression | SpreadAssignment | ShorthandPropertyAssignment | PropertyAssignment | FunctionExpression | EmptyStatement | DebuggerStatement | Block | VariableStatement | ExpressionStatement | IfStatement | DoStatement | WhileStatement | ForStatement | ForInStatement | ForOfStatement | BreakStatement | ContinueStatement | ReturnStatement | WithStatement | SwitchStatement | LabeledStatement | ThrowStatement | TryStatement | FunctionDeclaration | ConstructorDeclaration | MethodDeclaration | VariableDeclaration | PropertyDeclaration | AccessorDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | EnumMember | EnumDeclaration | ModuleDeclaration | ImportEqualsDeclaration | ImportDeclaration | NamespaceExportDeclaration | ExportAssignment | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | ExportDeclaration | NamedTupleMember | ExportSpecifier | CaseClause | EndOfFileToken;
+    type HasJSDoc = AccessorDeclaration | ArrowFunction | BinaryExpression | Block | BreakStatement | CallSignatureDeclaration | CaseClause | ClassLikeDeclaration | ClassStaticBlockDeclaration | ConstructorDeclaration | ConstructorTypeNode | ConstructSignatureDeclaration | ContinueStatement | DebuggerStatement | DoStatement | ElementAccessExpression | EmptyStatement | EndOfFileToken | EnumDeclaration | EnumMember | ExportAssignment | ExportDeclaration | ExportSpecifier | ExpressionStatement | ForInStatement | ForOfStatement | ForStatement | FunctionDeclaration | FunctionExpression | FunctionTypeNode | Identifier | IfStatement | ImportDeclaration | ImportEqualsDeclaration | IndexSignatureDeclaration | InterfaceDeclaration | JSDocFunctionType | JSDocSignature | LabeledStatement | MethodDeclaration | MethodSignature | ModuleDeclaration | NamedTupleMember | NamespaceExportDeclaration | ObjectLiteralExpression | ParameterDeclaration | ParenthesizedExpression | PropertyAccessExpression | PropertyAssignment | PropertyDeclaration | PropertySignature | ReturnStatement | ShorthandPropertyAssignment | SpreadAssignment | SwitchStatement | ThrowStatement | TryStatement | TypeAliasDeclaration | TypeParameterDeclaration | VariableDeclaration | VariableStatement | WhileStatement | WithStatement;
     type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
     type HasTypeArguments = CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement | JsxSelfClosingElement;
     type HasInitializer = HasExpressionInitializer | ForStatement | ForInStatement | ForOfStatement | JsxAttribute;
@@ -649,7 +649,7 @@ declare namespace ts {
         FileLevel = 32,
         AllowNameSubstitution = 64
     }
-    interface Identifier extends PrimaryExpression, Declaration {
+    interface Identifier extends PrimaryExpression, Declaration, JSDocContainer {
         readonly kind: SyntaxKind.Identifier;
         /**
          * Prefer to use `id.unescapedText`. (Note: This is available only in services, not internally to the TypeScript compiler.)
@@ -700,7 +700,7 @@ declare namespace ts {
         readonly parent: NamedDeclaration;
         readonly expression: LeftHandSideExpression;
     }
-    interface TypeParameterDeclaration extends NamedDeclaration {
+    interface TypeParameterDeclaration extends NamedDeclaration, JSDocContainer {
         readonly kind: SyntaxKind.TypeParameter;
         readonly parent: DeclarationWithTypeParameterChildren | InferTypeNode;
         readonly modifiers?: NodeArray<Modifier>;
@@ -1160,7 +1160,7 @@ declare namespace ts {
     type BinaryOperator = AssignmentOperatorOrHigher | SyntaxKind.CommaToken;
     type LogicalOrCoalescingAssignmentOperator = SyntaxKind.AmpersandAmpersandEqualsToken | SyntaxKind.BarBarEqualsToken | SyntaxKind.QuestionQuestionEqualsToken;
     type BinaryOperatorToken = Token<BinaryOperator>;
-    interface BinaryExpression extends Expression, Declaration {
+    interface BinaryExpression extends Expression, Declaration, JSDocContainer {
         readonly kind: SyntaxKind.BinaryExpression;
         readonly left: Expression;
         readonly operatorToken: BinaryOperatorToken;
@@ -1290,13 +1290,13 @@ declare namespace ts {
     interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, Declaration {
         readonly properties: NodeArray<T>;
     }
-    interface ObjectLiteralExpression extends ObjectLiteralExpressionBase<ObjectLiteralElementLike> {
+    interface ObjectLiteralExpression extends ObjectLiteralExpressionBase<ObjectLiteralElementLike>, JSDocContainer {
         readonly kind: SyntaxKind.ObjectLiteralExpression;
     }
     type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
     type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
     type AccessExpression = PropertyAccessExpression | ElementAccessExpression;
-    interface PropertyAccessExpression extends MemberExpression, NamedDeclaration {
+    interface PropertyAccessExpression extends MemberExpression, NamedDeclaration, JSDocContainer {
         readonly kind: SyntaxKind.PropertyAccessExpression;
         readonly expression: LeftHandSideExpression;
         readonly questionDotToken?: QuestionDotToken;
@@ -1315,7 +1315,7 @@ declare namespace ts {
         readonly expression: EntityNameExpression;
         readonly name: Identifier;
     }
-    interface ElementAccessExpression extends MemberExpression, Declaration {
+    interface ElementAccessExpression extends MemberExpression, Declaration, JSDocContainer {
         readonly kind: SyntaxKind.ElementAccessExpression;
         readonly expression: LeftHandSideExpression;
         readonly questionDotToken?: QuestionDotToken;
@@ -2008,7 +2008,7 @@ declare namespace ts {
         readonly kind: SyntaxKind.JSDocThrowsTag;
         readonly typeExpression?: JSDocTypeExpression;
     }
-    interface JSDocSignature extends JSDocType, Declaration {
+    interface JSDocSignature extends JSDocType, Declaration, JSDocContainer {
         readonly kind: SyntaxKind.JSDocSignature;
         readonly typeParameters?: readonly JSDocTemplateTag[];
         readonly parameters: readonly JSDocParameterTag[];

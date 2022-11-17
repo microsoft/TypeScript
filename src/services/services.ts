@@ -733,13 +733,14 @@ class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
     public kind: SyntaxKind.Identifier = SyntaxKind.Identifier;
     public escapedText!: __String;
     public autoGenerateFlags!: GeneratedIdentifierFlags;
-    _primaryExpressionBrand: any;
-    _memberExpressionBrand: any;
-    _leftHandSideExpressionBrand: any;
-    _updateExpressionBrand: any;
-    _unaryExpressionBrand: any;
-    _expressionBrand: any;
-    _declarationBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
     /** @internal */typeArguments!: NodeArray<TypeNode>;
     constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
         super(pos, end);
@@ -754,12 +755,12 @@ class PrivateIdentifierObject extends TokenOrIdentifierObject implements Private
     public kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
     public escapedText!: __String;
     // public symbol!: Symbol;
-    _primaryExpressionBrand: any;
-    _memberExpressionBrand: any;
-    _leftHandSideExpressionBrand: any;
-    _updateExpressionBrand: any;
-    _unaryExpressionBrand: any;
-    _expressionBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
     constructor(_kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
         super(pos, end);
     }
