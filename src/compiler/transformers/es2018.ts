@@ -95,7 +95,6 @@ import {
     SyntaxKind,
     TaggedTemplateExpression,
     TextRange,
-    Token,
     TransformationContext,
     TransformFlags,
     unwrapInnermostStatementOfLabel,

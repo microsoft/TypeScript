@@ -46,7 +46,6 @@ import {
     filter,
     first,
     firstOrUndefined,
-    flatMap,
     flatten,
     flattenDestructuringAssignment,
     flattenDestructuringBinding,

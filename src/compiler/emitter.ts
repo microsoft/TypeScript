@@ -273,6 +273,7 @@ import {
     JSDocVariadicType,
     JsxAttribute,
     JsxAttributes,
+    JsxAttributeValue,
     JsxClosingElement,
     JsxClosingFragment,
     JsxElement,

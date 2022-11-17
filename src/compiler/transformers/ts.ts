@@ -119,6 +119,7 @@ import {
     isSimpleInlineableExpression,
     isSourceFile,
     isStatement,
+    isTemplateLiteral,
     JsxOpeningElement,
     JsxSelfClosingElement,
     lastOrUndefined,

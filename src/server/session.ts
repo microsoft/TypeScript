@@ -2,6 +2,7 @@ import {
     arrayFrom,
     arrayIterator,
     arrayReverseIterator,
+    BufferEncoding,
     CallHierarchyIncomingCall,
     CallHierarchyItem,
     CallHierarchyOutgoingCall,

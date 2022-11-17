@@ -2,7 +2,6 @@ import {
     __String,
     addRange,
     append,
-    ArrayBindingElement,
     ArrayBindingOrAssignmentPattern,
     BindingName,
     BindingOrAssignmentElement,

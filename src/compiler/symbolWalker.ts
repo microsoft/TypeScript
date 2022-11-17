@@ -1,4 +1,5 @@
 import {
+    BaseType,
     clear,
     EntityNameOrEntityNameExpression,
     forEach,

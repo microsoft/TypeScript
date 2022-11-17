@@ -36,6 +36,7 @@ import {
     LeftHandSideExpression,
     NamedTupleMember,
     NewExpression,
+    Node,
     NodeArray,
     NodeFactory,
     OperatorPrecedence,

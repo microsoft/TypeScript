@@ -7,6 +7,7 @@ import {
     CancellationToken,
     CaseClause,
     cast,
+    ClassElement,
     concatenate,
     ConstructorDeclaration,
     contains,
@@ -79,6 +80,7 @@ import {
     toArray,
     toPath,
     TryStatement,
+    TypeElement,
 } from "./_namespaces/ts";
 
 export interface DocumentHighlights {

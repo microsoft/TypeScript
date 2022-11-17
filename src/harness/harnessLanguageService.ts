@@ -3,7 +3,6 @@ import * as fakes from "./_namespaces/fakes";
 import * as vfs from "./_namespaces/vfs";
 import * as collections from "./_namespaces/collections";
 import * as vpath from "./_namespaces/vpath";
-import * as Utils from "./_namespaces/Utils";
 import {
     Compiler,
     harnessNewLine,

@@ -2,7 +2,6 @@ import { expect } from "chai";
 
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
-import * as Utils from "../../_namespaces/Utils";
 import {
     createHasErrorMessageLogger,
     nullLogger,
