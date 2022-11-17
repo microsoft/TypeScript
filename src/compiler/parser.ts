@@ -9451,7 +9451,6 @@ namespace IncrementalParser {
         return;
 
         function visitNode(child: IncrementalNode) {
-            // Debug.type<IncrementalNode>(child);
             Debug.assert(child.pos <= child.end);
             if (child.pos > changeRangeOldEnd) {
                 // Node is entirely past the change range.  We need to move both its pos and
