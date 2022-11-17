@@ -611,7 +611,7 @@ export const watchLocal = task({
     dependencies: [localize, watchTsc, watchTsserver, watchServices, watchLssl, watchOtherOutputs, dts, watchSrc],
 });
 
-const runtestsDeps = [tests, generateLibs];
+const runtestsDeps = [tests, generateLibs, dts];
 
 export const runTests = task({
     name: "runtests",
