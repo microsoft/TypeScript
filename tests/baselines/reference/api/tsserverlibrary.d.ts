@@ -7888,8 +7888,8 @@ declare namespace ts {
         createPostfixDecrement(operand: Expression): PostfixUnaryExpression;
         createImmediatelyInvokedFunctionExpression(statements: readonly Statement[]): CallExpression;
         createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
-        createImmediatelyInvokedArrowFunction(statements: readonly Statement[]): CallExpression;
-        createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
+        createImmediatelyInvokedArrowFunction(statements: readonly Statement[] | ConciseBody): CallExpression;
+        createImmediatelyInvokedArrowFunction(statements: readonly Statement[] | ConciseBody, param: ParameterDeclaration, paramValue: Expression): CallExpression;
         createVoidZero(): VoidExpression;
         createExportDefault(expression: Expression): ExportAssignment;
         createExternalModuleExport(exportName: Identifier): ExportDeclaration;

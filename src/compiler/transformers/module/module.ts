@@ -855,7 +855,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         // We have to wrap require in then callback so that require is done in asynchronously
         // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
         // If the arg is not inlineable, we have to evaluate it in the current scope with a temp var
-        const temp = arg && !isSimpleInlineableExpression(arg) && !isInlineable ? factory.createTempVariable(hoistVariableDeclaration) : undefined;
+        const temp = arg && !isSimpleInlineableExpression(arg) && !isInlineable ? factory.createTempVariable(/*hoistVariableDeclaration*/ undefined) : undefined;
         const promiseResolveCall = factory.createCallExpression(
             factory.createPropertyAccessExpression(factory.createIdentifier("Promise"), "resolve"),
             /*typeArguments*/ undefined,
@@ -892,8 +892,14 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         }
 
         const downleveledImport = factory.createCallExpression(factory.createPropertyAccessExpression(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
+        if (temp && arg) {
+            const iife = languageVersion >= ScriptTarget.ES2015 ?
+                factory.createImmediatelyInvokedArrowFunction(downleveledImport, factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, temp), arg) :
+                factory.createImmediatelyInvokedFunctionExpression([factory.createReturnStatement(downleveledImport)], factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, temp), arg);
+            return iife;
+        }
 
-        return temp === undefined ? downleveledImport : factory.createCommaListExpression([factory.createAssignment(temp, arg!), downleveledImport]);
+        return downleveledImport;
     }
 
     function getHelperExpressionForExport(node: ExportDeclaration, innerExpr: Expression) {

@@ -8366,8 +8366,8 @@ export interface NodeFactory {
 
     createImmediatelyInvokedFunctionExpression(statements: readonly Statement[]): CallExpression;
     createImmediatelyInvokedFunctionExpression(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
-    createImmediatelyInvokedArrowFunction(statements: readonly Statement[]): CallExpression;
-    createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
+    createImmediatelyInvokedArrowFunction(statements: readonly Statement[] | ConciseBody): CallExpression;
+    createImmediatelyInvokedArrowFunction(statements: readonly Statement[] | ConciseBody, param: ParameterDeclaration, paramValue: Expression): CallExpression;
 
 
     createVoidZero(): VoidExpression;

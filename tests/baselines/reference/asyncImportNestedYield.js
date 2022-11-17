@@ -46,13 +46,16 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 function foo() {
     return __asyncGenerator(this, arguments, function foo_1() {
         return __generator(this, function (_a) {
-            var _b, _c;
             switch (_a.label) {
                 case 0: return [4 /*yield*/, __await("foo")];
                 case 1: return [4 /*yield*/, _a.sent()];
-                case 2: return [4 /*yield*/, __await.apply(void 0, [(_b = _a.sent(), Promise.resolve().then(function () { return require(_b); }))])];
+                case 2: return [4 /*yield*/, __await.apply(void 0, [function (_a) {
+                            return Promise.resolve().then(function () { return require(_a); });
+                        }(_a.sent())])];
                 case 3:
-                    _c = (_a.sent())["default"], Promise.resolve().then(function () { return require(_c); });
+                    (function (_a) {
+                        return Promise.resolve().then(function () { return require(_a); });
+                    })((_a.sent())["default"]);
                     return [2 /*return*/];
             }
         });

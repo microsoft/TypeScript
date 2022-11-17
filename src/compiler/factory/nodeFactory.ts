@@ -5763,9 +5763,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         );
     }
 
-    function createImmediatelyInvokedArrowFunction(statements: readonly Statement[]): CallExpression;
-    function createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
-    function createImmediatelyInvokedArrowFunction(statements: readonly Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
+    function createImmediatelyInvokedArrowFunction(statements: readonly Statement[] | ConciseBody): CallExpression;
+    function createImmediatelyInvokedArrowFunction(statements: readonly Statement[] | ConciseBody, param: ParameterDeclaration, paramValue: Expression): CallExpression;
+    function createImmediatelyInvokedArrowFunction(statements: readonly Statement[] | ConciseBody, param?: ParameterDeclaration, paramValue?: Expression) {
         return createCallExpression(
             createArrowFunction(
                 /*modifiers*/ undefined,
@@ -5773,7 +5773,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 /*parameters*/ param ? [param] : [],
                 /*type*/ undefined,
                 /*equalsGreaterThanToken*/ undefined,
-                createBlock(statements, /*multiLine*/ true)
+                isArray(statements) ? createBlock(statements, /*multiLine*/ true) : statements
             ),
             /*typeArguments*/ undefined,
             /*argumentsArray*/ paramValue ? [paramValue] : []

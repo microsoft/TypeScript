@@ -58,7 +58,6 @@ var v = import(String());
 
 
 //// [jsdocInTypeScript.js]
-var _a;
 var T = /** @class */ (function () {
     function T() {
     }
@@ -93,4 +92,6 @@ var E = {};
 E[""];
 // make sure import types in JSDoc are not resolved
 /** @type {import("should-not-be-resolved").Type} */
-var v = (_a = String(), Promise.resolve().then(function () { return require(_a); }));
+var v = function (_a) {
+    return Promise.resolve().then(function () { return require(_a); });
+}(String());
