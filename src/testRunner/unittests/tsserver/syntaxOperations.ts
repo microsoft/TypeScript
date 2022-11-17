@@ -1,14 +1,14 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    File,
     createServerHost,
+    File,
     libFile,
 } from "../virtualFileSystemWithWatch";
 import {
-    TestSession,
     checkNumberOfProjects,
     checkProjectActualFiles,
     createSession,
+    TestSession,
 } from "./helpers";
 
 describe("unittests:: tsserver:: syntax operations", () => {

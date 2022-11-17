@@ -1,15 +1,15 @@
 import {
     Diagnostics,
-    SourceFile,
-    Type,
-    TypeChecker,
-    TypeNode,
     factory,
     findAncestor,
     getTokenAtPosition,
     isFunctionLikeDeclaration,
     isInJSFile,
+    SourceFile,
     textChanges,
+    Type,
+    TypeChecker,
+    TypeNode,
 } from "../_namespaces/ts";
 import {
     codeFixAll,

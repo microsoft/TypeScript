@@ -1,7 +1,7 @@
 import {
-    TestServerHost,
     createWatchedSystem,
     libFile,
+    TestServerHost,
 } from "../virtualFileSystemWithWatch";
 import { verifyTscWatch } from "../tscWatch/helpers";
 import { dedent } from "../../_namespaces/Utils";

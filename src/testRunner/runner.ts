@@ -13,12 +13,12 @@ import {
     IO,
     Parallel,
     RunnerBase,
-    Test262BaselineRunner,
-    TestRunnerKind,
-    UserCodeRunner,
     setLightMode,
     setShardId,
     setShards,
+    Test262BaselineRunner,
+    TestRunnerKind,
+    UserCodeRunner,
 } from "./_namespaces/Harness";
 
 /* eslint-disable prefer-const */

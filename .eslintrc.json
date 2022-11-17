@@ -14,6 +14,7 @@
     ],
     "rules": {
         "sort-imports": ["error", {
+            "ignoreCase": true,
             "ignoreDeclarationSort": true,
             "allowSeparatedGroups": true
         }],

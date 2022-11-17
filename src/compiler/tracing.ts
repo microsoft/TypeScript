@@ -1,9 +1,12 @@
 import {
+    combinePaths,
     ConditionalType,
     Debug,
     EvolvingArrayType,
-    IndexType,
+    getLineAndCharacterOfPosition,
+    getSourceFileOfNode,
     IndexedAccessType,
+    IndexType,
     IntersectionType,
     LineAndCharacter,
     Node,
@@ -11,15 +14,12 @@ import {
     Path,
     ReverseMappedType,
     SubstitutionType,
+    timestamp,
     Type,
     TypeFlags,
     TypeReference,
-    UnionType,
-    combinePaths,
-    getLineAndCharacterOfPosition,
-    getSourceFileOfNode,
-    timestamp,
     unescapeLeadingUnderscores,
+    UnionType,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 

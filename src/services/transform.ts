@@ -1,13 +1,13 @@
 import {
     CompilerOptions,
-    DiagnosticWithLocation,
-    Node,
-    TransformationResult,
-    TransformerFactory,
     concatenate,
+    DiagnosticWithLocation,
     factory,
     fixupCompilerOptions,
     isArray,
+    Node,
+    TransformationResult,
+    TransformerFactory,
     transformNodes,
 } from "./_namespaces/ts";
 

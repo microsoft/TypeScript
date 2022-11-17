@@ -1,12 +1,12 @@
 import {
     Diagnostics,
+    getTokenAtPosition,
     Identifier,
+    isIdentifier,
+    isPropertyAccessExpression,
     PrivateIdentifier,
     PropertyAccessExpression,
     SourceFile,
-    getTokenAtPosition,
-    isIdentifier,
-    isPropertyAccessExpression,
     textChanges,
 } from "../_namespaces/ts";
 import {

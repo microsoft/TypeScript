@@ -1,9 +1,9 @@
 import * as ts from "../_namespaces/ts";
 import {
     NamedSourceText,
+    newProgram,
     ProgramWithSourceTexts,
     SourceText,
-    newProgram,
     updateProgram,
     updateProgramText,
 } from "./helpers";

@@ -1,11 +1,11 @@
 import {
+    getNormalizedAbsolutePath,
+    isRootedDiskPath,
+    normalizePath,
     Path,
     SortedArray,
     SortedReadonlyArray,
     TypeAcquisition,
-    getNormalizedAbsolutePath,
-    isRootedDiskPath,
-    normalizePath,
 } from "./_namespaces/ts";
 import {
     DiscoverTypings,

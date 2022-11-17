@@ -1,11 +1,11 @@
 import {
     Debug,
     Diagnostics,
+    factory,
+    getTokenAtPosition,
     ImportTypeNode,
     SourceFile,
     SyntaxKind,
-    factory,
-    getTokenAtPosition,
     textChanges,
 } from "../_namespaces/ts";
 import {

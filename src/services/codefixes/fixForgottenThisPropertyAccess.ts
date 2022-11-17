@@ -1,13 +1,13 @@
 import {
     Diagnostics,
-    Identifier,
-    PrivateIdentifier,
-    SourceFile,
     factory,
     getContainingClass,
     getTokenAtPosition,
+    Identifier,
     isIdentifier,
     isPrivateIdentifier,
+    PrivateIdentifier,
+    SourceFile,
     suppressLeadingAndTrailingTrivia,
     textChanges,
 } from "../_namespaces/ts";

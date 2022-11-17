@@ -7,12 +7,12 @@ import {
     Compiler,
     FileBasedTest,
     FileBasedTestConfiguration,
+    getFileBasedTestConfigurationDescription,
+    getFileBasedTestConfigurations,
     IO,
     RunnerBase,
     TestCaseParser,
     TestRunnerKind,
-    getFileBasedTestConfigurationDescription,
-    getFileBasedTestConfigurations,
 } from "./_namespaces/Harness";
 
 export const enum CompilerTestType {

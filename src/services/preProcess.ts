@@ -1,16 +1,16 @@
 import {
     FileReference,
-    PragmaContext,
-    PreProcessedFileInfo,
-    ScriptTarget,
-    SyntaxKind,
     isKeyword,
     lastOrUndefined,
     length,
     noop,
+    PragmaContext,
+    PreProcessedFileInfo,
     processCommentPragmas,
     processPragmasIntoFields,
     scanner,
+    ScriptTarget,
+    SyntaxKind,
 } from "./_namespaces/ts";
 
 export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {

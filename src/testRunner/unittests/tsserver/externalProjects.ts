@@ -1,8 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
 import {
-    File,
     createServerHost,
+    File,
     libFile,
 } from "../virtualFileSystemWithWatch";
 import {

@@ -1,7 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    File,
     createServerHost,
+    File,
 } from "../virtualFileSystemWithWatch";
 import {
     configuredProjectAt,

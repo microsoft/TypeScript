@@ -1,9 +1,11 @@
 import {
+    __String,
     CharacterCodes,
     Comparer,
     Comparison,
     Debug,
     EqualityComparer,
+    isWhiteSpaceLike,
     MapLike,
     Push,
     Queue,
@@ -11,8 +13,6 @@ import {
     SortedReadonlyArray,
     TextSpan,
     UnderscoreEscapedMap,
-    __String,
-    isWhiteSpaceLike,
 } from "./_namespaces/ts";
 
 /** @internal */

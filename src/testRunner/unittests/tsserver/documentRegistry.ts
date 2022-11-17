@@ -1,13 +1,13 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    File,
     createServerHost,
+    File,
     libFile,
 } from "../virtualFileSystemWithWatch";
 import {
-    TestProjectService,
     checkProjectActualFiles,
     createProjectService,
+    TestProjectService,
 } from "./helpers";
 
 describe("unittests:: tsserver:: document registry in project service", () => {

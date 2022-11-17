@@ -1,9 +1,9 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    File,
-    SymLink,
     createServerHost,
+    File,
     libFile,
+    SymLink,
 } from "../virtualFileSystemWithWatch";
 import {
     commonFile1,
