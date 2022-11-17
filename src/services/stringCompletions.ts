@@ -1,3 +1,4 @@
+import { usesExtensionsOnImports } from "../compiler/moduleSpecifiers";
 import {
     addToSeen, altDirectorySeparator, arrayFrom, CallLikeExpression, CancellationToken, changeExtension, CharacterCodes,
     combinePaths, comparePaths, comparePatternKeys, compareStringsCaseSensitive, compareValues, Comparison,
@@ -409,12 +410,11 @@ function getStringLiteralCompletionsFromModuleNamesWorker(sourceFile: SourceFile
         : getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, mode, compilerOptions, host, getIncludeExtensionOption(), typeChecker);
 
     function getIncludeExtensionOption() {
-        if (shouldAllowImportingTsExtension(compilerOptions)) {
-            return IncludeExtensionsOption.Include;
-        }
         const mode = isStringLiteralLike(node) ? getModeForUsageLocation(sourceFile, node) : undefined;
-        return preferences.importModuleSpecifierEnding === "js" || mode === ModuleKind.ESNext
-            ? IncludeExtensionsOption.ModuleSpecifierCompletion
+        return preferences.importModuleSpecifierEnding === "js" || mode === ModuleKind.ESNext || usesExtensionsOnImports(sourceFile)
+            ? shouldAllowImportingTsExtension(compilerOptions)
+              ? IncludeExtensionsOption.Include
+              : IncludeExtensionsOption.ModuleSpecifierCompletion
             : IncludeExtensionsOption.Exclude;
     }
 }

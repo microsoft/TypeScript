@@ -458,7 +458,8 @@ export function countPathComponents(path: string): number {
     return count;
 }
 
-function usesExtensionsOnImports({ imports }: SourceFile): boolean {
+/** @internal */
+export function usesExtensionsOnImports({ imports }: SourceFile): boolean {
     return firstDefined(imports, ({ text }) => pathIsRelative(text) ? (hasJSFileExtension(text) || hasTSFileExtension(text)) : undefined) || false;
 }
 
