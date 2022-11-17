@@ -1,15 +1,15 @@
 import {
     Debug,
     Diagnostics,
-    InstallPackageAction,
-    JsTyping,
-    LanguageServiceHost,
-    SourceFile,
     getTokenAtPosition,
     getTypesPackageName,
+    InstallPackageAction,
     isExternalModuleNameRelative,
     isStringLiteral,
+    JsTyping,
+    LanguageServiceHost,
     parsePackageName,
+    SourceFile,
     tryCast,
 } from "../_namespaces/ts";
 import {

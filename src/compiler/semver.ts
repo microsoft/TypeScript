@@ -1,8 +1,8 @@
 import {
-    Comparison,
-    Debug,
     compareStringsCaseSensitive,
     compareValues,
+    Comparison,
+    Debug,
     emptyArray,
     every,
     isArray,

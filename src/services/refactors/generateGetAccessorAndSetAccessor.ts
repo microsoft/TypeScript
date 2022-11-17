@@ -1,13 +1,13 @@
 import {
     ApplicableRefactorInfo,
+    codefix,
     Debug,
     Diagnostics,
-    RefactorContext,
-    codefix,
     emptyArray,
     getRenameLocation,
     isIdentifier,
     isParameter,
+    RefactorContext,
 } from "../_namespaces/ts";
 import {
     isRefactorErrorInfo,

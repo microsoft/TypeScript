@@ -1,10 +1,10 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import {
-    File,
-    SymLink,
     createWatchedSystem,
+    File,
     libFile,
+    SymLink,
 } from "../virtualFileSystemWithWatch";
 import {
     createBaseline,

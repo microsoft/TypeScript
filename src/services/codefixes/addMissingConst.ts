@@ -1,12 +1,7 @@
 import {
     Diagnostics,
-    Expression,
-    Node,
-    Program,
-    SourceFile,
-    SyntaxKind,
-    TypeChecker,
     every,
+    Expression,
     findAncestor,
     getTokenAtPosition,
     isArrayLiteralExpression,
@@ -15,8 +10,13 @@ import {
     isExpressionStatement,
     isForInOrOfStatement,
     isIdentifier,
+    Node,
+    Program,
+    SourceFile,
+    SyntaxKind,
     textChanges,
     tryAddToSet,
+    TypeChecker,
 } from "../_namespaces/ts";
 import {
     codeFixAll,

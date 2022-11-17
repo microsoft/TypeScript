@@ -2,11 +2,11 @@ import * as ts from "../../_namespaces/ts";
 import * as fakes from "../../_namespaces/fakes";
 import * as vfs from "../../_namespaces/vfs";
 import {
-    TscCompileSystem,
     baselinePrograms,
     commandLineCallbacks,
     loadProjectFromFiles,
     toPathWithSystem,
+    TscCompileSystem,
     verifyTscBaseline,
 } from "../tsc/helpers";
 

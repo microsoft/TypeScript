@@ -3,16 +3,14 @@ import * as vfs from "../../_namespaces/vfs";
 import * as fakes from "../../_namespaces/fakes";
 import * as Harness from "../../_namespaces/Harness";
 import {
-    File,
-    TestServerHost,
     changeToHostTrackingWrittenFiles,
     createWatchedSystem,
+    File,
     getTsBuildProjectFilePath,
     libFile,
+    TestServerHost,
 } from "../virtualFileSystemWithWatch";
 import {
-    TestTscEdit,
-    TscCompileSystem,
     appendText,
     createSolutionBuilderHostForBaseline,
     libContent,
@@ -23,6 +21,8 @@ import {
     prependText,
     replaceText,
     testTscCompileLike,
+    TestTscEdit,
+    TscCompileSystem,
     verifyTsc,
     verifyTscCompileLike,
     verifyTscWithEdits,

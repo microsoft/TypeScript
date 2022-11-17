@@ -1,12 +1,12 @@
 import {
-    Debug,
-    IScriptSnapshot,
-    TextChangeRange,
-    TextSpan,
     collapseTextChangeRangesAcrossMultipleVersions,
     computeLineStarts,
     createTextChangeRange,
     createTextSpan,
+    Debug,
+    IScriptSnapshot,
+    TextChangeRange,
+    TextSpan,
     unchangedTextChangeRange,
 } from "./_namespaces/ts";
 import {

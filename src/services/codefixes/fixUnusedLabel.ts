@@ -1,13 +1,13 @@
 import {
-    Diagnostics,
-    SourceFile,
-    SyntaxKind,
     cast,
+    Diagnostics,
     findChildOfKind,
     getTokenAtPosition,
     isLabeledStatement,
     positionsAreOnSameLine,
     skipTrivia,
+    SourceFile,
+    SyntaxKind,
     textChanges,
 } from "../_namespaces/ts";
 import {

@@ -3,19 +3,19 @@ import {
     CancellationToken,
     CompilerHost,
     CompilerOptions,
+    createBuilderProgram,
+    createRedirectedBuilderProgram,
     CustomTransformers,
     Diagnostic,
     DiagnosticWithLocation,
     EmitResult,
+    getBuilderCreationParameters,
     Program,
     ProjectReference,
     ReusableBuilderProgramState,
     SavedBuildProgramEmitState,
     SourceFile,
     WriteFileCallback,
-    createBuilderProgram,
-    createRedirectedBuilderProgram,
-    getBuilderCreationParameters,
 } from "./_namespaces/ts";
 
 export type AffectedFileResult<T> = { result: T; affected: SourceFile | Program; } | undefined;

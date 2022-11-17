@@ -1,9 +1,9 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    File,
-    TestServerHost,
     createWatchedSystem,
+    File,
     libFile,
+    TestServerHost,
 } from "../virtualFileSystemWithWatch";
 import {
     TscWatchCompileChange,

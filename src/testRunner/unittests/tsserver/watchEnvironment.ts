@@ -1,23 +1,23 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    File,
-    Tsc_WatchDirectory,
     createServerHost,
+    File,
     libFile,
+    Tsc_WatchDirectory,
 } from "../virtualFileSystemWithWatch";
 import {
     commonFile1,
     commonFile2,
 } from "../tscWatch/helpers";
 import {
-    Logger,
-    TestSession,
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
+    Logger,
     openFilesForSession,
     protocolFileLocationFromSubstring,
+    TestSession,
     toExternalFiles,
 } from "./helpers";
 

@@ -1,14 +1,14 @@
 import {
+    addNodeFactoryPatcher,
+    buildOverload,
     ConstructorTypeNode,
+    factory,
     Modifier,
     NodeArray,
     NodeFactory,
     ParameterDeclaration,
     TypeNode,
     TypeParameterDeclaration,
-    addNodeFactoryPatcher,
-    buildOverload,
-    factory,
 } from "../_namespaces/ts";
 
 // DEPRECATION: Overloads for createConstructorTypeNode/updateConstructorTypeNode that do not accept 'modifiers'

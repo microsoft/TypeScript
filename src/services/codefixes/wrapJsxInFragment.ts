@@ -1,15 +1,15 @@
 import {
     BinaryExpression,
     Diagnostics,
-    JsxChild,
-    Node,
-    SourceFile,
-    SyntaxKind,
     factory,
     getTokenAtPosition,
     isBinaryExpression,
     isJsxChild,
+    JsxChild,
+    Node,
     nodeIsMissing,
+    SourceFile,
+    SyntaxKind,
     textChanges,
 } from "../_namespaces/ts";
 import {

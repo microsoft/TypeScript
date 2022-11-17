@@ -1,15 +1,15 @@
 import {
-    Diagnostics,
-    SourceFile,
-    TypeLiteralNode,
-    TypeNode,
     cast,
+    Diagnostics,
     factory,
     getTokenAtPosition,
     isIdentifier,
     isPropertySignature,
     isTypeLiteralNode,
+    SourceFile,
     textChanges,
+    TypeLiteralNode,
+    TypeNode,
 } from "../_namespaces/ts";
 import {
     codeFixAll,

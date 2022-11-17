@@ -13,12 +13,12 @@ import {
     verifyGetErrRequest,
 } from "./helpers";
 import {
-    File,
-    SymLink,
     createServerHost,
+    File,
     getTsBuildProjectFile,
     getTsBuildProjectFilePath,
     libFile,
+    SymLink,
 } from "../virtualFileSystemWithWatch";
 import { solutionBuildWithBaseline } from "../tscWatch/helpers";
 

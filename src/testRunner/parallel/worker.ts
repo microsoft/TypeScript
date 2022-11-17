@@ -3,16 +3,16 @@ import {
     ParallelClientMessage,
     ParallelHostMessage,
     RunnerTask,
+    shimNoopTestInterface,
     Task,
     TaskResult,
     TestInfo,
     UnitTestTask,
-    shimNoopTestInterface,
 } from "../_namespaces/Harness.Parallel";
 import {
-    RunnerBase,
     createRunner,
     globalTimeout,
+    RunnerBase,
     runUnitTests,
 } from "../_namespaces/Harness";
 

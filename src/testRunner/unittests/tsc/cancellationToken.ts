@@ -2,13 +2,13 @@ import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import * as Harness from "../../_namespaces/Harness";
 import {
-    File,
     createWatchedSystem,
+    File,
     libFile,
 } from "../virtualFileSystemWithWatch";
 import {
-    CommandLineProgram,
     baselineBuildInfo,
+    CommandLineProgram,
 } from "../tsc/helpers";
 import {
     applyChange,

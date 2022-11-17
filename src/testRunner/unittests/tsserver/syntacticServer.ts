@@ -1,11 +1,10 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    File,
     createServerHost,
+    File,
     libFile,
 } from "../virtualFileSystemWithWatch";
 import {
-    TestSession,
     baselineTsserverLogs,
     checkNumberOfProjects,
     checkProjectActualFiles,
@@ -14,6 +13,7 @@ import {
     createSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
+    TestSession,
 } from "./helpers";
 
 describe("unittests:: tsserver:: Semantic operations on Syntax server", () => {

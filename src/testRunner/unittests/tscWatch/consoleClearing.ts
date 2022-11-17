@@ -1,14 +1,14 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    File,
     createWatchedSystem,
+    File,
     libFile,
 } from "../virtualFileSystemWithWatch";
 import {
-    TscWatchCompileChange,
     createBaseline,
     createWatchCompilerHostOfConfigFileForBaseline,
     runWatchBaseline,
+    TscWatchCompileChange,
     verifyTscWatch,
 } from "./helpers";
 
