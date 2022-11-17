@@ -9287,17 +9287,18 @@ namespace IncrementalParser {
         }
     }
 
-    function moveElementEntirelyPastChangeRange(element: IncrementalNode | IncrementalNodeArray, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
-        if (isArray(element)) {
-            visitArray(element);
+    function moveElementEntirelyPastChangeRange(element: IncrementalNode, isArray: false, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
+    function moveElementEntirelyPastChangeRange(element: IncrementalNodeArray, isArray: true, delta: number, oldText: string, newText: string, aggressiveChecks: boolean): void;
+    function moveElementEntirelyPastChangeRange(element: IncrementalNode | IncrementalNodeArray, isArray: boolean, delta: number, oldText: string, newText: string, aggressiveChecks: boolean) {
+        if (isArray) {
+            visitArray(element as IncrementalNodeArray);
         }
         else {
-            visitNode(element);
+            visitNode(element as IncrementalNode);
         }
         return;
 
-        function visitNode(node: Node) {
-            Debug.type<IncrementalNode>(node);
+        function visitNode(node: IncrementalNode) {
             let text = "";
             if (aggressiveChecks && shouldCheckNode(node)) {
                 text = oldText.substring(node.pos, node.end);
@@ -9315,7 +9316,7 @@ namespace IncrementalParser {
                 Debug.assert(text === newText.substring(node.pos, node.end));
             }
 
-            forEachChild(node, visitNode, visitArray);
+            forEachChild(node, visitNode as (node: Node) => void, visitArray as (nodes: NodeArray<Node>) => void);
             if (hasJSDocNodes(node)) {
                 for (const jsDocComment of node.jsDoc!) {
                     visitNode(jsDocComment as Node as IncrementalNode);
@@ -9324,8 +9325,7 @@ namespace IncrementalParser {
             checkNodePositions(node, aggressiveChecks);
         }
 
-        function visitArray(array: NodeArray<Node>) {
-            Debug.type<IncrementalNodeArray>(array);
+        function visitArray(array: IncrementalNodeArray) {
             array._children = undefined;
             setTextRangePosEnd(array, array.pos + delta, array.end + delta);
 
@@ -9450,13 +9450,13 @@ namespace IncrementalParser {
         visitNode(sourceFile);
         return;
 
-        function visitNode(child: Node) {
-            Debug.type<IncrementalNode>(child);
+        function visitNode(child: IncrementalNode) {
+            // Debug.type<IncrementalNode>(child);
             Debug.assert(child.pos <= child.end);
             if (child.pos > changeRangeOldEnd) {
                 // Node is entirely past the change range.  We need to move both its pos and
                 // end, forward or backward appropriately.
-                moveElementEntirelyPastChangeRange(child, delta, oldText, newText, aggressiveChecks);
+                moveElementEntirelyPastChangeRange(child, /*isArray*/ false, delta, oldText, newText, aggressiveChecks);
                 return;
             }
 
@@ -9470,10 +9470,10 @@ namespace IncrementalParser {
 
                 // Adjust the pos or end (or both) of the intersecting element accordingly.
                 adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
-                forEachChild(child, visitNode, visitArray);
+                forEachChild(child, visitNode as (node: Node) => void, visitArray as (nodes: NodeArray<Node>) => void);
                 if (hasJSDocNodes(child)) {
                     for (const jsDocComment of child.jsDoc!) {
-                        visitNode(jsDocComment);
+                        visitNode(jsDocComment as IncrementalNode);
                     }
                 }
                 checkNodePositions(child, aggressiveChecks);
@@ -9484,13 +9484,12 @@ namespace IncrementalParser {
             Debug.assert(fullEnd < changeStart);
         }
 
-        function visitArray(array: NodeArray<Node>) {
-            Debug.type<IncrementalNodeArray>(array);
+        function visitArray(array: IncrementalNodeArray) {
             Debug.assert(array.pos <= array.end);
             if (array.pos > changeRangeOldEnd) {
                 // Array is entirely after the change range.  We need to move it, and move any of
                 // its children.
-                moveElementEntirelyPastChangeRange(array, delta, oldText, newText, aggressiveChecks);
+                moveElementEntirelyPastChangeRange(array, /*isArray*/ true, delta, oldText, newText, aggressiveChecks);
                 return;
             }
 
