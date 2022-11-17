@@ -1,4 +1,5 @@
 import {
+    BufferEncoding,
     CallHierarchyIncomingCall,
     CallHierarchyItem,
     CallHierarchyOutgoingCall,
