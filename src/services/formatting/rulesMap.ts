@@ -22,7 +22,7 @@ function getRulesMap(): RulesMap {
  * cannot be applied at the same position.
  */
 function getRuleActionExclusion(ruleAction: RuleAction): RuleAction {
-    let mask: RuleAction = 0;
+    let mask = RuleAction.None;
     if (ruleAction & RuleAction.StopProcessingSpaceActions) {
         mask |= RuleAction.ModifySpaceAction;
     }

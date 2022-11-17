@@ -25,6 +25,7 @@ const enum ES2017SubstitutionFlags {
 }
 
 const enum ContextFlags {
+    None = 0,
     NonTopLevel = 1 << 0,
     HasLexicalThis = 1 << 1
 }
@@ -66,7 +67,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
     /** A set of node IDs for generated super accessors (variable statements). */
     const substitutedSuperAccessors: boolean[] = [];
 
-    let contextFlags: ContextFlags = 0;
+    let contextFlags = ContextFlags.None;
 
     // Save the previous transformation hooks.
     const previousOnEmitNode = context.onEmitNode;
