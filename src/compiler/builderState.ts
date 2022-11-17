@@ -1,6 +1,7 @@
 import {
-    arrayFrom, CancellationToken, computeSignatureWithDiagnostics, CustomTransformers, Debug, EmitOutput, emptyArray,
+    arrayFrom, CancellationToken, computeSignatureWithDiagnostics, createGetCanonicalFileName, CustomTransformers, Debug, EmitOutput, emptyArray,
     ExportedModulesFromDeclarationEmit, GetCanonicalFileName, getDirectoryPath, getSourceFileOfNode,
+    HostForComputeHash,
     isDeclarationFileName, isExternalOrCommonJsModule, isGlobalScopeAugmentation, isJsonSourceFile,
     isModuleWithStringLiteralName, isStringLiteral, mapDefined, mapDefinedIterator, ModuleDeclaration,
     ModuleKind, outFile, OutputFile, Path, Program, ResolutionMode, some, SourceFile, StringLiteralLike, Symbol,
@@ -158,11 +159,6 @@ export namespace BuilderState {
         return false;
     }
 
-    /**
-     * Compute the hash to store the shape of the file
-     */
-    export type ComputeHash = ((data: string) => string) | undefined;
-
     function getReferencedFilesFromImportedModuleSymbol(symbol: Symbol): Path[] {
         return mapDefined(symbol.declarations, declaration => getSourceFileOfNode(declaration)?.resolvedPath);
     }
@@ -272,7 +268,7 @@ export namespace BuilderState {
     /**
      * Creates the state of file references and signature for the new program from oldState if it is safe
      */
-    export function create(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<BuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
+    export function create(newProgram: Program, oldState?: Readonly<BuilderState>, disableUseFileVersionAsSignature?: boolean): BuilderState {
         const fileInfos = new Map<Path, FileInfo>();
         const options = newProgram.getCompilerOptions();
         const isOutFile = outFile(options);
@@ -280,6 +276,7 @@ export namespace BuilderState {
             createManyToManyPathMap() : undefined;
         const exportedModulesMap = referencedMap ? createManyToManyPathMap() : undefined;
         const useOldState = canReuseOldState(referencedMap, oldState);
+        const getCanonicalFileName = createGetCanonicalFileName(newProgram.useCaseSensitiveFileNames());
 
         // Ensure source files have parent pointers set
         newProgram.getTypeChecker();
@@ -340,16 +337,14 @@ export namespace BuilderState {
         programOfThisState: Program,
         path: Path,
         cancellationToken: CancellationToken | undefined,
-        computeHash: ComputeHash,
-        getCanonicalFileName: GetCanonicalFileName,
+        host: HostForComputeHash,
     ): readonly SourceFile[] {
         const result = getFilesAffectedByWithOldState(
             state,
             programOfThisState,
             path,
             cancellationToken,
-            computeHash,
-            getCanonicalFileName,
+            host,
         );
         state.oldSignatures?.clear();
         state.oldExportedModulesMap?.clear();
@@ -361,19 +356,18 @@ export namespace BuilderState {
         programOfThisState: Program,
         path: Path,
         cancellationToken: CancellationToken | undefined,
-        computeHash: ComputeHash,
-        getCanonicalFileName: GetCanonicalFileName,
+        host: HostForComputeHash,
     ): readonly SourceFile[] {
         const sourceFile = programOfThisState.getSourceFileByPath(path);
         if (!sourceFile) {
             return emptyArray;
         }
 
-        if (!updateShapeSignature(state, programOfThisState, sourceFile, cancellationToken, computeHash, getCanonicalFileName)) {
+        if (!updateShapeSignature(state, programOfThisState, sourceFile, cancellationToken, host)) {
             return [sourceFile];
         }
 
-        return (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(state, programOfThisState, sourceFile, cancellationToken, computeHash, getCanonicalFileName);
+        return (state.referencedMap ? getFilesAffectedByUpdatedShapeWhenModuleEmit : getFilesAffectedByUpdatedShapeWhenNonModuleEmit)(state, programOfThisState, sourceFile, cancellationToken, host);
     }
 
     export function updateSignatureOfFile(state: BuilderState, signature: string | undefined, path: Path) {
@@ -389,9 +383,8 @@ export namespace BuilderState {
         programOfThisState: Program,
         sourceFile: SourceFile,
         cancellationToken: CancellationToken | undefined,
-        computeHash: ComputeHash,
-        getCanonicalFileName: GetCanonicalFileName,
-        useFileVersionAsSignature = state.useFileVersionAsSignature
+        host: HostForComputeHash,
+        useFileVersionAsSignature = state.useFileVersionAsSignature,
     ) {
         // If we have cached the result for this file, that means hence forth we should assume file shape is uptodate
         if (state.hasCalledUpdateShapeSignature?.has(sourceFile.resolvedPath)) return false;
@@ -405,10 +398,10 @@ export namespace BuilderState {
                 (fileName, text, _writeByteOrderMark, _onError, sourceFiles, data) => {
                     Debug.assert(isDeclarationFileName(fileName), `File extension for signature expected to be dts: Got:: ${fileName}`);
                     latestSignature = computeSignatureWithDiagnostics(
+                        programOfThisState,
                         sourceFile,
                         text,
-                        computeHash,
-                        getCanonicalFileName,
+                        host,
                         data,
                     );
                     if (latestSignature !== prevSignature) {
@@ -604,8 +597,7 @@ export namespace BuilderState {
         programOfThisState: Program,
         sourceFileWithUpdatedShape: SourceFile,
         cancellationToken: CancellationToken | undefined,
-        computeHash: ComputeHash,
-        getCanonicalFileName: GetCanonicalFileName,
+        host: HostForComputeHash,
     ) {
         if (isFileAffectingGlobalScope(sourceFileWithUpdatedShape)) {
             return getAllFilesExcludingDefaultLibraryFile(state, programOfThisState, sourceFileWithUpdatedShape);
@@ -629,7 +621,7 @@ export namespace BuilderState {
             if (!seenFileNamesMap.has(currentPath)) {
                 const currentSourceFile = programOfThisState.getSourceFileByPath(currentPath)!;
                 seenFileNamesMap.set(currentPath, currentSourceFile);
-                if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cancellationToken, computeHash, getCanonicalFileName)) {
+                if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cancellationToken, host)) {
                     queue.push(...getReferencedByPaths(state, currentSourceFile.resolvedPath));
                 }
             }

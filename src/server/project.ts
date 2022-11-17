@@ -332,6 +332,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     autoImportProviderHost: AutoImportProviderProject | false | undefined;
     /** @internal */
     protected typeAcquisition: TypeAcquisition | undefined;
+    /** @internal */
+    createHash = maybeBind(this.projectService.host, this.projectService.host.createHash);
 
     /** @internal */
     constructor(
@@ -740,15 +742,14 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             return [];
         }
         updateProjectIfDirty(this);
-        this.builderState = BuilderState.create(this.program!, this.projectService.toCanonicalFileName, this.builderState, /*disableUseFileVersionAsSignature*/ true);
+        this.builderState = BuilderState.create(this.program!, this.builderState, /*disableUseFileVersionAsSignature*/ true);
         return mapDefined(
             BuilderState.getFilesAffectedBy(
                 this.builderState,
                 this.program!,
                 scriptInfo.path,
                 this.cancellationToken,
-                maybeBind(this.projectService.host, this.projectService.host.createHash),
-                this.getCanonicalFileName,
+                this.projectService.host,
             ),
             sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)) ? sourceFile.fileName : undefined
         );

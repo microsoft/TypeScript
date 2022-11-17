@@ -386,6 +386,7 @@ export const enum CheckMode {
 
 /** @internal */
 export const enum SignatureCheckMode {
+    None              = 0,
     BivariantCallback = 1 << 0,
     StrictCallback    = 1 << 1,
     IgnoreReturnTypes = 1 << 2,
@@ -476,7 +477,7 @@ function SymbolLinks(this: SymbolLinks) {
 }
 
 function NodeLinks(this: NodeLinks) {
-    this.flags = 0;
+    this.flags = NodeCheckFlags.None;
 }
 
 /** @internal */
@@ -1473,7 +1474,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags) {
         symbolCount++;
         const symbol = (new Symbol(flags | SymbolFlags.Transient, name) as TransientSymbol);
-        symbol.checkFlags = checkFlags || 0;
+        symbol.checkFlags = checkFlags || CheckFlags.None;
         return symbol;
     }
 
@@ -4544,7 +4545,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return new Type(checker, flags);
     }
 
-    function createIntrinsicType(kind: TypeFlags, intrinsicName: string, objectFlags: ObjectFlags = 0): IntrinsicType {
+    function createIntrinsicType(kind: TypeFlags, intrinsicName: string, objectFlags = ObjectFlags.None): IntrinsicType {
         const type = createType(kind) as IntrinsicType;
         type.intrinsicName = intrinsicName;
         type.objectFlags = objectFlags;
@@ -8664,7 +8665,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function formatUnionTypes(types: readonly Type[]): Type[] {
         const result: Type[] = [];
-        let flags: TypeFlags = 0;
+        let flags = 0 as TypeFlags;
         for (let i = 0; i < types.length; i++) {
             const t = types[i];
             flags |= t.flags;
@@ -14755,7 +14756,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const minLength = countWhere(elementFlags, f => !!(f & (ElementFlags.Required | ElementFlags.Variadic)));
         let typeParameters: TypeParameter[] | undefined;
         const properties: Symbol[] = [];
-        let combinedFlags: ElementFlags = 0;
+        let combinedFlags = 0 as ElementFlags;
         if (arity) {
             typeParameters = new Array(arity);
             for (let i = 0; i < arity; i++) {
@@ -15119,7 +15120,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return types[0];
         }
         let typeSet: Type[] | undefined = [];
-        const includes = addTypesToUnion(typeSet, 0, types);
+        const includes = addTypesToUnion(typeSet, 0 as TypeFlags, types);
         if (unionReduction !== UnionReduction.None) {
             if (includes & TypeFlags.AnyOrUnknown) {
                 return includes & TypeFlags.Any ?
@@ -15434,7 +15435,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // for intersections of types with signatures can be deterministic.
     function getIntersectionType(types: readonly Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], noSupertypeReduction?: boolean): Type {
         const typeMembershipMap: Map<string, Type> = new Map();
-        const includes = addTypesToIntersection(typeMembershipMap, 0, types);
+        const includes = addTypesToIntersection(typeMembershipMap, 0 as TypeFlags, types);
         const typeSet: Type[] = arrayFrom(typeMembershipMap.values());
         // An intersection type is considered empty if it contains
         // the type never, or
@@ -18446,7 +18447,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isSignatureAssignableTo(source: Signature,
         target: Signature,
         ignoreReturnTypes: boolean): boolean {
-        return compareSignaturesRelated(source, target, ignoreReturnTypes ? SignatureCheckMode.IgnoreReturnTypes : 0, /*reportErrors*/ false,
+        return compareSignaturesRelated(source, target, ignoreReturnTypes ? SignatureCheckMode.IgnoreReturnTypes : SignatureCheckMode.None, /*reportErrors*/ false,
             /*errorReporter*/ undefined, /*errorReporter*/ undefined, compareTypesAssignable, /*reportUnreliableMarkers*/ undefined) !== Ternary.False;
     }
 
@@ -18762,11 +18763,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive && !(relation === strictSubtypeRelation && isEmptyAnonymousObjectType(source) && !(getObjectFlags(source) & ObjectFlags.FreshLiteral))) return true;
         if (relation === assignableRelation || relation === comparableRelation) {
             if (s & TypeFlags.Any) return true;
-            // Type number or any numeric literal type is assignable to any numeric enum type or any
-            // numeric enum literal type. This rule exists for backwards compatibility reasons because
-            // bit-flag enum types sometimes look like literal enum types with numeric literal values.
-            if (s & (TypeFlags.Number | TypeFlags.NumberLiteral) && !(s & TypeFlags.EnumLiteral) && (
-                t & TypeFlags.Enum || relation === assignableRelation && t & TypeFlags.NumberLiteral && t & TypeFlags.EnumLiteral)) return true;
+            // Type number is assignable to any computed numeric enum type or any numeric enum literal type, and
+            // a numeric literal type is assignable any computed numeric enum type or any numeric enum literal type
+            // with a matching value. These rules exist such that enums can be used for bit-flag purposes.
+            if (s & TypeFlags.Number && (t & TypeFlags.Enum || t & TypeFlags.NumberLiteral && t & TypeFlags.EnumLiteral)) return true;
+            if (s & TypeFlags.NumberLiteral && !(s & TypeFlags.EnumLiteral) && (t & TypeFlags.Enum ||
+                t & TypeFlags.NumberLiteral && t & TypeFlags.EnumLiteral &&
+                (source as NumberLiteralType).value === (target as NumberLiteralType).value)) return true;
             // Anything is assignable to a union containing undefined, null, and {}
             if (isUnknownLikeUnionType(target)) return true;
         }
@@ -19750,7 +19753,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!(expandingFlags & ExpandingFlags.Target) && isDeeplyNestedType(target, targetStack, targetDepth)) expandingFlags |= ExpandingFlags.Target;
             }
             let originalHandler: typeof outofbandVarianceMarkerHandler;
-            let propagatingVarianceFlags: RelationComparisonResult = 0;
+            let propagatingVarianceFlags = 0 as RelationComparisonResult;
             if (outofbandVarianceMarkerHandler) {
                 originalHandler = outofbandVarianceMarkerHandler;
                 outofbandVarianceMarkerHandler = onlyUnreliable => {
@@ -22868,7 +22871,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, contravariant = false) {
+    function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority = InferencePriority.None, contravariant = false) {
         let bivariant = false;
         let propagationType: Type;
         let inferencePriority: number = InferencePriority.MaxValue;

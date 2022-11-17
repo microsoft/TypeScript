@@ -88,6 +88,7 @@ interface LoopOutParameter {
 }
 
 const enum LoopOutParameterFlags {
+    None = 0,
     Body = 1 << 0,          // Modified in the body of the iteration statement
     Initializer = 1 << 1,   // Set in the initializer of a ForStatement
 }
@@ -3495,7 +3496,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
             const checkFlags = resolver.getNodeCheckFlags(decl);
             if (checkFlags & NodeCheckFlags.NeedsLoopOutParameter || hasCapturedBindingsInForHead) {
                 const outParamName = factory.createUniqueName("out_" + idText(name));
-                let flags: LoopOutParameterFlags = 0;
+                let flags = LoopOutParameterFlags.None;
                 if (checkFlags & NodeCheckFlags.NeedsLoopOutParameter) {
                     flags |= LoopOutParameterFlags.Body;
                 }
