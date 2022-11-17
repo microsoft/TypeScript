@@ -1,15 +1,14 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    File,
     createServerHost,
+    File,
 } from "../virtualFileSystemWithWatch";
 import {
-    DocumentSpanFromSubstring,
-    TestSession,
     checkNumberOfProjects,
     checkProjectActualFiles,
     closeFilesForSession,
     createSession,
+    DocumentSpanFromSubstring,
     executeSessionRequest,
     makeReferenceItem,
     openFilesForSession,
@@ -19,6 +18,7 @@ import {
     protocolLocationFromSubstring,
     protocolRenameSpanFromSubstring,
     protocolTextSpanFromSubstring,
+    TestSession,
     textSpanFromSubstring,
 } from "./helpers";
 

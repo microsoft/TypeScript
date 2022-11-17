@@ -1,13 +1,10 @@
 import {
-    CodeFixContextBase,
-    Diagnostics,
-    ExportSpecifier,
-    SourceFile,
-    SyntaxKind,
-    TextSpan,
     addToSeen,
+    CodeFixContextBase,
     contains,
     createTextSpanFromNode,
+    Diagnostics,
+    ExportSpecifier,
     factory,
     filter,
     findDiagnosticForNode,
@@ -15,7 +12,10 @@ import {
     getNodeId,
     getTokenAtPosition,
     isExportSpecifier,
+    SourceFile,
+    SyntaxKind,
     textChanges,
+    TextSpan,
     tryCast,
 } from "../_namespaces/ts";
 import {

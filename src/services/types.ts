@@ -34,11 +34,11 @@ import {
     Symbol,
     SymlinkCache,
     TextChangeRange,
+    textChanges,
     TextRange,
     TextSpan,
     TypeReferenceDirectiveResolutionInfo,
     UserPreferences,
-    textChanges,
 } from "./_namespaces/ts";
 
 declare module "../compiler/types" {

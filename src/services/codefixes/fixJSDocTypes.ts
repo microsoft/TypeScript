@@ -5,8 +5,10 @@ import {
     ConstructSignatureDeclaration,
     DiagnosticMessage,
     Diagnostics,
+    findAncestor,
     FunctionDeclaration,
     GetAccessorDeclaration,
+    getTokenAtPosition,
     IndexSignatureDeclaration,
     MappedTypeNode,
     MethodDeclaration,
@@ -18,6 +20,7 @@ import {
     SetAccessorDeclaration,
     SourceFile,
     SyntaxKind,
+    textChanges,
     Type,
     TypeAliasDeclaration,
     TypeAssertion,
@@ -25,9 +28,6 @@ import {
     TypeFlags,
     TypeNode,
     VariableDeclaration,
-    findAncestor,
-    getTokenAtPosition,
-    textChanges,
 } from "../_namespaces/ts";
 import {
     codeFixAll,

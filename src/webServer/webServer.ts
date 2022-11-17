@@ -2,22 +2,22 @@
 /// <reference lib="webworker.importscripts" />
 
 import {
-    LogLevel,
+    indent,
     Logger,
+    LogLevel,
     ModuleImportResult,
     Msg,
+    nowString,
+    nullTypingsInstaller,
+    protocol,
     ServerCancellationToken,
     ServerHost,
     Session,
     SessionOptions,
-    indent,
-    nowString,
-    nullTypingsInstaller,
-    protocol,
 } from "./_namespaces/ts.server";
 import {
-    Debug,
     combinePaths,
+    Debug,
     directorySeparator,
     ensureTrailingDirectorySeparator,
     getDirectoryPath,

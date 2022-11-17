@@ -1,20 +1,20 @@
 import {
     BinaryExpression,
     Bundle,
-    Expression,
-    Node,
-    SourceFile,
-    SyntaxKind,
-    TransformFlags,
-    TransformationContext,
-    VisitResult,
     chainBundle,
+    Expression,
     isElementAccessExpression,
     isExpression,
     isPropertyAccessExpression,
+    Node,
     setTextRange,
+    SourceFile,
+    SyntaxKind,
+    TransformationContext,
+    TransformFlags,
     visitEachChild,
     visitNode,
+    VisitResult,
 } from "../_namespaces/ts";
 
 /** @internal */

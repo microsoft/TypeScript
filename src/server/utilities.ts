@@ -1,14 +1,14 @@
 import {
-    Comparer,
-    SortedArray,
     binarySearch,
+    Comparer,
     getBaseFileName,
     identity,
     perfLogger,
+    SortedArray,
 } from "./_namespaces/ts";
 import {
-    LogLevel,
     Logger,
+    LogLevel,
     NormalizedPath,
     ServerHost,
 } from "./_namespaces/ts.server";

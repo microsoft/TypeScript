@@ -2,11 +2,11 @@ import {
     ConstructorDeclaration,
     Debug,
     Diagnostics,
-    SourceFile,
     emptyArray,
     factory,
     getTokenAtPosition,
     isConstructorDeclaration,
+    SourceFile,
     textChanges,
 } from "../_namespaces/ts";
 import {

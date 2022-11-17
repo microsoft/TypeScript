@@ -1,20 +1,20 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
 import {
+    createWatchedSystem,
     File,
+    libFile,
     SymLink,
     TestServerHost,
-    createWatchedSystem,
-    libFile,
 } from "../virtualFileSystemWithWatch";
 import {
-    TscWatchCompileChange,
     commonFile1,
     commonFile2,
     createBaseline,
     createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline,
     noopChange,
     runWatchBaseline,
+    TscWatchCompileChange,
     verifyTscWatch,
     watchBaseline,
 } from "./helpers";

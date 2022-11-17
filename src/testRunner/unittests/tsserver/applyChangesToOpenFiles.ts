@@ -1,7 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    File,
     createServerHost,
+    File,
     libFile,
 } from "../virtualFileSystemWithWatch";
 import {
@@ -9,8 +9,8 @@ import {
     commonFile2,
 } from "../tscWatch/helpers";
 import {
-    TestSession,
     createSession,
+    TestSession,
 } from "./helpers";
 
 describe("unittests:: tsserver:: applyChangesToOpenFiles", () => {

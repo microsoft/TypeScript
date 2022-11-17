@@ -1,13 +1,13 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    File,
     createServerHost,
+    File,
 } from "../virtualFileSystemWithWatch";
 import {
-    MakeReferenceItem,
     createSession,
     executeSessionRequest,
     makeReferenceItem,
+    MakeReferenceItem,
     openFilesForSession,
     protocolFileLocationFromSubstring,
     protocolLocationFromSubstring,

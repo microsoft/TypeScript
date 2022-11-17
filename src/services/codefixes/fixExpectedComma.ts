@@ -1,12 +1,12 @@
 import {
     Diagnostics,
-    Node,
-    SourceFile,
-    SyntaxKind,
     factory,
     getTokenAtPosition,
     isArrayLiteralExpression,
     isObjectLiteralExpression,
+    Node,
+    SourceFile,
+    SyntaxKind,
     textChanges,
 } from "../_namespaces/ts";
 import {

@@ -1,16 +1,16 @@
 import {
-    Diagnostics,
-    PropertyAccessExpression,
-    QuotePreference,
-    SourceFile,
-    UserPreferences,
     cast,
+    Diagnostics,
     factory,
     getQuotePreference,
     getTokenAtPosition,
     isPropertyAccessChain,
     isPropertyAccessExpression,
+    PropertyAccessExpression,
+    QuotePreference,
+    SourceFile,
     textChanges,
+    UserPreferences,
 } from "../_namespaces/ts";
 import {
     codeFixAll,

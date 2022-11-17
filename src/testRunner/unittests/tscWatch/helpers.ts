@@ -2,20 +2,20 @@ import * as ts from "../../_namespaces/ts";
 import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes";
 import { Baseline } from "../../_namespaces/Harness";
 import {
+    changeToHostTrackingWrittenFiles,
+    createWatchedSystem,
     File,
     FileOrFolderOrSymLink,
     FileOrFolderOrSymLinkMap,
     TestServerHost,
     TestServerHostCreationParameters,
     TestServerHostTrackingWrittenFiles,
-    changeToHostTrackingWrittenFiles,
-    createWatchedSystem,
 } from "../virtualFileSystemWithWatch";
 import {
-    CommandLineCallbacks,
-    CommandLineProgram,
     baselinePrograms,
     commandLineCallbacks,
+    CommandLineCallbacks,
+    CommandLineProgram,
     createSolutionBuilderHostForBaseline,
     generateSourceMapBaselineFiles,
 } from "../tsc/helpers";

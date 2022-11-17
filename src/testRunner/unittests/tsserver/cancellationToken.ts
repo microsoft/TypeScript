@@ -1,8 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost } from "../virtualFileSystemWithWatch";
 import {
-    TestServerCancellationToken,
     createSession,
+    TestServerCancellationToken,
 } from "./helpers";
 
 describe("unittests:: tsserver:: cancellationToken", () => {

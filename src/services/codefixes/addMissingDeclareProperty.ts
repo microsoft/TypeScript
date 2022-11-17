@@ -1,10 +1,10 @@
 import {
     Diagnostics,
+    getTokenAtPosition,
+    isIdentifier,
     Node,
     SourceFile,
     SyntaxKind,
-    getTokenAtPosition,
-    isIdentifier,
     textChanges,
     tryAddToSet,
 } from "../_namespaces/ts";

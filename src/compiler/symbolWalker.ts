@@ -1,9 +1,12 @@
 import {
-    BaseType,
+    clear,
     EntityNameOrEntityNameExpression,
+    forEach,
+    getOwnValues,
+    getSymbolId,
     Identifier,
-    IndexType,
     IndexedAccessType,
+    IndexType,
     InterfaceType,
     MappedType,
     ObjectFlags,
@@ -20,10 +23,6 @@ import {
     TypeQueryNode,
     TypeReference,
     UnionOrIntersectionType,
-    clear,
-    forEach,
-    getOwnValues,
-    getSymbolId,
 } from "./_namespaces/ts";
 
 /** @internal */

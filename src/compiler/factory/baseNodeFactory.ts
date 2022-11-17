@@ -1,7 +1,7 @@
 import {
     Node,
-    SyntaxKind,
     objectAllocator,
+    SyntaxKind,
 } from "../_namespaces/ts";
 
 /**

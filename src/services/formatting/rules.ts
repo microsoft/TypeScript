@@ -1,4 +1,5 @@
 import {
+    anyContext,
     ContextPredicate,
     FormattingContext,
     FormattingRequestKind,
@@ -7,18 +8,13 @@ import {
     RuleFlags,
     TextRangeWithKind,
     TokenRange,
-    anyContext,
 } from "../_namespaces/ts.formatting";
 import {
     BinaryExpression,
-    FormatCodeSettings,
-    Node,
-    SemicolonPreference,
-    SyntaxKind,
-    YieldExpression,
     contains,
     findAncestor,
     findNextToken,
+    FormatCodeSettings,
     hasDecorators,
     hasProperty,
     isArray,
@@ -29,8 +25,12 @@ import {
     isPropertyDeclaration,
     isPropertySignature,
     isTrivia,
+    Node,
     positionIsASICandidate,
+    SemicolonPreference,
+    SyntaxKind,
     typeKeywords,
+    YieldExpression,
 } from "../_namespaces/ts";
 
 /** @internal */
