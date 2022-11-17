@@ -97,6 +97,7 @@ import {
     isArrowFunction,
     isAssignmentExpression,
     isAutoAccessorPropertyDeclaration,
+    isBindingOrAssignmentElement,
     isCallChain,
     isClassDeclaration,
     isClassElement,
@@ -169,7 +170,6 @@ import {
     visitNode,
     visitNodes,
     visitParameterList,
-    isBindingOrAssignmentElement,
 } from "../_namespaces/ts";
 
 const enum ClassPropertySubstitutionFlags {
