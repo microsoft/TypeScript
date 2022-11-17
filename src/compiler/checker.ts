@@ -192,6 +192,7 @@ import {
     FlowSwitchClause,
     FlowType,
     forEach,
+    forEachAncestor,
     forEachChild,
     forEachChildRecursively,
     forEachEnclosingBlockScopeContainer,
@@ -2568,6 +2569,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getNodeLinks(node: Node): NodeLinks {
         const nodeId = getNodeId(node);
         return nodeLinks[nodeId] || (nodeLinks[nodeId] = new (NodeLinks as any)());
+    }
+
+    function tryGetNodeLinks(node: Node): NodeLinks | undefined {
+        return node.id ? nodeLinks[node.id] : undefined;
     }
 
     function isGlobalSourceFile(node: Node) {
@@ -18987,12 +18992,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkExpressionForMutableLocationWithContextualType(next: Expression, sourcePropType: Type) {
-        next.contextualType = sourcePropType;
+        const links = getNodeLinks(next);
+        links.contextualType = sourcePropType;
         try {
             return checkExpressionForMutableLocation(next, CheckMode.Contextual, sourcePropType);
         }
         finally {
-            next.contextualType = undefined;
+            links.contextualType = undefined;
         }
     }
 
@@ -19235,18 +19241,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // recreate a tuple from the elements, if possible
         // Since we're re-doing the expression type, we need to reapply the contextual type
-        const oldContext = node.contextualType;
-        node.contextualType = target;
+        const links = getNodeLinks(node);
+        const oldContext = links.contextualType;
+        links.contextualType = target;
         try {
             const tupleizedType = checkArrayLiteral(node, CheckMode.Contextual, /*forceTuple*/ true);
-            node.contextualType = oldContext;
+            links.contextualType = oldContext;
             if (isTupleLikeType(tupleizedType)) {
                 return elaborateElementwise(generateLimitedTupleElements(node, target), tupleizedType, target, relation, containingMessageChain, errorOutputContainer);
             }
             return false;
         }
         finally {
-            node.contextualType = oldContext;
+            links.contextualType = oldContext;
         }
     }
 
@@ -28672,8 +28679,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // We cannot answer semantic questions within a with block, do not proceed any further
             return undefined;
         }
-        if (node.contextualType) {
-            return node.contextualType;
+        const contextualType = tryGetNodeLinks(node)?.contextualType;
+        if (contextualType) {
+            return contextualType;
         }
         const { parent } = node;
         switch (parent.kind) {
@@ -28743,16 +28751,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getInferenceContext(node: Node) {
-        const ancestor = findAncestor(node, n => !!n.inferenceContext);
-        return ancestor && ancestor.inferenceContext!;
+        return forEachAncestor(node, n => tryGetNodeLinks(n)?.inferenceContext);
     }
 
     function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement, contextFlags: ContextFlags | undefined) {
-        if (isJsxOpeningElement(node) && node.parent.contextualType && contextFlags !== ContextFlags.Completions) {
-            // Contextually applied type is moved from attributes up to the outer jsx attributes so when walking up from the children they get hit
-            // _However_ to hit them from the _attributes_ we must look for them here; otherwise we'll used the declared type
-            // (as below) instead!
-            return node.parent.contextualType;
+        if (isJsxOpeningElement(node) && contextFlags !== ContextFlags.Completions) {
+            const contextualType = tryGetNodeLinks(node.parent)?.contextualType;
+            if (contextualType) {
+                // Contextually applied type is moved from attributes up to the outer jsx attributes so when walking up from the children they get hit
+                // _However_ to hit them from the _attributes_ we must look for them here; otherwise we'll used the declared type
+                // (as below) instead!
+                return contextualType;
+            }
         }
         return getContextualTypeForArgumentAtIndex(node, 0);
     }
@@ -35995,11 +36005,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkExpressionWithContextualType(node: Expression, contextualType: Type, inferenceContext: InferenceContext | undefined, checkMode: CheckMode): Type {
         const context = getContextNode(node);
-        const saveContextualType = context.contextualType;
-        const saveInferenceContext = context.inferenceContext;
+        const links = getNodeLinks(context);
+        const saveContextualType = links.contextualType;
+        const saveInferenceContext = links.inferenceContext;
         try {
-            context.contextualType = contextualType;
-            context.inferenceContext = inferenceContext;
+            links.contextualType = contextualType;
+            links.inferenceContext = inferenceContext;
             const type = checkExpression(node, checkMode | CheckMode.Contextual | (inferenceContext ? CheckMode.Inferential : 0));
             // In CheckMode.Inferential we collect intra-expression inference sites to process before fixing any type
             // parameters. This information is no longer needed after the call to checkExpression.
@@ -36017,8 +36028,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // In the event our operation is canceled or some other exception occurs, reset the contextual type
             // so that we do not accidentally hold onto an instance of the checker, as a Type created in the services layer
             // may hold onto the checker that created it.
-            context.contextualType = saveContextualType;
-            context.inferenceContext = saveInferenceContext;
+            links.contextualType = saveContextualType;
+            links.inferenceContext = saveInferenceContext;
         }
     }
 
@@ -36383,8 +36394,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (links.contextFreeType) {
             return links.contextFreeType;
         }
-        const saveContextualType = node.contextualType;
-        node.contextualType = anyType;
+        const saveContextualType = links.contextualType;
+        links.contextualType = anyType;
         try {
             const type = links.contextFreeType = checkExpression(node, CheckMode.SkipContextSensitive);
             return type;
@@ -36393,7 +36404,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // In the event our operation is canceled or some other exception occurs, reset the contextual type
             // so that we do not accidentally hold onto an instance of the checker, as a Type created in the services layer
             // may hold onto the checker that created it.
-            node.contextualType = saveContextualType;
+            links.contextualType = saveContextualType;
         }
     }
 
