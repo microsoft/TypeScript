@@ -1,8 +1,24 @@
 import {
-    Debug, Diagnostics, emptyArray, factory, findAncestor, first, getTokenAtPosition, IfStatement, isBlock, isStatement,
-    sliceAfter, SourceFile, SyntaxKind, textChanges,
+    Debug,
+    Diagnostics,
+    IfStatement,
+    SourceFile,
+    SyntaxKind,
+    emptyArray,
+    factory,
+    findAncestor,
+    first,
+    getTokenAtPosition,
+    isBlock,
+    isStatement,
+    sliceAfter,
+    textChanges,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "fixUnreachableCode";
 const errorCodes = [Diagnostics.Unreachable_code_detected.code];

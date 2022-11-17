@@ -1,6 +1,11 @@
 import { createServerHost } from "../virtualFileSystemWithWatch";
 import * as ts from "../../_namespaces/ts";
-import { createSession, openFilesForSession, makeSessionRequest, toExternalFiles } from "./helpers";
+import {
+    createSession,
+    makeSessionRequest,
+    openFilesForSession,
+    toExternalFiles,
+} from "./helpers";
 
 describe("unittests:: tsserver:: with skipLibCheck", () => {
     it("should be turned on for js-only inferred projects", () => {

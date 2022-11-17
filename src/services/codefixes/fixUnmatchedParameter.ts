@@ -1,10 +1,31 @@
 import {
-    __String, append, CodeFixAction, CodeFixContext, Diagnostics, factory, firstDefined, getHostSignatureFromJSDoc,
-    getJSDocTags, getTokenAtPosition, Identifier, isIdentifier, isJSDocParameterTag, JSDocParameterTag, JSDocTag,
-    length, map, SignatureDeclaration, SourceFile, textChanges,
+    CodeFixAction,
+    CodeFixContext,
+    Diagnostics,
+    Identifier,
+    JSDocParameterTag,
+    JSDocTag,
+    SignatureDeclaration,
+    SourceFile,
+    __String,
+    append,
+    factory,
+    firstDefined,
+    getHostSignatureFromJSDoc,
+    getJSDocTags,
+    getTokenAtPosition,
+    isIdentifier,
+    isJSDocParameterTag,
+    length,
+    map,
+    textChanges,
 } from "../_namespaces/ts";
 import {
-    createCodeFixAction, createCodeFixActionWithoutFixAll, createCombinedCodeActions, eachDiagnostic, registerCodeFix,
+    createCodeFixAction,
+    createCodeFixActionWithoutFixAll,
+    createCombinedCodeActions,
+    eachDiagnostic,
+    registerCodeFix,
 } from "../_namespaces/ts.codefix";
 
 const deleteUnmatchedParameter = "deleteUnmatchedParameter";

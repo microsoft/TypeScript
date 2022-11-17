@@ -1,7 +1,23 @@
 import * as ts from "../_namespaces/ts";
-
-import { checkResolvedModulesCache, checkResolvedTypeDirectivesCache, createResolvedModule, createTestCompilerHost, NamedSourceText, newLine, newProgram, ProgramWithSourceTexts, SourceText, TestCompilerHost, updateProgram, updateProgramText } from "./helpers";
-import { createWatchedSystem, File, libFile } from "./virtualFileSystemWithWatch";
+import {
+    NamedSourceText,
+    ProgramWithSourceTexts,
+    SourceText,
+    TestCompilerHost,
+    checkResolvedModulesCache,
+    checkResolvedTypeDirectivesCache,
+    createResolvedModule,
+    createTestCompilerHost,
+    newLine,
+    newProgram,
+    updateProgram,
+    updateProgramText,
+} from "./helpers";
+import {
+    File,
+    createWatchedSystem,
+    libFile,
+} from "./virtualFileSystemWithWatch";
 
 describe("unittests:: Reuse program structure:: General", () => {
     const target = ts.ScriptTarget.Latest;

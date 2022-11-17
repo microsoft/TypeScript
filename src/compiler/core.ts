@@ -1,7 +1,18 @@
 import {
-    __String, CharacterCodes, Comparer, Comparison, Debug, EqualityComparer, isWhiteSpaceLike,
-    MapLike, Push, Queue, SortedArray, SortedReadonlyArray, TextSpan,
+    CharacterCodes,
+    Comparer,
+    Comparison,
+    Debug,
+    EqualityComparer,
+    MapLike,
+    Push,
+    Queue,
+    SortedArray,
+    SortedReadonlyArray,
+    TextSpan,
     UnderscoreEscapedMap,
+    __String,
+    isWhiteSpaceLike,
 } from "./_namespaces/ts";
 
 /** @internal */

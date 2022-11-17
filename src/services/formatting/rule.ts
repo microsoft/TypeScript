@@ -1,5 +1,8 @@
 import { FormattingContext } from "../_namespaces/ts.formatting";
-import { emptyArray, SyntaxKind } from "../_namespaces/ts";
+import {
+    SyntaxKind,
+    emptyArray,
+} from "../_namespaces/ts";
 
 /** @internal */
 export interface Rule {

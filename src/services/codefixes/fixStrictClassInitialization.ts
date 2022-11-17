@@ -1,11 +1,38 @@
 import {
-    append, BigIntLiteralType, CodeFixAction, CodeFixContext, Debug, Diagnostics, Expression, factory, firstDefined,
-    getClassLikeDeclarationOfSymbol, getEffectiveTypeAnnotationNode, getFirstConstructorWithBody, getTokenAtPosition,
-    hasSyntacticModifier, isIdentifier, isInJSFile, isPropertyDeclaration, isUnionTypeNode, ModifierFlags,
-    PropertyDeclaration, SourceFile, suppressLeadingAndTrailingTrivia, SyntaxKind, textChanges, Type, TypeChecker,
-    TypeFlags, TypeNode,
+    BigIntLiteralType,
+    CodeFixAction,
+    CodeFixContext,
+    Debug,
+    Diagnostics,
+    Expression,
+    ModifierFlags,
+    PropertyDeclaration,
+    SourceFile,
+    SyntaxKind,
+    Type,
+    TypeChecker,
+    TypeFlags,
+    TypeNode,
+    append,
+    factory,
+    firstDefined,
+    getClassLikeDeclarationOfSymbol,
+    getEffectiveTypeAnnotationNode,
+    getFirstConstructorWithBody,
+    getTokenAtPosition,
+    hasSyntacticModifier,
+    isIdentifier,
+    isInJSFile,
+    isPropertyDeclaration,
+    isUnionTypeNode,
+    suppressLeadingAndTrailingTrivia,
+    textChanges,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixName = "strictClassInitialization";
 const fixIdAddDefiniteAssignmentAssertions = "addMissingPropertyDefiniteAssignmentAssertions";

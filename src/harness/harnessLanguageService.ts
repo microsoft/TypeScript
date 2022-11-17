@@ -3,7 +3,13 @@ import * as fakes from "./_namespaces/fakes";
 import * as vfs from "./_namespaces/vfs";
 import * as collections from "./_namespaces/collections";
 import * as vpath from "./_namespaces/vpath";
-import { Compiler, harnessNewLine, mockHash, virtualFileSystemRoot } from "./_namespaces/Harness";
+import * as Utils from "./_namespaces/Utils";
+import {
+    Compiler,
+    harnessNewLine,
+    mockHash,
+    virtualFileSystemRoot,
+} from "./_namespaces/Harness";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
     const proxy = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null

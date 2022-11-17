@@ -1,10 +1,34 @@
 import {
-    addRange, CallExpression, CodeFixAction, CodeFixContext, Diagnostics, factory, findAncestor, getEmitModuleKind,
-    getNamespaceDeclarationNode, getQuotePreference, getSourceFileOfNode, getTokenAtPosition, ImportDeclaration,
-    isExpression, isImportCall, isNamedDeclaration, makeImport, ModuleKind, NamespaceImport, NewExpression, Node,
-    SourceFile, SyntaxKind, textChanges, TransientSymbol,
+    CallExpression,
+    CodeFixAction,
+    CodeFixContext,
+    Diagnostics,
+    ImportDeclaration,
+    ModuleKind,
+    NamespaceImport,
+    NewExpression,
+    Node,
+    SourceFile,
+    SyntaxKind,
+    TransientSymbol,
+    addRange,
+    factory,
+    findAncestor,
+    getEmitModuleKind,
+    getNamespaceDeclarationNode,
+    getQuotePreference,
+    getSourceFileOfNode,
+    getTokenAtPosition,
+    isExpression,
+    isImportCall,
+    isNamedDeclaration,
+    makeImport,
+    textChanges,
 } from "../_namespaces/ts";
-import { createCodeFixActionWithoutFixAll, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixName = "invalidImportSyntax";
 

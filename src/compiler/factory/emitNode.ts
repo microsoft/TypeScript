@@ -1,7 +1,24 @@
 import {
-    AccessExpression, append, appendIfUnique, Debug, EmitFlags, EmitHelper, EmitNode, getParseTreeNode,
-    getSourceFileOfNode, isParseTreeNode, Node, orderedRemoveItem, SnippetElement, some, SourceFile, SourceMapRange,
-    SyntaxKind, SynthesizedComment, TextRange, TypeNode,
+    AccessExpression,
+    Debug,
+    EmitFlags,
+    EmitHelper,
+    EmitNode,
+    Node,
+    SnippetElement,
+    SourceFile,
+    SourceMapRange,
+    SyntaxKind,
+    SynthesizedComment,
+    TextRange,
+    TypeNode,
+    append,
+    appendIfUnique,
+    getParseTreeNode,
+    getSourceFileOfNode,
+    isParseTreeNode,
+    orderedRemoveItem,
+    some,
 } from "../_namespaces/ts";
 
 /**

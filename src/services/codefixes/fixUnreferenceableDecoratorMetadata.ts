@@ -1,10 +1,33 @@
 import {
-    append, CodeFixAction, Diagnostics, emptyArray, find, forEachImportClauseDeclaration, getTokenAtPosition,
-    ImportClause, ImportEqualsDeclaration, ImportSpecifier, isIdentifier, isImportClause, isImportEqualsDeclaration,
-    isImportSpecifier, Node, or, Program, refactor, skipAlias, SourceFile, SymbolFlags, SyntaxKind, textChanges,
+    CodeFixAction,
+    Diagnostics,
+    ImportClause,
+    ImportEqualsDeclaration,
+    ImportSpecifier,
+    Node,
+    Program,
+    SourceFile,
+    SymbolFlags,
+    SyntaxKind,
+    append,
+    emptyArray,
+    find,
+    forEachImportClauseDeclaration,
+    getTokenAtPosition,
+    isIdentifier,
+    isImportClause,
+    isImportEqualsDeclaration,
+    isImportSpecifier,
+    or,
+    refactor,
+    skipAlias,
+    textChanges,
     tryCast,
 } from "../_namespaces/ts";
-import { createCodeFixActionWithoutFixAll, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "fixUnreferenceableDecoratorMetadata";
 const errorCodes = [Diagnostics.A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled.code];

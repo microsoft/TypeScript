@@ -1,6 +1,15 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { TestSession, createSession, checkNumberOfProjects, checkProjectActualFiles } from "./helpers";
+import {
+    File,
+    createServerHost,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    TestSession,
+    checkNumberOfProjects,
+    checkProjectActualFiles,
+    createSession,
+} from "./helpers";
 
 describe("unittests:: tsserver:: syntax operations", () => {
     function navBarFull(session: TestSession, file: File) {

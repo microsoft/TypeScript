@@ -1,7 +1,16 @@
 import {
     Bundle,
-    CatchClause, chainBundle, isBlock, Node, SourceFile, SyntaxKind, TransformationContext, TransformFlags,
-    visitEachChild, visitNode, VisitResult,
+    CatchClause,
+    Node,
+    SourceFile,
+    SyntaxKind,
+    TransformFlags,
+    TransformationContext,
+    VisitResult,
+    chainBundle,
+    isBlock,
+    visitEachChild,
+    visitNode,
 } from "../_namespaces/ts";
 
 /** @internal */

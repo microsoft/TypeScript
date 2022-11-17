@@ -1,6 +1,19 @@
 import * as ts from "../../../_namespaces/ts";
-import { createServerHost, File, libFile, TestServerHost } from "../../virtualFileSystemWithWatch";
-import { TestSession, openFilesForSession, checkNumberOfProjects, protocolLocationFromSubstring, toExternalFiles, createSessionWithEventTracking, createSessionWithDefaultEventHandler } from "../helpers";
+import {
+    File,
+    TestServerHost,
+    createServerHost,
+    libFile,
+} from "../../virtualFileSystemWithWatch";
+import {
+    TestSession,
+    checkNumberOfProjects,
+    createSessionWithDefaultEventHandler,
+    createSessionWithEventTracking,
+    openFilesForSession,
+    protocolLocationFromSubstring,
+    toExternalFiles,
+} from "../helpers";
 
 describe("unittests:: tsserver:: events:: ProjectLoadingStart and ProjectLoadingFinish events", () => {
     const aTs: File = {

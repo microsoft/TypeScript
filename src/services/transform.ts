@@ -1,6 +1,14 @@
 import {
-    CompilerOptions, concatenate, DiagnosticWithLocation, factory, fixupCompilerOptions, isArray, Node,
-    TransformationResult, TransformerFactory, transformNodes,
+    CompilerOptions,
+    DiagnosticWithLocation,
+    Node,
+    TransformationResult,
+    TransformerFactory,
+    concatenate,
+    factory,
+    fixupCompilerOptions,
+    isArray,
+    transformNodes,
 } from "./_namespaces/ts";
 
 /**

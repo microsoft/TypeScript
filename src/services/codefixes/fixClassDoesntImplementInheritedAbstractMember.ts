@@ -1,11 +1,28 @@
 import {
-    addToSeen, cast, ClassElement, ClassLikeDeclaration, Diagnostics, first, getEffectiveBaseTypeNode, getNodeId,
-    getSyntacticModifierFlags, getTokenAtPosition, isClassLike, ModifierFlags, SourceFile, Symbol, textChanges,
+    ClassElement,
+    ClassLikeDeclaration,
+    Diagnostics,
+    ModifierFlags,
+    SourceFile,
+    Symbol,
     UserPreferences,
+    addToSeen,
+    cast,
+    first,
+    getEffectiveBaseTypeNode,
+    getNodeId,
+    getSyntacticModifierFlags,
+    getTokenAtPosition,
+    isClassLike,
+    textChanges,
 } from "../_namespaces/ts";
 import {
-    codeFixAll, createCodeFixAction, createImportAdder, createMissingMemberNodes, registerCodeFix,
     TypeConstructionContext,
+    codeFixAll,
+    createCodeFixAction,
+    createImportAdder,
+    createMissingMemberNodes,
+    registerCodeFix,
 } from "../_namespaces/ts.codefix";
 
 const errorCodes = [
