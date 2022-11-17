@@ -1,4 +1,8 @@
-import { hasProperty, UnionToIntersection, Version } from "./_namespaces/ts";
+import {
+    UnionToIntersection,
+    Version,
+    hasProperty,
+} from "./_namespaces/ts";
 import { deprecate } from "./deprecate";
 
 /** @internal */

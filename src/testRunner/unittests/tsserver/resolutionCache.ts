@@ -1,6 +1,24 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile, TestServerHost } from "../virtualFileSystemWithWatch";
-import { createProjectService, TestTypingsInstaller, createLoggerWithInMemoryLogs, baselineTsserverLogs, checkProjectActualFiles, configuredProjectAt, createSession, openFilesForSession, makeSessionRequest, verifyGetErrRequest, toExternalFiles, checkNumberOfProjects } from "./helpers";
+import {
+    File,
+    TestServerHost,
+    createServerHost,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    TestTypingsInstaller,
+    baselineTsserverLogs,
+    checkNumberOfProjects,
+    checkProjectActualFiles,
+    configuredProjectAt,
+    createLoggerWithInMemoryLogs,
+    createProjectService,
+    createSession,
+    makeSessionRequest,
+    openFilesForSession,
+    toExternalFiles,
+    verifyGetErrRequest,
+} from "./helpers";
 
 describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem extra resolution pass in server host", () => {
     it("can load typings that are proper modules", () => {

@@ -1,10 +1,25 @@
 import {
-    CodeFixAction, createTextChange, createTextSpan, createTextSpanFromBounds, DiagnosticCategory, Diagnostics,
-    getLineAndCharacterOfPosition, getNewLineOrDefaultFromHost, isCheckJsEnabledForFile, isInJSFile, mapDefined,
-    SourceFile, textChanges, tryAddToSet,
+    CodeFixAction,
+    DiagnosticCategory,
+    Diagnostics,
+    SourceFile,
+    createTextChange,
+    createTextSpan,
+    createTextSpanFromBounds,
+    getLineAndCharacterOfPosition,
+    getNewLineOrDefaultFromHost,
+    isCheckJsEnabledForFile,
+    isInJSFile,
+    mapDefined,
+    textChanges,
+    tryAddToSet,
 } from "../_namespaces/ts";
 import {
-    codeFixAll, createCodeFixAction, createCodeFixActionWithoutFixAll, createFileTextChanges, registerCodeFix,
+    codeFixAll,
+    createCodeFixAction,
+    createCodeFixActionWithoutFixAll,
+    createFileTextChanges,
+    registerCodeFix,
 } from "../_namespaces/ts.codefix";
 
 const fixName = "disableJsDiagnostics";

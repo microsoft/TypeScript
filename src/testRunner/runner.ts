@@ -4,9 +4,21 @@ import * as FourSlash from "./_namespaces/FourSlash";
 import * as project from "./_namespaces/project";
 import * as RWC from "./_namespaces/RWC";
 import {
-    CompilerBaselineRunner, CompilerTestType, DefinitelyTypedRunner, DockerfileRunner, FourSlashRunner,
-    GeneratedFourslashRunner, IO, Parallel, RunnerBase, setLightMode, setShardId, setShards, Test262BaselineRunner,
-    TestRunnerKind, UserCodeRunner,
+    CompilerBaselineRunner,
+    CompilerTestType,
+    DefinitelyTypedRunner,
+    DockerfileRunner,
+    FourSlashRunner,
+    GeneratedFourslashRunner,
+    IO,
+    Parallel,
+    RunnerBase,
+    Test262BaselineRunner,
+    TestRunnerKind,
+    UserCodeRunner,
+    setLightMode,
+    setShardId,
+    setShards,
 } from "./_namespaces/Harness";
 
 /* eslint-disable prefer-const */

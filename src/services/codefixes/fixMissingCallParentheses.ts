@@ -1,8 +1,19 @@
 import {
-    Diagnostics, getTokenAtPosition, Identifier, isIdentifier, isPropertyAccessExpression, PrivateIdentifier,
-    PropertyAccessExpression, SourceFile, textChanges,
+    Diagnostics,
+    Identifier,
+    PrivateIdentifier,
+    PropertyAccessExpression,
+    SourceFile,
+    getTokenAtPosition,
+    isIdentifier,
+    isPropertyAccessExpression,
+    textChanges,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "fixMissingCallParentheses";
 const errorCodes = [

@@ -1,6 +1,17 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { createSession, openFilesForSession, executeSessionRequest, TestTypingsInstaller, checkNumberOfProjects, checkProjectActualFiles } from "./helpers";
+import {
+    File,
+    createServerHost,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    TestTypingsInstaller,
+    checkNumberOfProjects,
+    checkProjectActualFiles,
+    createSession,
+    executeSessionRequest,
+    openFilesForSession,
+} from "./helpers";
 
 describe("unittests:: tsserver:: completions", () => {
     it("works", () => {

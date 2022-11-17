@@ -1,4 +1,8 @@
-import { createWatchedSystem, libFile, TestServerHost } from "../virtualFileSystemWithWatch";
+import {
+    TestServerHost,
+    createWatchedSystem,
+    libFile,
+} from "../virtualFileSystemWithWatch";
 import { verifyTscWatch } from "../tscWatch/helpers";
 import { dedent } from "../../_namespaces/Utils";
 

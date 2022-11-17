@@ -1,7 +1,18 @@
 import {
-    Debug, Diagnostics, factory, getTokenAtPosition, ImportTypeNode, SourceFile, SyntaxKind, textChanges,
+    Debug,
+    Diagnostics,
+    ImportTypeNode,
+    SourceFile,
+    SyntaxKind,
+    factory,
+    getTokenAtPosition,
+    textChanges,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixIdAddMissingTypeof = "fixAddModuleReferTypeMissingTypeof";
 const fixId = fixIdAddMissingTypeof;

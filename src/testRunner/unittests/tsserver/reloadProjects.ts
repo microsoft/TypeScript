@@ -1,6 +1,16 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile, TestServerHost } from "../virtualFileSystemWithWatch";
-import { TestProjectService, createProjectService, checkNumberOfProjects, checkProjectActualFiles } from "./helpers";
+import {
+    File,
+    TestServerHost,
+    createServerHost,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    TestProjectService,
+    checkNumberOfProjects,
+    checkProjectActualFiles,
+    createProjectService,
+} from "./helpers";
 
 describe("unittests:: tsserver:: reloadProjects", () => {
     const configFile: File = {

@@ -1,6 +1,12 @@
 import { createServerHost } from "../virtualFileSystemWithWatch";
 import * as ts from "../../_namespaces/ts";
-import { createProjectService, toExternalFile, TestTypingsInstaller, checkProjectActualFiles, configuredProjectAt } from "./helpers";
+import {
+    TestTypingsInstaller,
+    checkProjectActualFiles,
+    configuredProjectAt,
+    createProjectService,
+    toExternalFile,
+} from "./helpers";
 
 describe("unittests:: tsserver:: autoDiscovery", () => {
     it("does not depend on extension", () => {

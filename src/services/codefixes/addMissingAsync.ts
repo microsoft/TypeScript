@@ -1,11 +1,39 @@
 import {
-    ArrowFunction, CodeFixAllContext, CodeFixContext, createTextSpanFromNode, Diagnostic, Diagnostics, factory,
-    FileTextChanges, find, findAncestor, FunctionDeclaration, FunctionExpression, getNodeId, getSyntacticModifierFlags,
-    getSynthesizedDeepClone, getTokenAtPosition, isArrowFunction, isFunctionDeclaration, isFunctionExpression,
-    isMethodDeclaration, isNumber, MethodDeclaration, ModifierFlags, some, SourceFile, textChanges, TextSpan,
-    textSpanEnd, textSpansEqual,
+    ArrowFunction,
+    CodeFixAllContext,
+    CodeFixContext,
+    Diagnostic,
+    Diagnostics,
+    FileTextChanges,
+    FunctionDeclaration,
+    FunctionExpression,
+    MethodDeclaration,
+    ModifierFlags,
+    SourceFile,
+    TextSpan,
+    createTextSpanFromNode,
+    factory,
+    find,
+    findAncestor,
+    getNodeId,
+    getSyntacticModifierFlags,
+    getSynthesizedDeepClone,
+    getTokenAtPosition,
+    isArrowFunction,
+    isFunctionDeclaration,
+    isFunctionExpression,
+    isMethodDeclaration,
+    isNumber,
+    some,
+    textChanges,
+    textSpanEnd,
+    textSpansEqual,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 type ContextualTrackChangesFunction = (cb: (changeTracker: textChanges.ChangeTracker) => void) => FileTextChanges[];
 const fixId = "addMissingAsync";

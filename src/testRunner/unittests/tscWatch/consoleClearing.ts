@@ -1,6 +1,16 @@
 import * as ts from "../../_namespaces/ts";
-import { createWatchedSystem, File, libFile } from "../virtualFileSystemWithWatch";
-import { createBaseline, createWatchCompilerHostOfConfigFileForBaseline, runWatchBaseline, TscWatchCompileChange, verifyTscWatch } from "./helpers";
+import {
+    File,
+    createWatchedSystem,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    TscWatchCompileChange,
+    createBaseline,
+    createWatchCompilerHostOfConfigFileForBaseline,
+    runWatchBaseline,
+    verifyTscWatch,
+} from "./helpers";
 
 describe("unittests:: tsc-watch:: console clearing", () => {
     const scenario = "consoleClearing";
