@@ -1,7 +1,7 @@
 [
     "======== Resolving module 'foo' from '/a/b/c/lib.ts'. ========",
     "Explicitly specified module resolution kind: 'NodeJs'.",
-    "Loading module 'foo' from 'node_modules' folder, target file type 'TypeScript'.",
+    "Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, Declaration.",
     "Directory '/a/b/c/node_modules' does not exist, skipping all lookups in it.",
     "File '/a/b/node_modules/foo.ts' does not exist.",
     "File '/a/b/node_modules/foo.tsx' does not exist.",
@@ -10,7 +10,7 @@
     "======== Module name 'foo' was successfully resolved to '/a/b/node_modules/foo.d.ts'. ========",
     "======== Resolving module 'foo' from '/a/b/c/d/e/app.ts'. ========",
     "Explicitly specified module resolution kind: 'NodeJs'.",
-    "Loading module 'foo' from 'node_modules' folder, target file type 'TypeScript'.",
+    "Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, Declaration.",
     "Directory '/a/b/c/d/e/node_modules' does not exist, skipping all lookups in it.",
     "Directory '/a/b/c/d/node_modules' does not exist, skipping all lookups in it.",
     "Resolution for module 'foo' was found in cache from location '/a/b/c'.",

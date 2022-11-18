@@ -1,7 +1,8 @@
 === /index.ts ===
+
 /// <reference types="pkg" resolution-mode="require"/>
-No type information for this code.export interface LocalInterface extends RequireInterface {}
-No type information for this code.=== /node_modules/pkg/require.d.ts ===
+export interface LocalInterface extends RequireInterface {}
+=== /node_modules/pkg/require.d.ts ===
 export {};
 declare global {
 >global : any

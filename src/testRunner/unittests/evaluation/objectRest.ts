@@ -1,3 +1,5 @@
+import * as evaluator from "../../_namespaces/evaluator";
+
 describe("unittests:: evaluation:: objectRest", () => {
     // https://github.com/microsoft/TypeScript/issues/31469
     it("side effects in property assignment", async () => {
