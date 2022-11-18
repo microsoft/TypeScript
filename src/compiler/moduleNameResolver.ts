@@ -1524,7 +1524,7 @@ export function hybridModuleNameResolver(moduleName: string, containingFile: str
     if (getResolveJsonModule(compilerOptions)) {
         extensions |= Extensions.Json;
     }
-    return nodeModuleNameResolverWorker(NodeResolutionFeatures.HybridDefault, moduleName, containingDirectory, compilerOptions, host, cache, extensions, /*isConfigLookup*/ false, redirectedReference);
+    return nodeModuleNameResolverWorker(getNodeResolutionFeatures(compilerOptions), moduleName, containingDirectory, compilerOptions, host, cache, extensions, /*isConfigLookup*/ false, redirectedReference);
 }
 
 export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;

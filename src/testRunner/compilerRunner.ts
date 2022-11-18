@@ -163,6 +163,8 @@ class CompilerTest {
         "useUnknownInCatchVariables",
         "noUncheckedIndexedAccess",
         "noPropertyAccessFromIndexSignature",
+        "resolvePackageJsonExports",
+        "resolvePackageJsonImports",
     ];
     private fileName: string;
     private justName: string;
