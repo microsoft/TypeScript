@@ -443,7 +443,7 @@ type BoxFunc<T> = typeof makeBox<T>;  // (value: T) => { value: T }
 >makeBox : <T>(value: T) => { value: T; }
 
 type StringBoxFunc = BoxFunc<string>;  // (value: string) => { value: string }
->StringBoxFunc : typeof makeBox<T>
+>StringBoxFunc : (value: string) => { value: string; }
 
 type Box<T> = ReturnType<typeof makeBox<T>>;  // { value: T }
 >Box : { value: T; }
