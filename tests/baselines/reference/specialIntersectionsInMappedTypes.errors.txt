@@ -1,4 +1,4 @@
-tests/cases/compiler/specialIntersectionsInMappedTypes.ts(14,1): error TS2532: Object is possibly 'undefined'.
+tests/cases/compiler/specialIntersectionsInMappedTypes.ts(14,1): error TS18048: 'a.other' is possibly 'undefined'.
 
 
 ==== tests/cases/compiler/specialIntersectionsInMappedTypes.ts (1 errors) ====
@@ -17,5 +17,5 @@ tests/cases/compiler/specialIntersectionsInMappedTypes.ts(14,1): error TS2532: O
     a.left.length;
     a.other.length;  // Error expected here
     ~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS18048: 'a.other' is possibly 'undefined'.
     
