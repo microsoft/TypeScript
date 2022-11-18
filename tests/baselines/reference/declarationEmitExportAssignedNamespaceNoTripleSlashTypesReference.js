@@ -80,7 +80,7 @@ import { Component } from 'react';
 export declare function getComp(): Component;
 //// [inferred-comp-export.d.ts]
 export declare const obj: {
-    comp: import("react").Component<any, {}, {}>;
+    comp: import("react").Component;
 };
 //// [some-other-file.d.ts]
 export * from '@emotion/core';

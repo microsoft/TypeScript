@@ -4,9 +4,6 @@
         "module": "commonjs",
         "types": [
             "node"
-        ],
-        "lib": [
-            "es6"
         ]
     },
     "include": ["**/*"]
