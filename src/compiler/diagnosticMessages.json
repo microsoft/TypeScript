@@ -4547,7 +4547,7 @@
         "category": "Message",
         "code": 6094
     },
-    "Loading module as file / folder, candidate module location '{0}', target file type '{1}'.": {
+    "Loading module as file / folder, candidate module location '{0}', target file types: {1}.": {
         "category": "Message",
         "code": 6095
     },
@@ -4559,7 +4559,7 @@
         "category": "Message",
         "code": 6097
     },
-    "Loading module '{0}' from 'node_modules' folder, target file type '{1}'.": {
+    "Loading module '{0}' from 'node_modules' folder, target file types: {1}.": {
         "category": "Message",
         "code": 6098
     },

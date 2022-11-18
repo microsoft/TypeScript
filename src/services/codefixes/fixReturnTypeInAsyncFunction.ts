@@ -1,8 +1,21 @@
 import {
-    Diagnostics, factory, findAncestor, getTokenAtPosition, isFunctionLikeDeclaration, isInJSFile, SourceFile,
-    textChanges, Type, TypeChecker, TypeNode,
+    Diagnostics,
+    factory,
+    findAncestor,
+    getTokenAtPosition,
+    isFunctionLikeDeclaration,
+    isInJSFile,
+    SourceFile,
+    textChanges,
+    Type,
+    TypeChecker,
+    TypeNode,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "fixReturnTypeInAsyncFunction";
 const errorCodes = [

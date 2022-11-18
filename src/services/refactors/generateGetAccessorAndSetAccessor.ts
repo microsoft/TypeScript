@@ -1,8 +1,18 @@
 import {
-    ApplicableRefactorInfo, codefix, Debug, Diagnostics, emptyArray, getRenameLocation, isIdentifier, isParameter,
+    ApplicableRefactorInfo,
+    codefix,
+    Debug,
+    Diagnostics,
+    emptyArray,
+    getRenameLocation,
+    isIdentifier,
+    isParameter,
     RefactorContext,
 } from "../_namespaces/ts";
-import { isRefactorErrorInfo, registerRefactor } from "../_namespaces/ts.refactor";
+import {
+    isRefactorErrorInfo,
+    registerRefactor,
+} from "../_namespaces/ts.refactor";
 
 const actionName = "Generate 'get' and 'set' accessors";
 const actionDescription = Diagnostics.Generate_get_and_set_accessors.message;

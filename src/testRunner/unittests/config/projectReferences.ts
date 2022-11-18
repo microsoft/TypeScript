@@ -1,6 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import * as fakes from "../../_namespaces/fakes";
 import * as vfs from "../../_namespaces/vfs";
+import { libFile } from "../virtualFileSystemWithWatch";
 
 interface TestProjectSpecification {
     configFileName?: string;
@@ -46,7 +47,7 @@ function moduleImporting(...names: string[]) {
 }
 
 function testProjectReferences(spec: TestSpecification, entryPointConfigFileName: string, checkResult: (prog: ts.Program, host: fakes.CompilerHost) => void) {
-    const files = new ts.Map<string, string>();
+    const files = new Map<string, string>();
     for (const key in spec) {
         const sp = spec[key];
         const configFileName = combineAllPaths("/", key, sp.configFileName || "tsconfig.json");
@@ -77,7 +78,7 @@ function testProjectReferences(spec: TestSpecification, entryPointConfigFileName
         }
     }
 
-    const vfsys = new vfs.FileSystem(false, { files: { "/lib.d.ts": ts.TestFSWithWatch.libFile.content } });
+    const vfsys = new vfs.FileSystem(false, { files: { "/lib.d.ts": libFile.content } });
     files.forEach((v, k) => {
         vfsys.mkdirpSync(ts.getDirectoryPath(k));
         vfsys.writeFileSync(k, v);

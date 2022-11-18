@@ -1,11 +1,41 @@
 import {
-    append, AsExpression, CallSignatureDeclaration, CodeFixAction, ConstructSignatureDeclaration, DiagnosticMessage,
-    Diagnostics, findAncestor, FunctionDeclaration, GetAccessorDeclaration, getTokenAtPosition,
-    IndexSignatureDeclaration, isJSDocNullableType, MappedTypeNode, MethodDeclaration, MethodSignature, Node, ParameterDeclaration,
-    PropertyDeclaration, PropertySignature, SetAccessorDeclaration, SourceFile, SyntaxKind, textChanges, Type,
-    TypeAliasDeclaration, TypeAssertion, TypeChecker, TypeFlags, TypeNode, VariableDeclaration,
+    append,
+    AsExpression,
+    CallSignatureDeclaration,
+    CodeFixAction,
+    ConstructSignatureDeclaration,
+    DiagnosticMessage,
+    Diagnostics,
+    findAncestor,
+    FunctionDeclaration,
+    GetAccessorDeclaration,
+    getTokenAtPosition,
+    IndexSignatureDeclaration,
+    isJSDocNullableType,
+    MappedTypeNode,
+    MethodDeclaration,
+    MethodSignature,
+    Node,
+    ParameterDeclaration,
+    PropertyDeclaration,
+    PropertySignature,
+    SetAccessorDeclaration,
+    SourceFile,
+    SyntaxKind,
+    textChanges,
+    Type,
+    TypeAliasDeclaration,
+    TypeAssertion,
+    TypeChecker,
+    TypeFlags,
+    TypeNode,
+    VariableDeclaration,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixIdPlain = "fixJSDocTypes_plain";
 const fixIdNullable = "fixJSDocTypes_nullable";

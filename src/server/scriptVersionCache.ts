@@ -1,8 +1,18 @@
 import {
-    collapseTextChangeRangesAcrossMultipleVersions, computeLineStarts, createTextChangeRange, createTextSpan, Debug,
-    IScriptSnapshot, TextChangeRange, TextSpan, unchangedTextChangeRange,
+    collapseTextChangeRangesAcrossMultipleVersions,
+    computeLineStarts,
+    createTextChangeRange,
+    createTextSpan,
+    Debug,
+    IScriptSnapshot,
+    TextChangeRange,
+    TextSpan,
+    unchangedTextChangeRange,
 } from "./_namespaces/ts";
-import { emptyArray, protocol } from "./_namespaces/ts.server";
+import {
+    emptyArray,
+    protocol,
+} from "./_namespaces/ts.server";
 
 const lineCollectionCapacity = 4;
 
