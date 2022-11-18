@@ -1,24 +1,28 @@
 import {
-    Debug,
-    Diagnostics,
     emptyArray,
-    factory,
-    findAncestor,
     first,
-    getTokenAtPosition,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import { isBlock } from "../../compiler/factory/nodeTests";
+import {
     IfStatement,
-    isBlock,
-    isStatement,
-    sliceAfter,
     SourceFile,
     SyntaxKind,
-    textChanges,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { sliceAfter } from "../../compiler/utilities";
+import {
+    findAncestor,
+    isStatement,
+} from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
 
 const fixId = "fixUnreachableCode";
 const errorCodes = [Diagnostics.Unreachable_code_detected.code];
@@ -27,14 +31,14 @@ registerCodeFix({
     getCodeActions(context) {
         const syntacticDiagnostics = context.program.getSyntacticDiagnostics(context.sourceFile, context.cancellationToken);
         if (syntacticDiagnostics.length) return;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.span.length, context.errorCode));
+        const changes = ChangeTracker.with(context, t => doChange(t, context.sourceFile, context.span.start, context.span.length, context.errorCode));
         return [createCodeFixAction(fixId, changes, Diagnostics.Remove_unreachable_code, fixId, Diagnostics.Remove_all_unreachable_code)];
     },
     fixIds: [fixId],
     getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, diag.start, diag.length, diag.code)),
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, start: number, length: number, errorCode: number): void {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, start: number, length: number, errorCode: number): void {
     const token = getTokenAtPosition(sourceFile, start);
     const statement = findAncestor(token, isStatement)!;
     if (statement.getStart(sourceFile) !== token.getStart(sourceFile)) {

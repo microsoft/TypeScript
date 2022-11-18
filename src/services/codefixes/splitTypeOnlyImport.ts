@@ -1,21 +1,21 @@
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import { isImportDeclaration } from "../../compiler/factory/nodeTests";
 import {
-    CodeFixContextBase,
-    Debug,
-    Diagnostics,
-    factory,
-    findAncestor,
-    getTokenAtPosition,
     ImportDeclaration,
-    isImportDeclaration,
     SourceFile,
-    textChanges,
     TextSpan,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { findAncestor } from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { CodeFixContextBase } from "../types";
+import { getTokenAtPosition } from "../utilities";
 
 const errorCodes = [Diagnostics.A_type_only_import_can_specify_a_default_import_or_named_bindings_but_not_both.code];
 const fixId = "splitTypeOnlyImport";
@@ -23,7 +23,7 @@ registerCodeFix({
     errorCodes,
     fixIds: [fixId],
     getCodeActions: function getCodeActionsToSplitTypeOnlyImport(context) {
-        const changes = textChanges.ChangeTracker.with(context, t => {
+        const changes = ChangeTracker.with(context, t => {
             return splitTypeOnlyImport(t, getImportDeclaration(context.sourceFile, context.span), context);
         });
         if (changes.length) {
@@ -39,7 +39,7 @@ function getImportDeclaration(sourceFile: SourceFile, span: TextSpan) {
     return findAncestor(getTokenAtPosition(sourceFile, span.start), isImportDeclaration);
 }
 
-function splitTypeOnlyImport(changes: textChanges.ChangeTracker, importDeclaration: ImportDeclaration | undefined, context: CodeFixContextBase) {
+function splitTypeOnlyImport(changes: ChangeTracker, importDeclaration: ImportDeclaration | undefined, context: CodeFixContextBase) {
     if (!importDeclaration) {
         return;
     }

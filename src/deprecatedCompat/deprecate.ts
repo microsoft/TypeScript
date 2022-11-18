@@ -1,11 +1,9 @@
-import {
-    Debug,
-    DeprecationOptions,
-    formatStringFromArgs,
-    noop,
-    version,
-    Version,
-} from "./_namespaces/ts";
+import { noop } from "../compiler/core";
+import { version } from "../compiler/corePublic";
+import { Debug } from "../compiler/debug";
+import { Version } from "../compiler/semver";
+import { formatStringFromArgs } from "../compiler/utilities";
+import { DeprecationOptions } from "./deprecations";
 
 export let enableDeprecationWarnings = true;
 

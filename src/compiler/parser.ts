@@ -1,10 +1,80 @@
-import * as ts from "./_namespaces/ts";
+import { convertToObjectWorker } from "./commandLineParser";
+import {
+    addRange,
+    append,
+    AssertionLevel,
+    concatenate,
+    emptyArray,
+    emptyMap,
+    findIndex,
+    forEach,
+    getSpellingSuggestion,
+    isArray,
+    lastOrUndefined,
+    map,
+    mapDefined,
+    noop,
+    some,
+    startsWith,
+    toArray,
+    trimString,
+} from "./core";
+import { Debug } from "./debug";
+import { Diagnostics } from "./diagnosticInformationMap.generated";
+import { BaseNodeFactory } from "./factory/baseNodeFactory";
+import {
+    createNodeFactory,
+    NodeFactoryFlags,
+} from "./factory/nodeFactory";
+import {
+    isAsyncModifier,
+    isExportAssignment,
+    isExportDeclaration,
+    isExportModifier,
+    isExpressionWithTypeArguments,
+    isExternalModuleReference,
+    isFunctionTypeNode,
+    isIdentifier as isIdentifierNode,
+    isImportDeclaration,
+    isImportEqualsDeclaration,
+    isJSDocFunctionType,
+    isJSDocNullableType,
+    isJSDocReturnTag,
+    isJSDocTypeTag,
+    isJsxOpeningElement,
+    isJsxOpeningFragment,
+    isMetaProperty,
+    isNonNullExpression,
+    isPrivateIdentifier,
+    isSetAccessorDeclaration,
+    isTaggedTemplateExpression,
+    isTypeReferenceNode,
+} from "./factory/nodeTests";
+import {
+    canHaveModifiers,
+    setTextRange,
+} from "./factory/utilitiesPublic";
+import { PackageJsonInfo } from "./moduleNameResolver";
+import {
+    fileExtensionIsOneOf,
+    normalizePath,
+} from "./path";
+import { perfLogger } from "./perfLogger";
+import * as performance from "./performance";
+import {
+    createScanner,
+    getLeadingCommentRanges,
+    isIdentifierText,
+    skipTrivia,
+    tokenIsIdentifierOrKeyword,
+    tokenIsIdentifierOrKeywordOrGreaterThan,
+    tokenToString,
+} from "./scanner";
+import { textToKeywordObj } from "./scannerUtilities";
+import { tracing } from "./tracing";
 import {
     AccessorDeclaration,
-    addRange,
-    addRelatedInfo,
     AmdDependency,
-    append,
     ArrayBindingElement,
     ArrayBindingPattern,
     ArrayLiteralExpression,
@@ -13,11 +83,8 @@ import {
     AsExpression,
     AssertClause,
     AssertEntry,
-    AssertionLevel,
     AsteriskToken,
-    attachFileToDiagnostics,
     AwaitExpression,
-    BaseNodeFactory,
     BinaryExpression,
     BinaryOperatorToken,
     BindingElement,
@@ -29,7 +96,6 @@ import {
     BreakStatement,
     CallExpression,
     CallSignatureDeclaration,
-    canHaveModifiers,
     CaseBlock,
     CaseClause,
     CaseOrDefaultClause,
@@ -46,35 +112,22 @@ import {
     commentPragmas,
     CommentRange,
     ComputedPropertyName,
-    concatenate,
     ConditionalExpression,
     ConditionalTypeNode,
     ConstructorDeclaration,
     ConstructorTypeNode,
     ConstructSignatureDeclaration,
-    containsParseError,
     ContinueStatement,
-    convertToObjectWorker,
-    createDetachedDiagnostic,
-    createNodeFactory,
-    createScanner,
-    createTextChangeRange,
-    createTextSpanFromBounds,
-    Debug,
     Decorator,
     DefaultClause,
     DeleteExpression,
     Diagnostic,
     DiagnosticMessage,
-    Diagnostics,
     DiagnosticWithDetachedLocation,
     DoStatement,
     DotDotDotToken,
     ElementAccessExpression,
-    emptyArray,
-    emptyMap,
     EndOfFileToken,
-    ensureScriptKind,
     EntityName,
     EnumDeclaration,
     EnumMember,
@@ -86,10 +139,7 @@ import {
     ExpressionStatement,
     ExpressionWithTypeArguments,
     ExternalModuleReference,
-    fileExtensionIsOneOf,
     FileReference,
-    findIndex,
-    forEach,
     ForEachChildNodes,
     ForInOrOfStatement,
     ForInStatement,
@@ -100,20 +150,10 @@ import {
     FunctionOrConstructorTypeNode,
     FunctionTypeNode,
     GetAccessorDeclaration,
-    getBinaryOperatorPrecedence,
-    getFullWidth,
-    getJSDocCommentRanges,
-    getLanguageVariant,
-    getLastChild,
-    getLeadingCommentRanges,
-    getSpellingSuggestion,
-    getTextOfNodeFromSourceText,
     HasJSDoc,
-    hasJSDocNodes,
     HasModifiers,
     HeritageClause,
     Identifier,
-    idText,
     IfStatement,
     ImportClause,
     ImportDeclaration,
@@ -127,37 +167,6 @@ import {
     InferTypeNode,
     InterfaceDeclaration,
     IntersectionTypeNode,
-    isArray,
-    isAssignmentOperator,
-    isAsyncModifier,
-    isClassMemberModifier,
-    isExportAssignment,
-    isExportDeclaration,
-    isExportModifier,
-    isExpressionWithTypeArguments,
-    isExternalModuleReference,
-    isFunctionTypeNode,
-    isIdentifierText,
-    isImportDeclaration,
-    isImportEqualsDeclaration,
-    isJSDocFunctionType,
-    isJSDocNullableType,
-    isJSDocReturnTag,
-    isJSDocTypeTag,
-    isJsxOpeningElement,
-    isJsxOpeningFragment,
-    isKeyword,
-    isLeftHandSideExpression,
-    isLiteralKind,
-    isMetaProperty,
-    isModifierKind,
-    isNonNullExpression,
-    isPrivateIdentifier,
-    isSetAccessorDeclaration,
-    isStringOrNumericLiteralLike,
-    isTaggedTemplateExpression,
-    isTemplateLiteralKind,
-    isTypeReferenceNode,
     IterationStatement,
     JSDoc,
     JSDocAllType,
@@ -226,13 +235,10 @@ import {
     JsxTokenSyntaxKind,
     LabeledStatement,
     LanguageVariant,
-    lastOrUndefined,
     LeftHandSideExpression,
     LiteralExpression,
     LiteralLikeNode,
     LiteralTypeNode,
-    map,
-    mapDefined,
     MappedTypeNode,
     MemberExpression,
     MetaProperty,
@@ -244,11 +250,9 @@ import {
     ModifierFlags,
     ModifierLike,
     ModifiersArray,
-    modifiersToFlags,
     ModuleBlock,
     ModuleDeclaration,
     ModuleKind,
-    Mutable,
     NamedExportBindings,
     NamedExports,
     NamedImports,
@@ -261,28 +265,20 @@ import {
     NewExpression,
     Node,
     NodeArray,
-    NodeFactoryFlags,
+    NodeFactory,
     NodeFlags,
-    nodeIsMissing,
-    nodeIsPresent,
     NonNullExpression,
-    noop,
-    normalizePath,
     NoSubstitutionTemplateLiteral,
     NullLiteral,
     NumericLiteral,
-    objectAllocator,
     ObjectBindingPattern,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
-    OperatorPrecedence,
     OptionalTypeNode,
-    PackageJsonInfo,
     ParameterDeclaration,
     ParenthesizedExpression,
     ParenthesizedTypeNode,
     PartiallyEmittedExpression,
-    perfLogger,
     PlusToken,
     PostfixUnaryExpression,
     PostfixUnaryOperator,
@@ -314,22 +310,12 @@ import {
     ScriptKind,
     ScriptTarget,
     SetAccessorDeclaration,
-    setParent,
-    setParentRecursive,
-    setTextRange,
-    setTextRangePos,
-    setTextRangePosEnd,
-    setTextRangePosWidth,
     ShorthandPropertyAssignment,
-    skipTrivia,
-    some,
     SourceFile,
     SpreadAssignment,
     SpreadElement,
-    startsWith,
     Statement,
     StringLiteral,
-    supportedDeclarationExtensions,
     SwitchStatement,
     SyntaxKind,
     TaggedTemplateExpression,
@@ -342,23 +328,13 @@ import {
     TemplateSpan,
     TemplateTail,
     TextChangeRange,
-    textChangeRangeIsUnchanged,
-    textChangeRangeNewSpan,
     TextRange,
-    textSpanEnd,
-    textToKeywordObj,
     ThisExpression,
     ThisTypeNode,
     ThrowStatement,
-    toArray,
     Token,
     TokenFlags,
-    tokenIsIdentifierOrKeyword,
-    tokenIsIdentifierOrKeywordOrGreaterThan,
-    tokenToString,
-    tracing,
     TransformFlags,
-    trimString,
     TryStatement,
     TupleTypeNode,
     TypeAliasDeclaration,
@@ -383,8 +359,49 @@ import {
     WhileStatement,
     WithStatement,
     YieldExpression,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./types";
+import {
+    addRelatedInfo,
+    attachFileToDiagnostics,
+    containsParseError,
+    createDetachedDiagnostic,
+    ensureScriptKind,
+    getBinaryOperatorPrecedence,
+    getFullWidth,
+    getJSDocCommentRanges,
+    getLanguageVariant,
+    getLastChild,
+    getTextOfNodeFromSourceText,
+    isAssignmentOperator,
+    isKeyword,
+    isStringOrNumericLiteralLike,
+    modifiersToFlags,
+    Mutable,
+    nodeIsMissing,
+    nodeIsPresent,
+    objectAllocator,
+    OperatorPrecedence,
+    setParent,
+    setParentRecursive,
+    setTextRangePos,
+    setTextRangePosEnd,
+    setTextRangePosWidth,
+    supportedDeclarationExtensions,
+} from "./utilities";
+import {
+    createTextChangeRange,
+    createTextSpanFromBounds,
+    hasJSDocNodes,
+    idText,
+    isClassMemberModifier,
+    isLeftHandSideExpression,
+    isLiteralKind,
+    isModifierKind,
+    isTemplateLiteralKind,
+    textChangeRangeIsUnchanged,
+    textChangeRangeNewSpan,
+    textSpanEnd,
+} from "./utilitiesPublic";
 
 const enum SignatureFlags {
     None = 0,
@@ -421,7 +438,7 @@ export const parseBaseNodeFactory: BaseNodeFactory = {
 };
 
 /** @internal */
-export const parseNodeFactory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules, parseBaseNodeFactory);
+export const parseNodeFactory: NodeFactory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules, parseBaseNodeFactory);
 
 function visitNode<T>(cbNode: (node: Node) => T, node: Node | undefined): T | undefined {
     return node && cbNode(node);
@@ -2295,7 +2312,7 @@ namespace Parser {
         }
 
         // Otherwise, if this isn't a well-known keyword-like identifier, give the generic fallback message.
-        const expressionText = ts.isIdentifier(node) ? idText(node) : undefined;
+        const expressionText = isIdentifierNode(node) ? idText(node) : undefined;
         if (!expressionText || !isIdentifierText(expressionText, languageVersion)) {
             parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.SemicolonToken));
             return;
@@ -6928,7 +6945,7 @@ namespace Parser {
         let node: ExpressionStatement | LabeledStatement;
         const hasParen = token() === SyntaxKind.OpenParenToken;
         const expression = allowInAnd(parseExpression);
-        if (ts.isIdentifier(expression) && parseOptional(SyntaxKind.ColonToken)) {
+        if (isIdentifierNode(expression) && parseOptional(SyntaxKind.ColonToken)) {
             node = factory.createLabeledStatement(expression, parseStatement());
         }
         else {
@@ -9017,7 +9034,7 @@ namespace Parser {
                     case SyntaxKind.ArrayType:
                         return isObjectOrObjectArrayTypeReference((node as ArrayTypeNode).elementType);
                     default:
-                        return isTypeReferenceNode(node) && ts.isIdentifier(node.typeName) && node.typeName.escapedText === "Object" && !node.typeArguments;
+                        return isTypeReferenceNode(node) && isIdentifierNode(node.typeName) && node.typeName.escapedText === "Object" && !node.typeArguments;
                 }
             }
 
@@ -9287,8 +9304,8 @@ namespace Parser {
             }
 
             function escapedTextsEqual(a: EntityName, b: EntityName): boolean {
-                while (!ts.isIdentifier(a) || !ts.isIdentifier(b)) {
-                    if (!ts.isIdentifier(a) && !ts.isIdentifier(b) && a.right.escapedText === b.right.escapedText) {
+                while (!isIdentifierNode(a) || !isIdentifierNode(b)) {
+                    if (!isIdentifierNode(a) && !isIdentifierNode(b) && a.right.escapedText === b.right.escapedText) {
                         a = a.left;
                         b = b.left;
                     }
@@ -9313,7 +9330,7 @@ namespace Parser {
                                 const child = tryParseChildTag(target, indent);
                                 if (child && (child.kind === SyntaxKind.JSDocParameterTag || child.kind === SyntaxKind.JSDocPropertyTag) &&
                                     target !== PropertyLikeParse.CallbackParameter &&
-                                    name && (ts.isIdentifier(child.name) || !escapedTextsEqual(name, child.name.left))) {
+                                    name && (isIdentifierNode(child.name) || !escapedTextsEqual(name, child.name.left))) {
                                     return false;
                                 }
                                 return child;

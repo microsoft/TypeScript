@@ -1,20 +1,20 @@
+import { isWhiteSpaceSingleLine } from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
 import {
-    Diagnostics,
-    factory,
-    getContainingClass,
-    getTokenAtPosition,
     HeritageClause,
-    isWhiteSpaceSingleLine,
     Node,
     SourceFile,
     SyntaxKind,
-    textChanges,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { getContainingClass } from "../../compiler/utilities";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
 
 const fixId = "extendsInterfaceBecomesImplements";
 const errorCodes = [Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements.code];
@@ -25,7 +25,7 @@ registerCodeFix({
         const nodes = getNodes(sourceFile, context.span.start);
         if (!nodes) return undefined;
         const { extendsToken, heritageClauses } = nodes;
-        const changes = textChanges.ChangeTracker.with(context, t => doChanges(t, sourceFile, extendsToken, heritageClauses));
+        const changes = ChangeTracker.with(context, t => doChanges(t, sourceFile, extendsToken, heritageClauses));
         return [createCodeFixAction(fixId, changes, Diagnostics.Change_extends_to_implements, fixId, Diagnostics.Change_all_extended_interfaces_to_implements)];
     },
     fixIds: [fixId],
@@ -42,7 +42,7 @@ function getNodes(sourceFile: SourceFile, pos: number) {
     return extendsToken.kind === SyntaxKind.ExtendsKeyword ? { extendsToken, heritageClauses } : undefined;
 }
 
-function doChanges(changes: textChanges.ChangeTracker, sourceFile: SourceFile, extendsToken: Node, heritageClauses: readonly HeritageClause[]): void {
+function doChanges(changes: ChangeTracker, sourceFile: SourceFile, extendsToken: Node, heritageClauses: readonly HeritageClause[]): void {
     changes.replaceNode(sourceFile, extendsToken, factory.createToken(SyntaxKind.ImplementsKeyword));
 
     // If there is already an implements clause, replace the implements keyword with a comma.

@@ -1,7 +1,5 @@
-import {
-    padLeft,
-    sys,
-} from "./_namespaces/ts";
+import { padLeft } from "../compiler/core";
+import { sys } from "../compiler/sys";
 
 export type ActionSet = "action::set";
 export type ActionInvalidate = "action::invalidate";

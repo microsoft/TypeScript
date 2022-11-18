@@ -1,124 +1,96 @@
+import { getSymbolId } from "../../compiler/checkerUtilities";
 import {
-    AnyImportOrRequireStatement,
     append,
-    ApplicableRefactorInfo,
-    AssignmentDeclarationKind,
-    BinaryExpression,
-    BindingElement,
-    BindingName,
-    CallExpression,
-    canHaveDecorators,
-    canHaveModifiers,
     cast,
-    ClassDeclaration,
-    codefix,
-    combinePaths,
     concatenate,
     contains,
-    copyEntries,
-    createTextRangeFromSpan,
-    Debug,
-    Declaration,
-    DeclarationStatement,
-    Diagnostics,
     emptyArray,
-    ensurePathIsNonModuleName,
-    EnumDeclaration,
-    escapeLeadingUnderscores,
-    Expression,
-    ExpressionStatement,
-    extensionFromPath,
-    ExternalModuleReference,
-    factory,
     find,
-    FindAllReferences,
     findIndex,
     firstDefined,
     flatMap,
-    forEachEntry,
-    FunctionDeclaration,
-    getAssignmentDeclarationKind,
-    getBaseFileName,
     GetCanonicalFileName,
-    getDecorators,
-    getDirectoryPath,
-    getLocaleSpecificMessage,
-    getModifiers,
-    getPropertySymbolFromBindingElement,
-    getQuotePreference,
     getRangesWhere,
-    getRefactorContextSpan,
-    getRelativePathFromFile,
-    getSymbolId,
-    getUniqueName,
-    hasSyntacticModifier,
-    hostGetCanonicalFileName,
-    Identifier,
-    ImportDeclaration,
-    ImportEqualsDeclaration,
-    insertImports,
-    InterfaceDeclaration,
-    InternalSymbolName,
+    last,
+    length,
+    mapDefined,
+    some,
+    takeWhile,
+    tryCast,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isArrayLiteralExpression,
     isBinaryExpression,
     isBindingElement,
-    isDeclarationName,
     isExpressionStatement,
     isExternalModuleReference,
     isIdentifier,
     isImportDeclaration,
     isImportEqualsDeclaration,
-    isNamedDeclaration,
     isObjectLiteralExpression,
     isOmittedExpression,
-    isPrologueDirective,
     isPropertyAccessExpression,
     isPropertyAssignment,
-    isRequireCall,
     isSourceFile,
     isStringLiteral,
-    isStringLiteralLike,
     isVariableDeclaration,
     isVariableDeclarationList,
     isVariableStatement,
-    LanguageServiceHost,
-    last,
-    length,
-    makeImportIfNecessary,
-    mapDefined,
+} from "../../compiler/factory/nodeTests";
+import {
+    canHaveDecorators,
+    canHaveModifiers,
+} from "../../compiler/factory/utilitiesPublic";
+import {
+    combinePaths,
+    ensurePathIsNonModuleName,
+    getBaseFileName,
+    getDirectoryPath,
+    getRelativePathFromFile,
+    normalizePath,
+} from "../../compiler/path";
+import {
+    AnyImportOrRequireStatement,
+    AssignmentDeclarationKind,
+    BinaryExpression,
+    BindingElement,
+    BindingName,
+    CallExpression,
+    ClassDeclaration,
+    Declaration,
+    DeclarationStatement,
+    EnumDeclaration,
+    Expression,
+    ExpressionStatement,
+    ExternalModuleReference,
+    FunctionDeclaration,
+    Identifier,
+    ImportDeclaration,
+    ImportEqualsDeclaration,
+    InterfaceDeclaration,
+    InternalSymbolName,
     ModifierFlags,
     ModifierLike,
     ModuleDeclaration,
     NamedImportBindings,
     Node,
     NodeFlags,
-    nodeSeenTracker,
-    normalizePath,
-    ObjectBindingElementWithoutPropertyName,
     Program,
     PropertyAccessExpression,
     PropertyAssignment,
-    QuotePreference,
-    rangeContainsRange,
-    RefactorContext,
-    RefactorEditInfo,
-    removeFileExtension,
     RequireOrImportCall,
     RequireVariableStatement,
     ScriptTarget,
-    skipAlias,
-    some,
     SourceFile,
     Statement,
     StringLiteralLike,
     Symbol,
     SymbolFlags,
-    symbolNameNoDefault,
     SyntaxKind,
-    takeWhile,
-    textChanges,
     TransformFlags,
-    tryCast,
     TypeAliasDeclaration,
     TypeChecker,
     TypeNode,
@@ -126,8 +98,52 @@ import {
     VariableDeclaration,
     VariableDeclarationList,
     VariableStatement,
-} from "../_namespaces/ts";
-import { registerRefactor } from "../_namespaces/ts.refactor";
+} from "../../compiler/types";
+import {
+    copyEntries,
+    extensionFromPath,
+    forEachEntry,
+    getAssignmentDeclarationKind,
+    getLocaleSpecificMessage,
+    hasSyntacticModifier,
+    hostGetCanonicalFileName,
+    isDeclarationName,
+    isPrologueDirective,
+    isRequireCall,
+    removeFileExtension,
+    skipAlias,
+} from "../../compiler/utilities";
+import {
+    escapeLeadingUnderscores,
+    getDecorators,
+    getModifiers,
+    isNamedDeclaration,
+    isStringLiteralLike,
+} from "../../compiler/utilitiesPublic";
+import { moduleSpecifierToValidIdentifier } from "../codefixes/importAdder";
+import { Core as FindAllReferences } from "../findAllReferences";
+import { registerRefactor } from "../refactorProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    ApplicableRefactorInfo,
+    LanguageServiceHost,
+    RefactorContext,
+    RefactorEditInfo,
+} from "../types";
+import {
+    createTextRangeFromSpan,
+    getPropertySymbolFromBindingElement,
+    getQuotePreference,
+    getRefactorContextSpan,
+    getUniqueName,
+    insertImports,
+    makeImportIfNecessary,
+    nodeSeenTracker,
+    ObjectBindingElementWithoutPropertyName,
+    QuotePreference,
+    rangeContainsRange,
+    symbolNameNoDefault,
+} from "../utilities";
 
 const refactorName = "Move to a new file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
@@ -154,7 +170,7 @@ registerRefactor(refactorName, {
     getEditsForAction: function getRefactorEditsToMoveToNewFile(context, actionName): RefactorEditInfo {
         Debug.assert(actionName === refactorName, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, statements, t, context.host, context.preferences));
+        const edits = ChangeTracker.with(context, t => doChange(context.file, context.program, statements, t, context.host, context.preferences));
         return { edits, renameFilename: undefined, renameLocation: undefined };
     }
 });
@@ -185,7 +201,7 @@ function getRangeToMove(context: RefactorContext): RangeToMove | undefined {
     };
 }
 
-function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
+function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes: ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
     const checker = program.getTypeChecker();
     const usage = getUsageInfo(oldFile, toMove.all, checker);
 
@@ -242,7 +258,7 @@ function isPureImport(node: Node): boolean {
     }
 }
 
-function addNewFileToTsconfig(program: Program, changes: textChanges.ChangeTracker, oldFileName: string, newFileNameWithExtension: string, getCanonicalFileName: GetCanonicalFileName): void {
+function addNewFileToTsconfig(program: Program, changes: ChangeTracker, oldFileName: string, newFileNameWithExtension: string, getCanonicalFileName: GetCanonicalFileName): void {
     const cfg = program.getCompilerOptions().configFile;
     if (!cfg) return;
 
@@ -258,7 +274,7 @@ function addNewFileToTsconfig(program: Program, changes: textChanges.ChangeTrack
 }
 
 function getNewStatementsAndRemoveFromOldFile(
-    oldFile: SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, newModuleName: string, preferences: UserPreferences,
+    oldFile: SourceFile, usage: UsageInfo, changes: ChangeTracker, toMove: ToMove, program: Program, newModuleName: string, preferences: UserPreferences,
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
@@ -296,20 +312,20 @@ function getNewStatementsAndRemoveFromOldFile(
     ];
 }
 
-function deleteMovedStatements(sourceFile: SourceFile, moved: readonly StatementRange[], changes: textChanges.ChangeTracker) {
+function deleteMovedStatements(sourceFile: SourceFile, moved: readonly StatementRange[], changes: ChangeTracker) {
     for (const { first, afterLast } of moved) {
         changes.deleteNodeRangeExcludingEnd(sourceFile, first, afterLast);
     }
 }
 
-function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Statement[], changes: textChanges.ChangeTracker, toDelete: ReadonlySymbolSet, checker: TypeChecker) {
+function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Statement[], changes: ChangeTracker, toDelete: ReadonlySymbolSet, checker: TypeChecker) {
     for (const statement of oldFile.statements) {
         if (contains(toMove, statement)) continue;
         forEachImportInStatement(statement, i => deleteUnusedImports(oldFile, i, changes, name => toDelete.has(checker.getSymbolAtLocation(name)!)));
     }
 }
 
-function updateImportsInOtherFiles(changes: textChanges.ChangeTracker, program: Program, oldFile: SourceFile, movedSymbols: ReadonlySymbolSet, newModuleName: string): void {
+function updateImportsInOtherFiles(changes: ChangeTracker, program: Program, oldFile: SourceFile, movedSymbols: ReadonlySymbolSet, newModuleName: string): void {
     const checker = program.getTypeChecker();
     for (const sourceFile of program.getSourceFiles()) {
         if (sourceFile === oldFile) continue;
@@ -350,7 +366,7 @@ function getNamespaceLikeImport(node: SupportedImport): Identifier | undefined {
 }
 
 function updateNamespaceLikeImport(
-    changes: textChanges.ChangeTracker,
+    changes: ChangeTracker,
     sourceFile: SourceFile,
     checker: TypeChecker,
     movedSymbols: ReadonlySymbolSet,
@@ -359,10 +375,10 @@ function updateNamespaceLikeImport(
     oldImportId: Identifier,
     oldImportNode: SupportedImport,
 ): void {
-    const preferredNewNamespaceName = codefix.moduleSpecifierToValidIdentifier(newModuleName, ScriptTarget.ESNext);
+    const preferredNewNamespaceName = moduleSpecifierToValidIdentifier(newModuleName, ScriptTarget.ESNext);
     let needUniqueName = false;
     const toChange: Identifier[] = [];
-    FindAllReferences.Core.eachSymbolReferenceInFile(oldImportId, checker, sourceFile, ref => {
+    FindAllReferences.eachSymbolReferenceInFile(oldImportId, checker, sourceFile, ref => {
         if (!isPropertyAccessExpression(ref.parent)) return;
         needUniqueName = needUniqueName || !!checker.resolveName(preferredNewNamespaceName, ref, SymbolFlags.All, /*excludeGlobals*/ true);
         if (movedSymbols.has(checker.getSymbolAtLocation(ref.parent.name)!)) {
@@ -480,7 +496,7 @@ function addExports(sourceFile: SourceFile, toMove: readonly Statement[], needEx
     });
 }
 
-function deleteUnusedImports(sourceFile: SourceFile, importDecl: SupportedImport, changes: textChanges.ChangeTracker, isUnused: (name: Identifier) => boolean): void {
+function deleteUnusedImports(sourceFile: SourceFile, importDecl: SupportedImport, changes: ChangeTracker, isUnused: (name: Identifier) => boolean): void {
     switch (importDecl.kind) {
         case SyntaxKind.ImportDeclaration:
             deleteUnusedImportsInDeclaration(sourceFile, importDecl, changes, isUnused);
@@ -497,7 +513,7 @@ function deleteUnusedImports(sourceFile: SourceFile, importDecl: SupportedImport
             Debug.assertNever(importDecl, `Unexpected import decl kind ${(importDecl as SupportedImport).kind}`);
     }
 }
-function deleteUnusedImportsInDeclaration(sourceFile: SourceFile, importDecl: ImportDeclaration, changes: textChanges.ChangeTracker, isUnused: (name: Identifier) => boolean): void {
+function deleteUnusedImportsInDeclaration(sourceFile: SourceFile, importDecl: ImportDeclaration, changes: ChangeTracker, isUnused: (name: Identifier) => boolean): void {
     if (!importDecl.importClause) return;
     const { name, namedBindings } = importDecl.importClause;
     const defaultUnused = !name || isUnused(name);
@@ -526,7 +542,7 @@ function deleteUnusedImportsInDeclaration(sourceFile: SourceFile, importDecl: Im
         }
     }
 }
-function deleteUnusedImportsInVariableDeclaration(sourceFile: SourceFile, varDecl: VariableDeclaration, changes: textChanges.ChangeTracker, isUnused: (name: Identifier) => boolean) {
+function deleteUnusedImportsInVariableDeclaration(sourceFile: SourceFile, varDecl: VariableDeclaration, changes: ChangeTracker, isUnused: (name: Identifier) => boolean) {
     const { name } = varDecl;
     switch (name.kind) {
         case SyntaxKind.Identifier:
@@ -562,7 +578,7 @@ function getNewFileImportsAndAddExportInOldFile(
     oldFile: SourceFile,
     importsToCopy: ReadonlySymbolSet,
     newFileImportsFromOldFile: ReadonlySymbolSet,
-    changes: textChanges.ChangeTracker,
+    changes: ChangeTracker,
     checker: TypeChecker,
     useEsModuleSyntax: boolean,
     quotePreference: QuotePreference,
@@ -900,7 +916,7 @@ function getTopLevelDeclarationStatement(d: TopLevelDeclaration): TopLevelDeclar
     }
 }
 
-function addExportToChanges(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, name: Identifier, changes: textChanges.ChangeTracker, useEs6Exports: boolean): void {
+function addExportToChanges(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, name: Identifier, changes: ChangeTracker, useEs6Exports: boolean): void {
     if (isExported(sourceFile, decl, useEs6Exports, name)) return;
     if (useEs6Exports) {
         if (!isExpressionStatement(decl)) changes.insertExportModifier(sourceFile, decl);

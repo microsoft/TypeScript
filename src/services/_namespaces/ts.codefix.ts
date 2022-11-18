@@ -20,6 +20,7 @@ export * from "../codefixes/convertToTypeOnlyImport";
 export * from "../codefixes/convertLiteralTypeToMappedType";
 export * from "../codefixes/fixClassIncorrectlyImplementsInterface";
 export * from "../codefixes/importFixes";
+export * from "../codefixes/importAdder";
 export * from "../codefixes/fixAddMissingConstraint";
 export * from "../codefixes/fixOverrideModifier";
 export * from "../codefixes/fixNoPropertyAccessFromIndexSignature";

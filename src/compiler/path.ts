@@ -1,10 +1,7 @@
 import {
-    CharacterCodes,
     compareStringsCaseInsensitive,
     compareStringsCaseSensitive,
     compareValues,
-    Comparison,
-    Debug,
     endsWith,
     equateStringsCaseInsensitive,
     equateStringsCaseSensitive,
@@ -12,11 +9,16 @@ import {
     getStringComparer,
     identity,
     lastOrUndefined,
-    Path,
     some,
     startsWith,
     stringContains,
-} from "./_namespaces/ts";
+} from "./core";
+import { Comparison } from "./corePublic";
+import { Debug } from "./debug";
+import {
+    CharacterCodes,
+    Path,
+} from "./types";
 
 /**
  * Internally, we represent paths as strings with '/' as the directory separator.

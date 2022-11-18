@@ -1,16 +1,16 @@
+import { hasProperty } from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import {
-    Diagnostics,
-    hasProperty,
-    quote,
     SourceFile,
-    textChanges,
     UserPreferences,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { quote } from "../utilities";
 
 const fixIdExpression = "fixInvalidJsxCharacters_expression";
 const fixIdHtmlEntity = "fixInvalidJsxCharacters_htmlEntity";
@@ -25,8 +25,8 @@ registerCodeFix({
     fixIds: [fixIdExpression, fixIdHtmlEntity],
     getCodeActions(context) {
         const { sourceFile, preferences, span } = context;
-        const changeToExpression = textChanges.ChangeTracker.with(context, t => doChange(t, preferences, sourceFile, span.start, /* useHtmlEntity */ false));
-        const changeToHtmlEntity = textChanges.ChangeTracker.with(context, t => doChange(t, preferences, sourceFile, span.start, /* useHtmlEntity */ true));
+        const changeToExpression = ChangeTracker.with(context, t => doChange(t, preferences, sourceFile, span.start, /* useHtmlEntity */ false));
+        const changeToHtmlEntity = ChangeTracker.with(context, t => doChange(t, preferences, sourceFile, span.start, /* useHtmlEntity */ true));
 
         return [
             createCodeFixAction(fixIdExpression, changeToExpression, Diagnostics.Wrap_invalid_character_in_an_expression_container, fixIdExpression, Diagnostics.Wrap_all_invalid_characters_in_an_expression_container),
@@ -47,7 +47,7 @@ function isValidCharacter(character: string): character is keyof typeof htmlEnti
     return hasProperty(htmlEntity, character);
 }
 
-function doChange(changes: textChanges.ChangeTracker, preferences: UserPreferences, sourceFile: SourceFile, start: number, useHtmlEntity: boolean) {
+function doChange(changes: ChangeTracker, preferences: UserPreferences, sourceFile: SourceFile, start: number, useHtmlEntity: boolean) {
     const character = sourceFile.getText()[start];
     // sanity check
     if (!isValidCharacter(character)) {

@@ -1,35 +1,43 @@
+import { getNodeId } from "../../compiler/checkerUtilities";
 import {
-    addToSeen,
-    CodeFixContextBase,
     contains,
-    createTextSpanFromNode,
-    Diagnostics,
-    ExportSpecifier,
-    factory,
     filter,
-    findDiagnosticForNode,
-    getDiagnosticsWithinSpan,
-    getNodeId,
-    getTokenAtPosition,
-    isExportSpecifier,
+    tryCast,
+} from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import { isExportSpecifier } from "../../compiler/factory/nodeTests";
+import {
+    ExportSpecifier,
     SourceFile,
     SyntaxKind,
-    textChanges,
     TextSpan,
-    tryCast,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { addToSeen } from "../../compiler/utilities";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import {
+    ChangeTracker,
+    LeadingTriviaOption,
+    TrailingTriviaOption,
+} from "../textChanges";
+import { CodeFixContextBase } from "../types";
+import {
+    createTextSpanFromNode,
+    findDiagnosticForNode,
+    getDiagnosticsWithinSpan,
+    getTokenAtPosition,
+} from "../utilities";
 
 const errorCodes = [Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type.code];
 const fixId = "convertToTypeOnlyExport";
 registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToConvertToTypeOnlyExport(context) {
-        const changes = textChanges.ChangeTracker.with(context, t => fixSingleExportDeclaration(t, getExportSpecifierForDiagnosticSpan(context.span, context.sourceFile), context));
+        const changes = ChangeTracker.with(context, t => fixSingleExportDeclaration(t, getExportSpecifierForDiagnosticSpan(context.span, context.sourceFile), context));
         if (changes.length) {
             return [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_type_only_export, fixId, Diagnostics.Convert_all_re_exported_types_to_type_only_exports)];
         }
@@ -50,7 +58,7 @@ function getExportSpecifierForDiagnosticSpan(span: TextSpan, sourceFile: SourceF
     return tryCast(getTokenAtPosition(sourceFile, span.start).parent, isExportSpecifier);
 }
 
-function fixSingleExportDeclaration(changes: textChanges.ChangeTracker, exportSpecifier: ExportSpecifier | undefined, context: CodeFixContextBase) {
+function fixSingleExportDeclaration(changes: ChangeTracker, exportSpecifier: ExportSpecifier | undefined, context: CodeFixContextBase) {
     if (!exportSpecifier) {
         return;
     }
@@ -79,8 +87,8 @@ function fixSingleExportDeclaration(changes: textChanges.ChangeTracker, exportSp
         );
 
         changes.replaceNode(context.sourceFile, exportDeclaration, valueExportDeclaration, {
-            leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
-            trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude
+            leadingTriviaOption: LeadingTriviaOption.IncludeAll,
+            trailingTriviaOption: TrailingTriviaOption.Exclude,
         });
         changes.insertNodeAfter(context.sourceFile, exportDeclaration, typeExportDeclaration);
     }

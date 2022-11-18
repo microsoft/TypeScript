@@ -1,50 +1,58 @@
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
 import {
-    CodeFixContextBase,
-    Debug,
-    Diagnostics,
-    factory,
-    findAncestor,
-    getEffectiveBaseTypeNode,
-    getEmitScriptTarget,
-    getMeaningFromLocation,
-    getModeForUsageLocation,
-    getResolvedModule,
-    getTextOfNode,
-    getTokenAtPosition,
-    hasSyntacticModifier,
-    ImportDeclaration,
     isBinaryExpression,
-    isClassElement,
-    isClassLike,
     isIdentifier,
-    isIdentifierText,
     isImportDeclaration,
     isImportSpecifier,
     isJsxAttribute,
-    isJsxOpeningLikeElement,
-    isMemberName,
-    isNamedDeclaration,
     isPrivateIdentifier,
     isPropertyAccessExpression,
     isQualifiedName,
-    isStringLiteralLike,
+} from "../../compiler/factory/nodeTests";
+import { getModeForUsageLocation } from "../../compiler/program";
+import { isIdentifierText } from "../../compiler/scanner";
+import {
+    ImportDeclaration,
     ModifierFlags,
     Node,
     NodeFlags,
     ScriptTarget,
-    SemanticMeaning,
     SourceFile,
     Symbol,
     SymbolFlags,
-    symbolName,
     SyntaxKind,
-    textChanges,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    getEffectiveBaseTypeNode,
+    getEmitScriptTarget,
+    getResolvedModule,
+    getTextOfNode,
+    hasSyntacticModifier,
+} from "../../compiler/utilities";
+import {
+    findAncestor,
+    isClassElement,
+    isClassLike,
+    isJsxOpeningLikeElement,
+    isMemberName,
+    isNamedDeclaration,
+    isStringLiteralLike,
+    symbolName,
+} from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { CodeFixContextBase } from "../types";
+import {
+    getMeaningFromLocation,
+    getTokenAtPosition,
+    SemanticMeaning,
+} from "../utilities";
 
 const fixId = "fixSpelling";
 const errorCodes = [
@@ -71,7 +79,7 @@ registerCodeFix({
         if (!info) return undefined;
         const { node, suggestedSymbol } = info;
         const target = getEmitScriptTarget(context.host.getCompilationSettings());
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestedSymbol, target));
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, node, suggestedSymbol, target));
         return [createCodeFixAction("spelling", changes, [Diagnostics.Change_spelling_to_0, symbolName(suggestedSymbol)], fixId, Diagnostics.Fix_all_detected_spelling_errors)];
     },
     fixIds: [fixId],
@@ -146,7 +154,7 @@ function getInfo(sourceFile: SourceFile, pos: number, context: CodeFixContextBas
     return suggestedSymbol === undefined ? undefined : { node, suggestedSymbol };
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: Node, suggestedSymbol: Symbol, target: ScriptTarget) {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, node: Node, suggestedSymbol: Symbol, target: ScriptTarget) {
     const suggestion = symbolName(suggestedSymbol);
     if (!isIdentifierText(suggestion, target) && isPropertyAccessExpression(node.parent)) {
         const valDecl = suggestedSymbol.valueDeclaration;

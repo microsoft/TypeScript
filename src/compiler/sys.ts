@@ -1,52 +1,60 @@
+import { matchesExclude } from "./commandLineParser";
 import {
     AssertionLevel,
-    closeFileWatcher,
-    closeFileWatcherOf,
-    combinePaths,
-    Comparison,
     contains,
-    containsPath,
     createGetCanonicalFileName,
     createMultiMap,
-    Debug,
-    directorySeparator,
     emptyArray,
-    emptyFileSystemEntries,
     endsWith,
     enumerateInsertsAndDeletes,
-    FileSystemEntries,
-    getDirectoryPath,
-    getFallbackOptions,
-    getNormalizedAbsolutePath,
-    getRelativePathToDirectoryOrUrl,
-    getRootLength,
     getStringComparer,
     isArray,
     isNodeLikeSystem,
     isString,
     mapDefined,
-    matchesExclude,
-    matchFiles,
     memoize,
     noop,
-    normalizePath,
-    normalizeSlashes,
     orderedRemoveItem,
-    Path,
-    perfLogger,
-    PollingWatchKind,
-    RequireResult,
-    resolveJSModule,
     some,
     startsWith,
     stringContains,
-    timestamp,
     unorderedRemoveItem,
+} from "./core";
+import { Comparison } from "./corePublic";
+import { Debug } from "./debug";
+import { resolveJSModule } from "./moduleNameResolver";
+import {
+    combinePaths,
+    containsPath,
+    directorySeparator,
+    getDirectoryPath,
+    getNormalizedAbsolutePath,
+    getRelativePathToDirectoryOrUrl,
+    getRootLength,
+    normalizePath,
+    normalizeSlashes,
+} from "./path";
+import { perfLogger } from "./perfLogger";
+import { timestamp } from "./performanceCore";
+import {
+    Path,
+    PollingWatchKind,
+    RequireResult,
     WatchDirectoryKind,
     WatchFileKind,
     WatchOptions,
+} from "./types";
+import {
+    closeFileWatcher,
+    emptyFileSystemEntries,
+    FileSystemEntries,
+    matchFiles,
     writeFileEnsuringDirectories,
-} from "./_namespaces/ts";
+} from "./utilities";
+import {
+    closeFileWatcherOf,
+    getFallbackOptions,
+} from "./watchUtilities";
 
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;

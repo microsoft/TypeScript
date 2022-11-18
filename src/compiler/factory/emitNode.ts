@@ -1,25 +1,29 @@
 import {
-    AccessExpression,
     append,
     appendIfUnique,
-    Debug,
+    orderedRemoveItem,
+    some,
+} from "../core";
+import { Debug } from "../debug";
+import {
+    AccessExpression,
     EmitFlags,
     EmitHelper,
     EmitNode,
-    getParseTreeNode,
-    getSourceFileOfNode,
-    isParseTreeNode,
     Node,
-    orderedRemoveItem,
     SnippetElement,
-    some,
     SourceFile,
     SourceMapRange,
     SyntaxKind,
     SynthesizedComment,
     TextRange,
     TypeNode,
-} from "../_namespaces/ts";
+} from "../types";
+import { getSourceFileOfNode } from "../utilities";
+import {
+    getParseTreeNode,
+    isParseTreeNode,
+} from "../utilitiesPublic";
 
 /**
  * Associates a node with the current transformation, initializing

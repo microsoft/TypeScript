@@ -1,27 +1,35 @@
+import { isPropertyAccessExpression } from "../factory/nodeTests";
 import {
     AssignmentExpression,
     BinaryExpression,
     Bundle,
-    chainBundle,
-    getNonAssignmentOperatorForCompoundAssignment,
-    isAccessExpression,
-    isExpression,
-    isLeftHandSideExpression,
-    isLogicalOrCoalescingAssignmentExpression,
-    isPropertyAccessExpression,
-    isSimpleCopiableExpression,
     LogicalOrCoalescingAssignmentOperator,
     Node,
-    skipParentheses,
     SourceFile,
     SyntaxKind,
     Token,
     TransformationContext,
     TransformFlags,
+    VisitResult,
+} from "../types";
+import {
+    isAccessExpression,
+    isLogicalOrCoalescingAssignmentExpression,
+    skipParentheses,
+} from "../utilities";
+import {
+    isExpression,
+    isLeftHandSideExpression,
+} from "../utilitiesPublic";
+import {
     visitEachChild,
     visitNode,
-    VisitResult,
-} from "../_namespaces/ts";
+} from "../visitorPublic";
+import {
+    chainBundle,
+    getNonAssignmentOperatorForCompoundAssignment,
+    isSimpleCopiableExpression,
+} from "./utilities";
 
 /** @internal */
 export function transformES2021(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

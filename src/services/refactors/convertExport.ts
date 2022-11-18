@@ -1,60 +1,68 @@
 import {
-    ApplicableRefactorInfo,
+    emptyArray,
+    first,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
+    isExportAssignment,
+    isIdentifier,
+    isModuleBlock,
+    isSourceFile,
+    isStringLiteral,
+} from "../../compiler/factory/nodeTests";
+import {
     CancellationToken,
     ClassDeclaration,
-    Debug,
-    Diagnostics,
-    emptyArray,
     EnumDeclaration,
     ExportAssignment,
     ExportSpecifier,
-    factory,
-    FindAllReferences,
-    findModifier,
-    first,
     FunctionDeclaration,
-    getLocaleSpecificMessage,
-    getParentNodeInSpan,
-    getRefactorContextSpan,
-    getSyntacticModifierFlags,
-    getTokenAtPosition,
     Identifier,
     ImportClause,
     ImportSpecifier,
     ImportTypeNode,
     InterfaceDeclaration,
     InternalSymbolName,
-    isAmbientModule,
-    isExportAssignment,
-    isExternalModuleAugmentation,
-    isIdentifier,
-    isModuleBlock,
-    isSourceFile,
-    isStringLiteral,
-    makeImport,
     ModifierFlags,
     NamespaceDeclaration,
     Node,
     NodeFlags,
     Program,
     PropertyAccessExpression,
-    QuotePreference,
-    quotePreferenceFromString,
-    RefactorContext,
-    RefactorEditInfo,
     SourceFile,
     Symbol,
     SyntaxKind,
-    textChanges,
     TypeAliasDeclaration,
     TypeChecker,
     VariableStatement,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
 import {
-    isRefactorErrorInfo,
+    getLocaleSpecificMessage,
+    getSyntacticModifierFlags,
+    isAmbientModule,
+    isExternalModuleAugmentation,
+} from "../../compiler/utilities";
+import { Core as FindAllReferences } from "../findAllReferences";
+import { registerRefactor } from "../refactorProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    ApplicableRefactorInfo,
+    RefactorContext,
+    RefactorEditInfo,
     RefactorErrorInfo,
-    registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../types";
+import {
+    findModifier,
+    getParentNodeInSpan,
+    getRefactorContextSpan,
+    getTokenAtPosition,
+    makeImport,
+    QuotePreference,
+    quotePreferenceFromString,
+} from "../utilities";
+import { isRefactorErrorInfo } from "./helpers";
 
 const refactorName = "Convert export";
 
@@ -98,7 +106,7 @@ registerRefactor(refactorName, {
         Debug.assert(actionName === defaultToNamedAction.name || actionName === namedToDefaultAction.name, "Unexpected action name");
         const info = getInfo(context);
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, info, t, context.cancellationToken));
+        const edits = ChangeTracker.with(context, t => doChange(context.file, context.program, info, t, context.cancellationToken));
         return { edits, renameFilename: undefined, renameLocation: undefined };
     },
 });
@@ -170,12 +178,12 @@ function getInfo(context: RefactorContext, considerPartialSpans = true): ExportI
     }
 }
 
-function doChange(exportingSourceFile: SourceFile, program: Program, info: ExportInfo, changes: textChanges.ChangeTracker, cancellationToken: CancellationToken | undefined): void {
+function doChange(exportingSourceFile: SourceFile, program: Program, info: ExportInfo, changes: ChangeTracker, cancellationToken: CancellationToken | undefined): void {
     changeExport(exportingSourceFile, info, changes, program.getTypeChecker());
     changeImports(program, info, changes, cancellationToken);
 }
 
-function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode, exportName }: ExportInfo, changes: textChanges.ChangeTracker, checker: TypeChecker): void {
+function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode, exportName }: ExportInfo, changes: ChangeTracker, checker: TypeChecker): void {
     if (wasDefault) {
         if (isExportAssignment(exportNode) && !exportNode.isExportEquals) {
             const exp = exportNode.expression as Identifier;
@@ -197,7 +205,7 @@ function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode,
             case SyntaxKind.VariableStatement:
                 // If 'x' isn't used in this file and doesn't have type definition, `export const x = 0;` --> `export default 0;`
                 const decl = first(exportNode.declarationList.declarations);
-                if (!FindAllReferences.Core.isSymbolReferencedInFile(exportName, checker, exportingSourceFile) && !decl.type) {
+                if (!FindAllReferences.isSymbolReferencedInFile(exportName, checker, exportingSourceFile) && !decl.type) {
                     // We checked in `getInfo` that an initializer exists.
                     changes.replaceNode(exportingSourceFile, exportNode, factory.createExportDefault(Debug.checkDefined(decl.initializer, "Initializer was previously known to be present")));
                     break;
@@ -216,10 +224,10 @@ function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode,
     }
 }
 
-function changeImports(program: Program, { wasDefault, exportName, exportingModuleSymbol }: ExportInfo, changes: textChanges.ChangeTracker, cancellationToken: CancellationToken | undefined): void {
+function changeImports(program: Program, { wasDefault, exportName, exportingModuleSymbol }: ExportInfo, changes: ChangeTracker, cancellationToken: CancellationToken | undefined): void {
     const checker = program.getTypeChecker();
     const exportSymbol = Debug.checkDefined(checker.getSymbolAtLocation(exportName), "Export name should resolve to a symbol");
-    FindAllReferences.Core.eachExportReference(program.getSourceFiles(), checker, cancellationToken, exportSymbol, exportingModuleSymbol, exportName.text, wasDefault, ref => {
+    FindAllReferences.eachExportReference(program.getSourceFiles(), checker, cancellationToken, exportSymbol, exportingModuleSymbol, exportName.text, wasDefault, ref => {
         if (exportName === ref) return;
         const importingSourceFile = ref.getSourceFile();
         if (wasDefault) {
@@ -231,7 +239,7 @@ function changeImports(program: Program, { wasDefault, exportName, exportingModu
     });
 }
 
-function changeDefaultToNamedImport(importingSourceFile: SourceFile, ref: Identifier, changes: textChanges.ChangeTracker, exportName: string): void {
+function changeDefaultToNamedImport(importingSourceFile: SourceFile, ref: Identifier, changes: ChangeTracker, exportName: string): void {
     const { parent } = ref;
     switch (parent.kind) {
         case SyntaxKind.PropertyAccessExpression:
@@ -277,7 +285,7 @@ function changeDefaultToNamedImport(importingSourceFile: SourceFile, ref: Identi
     }
 }
 
-function changeNamedToDefaultImport(importingSourceFile: SourceFile, ref: Identifier, changes: textChanges.ChangeTracker): void {
+function changeNamedToDefaultImport(importingSourceFile: SourceFile, ref: Identifier, changes: ChangeTracker): void {
     const parent = ref.parent as PropertyAccessExpression | ImportSpecifier | ExportSpecifier;
     switch (parent.kind) {
         case SyntaxKind.PropertyAccessExpression:

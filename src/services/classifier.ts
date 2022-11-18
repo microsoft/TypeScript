@@ -1,41 +1,35 @@
 import {
-    __String,
+    getModuleInstanceState,
+    ModuleInstanceState,
+} from "../compiler/binder";
+import {
     arrayToNumericMap,
+    isLineBreak,
+    lastOrUndefined,
+    some,
+} from "../compiler/core";
+import { Push } from "../compiler/corePublic";
+import { Debug } from "../compiler/debug";
+import {
+    isIdentifier,
+    isJSDoc,
+    isModuleDeclaration,
+} from "../compiler/factory/nodeTests";
+import { parseIsolatedJSDocComment } from "../compiler/parser";
+import {
+    couldStartTrivia,
+    createScanner,
+    Scanner,
+} from "../compiler/scanner";
+import {
+    __String,
     CancellationToken,
     CharacterCodes,
     ClassDeclaration,
-    ClassificationInfo,
-    ClassificationResult,
-    Classifications,
-    ClassificationType,
-    ClassificationTypeNames,
-    ClassifiedSpan,
-    Classifier,
     commentPragmas,
-    couldStartTrivia,
-    createScanner,
-    createTextSpan,
-    Debug,
-    decodedTextSpanIntersectsWith,
-    EndOfLineState,
     EnumDeclaration,
-    getMeaningFromLocation,
-    getModuleInstanceState,
-    getTypeArgumentOrTypeParameterList,
     HasJSDoc,
     InterfaceDeclaration,
-    isAccessibilityModifier,
-    isConstTypeReference,
-    isIdentifier,
-    isJSDoc,
-    isKeyword,
-    isLineBreak,
-    isModuleDeclaration,
-    isPunctuation,
-    isTemplateLiteralKind,
-    isThisIdentifier,
-    isToken,
-    isTrivia,
     JSDoc,
     JSDocAugmentsTag,
     JSDocCallbackTag,
@@ -53,29 +47,51 @@ import {
     JsxClosingElement,
     JsxOpeningElement,
     JsxSelfClosingElement,
-    lastOrUndefined,
     ModuleDeclaration,
-    ModuleInstanceState,
     Node,
-    nodeIsMissing,
     ParameterDeclaration,
-    parseIsolatedJSDocComment,
-    Push,
-    Scanner,
     ScriptTarget,
-    SemanticMeaning,
-    setParent,
-    some,
     SourceFile,
     Symbol,
     SymbolFlags,
     SyntaxKind,
     TextSpan,
-    textSpanIntersectsWith,
-    TokenClass,
     TypeChecker,
     TypeParameterDeclaration,
-} from "./_namespaces/ts";
+} from "../compiler/types";
+import {
+    isKeyword,
+    isThisIdentifier,
+    isTrivia,
+    nodeIsMissing,
+    setParent,
+} from "../compiler/utilities";
+import {
+    createTextSpan,
+    decodedTextSpanIntersectsWith,
+    isConstTypeReference,
+    isTemplateLiteralKind,
+    isToken,
+    textSpanIntersectsWith,
+} from "../compiler/utilitiesPublic";
+import {
+    ClassificationInfo,
+    ClassificationResult,
+    Classifications,
+    ClassificationType,
+    ClassificationTypeNames,
+    ClassifiedSpan,
+    Classifier,
+    EndOfLineState,
+    TokenClass,
+} from "./types";
+import {
+    getMeaningFromLocation,
+    getTypeArgumentOrTypeParameterList,
+    isAccessibilityModifier,
+    isPunctuation,
+    SemanticMeaning,
+} from "./utilities";
 
 /** The classifier is used for syntactic highlighting in editors via the TSServer */
 export function createClassifier(): Classifier {

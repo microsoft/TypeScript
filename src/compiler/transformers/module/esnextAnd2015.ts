@@ -1,53 +1,67 @@
 import {
     addRange,
     append,
-    Bundle,
-    chainBundle,
+    singleOrMany,
+    some,
+} from "../../core";
+import { Debug } from "../../debug";
+import {
+    isIdentifier,
+    isNamespaceExport,
+    isSourceFile,
+} from "../../factory/nodeTests";
+import {
     createEmptyExports,
     createExternalHelpersImportDeclarationIfNeeded,
-    Debug,
+    getExternalModuleNameLiteral,
+} from "../../factory/utilities";
+import {
+    setOriginalNode,
+    setTextRange,
+} from "../../factory/utilitiesPublic";
+import { isExternalModule } from "../../parser";
+import {
+    Bundle,
     EmitFlags,
     EmitHint,
     ExportAssignment,
     ExportDeclaration,
     Expression,
     GeneratedIdentifierFlags,
-    getEmitFlags,
-    getEmitModuleKind,
-    getEmitScriptTarget,
-    getExternalModuleNameLiteral,
-    hasSyntacticModifier,
     Identifier,
-    idText,
     ImportDeclaration,
     ImportEqualsDeclaration,
-    insertStatementsAfterCustomPrologue,
-    isExportNamespaceAsDefaultDeclaration,
-    isExternalModule,
-    isExternalModuleImportEqualsDeclaration,
-    isExternalModuleIndicator,
-    isIdentifier,
-    isNamespaceExport,
-    isSourceFile,
-    isStatement,
     ModifierFlags,
     ModuleKind,
     Node,
     NodeFlags,
     ScriptTarget,
-    setOriginalNode,
-    setTextRange,
-    singleOrMany,
-    some,
     SourceFile,
     Statement,
     SyntaxKind,
     TransformationContext,
     VariableStatement,
+    VisitResult,
+} from "../../types";
+import {
+    getEmitFlags,
+    getEmitModuleKind,
+    getEmitScriptTarget,
+    hasSyntacticModifier,
+    insertStatementsAfterCustomPrologue,
+    isExportNamespaceAsDefaultDeclaration,
+    isExternalModuleImportEqualsDeclaration,
+} from "../../utilities";
+import {
+    idText,
+    isExternalModuleIndicator,
+    isStatement,
+} from "../../utilitiesPublic";
+import {
     visitEachChild,
     visitNodes,
-    VisitResult,
-} from "../../_namespaces/ts";
+} from "../../visitorPublic";
+import { chainBundle } from "../utilities";
 
 /** @internal */
 export function transformECMAScriptModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

@@ -1,9 +1,11 @@
+import { getSymbolId } from "./checkerUtilities";
 import {
     clear,
-    EntityNameOrEntityNameExpression,
     forEach,
     getOwnValues,
-    getSymbolId,
+} from "./core";
+import {
+    EntityNameOrEntityNameExpression,
     Identifier,
     IndexedAccessType,
     IndexType,
@@ -24,7 +26,7 @@ import {
     TypeQueryNode,
     TypeReference,
     UnionOrIntersectionType,
-} from "./_namespaces/ts";
+} from "./types";
 
 /** @internal */
 export function createGetSymbolWalker(

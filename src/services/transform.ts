@@ -1,15 +1,17 @@
 import {
-    CompilerOptions,
     concatenate,
-    DiagnosticWithLocation,
-    factory,
-    fixupCompilerOptions,
     isArray,
+} from "../compiler/core";
+import { factory } from "../compiler/factory/nodeFactory";
+import { transformNodes } from "../compiler/transformer";
+import {
+    CompilerOptions,
+    DiagnosticWithLocation,
     Node,
     TransformationResult,
     TransformerFactory,
-    transformNodes,
-} from "./_namespaces/ts";
+} from "../compiler/types";
+import { fixupCompilerOptions } from "./transpile";
 
 /**
  * Transform one or more nodes using the supplied transformers.

@@ -1,19 +1,21 @@
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import {
-    Diagnostics,
-    getTokenAtPosition,
-    Identifier,
     isIdentifier,
     isPropertyAccessExpression,
+} from "../../compiler/factory/nodeTests";
+import {
+    Identifier,
     PrivateIdentifier,
     PropertyAccessExpression,
     SourceFile,
-    textChanges,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
 
 const fixId = "fixMissingCallParentheses";
 const errorCodes = [
@@ -28,7 +30,7 @@ registerCodeFix({
         const callName = getCallName(sourceFile, span.start);
         if (!callName) return;
 
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, callName));
+        const changes = ChangeTracker.with(context, t => doChange(t, context.sourceFile, callName));
         return [createCodeFixAction(fixId, changes, Diagnostics.Add_missing_call_parentheses, fixId, Diagnostics.Add_all_missing_call_parentheses)];
     },
     getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
@@ -37,7 +39,7 @@ registerCodeFix({
     })
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, name: Identifier | PrivateIdentifier): void {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, name: Identifier | PrivateIdentifier): void {
     changes.replaceNodeWithText(sourceFile, name, `${ name.text }()`);
 }
 

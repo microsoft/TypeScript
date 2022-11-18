@@ -1,31 +1,41 @@
-import * as ts from "./_namespaces/ts";
 import {
-    base64decode,
-    computeLineAndCharacterOfPosition,
-    createDocumentPositionMapper,
     createGetCanonicalFileName,
+    isString,
+} from "../compiler/core";
+import { isDeclarationFileName } from "../compiler/parser";
+import {
+    getDirectoryPath,
+    getNormalizedAbsolutePath,
+    toPath as toPathHelper,
+} from "../compiler/path";
+import {
+    computeLineAndCharacterOfPosition,
+    getLineStarts,
+} from "../compiler/scanner";
+import {
+    createDocumentPositionMapper,
+    getLineInfo,
+    identitySourceMapConsumer,
+    LineInfo,
+    tryGetSourceMappingURL,
+    tryParseRawSourceMap,
+} from "../compiler/sourcemap";
+import { sys } from "../compiler/sys";
+import {
     DocumentPosition,
     DocumentPositionMapper,
     DocumentPositionMapperHost,
     Extension,
-    getDeclarationEmitOutputFilePathWorker,
-    getDirectoryPath,
-    getLineInfo,
-    getLineStarts,
-    getNormalizedAbsolutePath,
-    identitySourceMapConsumer,
-    isDeclarationFileName,
-    isString,
     LineAndCharacter,
-    LineInfo,
-    outFile,
     Program,
-    removeFileExtension,
     SourceFileLike,
-    sys,
-    tryGetSourceMappingURL,
-    tryParseRawSourceMap,
-} from "./_namespaces/ts";
+} from "../compiler/types";
+import {
+    base64decode,
+    getDeclarationEmitOutputFilePathWorker,
+    outFile,
+    removeFileExtension,
+} from "../compiler/utilities";
 
 const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+\/=]+)$)?/;
 
@@ -58,10 +68,10 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
     return { tryGetSourcePosition, tryGetGeneratedPosition, toLineColumnOffset, clearCache };
 
     function toPath(fileName: string) {
-        return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+        return toPathHelper(fileName, currentDirectory, getCanonicalFileName);
     }
 
-    function getDocumentPositionMapper(generatedFileName: string, sourceFileName?: string) {
+    function getDocumentPositionMapperWorker(generatedFileName: string, sourceFileName?: string) {
         const path = toPath(generatedFileName);
         const value = documentPositionMappers.get(path);
         if (value) return value;
@@ -72,7 +82,7 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
         }
         else if (host.readFile) {
             const file = getSourceFileLike(generatedFileName);
-            mapper = file && ts.getDocumentPositionMapper(
+            mapper = file && getDocumentPositionMapper(
                 { getSourceFileLike, getCanonicalFileName, log: s => host.log(s) },
                 generatedFileName,
                 getLineInfo(file.text, getLineStarts(file)),
@@ -89,7 +99,7 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
         const file = getSourceFile(info.fileName);
         if (!file) return undefined;
 
-        const newLoc = getDocumentPositionMapper(info.fileName).getSourcePosition(info);
+        const newLoc = getDocumentPositionMapperWorker(info.fileName).getSourcePosition(info);
         return !newLoc || newLoc === info ? undefined : tryGetSourcePosition(newLoc) || newLoc;
     }
 
@@ -113,7 +123,7 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
             getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
         if (declarationPath === undefined) return undefined;
 
-        const newLoc = getDocumentPositionMapper(declarationPath, info.fileName).getGeneratedPosition(info);
+        const newLoc = getDocumentPositionMapperWorker(declarationPath, info.fileName).getGeneratedPosition(info);
         return newLoc === info ? undefined : newLoc;
     }
 

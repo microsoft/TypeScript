@@ -1,16 +1,5 @@
+import { Debug } from "../compiler/debug";
 import {
-    BindingElement,
-    CancellationToken,
-    Classifications,
-    ClassifiedSpan2020,
-    createTextSpan,
-    Debug,
-    Declaration,
-    EndOfLineState,
-    forEachChild,
-    getCombinedModifierFlags,
-    getCombinedNodeFlags,
-    getMeaningFromLocation,
     isBindingElement,
     isCallExpression,
     isCatchClause,
@@ -18,7 +7,6 @@ import {
     isIdentifier,
     isImportClause,
     isImportSpecifier,
-    isInfinityOrNaNString,
     isJsxElement,
     isJsxExpression,
     isJsxSelfClosingElement,
@@ -27,23 +15,43 @@ import {
     isQualifiedName,
     isSourceFile,
     isVariableDeclaration,
+} from "../compiler/factory/nodeTests";
+import { forEachChild } from "../compiler/parser";
+import {
+    BindingElement,
+    CancellationToken,
+    Declaration,
     ModifierFlags,
     NamedDeclaration,
     Node,
     NodeFlags,
     ParameterDeclaration,
     Program,
-    SemanticMeaning,
     SourceFile,
     Symbol,
     SymbolFlags,
     SyntaxKind,
     TextSpan,
-    textSpanIntersectsWith,
     Type,
     TypeChecker,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "../compiler/types";
+import { isInfinityOrNaNString } from "../compiler/utilities";
+import {
+    createTextSpan,
+    getCombinedModifierFlags,
+    getCombinedNodeFlags,
+    textSpanIntersectsWith,
+} from "../compiler/utilitiesPublic";
+import {
+    Classifications,
+    ClassifiedSpan2020,
+    EndOfLineState,
+} from "./types";
+import {
+    getMeaningFromLocation,
+    SemanticMeaning,
+} from "./utilities";
 
 /** @internal */
 export const enum TokenEncodingConsts {

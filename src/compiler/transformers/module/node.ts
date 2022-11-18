@@ -1,17 +1,17 @@
+import { map } from "../../core";
+import { Debug } from "../../debug";
+import { isSourceFile } from "../../factory/nodeTests";
 import {
     Bundle,
-    Debug,
     EmitHint,
-    isSourceFile,
-    map,
     ModuleKind,
     Node,
     SourceFile,
     SyntaxKind,
     TransformationContext,
-    transformECMAScriptModule,
-    transformModule,
-} from "../../_namespaces/ts";
+} from "../../types";
+import { transformECMAScriptModule } from "./esnextAnd2015";
+import { transformModule } from "./module";
 
 /** @internal */
 export function transformNodeModule(context: TransformationContext) {

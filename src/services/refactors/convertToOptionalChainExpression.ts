@@ -1,51 +1,59 @@
+import { emptyArray } from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
 import {
-    ApplicableRefactorInfo,
-    BinaryExpression,
-    CallExpression,
-    ConditionalExpression,
-    createTextSpanFromBounds,
-    Debug,
-    Diagnostics,
-    ElementAccessExpression,
-    emptyArray,
-    Expression,
-    ExpressionStatement,
-    factory,
-    findTokenOnLeftOfPosition,
-    getLocaleSpecificMessage,
-    getRefactorContextSpan,
-    getSingleVariableOfVariableStatement,
-    getTokenAtPosition,
-    Identifier,
     isBinaryExpression,
     isCallExpression,
     isConditionalExpression,
     isElementAccessExpression,
     isExpressionStatement,
     isIdentifier,
-    isOptionalChain,
     isPropertyAccessExpression,
     isReturnStatement,
-    isStringOrNumericLiteralLike,
     isVariableStatement,
+} from "../../compiler/factory/nodeTests";
+import {
+    BinaryExpression,
+    CallExpression,
+    ConditionalExpression,
+    ElementAccessExpression,
+    Expression,
+    ExpressionStatement,
+    Identifier,
     Node,
     PropertyAccessExpression,
-    RefactorContext,
-    RefactorEditInfo,
     ReturnStatement,
-    skipParentheses,
     SourceFile,
     SyntaxKind,
-    textChanges,
     TextSpan,
     TypeChecker,
     VariableStatement,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
 import {
-    isRefactorErrorInfo,
+    getLocaleSpecificMessage,
+    getSingleVariableOfVariableStatement,
+    isStringOrNumericLiteralLike,
+    skipParentheses,
+} from "../../compiler/utilities";
+import {
+    createTextSpanFromBounds,
+    isOptionalChain,
+} from "../../compiler/utilitiesPublic";
+import { registerRefactor } from "../refactorProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    ApplicableRefactorInfo,
+    RefactorContext,
+    RefactorEditInfo,
     RefactorErrorInfo,
-    registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../types";
+import {
+    findTokenOnLeftOfPosition,
+    getRefactorContextSpan,
+    getTokenAtPosition,
+} from "../utilities";
+import { isRefactorErrorInfo } from "./helpers";
 
 const refactorName = "Convert to optional chain expression";
 const convertToOptionalChainExpressionMessage = getLocaleSpecificMessage(Diagnostics.Convert_to_optional_chain_expression);
@@ -86,7 +94,7 @@ function getRefactorActionsToConvertToOptionalChain(context: RefactorContext): r
 function getRefactorEditsToConvertToOptionalChain(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
     const info = getInfo(context);
     Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
-    const edits = textChanges.ChangeTracker.with(context, t =>
+    const edits = ChangeTracker.with(context, t =>
         doChange(context.file, context.program.getTypeChecker(), t, info, actionName)
     );
     return { edits, renameFilename: undefined, renameLocation: undefined };
@@ -329,7 +337,7 @@ function convertOccurrences(checker: TypeChecker, toConvert: Expression, occurre
     return toConvert;
 }
 
-function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, info: OptionalChainInfo, _actionName: string): void {
+function doChange(sourceFile: SourceFile, checker: TypeChecker, changes: ChangeTracker, info: OptionalChainInfo, _actionName: string): void {
     const { finalExpression, occurrences, expression } = info;
     const firstOccurrence = occurrences[occurrences.length - 1];
     const convertedChain = convertOccurrences(checker, finalExpression, occurrences);

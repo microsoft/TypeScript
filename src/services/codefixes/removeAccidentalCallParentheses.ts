@@ -1,14 +1,12 @@
-import {
-    Diagnostics,
-    findAncestor,
-    getTokenAtPosition,
-    isCallExpression,
-    textChanges,
-} from "../_namespaces/ts";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { isCallExpression } from "../../compiler/factory/nodeTests";
+import { findAncestor } from "../../compiler/utilitiesPublic";
 import {
     createCodeFixActionWithoutFixAll,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
 
 const fixId = "removeAccidentalCallParentheses";
 const errorCodes = [
@@ -21,7 +19,7 @@ registerCodeFix({
         if (!callExpression) {
             return undefined;
         }
-        const changes = textChanges.ChangeTracker.with(context, t => {
+        const changes = ChangeTracker.with(context, t => {
             t.deleteRange(context.sourceFile, { pos: callExpression.expression.end, end: callExpression.end });
         });
         return [createCodeFixActionWithoutFixAll(fixId, changes, Diagnostics.Remove_parentheses)];

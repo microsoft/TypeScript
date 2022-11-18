@@ -1,5 +1,67 @@
+import { getNodeId } from "../compiler/checkerUtilities";
 import {
-    addToSeen,
+    concatenate,
+    contains,
+    endsWith,
+    filter,
+    find,
+    findLastIndex,
+    first,
+    firstOrUndefined,
+    flatMap,
+    flatMapToMutable,
+    group,
+    intersperse,
+    isArray,
+    isLineBreak,
+    isString,
+    isWhiteSpaceLike,
+    isWhiteSpaceSingleLine,
+    last,
+    lastOrUndefined,
+    length,
+    mapDefined,
+    removeSuffix,
+    singleOrUndefined,
+    stableSort,
+} from "../compiler/core";
+import { Debug } from "../compiler/debug";
+import { createPrinter } from "../compiler/emitter";
+import {
+    createNodeFactory,
+    factory,
+    NodeFactoryFlags,
+} from "../compiler/factory/nodeFactory";
+import {
+    isArrowFunction,
+    isCallExpression,
+    isExpressionStatement,
+    isFunctionDeclaration,
+    isFunctionExpression,
+    isIdentifier,
+    isImportClause,
+    isImportDeclaration,
+    isImportSpecifier,
+    isInterfaceDeclaration,
+    isNamedImports,
+    isObjectLiteralExpression,
+    isParameter,
+    isPropertyDeclaration,
+    isPropertySignature,
+    isStringLiteral,
+    isVariableDeclaration,
+} from "../compiler/factory/nodeTests";
+import { createSourceFile } from "../compiler/parser";
+import {
+    getLeadingCommentRanges,
+    getLineAndCharacterOfPosition,
+    getShebang,
+    getTrailingCommentRanges,
+    skipTrivia,
+    tokenToString,
+} from "../compiler/scanner";
+import { nullTransformationContext } from "../compiler/transformer";
+import {
     ArrowFunction,
     BindingElement,
     CharacterCodes,
@@ -7,113 +69,23 @@ import {
     ClassExpression,
     ClassLikeDeclaration,
     CommentRange,
-    concatenate,
     ConstructorDeclaration,
-    contains,
-    createNodeFactory,
-    createPrinter,
-    createRange,
-    createSourceFile,
-    createTextChange,
-    createTextRangeFromSpan,
-    createTextSpan,
-    createTextSpanFromRange,
-    createTextWriter,
-    Debug,
     DeclarationStatement,
     EmitHint,
     EmitTextWriter,
-    endsWith,
     Expression,
-    factory,
-    FileTextChanges,
-    filter,
-    find,
-    findChildOfKind,
-    findLastIndex,
-    findNextToken,
-    findPrecedingToken,
-    first,
-    firstOrUndefined,
-    flatMap,
-    flatMapToMutable,
-    formatting,
     FunctionDeclaration,
     FunctionExpression,
-    getAncestor,
-    getFirstNonSpaceCharacterPosition,
-    getFormatCodeSettingsForWriting,
-    getJSDocCommentRanges,
-    getLeadingCommentRanges,
-    getLineAndCharacterOfPosition,
-    getLineOfLocalPosition,
-    getLineStartPositionForPosition,
-    getNewLineKind,
-    getNewLineOrDefaultFromHost,
-    getNodeId,
-    getPrecedingNonSpaceCharacterPosition,
-    getScriptKindFromFileName,
-    getShebang,
-    getStartPositionOfLine,
-    getTokenAtPosition,
-    getTouchingToken,
-    getTrailingCommentRanges,
-    group,
     HasJSDoc,
-    hasJSDocNodes,
     ImportClause,
     ImportSpecifier,
-    indexOfNode,
     InterfaceDeclaration,
-    intersperse,
-    isAnyImportSyntax,
-    isArray,
-    isArrowFunction,
-    isCallExpression,
-    isClassElement,
-    isClassOrTypeElement,
-    isExpressionStatement,
-    isFunctionDeclaration,
-    isFunctionExpression,
-    isFunctionLike,
-    isIdentifier,
-    isImportClause,
-    isImportDeclaration,
-    isImportSpecifier,
-    isInComment,
-    isInJSXText,
-    isInString,
-    isInTemplateString,
-    isInterfaceDeclaration,
-    isJsonSourceFile,
-    isLineBreak,
-    isNamedImports,
-    isObjectLiteralExpression,
-    isParameter,
-    isPinnedComment,
-    isPrologueDirective,
-    isPropertyDeclaration,
-    isPropertySignature,
-    isRecognizedTripleSlashComment,
-    isStatement,
-    isStatementButNotDeclaration,
-    isString,
-    isStringLiteral,
-    isSuperCall,
-    isVariableDeclaration,
-    isWhiteSpaceLike,
-    isWhiteSpaceSingleLine,
     JSDoc,
     JSDocComment,
     JSDocParameterTag,
     JSDocReturnTag,
     JSDocTag,
     JSDocTypeTag,
-    LanguageServiceHost,
-    last,
-    lastOrUndefined,
-    length,
-    mapDefined,
     MethodSignature,
     Modifier,
     NamedImportBindings,
@@ -121,53 +93,103 @@ import {
     NamespaceImport,
     Node,
     NodeArray,
-    NodeFactoryFlags,
-    nodeIsSynthesized,
-    nullTransformationContext,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
     ParameterDeclaration,
-    positionsAreOnSameLine,
     PrintHandlers,
     PrologueDirective,
     PropertyAssignment,
     PropertyDeclaration,
     PropertySignature,
-    rangeContainsPosition,
-    rangeContainsRangeExclusive,
-    rangeOfNode,
-    rangeOfTypeParameters,
-    rangeStartPositionsAreOnSameLine,
-    removeSuffix,
     ScriptKind,
     ScriptTarget,
-    setTextRangePosEnd,
     SignatureDeclaration,
-    singleOrUndefined,
-    skipTrivia,
     SourceFile,
     SourceFileLike,
-    stableSort,
     Statement,
-    stringContainsAt,
     Symbol,
     SyntaxKind,
-    TextChange,
     TextRange,
-    textSpanEnd,
     Token,
-    tokenToString,
     TransformationContext,
     TypeLiteralNode,
     TypeNode,
     TypeParameterDeclaration,
-    UserPreferences,
     VariableDeclaration,
     VariableStatement,
+    Visitor,
+} from "../compiler/types";
+import {
+    addToSeen,
+    createRange,
+    createTextWriter,
+    getAncestor,
+    getJSDocCommentRanges,
+    getLineOfLocalPosition,
+    getScriptKindFromFileName,
+    getStartPositionOfLine,
+    indexOfNode,
+    isAnyImportSyntax,
+    isJsonSourceFile,
+    isPinnedComment,
+    isPrologueDirective,
+    isRecognizedTripleSlashComment,
+    isSuperCall,
+    nodeIsSynthesized,
+    positionsAreOnSameLine,
+    rangeOfNode,
+    rangeOfTypeParameters,
+    rangeStartPositionsAreOnSameLine,
+    setTextRangePosEnd,
+} from "../compiler/utilities";
+import {
+    createTextSpan,
+    hasJSDocNodes,
+    isClassElement,
+    isClassOrTypeElement,
+    isFunctionLike,
+    isStatement,
+    isStatementButNotDeclaration,
+    textSpanEnd,
+} from "../compiler/utilitiesPublic";
+import {
     visitEachChild,
     visitNodes,
-    Visitor,
-} from "./_namespaces/ts";
+} from "../compiler/visitorPublic";
+import {
+    formatDocument,
+    formatNodeGivenIndentation,
+} from "./formatting/formatting";
+import { SmartIndenter } from "./formatting/smartIndenter";
+import {
+    FileTextChanges,
+    FormatContext,
+    TextChange,
+    TextChangesContext,
+} from "./types";
+import {
+    createTextChange,
+    createTextRangeFromSpan,
+    createTextSpanFromRange,
+    findChildOfKind,
+    findNextToken,
+    findPrecedingToken,
+    getFirstNonSpaceCharacterPosition,
+    getFormatCodeSettingsForWriting,
+    getLineStartPositionForPosition,
+    getNewLineKind,
+    getNewLineOrDefaultFromHost,
+    getPrecedingNonSpaceCharacterPosition,
+    getTokenAtPosition,
+    getTouchingToken,
+    isInComment,
+    isInJSXText,
+    isInString,
+    isInTemplateString,
+    rangeContainsPosition,
+    rangeContainsRangeExclusive,
+    stringContainsAt,
+} from "./utilities";
 
 /**
  * Currently for simplicity we store recovered positions on the node itself.
@@ -460,13 +482,6 @@ function isSeparator(node: Node, candidate: Node | undefined): candidate is Toke
 }
 
 /** @internal */
-export interface TextChangesContext {
-    host: LanguageServiceHost;
-    formatContext: formatting.FormatContext;
-    preferences: UserPreferences;
-}
-
-/** @internal */
 export type TypeAnnotatable = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
 
 /** @internal */
@@ -495,7 +510,7 @@ export class ChangeTracker {
     }
 
     /** Public for tests only. Other callers should use `ChangeTracker.with`. */
-    constructor(private readonly newLineCharacter: string, private readonly formatContext: formatting.FormatContext) {}
+    constructor(private readonly newLineCharacter: string, private readonly formatContext: FormatContext) {}
 
     public pushRaw(sourceFile: SourceFile, change: FileTextChanges) {
         Debug.assertEqual(sourceFile.fileName, change.fileName);
@@ -826,7 +841,7 @@ export class ChangeTracker {
                 return undefined;
             }
             const memberStart = member.getStart(sourceFile);
-            const memberIndentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(memberStart, sourceFile), memberStart, sourceFile, this.formatContext.options);
+            const memberIndentation = SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(memberStart, sourceFile), memberStart, sourceFile, this.formatContext.options);
             if (indentation === undefined) {
                 indentation = memberIndentation;
             }
@@ -841,7 +856,7 @@ export class ChangeTracker {
 
     private computeIndentationForNewMember(sourceFile: SourceFile, node: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression | TypeLiteralNode) {
         const nodeStart = node.getStart(sourceFile);
-        return formatting.SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(nodeStart, sourceFile), nodeStart, sourceFile, this.formatContext.options)
+        return SmartIndenter.findFirstNonWhitespaceColumn(getLineStartPositionForPosition(nodeStart, sourceFile), nodeStart, sourceFile, this.formatContext.options)
             + (this.formatContext.options.indentSize ?? 4);
     }
 
@@ -985,7 +1000,7 @@ export class ChangeTracker {
      * i.e. arguments in arguments lists, parameters in parameter lists etc.
      * Note that separators are part of the node in statements and class elements.
      */
-    public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node, containingList = formatting.SmartIndenter.getContainingList(after, sourceFile)): void {
+    public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node, containingList = SmartIndenter.getContainingList(after, sourceFile)): void {
         if (!containingList) {
             Debug.fail("node is not a list element");
             return;
@@ -1057,7 +1072,7 @@ export class ChangeTracker {
                 // insert separator immediately following the 'after' node to preserve comments in trailing trivia
                 this.replaceRange(sourceFile, createRange(end), factory.createToken(separator));
                 // use the same indentation as 'after' item
-                const indentation = formatting.SmartIndenter.findFirstNonWhitespaceColumn(afterStartLinePosition, afterStart, sourceFile, this.formatContext.options);
+                const indentation = SmartIndenter.findFirstNonWhitespaceColumn(afterStartLinePosition, afterStart, sourceFile, this.formatContext.options);
                 // insert element before the line break on the line that contains 'after' element
                 let insertPos = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true, /*stopAtComments*/ false);
                 // find position before "\n" or "\r\n"
@@ -1108,7 +1123,7 @@ export class ChangeTracker {
 
         deletedNodesInLists.forEach(node => {
             const sourceFile = node.getSourceFile();
-            const list = formatting.SmartIndenter.getContainingList(node, sourceFile)!;
+            const list = SmartIndenter.getContainingList(node, sourceFile)!;
             if (node !== last(list)) return;
 
             const lastNonDeletedIndex = findLastIndex(list, n => !deletedNodesInLists.has(n), list.length - 2);
@@ -1209,12 +1224,12 @@ function getMembersOrProperties(node: ClassLikeDeclaration | InterfaceDeclaratio
 export type ValidateNonFormattedText = (node: Node, text: string) => void;
 
 /** @internal */
-export function getNewFileText(statements: readonly Statement[], scriptKind: ScriptKind, newLineCharacter: string, formatContext: formatting.FormatContext): string {
+export function getNewFileText(statements: readonly Statement[], scriptKind: ScriptKind, newLineCharacter: string, formatContext: FormatContext): string {
     return changesToText.newFileChangesWorker(/*oldFile*/ undefined, scriptKind, statements, newLineCharacter, formatContext);
 }
 
 namespace changesToText {
-    export function getTextChangesFromChanges(changes: readonly Change[], newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
+    export function getTextChangesFromChanges(changes: readonly Change[], newLineCharacter: string, formatContext: FormatContext, validate: ValidateNonFormattedText | undefined): FileTextChanges[] {
         return mapDefined(group(changes, c => c.sourceFile.path), changesInFile => {
             const sourceFile = changesInFile[0].sourceFile;
             // order changes by start position
@@ -1242,20 +1257,20 @@ namespace changesToText {
         });
     }
 
-    export function newFileChanges(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: formatting.FormatContext): FileTextChanges {
+    export function newFileChanges(oldFile: SourceFile | undefined, fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: FormatContext): FileTextChanges {
         const text = newFileChangesWorker(oldFile, getScriptKindFromFileName(fileName), statements, newLineCharacter, formatContext);
         return { fileName, textChanges: [createTextChange(createTextSpan(0, 0), text)], isNewFile: true };
     }
 
-    export function newFileChangesWorker(oldFile: SourceFile | undefined, scriptKind: ScriptKind, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: formatting.FormatContext): string {
+    export function newFileChangesWorker(oldFile: SourceFile | undefined, scriptKind: ScriptKind, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], newLineCharacter: string, formatContext: FormatContext): string {
         // TODO: this emits the file, parses it back, then formats it that -- may be a less roundabout way to do this
         const nonFormattedText = statements.map(s => s === SyntaxKind.NewLineTrivia ? "" : getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
         const sourceFile = createSourceFile("any file name", nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true, scriptKind);
-        const changes = formatting.formatDocument(sourceFile, formatContext);
+        const changes = formatDocument(sourceFile, formatContext);
         return applyChanges(nonFormattedText, changes) + newLineCharacter;
     }
 
-    function computeNewText(change: Change, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
+    function computeNewText(change: Change, sourceFile: SourceFile, newLineCharacter: string, formatContext: FormatContext, validate: ValidateNonFormattedText | undefined): string {
         if (change.kind === ChangeKind.Remove) {
             return "";
         }
@@ -1276,16 +1291,16 @@ namespace changesToText {
     }
 
     /** Note: this may mutate `nodeIn`. */
-    function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
+    function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: FormatContext, validate: ValidateNonFormattedText | undefined): string {
         const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
         if (validate) validate(node, text);
         const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
         const initialIndentation =
             indentation !== undefined
                 ? indentation
-                : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
+                : SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
         if (delta === undefined) {
-            delta = formatting.SmartIndenter.shouldIndentChildNode(formatOptions, nodeIn) ? (formatOptions.indentSize || 0) : 0;
+            delta = SmartIndenter.shouldIndentChildNode(formatOptions, nodeIn) ? (formatOptions.indentSize || 0) : 0;
         }
 
         const file: SourceFileLike = {
@@ -1294,7 +1309,7 @@ namespace changesToText {
                 return getLineAndCharacterOfPosition(this, pos);
             }
         };
-        const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
+        const changes = formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, { ...formatContext, options: formatOptions });
         return applyChanges(text, changes);
     }
 
@@ -1329,9 +1344,7 @@ function isTrivia(s: string) {
 // are more aggressive than is strictly necessary.
 const textChangesTransformationContext: TransformationContext = {
     ...nullTransformationContext,
-    factory: createNodeFactory(
-        nullTransformationContext.factory.flags | NodeFactoryFlags.NoParenthesizerRules,
-        nullTransformationContext.factory.baseFactory),
+    factory: createNodeFactory(factory.flags | NodeFactoryFlags.NoParenthesizerRules, factory.baseFactory),
 };
 
 /** @internal */
@@ -1791,7 +1804,7 @@ export function deleteNode(changes: ChangeTracker, sourceFile: SourceFile, node:
 }
 
 function deleteNodeInList(changes: ChangeTracker, deletedNodesInLists: Set<Node>, sourceFile: SourceFile, node: Node): void {
-    const containingList = Debug.checkDefined(formatting.SmartIndenter.getContainingList(node, sourceFile));
+    const containingList = Debug.checkDefined(SmartIndenter.getContainingList(node, sourceFile));
     const index = indexOfNode(containingList, node);
     Debug.assert(index !== -1);
     if (containingList.length === 1) {

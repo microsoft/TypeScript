@@ -1,18 +1,18 @@
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
 import {
-    Debug,
-    Diagnostics,
-    factory,
-    getTokenAtPosition,
     ImportTypeNode,
     SourceFile,
     SyntaxKind,
-    textChanges,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
 
 const fixIdAddMissingTypeof = "fixAddModuleReferTypeMissingTypeof";
 const fixId = fixIdAddMissingTypeof;
@@ -23,7 +23,7 @@ registerCodeFix({
     getCodeActions: function getCodeActionsToAddMissingTypeof(context) {
         const { sourceFile, span } = context;
         const importType = getImportTypeNode(sourceFile, span.start);
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, importType));
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, importType));
         return [createCodeFixAction(fixId, changes, Diagnostics.Add_missing_typeof, fixId, Diagnostics.Add_missing_typeof)];
     },
     fixIds: [fixId],
@@ -38,7 +38,7 @@ function getImportTypeNode(sourceFile: SourceFile, pos: number): ImportTypeNode 
     return token.parent as ImportTypeNode;
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importType: ImportTypeNode) {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, importType: ImportTypeNode) {
     const newTypeNode = factory.updateImportTypeNode(importType, importType.argument, importType.assertions, importType.qualifier, importType.typeArguments, /* isTypeOf */ true);
     changes.replaceNode(sourceFile, importType, newTypeNode);
 }

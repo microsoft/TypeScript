@@ -1,61 +1,71 @@
 import {
-    ApplicableRefactorInfo,
-    ArrowFunction,
-    Block,
-    ConciseBody,
-    copyComments,
-    copyTrailingAsLeadingComments,
-    Debug,
-    Diagnostics,
     emptyArray,
-    factory,
-    FileTextChanges,
-    FindAllReferences,
     first,
-    forEachChild,
-    FunctionExpression,
-    getCombinedModifierFlags,
-    getContainingFunction,
-    getEffectiveModifierFlags,
-    getLocaleSpecificMessage,
-    getTokenAtPosition,
-    Identifier,
+    length,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isArrowFunction,
-    isClassLike,
-    isExpression,
     isFunctionDeclaration,
     isFunctionExpression,
     isIdentifier,
     isReturnStatement,
-    isThis,
     isVariableDeclaration,
-    isVariableDeclarationInVariableStatement,
     isVariableDeclarationList,
     isVariableStatement,
-    length,
+} from "../../compiler/factory/nodeTests";
+import { forEachChild } from "../../compiler/parser";
+import {
+    ArrowFunction,
+    Block,
+    ConciseBody,
+    FunctionExpression,
+    Identifier,
     ModifierFlags,
     Node,
     Program,
-    rangeContainsRange,
-    RefactorActionInfo,
-    RefactorContext,
-    RefactorEditInfo,
     ReturnStatement,
     SourceFile,
     Statement,
-    suppressLeadingAndTrailingTrivia,
-    suppressLeadingTrivia,
     SyntaxKind,
-    textChanges,
     TypeChecker,
     VariableDeclaration,
     VariableDeclarationList,
     VariableStatement,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
 import {
-    refactorKindBeginsWith,
-    registerRefactor,
-} from "../_namespaces/ts.refactor";
+    getContainingFunction,
+    getEffectiveModifierFlags,
+    getLocaleSpecificMessage,
+    isVariableDeclarationInVariableStatement,
+} from "../../compiler/utilities";
+import {
+    getCombinedModifierFlags,
+    isClassLike,
+    isExpression,
+} from "../../compiler/utilitiesPublic";
+import { Core as FindAllReferences } from "../findAllReferences";
+import { registerRefactor } from "../refactorProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    ApplicableRefactorInfo,
+    FileTextChanges,
+    RefactorActionInfo,
+    RefactorContext,
+    RefactorEditInfo,
+} from "../types";
+import {
+    copyComments,
+    copyTrailingAsLeadingComments,
+    getTokenAtPosition,
+    isThis,
+    rangeContainsRange,
+    suppressLeadingAndTrailingTrivia,
+    suppressLeadingTrivia,
+} from "../utilities";
+import { refactorKindBeginsWith } from "./helpers";
 
 const refactorName = "Convert arrow function or function expression";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_arrow_function_or_function_expression);
@@ -261,7 +271,7 @@ function getEditInfoForConvertToAnonymousFunction(context: RefactorContext, func
     const { file } = context;
     const body = convertToBlock(func.body);
     const newNode = factory.createFunctionExpression(func.modifiers, func.asteriskToken, /* name */ undefined, func.typeParameters, func.parameters, func.type, body);
-    return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
+    return ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
 }
 
 function getEditInfoForConvertToNamedFunction(context: RefactorContext, func: FunctionExpression | ArrowFunction, variableInfo: VariableInfo): FileTextChanges[] {
@@ -276,10 +286,10 @@ function getEditInfoForConvertToNamedFunction(context: RefactorContext, func: Fu
     const newNode = factory.createFunctionDeclaration(length(modifiers) ? modifiers : undefined, func.asteriskToken, name, func.typeParameters, func.parameters, func.type, body);
 
     if (variableDeclarationList.declarations.length === 1) {
-        return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement, newNode));
+        return ChangeTracker.with(context, t => t.replaceNode(file, statement, newNode));
     }
     else {
-        return textChanges.ChangeTracker.with(context, t => {
+        return ChangeTracker.with(context, t => {
             t.delete(file, variableDeclaration);
             t.insertNodeAfter(file, statement, newNode);
         });
@@ -302,7 +312,7 @@ function getEditInfoForConvertToArrowFunction(context: RefactorContext, func: Fu
     }
 
     const newNode = factory.createArrowFunction(func.modifiers, func.typeParameters, func.parameters, func.type, factory.createToken(SyntaxKind.EqualsGreaterThanToken), body);
-    return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
+    return ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
 }
 
 function canBeConvertedToExpression(body: Block, head: Statement): head is ReturnStatement {
@@ -310,5 +320,5 @@ function canBeConvertedToExpression(body: Block, head: Statement): head is Retur
 }
 
 function isFunctionReferencedInFile(sourceFile: SourceFile, typeChecker: TypeChecker, node: FunctionExpression): boolean {
-    return !!node.name && FindAllReferences.Core.isSymbolReferencedInFile(node.name, typeChecker, sourceFile);
+    return !!node.name && FindAllReferences.isSymbolReferencedInFile(node.name, typeChecker, sourceFile);
 }

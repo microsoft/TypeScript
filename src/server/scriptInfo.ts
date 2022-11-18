@@ -1,57 +1,77 @@
 import {
-    AbsolutePositionAndLineText,
+    assign,
+    clear,
+    contains,
+    forEach,
+    isString,
+    some,
+    stringContains,
+    unorderedRemoveItem,
+} from "../compiler/core";
+import { Debug } from "../compiler/debug";
+import {
+    directorySeparator,
+    getBaseFileName,
+} from "../compiler/path";
+import {
+    computeLineAndCharacterOfPosition,
+    computeLineStarts,
+    computePositionOfLineAndCharacter,
+} from "../compiler/scanner";
+import {
+    getLineInfo,
+    LineInfo,
+} from "../compiler/sourcemap";
+import {
+    FileWatcher,
+    FileWatcherEventKind,
+} from "../compiler/sys";
+import {
+    DocumentPositionMapper,
+    Path,
+    ScriptKind,
+    SourceFile,
+    SourceFileLike,
+    TextSpan,
+} from "../compiler/types";
+import {
+    getScriptKindFromFileName,
+    hasTSFileExtension,
+} from "../compiler/utilities";
+import { createTextSpanFromBounds } from "../compiler/utilitiesPublic";
+import { closeFileWatcherOf } from "../compiler/watchUtilities";
+import {
+    DocumentRegistryBucketKeyWithMode,
+} from "../services/documentRegistry";
+import {
+    emptyOptions,
+    FormatCodeSettings,
+    getDefaultFormatCodeSettings,
+    IScriptSnapshot,
+    ScriptSnapshot,
+} from "../services/types";
+import { getSnapshotText } from "../services/utilities";
+import { maxFileSize } from "./editorServices";
+import {
     ConfiguredProject,
-    Errors,
     ExternalProject,
     InferredProject,
     isConfiguredProject,
     isExternalProject,
     isInferredProject,
-    maxFileSize,
-    NormalizedPath,
     Project,
     ProjectKind,
-    protocol,
-    ScriptVersionCache,
-    ServerHost,
-} from "./_namespaces/ts.server";
+} from "./project";
+import * as protocol from "./protocol";
 import {
-    assign,
-    clear,
-    closeFileWatcherOf,
-    computeLineAndCharacterOfPosition,
-    computeLineStarts,
-    computePositionOfLineAndCharacter,
-    contains,
-    createTextSpanFromBounds,
-    Debug,
-    directorySeparator,
-    DocumentPositionMapper,
-    DocumentRegistryBucketKeyWithMode,
-    emptyOptions,
-    FileWatcher,
-    FileWatcherEventKind,
-    forEach,
-    FormatCodeSettings,
-    getBaseFileName,
-    getDefaultFormatCodeSettings,
-    getLineInfo,
-    getScriptKindFromFileName,
-    getSnapshotText,
-    hasTSFileExtension,
-    IScriptSnapshot,
-    isString,
-    LineInfo,
-    Path,
-    ScriptKind,
-    ScriptSnapshot,
-    some,
-    SourceFile,
-    SourceFileLike,
-    stringContains,
-    TextSpan,
-    unorderedRemoveItem,
-} from "./_namespaces/ts";
+    AbsolutePositionAndLineText,
+    ScriptVersionCache,
+} from "./scriptVersionCache";
+import { ServerHost } from "./types";
+import {
+    Errors,
+    NormalizedPath,
+} from "./utilitiesPublic";
 
 export interface ScriptInfoVersion {
     svc: number;

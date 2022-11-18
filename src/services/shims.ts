@@ -1,71 +1,91 @@
+import { EmitOutput } from "../compiler/builderStatePublic";
 import {
-    Classifications,
-    Classifier,
-    clear,
-    CompilerOptions,
-    CompletionEntryData,
-    createClassifier,
-    createDocumentRegistry,
-    createGetCanonicalFileName,
-    createLanguageService,
-    createTextChangeRange,
-    createTextSpan,
-    Diagnostic,
-    diagnosticCategoryName,
-    DocCommentTemplateOptions,
-    DocumentRegistry,
-    EditorOptions,
-    EmitOutput,
-    emptyOptions,
-    EndOfLineState,
-    Extension,
-    extensionFromPath,
-    FileReference,
-    filter,
-    flattenDiagnosticMessageText,
-    FormatCodeOptions,
-    FormatCodeSettings,
-    getAutomaticTypeDirectiveNames,
-    GetCompletionsAtPositionOptions,
-    getDefaultCompilerOptions,
-    getDirectoryPath,
-    getFileMatcherPatterns,
-    getNewLineOrDefaultFromHost,
-    getProperty,
-    getSnapshotText,
-    HostCancellationToken,
-    IScriptSnapshot,
-    isString,
-    JsTyping,
-    LanguageService,
-    LanguageServiceHost,
-    map,
-    MapLike,
-    ModuleResolutionHost,
-    normalizeSlashes,
-    OperationCanceledException,
-    ParseConfigHost,
     parseJsonSourceFileConfigFileContent,
-    parseJsonText,
-    preProcessFile,
-    ResolvedModuleFull,
-    ResolvedTypeReferenceDirective,
+} from "../compiler/commandLineParser";
+import {
+    clear,
+    createGetCanonicalFileName,
+    filter,
+    getProperty,
+    isString,
+    map,
+    toFileNameLowerCase,
+} from "../compiler/core";
+import { MapLike } from "../compiler/corePublic";
+import {
+    getAutomaticTypeDirectiveNames,
     resolveModuleName,
     resolveTypeReferenceDirective,
+} from "../compiler/moduleNameResolver";
+import { parseJsonText } from "../compiler/parser";
+import {
+    getDirectoryPath,
+    normalizeSlashes,
+    toPath,
+} from "../compiler/path";
+import { timestamp } from "../compiler/performanceCore";
+import { flattenDiagnosticMessageText } from "../compiler/program";
+import {
+    CompilerOptions,
+    Diagnostic,
+    diagnosticCategoryName,
+    Extension,
+    FileReference,
+    ModuleResolutionHost,
+    OperationCanceledException,
+    ParseConfigHost,
+    ResolvedModuleFull,
+    ResolvedTypeReferenceDirective,
     ScriptKind,
-    SemanticClassificationFormat,
-    servicesVersion,
-    SignatureHelpItemsOptions,
     TextChangeRange,
     TextRange,
     TextSpan,
-    ThrottledCancellationToken,
-    timestamp,
-    toFileNameLowerCase,
-    toPath,
     TypeAcquisition,
     UserPreferences,
-} from "./_namespaces/ts";
+} from "../compiler/types";
+import {
+    extensionFromPath,
+    getFileMatcherPatterns,
+} from "../compiler/utilities";
+import {
+    createTextChangeRange,
+    createTextSpan,
+} from "../compiler/utilitiesPublic";
+import * as JsTyping from "../jsTyping/jsTyping";
+import { createClassifier } from "./classifier";
+import {
+    createDocumentRegistry,
+    DocumentRegistry,
+} from "./documentRegistry";
+import { preProcessFile } from "./preProcess";
+import {
+    createLanguageService,
+    getDefaultCompilerOptions,
+    servicesVersion,
+    ThrottledCancellationToken,
+} from "./services";
+import {
+    Classifications,
+    Classifier,
+    CompletionEntryData,
+    DocCommentTemplateOptions,
+    EditorOptions,
+    emptyOptions,
+    EndOfLineState,
+    FormatCodeOptions,
+    FormatCodeSettings,
+    GetCompletionsAtPositionOptions,
+    HostCancellationToken,
+    IScriptSnapshot,
+    LanguageService,
+    LanguageServiceHost,
+    SemanticClassificationFormat,
+    SignatureHelpItemsOptions,
+} from "./types";
+import {
+    getNewLineOrDefaultFromHost,
+    getSnapshotText,
+} from "./utilities";
 
 //
 // Copyright (c) Microsoft Corporation.  All rights reserved.

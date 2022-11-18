@@ -1,54 +1,64 @@
 import {
-    ApplicableRefactorInfo,
     arrayFrom,
-    codefix,
-    Debug,
-    Diagnostics,
     emptyArray,
-    Expression,
-    factory,
-    FindAllReferences,
-    findAncestor,
-    findNextToken,
-    getAllowSyntheticDefaultImports,
-    getLocaleSpecificMessage,
     getOwnValues,
-    getParentNodeInSpan,
-    getRefactorContextSpan,
-    getTokenAtPosition,
-    getUniqueName,
-    Identifier,
-    ImportClause,
-    ImportDeclaration,
-    ImportKind,
-    ImportSpecifier,
+    some,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isExportSpecifier,
     isImportDeclaration,
     isPropertyAccessExpression,
-    isPropertyAccessOrQualifiedName,
     isShorthandPropertyAssignment,
     isStringLiteral,
+} from "../../compiler/factory/nodeTests";
+import {
+    Expression,
+    Identifier,
+    ImportClause,
+    ImportDeclaration,
+    ImportSpecifier,
     NamedImports,
     NamespaceImport,
     Program,
     PropertyAccessExpression,
     QualifiedName,
-    RefactorContext,
-    RefactorEditInfo,
     ScriptTarget,
-    some,
     SourceFile,
     Symbol,
     SymbolFlags,
     SyntaxKind,
-    textChanges,
     TypeChecker,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
 import {
-    isRefactorErrorInfo,
+    getAllowSyntheticDefaultImports,
+    getLocaleSpecificMessage,
+} from "../../compiler/utilities";
+import {
+    findAncestor,
+    isPropertyAccessOrQualifiedName,
+} from "../../compiler/utilitiesPublic";
+import { moduleSpecifierToValidIdentifier } from "../codefixes/importAdder";
+import { ImportKind } from "../exportInfoMap";
+import { Core as FindAllReferences } from "../findAllReferences";
+import { registerRefactor } from "../refactorProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    ApplicableRefactorInfo,
+    RefactorContext,
+    RefactorEditInfo,
     RefactorErrorInfo,
-    registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../types";
+import {
+    findNextToken,
+    getParentNodeInSpan,
+    getRefactorContextSpan,
+    getTokenAtPosition,
+    getUniqueName,
+} from "../utilities";
+import { isRefactorErrorInfo } from "./helpers";
 
 const refactorName = "Convert import";
 
@@ -95,7 +105,7 @@ registerRefactor(refactorName, {
         Debug.assert(some(getOwnValues(actions), action => action.name === actionName), "Unexpected action name");
         const info = getImportConversionInfo(context);
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected applicable refactor info");
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, t, info));
+        const edits = ChangeTracker.with(context, t => doChange(context.file, context.program, t, info));
         return { edits, renameFilename: undefined, renameLocation: undefined };
     }
 });
@@ -141,7 +151,7 @@ function getShouldUseDefault(program: Program, importClause: ImportClause) {
         && isExportEqualsModule(importClause.parent.moduleSpecifier, program.getTypeChecker());
 }
 
-function doChange(sourceFile: SourceFile, program: Program, changes: textChanges.ChangeTracker, info: ImportConversionInfo): void {
+function doChange(sourceFile: SourceFile, program: Program, changes: ChangeTracker, info: ImportConversionInfo): void {
     const checker = program.getTypeChecker();
     if (info.convertTo === ImportKind.Named) {
         doChangeNamespaceToNamed(sourceFile, checker, changes, info.import, getAllowSyntheticDefaultImports(program.getCompilerOptions()));
@@ -151,13 +161,13 @@ function doChange(sourceFile: SourceFile, program: Program, changes: textChanges
     }
 }
 
-function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, toConvert: NamespaceImport, allowSyntheticDefaultImports: boolean): void {
+function doChangeNamespaceToNamed(sourceFile: SourceFile, checker: TypeChecker, changes: ChangeTracker, toConvert: NamespaceImport, allowSyntheticDefaultImports: boolean): void {
     let usedAsNamespaceOrDefault = false;
 
     const nodesToReplace: (PropertyAccessExpression | QualifiedName)[] = [];
     const conflictingNames = new Map<string, true>();
 
-    FindAllReferences.Core.eachSymbolReferenceInFile(toConvert.name, checker, sourceFile, id => {
+    FindAllReferences.eachSymbolReferenceInFile(toConvert.name, checker, sourceFile, id => {
         if (!isPropertyAccessOrQualifiedName(id.parent)) {
             usedAsNamespaceOrDefault = true;
         }
@@ -207,7 +217,7 @@ function getLeftOfPropertyAccessOrQualifiedName(propertyAccessOrQualifiedName: P
 }
 
 /** @internal */
-export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, program: Program, changes: textChanges.ChangeTracker, toConvert: NamedImports, shouldUseDefault = getShouldUseDefault(program, toConvert.parent)): void {
+export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, program: Program, changes: ChangeTracker, toConvert: NamedImports, shouldUseDefault = getShouldUseDefault(program, toConvert.parent)): void {
     const checker = program.getTypeChecker();
     const importDecl = toConvert.parent.parent;
     const { moduleSpecifier } = importDecl;
@@ -219,13 +229,13 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
             toConvertSymbols.add(symbol);
         }
     });
-    const preferredName = moduleSpecifier && isStringLiteral(moduleSpecifier) ? codefix.moduleSpecifierToValidIdentifier(moduleSpecifier.text, ScriptTarget.ESNext) : "module";
+    const preferredName = moduleSpecifier && isStringLiteral(moduleSpecifier) ? moduleSpecifierToValidIdentifier(moduleSpecifier.text, ScriptTarget.ESNext) : "module";
     function hasNamespaceNameConflict(namedImport: ImportSpecifier): boolean {
         // We need to check if the preferred namespace name (`preferredName`) we'd like to use in the refactored code will present a name conflict.
         // A name conflict means that, in a scope where we would like to use the preferred namespace name, there already exists a symbol with that name in that scope.
         // We are going to use the namespace name in the scopes the named imports being refactored are referenced,
         // so we look for conflicts by looking at every reference to those named imports.
-        return !!FindAllReferences.Core.eachSymbolReferenceInFile(namedImport.name, checker, sourceFile, id => {
+        return !!FindAllReferences.eachSymbolReferenceInFile(namedImport.name, checker, sourceFile, id => {
             const symbol = checker.resolveName(preferredName, id, SymbolFlags.All, /*excludeGlobals*/ true);
             if (symbol) { // There already is a symbol with the same name as the preferred namespace name.
                 if (toConvertSymbols.has(symbol)) { // `preferredName` resolves to a symbol for one of the named import references we are going to transform into namespace import references...
@@ -245,7 +255,7 @@ export function doChangeNamedToNamespaceOrDefault(sourceFile: SourceFile, progra
 
     for (const element of toConvert.elements) {
         const propertyName = (element.propertyName || element.name).text;
-        FindAllReferences.Core.eachSymbolReferenceInFile(element.name, checker, sourceFile, id => {
+        FindAllReferences.eachSymbolReferenceInFile(element.name, checker, sourceFile, id => {
             const access = factory.createPropertyAccessExpression(factory.createIdentifier(namespaceImportName), propertyName);
             if (isShorthandPropertyAssignment(id.parent)) {
                 changes.replaceNode(sourceFile, id.parent, factory.createPropertyAssignment(id.text, access));

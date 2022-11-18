@@ -1,24 +1,30 @@
+import { singleOrUndefined } from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { SourceFile } from "../../compiler/types";
 import {
-    CodeFixAllContext,
-    CodeFixContext,
-    Debug,
-    Diagnostics,
     getSourceFileOfNode,
     getTextOfPropertyName,
-    getTokenAtPosition,
+} from "../../compiler/utilities";
+import {
     isAccessor,
     isClassLike,
-    singleOrUndefined,
-    SourceFile,
     unescapeLeadingUnderscores,
-} from "../_namespaces/ts";
+} from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
+    registerCodeFix,
+} from "../codeFixProvider";
+import {
+    CodeFixAllContext,
+    CodeFixContext,
+} from "../types";
+import { getTokenAtPosition } from "../utilities";
+import {
     generateAccessorFromProperty,
     getAllSupers,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "./generateAccessors";
 
 const errorCodes = [
     Diagnostics._0_is_defined_as_an_accessor_in_class_1_but_is_overridden_here_in_2_as_an_instance_property.code,

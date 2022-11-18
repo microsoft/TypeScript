@@ -1,20 +1,20 @@
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
 import {
-    Diagnostics,
-    factory,
-    findAncestor,
-    getTokenAtPosition,
     NamedTupleMember,
     OptionalTypeNode,
     ParenthesizedTypeNode,
     RestTypeNode,
     SourceFile,
     SyntaxKind,
-    textChanges,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { findAncestor } from "../../compiler/utilitiesPublic";
 import {
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
 
 const fixId = "fixIncorrectNamedTupleSyntax";
 const errorCodes = [
@@ -27,7 +27,7 @@ registerCodeFix({
     getCodeActions: function getCodeActionsToFixIncorrectNamedTupleSyntax(context) {
         const { sourceFile, span } = context;
         const namedTupleMember = getNamedTupleMember(sourceFile, span.start);
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, namedTupleMember));
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, namedTupleMember));
         return [createCodeFixAction(fixId, changes, Diagnostics.Move_labeled_tuple_element_modifiers_to_labels, fixId, Diagnostics.Move_labeled_tuple_element_modifiers_to_labels)];
     },
     fixIds: [fixId]
@@ -37,7 +37,7 @@ function getNamedTupleMember(sourceFile: SourceFile, pos: number) {
     const token = getTokenAtPosition(sourceFile, pos);
     return findAncestor(token, t => t.kind === SyntaxKind.NamedTupleMember) as NamedTupleMember | undefined;
 }
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, namedTupleMember?: NamedTupleMember) {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, namedTupleMember?: NamedTupleMember) {
     if (!namedTupleMember) {
         return;
     }

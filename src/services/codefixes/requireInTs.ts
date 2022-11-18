@@ -1,32 +1,38 @@
 import {
     cast,
-    Debug,
-    Diagnostics,
-    factory,
     first,
-    getAllowSyntheticDefaultImports,
-    getTokenAtPosition,
-    Identifier,
-    ImportSpecifier,
+    tryCast,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isIdentifier,
     isObjectBindingPattern,
-    isRequireCall,
     isVariableDeclaration,
     isVariableStatement,
+} from "../../compiler/factory/nodeTests";
+import {
+    Identifier,
+    ImportSpecifier,
     NamedImports,
     ObjectBindingPattern,
     Program,
     SourceFile,
     StringLiteralLike,
-    textChanges,
-    tryCast,
     VariableStatement,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    getAllowSyntheticDefaultImports,
+    isRequireCall,
+} from "../../compiler/utilities";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
 
 const fixId = "requireInTs";
 const errorCodes = [Diagnostics.require_call_may_be_converted_to_an_import.code];
@@ -37,7 +43,7 @@ registerCodeFix({
         if (!info) {
             return undefined;
         }
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, info));
+        const changes = ChangeTracker.with(context, t => doChange(t, context.sourceFile, info));
         return [createCodeFixAction(fixId, changes, Diagnostics.Convert_require_to_import, fixId, Diagnostics.Convert_all_require_to_import)];
     },
     fixIds: [fixId],
@@ -49,7 +55,7 @@ registerCodeFix({
     }),
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info) {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, info: Info) {
     const { allowSyntheticDefaults, defaultImportName, namedImports, statement, required } = info;
     changes.replaceNode(sourceFile, statement, defaultImportName && !allowSyntheticDefaults
         ? factory.createImportEqualsDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false, defaultImportName, factory.createExternalModuleReference(required))

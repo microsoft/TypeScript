@@ -1,7 +1,32 @@
 import {
-    __String,
     addRange,
     append,
+    every,
+    forEach,
+    last,
+    map,
+    some,
+} from "../core";
+import { Debug } from "../debug";
+import { factory } from "../factory/nodeFactory";
+import {
+    isBindingElement,
+    isComputedPropertyName,
+    isIdentifier,
+    isOmittedExpression,
+    isVariableDeclaration,
+} from "../factory/nodeTests";
+import {
+    getElementsOfBindingOrAssignmentPattern,
+    getInitializerOfBindingOrAssignmentElement,
+    getPropertyNameOfBindingOrAssignmentElement,
+    getRestIndicatorOfBindingOrAssignmentElement,
+    getTargetOfBindingOrAssignmentElement,
+    tryGetPropertyNameOfBindingOrAssignmentElement,
+} from "../factory/utilities";
+import { setTextRange } from "../factory/utilitiesPublic";
+import {
+    __String,
     ArrayBindingElement,
     ArrayBindingOrAssignmentPattern,
     BindingElement,
@@ -9,58 +34,43 @@ import {
     BindingOrAssignmentElement,
     BindingOrAssignmentElementTarget,
     BindingOrAssignmentPattern,
-    Debug,
     DestructuringAssignment,
     ElementAccessExpression,
-    every,
     Expression,
-    factory,
-    forEach,
-    getElementsOfBindingOrAssignmentPattern,
-    getInitializerOfBindingOrAssignmentElement,
-    getPropertyNameOfBindingOrAssignmentElement,
-    getRestIndicatorOfBindingOrAssignmentElement,
-    getTargetOfBindingOrAssignmentElement,
     Identifier,
-    idText,
-    isArrayBindingElement,
-    isArrayBindingOrAssignmentPattern,
-    isBindingElement,
-    isBindingName,
-    isBindingOrAssignmentPattern,
-    isComputedPropertyName,
-    isDeclarationBindingElement,
-    isDestructuringAssignment,
-    isEmptyArrayLiteral,
-    isEmptyObjectLiteral,
-    isExpression,
-    isIdentifier,
-    isLiteralExpression,
-    isObjectBindingOrAssignmentPattern,
-    isOmittedExpression,
-    isPropertyNameLiteral,
-    isSimpleInlineableExpression,
-    isStringOrNumericLiteralLike,
-    isVariableDeclaration,
-    last,
     LeftHandSideExpression,
-    map,
     Node,
     NodeFactory,
-    nodeIsSynthesized,
     ObjectBindingOrAssignmentPattern,
     ParameterDeclaration,
     PropertyName,
-    setTextRange,
-    some,
     TextRange,
     TransformationContext,
     TransformFlags,
-    tryGetPropertyNameOfBindingOrAssignmentElement,
     VariableDeclaration,
-    visitNode,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../types";
+import {
+    isDestructuringAssignment,
+    isEmptyArrayLiteral,
+    isEmptyObjectLiteral,
+    isPropertyNameLiteral,
+    isStringOrNumericLiteralLike,
+    nodeIsSynthesized,
+} from "../utilities";
+import {
+    idText,
+    isArrayBindingElement,
+    isArrayBindingOrAssignmentPattern,
+    isBindingName,
+    isBindingOrAssignmentPattern,
+    isDeclarationBindingElement,
+    isExpression,
+    isLiteralExpression,
+    isObjectBindingOrAssignmentPattern,
+} from "../utilitiesPublic";
+import { visitNode } from "../visitorPublic";
+import { isSimpleInlineableExpression } from "./utilities";
 
 interface FlattenContext {
     context: TransformationContext;

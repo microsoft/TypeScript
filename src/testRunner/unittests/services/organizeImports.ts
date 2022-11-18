@@ -6,6 +6,7 @@ import {
 } from "../virtualFileSystemWithWatch";
 import { createProjectService } from "../tsserver/helpers";
 import { newLineCharacter } from "./extract/helpers";
+import { applyChanges } from "../../../services/textChanges";
 
 describe("unittests:: services:: organizeImports", () => {
     describe("Sort imports", () => {
@@ -1025,7 +1026,7 @@ export * from "lib";
             assert.equal(changes.length, 1);
             assert.equal(changes[0].fileName, testPath);
 
-            const newText = ts.textChanges.applyChanges(testContent, changes[0].textChanges);
+            const newText = applyChanges(testContent, changes[0].textChanges);
             Harness.Baseline.runBaseline(baselinePath, [
                 "// ==ORIGINAL==",
                 testContent,

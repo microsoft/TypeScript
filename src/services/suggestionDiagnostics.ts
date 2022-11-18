@@ -1,64 +1,74 @@
 import {
     addRange,
+    some,
+} from "../compiler/core";
+import { Push } from "../compiler/corePublic";
+import { Diagnostics } from "../compiler/diagnosticInformationMap.generated";
+import {
+    isBinaryExpression,
+    isBlock,
+    isCallExpression,
+    isExportAssignment,
+    isIdentifier,
+    isPropertyAccessExpression,
+    isReturnStatement,
+    isStringLiteral,
+    isVariableDeclaration,
+    isVariableStatement,
+} from "../compiler/factory/nodeTests";
+import { fileExtensionIsOneOf } from "../compiler/path";
+import { getModeForUsageLocation } from "../compiler/program";
+import {
     AnyValidImportOrReExport,
     ArrowFunction,
     AssignmentDeclarationKind,
     Block,
     CallExpression,
     CancellationToken,
-    codefix,
-    compilerOptionsIndicateEsModules,
-    createDiagnosticForNode,
-    Diagnostics,
     DiagnosticWithLocation,
     Expression,
     ExpressionStatement,
     Extension,
-    fileExtensionIsOneOf,
-    forEachReturnStatement,
     FunctionDeclaration,
     FunctionExpression,
-    FunctionFlags,
     FunctionLikeDeclaration,
-    getAllowSyntheticDefaultImports,
-    getAssignmentDeclarationKind,
-    getFunctionFlags,
-    getModeForUsageLocation,
-    getResolvedModule,
-    hasInitializer,
-    hasPropertyAccessExpressionWithName,
     Identifier,
-    importFromModuleSpecifier,
-    isAsyncFunction,
-    isBinaryExpression,
-    isBlock,
-    isCallExpression,
-    isExportAssignment,
-    isFunctionLike,
-    isIdentifier,
-    isPropertyAccessExpression,
-    isRequireCall,
-    isReturnStatement,
-    isSourceFileJS,
-    isStringLiteral,
-    isVariableDeclaration,
-    isVariableStatement,
     MethodDeclaration,
     ModuleKind,
     Node,
     NodeFlags,
     Program,
-    programContainsEsModules,
     PropertyAccessExpression,
-    Push,
     ReturnStatement,
-    skipAlias,
-    some,
     SourceFile,
     SyntaxKind,
     TypeChecker,
     VariableStatement,
-} from "./_namespaces/ts";
+} from "../compiler/types";
+import {
+    createDiagnosticForNode,
+    forEachReturnStatement,
+    FunctionFlags,
+    getAllowSyntheticDefaultImports,
+    getAssignmentDeclarationKind,
+    getFunctionFlags,
+    getResolvedModule,
+    importFromModuleSpecifier,
+    isAsyncFunction,
+    isRequireCall,
+    isSourceFileJS,
+    skipAlias,
+} from "../compiler/utilities";
+import {
+    hasInitializer,
+    isFunctionLike,
+} from "../compiler/utilitiesPublic";
+import {
+    compilerOptionsIndicateEsModules,
+    hasPropertyAccessExpressionWithName,
+    parameterShouldGetTypeFromJSDoc,
+    programContainsEsModules,
+} from "./utilities";
 
 const visitedNestedConvertibleFunctions = new Map<string, true>();
 
@@ -115,7 +125,7 @@ export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Pr
                 }
             }
 
-            if (codefix.parameterShouldGetTypeFromJSDoc(node)) {
+            if (parameterShouldGetTypeFromJSDoc(node)) {
                 diags.push(createDiagnosticForNode(node.name || node, Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types));
             }
         }

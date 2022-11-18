@@ -1,11 +1,17 @@
 import {
+    addRange,
+    appendIfUnique,
+} from "../core";
+import {
+    EmitFlags,
+    EmitNode,
     HasDecorators,
     HasModifiers,
     Node,
-    setTextRangePosEnd,
     SyntaxKind,
     TextRange,
-} from "../_namespaces/ts";
+} from "../types";
+import { setTextRangePosEnd } from "../utilities";
 
 export function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T {
     return location ? setTextRangePosEnd(range, location.pos, location.end) : range;
@@ -49,4 +55,53 @@ export function canHaveDecorators(node: Node): node is HasDecorators {
         || kind === SyntaxKind.SetAccessor
         || kind === SyntaxKind.ClassExpression
         || kind === SyntaxKind.ClassDeclaration;
+}
+
+export function setOriginalNode<T extends Node>(node: T, original: Node | undefined): T {
+    node.original = original;
+    if (original) {
+        const emitNode = original.emitNode;
+        if (emitNode) node.emitNode = mergeEmitNode(emitNode, node.emitNode);
+    }
+    return node;
+}
+
+function mergeEmitNode(sourceEmitNode: EmitNode, destEmitNode: EmitNode | undefined) {
+    const {
+        flags,
+        leadingComments,
+        trailingComments,
+        commentRange,
+        sourceMapRange,
+        tokenSourceMapRanges,
+        constantValue,
+        helpers,
+        startsOnNewLine,
+        snippetElement,
+    } = sourceEmitNode;
+    if (!destEmitNode) destEmitNode = {} as EmitNode;
+    // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
+    if (leadingComments) destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
+    if (trailingComments) destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
+    if (flags) destEmitNode.flags = flags & ~EmitFlags.Immutable;
+    if (commentRange) destEmitNode.commentRange = commentRange;
+    if (sourceMapRange) destEmitNode.sourceMapRange = sourceMapRange;
+    if (tokenSourceMapRanges) destEmitNode.tokenSourceMapRanges = mergeTokenSourceMapRanges(tokenSourceMapRanges, destEmitNode.tokenSourceMapRanges!);
+    if (constantValue !== undefined) destEmitNode.constantValue = constantValue;
+    if (helpers) {
+        for (const helper of helpers) {
+            destEmitNode.helpers = appendIfUnique(destEmitNode.helpers, helper);
+        }
+    }
+    if (startsOnNewLine !== undefined) destEmitNode.startsOnNewLine = startsOnNewLine;
+    if (snippetElement !== undefined) destEmitNode.snippetElement = snippetElement;
+    return destEmitNode;
+}
+
+function mergeTokenSourceMapRanges(sourceRanges: (TextRange | undefined)[], destRanges: (TextRange | undefined)[]) {
+    if (!destRanges) destRanges = [];
+    for (const key in sourceRanges) {
+        destRanges[key] = sourceRanges[key];
+    }
+    return destRanges;
 }

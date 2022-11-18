@@ -1,117 +1,97 @@
 import {
+    find,
+    findIndex,
+    forEachRight,
+    isLineBreak,
+    isWhiteSpaceSingleLine,
+    last,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { isDecorator } from "../../compiler/factory/nodeTests";
+import { canHaveModifiers } from "../../compiler/factory/utilitiesPublic";
+import { forEachChild } from "../../compiler/parser";
+import {
     Block,
     CallExpression,
-    canHaveModifiers,
     CatchClause,
     CharacterCodes,
     ClassDeclaration,
-    CommentRange,
-    concatenate,
-    createTextChangeFromStartLength,
-    Debug,
     Declaration,
     Diagnostic,
-    EditorSettings,
-    find,
-    findAncestor,
-    findIndex,
-    findPrecedingToken,
-    forEachChild,
-    forEachRight,
-    FormatCodeSettings,
-    FormattingHost,
     FunctionDeclaration,
-    getEndLinePosition,
-    getLeadingCommentRangesOfNode,
-    getLineStartPositionForPosition,
-    getNameOfDeclaration,
-    getNewLineOrDefaultFromHost,
-    getNonDecoratorTokenPosOfNode,
-    getStartPositionOfLine,
-    getTokenAtPosition,
-    getTrailingCommentRanges,
-    hasDecorators,
     InterfaceDeclaration,
-    isComment,
-    isDecorator,
-    isJSDoc,
-    isLineBreak,
-    isModifier,
-    isNodeArray,
-    isStringOrRegularExpressionOrTemplateLiteral,
-    isToken,
-    isWhiteSpaceSingleLine,
     LanguageVariant,
-    last,
     LineAndCharacter,
     MethodDeclaration,
     ModuleDeclaration,
     Node,
     NodeArray,
+    SourceFile,
+    SourceFileLike,
+    SyntaxKind,
+    TextRange,
+    TypeReferenceNode,
+} from "../../compiler/types";
+import {
+    getEndLinePosition,
+    getNonDecoratorTokenPosOfNode,
+    getStartPositionOfLine,
+    hasDecorators,
     nodeIsMissing,
     nodeIsSynthesized,
-    rangeContainsPositionExclusive,
+} from "../../compiler/utilities";
+import {
+    getNameOfDeclaration,
+    isModifier,
+    isNodeArray,
+    isToken,
+} from "../../compiler/utilitiesPublic";
+import {
+    EditorSettings,
+    FormatCodeSettings,
+    FormatContext,
+    FormattingHost,
+    TextChange,
+    TextRangeWithKind,
+    TokenInfo,
+} from "../types";
+import {
+    createTextChangeFromStartLength,
+    findPrecedingToken,
+    getLineStartPositionForPosition,
+    getNewLineOrDefaultFromHost,
+    isComment,
+    isStringOrRegularExpressionOrTemplateLiteral,
     rangeContainsRange,
     rangeContainsStartEnd,
     rangeOverlapsWithStartEnd,
     repeatString,
-    SourceFile,
-    SourceFileLike,
     startEndContainsRange,
     startEndOverlapsWithStartEnd,
-    SyntaxKind,
-    TextChange,
-    TextRange,
-    TriviaSyntaxKind,
-    TypeReferenceNode,
-} from "../_namespaces/ts";
+} from "../utilities";
 import {
     FormattingContext,
     FormattingRequestKind,
+} from "./formattingContext";
+import {
     FormattingScanner,
     getFormattingScanner,
+} from "./formattingScanner";
+import {
     Rule,
     RuleAction,
     RuleFlags,
-    RulesMap,
-    SmartIndenter,
-} from "../_namespaces/ts.formatting";
-
-/** @internal */
-export interface FormatContext {
-    readonly options: FormatCodeSettings;
-    readonly getRules: RulesMap;
-    readonly host: FormattingHost;
-}
-
-/** @internal */
-export interface TextRangeWithKind<T extends SyntaxKind = SyntaxKind> extends TextRange {
-    kind: T;
-}
-
-/** @internal */
-export type TextRangeWithTriviaKind = TextRangeWithKind<TriviaSyntaxKind>;
-
-/** @internal */
-export interface TokenInfo {
-    leadingTrivia: TextRangeWithTriviaKind[] | undefined;
-    token: TextRangeWithKind;
-    trailingTrivia: TextRangeWithTriviaKind[] | undefined;
-}
-
-/** @internal */
-export function createTextRangeWithKind<T extends SyntaxKind>(pos: number, end: number, kind: T): TextRangeWithKind<T> {
-    const textRangeWithKind: TextRangeWithKind<T> = { pos, end, kind };
-    if (Debug.isDebugging) {
-        Object.defineProperty(textRangeWithKind, "__debugKind", {
-            get: () => Debug.formatSyntaxKind(kind),
-        });
-    }
-    return textRangeWithKind;
-}
+} from "./rule";
+import { getRulesMap } from "./rulesMap";
+import { SmartIndenter } from "./smartIndenter";
 
 const enum Constants {
     Unknown = -1
+}
+
+/** @internal */
+export function getFormatContext(options: FormatCodeSettings, host: FormattingHost): FormatContext {
+    return { options, getRules: getRulesMap(), host };
 }
 
 /*
@@ -489,7 +469,6 @@ function formatSpanWorker(
     requestKind: FormattingRequestKind,
     rangeContainsError: (r: TextRange) => boolean,
     sourceFile: SourceFileLike): TextChange[] {
-
     // formatting context is used by rules provider
     const formattingContext = new FormattingContext(sourceFile, requestKind, options);
     let previousRangeTriviaEnd: number;
@@ -1376,48 +1355,6 @@ function formatSpanWorker(
 }
 
 const enum LineAction { None, LineAdded, LineRemoved }
-
-/**
- *
- * @internal
- */
-export function getRangeOfEnclosingComment(
-    sourceFile: SourceFile,
-    position: number,
-    precedingToken?: Node | null,
-    tokenAtPosition = getTokenAtPosition(sourceFile, position),
-): CommentRange | undefined {
-    const jsdoc = findAncestor(tokenAtPosition, isJSDoc);
-    if (jsdoc) tokenAtPosition = jsdoc.parent;
-    const tokenStart = tokenAtPosition.getStart(sourceFile);
-    if (tokenStart <= position && position < tokenAtPosition.getEnd()) {
-        return undefined;
-    }
-
-    // eslint-disable-next-line no-null/no-null
-    precedingToken = precedingToken === null ? undefined : precedingToken === undefined ? findPrecedingToken(position, sourceFile) : precedingToken;
-
-    // Between two consecutive tokens, all comments are either trailing on the former
-    // or leading on the latter (and none are in both lists).
-    const trailingRangesOfPreviousToken = precedingToken && getTrailingCommentRanges(sourceFile.text, precedingToken.end);
-    const leadingCommentRangesOfNextToken = getLeadingCommentRangesOfNode(tokenAtPosition, sourceFile);
-    const commentRanges = concatenate(trailingRangesOfPreviousToken, leadingCommentRangesOfNextToken);
-    return commentRanges && find(commentRanges, range => rangeContainsPositionExclusive(range, position) ||
-        // The end marker of a single-line comment does not include the newline character.
-        // With caret at `^`, in the following case, we are inside a comment (^ denotes the cursor position):
-        //
-        //    // asdf   ^\n
-        //
-        // But for closed multi-line comments, we don't want to be inside the comment in the following case:
-        //
-        //    /* asdf */^
-        //
-        // However, unterminated multi-line comments *do* contain their end.
-        //
-        // Internally, we represent the end of the comment at the newline and closing '/', respectively.
-        //
-        position === range.end && (range.kind === SyntaxKind.SingleLineCommentTrivia || position === sourceFile.getFullWidth()));
-}
 
 function getOpenTokenForList(node: Node, list: readonly Node[]) {
     switch (node.kind) {

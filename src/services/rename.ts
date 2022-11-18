@@ -1,57 +1,74 @@
 import {
     compareStringsCaseSensitive,
-    Comparison,
-    createTextSpan,
-    DiagnosticMessage,
-    Diagnostics,
     endsWith,
     every,
-    Extension,
-    fileExtensionIs,
     find,
-    getAdjustedRenameLocation,
-    getContextualTypeFromParentOrAncestorTypeNode,
-    getLocaleSpecificMessage,
-    getPathComponents,
-    getTextOfIdentifierOrLiteral,
-    getTextOfNode,
-    getTouchingPropertyName,
-    ImportSpecifier,
-    isExternalModuleNameRelative,
+    some,
+    tryRemoveSuffix,
+} from "../compiler/core";
+import { Comparison } from "../compiler/corePublic";
+import { Diagnostics } from "../compiler/diagnosticInformationMap.generated";
+import {
     isIdentifier,
-    isImportOrExportSpecifierName,
     isImportSpecifier,
-    isInsideNodeModules,
-    isLabelName,
-    isLiteralNameOfPropertyDeclarationOrIndexAccess,
     isSourceFile,
-    isStringLiteralLike,
-    isStringOrNumericLiteralLike,
+} from "../compiler/factory/nodeTests";
+import {
+    fileExtensionIs,
+    getPathComponents,
+} from "../compiler/path";
+import {
+    DiagnosticMessage,
+    Extension,
+    ImportSpecifier,
     Node,
     NumericLiteral,
     Path,
     Program,
+    SourceFile,
+    StringLiteralLike,
+    Symbol,
+    SymbolFlags,
+    SyntaxKind,
+    TypeChecker,
+    TypeFlags,
+    UnionType,
+    UserPreferences,
+} from "../compiler/types";
+import {
+    getLocaleSpecificMessage,
+    getTextOfIdentifierOrLiteral,
+    getTextOfNode,
+    isStringOrNumericLiteralLike,
     removeFileExtension,
+    stripQuotes,
+    tryGetImportFromModuleSpecifier,
+} from "../compiler/utilities";
+import {
+    createTextSpan,
+    isExternalModuleNameRelative,
+    isStringLiteralLike,
+} from "../compiler/utilitiesPublic";
+import {
+    getSymbolKind,
+    getSymbolModifiers,
+} from "./symbolDisplay";
+import {
     RenameInfo,
     RenameInfoFailure,
     RenameInfoSuccess,
     ScriptElementKind,
     ScriptElementKindModifier,
-    some,
-    SourceFile,
-    StringLiteralLike,
-    stripQuotes,
-    Symbol,
-    SymbolDisplay,
-    SymbolFlags,
-    SyntaxKind,
-    tryGetImportFromModuleSpecifier,
-    tryRemoveSuffix,
-    TypeChecker,
-    TypeFlags,
-    UnionType,
-    UserPreferences,
-} from "./_namespaces/ts";
+} from "./types";
+import {
+    getAdjustedRenameLocation,
+    getContextualTypeFromParentOrAncestorTypeNode,
+    getTouchingPropertyName,
+    isImportOrExportSpecifierName,
+    isInsideNodeModules,
+    isLabelName,
+    isLiteralNameOfPropertyDeclarationOrIndexAccess,
+} from "./utilities";
 
 /** @internal */
 export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number, preferences: UserPreferences): RenameInfo {
@@ -111,13 +128,13 @@ function getRenameInfoForNode(
         return getRenameInfoError(wouldRenameNodeModules);
     }
 
-    const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
+    const kind = getSymbolKind(typeChecker, symbol, node);
     const specifierName = (isImportOrExportSpecifierName(node) || isStringOrNumericLiteralLike(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
         ? stripQuotes(getTextOfIdentifierOrLiteral(node))
         : undefined;
     const displayName = specifierName || typeChecker.symbolToString(symbol);
     const fullDisplayName = specifierName || typeChecker.getFullyQualifiedName(symbol);
-    return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(typeChecker,symbol), node, sourceFile);
+    return getRenameInfoSuccess(displayName, fullDisplayName, kind, getSymbolModifiers(typeChecker,symbol), node, sourceFile);
 }
 
 function isDefinedInLibraryFile(program: Program, declaration: Node) {

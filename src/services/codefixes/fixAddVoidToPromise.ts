@@ -1,35 +1,39 @@
+import { some } from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
 import {
-    CodeFixAllContext,
-    Diagnostics,
-    factory,
-    getJSDocTypeTag,
-    getTokenAtPosition,
-    idText,
     isCallExpression,
     isIdentifier,
-    isInJSFile,
     isNewExpression,
     isParameter,
     isParenthesizedExpression,
     isParenthesizedTypeNode,
     isTypeReferenceNode,
     isUnionTypeNode,
+} from "../../compiler/factory/nodeTests";
+import { skipTrivia } from "../../compiler/scanner";
+import {
     NewExpression,
     ParameterDeclaration,
     Program,
-    skipTrivia,
-    some,
     SourceFile,
     SyntaxKind,
-    textChanges,
     TextSpan,
     TypeFlags,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { isInJSFile } from "../../compiler/utilities";
+import {
+    getJSDocTypeTag,
+    idText,
+} from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { CodeFixAllContext } from "../types";
+import { getTokenAtPosition } from "../utilities";
 
 const fixName = "addVoidToPromise";
 const fixId = "addVoidToPromise";
@@ -41,7 +45,7 @@ registerCodeFix({
     errorCodes,
     fixIds: [fixId],
     getCodeActions(context) {
-        const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span, context.program));
+        const changes = ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span, context.program));
         if (changes.length > 0) {
             return [createCodeFixAction(fixName, changes, Diagnostics.Add_void_to_Promise_resolved_without_a_value, fixId, Diagnostics.Add_void_to_all_Promises_resolved_without_a_value)];
         }
@@ -51,7 +55,7 @@ registerCodeFix({
     }
 });
 
-function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, span: TextSpan, program: Program, seen?: Set<ParameterDeclaration>) {
+function makeChange(changes: ChangeTracker, sourceFile: SourceFile, span: TextSpan, program: Program, seen?: Set<ParameterDeclaration>) {
     const node = getTokenAtPosition(sourceFile, span.start);
     if (!isIdentifier(node) || !isCallExpression(node.parent) || node.parent.expression !== node || node.parent.arguments.length !== 0) return;
 

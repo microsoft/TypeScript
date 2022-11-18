@@ -1,20 +1,20 @@
+import { cast } from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import { isCallExpression } from "../../compiler/factory/nodeTests";
 import {
-    cast,
-    Diagnostics,
-    factory,
-    getTokenAtPosition,
-    isCallExpression,
     Node,
     SourceFile,
-    textChanges,
     TextSpan,
-    textSpanEnd,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { textSpanEnd } from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
 
 const fixId = "addMissingNewOperator";
 const errorCodes = [Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new.code];
@@ -22,7 +22,7 @@ registerCodeFix({
     errorCodes,
     getCodeActions(context) {
         const { sourceFile, span } = context;
-        const changes = textChanges.ChangeTracker.with(context, t => addMissingNewOperator(t, sourceFile, span));
+        const changes = ChangeTracker.with(context, t => addMissingNewOperator(t, sourceFile, span));
         return [createCodeFixAction(fixId, changes, Diagnostics.Add_missing_new_operator_to_call, fixId, Diagnostics.Add_missing_new_operator_to_all_calls)];
     },
     fixIds: [fixId],
@@ -30,7 +30,7 @@ registerCodeFix({
         addMissingNewOperator(changes, context.sourceFile, diag)),
 });
 
-function addMissingNewOperator(changes: textChanges.ChangeTracker, sourceFile: SourceFile, span: TextSpan): void {
+function addMissingNewOperator(changes: ChangeTracker, sourceFile: SourceFile, span: TextSpan): void {
     const call = cast(findAncestorMatchingSpan(sourceFile, span), isCallExpression);
     const newExpression = factory.createNewExpression(call.expression, call.typeArguments, call.arguments);
 

@@ -1,15 +1,13 @@
-import {
-    Diagnostics,
-    factory,
-    textChanges,
-    TsConfigSourceFile,
-} from "../_namespaces/ts";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import { TsConfigSourceFile } from "../../compiler/types";
 import {
     codeFixAll,
     createCodeFixActionWithoutFixAll,
     registerCodeFix,
-    setJsonCompilerOptionValue,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { setJsonCompilerOptionValue } from "./helpers";
 
 const fixID = "fixEnableJsxFlag";
 const errorCodes = [Diagnostics.Cannot_use_JSX_unless_the_jsx_flag_is_provided.code];
@@ -21,7 +19,7 @@ registerCodeFix({
             return undefined;
         }
 
-        const changes = textChanges.ChangeTracker.with(context, changeTracker =>
+        const changes = ChangeTracker.with(context, changeTracker =>
             doChange(changeTracker, configFile)
         );
         return [
@@ -40,6 +38,6 @@ registerCodeFix({
         })
 });
 
-function doChange(changeTracker: textChanges.ChangeTracker, configFile: TsConfigSourceFile) {
+function doChange(changeTracker: ChangeTracker, configFile: TsConfigSourceFile) {
     setJsonCompilerOptionValue(changeTracker, configFile, "jsx", factory.createStringLiteral("react"));
 }

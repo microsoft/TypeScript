@@ -1,19 +1,21 @@
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
 import {
-    Diagnostics,
-    factory,
-    getTokenAtPosition,
     isArrayLiteralExpression,
     isObjectLiteralExpression,
+} from "../../compiler/factory/nodeTests";
+import {
     Node,
     SourceFile,
     SyntaxKind,
-    textChanges,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
 
 const fixId = "fixExpectedComma";
 const expectedErrorCode = Diagnostics._0_expected.code;
@@ -26,7 +28,7 @@ registerCodeFix({
         const info = getInfo(sourceFile, context.span.start, context.errorCode);
         if (!info) return undefined;
 
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info));
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, info));
 
         return [createCodeFixAction(
             fixId,
@@ -54,7 +56,7 @@ function getInfo(sourceFile: SourceFile, pos: number, _: number): Info | undefin
              isArrayLiteralExpression(node.parent))) ? { node } : undefined;
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { node }: Info): void {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, { node }: Info): void {
     const newNode = factory.createToken(SyntaxKind.CommaToken);
     changes.replaceNode(sourceFile, node, newNode);
 }

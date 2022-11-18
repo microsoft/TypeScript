@@ -1,28 +1,24 @@
-import {
-    Debug,
-    every,
-    FormatCodeSettings,
-    FormattingHost,
-    SyntaxKind,
-} from "../_namespaces/ts";
+import { every } from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { SyntaxKind } from "../../compiler/types";
+import { FormattingContext } from "./formattingContext";
 import {
     anyContext,
-    FormatContext,
-    FormattingContext,
-    getAllRules,
     Rule,
     RuleAction,
+} from "./rule";
+import {
+    getAllRules,
     RuleSpec,
-} from "../_namespaces/ts.formatting";
+} from "./rules";
 
 /** @internal */
-export function getFormatContext(options: FormatCodeSettings, host: FormattingHost): FormatContext {
-    return { options, getRules: getRulesMap(), host };
-}
+export type RulesMap = (context: FormattingContext) => readonly Rule[] | undefined;
 
 let rulesMapCache: RulesMap | undefined;
 
-function getRulesMap(): RulesMap {
+/** @internal */
+export function getRulesMap(): RulesMap {
     if (rulesMapCache === undefined) {
         rulesMapCache = createRulesMap(getAllRules());
     }
@@ -50,8 +46,6 @@ function getRuleActionExclusion(ruleAction: RuleAction): RuleAction {
     return mask;
 }
 
-/** @internal */
-export type RulesMap = (context: FormattingContext) => readonly Rule[] | undefined;
 function createRulesMap(rules: readonly RuleSpec[]): RulesMap {
     const map = buildMap(rules);
     return context => {

@@ -1,23 +1,25 @@
-import * as ts from "./_namespaces/ts";
+import { OutputFile } from "../compiler/builderStatePublic";
+import { MapLike } from "../compiler/corePublic";
 import {
     CompilerOptionsValue,
-    EndOfLineState,
     FileExtensionInfo,
-    HighlightSpanKind,
-    MapLike,
-    OutliningSpanKind,
-    OutputFile,
     PluginImport,
     ProjectReference,
+    ScriptKind,
+    TypeAcquisition,
+} from "../compiler/types";
+import {
+    EndOfLineState,
+    HighlightSpanKind,
+    OutliningSpanKind,
     RenameLocation,
     ScriptElementKind,
-    ScriptKind,
     TextChange,
     TextInsertion,
     TodoComment,
     TodoCommentDescriptor,
-    TypeAcquisition,
-} from "./_namespaces/ts";
+} from "../services/types";
+import * as ts from "./_namespaces/ts";
 
 /**
  * Declaration module describing the TypeScript Server protocol

@@ -1,16 +1,18 @@
 import {
-    CharacterCodes,
     compareBooleans,
     compareValues,
-    Comparison,
-    createTextSpan,
-    isUnicodeIdentifierStart,
     last,
     min,
-    ScriptTarget,
     startsWith,
+} from "../compiler/core";
+import { Comparison } from "../compiler/corePublic";
+import { isUnicodeIdentifierStart } from "../compiler/scanner";
+import {
+    CharacterCodes,
+    ScriptTarget,
     TextSpan,
-} from "./_namespaces/ts";
+} from "../compiler/types";
+import { createTextSpan } from "../compiler/utilitiesPublic";
 
 // Note(cyrusn): this enum is ordered from strongest match type to weakest match type.
 /** @internal */

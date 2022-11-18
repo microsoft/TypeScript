@@ -1,56 +1,66 @@
+import { getOptionFromName } from "../compiler/commandLineParser";
 import {
-    combinePaths,
     createGetCanonicalFileName,
-    createModuleSpecifierResolutionHost,
-    createRange,
-    Debug,
     emptyArray,
     endsWith,
-    ensurePathIsNonModuleName,
-    Expression,
-    factory,
-    FileTextChanges,
     find,
     forEach,
-    formatting,
     GetCanonicalFileName,
-    getDirectoryPath,
-    getFileMatcherPatterns,
-    getModeForUsageLocation,
-    getOptionFromName,
-    getRegexFromPattern,
-    getRelativePathFromDirectory,
-    getRelativePathFromFile,
-    getTsConfigObjectLiteralExpression,
-    hostUsesCaseSensitiveFileNames,
-    isAmbientModule,
+    last,
+    mapDefined,
+} from "../compiler/core";
+import { Debug } from "../compiler/debug";
+import { factory } from "../compiler/factory/nodeFactory";
+import {
     isArrayLiteralExpression,
     isObjectLiteralExpression,
     isPropertyAssignment,
     isSourceFile,
     isStringLiteral,
-    LanguageServiceHost,
-    last,
-    mapDefined,
-    ModuleResolutionHost,
-    moduleSpecifiers,
+} from "../compiler/factory/nodeTests";
+import { resolveModuleName } from "../compiler/moduleNameResolver";
+import { updateModuleSpecifier } from "../compiler/moduleSpecifiers";
+import {
+    combinePaths,
+    ensurePathIsNonModuleName,
+    getDirectoryPath,
+    getRelativePathFromDirectory,
+    getRelativePathFromFile,
     normalizePath,
-    Path,
     pathIsRelative,
+} from "../compiler/path";
+import { getModeForUsageLocation } from "../compiler/program";
+import {
+    Expression,
+    ModuleResolutionHost,
+    Path,
     Program,
     PropertyAssignment,
     ResolvedModuleWithFailedLookupLocations,
-    resolveModuleName,
     SourceFile,
     SourceFileLike,
-    SourceMapper,
     StringLiteralLike,
     Symbol,
-    textChanges,
     TextRange,
-    tryRemoveDirectoryPrefix,
     UserPreferences,
-} from "./_namespaces/ts";
+} from "../compiler/types";
+import {
+    createRange,
+    getFileMatcherPatterns,
+    getRegexFromPattern,
+    getTsConfigObjectLiteralExpression,
+    hostUsesCaseSensitiveFileNames,
+    isAmbientModule,
+    tryRemoveDirectoryPrefix,
+} from "../compiler/utilities";
+import { SourceMapper } from "./sourcemaps";
+import { ChangeTracker } from "./textChanges";
+import {
+    FileTextChanges,
+    FormatContext,
+    LanguageServiceHost,
+} from "./types";
+import { createModuleSpecifierResolutionHost } from "./utilities";
 
 /** @internal */
 export function getEditsForFileRename(
@@ -58,7 +68,7 @@ export function getEditsForFileRename(
     oldFileOrDirPath: string,
     newFileOrDirPath: string,
     host: LanguageServiceHost,
-    formatContext: formatting.FormatContext,
+    formatContext: FormatContext,
     preferences: UserPreferences,
     sourceMapper: SourceMapper,
 ): readonly FileTextChanges[] {
@@ -66,7 +76,7 @@ export function getEditsForFileRename(
     const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
     const oldToNew = getPathUpdater(oldFileOrDirPath, newFileOrDirPath, getCanonicalFileName, sourceMapper);
     const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath, getCanonicalFileName, sourceMapper);
-    return textChanges.ChangeTracker.with({ host, formatContext, preferences }, changeTracker => {
+    return ChangeTracker.with({ host, formatContext, preferences }, changeTracker => {
         updateTsconfigFiles(program, changeTracker, oldToNew, oldFileOrDirPath, newFileOrDirPath, host.getCurrentDirectory(), useCaseSensitiveFileNames);
         updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName);
     });
@@ -103,7 +113,7 @@ function makeCorrespondingRelativeChange(a0: string, b0: string, a1: string, get
     return combinePathsSafe(getDirectoryPath(a1), rel);
 }
 
-function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, oldToNew: PathUpdater, oldFileOrDirPath: string, newFileOrDirPath: string, currentDirectory: string, useCaseSensitiveFileNames: boolean): void {
+function updateTsconfigFiles(program: Program, changeTracker: ChangeTracker, oldToNew: PathUpdater, oldFileOrDirPath: string, newFileOrDirPath: string, currentDirectory: string, useCaseSensitiveFileNames: boolean): void {
     const { configFile } = program.getCompilerOptions();
     if (!configFile) return;
     const configDir = getDirectoryPath(configFile.fileName);
@@ -175,7 +185,7 @@ function updateTsconfigFiles(program: Program, changeTracker: textChanges.Change
 
 function updateImports(
     program: Program,
-    changeTracker: textChanges.ChangeTracker,
+    changeTracker: ChangeTracker,
     oldToNew: PathUpdater,
     newToOld: PathUpdater,
     host: LanguageServiceHost,
@@ -214,7 +224,7 @@ function updateImports(
 
                 // Need an update if the imported file moved, or the importing file moved and was using a relative path.
                 return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
-                    ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), sourceFile, getCanonicalFileName(newImportFromPath) as Path, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
+                    ? updateModuleSpecifier(program.getCompilerOptions(), sourceFile, getCanonicalFileName(newImportFromPath) as Path, toImport.newFileName, createModuleSpecifierResolutionHost(program, host), importLiteral.text)
                     : undefined;
             });
     }
@@ -292,7 +302,7 @@ function getSourceFileToImportFromResolved(importLiteral: StringLiteralLike, res
     }
 }
 
-function updateImportsWorker(sourceFile: SourceFile, changeTracker: textChanges.ChangeTracker, updateRef: (refText: string) => string | undefined, updateImport: (importLiteral: StringLiteralLike) => string | undefined) {
+function updateImportsWorker(sourceFile: SourceFile, changeTracker: ChangeTracker, updateRef: (refText: string) => string | undefined, updateImport: (importLiteral: StringLiteralLike) => string | undefined) {
     for (const ref of sourceFile.referencedFiles || emptyArray) { // TODO: GH#26162
         const updated = updateRef(ref.fileName);
         if (updated !== undefined && updated !== sourceFile.text.slice(ref.pos, ref.end)) changeTracker.replaceRangeWithText(sourceFile, ref, updated);

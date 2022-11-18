@@ -1,90 +1,63 @@
+import { getNodeId } from "../compiler/checkerUtilities";
 import {
-    AccessExpression,
     append,
-    ArrowFunction,
-    AsExpression,
-    CallExpression,
-    CallHierarchyIncomingCall,
-    CallHierarchyItem,
-    CallHierarchyOutgoingCall,
-    CancellationToken,
-    canHaveModifiers,
-    ClassDeclaration,
-    ClassExpression,
-    ClassLikeDeclaration,
-    ClassStaticBlockDeclaration,
     compareStringsCaseSensitive,
-    createPrinter,
-    createTextRangeFromNode,
-    createTextSpanFromBounds,
-    createTextSpanFromRange,
-    Debug,
-    Decorator,
-    ElementAccessExpression,
-    EmitHint,
     filter,
     find,
-    FindAllReferences,
-    findAncestor,
     forEach,
-    forEachChild,
-    FunctionDeclaration,
-    FunctionExpression,
-    FunctionLikeDeclaration,
-    GetAccessorDeclaration,
-    getAssignedName,
-    getClassExtendsHeritageElement,
-    getCombinedNodeFlags,
-    getFirstConstructorWithBody,
-    getNameOfDeclaration,
-    getNodeId,
-    getNodeKind,
-    getNodeModifiers,
     group,
-    hasSyntacticModifier,
-    Identifier,
-    idText,
     indicesOf,
-    isAccessExpression,
-    isArgumentExpressionOfElementAccess,
     isArray,
+    map,
+} from "../compiler/core";
+import { Debug } from "../compiler/debug";
+import { createPrinter } from "../compiler/emitter";
+import {
     isArrowFunction,
-    isCallOrNewExpressionTarget,
     isClassDeclaration,
     isClassExpression,
-    isClassLike,
     isClassStaticBlockDeclaration,
     isComputedPropertyName,
     isConstructorDeclaration,
-    isDeclarationName,
-    isDecoratorTarget,
     isFunctionDeclaration,
     isFunctionExpression,
-    isFunctionLikeDeclaration,
     isGetAccessorDeclaration,
     isIdentifier,
-    isJsxOpeningLikeElement,
-    isJsxOpeningLikeElementTagName,
     isMethodDeclaration,
     isMethodSignature,
     isModuleBlock,
     isModuleDeclaration,
-    isNamedDeclaration,
-    isPartOfTypeNode,
     isPropertyDeclaration,
-    isRightSideOfPropertyAccess,
     isSetAccessorDeclaration,
     isSourceFile,
-    isStringOrNumericLiteralLike,
     isTaggedTemplateExpression,
-    isTaggedTemplateTag,
     isVariableDeclaration,
+} from "../compiler/factory/nodeTests";
+import { canHaveModifiers } from "../compiler/factory/utilitiesPublic";
+import { forEachChild } from "../compiler/parser";
+import { skipTrivia } from "../compiler/scanner";
+import {
+    AccessExpression,
+    ArrowFunction,
+    AsExpression,
+    CallExpression,
+    CancellationToken,
+    ClassDeclaration,
+    ClassExpression,
+    ClassLikeDeclaration,
+    ClassStaticBlockDeclaration,
+    Decorator,
+    ElementAccessExpression,
+    EmitHint,
+    FunctionDeclaration,
+    FunctionExpression,
+    FunctionLikeDeclaration,
+    GetAccessorDeclaration,
+    Identifier,
     JsxOpeningLikeElement,
-    map,
     MethodDeclaration,
     ModifierFlags,
     ModuleDeclaration,
-    moveRangePastModifiers,
     NewExpression,
     Node,
     NodeFlags,
@@ -93,7 +66,6 @@ import {
     PropertyAccessExpression,
     SatisfiesExpression,
     SetAccessorDeclaration,
-    skipTrivia,
     SourceFile,
     SymbolFlags,
     SyntaxKind,
@@ -102,9 +74,54 @@ import {
     TextSpan,
     TypeAssertion,
     TypeChecker,
-    usingSingleLineStringWriter,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "../compiler/types";
+import {
+    getClassExtendsHeritageElement,
+    getFirstConstructorWithBody,
+    hasSyntacticModifier,
+    isAccessExpression,
+    isDeclarationName,
+    isPartOfTypeNode,
+    isStringOrNumericLiteralLike,
+    moveRangePastModifiers,
+    usingSingleLineStringWriter,
+} from "../compiler/utilities";
+import {
+    createTextSpanFromBounds,
+    findAncestor,
+    getAssignedName,
+    getCombinedNodeFlags,
+    getNameOfDeclaration,
+    idText,
+    isClassLike,
+    isFunctionLikeDeclaration,
+    isJsxOpeningLikeElement,
+    isNamedDeclaration,
+} from "../compiler/utilitiesPublic";
+import {
+    findReferenceOrRenameEntries,
+    FindReferencesUse,
+} from "./findAllReferences";
+import {
+    CallHierarchyIncomingCall,
+    CallHierarchyItem,
+    CallHierarchyOutgoingCall,
+    Entry,
+    EntryKind,
+} from "./types";
+import {
+    createTextRangeFromNode,
+    createTextSpanFromRange,
+    getNodeKind,
+    getNodeModifiers,
+    isArgumentExpressionOfElementAccess,
+    isCallOrNewExpressionTarget,
+    isDecoratorTarget,
+    isJsxOpeningLikeElementTagName,
+    isRightSideOfPropertyAccess,
+    isTaggedTemplateTag,
+} from "./utilities";
 
 /** @internal */
 export type NamedExpression =
@@ -429,8 +446,8 @@ interface CallSite {
     range: TextRange;
 }
 
-function convertEntryToCallSite(entry: FindAllReferences.Entry): CallSite | undefined {
-    if (entry.kind === FindAllReferences.EntryKind.Node) {
+function convertEntryToCallSite(entry: Entry): CallSite | undefined {
+    if (entry.kind === EntryKind.Node) {
         const { node } = entry;
         if (isCallOrNewExpressionTarget(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
             || isTaggedTemplateTag(node, /*includeElementAccess*/ true, /*skipPastOuterExpressions*/ true)
@@ -468,7 +485,7 @@ export function getIncomingCalls(program: Program, declaration: CallHierarchyDec
         return [];
     }
     const location = getCallHierarchyDeclarationReferenceNode(declaration);
-    const calls = filter(FindAllReferences.findReferenceOrRenameEntries(program, cancellationToken, program.getSourceFiles(), location, /*position*/ 0, { use: FindAllReferences.FindReferencesUse.References }, convertEntryToCallSite), isDefined);
+    const calls = filter(findReferenceOrRenameEntries(program, cancellationToken, program.getSourceFiles(), location, /*position*/ 0, { use: FindReferencesUse.References }, convertEntryToCallSite), isDefined);
     return calls ? group(calls, getCallSiteGroupKey, entries => convertCallSiteGroupToIncomingCall(program, entries)) : [];
 }
 

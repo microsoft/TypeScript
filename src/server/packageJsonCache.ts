@@ -1,15 +1,19 @@
+import { Debug } from "../compiler/debug";
 import {
     combinePaths,
-    createPackageJsonInfo,
-    Debug,
     forEachAncestorDirectory,
     getDirectoryPath,
+} from "../compiler/path";
+import {
     Path,
-    ProjectPackageJsonInfo,
     Ternary,
+} from "../compiler/types";
+import { ProjectPackageJsonInfo } from "../services/types";
+import {
+    createPackageJsonInfo,
     tryFileExists,
-} from "./_namespaces/ts";
-import { ProjectService } from "./_namespaces/ts.server";
+} from "../services/utilities";
+import { ProjectService } from "./editorServices";
 
 /** @internal */
 export interface PackageJsonCache {

@@ -1,13 +1,15 @@
+import { noop } from "./core";
+import { Debug } from "./debug";
 import {
-    Debug,
-    noop,
     Performance,
     PerformanceHooks,
-    sys,
-    System,
     timestamp,
     tryGetNativePerformanceHooks,
-} from "./_namespaces/ts";
+} from "./performanceCore";
+import {
+    sys,
+    System,
+} from "./sys";
 
 /** Performance measurements for the compiler. */
 

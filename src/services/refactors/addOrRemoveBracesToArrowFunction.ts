@@ -1,38 +1,48 @@
 import {
-    ApplicableRefactorInfo,
-    ArrowFunction,
-    ConciseBody,
-    copyLeadingComments,
-    copyTrailingAsLeadingComments,
-    copyTrailingComments,
-    Debug,
-    Diagnostics,
     emptyArray,
-    Expression,
-    factory,
     first,
-    getContainingFunction,
-    getLocaleSpecificMessage,
-    getTokenAtPosition,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isArrowFunction,
     isBlock,
-    isExpression,
     isReturnStatement,
-    needsParentheses,
-    rangeContainsRange,
-    RefactorContext,
-    RefactorEditInfo,
+} from "../../compiler/factory/nodeTests";
+import {
+    ArrowFunction,
+    ConciseBody,
+    Expression,
     ReturnStatement,
     SourceFile,
     SyntaxKind,
-    textChanges,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    getContainingFunction,
+    getLocaleSpecificMessage,
+} from "../../compiler/utilities";
+import { isExpression } from "../../compiler/utilitiesPublic";
+import { registerRefactor } from "../refactorProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    ApplicableRefactorInfo,
+    RefactorContext,
+    RefactorEditInfo,
+    RefactorErrorInfo,
+} from "../types";
+import {
+    copyLeadingComments,
+    copyTrailingAsLeadingComments,
+    copyTrailingComments,
+    getTokenAtPosition,
+    needsParentheses,
+    rangeContainsRange,
+} from "../utilities";
 import {
     isRefactorErrorInfo,
-    RefactorErrorInfo,
     refactorKindBeginsWith,
-    registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "./helpers";
 
 const refactorName = "Add or remove braces in an arrow function";
 const refactorDescription = Diagnostics.Add_or_remove_braces_in_an_arrow_function.message;
@@ -114,7 +124,7 @@ function getRefactorEditsToRemoveFunctionBraces(context: RefactorContext, action
         Debug.fail("invalid action");
     }
 
-    const edits = textChanges.ChangeTracker.with(context, t => {
+    const edits = ChangeTracker.with(context, t => {
         t.replaceNode(file, func.body, body);
     });
 

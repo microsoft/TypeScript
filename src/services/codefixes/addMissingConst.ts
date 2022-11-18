@@ -1,28 +1,34 @@
 import {
-    Diagnostics,
     every,
-    Expression,
-    findAncestor,
-    getTokenAtPosition,
+    tryAddToSet,
+} from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import {
     isArrayLiteralExpression,
-    isAssignmentExpression,
     isBinaryExpression,
     isExpressionStatement,
-    isForInOrOfStatement,
     isIdentifier,
+} from "../../compiler/factory/nodeTests";
+import {
+    Expression,
     Node,
     Program,
     SourceFile,
     SyntaxKind,
-    textChanges,
-    tryAddToSet,
     TypeChecker,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { isAssignmentExpression } from "../../compiler/utilities";
+import {
+    findAncestor,
+    isForInOrOfStatement,
+} from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
 
 const fixId = "addMissingConst";
 const errorCodes = [
@@ -33,7 +39,7 @@ const errorCodes = [
 registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToAddMissingConst(context) {
-        const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start, context.program));
+        const changes = ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start, context.program));
         if (changes.length > 0) {
             return [createCodeFixAction(fixId, changes, Diagnostics.Add_const_to_unresolved_variable, fixId, Diagnostics.Add_const_to_all_unresolved_variables)];
         }
@@ -45,7 +51,7 @@ registerCodeFix({
     },
 });
 
-function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, program: Program, fixedNodes?: Set<Node>) {
+function makeChange(changeTracker: ChangeTracker, sourceFile: SourceFile, pos: number, program: Program, fixedNodes?: Set<Node>) {
     const token = getTokenAtPosition(sourceFile, pos);
     const forInitializer = findAncestor(token, node =>
         isForInOrOfStatement(node.parent) ? node.parent.initializer === node :
@@ -81,7 +87,7 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
     }
 }
 
-function applyChange(changeTracker: textChanges.ChangeTracker, initializer: Node, sourceFile: SourceFile, fixedNodes?: Set<Node>) {
+function applyChange(changeTracker: ChangeTracker, initializer: Node, sourceFile: SourceFile, fixedNodes?: Set<Node>) {
     if (!fixedNodes || tryAddToSet(fixedNodes, initializer)) {
         changeTracker.insertModifierBefore(sourceFile, SyntaxKind.ConstKeyword, initializer);
     }

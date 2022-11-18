@@ -1,35 +1,43 @@
+import { readConfigFile } from "../compiler/commandLineParser";
 import {
-    CharacterCodes,
-    combinePaths,
     compareStringsCaseSensitive,
-    CompilerOptions,
-    Debug,
     deduplicate,
     equateStringsCaseSensitive,
-    Extension,
-    fileExtensionIs,
     flatMap,
     forEach,
-    getBaseFileName,
-    getDirectoryPath,
     getEntries,
-    getNormalizedAbsolutePath,
     getOwnKeys,
-    getPathComponents,
     getProperty,
-    hasJSFileExtension,
     mapDefined,
-    MapLike,
-    normalizePath,
-    Path,
-    readConfigFile,
-    removeFileExtension,
     removeMinAndVersionNumbers,
     some,
-    TypeAcquisition,
-    Version,
+} from "../compiler/core";
+import {
+    MapLike,
     versionMajorMinor,
-} from "./_namespaces/ts";
+} from "../compiler/corePublic";
+import { Debug } from "../compiler/debug";
+import {
+    combinePaths,
+    fileExtensionIs,
+    getBaseFileName,
+    getDirectoryPath,
+    getNormalizedAbsolutePath,
+    getPathComponents,
+    normalizePath,
+} from "../compiler/path";
+import { Version } from "../compiler/semver";
+import {
+    CharacterCodes,
+    CompilerOptions,
+    Extension,
+    Path,
+    TypeAcquisition,
+} from "../compiler/types";
+import {
+    hasJSFileExtension,
+    removeFileExtension,
+} from "../compiler/utilities";
 
 /** @internal */
 export interface TypingResolutionHost {

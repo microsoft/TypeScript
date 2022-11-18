@@ -1,42 +1,48 @@
+import { getNodeId } from "../../compiler/checkerUtilities";
 import {
-    addToSeen,
     and,
+    find,
+    mapDefined,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { isConstructorDeclaration } from "../../compiler/factory/nodeTests";
+import {
     ClassElement,
     ClassLikeDeclaration,
-    CodeFixAction,
-    createSymbolTable,
-    Debug,
-    Diagnostics,
     ExpressionWithTypeArguments,
-    find,
-    getContainingClass,
-    getEffectiveBaseTypeNode,
-    getEffectiveImplementsTypeNodes,
-    getEffectiveModifierFlags,
-    getNodeId,
-    getTokenAtPosition,
     IndexKind,
     InterfaceDeclaration,
     InterfaceType,
-    isConstructorDeclaration,
-    mapDefined,
     ModifierFlags,
     SourceFile,
     Symbol,
     SymbolTable,
-    textChanges,
     TypeChecker,
     UserPreferences,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    addToSeen,
+    createSymbolTable,
+    getContainingClass,
+    getEffectiveBaseTypeNode,
+    getEffectiveImplementsTypeNodes,
+    getEffectiveModifierFlags,
+} from "../../compiler/utilities";
 import {
     codeFixAll,
     createCodeFixAction,
-    createImportAdder,
+    registerCodeFix,
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { CodeFixAction } from "../types";
+import { getTokenAtPosition } from "../utilities";
+import {
     createMissingMemberNodes,
     getNoopSymbolTrackerWithResolver,
-    registerCodeFix,
     TypeConstructionContext,
-} from "../_namespaces/ts.codefix";
+} from "./helpers";
+import { createImportAdder } from "./importAdder";
 
 const errorCodes = [
     Diagnostics.Class_0_incorrectly_implements_interface_1.code,
@@ -49,7 +55,7 @@ registerCodeFix({
         const { sourceFile, span } = context;
         const classDeclaration = getClass(sourceFile, span.start);
         return mapDefined<ExpressionWithTypeArguments, CodeFixAction>(getEffectiveImplementsTypeNodes(classDeclaration), implementedTypeNode => {
-            const changes = textChanges.ChangeTracker.with(context, t => addMissingDeclarations(context, implementedTypeNode, sourceFile, classDeclaration, t, context.preferences));
+            const changes = ChangeTracker.with(context, t => addMissingDeclarations(context, implementedTypeNode, sourceFile, classDeclaration, t, context.preferences));
             return changes.length === 0 ? undefined : createCodeFixAction(fixId, changes, [Diagnostics.Implement_interface_0, implementedTypeNode.getText(sourceFile)], fixId, Diagnostics.Implement_all_unimplemented_interfaces);
         });
     },
@@ -80,7 +86,7 @@ function addMissingDeclarations(
     implementedTypeNode: ExpressionWithTypeArguments,
     sourceFile: SourceFile,
     classDeclaration: ClassLikeDeclaration,
-    changeTracker: textChanges.ChangeTracker,
+    changeTracker: ChangeTracker,
     preferences: UserPreferences,
 ): void {
     const checker = context.program.getTypeChecker();
@@ -101,7 +107,7 @@ function addMissingDeclarations(
         createMissingIndexSignatureDeclaration(implementedType, IndexKind.String);
     }
 
-    const importAdder = createImportAdder(sourceFile, context.program, preferences, context.host);
+    const importAdder = createImportAdder(sourceFile, context.program, preferences, context.host, /*useAutoImportProvider*/ false);
     createMissingMemberNodes(classDeclaration, nonPrivateAndNotExistedInHeritageClauseMembers, sourceFile, context, preferences, importAdder, member => insertInterfaceMemberNode(sourceFile, classDeclaration, member as ClassElement));
     importAdder.writeFixes(changeTracker);
 

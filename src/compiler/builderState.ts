@@ -1,39 +1,47 @@
+import { computeSignatureWithDiagnostics } from "./builder";
+import { HostForComputeHash } from "./builderPublic";
+import {
+    EmitOutput,
+    OutputFile,
+} from "./builderStatePublic";
 import {
     arrayFrom,
-    CancellationToken,
-    computeSignatureWithDiagnostics,
     createGetCanonicalFileName,
-    CustomTransformers,
-    Debug,
-    EmitOutput,
     emptyArray,
-    ExportedModulesFromDeclarationEmit,
     GetCanonicalFileName,
+    mapDefined,
+    mapDefinedIterator,
+    some,
+} from "./core";
+import { Debug } from "./debug";
+import { isStringLiteral } from "./factory/nodeTests";
+import { isDeclarationFileName } from "./parser";
+import {
     getDirectoryPath,
+    toPath,
+} from "./path";
+import {
+    CancellationToken,
+    CustomTransformers,
+    ExportedModulesFromDeclarationEmit,
+    ModuleDeclaration,
+    ModuleKind,
+    Path,
+    Program,
+    ResolutionMode,
+    SourceFile,
+    StringLiteralLike,
+    Symbol,
+    TypeChecker,
+} from "./types";
+import {
     getSourceFileOfNode,
-    HostForComputeHash,
-    isDeclarationFileName,
     isExternalOrCommonJsModule,
     isGlobalScopeAugmentation,
     isJsonSourceFile,
     isModuleWithStringLiteralName,
-    isStringLiteral,
-    mapDefined,
-    mapDefinedIterator,
-    ModuleDeclaration,
-    ModuleKind,
     outFile,
-    OutputFile,
-    Path,
-    Program,
-    ResolutionMode,
-    some,
-    SourceFile,
-    StringLiteralLike,
-    Symbol,
-    toPath,
-    TypeChecker,
-} from "./_namespaces/ts";
+} from "./utilities";
 
 /** @internal */
 export function getFileEmitOutput(program: Program, sourceFile: SourceFile, emitOnlyDtsFiles: boolean,

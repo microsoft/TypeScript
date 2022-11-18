@@ -1,37 +1,51 @@
 import {
-    anyContext,
-    ContextPredicate,
-    FormattingContext,
-    FormattingRequestKind,
-    Rule,
-    RuleAction,
-    RuleFlags,
-    TextRangeWithKind,
-    TokenRange,
-} from "../_namespaces/ts.formatting";
-import {
-    BinaryExpression,
     contains,
-    findAncestor,
-    findNextToken,
-    FormatCodeSettings,
-    hasDecorators,
     hasProperty,
     isArray,
-    isExpression,
-    isFunctionLikeKind,
+} from "../../compiler/core";
+import {
     isNumericLiteral,
     isPropertyAccessExpression,
     isPropertyDeclaration,
     isPropertySignature,
-    isTrivia,
+} from "../../compiler/factory/nodeTests";
+import {
+    BinaryExpression,
     Node,
-    positionIsASICandidate,
-    SemicolonPreference,
     SyntaxKind,
-    typeKeywords,
     YieldExpression,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    hasDecorators,
+    isTrivia,
+} from "../../compiler/utilities";
+import {
+    findAncestor,
+    isExpression,
+    isFunctionLikeKind,
+} from "../../compiler/utilitiesPublic";
+import {
+    FormatCodeSettings,
+    SemicolonPreference,
+    TextRangeWithKind,
+} from "../types";
+import {
+    findNextToken,
+    positionIsASICandidate,
+    typeKeywords,
+} from "../utilities";
+import {
+    FormattingContext,
+    FormattingRequestKind,
+} from "./formattingContext";
+import {
+    anyContext,
+    ContextPredicate,
+    Rule,
+    RuleAction,
+    RuleFlags,
+    TokenRange,
+} from "./rule";
 
 /** @internal */
 export interface RuleSpec {

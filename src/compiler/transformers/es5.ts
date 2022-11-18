@@ -1,29 +1,33 @@
 import {
-    Bundle,
-    chainBundle,
-    EmitHint,
-    Expression,
-    getOriginalNodeId,
-    Identifier,
-    idText,
     isIdentifier,
     isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyAssignment,
+} from "../factory/nodeTests";
+import { setTextRange } from "../factory/utilitiesPublic";
+import { stringToToken } from "../scanner";
+import {
+    Bundle,
+    EmitHint,
+    Expression,
+    Identifier,
     JsxClosingElement,
     JsxEmit,
     JsxOpeningElement,
     JsxSelfClosingElement,
     Node,
-    nodeIsSynthesized,
     PropertyAccessExpression,
     PropertyAssignment,
-    setTextRange,
     SourceFile,
-    stringToToken,
     SyntaxKind,
     TransformationContext,
-} from "../_namespaces/ts";
+} from "../types";
+import { nodeIsSynthesized } from "../utilities";
+import { idText } from "../utilitiesPublic";
+import {
+    chainBundle,
+    getOriginalNodeId,
+} from "./utilities";
 
 /**
  * Transforms ES5 syntax into ES3 syntax.

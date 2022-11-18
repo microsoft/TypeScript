@@ -1,77 +1,55 @@
 import {
+    contains,
+    countWhere,
+    emptyArray,
+    findIndex,
+    first,
+    firstDefined,
+    flatMapToMutable,
+    identity,
+    last,
+    lastOrUndefined,
+    map,
+} from "../compiler/core";
+import { Debug } from "../compiler/debug";
+import { createPrinter } from "../compiler/emitter";
+import { factory } from "../compiler/factory/nodeFactory";
+import {
+    isBinaryExpression,
+    isBlock,
+    isFunctionTypeNode,
+    isIdentifier,
+    isMethodDeclaration,
+    isNoSubstitutionTemplateLiteral,
+    isPropertyAccessExpression,
+    isSourceFile,
+    isTaggedTemplateExpression,
+    isTemplateHead,
+    isTemplateSpan,
+    isTemplateTail,
+} from "../compiler/factory/nodeTests";
+import { skipTrivia } from "../compiler/scanner";
+import {
     ArrowFunction,
     BinaryExpression,
     CallLikeExpression,
     CancellationToken,
     CheckFlags,
-    contains,
-    countWhere,
-    createPrinter,
-    createTextSpan,
-    createTextSpanFromBounds,
-    createTextSpanFromNode,
-    Debug,
     EmitHint,
-    emptyArray,
     Expression,
-    factory,
-    findContainingList,
-    findIndex,
-    findPrecedingToken,
-    findTokenOnLeftOfPosition,
-    first,
-    firstDefined,
-    flatMapToMutable,
     FunctionExpression,
-    getInvokedExpression,
-    getPossibleGenericSignatures,
-    getPossibleTypeArgumentsInfo,
     Identifier,
-    identity,
     InternalSymbolName,
-    isBinaryExpression,
-    isBlock,
-    isCallOrNewExpression,
-    isFunctionTypeNode,
-    isIdentifier,
-    isInComment,
-    isInsideTemplateLiteral,
-    isInString,
-    isJsxOpeningLikeElement,
-    isMethodDeclaration,
-    isNoSubstitutionTemplateLiteral,
-    isPropertyAccessExpression,
-    isSourceFile,
-    isSourceFileJS,
-    isTaggedTemplateExpression,
-    isTemplateHead,
-    isTemplateLiteralToken,
-    isTemplateSpan,
-    isTemplateTail,
-    last,
-    lastOrUndefined,
     ListFormat,
-    map,
-    mapToDisplayParts,
     Node,
     NodeBuilderFlags,
     ParameterDeclaration,
     ParenthesizedExpression,
     Printer,
     Program,
-    punctuationPart,
-    rangeContainsRange,
     Signature,
-    SignatureHelpItem,
-    SignatureHelpItems,
-    SignatureHelpParameter,
-    SignatureHelpTriggerReason,
-    skipTrivia,
     SourceFile,
-    spacePart,
     Symbol,
-    SymbolDisplayPart,
-    symbolToDisplayParts,
     SyntaxKind,
     TaggedTemplateExpression,
     TemplateExpression,
@@ -80,7 +58,41 @@ import {
     Type,
     TypeChecker,
     TypeParameter,
-} from "./_namespaces/ts";
+} from "../compiler/types";
+import {
+    getInvokedExpression,
+    isSourceFileJS,
+} from "../compiler/utilities";
+import {
+    createTextSpan,
+    createTextSpanFromBounds,
+    isCallOrNewExpression,
+    isJsxOpeningLikeElement,
+    isTemplateLiteralToken,
+} from "../compiler/utilitiesPublic";
+import {
+    SignatureHelpItem,
+    SignatureHelpItems,
+    SignatureHelpParameter,
+    SignatureHelpTriggerReason,
+    SymbolDisplayPart,
+} from "./types";
+import {
+    createTextSpanFromNode,
+    findContainingList,
+    findPrecedingToken,
+    findTokenOnLeftOfPosition,
+    getPossibleGenericSignatures,
+    getPossibleTypeArgumentsInfo,
+    isInComment,
+    isInsideTemplateLiteral,
+    isInString,
+    mapToDisplayParts,
+    punctuationPart,
+    rangeContainsRange,
+    spacePart,
+    symbolToDisplayParts,
+} from "./utilities";
 
 const enum InvocationKind { Call, TypeArgs, Contextual }
 interface CallInvocation { readonly kind: InvocationKind.Call; readonly node: CallLikeExpression; }
@@ -663,10 +675,12 @@ function getTypeHelpItem(symbol: Symbol, typeParameters: readonly TypeParameter[
     const documentation = symbol.getDocumentationComment(checker);
     const tags = symbol.getJsDocTags(checker);
     const prefixDisplayParts = [...typeSymbolDisplay, punctuationPart(SyntaxKind.LessThanToken)];
-    return { isVariadic: false, prefixDisplayParts, suffixDisplayParts: [punctuationPart(SyntaxKind.GreaterThanToken)], separatorDisplayParts, parameters, documentation, tags };
+    return { isVariadic: false, prefixDisplayParts, suffixDisplayParts: [punctuationPart(SyntaxKind.GreaterThanToken)], separatorDisplayParts: getSeparatorDisplayParts(), parameters, documentation, tags };
 }
 
-const separatorDisplayParts: SymbolDisplayPart[] = [punctuationPart(SyntaxKind.CommaToken), spacePart()];
+function getSeparatorDisplayParts(): SymbolDisplayPart[] {
+    return [punctuationPart(SyntaxKind.CommaToken), spacePart()];
+}
 
 function getSignatureHelpItem(candidateSignature: Signature, callTargetDisplayParts: readonly SymbolDisplayPart[], isTypeParameterList: boolean, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItem[] {
     const infos = (isTypeParameterList ? itemInfoForTypeParameters : itemInfoForParameters)(candidateSignature, checker, enclosingDeclaration, sourceFile);
@@ -675,7 +689,7 @@ function getSignatureHelpItem(candidateSignature: Signature, callTargetDisplayPa
         const suffixDisplayParts = [...suffix, ...returnTypeToDisplayParts(candidateSignature, enclosingDeclaration, checker)];
         const documentation = candidateSignature.getDocumentationComment(checker);
         const tags = candidateSignature.getJsDocTags();
-        return { isVariadic, prefixDisplayParts, suffixDisplayParts, separatorDisplayParts, parameters, documentation, tags };
+        return { isVariadic, prefixDisplayParts, suffixDisplayParts, separatorDisplayParts: getSeparatorDisplayParts(), parameters, documentation, tags };
     });
 }
 

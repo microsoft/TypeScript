@@ -1,44 +1,48 @@
 import {
-    addEmitHelpers,
     arrayFrom,
-    Bundle,
-    chainBundle,
-    createExpressionForJsxElement,
-    createExpressionForJsxFragment,
-    createExpressionFromEntityName,
-    createJsxFactoryExpression,
-    Debug,
     emptyArray,
-    Expression,
     filter,
     find,
     flatten,
-    GeneratedIdentifierFlags,
-    getEmitScriptTarget,
     getEntries,
-    getJSXImplicitImportBase,
-    getJSXRuntimeImport,
-    getLineAndCharacterOfPosition,
-    getOriginalNode,
-    getSemanticJsxChildren,
-    Identifier,
-    idText,
-    ImportSpecifier,
-    insertStatementAfterCustomPrologue,
-    isExpression,
-    isExternalModule,
-    isExternalOrCommonJsModule,
+    isLineBreak,
+    isWhiteSpaceSingleLine,
+    length,
+    map,
+    mapDefined,
+    singleOrUndefined,
+    spanMap,
+} from "../core";
+import { Debug } from "../debug";
+import { addEmitHelpers } from "../factory/emitNode";
+import {
     isIdentifier,
-    isIntrinsicJsxName,
     isJsxAttribute,
     isJsxElement,
     isJsxFragment,
     isJsxSelfClosingElement,
     isJsxSpreadAttribute,
-    isLineBreak,
     isSourceFile,
-    isStringDoubleQuoted,
-    isWhiteSpaceSingleLine,
+} from "../factory/nodeTests";
+import {
+    createExpressionForJsxElement,
+    createExpressionForJsxFragment,
+    createExpressionFromEntityName,
+    createJsxFactoryExpression,
+    startOnNewLine,
+} from "../factory/utilities";
+import { setTextRange } from "../factory/utilitiesPublic";
+import { isExternalModule } from "../parser";
+import {
+    getLineAndCharacterOfPosition,
+    utf16EncodeAsString,
+} from "../scanner";
+import {
+    Bundle,
+    Expression,
+    GeneratedIdentifierFlags,
+    Identifier,
+    ImportSpecifier,
     JsxAttribute,
     JsxAttributeValue,
     JsxChild,
@@ -51,32 +55,42 @@ import {
     JsxSelfClosingElement,
     JsxSpreadAttribute,
     JsxText,
-    length,
-    map,
-    mapDefined,
     Node,
     NodeFlags,
     PropertyAssignment,
     ScriptTarget,
-    setParentRecursive,
-    setTextRange,
-    singleOrUndefined,
     SourceFile,
-    spanMap,
     SpreadAssignment,
-    startOnNewLine,
     Statement,
     StringLiteral,
     SyntaxKind,
     TextRange,
     TransformationContext,
     TransformFlags,
-    utf16EncodeAsString,
     VariableDeclaration,
+    VisitResult,
+} from "../types";
+import {
+    getEmitScriptTarget,
+    getJSXImplicitImportBase,
+    getJSXRuntimeImport,
+    getSemanticJsxChildren,
+    insertStatementAfterCustomPrologue,
+    isExternalOrCommonJsModule,
+    isIntrinsicJsxName,
+    isStringDoubleQuoted,
+    setParentRecursive,
+} from "../utilities";
+import {
+    getOriginalNode,
+    idText,
+    isExpression,
+} from "../utilitiesPublic";
+import {
     visitEachChild,
     visitNode,
-    VisitResult,
-} from "../_namespaces/ts";
+} from "../visitorPublic";
+import { chainBundle } from "./utilities";
 
 /** @internal */
 export function transformJsx(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

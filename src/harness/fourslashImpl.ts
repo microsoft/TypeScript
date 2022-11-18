@@ -5,6 +5,7 @@ import * as ts from "./_namespaces/ts";
 import * as fakes from "./_namespaces/fakes";
 import * as vpath from "./_namespaces/vpath";
 import * as Utils from "./_namespaces/Utils";
+import { applyChanges } from "../services/textChanges";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
@@ -2990,7 +2991,7 @@ export class TestState {
             assert(changes.length === 1, "Affected 0 or more than 1 file, must use 'newFileContent' instead of 'newRangeContent'");
             const change = ts.first(changes);
             assert(change.fileName = this.activeFile.fileName);
-            const newText = ts.textChanges.applyChanges(this.getFileContent(this.activeFile.fileName), change.textChanges);
+            const newText = applyChanges(this.getFileContent(this.activeFile.fileName), change.textChanges);
             const newRange = updateTextRangeForTextChanges(this.getOnlyRange(), change.textChanges);
             const actualText = newText.slice(newRange.pos, newRange.end);
             this.verifyTextMatches(actualText, /*includeWhitespace*/ true, newRangeContent);
@@ -3005,7 +3006,7 @@ export class TestState {
                 }
                 const oldText = this.tryGetFileContent(change.fileName);
                 ts.Debug.assert(!!change.isNewFile === (oldText === undefined));
-                const newContent = change.isNewFile ? ts.first(change.textChanges).newText : ts.textChanges.applyChanges(oldText!, change.textChanges);
+                const newContent = change.isNewFile ? ts.first(change.textChanges).newText : applyChanges(oldText!, change.textChanges);
                 this.verifyTextMatches(newContent, /*includeWhitespace*/ true, expectedNewContent);
             }
             for (const newFileName in newFileContent) {
@@ -3640,7 +3641,7 @@ export class TestState {
 
             const fileContent = this.tryGetFileContent(fileName);
             if (fileContent !== undefined) {
-                const actualNewContent = ts.textChanges.applyChanges(fileContent, textChanges);
+                const actualNewContent = applyChanges(fileContent, textChanges);
                 assert.equal(actualNewContent, newContent, `new content for ${fileName}`);
             }
             else {

@@ -1,42 +1,54 @@
 import {
-    ApplicableRefactorInfo,
-    BinaryExpression,
-    BinaryOperator,
-    copyTrailingAsLeadingComments,
-    copyTrailingComments,
-    Debug,
-    Diagnostics,
     emptyArray,
-    Expression,
-    factory,
-    findAncestor,
-    getLocaleSpecificMessage,
-    getTextOfNode,
-    getTokenAtPosition,
-    getTrailingCommentRanges,
+    map,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isBinaryExpression,
     isNoSubstitutionTemplateLiteral,
     isParenthesizedExpression,
     isStringLiteral,
-    isStringLiteralLike,
     isTemplateExpression,
     isTemplateHead,
     isTemplateMiddle,
-    map,
+} from "../../compiler/factory/nodeTests";
+import { getTrailingCommentRanges } from "../../compiler/scanner";
+import {
+    BinaryExpression,
+    BinaryOperator,
+    Expression,
     Node,
     ParenthesizedExpression,
-    RefactorContext,
-    RefactorEditInfo,
     SourceFile,
     SyntaxKind,
     TemplateHead,
     TemplateMiddle,
     TemplateSpan,
     TemplateTail,
-    textChanges,
     Token,
-} from "../_namespaces/ts";
-import { registerRefactor } from "../_namespaces/ts.refactor";
+} from "../../compiler/types";
+import {
+    getLocaleSpecificMessage,
+    getTextOfNode,
+} from "../../compiler/utilities";
+import {
+    findAncestor,
+    isStringLiteralLike,
+} from "../../compiler/utilitiesPublic";
+import { registerRefactor } from "../refactorProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    ApplicableRefactorInfo,
+    RefactorContext,
+    RefactorEditInfo,
+} from "../types";
+import {
+    copyTrailingAsLeadingComments,
+    copyTrailingComments,
+    getTokenAtPosition,
+} from "../utilities";
 
 const refactorName = "Convert to template string";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_template_string);
@@ -111,13 +123,13 @@ function getEditsForToTemplateLiteral(context: RefactorContext, node: Node) {
 
         // since suppressTrailingTrivia(maybeBinary) does not work, the trailing comment is removed manually
         // otherwise it would have the trailing comment twice
-        return textChanges.ChangeTracker.with(context, t => {
+        return ChangeTracker.with(context, t => {
             t.deleteRange(file, trailingRange);
             t.replaceNode(file, maybeBinary, templateLiteral);
         });
     }
     else {
-        return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, maybeBinary, templateLiteral));
+        return ChangeTracker.with(context, t => t.replaceNode(file, maybeBinary, templateLiteral));
     }
 }
 

@@ -1,32 +1,32 @@
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import { isParameter } from "../../compiler/factory/nodeTests";
 import {
-    Debug,
-    Diagnostics,
-    factory,
-    getTokenAtPosition,
     Identifier,
-    isParameter,
     SourceFile,
-    textChanges,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
 
 const fixId = "addNameToNamelessParameter";
 const errorCodes = [Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1.code];
 registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToAddNameToNamelessParameter(context) {
-        const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start));
+        const changes = ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start));
         return [createCodeFixAction(fixId, changes, Diagnostics.Add_parameter_name, fixId, Diagnostics.Add_names_to_all_parameters_without_names)];
     },
     fixIds: [fixId],
     getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file, diag.start)),
 });
 
-function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {
+function makeChange(changeTracker: ChangeTracker, sourceFile: SourceFile, pos: number) {
     const token = getTokenAtPosition(sourceFile, pos);
     const param = token.parent;
     if (!isParameter(param)) {

@@ -1,22 +1,24 @@
 import {
     BuilderProgramKind,
+    createBuilderProgram,
+    createRedirectedBuilderProgram,
+    getBuilderCreationParameters,
+    ReusableBuilderProgramState,
+    SavedBuildProgramEmitState,
+} from "./builder";
+import {
     CancellationToken,
     CompilerHost,
     CompilerOptions,
-    createBuilderProgram,
-    createRedirectedBuilderProgram,
     CustomTransformers,
     Diagnostic,
     DiagnosticWithLocation,
     EmitResult,
-    getBuilderCreationParameters,
     Program,
     ProjectReference,
-    ReusableBuilderProgramState,
-    SavedBuildProgramEmitState,
     SourceFile,
     WriteFileCallback,
-} from "./_namespaces/ts";
+} from "./types";
 
 export type AffectedFileResult<T> = { result: T; affected: SourceFile | Program; } | undefined;
 

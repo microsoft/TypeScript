@@ -1,14 +1,16 @@
+import { isArray } from "../../compiler/core";
 import {
     addNodeFactoryPatcher,
-    buildOverload,
     factory,
+} from "../../compiler/factory/nodeFactory";
+import {
     Identifier,
-    isArray,
     Modifier,
     NodeFactory,
     TypeNode,
     TypeParameterDeclaration,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { buildOverload } from "../deprecations";
 
 // DEPRECATION: Overloads to createTypeParameter/updateTypeParameter that does not accept `modifiers`
 // DEPRECATION PLAN:

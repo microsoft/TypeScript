@@ -1,60 +1,29 @@
-import * as ts from "./_namespaces/ts";
 import {
-    addRange,
     AffectedFileResult,
-    arrayFrom,
-    arrayToMap,
     BuilderProgram,
     BuilderProgramHost,
-    BuilderState,
-    BuildInfo,
-    BundleBuildInfo,
-    CancellationToken,
-    CommandLineOption,
+    EmitAndSemanticDiagnosticsBuilderProgram,
+    HostForComputeHash,
+    SemanticDiagnosticsBuilderProgram,
+} from "./builderPublic";
+import { BuilderState } from "./builderState";
+import {
+    convertToOptionsWithAbsolutePaths,
+    getOptionsNameMap,
+} from "./commandLineParser";
+import {
+    addRange,
+    arrayFrom,
+    arrayToMap,
     compareStringsCaseSensitive,
     compareValues,
-    CompilerHost,
-    CompilerOptions,
-    compilerOptionsAffectDeclarationPath,
-    compilerOptionsAffectEmit,
-    compilerOptionsAffectSemanticDiagnostics,
-    CompilerOptionsValue,
     concatenate,
-    convertToOptionsWithAbsolutePaths,
-    createBuildInfo,
     createGetCanonicalFileName,
-    createProgram,
-    CustomTransformers,
-    Debug,
-    Diagnostic,
-    DiagnosticCategory,
-    DiagnosticMessageChain,
-    DiagnosticRelatedInformation,
-    DiagnosticWithLocation,
-    EmitAndSemanticDiagnosticsBuilderProgram,
-    EmitOnly,
-    EmitResult,
-    emitSkippedWithNoDiagnostics,
     emptyArray,
-    ensurePathIsNonModuleName,
-    filterSemanticDiagnostics,
     forEach,
-    forEachEntry,
-    forEachKey,
-    generateDjb2Hash,
     GetCanonicalFileName,
-    getDirectoryPath,
-    getEmitDeclarations,
-    getNormalizedAbsolutePath,
-    getOptionsNameMap,
     getOwnKeys,
-    getRelativePathFromDirectory,
-    getTsBuildInfoEmitOutputFilePath,
-    handleNoEmitOptions,
-    HostForComputeHash,
     isArray,
-    isDeclarationFileName,
-    isJsonSourceFile,
     isNumber,
     isString,
     map,
@@ -62,25 +31,69 @@ import {
     maybeBind,
     noop,
     notImplemented,
-    outFile,
+    returnFalse,
+    returnUndefined,
+    some,
+    tryAddToSet,
+} from "./core";
+import { ReadonlyCollection } from "./corePublic";
+import { Debug } from "./debug";
+import {
+    createBuildInfo,
+    getTsBuildInfoEmitOutputFilePath,
+} from "./emitter";
+import { isDeclarationFileName } from "./parser";
+import {
+    ensurePathIsNonModuleName,
+    getDirectoryPath,
+    getNormalizedAbsolutePath,
+    getRelativePathFromDirectory,
+    toPath,
+} from "./path";
+import {
+    createProgram,
+    emitSkippedWithNoDiagnostics,
+    filterSemanticDiagnostics,
+    handleNoEmitOptions,
+} from "./program";
+import { generateDjb2Hash } from "./sys";
+import {
+    BuildInfo,
+    BundleBuildInfo,
+    CancellationToken,
+    CommandLineOption,
+    CompilerHost,
+    CompilerOptions,
+    CompilerOptionsValue,
+    CustomTransformers,
+    Diagnostic,
+    DiagnosticCategory,
+    DiagnosticMessageChain,
+    DiagnosticRelatedInformation,
+    DiagnosticWithLocation,
+    EmitOnly,
+    EmitResult,
     Path,
     Program,
     ProjectReference,
-    ReadBuildProgramHost,
-    ReadonlyCollection,
-    returnFalse,
-    returnUndefined,
-    SemanticDiagnosticsBuilderProgram,
-    skipTypeChecking,
-    some,
     SourceFile,
-    sourceFileMayBeEmitted,
     SourceMapEmitResult,
-    toPath,
-    tryAddToSet,
     WriteFileCallback,
     WriteFileCallbackData,
-} from "./_namespaces/ts";
+} from "./types";
+import {
+    compilerOptionsAffectDeclarationPath,
+    compilerOptionsAffectEmit,
+    compilerOptionsAffectSemanticDiagnostics,
+    forEachEntry,
+    forEachKey,
+    getEmitDeclarations,
+    isJsonSourceFile,
+    outFile,
+    skipTypeChecking,
+    sourceFileMayBeEmitted,
+} from "./utilities";
+import { ReadBuildProgramHost } from "./watchPublic";
 
 /** @internal */
 export interface ReusableDiagnostic extends ReusableDiagnosticRelatedInformation {
@@ -452,7 +465,7 @@ function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newPro
     let buildInfoDirectory: string | undefined;
     let getCanonicalFileName: GetCanonicalFileName | undefined;
     return diagnostics.map(diagnostic => {
-        const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPath);
+        const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPathHelper);
         result.reportsUnnecessary = diagnostic.reportsUnnecessary;
         result.reportsDeprecated = diagnostic.reportDeprecated;
         result.source = diagnostic.source;
@@ -460,15 +473,15 @@ function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newPro
         const { relatedInformation } = diagnostic;
         result.relatedInformation = relatedInformation ?
             relatedInformation.length ?
-                relatedInformation.map(r => convertToDiagnosticRelatedInformation(r, newProgram, toPath)) :
+                relatedInformation.map(r => convertToDiagnosticRelatedInformation(r, newProgram, toPathHelper)) :
                 [] :
             undefined;
         return result;
     });
 
-    function toPath(path: string) {
+    function toPathHelper(path: string) {
         buildInfoDirectory ??= getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(newProgram.getCompilerOptions())!, newProgram.getCurrentDirectory()));
-        return ts.toPath(path, buildInfoDirectory, getCanonicalFileName ??= createGetCanonicalFileName(newProgram.useCaseSensitiveFileNames()));
+        return toPath(path, buildInfoDirectory, getCanonicalFileName ??= createGetCanonicalFileName(newProgram.useCaseSensitiveFileNames()));
     }
 }
 
@@ -1664,7 +1677,7 @@ export function createBuilderProgramUsingProgramBuildInfo(buildInfo: BuildInfo, 
     const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
 
     let state: ReusableBuilderProgramState;
-    const filePaths = program.fileNames?.map(toPath);
+    const filePaths = program.fileNames?.map(toPathHelper);
     let filePathsSetList: Set<Path>[] | undefined;
     const latestChangedDtsFile = program.latestChangedDtsFile ? toAbsolutePath(program.latestChangedDtsFile) : undefined;
     if (isProgramBundleEmitBuildInfo(program)) {
@@ -1744,8 +1757,8 @@ export function createBuilderProgramUsingProgramBuildInfo(buildInfo: BuildInfo, 
         hasChangedEmitSignature: returnFalse,
     };
 
-    function toPath(path: string) {
-        return ts.toPath(path, buildInfoDirectory, getCanonicalFileName);
+    function toPathHelper(path: string) {
+        return toPath(path, buildInfoDirectory, getCanonicalFileName);
     }
 
     function toAbsolutePath(path: string) {

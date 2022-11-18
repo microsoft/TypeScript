@@ -1,4 +1,20 @@
 import {
+    MapLike,
+    SortedReadonlyArray,
+} from "../compiler/corePublic";
+import {
+    DirectoryWatcherCallback,
+    FileWatcher,
+    FileWatcherCallback,
+} from "../compiler/sys";
+import {
+    CompilerOptions,
+    Path,
+    TypeAcquisition,
+    WatchOptions,
+} from "../compiler/types";
+import * as JsTyping from "./jsTyping";
+import {
     ActionInvalidate,
     ActionPackageInstalled,
     ActionSet,
@@ -6,19 +22,7 @@ import {
     EventEndInstallTypes,
     EventInitializationFailed,
     EventTypesRegistry,
-} from "./_namespaces/ts.server";
-import {
-    CompilerOptions,
-    DirectoryWatcherCallback,
-    FileWatcher,
-    FileWatcherCallback,
-    JsTyping,
-    MapLike,
-    Path,
-    SortedReadonlyArray,
-    TypeAcquisition,
-    WatchOptions,
-} from "./_namespaces/ts";
+} from "./shared";
 
 export interface TypingInstallerResponse {
     readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;

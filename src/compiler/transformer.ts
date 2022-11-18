@@ -1,16 +1,54 @@
 import {
     addRange,
     append,
+    emptyArray,
+    map,
+    memoize,
+    noop,
+    notImplemented,
+    returnUndefined,
+    some,
+} from "./core";
+import { Debug } from "./debug";
+import { createEmitHelperFactory } from "./factory/emitHelpers";
+import {
+    disposeEmitNodes,
+    setEmitFlags,
+} from "./factory/emitNode";
+import { factory } from "./factory/nodeFactory";
+import {
+    isBundle,
+    isSourceFile,
+} from "./factory/nodeTests";
+import * as performance from "./performance";
+import { tracing } from "./tracing";
+import { transformClassFields } from "./transformers/classFields";
+import { transformDeclarations } from "./transformers/declarations";
+import { transformES2015 } from "./transformers/es2015";
+import { transformES2016 } from "./transformers/es2016";
+import { transformES2017 } from "./transformers/es2017";
+import { transformES2018 } from "./transformers/es2018";
+import { transformES2019 } from "./transformers/es2019";
+import { transformES2020 } from "./transformers/es2020";
+import { transformES2021 } from "./transformers/es2021";
+import { transformES5 } from "./transformers/es5";
+import { transformESNext } from "./transformers/esnext";
+import { transformGenerators } from "./transformers/generators";
+import { transformJsx } from "./transformers/jsx";
+import { transformLegacyDecorators } from "./transformers/legacyDecorators";
+import { transformECMAScriptModule } from "./transformers/module/esnextAnd2015";
+import { transformModule } from "./transformers/module/module";
+import { transformNodeModule } from "./transformers/module/node";
+import { transformSystemModule } from "./transformers/module/system";
+import { transformTypeScript } from "./transformers/ts";
+import { chainBundle } from "./transformers/utilities";
+import {
     Bundle,
-    chainBundle,
     CompilerOptions,
-    createEmitHelperFactory,
     CustomTransformer,
     CustomTransformerFactory,
     CustomTransformers,
-    Debug,
     DiagnosticWithLocation,
-    disposeEmitNodes,
     EmitFlags,
     EmitHelper,
     EmitHint,
@@ -18,61 +56,31 @@ import {
     EmitOnly,
     EmitResolver,
     EmitTransformers,
-    emptyArray,
-    factory,
     FunctionDeclaration,
-    getEmitFlags,
-    getEmitModuleKind,
-    getEmitScriptTarget,
-    getJSXTransformEnabled,
-    getParseTreeNode,
-    getSourceFileOfNode,
     Identifier,
-    isBundle,
-    isSourceFile,
     LexicalEnvironmentFlags,
-    map,
-    memoize,
     ModuleKind,
     Node,
     NodeFactory,
     NodeFlags,
-    noop,
-    notImplemented,
-    returnUndefined,
     ScriptTarget,
-    setEmitFlags,
-    some,
     SourceFile,
     Statement,
     SyntaxKind,
-    tracing,
     TransformationContext,
     TransformationResult,
-    transformClassFields,
-    transformDeclarations,
-    transformECMAScriptModule,
     Transformer,
     TransformerFactory,
-    transformES2015,
-    transformES2016,
-    transformES2017,
-    transformES2018,
-    transformES2019,
-    transformES2020,
-    transformES2021,
-    transformES5,
-    transformESNext,
-    transformGenerators,
-    transformJsx,
-    transformLegacyDecorators,
-    transformModule,
-    transformNodeModule,
-    transformSystemModule,
-    transformTypeScript,
     VariableDeclaration,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./types";
+import {
+    getEmitFlags,
+    getEmitModuleKind,
+    getEmitScriptTarget,
+    getJSXTransformEnabled,
+    getSourceFileOfNode,
+} from "./utilities";
+import { getParseTreeNode } from "./utilitiesPublic";
 
 function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile | Bundle> {
     switch (moduleKind) {

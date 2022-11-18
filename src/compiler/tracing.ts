@@ -1,10 +1,11 @@
+import { Debug } from "./debug";
+import { combinePaths } from "./path";
+import * as performance from "./performance";
+import { timestamp } from "./performanceCore";
+import { getLineAndCharacterOfPosition } from "./scanner";
 import {
-    combinePaths,
     ConditionalType,
-    Debug,
     EvolvingArrayType,
-    getLineAndCharacterOfPosition,
-    getSourceFileOfNode,
     IndexedAccessType,
     IndexType,
     IntersectionType,
@@ -14,14 +15,13 @@ import {
     Path,
     ReverseMappedType,
     SubstitutionType,
-    timestamp,
     Type,
     TypeFlags,
     TypeReference,
-    unescapeLeadingUnderscores,
     UnionType,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./types";
+import { getSourceFileOfNode } from "./utilities";
+import { unescapeLeadingUnderscores } from "./utilitiesPublic";
 
 /* Tracing events for the compiler. */
 

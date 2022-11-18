@@ -1,34 +1,42 @@
+import { addRange } from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
 import {
-    addRange,
     CallExpression,
-    CodeFixAction,
-    CodeFixContext,
-    Diagnostics,
-    factory,
-    findAncestor,
-    getEmitModuleKind,
-    getNamespaceDeclarationNode,
-    getQuotePreference,
-    getSourceFileOfNode,
-    getTokenAtPosition,
     ImportDeclaration,
-    isExpression,
-    isImportCall,
-    isNamedDeclaration,
-    makeImport,
     ModuleKind,
     NamespaceImport,
     NewExpression,
     Node,
     SourceFile,
     SyntaxKind,
-    textChanges,
     TransientSymbol,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    getEmitModuleKind,
+    getNamespaceDeclarationNode,
+    getSourceFileOfNode,
+    isImportCall,
+} from "../../compiler/utilities";
+import {
+    findAncestor,
+    isExpression,
+    isNamedDeclaration,
+} from "../../compiler/utilitiesPublic";
 import {
     createCodeFixActionWithoutFixAll,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    CodeFixAction,
+    CodeFixContext,
+} from "../types";
+import {
+    getQuotePreference,
+    getTokenAtPosition,
+    makeImport,
+} from "../utilities";
 
 const fixName = "invalidImportSyntax";
 
@@ -55,7 +63,7 @@ function getCodeFixesForImportDeclaration(context: CodeFixContext, node: ImportD
 }
 
 function createAction(context: CodeFixContext, sourceFile: SourceFile, node: Node, replacement: Node): CodeFixAction {
-    const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, node, replacement));
+    const changes = ChangeTracker.with(context, t => t.replaceNode(sourceFile, node, replacement));
     return createCodeFixActionWithoutFixAll(fixName, changes, [Diagnostics.Replace_import_with_0, changes[0].textChanges[0].newText]);
 }
 
@@ -117,7 +125,7 @@ function getImportCodeFixesForExpression(context: CodeFixContext, expr: Node): C
     }
     if (isExpression(expr) && !(isNamedDeclaration(expr.parent) && expr.parent.name === expr)) {
         const sourceFile = context.sourceFile;
-        const changes = textChanges.ChangeTracker.with(context, t => t.replaceNode(sourceFile, expr, factory.createPropertyAccessExpression(expr, "default"), {}));
+        const changes = ChangeTracker.with(context, t => t.replaceNode(sourceFile, expr, factory.createPropertyAccessExpression(expr, "default"), {}));
         fixes.push(createCodeFixActionWithoutFixAll(fixName, changes, Diagnostics.Use_synthetic_default_member));
     }
     return fixes;

@@ -1,17 +1,21 @@
 import {
-    FileReference,
-    isKeyword,
     lastOrUndefined,
     length,
     noop,
+} from "../compiler/core";
+import {
     PragmaContext,
-    PreProcessedFileInfo,
     processCommentPragmas,
     processPragmasIntoFields,
-    scanner,
+} from "../compiler/parser";
+import {
+    FileReference,
     ScriptTarget,
     SyntaxKind,
-} from "./_namespaces/ts";
+} from "../compiler/types";
+import { isKeyword } from "../compiler/utilities";
+import { PreProcessedFileInfo } from "./types";
+import { scanner } from "./utilities";
 
 export function preProcessFile(sourceText: string, readImportFiles = true, detectJavaScriptImports = false): PreProcessedFileInfo {
     const pragmaContext: PragmaContext = {

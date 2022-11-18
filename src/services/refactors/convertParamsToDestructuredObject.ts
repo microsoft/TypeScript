@@ -1,6 +1,41 @@
 import {
-    addEmitFlags,
-    ApplicableRefactorInfo,
+    compareValues,
+    contains,
+    deduplicate,
+    emptyArray,
+    equateValues,
+    every,
+    first,
+    flatMap,
+    last,
+    map,
+    sortAndDeduplicate,
+    tryCast,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { addEmitFlags } from "../../compiler/factory/emitNode";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
+    isClassDeclaration,
+    isConstructorDeclaration,
+    isElementAccessExpression,
+    isExportAssignment,
+    isExportSpecifier,
+    isIdentifier,
+    isImportClause,
+    isImportEqualsDeclaration,
+    isImportSpecifier,
+    isInterfaceDeclaration,
+    isMethodSignature,
+    isNamespaceImport,
+    isObjectLiteralExpression,
+    isPropertyAccessExpression,
+    isPropertyAssignment,
+    isTypeLiteralNode,
+    isVariableDeclaration,
+} from "../../compiler/factory/nodeTests";
+import {
     ArrowFunction,
     BindingElement,
     CallExpression,
@@ -8,72 +43,15 @@ import {
     CheckFlags,
     ClassDeclaration,
     ClassExpression,
-    compareValues,
     ConstructorDeclaration,
-    contains,
-    copyComments,
-    Debug,
-    deduplicate,
-    Diagnostics,
     ElementAccessExpression,
     EmitFlags,
-    emptyArray,
-    equateValues,
-    every,
     Expression,
-    factory,
-    FindAllReferences,
-    findAncestor,
-    findChildOfKind,
-    findModifier,
-    first,
-    flatMap,
     FunctionBody,
     FunctionDeclaration,
     FunctionExpression,
     FunctionLikeDeclaration,
-    getCheckFlags,
-    getContainingFunctionDeclaration,
-    getContainingObjectLiteralElement,
-    getLocaleSpecificMessage,
-    getMeaningFromLocation,
-    getSourceFileOfNode,
-    getSymbolTarget,
-    getSynthesizedDeepClone,
-    getTextOfIdentifierOrLiteral,
-    getTouchingToken,
-    getTypeNodeIfAccessible,
     Identifier,
-    isCallOrNewExpression,
-    isClassDeclaration,
-    isConstructorDeclaration,
-    isDeclaration,
-    isElementAccessExpression,
-    isExportAssignment,
-    isExportSpecifier,
-    isExpressionWithTypeArgumentsInClassExtendsClause,
-    isFunctionLikeDeclaration,
-    isIdentifier,
-    isImportClause,
-    isImportEqualsDeclaration,
-    isImportSpecifier,
-    isInterfaceDeclaration,
-    isJSDocNode,
-    isMethodSignature,
-    isNamespaceImport,
-    isNewExpressionTarget,
-    isObjectLiteralExpression,
-    isPropertyAccessExpression,
-    isPropertyAssignment,
-    isRestParameter,
-    isSourceFileJS,
-    isThis,
-    isTypeLiteralNode,
-    isVarConst,
-    isVariableDeclaration,
-    LanguageServiceHost,
-    last,
-    map,
     MethodDeclaration,
     MethodSignature,
     Modifier,
@@ -87,24 +65,65 @@ import {
     PropertyAccessExpression,
     PropertyAssignment,
     PropertySignature,
-    rangeContainsRange,
-    RefactorContext,
-    RefactorEditInfo,
-    SemanticMeaning,
     ShorthandPropertyAssignment,
-    sortAndDeduplicate,
     SourceFile,
-    suppressLeadingAndTrailingTrivia,
     Symbol,
     SyntaxKind,
-    textChanges,
-    tryCast,
     TypeChecker,
     TypeLiteralNode,
     TypeNode,
     VariableDeclaration,
-} from "../_namespaces/ts";
-import { registerRefactor } from "../_namespaces/ts.refactor";
+} from "../../compiler/types";
+import {
+    getCheckFlags,
+    getContainingFunctionDeclaration,
+    getLocaleSpecificMessage,
+    getSourceFileOfNode,
+    getTextOfIdentifierOrLiteral,
+    isExpressionWithTypeArgumentsInClassExtendsClause,
+    isSourceFileJS,
+    isVarConst,
+} from "../../compiler/utilities";
+import {
+    findAncestor,
+    isCallOrNewExpression,
+    isDeclaration,
+    isFunctionLikeDeclaration,
+    isJSDocNode,
+    isRestParameter,
+} from "../../compiler/utilitiesPublic";
+import { getReferenceEntriesForNode } from "../findAllReferences";
+import { registerRefactor } from "../refactorProvider";
+import { getContainingObjectLiteralElement } from "../services";
+import {
+    ChangeTracker,
+    LeadingTriviaOption,
+    TrailingTriviaOption,
+} from "../textChanges";
+import {
+    ApplicableRefactorInfo,
+    Entry,
+    EntryKind,
+    LanguageServiceHost,
+    NodeEntry,
+    RefactorContext,
+    RefactorEditInfo,
+} from "../types";
+import {
+    copyComments,
+    findChildOfKind,
+    findModifier,
+    getMeaningFromLocation,
+    getSymbolTarget,
+    getSynthesizedDeepClone,
+    getTouchingToken,
+    getTypeNodeIfAccessible,
+    isNewExpressionTarget,
+    isThis,
+    rangeContainsRange,
+    SemanticMeaning,
+    suppressLeadingAndTrailingTrivia,
+} from "../utilities";
 
 const refactorName = "Convert parameters to destructured object";
 const minimumParameterLength = 1;
@@ -143,7 +162,7 @@ function getRefactorEditsToConvertParametersToDestructuredObject(context: Refact
 
     const groupedReferences = getGroupedReferences(functionDeclaration, program, cancellationToken);
     if (groupedReferences.valid) {
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(file, program, host, t, functionDeclaration, groupedReferences));
+        const edits = ChangeTracker.with(context, t => doChange(file, program, host, t, functionDeclaration, groupedReferences));
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
@@ -154,7 +173,7 @@ function doChange(
     sourceFile: SourceFile,
     program: Program,
     host: LanguageServiceHost,
-    changes: textChanges.ChangeTracker,
+    changes: ChangeTracker,
     functionDeclaration: ValidFunctionDeclaration,
     groupedReferences: GroupedReferences): void {
     const signature = groupedReferences.signature;
@@ -175,7 +194,7 @@ function doChange(
                 first(call.arguments),
                 last(call.arguments),
                 newArgument,
-                { leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll, trailingTriviaOption: textChanges.TrailingTriviaOption.Include });
+                { leadingTriviaOption: LeadingTriviaOption.IncludeAll, trailingTriviaOption: TrailingTriviaOption.Include });
         }
     }
 
@@ -189,8 +208,8 @@ function doChange(
                 joiner: ", ",
                 // indentation is set to 0 because otherwise the object parameter will be indented if there is a `this` parameter
                 indentation: 0,
-                leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
-                trailingTriviaOption: textChanges.TrailingTriviaOption.Include
+                leadingTriviaOption: LeadingTriviaOption.IncludeAll,
+                trailingTriviaOption: TrailingTriviaOption.Include
             });
     }
 }
@@ -201,7 +220,7 @@ function getGroupedReferences(functionDeclaration: ValidFunctionDeclaration, pro
     const names = deduplicate([...functionNames, ...classNames], equateValues);
     const checker = program.getTypeChecker();
 
-    const references = flatMap(names, /*mapfn*/ name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
+    const references = flatMap(names, /*mapfn*/ name => getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
     const groupedReferences = groupReferences(references);
 
     if (!every(groupedReferences.declarations, /*callback*/ decl => contains(names, decl))) {
@@ -210,7 +229,7 @@ function getGroupedReferences(functionDeclaration: ValidFunctionDeclaration, pro
 
     return groupedReferences;
 
-    function groupReferences(referenceEntries: readonly FindAllReferences.Entry[]): GroupedReferences {
+    function groupReferences(referenceEntries: readonly Entry[]): GroupedReferences {
         const classReferences: ClassReferences = { accessExpressions: [], typeUsages: [] };
         const groupedReferences: GroupedReferences = { functionCalls: [], declarations: [], classReferences, valid: true };
         const functionSymbols = map(functionNames, getSymbolTargetAtLocation);
@@ -219,7 +238,7 @@ function getGroupedReferences(functionDeclaration: ValidFunctionDeclaration, pro
         const contextualSymbols = map(functionNames, name => getSymbolForContextualType(name, checker));
 
         for (const entry of referenceEntries) {
-            if (entry.kind === FindAllReferences.EntryKind.Span) {
+            if (entry.kind === EntryKind.Span) {
                 groupedReferences.valid = false;
                 continue;
             }
@@ -334,7 +353,7 @@ function getSymbolForContextualType(node: Node, checker: TypeChecker): Symbol | 
     }
 }
 
-function entryToImportOrExport(entry: FindAllReferences.NodeEntry): Node | undefined {
+function entryToImportOrExport(entry: NodeEntry): Node | undefined {
     const node = entry.node;
 
     if (isImportSpecifier(node.parent)
@@ -350,14 +369,14 @@ function entryToImportOrExport(entry: FindAllReferences.NodeEntry): Node | undef
     return undefined;
 }
 
-function entryToDeclaration(entry: FindAllReferences.NodeEntry): Node | undefined {
+function entryToDeclaration(entry: NodeEntry): Node | undefined {
     if (isDeclaration(entry.node.parent)) {
         return entry.node;
     }
     return undefined;
 }
 
-function entryToFunctionCall(entry: FindAllReferences.NodeEntry): CallExpression | NewExpression | undefined {
+function entryToFunctionCall(entry: NodeEntry): CallExpression | NewExpression | undefined {
     if (entry.node.parent) {
         const functionReference = entry.node;
         const parent = functionReference.parent;
@@ -395,7 +414,7 @@ function entryToFunctionCall(entry: FindAllReferences.NodeEntry): CallExpression
     return undefined;
 }
 
-function entryToAccessExpression(entry: FindAllReferences.NodeEntry): ElementAccessExpression | PropertyAccessExpression | undefined {
+function entryToAccessExpression(entry: NodeEntry): ElementAccessExpression | PropertyAccessExpression | undefined {
     if (entry.node.parent) {
         const reference = entry.node;
         const parent = reference.parent;
@@ -419,7 +438,7 @@ function entryToAccessExpression(entry: FindAllReferences.NodeEntry): ElementAcc
     return undefined;
 }
 
-function entryToType(entry: FindAllReferences.NodeEntry): Node | undefined {
+function entryToType(entry: NodeEntry): Node | undefined {
     const reference = entry.node;
     if (getMeaningFromLocation(reference) === SemanticMeaning.Type || isExpressionWithTypeArgumentsInClassExtendsClause(reference.parent)) {
         return reference;

@@ -1,27 +1,27 @@
+import { tryCast } from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import { isImportDeclaration } from "../../compiler/factory/nodeTests";
 import {
-    CodeFixContextBase,
-    Diagnostics,
-    factory,
-    getTokenAtPosition,
     ImportDeclaration,
-    isImportDeclaration,
     SourceFile,
-    textChanges,
     TextSpan,
-    tryCast,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { CodeFixContextBase } from "../types";
+import { getTokenAtPosition } from "../utilities";
 
 const errorCodes = [Diagnostics.This_import_is_never_used_as_a_value_and_must_use_import_type_because_importsNotUsedAsValues_is_set_to_error.code];
 const fixId = "convertToTypeOnlyImport";
 registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToConvertToTypeOnlyImport(context) {
-        const changes = textChanges.ChangeTracker.with(context, t => {
+        const changes = ChangeTracker.with(context, t => {
             const importDeclaration = getImportDeclarationForDiagnosticSpan(context.span, context.sourceFile);
             fixSingleImportDeclaration(t, importDeclaration, context);
         });
@@ -42,7 +42,7 @@ function getImportDeclarationForDiagnosticSpan(span: TextSpan, sourceFile: Sourc
     return tryCast(getTokenAtPosition(sourceFile, span.start).parent, isImportDeclaration);
 }
 
-function fixSingleImportDeclaration(changes: textChanges.ChangeTracker, importDeclaration: ImportDeclaration | undefined, context: CodeFixContextBase) {
+function fixSingleImportDeclaration(changes: ChangeTracker, importDeclaration: ImportDeclaration | undefined, context: CodeFixContextBase) {
     if (!importDeclaration?.importClause) {
         return;
     }

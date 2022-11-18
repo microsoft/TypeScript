@@ -1,14 +1,14 @@
+import { Debug } from "../compiler/debug";
+import { nodeModulesPathPart } from "../compiler/moduleNameResolver";
+import { FileWatcher } from "../compiler/sys";
 import {
-    Debug,
-    FileWatcher,
     ModulePath,
     ModuleSpecifierCache,
     ModuleSpecifierOptions,
-    nodeModulesPathPart,
     Path,
     ResolvedModuleSpecifierInfo,
     UserPreferences,
-} from "./_namespaces/ts";
+} from "../compiler/types";
 
 /** @internal */
 export interface ModuleSpecifierResolutionCacheHost {

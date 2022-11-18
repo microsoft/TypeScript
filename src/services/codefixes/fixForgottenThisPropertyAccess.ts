@@ -1,21 +1,25 @@
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
 import {
-    Diagnostics,
-    factory,
-    getContainingClass,
-    getTokenAtPosition,
-    Identifier,
     isIdentifier,
     isPrivateIdentifier,
+} from "../../compiler/factory/nodeTests";
+import {
+    Identifier,
     PrivateIdentifier,
     SourceFile,
-    suppressLeadingAndTrailingTrivia,
-    textChanges,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { getContainingClass } from "../../compiler/utilities";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    getTokenAtPosition,
+    suppressLeadingAndTrailingTrivia,
+} from "../utilities";
 
 const fixId = "forgottenThisPropertyAccess";
 const didYouMeanStaticMemberCode = Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code;
@@ -32,7 +36,7 @@ registerCodeFix({
         if (!info) {
             return undefined;
         }
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info));
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, info));
         return [createCodeFixAction(fixId, changes, [Diagnostics.Add_0_to_unresolved_variable, info.className || "this"], fixId, Diagnostics.Add_qualifier_to_all_unresolved_variables_matching_a_member_name)];
     },
     fixIds: [fixId],
@@ -54,7 +58,7 @@ function getInfo(sourceFile: SourceFile, pos: number, diagCode: number): Info | 
     }
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { node, className }: Info): void {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, { node, className }: Info): void {
     // TODO (https://github.com/Microsoft/TypeScript/issues/21246): use shared helper
     suppressLeadingAndTrailingTrivia(node);
     changes.replaceNode(sourceFile, node, factory.createPropertyAccessExpression(className ? factory.createIdentifier(className) : factory.createThis(), node));

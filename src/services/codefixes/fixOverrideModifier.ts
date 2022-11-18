@@ -1,42 +1,52 @@
 import {
-    CodeFixAllContext,
-    CodeFixContext,
-    ConstructorDeclaration,
-    Debug,
-    DiagnosticMessage,
-    Diagnostics,
     emptyArray,
-    factory,
     find,
-    findAncestor,
     findLast,
-    GetAccessorDeclaration,
-    getTokenAtPosition,
+    not,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isAbstractModifier,
-    isAccessibilityModifier,
-    isClassLike,
     isDecorator,
     isJSDocOverrideTag,
     isOverrideModifier,
-    isParameterPropertyDeclaration,
-    isSourceFileJS,
     isStaticModifier,
+} from "../../compiler/factory/nodeTests";
+import { skipTrivia } from "../../compiler/scanner";
+import {
+    ConstructorDeclaration,
+    DiagnosticMessage,
+    GetAccessorDeclaration,
     MethodDeclaration,
     Node,
-    not,
-    ParameterPropertyDeclaration,
     PropertyDeclaration,
     SetAccessorDeclaration,
-    skipTrivia,
     SourceFile,
     SyntaxKind,
-    textChanges,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { isSourceFileJS } from "../../compiler/utilities";
+import {
+    findAncestor,
+    isClassLike,
+    isParameterPropertyDeclaration,
+    ParameterPropertyDeclaration,
+} from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixActionMaybeFixAll,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    CodeFixAllContext,
+    CodeFixContext,
+} from "../types";
+import {
+    getTokenAtPosition,
+    isAccessibilityModifier,
+} from "../utilities";
 
 const fixName = "fixOverrideModifier";
 const fixAddOverrideId = "fixAddOverrideModifier";
@@ -130,7 +140,7 @@ registerCodeFix({
         if (!info) return emptyArray;
 
         const { descriptions, fixId, fixAllDescriptions } = info;
-        const changes = textChanges.ChangeTracker.with(context, changes => dispatchChanges(changes, context, errorCode, span.start));
+        const changes = ChangeTracker.with(context, changes => dispatchChanges(changes, context, errorCode, span.start));
 
         return [
             createCodeFixActionMaybeFixAll(fixName, changes, descriptions, fixId, fixAllDescriptions)
@@ -150,7 +160,7 @@ registerCodeFix({
 });
 
 function dispatchChanges(
-    changeTracker: textChanges.ChangeTracker,
+    changeTracker: ChangeTracker,
     context: CodeFixContext | CodeFixAllContext,
     errorCode: number,
     pos: number) {
@@ -171,7 +181,7 @@ function dispatchChanges(
     }
 }
 
-function doAddOverrideModifierChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {
+function doAddOverrideModifierChange(changeTracker: ChangeTracker, sourceFile: SourceFile, pos: number) {
     const classElement = findContainerClassElementLike(sourceFile, pos);
     if (isSourceFileJS(sourceFile)) {
         changeTracker.addJSDocTags(sourceFile, classElement, [factory.createJSDocOverrideTag(factory.createIdentifier("override"))]);
@@ -190,7 +200,7 @@ function doAddOverrideModifierChange(changeTracker: textChanges.ChangeTracker, s
     changeTracker.insertModifierAt(sourceFile, modifierPos, SyntaxKind.OverrideKeyword, options);
 }
 
-function doRemoveOverrideModifierChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {
+function doRemoveOverrideModifierChange(changeTracker: ChangeTracker, sourceFile: SourceFile, pos: number) {
     const classElement = findContainerClassElementLike(sourceFile, pos);
     if (isSourceFileJS(sourceFile)) {
         changeTracker.filterJSDocTags(sourceFile, classElement, not(isJSDocOverrideTag));

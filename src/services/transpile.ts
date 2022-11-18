@@ -1,33 +1,43 @@
 import {
+    createCompilerDiagnosticForInvalidCustomType,
+    optionDeclarations,
+    parseCustomTypeOption,
+    transpileOptionValueCompilerOptions,
+} from "../compiler/commandLineParser";
+import {
     addRange,
-    cloneCompilerOptions,
+    filter,
+    getEntries,
+    hasProperty,
+    isString,
+} from "../compiler/core";
+import { MapLike } from "../compiler/corePublic";
+import { Debug } from "../compiler/debug";
+import { createSourceFile } from "../compiler/parser";
+import {
+    fileExtensionIs,
+    normalizePath,
+    toPath,
+} from "../compiler/path";
+import {
+    createProgram,
+    getImpliedNodeFormatForFile,
+} from "../compiler/program";
+import {
     CommandLineOptionOfCustomType,
     CompilerHost,
     CompilerOptions,
-    createCompilerDiagnosticForInvalidCustomType,
-    createProgram,
-    createSourceFile,
     CustomTransformers,
-    Debug,
     Diagnostic,
-    fileExtensionIs,
-    filter,
+} from "../compiler/types";
+import {
     forEachEntry,
-    getDefaultCompilerOptions,
     getEmitScriptTarget,
-    getEntries,
-    getImpliedNodeFormatForFile,
     getNewLineCharacter,
     getSetExternalModuleIndicator,
-    hasProperty,
-    isString,
-    MapLike,
-    normalizePath,
-    optionDeclarations,
-    parseCustomTypeOption,
-    toPath,
-    transpileOptionValueCompilerOptions,
-} from "./_namespaces/ts";
+} from "../compiler/utilities";
+import { getDefaultCompilerOptions } from "./services";
+import { cloneCompilerOptions } from "./utilities";
 
 export interface TranspileOptions {
     compilerOptions?: CompilerOptions;

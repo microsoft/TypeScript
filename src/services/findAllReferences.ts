@@ -1,194 +1,111 @@
 import {
-    __String,
-    addToSeen,
+    getNodeId,
+    getSymbolId,
+} from "../compiler/checkerUtilities";
+import {
     append,
-    AssignmentDeclarationKind,
-    BinaryExpression,
-    BindingElement,
-    Block,
-    CallExpression,
-    CancellationToken,
     cast,
-    CheckFlags,
-    ClassLikeDeclaration,
-    climbPastPropertyAccess,
     compareValues,
-    ConstructorDeclaration,
     contains,
     createQueue,
-    createTextSpan,
-    createTextSpanFromBounds,
-    createTextSpanFromRange,
-    Debug,
-    Declaration,
-    displayPart,
-    DocumentSpan,
     emptyArray,
-    emptyOptions,
-    escapeLeadingUnderscores,
-    ExportSpecifier,
-    Expression,
-    FileIncludeReason,
-    FileReference,
     filter,
     find,
-    findAncestor,
-    findChildOfKind,
     findIndex,
     first,
     firstDefined,
     firstOrUndefined,
     flatMap,
+    map,
+    mapDefined,
+    MultiMap,
+    some,
+    tryAddToSet,
+    tryCast,
+} from "../compiler/core";
+import { Push } from "../compiler/corePublic";
+import { Debug } from "../compiler/debug";
+import {
+    isBinaryExpression,
+    isBindingElement,
+    isCallExpression,
+    isCatchClause,
+    isClassStaticBlockDeclaration,
+    isComputedPropertyName,
+    isConstructorDeclaration,
+    isExportAssignment,
+    isExportSpecifier,
+    isExpressionWithTypeArguments,
+    isFunctionExpression,
+    isIdentifier,
+    isImportSpecifier,
+    isImportTypeNode,
+    isInterfaceDeclaration,
+    isJSDocMemberName,
+    isJsxClosingElement,
+    isJsxOpeningElement,
+    isJsxSelfClosingElement,
+    isLabeledStatement,
+    isLiteralTypeNode,
+    isModuleDeclaration,
+    isNamespaceExportDeclaration,
+    isNoSubstitutionTemplateLiteral,
+    isObjectLiteralExpression,
+    isParameter,
+    isPropertyAccessExpression,
+    isQualifiedName,
+    isShorthandPropertyAssignment,
+    isSourceFile,
+    isStaticModifier,
+    isTypeAliasDeclaration,
+    isTypeLiteralNode,
+    isTypeOperatorNode,
+    isUnionTypeNode,
+    isVoidExpression,
+} from "../compiler/factory/nodeTests";
+import {
     forEachChild,
-    forEachReturnStatement,
-    ForInOrOfStatement,
+    isExternalModule,
+} from "../compiler/parser";
+import {
+    getModeForUsageLocation,
+    getReferencedFileLocation,
+    isReferencedFile,
+    isReferenceFileLocation,
+} from "../compiler/program";
+import {
+    isIdentifierPart,
+    tokenToString,
+} from "../compiler/scanner";
+import {
+    __String,
+    AssignmentDeclarationKind,
+    BindingElement,
+    Block,
+    CallExpression,
+    CancellationToken,
+    CheckFlags,
+    ClassLikeDeclaration,
+    ConstructorDeclaration,
+    Declaration,
+    ExportSpecifier,
+    Expression,
+    FileIncludeReason,
+    FileReference,
     FunctionDeclaration,
     FunctionExpression,
     FunctionLikeDeclaration,
     GetAccessorDeclaration,
-    getAdjustedReferenceLocation,
-    getAdjustedRenameLocation,
-    getAllSuperTypeNodes,
-    getAncestor,
-    getAssignmentDeclarationKind,
-    getCheckFlags,
-    getContainerNode,
-    getContainingObjectLiteralElement,
-    getContextualTypeFromParentOrAncestorTypeNode,
-    getDeclarationFromName,
-    getDeclarationOfKind,
-    getEffectiveModifierFlags,
-    getLocalSymbolForExportDefault,
-    getMeaningFromDeclaration,
-    getMeaningFromLocation,
-    getModeForUsageLocation,
-    getNameOfDeclaration,
-    getNameTable,
-    getNextJSDocCommentLocation,
-    getNodeId,
-    getNodeKind,
-    getPropertySymbolFromBindingElement,
-    getPropertySymbolsFromContextualType,
-    getReferencedFileLocation,
-    getSuperContainer,
-    getSymbolId,
-    getSyntacticModifierFlags,
-    getTargetLabel,
-    getTextOfNode,
-    getThisContainer,
-    getTouchingPropertyName,
-    GoToDefinition,
-    hasEffectiveModifier,
-    hasInitializer,
-    hasSyntacticModifier,
-    hasType,
-    HighlightSpan,
-    HighlightSpanKind,
     Identifier,
-    ImplementationLocation,
     InterfaceDeclaration,
     InternalSymbolName,
-    isAccessExpression,
-    isArrayLiteralOrObjectLiteralDestructuringPattern,
-    isAssertionExpression,
-    isBinaryExpression,
-    isBindableObjectDefinePropertyCall,
-    isBindingElement,
-    isBreakOrContinueStatement,
-    isCallExpression,
-    isCallExpressionTarget,
-    isCatchClause,
-    isClassLike,
-    isClassStaticBlockDeclaration,
-    isComputedPropertyName,
-    isConstructorDeclaration,
-    isDeclaration,
-    isDeclarationName,
-    isExportAssignment,
-    isExportSpecifier,
-    isExpressionOfExternalModuleImportEqualsDeclaration,
-    isExpressionStatement,
-    isExpressionWithTypeArguments,
-    isExternalModule,
-    isExternalModuleSymbol,
-    isExternalOrCommonJsModule,
-    isForInOrOfStatement,
-    isFunctionExpression,
-    isFunctionLike,
-    isFunctionLikeDeclaration,
-    isIdentifier,
-    isIdentifierPart,
-    isImportMeta,
-    isImportOrExportSpecifier,
-    isImportSpecifier,
-    isImportTypeNode,
-    isInJSFile,
-    isInNonReferenceComment,
-    isInString,
-    isInterfaceDeclaration,
-    isJSDocMemberName,
-    isJSDocTag,
-    isJsxClosingElement,
-    isJsxOpeningElement,
-    isJsxSelfClosingElement,
-    isJumpStatementTarget,
-    isLabeledStatement,
-    isLabelOfLabeledStatement,
-    isLiteralComputedPropertyDeclarationName,
-    isLiteralNameOfPropertyDeclarationOrIndexAccess,
-    isLiteralTypeNode,
-    isMethodOrAccessor,
-    isModuleDeclaration,
-    isModuleExportsAccessExpression,
-    isModuleOrEnumDeclaration,
-    isModuleSpecifierLike,
-    isNameOfModuleDeclaration,
-    isNamespaceExportDeclaration,
-    isNewExpressionTarget,
-    isNoSubstitutionTemplateLiteral,
-    isObjectBindingElementWithoutPropertyName,
-    isObjectLiteralExpression,
-    isObjectLiteralMethod,
-    isParameter,
-    isParameterPropertyDeclaration,
-    isPrivateIdentifierClassElementDeclaration,
-    isPropertyAccessExpression,
-    isQualifiedName,
-    isReferencedFile,
-    isReferenceFileLocation,
-    isRightSideOfPropertyAccess,
-    isShorthandPropertyAssignment,
-    isSourceFile,
-    isStatement,
-    isStatic,
-    isStaticModifier,
-    isStringLiteralLike,
-    isSuperProperty,
-    isThis,
-    isTypeAliasDeclaration,
-    isTypeElement,
-    isTypeKeyword,
-    isTypeLiteralNode,
-    isTypeNode,
-    isTypeOperatorNode,
-    isUnionTypeNode,
-    isVariableDeclarationInitializedToBareOrAccessedRequire,
-    isVariableDeclarationList,
-    isVariableLike,
-    isVariableStatement,
-    isVoidExpression,
-    isWriteAccess,
     JSDocTag,
-    map,
-    mapDefined,
     MethodDeclaration,
     ModifierFlags,
     ModuleDeclaration,
-    MultiMap,
     NamedDeclaration,
     Node,
     NodeFlags,
-    nodeSeenTracker,
     NumericLiteral,
     ParameterDeclaration,
     ParenthesizedExpression,
@@ -198,44 +115,85 @@ import {
     PropertyAccessExpression,
     PropertyAssignment,
     PropertyDeclaration,
-    punctuationPart,
-    Push,
-    rangeIsOnSingleLine,
-    ReferencedSymbol,
-    ReferencedSymbolDefinitionInfo,
-    ReferencedSymbolEntry,
-    ReferenceEntry,
-    RenameLocation,
-    ScriptElementKind,
     ScriptTarget,
-    SemanticMeaning,
     SetAccessorDeclaration,
     SignatureDeclaration,
-    skipAlias,
-    some,
     SourceFile,
     Statement,
     StringLiteral,
     StringLiteralLike,
-    stripQuotes,
     Symbol,
-    SymbolDisplay,
-    SymbolDisplayPart,
-    SymbolDisplayPartKind,
     SymbolFlags,
     SymbolId,
-    symbolName,
     SyntaxKind,
-    textPart,
     TextSpan,
-    tokenToString,
-    tryAddToSet,
-    tryCast,
-    tryGetClassExtendingExpressionWithTypeArguments,
-    tryGetImportFromModuleSpecifier,
     TypeChecker,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "../compiler/types";
+import {
+    addToSeen,
+    forEachReturnStatement,
+    getAllSuperTypeNodes,
+    getAncestor,
+    getAssignmentDeclarationKind,
+    getCheckFlags,
+    getDeclarationFromName,
+    getDeclarationOfKind,
+    getEffectiveModifierFlags,
+    getLocalSymbolForExportDefault,
+    getNextJSDocCommentLocation,
+    getSuperContainer,
+    getSyntacticModifierFlags,
+    getTextOfNode,
+    getThisContainer,
+    hasEffectiveModifier,
+    hasSyntacticModifier,
+    isAccessExpression,
+    isBindableObjectDefinePropertyCall,
+    isDeclarationName,
+    isExternalOrCommonJsModule,
+    isImportMeta,
+    isInJSFile,
+    isLiteralComputedPropertyDeclarationName,
+    isModuleExportsAccessExpression,
+    isObjectLiteralMethod,
+    isStatic,
+    isSuperProperty,
+    isVariableDeclarationInitializedToBareOrAccessedRequire,
+    isVariableLike,
+    isWriteAccess,
+    rangeIsOnSingleLine,
+    skipAlias,
+    stripQuotes,
+    tryGetClassExtendingExpressionWithTypeArguments,
+    tryGetImportFromModuleSpecifier,
+} from "../compiler/utilities";
+import {
+    createTextSpan,
+    escapeLeadingUnderscores,
+    findAncestor,
+    getNameOfDeclaration,
+    hasInitializer,
+    hasType,
+    isAssertionExpression,
+    isBreakOrContinueStatement,
+    isClassLike,
+    isDeclaration,
+    isFunctionLike,
+    isFunctionLikeDeclaration,
+    isImportOrExportSpecifier,
+    isJSDocTag,
+    isMethodOrAccessor,
+    isModuleOrEnumDeclaration,
+    isParameterPropertyDeclaration,
+    isPrivateIdentifierClassElementDeclaration,
+    isStatement,
+    isStringLiteralLike,
+    isTypeElement,
+    isTypeNode,
+    symbolName,
+} from "../compiler/utilitiesPublic";
+import { getReferenceAtPosition } from "./goToDefinition";
 import {
     createImportTracker,
     ExportInfo,
@@ -247,7 +205,77 @@ import {
     ImportsResult,
     ImportTracker,
     ModuleReference,
-} from "./_namespaces/ts.FindAllReferences";
+} from "./importTracker";
+import {
+    getContainingObjectLiteralElement,
+    getNameTable,
+    getPropertySymbolsFromContextualType,
+} from "./services";
+import {
+    getSymbolDisplayPartsDocumentationAndSymbolKind,
+} from "./symbolDisplay";
+import {
+    ContextNode,
+    ContextWithStartAndEndNode,
+    DocumentSpan,
+    emptyOptions,
+    Entry,
+    EntryKind,
+    HighlightSpan,
+    HighlightSpanKind,
+    ImplementationLocation,
+    NodeEntry,
+    NodeEntryKind,
+    ReferencedSymbol,
+    ReferencedSymbolDefinitionInfo,
+    ReferencedSymbolEntry,
+    ReferenceEntry,
+    RenameLocation,
+    ScriptElementKind,
+    SpanEntry,
+    SymbolDisplayPart,
+    SymbolDisplayPartKind,
+} from "./types";
+import {
+    climbPastPropertyAccess,
+    createTextSpanFromRange,
+    displayPart,
+    findChildOfKind,
+    getAdjustedReferenceLocation,
+    getAdjustedRenameLocation,
+    getContainerNode,
+    getContextNode,
+    getContextualTypeFromParentOrAncestorTypeNode,
+    getMeaningFromDeclaration,
+    getMeaningFromLocation,
+    getNodeKind,
+    getPropertySymbolFromBindingElement,
+    getTargetLabel,
+    getTextSpan,
+    getTextSpanOfEntry,
+    getTouchingPropertyName,
+    isArrayLiteralOrObjectLiteralDestructuringPattern,
+    isCallExpressionTarget,
+    isExpressionOfExternalModuleImportEqualsDeclaration,
+    isExternalModuleSymbol,
+    isInNonReferenceComment,
+    isInString,
+    isJumpStatementTarget,
+    isLabelOfLabeledStatement,
+    isLiteralNameOfPropertyDeclarationOrIndexAccess,
+    isModuleSpecifierLike,
+    isNameOfModuleDeclaration,
+    isNewExpressionTarget,
+    isObjectBindingElementWithoutPropertyName,
+    isRightSideOfPropertyAccess,
+    isThis,
+    isTypeKeyword,
+    nodeSeenTracker,
+    punctuationPart,
+    SemanticMeaning,
+    textPart,
+    toContextSpan,
+} from "./utilities";
 
 /** @internal */
 export interface SymbolAndEntries {
@@ -267,31 +295,6 @@ export type Definition =
     | { readonly type: DefinitionKind.TripleSlashReference; readonly reference: FileReference, readonly file: SourceFile };
 
 /** @internal */
-export const enum EntryKind { Span, Node, StringLiteral, SearchedLocalFoundProperty, SearchedPropertyFoundLocal }
-/** @internal */
-export type NodeEntryKind = EntryKind.Node | EntryKind.StringLiteral | EntryKind.SearchedLocalFoundProperty | EntryKind.SearchedPropertyFoundLocal;
-/** @internal */
-export type Entry = NodeEntry | SpanEntry;
-/** @internal */
-export interface ContextWithStartAndEndNode {
-    start: Node;
-    end: Node;
-}
-/** @internal */
-export type ContextNode = Node | ContextWithStartAndEndNode;
-/** @internal */
-export interface NodeEntry {
-    readonly kind: NodeEntryKind;
-    readonly node: Node;
-    readonly context?: ContextNode;
-}
-/** @internal */
-export interface SpanEntry {
-    readonly kind: EntryKind.Span;
-    readonly fileName: string;
-    readonly textSpan: TextSpan;
-}
-/** @internal */
 export function nodeEntry(node: Node, kind: NodeEntryKind = EntryKind.Node): NodeEntry {
     return {
         kind,
@@ -300,10 +303,6 @@ export function nodeEntry(node: Node, kind: NodeEntryKind = EntryKind.Node): Nod
     };
 }
 
-/** @internal */
-export function isContextWithStartAndEndNode(node: ContextNode): node is ContextWithStartAndEndNode {
-    return node && (node as Node).kind === undefined;
-}
 
 function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
     if (isDeclaration(node)) {
@@ -369,71 +368,6 @@ function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
     }
 
     return undefined;
-}
-
-/** @internal */
-export function getContextNode(node: NamedDeclaration | BinaryExpression | ForInOrOfStatement | undefined): ContextNode | undefined {
-    if (!node) return undefined;
-    switch (node.kind) {
-        case SyntaxKind.VariableDeclaration:
-            return !isVariableDeclarationList(node.parent) || node.parent.declarations.length !== 1 ?
-                node :
-                isVariableStatement(node.parent.parent) ?
-                    node.parent.parent :
-                    isForInOrOfStatement(node.parent.parent) ?
-                        getContextNode(node.parent.parent) :
-                        node.parent;
-
-        case SyntaxKind.BindingElement:
-            return getContextNode(node.parent.parent as NamedDeclaration);
-
-        case SyntaxKind.ImportSpecifier:
-            return node.parent.parent.parent;
-
-        case SyntaxKind.ExportSpecifier:
-        case SyntaxKind.NamespaceImport:
-            return node.parent.parent;
-
-        case SyntaxKind.ImportClause:
-        case SyntaxKind.NamespaceExport:
-            return node.parent;
-
-        case SyntaxKind.BinaryExpression:
-            return isExpressionStatement(node.parent) ?
-                node.parent :
-                node;
-
-        case SyntaxKind.ForOfStatement:
-        case SyntaxKind.ForInStatement:
-            return {
-                start: (node as ForInOrOfStatement).initializer,
-                end: (node as ForInOrOfStatement).expression
-            };
-
-        case SyntaxKind.PropertyAssignment:
-        case SyntaxKind.ShorthandPropertyAssignment:
-            return isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent) ?
-                getContextNode(
-                    findAncestor(node.parent, node =>
-                        isBinaryExpression(node) || isForInOrOfStatement(node)
-                    ) as BinaryExpression | ForInOrOfStatement
-                ) :
-                node;
-
-        default:
-            return node;
-    }
-}
-
-/** @internal */
-export function toContextSpan(textSpan: TextSpan, sourceFile: SourceFile, context?: ContextNode): { contextSpan: TextSpan } | undefined {
-    if (!context) return undefined;
-    const contextSpan = isContextWithStartAndEndNode(context) ?
-        getTextSpan(context.start, sourceFile, context.end) :
-        getTextSpan(context, sourceFile);
-    return contextSpan.start !== textSpan.start || contextSpan.length !== textSpan.length ?
-        { contextSpan } :
-        undefined;
 }
 
 /** @internal */
@@ -608,7 +542,7 @@ function definitionToReferencedSymbolDefinitionInfo(def: Definition, checker: Ty
             case DefinitionKind.This: {
                 const { node } = def;
                 const symbol = checker.getSymbolAtLocation(node);
-                const displayParts = symbol && SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(
+                const displayParts = symbol && getSymbolDisplayPartsDocumentationAndSymbolKind(
                     checker, symbol, node.getSourceFile(), getContainerNode(node), node).displayParts || [textPart("this")];
                 return { ...getFileAndTextSpanFromNode(node), name: "this", kind: ScriptElementKind.variableElement, displayParts };
             }
@@ -660,7 +594,7 @@ function getDefinitionKindAndDisplayParts(symbol: Symbol, checker: TypeChecker, 
     const meaning = Core.getIntersectingMeaningFromDeclarations(node, symbol);
     const enclosingDeclaration = symbol.declarations && firstOrUndefined(symbol.declarations) || node;
     const { displayParts, symbolKind } =
-        SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, enclosingDeclaration.getSourceFile(), enclosingDeclaration, enclosingDeclaration, meaning);
+        getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, enclosingDeclaration.getSourceFile(), enclosingDeclaration, enclosingDeclaration, meaning);
     return { displayParts, kind: symbolKind };
 }
 
@@ -814,23 +748,6 @@ export function toHighlightSpan(entry: Entry): { fileName: string, span: Highlig
     return { fileName: documentSpan.fileName, span };
 }
 
-function getTextSpan(node: Node, sourceFile: SourceFile, endNode?: Node): TextSpan {
-    let start = node.getStart(sourceFile);
-    let end = (endNode || node).getEnd();
-    if (isStringLiteralLike(node) && (end - start) > 2) {
-        Debug.assert(endNode === undefined);
-        start += 1;
-        end -= 1;
-    }
-    return createTextSpanFromBounds(start, end);
-}
-
-/** @internal */
-export function getTextSpanOfEntry(entry: Entry) {
-    return entry.kind === EntryKind.Span ? entry.textSpan :
-        getTextSpan(entry.node, entry.node.getSourceFile());
-}
-
 /** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
 function isWriteAccessForReference(node: Node): boolean {
     const decl = getDeclarationFromName(node);
@@ -924,7 +841,7 @@ export namespace Core {
     export function getReferencedSymbolsForNode(position: number, node: Node, program: Program, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlySet<string> = new Set(sourceFiles.map(f => f.fileName))): readonly SymbolAndEntries[] | undefined {
         node = getAdjustedNode(node, options);
         if (isSourceFile(node)) {
-            const resolvedRef = GoToDefinition.getReferenceAtPosition(node, position, program);
+            const resolvedRef = getReferenceAtPosition(node, position, program);
             if (!resolvedRef?.file) {
                 return undefined;
             }

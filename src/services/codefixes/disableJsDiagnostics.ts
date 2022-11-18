@@ -1,26 +1,37 @@
 import {
-    CodeFixAction,
-    createTextChange,
-    createTextSpan,
-    createTextSpanFromBounds,
+    mapDefined,
+    tryAddToSet,
+} from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { getLineAndCharacterOfPosition } from "../../compiler/scanner";
+import {
     DiagnosticCategory,
-    Diagnostics,
-    getLineAndCharacterOfPosition,
-    getNewLineOrDefaultFromHost,
+    SourceFile,
+} from "../../compiler/types";
+import {
     isCheckJsEnabledForFile,
     isInJSFile,
-    mapDefined,
-    SourceFile,
-    textChanges,
-    tryAddToSet,
-} from "../_namespaces/ts";
+} from "../../compiler/utilities";
+import {
+    createTextSpan,
+    createTextSpanFromBounds,
+} from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     createCodeFixActionWithoutFixAll,
     createFileTextChanges,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import {
+    ChangeTracker,
+    isValidLocationToAddComment,
+} from "../textChanges";
+import { CodeFixAction } from "../types";
+import {
+    createTextChange,
+    getNewLineOrDefaultFromHost,
+} from "../utilities";
 
 const fixName = "disableJsDiagnostics";
 const fixId = "disableJsDiagnostics";
@@ -51,8 +62,8 @@ registerCodeFix({
                 Diagnostics.Disable_checking_for_this_file),
         ];
 
-        if (textChanges.isValidLocationToAddComment(sourceFile, span.start)) {
-            fixes.unshift(createCodeFixAction(fixName, textChanges.ChangeTracker.with(context, t => makeChange(t, sourceFile, span.start)), Diagnostics.Ignore_this_error_message, fixId, Diagnostics.Add_ts_ignore_to_all_error_messages));
+        if (isValidLocationToAddComment(sourceFile, span.start)) {
+            fixes.unshift(createCodeFixAction(fixName, ChangeTracker.with(context, t => makeChange(t, sourceFile, span.start)), Diagnostics.Ignore_this_error_message, fixId, Diagnostics.Add_ts_ignore_to_all_error_messages));
         }
 
         return fixes;
@@ -61,14 +72,14 @@ registerCodeFix({
     getAllCodeActions: context => {
         const seenLines = new Set<number>();
         return codeFixAll(context, errorCodes, (changes, diag) => {
-            if (textChanges.isValidLocationToAddComment(diag.file, diag.start)) {
+            if (isValidLocationToAddComment(diag.file, diag.start)) {
                 makeChange(changes, diag.file, diag.start, seenLines);
             }
         });
     },
 });
 
-function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, seenLines?: Set<number>) {
+function makeChange(changes: ChangeTracker, sourceFile: SourceFile, position: number, seenLines?: Set<number>) {
     const { line: lineNumber } = getLineAndCharacterOfPosition(sourceFile, position);
     // Only need to add `// @ts-ignore` for a line once.
     if (!seenLines || tryAddToSet(seenLines, lineNumber)) {

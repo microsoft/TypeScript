@@ -3,8 +3,8 @@ import {
     FileWatcher,
     FileWatcherCallback,
     System,
-    WatchOptions,
-} from "./_namespaces/ts";
+} from "../compiler/sys";
+import { WatchOptions } from "../compiler/types";
 
 export interface CompressedData {
     length: number;

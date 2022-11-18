@@ -1,16 +1,20 @@
+import { isArray } from "../../compiler/core";
 import {
     addNodeFactoryPatcher,
-    buildOverload,
-    EntityName,
     factory,
+} from "../../compiler/factory/nodeFactory";
+import {
+    isImportTypeAssertionContainer,
+} from "../../compiler/factory/nodeTests";
+import {
+    EntityName,
     ImportTypeAssertionContainer,
     ImportTypeNode,
-    isArray,
-    isEntityName,
-    isImportTypeAssertionContainer,
     NodeFactory,
     TypeNode,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { isEntityName } from "../../compiler/utilitiesPublic";
+import { buildOverload } from "../deprecations";
 
 // DEPRECATION: Overloads to createImportTypeNode/updateImportTypeNode that do not accept `assertions`
 // DEPRECATION PLAN:

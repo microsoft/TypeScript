@@ -1,17 +1,19 @@
 import {
     binarySearch,
-    Comparer,
-    getBaseFileName,
     identity,
-    perfLogger,
+} from "../compiler/core";
+import {
+    Comparer,
     SortedArray,
-} from "./_namespaces/ts";
+} from "../compiler/corePublic";
+import { getBaseFileName } from "../compiler/path";
+import { perfLogger } from "../compiler/perfLogger";
+import { ServerHost } from "./types";
 import {
     Logger,
     LogLevel,
     NormalizedPath,
-    ServerHost,
-} from "./_namespaces/ts.server";
+} from "./utilitiesPublic";
 
 /** @internal */
 export class ThrottledOperations {

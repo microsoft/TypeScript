@@ -1,60 +1,78 @@
 import {
-    AnyImportOrRequireStatement,
     arrayIsSorted,
     binarySearch,
     compareBooleans,
     compareStringsCaseInsensitive,
     compareValues,
-    Comparison,
-    createScanner,
     emptyArray,
-    ExportDeclaration,
-    ExportSpecifier,
-    Expression,
-    factory,
-    FileTextChanges,
-    FindAllReferences,
     flatMap,
-    formatting,
-    getNewLineOrDefaultFromHost,
     group,
-    Identifier,
     identity,
-    ImportDeclaration,
-    ImportOrExportSpecifier,
-    ImportSpecifier,
-    isAmbientModule,
+    isString,
+    length,
+    map,
+    some,
+    stableSort,
+    tryCast,
+} from "../compiler/core";
+import {
+    Comparison,
+    SortedReadonlyArray,
+} from "../compiler/corePublic";
+import { factory } from "../compiler/factory/nodeFactory";
+import {
     isExportDeclaration,
-    isExternalModuleNameRelative,
     isExternalModuleReference,
     isImportDeclaration,
     isNamedExports,
     isNamedImports,
     isNamespaceImport,
-    isString,
     isStringLiteral,
-    isStringLiteralLike,
-    jsxModeNeedsExplicitImport,
-    LanguageServiceHost,
-    length,
-    map,
+} from "../compiler/factory/nodeTests";
+import {
+    createScanner,
+    Scanner,
+} from "../compiler/scanner";
+import {
+    AnyImportOrRequireStatement,
+    ExportDeclaration,
+    ExportSpecifier,
+    Expression,
+    Identifier,
+    ImportDeclaration,
+    ImportOrExportSpecifier,
+    ImportSpecifier,
     NamedImportBindings,
     NamedImports,
     NamespaceImport,
-    OrganizeImportsMode,
     Program,
-    Scanner,
-    some,
-    SortedReadonlyArray,
     SourceFile,
-    stableSort,
-    suppressLeadingTrivia,
     SyntaxKind,
-    textChanges,
     TransformFlags,
-    tryCast,
     UserPreferences,
-} from "./_namespaces/ts";
+} from "../compiler/types";
+import { isAmbientModule } from "../compiler/utilities";
+import {
+    isExternalModuleNameRelative,
+    isStringLiteralLike,
+} from "../compiler/utilitiesPublic";
+import { Core as FindAllReferences } from "./findAllReferences";
+import {
+    ChangeTracker,
+    LeadingTriviaOption,
+    TrailingTriviaOption,
+} from "./textChanges";
+import {
+    FileTextChanges,
+    FormatContext,
+    LanguageServiceHost,
+    OrganizeImportsMode,
+} from "./types";
+import {
+    getNewLineOrDefaultFromHost,
+    jsxModeNeedsExplicitImport,
+    suppressLeadingTrivia,
+} from "./utilities";
 
 /**
  * Organize imports by:
@@ -66,13 +84,13 @@ import {
  */
 export function organizeImports(
     sourceFile: SourceFile,
-    formatContext: formatting.FormatContext,
+    formatContext: FormatContext,
     host: LanguageServiceHost,
     program: Program,
     preferences: UserPreferences,
     mode: OrganizeImportsMode,
 ): FileTextChanges[] {
-    const changeTracker = textChanges.ChangeTracker.fromContext({ host, formatContext, preferences });
+    const changeTracker = ChangeTracker.fromContext({ host, formatContext, preferences });
     const shouldSort = mode === OrganizeImportsMode.SortAndCombine || mode === OrganizeImportsMode.All;
     const shouldCombine = shouldSort; // These are currently inseparable, but I draw a distinction for clarity and in case we add modes in the future.
     const shouldRemove = mode === OrganizeImportsMode.RemoveUnused || mode === OrganizeImportsMode.All;
@@ -142,20 +160,20 @@ export function organizeImports(
             // Consider the first node to have trailingTrivia as we want to exclude the
             // "header" comment.
             changeTracker.deleteNodes(sourceFile, oldImportDecls, {
-                trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
+                trailingTriviaOption: TrailingTriviaOption.Include,
             }, /*hasTrailingComment*/ true);
         }
         else {
             // Note: Delete the surrounding trivia because it will have been retained in newImportDecls.
             const replaceOptions = {
-                leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, // Leave header comment in place
-                trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
+                leadingTriviaOption: LeadingTriviaOption.Exclude, // Leave header comment in place
+                trailingTriviaOption: TrailingTriviaOption.Include,
                 suffix: getNewLineOrDefaultFromHost(host, formatContext.options),
             };
             changeTracker.replaceNodeWithNodes(sourceFile, oldImportDecls[0], newImportDecls, replaceOptions);
             const hasTrailingComment = changeTracker.nodeHasTrailingComment(sourceFile, oldImportDecls[0], replaceOptions);
             changeTracker.deleteNodes(sourceFile, oldImportDecls.slice(1), {
-                trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
+                trailingTriviaOption: TrailingTriviaOption.Include,
             }, hasTrailingComment);
         }
     }
@@ -273,7 +291,7 @@ function removeUnusedImports(oldImports: readonly ImportDeclaration[], sourceFil
     function isDeclarationUsed(identifier: Identifier) {
         // The JSX factory symbol is always used if JSX elements are present - even if they are not allowed.
         return jsxElementsPresent && (identifier.text === jsxNamespace || jsxFragmentFactory && identifier.text === jsxFragmentFactory) && jsxModeNeedsExplicitImport(compilerOptions.jsx) ||
-            FindAllReferences.Core.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
+            FindAllReferences.isSymbolReferencedInFile(identifier, typeChecker, sourceFile);
     }
 }
 

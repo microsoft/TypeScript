@@ -1,102 +1,119 @@
 import {
+    concatenate,
+    emptyArray,
+    every,
+    filter,
+    find,
+    first,
+    flatMap,
+    forEach,
+    last,
+    map,
+    mapDefined,
+    some,
+    tryCast,
+} from "../compiler/core";
+import { Debug } from "../compiler/debug";
+import {
+    isBindingElement,
+    isClassExpression,
+    isClassStaticBlockDeclaration,
+    isConstructorDeclaration,
+    isFunctionTypeNode,
+    isIdentifier,
+    isJSDocOverrideTag,
+    isObjectBindingPattern,
+    isStaticModifier,
+    isVariableDeclaration,
+} from "../compiler/factory/nodeTests";
+import { isDeclarationFileName } from "../compiler/parser";
+import {
+    getDirectoryPath,
+    resolvePath,
+} from "../compiler/path";
+import { getModeForUsageLocation } from "../compiler/program";
+import { skipTrivia } from "../compiler/scanner";
+import {
     AssignmentDeclarationKind,
     AssignmentExpression,
     AssignmentOperatorToken,
     CallLikeExpression,
-    concatenate,
-    createTextSpan,
-    createTextSpanFromBounds,
-    createTextSpanFromNode,
-    createTextSpanFromRange,
-    Debug,
     Declaration,
-    DefinitionInfo,
-    DefinitionInfoAndBoundSpan,
-    emptyArray,
-    every,
     FileReference,
-    filter,
-    find,
-    FindAllReferences,
-    findAncestor,
-    first,
-    flatMap,
-    forEach,
     FunctionLikeDeclaration,
+    ModifierFlags,
+    Node,
+    NodeFlags,
+    Program,
+    SignatureDeclaration,
+    SourceFile,
+    Symbol,
+    SymbolFlags,
+    SyntaxKind,
+    TextSpan,
+    Type,
+    TypeChecker,
+    TypeFlags,
+} from "../compiler/types";
+import {
     getAssignmentDeclarationKind,
-    getContainingObjectLiteralElement,
-    getDirectoryPath,
     getEffectiveBaseTypeNode,
     getInvokedExpression,
-    getModeForUsageLocation,
-    getNameFromPropertyName,
-    getNameOfDeclaration,
-    getPropertySymbolsFromContextualType,
-    getTargetLabel,
     getTextOfPropertyName,
-    getTouchingPropertyName,
-    getTouchingToken,
     hasEffectiveModifier,
-    hasInitializer,
     hasStaticModifier,
     isAnyImportOrBareOrAccessedRequire,
     isAssignmentDeclaration,
     isAssignmentExpression,
-    isBindingElement,
+    isImportMeta,
+    moveRangePastModifiers,
+    skipAlias,
+    skipParentheses,
+    tryGetModuleSpecifierFromDeclaration,
+} from "../compiler/utilities";
+import {
+    createTextSpan,
+    createTextSpanFromBounds,
+    findAncestor,
+    getNameOfDeclaration,
+    hasInitializer,
     isCallLikeExpression,
-    isCallOrNewExpressionTarget,
     isClassElement,
-    isClassExpression,
     isClassLike,
-    isClassStaticBlockDeclaration,
-    isConstructorDeclaration,
-    isDeclarationFileName,
     isExternalModuleNameRelative,
     isFunctionLike,
     isFunctionLikeDeclaration,
-    isFunctionTypeNode,
-    isIdentifier,
-    isImportMeta,
-    isJSDocOverrideTag,
     isJsxOpeningLikeElement,
+    isPropertyName,
+    textRangeContainsPositionInclusive,
+    unescapeLeadingUnderscores,
+} from "../compiler/utilitiesPublic";
+import {
+    getContainingObjectLiteralElement,
+    getPropertySymbolsFromContextualType,
+} from "./services";
+import { getSymbolKind } from "./symbolDisplay";
+import {
+    DefinitionInfo,
+    DefinitionInfoAndBoundSpan,
+    ScriptElementKind,
+} from "./types";
+import {
+    createTextSpanFromNode,
+    createTextSpanFromRange,
+    getContextNode,
+    getNameFromPropertyName,
+    getTargetLabel,
+    getTouchingPropertyName,
+    getTouchingToken,
+    isCallOrNewExpressionTarget,
     isJumpStatementTarget,
     isModuleSpecifierLike,
     isNameOfFunctionDeclaration,
     isNewExpressionTarget,
-    isObjectBindingPattern,
-    isPropertyName,
     isRightSideOfPropertyAccess,
-    isStaticModifier,
-    isVariableDeclaration,
-    last,
-    map,
-    mapDefined,
-    ModifierFlags,
-    moveRangePastModifiers,
-    Node,
-    NodeFlags,
-    Program,
-    resolvePath,
-    ScriptElementKind,
-    SignatureDeclaration,
-    skipAlias,
-    skipParentheses,
-    skipTrivia,
-    some,
-    SourceFile,
-    Symbol,
-    SymbolDisplay,
-    SymbolFlags,
-    SyntaxKind,
-    textRangeContainsPositionInclusive,
-    TextSpan,
-    tryCast,
-    tryGetModuleSpecifierFromDeclaration,
-    Type,
-    TypeChecker,
-    TypeFlags,
-    unescapeLeadingUnderscores,
-} from "./_namespaces/ts";
+    toContextSpan,
+} from "./utilities";
 
 /** @internal */
 export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {
@@ -510,7 +527,7 @@ function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node:
  */
 export function createDefinitionInfo(declaration: Declaration, checker: TypeChecker, symbol: Symbol, node: Node, unverified?: boolean, failedAliasResolution?: boolean): DefinitionInfo {
     const symbolName = checker.symbolToString(symbol); // Do not get scoped name, just the name of the symbol
-    const symbolKind = SymbolDisplay.getSymbolKind(checker, symbol, node);
+    const symbolKind = getSymbolKind(checker, symbol, node);
     const containerName = symbol.parent ? checker.symbolToString(symbol.parent, node) : "";
     return createDefinitionInfoFromName(checker, declaration, symbolKind, symbolName, containerName, unverified, failedAliasResolution);
 }
@@ -529,10 +546,10 @@ function createDefinitionInfoFromName(checker: TypeChecker, declaration: Declara
         name: symbolName,
         containerKind: undefined!, // TODO: GH#18217
         containerName,
-        ...FindAllReferences.toContextSpan(
+        ...toContextSpan(
             textSpan,
             sourceFile,
-            FindAllReferences.getContextNode(declaration)
+            getContextNode(declaration)
         ),
         isLocal: !isDefinitionVisible(checker, declaration),
         isAmbient: !!(declaration.flags & NodeFlags.Ambient),

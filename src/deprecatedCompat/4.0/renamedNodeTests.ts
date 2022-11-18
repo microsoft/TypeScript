@@ -2,7 +2,7 @@ import {
     Node,
     SyntaxKind,
     TypeAssertion,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
 import { deprecate } from "../deprecate";
 
 // DEPRECATION: Renamed node tests

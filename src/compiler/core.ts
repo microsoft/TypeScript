@@ -1,19 +1,20 @@
 import {
-    __String,
-    CharacterCodes,
     Comparer,
     Comparison,
-    Debug,
     EqualityComparer,
-    isWhiteSpaceLike,
     MapLike,
     Push,
-    Queue,
     SortedArray,
     SortedReadonlyArray,
+} from "./corePublic";
+// import { Debug } from "./debug";
+import {
+    __String,
+    CharacterCodes,
+    Queue,
     TextSpan,
     UnderscoreEscapedMap,
-} from "./_namespaces/ts";
+} from "./types";
 
 /** @internal */
 export function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined>(iterable: I): Iterator<
@@ -135,7 +136,7 @@ export function reduceLeftIterator<T, U>(iterator: Iterator<T> | undefined, f: (
 /** @internal */
 export function zipWith<T, U, V>(arrayA: readonly T[], arrayB: readonly U[], callback: (a: T, b: U, index: number) => V): V[] {
     const result: V[] = [];
-    Debug.assertEqual(arrayA.length, arrayB.length);
+    // Debug.assertEqual(arrayA.length, arrayB.length);
     for (let i = 0; i < arrayA.length; i++) {
         result.push(callback(arrayA[i], arrayB[i], i));
     }
@@ -144,7 +145,7 @@ export function zipWith<T, U, V>(arrayA: readonly T[], arrayB: readonly U[], cal
 
 /** @internal */
 export function zipToIterator<T, U>(arrayA: readonly T[], arrayB: readonly U[]): Iterator<[T, U]> {
-    Debug.assertEqual(arrayA.length, arrayB.length);
+    // Debug.assertEqual(arrayA.length, arrayB.length);
     let i = 0;
     return {
         next() {
@@ -159,7 +160,7 @@ export function zipToIterator<T, U>(arrayA: readonly T[], arrayB: readonly U[]):
 
 /** @internal */
 export function zipToMap<K, V>(keys: readonly K[], values: readonly V[]): Map<K, V> {
-    Debug.assert(keys.length === values.length);
+    // Debug.assert(keys.length === values.length);
     const map = new Map<K, V>();
     for (let i = 0; i < keys.length; ++i) {
         map.set(keys[i], values[i]);
@@ -279,7 +280,8 @@ export function findMap<T, U>(array: readonly T[], callback: (element: T, index:
             return result;
         }
     }
-    return Debug.fail();
+    // return Debug.fail();
+    throw new Error();
 }
 
 /** @internal */
@@ -897,7 +899,8 @@ function deduplicateSorted<T>(array: SortedReadonlyArray<T>, comparer: EqualityC
 
             case Comparison.LessThan:
                 // If `array` is sorted, `next` should **never** be less than `last`.
-                return Debug.fail("Array is unsorted.");
+                // return Debug.fail("Array is unsorted.");
+                throw new Error("Array is unsorted.");
         }
 
         deduplicated.push(last = next);
@@ -1018,14 +1021,14 @@ export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | und
     loopB: for (let offsetA = 0, offsetB = 0; offsetB < arrayB.length; offsetB++) {
         if (offsetB > 0) {
             // Ensure `arrayB` is properly sorted.
-            Debug.assertGreaterThanOrEqual(comparer(arrayB[offsetB], arrayB[offsetB - 1]), Comparison.EqualTo);
+            // Debug.assertGreaterThanOrEqual(comparer(arrayB[offsetB], arrayB[offsetB - 1]), Comparison.EqualTo);
         }
 
         loopA: for (const startA = offsetA; offsetA < arrayA.length; offsetA++) {
             if (offsetA > startA) {
                 // Ensure `arrayA` is properly sorted. We only need to perform this check if
                 // `offsetA` has changed since we entered the loop.
-                Debug.assertGreaterThanOrEqual(comparer(arrayA[offsetA], arrayA[offsetA - 1]), Comparison.EqualTo);
+                // Debug.assertGreaterThanOrEqual(comparer(arrayA[offsetA], arrayA[offsetA - 1]), Comparison.EqualTo);
             }
 
             switch (comparer(arrayB[offsetB], arrayA[offsetA])) {
@@ -1272,7 +1275,7 @@ export function firstOrUndefined<T>(array: readonly T[] | undefined): T | undefi
 
 /** @internal */
 export function first<T>(array: readonly T[]): T {
-    Debug.assert(array.length !== 0);
+    // Debug.assert(array.length !== 0);
     return array[0];
 }
 
@@ -1287,7 +1290,7 @@ export function lastOrUndefined<T>(array: readonly T[] | undefined): T | undefin
 
 /** @internal */
 export function last<T>(array: readonly T[]): T {
-    Debug.assert(array.length !== 0);
+    // Debug.assert(array.length !== 0);
     return array[array.length - 1];
 }
 
@@ -1308,7 +1311,12 @@ export function singleOrUndefined<T>(array: readonly T[] | undefined): T | undef
  * @internal
  */
 export function single<T>(array: readonly T[]): T {
-    return Debug.checkDefined(singleOrUndefined(array));
+    // return Debug.checkDefined(singleOrUndefined(array));
+    const result = singleOrUndefined(array);
+    if (result === undefined) {
+        throw new Error();
+    }
+    return result;
 }
 
 /**
@@ -1487,18 +1495,21 @@ export function getOwnValues<T>(collection: MapLike<T> | T[]): T[] {
     return values;
 }
 
-const _entries = Object.entries || (<T>(obj: MapLike<T>) => {
+function entries<T>(obj: MapLike<T>): [string, T][] {
+    if (Object.entries) {
+        return Object.entries(obj);
+    }
     const keys = getOwnKeys(obj);
     const result: [string, T][] = Array(keys.length);
     for (let i = 0; i < keys.length; i++) {
         result[i] = [keys[i], obj[keys[i]]];
     }
     return result;
-});
+}
 
 /** @internal */
 export function getEntries<T>(obj: MapLike<T>): [string, T][] {
-    return obj ? _entries(obj) : [];
+    return obj ? entries(obj) : [];
 }
 
 /** @internal */
@@ -2001,8 +2012,8 @@ export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined
 /** @internal */
 export function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut {
     if (value !== undefined && test(value)) return value;
-
-    return Debug.fail(`Invalid cast. The supplied value ${value} did not pass the test '${Debug.getFunctionName(test)}'.`);
+    throw new Error(`Invalid cast. The supplied value ${value} did not pass the test`);
+    // return Debug.fail(`Invalid cast. The supplied value ${value} did not pass the test '${Debug.getFunctionName(test)}'.`);
 }
 
 /**
@@ -2488,7 +2499,7 @@ export function getSpellingSuggestion<T>(name: string, candidates: T[], getName:
                 continue;
             }
 
-            Debug.assert(distance < bestDistance); // Else `levenshteinWithMax` should return undefined
+            // Debug.assert(distance < bestDistance); // Else `levenshteinWithMax` should return undefined
             bestDistance = distance;
             bestCandidate = candidate;
         }
@@ -2702,7 +2713,7 @@ export function patternText({ prefix, suffix }: Pattern): string {
  * @internal
  */
 export function matchedText(pattern: Pattern, candidate: string): string {
-    Debug.assert(isPatternMatch(pattern, candidate));
+    // Debug.assert(isPatternMatch(pattern, candidate));
     return candidate.substring(pattern.prefix.length, candidate.length - pattern.suffix.length);
 }
 
@@ -2934,6 +2945,46 @@ function trimEndImpl(s: string) {
         end--;
     }
     return s.slice(0, end + 1);
+}
+
+export function isWhiteSpaceLike(ch: number): boolean {
+    return isWhiteSpaceSingleLine(ch) || isLineBreak(ch);
+}
+
+/** Does not include line breaks. For that, see isWhiteSpaceLike. */
+export function isWhiteSpaceSingleLine(ch: number): boolean {
+    // Note: nextLine is in the Zs space, and should be considered to be a whitespace.
+    // It is explicitly not a line-break as it isn't in the exact set specified by EcmaScript.
+    return ch === CharacterCodes.space ||
+        ch === CharacterCodes.tab ||
+        ch === CharacterCodes.verticalTab ||
+        ch === CharacterCodes.formFeed ||
+        ch === CharacterCodes.nonBreakingSpace ||
+        ch === CharacterCodes.nextLine ||
+        ch === CharacterCodes.ogham ||
+        ch >= CharacterCodes.enQuad && ch <= CharacterCodes.zeroWidthSpace ||
+        ch === CharacterCodes.narrowNoBreakSpace ||
+        ch === CharacterCodes.mathematicalSpace ||
+        ch === CharacterCodes.ideographicSpace ||
+        ch === CharacterCodes.byteOrderMark;
+}
+
+export function isLineBreak(ch: number): boolean {
+    // ES5 7.3:
+    // The ECMAScript line terminator characters are listed in Table 3.
+    //     Table 3: Line Terminator Characters
+    //     Code Unit Value     Name                    Formal Name
+    //     \u000A              Line Feed               <LF>
+    //     \u000D              Carriage Return         <CR>
+    //     \u2028              Line separator          <LS>
+    //     \u2029              Paragraph separator     <PS>
+    // Only the characters in Table 3 are treated as line terminators. Other new line or line
+    // breaking characters are treated as white space but not as line terminators.
+
+    return ch === CharacterCodes.lineFeed ||
+        ch === CharacterCodes.carriageReturn ||
+        ch === CharacterCodes.lineSeparator ||
+        ch === CharacterCodes.paragraphSeparator;
 }
 
 declare const process: any;

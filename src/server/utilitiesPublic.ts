@@ -1,16 +1,18 @@
 import {
+    SortedArray,
+    SortedReadonlyArray,
+} from "../compiler/corePublic";
+import {
     getNormalizedAbsolutePath,
     isRootedDiskPath,
     normalizePath,
-    Path,
-    SortedArray,
-    SortedReadonlyArray,
-    TypeAcquisition,
-} from "./_namespaces/ts";
+} from "../compiler/path";
 import {
-    DiscoverTypings,
-    Project,
-} from "./_namespaces/ts.server";
+    Path,
+    TypeAcquisition,
+} from "../compiler/types";
+import { DiscoverTypings } from "../jsTyping/types";
+import { Project } from "./project";
 
 export enum LogLevel {
     terse,

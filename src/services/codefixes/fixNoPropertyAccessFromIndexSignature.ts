@@ -1,22 +1,24 @@
+import { cast } from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import { isPropertyAccessExpression } from "../../compiler/factory/nodeTests";
 import {
-    cast,
-    Diagnostics,
-    factory,
-    getQuotePreference,
-    getTokenAtPosition,
-    isPropertyAccessChain,
-    isPropertyAccessExpression,
     PropertyAccessExpression,
-    QuotePreference,
     SourceFile,
-    textChanges,
     UserPreferences,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { isPropertyAccessChain } from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    getQuotePreference,
+    getTokenAtPosition,
+    QuotePreference,
+} from "../utilities";
 
 const fixId = "fixNoPropertyAccessFromIndexSignature";
 const errorCodes = [
@@ -29,14 +31,14 @@ registerCodeFix({
     getCodeActions(context) {
         const { sourceFile, span, preferences } = context;
         const property = getPropertyAccessExpression(sourceFile, span.start);
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, property, preferences));
+        const changes = ChangeTracker.with(context, t => doChange(t, context.sourceFile, property, preferences));
         return [createCodeFixAction(fixId, changes, [Diagnostics.Use_element_access_for_0, property.name.text], fixId, Diagnostics.Use_element_access_for_all_undeclared_properties)];
     },
     getAllCodeActions: context =>
         codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, getPropertyAccessExpression(diag.file, diag.start), context.preferences))
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: PropertyAccessExpression, preferences: UserPreferences): void {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, node: PropertyAccessExpression, preferences: UserPreferences): void {
     const quotePreference = getQuotePreference(sourceFile, preferences);
     const argumentsExpression = factory.createStringLiteral(node.name.text, quotePreference === QuotePreference.Single);
     changes.replaceNode(

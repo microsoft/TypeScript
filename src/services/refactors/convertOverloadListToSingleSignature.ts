@@ -1,25 +1,27 @@
 import {
-    ApplicableRefactorInfo,
-    CallSignatureDeclaration,
-    ConstructorDeclaration,
-    ConstructSignatureDeclaration,
-    Debug,
-    Diagnostics,
-    displayPartsToString,
-    EmitFlags,
     emptyArray,
     every,
-    factory,
-    findAncestor,
-    FunctionDeclaration,
-    getSourceFileOfNode,
-    getSyntheticLeadingComments,
-    getTokenAtPosition,
-    isFunctionLikeDeclaration,
-    isIdentifier,
     length,
     map,
     mapDefined,
+    some,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import {
+    getSyntheticLeadingComments,
+    setEmitFlags,
+    setSyntheticLeadingComments,
+} from "../../compiler/factory/emitNode";
+import { factory } from "../../compiler/factory/nodeFactory";
+import { isIdentifier } from "../../compiler/factory/nodeTests";
+import { setTextRange } from "../../compiler/factory/utilitiesPublic";
+import {
+    CallSignatureDeclaration,
+    ConstructorDeclaration,
+    ConstructSignatureDeclaration,
+    EmitFlags,
+    FunctionDeclaration,
     MethodDeclaration,
     MethodSignature,
     NamedTupleMember,
@@ -27,19 +29,27 @@ import {
     NodeArray,
     ParameterDeclaration,
     Program,
-    rangeContainsPosition,
-    RefactorContext,
-    RefactorEditInfo,
-    setEmitFlags,
-    setSyntheticLeadingComments,
-    setTextRange,
-    some,
     SourceFile,
     SyntaxKind,
-    textChanges,
     TupleTypeNode,
-} from "../_namespaces/ts";
-import { registerRefactor } from "../_namespaces/ts.refactor";
+} from "../../compiler/types";
+import { getSourceFileOfNode } from "../../compiler/utilities";
+import {
+    findAncestor,
+    isFunctionLikeDeclaration,
+} from "../../compiler/utilitiesPublic";
+import { registerRefactor } from "../refactorProvider";
+import { displayPartsToString } from "../services";
+import { ChangeTracker } from "../textChanges";
+import {
+    ApplicableRefactorInfo,
+    RefactorContext,
+    RefactorEditInfo,
+} from "../types";
+import {
+    getTokenAtPosition,
+    rangeContainsPosition,
+} from "../utilities";
 
 const refactorName = "Convert overload list to single signature";
 const refactorDescription = Diagnostics.Convert_overload_list_to_single_signature.message;
@@ -150,7 +160,7 @@ function getRefactorEditsToConvertOverloadsToOneSignature(context: RefactorConte
         return; // No edits to apply, do nothing
     }
 
-    const edits = textChanges.ChangeTracker.with(context, t => {
+    const edits = ChangeTracker.with(context, t => {
         t.replaceNodeRange(file, signatureDecls[0], signatureDecls[signatureDecls.length - 1], updated);
     });
 

@@ -1,21 +1,25 @@
 import {
+    isElementAccessExpression,
+    isPropertyAccessExpression,
+} from "../factory/nodeTests";
+import { setTextRange } from "../factory/utilitiesPublic";
+import {
     BinaryExpression,
     Bundle,
-    chainBundle,
     Expression,
-    isElementAccessExpression,
-    isExpression,
-    isPropertyAccessExpression,
     Node,
-    setTextRange,
     SourceFile,
     SyntaxKind,
     TransformationContext,
     TransformFlags,
+    VisitResult,
+} from "../types";
+import { isExpression } from "../utilitiesPublic";
+import {
     visitEachChild,
     visitNode,
-    VisitResult,
-} from "../_namespaces/ts";
+} from "../visitorPublic";
+import { chainBundle } from "./utilities";
 
 /** @internal */
 export function transformES2016(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

@@ -1,15 +1,13 @@
-import {
-    Diagnostics,
-    factory,
-    textChanges,
-    TsConfigSourceFile,
-} from "../_namespaces/ts";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import { TsConfigSourceFile } from "../../compiler/types";
 import {
     codeFixAll,
     createCodeFixActionWithoutFixAll,
     registerCodeFix,
-    setJsonCompilerOptionValue,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { setJsonCompilerOptionValue } from "./helpers";
 
 const fixId = "enableExperimentalDecorators";
 const errorCodes = [
@@ -23,7 +21,7 @@ registerCodeFix({
             return undefined;
         }
 
-        const changes = textChanges.ChangeTracker.with(context, changeTracker => doChange(changeTracker, configFile));
+        const changes = ChangeTracker.with(context, changeTracker => doChange(changeTracker, configFile));
         return [createCodeFixActionWithoutFixAll(fixId, changes, Diagnostics.Enable_the_experimentalDecorators_option_in_your_configuration_file)];
     },
     fixIds: [fixId],
@@ -36,6 +34,6 @@ registerCodeFix({
     }),
 });
 
-function doChange(changeTracker: textChanges.ChangeTracker, configFile: TsConfigSourceFile) {
+function doChange(changeTracker: ChangeTracker, configFile: TsConfigSourceFile) {
     setJsonCompilerOptionValue(changeTracker, configFile, "experimentalDecorators", factory.createTrue());
 }

@@ -1,32 +1,38 @@
 import {
-    __String,
     append,
-    CodeFixAction,
-    CodeFixContext,
-    Diagnostics,
-    factory,
     firstDefined,
-    getHostSignatureFromJSDoc,
-    getJSDocTags,
-    getTokenAtPosition,
-    Identifier,
-    isIdentifier,
-    isJSDocParameterTag,
-    JSDocParameterTag,
-    JSDocTag,
     length,
     map,
+} from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
+    isIdentifier,
+    isJSDocParameterTag,
+} from "../../compiler/factory/nodeTests";
+import {
+    __String,
+    Identifier,
+    JSDocParameterTag,
+    JSDocTag,
     SignatureDeclaration,
     SourceFile,
-    textChanges,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { getHostSignatureFromJSDoc } from "../../compiler/utilities";
+import { getJSDocTags } from "../../compiler/utilitiesPublic";
 import {
     createCodeFixAction,
     createCodeFixActionWithoutFixAll,
     createCombinedCodeActions,
     eachDiagnostic,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    CodeFixAction,
+    CodeFixContext,
+} from "../types";
+import { getTokenAtPosition } from "../utilities";
 
 const deleteUnmatchedParameter = "deleteUnmatchedParameter";
 const renameUnmatchedParameter = "renameUnmatchedParameter";
@@ -51,7 +57,7 @@ registerCodeFix({
     },
     getAllCodeActions: function getAllCodeActionsToFixUnmatchedParameter(context) {
         const tagsToSignature = new Map<SignatureDeclaration, JSDocTag[]>();
-        return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
+        return createCombinedCodeActions(ChangeTracker.with(context, changes => {
             eachDiagnostic(context, errorCodes, ({ file, start }) => {
                 const info = getInfo(file, start);
                 if (info) {
@@ -70,7 +76,7 @@ registerCodeFix({
 });
 
 function getDeleteAction(context: CodeFixContext, { name, signature, jsDocParameterTag }: Info) {
-    const changes = textChanges.ChangeTracker.with(context, changeTracker =>
+    const changes = ChangeTracker.with(context, changeTracker =>
         changeTracker.filterJSDocTags(context.sourceFile, signature, t => t !== jsDocParameterTag));
     return createCodeFixAction(
         deleteUnmatchedParameter,
@@ -107,7 +113,7 @@ function getRenameAction(context: CodeFixContext, { name, signature, jsDocParame
         jsDocParameterTag.isNameFirst,
         jsDocParameterTag.comment
     );
-    const changes = textChanges.ChangeTracker.with(context, changeTracker =>
+    const changes = ChangeTracker.with(context, changeTracker =>
         changeTracker.replaceJSDocComment(sourceFile, signature, map(tags, t => t === jsDocParameterTag ? newJSDocParameterTag : t)));
     return createCodeFixActionWithoutFixAll(renameUnmatchedParameter, changes, [Diagnostics.Rename_param_tag_name_0_to_1, name.getText(sourceFile), parameterName]);
 }

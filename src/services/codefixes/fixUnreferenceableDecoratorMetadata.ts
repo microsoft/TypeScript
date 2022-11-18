@@ -1,33 +1,39 @@
 import {
     append,
-    CodeFixAction,
-    Diagnostics,
     emptyArray,
     find,
-    forEachImportClauseDeclaration,
-    getTokenAtPosition,
-    ImportClause,
-    ImportEqualsDeclaration,
-    ImportSpecifier,
+    or,
+    tryCast,
+} from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import {
     isIdentifier,
     isImportClause,
     isImportEqualsDeclaration,
     isImportSpecifier,
+} from "../../compiler/factory/nodeTests";
+import {
+    ImportClause,
+    ImportEqualsDeclaration,
+    ImportSpecifier,
     Node,
-    or,
     Program,
-    refactor,
-    skipAlias,
     SourceFile,
     SymbolFlags,
     SyntaxKind,
-    textChanges,
-    tryCast,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    forEachImportClauseDeclaration,
+    skipAlias,
+} from "../../compiler/utilities";
 import {
     createCodeFixActionWithoutFixAll,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { doChangeNamedToNamespaceOrDefault } from "../refactors/convertImport";
+import { ChangeTracker } from "../textChanges";
+import { CodeFixAction } from "../types";
+import { getTokenAtPosition } from "../utilities";
 
 const fixId = "fixUnreferenceableDecoratorMetadata";
 const errorCodes = [Diagnostics.A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled.code];
@@ -37,8 +43,8 @@ registerCodeFix({
         const importDeclaration = getImportDeclaration(context.sourceFile, context.program, context.span.start);
         if (!importDeclaration) return;
 
-        const namespaceChanges = textChanges.ChangeTracker.with(context, t => importDeclaration.kind === SyntaxKind.ImportSpecifier && doNamespaceImportChange(t, context.sourceFile, importDeclaration, context.program));
-        const typeOnlyChanges = textChanges.ChangeTracker.with(context, t => doTypeOnlyImportChange(t, context.sourceFile, importDeclaration, context.program));
+        const namespaceChanges = ChangeTracker.with(context, t => importDeclaration.kind === SyntaxKind.ImportSpecifier && doNamespaceImportChange(t, context.sourceFile, importDeclaration, context.program));
+        const typeOnlyChanges = ChangeTracker.with(context, t => doTypeOnlyImportChange(t, context.sourceFile, importDeclaration, context.program));
         let actions: CodeFixAction[] | undefined;
         if (namespaceChanges.length) {
             actions = append(actions, createCodeFixActionWithoutFixAll(fixId, namespaceChanges, Diagnostics.Convert_named_imports_to_namespace_import));
@@ -65,7 +71,7 @@ function getImportDeclaration(sourceFile: SourceFile, program: Program, start: n
 // cannot be done cleanly, we could offer to *extract* the offending import to a
 // new type-only import declaration, but honestly I doubt anyone will ever use this
 // codefix at all, so it's probably not worth the lines of code.
-function doTypeOnlyImportChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDeclaration: ImportClause | ImportSpecifier | ImportEqualsDeclaration, program: Program) {
+function doTypeOnlyImportChange(changes: ChangeTracker, sourceFile: SourceFile, importDeclaration: ImportClause | ImportSpecifier | ImportEqualsDeclaration, program: Program) {
     if (importDeclaration.kind === SyntaxKind.ImportEqualsDeclaration) {
         changes.insertModifierBefore(sourceFile, SyntaxKind.TypeKeyword, importDeclaration.name);
         return;
@@ -93,6 +99,6 @@ function doTypeOnlyImportChange(changes: textChanges.ChangeTracker, sourceFile: 
     changes.insertModifierBefore(sourceFile, SyntaxKind.TypeKeyword, importClause);
 }
 
-function doNamespaceImportChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, importDeclaration: ImportSpecifier, program: Program) {
-    refactor.doChangeNamedToNamespaceOrDefault(sourceFile, program, changes, importDeclaration.parent);
+function doNamespaceImportChange(changes: ChangeTracker, sourceFile: SourceFile, importDeclaration: ImportSpecifier, program: Program) {
+    doChangeNamedToNamespaceOrDefault(sourceFile, program, changes, importDeclaration.parent);
 }

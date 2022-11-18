@@ -1,24 +1,28 @@
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import {
-    AnyImportSyntax,
-    Diagnostics,
-    Expression,
-    getQuotePreference,
-    getTokenAtPosition,
-    Identifier,
     isExternalModuleReference,
     isIdentifier,
     isImportEqualsDeclaration,
     isNamespaceImport,
-    makeImport,
+} from "../../compiler/factory/nodeTests";
+import {
+    AnyImportSyntax,
+    Expression,
+    Identifier,
     SourceFile,
-    textChanges,
     UserPreferences,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    getQuotePreference,
+    getTokenAtPosition,
+    makeImport,
+} from "../utilities";
 
 const fixId = "useDefaultImport";
 const errorCodes = [Diagnostics.Import_may_be_converted_to_a_default_import.code];
@@ -28,7 +32,7 @@ registerCodeFix({
         const { sourceFile, span: { start } } = context;
         const info = getInfo(sourceFile, start);
         if (!info) return undefined;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info, context.preferences));
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, info, context.preferences));
         return [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_default_import, fixId, Diagnostics.Convert_all_to_default_imports)];
     },
     fixIds: [fixId],
@@ -56,6 +60,6 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     }
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info, preferences: UserPreferences): void {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, info: Info, preferences: UserPreferences): void {
     changes.replaceNode(sourceFile, info.importNode, makeImport(info.name, /*namedImports*/ undefined, info.moduleSpecifier, getQuotePreference(sourceFile, preferences)));
 }

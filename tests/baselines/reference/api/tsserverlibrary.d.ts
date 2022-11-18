@@ -3165,14 +3165,14 @@ declare namespace ts {
             isKnownTypesPackageName(name: string): boolean;
             installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
             private get typingsCache();
-            getCompilationSettings(): ts.CompilerOptions;
-            getCompilerOptions(): ts.CompilerOptions;
+            getCompilationSettings(): CompilerOptions;
+            getCompilerOptions(): CompilerOptions;
             getNewLine(): string;
             getProjectVersion(): string;
             getProjectReferences(): readonly ProjectReference[] | undefined;
             getScriptFileNames(): string[];
             private getOrCreateScriptInfoAndAttachToProject;
-            getScriptKind(fileName: string): ts.ScriptKind;
+            getScriptKind(fileName: string): ScriptKind;
             getScriptVersion(filename: string): string;
             getScriptSnapshot(filename: string): IScriptSnapshot | undefined;
             getCancellationToken(): HostCancellationToken;
@@ -3212,7 +3212,7 @@ declare namespace ts {
             getProjectName(): string;
             protected removeLocalTypingsFromTypeAcquisition(newTypeAcquisition: TypeAcquisition): TypeAcquisition;
             getExternalFiles(): SortedReadonlyArray<string>;
-            getSourceFile(path: Path): ts.SourceFile | undefined;
+            getSourceFile(path: Path): SourceFile | undefined;
             close(): void;
             private detachScriptInfoIfNotRoot;
             isClosed(): boolean;
@@ -3249,7 +3249,7 @@ declare namespace ts {
             filesToString(writeProjectFileNames: boolean): string;
             setCompilerOptions(compilerOptions: CompilerOptions): void;
             setTypeAcquisition(newTypeAcquisition: TypeAcquisition | undefined): void;
-            getTypeAcquisition(): ts.TypeAcquisition;
+            getTypeAcquisition(): TypeAcquisition;
             protected removeRoot(info: ScriptInfo): void;
             protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<string, any> | undefined): void;
             protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<string, any> | undefined): void;
@@ -3283,7 +3283,7 @@ declare namespace ts {
             getScriptFileNames(): string[];
             getLanguageService(): never;
             getModuleResolutionHostForAutoImportProvider(): never;
-            getProjectReferences(): readonly ts.ProjectReference[] | undefined;
+            getProjectReferences(): readonly ProjectReference[] | undefined;
             getTypeAcquisition(): TypeAcquisition;
         }
         /**
@@ -3982,6 +3982,10 @@ declare namespace ts {
     interface Push<T> {
         push(...values: T[]): void;
     }
+    function isWhiteSpaceLike(ch: number): boolean;
+    /** Does not include line breaks. For that, see isWhiteSpaceLike. */
+    function isWhiteSpaceSingleLine(ch: number): boolean;
+    function isLineBreak(ch: number): boolean;
     type Path = string & {
         __pathBrand: any;
     };
@@ -8435,10 +8439,6 @@ declare namespace ts {
     function tokenToString(t: SyntaxKind): string | undefined;
     function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number;
     function getLineAndCharacterOfPosition(sourceFile: SourceFileLike, position: number): LineAndCharacter;
-    function isWhiteSpaceLike(ch: number): boolean;
-    /** Does not include line breaks. For that, see isWhiteSpaceLike. */
-    function isWhiteSpaceSingleLine(ch: number): boolean;
-    function isLineBreak(ch: number): boolean;
     function couldStartTrivia(text: string, pos: number): boolean;
     function forEachLeadingCommentRange<U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean) => U): U | undefined;
     function forEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state: T): U | undefined;
@@ -8772,7 +8772,6 @@ declare namespace ts {
      * Create an external source map source file reference
      */
     function createSourceMapSource(fileName: string, text: string, skipTrivia?: (pos: number) => number): SourceMapSource;
-    function setOriginalNode<T extends Node>(node: T, original: Node | undefined): T;
     const factory: NodeFactory;
     /**
      * Clears any `EmitNode` entries from parse-tree nodes.
@@ -9045,6 +9044,7 @@ declare namespace ts {
     function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T;
     function canHaveModifiers(node: Node): node is HasModifiers;
     function canHaveDecorators(node: Node): node is HasDecorators;
+    function setOriginalNode<T extends Node>(node: T, original: Node | undefined): T;
     /**
      * Invokes a callback for each child of the given node. The 'cbNode' callback is invoked for all child nodes
      * stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
@@ -9330,7 +9330,7 @@ declare namespace ts {
      * Calculates the resulting resolution mode for some reference in some file - this is generally the explicitly
      * provided resolution mode in the reference, unless one is not present, in which case it is the mode of the containing file.
      */
-    function getModeForFileReference(ref: FileReference | string, containingFileMode: ResolutionMode): ts.ResolutionMode;
+    function getModeForFileReference(ref: FileReference | string, containingFileMode: ResolutionMode): ResolutionMode;
     /**
      * Calculates the final resolution mode for an import at some index within a file's imports list. This is generally the explicitly
      * defined mode of the import if provided, or, if not, the mode of the containing file (with some exceptions: import=require is always commonjs, dynamic import is always esm).
@@ -9350,7 +9350,7 @@ declare namespace ts {
      */
     function getModeForUsageLocation(file: {
         impliedNodeFormat?: ResolutionMode;
-    }, usage: StringLiteralLike): ts.ModuleKind.CommonJS | ts.ModuleKind.ESNext | undefined;
+    }, usage: StringLiteralLike): ResolutionMode;
     function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): readonly Diagnostic[];
     /**
      * A function for determining if a given file is esm or cjs format, assuming modern node module resolution rules, as configured by the
@@ -10336,6 +10336,10 @@ declare namespace ts {
         contextSpan?: TextSpan;
         kind: HighlightSpanKind;
     }
+    interface DocumentHighlights {
+        fileName: string;
+        highlightSpans: HighlightSpan[];
+    }
     interface NavigateToItem {
         name: string;
         kind: ScriptElementKind;
@@ -10899,10 +10903,6 @@ declare namespace ts {
     }
     /** The classifier is used for syntactic highlighting in editors via the TSServer */
     function createClassifier(): Classifier;
-    interface DocumentHighlights {
-        fileName: string;
-        highlightSpans: HighlightSpan[];
-    }
     function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string): DocumentRegistry;
     /**
      * The document registry represents a store of SourceFile objects that can be shared between

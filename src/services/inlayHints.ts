@@ -1,52 +1,43 @@
 import {
-    __String,
-    ArrowFunction,
-    CallExpression,
-    createPrinter,
-    Debug,
-    EmitHint,
-    EnumMember,
     equateStringsCaseInsensitive,
-    Expression,
-    findChildOfKind,
-    forEachChild,
-    FunctionDeclaration,
-    FunctionExpression,
-    FunctionLikeDeclaration,
-    GetAccessorDeclaration,
-    getEffectiveReturnTypeNode,
-    getEffectiveTypeAnnotationNode,
-    getLanguageVariant,
-    getLeadingCommentRanges,
-    hasContextSensitiveParameters,
-    Identifier,
-    InlayHint,
-    InlayHintKind,
-    InlayHintsContext,
+    some,
+} from "../compiler/core";
+import { Debug } from "../compiler/debug";
+import { createPrinter } from "../compiler/emitter";
+import {
     isArrowFunction,
-    isAssertionExpression,
-    isBindingPattern,
     isCallExpression,
     isEnumMember,
     isExpressionWithTypeArguments,
     isFunctionDeclaration,
     isFunctionExpression,
-    isFunctionLikeDeclaration,
     isGetAccessorDeclaration,
     isIdentifier,
-    isIdentifierText,
-    isInfinityOrNaNString,
-    isLiteralExpression,
     isMethodDeclaration,
     isNewExpression,
     isObjectLiteralExpression,
     isParameter,
-    isParameterDeclaration,
     isPropertyAccessExpression,
     isPropertyDeclaration,
-    isTypeNode,
-    isVarConst,
     isVariableDeclaration,
+} from "../compiler/factory/nodeTests";
+import { forEachChild } from "../compiler/parser";
+import {
+    getLeadingCommentRanges,
+    isIdentifierText,
+} from "../compiler/scanner";
+import {
+    __String,
+    ArrowFunction,
+    CallExpression,
+    EmitHint,
+    EnumMember,
+    Expression,
+    FunctionDeclaration,
+    FunctionExpression,
+    FunctionLikeDeclaration,
+    GetAccessorDeclaration,
+    Identifier,
     MethodDeclaration,
     NewExpression,
     Node,
@@ -56,19 +47,40 @@ import {
     PrinterOptions,
     PropertyDeclaration,
     Signature,
-    skipParentheses,
-    some,
     Symbol,
     SymbolFlags,
     SyntaxKind,
-    textSpanIntersectsWith,
     Type,
     TypeFormatFlags,
-    unescapeLeadingUnderscores,
     UserPreferences,
-    usingSingleLineStringWriter,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "../compiler/types";
+import {
+    getEffectiveReturnTypeNode,
+    getEffectiveTypeAnnotationNode,
+    getLanguageVariant,
+    hasContextSensitiveParameters,
+    isInfinityOrNaNString,
+    isParameterDeclaration,
+    isVarConst,
+    skipParentheses,
+    usingSingleLineStringWriter,
+} from "../compiler/utilities";
+import {
+    isAssertionExpression,
+    isBindingPattern,
+    isFunctionLikeDeclaration,
+    isLiteralExpression,
+    isTypeNode,
+    textSpanIntersectsWith,
+    unescapeLeadingUnderscores,
+} from "../compiler/utilitiesPublic";
+import {
+    InlayHint,
+    InlayHintKind,
+    InlayHintsContext,
+} from "./types";
+import { findChildOfKind } from "./utilities";
 
 const maxHintsLength = 30;
 

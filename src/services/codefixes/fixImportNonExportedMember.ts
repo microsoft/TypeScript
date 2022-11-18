@@ -1,41 +1,49 @@
 import {
-    canHaveExportModifier,
-    Declaration,
-    Diagnostics,
-    ExportDeclaration,
-    factory,
     find,
-    findAncestor,
     findLast,
     firstOrUndefined,
-    getResolvedModule,
-    getTokenAtPosition,
-    Identifier,
+    length,
+    map,
+    tryCast,
+} from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isExportDeclaration,
     isIdentifier,
     isImportDeclaration,
     isNamedExports,
-    isSourceFileFromLibrary,
     isStringLiteral,
-    isTypeDeclaration,
     isVariableDeclaration,
     isVariableStatement,
-    length,
-    map,
+} from "../../compiler/factory/nodeTests";
+import {
+    Declaration,
+    ExportDeclaration,
+    Identifier,
     Node,
     Program,
     SourceFile,
     Symbol,
-    textChanges,
-    tryCast,
     VariableStatement,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    canHaveExportModifier,
+    getResolvedModule,
+    isTypeDeclaration,
+} from "../../compiler/utilities";
+import { findAncestor } from "../../compiler/utilitiesPublic";
 import {
     createCodeFixAction,
     createCombinedCodeActions,
     eachDiagnostic,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    getTokenAtPosition,
+    isSourceFileFromLibrary,
+} from "../utilities";
 
 const fixId = "fixImportNonExportedMember";
 const errorCodes = [
@@ -50,12 +58,12 @@ registerCodeFix({
         const info = getInfo(sourceFile, span.start, program);
         if (info === undefined) return undefined;
 
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, program, info));
+        const changes = ChangeTracker.with(context, t => doChange(t, program, info));
         return [createCodeFixAction(fixId, changes, [Diagnostics.Export_0_from_module_1, info.exportName.node.text, info.moduleSpecifier], fixId, Diagnostics.Export_all_referenced_locals)];
     },
     getAllCodeActions(context) {
         const { program } = context;
-        return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
+        return createCombinedCodeActions(ChangeTracker.with(context, changes => {
             const exports = new Map<SourceFile, ModuleExports>();
 
             eachDiagnostic(context, errorCodes, diag => {
@@ -140,7 +148,7 @@ function getInfo(sourceFile: SourceFile, pos: number, program: Program): Info | 
     return undefined;
 }
 
-function doChange(changes: textChanges.ChangeTracker, program: Program, { exportName, node, moduleSourceFile }: Info) {
+function doChange(changes: ChangeTracker, program: Program, { exportName, node, moduleSourceFile }: Info) {
     const exportDeclaration = tryGetExportDeclaration(moduleSourceFile, exportName.isTypeOnly);
     if (exportDeclaration) {
         updateExport(changes, program, moduleSourceFile, exportDeclaration, [exportName]);
@@ -153,7 +161,7 @@ function doChange(changes: textChanges.ChangeTracker, program: Program, { export
     }
 }
 
-function doChanges(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, moduleExports: ExportName[], node: ExportDeclaration | undefined) {
+function doChanges(changes: ChangeTracker, program: Program, sourceFile: SourceFile, moduleExports: ExportName[], node: ExportDeclaration | undefined) {
     if (length(moduleExports)) {
         if (node) {
             updateExport(changes, program, sourceFile, node, moduleExports);
@@ -170,7 +178,7 @@ function tryGetExportDeclaration(sourceFile: SourceFile, isTypeOnly: boolean) {
     return findLast(sourceFile.statements, predicate);
 }
 
-function updateExport(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, node: ExportDeclaration, names: ExportName[]) {
+function updateExport(changes: ChangeTracker, program: Program, sourceFile: SourceFile, node: ExportDeclaration, names: ExportName[]) {
     const namedExports = node.exportClause && isNamedExports(node.exportClause) ? node.exportClause.elements : factory.createNodeArray([]);
     const allowTypeModifier = !node.isTypeOnly && !!(program.getCompilerOptions().isolatedModules || find(namedExports, e => e.isTypeOnly));
     changes.replaceNode(sourceFile, node,
@@ -179,7 +187,7 @@ function updateExport(changes: textChanges.ChangeTracker, program: Program, sour
                 factory.createNodeArray([...namedExports, ...createExportSpecifiers(names, allowTypeModifier)], /*hasTrailingComma*/ namedExports.hasTrailingComma)), node.moduleSpecifier, node.assertClause));
 }
 
-function createExport(changes: textChanges.ChangeTracker, program: Program, sourceFile: SourceFile, names: ExportName[]) {
+function createExport(changes: ChangeTracker, program: Program, sourceFile: SourceFile, names: ExportName[]) {
     changes.insertNodeAtEndOfScope(sourceFile, sourceFile,
         factory.createExportDeclaration(/*modifiers*/ undefined, /*isTypeOnly*/ false,
             factory.createNamedExports(createExportSpecifiers(names, /*allowTypeModifier*/ !!program.getCompilerOptions().isolatedModules)), /*moduleSpecifier*/ undefined, /*assertClause*/ undefined));

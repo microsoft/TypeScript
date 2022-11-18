@@ -2,31 +2,40 @@ import {
     append,
     arraysEqual,
     binarySearch,
+    compareValues,
+    identity,
+    isLineBreak,
+    isWhiteSpaceLike,
+    isWhiteSpaceSingleLine,
+    trimStringStart,
+} from "./core";
+// import { Debug } from "./debug";
+import { Diagnostics } from "./diagnosticInformationMap.generated";
+import {
+    textToKeyword,
+    textToToken,
+} from "./scannerUtilities";
+import {
     CharacterCodes,
     CommentDirective,
     CommentDirectiveType,
     CommentKind,
     CommentRange,
-    compareValues,
-    Debug,
     DiagnosticMessage,
-    Diagnostics,
-    getEntries,
-    identity,
     JSDocSyntaxKind,
     JsxTokenSyntaxKind,
     KeywordSyntaxKind,
     LanguageVariant,
     LineAndCharacter,
-    MapLike,
-    parsePseudoBigInt,
-    positionIsSynthesized,
     ScriptTarget,
     SourceFileLike,
     SyntaxKind,
     TokenFlags,
-    trimStringStart,
-} from "./_namespaces/ts";
+} from "./types";
+import {
+    parsePseudoBigInt,
+    positionIsSynthesized,
+} from "./utilities";
 
 export type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
 
@@ -105,159 +114,6 @@ export interface Scanner {
     // of invoking the callback is returned from this function.
     tryScan<T>(callback: () => T): T;
 }
-
-/** @internal */
-export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
-    abstract: SyntaxKind.AbstractKeyword,
-    accessor: SyntaxKind.AccessorKeyword,
-    any: SyntaxKind.AnyKeyword,
-    as: SyntaxKind.AsKeyword,
-    asserts: SyntaxKind.AssertsKeyword,
-    assert: SyntaxKind.AssertKeyword,
-    bigint: SyntaxKind.BigIntKeyword,
-    boolean: SyntaxKind.BooleanKeyword,
-    break: SyntaxKind.BreakKeyword,
-    case: SyntaxKind.CaseKeyword,
-    catch: SyntaxKind.CatchKeyword,
-    class: SyntaxKind.ClassKeyword,
-    continue: SyntaxKind.ContinueKeyword,
-    const: SyntaxKind.ConstKeyword,
-    ["" + "constructor"]: SyntaxKind.ConstructorKeyword,
-    debugger: SyntaxKind.DebuggerKeyword,
-    declare: SyntaxKind.DeclareKeyword,
-    default: SyntaxKind.DefaultKeyword,
-    delete: SyntaxKind.DeleteKeyword,
-    do: SyntaxKind.DoKeyword,
-    else: SyntaxKind.ElseKeyword,
-    enum: SyntaxKind.EnumKeyword,
-    export: SyntaxKind.ExportKeyword,
-    extends: SyntaxKind.ExtendsKeyword,
-    false: SyntaxKind.FalseKeyword,
-    finally: SyntaxKind.FinallyKeyword,
-    for: SyntaxKind.ForKeyword,
-    from: SyntaxKind.FromKeyword,
-    function: SyntaxKind.FunctionKeyword,
-    get: SyntaxKind.GetKeyword,
-    if: SyntaxKind.IfKeyword,
-    implements: SyntaxKind.ImplementsKeyword,
-    import: SyntaxKind.ImportKeyword,
-    in: SyntaxKind.InKeyword,
-    infer: SyntaxKind.InferKeyword,
-    instanceof: SyntaxKind.InstanceOfKeyword,
-    interface: SyntaxKind.InterfaceKeyword,
-    intrinsic: SyntaxKind.IntrinsicKeyword,
-    is: SyntaxKind.IsKeyword,
-    keyof: SyntaxKind.KeyOfKeyword,
-    let: SyntaxKind.LetKeyword,
-    module: SyntaxKind.ModuleKeyword,
-    namespace: SyntaxKind.NamespaceKeyword,
-    never: SyntaxKind.NeverKeyword,
-    new: SyntaxKind.NewKeyword,
-    null: SyntaxKind.NullKeyword,
-    number: SyntaxKind.NumberKeyword,
-    object: SyntaxKind.ObjectKeyword,
-    package: SyntaxKind.PackageKeyword,
-    private: SyntaxKind.PrivateKeyword,
-    protected: SyntaxKind.ProtectedKeyword,
-    public: SyntaxKind.PublicKeyword,
-    override: SyntaxKind.OverrideKeyword,
-    out: SyntaxKind.OutKeyword,
-    readonly: SyntaxKind.ReadonlyKeyword,
-    require: SyntaxKind.RequireKeyword,
-    global: SyntaxKind.GlobalKeyword,
-    return: SyntaxKind.ReturnKeyword,
-    satisfies: SyntaxKind.SatisfiesKeyword,
-    set: SyntaxKind.SetKeyword,
-    static: SyntaxKind.StaticKeyword,
-    string: SyntaxKind.StringKeyword,
-    super: SyntaxKind.SuperKeyword,
-    switch: SyntaxKind.SwitchKeyword,
-    symbol: SyntaxKind.SymbolKeyword,
-    this: SyntaxKind.ThisKeyword,
-    throw: SyntaxKind.ThrowKeyword,
-    true: SyntaxKind.TrueKeyword,
-    try: SyntaxKind.TryKeyword,
-    type: SyntaxKind.TypeKeyword,
-    typeof: SyntaxKind.TypeOfKeyword,
-    undefined: SyntaxKind.UndefinedKeyword,
-    unique: SyntaxKind.UniqueKeyword,
-    unknown: SyntaxKind.UnknownKeyword,
-    var: SyntaxKind.VarKeyword,
-    void: SyntaxKind.VoidKeyword,
-    while: SyntaxKind.WhileKeyword,
-    with: SyntaxKind.WithKeyword,
-    yield: SyntaxKind.YieldKeyword,
-    async: SyntaxKind.AsyncKeyword,
-    await: SyntaxKind.AwaitKeyword,
-    of: SyntaxKind.OfKeyword,
-};
-
-const textToKeyword = new Map(getEntries(textToKeywordObj));
-
-const textToToken = new Map(getEntries({
-    ...textToKeywordObj,
-    "{": SyntaxKind.OpenBraceToken,
-    "}": SyntaxKind.CloseBraceToken,
-    "(": SyntaxKind.OpenParenToken,
-    ")": SyntaxKind.CloseParenToken,
-    "[": SyntaxKind.OpenBracketToken,
-    "]": SyntaxKind.CloseBracketToken,
-    ".": SyntaxKind.DotToken,
-    "...": SyntaxKind.DotDotDotToken,
-    ";": SyntaxKind.SemicolonToken,
-    ",": SyntaxKind.CommaToken,
-    "<": SyntaxKind.LessThanToken,
-    ">": SyntaxKind.GreaterThanToken,
-    "<=": SyntaxKind.LessThanEqualsToken,
-    ">=": SyntaxKind.GreaterThanEqualsToken,
-    "==": SyntaxKind.EqualsEqualsToken,
-    "!=": SyntaxKind.ExclamationEqualsToken,
-    "===": SyntaxKind.EqualsEqualsEqualsToken,
-    "!==": SyntaxKind.ExclamationEqualsEqualsToken,
-    "=>": SyntaxKind.EqualsGreaterThanToken,
-    "+": SyntaxKind.PlusToken,
-    "-": SyntaxKind.MinusToken,
-    "**": SyntaxKind.AsteriskAsteriskToken,
-    "*": SyntaxKind.AsteriskToken,
-    "/": SyntaxKind.SlashToken,
-    "%": SyntaxKind.PercentToken,
-    "++": SyntaxKind.PlusPlusToken,
-    "--": SyntaxKind.MinusMinusToken,
-    "<<": SyntaxKind.LessThanLessThanToken,
-    "</": SyntaxKind.LessThanSlashToken,
-    ">>": SyntaxKind.GreaterThanGreaterThanToken,
-    ">>>": SyntaxKind.GreaterThanGreaterThanGreaterThanToken,
-    "&": SyntaxKind.AmpersandToken,
-    "|": SyntaxKind.BarToken,
-    "^": SyntaxKind.CaretToken,
-    "!": SyntaxKind.ExclamationToken,
-    "~": SyntaxKind.TildeToken,
-    "&&": SyntaxKind.AmpersandAmpersandToken,
-    "||": SyntaxKind.BarBarToken,
-    "?": SyntaxKind.QuestionToken,
-    "??": SyntaxKind.QuestionQuestionToken,
-    "?.": SyntaxKind.QuestionDotToken,
-    ":": SyntaxKind.ColonToken,
-    "=": SyntaxKind.EqualsToken,
-    "+=": SyntaxKind.PlusEqualsToken,
-    "-=": SyntaxKind.MinusEqualsToken,
-    "*=": SyntaxKind.AsteriskEqualsToken,
-    "**=": SyntaxKind.AsteriskAsteriskEqualsToken,
-    "/=": SyntaxKind.SlashEqualsToken,
-    "%=": SyntaxKind.PercentEqualsToken,
-    "<<=": SyntaxKind.LessThanLessThanEqualsToken,
-    ">>=": SyntaxKind.GreaterThanGreaterThanEqualsToken,
-    ">>>=": SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken,
-    "&=": SyntaxKind.AmpersandEqualsToken,
-    "|=": SyntaxKind.BarEqualsToken,
-    "^=": SyntaxKind.CaretEqualsToken,
-    "||=": SyntaxKind.BarBarEqualsToken,
-    "&&=": SyntaxKind.AmpersandAmpersandEqualsToken,
-    "??=": SyntaxKind.QuestionQuestionEqualsToken,
-    "@": SyntaxKind.AtToken,
-    "#": SyntaxKind.HashToken,
-    "`": SyntaxKind.BacktickToken,
-}));
 
 /*
     As per ECMAScript Language Specification 3th Edition, Section 7.6: Identifiers
@@ -435,7 +291,8 @@ export function computePositionOfLineAndCharacter(lineStarts: readonly number[],
             line = line < 0 ? 0 : line >= lineStarts.length ? lineStarts.length - 1 : line;
         }
         else {
-            Debug.fail(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arraysEqual(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
+            // Debug.fail(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arraysEqual(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
+            throw new Error(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arraysEqual(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
         }
     }
 
@@ -447,10 +304,16 @@ export function computePositionOfLineAndCharacter(lineStarts: readonly number[],
         return res > lineStarts[line + 1] ? lineStarts[line + 1] : typeof debugText === "string" && res > debugText.length ? debugText.length : res;
     }
     if (line < lineStarts.length - 1) {
-        Debug.assert(res < lineStarts[line + 1]);
+        if (!(res < lineStarts[line + 1])) {
+            throw new Error();
+        }
+        // Debug.assert(res < lineStarts[line + 1]);
     }
     else if (debugText !== undefined) {
-        Debug.assert(res <= debugText.length); // Allow single character overflow for trailing newline
+        if (!(res <= debugText.length)) {
+            throw new Error();
+        }
+        // Debug.assert(res <= debugText.length); // Allow single character overflow for trailing newline
     }
     return res;
 }
@@ -484,7 +347,10 @@ export function computeLineOfPosition(lineStarts: readonly number[], position: n
         // We want the index of the previous line start, so we subtract 1.
         // Review 2's-complement if this is confusing.
         lineNumber = ~lineNumber - 1;
-        Debug.assert(lineNumber !== -1, "position cannot precede the beginning of the file");
+        // Debug.assert(lineNumber !== -1, "position cannot precede the beginning of the file");
+        if (!(lineNumber !== -1)) {
+            throw new Error("position cannot precede the beginning of the file");
+        }
     }
     return lineNumber;
 }
@@ -503,46 +369,6 @@ export function getLinesBetweenPositions(sourceFile: SourceFileLike, pos1: numbe
 
 export function getLineAndCharacterOfPosition(sourceFile: SourceFileLike, position: number): LineAndCharacter {
     return computeLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
-}
-
-export function isWhiteSpaceLike(ch: number): boolean {
-    return isWhiteSpaceSingleLine(ch) || isLineBreak(ch);
-}
-
-/** Does not include line breaks. For that, see isWhiteSpaceLike. */
-export function isWhiteSpaceSingleLine(ch: number): boolean {
-    // Note: nextLine is in the Zs space, and should be considered to be a whitespace.
-    // It is explicitly not a line-break as it isn't in the exact set specified by EcmaScript.
-    return ch === CharacterCodes.space ||
-        ch === CharacterCodes.tab ||
-        ch === CharacterCodes.verticalTab ||
-        ch === CharacterCodes.formFeed ||
-        ch === CharacterCodes.nonBreakingSpace ||
-        ch === CharacterCodes.nextLine ||
-        ch === CharacterCodes.ogham ||
-        ch >= CharacterCodes.enQuad && ch <= CharacterCodes.zeroWidthSpace ||
-        ch === CharacterCodes.narrowNoBreakSpace ||
-        ch === CharacterCodes.mathematicalSpace ||
-        ch === CharacterCodes.ideographicSpace ||
-        ch === CharacterCodes.byteOrderMark;
-}
-
-export function isLineBreak(ch: number): boolean {
-    // ES5 7.3:
-    // The ECMAScript line terminator characters are listed in Table 3.
-    //     Table 3: Line Terminator Characters
-    //     Code Unit Value     Name                    Formal Name
-    //     \u000A              Line Feed               <LF>
-    //     \u000D              Carriage Return         <CR>
-    //     \u2028              Line separator          <LS>
-    //     \u2029              Paragraph separator     <PS>
-    // Only the characters in Table 3 are treated as line terminators. Other new line or line
-    // breaking characters are treated as white space but not as line terminators.
-
-    return ch === CharacterCodes.lineFeed ||
-        ch === CharacterCodes.carriageReturn ||
-        ch === CharacterCodes.lineSeparator ||
-        ch === CharacterCodes.paragraphSeparator;
 }
 
 function isDigit(ch: number): boolean {
@@ -690,7 +516,10 @@ export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boole
 const mergeConflictMarkerLength = "<<<<<<<".length;
 
 function isConflictMarkerTrivia(text: string, pos: number) {
-    Debug.assert(pos >= 0);
+    // Debug.assert(pos >= 0);
+    if (!(pos >= 0)) {
+        throw new Error();
+    }
 
     // Conflict markers must be at the start of a line.
     if (pos === 0 || isLineBreak(text.charCodeAt(pos - 1))) {
@@ -725,7 +554,10 @@ function scanConflictMarkerTrivia(text: string, pos: number, error?: (diag: Diag
         }
     }
     else {
-        Debug.assert(ch === CharacterCodes.bar || ch === CharacterCodes.equals);
+        // Debug.assert(ch === CharacterCodes.bar || ch === CharacterCodes.equals);
+        if (!(ch === CharacterCodes.bar || ch === CharacterCodes.equals)) {
+            throw new Error();
+        }
         // Consume everything from the start of a ||||||| or ======= marker to the start
         // of the next ======= or >>>>>>> marker.
         while (pos < len) {
@@ -746,7 +578,10 @@ const shebangTriviaRegex = /^#!.*/;
 /** @internal */
 export function isShebangTrivia(text: string, pos: number) {
     // Shebangs check must only be done at the start of the file
-    Debug.assert(pos === 0);
+    // Debug.assert(pos === 0);
+    if (!(pos === 0)) {
+        throw new Error();
+    }
     return shebangTriviaRegex.test(text);
 }
 
@@ -1036,14 +871,14 @@ export function createScanner(languageVersion: ScriptTarget,
         scanRange,
     };
 
-    if (Debug.isDebugging) {
-        Object.defineProperty(scanner, "__debugShowCurrentPositionInText", {
-            get: () => {
-                const text = scanner.getText();
-                return text.slice(0, scanner.getStartPos()) + "║" + text.slice(scanner.getStartPos());
-            },
-        });
-    }
+    // if (Debug.isDebugging) {
+    //     Object.defineProperty(scanner, "__debugShowCurrentPositionInText", {
+    //         get: () => {
+    //             const text = scanner.getText();
+    //             return text.slice(0, scanner.getStartPos()) + "║" + text.slice(scanner.getStartPos());
+    //         },
+    //     });
+    // }
 
     return scanner;
 
@@ -1339,7 +1174,10 @@ export function createScanner(languageVersion: ScriptTarget,
             pos++;
         }
 
-        Debug.assert(resultingToken !== undefined);
+        // Debug.assert(resultingToken !== undefined);
+        if (!(resultingToken !== undefined)) {
+            throw new Error();
+        }
 
         tokenValue = contents;
         return resultingToken;
@@ -2139,7 +1977,10 @@ export function createScanner(languageVersion: ScriptTarget,
     }
 
     function reScanInvalidIdentifier(): SyntaxKind {
-        Debug.assert(token === SyntaxKind.Unknown, "'reScanInvalidIdentifier' should only be called when the current token is 'SyntaxKind.Unknown'.");
+        // Debug.assert(token === SyntaxKind.Unknown, "'reScanInvalidIdentifier' should only be called when the current token is 'SyntaxKind.Unknown'.");
+        if (!(token === SyntaxKind.Unknown)) {
+            throw new Error("'reScanInvalidIdentifier' should only be called when the current token is 'SyntaxKind.Unknown'.");
+        }
         pos = tokenPos = startPos;
         tokenFlags = 0;
         const ch = codePointAt(text, pos);
@@ -2188,7 +2029,10 @@ export function createScanner(languageVersion: ScriptTarget,
     }
 
     function reScanAsteriskEqualsToken(): SyntaxKind {
-        Debug.assert(token === SyntaxKind.AsteriskEqualsToken, "'reScanAsteriskEqualsToken' should only be called on a '*='");
+        // Debug.assert(token === SyntaxKind.AsteriskEqualsToken, "'reScanAsteriskEqualsToken' should only be called on a '*='");
+        if (!(token === SyntaxKind.AsteriskEqualsToken)) {
+            throw new Error("'reScanAsteriskEqualsToken' should only be called on a '*='");
+        }
         pos = tokenPos + 1;
         return token = SyntaxKind.EqualsToken;
     }
@@ -2288,7 +2132,10 @@ export function createScanner(languageVersion: ScriptTarget,
      * Unconditionally back up and scan a template expression portion.
      */
     function reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind {
-        Debug.assert(token === SyntaxKind.CloseBraceToken, "'reScanTemplateToken' should only be called on a '}'");
+        // Debug.assert(token === SyntaxKind.CloseBraceToken, "'reScanTemplateToken' should only be called on a '}'");
+        if (!(token === SyntaxKind.CloseBraceToken)) {
+            throw new Error("'reScanTemplateToken' should only be called on a '}'");
+        }
         pos = tokenPos;
         return token = scanTemplateAndSetTokenValue(isTaggedTemplate);
     }
@@ -2320,7 +2167,10 @@ export function createScanner(languageVersion: ScriptTarget,
     }
 
     function reScanQuestionToken(): SyntaxKind {
-        Debug.assert(token === SyntaxKind.QuestionQuestionToken, "'reScanQuestionToken' should only be called on a '??'");
+        // Debug.assert(token === SyntaxKind.QuestionQuestionToken, "'reScanQuestionToken' should only be called on a '??'");
+        if (!(token === SyntaxKind.QuestionQuestionToken)) {
+            throw new Error("'reScanQuestionToken' should only be called on a '??'");
+        }
         pos = tokenPos + 1;
         return token = SyntaxKind.QuestionToken;
     }
@@ -2625,7 +2475,10 @@ export function createScanner(languageVersion: ScriptTarget,
     }
 
     function setTextPos(textPos: number) {
-        Debug.assert(textPos >= 0);
+        // Debug.assert(textPos >= 0);
+        if (!(textPos >= 0)) {
+            throw new Error();
+        }
         pos = textPos;
         startPos = textPos;
         tokenPos = textPos;
@@ -2670,7 +2523,10 @@ function charSize(ch: number) {
 
 // Derived from the 10.1.1 UTF16Encoding of the ES6 Spec.
 function utf16EncodeAsStringFallback(codePoint: number) {
-    Debug.assert(0x0 <= codePoint && codePoint <= 0x10FFFF);
+    // Debug.assert(0x0 <= codePoint && codePoint <= 0x10FFFF);
+    if (!(0x0 <= codePoint && codePoint <= 0x10FFFF)) {
+        throw new Error();
+    }
 
     if (codePoint <= 65535) {
         return String.fromCharCode(codePoint);

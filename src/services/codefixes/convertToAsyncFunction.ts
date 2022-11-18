@@ -1,87 +1,101 @@
 import {
+    getNodeId,
+    getSymbolId,
+} from "../../compiler/checkerUtilities";
+import {
+    concatenate,
+    createMultiMap,
+    elementAt,
+    emptyArray,
+    every,
+    firstOrUndefined,
+    flatMap,
+    forEach,
+    lastOrUndefined,
+    returnTrue,
+    tryCast,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
+    isBindingElement,
+    isBlock,
+    isCallExpression,
+    isIdentifier,
+    isObjectBindingPattern,
+    isOmittedExpression,
+    isParameter,
+    isPropertyAccessExpression,
+    isReturnStatement,
+    isVariableDeclaration,
+} from "../../compiler/factory/nodeTests";
+import { forEachChild } from "../../compiler/parser";
+import { skipTrivia } from "../../compiler/scanner";
+import {
     ArrowFunction,
     AwaitExpression,
     BindingName,
     BindingPattern,
     Block,
     CallExpression,
-    canBeConvertedToAsync,
-    CodeFixContext,
-    concatenate,
-    createMultiMap,
-    Debug,
-    Diagnostics,
-    elementAt,
-    emptyArray,
-    every,
     Expression,
-    factory,
-    firstOrUndefined,
-    flatMap,
-    forEach,
-    forEachChild,
-    forEachReturnStatement,
     FunctionExpression,
     FunctionLikeDeclaration,
     GeneratedIdentifierFlags,
-    getContainingFunction,
-    getNodeId,
-    getObjectFlags,
-    getOriginalNode,
-    getSymbolId,
-    getSynthesizedDeepClone,
-    getSynthesizedDeepCloneWithReplacements,
-    getTokenAtPosition,
-    hasPropertyAccessExpressionWithName,
     Identifier,
-    idText,
-    isBindingElement,
-    isBlock,
-    isCallExpression,
-    isExpression,
-    isFixablePromiseHandler,
-    isFunctionLike,
-    isFunctionLikeDeclaration,
-    isGeneratedIdentifier,
-    isIdentifier,
-    isInJSFile,
-    isObjectBindingPattern,
-    isOmittedExpression,
-    isParameter,
-    isPropertyAccessExpression,
-    isReturnStatement,
-    isReturnStatementWithFixablePromiseHandler,
-    isVariableDeclaration,
-    lastOrUndefined,
-    moveRangePastModifiers,
     Node,
     NodeFlags,
     ObjectFlags,
     PropertyAccessExpression,
-    returnsPromise,
     ReturnStatement,
-    returnTrue,
     Signature,
     SignatureKind,
-    skipTrivia,
     SourceFile,
     Statement,
     Symbol,
     SyntaxKind,
-    textChanges,
-    tryCast,
     TryStatement,
     Type,
     TypeChecker,
     TypeNode,
     TypeReference,
     UnionReduction,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    forEachReturnStatement,
+    getContainingFunction,
+    getObjectFlags,
+    isInJSFile,
+    moveRangePastModifiers,
+} from "../../compiler/utilities";
+import {
+    getOriginalNode,
+    idText,
+    isExpression,
+    isFunctionLike,
+    isFunctionLikeDeclaration,
+    isGeneratedIdentifier,
+} from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import {
+    canBeConvertedToAsync,
+    isFixablePromiseHandler,
+    isReturnStatementWithFixablePromiseHandler,
+    returnsPromise,
+} from "../suggestionDiagnostics";
+import { ChangeTracker } from "../textChanges";
+import { CodeFixContext } from "../types";
+import {
+    getSynthesizedDeepClone,
+    getSynthesizedDeepCloneWithReplacements,
+    getTokenAtPosition,
+    hasPropertyAccessExpressionWithName,
+} from "../utilities";
 
 const fixId = "convertToAsyncFunction";
 const errorCodes = [Diagnostics.This_may_be_converted_to_an_async_function.code];
@@ -90,7 +104,7 @@ registerCodeFix({
     errorCodes,
     getCodeActions(context: CodeFixContext) {
         codeActionSucceeded = true;
-        const changes = textChanges.ChangeTracker.with(context, (t) => convertToAsyncFunction(t, context.sourceFile, context.span.start, context.program.getTypeChecker()));
+        const changes = ChangeTracker.with(context, (t) => convertToAsyncFunction(t, context.sourceFile, context.span.start, context.program.getTypeChecker()));
         return codeActionSucceeded ? [createCodeFixAction(fixId, changes, Diagnostics.Convert_to_async_function, fixId, Diagnostics.Convert_all_to_async_functions)] : [];
     },
     fixIds: [fixId],
@@ -133,7 +147,7 @@ interface PromiseReturningCallExpression<Name extends string> extends CallExpres
     };
 }
 
-function convertToAsyncFunction(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
+function convertToAsyncFunction(changes: ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker): void {
     // get the function declaration - returns a promise
     const tokenAtPosition = getTokenAtPosition(sourceFile, position);
     let functionToConvert: FunctionLikeDeclaration | undefined;

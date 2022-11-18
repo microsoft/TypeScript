@@ -1,21 +1,25 @@
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
 import {
-    createCodeFixActionWithoutFixAll,
-    registerCodeFix,
-    setJsonCompilerOptionValue,
-    setJsonCompilerOptionValues,
-} from "../_namespaces/ts.codefix";
-import {
-    CodeFixAction,
-    Diagnostics,
     Expression,
-    factory,
+    ModuleKind,
+    ScriptTarget,
+} from "../../compiler/types";
+import {
     getEmitModuleKind,
     getEmitScriptTarget,
     getTsConfigObjectLiteralExpression,
-    ModuleKind,
-    ScriptTarget,
-    textChanges,
-} from "../_namespaces/ts";
+} from "../../compiler/utilities";
+import {
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { CodeFixAction } from "../types";
+import {
+    setJsonCompilerOptionValue,
+    setJsonCompilerOptionValues,
+} from "./helpers";
 
 registerCodeFix({
     errorCodes: [
@@ -33,7 +37,7 @@ registerCodeFix({
         const moduleKind = getEmitModuleKind(compilerOptions);
         const moduleOutOfRange = moduleKind >= ModuleKind.ES2015 && moduleKind < ModuleKind.ESNext;
         if (moduleOutOfRange) {
-            const changes = textChanges.ChangeTracker.with(context, changes => {
+            const changes = ChangeTracker.with(context, changes => {
                 setJsonCompilerOptionValue(changes, configFile, "module", factory.createStringLiteral("esnext"));
             });
             codeFixes.push(createCodeFixActionWithoutFixAll("fixModuleOption", changes, [Diagnostics.Set_the_module_option_in_your_configuration_file_to_0, "esnext"]));
@@ -42,7 +46,7 @@ registerCodeFix({
         const target = getEmitScriptTarget(compilerOptions);
         const targetOutOfRange = target < ScriptTarget.ES2017 || target > ScriptTarget.ESNext;
         if (targetOutOfRange) {
-            const changes = textChanges.ChangeTracker.with(context, tracker => {
+            const changes = ChangeTracker.with(context, tracker => {
                 const configObject = getTsConfigObjectLiteralExpression(configFile);
                 if (!configObject) return;
 

@@ -1,26 +1,32 @@
 import {
     append,
-    createScanner,
-    Debug,
+    last,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import {
     isJsxAttribute,
     isJsxElement,
     isJsxText,
-    isKeyword,
-    isToken,
-    isTrivia,
+} from "../../compiler/factory/nodeTests";
+import { createScanner } from "../../compiler/scanner";
+import {
     LanguageVariant,
-    last,
     Node,
     NodeArray,
     ScriptTarget,
     SyntaxKind,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
 import {
-    createTextRangeWithKind,
+    isKeyword,
+    isTrivia,
+} from "../../compiler/utilities";
+import { isToken } from "../../compiler/utilitiesPublic";
+import {
     TextRangeWithKind,
     TextRangeWithTriviaKind,
     TokenInfo,
-} from "../_namespaces/ts.formatting";
+} from "../types";
+import { createTextRangeWithKind } from "../utilities";
 
 const standardScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.Standard);
 const jsxScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.JSX);

@@ -1,24 +1,28 @@
+import { tryCast } from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import {
-    AwaitKeywordToken,
-    Diagnostics,
-    findPrecedingToken,
-    getLeftmostExpression,
-    getTokenAtPosition,
     isAwaitExpression,
     isIdentifier,
     isParenthesizedExpression,
+} from "../../compiler/factory/nodeTests";
+import {
+    AwaitKeywordToken,
     Node,
     SourceFile,
     SyntaxKind,
-    textChanges,
     TextSpan,
-    tryCast,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { getLeftmostExpression } from "../../compiler/utilities";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    findPrecedingToken,
+    getTokenAtPosition,
+} from "../utilities";
 
 const fixId = "removeUnnecessaryAwait";
 const errorCodes = [
@@ -28,7 +32,7 @@ const errorCodes = [
 registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToRemoveUnnecessaryAwait(context) {
-        const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span));
+        const changes = ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span));
         if (changes.length > 0) {
             return [createCodeFixAction(fixId, changes, Diagnostics.Remove_unnecessary_await, fixId, Diagnostics.Remove_all_unnecessary_uses_of_await)];
         }
@@ -39,7 +43,7 @@ registerCodeFix({
     },
 });
 
-function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, span: TextSpan) {
+function makeChange(changeTracker: ChangeTracker, sourceFile: SourceFile, span: TextSpan) {
     const awaitKeyword = tryCast(getTokenAtPosition(sourceFile, span.start), (node): node is AwaitKeywordToken => node.kind === SyntaxKind.AwaitKeyword);
     const awaitExpression = awaitKeyword && tryCast(awaitKeyword.parent, isAwaitExpression);
     if (!awaitExpression) {

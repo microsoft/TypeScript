@@ -1,19 +1,21 @@
+import { cast } from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
 import {
-    cast,
-    Diagnostics,
-    Expression,
-    factory,
-    getTokenAtPosition,
     isShorthandPropertyAssignment,
+} from "../../compiler/factory/nodeTests";
+import {
+    Expression,
     ShorthandPropertyAssignment,
     SourceFile,
-    textChanges,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
 
 const fixId = "fixPropertyAssignment";
 const errorCodes = [
@@ -26,14 +28,14 @@ registerCodeFix({
     getCodeActions(context) {
         const { sourceFile, span } = context;
         const property = getProperty(sourceFile, span.start);
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, property));
+        const changes = ChangeTracker.with(context, t => doChange(t, context.sourceFile, property));
         return [createCodeFixAction(fixId, changes, [Diagnostics.Change_0_to_1, "=", ":"], fixId, [Diagnostics.Switch_each_misused_0_to_1, "=", ":"])];
     },
     getAllCodeActions: context =>
         codeFixAll(context, errorCodes, (changes, diag) => doChange(changes, diag.file, getProperty(diag.file, diag.start)))
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: ShorthandPropertyAssignment): void {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, node: ShorthandPropertyAssignment): void {
     changes.replaceNode(sourceFile, node, factory.createPropertyAssignment(node.name, node.objectAssignmentInitializer as Expression));
 }
 

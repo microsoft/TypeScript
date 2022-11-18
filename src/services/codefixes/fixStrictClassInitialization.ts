@@ -1,38 +1,48 @@
 import {
     append,
-    BigIntLiteralType,
-    CodeFixAction,
-    CodeFixContext,
-    Debug,
-    Diagnostics,
-    Expression,
-    factory,
     firstDefined,
-    getClassLikeDeclarationOfSymbol,
-    getEffectiveTypeAnnotationNode,
-    getFirstConstructorWithBody,
-    getTokenAtPosition,
-    hasSyntacticModifier,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isIdentifier,
-    isInJSFile,
     isPropertyDeclaration,
     isUnionTypeNode,
+} from "../../compiler/factory/nodeTests";
+import {
+    BigIntLiteralType,
+    Expression,
     ModifierFlags,
     PropertyDeclaration,
     SourceFile,
-    suppressLeadingAndTrailingTrivia,
     SyntaxKind,
-    textChanges,
     Type,
     TypeChecker,
     TypeFlags,
     TypeNode,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    getClassLikeDeclarationOfSymbol,
+    getEffectiveTypeAnnotationNode,
+    getFirstConstructorWithBody,
+    hasSyntacticModifier,
+    isInJSFile,
+} from "../../compiler/utilities";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    CodeFixAction,
+    CodeFixContext,
+} from "../types";
+import {
+    getTokenAtPosition,
+    suppressLeadingAndTrailingTrivia,
+} from "../utilities";
 
 const fixName = "strictClassInitialization";
 const fixIdAddDefiniteAssignmentAssertions = "addMissingPropertyDefiniteAssignmentAssertions";
@@ -96,11 +106,11 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
 
 function getActionForAddMissingDefiniteAssignmentAssertion(context: CodeFixContext, info: Info): CodeFixAction | undefined {
     if (info.isJs) return undefined;
-    const changes = textChanges.ChangeTracker.with(context, t => addDefiniteAssignmentAssertion(t, context.sourceFile, info.prop));
+    const changes = ChangeTracker.with(context, t => addDefiniteAssignmentAssertion(t, context.sourceFile, info.prop));
     return createCodeFixAction(fixName, changes, [Diagnostics.Add_definite_assignment_assertion_to_property_0, info.prop.getText()], fixIdAddDefiniteAssignmentAssertions, Diagnostics.Add_definite_assignment_assertions_to_all_uninitialized_properties);
 }
 
-function addDefiniteAssignmentAssertion(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
+function addDefiniteAssignmentAssertion(changeTracker: ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration): void {
     suppressLeadingAndTrailingTrivia(propertyDeclaration);
     const property = factory.updatePropertyDeclaration(
         propertyDeclaration,
@@ -114,11 +124,11 @@ function addDefiniteAssignmentAssertion(changeTracker: textChanges.ChangeTracker
 }
 
 function getActionForAddMissingUndefinedType(context: CodeFixContext, info: Info): CodeFixAction {
-    const changes = textChanges.ChangeTracker.with(context, t => addUndefinedType(t, context.sourceFile, info));
+    const changes = ChangeTracker.with(context, t => addUndefinedType(t, context.sourceFile, info));
     return createCodeFixAction(fixName, changes, [Diagnostics.Add_undefined_type_to_property_0, info.prop.name.getText()], fixIdAddUndefinedType, Diagnostics.Add_undefined_type_to_all_uninitialized_properties);
 }
 
-function addUndefinedType(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, info: Info): void {
+function addUndefinedType(changeTracker: ChangeTracker, sourceFile: SourceFile, info: Info): void {
     const undefinedTypeNode = factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword);
     const types = isUnionTypeNode(info.type) ? info.type.types.concat(undefinedTypeNode) : [info.type, undefinedTypeNode];
     const unionTypeNode = factory.createUnionTypeNode(types);
@@ -137,11 +147,11 @@ function getActionForAddMissingInitializer(context: CodeFixContext, info: Info):
     const initializer = getInitializer(checker, info.prop);
     if (!initializer) return undefined;
 
-    const changes = textChanges.ChangeTracker.with(context, t => addInitializer(t, context.sourceFile, info.prop, initializer));
+    const changes = ChangeTracker.with(context, t => addInitializer(t, context.sourceFile, info.prop, initializer));
     return createCodeFixAction(fixName, changes, [Diagnostics.Add_initializer_to_property_0, info.prop.name.getText()], fixIdAddInitializer, Diagnostics.Add_initializers_to_all_uninitialized_properties);
 }
 
-function addInitializer(changeTracker: textChanges.ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, initializer: Expression): void {
+function addInitializer(changeTracker: ChangeTracker, propertyDeclarationSourceFile: SourceFile, propertyDeclaration: PropertyDeclaration, initializer: Expression): void {
     suppressLeadingAndTrailingTrivia(propertyDeclaration);
     const property = factory.updatePropertyDeclaration(
         propertyDeclaration,

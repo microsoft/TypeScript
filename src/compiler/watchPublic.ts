@@ -1,96 +1,120 @@
 import * as ts from "./_namespaces/ts";
+import { createBuilderProgramUsingProgramBuildInfo } from "./builder";
 import {
     BuilderProgram,
-    BuildInfo,
-    canJsonReportNoInputFiles,
-    changeCompilerHostLikeToUseCache,
-    changesAffectModuleResolution,
-    cleanExtendedConfigCache,
-    clearMap,
-    clearSharedExtendedConfigFileWatcher,
-    closeFileWatcher,
-    closeFileWatcherOf,
-    CompilerHost,
-    CompilerOptions,
-    ConfigFileDiagnosticsReporter,
-    ConfigFileProgramReloadLevel,
-    createBuilderProgramUsingProgramBuildInfo,
-    createCachedDirectoryStructureHost,
-    createCompilerDiagnostic,
-    createCompilerHostFromProgramHost,
-    createCompilerHostWorker,
     createEmitAndSemanticDiagnosticsBuilderProgram,
-    createGetCanonicalFileName,
-    createResolutionCache,
-    CreateSourceFileOptions,
-    createWatchCompilerHostOfConfigFile,
-    createWatchCompilerHostOfFilesAndCompilerOptions,
-    createWatchFactory,
-    Debug,
-    Diagnostic,
-    DiagnosticMessage,
-    DiagnosticReporter,
-    Diagnostics,
-    DirectoryStructureHost,
-    DirectoryWatcherCallback,
     EmitAndSemanticDiagnosticsBuilderProgram,
+} from "./builderPublic";
+import {
+    canJsonReportNoInputFiles,
+    ConfigFileDiagnosticsReporter,
+    DiagnosticReporter,
     ExtendedConfigCacheEntry,
-    FileExtensionInfo,
-    FileReference,
+    getFileNamesFromConfigSpecs,
+    getParsedCommandLineOfConfigFile,
+    updateErrorForNoInputFiles,
+} from "./commandLineParser";
+import {
+    createGetCanonicalFileName,
+    getEntries,
+    isArray,
+    maybeBind,
+    noop,
+    returnFalse,
+    returnTrue,
+} from "./core";
+import {
+    MapLike,
+    version,
+} from "./corePublic";
+import { Debug } from "./debug";
+import { Diagnostics } from "./diagnosticInformationMap.generated";
+import {
+    getBuildInfo,
+    getTsBuildInfoEmitOutputFilePath,
+} from "./emitter";
+import { ModuleResolutionCache } from "./moduleNameResolver";
+import { CreateSourceFileOptions } from "./parser";
+import {
+    getDirectoryPath,
+    getNormalizedAbsolutePath,
+    toPath,
+} from "./path";
+import { perfLogger } from "./perfLogger";
+import {
+    changeCompilerHostLikeToUseCache,
+    createCompilerHostWorker,
+    getConfigFileParsingDiagnostics,
+    isProgramUptoDate,
+    parseConfigHostFromCompilerHostLike,
+} from "./program";
+import {
+    createResolutionCache,
+    ResolutionCacheHost,
+} from "./resolutionCache";
+import {
+    DirectoryWatcherCallback,
     FileWatcher,
     FileWatcherCallback,
     FileWatcherEventKind,
-    getBuildInfo,
-    getConfigFileParsingDiagnostics,
-    getDirectoryPath,
-    getEntries,
-    getFileNamesFromConfigSpecs,
-    getNewLineCharacter,
-    getNormalizedAbsolutePath,
-    getParsedCommandLineOfConfigFile,
-    getTsBuildInfoEmitOutputFilePath,
+    PollingInterval,
+    sys,
+    System,
+} from "./sys";
+import {
+    BuildInfo,
+    CompilerHost,
+    CompilerOptions,
+    Diagnostic,
+    DiagnosticMessage,
+    FileExtensionInfo,
+    FileReference,
     HasInvalidatedResolutions,
-    isArray,
-    isIgnoredFileFromWildCardWatching,
-    isProgramUptoDate,
-    MapLike,
-    maybeBind,
-    ModuleResolutionCache,
     ModuleResolutionInfo,
-    noop,
-    noopFileWatcher,
-    parseConfigHostFromCompilerHostLike,
     ParsedCommandLine,
     Path,
-    perfLogger,
-    PollingInterval,
     ProjectReference,
-    ResolutionCacheHost,
     ResolutionMode,
     ResolvedModule,
     ResolvedProjectReference,
     ResolvedTypeReferenceDirective,
-    returnFalse,
-    returnTrue,
     ScriptTarget,
-    setGetSourceFileAsHashVersioned,
-    SharedExtendedConfigFileWatcher,
     SourceFile,
-    sys,
-    System,
-    toPath,
     TypeReferenceDirectiveResolutionInfo,
-    updateErrorForNoInputFiles,
+    WatchDirectoryFlags,
+    WatchOptions,
+} from "./types";
+import {
+    changesAffectModuleResolution,
+    clearMap,
+    closeFileWatcher,
+    createCompilerDiagnostic,
+    getNewLineCharacter,
+} from "./utilities";
+import {
+    createCompilerHostFromProgramHost,
+    createWatchCompilerHostOfConfigFile,
+    createWatchCompilerHostOfFilesAndCompilerOptions,
+    createWatchFactory,
+    noopFileWatcher,
+    setGetSourceFileAsHashVersioned,
+    WatchType,
+    WatchTypeRegistry,
+} from "./watch";
+import {
+    cleanExtendedConfigCache,
+    clearSharedExtendedConfigFileWatcher,
+    closeFileWatcherOf,
+    ConfigFileProgramReloadLevel,
+    createCachedDirectoryStructureHost,
+    DirectoryStructureHost,
+    isIgnoredFileFromWildCardWatching,
+    SharedExtendedConfigFileWatcher,
     updateMissingFilePathsWatch,
     updateSharedExtendedConfigFileWatcher,
     updateWatchingWildcardDirectories,
-    version,
-    WatchDirectoryFlags,
-    WatchOptions,
-    WatchType,
-    WatchTypeRegistry,
     WildcardDirectoryWatcher,
-} from "./_namespaces/ts";
+} from "./watchUtilities";
 
 export interface ReadBuildProgramHost {
     useCaseSensitiveFileNames(): boolean;

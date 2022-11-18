@@ -1,50 +1,40 @@
 import {
     arraysEqual,
-    ArrowFunction,
-    AssignmentDeclarationKind,
-    BinaryExpression,
-    buildLinkParts,
-    ClassExpression,
-    CompletionEntry,
-    CompletionEntryDetails,
-    Completions,
-    ConstructorDeclaration,
     contains,
-    Declaration,
-    DocCommentTemplateOptions,
     emptyArray,
-    Expression,
-    ExpressionStatement,
     find,
-    findAncestor,
     flatMap,
     flatten,
     forEach,
-    forEachAncestor,
-    forEachReturnStatement,
-    forEachUnique,
-    FunctionDeclaration,
-    FunctionExpression,
-    getAssignmentDeclarationKind,
-    getJSDocCommentsAndTags,
-    getJSDocTags,
-    getLineStartPositionForPosition,
-    getTokenAtPosition,
-    hasJSDocNodes,
-    hasJSFileExtension,
     intersperse,
+    isWhiteSpaceSingleLine,
+    lastOrUndefined,
+    length,
+    map,
+    mapDefined,
+    startsWith,
+} from "../compiler/core";
+import {
     isArrowFunction,
     isBlock,
     isConstructorDeclaration,
-    isExpression,
     isFunctionExpression,
-    isFunctionLike,
-    isFunctionLikeDeclaration,
     isFunctionTypeNode,
     isIdentifier,
     isJSDoc,
     isJSDocParameterTag,
-    isWhiteSpaceSingleLine,
+} from "../compiler/factory/nodeTests";
+import {
+    ArrowFunction,
+    AssignmentDeclarationKind,
+    BinaryExpression,
+    ClassExpression,
+    ConstructorDeclaration,
+    Declaration,
+    Expression,
+    ExpressionStatement,
+    FunctionDeclaration,
+    FunctionExpression,
     JSDoc,
     JSDocAugmentsTag,
     JSDocCallbackTag,
@@ -54,39 +44,61 @@ import {
     JSDocPropertyTag,
     JSDocSeeTag,
     JSDocTag,
-    JSDocTagInfo,
     JSDocTemplateTag,
     JSDocTypedefTag,
     JSDocTypeTag,
-    lastOrUndefined,
-    length,
-    lineBreakPart,
-    map,
-    mapDefined,
     MethodDeclaration,
     MethodSignature,
     Node,
     ParameterDeclaration,
-    parameterNamePart,
     ParenthesizedExpression,
     PropertyAssignment,
     PropertyDeclaration,
-    propertyNamePart,
     PropertySignature,
-    punctuationPart,
-    ScriptElementKind,
     SourceFile,
-    spacePart,
-    startsWith,
-    SymbolDisplayPart,
     SyntaxKind,
+    TypeChecker,
+    VariableStatement,
+} from "../compiler/types";
+import {
+    forEachAncestor,
+    forEachReturnStatement,
+    getAssignmentDeclarationKind,
+    getJSDocCommentsAndTags,
+    hasJSFileExtension,
+} from "../compiler/utilities";
+import {
+    findAncestor,
+    getJSDocTags,
+    hasJSDocNodes,
+    isExpression,
+    isFunctionLike,
+    isFunctionLikeDeclaration,
+} from "../compiler/utilitiesPublic";
+import { SortText } from "./completions";
+import {
+    CompletionEntry,
+    CompletionEntryDetails,
+    DocCommentTemplateOptions,
+    JSDocTagInfo,
+    ScriptElementKind,
+    SymbolDisplayPart,
     TextInsertion,
+} from "./types";
+import {
+    buildLinkParts,
+    forEachUnique,
+    getLineStartPositionForPosition,
+    getTokenAtPosition,
+    lineBreakPart,
+    parameterNamePart,
+    propertyNamePart,
+    punctuationPart,
+    spacePart,
     textPart,
     typeAliasNamePart,
-    TypeChecker,
     typeParameterNamePart,
-    VariableStatement,
-} from "./_namespaces/ts";
+} from "./utilities";
 
 const jsDocTagNames = [
     "abstract",
@@ -341,7 +353,7 @@ export function getJSDocTagNameCompletions(): CompletionEntry[] {
             name: tagName,
             kind: ScriptElementKind.keyword,
             kindModifiers: "",
-            sortText: Completions.SortText.LocationPriority,
+            sortText: SortText.LocationPriority,
         };
     }));
 }
@@ -356,7 +368,7 @@ export function getJSDocTagCompletions(): CompletionEntry[] {
             name: `@${tagName}`,
             kind: ScriptElementKind.keyword,
             kindModifiers: "",
-            sortText: Completions.SortText.LocationPriority
+            sortText: SortText.LocationPriority
         };
     }));
 }
@@ -393,7 +405,7 @@ export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): Comple
             return undefined;
         }
 
-        return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: Completions.SortText.LocationPriority };
+        return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: SortText.LocationPriority };
     });
 }
 

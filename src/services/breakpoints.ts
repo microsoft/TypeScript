@@ -1,16 +1,29 @@
 import {
+    getModuleInstanceState,
+    ModuleInstanceState,
+} from "../compiler/binder";
+import {
+    findLast,
+    forEach,
+    lastOrUndefined,
+} from "../compiler/core";
+import { Debug } from "../compiler/debug";
+import {
+    isDecorator,
+    isVariableDeclarationList,
+} from "../compiler/factory/nodeTests";
+import { canHaveDecorators } from "../compiler/factory/utilitiesPublic";
+import { skipTrivia } from "../compiler/scanner";
+import {
     ArrayLiteralExpression,
     BinaryExpression,
     BindingPattern,
     Block,
     BreakOrContinueStatement,
-    canHaveDecorators,
     CaseBlock,
     CaseOrDefaultClause,
     CatchClause,
     ClassDeclaration,
-    createTextSpanFromBounds,
-    Debug,
     DestructuringPattern,
     DoStatement,
     EnumDeclaration,
@@ -18,35 +31,17 @@ import {
     ExportDeclaration,
     Expression,
     ExpressionStatement,
-    findLast,
-    findNextToken,
-    findPrecedingToken,
-    forEach,
     ForInStatement,
     ForOfStatement,
     ForStatement,
     FunctionLikeDeclaration,
-    getModuleInstanceState,
-    getTokenAtPosition,
     HasDecorators,
-    hasOnlyExpressionInitializer,
-    hasSyntacticModifier,
     IfStatement,
     ImportDeclaration,
     ImportEqualsDeclaration,
-    isArrayLiteralOrObjectLiteralDestructuringPattern,
-    isAssignmentOperator,
-    isBindingPattern,
-    isDecorator,
-    isExpressionNode,
-    isFunctionBlock,
-    isFunctionLike,
-    isVariableDeclarationList,
     LabeledStatement,
-    lastOrUndefined,
     ModifierFlags,
     ModuleDeclaration,
-    ModuleInstanceState,
     Node,
     NodeArray,
     NodeFlags,
@@ -57,7 +52,6 @@ import {
     PropertyDeclaration,
     PropertySignature,
     ReturnStatement,
-    skipTrivia,
     SourceFile,
     SwitchStatement,
     SyntaxKind,
@@ -70,7 +64,25 @@ import {
     VariableStatement,
     WhileStatement,
     WithStatement,
-} from "./_namespaces/ts";
+} from "../compiler/types";
+import {
+    hasSyntacticModifier,
+    isAssignmentOperator,
+    isExpressionNode,
+    isFunctionBlock,
+} from "../compiler/utilities";
+import {
+    createTextSpanFromBounds,
+    hasOnlyExpressionInitializer,
+    isBindingPattern,
+    isFunctionLike,
+} from "../compiler/utilitiesPublic";
+import {
+    findNextToken,
+    findPrecedingToken,
+    getTokenAtPosition,
+    isArrayLiteralOrObjectLiteralDestructuringPattern,
+} from "./utilities";
 
 /**
  * Get the breakpoint span in given sourceFile

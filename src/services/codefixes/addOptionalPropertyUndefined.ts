@@ -1,14 +1,9 @@
+import { emptyArray } from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
 import {
-    Diagnostics,
-    emptyArray,
-    factory,
-    getFixableErrorSpanExpression,
-    getSourceFileOfNode,
-    Identifier,
     isBinaryExpression,
     isCallExpression,
-    isExpression,
-    isFunctionLikeKind,
     isIdentifier,
     isPropertyAccessExpression,
     isPropertyAssignment,
@@ -16,21 +11,30 @@ import {
     isPropertySignature,
     isShorthandPropertyAssignment,
     isVariableDeclaration,
+} from "../../compiler/factory/nodeTests";
+import {
+    Identifier,
     Node,
     PropertyAccessExpression,
     SignatureDeclaration,
     SourceFile,
     Symbol,
     SyntaxKind,
-    textChanges,
     TextSpan,
     TypeChecker,
     UnionTypeNode,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { getSourceFileOfNode } from "../../compiler/utilities";
+import {
+    isExpression,
+    isFunctionLikeKind,
+} from "../../compiler/utilitiesPublic";
 import {
     createCodeFixActionWithoutFixAll,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getFixableErrorSpanExpression } from "../utilities";
 
 const addOptionalPropertyUndefined = "addOptionalPropertyUndefined";
 
@@ -48,7 +52,7 @@ registerCodeFix({
         if (!toAdd.length) {
             return undefined;
         }
-        const changes = textChanges.ChangeTracker.with(context, t => addUndefinedToOptionalProperty(t, toAdd));
+        const changes = ChangeTracker.with(context, t => addUndefinedToOptionalProperty(t, toAdd));
         return [createCodeFixActionWithoutFixAll(addOptionalPropertyUndefined, changes, Diagnostics.Add_undefined_to_optional_property_type)];
     },
     fixIds: [addOptionalPropertyUndefined],
@@ -113,7 +117,7 @@ function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { s
     return undefined;
 }
 
-function addUndefinedToOptionalProperty(changes: textChanges.ChangeTracker, toAdd: Symbol[]) {
+function addUndefinedToOptionalProperty(changes: ChangeTracker, toAdd: Symbol[]) {
     for (const add of toAdd) {
         const d = add.valueDeclaration;
         if (d && (isPropertySignature(d) || isPropertyDeclaration(d)) && d.type) {

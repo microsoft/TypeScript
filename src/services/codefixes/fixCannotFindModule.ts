@@ -1,22 +1,24 @@
+import { tryCast } from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { isStringLiteral } from "../../compiler/factory/nodeTests";
 import {
-    Debug,
-    Diagnostics,
-    getTokenAtPosition,
     getTypesPackageName,
-    InstallPackageAction,
-    isExternalModuleNameRelative,
-    isStringLiteral,
-    JsTyping,
-    LanguageServiceHost,
     parsePackageName,
-    SourceFile,
-    tryCast,
-} from "../_namespaces/ts";
+} from "../../compiler/moduleNameResolver";
+import { SourceFile } from "../../compiler/types";
+import { isExternalModuleNameRelative } from "../../compiler/utilitiesPublic";
+import { nodeCoreModules } from "../../jsTyping/jsTyping";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import {
+    InstallPackageAction,
+    LanguageServiceHost,
+} from "../types";
+import { getTokenAtPosition } from "../utilities";
 
 const fixName = "fixCannotFindModule";
 const fixIdInstallTypesPackage = "installTypesPackage";
@@ -71,6 +73,6 @@ function tryGetImportedPackageName(sourceFile: SourceFile, pos: number): string 
 
 function getTypesPackageNameToInstall(packageName: string, host: LanguageServiceHost, diagCode: number): string | undefined {
     return diagCode === errorCodeCannotFindModule
-        ? (JsTyping.nodeCoreModules.has(packageName) ? "@types/node" : undefined)
+        ? (nodeCoreModules.has(packageName) ? "@types/node" : undefined)
         : (host.isKnownTypesPackageName?.(packageName) ? getTypesPackageName(packageName) : undefined);
 }

@@ -5,6 +5,8 @@ import {
     libFile,
 } from "../../virtualFileSystemWithWatch";
 import { createProjectService } from "../../tsserver/helpers";
+import { applyChanges } from "../../../../services/textChanges";
+import { getFormatContext } from "../../../../services/formatting/formatting";
 
 interface Range {
     pos: number;
@@ -111,7 +113,7 @@ export function testExtractSymbol(caption: string, text: string, baselineFolder:
             startPosition: selectionRange.pos,
             endPosition: selectionRange.end,
             host: notImplementedHost,
-            formatContext: ts.formatting.getFormatContext(ts.testFormatSettings, notImplementedHost),
+            formatContext: getFormatContext(ts.testFormatSettings, notImplementedHost),
             preferences: ts.emptyOptions,
         };
         const rangeToExtract = ts.refactor.extractSymbol.getRangeToExtract(sourceFile, ts.createTextSpanFromRange(selectionRange));
@@ -126,7 +128,7 @@ export function testExtractSymbol(caption: string, text: string, baselineFolder:
             const { renameLocation, edits } = ts.refactor.extractSymbol.getRefactorEditsToExtractSymbol(context, action.name)!;
             assert.lengthOf(edits, 1);
             data.push(`// ==SCOPE::${action.description}==`);
-            const newText = ts.textChanges.applyChanges(sourceFile.text, edits[0].textChanges);
+            const newText = applyChanges(sourceFile.text, edits[0].textChanges);
             const newTextWithRename = newText.slice(0, renameLocation) + "/*RENAME*/" + newText.slice(renameLocation);
             data.push(newTextWithRename);
 
@@ -174,7 +176,7 @@ export function testExtractSymbolFailed(caption: string, text: string, descripti
             startPosition: selectionRange.pos,
             endPosition: selectionRange.end,
             host: notImplementedHost,
-            formatContext: ts.formatting.getFormatContext(ts.testFormatSettings, notImplementedHost),
+            formatContext: getFormatContext(ts.testFormatSettings, notImplementedHost),
             preferences: ts.emptyOptions,
         };
         const rangeToExtract = ts.refactor.extractSymbol.getRangeToExtract(sourceFile, ts.createTextSpanFromRange(selectionRange));

@@ -1,70 +1,55 @@
 import {
+    cast,
+    createMultiMap,
+    emptyArray,
+    first,
+    firstOrUndefined,
+    flatMap,
+    forEach,
+    last,
+    length,
+    map,
+    mapDefined,
+    mapEntries,
+    returnTrue,
+    singleOrUndefined,
+    tryCast,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { setEmitFlags } from "../../compiler/factory/emitNode";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
+    isArrowFunction,
+    isCallExpression,
+    isExpressionStatement,
+    isFunctionExpression,
+    isGetAccessorDeclaration,
+    isIdentifier,
+    isParameter,
+    isPropertyAccessExpression,
+    isPropertyDeclaration,
+    isPropertySignature,
+    isSetAccessorDeclaration,
+    isVariableDeclaration,
+    isVariableStatement,
+} from "../../compiler/factory/nodeTests";
+import {
     __String,
     AnonymousType,
     BinaryExpression,
     CallExpression,
     CancellationToken,
     CaseOrDefaultClause,
-    cast,
-    createMultiMap,
-    createSymbolTable,
-    Debug,
     Declaration,
     DiagnosticMessage,
-    Diagnostics,
     ElementAccessExpression,
     EmitFlags,
-    emptyArray,
-    escapeLeadingUnderscores,
     Expression,
-    factory,
-    FindAllReferences,
-    findChildOfKind,
-    first,
-    firstOrUndefined,
-    flatMap,
-    forEach,
-    forEachEntry,
-    getContainingFunction,
-    getEmitScriptTarget,
-    getJSDocType,
-    getNameOfDeclaration,
-    getObjectFlags,
-    getSourceFileOfNode,
-    getTextOfNode,
-    getTokenAtPosition,
-    getTypeNodeIfAccessible,
     Identifier,
     IndexKind,
-    isArrowFunction,
-    isAssignmentExpression,
-    isCallExpression,
-    isExpressionNode,
-    isExpressionStatement,
-    isFunctionExpression,
-    isGetAccessorDeclaration,
-    isIdentifier,
-    isInJSFile,
-    isParameter,
-    isParameterPropertyModifier,
-    isPropertyAccessExpression,
-    isPropertyDeclaration,
-    isPropertySignature,
-    isRestParameter,
-    isRightSideOfQualifiedNameOrPropertyAccess,
-    isSetAccessorDeclaration,
-    isVariableDeclaration,
-    isVariableStatement,
-    LanguageServiceHost,
-    last,
-    length,
-    map,
-    mapDefined,
-    mapEntries,
     NewExpression,
     Node,
-    nodeSeenTracker,
-    NodeSeenTracker,
     ObjectFlags,
     ParameterDeclaration,
     PrefixUnaryExpression,
@@ -75,25 +60,20 @@ import {
     PropertyDeclaration,
     PropertyName,
     PropertySignature,
-    returnTrue,
     ScriptTarget,
     SetAccessorDeclaration,
-    setEmitFlags,
     ShorthandPropertyAssignment,
     Signature,
     SignatureDeclaration,
     SignatureFlags,
     SignatureKind,
-    singleOrUndefined,
     SourceFile,
     Symbol,
     SymbolFlags,
     SymbolLinks,
     SyntaxKind,
-    textChanges,
     Token,
     TransientSymbol,
-    tryCast,
     Type,
     TypeFlags,
     TypeNode,
@@ -103,15 +83,55 @@ import {
     UnionReduction,
     UserPreferences,
     VariableDeclaration,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    createSymbolTable,
+    forEachEntry,
+    getContainingFunction,
+    getEmitScriptTarget,
+    getObjectFlags,
+    getSourceFileOfNode,
+    getTextOfNode,
+    isAssignmentExpression,
+    isExpressionNode,
+    isInJSFile,
+    isRightSideOfQualifiedNameOrPropertyAccess,
+} from "../../compiler/utilities";
+import {
+    escapeLeadingUnderscores,
+    getJSDocType,
+    getNameOfDeclaration,
+    isParameterPropertyModifier,
+    isRestParameter,
+} from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
+    registerCodeFix,
+} from "../codeFixProvider";
+import { getReferenceEntriesForNode } from "../findAllReferences";
+import {
+    ChangeTracker,
+    isThisTypeAnnotatable,
+    ThisTypeAnnotatable,
+    TypeAnnotatable,
+} from "../textChanges";
+import {
+    EntryKind,
+    LanguageServiceHost,
+} from "../types";
+import {
+    findChildOfKind,
+    getTokenAtPosition,
+    getTypeNodeIfAccessible,
+    nodeSeenTracker,
+    NodeSeenTracker,
+} from "../utilities";
+import { tryGetAutoImportableReferenceFromTypeNode } from "./helpers";
+import {
     createImportAdder,
     ImportAdder,
-    registerCodeFix,
-    tryGetAutoImportableReferenceFromTypeNode,
-} from "../_namespaces/ts.codefix";
+} from "./importAdder";
 
 const fixId = "inferFromUsage";
 const errorCodes = [
@@ -166,7 +186,7 @@ registerCodeFix({
 
         const token = getTokenAtPosition(sourceFile, start);
         let declaration: Declaration | undefined;
-        const changes = textChanges.ChangeTracker.with(context, changes => {
+        const changes = ChangeTracker.with(context, changes => {
             declaration = doChange(changes, sourceFile, token, errorCode, program, cancellationToken, /*markSeen*/ returnTrue, host, preferences);
         });
         const name = declaration && getNameOfDeclaration(declaration);
@@ -221,13 +241,13 @@ function mapSuggestionDiagnostic(errorCode: number) {
     return errorCode;
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, markSeen: NodeSeenTracker, host: LanguageServiceHost, preferences: UserPreferences): Declaration | undefined {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, markSeen: NodeSeenTracker, host: LanguageServiceHost, preferences: UserPreferences): Declaration | undefined {
     if (!isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier && token.kind !== SyntaxKind.DotDotDotToken && token.kind !== SyntaxKind.ThisKeyword) {
         return undefined;
     }
 
     const { parent } = token;
-    const importAdder = createImportAdder(sourceFile, program, preferences, host);
+    const importAdder = createImportAdder(sourceFile, program, preferences, host, /*useAutoImportProvider*/ false);
     errorCode = mapSuggestionDiagnostic(errorCode);
     switch (errorCode) {
         // Variable and Property declarations
@@ -304,7 +324,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, to
 
         // Function 'this'
         case Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code:
-            if (textChanges.isThisTypeAnnotatable(containingFunction) && markSeen(containingFunction)) {
+            if (isThisTypeAnnotatable(containingFunction) && markSeen(containingFunction)) {
                 annotateThis(changes, sourceFile, containingFunction, program, host, cancellationToken);
                 declaration = containingFunction;
             }
@@ -319,7 +339,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, to
 }
 
 function annotateVariableDeclaration(
-    changes: textChanges.ChangeTracker,
+    changes: ChangeTracker,
     importAdder: ImportAdder,
     sourceFile: SourceFile,
     declaration: VariableDeclaration | PropertyDeclaration | PropertySignature,
@@ -333,7 +353,7 @@ function annotateVariableDeclaration(
 }
 
 function annotateParameters(
-    changes: textChanges.ChangeTracker,
+    changes: ChangeTracker,
     importAdder: ImportAdder,
     sourceFile: SourceFile,
     parameterDeclaration: ParameterDeclaration,
@@ -364,7 +384,7 @@ function annotateParameters(
     }
 }
 
-function annotateThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: textChanges.ThisTypeAnnotatable, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken) {
+function annotateThis(changes: ChangeTracker, sourceFile: SourceFile, containingFunction: ThisTypeAnnotatable, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken) {
     const references = getFunctionReferences(containingFunction, sourceFile, program, cancellationToken);
     if (!references || !references.length) {
         return;
@@ -383,14 +403,14 @@ function annotateThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile
     }
 }
 
-function annotateJSDocThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: SignatureDeclaration, typeNode: TypeNode) {
+function annotateJSDocThis(changes: ChangeTracker, sourceFile: SourceFile, containingFunction: SignatureDeclaration, typeNode: TypeNode) {
     changes.addJSDocTags(sourceFile, containingFunction, [
         factory.createJSDocThisTag(/*tagName*/ undefined, factory.createJSDocTypeExpression(typeNode)),
     ]);
 }
 
 function annotateSetAccessor(
-    changes: textChanges.ChangeTracker,
+    changes: ChangeTracker,
     importAdder: ImportAdder,
     sourceFile: SourceFile,
     setAccessorDeclaration: SetAccessorDeclaration,
@@ -414,7 +434,7 @@ function annotateSetAccessor(
     }
 }
 
-function annotate(changes: textChanges.ChangeTracker, importAdder: ImportAdder, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type, program: Program, host: LanguageServiceHost): void {
+function annotate(changes: ChangeTracker, importAdder: ImportAdder, sourceFile: SourceFile, declaration: TypeAnnotatable, type: Type, program: Program, host: LanguageServiceHost): void {
     const typeNode = getTypeNodeIfAccessible(type, declaration, program, host);
     if (typeNode) {
         if (isInJSFile(sourceFile) && declaration.kind !== SyntaxKind.PropertySignature) {
@@ -434,9 +454,9 @@ function annotate(changes: textChanges.ChangeTracker, importAdder: ImportAdder, 
 
 function tryReplaceImportTypeNodeWithAutoImport(
     typeNode: TypeNode,
-    declaration: textChanges.TypeAnnotatable,
+    declaration: TypeAnnotatable,
     sourceFile: SourceFile,
-    changes: textChanges.ChangeTracker,
+    changes: ChangeTracker,
     importAdder: ImportAdder,
     scriptTarget: ScriptTarget
 ): boolean {
@@ -448,7 +468,7 @@ function tryReplaceImportTypeNodeWithAutoImport(
     return false;
 }
 
-function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parameterInferences: readonly ParameterInference[], program: Program, host: LanguageServiceHost): void {
+function annotateJSDocParameters(changes: ChangeTracker, sourceFile: SourceFile, parameterInferences: readonly ParameterInference[], program: Program, host: LanguageServiceHost): void {
     const signature = parameterInferences.length && parameterInferences[0].declaration.parent;
     if (!signature) {
         return;
@@ -497,8 +517,8 @@ function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile:
 
 function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>, program: Program, cancellationToken: CancellationToken): readonly Identifier[] {
     // Position shouldn't matter since token is not a SourceFile.
-    return mapDefined(FindAllReferences.getReferenceEntriesForNode(-1, token, program, program.getSourceFiles(), cancellationToken), entry =>
-        entry.kind !== FindAllReferences.EntryKind.Span ? tryCast(entry.node, isIdentifier) : undefined);
+    return mapDefined(getReferenceEntriesForNode(-1, token, program, program.getSourceFiles(), cancellationToken), entry =>
+        entry.kind !== EntryKind.Span ? tryCast(entry.node, isIdentifier) : undefined);
 }
 
 function inferTypeForVariableFromUsage(token: Identifier | PrivateIdentifier, program: Program, cancellationToken: CancellationToken): Type {

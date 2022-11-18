@@ -1,30 +1,36 @@
+import { getNodeId } from "../../compiler/checkerUtilities";
+import { first } from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
 import {
-    addToSeen,
-    ArrowFunction,
-    Diagnostics,
-    factory,
-    findChildOfKind,
-    first,
-    FunctionDeclaration,
-    FunctionExpression,
-    getContainingFunction,
-    getEntityNameFromTypeNode,
-    getNodeId,
-    getTokenAtPosition,
     isFunctionTypeNode,
     isVariableDeclaration,
+} from "../../compiler/factory/nodeTests";
+import {
+    ArrowFunction,
+    FunctionDeclaration,
+    FunctionExpression,
     MethodDeclaration,
     Node,
     SourceFile,
     SyntaxKind,
-    textChanges,
     TypeNode,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    addToSeen,
+    getContainingFunction,
+    getEntityNameFromTypeNode,
+} from "../../compiler/utilities";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    findChildOfKind,
+    getTokenAtPosition,
+} from "../utilities";
 
 const fixId = "fixAwaitInSyncFunction";
 const errorCodes = [
@@ -38,7 +44,7 @@ registerCodeFix({
         const { sourceFile, span } = context;
         const nodes = getNodes(sourceFile, span.start);
         if (!nodes) return undefined;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, nodes));
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, nodes));
         return [createCodeFixAction(fixId, changes, Diagnostics.Add_async_modifier_to_containing_function, fixId, Diagnostics.Add_all_missing_async_modifiers)];
     },
     fixIds: [fixId],
@@ -94,7 +100,7 @@ function getNodes(sourceFile: SourceFile, start: number): { insertBefore: Node, 
 }
 
 function doChange(
-    changes: textChanges.ChangeTracker,
+    changes: ChangeTracker,
     sourceFile: SourceFile,
     { insertBefore, returnType }: { insertBefore: Node, returnType: TypeNode | undefined }): void {
 

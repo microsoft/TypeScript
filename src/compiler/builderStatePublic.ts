@@ -1,7 +1,7 @@
 import {
     Diagnostic,
     WriteFileCallbackData,
-} from "./_namespaces/ts";
+} from "./types";
 
 export interface EmitOutput {
     outputFiles: OutputFile[];

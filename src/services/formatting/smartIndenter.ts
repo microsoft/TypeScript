@@ -1,4 +1,19 @@
 import {
+    contains,
+    find,
+    isWhiteSpaceLike,
+    isWhiteSpaceSingleLine,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import {
+    isCallExpression,
+    isConditionalExpression,
+} from "../../compiler/factory/nodeTests";
+import {
+    getLineAndCharacterOfPosition,
+    skipTrivia,
+} from "../../compiler/scanner";
+import {
     ArrayBindingPattern,
     ArrayLiteralExpression,
     CallExpression,
@@ -6,32 +21,10 @@ import {
     ClassDeclaration,
     ClassExpression,
     CommentRange,
-    contains,
-    Debug,
-    EditorSettings,
-    find,
-    findChildOfKind,
-    findListItemInfo,
-    findNextToken,
-    findPrecedingToken,
-    FormatCodeSettings,
     GetAccessorDeclaration,
-    getLineAndCharacterOfPosition,
-    getLineStartPositionForPosition,
-    getStartPositionOfLine,
-    getTokenAtPosition,
     IfStatement,
     ImportClause,
-    IndentStyle,
     InterfaceDeclaration,
-    isCallExpression,
-    isCallOrNewExpression,
-    isConditionalExpression,
-    isDeclaration,
-    isStatementButNotDeclaration,
-    isStringOrRegularExpressionOrTemplateLiteral,
-    isWhiteSpaceLike,
-    isWhiteSpaceSingleLine,
     JSDocTemplateTag,
     LineAndCharacter,
     NamedImportsOrExports,
@@ -39,11 +32,7 @@ import {
     NodeArray,
     ObjectBindingPattern,
     ObjectLiteralExpression,
-    positionBelongsToNode,
-    rangeContainsRange,
-    rangeContainsStartEnd,
     SignatureDeclaration,
-    skipTrivia,
     SourceFile,
     SourceFileLike,
     SyntaxKind,
@@ -52,15 +41,35 @@ import {
     TypeLiteralNode,
     TypeReferenceNode,
     VariableDeclarationList,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { getStartPositionOfLine } from "../../compiler/utilities";
 import {
-    getRangeOfEnclosingComment,
+    isCallOrNewExpression,
+    isDeclaration,
+    isStatementButNotDeclaration,
+} from "../../compiler/utilitiesPublic";
+import {
+    EditorSettings,
+    FormatCodeSettings,
+    IndentStyle,
     TextRangeWithKind,
-} from "../_namespaces/ts.formatting";
+} from "../types";
+import {
+    findChildOfKind,
+    findListItemInfo,
+    findNextToken,
+    findPrecedingToken,
+    getLineStartPositionForPosition,
+    getRangeOfEnclosingComment,
+    getTokenAtPosition,
+    isStringOrRegularExpressionOrTemplateLiteral,
+    positionBelongsToNode,
+    rangeContainsRange,
+    rangeContainsStartEnd,
+} from "../utilities";
 
 /** @internal */
 export namespace SmartIndenter {
-
     const enum Value {
         Unknown = -1
     }

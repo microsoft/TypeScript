@@ -1,14 +1,7 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    createServerHost,
-    File,
-} from "../virtualFileSystemWithWatch";
-import {
-    configuredProjectAt,
-    createSession,
-    executeSessionRequest,
-    openFilesForSession,
-} from "./helpers";
+import { getSymbolId } from "../../../compiler/checkerUtilities";
+import { createServerHost, File } from "../virtualFileSystemWithWatch";
+import { configuredProjectAt, createSession, executeSessionRequest, openFilesForSession } from "./helpers";
 
 const packageJson: File = {
     path: "/package.json",
@@ -103,7 +96,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         });
         assert.ok(sigintPropBefore);
         assert.ok(sigintPropBefore![0].symbol.flags & ts.SymbolFlags.Transient);
-        const symbolIdBefore = ts.getSymbolId(sigintPropBefore![0].symbol);
+        const symbolIdBefore = getSymbolId(sigintPropBefore![0].symbol);
 
         // Update program without clearing cache
         session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
@@ -128,7 +121,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
             if (symbolName === "SIGINT") sigintPropAfter = info;
         });
         assert.ok(sigintPropAfter);
-        assert.notEqual(symbolIdBefore, ts.getSymbolId(sigintPropAfter![0].symbol));
+        assert.notEqual(symbolIdBefore, getSymbolId(sigintPropAfter![0].symbol));
     });
 });
 

@@ -1,15 +1,15 @@
 import {
     compareStringsCaseSensitive,
     compareValues,
-    Comparison,
-    Debug,
     emptyArray,
-    every,
     isArray,
     map,
     some,
     trimString,
-} from "./_namespaces/ts";
+} from "./core";
+import { Comparison } from "./corePublic";
+
+// import { Debug } from "./debug";
 
 // https://semver.org/#spec-item-2
 // > A normal version number MUST take the form X.Y.Z where X, Y, and Z are non-negative
@@ -26,14 +26,14 @@ const versionRegExp = /^(0|[1-9]\d*)(?:\.(0|[1-9]\d*)(?:\.(0|[1-9]\d*)(?:\-([a-z
 // > alphanumerics and hyphen [0-9A-Za-z-]. Identifiers MUST NOT be empty. Numeric identifiers
 // > MUST NOT include leading zeroes.
 const prereleaseRegExp = /^(?:0|[1-9]\d*|[a-z-][a-z0-9-]*)(?:\.(?:0|[1-9]\d*|[a-z-][a-z0-9-]*))*$/i;
-const prereleasePartRegExp = /^(?:0|[1-9]\d*|[a-z-][a-z0-9-]*)$/i;
+// const prereleasePartRegExp = /^(?:0|[1-9]\d*|[a-z-][a-z0-9-]*)$/i;
 
 // https://semver.org/#spec-item-10
 // > Build metadata MAY be denoted by appending a plus sign and a series of dot separated
 // > identifiers immediately following the patch or pre-release version. Identifiers MUST
 // > comprise only ASCII alphanumerics and hyphen [0-9A-Za-z-]. Identifiers MUST NOT be empty.
 const buildRegExp = /^[a-z0-9-]+(?:\.[a-z0-9-]+)*$/i;
-const buildPartRegExp = /^[a-z0-9-]+$/i;
+// const buildPartRegExp = /^[a-z0-9-]+$/i;
 
 // https://semver.org/#spec-item-9
 // > Numeric identifiers MUST NOT include leading zeroes.
@@ -57,19 +57,23 @@ export class Version {
     constructor(major: number, minor?: number, patch?: number, prerelease?: string | readonly string[], build?: string | readonly string[]);
     constructor(major: number | string, minor = 0, patch = 0, prerelease: string | readonly string[] = "", build: string | readonly string[] = "") {
         if (typeof major === "string") {
-            const result = Debug.checkDefined(tryParseComponents(major), "Invalid version");
+            // const result = Debug.checkDefined(tryParseComponents(major), "Invalid version");
+            const result = tryParseComponents(major);
+            if (result === undefined) {
+                throw new Error("Invalid version");
+            }
             ({ major, minor, patch, prerelease, build } = result);
         }
 
-        Debug.assert(major >= 0, "Invalid argument: major");
-        Debug.assert(minor >= 0, "Invalid argument: minor");
-        Debug.assert(patch >= 0, "Invalid argument: patch");
+        // Debug.assert(major >= 0, "Invalid argument: major");
+        // Debug.assert(minor >= 0, "Invalid argument: minor");
+        // Debug.assert(patch >= 0, "Invalid argument: patch");
 
         const prereleaseArray = prerelease ? isArray(prerelease) ? prerelease : prerelease.split(".") : emptyArray;
         const buildArray = build ? isArray(build) ? build : build.split(".") : emptyArray;
 
-        Debug.assert(every(prereleaseArray, s => prereleasePartRegExp.test(s)), "Invalid argument: prerelease");
-        Debug.assert(every(buildArray, s => buildPartRegExp.test(s)), "Invalid argument: build");
+        // Debug.assert(every(prereleaseArray, s => prereleasePartRegExp.test(s)), "Invalid argument: prerelease");
+        // Debug.assert(every(buildArray, s => buildPartRegExp.test(s)), "Invalid argument: build");
 
         this.major = major;
         this.minor = minor;
@@ -112,7 +116,9 @@ export class Version {
             case "major": return new Version(this.major + 1, 0, 0);
             case "minor": return new Version(this.major, this.minor + 1, 0);
             case "patch": return new Version(this.major, this.minor, this.patch + 1);
-            default: return Debug.assertNever(field);
+            // default: return Debug.assertNever(field);
+            default:
+                throw new Error(field);
         }
     }
 
@@ -204,7 +210,11 @@ export class VersionRange {
     private _alternatives: readonly (readonly Comparator[])[];
 
     constructor(spec: string) {
-        this._alternatives = spec ? Debug.checkDefined(parseRange(spec), "Invalid range spec.") : emptyArray;
+        const result = spec ? parseRange(spec) : emptyArray;
+        if (result === undefined) {
+            throw new Error("Invalid range spec.");
+        }
+        this._alternatives = result;
     }
 
     static tryParse(text: string) {
@@ -413,7 +423,9 @@ function testComparator(version: Version, operator: Comparator["operator"], oper
         case ">": return cmp > 0;
         case ">=": return cmp >= 0;
         case "=": return cmp === 0;
-        default: return Debug.assertNever(operator);
+        // default: return Debug.assertNever(operator);
+        default:
+            throw new Error(operator);
     }
 }
 

@@ -1,64 +1,51 @@
+import { isExportsOrModuleExportsOrAlias } from "../../compiler/binder";
 import {
-    createCodeFixActionWithoutFixAll,
-    moduleSpecifierToValidIdentifier,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+    arrayFrom,
+    concatenate,
+    createMultiMap,
+    emptyMap,
+    filter,
+    flatMap,
+    forEach,
+    isArray,
+    map,
+    mapAllOrFail,
+    mapIterator,
+    some,
+} from "../../compiler/core";
+import { ReadonlyCollection } from "../../compiler/corePublic";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
+    isArrowFunction,
+    isBinaryExpression,
+    isClassExpression,
+    isFunctionExpression,
+    isIdentifier,
+    isObjectLiteralExpression,
+    isPropertyAccessExpression,
+    isVariableStatement,
+} from "../../compiler/factory/nodeTests";
+import { getModeForUsageLocation } from "../../compiler/program";
 import {
     __String,
-    arrayFrom,
     ArrowFunction,
     BinaryExpression,
     BindingElement,
     BindingName,
     ClassDeclaration,
     ClassExpression,
-    concatenate,
-    copyEntries,
-    createMultiMap,
-    createRange,
-    Debug,
-    Diagnostics,
-    emptyMap,
     ExportDeclaration,
     ExportSpecifier,
     Expression,
     ExpressionStatement,
-    factory,
-    filter,
-    findChildOfKind,
-    flatMap,
-    forEach,
     FunctionDeclaration,
     FunctionExpression,
-    getEmitScriptTarget,
-    getModeForUsageLocation,
-    getQuotePreference,
-    getResolvedModule,
-    getSynthesizedDeepClone,
-    getSynthesizedDeepClones,
-    getSynthesizedDeepClonesWithReplacements,
-    getSynthesizedDeepCloneWithReplacements,
     Identifier,
     ImportDeclaration,
-    importFromModuleSpecifier,
     ImportSpecifier,
     InternalSymbolName,
-    isArray,
-    isArrowFunction,
-    isBinaryExpression,
-    isClassExpression,
-    isExportsOrModuleExportsOrAlias,
-    isFunctionExpression,
-    isIdentifier,
-    isNonContextualKeyword,
-    isObjectLiteralExpression,
-    isPropertyAccessExpression,
-    isRequireCall,
-    isVariableStatement,
-    makeImport,
-    map,
-    mapAllOrFail,
-    mapIterator,
     MethodDeclaration,
     Modifier,
     Node,
@@ -67,26 +54,47 @@ import {
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
     PropertyAccessExpression,
-    QuotePreference,
-    rangeContainsRange,
-    ReadonlyCollection,
     ScriptTarget,
-    some,
     SourceFile,
     Statement,
     StringLiteralLike,
     SymbolFlags,
     SyntaxKind,
-    textChanges,
     TypeChecker,
     VariableStatement,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    copyEntries,
+    createRange,
+    getEmitScriptTarget,
+    getResolvedModule,
+    importFromModuleSpecifier,
+    isNonContextualKeyword,
+    isRequireCall,
+} from "../../compiler/utilities";
+import {
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    findChildOfKind,
+    getQuotePreference,
+    getSynthesizedDeepClone,
+    getSynthesizedDeepClones,
+    getSynthesizedDeepClonesWithReplacements,
+    getSynthesizedDeepCloneWithReplacements,
+    makeImport,
+    QuotePreference,
+    rangeContainsRange,
+} from "../utilities";
+import { moduleSpecifierToValidIdentifier } from "./importAdder";
 
 registerCodeFix({
     errorCodes: [Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module.code],
     getCodeActions(context) {
         const { sourceFile, program, preferences } = context;
-        const changes = textChanges.ChangeTracker.with(context, changes => {
+        const changes = ChangeTracker.with(context, changes => {
             const moduleExportsChangedToDefault = convertFileToEsModule(sourceFile, program.getTypeChecker(), changes, getEmitScriptTarget(program.getCompilerOptions()), getQuotePreference(sourceFile, preferences));
             if (moduleExportsChangedToDefault) {
                 for (const importingFile of program.getSourceFiles()) {
@@ -99,7 +107,7 @@ registerCodeFix({
     },
 });
 
-function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: SourceFile, changes: textChanges.ChangeTracker, quotePreference: QuotePreference) {
+function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: SourceFile, changes: ChangeTracker, quotePreference: QuotePreference) {
     for (const moduleSpecifier of importingFile.imports) {
         const imported = getResolvedModule(importingFile, moduleSpecifier.text, getModeForUsageLocation(importingFile, moduleSpecifier));
         if (!imported || imported.resolvedFileName !== exportingFile.fileName) {
@@ -121,7 +129,7 @@ function fixImportOfModuleExports(importingFile: SourceFile, exportingFile: Sour
 }
 
 /** @returns Whether we converted a `module.exports =` to a default export. */
-function convertFileToEsModule(sourceFile: SourceFile, checker: TypeChecker, changes: textChanges.ChangeTracker, target: ScriptTarget, quotePreference: QuotePreference): ModuleExportsChanged {
+function convertFileToEsModule(sourceFile: SourceFile, checker: TypeChecker, changes: ChangeTracker, target: ScriptTarget, quotePreference: QuotePreference): ModuleExportsChanged {
     const identifiers: Identifiers = { original: collectFreeIdentifiers(sourceFile), additional: new Set() };
     const exports = collectExportRenames(sourceFile, checker, identifiers);
     convertExportsAccesses(sourceFile, exports, changes);
@@ -171,7 +179,7 @@ function collectExportRenames(sourceFile: SourceFile, checker: TypeChecker, iden
     return res;
 }
 
-function convertExportsAccesses(sourceFile: SourceFile, exports: ExportRenames, changes: textChanges.ChangeTracker): void {
+function convertExportsAccesses(sourceFile: SourceFile, exports: ExportRenames, changes: ChangeTracker): void {
     forEachExportReference(sourceFile, (node, isAssignmentLhs) => {
         if (isAssignmentLhs) {
             return;
@@ -198,7 +206,7 @@ function convertStatement(
     sourceFile: SourceFile,
     statement: Statement,
     checker: TypeChecker,
-    changes: textChanges.ChangeTracker,
+    changes: ChangeTracker,
     identifiers: Identifiers,
     target: ScriptTarget,
     exports: ExportRenames,
@@ -234,7 +242,7 @@ function convertStatement(
 function convertVariableStatement(
     sourceFile: SourceFile,
     statement: VariableStatement,
-    changes: textChanges.ChangeTracker,
+    changes: ChangeTracker,
     checker: TypeChecker,
     identifiers: Identifiers,
     target: ScriptTarget,
@@ -300,7 +308,7 @@ function convertAssignment(
     sourceFile: SourceFile,
     checker: TypeChecker,
     assignment: BinaryExpression,
-    changes: textChanges.ChangeTracker,
+    changes: ChangeTracker,
     exports: ExportRenames,
     useSitesToUnqualify: Map<Node, Node> | undefined,
 ): ModuleExportsChanged {
@@ -363,7 +371,7 @@ function tryChangeModuleExportsObject(object: ObjectLiteralExpression, useSitesT
 function convertNamedExport(
     sourceFile: SourceFile,
     assignment: BinaryExpression & { left: PropertyAccessExpression },
-    changes: textChanges.ChangeTracker,
+    changes: ChangeTracker,
     exports: ExportRenames,
 ): void {
     // If "originalKeywordKind" was set, this is e.g. `exports.
@@ -402,7 +410,7 @@ function reExportDefault(moduleSpecifier: string): ExportDeclaration {
     return makeExportDeclaration([factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, "default")], moduleSpecifier);
 }
 
-function convertExportsPropertyAssignment({ left, right, parent }: BinaryExpression & { left: PropertyAccessExpression }, sourceFile: SourceFile, changes: textChanges.ChangeTracker): void {
+function convertExportsPropertyAssignment({ left, right, parent }: BinaryExpression & { left: PropertyAccessExpression }, sourceFile: SourceFile, changes: ChangeTracker): void {
     const name = left.name.text;
     if ((isFunctionExpression(right) || isArrowFunction(right) || isClassExpression(right)) && (!right.name || right.name.text === name)) {
         // `exports.f = function() {}` -> `export function f() {}` -- Replace `exports.f = ` with `export `, and insert the name after `function`.

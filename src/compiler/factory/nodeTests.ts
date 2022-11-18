@@ -222,7 +222,7 @@ import {
     WhileStatement,
     WithStatement,
     YieldExpression,
-} from "../_namespaces/ts";
+} from "../types";
 
 // Literals
 

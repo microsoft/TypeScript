@@ -1,58 +1,70 @@
+import { getSymbolId } from "../../compiler/checkerUtilities";
 import {
-    CancellationToken,
-    CodeFixAllContext,
-    CodeFixContext,
     compact,
     contains,
-    Diagnostic,
-    Diagnostics,
-    Expression,
-    factory,
-    FileTextChanges,
     find,
-    FindAllReferences,
-    findAncestor,
-    findPrecedingToken,
     forEach,
-    getAncestor,
-    getFixableErrorSpanExpression,
-    getSymbolId,
-    hasSyntacticModifier,
-    Identifier,
+    isNumber,
+    some,
+    tryAddToSet,
+    tryCast,
+} from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isArrowFunction,
     isBinaryExpression,
     isBlock,
-    isCallOrNewExpression,
     isForOfStatement,
     isIdentifier,
-    isNumber,
     isPropertyAccessExpression,
     isVariableDeclaration,
+} from "../../compiler/factory/nodeTests";
+import {
+    CancellationToken,
+    Diagnostic,
+    Expression,
+    Identifier,
     ModifierFlags,
     Node,
     NodeFlags,
-    positionIsASICandidate,
     Program,
-    some,
     SourceFile,
     Symbol,
     SyntaxKind,
-    textChanges,
     TextSpan,
-    textSpansEqual,
-    tryAddToSet,
-    tryCast,
     TypeChecker,
     TypeFlags,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    getAncestor,
+    hasSyntacticModifier,
+} from "../../compiler/utilities";
+import {
+    findAncestor,
+    isCallOrNewExpression,
+} from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     createCodeFixActionWithoutFixAll,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { Core as FindAllReferences } from "../findAllReferences";
+import { ChangeTracker } from "../textChanges";
+import {
+    CodeFixAllContext,
+    CodeFixContext,
+    FileTextChanges,
+} from "../types";
+import {
+    findPrecedingToken,
+    getFixableErrorSpanExpression,
+    positionIsASICandidate,
+    textSpansEqual,
+} from "../utilities";
 
-type ContextualTrackChangesFunction = (cb: (changeTracker: textChanges.ChangeTracker) => void) => FileTextChanges[];
+type ContextualTrackChangesFunction = (cb: (changeTracker: ChangeTracker) => void) => FileTextChanges[];
 const fixId = "addMissingAwait";
 const propertyAccessCode = Diagnostics.Property_0_does_not_exist_on_type_1.code;
 const callableConstructableErrorCodes = [
@@ -90,7 +102,7 @@ registerCodeFix({
         }
 
         const checker = context.program.getTypeChecker();
-        const trackChanges: ContextualTrackChangesFunction = cb => textChanges.ChangeTracker.with(context, cb);
+        const trackChanges: ContextualTrackChangesFunction = cb => ChangeTracker.with(context, cb);
         return compact([
             getDeclarationSiteFix(context, expression, errorCode, checker, trackChanges),
             getUseSiteFix(context, expression, errorCode, checker, trackChanges)]);
@@ -199,7 +211,7 @@ function findAwaitableInitializers(
         }
 
         const diagnostics = program.getSemanticDiagnostics(sourceFile, cancellationToken);
-        const isUsedElsewhere = FindAllReferences.Core.eachSymbolReferenceInFile(variableName, checker, sourceFile, reference => {
+        const isUsedElsewhere = FindAllReferences.eachSymbolReferenceInFile(variableName, checker, sourceFile, reference => {
             return identifier !== reference && !symbolReferenceIsAlsoMissingAwait(reference, diagnostics, sourceFile, checker);
         });
 
@@ -277,7 +289,7 @@ function isInsideAwaitableBody(node: Node) {
             ancestor.parent.kind === SyntaxKind.MethodDeclaration));
 }
 
-function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression, fixedDeclarations?: Set<number>) {
+function makeChange(changeTracker: ChangeTracker, errorCode: number, sourceFile: SourceFile, checker: TypeChecker, insertionSite: Expression, fixedDeclarations?: Set<number>) {
     if (isForOfStatement(insertionSite.parent) && !insertionSite.parent.awaitModifier) {
         const exprType = checker.getTypeAtLocation(insertionSite);
         const asyncIter = checker.getAsyncIterableType();
@@ -334,7 +346,7 @@ function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number,
     }
 }
 
-function insertLeadingSemicolonIfNeeded(changeTracker: textChanges.ChangeTracker, beforeNode: Node, sourceFile: SourceFile) {
+function insertLeadingSemicolonIfNeeded(changeTracker: ChangeTracker, beforeNode: Node, sourceFile: SourceFile) {
     const precedingToken = findPrecedingToken(beforeNode.pos, sourceFile);
     if (precedingToken && positionIsASICandidate(precedingToken.end, precedingToken.parent, sourceFile)) {
         changeTracker.insertText(sourceFile, beforeNode.getStart(sourceFile), ";");

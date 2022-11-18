@@ -1,25 +1,27 @@
+import { getSymbolId } from "../../compiler/checkerUtilities";
+import { tryCast } from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import { isVariableDeclarationList } from "../../compiler/factory/nodeTests";
 import {
-    addToSeen,
-    Diagnostics,
-    factory,
-    findChildOfKind,
-    getSymbolId,
-    getTokenAtPosition,
-    isVariableDeclarationList,
     Program,
     SourceFile,
     Symbol,
     SyntaxKind,
-    textChanges,
     Token,
-    tryCast,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { addToSeen } from "../../compiler/utilities";
 import {
     createCodeFixActionMaybeFixAll,
     createCombinedCodeActions,
     eachDiagnostic,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    findChildOfKind,
+    getTokenAtPosition,
+} from "../utilities";
 
 const fixId = "fixConvertConstToLet";
 const errorCodes = [Diagnostics.Cannot_assign_to_0_because_it_is_a_constant.code];
@@ -31,14 +33,14 @@ registerCodeFix({
         const info = getInfo(sourceFile, span.start, program);
         if (info === undefined) return;
 
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info.token));
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, info.token));
         return [createCodeFixActionMaybeFixAll(fixId, changes, Diagnostics.Convert_const_to_let, fixId, Diagnostics.Convert_all_const_to_let)];
     },
     getAllCodeActions: context => {
         const { program } = context;
         const seen = new Map<number, true>();
 
-        return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
+        return createCombinedCodeActions(ChangeTracker.with(context, changes => {
             eachDiagnostic(context, errorCodes, diag => {
                 const info = getInfo(diag.file, diag.start, program);
                 if (info) {
@@ -72,6 +74,6 @@ function getInfo(sourceFile: SourceFile, pos: number, program: Program): Info | 
     return { symbol, token: constToken };
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Token<SyntaxKind.ConstKeyword>) {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, token: Token<SyntaxKind.ConstKeyword>) {
     changes.replaceNode(sourceFile, token, factory.createToken(SyntaxKind.LetKeyword));
 }

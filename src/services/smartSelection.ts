@@ -1,19 +1,16 @@
 import {
-    CharacterCodes,
     compact,
     contains,
-    createTextSpanFromBounds,
-    Debug,
     findIndex,
     first,
-    getTokenPosOfNode,
-    getTouchingPropertyName,
-    getTrailingCommentRanges,
-    hasJSDocNodes,
+    last,
+    or,
+    singleOrUndefined,
+} from "../compiler/core";
+import { Debug } from "../compiler/debug";
+import {
     isBindingElement,
     isBlock,
-    isFunctionBody,
-    isFunctionLikeDeclaration,
     isImportDeclaration,
     isImportEqualsDeclaration,
     isJSDocSignature,
@@ -26,27 +23,40 @@ import {
     isStringLiteral,
     isSyntaxList,
     isTemplateHead,
-    isTemplateLiteral,
-    isTemplateMiddleOrTemplateTail,
     isTemplateSpan,
     isTemplateTail,
     isVariableDeclaration,
     isVariableDeclarationList,
     isVariableStatement,
-    last,
+} from "../compiler/factory/nodeTests";
+import { parseNodeFactory } from "../compiler/parser";
+import { getTrailingCommentRanges } from "../compiler/scanner";
+import {
+    CharacterCodes,
     Node,
-    or,
-    parseNodeFactory,
-    positionsAreOnSameLine,
-    SelectionRange,
-    setTextRangePosEnd,
-    singleOrUndefined,
     SourceFile,
     SyntaxKind,
     SyntaxList,
+} from "../compiler/types";
+import {
+    getTokenPosOfNode,
+    positionsAreOnSameLine,
+    setTextRangePosEnd,
+} from "../compiler/utilities";
+import {
+    createTextSpanFromBounds,
+    hasJSDocNodes,
+    isFunctionBody,
+    isFunctionLikeDeclaration,
+    isTemplateLiteral,
+    isTemplateMiddleOrTemplateTail,
     textSpanIntersectsWithPosition,
+} from "../compiler/utilitiesPublic";
+import { SelectionRange } from "./types";
+import {
+    getTouchingPropertyName,
     textSpansEqual,
-} from "./_namespaces/ts";
+} from "./utilities";
 
 /** @internal */
 export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): SelectionRange {

@@ -1,41 +1,51 @@
+import { getNodeId } from "../../compiler/checkerUtilities";
 import {
-    addToSeen,
-    createTextSpan,
-    DiagnosticMessageChain,
-    Diagnostics,
-    factory,
     find,
-    flattenDiagnosticMessageText,
-    getEmitScriptTarget,
-    getNodeId,
-    getTokenAtPosition,
-    isExpression,
+    isString,
+} from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isIdentifier,
     isMappedTypeNode,
-    isString,
-    isTypeNode,
     isTypeParameterDeclaration,
-    LanguageServiceHost,
+} from "../../compiler/factory/nodeTests";
+import { flattenDiagnosticMessageText } from "../../compiler/program";
+import {
+    DiagnosticMessageChain,
     Node,
     Program,
     SourceFile,
-    textChanges,
     TextSpan,
     Type,
     TypeChecker,
     TypeParameterDeclaration,
     UserPreferences,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    addToSeen,
+    getEmitScriptTarget,
+} from "../../compiler/utilities";
+import {
+    createTextSpan,
+    isExpression,
+    isTypeNode,
+} from "../../compiler/utilitiesPublic";
 import {
     createCodeFixAction,
     createCombinedCodeActions,
-    createImportAdder,
     eachDiagnostic,
+    registerCodeFix,
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { LanguageServiceHost } from "../types";
+import { getTokenAtPosition } from "../utilities";
+import {
     findAncestorMatchingSpan,
     getNoopSymbolTrackerWithResolver,
-    registerCodeFix,
     typeToAutoImportableTypeNode,
-} from "../_namespaces/ts.codefix";
+} from "./helpers";
+import { createImportAdder } from "./importAdder";
 
 const fixId = "addMissingConstraint";
 const errorCodes = [
@@ -57,7 +67,7 @@ registerCodeFix({
         const info = getInfo(program, sourceFile, span);
         if (info === undefined) return;
 
-        const changes = textChanges.ChangeTracker.with(context, t => addMissingConstraint(t, program, preferences, host, sourceFile, info));
+        const changes = ChangeTracker.with(context, t => addMissingConstraint(t, program, preferences, host, sourceFile, info));
         return [createCodeFixAction(fixId, changes, Diagnostics.Add_extends_constraint, fixId, Diagnostics.Add_extends_constraint_to_all_type_parameters)];
     },
     fixIds: [fixId],
@@ -65,7 +75,7 @@ registerCodeFix({
         const { program, preferences, host } = context;
         const seen = new Map<number, true>();
 
-        return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
+        return createCombinedCodeActions(ChangeTracker.with(context, changes => {
             eachDiagnostic(context, errorCodes, diag => {
                 const info = getInfo(program, diag.file, createTextSpan(diag.start, diag.length));
                 if (info) {
@@ -112,7 +122,7 @@ function getInfo(program: Program, sourceFile: SourceFile, span: TextSpan): Info
     return undefined;
 }
 
-function addMissingConstraint(changes: textChanges.ChangeTracker, program: Program, preferences: UserPreferences, host: LanguageServiceHost, sourceFile: SourceFile, info: Info): void {
+function addMissingConstraint(changes: ChangeTracker, program: Program, preferences: UserPreferences, host: LanguageServiceHost, sourceFile: SourceFile, info: Info): void {
     const { declaration, constraint } = info;
     const checker = program.getTypeChecker();
 
@@ -122,7 +132,7 @@ function addMissingConstraint(changes: textChanges.ChangeTracker, program: Progr
     else {
         const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
         const tracker = getNoopSymbolTrackerWithResolver({ program, host });
-        const importAdder = createImportAdder(sourceFile, program, preferences, host);
+        const importAdder = createImportAdder(sourceFile, program, preferences, host, /*useAutoImportProvider*/ false);
         const typeNode = typeToAutoImportableTypeNode(checker, importAdder, constraint, /*contextNode*/ undefined, scriptTarget, /*flags*/ undefined, tracker);
         if (typeNode) {
             changes.replaceNode(sourceFile, declaration, factory.updateTypeParameterDeclaration(declaration, /*modifiers*/ undefined, declaration.name, typeNode, declaration.default));

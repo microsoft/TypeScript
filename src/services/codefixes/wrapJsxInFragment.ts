@@ -1,22 +1,22 @@
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import { isBinaryExpression } from "../../compiler/factory/nodeTests";
 import {
     BinaryExpression,
-    Diagnostics,
-    factory,
-    getTokenAtPosition,
-    isBinaryExpression,
-    isJsxChild,
     JsxChild,
     Node,
-    nodeIsMissing,
     SourceFile,
     SyntaxKind,
-    textChanges,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { nodeIsMissing } from "../../compiler/utilities";
+import { isJsxChild } from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
 
 const fixID = "wrapJsxInFragment";
 const errorCodes = [Diagnostics.JSX_expressions_must_have_one_parent_element.code];
@@ -26,7 +26,7 @@ registerCodeFix({
         const { sourceFile, span } = context;
         const node = findNodeToFix(sourceFile, span.start);
         if (!node) return undefined;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, node));
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, node));
         return [createCodeFixAction(fixID, changes, Diagnostics.Wrap_in_JSX_fragment, fixID, Diagnostics.Wrap_all_unparented_JSX_in_JSX_fragment)];
     },
     fixIds: [fixID],
@@ -52,7 +52,7 @@ function findNodeToFix(sourceFile: SourceFile, pos: number): BinaryExpression | 
     return binaryExpr;
 }
 
-function doChange(changeTracker: textChanges.ChangeTracker, sf: SourceFile, node: Node) {
+function doChange(changeTracker: ChangeTracker, sf: SourceFile, node: Node) {
     const jsx = flattenInvalidBinaryExpr(node);
     if (jsx) changeTracker.replaceNode(sf, node, factory.createJsxFragment(factory.createJsxOpeningFragment(), jsx, factory.createJsxJsxClosingFragment()));
 }

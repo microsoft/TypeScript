@@ -1,59 +1,71 @@
-import * as ts from "./_namespaces/ts";
+import { BuilderProgram } from "./builderPublic";
+import {
+    ExtendedConfigCacheEntry,
+    isExcludedFile,
+    matchesExclude,
+} from "./commandLineParser";
 import {
     arrayToMap,
     binarySearch,
-    BuilderProgram,
-    closeFileWatcher,
     compareStringsCaseSensitive,
-    CompilerOptions,
     createGetCanonicalFileName,
-    Debug,
-    DirectoryWatcherCallback,
     emptyArray,
-    emptyFileSystemEntries,
-    ensureTrailingDirectorySeparator,
-    ExtendedConfigCacheEntry,
-    Extension,
-    FileExtensionInfo,
-    fileExtensionIsOneOf,
-    FileSystemEntries,
-    FileWatcher,
-    FileWatcherCallback,
-    FileWatcherEventKind,
     find,
+    identity,
+    insertSorted,
+    isArray,
+    map,
+    noop,
+    returnTrue,
+} from "./core";
+import {
+    SortedArray,
+    SortedReadonlyArray,
+} from "./corePublic";
+import { Debug } from "./debug";
+import { isDeclarationFileName } from "./parser";
+import {
+    toPath as _toPath,
+    ensureTrailingDirectorySeparator,
+    fileExtensionIsOneOf,
     getBaseFileName,
     getDirectoryPath,
     getNormalizedAbsolutePath,
     hasExtension,
-    identity,
-    insertSorted,
-    isArray,
-    isDeclarationFileName,
-    isExcludedFile,
-    isSupportedSourceFileName,
-    map,
-    matchesExclude,
-    matchFiles,
-    mutateMap,
-    noop,
     normalizePath,
-    outFile,
-    Path,
+} from "./path";
+import { timestamp } from "./performanceCore";
+import { removeIgnoredPath } from "./resolutionCache";
+import {
+    DirectoryWatcherCallback,
+    FileWatcher,
+    FileWatcherCallback,
+    FileWatcherEventKind,
     PollingInterval,
-    Program,
-    removeFileExtension,
-    removeIgnoredPath,
-    returnNoopFileWatcher,
-    returnTrue,
     setSysLog,
-    SortedArray,
-    SortedReadonlyArray,
-    supportedJSExtensionsFlat,
-    timestamp,
+} from "./sys";
+import {
+    CompilerOptions,
+    Extension,
+    FileExtensionInfo,
+    Path,
+    Program,
     WatchDirectoryFlags,
     WatchFileKind,
     WatchOptions,
-} from "./_namespaces/ts";
+} from "./types";
+import {
+    closeFileWatcher,
+    emptyFileSystemEntries,
+    FileSystemEntries,
+    isSupportedSourceFileName,
+    matchFiles,
+    mutateMap,
+    outFile,
+    removeFileExtension,
+    supportedJSExtensionsFlat,
+} from "./utilities";
+import { returnNoopFileWatcher } from "./watch";
 
 /**
  * Partial interface of the System thats needed to support the caching of directory structure
@@ -133,7 +145,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
     };
 
     function toPath(fileName: string) {
-        return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+        return _toPath(fileName, currentDirectory, getCanonicalFileName);
     }
 
     function getCachedFileSystemEntries(rootDirPath: Path) {

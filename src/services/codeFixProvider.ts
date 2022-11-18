@@ -1,6 +1,21 @@
 import {
     arrayFrom,
     cast,
+    contains,
+    createMultiMap,
+    flatMap,
+    isString,
+    map,
+} from "../compiler/core";
+import { Push } from "../compiler/corePublic";
+import { Debug } from "../compiler/debug";
+import {
+    Diagnostic,
+    DiagnosticWithLocation,
+} from "../compiler/types";
+import { computeSuggestionDiagnostics } from "./suggestionDiagnostics";
+import { ChangeTracker } from "./textChanges";
+import {
     CodeActionCommand,
     CodeFixAction,
     CodeFixAllContext,
@@ -8,22 +23,13 @@ import {
     CodeFixContextBase,
     CodeFixRegistration,
     CombinedCodeActions,
-    computeSuggestionDiagnostics,
-    contains,
-    createMultiMap,
-    Debug,
-    Diagnostic,
+    FileTextChanges,
+    TextChange,
+} from "./types";
+import {
     DiagnosticAndArguments,
     diagnosticToString,
-    DiagnosticWithLocation,
-    FileTextChanges,
-    flatMap,
-    isString,
-    map,
-    Push,
-    TextChange,
-    textChanges,
-} from "./_namespaces/ts";
+} from "./utilities";
 
 const errorCodeToFixes = createMultiMap<CodeFixRegistration>();
 const fixIdToRegistration = new Map<string, CodeFixRegistration>();
@@ -106,10 +112,10 @@ export function createFileTextChanges(fileName: string, textChanges: TextChange[
 export function codeFixAll(
     context: CodeFixAllContext,
     errorCodes: number[],
-    use: (changes: textChanges.ChangeTracker, error: DiagnosticWithLocation, commands: Push<CodeActionCommand>) => void,
+    use: (changes: ChangeTracker, error: DiagnosticWithLocation, commands: Push<CodeActionCommand>) => void,
 ): CombinedCodeActions {
     const commands: CodeActionCommand[] = [];
-    const changes = textChanges.ChangeTracker.with(context, t => eachDiagnostic(context, errorCodes, diag => use(t, diag, commands)));
+    const changes = ChangeTracker.with(context, t => eachDiagnostic(context, errorCodes, diag => use(t, diag, commands)));
     return createCombinedCodeActions(changes, commands.length === 0 ? undefined : commands);
 }
 

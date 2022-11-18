@@ -1,38 +1,48 @@
 import {
-    ApplicableRefactorInfo,
-    ArrowFunction,
-    Diagnostics,
     emptyArray,
-    factory,
-    findAncestor,
-    findChildOfKind,
     first,
-    FunctionDeclaration,
-    FunctionExpression,
-    getLocaleSpecificMessage,
-    getTokenAtPosition,
+    mapDefined,
+} from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isArrowFunction,
     isBlock,
-    isInJSFile,
-    mapDefined,
+} from "../../compiler/factory/nodeTests";
+import {
+    ArrowFunction,
+    FunctionDeclaration,
+    FunctionExpression,
     MethodDeclaration,
     Node,
     NodeBuilderFlags,
-    RefactorContext,
-    RefactorEditInfo,
     SourceFile,
     SyntaxKind,
-    textChanges,
     Type,
     TypeChecker,
     TypeNode,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    getLocaleSpecificMessage,
+    isInJSFile,
+} from "../../compiler/utilities";
+import { findAncestor } from "../../compiler/utilitiesPublic";
+import { registerRefactor } from "../refactorProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    ApplicableRefactorInfo,
+    RefactorContext,
+    RefactorEditInfo,
+    RefactorErrorInfo,
+} from "../types";
+import {
+    findChildOfKind,
+    getTokenAtPosition,
+} from "../utilities";
 import {
     isRefactorErrorInfo,
-    RefactorErrorInfo,
     refactorKindBeginsWith,
-    registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "./helpers";
 
 const refactorName = "Infer function return type";
 const refactorDescription = Diagnostics.Infer_function_return_type.message;
@@ -51,7 +61,7 @@ registerRefactor(refactorName, {
 function getRefactorEditsToInferReturnType(context: RefactorContext): RefactorEditInfo | undefined {
     const info = getInfo(context);
     if (info && !isRefactorErrorInfo(info)) {
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, t, info.declaration, info.returnTypeNode));
+        const edits = ChangeTracker.with(context, t => doChange(context.file, t, info.declaration, info.returnTypeNode));
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
     return undefined;
@@ -88,7 +98,7 @@ interface FunctionInfo {
     returnTypeNode: TypeNode;
 }
 
-function doChange(sourceFile: SourceFile, changes: textChanges.ChangeTracker, declaration: ConvertibleDeclaration, typeNode: TypeNode) {
+function doChange(sourceFile: SourceFile, changes: ChangeTracker, declaration: ConvertibleDeclaration, typeNode: TypeNode) {
     const closeParen = findChildOfKind(declaration, SyntaxKind.CloseParenToken, sourceFile);
     const needParens = isArrowFunction(declaration) && closeParen === undefined;
     const endNode = needParens ? first(declaration.parameters) : closeParen;

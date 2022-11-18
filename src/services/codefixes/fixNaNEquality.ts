@@ -1,26 +1,28 @@
+import { find } from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import { isBinaryExpression } from "../../compiler/factory/nodeTests";
+import { flattenDiagnosticMessageText } from "../../compiler/program";
 import {
     BinaryExpression,
-    createTextSpan,
     DiagnosticMessageChain,
-    Diagnostics,
     Expression,
-    factory,
-    find,
-    flattenDiagnosticMessageText,
-    isBinaryExpression,
-    isExpression,
     Program,
     SourceFile,
     SyntaxKind,
-    textChanges,
     TextSpan,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    createTextSpan,
+    isExpression,
+} from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
-    findAncestorMatchingSpan,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { findAncestorMatchingSpan } from "./helpers";
 
 const fixId = "fixNaNEquality";
 const errorCodes = [
@@ -35,7 +37,7 @@ registerCodeFix({
         if (info === undefined) return;
 
         const { suggestion, expression, arg } = info;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, arg, expression));
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, arg, expression));
         return [createCodeFixAction(fixId, changes, [Diagnostics.Use_0, suggestion], fixId, Diagnostics.Use_Number_isNaN_in_all_conditions)];
     },
     fixIds: [fixId],
@@ -71,7 +73,7 @@ function getInfo(program: Program, sourceFile: SourceFile, span: TextSpan): Info
     return undefined;
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, arg: Expression, expression: BinaryExpression) {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, arg: Expression, expression: BinaryExpression) {
     const callExpression = factory.createCallExpression(
         factory.createPropertyAccessExpression(factory.createIdentifier("Number"), factory.createIdentifier("isNaN")), /*typeArguments*/ undefined, [arg]);
     const operator = expression.operatorToken.kind ;

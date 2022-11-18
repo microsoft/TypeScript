@@ -1,78 +1,88 @@
 import {
-    __String,
-    AccessExpression,
-    ArrowFunction,
-    BinaryExpression,
-    Block,
-    canHaveModifiers,
-    ClassDeclaration,
-    ClassElement,
-    CodeFixContext,
-    CompilerOptions,
     concatenate,
-    copyLeadingComments,
-    Diagnostics,
     every,
-    Expression,
-    factory,
     filter,
     forEach,
-    FunctionDeclaration,
-    FunctionExpression,
-    getEmitScriptTarget,
-    getNameOfDeclaration,
-    getQuotePreference,
-    getTokenAtPosition,
-    idText,
-    isAccessExpression,
+    some,
+} from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isArrowFunction,
     isBinaryExpression,
     isFunctionDeclaration,
     isFunctionExpression,
-    isFunctionLike,
-    isGetOrSetAccessorDeclaration,
     isIdentifier,
-    isIdentifierText,
     isMethodDeclaration,
     isNoSubstitutionTemplateLiteral,
     isNumericLiteral,
     isObjectLiteralExpression,
     isPropertyAccessExpression,
     isPropertyAssignment,
-    isSourceFileJS,
-    isStringLiteralLike,
     isVariableDeclaration,
     isVariableDeclarationList,
+} from "../../compiler/factory/nodeTests";
+import { canHaveModifiers } from "../../compiler/factory/utilitiesPublic";
+import { isIdentifierText } from "../../compiler/scanner";
+import {
+    __String,
+    AccessExpression,
+    ArrowFunction,
+    BinaryExpression,
+    Block,
+    ClassDeclaration,
+    ClassElement,
+    CompilerOptions,
+    Expression,
+    FunctionDeclaration,
+    FunctionExpression,
     Modifier,
     Node,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
     PropertyAccessExpression,
     PropertyName,
-    QuotePreference,
-    some,
     SourceFile,
     Symbol,
     SymbolFlags,
-    symbolName,
     SyntaxKind,
-    textChanges,
     TypeChecker,
     UserPreferences,
     VariableDeclaration,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    getEmitScriptTarget,
+    isAccessExpression,
+    isSourceFileJS,
+} from "../../compiler/utilities";
+import {
+    getNameOfDeclaration,
+    idText,
+    isFunctionLike,
+    isGetOrSetAccessorDeclaration,
+    isStringLiteralLike,
+    symbolName,
+} from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { CodeFixContext } from "../types";
+import {
+    copyLeadingComments,
+    getQuotePreference,
+    getTokenAtPosition,
+    QuotePreference,
+} from "../utilities";
 
 const fixId = "convertFunctionToEs6Class";
 const errorCodes = [Diagnostics.This_constructor_function_may_be_converted_to_a_class_declaration.code];
 registerCodeFix({
     errorCodes,
     getCodeActions(context: CodeFixContext) {
-        const changes = textChanges.ChangeTracker.with(context, t =>
+        const changes = ChangeTracker.with(context, t =>
             doChange(t, context.sourceFile, context.span.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions()));
         return [createCodeFixAction(fixId, changes, Diagnostics.Convert_function_to_an_ES2015_class, fixId, Diagnostics.Convert_all_constructor_functions_to_classes)];
     },
@@ -81,7 +91,7 @@ registerCodeFix({
         doChange(changes, err.file, err.start, context.program.getTypeChecker(), context.preferences, context.program.getCompilerOptions())),
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, preferences: UserPreferences, compilerOptions: CompilerOptions): void {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, preferences: UserPreferences, compilerOptions: CompilerOptions): void {
     const ctorSymbol = checker.getSymbolAtLocation(getTokenAtPosition(sourceFile, position))!;
     if (!ctorSymbol || !ctorSymbol.valueDeclaration || !(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
         // Bad input

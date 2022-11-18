@@ -1,48 +1,25 @@
 import {
-    AccessorDeclaration,
     append,
     arrayFrom,
-    ArrowFunction,
-    Block,
-    CallExpression,
-    CharacterCodes,
-    ClassLikeDeclaration,
-    CodeFixContextBase,
-    Debug,
-    Diagnostics,
     emptyArray,
-    EntityName,
-    Expression,
-    factory,
     find,
     flatMap,
-    FunctionDeclaration,
-    FunctionExpression,
-    GetAccessorDeclaration,
-    getAllAccessorDeclarations,
-    getEffectiveModifierFlags,
-    getEmitScriptTarget,
-    getFirstIdentifier,
-    getModuleSpecifierResolverHost,
-    getNameForExportedSymbol,
-    getNameOfDeclaration,
-    getQuotePreference,
-    getSetAccessorValueParameter,
-    getSynthesizedDeepClone,
-    getTokenAtPosition,
-    getTsConfigObjectLiteralExpression,
-    Identifier,
-    idText,
-    IntersectionType,
+    length,
+    map,
+    sameMap,
+    some,
+    tryCast,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isArrowFunction,
-    isAutoAccessorPropertyDeclaration,
     isFunctionDeclaration,
     isFunctionExpression,
     isGetAccessorDeclaration,
     isIdentifier,
     isImportTypeNode,
-    isInJSFile,
-    isLiteralImportTypeNode,
     isMethodDeclaration,
     isObjectLiteralExpression,
     isPropertyAccessExpression,
@@ -50,9 +27,23 @@ import {
     isSetAccessorDeclaration,
     isStringLiteral,
     isYieldExpression,
-    LanguageServiceHost,
-    length,
-    map,
+} from "../../compiler/factory/nodeTests";
+import { setTextRange } from "../../compiler/factory/utilitiesPublic";
+import { nullTransformationContext } from "../../compiler/transformer";
+import {
+    AccessorDeclaration,
+    ArrowFunction,
+    Block,
+    CallExpression,
+    CharacterCodes,
+    ClassLikeDeclaration,
+    EntityName,
+    Expression,
+    FunctionDeclaration,
+    FunctionExpression,
+    GetAccessorDeclaration,
+    Identifier,
+    IntersectionType,
     MethodDeclaration,
     MethodSignature,
     Modifier,
@@ -61,7 +52,6 @@ import {
     NodeArray,
     NodeBuilderFlags,
     NodeFlags,
-    nullTransformationContext,
     ObjectFlags,
     ObjectLiteralExpression,
     ObjectType,
@@ -70,24 +60,16 @@ import {
     PropertyAssignment,
     PropertyDeclaration,
     PropertyName,
-    QuotePreference,
-    sameMap,
     ScriptTarget,
     SetAccessorDeclaration,
-    setTextRange,
     Signature,
     SignatureDeclaration,
-    signatureHasRestParameter,
-    some,
     SourceFile,
     Symbol,
     SymbolFlags,
     SymbolTracker,
     SyntaxKind,
-    textChanges,
     TextSpan,
-    textSpanEnd,
-    tryCast,
     TsConfigSourceFile,
     Type,
     TypeChecker,
@@ -96,10 +78,42 @@ import {
     TypeParameterDeclaration,
     UnionType,
     UserPreferences,
+} from "../../compiler/types";
+import {
+    getAllAccessorDeclarations,
+    getEffectiveModifierFlags,
+    getEmitScriptTarget,
+    getFirstIdentifier,
+    getSetAccessorValueParameter,
+    getTsConfigObjectLiteralExpression,
+    isInJSFile,
+    isLiteralImportTypeNode,
+    signatureHasRestParameter,
+} from "../../compiler/utilities";
+import {
+    getNameOfDeclaration,
+    idText,
+    isAutoAccessorPropertyDeclaration,
+    textSpanEnd,
+} from "../../compiler/utilitiesPublic";
+import {
     visitEachChild,
     visitNode,
-} from "../_namespaces/ts";
-import { ImportAdder } from "../_namespaces/ts.codefix";
+} from "../../compiler/visitorPublic";
+import { ChangeTracker } from "../textChanges";
+import {
+    CodeFixContextBase,
+    LanguageServiceHost,
+} from "../types";
+import {
+    getModuleSpecifierResolverHost,
+    getNameForExportedSymbol,
+    getQuotePreference,
+    getSynthesizedDeepClone,
+    getTokenAtPosition,
+    QuotePreference,
+} from "../utilities";
+import { ImportAdder } from "./importAdder";
 
 /**
  * Finds members of the resolved type that are missing in the class pointed to by class decl
@@ -765,7 +779,7 @@ export function createStubbedBody(text: string, quotePreference: QuotePreference
 
 /** @internal */
 export function setJsonCompilerOptionValues(
-    changeTracker: textChanges.ChangeTracker,
+    changeTracker: ChangeTracker,
     configFile: TsConfigSourceFile,
     options: [string, Expression][]
 ) {
@@ -798,7 +812,7 @@ export function setJsonCompilerOptionValues(
 
 /** @internal */
 export function setJsonCompilerOptionValue(
-    changeTracker: textChanges.ChangeTracker,
+    changeTracker: ChangeTracker,
     configFile: TsConfigSourceFile,
     optionName: string,
     optionValue: Expression,

@@ -1,50 +1,64 @@
 import {
     append,
-    ArrowFunction,
-    CodeFixContext,
-    copyComments,
-    createSymbolTable,
-    Debug,
-    Diagnostics,
-    Expression,
-    factory,
-    findAncestor,
     first,
-    FunctionLikeDeclaration,
-    getTokenAtPosition,
-    hasSyntacticModifier,
-    Identifier,
+    length,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isArrowFunction,
     isBlock,
     isCallExpression,
-    isDeclarationName,
     isExpressionStatement,
-    isFunctionLikeDeclaration,
     isJsxAttribute,
     isJsxExpression,
     isLabeledStatement,
-    isVariableLike,
-    length,
+} from "../../compiler/factory/nodeTests";
+import {
+    ArrowFunction,
+    Expression,
+    FunctionLikeDeclaration,
+    Identifier,
     ModifierFlags,
-    needsParentheses,
     Node,
-    probablyUsesSemicolons,
-    rangeContainsRange,
     SourceFile,
     Statement,
-    suppressLeadingAndTrailingTrivia,
     SymbolFlags,
     SyntaxKind,
-    textChanges,
     Type,
     TypeChecker,
     VariableLikeDeclaration,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    createSymbolTable,
+    hasSyntacticModifier,
+    isDeclarationName,
+    isVariableLike,
+} from "../../compiler/utilities";
+import {
+    findAncestor,
+    isFunctionLikeDeclaration,
+} from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import {
+    ChangeTracker,
+    LeadingTriviaOption,
+    TrailingTriviaOption,
+} from "../textChanges";
+import { CodeFixContext } from "../types";
+import {
+    copyComments,
+    getTokenAtPosition,
+    needsParentheses,
+    probablyUsesSemicolons,
+    rangeContainsRange,
+    suppressLeadingAndTrailingTrivia,
+} from "../utilities";
 
 const fixId = "returnValueCorrect";
 const fixIdAddReturnStatement = "fixAddReturnStatement";
@@ -250,17 +264,17 @@ function getVariableLikeInitializer(declaration: VariableLikeDeclaration): Expre
     }
 }
 
-function addReturnStatement(changes: textChanges.ChangeTracker, sourceFile: SourceFile, expression: Expression, statement: Statement) {
+function addReturnStatement(changes: ChangeTracker, sourceFile: SourceFile, expression: Expression, statement: Statement) {
     suppressLeadingAndTrailingTrivia(expression);
     const probablyNeedSemi = probablyUsesSemicolons(sourceFile);
     changes.replaceNode(sourceFile, statement, factory.createReturnStatement(expression), {
-        leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
-        trailingTriviaOption: textChanges.TrailingTriviaOption.Exclude,
+        leadingTriviaOption: LeadingTriviaOption.Exclude,
+        trailingTriviaOption: TrailingTriviaOption.Exclude,
         suffix: probablyNeedSemi ? ";" : undefined
     });
 }
 
-function removeBlockBodyBrace(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: ArrowFunction, expression: Expression, commentSource: Node, withParen: boolean) {
+function removeBlockBodyBrace(changes: ChangeTracker, sourceFile: SourceFile, declaration: ArrowFunction, expression: Expression, commentSource: Node, withParen: boolean) {
     const newBody = (withParen || needsParentheses(expression)) ? factory.createParenthesizedExpression(expression) : expression;
     suppressLeadingAndTrailingTrivia(commentSource);
     copyComments(commentSource, newBody);
@@ -268,21 +282,21 @@ function removeBlockBodyBrace(changes: textChanges.ChangeTracker, sourceFile: So
     changes.replaceNode(sourceFile, declaration.body, newBody);
 }
 
-function wrapBlockWithParen(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: ArrowFunction, expression: Expression) {
+function wrapBlockWithParen(changes: ChangeTracker, sourceFile: SourceFile, declaration: ArrowFunction, expression: Expression) {
     changes.replaceNode(sourceFile, declaration.body, factory.createParenthesizedExpression(expression));
 }
 
 function getActionForfixAddReturnStatement(context: CodeFixContext, expression: Expression, statement: Statement) {
-    const changes = textChanges.ChangeTracker.with(context, t => addReturnStatement(t, context.sourceFile, expression, statement));
+    const changes = ChangeTracker.with(context, t => addReturnStatement(t, context.sourceFile, expression, statement));
     return createCodeFixAction(fixId, changes, Diagnostics.Add_a_return_statement, fixIdAddReturnStatement, Diagnostics.Add_all_missing_return_statement);
 }
 
 function getActionForFixRemoveBracesFromArrowFunctionBody(context: CodeFixContext, declaration: ArrowFunction, expression: Expression, commentSource: Node) {
-    const changes = textChanges.ChangeTracker.with(context, t => removeBlockBodyBrace(t, context.sourceFile, declaration, expression, commentSource, /* withParen */ false));
+    const changes = ChangeTracker.with(context, t => removeBlockBodyBrace(t, context.sourceFile, declaration, expression, commentSource, /* withParen */ false));
     return createCodeFixAction(fixId, changes, Diagnostics.Remove_braces_from_arrow_function_body, fixRemoveBracesFromArrowFunctionBody, Diagnostics.Remove_braces_from_all_arrow_function_bodies_with_relevant_issues);
 }
 
 function getActionForfixWrapTheBlockWithParen(context: CodeFixContext, declaration: ArrowFunction, expression: Expression) {
-    const changes = textChanges.ChangeTracker.with(context, t => wrapBlockWithParen(t, context.sourceFile, declaration, expression));
+    const changes = ChangeTracker.with(context, t => wrapBlockWithParen(t, context.sourceFile, declaration, expression));
     return createCodeFixAction(fixId, changes, Diagnostics.Wrap_the_following_body_with_parentheses_which_should_be_an_object_literal, fixIdWrapTheBlockWithParen, Diagnostics.Wrap_all_object_literal_with_parentheses);
 }

@@ -1,29 +1,35 @@
+import { getNodeId } from "../../compiler/checkerUtilities";
 import {
-    addToSeen,
     cast,
+    first,
+} from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import {
     ClassElement,
     ClassLikeDeclaration,
-    Diagnostics,
-    first,
-    getEffectiveBaseTypeNode,
-    getNodeId,
-    getSyntacticModifierFlags,
-    getTokenAtPosition,
-    isClassLike,
     ModifierFlags,
     SourceFile,
     Symbol,
-    textChanges,
     UserPreferences,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    addToSeen,
+    getEffectiveBaseTypeNode,
+    getSyntacticModifierFlags,
+} from "../../compiler/utilities";
+import { isClassLike } from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
-    createImportAdder,
-    createMissingMemberNodes,
     registerCodeFix,
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
+import {
+    createMissingMemberNodes,
     TypeConstructionContext,
-} from "../_namespaces/ts.codefix";
+} from "./helpers";
+import { createImportAdder } from "./importAdder";
 
 const errorCodes = [
     Diagnostics.Non_abstract_class_0_does_not_implement_inherited_abstract_member_1_from_class_2.code,
@@ -34,7 +40,7 @@ registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToFixClassNotImplementingInheritedMembers(context) {
         const { sourceFile, span } = context;
-        const changes = textChanges.ChangeTracker.with(context, t =>
+        const changes = ChangeTracker.with(context, t =>
             addMissingMembers(getClass(sourceFile, span.start), sourceFile, context, t, context.preferences));
         return changes.length === 0 ? undefined : [createCodeFixAction(fixId, changes, Diagnostics.Implement_inherited_abstract_class, fixId, Diagnostics.Implement_all_inherited_abstract_classes)];
     },
@@ -57,7 +63,7 @@ function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
     return cast(token.parent, isClassLike);
 }
 
-function addMissingMembers(classDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, context: TypeConstructionContext, changeTracker: textChanges.ChangeTracker, preferences: UserPreferences): void {
+function addMissingMembers(classDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, context: TypeConstructionContext, changeTracker: ChangeTracker, preferences: UserPreferences): void {
     const extendsNode = getEffectiveBaseTypeNode(classDeclaration)!;
     const checker = context.program.getTypeChecker();
     const instantiatedExtendsType = checker.getTypeAtLocation(extendsNode);
@@ -66,7 +72,7 @@ function addMissingMembers(classDeclaration: ClassLikeDeclaration, sourceFile: S
     // so duplicates cannot occur.
     const abstractAndNonPrivateExtendsSymbols = checker.getPropertiesOfType(instantiatedExtendsType).filter(symbolPointsToNonPrivateAndAbstractMember);
 
-    const importAdder = createImportAdder(sourceFile, context.program, preferences, context.host);
+    const importAdder = createImportAdder(sourceFile, context.program, preferences, context.host, /*useAutoImportProvider*/ false);
     createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, sourceFile, context, preferences, importAdder, member => changeTracker.insertMemberAtStart(sourceFile, classDeclaration, member as ClassElement));
     importAdder.writeFixes(changeTracker);
 }

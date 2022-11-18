@@ -1,42 +1,52 @@
+import { cast } from "../core";
+import { Debug } from "../debug";
+import { addEmitFlags } from "../factory/emitNode";
+import {
+    isIdentifier,
+    isParenthesizedExpression,
+    isSyntheticReference,
+    isTaggedTemplateExpression,
+} from "../factory/nodeTests";
+import {
+    setOriginalNode,
+    setTextRange,
+} from "../factory/utilitiesPublic";
 import {
     AccessExpression,
-    addEmitFlags,
     BinaryExpression,
     Bundle,
     CallExpression,
-    cast,
-    chainBundle,
-    Debug,
     DeleteExpression,
     EmitFlags,
     Expression,
-    isCallChain,
-    isExpression,
-    isGeneratedIdentifier,
-    isIdentifier,
-    isNonNullChain,
-    isOptionalChain,
-    isParenthesizedExpression,
-    isSimpleCopiableExpression,
-    isSyntheticReference,
-    isTaggedTemplateExpression,
     Node,
     OptionalChain,
     OuterExpressionKinds,
     ParenthesizedExpression,
-    setOriginalNode,
-    setTextRange,
-    skipParentheses,
-    skipPartiallyEmittedExpressions,
     SourceFile,
     SyntaxKind,
     TransformationContext,
     TransformFlags,
+    VisitResult,
+} from "../types";
+import { skipParentheses } from "../utilities";
+import {
+    isCallChain,
+    isExpression,
+    isGeneratedIdentifier,
+    isNonNullChain,
+    isOptionalChain,
+    skipPartiallyEmittedExpressions,
+} from "../utilitiesPublic";
+import {
     visitEachChild,
     visitNode,
     visitNodes,
-    VisitResult,
-} from "../_namespaces/ts";
+} from "../visitorPublic";
+import {
+    chainBundle,
+    isSimpleCopiableExpression,
+} from "./utilities";
 
 /** @internal */
 export function transformES2020(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

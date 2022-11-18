@@ -1,16 +1,13 @@
+import { Debug } from "../debug";
+import { factory } from "../factory/nodeFactory";
+import { isNoSubstitutionTemplateLiteral } from "../factory/nodeTests";
+import { setTextRange } from "../factory/utilitiesPublic";
+import { isExternalModule } from "../parser";
 import {
     CallExpression,
-    Debug,
     Expression,
-    factory,
-    getSourceTextOfNodeFromSourceFile,
-    hasInvalidEscape,
     Identifier,
-    isExpression,
-    isExternalModule,
-    isNoSubstitutionTemplateLiteral,
     NoSubstitutionTemplateLiteral,
-    setTextRange,
     SourceFile,
     SyntaxKind,
     TaggedTemplateExpression,
@@ -19,10 +16,17 @@ import {
     TemplateMiddle,
     TemplateTail,
     TransformationContext,
+    Visitor,
+} from "../types";
+import {
+    getSourceTextOfNodeFromSourceFile,
+    hasInvalidEscape,
+} from "../utilities";
+import { isExpression } from "../utilitiesPublic";
+import {
     visitEachChild,
     visitNode,
-    Visitor,
-} from "../_namespaces/ts";
+} from "../visitorPublic";
 
 /** @internal */
 export enum ProcessLevel {

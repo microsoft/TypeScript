@@ -1,41 +1,52 @@
+import { getNodeId } from "../../compiler/checkerUtilities";
 import {
-    ArrowFunction,
-    CodeFixAllContext,
-    CodeFixContext,
-    createTextSpanFromNode,
-    Diagnostic,
-    Diagnostics,
-    factory,
-    FileTextChanges,
     find,
-    findAncestor,
-    FunctionDeclaration,
-    FunctionExpression,
-    getNodeId,
-    getSyntacticModifierFlags,
-    getSynthesizedDeepClone,
-    getTokenAtPosition,
+    isNumber,
+    some,
+} from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isArrowFunction,
     isFunctionDeclaration,
     isFunctionExpression,
     isMethodDeclaration,
-    isNumber,
+} from "../../compiler/factory/nodeTests";
+import {
+    ArrowFunction,
+    Diagnostic,
+    FunctionDeclaration,
+    FunctionExpression,
     MethodDeclaration,
     ModifierFlags,
-    some,
     SourceFile,
-    textChanges,
     TextSpan,
+} from "../../compiler/types";
+import { getSyntacticModifierFlags } from "../../compiler/utilities";
+import {
+    findAncestor,
     textSpanEnd,
-    textSpansEqual,
-} from "../_namespaces/ts";
+} from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    CodeFixAllContext,
+    CodeFixContext,
+    FileTextChanges,
+} from "../types";
+import {
+    createTextSpanFromNode,
+    getSynthesizedDeepClone,
+    getTokenAtPosition,
+    textSpansEqual,
+} from "../utilities";
 
-type ContextualTrackChangesFunction = (cb: (changeTracker: textChanges.ChangeTracker) => void) => FileTextChanges[];
+type ContextualTrackChangesFunction = (cb: (changeTracker: ChangeTracker) => void) => FileTextChanges[];
+
 const fixId = "addMissingAsync";
 const errorCodes = [
     Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code,
@@ -56,7 +67,7 @@ registerCodeFix({
             return;
         }
 
-        const trackChanges: ContextualTrackChangesFunction = cb => textChanges.ChangeTracker.with(context, cb);
+        const trackChanges: ContextualTrackChangesFunction = cb => ChangeTracker.with(context, cb);
         return [getFix(context, decl, trackChanges)];
     },
     getAllCodeActions: context => {
@@ -80,7 +91,7 @@ function getFix(context: CodeFixContext | CodeFixAllContext, decl: FixableDeclar
     return createCodeFixAction(fixId, changes, Diagnostics.Add_async_modifier_to_containing_function, fixId, Diagnostics.Add_all_missing_async_modifiers);
 }
 
-function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, insertionSite: FixableDeclaration, fixedDeclarations?: Set<number>) {
+function makeChange(changeTracker: ChangeTracker, sourceFile: SourceFile, insertionSite: FixableDeclaration, fixedDeclarations?: Set<number>) {
     if (fixedDeclarations) {
         if (fixedDeclarations.has(getNodeId(insertionSite))) {
             return;

@@ -1,9 +1,11 @@
 import {
     combinePaths,
-    Extension,
     fileExtensionIs,
+} from "./path";
+import {
+    Extension,
     ResolvedConfigFileName,
-} from "./_namespaces/ts";
+} from "./types";
 
 /** @internal */
 export enum UpToDateStatusType {

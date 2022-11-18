@@ -1,52 +1,61 @@
 import {
-    Debug,
-    Diagnostics,
-    EmitFlags,
     emptyArray,
-    factory,
-    findChildOfKind,
     first,
-    FunctionLikeDeclaration,
-    getJSDocReturnType,
-    getJSDocType,
-    getJSDocTypeParameterDeclarations,
-    getTokenAtPosition,
+    last,
+    map,
+    tryCast,
+} from "../../compiler/core";
+import { Debug } from "../../compiler/debug";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { setEmitFlags } from "../../compiler/factory/emitNode";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isArrowFunction,
-    isFunctionLikeDeclaration,
     isIdentifier,
-    isJSDocIndexSignature,
-    isOptionalJSDocPropertyLikeTag,
     isParameter,
+} from "../../compiler/factory/nodeTests";
+import { nullTransformationContext } from "../../compiler/transformer";
+import {
+    EmitFlags,
     JSDocFunctionType,
     JSDocNonNullableType,
     JSDocNullableType,
     JSDocOptionalType,
     JSDocTypeLiteral,
     JSDocVariadicType,
-    last,
-    map,
-    Node,
-    nullTransformationContext,
     ParameterDeclaration,
-    PropertyDeclaration,
-    PropertySignature,
-    setEmitFlags,
     SourceFile,
     SyntaxKind,
-    textChanges,
-    tryCast,
     TypeNode,
     TypeReferenceNode,
-    VariableDeclaration,
+} from "../../compiler/types";
+import {
+    getJSDocTypeParameterDeclarations,
+    isJSDocIndexSignature,
+    isOptionalJSDocPropertyLikeTag,
+} from "../../compiler/utilities";
+import {
+    getJSDocReturnType,
+    getJSDocType,
+    isFunctionLikeDeclaration,
+} from "../../compiler/utilitiesPublic";
+import {
     visitEachChild,
     visitNode,
     visitNodes,
-} from "../_namespaces/ts";
+} from "../../compiler/visitorPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import {
+    DeclarationWithType,
+    findChildOfKind,
+    getTokenAtPosition,
+    parameterShouldGetTypeFromJSDoc,
+} from "../utilities";
 
 const fixId = "annotateWithTypeFromJSDoc";
 const errorCodes = [Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types.code];
@@ -55,7 +64,7 @@ registerCodeFix({
     getCodeActions(context) {
         const decl = getDeclaration(context.sourceFile, context.span.start);
         if (!decl) return;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, context.sourceFile, decl));
+        const changes = ChangeTracker.with(context, t => doChange(t, context.sourceFile, decl));
         return [createCodeFixAction(fixId, changes, Diagnostics.Annotate_with_type_from_JSDoc, fixId, Diagnostics.Annotate_everything_with_types_from_JSDoc)];
     },
     fixIds: [fixId],
@@ -71,25 +80,7 @@ function getDeclaration(file: SourceFile, pos: number): DeclarationWithType | un
     return tryCast(isParameter(name.parent) ? name.parent.parent : name.parent, parameterShouldGetTypeFromJSDoc);
 }
 
-/** @internal */
-export type DeclarationWithType =
-    | FunctionLikeDeclaration
-    | VariableDeclaration
-    | PropertySignature
-    | PropertyDeclaration;
-
-/** @internal */
-export function parameterShouldGetTypeFromJSDoc(node: Node): node is DeclarationWithType {
-    return isDeclarationWithType(node) && hasUsableJSDoc(node);
-}
-
-function hasUsableJSDoc(decl: DeclarationWithType | ParameterDeclaration): boolean {
-    return isFunctionLikeDeclaration(decl)
-        ? decl.parameters.some(hasUsableJSDoc) || (!decl.type && !!getJSDocReturnType(decl))
-        : !decl.type && !!getJSDocType(decl);
-}
-
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, decl: DeclarationWithType): void {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, decl: DeclarationWithType): void {
     if (isFunctionLikeDeclaration(decl) && (getJSDocReturnType(decl) || decl.parameters.some(p => !!getJSDocType(p)))) {
         if (!decl.typeParameters) {
             const typeParameters = getJSDocTypeParameterDeclarations(decl);
@@ -114,13 +105,6 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, de
         Debug.assert(!decl.type, "The JSDocType decl should have a type"); // If defined, shouldn't have been an error to fix.
         changes.tryInsertTypeAnnotation(sourceFile, decl, transformJSDocType(jsdocType));
     }
-}
-
-function isDeclarationWithType(node: Node): node is DeclarationWithType {
-    return isFunctionLikeDeclaration(node) ||
-        node.kind === SyntaxKind.VariableDeclaration ||
-        node.kind === SyntaxKind.PropertySignature ||
-        node.kind === SyntaxKind.PropertyDeclaration;
 }
 
 function transformJSDocType(node: TypeNode): TypeNode {

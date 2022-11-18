@@ -1,17 +1,19 @@
+import { isBlock } from "../factory/nodeTests";
 import {
     Bundle,
     CatchClause,
-    chainBundle,
-    isBlock,
     Node,
     SourceFile,
     SyntaxKind,
     TransformationContext,
     TransformFlags,
+    VisitResult,
+} from "../types";
+import {
     visitEachChild,
     visitNode,
-    VisitResult,
-} from "../_namespaces/ts";
+} from "../visitorPublic";
+import { chainBundle } from "./utilities";
 
 /** @internal */
 export function transformES2019(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

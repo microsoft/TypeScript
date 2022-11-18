@@ -1,32 +1,38 @@
 import {
     cast,
-    Diagnostics,
     emptyArray,
-    factory,
     first,
-    getAllSuperTypeNodes,
-    getTokenAtPosition,
-    hasEffectiveReadonlyModifier,
-    idText,
-    IndexSignatureDeclaration,
-    InterfaceDeclaration,
+    tryCast,
+} from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
+import {
     isIdentifier,
     isIndexSignatureDeclaration,
     isInterfaceDeclaration,
     isTypeAliasDeclaration,
+} from "../../compiler/factory/nodeTests";
+import {
+    IndexSignatureDeclaration,
+    InterfaceDeclaration,
     SourceFile,
     SyntaxKind,
-    textChanges,
-    tryCast,
     TypeAliasDeclaration,
     TypeLiteralNode,
     TypeNode,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    getAllSuperTypeNodes,
+    hasEffectiveReadonlyModifier,
+} from "../../compiler/utilities";
+import { idText } from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
 
 const fixId = "fixConvertToMappedObjectType";
 const errorCodes = [Diagnostics.An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead.code];
@@ -39,7 +45,7 @@ registerCodeFix({
         const { sourceFile, span } = context;
         const info = getInfo(sourceFile, span.start);
         if (!info) return undefined;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, info));
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, info));
         const name = idText(info.container.name);
         return [createCodeFixAction(fixId, changes, [Diagnostics.Convert_0_to_mapped_object_type, name], fixId, [Diagnostics.Convert_0_to_mapped_object_type, name])];
     },
@@ -66,7 +72,7 @@ function createTypeAliasFromInterface(declaration: FixableDeclaration, type: Typ
     return factory.createTypeAliasDeclaration(declaration.modifiers, declaration.name, declaration.typeParameters, type);
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { indexSignature, container }: Info): void {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, { indexSignature, container }: Info): void {
     const members = isInterfaceDeclaration(container) ? container.members : (container.type as TypeLiteralNode).members;
     const otherMembers = members.filter(member => !isIndexSignatureDeclaration(member));
     const parameter = first(indexSignature.parameters);

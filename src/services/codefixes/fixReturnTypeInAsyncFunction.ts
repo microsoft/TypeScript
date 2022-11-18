@@ -1,21 +1,23 @@
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
 import {
-    Diagnostics,
-    factory,
-    findAncestor,
-    getTokenAtPosition,
-    isFunctionLikeDeclaration,
-    isInJSFile,
     SourceFile,
-    textChanges,
     Type,
     TypeChecker,
     TypeNode,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { isInJSFile } from "../../compiler/utilities";
+import {
+    findAncestor,
+    isFunctionLikeDeclaration,
+} from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
 
 const fixId = "fixReturnTypeInAsyncFunction";
 const errorCodes = [
@@ -40,7 +42,7 @@ registerCodeFix({
             return undefined;
         }
         const { returnTypeNode, returnType, promisedTypeNode, promisedType } = info;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, returnTypeNode, promisedTypeNode));
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, returnTypeNode, promisedTypeNode));
         return [createCodeFixAction(
             fixId, changes,
             [Diagnostics.Replace_0_with_Promise_1,
@@ -75,6 +77,6 @@ function getInfo(sourceFile: SourceFile, checker: TypeChecker, pos: number): Inf
     }
 }
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, returnTypeNode: TypeNode, promisedTypeNode: TypeNode): void {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, returnTypeNode: TypeNode, promisedTypeNode: TypeNode): void {
     changes.replaceNode(sourceFile, returnTypeNode, factory.createTypeReferenceNode("Promise", [promisedTypeNode]));
 }

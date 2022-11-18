@@ -1,18 +1,18 @@
+import { tryAddToSet } from "../../compiler/core";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { isIdentifier } from "../../compiler/factory/nodeTests";
 import {
-    Diagnostics,
-    getTokenAtPosition,
-    isIdentifier,
     Node,
     SourceFile,
     SyntaxKind,
-    textChanges,
-    tryAddToSet,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
 
 const fixId = "addMissingDeclareProperty";
 const errorCodes = [
@@ -22,7 +22,7 @@ const errorCodes = [
 registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToAddMissingDeclareOnProperty(context) {
-        const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start));
+        const changes = ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start));
         if (changes.length > 0) {
             return [createCodeFixAction(fixId, changes, Diagnostics.Prefix_with_declare, fixId, Diagnostics.Prefix_all_incorrect_property_declarations_with_declare)];
         }
@@ -34,7 +34,7 @@ registerCodeFix({
     },
 });
 
-function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number, fixedNodes?: Set<Node>) {
+function makeChange(changeTracker: ChangeTracker, sourceFile: SourceFile, pos: number, fixedNodes?: Set<Node>) {
     const token = getTokenAtPosition(sourceFile, pos);
     if (!isIdentifier(token)) {
         return;

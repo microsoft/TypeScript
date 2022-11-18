@@ -1,27 +1,31 @@
+import { getNodeId } from "../../compiler/checkerUtilities";
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import {
-    addToSeen,
+    isExpressionStatement,
+    isPropertyAccessExpression,
+} from "../../compiler/factory/nodeTests";
+import { forEachChild } from "../../compiler/parser";
+import {
     CallExpression,
     ConstructorDeclaration,
-    Diagnostics,
     ExpressionStatement,
-    forEachChild,
-    getContainingFunction,
-    getNodeId,
-    getTokenAtPosition,
-    isExpressionStatement,
-    isFunctionLike,
-    isPropertyAccessExpression,
-    isSuperCall,
     Node,
     SourceFile,
     SyntaxKind,
-    textChanges,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    addToSeen,
+    getContainingFunction,
+    isSuperCall,
+} from "../../compiler/utilities";
+import { isFunctionLike } from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { getTokenAtPosition } from "../utilities";
 
 const fixId = "classSuperMustPrecedeThisAccess";
 const errorCodes = [Diagnostics.super_must_be_called_before_accessing_this_in_the_constructor_of_a_derived_class.code];
@@ -32,7 +36,7 @@ registerCodeFix({
         const nodes = getNodes(sourceFile, span.start);
         if (!nodes) return undefined;
         const { constructor, superCall } = nodes;
-        const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, constructor, superCall));
+        const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, constructor, superCall));
         return [createCodeFixAction(fixId, changes, Diagnostics.Make_super_call_the_first_statement_in_the_constructor, fixId, Diagnostics.Make_all_super_calls_the_first_statement_in_their_constructor)];
     },
     fixIds: [fixId],
@@ -50,7 +54,7 @@ registerCodeFix({
     },
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, constructor: ConstructorDeclaration, superCall: ExpressionStatement): void {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, constructor: ConstructorDeclaration, superCall: ExpressionStatement): void {
     changes.insertNodeAtConstructorStart(sourceFile, constructor, superCall);
     changes.delete(sourceFile, superCall);
 }

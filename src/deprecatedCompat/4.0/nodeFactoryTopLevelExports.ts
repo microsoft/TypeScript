@@ -1,3 +1,7 @@
+import { Debug } from "../../compiler/debug";
+import { factory } from "../../compiler/factory/nodeFactory";
+import { setTextRange } from "../../compiler/factory/utilitiesPublic";
+import { parseBaseNodeFactory } from "../../compiler/parser";
 import {
     ArrowFunction,
     AsteriskToken,
@@ -12,27 +16,22 @@ import {
     ConciseBody,
     ConditionalExpression,
     ConstructorTypeNode,
-    Debug,
     Decorator,
-    DeprecationOptions,
     EntityName,
     EqualsGreaterThanToken,
     ExclamationToken,
     ExportDeclaration,
     Expression,
     ExpressionWithTypeArguments,
-    factory,
     GeneratedIdentifierFlags,
     HeritageClause,
     Identifier,
     ImportClause,
     IndexSignatureDeclaration,
-    isNodeKind,
     JSDocParameterTag,
     JSDocTypeExpression,
     MethodSignature,
     Modifier,
-    Mutable,
     NamedExportBindings,
     NamedImportBindings,
     Node,
@@ -40,7 +39,6 @@ import {
     NoSubstitutionTemplateLiteral,
     NumericLiteral,
     ParameterDeclaration,
-    parseBaseNodeFactory,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
     PrimaryExpression,
@@ -48,9 +46,6 @@ import {
     PropertySignature,
     PseudoBigInt,
     QuestionToken,
-    setParent,
-    setTextRange,
-    setTextRangePosEnd,
     StringLiteral,
     SyntaxKind,
     TaggedTemplateExpression,
@@ -63,8 +58,15 @@ import {
     TypePredicateNode,
     VariableDeclaration,
     YieldExpression,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import {
+    Mutable,
+    setParent,
+    setTextRangePosEnd,
+} from "../../compiler/utilities";
+import { isNodeKind } from "../../compiler/utilitiesPublic";
 import { deprecate } from "../deprecate";
+import { DeprecationOptions } from "../deprecations";
 
 // DEPRECATION: Node factory top-level exports
 // DEPRECATION PLAN:

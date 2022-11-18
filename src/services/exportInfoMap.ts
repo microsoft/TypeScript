@@ -1,65 +1,84 @@
+import { getSymbolId } from "../compiler/checkerUtilities";
 import {
-    __String,
-    addToSeen,
     arrayIsEqualTo,
-    CancellationToken,
-    CompilerOptions,
-    consumesNodeCoreModules,
     createMultiMap,
-    Debug,
     emptyArray,
     findIndex,
     firstDefined,
-    forEachAncestorDirectory,
-    forEachEntry,
-    getBaseFileName,
     GetCanonicalFileName,
-    getDirectoryPath,
-    getLocalSymbolForExportDefault,
-    getNameForExportedSymbol,
-    getNamesForExportedSymbol,
-    getNodeModulePathParts,
-    getPackageNameFromTypesPackageName,
-    getPatternFromSpec,
-    getRegexFromPattern,
-    getSymbolId,
-    hostGetCanonicalFileName,
-    hostUsesCaseSensitiveFileNames,
-    InternalSymbolName,
+    mapDefined,
+    startsWith,
+    stringContains,
+    tryCast,
+} from "../compiler/core";
+import { Debug } from "../compiler/debug";
+import {
     isExportAssignment,
     isExportSpecifier,
-    isExternalModuleNameRelative,
-    isExternalModuleSymbol,
-    isExternalOrCommonJsModule,
     isIdentifier,
+} from "../compiler/factory/nodeTests";
+import {
+    getPackageNameFromTypesPackageName,
+    nodeModulesPathPart,
+    unmangleScopedPackageName,
+} from "../compiler/moduleNameResolver";
+import { forEachFileNameOfModule } from "../compiler/moduleSpecifiers";
+import {
+    forEachAncestorDirectory,
+    getBaseFileName,
+    getDirectoryPath,
+} from "../compiler/path";
+import { timestamp } from "../compiler/performanceCore";
+import {
+    __String,
+    CancellationToken,
+    CompilerOptions,
+    InternalSymbolName,
+    ModuleSpecifierCache,
+    ModuleSpecifierResolutionHost,
+    Path,
+    Program,
+    SourceFile,
+    Statement,
+    Symbol,
+    SymbolFlags,
+    TypeChecker,
+    UserPreferences,
+} from "../compiler/types";
+import {
+    addToSeen,
+    forEachEntry,
+    getLocalSymbolForExportDefault,
+    getNodeModulePathParts,
+    getPatternFromSpec,
+    getRegexFromPattern,
+    hostGetCanonicalFileName,
+    hostUsesCaseSensitiveFileNames,
+    isExternalOrCommonJsModule,
     isKnownSymbol,
     isNonGlobalAmbientModule,
     isPrivateIdentifierSymbol,
-    LanguageServiceHost,
-    mapDefined,
-    ModuleSpecifierCache,
-    ModuleSpecifierResolutionHost,
-    moduleSpecifiers,
-    nodeModulesPathPart,
-    PackageJsonImportFilter,
-    Path,
-    Program,
     skipAlias,
     skipOuterExpressions,
-    SourceFile,
-    startsWith,
-    Statement,
-    stringContains,
     stripQuotes,
-    Symbol,
-    SymbolFlags,
-    timestamp,
-    tryCast,
-    TypeChecker,
+} from "../compiler/utilities";
+import {
+    isExternalModuleNameRelative,
     unescapeLeadingUnderscores,
-    unmangleScopedPackageName,
-    UserPreferences,
-} from "./_namespaces/ts";
+} from "../compiler/utilitiesPublic";
+import {
+    ExportInfoMap,
+    ExportKind,
+    LanguageServiceHost,
+    SymbolExportInfo,
+} from "./types";
+import {
+    consumesNodeCoreModules,
+    getNameForExportedSymbol,
+    getNamesForExportedSymbol,
+    isExternalModuleSymbol,
+    PackageJsonImportFilter,
+} from "./utilities";
 
 /** @internal */
 export const enum ImportKind {
@@ -67,26 +86,6 @@ export const enum ImportKind {
     Default,
     Namespace,
     CommonJS,
-}
-
-/** @internal */
-export const enum ExportKind {
-    Named,
-    Default,
-    ExportEquals,
-    UMD,
-}
-
-/** @internal */
-export interface SymbolExportInfo {
-    readonly symbol: Symbol;
-    readonly moduleSymbol: Symbol;
-    /** Set if `moduleSymbol` is an external module, not an ambient module */
-    moduleFileName: string | undefined;
-    exportKind: ExportKind;
-    targetFlags: SymbolFlags;
-    /** True if export was only found via the package.json AutoImportProvider (for telemetry). */
-    isFromPackageJson: boolean;
 }
 
 interface CachedSymbolExportInfo {
@@ -106,19 +105,6 @@ interface CachedSymbolExportInfo {
     exportKind: ExportKind;
     targetFlags: SymbolFlags;
     isFromPackageJson: boolean;
-}
-
-/** @internal */
-export interface ExportInfoMap {
-    isUsableByFile(importingFile: Path): boolean;
-    clear(): void;
-    add(importingFile: Path, symbol: Symbol, key: __String, moduleSymbol: Symbol, moduleFile: SourceFile | undefined, exportKind: ExportKind, isFromPackageJson: boolean, checker: TypeChecker): void;
-    get(importingFile: Path, key: string): readonly SymbolExportInfo[] | undefined;
-    search<T>(importingFile: Path, preferCapitalized: boolean, matches: (name: string, targetFlags: SymbolFlags) => boolean, action: (info: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean, key: string) => T | undefined): T | undefined;
-    releaseSymbols(): void;
-    isEmpty(): boolean;
-    /** @returns Whether the change resulted in the cache being cleared */
-    onFileChanged(oldSourceFile: SourceFile, newSourceFile: SourceFile, typeAcquisitionEnabled: boolean): boolean;
 }
 
 /** @internal */
@@ -366,7 +352,7 @@ export function isImportableFile(
 
     const getCanonicalFileName = hostGetCanonicalFileName(moduleSpecifierResolutionHost);
     const globalTypingsCache = moduleSpecifierResolutionHost.getGlobalTypingsCacheLocation?.();
-    const hasImportablePath = !!moduleSpecifiers.forEachFileNameOfModule(
+    const hasImportablePath = !!forEachFileNameOfModule(
         from.fileName,
         to.fileName,
         moduleSpecifierResolutionHost,

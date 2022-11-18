@@ -1,14 +1,11 @@
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
 import {
     AsExpression,
     CallSignatureDeclaration,
-    CodeFixAction,
     ConstructSignatureDeclaration,
     DiagnosticMessage,
-    Diagnostics,
-    findAncestor,
     FunctionDeclaration,
     GetAccessorDeclaration,
-    getTokenAtPosition,
     IndexSignatureDeclaration,
     MappedTypeNode,
     MethodDeclaration,
@@ -20,7 +17,6 @@ import {
     SetAccessorDeclaration,
     SourceFile,
     SyntaxKind,
-    textChanges,
     Type,
     TypeAliasDeclaration,
     TypeAssertion,
@@ -28,12 +24,16 @@ import {
     TypeFlags,
     TypeNode,
     VariableDeclaration,
-} from "../_namespaces/ts";
+} from "../../compiler/types";
+import { findAncestor } from "../../compiler/utilitiesPublic";
 import {
     codeFixAll,
     createCodeFixAction,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
+import { CodeFixAction } from "../types";
+import { getTokenAtPosition } from "../utilities";
 
 const fixIdPlain = "fixJSDocTypes_plain";
 const fixIdNullable = "fixJSDocTypes_nullable";
@@ -56,7 +56,7 @@ registerCodeFix({
         return actions;
 
         function fix(type: Type, fixId: string, fixAllDescription: DiagnosticMessage): CodeFixAction {
-            const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, typeNode, type, checker));
+            const changes = ChangeTracker.with(context, t => doChange(t, sourceFile, typeNode, type, checker));
             return createCodeFixAction("jdocTypes", changes, [Diagnostics.Change_0_to_1, original, checker.typeToString(type)], fixId, fixAllDescription);
         }
     },
@@ -74,7 +74,7 @@ registerCodeFix({
     }
 });
 
-function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, oldTypeNode: TypeNode, newType: Type, checker: TypeChecker): void {
+function doChange(changes: ChangeTracker, sourceFile: SourceFile, oldTypeNode: TypeNode, newType: Type, checker: TypeChecker): void {
     changes.replaceNode(sourceFile, oldTypeNode, checker.typeToTypeNode(newType, /*enclosingDeclaration*/ oldTypeNode, /*flags*/ undefined)!); // TODO: GH#18217
 }
 

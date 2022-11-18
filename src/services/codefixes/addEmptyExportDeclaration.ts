@@ -1,12 +1,10 @@
+import { Diagnostics } from "../../compiler/diagnosticInformationMap.generated";
+import { factory } from "../../compiler/factory/nodeFactory";
 import {
     createCodeFixActionWithoutFixAll,
     registerCodeFix,
-} from "../_namespaces/ts.codefix";
-import {
-    Diagnostics,
-    factory,
-    textChanges,
-} from "../_namespaces/ts";
+} from "../codeFixProvider";
+import { ChangeTracker } from "../textChanges";
 
 registerCodeFix({
     errorCodes: [
@@ -15,7 +13,7 @@ registerCodeFix({
     ],
     getCodeActions: function getCodeActionsToAddEmptyExportDeclaration(context) {
         const { sourceFile } = context;
-        const changes = textChanges.ChangeTracker.with(context, changes => {
+        const changes = ChangeTracker.with(context, changes => {
             const exportDeclaration = factory.createExportDeclaration(
                 /*modifiers*/ undefined,
                 /*isTypeOnly*/ false,
