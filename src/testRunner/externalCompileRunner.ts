@@ -3,7 +3,13 @@ import * as fs from "fs";
 import * as path from "path";
 
 import * as ts from "./_namespaces/ts";
-import { Baseline, IO, isWorker, RunnerBase, TestRunnerKind } from "./_namespaces/Harness";
+import {
+    Baseline,
+    IO,
+    isWorker,
+    RunnerBase,
+    TestRunnerKind,
+} from "./_namespaces/Harness";
 
 interface ExecResult {
     stdout: Buffer;

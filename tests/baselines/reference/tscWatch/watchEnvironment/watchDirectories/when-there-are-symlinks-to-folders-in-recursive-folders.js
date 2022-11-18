@@ -42,7 +42,7 @@ CreatingProgramWith::
 FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src/file.ts 250 undefined Source file
 ======== Resolving module 'a' from '/home/user/projects/myproject/src/file.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.
+Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/home/user/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
 File '/home/user/projects/myproject/node_modules/a/package.json' does not exist.
 File '/home/user/projects/myproject/node_modules/a.ts' does not exist.
