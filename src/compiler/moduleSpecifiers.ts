@@ -60,7 +60,7 @@ function getPreferences(
             }
             switch (preferredEnding) {
                 case ModuleSpecifierEnding.JsExtension: return [ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index];
-                case ModuleSpecifierEnding.TsExtension: return [ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index];
+                case ModuleSpecifierEnding.TsExtension: return [ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.Index];
                 case ModuleSpecifierEnding.Index: return [ModuleSpecifierEnding.Index, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.JsExtension];
                 case ModuleSpecifierEnding.Minimal: return [ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index, ModuleSpecifierEnding.JsExtension];
                 default: Debug.assertNever(preferredEnding);
@@ -367,7 +367,7 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
         return fromPaths;
     }
 
-    const maybeNonRelative = fromPaths === undefined && baseUrl !== undefined ? processEnding(relativeToBaseUrl, ending, compilerOptions) : fromPaths;
+    const maybeNonRelative = fromPaths === undefined && baseUrl !== undefined ? processEnding(relativeToBaseUrl, allowedEndings, compilerOptions) : fromPaths;
     if (!maybeNonRelative) {
         return relativePath;
     }
@@ -655,7 +655,7 @@ function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<rea
             // sorted among the others for a particular value of `importModuleSpecifierEnding`.
             const candidates: { ending: ModuleSpecifierEnding | undefined, value: string }[] = allowedEndings.map(ending => ({
                 ending,
-                value: processEnding(relativeToBaseUrl, ending, compilerOptions)
+                value: processEnding(relativeToBaseUrl, [ending], compilerOptions)
             }));
             if (tryGetExtensionFromPath(pattern)) {
                 candidates.push({ ending: undefined, value: relativeToBaseUrl });
@@ -692,7 +692,7 @@ function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<rea
         // `ModuleSpecifierEnding.Index` result, which should already be in the list of candidates if `Minimal` was. (Note: the assumption here is
         // that every module resolution mode that supports dropping extensions also supports dropping `/index`. Like literally
         // everything else in this file, this logic needs to be updated if that's not true in some future module resolution mode.)
-        return ending !== ModuleSpecifierEnding.Minimal || value === processEnding(relativeToBaseUrl, ending, compilerOptions, host);
+        return ending !== ModuleSpecifierEnding.Minimal || value === processEnding(relativeToBaseUrl, [ending], compilerOptions, host);
     }
 }
 
@@ -767,7 +767,7 @@ function tryGetModuleNameFromExports(options: CompilerOptions, targetFilePath: s
     return undefined;
 }
 
-function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string, ending: ModuleSpecifierEnding, compilerOptions: CompilerOptions): string | undefined {
+function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string, allowedEndings: readonly ModuleSpecifierEnding[], compilerOptions: CompilerOptions): string | undefined {
     const normalizedTargetPaths = getPathsRelativeToRootDirs(moduleFileName, rootDirs, getCanonicalFileName);
     if (normalizedTargetPaths === undefined) {
         return undefined;
@@ -781,7 +781,7 @@ function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileNam
         if (!shortest) {
             return undefined;
         }
-        return processEnding(shortest, ending, compilerOptions);
+        return processEnding(shortest, allowedEndings, compilerOptions);
     }
 
 function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, sourceDirectory }: Info, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, options: CompilerOptions, userPreferences: UserPreferences, packageNameOnly?: boolean, overrideMode?: ResolutionMode): string | undefined {
@@ -823,7 +823,7 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
             // try with next level of directory
             packageRootIndex = path.indexOf(directorySeparator, packageRootIndex + 1);
             if (packageRootIndex === -1) {
-                moduleSpecifier = processEnding(moduleFileName, allowedEndings[0], options, host);
+                moduleSpecifier = processEnding(moduleFileName, allowedEndings, options, host);
                 break;
             }
         }
@@ -936,7 +936,7 @@ function getPathsRelativeToRootDirs(path: string, rootDirs: readonly string[], g
     });
 }
 
-function processEnding(fileName: string, ending: ModuleSpecifierEnding, options: CompilerOptions, host?: ModuleSpecifierResolutionHost): string {
+function processEnding(fileName: string, allowedEndings: readonly ModuleSpecifierEnding[], options: CompilerOptions, host?: ModuleSpecifierResolutionHost): string {
     if (fileExtensionIsOneOf(fileName, [Extension.Json, Extension.Mjs, Extension.Cjs])) {
         return fileName;
     }
@@ -950,7 +950,7 @@ function processEnding(fileName: string, ending: ModuleSpecifierEnding, options:
         return noExtension + getJSExtensionForFile(fileName, options);
     }
 
-    switch (ending) {
+    switch (allowedEndings[0]) {
         case ModuleSpecifierEnding.Minimal:
             const withoutIndex = removeSuffix(noExtension, "/index");
             if (host && withoutIndex !== noExtension && tryGetAnyFileFromPath(host, withoutIndex)) {
@@ -965,10 +965,17 @@ function processEnding(fileName: string, ending: ModuleSpecifierEnding, options:
             return noExtension + getJSExtensionForFile(fileName, options);
         case ModuleSpecifierEnding.TsExtension:
             // For now, we don't know if this import is going to be type-only, which means we don't
-            // know if a .d.ts extension is valid, so use the .js extension.
-            return isDeclarationFileName(fileName) ? noExtension + getJSExtensionForFile(fileName, options) : fileName;
+            // know if a .d.ts extension is valid, so use no extension or a .js extension
+            if (isDeclarationFileName(fileName)) {
+                const extensionlessPriority = allowedEndings.findIndex(e => e === ModuleSpecifierEnding.Minimal || e === ModuleSpecifierEnding.Index);
+                const jsPriority = allowedEndings.indexOf(ModuleSpecifierEnding.JsExtension);
+                return extensionlessPriority !== -1 && extensionlessPriority < jsPriority
+                    ? noExtension
+                    : noExtension + getJSExtensionForFile(fileName, options);
+            }
+            return fileName;
         default:
-            return Debug.assertNever(ending);
+            return Debug.assertNever(allowedEndings[0]);
     }
 }
 

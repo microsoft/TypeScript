@@ -6,12 +6,12 @@ import { Component } from "./Component.tsx";
 
 ## From completions
 
-- `fromDecl` from `"./decl.js"`
+- `fromDecl` from `"./decl"`
 - `fromLocal` from `"./local.ts"`
 
 ```ts
 import { Component } from "./Component.tsx";
-import { fromDecl } from "./decl.js";
+import { fromDecl } from "./decl";
 fromDecl
 ```
 
