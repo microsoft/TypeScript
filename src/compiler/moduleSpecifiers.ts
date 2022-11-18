@@ -4,7 +4,7 @@ import {
     containsPath, createGetCanonicalFileName, Debug, directorySeparator, emptyArray, endsWith,
     ensurePathIsNonModuleName, ensureTrailingDirectorySeparator, every, ExportAssignment, Extension, extensionFromPath,
     fileExtensionIsOneOf, FileIncludeKind, firstDefined, flatMap, flatten, forEach, forEachAncestorDirectory,
-    GetCanonicalFileName, getDirectoryPath, getEmitModuleResolutionKind, getImpliedNodeFormatForFile,
+    GetCanonicalFileName, getDirectoryPath, getEmitModuleResolutionKind,
     getModeForResolutionAtIndex, getModuleNameStringLiteralAt, getNodeModulePathParts, getNormalizedAbsolutePath,
     getOwnKeys, getPackageJsonTypesVersionsPaths, getPackageNameFromTypesPackageName, getPathsBasePath,
     getRelativePathFromDirectory, getRelativePathToDirectoryOrUrl, getSourceFileOfModule, getSupportedExtensions,
@@ -12,18 +12,16 @@ import {
     isAmbientModule, isApplicableVersionedTypesKey, isExternalModuleAugmentation, isExternalModuleNameRelative,
     isModuleBlock, isModuleDeclaration, isNonGlobalAmbientModule, isRootedDiskPath, isSourceFile, isString, JsxEmit,
     map, mapDefined, MapLike, matchPatternOrExact, min, ModuleDeclaration, ModuleKind, ModulePath,
-    ModuleResolutionHost, ModuleResolutionKind, ModuleSpecifierCache, ModuleSpecifierOptions,
+    ModuleResolutionKind, ModuleSpecifierCache, ModuleSpecifierOptions,
     ModuleSpecifierResolutionHost, NodeFlags, NodeModulePathParts, normalizePath, Path, pathContainsNodeModules,
     pathIsBareSpecifier, pathIsRelative, PropertyAccessExpression, removeFileExtension, removeSuffix, resolvePath,
     ScriptKind, some, SourceFile, startsWith, startsWithDirectory, stringContains, StringLiteral, Symbol, SymbolFlags,
-    toPath, tryGetExtensionFromPath, tryParsePatterns, TypeChecker, UserPreferences, shouldAllowImportingTsExtension, ResolutionMode,
+    toPath, tryGetExtensionFromPath, tryParsePatterns, TypeChecker, UserPreferences, shouldAllowImportingTsExtension, ResolutionMode, ModuleSpecifierEnding, getModuleSpecifierEndingPreference,
 } from "./_namespaces/ts";
 
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
 
 const enum RelativePreference { Relative, NonRelative, Shortest, ExternalNonRelative }
-// See UserPreferences#importPathEnding
-const enum Ending { Minimal, Index, JsExtension, TsExtension }
 
 // Processed preferences
 interface Preferences {
@@ -31,11 +29,10 @@ interface Preferences {
     /**
      * @param syntaxImpliedNodeFormat Used when the import syntax implies ESM or CJS irrespective of the mode of the file.
      */
-    getAllowedEndingsInPrefererredOrder(syntaxImpliedNodeFormat?: SourceFile["impliedNodeFormat"]): Ending[];
+    getAllowedEndingsInPrefererredOrder(syntaxImpliedNodeFormat?: SourceFile["impliedNodeFormat"]): ModuleSpecifierEnding[];
 }
 
 function getPreferences(
-    host: ModuleSpecifierResolutionHost,
     { importModuleSpecifierPreference, importModuleSpecifierEnding }: UserPreferences,
     compilerOptions: CompilerOptions,
     importingSourceFile: SourceFile,
@@ -52,64 +49,36 @@ function getPreferences(
             importModuleSpecifierPreference === "project-relative" ? RelativePreference.ExternalNonRelative :
             RelativePreference.Shortest,
         getAllowedEndingsInPrefererredOrder: syntaxImpliedNodeFormat => {
-            if (syntaxImpliedNodeFormat === ModuleKind.ESNext || isFormatRequiringExtensions()) {
+            if (syntaxImpliedNodeFormat === ModuleKind.ESNext || (syntaxImpliedNodeFormat ?? importingSourceFile.impliedNodeFormat) === ModuleKind.ESNext) {
                 if (shouldAllowImportingTsExtension(compilerOptions, importingSourceFile.fileName)) {
-                    return [Ending.TsExtension, Ending.JsExtension];
+                    return [ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.JsExtension];
                 }
-                return [Ending.JsExtension];
+                return [ModuleSpecifierEnding.JsExtension];
             }
             if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Classic) {
-                return [Ending.Index, Ending.JsExtension];
+                return [ModuleSpecifierEnding.Index, ModuleSpecifierEnding.JsExtension];
             }
             switch (preferredEnding) {
-                case Ending.JsExtension: return [Ending.JsExtension, Ending.Minimal, Ending.Index];
-                case Ending.TsExtension: return [Ending.TsExtension, Ending.TsExtension, Ending.Minimal, Ending.Index];
-                case Ending.Index: return [Ending.Index, Ending.Minimal, Ending.JsExtension];
-                case Ending.Minimal: return [Ending.Minimal, Ending.Index, Ending.JsExtension];
+                case ModuleSpecifierEnding.JsExtension: return [ModuleSpecifierEnding.JsExtension, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index];
+                case ModuleSpecifierEnding.TsExtension: return [ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index];
+                case ModuleSpecifierEnding.Index: return [ModuleSpecifierEnding.Index, ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.JsExtension];
+                case ModuleSpecifierEnding.Minimal: return [ModuleSpecifierEnding.Minimal, ModuleSpecifierEnding.Index, ModuleSpecifierEnding.JsExtension];
                 default: Debug.assertNever(preferredEnding);
             }
         },
     };
 
-    function getPreferredEnding(): Ending {
+    function getPreferredEnding(): ModuleSpecifierEnding {
         if (oldImportSpecifier !== undefined) {
-            if (hasJSFileExtension(oldImportSpecifier)) return Ending.JsExtension;
-            if (endsWith(oldImportSpecifier, "/index")) return Ending.Index;
+            if (hasJSFileExtension(oldImportSpecifier)) return ModuleSpecifierEnding.JsExtension;
+            if (endsWith(oldImportSpecifier, "/index")) return ModuleSpecifierEnding.Index;
         }
-        switch (importModuleSpecifierEnding) {
-            case "minimal": return Ending.Minimal;
-            case "index": return Ending.Index;
-            case "js": return shouldAllowImportingTsExtension(compilerOptions) ? Ending.TsExtension : Ending.JsExtension;
-            default: return usesExtensionsOnImports(importingSourceFile)
-                ? shouldAllowImportingTsExtension(compilerOptions) ? Ending.TsExtension : Ending.JsExtension
-                : Ending.Minimal;
-        }
+        return getModuleSpecifierEndingPreference(
+          importModuleSpecifierEnding,
+          importingSourceFile.impliedNodeFormat,
+          compilerOptions,
+          importingSourceFile);
     }
-
-    function isFormatRequiringExtensions() {
-        switch (getEmitModuleResolutionKind(compilerOptions)) {
-            case ModuleResolutionKind.Node16:
-            case ModuleResolutionKind.NodeNext:
-                return getImpliedNodeFormatForFile(
-                    importingSourceFile.path,
-                    host.getPackageJsonInfoCache?.(),
-                    getModuleResolutionHost(host), compilerOptions,
-                ) !== ModuleKind.CommonJS;
-            default:
-                return false;
-        }
-    }
-}
-
-function getModuleResolutionHost(host: ModuleSpecifierResolutionHost): ModuleResolutionHost {
-    return {
-        fileExists: host.fileExists,
-        readFile: Debug.checkDefined(host.readFile),
-        directoryExists: host.directoryExists,
-        getCurrentDirectory: host.getCurrentDirectory,
-        realpath: host.realpath,
-        useCaseSensitiveFileNames: host.useCaseSensitiveFileNames?.(),
-    };
 }
 
 // `importingSourceFile` and `importingSourceFileName`? Why not just use `importingSourceFile.path`?
@@ -126,7 +95,7 @@ export function updateModuleSpecifier(
     oldImportSpecifier: string,
     options: ModuleSpecifierOptions = {},
 ): string | undefined {
-    const res = getModuleSpecifierWorker(compilerOptions, importingSourceFile, importingSourceFileName, toFileName, host, getPreferences(host, {}, compilerOptions, importingSourceFile, oldImportSpecifier), {}, options);
+    const res = getModuleSpecifierWorker(compilerOptions, importingSourceFile, importingSourceFileName, toFileName, host, getPreferences({}, compilerOptions, importingSourceFile, oldImportSpecifier), {}, options);
     if (res === oldImportSpecifier) return undefined;
     return res;
 }
@@ -146,7 +115,7 @@ export function getModuleSpecifier(
     host: ModuleSpecifierResolutionHost,
     options: ModuleSpecifierOptions = {},
 ): string {
-    return getModuleSpecifierWorker(compilerOptions, importingSourceFile, importingSourceFileName, toFileName, host, getPreferences(host, {}, compilerOptions, importingSourceFile), {}, options);
+    return getModuleSpecifierWorker(compilerOptions, importingSourceFile, importingSourceFileName, toFileName, host, getPreferences({}, compilerOptions, importingSourceFile), {}, options);
 }
 
 /** @internal */
@@ -279,7 +248,7 @@ function computeModuleSpecifiers(
     options: ModuleSpecifierOptions = {},
 ): readonly string[] {
     const info = getInfo(importingSourceFile.path, host);
-    const preferences = getPreferences(host, userPreferences, compilerOptions, importingSourceFile);
+    const preferences = getPreferences(userPreferences, compilerOptions, importingSourceFile);
     const existingSpecifier = forEach(modulePaths, modulePath => forEach(
         host.getFileIncludeReasons().get(toPath(modulePath.path, host.getCurrentDirectory(), info.getCanonicalFileName)),
         reason => {
@@ -381,9 +350,8 @@ function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOpt
 
     const { sourceDirectory, getCanonicalFileName } = info;
     const allowedEndings = getAllowedEndingsInPrefererredOrder(importMode);
-    const ending = allowedEndings[0];
-    const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, ending, compilerOptions) ||
-        processEnding(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), ending, compilerOptions);
+    const relativePath = rootDirs && tryGetModuleNameFromRootDirs(rootDirs, moduleFileName, sourceDirectory, getCanonicalFileName, allowedEndings, compilerOptions) ||
+        processEnding(ensurePathIsNonModuleName(getRelativePathFromDirectory(sourceDirectory, moduleFileName, getCanonicalFileName)), allowedEndings, compilerOptions);
     if (!baseUrl && !paths || relativePreference === RelativePreference.Relative) {
         return pathsOnly ? undefined : relativePath;
     }
@@ -456,11 +424,6 @@ export function countPathComponents(path: string): number {
         if (path.charCodeAt(i) === CharacterCodes.slash) count++;
     }
     return count;
-}
-
-/** @internal */
-export function usesExtensionsOnImports({ imports }: SourceFile): boolean {
-    return firstDefined(imports, ({ text }) => pathIsRelative(text) ? (hasJSFileExtension(text) || hasTSFileExtension(text)) : undefined) || false;
 }
 
 function comparePathsByRedirectAndNumberOfDirectorySeparators(a: ModulePath, b: ModulePath) {
@@ -649,7 +612,7 @@ function tryGetModuleNameFromAmbientModule(moduleSymbol: Symbol, checker: TypeCh
     }
 }
 
-function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<readonly string[]>, allowedEndings: Ending[], host: ModuleSpecifierResolutionHost, compilerOptions: CompilerOptions): string | undefined {
+function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<readonly string[]>, allowedEndings: ModuleSpecifierEnding[], host: ModuleSpecifierResolutionHost, compilerOptions: CompilerOptions): string | undefined {
     for (const key in paths) {
         for (const patternText of paths[key]) {
             const pattern = normalizePath(patternText);
@@ -690,7 +653,7 @@ function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<rea
             // resolution, but as long criteria (b) above is met, I don't think its result needs to be the highest priority result
             // in module specifier generation. I have included it last, as it's difficult to tell exactly where it should be
             // sorted among the others for a particular value of `importModuleSpecifierEnding`.
-            const candidates: { ending: Ending | undefined, value: string }[] = allowedEndings.map(ending => ({
+            const candidates: { ending: ModuleSpecifierEnding | undefined, value: string }[] = allowedEndings.map(ending => ({
                 ending,
                 value: processEnding(relativeToBaseUrl, ending, compilerOptions)
             }));
@@ -713,23 +676,23 @@ function tryGetModuleNameFromPaths(relativeToBaseUrl: string, paths: MapLike<rea
                 }
             }
             else if (
-                some(candidates, c => c.ending !== Ending.Minimal && pattern === c.value) ||
-                some(candidates, c => c.ending === Ending.Minimal && pattern === c.value && validateEnding(c))
+                some(candidates, c => c.ending !== ModuleSpecifierEnding.Minimal && pattern === c.value) ||
+                some(candidates, c => c.ending === ModuleSpecifierEnding.Minimal && pattern === c.value && validateEnding(c))
             ) {
                 return key;
             }
         }
     }
 
-    function validateEnding({ ending, value }: { ending: Ending | undefined, value: string }) {
+    function validateEnding({ ending, value }: { ending: ModuleSpecifierEnding | undefined, value: string }) {
         // Optimization: `removeExtensionAndIndexPostFix` can query the file system (a good bit) if `ending` is `Minimal`, the basename
         // is 'index', and a `host` is provided. To avoid that until it's unavoidable, we ran the function with no `host` above. Only
         // here, after we've checked that the minimal ending is indeed a match (via the length and prefix/suffix checks / `some` calls),
         // do we check that the host-validated result is consistent with the answer we got before. If it's not, it falls back to the
-        // `Ending.Index` result, which should already be in the list of candidates if `Minimal` was. (Note: the assumption here is
+        // `ModuleSpecifierEnding.Index` result, which should already be in the list of candidates if `Minimal` was. (Note: the assumption here is
         // that every module resolution mode that supports dropping extensions also supports dropping `/index`. Like literally
         // everything else in this file, this logic needs to be updated if that's not true in some future module resolution mode.)
-        return ending !== Ending.Minimal || value === processEnding(relativeToBaseUrl, ending, compilerOptions, host);
+        return ending !== ModuleSpecifierEnding.Minimal || value === processEnding(relativeToBaseUrl, ending, compilerOptions, host);
     }
 }
 
@@ -804,7 +767,7 @@ function tryGetModuleNameFromExports(options: CompilerOptions, targetFilePath: s
     return undefined;
 }
 
-function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string, ending: Ending, compilerOptions: CompilerOptions): string | undefined {
+function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string, ending: ModuleSpecifierEnding, compilerOptions: CompilerOptions): string | undefined {
     const normalizedTargetPaths = getPathsRelativeToRootDirs(moduleFileName, rootDirs, getCanonicalFileName);
     if (normalizedTargetPaths === undefined) {
         return undefined;
@@ -832,7 +795,7 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
 
     // Simplify the full file path to something that can be resolved by Node.
 
-    const preferences = getPreferences(host, userPreferences, options, importingSourceFile);
+    const preferences = getPreferences(userPreferences, options, importingSourceFile);
     const allowedEndings = preferences.getAllowedEndingsInPrefererredOrder();
     let moduleSpecifier = path;
     let isPackageRootPath = false;
@@ -973,13 +936,13 @@ function getPathsRelativeToRootDirs(path: string, rootDirs: readonly string[], g
     });
 }
 
-function processEnding(fileName: string, ending: Ending, options: CompilerOptions, host?: ModuleSpecifierResolutionHost): string {
+function processEnding(fileName: string, ending: ModuleSpecifierEnding, options: CompilerOptions, host?: ModuleSpecifierResolutionHost): string {
     if (fileExtensionIsOneOf(fileName, [Extension.Json, Extension.Mjs, Extension.Cjs])) return fileName;
     const noExtension = removeFileExtension(fileName);
     if (fileName === noExtension) return fileName;
     if (fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Dcts, Extension.Cts])) return noExtension + getJSExtensionForFile(fileName, options);
     switch (ending) {
-        case Ending.Minimal:
+        case ModuleSpecifierEnding.Minimal:
             const withoutIndex = removeSuffix(noExtension, "/index");
             if (host && withoutIndex !== noExtension && tryGetAnyFileFromPath(host, withoutIndex)) {
                 // Can't remove index if there's a file by the same name as the directory.
@@ -987,11 +950,11 @@ function processEnding(fileName: string, ending: Ending, options: CompilerOption
                 return noExtension;
             }
             return withoutIndex;
-        case Ending.Index:
+        case ModuleSpecifierEnding.Index:
             return noExtension;
-        case Ending.JsExtension:
+        case ModuleSpecifierEnding.JsExtension:
             return noExtension + getJSExtensionForFile(fileName, options);
-        case Ending.TsExtension:
+        case ModuleSpecifierEnding.TsExtension:
             return fileName;
         default:
             return Debug.assertNever(ending);
