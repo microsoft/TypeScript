@@ -1,6 +1,7 @@
 import * as ts from "../_namespaces/ts";
 
 const enum ChangedPart {
+    none = 0,
     references = 1 << 0,
     importsAndExports = 1 << 1,
     program = 1 << 2
@@ -32,7 +33,7 @@ export class SourceText implements ts.IScriptSnapshot {
     constructor(private references: string,
         private importsAndExports: string,
         private program: string,
-        private changedPart: ChangedPart = 0,
+        private changedPart = ChangedPart.none,
         private version = 0) {
     }
 

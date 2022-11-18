@@ -1,6 +1,15 @@
 import {
-    CharacterCodes, compareBooleans, compareValues, Comparison, createTextSpan, isUnicodeIdentifierStart, last,
-    min, ScriptTarget, startsWith, TextSpan,
+    CharacterCodes,
+    compareBooleans,
+    compareValues,
+    Comparison,
+    createTextSpan,
+    isUnicodeIdentifierStart,
+    last,
+    min,
+    ScriptTarget,
+    startsWith,
+    TextSpan,
 } from "./_namespaces/ts";
 
 // Note(cyrusn): this enum is ordered from strongest match type to weakest match type.

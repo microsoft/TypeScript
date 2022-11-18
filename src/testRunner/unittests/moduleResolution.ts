@@ -1,6 +1,10 @@
 import * as ts from "../_namespaces/ts";
 import * as Harness from "../_namespaces/Harness";
-import { checkResolvedModule, checkResolvedModuleWithFailedLookupLocations, createResolvedModule } from "./helpers";
+import {
+    checkResolvedModule,
+    checkResolvedModuleWithFailedLookupLocations,
+    createResolvedModule,
+} from "./helpers";
 
 interface File {
     name: string;
