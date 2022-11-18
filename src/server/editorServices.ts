@@ -1,38 +1,184 @@
 import {
-    ActionInvalidate, ActionSet, asNormalizedPath, AutoImportProviderProject, BeginEnablePluginResult,
-    BeginInstallTypes, ConfiguredProject, countEachFileTypes, createPackageJsonCache, emptyArray, EndInstallTypes,
-    Errors, ExternalProject, getBaseConfigFileName, hasNoTypeScriptSource, InferredProject, InvalidateCachedTypings,
-    isConfiguredProject, isDynamicFileName, isInferredProject, isInferredProjectName, ITypingsInstaller, Logger,
-    LogLevel, makeAutoImportProviderProjectName, makeAuxiliaryProjectName, makeInferredProjectName, Msg, NormalizedPath,
-    normalizedPathToPath, nullTypingsInstaller, PackageInstalledResponse, PackageJsonCache, Project,
-    ProjectFilesWithTSDiagnostics, ProjectKind, ProjectOptions, protocol, ScriptInfo, ScriptInfoVersion, ServerHost,
-    Session, SetTypings, ThrottledOperations, toNormalizedPath, TypingsCache,
+    ActionInvalidate,
+    ActionSet,
+    asNormalizedPath,
+    AutoImportProviderProject,
+    BeginEnablePluginResult,
+    BeginInstallTypes,
+    ConfiguredProject,
+    countEachFileTypes,
+    createPackageJsonCache,
+    emptyArray,
+    EndInstallTypes,
+    Errors,
+    ExternalProject,
+    getBaseConfigFileName,
+    hasNoTypeScriptSource,
+    InferredProject,
+    InvalidateCachedTypings,
+    isConfiguredProject,
+    isDynamicFileName,
+    isInferredProject,
+    isInferredProjectName,
+    ITypingsInstaller,
+    Logger,
+    LogLevel,
+    makeAutoImportProviderProjectName,
+    makeAuxiliaryProjectName,
+    makeInferredProjectName,
+    Msg,
+    NormalizedPath,
+    normalizedPathToPath,
+    nullTypingsInstaller,
+    PackageInstalledResponse,
+    PackageJsonCache,
+    Project,
+    ProjectFilesWithTSDiagnostics,
+    ProjectKind,
+    ProjectOptions,
+    protocol,
+    ScriptInfo,
+    ScriptInfoVersion,
+    ServerHost,
+    Session,
+    SetTypings,
+    ThrottledOperations,
+    toNormalizedPath,
+    TypingsCache,
 } from "./_namespaces/ts.server";
 import {
-    addToSeen, arrayFrom, arrayToMap, AssertionLevel, CachedDirectoryStructureHost, canJsonReportNoInputFiles,
-    canWatchDirectoryOrFile, cleanExtendedConfigCache, clearMap, clearSharedExtendedConfigFileWatcher,
-    closeFileWatcherOf, combinePaths, CommandLineOption, CompilerOptions, CompletionInfo, ConfigFileProgramReloadLevel,
-    contains, containsPath, convertCompilerOptionsForTelemetry, convertEnableAutoDiscoveryToEnable, convertJsonOption,
-    createCachedDirectoryStructureHost, createDocumentRegistryInternal, createGetCanonicalFileName, createMultiMap,
-    Debug, Diagnostic, directorySeparator, DirectoryStructureHost, DocumentPosition, DocumentPositionMapper,
-    DocumentRegistry, DocumentRegistryBucketKeyWithMode, emptyOptions, ensureTrailingDirectorySeparator, ESMap,
-    ExtendedConfigCacheEntry, FileExtensionInfo, fileExtensionIs, FileWatcher, FileWatcherEventKind, find, flatMap,
-    forEach, forEachAncestorDirectory, forEachEntry, forEachKey, forEachResolvedProjectReference, FormatCodeSettings,
-    getAnyExtensionFromPath, getBaseFileName, getDefaultFormatCodeSettings, getDirectoryPath, getDocumentPositionMapper,
-    getEntries, getFileNamesFromConfigSpecs, getFileWatcherEventKind, getNormalizedAbsolutePath, getSnapshotText,
-    getWatchFactory, hasExtension, hasProperty, hasTSFileExtension, HostCancellationToken, identity,
-    IncompleteCompletionsCache, IndentStyle, isArray, isIgnoredFileFromWildCardWatching, isInsideNodeModules,
-    isJsonEqual, isNodeModulesDirectory, isRootedDiskPath, isString, Iterator, LanguageServiceMode, length, map, Map,
-    mapDefinedEntries, mapDefinedIterator, missingFileModifiedTime, MultiMap, noop, normalizePath, normalizeSlashes,
-    optionDeclarations, optionsForWatch, PackageJsonAutoImportPreference, ParsedCommandLine,
-    parseJsonSourceFileConfigFileContent, parseJsonText, parsePackageName, Path, PerformanceEvent, PluginImport,
-    PollingInterval, ProjectPackageJsonInfo, ProjectReference, ReadMapFile, ReadonlyCollection, removeFileExtension,
-    removeIgnoredPath, removeMinAndVersionNumbers, ResolvedProjectReference, resolveProjectReferencePath,
-    returnNoopFileWatcher, returnTrue, ScriptKind, Set, SharedExtendedConfigFileWatcher, some, SourceFile, SourceFileLike, startsWith,
-    Ternary, TextChange, toFileNameLowerCase, toPath, tracing, tryAddToSet, tryReadFile, TsConfigSourceFile,
-    TypeAcquisition, typeAcquisitionDeclarations, unorderedRemoveItem, updateSharedExtendedConfigFileWatcher,
-    updateWatchingWildcardDirectories, UserPreferences, version, WatchDirectoryFlags, WatchFactory, WatchLogLevel,
-    WatchOptions, WatchType, WildcardDirectoryWatcher,
+    addToSeen,
+    arrayFrom,
+    arrayToMap,
+    AssertionLevel,
+    CachedDirectoryStructureHost,
+    canJsonReportNoInputFiles,
+    canWatchDirectoryOrFile,
+    cleanExtendedConfigCache,
+    clearMap,
+    clearSharedExtendedConfigFileWatcher,
+    closeFileWatcherOf,
+    combinePaths,
+    CommandLineOption,
+    CompilerOptions,
+    CompletionInfo,
+    ConfigFileProgramReloadLevel,
+    contains,
+    containsPath,
+    convertCompilerOptionsForTelemetry,
+    convertEnableAutoDiscoveryToEnable,
+    convertJsonOption,
+    createCachedDirectoryStructureHost,
+    createDocumentRegistryInternal,
+    createGetCanonicalFileName,
+    createMultiMap,
+    Debug,
+    Diagnostic,
+    directorySeparator,
+    DirectoryStructureHost,
+    DocumentPosition,
+    DocumentPositionMapper,
+    DocumentRegistry,
+    DocumentRegistryBucketKeyWithMode,
+    emptyOptions,
+    ensureTrailingDirectorySeparator,
+    ExtendedConfigCacheEntry,
+    FileExtensionInfo,
+    fileExtensionIs,
+    FileWatcher,
+    FileWatcherEventKind,
+    find,
+    flatMap,
+    forEach,
+    forEachAncestorDirectory,
+    forEachEntry,
+    forEachKey,
+    forEachResolvedProjectReference,
+    FormatCodeSettings,
+    getAnyExtensionFromPath,
+    getBaseFileName,
+    getDefaultFormatCodeSettings,
+    getDirectoryPath,
+    getDocumentPositionMapper,
+    getEntries,
+    getFileNamesFromConfigSpecs,
+    getFileWatcherEventKind,
+    getNormalizedAbsolutePath,
+    getSnapshotText,
+    getWatchFactory,
+    hasExtension,
+    hasProperty,
+    hasTSFileExtension,
+    HostCancellationToken,
+    identity,
+    IncompleteCompletionsCache,
+    IndentStyle,
+    isArray,
+    isIgnoredFileFromWildCardWatching,
+    isInsideNodeModules,
+    isJsonEqual,
+    isNodeModulesDirectory,
+    isRootedDiskPath,
+    isString,
+    LanguageServiceMode,
+    length,
+    map,
+    mapDefinedEntries,
+    mapDefinedIterator,
+    missingFileModifiedTime,
+    MultiMap,
+    noop,
+    normalizePath,
+    normalizeSlashes,
+    optionDeclarations,
+    optionsForWatch,
+    PackageJsonAutoImportPreference,
+    ParsedCommandLine,
+    parseJsonSourceFileConfigFileContent,
+    parseJsonText,
+    parsePackageName,
+    Path,
+    PerformanceEvent,
+    PluginImport,
+    PollingInterval,
+    ProjectPackageJsonInfo,
+    ProjectReference,
+    ReadMapFile,
+    ReadonlyCollection,
+    removeFileExtension,
+    removeIgnoredPath,
+    removeMinAndVersionNumbers,
+    ResolvedProjectReference,
+    resolveProjectReferencePath,
+    returnNoopFileWatcher,
+    returnTrue,
+    ScriptKind,
+    SharedExtendedConfigFileWatcher,
+    some,
+    SourceFile,
+    SourceFileLike,
+    startsWith,
+    Ternary,
+    TextChange,
+    toFileNameLowerCase,
+    toPath,
+    tracing,
+    tryAddToSet,
+    tryReadFile,
+    TsConfigSourceFile,
+    TypeAcquisition,
+    typeAcquisitionDeclarations,
+    unorderedRemoveItem,
+    updateSharedExtendedConfigFileWatcher,
+    updateWatchingWildcardDirectories,
+    UserPreferences,
+    version,
+    WatchDirectoryFlags,
+    WatchFactory,
+    WatchLogLevel,
+    WatchOptions,
+    WatchType,
+    WildcardDirectoryWatcher,
 } from "./_namespaces/ts";
 
 export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
@@ -193,11 +339,11 @@ export interface SafeList {
     [name: string]: { match: RegExp, exclude?: (string | number)[][], types?: string[] };
 }
 
-function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): ESMap<string, ESMap<string, number>> {
-    const map = new Map<string, ESMap<string, number>>();
+function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): Map<string, Map<string, number>> {
+    const map = new Map<string, Map<string, number>>();
     for (const option of commandLineOptions) {
         if (typeof option.type === "object") {
-            const optionMap = option.type as ESMap<string, number>;
+            const optionMap = option.type as Map<string, number>;
             // verify that map contains only numbers
             optionMap.forEach(value => {
                 Debug.assert(typeof value === "number");
@@ -413,7 +559,7 @@ export interface ConfigFileExistenceInfo {
      * It is false when the open file that would still be impacted by existence of
      *   this config file but it is not the root of inferred project
      */
-    openFilesImpactedByConfigFile?: ESMap<Path, boolean>;
+    openFilesImpactedByConfigFile?: Map<Path, boolean>;
     /**
      * The file watcher watching the config file because there is open script info that is root of
      * inferred project and will be impacted by change in the status of the config file
@@ -506,7 +652,7 @@ export function forEachResolvedProjectReferenceProject<T>(
 ): T | undefined {
     const resolvedRefs = project.getCurrentProgram()?.getResolvedProjectReferences();
     if (!resolvedRefs) return undefined;
-    let seenResolvedRefs: ESMap<string, ProjectReferenceProjectLoadKind> | undefined;
+    let seenResolvedRefs: Map<string, ProjectReferenceProjectLoadKind> | undefined;
     const possibleDefaultRef = fileName ? project.getResolvedProjectReferenceToRedirect(fileName) : undefined;
     if (possibleDefaultRef) {
         // Try to find the name of the file directly through resolved project references
@@ -564,7 +710,7 @@ function forEachResolvedProjectReferenceProjectWorker<T>(
     cb: (resolvedRef: ResolvedProjectReference, loadKind: ProjectReferenceProjectLoadKind) => T | undefined,
     projectReferenceProjectLoadKind: ProjectReferenceProjectLoadKind,
     projectService: ProjectService,
-    seenResolvedRefs: ESMap<string, ProjectReferenceProjectLoadKind> | undefined,
+    seenResolvedRefs: Map<string, ProjectReferenceProjectLoadKind> | undefined,
 ): T | undefined {
     const loadKind = parentOptions.disableReferencedProjectLoad ? ProjectReferenceProjectLoadKind.Find : projectReferenceProjectLoadKind;
     return forEach(resolvedProjectReferences, ref => {
@@ -693,9 +839,9 @@ export interface ParsedConfig{
      *   - true if project is watching config file as well as wild cards
      *   - false if just config file is watched
      */
-    projects: ESMap<NormalizedPath, boolean>;
+    projects: Map<NormalizedPath, boolean>;
     parsedCommandLine?: ParsedCommandLine;
-    watchedDirectories?: Map<WildcardDirectoryWatcher>;
+    watchedDirectories?: Map<string, WildcardDirectoryWatcher>;
     /**
      * true if watchedDirectories need to be updated as per parsedCommandLine's updated watched directories
      */
@@ -718,8 +864,9 @@ export class ProjectService {
 
     /**
      * Container of all known scripts
+     *
+     * @internal
      */
-    /** @internal */
     readonly filenameToScriptInfo = new Map<string, ScriptInfo>();
     private readonly nodeModulesWatchers = new Map<string, NodeModulesWatcher>();
     /**
@@ -733,8 +880,9 @@ export class ProjectService {
 
     /**
      * Map to the real path of the infos
+     *
+     * @internal
      */
-    /** @internal */
     readonly realpathToScriptInfos: MultiMap<Path, ScriptInfo> | undefined;
     /**
      * maps external project file name to list of config files that were the part of this project
@@ -752,7 +900,7 @@ export class ProjectService {
     /**
      * projects specified by a tsconfig.json file
      */
-    readonly configuredProjects: Map<ConfiguredProject> = new Map<string, ConfiguredProject>();
+    readonly configuredProjects: Map<string, ConfiguredProject> = new Map<string, ConfiguredProject>();
     /** @internal */
     readonly newInferredProjectName = createProjectNameFactoryWithCounter(makeInferredProjectName);
     /** @internal */
@@ -762,9 +910,9 @@ export class ProjectService {
     /**
      * Open files: with value being project root path, and key being Path of the file that is open
      */
-    readonly openFiles: Map<NormalizedPath | undefined> = new Map<Path, NormalizedPath | undefined>();
+    readonly openFiles: Map<string, NormalizedPath | undefined> = new Map<Path, NormalizedPath | undefined>();
     /** @internal */
-    readonly configFileForOpenFiles: ESMap<Path, NormalizedPath | false> = new Map();
+    readonly configFileForOpenFiles: Map<Path, NormalizedPath | false> = new Map();
     /**
      * Map of open files that are opened without complete path but have projectRoot as current directory
      */
@@ -786,8 +934,11 @@ export class ProjectService {
      *   In this case the exists could be true/false based on config file is present or not
      * - Or it is present if we have configured project open with config file at that location
      *   In this case the exists property is always true
+     *
+     *
+     * @internal
      */
-    /** @internal */ readonly configFileExistenceInfoCache = new Map<NormalizedPath, ConfigFileExistenceInfo>();
+    readonly configFileExistenceInfoCache = new Map<NormalizedPath, ConfigFileExistenceInfo>();
     /** @internal */ readonly throttledOperations: ThrottledOperations;
 
     private readonly hostConfiguration: HostConfiguration;
@@ -815,7 +966,7 @@ export class ProjectService {
     public readonly globalPlugins: readonly string[];
     public readonly pluginProbeLocations: readonly string[];
     public readonly allowLocalPluginLoads: boolean;
-    private currentPluginConfigOverrides: ESMap<string, any> | undefined;
+    private currentPluginConfigOverrides: Map<string, any> | undefined;
 
     public readonly typesMapLocation: string | undefined;
 
@@ -837,7 +988,7 @@ export class ProjectService {
     /** @internal */
     readonly packageJsonCache: PackageJsonCache;
     /** @internal */
-    private packageJsonFilesMap: ESMap<Path, FileWatcher> | undefined;
+    private packageJsonFilesMap: Map<Path, FileWatcher> | undefined;
     /** @internal */
     private incompleteCompletionsCache: IncompleteCompletionsCache | undefined;
     /** @internal */
@@ -846,7 +997,7 @@ export class ProjectService {
 
     private performanceEventHandler?: PerformanceEventHandler;
 
-    private pendingPluginEnablements?: ESMap<Project, Promise<BeginEnablePluginResult>[]>;
+    private pendingPluginEnablements?: Map<Project, Promise<BeginEnablePluginResult>[]>;
     private currentPluginEnablementPromise?: Promise<void>;
 
     constructor(opts: ProjectServiceOptions) {
@@ -1344,8 +1495,9 @@ export class ProjectService {
 
     /**
      * This is to watch whenever files are added or removed to the wildcard directories
+     *
+     * @internal
      */
-    /** @internal */
     private watchWildcardDirectory(directory: Path, flags: WatchDirectoryFlags, configFileName: NormalizedPath, config: ParsedConfig) {
         return this.watchFactory.watchDirectory(
             directory,
@@ -1701,7 +1853,7 @@ export class ProjectService {
 
         // Cache the host value of file exists and add the info to map of open files impacted by this config file
         const exists = this.host.fileExists(configFileName);
-        let openFilesImpactedByConfigFile: ESMap<Path, boolean> | undefined;
+        let openFilesImpactedByConfigFile: Map<Path, boolean> | undefined;
         if (isOpenScriptInfo(info)) {
             (openFilesImpactedByConfigFile ||= new Map()).set(info.path, false);
         }
@@ -1774,8 +1926,9 @@ export class ProjectService {
     /**
      * Close the config file watcher in the cached ConfigFileExistenceInfo
      *   if there arent any open files that are root of inferred project and there is no parsed config held by any project
+     *
+     * @internal
      */
-    /** @internal */
     private closeConfigFileWatcherOnReleaseOfOpenFile(configFileExistenceInfo: ConfigFileExistenceInfo) {
         // Close the config file watcher if there are no more open files that are root of inferred project
         // or if there are no projects that need to watch this config file existence info
@@ -1822,8 +1975,9 @@ export class ProjectService {
 
     /**
      * This is called by inferred project whenever script info is added as a root
+     *
+     * @internal
      */
-    /** @internal */
     startWatchingConfigFilesForInferredProjectRoot(info: ScriptInfo) {
         Debug.assert(info.isScriptOpen());
         this.forEachConfigFileLocation(info, (canonicalConfigFilePath, configFileName) => {
@@ -1852,8 +2006,9 @@ export class ProjectService {
 
     /**
      * This is called by inferred project whenever root script info is removed from it
+     *
+     * @internal
      */
-    /** @internal */
     stopWatchingConfigFilesForInferredProjectRoot(info: ScriptInfo) {
         this.forEachConfigFileLocation(info, canonicalConfigFilePath => {
             const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
@@ -2168,8 +2323,9 @@ export class ProjectService {
 
     /**
      * Read the config file of the project, and update the project root file names.
+     *
+     * @internal
      */
-    /** @internal */
     private loadConfiguredProject(project: ConfiguredProject, reason: string) {
         tracing?.push(tracing.Phase.Session, "loadConfiguredProject", { configFilePath: project.canonicalConfigFilePath });
         this.sendProjectLoadingStartEvent(project, reason);
@@ -2434,8 +2590,9 @@ export class ProjectService {
 
     /**
      * Reload the file names from config file specs and update the project graph
+     *
+     * @internal
      */
-    /** @internal */
     reloadFileNamesOfConfiguredProject(project: ConfiguredProject) {
         const fileNames = this.reloadFileNamesOfParsedConfig(project.getConfigFilePath(), this.configFileExistenceInfoCache.get(project.canonicalConfigFilePath)!.config!);
         project.updateErrorOnNoInputFiles(fileNames);
@@ -2466,8 +2623,9 @@ export class ProjectService {
 
     /**
      * Read the config file of the project again by clearing the cache and update the project graph
+     *
+     * @internal
      */
-    /** @internal */
     reloadConfiguredProject(project: ConfiguredProject, reason: string, isInitialLoad: boolean, clearSemanticCache: boolean) {
         // At this point, there is no reason to not have configFile in the host
         const host = project.getCachedDirectoryStructureHost();
@@ -2632,8 +2790,9 @@ export class ProjectService {
     /**
      * Returns the projects that contain script info through SymLink
      * Note that this does not return projects in info.containingProjects
+     *
+     * @internal
      */
-    /** @internal */
     getSymlinkedProjects(info: ScriptInfo): MultiMap<Path, Project> | undefined {
         let projects: MultiMap<Path, Project> | undefined;
         if (this.realpathToScriptInfos) {
@@ -3130,7 +3289,7 @@ export class ProjectService {
         });
 
         // Reload Projects
-        this.reloadConfiguredProjectForFiles(this.openFiles as ESMap<Path, NormalizedPath | undefined>, /*clearSemanticCache*/ true, /*delayReload*/ false, returnTrue, "User requested reload projects");
+        this.reloadConfiguredProjectForFiles(this.openFiles as Map<Path, NormalizedPath | undefined>, /*clearSemanticCache*/ true, /*delayReload*/ false, returnTrue, "User requested reload projects");
         this.externalProjects.forEach(project => {
             this.clearSemanticCache(project);
             project.updateGraph();
@@ -3146,7 +3305,7 @@ export class ProjectService {
      * If there is no existing project it just opens the configured project for the config file
      * reloadForInfo provides a way to filter out files to reload configured project for
      */
-    private reloadConfiguredProjectForFiles<T>(openFiles: ESMap<Path, T> | undefined, clearSemanticCache: boolean, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
+    private reloadConfiguredProjectForFiles<T>(openFiles: Map<Path, T> | undefined, clearSemanticCache: boolean, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
         const updatedProjects = new Map<string, true>();
         const reloadChildProject = (child: ConfiguredProject) => {
             if (!updatedProjects.has(child.canonicalConfigFilePath)) {
@@ -4111,7 +4270,7 @@ export class ProjectService {
     }
 
     /** @internal */
-    requestEnablePlugin(project: Project, pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined) {
+    requestEnablePlugin(project: Project, pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<string, any> | undefined) {
         if (!this.host.importPlugin && !this.host.require) {
             this.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
             return;
@@ -4149,8 +4308,9 @@ export class ProjectService {
 
     /**
      * Waits for any ongoing plugin enablement requests to complete.
+     *
+     * @internal
      */
-    /** @internal */
     async waitForPendingPlugins() {
         while (this.currentPluginEnablementPromise) {
             await this.currentPluginEnablementPromise;
@@ -4159,8 +4319,9 @@ export class ProjectService {
 
     /**
      * Starts enabling any requested plugins without waiting for the result.
+     *
+     * @internal
      */
-    /** @internal */
     enableRequestedPlugins() {
         if (this.pendingPluginEnablements) {
             void this.enableRequestedPluginsAsync();

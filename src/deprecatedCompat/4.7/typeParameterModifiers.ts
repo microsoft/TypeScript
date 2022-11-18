@@ -1,5 +1,12 @@
 import {
-    addNodeFactoryPatcher, buildOverload, factory, Identifier, isArray, Modifier, NodeFactory, TypeNode,
+    addNodeFactoryPatcher,
+    buildOverload,
+    factory,
+    Identifier,
+    isArray,
+    Modifier,
+    NodeFactory,
+    TypeNode,
     TypeParameterDeclaration,
 } from "../_namespaces/ts";
 

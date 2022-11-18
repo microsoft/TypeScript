@@ -1,7 +1,7 @@
 [
     "======== Resolving module './mod1' from '/mod2.ts'. ========",
     "Module resolution kind is not specified, using 'NodeJs'.",
-    "Loading module as file / folder, candidate module location '/mod1', target file type 'TypeScript'.",
+    "Loading module as file / folder, candidate module location '/mod1', target file types: TypeScript, Declaration.",
     "File '/mod1.ts' exist - use it as a name resolution result.",
     "======== Module name './mod1' was successfully resolved to '/mod1.ts'. ========",
     "======== Resolving type reference directive 'lib', containing file '/__inferred type names__.ts', root directory '/types'. ========",
