@@ -5694,7 +5694,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (isInstantiationExpressionType) {
                         const instantiationExpressionType = type as InstantiationExpressionType;
                         if (isTypeQueryNode(instantiationExpressionType.node)) {
-                            return factory.cloneNode(instantiationExpressionType.node);
+                            const typeNode = serializeExistingTypeNode(context, instantiationExpressionType.node);
+                            if (typeNode) {
+                                return typeNode;
+                            }
                         }
                         if (context.visitedTypes?.has(typeId)) {
                             return createElidedInformationPlaceholder(context);
