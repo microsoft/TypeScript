@@ -519,7 +519,7 @@ export namespace Debug {
                     }
                 },
                 __debugFlowFlags: { get(this: FlowNodeBase) { return formatEnum(this.flags, (ts as any).FlowFlags, /*isFlags*/ true); } },
-                __debugToString: { value(this: FlowNodeBase) { return formatControlFlowGraph(this); } }
+                __debugToString: { value(this: FlowNodeBase) { return formatControlFlowGraph(this as FlowNode); } }
             });
         }
     }
@@ -912,7 +912,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             return !!(f.flags & hasAntecedentFlags);
         }
 
-        function hasNode(f: FlowNode): f is Extract<FlowNode, { node?: Node }> {
+        function hasNode(f: FlowNode): f is Extract<FlowNode, { node: Node | undefined }> {
             return !!(f.flags & hasNodeFlags);
         }
 

@@ -3889,6 +3889,15 @@ export type FlowNode =
 export interface FlowNodeBase {
     flags: FlowFlags;
     id?: number;     // Node id used by flow type cache in checker
+
+    // Declared here so we can construct flow nodes with properties in a consistent order.
+    /** @internal */ node?: Node;
+    /** @internal */ antecedent?: FlowNode;
+    /** @internal */ antecedents?: FlowNode[];
+    /** @internal */ target?: FlowLabel;
+    /** @internal */ switchStatement?: SwitchStatement;
+    /** @internal */ clauseStart?: number;
+    /** @internal */ clauseEnd?: number;
 }
 
 // FlowStart represents the start of a control flow. For a function expression or arrow
