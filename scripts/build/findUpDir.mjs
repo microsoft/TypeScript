@@ -1,4 +1,4 @@
-import { join, resolve, dirname } from "path";
+import { dirname, join, resolve } from "path";
 import { existsSync } from "fs";
 import url from "url";
 

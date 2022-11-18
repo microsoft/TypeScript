@@ -49,22 +49,22 @@ Info 8    [00:00:55.000] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info 9    [00:00:56.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 10   [00:00:57.000] ======== Resolving module './feature/file2' from '/user/username/projects/myproject/product/src/file1.ts'. ========
 Info 11   [00:00:58.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 12   [00:00:59.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/src/feature/file2', target file type 'TypeScript'.
+Info 12   [00:00:59.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/src/feature/file2', target file types: TypeScript, Declaration.
 Info 13   [00:01:00.000] File '/user/username/projects/myproject/product/src/feature/file2.ts' exist - use it as a name resolution result.
 Info 14   [00:01:01.000] ======== Module name './feature/file2' was successfully resolved to '/user/username/projects/myproject/product/src/feature/file2.ts'. ========
 Info 15   [00:01:02.000] ======== Resolving module '../test/file4' from '/user/username/projects/myproject/product/src/file1.ts'. ========
 Info 16   [00:01:03.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 17   [00:01:04.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/test/file4', target file type 'TypeScript'.
+Info 17   [00:01:04.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/test/file4', target file types: TypeScript, Declaration.
 Info 18   [00:01:05.000] File '/user/username/projects/myproject/product/test/file4.ts' exist - use it as a name resolution result.
 Info 19   [00:01:06.000] ======== Module name '../test/file4' was successfully resolved to '/user/username/projects/myproject/product/test/file4.ts'. ========
 Info 20   [00:01:07.000] ======== Resolving module '../test/src/file3' from '/user/username/projects/myproject/product/src/file1.ts'. ========
 Info 21   [00:01:08.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 22   [00:01:09.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/test/src/file3', target file type 'TypeScript'.
+Info 22   [00:01:09.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/test/src/file3', target file types: TypeScript, Declaration.
 Info 23   [00:01:10.000] File '/user/username/projects/myproject/product/test/src/file3.ts' exist - use it as a name resolution result.
 Info 24   [00:01:11.000] ======== Module name '../test/src/file3' was successfully resolved to '/user/username/projects/myproject/product/test/src/file3.ts'. ========
 Info 25   [00:01:12.000] ======== Resolving module 'module1' from '/user/username/projects/myproject/product/src/file1.ts'. ========
 Info 26   [00:01:13.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 27   [00:01:14.000] Loading module 'module1' from 'node_modules' folder, target file type 'TypeScript'.
+Info 27   [00:01:14.000] Loading module 'module1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info 28   [00:01:15.000] Directory '/user/username/projects/myproject/product/src/node_modules' does not exist, skipping all lookups in it.
 Info 29   [00:01:16.000] File '/user/username/projects/myproject/product/node_modules/module1/package.json' does not exist.
 Info 30   [00:01:17.000] File '/user/username/projects/myproject/product/node_modules/module1.ts' does not exist.
@@ -75,7 +75,7 @@ Info 34   [00:01:21.000] Resolving real path for '/user/username/projects/myproj
 Info 35   [00:01:22.000] ======== Module name 'module1' was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'. ========
 Info 36   [00:01:23.000] ======== Resolving module 'module2' from '/user/username/projects/myproject/product/src/file1.ts'. ========
 Info 37   [00:01:24.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 38   [00:01:25.000] Loading module 'module2' from 'node_modules' folder, target file type 'TypeScript'.
+Info 38   [00:01:25.000] Loading module 'module2' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info 39   [00:01:26.000] Directory '/user/username/projects/myproject/product/src/node_modules' does not exist, skipping all lookups in it.
 Info 40   [00:01:27.000] File '/user/username/projects/myproject/product/node_modules/module2.ts' does not exist.
 Info 41   [00:01:28.000] File '/user/username/projects/myproject/product/node_modules/module2.tsx' does not exist.
@@ -91,13 +91,13 @@ Info 50   [00:01:37.000] ======== Module name 'module2' was successfully resolve
 Info 51   [00:01:38.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product/src/feature/file2.ts 500 undefined WatchType: Closed Script info
 Info 52   [00:01:39.000] ======== Resolving module 'module1' from '/user/username/projects/myproject/product/src/feature/file2.ts'. ========
 Info 53   [00:01:40.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 54   [00:01:41.000] Loading module 'module1' from 'node_modules' folder, target file type 'TypeScript'.
+Info 54   [00:01:41.000] Loading module 'module1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info 55   [00:01:42.000] Directory '/user/username/projects/myproject/product/src/feature/node_modules' does not exist, skipping all lookups in it.
 Info 56   [00:01:43.000] Resolution for module 'module1' was found in cache from location '/user/username/projects/myproject/product/src'.
 Info 57   [00:01:44.000] ======== Module name 'module1' was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'. ========
 Info 58   [00:01:45.000] ======== Resolving module 'module2' from '/user/username/projects/myproject/product/src/feature/file2.ts'. ========
 Info 59   [00:01:46.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 60   [00:01:47.000] Loading module 'module2' from 'node_modules' folder, target file type 'TypeScript'.
+Info 60   [00:01:47.000] Loading module 'module2' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info 61   [00:01:48.000] Directory '/user/username/projects/myproject/product/src/feature/node_modules' does not exist, skipping all lookups in it.
 Info 62   [00:01:49.000] Resolution for module 'module2' was found in cache from location '/user/username/projects/myproject/product/src'.
 Info 63   [00:01:50.000] ======== Module name 'module2' was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'. ========
@@ -108,26 +108,26 @@ Info 67   [00:01:54.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 68   [00:01:55.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product/test/file4.ts 500 undefined WatchType: Closed Script info
 Info 69   [00:01:56.000] ======== Resolving module 'module1' from '/user/username/projects/myproject/product/test/file4.ts'. ========
 Info 70   [00:01:57.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 71   [00:01:58.000] Loading module 'module1' from 'node_modules' folder, target file type 'TypeScript'.
+Info 71   [00:01:58.000] Loading module 'module1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info 72   [00:01:59.000] Directory '/user/username/projects/myproject/product/test/node_modules' does not exist, skipping all lookups in it.
 Info 73   [00:02:00.000] Resolution for module 'module1' was found in cache from location '/user/username/projects/myproject/product'.
 Info 74   [00:02:01.000] ======== Module name 'module1' was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'. ========
 Info 75   [00:02:02.000] ======== Resolving module 'module2' from '/user/username/projects/myproject/product/test/file4.ts'. ========
 Info 76   [00:02:03.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 77   [00:02:04.000] Loading module 'module2' from 'node_modules' folder, target file type 'TypeScript'.
+Info 77   [00:02:04.000] Loading module 'module2' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info 78   [00:02:05.000] Directory '/user/username/projects/myproject/product/test/node_modules' does not exist, skipping all lookups in it.
 Info 79   [00:02:06.000] Resolution for module 'module2' was found in cache from location '/user/username/projects/myproject/product'.
 Info 80   [00:02:07.000] ======== Module name 'module2' was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'. ========
 Info 81   [00:02:08.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product/test/src/file3.ts 500 undefined WatchType: Closed Script info
 Info 82   [00:02:09.000] ======== Resolving module 'module1' from '/user/username/projects/myproject/product/test/src/file3.ts'. ========
 Info 83   [00:02:10.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 84   [00:02:11.000] Loading module 'module1' from 'node_modules' folder, target file type 'TypeScript'.
+Info 84   [00:02:11.000] Loading module 'module1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info 85   [00:02:12.000] Directory '/user/username/projects/myproject/product/test/src/node_modules' does not exist, skipping all lookups in it.
 Info 86   [00:02:13.000] Resolution for module 'module1' was found in cache from location '/user/username/projects/myproject/product/test'.
 Info 87   [00:02:14.000] ======== Module name 'module1' was successfully resolved to '/user/username/projects/myproject/product/node_modules/module1/index.ts'. ========
 Info 88   [00:02:15.000] ======== Resolving module 'module2' from '/user/username/projects/myproject/product/test/src/file3.ts'. ========
 Info 89   [00:02:16.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 90   [00:02:17.000] Loading module 'module2' from 'node_modules' folder, target file type 'TypeScript'.
+Info 90   [00:02:17.000] Loading module 'module2' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info 91   [00:02:18.000] Directory '/user/username/projects/myproject/product/test/src/node_modules' does not exist, skipping all lookups in it.
 Info 92   [00:02:19.000] Resolution for module 'module2' was found in cache from location '/user/username/projects/myproject/product/test'.
 Info 93   [00:02:20.000] ======== Module name 'module2' was successfully resolved to '/user/username/projects/myproject/node_modules/module2/index.ts'. ========

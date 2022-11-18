@@ -1,8 +1,20 @@
 import {
-    emptyArray, findArgument, hasArgument, initializeNodeSystem, initializeWebSystem, Msg,
+    emptyArray,
+    findArgument,
+    hasArgument,
+    initializeNodeSystem,
+    initializeWebSystem,
+    Msg,
     StartInput,
 } from "./_namespaces/ts.server";
-import { Debug, getNodeMajorVersion, setStackTraceLimit, sys, version } from "./_namespaces/ts";
+import {
+    Debug,
+    getNodeMajorVersion,
+    setStackTraceLimit,
+    sys,
+    version,
+} from "./_namespaces/ts";
+
 export * from "./_namespaces/ts";
 
 declare const addEventListener: any;

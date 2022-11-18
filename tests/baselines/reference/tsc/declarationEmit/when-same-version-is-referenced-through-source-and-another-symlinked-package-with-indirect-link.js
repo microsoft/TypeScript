@@ -91,7 +91,7 @@ interface Array<T> { length: number; [n: number]: T; }
 Output::
 ======== Resolving module 'plugin-two' from '/user/username/projects/myproject/plugin-one/index.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'plugin-two' from 'node_modules' folder, target file type 'TypeScript'.
+Loading module 'plugin-two' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Found 'package.json' at '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/package.json'.
 'package.json' does not have a 'typesVersions' field.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two.ts' does not exist.
@@ -101,10 +101,7 @@ File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two.d.ts'
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'dist/commonjs/index.js' that references '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.js'.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.js' does not exist.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.js', target file type 'TypeScript'.
-File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.js.ts' does not exist.
-File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.js.tsx' does not exist.
-File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.js.d.ts' does not exist.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.js', target file types: TypeScript, Declaration.
 File name '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.ts' does not exist.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.tsx' does not exist.
@@ -113,7 +110,7 @@ Resolving real path for '/user/username/projects/myproject/plugin-one/node_modul
 ======== Module name 'plugin-two' was successfully resolved to '/user/username/projects/myproject/plugin-two/dist/commonjs/index.d.ts' with Package ID 'plugin-two/dist/commonjs/index.d.ts@0.1.3'. ========
 ======== Resolving module 'typescript-fsa' from '/user/username/projects/myproject/plugin-one/index.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'typescript-fsa' from 'node_modules' folder, target file type 'TypeScript'.
+Loading module 'typescript-fsa' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Found 'package.json' at '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json'.
 'package.json' does not have a 'typesVersions' field.
 File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa.ts' does not exist.
@@ -129,7 +126,7 @@ Resolving real path for '/user/username/projects/myproject/plugin-one/node_modul
 ======== Module name 'typescript-fsa' was successfully resolved to '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts' with Package ID 'typescript-fsa/index.d.ts@3.0.0-beta-2'. ========
 ======== Resolving module 'typescript-fsa' from '/user/username/projects/myproject/plugin-two/dist/commonjs/index.d.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'typescript-fsa' from 'node_modules' folder, target file type 'TypeScript'.
+Loading module 'typescript-fsa' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/plugin-two/dist/commonjs/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/plugin-two/dist/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/package.json'.
