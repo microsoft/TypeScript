@@ -28,6 +28,7 @@ describe("unittests:: Public APIs", () => {
                 ...ts.getDefaultCompilerOptions(),
                 strict: true,
                 exactOptionalPropertyTypes: true,
+                lib: ["lib.es2018.d.ts"],
             };
             const host = new fakes.CompilerHost(sys, options);
             const result = compiler.compileFiles(host, [`${vfs.srcFolder}/${fileName}`], options);

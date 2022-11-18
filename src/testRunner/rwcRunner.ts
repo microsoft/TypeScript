@@ -88,7 +88,7 @@ export function runRWCTest(jsonPath: string) {
                 }
 
                 // Deduplicate files so they are only printed once in baselines (they are deduplicated within the compiler already)
-                const uniqueNames = new ts.Map<string, true>();
+                const uniqueNames = new Map<string, true>();
                 for (const fileName of fileNames) {
                     // Must maintain order, build result list while checking map
                     const normalized = ts.normalizeSlashes(Harness.IO.resolvePath(fileName)!);
