@@ -1,5 +1,12 @@
 import * as ts from "../_namespaces/ts";
-import { NamedSourceText, newProgram, ProgramWithSourceTexts, SourceText, updateProgram, updateProgramText } from "./helpers";
+import {
+    NamedSourceText,
+    newProgram,
+    ProgramWithSourceTexts,
+    SourceText,
+    updateProgram,
+    updateProgramText,
+} from "./helpers";
 
 describe("unittests:: builder", () => {
     it("emits dependent files", () => {
@@ -74,7 +81,7 @@ describe("unittests:: builder", () => {
 });
 
 function makeAssertChanges(getProgram: () => ts.Program): (fileNames: readonly string[]) => void {
-    const host: ts.BuilderProgramHost = { useCaseSensitiveFileNames: ts.returnTrue };
+    const host: ts.BuilderProgramHost = { };
     let builderProgram: ts.EmitAndSemanticDiagnosticsBuilderProgram | undefined;
     return fileNames => {
         const program = getProgram();
@@ -88,7 +95,7 @@ function makeAssertChanges(getProgram: () => ts.Program): (fileNames: readonly s
 }
 
 function makeAssertChangesWithCancellationToken(getProgram: () => ts.Program): (fileNames: readonly string[], cancelAfterEmitLength?: number) => void {
-    const host: ts.BuilderProgramHost = { useCaseSensitiveFileNames: ts.returnTrue };
+    const host: ts.BuilderProgramHost = { };
     let builderProgram: ts.EmitAndSemanticDiagnosticsBuilderProgram | undefined;
     let cancel = false;
     const cancellationToken: ts.CancellationToken = {

@@ -1,7 +1,17 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { commonFile1, commonFile2 } from "../tscWatch/helpers";
-import { createSession, TestSession } from "./helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    commonFile1,
+    commonFile2,
+} from "../tscWatch/helpers";
+import {
+    createSession,
+    TestSession,
+} from "./helpers";
 
 describe("unittests:: tsserver:: inlayHints", () => {
     const configFile: File = {

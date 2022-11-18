@@ -1,6 +1,25 @@
 import * as ts from "../../_namespaces/ts";
-import { baselineTsserverLogs, checkProjectActualFiles, createHostWithSolutionBuild, createLoggerWithInMemoryLogs, createProjectService, createSession, makeReferenceItem, openFilesForSession, protocolFileLocationFromSubstring, protocolLocationFromSubstring, verifyGetErrRequest } from "./helpers";
-import { createServerHost, File, getTsBuildProjectFile, getTsBuildProjectFilePath, libFile, SymLink } from "../virtualFileSystemWithWatch";
+import {
+    baselineTsserverLogs,
+    checkProjectActualFiles,
+    createHostWithSolutionBuild,
+    createLoggerWithInMemoryLogs,
+    createProjectService,
+    createSession,
+    makeReferenceItem,
+    openFilesForSession,
+    protocolFileLocationFromSubstring,
+    protocolLocationFromSubstring,
+    verifyGetErrRequest,
+} from "./helpers";
+import {
+    createServerHost,
+    File,
+    getTsBuildProjectFile,
+    getTsBuildProjectFilePath,
+    libFile,
+    SymLink,
+} from "../virtualFileSystemWithWatch";
 import { solutionBuildWithBaseline } from "../tscWatch/helpers";
 
 describe("unittests:: tsserver:: with project references and tsbuild", () => {

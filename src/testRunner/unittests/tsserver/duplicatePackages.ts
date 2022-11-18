@@ -1,6 +1,13 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { createSession, openFilesForSession, executeSessionRequest } from "./helpers";
+import {
+    createServerHost,
+    File,
+} from "../virtualFileSystemWithWatch";
+import {
+    createSession,
+    executeSessionRequest,
+    openFilesForSession,
+} from "./helpers";
 
 describe("unittests:: tsserver:: duplicate packages", () => {
     // Tests that 'moduleSpecifiers.ts' will import from the redirecting file, and not from the file it redirects to, if that can provide a global module specifier.

@@ -3,8 +3,16 @@ import * as ts from "./_namespaces/ts";
 import * as compiler from "./_namespaces/compiler";
 import * as Utils from "./_namespaces/Utils";
 import {
-    Baseline, Compiler, FileBasedTest, FileBasedTestConfiguration, getFileBasedTestConfigurationDescription,
-    getFileBasedTestConfigurations, IO, RunnerBase, TestCaseParser, TestRunnerKind,
+    Baseline,
+    Compiler,
+    FileBasedTest,
+    FileBasedTestConfiguration,
+    getFileBasedTestConfigurationDescription,
+    getFileBasedTestConfigurations,
+    IO,
+    RunnerBase,
+    TestCaseParser,
+    TestRunnerKind,
 } from "./_namespaces/Harness";
 
 export const enum CompilerTestType {

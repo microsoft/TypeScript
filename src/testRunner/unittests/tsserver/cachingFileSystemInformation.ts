@@ -1,6 +1,22 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile, SymLink, TestServerHost } from "../virtualFileSystemWithWatch";
-import { Logger, createProjectService, createLoggerWithInMemoryLogs, baselineTsserverLogs, createSession, openFilesForSession, makeSessionRequest, checkProjectActualFiles, checkNumberOfProjects } from "./helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+    SymLink,
+    TestServerHost,
+} from "../virtualFileSystemWithWatch";
+import {
+    baselineTsserverLogs,
+    checkNumberOfProjects,
+    checkProjectActualFiles,
+    createLoggerWithInMemoryLogs,
+    createProjectService,
+    createSession,
+    Logger,
+    makeSessionRequest,
+    openFilesForSession,
+} from "./helpers";
 
 describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectSystem CachingFileSystemInformation", () => {
     enum CalledMapsWithSingleArg {

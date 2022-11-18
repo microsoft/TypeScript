@@ -1,11 +1,44 @@
 import {
-    CancellationToken, CompilerHost, CompilerOptions, CustomTransformers, Diagnostic, DiagnosticWithLocation,
-    DocumentHighlights, DocumentPositionMapper, EmitOutput, ExportInfoMap, FileReference,
-    GetEffectiveTypeRootsHost, HasChangedAutomaticTypeDirectiveNames, HasInvalidatedResolutions, LineAndCharacter,
-    MinimalResolutionCacheHost, ModuleResolutionCache, ModuleResolutionInfo, ModuleSpecifierCache,
-    ParsedCommandLine, Path, Program, ProjectReference, ResolutionMode, ResolvedModule, ResolvedModuleWithFailedLookupLocations,
-    ResolvedProjectReference, ResolvedTypeReferenceDirective, ScriptKind, SourceFile, SourceFileLike, SourceMapper,
-    Symbol, SymlinkCache, TextChangeRange, textChanges, TextRange, TextSpan, TypeReferenceDirectiveResolutionInfo, UserPreferences,
+    CancellationToken,
+    CompilerHost,
+    CompilerOptions,
+    CustomTransformers,
+    Diagnostic,
+    DiagnosticWithLocation,
+    DocumentHighlights,
+    DocumentPositionMapper,
+    EmitOutput,
+    ExportInfoMap,
+    FileReference,
+    GetEffectiveTypeRootsHost,
+    HasChangedAutomaticTypeDirectiveNames,
+    HasInvalidatedResolutions,
+    LineAndCharacter,
+    MinimalResolutionCacheHost,
+    ModuleResolutionCache,
+    ModuleResolutionInfo,
+    ModuleSpecifierCache,
+    ParsedCommandLine,
+    Path,
+    Program,
+    ProjectReference,
+    ResolutionMode,
+    ResolvedModule,
+    ResolvedModuleWithFailedLookupLocations,
+    ResolvedProjectReference,
+    ResolvedTypeReferenceDirective,
+    ScriptKind,
+    SourceFile,
+    SourceFileLike,
+    SourceMapper,
+    Symbol,
+    SymlinkCache,
+    TextChangeRange,
+    textChanges,
+    TextRange,
+    TextSpan,
+    TypeReferenceDirectiveResolutionInfo,
+    UserPreferences,
 } from "./_namespaces/ts";
 
 declare module "../compiler/types" {
@@ -303,6 +336,7 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
      */
     readDirectory?(path: string, extensions?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): string[];
     realpath?(path: string): string;
+    /** @internal */ createHash?(data: string): string;
 
     /*
      * Unlike `realpath and `readDirectory`, `readFile` and `fileExists` are now _required_
