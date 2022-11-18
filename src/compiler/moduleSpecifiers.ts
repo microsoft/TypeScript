@@ -16,7 +16,7 @@ import {
     ModuleSpecifierResolutionHost, NodeFlags, NodeModulePathParts, normalizePath, Path, pathContainsNodeModules,
     pathIsBareSpecifier, pathIsRelative, PropertyAccessExpression, removeFileExtension, removeSuffix, resolvePath,
     ScriptKind, some, SourceFile, startsWith, startsWithDirectory, stringContains, StringLiteral, Symbol, SymbolFlags,
-    toPath, tryGetExtensionFromPath, tryParsePatterns, TypeChecker, UserPreferences, shouldAllowImportingTsExtension, ResolutionMode, ModuleSpecifierEnding, getModuleSpecifierEndingPreference,
+    toPath, tryGetExtensionFromPath, tryParsePatterns, TypeChecker, UserPreferences, shouldAllowImportingTsExtension, ResolutionMode, ModuleSpecifierEnding, getModuleSpecifierEndingPreference, isDeclarationFileName,
 } from "./_namespaces/ts";
 
 // Used by importFixes, getEditsForFileRename, and declaration emit to synthesize import module specifiers.
@@ -74,10 +74,10 @@ function getPreferences(
             if (endsWith(oldImportSpecifier, "/index")) return ModuleSpecifierEnding.Index;
         }
         return getModuleSpecifierEndingPreference(
-          importModuleSpecifierEnding,
-          importingSourceFile.impliedNodeFormat,
-          compilerOptions,
-          importingSourceFile);
+            importModuleSpecifierEnding,
+            importingSourceFile.impliedNodeFormat,
+            compilerOptions,
+            importingSourceFile);
     }
 }
 
@@ -937,10 +937,19 @@ function getPathsRelativeToRootDirs(path: string, rootDirs: readonly string[], g
 }
 
 function processEnding(fileName: string, ending: ModuleSpecifierEnding, options: CompilerOptions, host?: ModuleSpecifierResolutionHost): string {
-    if (fileExtensionIsOneOf(fileName, [Extension.Json, Extension.Mjs, Extension.Cjs])) return fileName;
+    if (fileExtensionIsOneOf(fileName, [Extension.Json, Extension.Mjs, Extension.Cjs])) {
+        return fileName;
+    }
+
     const noExtension = removeFileExtension(fileName);
-    if (fileName === noExtension) return fileName;
-    if (fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Dcts, Extension.Cts])) return noExtension + getJSExtensionForFile(fileName, options);
+    if (fileName === noExtension) {
+        return fileName;
+    }
+
+    if (fileExtensionIsOneOf(fileName, [Extension.Dmts, Extension.Mts, Extension.Dcts, Extension.Cts])) {
+        return noExtension + getJSExtensionForFile(fileName, options);
+    }
+
     switch (ending) {
         case ModuleSpecifierEnding.Minimal:
             const withoutIndex = removeSuffix(noExtension, "/index");
@@ -955,7 +964,9 @@ function processEnding(fileName: string, ending: ModuleSpecifierEnding, options:
         case ModuleSpecifierEnding.JsExtension:
             return noExtension + getJSExtensionForFile(fileName, options);
         case ModuleSpecifierEnding.TsExtension:
-            return fileName;
+            // For now, we don't know if this import is going to be type-only, which means we don't
+            // know if a .d.ts extension is valid, so use the .js extension.
+            return isDeclarationFileName(fileName) ? noExtension + getJSExtensionForFile(fileName, options) : fileName;
         default:
             return Debug.assertNever(ending);
     }

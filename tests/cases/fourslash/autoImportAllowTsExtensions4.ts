@@ -14,7 +14,7 @@
 //// export function Component() { return null; }
 
 // @Filename: /main.ts
-//// import { Component } from "./Component.tsx";
+//// import { Component } from "./local.js";
 //// /**/
 
 verify.baselineAutoImports("");
