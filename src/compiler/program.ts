@@ -2412,8 +2412,20 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         });
     }
 
+    /** Remove any diagnostics from input array that have the duplicate message, start, and file */
+    function removeDuplicateDiagnostics(diagnostics: Diagnostic[]){
+        return diagnostics.filter((current, index, array) =>
+                                    index === array.findIndex((predicate) => {
+                                        const sameMessage = predicate.messageText === current.messageText;
+                                        const sameStart = predicate.start === current.start;
+                                        const sameFile = predicate.file && current.file && isSameFile(predicate.file.path, current.file.path);
+                                        return sameMessage && sameStart && sameFile;
+                                    }));
+    }
+
     function getMergedBindAndCheckDiagnostics(sourceFile: SourceFile, includeBindAndCheckDiagnostics: boolean, ...allDiagnostics: (readonly Diagnostic[] | undefined)[]) {
-        const flatDiagnostics = flatten(allDiagnostics);
+        const flatDiagnostics = removeDuplicateDiagnostics(flatten(allDiagnostics));
+
         if (!includeBindAndCheckDiagnostics || !sourceFile.commentDirectives?.length) {
             return flatDiagnostics;
         }
