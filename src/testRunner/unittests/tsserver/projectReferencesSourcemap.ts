@@ -1,6 +1,19 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile, TestServerHost } from "../virtualFileSystemWithWatch";
-import { TestSession, closeFilesForSession, openFilesForSession, createHostWithSolutionBuild, createSession, createLoggerWithInMemoryLogs, baselineTsserverLogs } from "./helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+    TestServerHost,
+} from "../virtualFileSystemWithWatch";
+import {
+    baselineTsserverLogs,
+    closeFilesForSession,
+    createHostWithSolutionBuild,
+    createLoggerWithInMemoryLogs,
+    createSession,
+    openFilesForSession,
+    TestSession,
+} from "./helpers";
 
 describe("unittests:: tsserver:: with project references and tsbuild source map", () => {
     const dependecyLocation = `/user/username/projects/myproject/dependency`;

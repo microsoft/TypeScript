@@ -1,4 +1,8 @@
-import { loadProjectFromFiles, noChangeRun, verifyTscWithEdits } from "../tsc/helpers";
+import {
+    loadProjectFromFiles,
+    noChangeRun,
+    verifyTscWithEdits,
+} from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: noEmit", () => {
     function verifyNoEmitWorker(subScenario: string, aTsContent: string, commandLineArgs: readonly string[]) {

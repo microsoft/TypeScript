@@ -1,6 +1,14 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { createSession, openFilesForSession, executeSessionRequest, makeReferenceItem } from "./helpers";
+import {
+    createServerHost,
+    File,
+} from "../virtualFileSystemWithWatch";
+import {
+    createSession,
+    executeSessionRequest,
+    makeReferenceItem,
+    openFilesForSession,
+} from "./helpers";
 
 describe("unittests:: tsserver:: getFileReferences", () => {
     const importA = `import "./a";`;

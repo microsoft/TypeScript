@@ -2783,6 +2783,7 @@ declare namespace ts {
     interface EnumType extends Type {
     }
     enum ObjectFlags {
+        None = 0,
         Class = 1,
         Interface = 2,
         Reference = 4,
@@ -2953,6 +2954,7 @@ declare namespace ts {
         declaration?: IndexSignatureDeclaration;
     }
     enum InferencePriority {
+        None = 0,
         NakedTypeVariable = 1,
         SpeculativeTuple = 2,
         SubstituteSource = 4,
@@ -5495,10 +5497,6 @@ declare namespace ts {
         affected: SourceFile | Program;
     } | undefined;
     interface BuilderProgramHost {
-        /**
-         * return true if file names are treated with case sensitivity
-         */
-        useCaseSensitiveFileNames(): boolean;
         /**
          * If provided this would be used this hash instead of actual file shape text for detecting changes
          */

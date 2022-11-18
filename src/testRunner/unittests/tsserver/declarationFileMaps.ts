@@ -1,6 +1,26 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { DocumentSpanFromSubstring, textSpanFromSubstring, TestSession, openFilesForSession, closeFilesForSession, createSession, checkNumberOfProjects, checkProjectActualFiles, executeSessionRequest, protocolFileLocationFromSubstring, protocolFileSpanWithContextFromSubstring, protocolTextSpanFromSubstring, protocolFileSpanFromSubstring, makeReferenceItem, protocolLocationFromSubstring, protocolRenameSpanFromSubstring } from "./helpers";
+import {
+    createServerHost,
+    File,
+} from "../virtualFileSystemWithWatch";
+import {
+    checkNumberOfProjects,
+    checkProjectActualFiles,
+    closeFilesForSession,
+    createSession,
+    DocumentSpanFromSubstring,
+    executeSessionRequest,
+    makeReferenceItem,
+    openFilesForSession,
+    protocolFileLocationFromSubstring,
+    protocolFileSpanFromSubstring,
+    protocolFileSpanWithContextFromSubstring,
+    protocolLocationFromSubstring,
+    protocolRenameSpanFromSubstring,
+    protocolTextSpanFromSubstring,
+    TestSession,
+    textSpanFromSubstring,
+} from "./helpers";
 
 function documentSpanFromSubstring({ file, text, contextText, options, contextOptions }: DocumentSpanFromSubstring): ts.DocumentSpan {
     const contextSpan = contextText !== undefined ? documentSpanFromSubstring({ file, text: contextText, options: contextOptions }) : undefined;

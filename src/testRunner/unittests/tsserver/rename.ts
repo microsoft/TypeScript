@@ -1,6 +1,16 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { createSession, openFilesForSession, executeSessionRequest, protocolFileLocationFromSubstring, protocolTextSpanFromSubstring, protocolRenameSpanFromSubstring } from "./helpers";
+import {
+    createServerHost,
+    File,
+} from "../virtualFileSystemWithWatch";
+import {
+    createSession,
+    executeSessionRequest,
+    openFilesForSession,
+    protocolFileLocationFromSubstring,
+    protocolRenameSpanFromSubstring,
+    protocolTextSpanFromSubstring,
+} from "./helpers";
 
 describe("unittests:: tsserver:: rename", () => {
     it("works with fileToRename", () => {

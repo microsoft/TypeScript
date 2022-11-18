@@ -1,9 +1,24 @@
 import {
-    addToSeen, Diagnostics, factory, findChildOfKind, getSymbolId, getTokenAtPosition, isVariableDeclarationList,
-    Program, SourceFile, Symbol, SyntaxKind, textChanges, Token, tryCast,
+    addToSeen,
+    Diagnostics,
+    factory,
+    findChildOfKind,
+    getSymbolId,
+    getTokenAtPosition,
+    isVariableDeclarationList,
+    Program,
+    SourceFile,
+    Symbol,
+    SyntaxKind,
+    textChanges,
+    Token,
+    tryCast,
 } from "../_namespaces/ts";
 import {
-    createCodeFixActionMaybeFixAll, createCombinedCodeActions, eachDiagnostic, registerCodeFix,
+    createCodeFixActionMaybeFixAll,
+    createCombinedCodeActions,
+    eachDiagnostic,
+    registerCodeFix,
 } from "../_namespaces/ts.codefix";
 
 const fixId = "fixConvertConstToLet";

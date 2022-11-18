@@ -1,5 +1,8 @@
 import { FormattingContext } from "../_namespaces/ts.formatting";
-import { emptyArray, SyntaxKind } from "../_namespaces/ts";
+import {
+    emptyArray,
+    SyntaxKind,
+} from "../_namespaces/ts";
 
 /** @internal */
 export interface Rule {
@@ -17,6 +20,7 @@ export const anyContext: readonly ContextPredicate[] = emptyArray;
 
 /** @internal */
 export const enum RuleAction {
+    None                       = 0,
     StopProcessingSpaceActions = 1 << 0,
     StopProcessingTokenActions = 1 << 1,
     InsertSpace                = 1 << 2,

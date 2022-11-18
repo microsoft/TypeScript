@@ -1,4 +1,12 @@
-import { appendText, loadProjectFromDisk, loadProjectFromFiles, noChangeRun, replaceText, verifyTsc, verifyTscWithEdits } from "../tsc/helpers";
+import {
+    appendText,
+    loadProjectFromDisk,
+    loadProjectFromFiles,
+    noChangeRun,
+    replaceText,
+    verifyTsc,
+    verifyTscWithEdits,
+} from "../tsc/helpers";
 import { dedent } from "../../_namespaces/Utils";
 
 describe("unittests:: tsbuild:: configFileErrors:: when tsconfig extends the missing file", () => {
