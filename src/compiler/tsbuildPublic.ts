@@ -1,31 +1,136 @@
 import * as ts from "./_namespaces/ts";
 import {
-    AffectedFileResult, arrayToMap, assertType, BuilderProgram, BuildInfo, CancellationToken, canJsonReportNoInputFiles,
-    changeCompilerHostLikeToUseCache, clearMap, closeFileWatcher, closeFileWatcherOf, commonOptionsWithBuild,
-    CompilerHost, CompilerOptions, CompilerOptionsValue, ConfigFileProgramReloadLevel, convertToRelativePath,
-    copyProperties, createCompilerDiagnostic, createCompilerHostFromProgramHost, createDiagnosticCollection,
-    createDiagnosticReporter, createGetCanonicalFileName, createModuleResolutionCache, CreateProgram, createProgramHost,
-    createTypeReferenceDirectiveResolutionCache, createWatchFactory, createWatchHost, CustomTransformers, Debug,
-    Diagnostic, DiagnosticCollection, DiagnosticMessage, DiagnosticReporter, Diagnostics,
-    EmitAndSemanticDiagnosticsBuilderProgram, emitFilesAndReportErrors, EmitResult, emitUsingBuildInfo, emptyArray,
-    ESMap, ExitStatus, ExtendedConfigCacheEntry, FileWatcher, FileWatcherCallback, findIndex,
-    flattenDiagnosticMessageText, forEach, ForegroundColorEscapeSequences, formatColorAndReset, getAllProjectOutputs,
-    getBuildInfoFileVersionMap, GetCanonicalFileName, getConfigFileParsingDiagnostics, getDirectoryPath, getEntries,
-    getErrorCountForSummary, getFileNamesFromConfigSpecs, getFilesInErrorForSummary, getFirstProjectOutput,
-    getLocaleTimeString, getNormalizedAbsolutePath, getParsedCommandLineOfConfigFile, getPendingEmitKind,
-    getSourceFileVersionAsHashFromText, getTsBuildInfoEmitOutputFilePath, getWatchErrorSummaryDiagnosticMessage,
-    hasProperty, identity, isArray, isIgnoredFileFromWildCardWatching, isIncrementalCompilation, isString, listFiles,
-    loadWithModeAwareCache, loadWithTypeDirectiveCache, map, Map, maybeBind, missingFileModifiedTime, ModuleKind,
-    ModuleResolutionCache, mutateMap, mutateMapSkippingNewValues, noop, outFile, OutputFile, ParseConfigFileHost,
-    parseConfigHostFromCompilerHostLike, ParsedCommandLine, Path, PollingInterval, Program, ProgramBuildInfo,
-    ProgramBundleEmitBuildInfo, ProgramHost, ProgramMultiFileEmitBuildInfo, readBuilderProgram, ReadBuildProgramHost,
-    resolveConfigFileProjectName, ResolvedConfigFileName, ResolvedProjectReference, ResolvedTypeReferenceDirective,
-    resolveModuleName, resolvePath, resolveProjectReferencePath, resolveTypeReferenceDirective, returnUndefined,
-    SemanticDiagnosticsBuilderProgram, Set, setGetSourceFileAsHashVersioned, SharedExtendedConfigFileWatcher, some,
-    SourceFile, Status, sys, System, TypeReferenceDirectiveResolutionCache, unorderedRemoveItem,
-    updateErrorForNoInputFiles, updateSharedExtendedConfigFileWatcher, updateWatchingWildcardDirectories,
-    UpToDateStatus, UpToDateStatusType, version, WatchFactory, WatchHost, WatchOptions, WatchStatusReporter, WatchType,
-    WildcardDirectoryWatcher, writeFile, WriteFileCallback,
+    AffectedFileResult,
+    arrayToMap,
+    assertType,
+    BuilderProgram,
+    BuildInfo,
+    CancellationToken,
+    canJsonReportNoInputFiles,
+    changeCompilerHostLikeToUseCache,
+    clearMap,
+    closeFileWatcher,
+    closeFileWatcherOf,
+    commonOptionsWithBuild,
+    CompilerHost,
+    CompilerOptions,
+    CompilerOptionsValue,
+    ConfigFileProgramReloadLevel,
+    convertToRelativePath,
+    copyProperties,
+    createCompilerDiagnostic,
+    createCompilerHostFromProgramHost,
+    createDiagnosticCollection,
+    createDiagnosticReporter,
+    createGetCanonicalFileName,
+    createModuleResolutionCache,
+    CreateProgram,
+    createProgramHost,
+    createTypeReferenceDirectiveResolutionCache,
+    createWatchFactory,
+    createWatchHost,
+    CustomTransformers,
+    Debug,
+    Diagnostic,
+    DiagnosticCollection,
+    DiagnosticMessage,
+    DiagnosticReporter,
+    Diagnostics,
+    EmitAndSemanticDiagnosticsBuilderProgram,
+    emitFilesAndReportErrors,
+    EmitResult,
+    emitUsingBuildInfo,
+    emptyArray,
+    ExitStatus,
+    ExtendedConfigCacheEntry,
+    FileWatcher,
+    FileWatcherCallback,
+    findIndex,
+    flattenDiagnosticMessageText,
+    forEach,
+    ForegroundColorEscapeSequences,
+    formatColorAndReset,
+    getAllProjectOutputs,
+    getBuildInfoFileVersionMap,
+    GetCanonicalFileName,
+    getConfigFileParsingDiagnostics,
+    getDirectoryPath,
+    getEntries,
+    getErrorCountForSummary,
+    getFileNamesFromConfigSpecs,
+    getFilesInErrorForSummary,
+    getFirstProjectOutput,
+    getLocaleTimeString,
+    getNormalizedAbsolutePath,
+    getParsedCommandLineOfConfigFile,
+    getPendingEmitKind,
+    getSourceFileVersionAsHashFromText,
+    getTsBuildInfoEmitOutputFilePath,
+    getWatchErrorSummaryDiagnosticMessage,
+    hasProperty,
+    identity,
+    isArray,
+    isIgnoredFileFromWildCardWatching,
+    isIncrementalCompilation,
+    isString,
+    listFiles,
+    loadWithModeAwareCache,
+    loadWithTypeDirectiveCache,
+    map,
+    maybeBind,
+    missingFileModifiedTime,
+    ModuleResolutionCache,
+    mutateMap,
+    mutateMapSkippingNewValues,
+    noop,
+    outFile,
+    OutputFile,
+    ParseConfigFileHost,
+    parseConfigHostFromCompilerHostLike,
+    ParsedCommandLine,
+    Path,
+    PollingInterval,
+    Program,
+    ProgramBuildInfo,
+    ProgramBundleEmitBuildInfo,
+    ProgramHost,
+    ProgramMultiFileEmitBuildInfo,
+    readBuilderProgram,
+    ReadBuildProgramHost,
+    ResolutionMode,
+    resolveConfigFileProjectName,
+    ResolvedConfigFileName,
+    ResolvedProjectReference,
+    ResolvedTypeReferenceDirective,
+    resolveModuleName,
+    resolvePath,
+    resolveProjectReferencePath,
+    resolveTypeReferenceDirective,
+    returnUndefined,
+    SemanticDiagnosticsBuilderProgram,
+    setGetSourceFileAsHashVersioned,
+    SharedExtendedConfigFileWatcher,
+    some,
+    SourceFile,
+    Status,
+    sys,
+    System,
+    TypeReferenceDirectiveResolutionCache,
+    unorderedRemoveItem,
+    updateErrorForNoInputFiles,
+    updateSharedExtendedConfigFileWatcher,
+    updateWatchingWildcardDirectories,
+    UpToDateStatus,
+    UpToDateStatusType,
+    version,
+    WatchFactory,
+    WatchHost,
+    WatchOptions,
+    WatchStatusReporter,
+    WatchType,
+    WildcardDirectoryWatcher,
+    writeFile,
+    WriteFileCallback,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -89,7 +194,7 @@ enum BuildResultFlags {
 /** @internal */
 export type ResolvedConfigFilePath = ResolvedConfigFileName & Path;
 
-function getOrCreateValueFromConfigFileMap<T>(configFileMap: ESMap<ResolvedConfigFilePath, T>, resolved: ResolvedConfigFilePath, createT: () => T): T {
+function getOrCreateValueFromConfigFileMap<T>(configFileMap: Map<ResolvedConfigFilePath, T>, resolved: ResolvedConfigFilePath, createT: () => T): T {
     const existingValue = configFileMap.get(resolved);
     let newValue: T | undefined;
     if (!existingValue) {
@@ -99,7 +204,7 @@ function getOrCreateValueFromConfigFileMap<T>(configFileMap: ESMap<ResolvedConfi
     return existingValue || newValue!;
 }
 
-function getOrCreateValueMapFromConfigFileMap<K extends string, V>(configFileMap: ESMap<ResolvedConfigFilePath, ESMap<K, V>>, resolved: ResolvedConfigFilePath): ESMap<K, V> {
+function getOrCreateValueMapFromConfigFileMap<K extends string, V>(configFileMap: Map<ResolvedConfigFilePath, Map<K, V>>, resolved: ResolvedConfigFilePath): Map<K, V> {
     return getOrCreateValueFromConfigFileMap(configFileMap, resolved, () => new Map());
 }
 
@@ -280,17 +385,17 @@ interface SolutionBuilderState<T extends BuilderProgram = BuilderProgram> extend
     readonly rootNames: readonly string[];
     readonly baseWatchOptions: WatchOptions | undefined;
 
-    readonly resolvedConfigFilePaths: ESMap<string, ResolvedConfigFilePath>;
-    readonly configFileCache: ESMap<ResolvedConfigFilePath, ConfigFileCacheEntry>;
+    readonly resolvedConfigFilePaths: Map<string, ResolvedConfigFilePath>;
+    readonly configFileCache: Map<ResolvedConfigFilePath, ConfigFileCacheEntry>;
     /** Map from config file name to up-to-date status */
-    readonly projectStatus: ESMap<ResolvedConfigFilePath, UpToDateStatus>;
-    readonly extendedConfigCache: ESMap<string, ExtendedConfigCacheEntry>;
-    readonly buildInfoCache: ESMap<ResolvedConfigFilePath, BuildInfoCacheEntry>;
+    readonly projectStatus: Map<ResolvedConfigFilePath, UpToDateStatus>;
+    readonly extendedConfigCache: Map<string, ExtendedConfigCacheEntry>;
+    readonly buildInfoCache: Map<ResolvedConfigFilePath, BuildInfoCacheEntry>;
 
-    readonly builderPrograms: ESMap<ResolvedConfigFilePath, T>;
-    readonly diagnostics: ESMap<ResolvedConfigFilePath, readonly Diagnostic[]>;
-    readonly projectPendingBuild: ESMap<ResolvedConfigFilePath, ConfigFileProgramReloadLevel>;
-    readonly projectErrorsReported: ESMap<ResolvedConfigFilePath, true>;
+    readonly builderPrograms: Map<ResolvedConfigFilePath, T>;
+    readonly diagnostics: Map<ResolvedConfigFilePath, readonly Diagnostic[]>;
+    readonly projectPendingBuild: Map<ResolvedConfigFilePath, ConfigFileProgramReloadLevel>;
+    readonly projectErrorsReported: Map<ResolvedConfigFilePath, true>;
 
     readonly compilerHost: CompilerHost & ReadBuildProgramHost;
     readonly moduleResolutionCache: ModuleResolutionCache | undefined;
@@ -307,15 +412,15 @@ interface SolutionBuilderState<T extends BuilderProgram = BuilderProgram> extend
 
     // Watch state
     readonly watch: boolean;
-    readonly allWatchedWildcardDirectories: ESMap<ResolvedConfigFilePath, ESMap<string, WildcardDirectoryWatcher>>;
-    readonly allWatchedInputFiles: ESMap<ResolvedConfigFilePath, ESMap<Path, FileWatcher>>;
-    readonly allWatchedConfigFiles: ESMap<ResolvedConfigFilePath, FileWatcher>;
-    readonly allWatchedExtendedConfigFiles: ESMap<Path, SharedExtendedConfigFileWatcher<ResolvedConfigFilePath>>;
-    readonly allWatchedPackageJsonFiles: ESMap<ResolvedConfigFilePath, ESMap<Path, FileWatcher>>;
-    readonly filesWatched: ESMap<Path, FileWatcherWithModifiedTime | Date>;
-    readonly outputTimeStamps: ESMap<ResolvedConfigFilePath, ESMap<Path, Date>>;
+    readonly allWatchedWildcardDirectories: Map<ResolvedConfigFilePath, Map<string, WildcardDirectoryWatcher>>;
+    readonly allWatchedInputFiles: Map<ResolvedConfigFilePath, Map<Path, FileWatcher>>;
+    readonly allWatchedConfigFiles: Map<ResolvedConfigFilePath, FileWatcher>;
+    readonly allWatchedExtendedConfigFiles: Map<Path, SharedExtendedConfigFileWatcher<ResolvedConfigFilePath>>;
+    readonly allWatchedPackageJsonFiles: Map<ResolvedConfigFilePath, Map<Path, FileWatcher>>;
+    readonly filesWatched: Map<Path, FileWatcherWithModifiedTime | Date>;
+    readonly outputTimeStamps: Map<ResolvedConfigFilePath, Map<Path, Date>>;
 
-    readonly lastCachedPackageJsonLookups: ESMap<ResolvedConfigFilePath, readonly (readonly [Path, object | boolean])[] | undefined>;
+    readonly lastCachedPackageJsonLookups: Map<ResolvedConfigFilePath, readonly (readonly [Path, object | boolean])[] | undefined>;
 
     timerToBuildInvalidatedProject: any;
     reportFileChangeDetected: boolean;
@@ -339,14 +444,14 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
     const moduleResolutionCache = !compilerHost.resolveModuleNames ? createModuleResolutionCache(currentDirectory, getCanonicalFileName) : undefined;
     const typeReferenceDirectiveResolutionCache = !compilerHost.resolveTypeReferenceDirectives ? createTypeReferenceDirectiveResolutionCache(currentDirectory, getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache()) : undefined;
     if (!compilerHost.resolveModuleNames) {
-        const loader = (moduleName: string, resolverMode: ModuleKind.CommonJS | ModuleKind.ESNext | undefined, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) =>
+        const loader = (moduleName: string, resolverMode: ResolutionMode, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) =>
             resolveModuleName(moduleName, containingFile, state.projectCompilerOptions, compilerHost, moduleResolutionCache, redirectedReference, resolverMode).resolvedModule;
         compilerHost.resolveModuleNames = (moduleNames, containingFile, _reusedNames, redirectedReference, _options, containingSourceFile, resolutionInfo) =>
             loadWithModeAwareCache(Debug.checkEachDefined(moduleNames), Debug.checkDefined(containingSourceFile), containingFile, redirectedReference, resolutionInfo, loader);
         compilerHost.getModuleResolutionCache = () => moduleResolutionCache;
     }
     if (!compilerHost.resolveTypeReferenceDirectives) {
-        const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined, containingFileMode: SourceFile["impliedNodeFormat"] | undefined) => resolveTypeReferenceDirective(moduleName, containingFile, state.projectCompilerOptions, compilerHost, redirectedReference, state.typeReferenceDirectiveResolutionCache, containingFileMode).resolvedTypeReferenceDirective!;
+        const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined, containingFileMode: ResolutionMode) => resolveTypeReferenceDirective(moduleName, containingFile, state.projectCompilerOptions, compilerHost, redirectedReference, state.typeReferenceDirectiveResolutionCache, containingFileMode).resolvedTypeReferenceDirective!;
         compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile, redirectedReference, _options, containingFileMode) =>
             loadWithTypeDirectiveCache<ResolvedTypeReferenceDirective>(Debug.checkEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, containingFileMode, loader);
     }
@@ -1033,7 +1138,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
         const emittedOutputs = new Map<Path, string>();
         const options = program.getCompilerOptions();
         const isIncremental = isIncrementalCompilation(options);
-        let outputTimeStampMap: ESMap<Path, Date> | undefined;
+        let outputTimeStampMap: Map<Path, Date> | undefined;
         let now: Date | undefined;
         outputFiles.forEach(({ name, text, writeByteOrderMark, data }) => {
             const path = toPath(state, name);
@@ -1081,7 +1186,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
 
     function finishEmit(
         emitterDiagnostics: DiagnosticCollection,
-        emittedOutputs: ESMap<Path, string>,
+        emittedOutputs: Map<Path, string>,
         oldestOutputFileName: string,
         resultFlags: BuildResultFlags
     ) {
@@ -1618,7 +1723,7 @@ function getUpToDateStatusWorker(state: SolutionBuilderState, project: ParsedCom
     let oldestOutputFileTime = maximumDate;
     let buildInfoTime: Date | undefined;
     let buildInfoProgram: ProgramBuildInfo | undefined;
-    let buildInfoVersionMap: ESMap<Path, string> | undefined;
+    let buildInfoVersionMap: Map<Path, string> | undefined;
     if (buildInfoPath) {
         const buildInfoCacheEntry = getBuildInfoCacheEntry(state, buildInfoPath, resolvedPath);
         buildInfoTime = buildInfoCacheEntry?.modifiedTime || ts.getModifiedTime(host, buildInfoPath);
@@ -1871,7 +1976,7 @@ function updateOutputTimestampsWorker(
     proj: ParsedCommandLine,
     projectPath: ResolvedConfigFilePath,
     verboseMessage: DiagnosticMessage,
-    skipOutputs?: ESMap<Path, string>
+    skipOutputs?: Map<Path, string>
 ) {
     if (proj.options.noEmit) return;
     let now: Date | undefined;
@@ -1982,7 +2087,7 @@ function queueReferencingProjects(
                             }
                             break;
                         }
-                        // falls through
+                    // falls through
 
                     case UpToDateStatusType.UpToDateWithInputFileText:
                     case UpToDateStatusType.UpToDateWithUpstreamTypes:
@@ -2193,7 +2298,7 @@ function watchExtendedConfigFiles(state: SolutionBuilderState, resolvedPath: Res
             state,
             extendedConfigFileName,
             () => state.allWatchedExtendedConfigFiles.get(extendedConfigFilePath)?.projects.forEach(projectConfigFilePath =>
-                    invalidateProjectAndScheduleBuilds(state, projectConfigFilePath, ConfigFileProgramReloadLevel.Full)),
+                invalidateProjectAndScheduleBuilds(state, projectConfigFilePath, ConfigFileProgramReloadLevel.Full)),
             PollingInterval.High,
             parsed?.watchOptions,
             WatchType.ExtendedConfigFile,

@@ -14,7 +14,7 @@
             // https://github.com/microsoft/vscode/issues/93001
             "label": "gulp: tests",
             "type": "npm",
-            "script": "build:tests",
+            "script": "build:tests -- --no-typecheck",
             "group": "build",
             "hide": true,
             "problemMatcher": [
@@ -44,7 +44,7 @@
         {
             "label": "npm: build:tests",
             "type": "npm",
-            "script": "build:tests",
+            "script": "build:tests -- --no-typecheck",
             "group": "build",
             "problemMatcher": [
                 "$tsc"
