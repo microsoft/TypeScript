@@ -1,16 +1,15 @@
 === tests/cases/compiler/removeDuplicateDiagnostics.ts ===
-/* eslint-disable linebreak-style */
 class X {
 >X : Symbol(X, Decl(removeDuplicateDiagnostics.ts, 0, 0))
 
   foo() {
->foo : Symbol(X.foo, Decl(removeDuplicateDiagnostics.ts, 1, 9))
+>foo : Symbol(X.foo, Decl(removeDuplicateDiagnostics.ts, 0, 9))
 
     return 1;
   }
 
   get foo() {
->foo : Symbol(X.foo, Decl(removeDuplicateDiagnostics.ts, 4, 3))
+>foo : Symbol(X.foo, Decl(removeDuplicateDiagnostics.ts, 3, 3))
 
     return 1;
   }

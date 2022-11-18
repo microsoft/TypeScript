@@ -1,5 +1,4 @@
 === tests/cases/compiler/removeDuplicateDiagnostics.ts ===
-/* eslint-disable linebreak-style */
 class X {
 >X : X
 

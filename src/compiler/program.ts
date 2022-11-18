@@ -2412,14 +2412,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         });
     }
 
-    /** Remove any diagnostics from input array that have the duplicate message, start, and file */
+    /** Remove any diagnostics that have the duplicate code, start, and file */
     function removeDuplicateDiagnostics(diagnostics: Diagnostic[]){
         return diagnostics.filter((current, index, array) =>
                                     index === array.findIndex((predicate) => {
-                                        const sameMessage = predicate.messageText === current.messageText;
+                                        const sameCode = predicate.code === current.code;
                                         const sameStart = predicate.start === current.start;
                                         const sameFile = predicate.file && current.file && isSameFile(predicate.file.path, current.file.path);
-                                        return sameMessage && sameStart && sameFile;
+                                        return sameCode && sameStart && sameFile;
                                     }));
     }
 

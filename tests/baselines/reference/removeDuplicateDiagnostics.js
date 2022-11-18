@@ -1,5 +1,4 @@
 //// [removeDuplicateDiagnostics.ts]
-/* eslint-disable linebreak-style */
 class X {
   foo() {
     return 1;
@@ -12,7 +11,6 @@ class X {
 
 
 //// [removeDuplicateDiagnostics.js]
-/* eslint-disable linebreak-style */
 var X = /** @class */ (function () {
     function X() {
     }
