@@ -1,4 +1,9 @@
-import { createWatchedSystem, File, getTsBuildProjectFile, libFile } from "../virtualFileSystemWithWatch";
+import {
+    createWatchedSystem,
+    File,
+    getTsBuildProjectFile,
+    libFile,
+} from "../virtualFileSystemWithWatch";
 import { libContent } from "../tsc/helpers";
 import { verifyTscWatch } from "../tscWatch/helpers";
 

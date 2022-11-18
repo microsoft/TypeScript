@@ -1,5 +1,12 @@
 import * as ts from "../_namespaces/ts";
-import { NamedSourceText, newProgram, ProgramWithSourceTexts, SourceText, updateProgram, updateProgramText } from "./helpers";
+import {
+    NamedSourceText,
+    newProgram,
+    ProgramWithSourceTexts,
+    SourceText,
+    updateProgram,
+    updateProgramText,
+} from "./helpers";
 
 describe("unittests:: builder", () => {
     it("emits dependent files", () => {

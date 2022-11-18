@@ -1,6 +1,13 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { createSession, openFilesForSession, checkNumberOfInferredProjects } from "./helpers";
+import {
+    createServerHost,
+    File,
+} from "../virtualFileSystemWithWatch";
+import {
+    checkNumberOfInferredProjects,
+    createSession,
+    openFilesForSession,
+} from "./helpers";
 
 const aTs: File = {
     path: "/a.ts",

@@ -1,6 +1,15 @@
 import * as ts from "../../_namespaces/ts";
-import { getTsBuildProjectFile, getTsBuildProjectFilePath, libFile, TestServerHost } from "../virtualFileSystemWithWatch";
-import { createSolutionBuilder, createSystemWithSolutionBuild, verifyTscWatch } from "./helpers";
+import {
+    getTsBuildProjectFile,
+    getTsBuildProjectFilePath,
+    libFile,
+    TestServerHost,
+} from "../virtualFileSystemWithWatch";
+import {
+    createSolutionBuilder,
+    createSystemWithSolutionBuild,
+    verifyTscWatch,
+} from "./helpers";
 
 describe("unittests:: tsc-watch:: projects with references: invoking when references are already built", () => {
     verifyTscWatch({

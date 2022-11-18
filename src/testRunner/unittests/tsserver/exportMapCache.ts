@@ -1,6 +1,14 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { createSession, openFilesForSession, configuredProjectAt, executeSessionRequest } from "./helpers";
+import {
+    createServerHost,
+    File,
+} from "../virtualFileSystemWithWatch";
+import {
+    configuredProjectAt,
+    createSession,
+    executeSessionRequest,
+    openFilesForSession,
+} from "./helpers";
 
 const packageJson: File = {
     path: "/package.json",

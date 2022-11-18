@@ -1,5 +1,8 @@
 import * as ts from "../../../_namespaces/ts";
-import { testExtractSymbol, testExtractSymbolFailed } from "./helpers";
+import {
+    testExtractSymbol,
+    testExtractSymbolFailed,
+} from "./helpers";
 
 describe("unittests:: services:: extract:: extractConstants", () => {
     testExtractConstant("extractConstant_TopLevel",

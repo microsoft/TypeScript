@@ -1,6 +1,13 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { createSession, openFilesForSession, executeSessionRequest } from "./helpers";
+import {
+    createServerHost,
+    File,
+} from "../virtualFileSystemWithWatch";
+import {
+    createSession,
+    executeSessionRequest,
+    openFilesForSession,
+} from "./helpers";
 
 describe("unittests:: tsserver:: refactors", () => {
     it("use formatting options", () => {

@@ -1,7 +1,20 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../virtualFileSystemWithWatch";
 import { commonFile1 } from "../tscWatch/helpers";
-import { createProjectService, createLoggerWithInMemoryLogs, baselineTsserverLogs, checkNumberOfConfiguredProjects, checkNumberOfInferredProjects, checkProjectActualFiles, checkNumberOfProjects, createSession } from "./helpers";
+import {
+    baselineTsserverLogs,
+    checkNumberOfConfiguredProjects,
+    checkNumberOfInferredProjects,
+    checkNumberOfProjects,
+    checkProjectActualFiles,
+    createLoggerWithInMemoryLogs,
+    createProjectService,
+    createSession,
+} from "./helpers";
 
 describe("unittests:: tsserver:: Inferred projects", () => {
     it("create inferred project", () => {
