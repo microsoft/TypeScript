@@ -1088,34 +1088,34 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         category: Diagnostics.Modules,
         description: Diagnostics.Allow_imports_to_include_TypeScript_file_extensions_Requires_moduleResolution_hybrid_and_either_noEmit_or_emitDeclarationOnly_to_be_set,
         defaultValueDescription: false,
-        },
-        {
-            name: "resolvePackageJsonExports",
-            type: "boolean",
-            affectsModuleResolution: true,
-            category: Diagnostics.Modules,
-            description: Diagnostics.Use_the_package_json_exports_field_when_resolving_package_imports,
-            defaultValueDescription: Diagnostics.true_when_moduleResolution_is_node16_nodenext_or_hybrid_otherwise_false,
     },
-        {
-            name: "resolvePackageJsonImports",
-            type: "boolean",
-            affectsModuleResolution: true,
-            category: Diagnostics.Modules,
-            description: Diagnostics.Use_the_package_json_imports_field_when_resolving_imports,
-            defaultValueDescription: Diagnostics.true_when_moduleResolution_is_node16_nodenext_or_hybrid_otherwise_false,
+    {
+        name: "resolvePackageJsonExports",
+        type: "boolean",
+        affectsModuleResolution: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Use_the_package_json_exports_field_when_resolving_package_imports,
+        defaultValueDescription: Diagnostics.true_when_moduleResolution_is_node16_nodenext_or_hybrid_otherwise_false,
+    },
+    {
+        name: "resolvePackageJsonImports",
+        type: "boolean",
+        affectsModuleResolution: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Use_the_package_json_imports_field_when_resolving_imports,
+        defaultValueDescription: Diagnostics.true_when_moduleResolution_is_node16_nodenext_or_hybrid_otherwise_false,
+    },
+    {
+        name: "customConditions",
+        type: "list",
+        element: {
+            name: "condition",
+            type: "string",
         },
-        {
-            name: "customConditions",
-            type: "list",
-            element: {
-                name: "condition",
-                type: "string",
-            },
-            affectsModuleResolution: true,
-            category: Diagnostics.Modules,
-            description: Diagnostics.Conditions_to_set_in_addition_to_the_resolver_specific_defaults_when_resolving_imports,
-        },
+        affectsModuleResolution: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Conditions_to_set_in_addition_to_the_resolver_specific_defaults_when_resolving_imports,
+    },
 
     // Source Maps
     {

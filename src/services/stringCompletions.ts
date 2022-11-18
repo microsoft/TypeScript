@@ -545,7 +545,7 @@ interface ExtensionOptions {
 }
 
 function getExtensionOptions(compilerOptions: CompilerOptions, referenceKind: ReferenceKind, importingSourceFile: SourceFile, preferences?: UserPreferences, resolutionMode?: ResolutionMode): ExtensionOptions {
-return {
+    return {
         extensionsToSearch: flatten(getSupportedExtensionsForModuleResolution(compilerOptions)),
         referenceKind,
         importingSourceFile,

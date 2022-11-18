@@ -612,12 +612,12 @@ function getNodeResolutionFeatures(options: CompilerOptions) {
     switch (getEmitModuleResolutionKind(options)) {
         case ModuleResolutionKind.Node16:
             features = NodeResolutionFeatures.Node16Default;
-        break;
+            break;
         case ModuleResolutionKind.NodeNext:
             features = NodeResolutionFeatures.NodeNextDefault;
             break;
         case ModuleResolutionKind.Hybrid:
-        features = NodeResolutionFeatures.HybridDefault;
+            features = NodeResolutionFeatures.HybridDefault;
             break;
     }
     if (options.resolvePackageJsonExports) {
@@ -2036,7 +2036,7 @@ export interface PackageJsonInfoContents {
  *
  * @internal
  */
- export function getPackageScopeForPath(fileName: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
+export function getPackageScopeForPath(fileName: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
     const parts = getPathComponents(fileName);
     parts.pop();
     while (parts.length > 0) {
