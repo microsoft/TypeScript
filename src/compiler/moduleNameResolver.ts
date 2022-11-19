@@ -1818,7 +1818,7 @@ function tryFileLookup(fileName: string, onlyRecordFailures: boolean, state: Mod
 function loadNodeModuleFromDirectory(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState, considerPackageJson = true) {
     const packageInfo = considerPackageJson ? getPackageJsonInfo(candidate, onlyRecordFailures, state) : undefined;
     const packageJsonContent = packageInfo && packageInfo.contents.packageJsonContent;
-    const versionPaths = packageInfo && packageInfo.contents.versionPaths;
+    const versionPaths = packageInfo && getVersionPathsOfPackageJsonInfo(packageInfo, state);
     return withPackageId(packageInfo, loadNodeModuleFromDirectoryWorker(extensions, candidate, onlyRecordFailures, state, packageJsonContent, versionPaths));
 }
 
@@ -1848,7 +1848,7 @@ export function getEntrypointsFromPackageJsonInfo(
         /*onlyRecordFailures*/ false,
         requireState,
         packageJsonInfo.contents.packageJsonContent,
-        packageJsonInfo.contents.versionPaths);
+        getVersionPathsOfPackageJsonInfo(packageJsonInfo, requireState));
     entrypoints = append(entrypoints, requireResolution?.path);
 
     if (features & NodeResolutionFeatures.Exports && packageJsonInfo.contents.packageJsonContent.exports) {
@@ -1952,7 +1952,8 @@ export interface PackageJsonInfo {
 /** @internal */
 export interface PackageJsonInfoContents {
     packageJsonContent: PackageJsonPathFields;
-    versionPaths: VersionPaths | undefined;
+    /** false: versionPaths are not present. undefined: not yet resolved */
+    versionPaths: VersionPaths | false | undefined;
     /** false: resolved to nothing. undefined: not yet resolved */
     resolvedEntrypoints: string[] | false | undefined;
 }
@@ -1973,6 +1974,13 @@ export interface PackageJsonInfoContents {
         parts.pop();
     }
     return undefined;
+}
+
+function getVersionPathsOfPackageJsonInfo(packageJsonInfo: PackageJsonInfo, state: ModuleResolutionState): VersionPaths | undefined {
+    if (packageJsonInfo.contents.versionPaths === undefined) {
+        packageJsonInfo.contents.versionPaths = readPackageJsonTypesVersionPaths(packageJsonInfo.contents.packageJsonContent, state) || false;
+    }
+    return packageJsonInfo.contents.versionPaths || undefined;
 }
 
 /** @internal */
@@ -2005,8 +2013,7 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
         if (traceEnabled) {
             trace(host, Diagnostics.Found_package_json_at_0, packageJsonPath);
         }
-        const versionPaths = readPackageJsonTypesVersionPaths(packageJsonContent, state);
-        const result: PackageJsonInfo = { packageDirectory, contents: { packageJsonContent, versionPaths, resolvedEntrypoints: undefined } };
+        const result: PackageJsonInfo = { packageDirectory, contents: { packageJsonContent, versionPaths: undefined, resolvedEntrypoints: undefined } };
         state.packageJsonInfoCache?.setPackageJsonInfo(packageJsonPath, result);
         state.affectingLocations.push(packageJsonPath);
         return result;
@@ -2587,7 +2594,7 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
                 !nodeModulesDirectoryExists,
                 state,
                 packageInfo.contents.packageJsonContent,
-                packageInfo.contents.versionPaths
+                getVersionPathsOfPackageJsonInfo(packageInfo, state),
             );
             return withPackageId(packageInfo, fromDirectory);
         }
@@ -2602,7 +2609,7 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
                 onlyRecordFailures,
                 state,
                 packageInfo && packageInfo.contents.packageJsonContent,
-                packageInfo && packageInfo.contents.versionPaths
+                packageInfo && getVersionPathsOfPackageJsonInfo(packageInfo, state),
             );
         if (
             !pathAndExtension && packageInfo
@@ -2627,12 +2634,13 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
     if (packageInfo && packageInfo.contents.packageJsonContent.exports && state.features & NodeResolutionFeatures.Exports) {
         return loadModuleFromExports(packageInfo, extensions, combinePaths(".", rest), state, cache, redirectedReference)?.value;
     }
-    if (rest !== "" && packageInfo && packageInfo.contents.versionPaths) {
+    const versionPaths = rest !== "" && packageInfo ? getVersionPathsOfPackageJsonInfo(packageInfo, state) : undefined;
+    if (versionPaths) {
         if (state.traceEnabled) {
-            trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, packageInfo.contents.versionPaths.version, version, rest);
+            trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, versionPaths.version, version, rest);
         }
         const packageDirectoryExists = nodeModulesDirectoryExists && directoryProbablyExists(packageDirectory, state.host);
-        const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, packageInfo.contents.versionPaths.paths, /*pathPatterns*/ undefined, loader, !packageDirectoryExists, state);
+        const fromPaths = tryLoadModuleUsingPaths(extensions, rest, packageDirectory, versionPaths.paths, /*pathPatterns*/ undefined, loader, !packageDirectoryExists, state);
         if (fromPaths) {
             return fromPaths.value;
         }

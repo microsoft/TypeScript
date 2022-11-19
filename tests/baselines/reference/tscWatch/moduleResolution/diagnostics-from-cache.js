@@ -31,7 +31,6 @@ Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
-'package.json' does not have a 'typesVersions' field.
 ======== Resolving module '@this/package' from '/user/username/projects/myproject/index.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
 Resolving in ESM mode with conditions 'node', 'import', 'types'.
