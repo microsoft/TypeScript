@@ -2412,19 +2412,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         });
     }
 
-    /** Remove any diagnostics that have the duplicate code, start, and file */
-    function removeDuplicateDiagnostics(diagnostics: Diagnostic[]){
-        return diagnostics.filter((current, index, array) =>
-                                    index === array.findIndex((predicate) => {
-                                        const sameCode = predicate.code === current.code;
-                                        const sameStart = predicate.start === current.start;
-                                        const sameFile = predicate.file && current.file && isSameFile(predicate.file.path, current.file.path);
-                                        return sameCode && sameStart && sameFile;
-                                    }));
-    }
-
     function getMergedBindAndCheckDiagnostics(sourceFile: SourceFile, includeBindAndCheckDiagnostics: boolean, ...allDiagnostics: (readonly Diagnostic[] | undefined)[]) {
-        const flatDiagnostics = removeDuplicateDiagnostics(flatten(allDiagnostics));
+        const flatDiagnostics = Array.from(sortAndDeduplicateDiagnostics(flatten(allDiagnostics)));
 
         if (!includeBindAndCheckDiagnostics || !sourceFile.commentDirectives?.length) {
             return flatDiagnostics;
