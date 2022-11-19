@@ -1,4 +1,4 @@
-//// [removeDuplicateDiagnostics.ts]
+//// [removeDuplicateDuplicateIdentifierDiagnostic.ts]
 class X {
   foo() {
     return 1;
@@ -10,7 +10,7 @@ class X {
 }
 
 
-//// [removeDuplicateDiagnostics.js]
+//// [removeDuplicateDuplicateIdentifierDiagnostic.js]
 var X = /** @class */ (function () {
     function X() {
     }

@@ -1,4 +1,4 @@
-=== tests/cases/compiler/removeDuplicateDiagnostics.ts ===
+=== tests/cases/compiler/removeDuplicateDuplicateIdentifierDiagnostic.ts ===
 class X {
 >X : X
 
