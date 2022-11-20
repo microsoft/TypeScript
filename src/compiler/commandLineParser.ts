@@ -2047,7 +2047,19 @@ export function readJsonConfigFile(fileName: string, readFile: (path: string) =>
 export function tryReadFile(fileName: string, readFile: (path: string) => string | undefined): string | Diagnostic {
     let text: string | undefined;
     try {
-        text = readFile(fileName);
+        if (fileName.slice(-3) === '.js') {
+            try {
+                text = JSON.stringify( require( process.cwd() + '/' + fileName ) );
+            }
+            catch (err) {
+                return createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, err);
+            }
+
+        } else if (fileName.slice(-5) === '.json') {
+            text = readFile(fileName);
+        } else {
+            return createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, "Config file extension is neither .js nor .json");
+        }
     }
     catch (e) {
         return createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message);
