@@ -958,32 +958,57 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     function createImportCallExpressionCommonJS(arg: Expression | undefined, isInlineable?: boolean): Expression {
         // import(x)
         // emit as
-        // var _a;
-        // (_a = x, Promise.resolve().then(() => require(_a)) /*CommonJs Require*/
+        // Promise.resolve(`${x}`).then((s) => require(s)) /*CommonJs Require*/
         // We have to wrap require in then callback so that require is done in asynchronously
         // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
-        // If the arg is not inlineable, we have to evaluate it in the current scope with a temp var
-        const temp = arg && !isSimpleInlineableExpression(arg) && !isInlineable ? factory.createTempVariable(hoistVariableDeclaration) : undefined;
+        // If the arg is not inlineable, we have to evaluate and ToString() it in the current scope
+        // Otherwise, we inline it in require() so that it's statically analyzable
+        const needSyncEval = arg && !isSimpleInlineableExpression(arg) && !isInlineable;
+
         const promiseResolveCall = factory.createCallExpression(
             factory.createPropertyAccessExpression(factory.createIdentifier("Promise"), "resolve"),
             /*typeArguments*/ undefined,
-            /*argumentsArray*/ [],
+            /*argumentsArray*/ needSyncEval
+                ? languageVersion >= ScriptTarget.ES2015
+                    ? [
+                          factory.createTemplateExpression(factory.createTemplateHead(""), [
+                              factory.createTemplateSpan(arg, factory.createTemplateTail("")),
+                          ]),
+                      ]
+                    : [
+                          factory.createCallExpression(
+                              factory.createPropertyAccessExpression(factory.createStringLiteral(""), "concat"),
+                              /*typeArguments*/ undefined,
+                              [arg]
+                          ),
+                      ]
+                : []
         );
+
         let requireCall: Expression = factory.createCallExpression(
             factory.createIdentifier("require"),
             /*typeArguments*/ undefined,
-            temp ? [temp] : arg ? [arg] : [],
+            needSyncEval ? [factory.createIdentifier("s")] : arg ? [arg] : [],
         );
         if (getESModuleInterop(compilerOptions)) {
             requireCall = emitHelpers().createImportStarHelper(requireCall);
         }
+
+        const parameters = needSyncEval
+            ? [
+                factory.createParameterDeclaration(
+                    /*modifiers*/ undefined,
+                    /*dotDotDotToken*/ undefined,
+                    /*name*/ "s"),
+            ]
+            : [];
 
         let func: FunctionExpression | ArrowFunction;
         if (languageVersion >= ScriptTarget.ES2015) {
             func = factory.createArrowFunction(
                 /*modifiers*/ undefined,
                 /*typeParameters*/ undefined,
-                /*parameters*/ [],
+                /*parameters*/ parameters,
                 /*type*/ undefined,
                 /*equalsGreaterThanToken*/ undefined,
                 requireCall);
@@ -994,14 +1019,14 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
-                /*parameters*/ [],
+                /*parameters*/ parameters,
                 /*type*/ undefined,
                 factory.createBlock([factory.createReturnStatement(requireCall)]));
         }
 
         const downleveledImport = factory.createCallExpression(factory.createPropertyAccessExpression(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
 
-        return temp === undefined ? downleveledImport : factory.createCommaListExpression([factory.createAssignment(temp, arg!), downleveledImport]);
+        return downleveledImport;
     }
 
     function getHelperExpressionForExport(node: ExportDeclaration, innerExpr: Expression) {
