@@ -1,6 +1,6 @@
 === tests/cases/conformance/es2022/es2022SharedMemory.ts ===
-const sab32 = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 1024);
->sab32 : SharedArrayBuffer
+const sab = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 1024);
+>sab : SharedArrayBuffer
 >new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 1024) : SharedArrayBuffer
 >SharedArrayBuffer : SharedArrayBufferConstructor
 >Int32Array.BYTES_PER_ELEMENT * 1024 : number
@@ -8,6 +8,12 @@ const sab32 = new SharedArrayBuffer(Int32Array.BYTES_PER_ELEMENT * 1024);
 >Int32Array : Int32ArrayConstructor
 >BYTES_PER_ELEMENT : number
 >1024 : 1024
+
+const int32 = new Int32Array(sab);
+>int32 : Int32Array
+>new Int32Array(sab) : Int32Array
+>Int32Array : Int32ArrayConstructor
+>sab : SharedArrayBuffer
 
 const sab64 = new SharedArrayBuffer(BigInt64Array.BYTES_PER_ELEMENT * 1024);
 >sab64 : SharedArrayBuffer
@@ -18,12 +24,6 @@ const sab64 = new SharedArrayBuffer(BigInt64Array.BYTES_PER_ELEMENT * 1024);
 >BigInt64Array : BigInt64ArrayConstructor
 >BYTES_PER_ELEMENT : number
 >1024 : 1024
-
-const int32 = new Int32Array(sab32);
->int32 : Int32Array
->new Int32Array(sab32) : Int32Array
->Int32Array : Int32ArrayConstructor
->sab32 : SharedArrayBuffer
 
 const int64 = new BigInt64Array(sab64);
 >int64 : BigInt64Array
@@ -41,11 +41,9 @@ const waitValue = Atomics.wait(int32, 0, 0);
 >0 : 0
 >0 : 0
 
-const { async: async32, value: value32 } = Atomics.waitAsync(int32, 0, 0);
->async : any
->async32 : boolean
->value : any
->value32 : "ok" | "not-equal" | "timed-out" | Promise<"ok" | "not-equal" | "timed-out">
+const { async, value } = Atomics.waitAsync(int32, 0, 0);
+>async : boolean
+>value : "ok" | "not-equal" | "timed-out" | Promise<"ok" | "not-equal" | "timed-out">
 >Atomics.waitAsync(int32, 0, 0) : { async: false; value: "ok" | "not-equal" | "timed-out"; } | { async: true; value: Promise<"ok" | "not-equal" | "timed-out">; }
 >Atomics.waitAsync : { (typedArray: Int32Array, index: number, value: number, timeout?: number | undefined): { async: false; value: "ok" | "not-equal" | "timed-out"; } | { async: true; value: Promise<"ok" | "not-equal" | "timed-out">; }; (typedArray: BigInt64Array, index: number, value: bigint, timeout?: number | undefined): { async: false; value: "ok" | "not-equal" | "timed-out"; } | { async: true; value: Promise<"ok" | "not-equal" | "timed-out">; }; }
 >Atomics : Atomics
@@ -71,14 +69,14 @@ const { async: async64, value: value64 } = Atomics.waitAsync(int64, 0, BigInt(0)
 
 const main = async () => {
 >main : () => Promise<void>
->async () => {    if (async32) {        await value32;    }    if (async64) {        await value64;    }} : () => Promise<void>
+>async () => {    if (async) {        await value;    }    if (async64) {        await value64;    }} : () => Promise<void>
 
-    if (async32) {
->async32 : boolean
+    if (async) {
+>async : boolean
 
-        await value32;
->await value32 : "ok" | "not-equal" | "timed-out"
->value32 : Promise<"ok" | "not-equal" | "timed-out">
+        await value;
+>await value : "ok" | "not-equal" | "timed-out"
+>value : Promise<"ok" | "not-equal" | "timed-out">
     }
     if (async64) {
 >async64 : boolean
