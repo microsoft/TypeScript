@@ -28419,11 +28419,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkObjectLiteral(node: ObjectLiteralExpression, checkMode?: CheckMode): Type {
         const contextualType = getContextualType(node, /*contextFlags*/ undefined);
         const isContextualTypeDependent =
+            node.parent.kind === SyntaxKind.CallExpression &&
             contextualType &&
+            (contextualType.flags & TypeFlags.TypeParameter) &&
             contextualType.immediateBaseConstraint &&
-            contextualType.immediateBaseConstraint.aliasTypeArguments &&
-            contextualType.immediateBaseConstraint.aliasTypeArguments.length === 1 &&
-            contextualType.immediateBaseConstraint.aliasTypeArguments[0].id === contextualType.id;
+            !!forEachChildRecursively(
+                (contextualType.symbol.declarations![0] as TypeParameterDeclaration).constraint!,
+                node => {
+                    if (
+                        node.kind === SyntaxKind.TypeReference &&
+                        (node as TypeReferenceNode).typeName.kind === SyntaxKind.Identifier &&
+                        ((node as TypeReferenceNode).typeName as Identifier).escapedText ===
+                        (contextualType.symbol.declarations![0] as TypeParameterDeclaration).name.escapedText
+                    ) {
+                        return true
+                    }
+                }
+            )
 
         if (!isContextualTypeDependent) {
             return checkObjectLiteralNonDependently(node, checkMode);
