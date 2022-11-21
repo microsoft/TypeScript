@@ -108,6 +108,7 @@ import {
     getTokenPosOfNode,
     HasContainerFlags,
     hasDynamicName,
+    HasFlowNode,
     hasJSDocNodes,
     HasLocals,
     hasSyntacticModifier,
@@ -229,6 +230,7 @@ import {
     length,
     LiteralLikeElementAccessExpression,
     MappedTypeNode,
+    MetaProperty,
     MethodDeclaration,
     ModifierFlags,
     ModuleBlock,
@@ -260,6 +262,7 @@ import {
     PropertyAccessExpression,
     PropertyDeclaration,
     PropertySignature,
+    QualifiedName,
     removeFileExtension,
     ReturnStatement,
     ScriptTarget,
@@ -277,6 +280,7 @@ import {
     SpreadElement,
     Statement,
     StringLiteral,
+    SuperExpression,
     SwitchStatement,
     Symbol,
     SymbolFlags,
@@ -284,6 +288,7 @@ import {
     SymbolTable,
     SyntaxKind,
     TextRange,
+    ThisExpression,
     ThrowStatement,
     TokenFlags,
     tokenToString,
@@ -1062,7 +1067,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             return;
         }
         if (node.kind >= SyntaxKind.FirstStatement && node.kind <= SyntaxKind.LastStatement && !options.allowUnreachableCode) {
-            node.flowNode = currentFlow;
+            (node as HasFlowNode).flowNode = currentFlow;
         }
         switch (node.kind) {
             case SyntaxKind.WhileStatement:
@@ -2733,18 +2738,20 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 }
                 // falls through
             case SyntaxKind.ThisKeyword:
+                // TODO: Why use `isExpression` here? both Identifier and ThisKeyword are expressions.
                 if (currentFlow && (isExpression(node) || parent.kind === SyntaxKind.ShorthandPropertyAssignment)) {
-                    node.flowNode = currentFlow;
+                    (node as Identifier | ThisExpression).flowNode = currentFlow;
                 }
+                // TODO: a `ThisExpression` is not an Identifier, this cast is unsound
                 return checkContextualIdentifier(node as Identifier);
             case SyntaxKind.QualifiedName:
                 if (currentFlow && isPartOfTypeQuery(node)) {
-                    node.flowNode = currentFlow;
+                    (node as QualifiedName).flowNode = currentFlow;
                 }
                 break;
             case SyntaxKind.MetaProperty:
             case SyntaxKind.SuperKeyword:
-                node.flowNode = currentFlow;
+                (node as MetaProperty | SuperExpression).flowNode = currentFlow;
                 break;
             case SyntaxKind.PrivateIdentifier:
                 return checkPrivateIdentifier(node as PrivateIdentifier);
@@ -2827,7 +2834,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.VariableDeclaration:
                 return bindVariableDeclarationOrBindingElement(node as VariableDeclaration);
             case SyntaxKind.BindingElement:
-                node.flowNode = currentFlow;
+                (node as BindingElement).flowNode = currentFlow;
                 return bindVariableDeclarationOrBindingElement(node as BindingElement);
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -2873,7 +2880,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 return bindObjectLiteralExpression(node as ObjectLiteralExpression);
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-                return bindFunctionExpression(node as FunctionExpression);
+                return bindFunctionExpression(node as FunctionExpression | ArrowFunction);
 
             case SyntaxKind.CallExpression:
                 const assignmentKind = getAssignmentDeclarationKind(node as CallExpression);
@@ -3582,7 +3589,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
     }
 
-    function bindFunctionExpression(node: FunctionExpression) {
+    function bindFunctionExpression(node: FunctionExpression | ArrowFunction) {
         if (!file.isDeclarationFile && !(node.flags & NodeFlags.Ambient)) {
             if (isAsyncFunction(node)) {
                 emitFlags |= NodeFlags.HasAsyncFunctions;

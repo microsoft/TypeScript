@@ -4518,6 +4518,9 @@ declare namespace ts {
     interface LocalsContainer extends Node {
         _localsContainerBrand: any;
     }
+    interface FlowContainer extends Node {
+        _flowContainerBrand: any;
+    }
     type HasJSDoc = AccessorDeclaration | ArrowFunction | BinaryExpression | Block | BreakStatement | CallSignatureDeclaration | CaseClause | ClassLikeDeclaration | ClassStaticBlockDeclaration | ConstructorDeclaration | ConstructorTypeNode | ConstructSignatureDeclaration | ContinueStatement | DebuggerStatement | DoStatement | ElementAccessExpression | EmptyStatement | EndOfFileToken | EnumDeclaration | EnumMember | ExportAssignment | ExportDeclaration | ExportSpecifier | ExpressionStatement | ForInStatement | ForOfStatement | ForStatement | FunctionDeclaration | FunctionExpression | FunctionTypeNode | Identifier | IfStatement | ImportDeclaration | ImportEqualsDeclaration | IndexSignatureDeclaration | InterfaceDeclaration | JSDocFunctionType | JSDocSignature | LabeledStatement | MethodDeclaration | MethodSignature | ModuleDeclaration | NamedTupleMember | NamespaceExportDeclaration | ObjectLiteralExpression | ParameterDeclaration | ParenthesizedExpression | PropertyAccessExpression | PropertyAssignment | PropertyDeclaration | PropertySignature | ReturnStatement | ShorthandPropertyAssignment | SpreadAssignment | SwitchStatement | ThrowStatement | TryStatement | TypeAliasDeclaration | TypeParameterDeclaration | VariableDeclaration | VariableStatement | WhileStatement | WithStatement;
     type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
     type HasTypeArguments = CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement | JsxSelfClosingElement;
@@ -4586,7 +4589,7 @@ declare namespace ts {
         FileLevel = 32,
         AllowNameSubstitution = 64
     }
-    interface Identifier extends PrimaryExpression, Declaration, JSDocContainer {
+    interface Identifier extends PrimaryExpression, Declaration, JSDocContainer, FlowContainer {
         readonly kind: SyntaxKind.Identifier;
         /**
          * Prefer to use `id.unescapedText`. (Note: This is available only in services, not internally to the TypeScript compiler.)
@@ -4602,7 +4605,7 @@ declare namespace ts {
     interface TransientIdentifier extends Identifier {
         resolvedSymbol: Symbol;
     }
-    interface QualifiedName extends Node {
+    interface QualifiedName extends Node, FlowContainer {
         readonly kind: SyntaxKind.QualifiedName;
         readonly left: EntityName;
         readonly right: Identifier;
@@ -4685,7 +4688,7 @@ declare namespace ts {
         readonly type?: TypeNode;
         readonly initializer?: Expression;
     }
-    interface BindingElement extends NamedDeclaration {
+    interface BindingElement extends NamedDeclaration, FlowContainer {
         readonly kind: SyntaxKind.BindingElement;
         readonly parent: BindingPattern;
         readonly propertyName?: PropertyName;
@@ -4799,7 +4802,7 @@ declare namespace ts {
         readonly modifiers?: NodeArray<Modifier>;
         readonly name: PropertyName;
     }
-    interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer, LocalsContainer {
+    interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer {
         readonly kind: SyntaxKind.MethodDeclaration;
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression;
         readonly modifiers?: NodeArray<ModifierLike> | undefined;
@@ -4817,14 +4820,14 @@ declare namespace ts {
         readonly kind: SyntaxKind.SemicolonClassElement;
         readonly parent: ClassLikeDeclaration;
     }
-    interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer {
+    interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer {
         readonly kind: SyntaxKind.GetAccessor;
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: PropertyName;
         readonly body?: FunctionBody;
     }
-    interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer {
+    interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer, FlowContainer {
         readonly kind: SyntaxKind.SetAccessor;
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
@@ -5040,10 +5043,10 @@ declare namespace ts {
         readonly kind: SyntaxKind.FalseKeyword;
     }
     type BooleanLiteral = TrueLiteral | FalseLiteral;
-    interface ThisExpression extends PrimaryExpression {
+    interface ThisExpression extends PrimaryExpression, FlowContainer {
         readonly kind: SyntaxKind.ThisKeyword;
     }
-    interface SuperExpression extends PrimaryExpression {
+    interface SuperExpression extends PrimaryExpression, FlowContainer {
         readonly kind: SyntaxKind.SuperKeyword;
     }
     interface ImportExpression extends PrimaryExpression {
@@ -5134,13 +5137,13 @@ declare namespace ts {
     }
     type FunctionBody = Block;
     type ConciseBody = FunctionBody | Expression;
-    interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer {
+    interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer, FlowContainer {
         readonly kind: SyntaxKind.FunctionExpression;
         readonly modifiers?: NodeArray<Modifier>;
         readonly name?: Identifier;
         readonly body: FunctionBody;
     }
-    interface ArrowFunction extends Expression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer {
+    interface ArrowFunction extends Expression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer, FlowContainer {
         readonly kind: SyntaxKind.ArrowFunction;
         readonly modifiers?: NodeArray<Modifier>;
         readonly equalsGreaterThanToken: EqualsGreaterThanToken;
@@ -5233,7 +5236,7 @@ declare namespace ts {
     type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
     type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
     type AccessExpression = PropertyAccessExpression | ElementAccessExpression;
-    interface PropertyAccessExpression extends MemberExpression, NamedDeclaration, JSDocContainer {
+    interface PropertyAccessExpression extends MemberExpression, NamedDeclaration, JSDocContainer, FlowContainer {
         readonly kind: SyntaxKind.PropertyAccessExpression;
         readonly expression: LeftHandSideExpression;
         readonly questionDotToken?: QuestionDotToken;
@@ -5252,7 +5255,7 @@ declare namespace ts {
         readonly expression: EntityNameExpression;
         readonly name: Identifier;
     }
-    interface ElementAccessExpression extends MemberExpression, Declaration, JSDocContainer {
+    interface ElementAccessExpression extends MemberExpression, Declaration, JSDocContainer, FlowContainer {
         readonly kind: SyntaxKind.ElementAccessExpression;
         readonly expression: LeftHandSideExpression;
         readonly questionDotToken?: QuestionDotToken;
@@ -5322,7 +5325,7 @@ declare namespace ts {
     interface NonNullChain extends NonNullExpression {
         _optionalChainBrand: any;
     }
-    interface MetaProperty extends PrimaryExpression {
+    interface MetaProperty extends PrimaryExpression, FlowContainer {
         readonly kind: SyntaxKind.MetaProperty;
         readonly keywordToken: SyntaxKind.NewKeyword | SyntaxKind.ImportKeyword;
         readonly name: Identifier;
@@ -5415,7 +5418,7 @@ declare namespace ts {
     interface EmptyStatement extends Statement {
         readonly kind: SyntaxKind.EmptyStatement;
     }
-    interface DebuggerStatement extends Statement {
+    interface DebuggerStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.DebuggerStatement;
     }
     interface MissingDeclaration extends DeclarationStatement {
@@ -5427,16 +5430,16 @@ declare namespace ts {
         readonly kind: SyntaxKind.Block;
         readonly statements: NodeArray<Statement>;
     }
-    interface VariableStatement extends Statement {
+    interface VariableStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.VariableStatement;
         readonly modifiers?: NodeArray<Modifier>;
         readonly declarationList: VariableDeclarationList;
     }
-    interface ExpressionStatement extends Statement {
+    interface ExpressionStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.ExpressionStatement;
         readonly expression: Expression;
     }
-    interface IfStatement extends Statement {
+    interface IfStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.IfStatement;
         readonly expression: Expression;
         readonly thenStatement: Statement;
@@ -5445,52 +5448,52 @@ declare namespace ts {
     interface IterationStatement extends Statement {
         readonly statement: Statement;
     }
-    interface DoStatement extends IterationStatement {
+    interface DoStatement extends IterationStatement, FlowContainer {
         readonly kind: SyntaxKind.DoStatement;
         readonly expression: Expression;
     }
-    interface WhileStatement extends IterationStatement {
+    interface WhileStatement extends IterationStatement, FlowContainer {
         readonly kind: SyntaxKind.WhileStatement;
         readonly expression: Expression;
     }
     type ForInitializer = VariableDeclarationList | Expression;
-    interface ForStatement extends IterationStatement, LocalsContainer {
+    interface ForStatement extends IterationStatement, LocalsContainer, FlowContainer {
         readonly kind: SyntaxKind.ForStatement;
         readonly initializer?: ForInitializer;
         readonly condition?: Expression;
         readonly incrementor?: Expression;
     }
     type ForInOrOfStatement = ForInStatement | ForOfStatement;
-    interface ForInStatement extends IterationStatement, LocalsContainer {
+    interface ForInStatement extends IterationStatement, LocalsContainer, FlowContainer {
         readonly kind: SyntaxKind.ForInStatement;
         readonly initializer: ForInitializer;
         readonly expression: Expression;
     }
-    interface ForOfStatement extends IterationStatement, LocalsContainer {
+    interface ForOfStatement extends IterationStatement, LocalsContainer, FlowContainer {
         readonly kind: SyntaxKind.ForOfStatement;
         readonly awaitModifier?: AwaitKeyword;
         readonly initializer: ForInitializer;
         readonly expression: Expression;
     }
-    interface BreakStatement extends Statement {
+    interface BreakStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.BreakStatement;
         readonly label?: Identifier;
     }
-    interface ContinueStatement extends Statement {
+    interface ContinueStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.ContinueStatement;
         readonly label?: Identifier;
     }
     type BreakOrContinueStatement = BreakStatement | ContinueStatement;
-    interface ReturnStatement extends Statement {
+    interface ReturnStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.ReturnStatement;
         readonly expression?: Expression;
     }
-    interface WithStatement extends Statement {
+    interface WithStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.WithStatement;
         readonly expression: Expression;
         readonly statement: Statement;
     }
-    interface SwitchStatement extends Statement {
+    interface SwitchStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.SwitchStatement;
         readonly expression: Expression;
         readonly caseBlock: CaseBlock;
@@ -5513,16 +5516,16 @@ declare namespace ts {
         readonly statements: NodeArray<Statement>;
     }
     type CaseOrDefaultClause = CaseClause | DefaultClause;
-    interface LabeledStatement extends Statement {
+    interface LabeledStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.LabeledStatement;
         readonly label: Identifier;
         readonly statement: Statement;
     }
-    interface ThrowStatement extends Statement {
+    interface ThrowStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.ThrowStatement;
         readonly expression: Expression;
     }
-    interface TryStatement extends Statement {
+    interface TryStatement extends Statement, FlowContainer {
         readonly kind: SyntaxKind.TryStatement;
         readonly tryBlock: Block;
         readonly catchClause?: CatchClause;

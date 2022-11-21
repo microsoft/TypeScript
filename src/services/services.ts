@@ -741,6 +741,7 @@ class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
     declare _expressionBrand: any;
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
     /** @internal */typeArguments!: NodeArray<TypeNode>;
     constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
         super(pos, end);
