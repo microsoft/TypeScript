@@ -83,6 +83,7 @@ import {
     HasExpressionInitializer,
     HasInitializer,
     HasJSDoc,
+    HasLocals,
     HasModifiers,
     hasProperty,
     hasSyntacticModifier,
@@ -2129,6 +2130,45 @@ export function canHaveSymbol(node: Node): node is Declaration {
         case SyntaxKind.TypeLiteral:
         case SyntaxKind.TypeParameter:
         case SyntaxKind.VariableDeclaration:
+            return true;
+        default:
+            return false;
+    }
+}
+
+/** @internal */
+export function canHaveLocals(node: Node): node is HasLocals {
+    switch (node.kind) {
+        case SyntaxKind.ArrowFunction:
+        case SyntaxKind.Block:
+        case SyntaxKind.CallSignature:
+        case SyntaxKind.CaseBlock:
+        case SyntaxKind.CatchClause:
+        case SyntaxKind.ClassStaticBlockDeclaration:
+        case SyntaxKind.ConditionalType:
+        case SyntaxKind.Constructor:
+        case SyntaxKind.ConstructorType:
+        case SyntaxKind.ConstructSignature:
+        case SyntaxKind.ForStatement:
+        case SyntaxKind.ForInStatement:
+        case SyntaxKind.ForOfStatement:
+        case SyntaxKind.FunctionDeclaration:
+        case SyntaxKind.FunctionExpression:
+        case SyntaxKind.FunctionType:
+        case SyntaxKind.GetAccessor:
+        case SyntaxKind.IndexSignature:
+        case SyntaxKind.JSDocCallbackTag:
+        case SyntaxKind.JSDocEnumTag:
+        case SyntaxKind.JSDocFunctionType:
+        case SyntaxKind.JSDocSignature:
+        case SyntaxKind.JSDocTypedefTag:
+        case SyntaxKind.MappedType:
+        case SyntaxKind.MethodDeclaration:
+        case SyntaxKind.MethodSignature:
+        case SyntaxKind.ModuleDeclaration:
+        case SyntaxKind.SetAccessor:
+        case SyntaxKind.SourceFile:
+        case SyntaxKind.TypeAliasDeclaration:
             return true;
         default:
             return false;

@@ -4515,6 +4515,9 @@ declare namespace ts {
     interface JSDocContainer extends Node {
         _jsdocContainerBrand: any;
     }
+    interface LocalsContainer extends Node {
+        _localsContainerBrand: any;
+    }
     type HasJSDoc = AccessorDeclaration | ArrowFunction | BinaryExpression | Block | BreakStatement | CallSignatureDeclaration | CaseClause | ClassLikeDeclaration | ClassStaticBlockDeclaration | ConstructorDeclaration | ConstructorTypeNode | ConstructSignatureDeclaration | ContinueStatement | DebuggerStatement | DoStatement | ElementAccessExpression | EmptyStatement | EndOfFileToken | EnumDeclaration | EnumMember | ExportAssignment | ExportDeclaration | ExportSpecifier | ExpressionStatement | ForInStatement | ForOfStatement | ForStatement | FunctionDeclaration | FunctionExpression | FunctionTypeNode | Identifier | IfStatement | ImportDeclaration | ImportEqualsDeclaration | IndexSignatureDeclaration | InterfaceDeclaration | JSDocFunctionType | JSDocSignature | LabeledStatement | MethodDeclaration | MethodSignature | ModuleDeclaration | NamedTupleMember | NamespaceExportDeclaration | ObjectLiteralExpression | ParameterDeclaration | ParenthesizedExpression | PropertyAccessExpression | PropertyAssignment | PropertyDeclaration | PropertySignature | ReturnStatement | ShorthandPropertyAssignment | SpreadAssignment | SwitchStatement | ThrowStatement | TryStatement | TypeAliasDeclaration | TypeParameterDeclaration | VariableDeclaration | VariableStatement | WhileStatement | WithStatement;
     type HasType = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertySignature | PropertyDeclaration | TypePredicateNode | ParenthesizedTypeNode | TypeOperatorNode | MappedTypeNode | AssertionExpression | TypeAliasDeclaration | JSDocTypeExpression | JSDocNonNullableType | JSDocNullableType | JSDocOptionalType | JSDocVariadicType;
     type HasTypeArguments = CallExpression | NewExpression | TaggedTemplateExpression | JsxOpeningElement | JsxSelfClosingElement;
@@ -4652,10 +4655,10 @@ declare namespace ts {
         readonly type?: TypeNode | undefined;
     }
     type SignatureDeclaration = CallSignatureDeclaration | ConstructSignatureDeclaration | MethodSignature | IndexSignatureDeclaration | FunctionTypeNode | ConstructorTypeNode | JSDocFunctionType | FunctionDeclaration | MethodDeclaration | ConstructorDeclaration | AccessorDeclaration | FunctionExpression | ArrowFunction;
-    interface CallSignatureDeclaration extends SignatureDeclarationBase, TypeElement {
+    interface CallSignatureDeclaration extends SignatureDeclarationBase, TypeElement, LocalsContainer {
         readonly kind: SyntaxKind.CallSignature;
     }
-    interface ConstructSignatureDeclaration extends SignatureDeclarationBase, TypeElement {
+    interface ConstructSignatureDeclaration extends SignatureDeclarationBase, TypeElement, LocalsContainer {
         readonly kind: SyntaxKind.ConstructSignature;
     }
     type BindingName = Identifier | BindingPattern;
@@ -4784,26 +4787,26 @@ declare namespace ts {
     type FunctionLikeDeclaration = FunctionDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction;
     /** @deprecated Use SignatureDeclaration */
     type FunctionLike = SignatureDeclaration;
-    interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement {
+    interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement, LocalsContainer {
         readonly kind: SyntaxKind.FunctionDeclaration;
         readonly modifiers?: NodeArray<Modifier>;
         readonly name?: Identifier;
         readonly body?: FunctionBody;
     }
-    interface MethodSignature extends SignatureDeclarationBase, TypeElement {
+    interface MethodSignature extends SignatureDeclarationBase, TypeElement, LocalsContainer {
         readonly kind: SyntaxKind.MethodSignature;
         readonly parent: TypeLiteralNode | InterfaceDeclaration;
         readonly modifiers?: NodeArray<Modifier>;
         readonly name: PropertyName;
     }
-    interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
+    interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer, LocalsContainer {
         readonly kind: SyntaxKind.MethodDeclaration;
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression;
         readonly modifiers?: NodeArray<ModifierLike> | undefined;
         readonly name: PropertyName;
         readonly body?: FunctionBody | undefined;
     }
-    interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer {
+    interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer, LocalsContainer {
         readonly kind: SyntaxKind.Constructor;
         readonly parent: ClassLikeDeclaration;
         readonly modifiers?: NodeArray<Modifier> | undefined;
@@ -4814,14 +4817,14 @@ declare namespace ts {
         readonly kind: SyntaxKind.SemicolonClassElement;
         readonly parent: ClassLikeDeclaration;
     }
-    interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer {
+    interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer {
         readonly kind: SyntaxKind.GetAccessor;
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
         readonly name: PropertyName;
         readonly body?: FunctionBody;
     }
-    interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer {
+    interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer {
         readonly kind: SyntaxKind.SetAccessor;
         readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
         readonly modifiers?: NodeArray<ModifierLike>;
@@ -4829,13 +4832,13 @@ declare namespace ts {
         readonly body?: FunctionBody;
     }
     type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
-    interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement {
+    interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement, LocalsContainer {
         readonly kind: SyntaxKind.IndexSignature;
         readonly parent: ObjectTypeDeclaration;
         readonly modifiers?: NodeArray<Modifier>;
         readonly type: TypeNode;
     }
-    interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer {
+    interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer, LocalsContainer {
         readonly kind: SyntaxKind.ClassStaticBlockDeclaration;
         readonly parent: ClassDeclaration | ClassExpression;
         readonly body: Block;
@@ -4867,14 +4870,14 @@ declare namespace ts {
         readonly kind: SyntaxKind.FunctionType | SyntaxKind.ConstructorType;
         readonly type: TypeNode;
     }
-    interface FunctionTypeNode extends FunctionOrConstructorTypeNodeBase {
+    interface FunctionTypeNode extends FunctionOrConstructorTypeNodeBase, LocalsContainer {
         readonly kind: SyntaxKind.FunctionType;
     }
     interface FunctionTypeNode {
         /** @deprecated A function type cannot have modifiers */
         readonly modifiers?: NodeArray<Modifier> | undefined;
     }
-    interface ConstructorTypeNode extends FunctionOrConstructorTypeNodeBase {
+    interface ConstructorTypeNode extends FunctionOrConstructorTypeNodeBase, LocalsContainer {
         readonly kind: SyntaxKind.ConstructorType;
         readonly modifiers?: NodeArray<Modifier>;
     }
@@ -4909,7 +4912,7 @@ declare namespace ts {
         readonly kind: SyntaxKind.TupleType;
         readonly elements: NodeArray<TypeNode | NamedTupleMember>;
     }
-    interface NamedTupleMember extends TypeNode, JSDocContainer, Declaration {
+    interface NamedTupleMember extends TypeNode, Declaration, JSDocContainer {
         readonly kind: SyntaxKind.NamedTupleMember;
         readonly dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
         readonly name: Identifier;
@@ -4933,7 +4936,7 @@ declare namespace ts {
         readonly kind: SyntaxKind.IntersectionType;
         readonly types: NodeArray<TypeNode>;
     }
-    interface ConditionalTypeNode extends TypeNode {
+    interface ConditionalTypeNode extends TypeNode, LocalsContainer {
         readonly kind: SyntaxKind.ConditionalType;
         readonly checkType: TypeNode;
         readonly extendsType: TypeNode;
@@ -4958,7 +4961,7 @@ declare namespace ts {
         readonly objectType: TypeNode;
         readonly indexType: TypeNode;
     }
-    interface MappedTypeNode extends TypeNode, Declaration {
+    interface MappedTypeNode extends TypeNode, Declaration, LocalsContainer {
         readonly kind: SyntaxKind.MappedType;
         readonly readonlyToken?: ReadonlyKeyword | PlusToken | MinusToken;
         readonly typeParameter: TypeParameterDeclaration;
@@ -5131,13 +5134,13 @@ declare namespace ts {
     }
     type FunctionBody = Block;
     type ConciseBody = FunctionBody | Expression;
-    interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclarationBase, JSDocContainer {
+    interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer {
         readonly kind: SyntaxKind.FunctionExpression;
         readonly modifiers?: NodeArray<Modifier>;
         readonly name?: Identifier;
         readonly body: FunctionBody;
     }
-    interface ArrowFunction extends Expression, FunctionLikeDeclarationBase, JSDocContainer {
+    interface ArrowFunction extends Expression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer {
         readonly kind: SyntaxKind.ArrowFunction;
         readonly modifiers?: NodeArray<Modifier>;
         readonly equalsGreaterThanToken: EqualsGreaterThanToken;
@@ -5420,7 +5423,7 @@ declare namespace ts {
         readonly name?: Identifier;
     }
     type BlockLike = SourceFile | Block | ModuleBlock | CaseOrDefaultClause;
-    interface Block extends Statement {
+    interface Block extends Statement, LocalsContainer {
         readonly kind: SyntaxKind.Block;
         readonly statements: NodeArray<Statement>;
     }
@@ -5451,19 +5454,19 @@ declare namespace ts {
         readonly expression: Expression;
     }
     type ForInitializer = VariableDeclarationList | Expression;
-    interface ForStatement extends IterationStatement {
+    interface ForStatement extends IterationStatement, LocalsContainer {
         readonly kind: SyntaxKind.ForStatement;
         readonly initializer?: ForInitializer;
         readonly condition?: Expression;
         readonly incrementor?: Expression;
     }
     type ForInOrOfStatement = ForInStatement | ForOfStatement;
-    interface ForInStatement extends IterationStatement {
+    interface ForInStatement extends IterationStatement, LocalsContainer {
         readonly kind: SyntaxKind.ForInStatement;
         readonly initializer: ForInitializer;
         readonly expression: Expression;
     }
-    interface ForOfStatement extends IterationStatement {
+    interface ForOfStatement extends IterationStatement, LocalsContainer {
         readonly kind: SyntaxKind.ForOfStatement;
         readonly awaitModifier?: AwaitKeyword;
         readonly initializer: ForInitializer;
@@ -5493,7 +5496,7 @@ declare namespace ts {
         readonly caseBlock: CaseBlock;
         possiblyExhaustive?: boolean;
     }
-    interface CaseBlock extends Node {
+    interface CaseBlock extends Node, LocalsContainer {
         readonly kind: SyntaxKind.CaseBlock;
         readonly parent: SwitchStatement;
         readonly clauses: NodeArray<CaseOrDefaultClause>;
@@ -5525,7 +5528,7 @@ declare namespace ts {
         readonly catchClause?: CatchClause;
         readonly finallyBlock?: Block;
     }
-    interface CatchClause extends Node {
+    interface CatchClause extends Node, LocalsContainer {
         readonly kind: SyntaxKind.CatchClause;
         readonly parent: TryStatement;
         readonly variableDeclaration?: VariableDeclaration;
@@ -5575,7 +5578,7 @@ declare namespace ts {
         readonly token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword;
         readonly types: NodeArray<ExpressionWithTypeArguments>;
     }
-    interface TypeAliasDeclaration extends DeclarationStatement, JSDocContainer {
+    interface TypeAliasDeclaration extends DeclarationStatement, JSDocContainer, LocalsContainer {
         readonly kind: SyntaxKind.TypeAliasDeclaration;
         readonly modifiers?: NodeArray<Modifier>;
         readonly name: Identifier;
@@ -5596,7 +5599,7 @@ declare namespace ts {
     }
     type ModuleName = Identifier | StringLiteral;
     type ModuleBody = NamespaceBody | JSDocNamespaceBody;
-    interface ModuleDeclaration extends DeclarationStatement, JSDocContainer {
+    interface ModuleDeclaration extends DeclarationStatement, JSDocContainer, LocalsContainer {
         readonly kind: SyntaxKind.ModuleDeclaration;
         readonly parent: ModuleBody | SourceFile;
         readonly modifiers?: NodeArray<Modifier>;
@@ -5812,7 +5815,7 @@ declare namespace ts {
         readonly kind: SyntaxKind.JSDocOptionalType;
         readonly type: TypeNode;
     }
-    interface JSDocFunctionType extends JSDocType, SignatureDeclarationBase {
+    interface JSDocFunctionType extends JSDocType, SignatureDeclarationBase, LocalsContainer {
         readonly kind: SyntaxKind.JSDocFunctionType;
     }
     interface JSDocVariadicType extends JSDocType {
@@ -5898,7 +5901,7 @@ declare namespace ts {
     interface JSDocOverrideTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocOverrideTag;
     }
-    interface JSDocEnumTag extends JSDocTag, Declaration {
+    interface JSDocEnumTag extends JSDocTag, Declaration, LocalsContainer {
         readonly kind: SyntaxKind.JSDocEnumTag;
         readonly parent: JSDoc;
         readonly typeExpression: JSDocTypeExpression;
@@ -5924,14 +5927,14 @@ declare namespace ts {
         readonly kind: SyntaxKind.JSDocTypeTag;
         readonly typeExpression: JSDocTypeExpression;
     }
-    interface JSDocTypedefTag extends JSDocTag, NamedDeclaration {
+    interface JSDocTypedefTag extends JSDocTag, NamedDeclaration, LocalsContainer {
         readonly kind: SyntaxKind.JSDocTypedefTag;
         readonly parent: JSDoc;
         readonly fullName?: JSDocNamespaceDeclaration | Identifier;
         readonly name?: Identifier;
         readonly typeExpression?: JSDocTypeExpression | JSDocTypeLiteral;
     }
-    interface JSDocCallbackTag extends JSDocTag, NamedDeclaration {
+    interface JSDocCallbackTag extends JSDocTag, NamedDeclaration, LocalsContainer {
         readonly kind: SyntaxKind.JSDocCallbackTag;
         readonly parent: JSDoc;
         readonly fullName?: JSDocNamespaceDeclaration | Identifier;
@@ -5942,7 +5945,7 @@ declare namespace ts {
         readonly kind: SyntaxKind.JSDocThrowsTag;
         readonly typeExpression?: JSDocTypeExpression;
     }
-    interface JSDocSignature extends JSDocType, Declaration, JSDocContainer {
+    interface JSDocSignature extends JSDocType, Declaration, JSDocContainer, LocalsContainer {
         readonly kind: SyntaxKind.JSDocSignature;
         readonly typeParameters?: readonly JSDocTemplateTag[];
         readonly parameters: readonly JSDocParameterTag[];
@@ -6042,7 +6045,7 @@ declare namespace ts {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
     type ResolutionMode = ModuleKind.ESNext | ModuleKind.CommonJS | undefined;
-    interface SourceFile extends Declaration {
+    interface SourceFile extends Declaration, LocalsContainer {
         readonly kind: SyntaxKind.SourceFile;
         readonly statements: NodeArray<Statement>;
         readonly endOfFileToken: Token<SyntaxKind.EndOfFileToken>;

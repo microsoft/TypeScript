@@ -21,6 +21,7 @@ import {
     BreakOrContinueStatement,
     CallChain,
     CallExpression,
+    canHaveLocals,
     canHaveSymbol,
     CaseBlock,
     CaseClause,
@@ -495,7 +496,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     let container: IsContainer | EntityNameExpression;
     let thisParentContainer: IsContainer | EntityNameExpression; // Container one level up
     let blockScopeContainer: IsBlockScopedContainer;
-    let lastContainer: IsBlockScopedContainer;
+    let lastContainer: HasLocals;
     let delayedTypeAliases: (JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag)[];
     let seenThisKeyword: boolean;
 
@@ -858,6 +859,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes);
             }
             else {
+                Debug.assertNode(container, canHaveLocals);
                 return declareSymbol(container.locals!, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
             }
         }
@@ -879,7 +881,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
             if (isJSDocTypeAlias(node)) Debug.assert(isInJSFile(node)); // We shouldn't add symbols for JSDoc nodes if not in a JS file.
             if (!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) {
-                if (!container.locals || (hasSyntacticModifier(node, ModifierFlags.Default) && !getDeclarationName(node))) {
+                if (!canHaveLocals(container) || !container.locals || (hasSyntacticModifier(node, ModifierFlags.Default) && !getDeclarationName(node))) {
                     return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes); // No local symbol for an unnamed default!
                 }
                 const exportKind = symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0;
@@ -889,6 +891,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 return local;
             }
             else {
+                Debug.assertNode(container, canHaveLocals);
                 return declareSymbol(container.locals!, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
             }
         }
@@ -946,13 +949,15 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             }
             container = blockScopeContainer = node as IsContainer;
             if (containerFlags & ContainerFlags.HasLocals) {
-                container.locals = createSymbolTable();
+                (container as HasLocals).locals = createSymbolTable();
+                addToContainerChain(container as HasLocals);
             }
-            addToContainerChain(blockScopeContainer);
         }
         else if (containerFlags & ContainerFlags.IsBlockScopedContainer) {
             blockScopeContainer = node as IsBlockScopedContainer;
-            blockScopeContainer.locals = undefined;
+            if (containerFlags & ContainerFlags.HasLocals) {
+                (blockScopeContainer as HasLocals).locals = undefined;
+            }
         }
         if (containerFlags & ContainerFlags.IsControlFlowContainer) {
             const saveCurrentFlow = currentFlow;
@@ -2127,7 +2132,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
     }
 
-    function addToContainerChain(next: IsBlockScopedContainer) {
+    function addToContainerChain(next: HasLocals) {
         if (lastContainer) {
             lastContainer.nextContainer = next;
         }
@@ -2190,6 +2195,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 // their container in the tree). To accomplish this, we simply add their declared
                 // symbol to the 'locals' of the container.  These symbols can then be found as
                 // the type checker walks up the containers, checking them for matching names.
+                if (container.locals) Debug.assertNode(container, canHaveLocals);
                 return declareSymbol(container.locals!, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
         }
     }
@@ -2317,6 +2323,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 }
                 // falls through
             default:
+                Debug.assertNode(blockScopeContainer, canHaveLocals);
                 if (!blockScopeContainer.locals) {
                     blockScopeContainer.locals = createSymbolTable();
                     addToContainerChain(blockScopeContainer);
@@ -3612,6 +3619,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         if (isJSDocTemplateTag(node.parent)) {
             const container: HasLocals | undefined = getEffectiveContainerForJSDocTemplateTag(node.parent);
             if (container) {
+                Debug.assertNode(container, canHaveLocals);
                 container.locals ??= createSymbolTable();
                 declareSymbol(container.locals, /*parent*/ undefined, node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
             }
@@ -3622,6 +3630,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         else if (node.parent.kind === SyntaxKind.InferType) {
             const container: HasLocals | undefined = getInferTypeContainer(node.parent);
             if (container) {
+                Debug.assertNode(container, canHaveLocals);
                 container.locals ??= createSymbolTable();
                 declareSymbol(container.locals, /*parent*/ undefined, node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
             }
@@ -3798,7 +3807,7 @@ function getContainerFlags(node: Node): ContainerFlags {
         case SyntaxKind.ForInStatement:
         case SyntaxKind.ForOfStatement:
         case SyntaxKind.CaseBlock:
-            return ContainerFlags.IsBlockScopedContainer;
+            return ContainerFlags.IsBlockScopedContainer | ContainerFlags.HasLocals;
 
         case SyntaxKind.Block:
             // do not treat blocks directly inside a function as a block-scoped-container.
@@ -3817,14 +3826,14 @@ function getContainerFlags(node: Node): ContainerFlags {
             // By not creating a new block-scoped-container here, we ensure that both 'var x'
             // and 'let x' go into the Function-container's locals, and we do get a collision
             // conflict.
-            return isFunctionLike(node.parent) || isClassStaticBlockDeclaration(node.parent) ? ContainerFlags.None : ContainerFlags.IsBlockScopedContainer;
+            return isFunctionLike(node.parent) || isClassStaticBlockDeclaration(node.parent) ? ContainerFlags.None : ContainerFlags.IsBlockScopedContainer | ContainerFlags.HasLocals;
     }
 
     return ContainerFlags.None;
 }
 
 function lookupSymbolForName(container: Node, name: __String): Symbol | undefined {
-    const local = container.locals?.get(name);
+    const local = tryCast(container, canHaveLocals)?.locals?.get(name);
     if (local) {
         return local.exportSymbol ?? local;
     }

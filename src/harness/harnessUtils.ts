@@ -222,8 +222,8 @@ export function sourceFileToJSON(file: ts.Node): string {
                     break;
 
                 case "nextContainer":
-                    if (n.nextContainer) {
-                        o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.pos, end: n.nextContainer.end };
+                    if ((n as ts.HasLocals).nextContainer) {
+                        o[propertyName] = { kind: (n as ts.HasLocals).nextContainer!.kind, pos: (n as ts.HasLocals).nextContainer!.pos, end: (n as ts.HasLocals).nextContainer!.end };
                     }
                     break;
 

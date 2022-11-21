@@ -993,7 +993,8 @@ function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration
 
 class SourceFileObject extends NodeObject implements SourceFile {
     public kind: SyntaxKind.SourceFile = SyntaxKind.SourceFile;
-    public _declarationBrand: any;
+    declare _declarationBrand: any;
+    declare _localsContainerBrand: any;
     public fileName!: string;
     public path!: Path;
     public resolvedPath!: Path;

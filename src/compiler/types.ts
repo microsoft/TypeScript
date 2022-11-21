@@ -899,9 +899,6 @@ export interface Node extends ReadonlyTextRange {
     readonly parent: Node;                                // Parent node (initialized by binding)
     /** @internal */ original?: Node;                      // The original node if this is an updated node.
 
-    /** @internal */ locals?: SymbolTable;                 // Locals associated with node (initialized by binding)
-    /** @internal */ nextContainer?: Node;                 // Next container in declaration order (initialized by binding)
-
     /** @internal */ flowNode?: FlowNode;                  // Associated FlowNode (initialized by binding)
     /** @internal */ emitNode?: EmitNode;                  // Associated EmitNode (initialized by transforms)
 }
@@ -910,6 +907,12 @@ export interface JSDocContainer extends Node {
     _jsdocContainerBrand: any;
     /** @internal */ jsDoc?: JSDoc[];                      // JSDoc that directly precedes this node
     /** @internal */ jsDocCache?: readonly JSDocTag[];     // Cache for getJSDocTags
+}
+
+export interface LocalsContainer extends Node {
+    _localsContainerBrand: any;
+    /** @internal */ locals?: SymbolTable;                 // Locals associated with node (initialized by binding)
+    /** @internal */ nextContainer?: HasLocals;            // Next container in declaration order (initialized by binding)
 }
 
 // Ideally, `ForEachChildNodes` and `VisitEachChildNodes` would not differ.
@@ -1424,35 +1427,42 @@ export type IsFunctionExpression =
     ;
 
 /**
- * Nodes that can have local symbols. Corresponds with `ContainerFlags.HasLocals`.
+ * Nodes that can have local symbols. Corresponds with `ContainerFlags.HasLocals`. Constituents should extend
+ * {@link LocalsContainer}.
  *
  * @internal
  */
 export type HasLocals =
-    | ModuleDeclaration
-    | TypeAliasDeclaration
-    | MappedTypeNode
-    | IndexSignatureDeclaration
-    | SourceFile
-    | GetAccessorDeclaration
-    | SetAccessorDeclaration
-    | MethodDeclaration
-    | ConstructorDeclaration
-    | FunctionDeclaration
-    | MethodSignature
-    | CallSignatureDeclaration
-    | JSDocSignature
-    | JSDocFunctionType
-    | FunctionTypeNode
-    | ConstructSignatureDeclaration
-    | ConstructorTypeNode
-    | ClassStaticBlockDeclaration
-    | FunctionExpression
     | ArrowFunction
-    | JSDocTypedefTag //
-    | JSDocEnumTag
-    | JSDocCallbackTag
+    | Block
+    | CallSignatureDeclaration
+    | CaseBlock
+    | CatchClause
+    | ClassStaticBlockDeclaration
     | ConditionalTypeNode
+    | ConstructorDeclaration
+    | ConstructorTypeNode
+    | ConstructSignatureDeclaration
+    | ForStatement
+    | ForInStatement
+    | ForOfStatement
+    | FunctionDeclaration
+    | FunctionExpression
+    | FunctionTypeNode
+    | GetAccessorDeclaration
+    | IndexSignatureDeclaration
+    | JSDocCallbackTag
+    | JSDocEnumTag
+    | JSDocFunctionType
+    | JSDocSignature
+    | JSDocTypedefTag
+    | MappedTypeNode
+    | MethodDeclaration
+    | MethodSignature
+    | ModuleDeclaration
+    | SetAccessorDeclaration
+    | SourceFile
+    | TypeAliasDeclaration
     ;
 
 /**
@@ -1781,11 +1791,11 @@ export type SignatureDeclaration =
     | FunctionExpression
     | ArrowFunction;
 
-export interface CallSignatureDeclaration extends SignatureDeclarationBase, TypeElement {
+export interface CallSignatureDeclaration extends SignatureDeclarationBase, TypeElement, LocalsContainer {
     readonly kind: SyntaxKind.CallSignature;
 }
 
-export interface ConstructSignatureDeclaration extends SignatureDeclarationBase, TypeElement {
+export interface ConstructSignatureDeclaration extends SignatureDeclarationBase, TypeElement, LocalsContainer {
     readonly kind: SyntaxKind.ConstructSignature;
 }
 
@@ -2000,7 +2010,7 @@ export type FunctionLikeDeclaration =
 /** @deprecated Use SignatureDeclaration */
 export type FunctionLike = SignatureDeclaration;
 
-export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement {
+export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement, LocalsContainer {
     readonly kind: SyntaxKind.FunctionDeclaration;
     readonly modifiers?: NodeArray<Modifier>;
     readonly name?: Identifier;
@@ -2010,7 +2020,7 @@ export interface FunctionDeclaration extends FunctionLikeDeclarationBase, Declar
     /** @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined; // functions cannot have decorators
 }
 
-export interface MethodSignature extends SignatureDeclarationBase, TypeElement {
+export interface MethodSignature extends SignatureDeclarationBase, TypeElement, LocalsContainer {
     readonly kind: SyntaxKind.MethodSignature;
     readonly parent: TypeLiteralNode | InterfaceDeclaration;
     readonly modifiers?: NodeArray<Modifier>;
@@ -2026,7 +2036,7 @@ export interface MethodSignature extends SignatureDeclarationBase, TypeElement {
 // Because of this, it may be necessary to determine what sort of MethodDeclaration you have
 // at later stages of the compiler pipeline.  In that case, you can either check the parent kind
 // of the method, or use helpers like isObjectLiteralMethodDeclaration
-export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer {
+export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassElement, ObjectLiteralElement, JSDocContainer, LocalsContainer {
     readonly kind: SyntaxKind.MethodDeclaration;
     readonly parent: ClassLikeDeclaration | ObjectLiteralExpression;
     readonly modifiers?: NodeArray<ModifierLike> | undefined;
@@ -2037,7 +2047,7 @@ export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassEle
     /** @internal */ readonly exclamationToken?: ExclamationToken | undefined; // A method cannot have an exclamation token
 }
 
-export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer {
+export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer, LocalsContainer {
     readonly kind: SyntaxKind.Constructor;
     readonly parent: ClassLikeDeclaration;
     readonly modifiers?: NodeArray<Modifier> | undefined;
@@ -2057,7 +2067,7 @@ export interface SemicolonClassElement extends ClassElement {
 
 // See the comment on MethodDeclaration for the intuition behind GetAccessorDeclaration being a
 // ClassElement and an ObjectLiteralElement.
-export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer {
+export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer {
     readonly kind: SyntaxKind.GetAccessor;
     readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
     readonly modifiers?: NodeArray<ModifierLike>;
@@ -2070,7 +2080,7 @@ export interface GetAccessorDeclaration extends FunctionLikeDeclarationBase, Cla
 
 // See the comment on MethodDeclaration for the intuition behind SetAccessorDeclaration being a
 // ClassElement and an ObjectLiteralElement.
-export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer {
+export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, ClassElement, TypeElement, ObjectLiteralElement, JSDocContainer, LocalsContainer {
     readonly kind: SyntaxKind.SetAccessor;
     readonly parent: ClassLikeDeclaration | ObjectLiteralExpression | TypeLiteralNode | InterfaceDeclaration;
     readonly modifiers?: NodeArray<ModifierLike>;
@@ -2084,7 +2094,7 @@ export interface SetAccessorDeclaration extends FunctionLikeDeclarationBase, Cla
 
 export type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
 
-export interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement {
+export interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement, LocalsContainer {
     readonly kind: SyntaxKind.IndexSignature;
     readonly parent: ObjectTypeDeclaration;
     readonly modifiers?: NodeArray<Modifier>;
@@ -2094,7 +2104,7 @@ export interface IndexSignatureDeclaration extends SignatureDeclarationBase, Cla
     /** @internal */ readonly illegalDecorators?: NodeArray<Decorator> | undefined;
 }
 
-export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer {
+export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer, LocalsContainer {
     readonly kind: SyntaxKind.ClassStaticBlockDeclaration;
     readonly parent: ClassDeclaration | ClassExpression;
     readonly body: Block;
@@ -2149,14 +2159,14 @@ export interface FunctionOrConstructorTypeNodeBase extends TypeNode, SignatureDe
     readonly type: TypeNode;
 }
 
-export interface FunctionTypeNode extends FunctionOrConstructorTypeNodeBase {
+export interface FunctionTypeNode extends FunctionOrConstructorTypeNodeBase, LocalsContainer {
     readonly kind: SyntaxKind.FunctionType;
 
     // The following properties are used only to report grammar errors
     /** @internal */ readonly modifiers?: NodeArray<Modifier> | undefined;
 }
 
-export interface ConstructorTypeNode extends FunctionOrConstructorTypeNodeBase {
+export interface ConstructorTypeNode extends FunctionOrConstructorTypeNodeBase, LocalsContainer {
     readonly kind: SyntaxKind.ConstructorType;
     readonly modifiers?: NodeArray<Modifier>;
 }
@@ -2231,7 +2241,7 @@ export interface IntersectionTypeNode extends TypeNode {
     readonly types: NodeArray<TypeNode>;
 }
 
-export interface ConditionalTypeNode extends TypeNode {
+export interface ConditionalTypeNode extends TypeNode, LocalsContainer {
     readonly kind: SyntaxKind.ConditionalType;
     readonly checkType: TypeNode;
     readonly extendsType: TypeNode;
@@ -2266,7 +2276,7 @@ export interface IndexedAccessTypeNode extends TypeNode {
     readonly indexType: TypeNode;
 }
 
-export interface MappedTypeNode extends TypeNode, Declaration {
+export interface MappedTypeNode extends TypeNode, Declaration, LocalsContainer {
     readonly kind: SyntaxKind.MappedType;
     readonly readonlyToken?: ReadonlyKeyword | PlusToken | MinusToken;
     readonly typeParameter: TypeParameterDeclaration;
@@ -2684,14 +2694,14 @@ export interface ConditionalExpression extends Expression {
 export type FunctionBody = Block;
 export type ConciseBody = FunctionBody | Expression;
 
-export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclarationBase, JSDocContainer {
+export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer {
     readonly kind: SyntaxKind.FunctionExpression;
     readonly modifiers?: NodeArray<Modifier>;
     readonly name?: Identifier;
     readonly body: FunctionBody;  // Required, whereas the member inherited from FunctionDeclaration is optional
 }
 
-export interface ArrowFunction extends Expression, FunctionLikeDeclarationBase, JSDocContainer {
+export interface ArrowFunction extends Expression, FunctionLikeDeclarationBase, JSDocContainer, LocalsContainer {
     readonly kind: SyntaxKind.ArrowFunction;
     readonly modifiers?: NodeArray<Modifier>;
     readonly equalsGreaterThanToken: EqualsGreaterThanToken;
@@ -3279,7 +3289,7 @@ export type BlockLike =
     | CaseOrDefaultClause
     ;
 
-export interface Block extends Statement {
+export interface Block extends Statement, LocalsContainer {
     readonly kind: SyntaxKind.Block;
     readonly statements: NodeArray<Statement>;
     /** @internal */ multiLine?: boolean;
@@ -3330,7 +3340,7 @@ export type ForInitializer =
     | Expression
     ;
 
-export interface ForStatement extends IterationStatement {
+export interface ForStatement extends IterationStatement, LocalsContainer {
     readonly kind: SyntaxKind.ForStatement;
     readonly initializer?: ForInitializer;
     readonly condition?: Expression;
@@ -3342,13 +3352,13 @@ export type ForInOrOfStatement =
     | ForOfStatement
     ;
 
-export interface ForInStatement extends IterationStatement {
+export interface ForInStatement extends IterationStatement, LocalsContainer {
     readonly kind: SyntaxKind.ForInStatement;
     readonly initializer: ForInitializer;
     readonly expression: Expression;
 }
 
-export interface ForOfStatement extends IterationStatement {
+export interface ForOfStatement extends IterationStatement, LocalsContainer {
     readonly kind: SyntaxKind.ForOfStatement;
     readonly awaitModifier?: AwaitKeyword;
     readonly initializer: ForInitializer;
@@ -3388,7 +3398,7 @@ export interface SwitchStatement extends Statement {
     possiblyExhaustive?: boolean; // initialized by binding
 }
 
-export interface CaseBlock extends Node {
+export interface CaseBlock extends Node, LocalsContainer {
     readonly kind: SyntaxKind.CaseBlock;
     readonly parent: SwitchStatement;
     readonly clauses: NodeArray<CaseOrDefaultClause>;
@@ -3432,7 +3442,7 @@ export interface TryStatement extends Statement {
     readonly finallyBlock?: Block;
 }
 
-export interface CatchClause extends Node {
+export interface CatchClause extends Node, LocalsContainer {
     readonly kind: SyntaxKind.CatchClause;
     readonly parent: TryStatement;
     readonly variableDeclaration?: VariableDeclaration;
@@ -3515,7 +3525,7 @@ export interface HeritageClause extends Node {
     readonly types: NodeArray<ExpressionWithTypeArguments>;
 }
 
-export interface TypeAliasDeclaration extends DeclarationStatement, JSDocContainer {
+export interface TypeAliasDeclaration extends DeclarationStatement, JSDocContainer, LocalsContainer {
     readonly kind: SyntaxKind.TypeAliasDeclaration;
     readonly modifiers?: NodeArray<Modifier>;
     readonly name: Identifier;
@@ -3560,7 +3570,7 @@ export interface AmbientModuleDeclaration extends ModuleDeclaration {
     readonly body?: ModuleBlock;
 }
 
-export interface ModuleDeclaration extends DeclarationStatement, JSDocContainer {
+export interface ModuleDeclaration extends DeclarationStatement, JSDocContainer, LocalsContainer {
     readonly kind: SyntaxKind.ModuleDeclaration;
     readonly parent: ModuleBody | SourceFile;
     readonly modifiers?: NodeArray<Modifier>;
@@ -3856,7 +3866,7 @@ export interface JSDocOptionalType extends JSDocType {
     readonly type: TypeNode;
 }
 
-export interface JSDocFunctionType extends JSDocType, SignatureDeclarationBase {
+export interface JSDocFunctionType extends JSDocType, SignatureDeclarationBase, LocalsContainer {
     readonly kind: SyntaxKind.JSDocFunctionType;
 }
 
@@ -3965,7 +3975,7 @@ export interface JSDocOverrideTag extends JSDocTag {
     readonly kind: SyntaxKind.JSDocOverrideTag;
 }
 
-export interface JSDocEnumTag extends JSDocTag, Declaration {
+export interface JSDocEnumTag extends JSDocTag, Declaration, LocalsContainer {
     readonly kind: SyntaxKind.JSDocEnumTag;
     readonly parent: JSDoc;
     readonly typeExpression: JSDocTypeExpression;
@@ -3997,7 +4007,7 @@ export interface JSDocTypeTag extends JSDocTag {
     readonly typeExpression: JSDocTypeExpression;
 }
 
-export interface JSDocTypedefTag extends JSDocTag, NamedDeclaration {
+export interface JSDocTypedefTag extends JSDocTag, NamedDeclaration, LocalsContainer {
     readonly kind: SyntaxKind.JSDocTypedefTag;
     readonly parent: JSDoc;
     readonly fullName?: JSDocNamespaceDeclaration | Identifier;
@@ -4005,7 +4015,7 @@ export interface JSDocTypedefTag extends JSDocTag, NamedDeclaration {
     readonly typeExpression?: JSDocTypeExpression | JSDocTypeLiteral;
 }
 
-export interface JSDocCallbackTag extends JSDocTag, NamedDeclaration {
+export interface JSDocCallbackTag extends JSDocTag, NamedDeclaration, LocalsContainer {
     readonly kind: SyntaxKind.JSDocCallbackTag;
     readonly parent: JSDoc;
     readonly fullName?: JSDocNamespaceDeclaration | Identifier;
@@ -4018,7 +4028,7 @@ export interface JSDocThrowsTag extends JSDocTag {
     readonly typeExpression?: JSDocTypeExpression;
 }
 
-export interface JSDocSignature extends JSDocType, Declaration, JSDocContainer {
+export interface JSDocSignature extends JSDocType, Declaration, JSDocContainer, LocalsContainer {
     readonly kind: SyntaxKind.JSDocSignature;
     readonly typeParameters?: readonly JSDocTemplateTag[];
     readonly parameters: readonly JSDocParameterTag[];
@@ -4176,7 +4186,7 @@ export interface RedirectInfo {
 export type ResolutionMode = ModuleKind.ESNext | ModuleKind.CommonJS | undefined;
 
 // Source files are declarations when they are external modules.
-export interface SourceFile extends Declaration {
+export interface SourceFile extends Declaration, LocalsContainer {
     readonly kind: SyntaxKind.SourceFile;
     readonly statements: NodeArray<Statement>;
     readonly endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
