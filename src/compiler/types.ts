@@ -9135,6 +9135,10 @@ export interface DiagnosticCollection {
     // Otherwise, returns all the diagnostics (global and file associated) in this collection.
     getDiagnostics(): Diagnostic[];
     getDiagnostics(fileName: string): DiagnosticWithLocation[];
+
+    isStaging: boolean;
+    commitStaged(): void;
+    revertStaged(): void;
 }
 
 // SyntaxKind.SyntaxList

@@ -1,0 +1,60 @@
+=== tests/cases/compiler/dependentContextualInferenceMultiplePasses.ts ===
+declare const f:
+>f : Symbol(f, Decl(dependentContextualInferenceMultiplePasses.ts, 0, 13))
+
+  <T extends F<T>>(t: T) => T
+>T : Symbol(T, Decl(dependentContextualInferenceMultiplePasses.ts, 1, 3))
+>F : Symbol(F, Decl(dependentContextualInferenceMultiplePasses.ts, 1, 29))
+>T : Symbol(T, Decl(dependentContextualInferenceMultiplePasses.ts, 1, 3))
+>t : Symbol(t, Decl(dependentContextualInferenceMultiplePasses.ts, 1, 19))
+>T : Symbol(T, Decl(dependentContextualInferenceMultiplePasses.ts, 1, 3))
+>T : Symbol(T, Decl(dependentContextualInferenceMultiplePasses.ts, 1, 3))
+
+type F<T> =
+>F : Symbol(F, Decl(dependentContextualInferenceMultiplePasses.ts, 1, 29))
+>T : Symbol(T, Decl(dependentContextualInferenceMultiplePasses.ts, 3, 7))
+
+  { a: unknown
+>a : Symbol(a, Decl(dependentContextualInferenceMultiplePasses.ts, 4, 3))
+
+  , b: (a: T["a" & keyof T]) => unknown
+>b : Symbol(b, Decl(dependentContextualInferenceMultiplePasses.ts, 5, 3))
+>a : Symbol(a, Decl(dependentContextualInferenceMultiplePasses.ts, 5, 8))
+>T : Symbol(T, Decl(dependentContextualInferenceMultiplePasses.ts, 3, 7))
+>T : Symbol(T, Decl(dependentContextualInferenceMultiplePasses.ts, 3, 7))
+
+  , c: (b: ReturnType<Extract<T["b" & keyof T], (...a: never[]) => unknown>>) => unknown
+>c : Symbol(c, Decl(dependentContextualInferenceMultiplePasses.ts, 6, 3))
+>b : Symbol(b, Decl(dependentContextualInferenceMultiplePasses.ts, 6, 8))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(dependentContextualInferenceMultiplePasses.ts, 3, 7))
+>T : Symbol(T, Decl(dependentContextualInferenceMultiplePasses.ts, 3, 7))
+>a : Symbol(a, Decl(dependentContextualInferenceMultiplePasses.ts, 6, 49))
+  }
+
+f({
+>f : Symbol(f, Decl(dependentContextualInferenceMultiplePasses.ts, 0, 13))
+
+  a: ({ value: "a" as "a" }),
+>a : Symbol(a, Decl(dependentContextualInferenceMultiplePasses.ts, 9, 3))
+>value : Symbol(value, Decl(dependentContextualInferenceMultiplePasses.ts, 10, 7))
+
+  b: x => ({ value: x.value  }),
+>b : Symbol(b, Decl(dependentContextualInferenceMultiplePasses.ts, 10, 29))
+>x : Symbol(x, Decl(dependentContextualInferenceMultiplePasses.ts, 11, 4))
+>value : Symbol(value, Decl(dependentContextualInferenceMultiplePasses.ts, 11, 12))
+>x.value : Symbol(value, Decl(dependentContextualInferenceMultiplePasses.ts, 10, 7))
+>x : Symbol(x, Decl(dependentContextualInferenceMultiplePasses.ts, 11, 4))
+>value : Symbol(value, Decl(dependentContextualInferenceMultiplePasses.ts, 10, 7))
+
+  c: x => ({ value: x.value  })
+>c : Symbol(c, Decl(dependentContextualInferenceMultiplePasses.ts, 11, 32))
+>x : Symbol(x, Decl(dependentContextualInferenceMultiplePasses.ts, 12, 4))
+>value : Symbol(value, Decl(dependentContextualInferenceMultiplePasses.ts, 12, 12))
+>x.value : Symbol(value, Decl(dependentContextualInferenceMultiplePasses.ts, 11, 12))
+>x : Symbol(x, Decl(dependentContextualInferenceMultiplePasses.ts, 12, 4))
+>value : Symbol(value, Decl(dependentContextualInferenceMultiplePasses.ts, 11, 12))
+
+})
+

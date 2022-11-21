@@ -1,0 +1,94 @@
+=== tests/cases/compiler/dependentContextualInferenceTooManyPasses.ts ===
+declare const f:
+>f : Symbol(f, Decl(dependentContextualInferenceTooManyPasses.ts, 0, 13))
+
+  <T extends F<T>>(t: T) => T
+>T : Symbol(T, Decl(dependentContextualInferenceTooManyPasses.ts, 1, 3))
+>F : Symbol(F, Decl(dependentContextualInferenceTooManyPasses.ts, 1, 29))
+>T : Symbol(T, Decl(dependentContextualInferenceTooManyPasses.ts, 1, 3))
+>t : Symbol(t, Decl(dependentContextualInferenceTooManyPasses.ts, 1, 19))
+>T : Symbol(T, Decl(dependentContextualInferenceTooManyPasses.ts, 1, 3))
+>T : Symbol(T, Decl(dependentContextualInferenceTooManyPasses.ts, 1, 3))
+
+type F<T> =
+>F : Symbol(F, Decl(dependentContextualInferenceTooManyPasses.ts, 1, 29))
+>T : Symbol(T, Decl(dependentContextualInferenceTooManyPasses.ts, 3, 7))
+
+  { a: unknown
+>a : Symbol(a, Decl(dependentContextualInferenceTooManyPasses.ts, 4, 3))
+
+  , b: (a: T["a" & keyof T]) => unknown
+>b : Symbol(b, Decl(dependentContextualInferenceTooManyPasses.ts, 5, 3))
+>a : Symbol(a, Decl(dependentContextualInferenceTooManyPasses.ts, 5, 8))
+>T : Symbol(T, Decl(dependentContextualInferenceTooManyPasses.ts, 3, 7))
+>T : Symbol(T, Decl(dependentContextualInferenceTooManyPasses.ts, 3, 7))
+
+  , c: (b: ReturnType<Extract<T["b" & keyof T], (...a: never[]) => unknown>>) => unknown
+>c : Symbol(c, Decl(dependentContextualInferenceTooManyPasses.ts, 6, 3))
+>b : Symbol(b, Decl(dependentContextualInferenceTooManyPasses.ts, 6, 8))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(dependentContextualInferenceTooManyPasses.ts, 3, 7))
+>T : Symbol(T, Decl(dependentContextualInferenceTooManyPasses.ts, 3, 7))
+>a : Symbol(a, Decl(dependentContextualInferenceTooManyPasses.ts, 6, 49))
+
+  , d: (c: ReturnType<Extract<T["c" & keyof T], (...a: never[]) => unknown>>) => unknown
+>d : Symbol(d, Decl(dependentContextualInferenceTooManyPasses.ts, 7, 3))
+>c : Symbol(c, Decl(dependentContextualInferenceTooManyPasses.ts, 7, 8))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(dependentContextualInferenceTooManyPasses.ts, 3, 7))
+>T : Symbol(T, Decl(dependentContextualInferenceTooManyPasses.ts, 3, 7))
+>a : Symbol(a, Decl(dependentContextualInferenceTooManyPasses.ts, 7, 49))
+
+  , e: (d: ReturnType<Extract<T["d" & keyof T], (...a: never[]) => unknown>>) => unknown
+>e : Symbol(e, Decl(dependentContextualInferenceTooManyPasses.ts, 8, 3))
+>d : Symbol(d, Decl(dependentContextualInferenceTooManyPasses.ts, 8, 8))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(dependentContextualInferenceTooManyPasses.ts, 3, 7))
+>T : Symbol(T, Decl(dependentContextualInferenceTooManyPasses.ts, 3, 7))
+>a : Symbol(a, Decl(dependentContextualInferenceTooManyPasses.ts, 8, 49))
+  }
+
+f({
+>f : Symbol(f, Decl(dependentContextualInferenceTooManyPasses.ts, 0, 13))
+
+  a: ({ value: "a" as "a" }),
+>a : Symbol(a, Decl(dependentContextualInferenceTooManyPasses.ts, 11, 3))
+>value : Symbol(value, Decl(dependentContextualInferenceTooManyPasses.ts, 12, 7))
+
+  b: x => ({ value: x.value  }),
+>b : Symbol(b, Decl(dependentContextualInferenceTooManyPasses.ts, 12, 29))
+>x : Symbol(x, Decl(dependentContextualInferenceTooManyPasses.ts, 13, 4))
+>value : Symbol(value, Decl(dependentContextualInferenceTooManyPasses.ts, 13, 12))
+>x.value : Symbol(value, Decl(dependentContextualInferenceTooManyPasses.ts, 12, 7))
+>x : Symbol(x, Decl(dependentContextualInferenceTooManyPasses.ts, 13, 4))
+>value : Symbol(value, Decl(dependentContextualInferenceTooManyPasses.ts, 12, 7))
+
+  c: x => ({ value: x.value  }),
+>c : Symbol(c, Decl(dependentContextualInferenceTooManyPasses.ts, 13, 32))
+>x : Symbol(x, Decl(dependentContextualInferenceTooManyPasses.ts, 14, 4))
+>value : Symbol(value, Decl(dependentContextualInferenceTooManyPasses.ts, 14, 12))
+>x.value : Symbol(value, Decl(dependentContextualInferenceTooManyPasses.ts, 13, 12))
+>x : Symbol(x, Decl(dependentContextualInferenceTooManyPasses.ts, 14, 4))
+>value : Symbol(value, Decl(dependentContextualInferenceTooManyPasses.ts, 13, 12))
+
+  d: x => ({ value: x.value  }),
+>d : Symbol(d, Decl(dependentContextualInferenceTooManyPasses.ts, 14, 32))
+>x : Symbol(x, Decl(dependentContextualInferenceTooManyPasses.ts, 15, 4))
+>value : Symbol(value, Decl(dependentContextualInferenceTooManyPasses.ts, 15, 12))
+>x.value : Symbol(value, Decl(dependentContextualInferenceTooManyPasses.ts, 14, 12))
+>x : Symbol(x, Decl(dependentContextualInferenceTooManyPasses.ts, 15, 4))
+>value : Symbol(value, Decl(dependentContextualInferenceTooManyPasses.ts, 14, 12))
+
+  e: x => ({ value: x.value  }),
+>e : Symbol(e, Decl(dependentContextualInferenceTooManyPasses.ts, 15, 32))
+>x : Symbol(x, Decl(dependentContextualInferenceTooManyPasses.ts, 16, 4))
+>value : Symbol(value, Decl(dependentContextualInferenceTooManyPasses.ts, 16, 12))
+>x.value : Symbol(value, Decl(dependentContextualInferenceTooManyPasses.ts, 15, 12))
+>x : Symbol(x, Decl(dependentContextualInferenceTooManyPasses.ts, 16, 4))
+>value : Symbol(value, Decl(dependentContextualInferenceTooManyPasses.ts, 15, 12))
+
+})
+
