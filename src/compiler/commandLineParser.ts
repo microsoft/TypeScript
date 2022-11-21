@@ -2049,12 +2049,11 @@ export function tryReadFile(fileName: string, readFile: (path: string) => string
     try {
         if (fileName.slice(-3) === '.js') {
             try {
-                text = JSON.stringify( require( process.cwd() + '/' + fileName ) );
+                text = JSON.stringify( require( combinePaths(process.cwd(), fileName) ) );
             }
             catch (err) {
                 return createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, err);
             }
-
         } else if (fileName.slice(-5) === '.json') {
             text = readFile(fileName);
         } else {
