@@ -15019,8 +15019,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getSubstitutionType(baseType: Type, constraint: Type) {
-        if (constraint.flags & TypeFlags.AnyOrUnknown || constraint === baseType ||
-            !isGenericType(baseType) && !isGenericType(constraint)) {
+        if (constraint.flags & TypeFlags.AnyOrUnknown || constraint === baseType) {
             return baseType;
         }
         const id = `${getTypeId(baseType)}>${getTypeId(constraint)}`;
