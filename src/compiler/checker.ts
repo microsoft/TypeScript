@@ -34167,7 +34167,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function hasEmptyObjectIntersection(type: Type): boolean {
-        return someType(type, t => t === unknownEmptyObjectType || !!(t.flags & TypeFlags.Intersection) && some((t as IntersectionType).types, isEmptyAnonymousObjectType));
+        return someType(type, t => t === unknownEmptyObjectType || !!(t.flags & TypeFlags.Intersection) && isEmptyAnonymousObjectType(getBaseConstraintOrType(t)));
     }
 
     function checkInExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {
@@ -34196,10 +34196,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // that include {} (we know that the other types in such intersections are assignable to object
             // since we already checked for that).
             if (hasEmptyObjectIntersection(rightType)) {
-                const constraint = getBaseConstraintOfType(rightType);
-                if (!constraint || isEmptyAnonymousObjectType(constraint)) {
-                    error(right, Diagnostics.Type_0_may_represent_a_primitive_value_which_is_not_permitted_as_the_right_operand_of_the_in_operator, typeToString(rightType));
-                }
+                error(right, Diagnostics.Type_0_may_represent_a_primitive_value_which_is_not_permitted_as_the_right_operand_of_the_in_operator, typeToString(rightType));
             }
         }
         // The result is always of the Boolean primitive type.
