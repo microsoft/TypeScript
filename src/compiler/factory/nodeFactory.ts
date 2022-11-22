@@ -1754,12 +1754,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
                 TransformFlags.ContainsES2015;
         }
 
+        node.typeArguments = undefined; // used in quick info
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
         node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
         node.locals = undefined; // initialized by binder (LocalsContainer)
         node.nextContainer = undefined; // initialized by binder (LocalsContainer)
         node.flowNode = undefined; // initialized by binder (FlowContainer)
-        node.typeArguments = undefined; // used in quick info
+        node.endFlowNode = undefined;
+        node.returnFlowNode = undefined;
         return node;
     }
 
@@ -1808,6 +1810,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
         node.locals = undefined; // initialized by binder (LocalsContainer)
         node.nextContainer = undefined; // initialized by binder (LocalsContainer)
+        node.endFlowNode = undefined;
+        node.returnFlowNode = undefined;
         return node;
     }
 
@@ -1849,12 +1853,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.illegalDecorators = undefined; // initialized by parser for grammar errors
         node.typeParameters = undefined; // initialized by parser for grammar errors
         node.type = undefined; // initialized by parser for grammar errors
-
+        node.typeArguments = undefined; // used in quick info
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
         node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
         node.locals = undefined; // initialized by binder (LocalsContainer)
         node.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        node.typeArguments = undefined; // used in quick info
+        node.endFlowNode = undefined;
+        node.returnFlowNode = undefined;
         return node;
     }
 
@@ -1916,6 +1921,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.locals = undefined; // initialized by binder (LocalsContainer)
         node.nextContainer = undefined; // initialized by binder (LocalsContainer)
         node.flowNode = undefined; // initialized by binder (FlowContainer)
+        node.endFlowNode = undefined;
+        node.returnFlowNode = undefined;
         return node;
     }
 
@@ -1977,6 +1984,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.locals = undefined; // initialized by binder (LocalsContainer)
         node.nextContainer = undefined; // initialized by binder (LocalsContainer)
         node.flowNode = undefined; // initialized by binder (FlowContainer)
+        node.endFlowNode = undefined;
+        node.returnFlowNode = undefined;
         return node;
     }
 
@@ -3081,12 +3090,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             (node.typeParameters || node.type ? TransformFlags.ContainsTypeScript : TransformFlags.None) |
             TransformFlags.ContainsHoistedDeclarationOrCompletion;
 
+        node.typeArguments = undefined; // used in quick info
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
         node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
         node.locals = undefined; // initialized by binder (LocalsContainer)
         node.nextContainer = undefined; // initialized by binder (LocalsContainer)
         node.flowNode = undefined; // initialized by binder (FlowContainer)
-        node.typeArguments = undefined; // used in quick info
+        node.endFlowNode = undefined;
+        node.returnFlowNode = undefined;
         return node;
     }
 
@@ -3142,12 +3153,14 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             (isAsync ? TransformFlags.ContainsES2017 | TransformFlags.ContainsLexicalThis : TransformFlags.None) |
             TransformFlags.ContainsES2015;
 
+        node.typeArguments = undefined; // used in quick info
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
         node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
         node.locals = undefined; // initialized by binder (LocalsContainer)
         node.nextContainer = undefined; // initialized by binder (LocalsContainer)
         node.flowNode = undefined; // initialized by binder (FlowContainer)
-        node.typeArguments = undefined; // used in quick info
+        node.endFlowNode = undefined;
+        node.returnFlowNode = undefined;
         return node;
     }
 
@@ -4275,11 +4288,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
         node.illegalDecorators = undefined; // initialized by parser for grammar errors
 
+        node.typeArguments = undefined; // used in quick info
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
         node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
         node.locals = undefined; // initialized by binder (LocalsContainer)
         node.nextContainer = undefined; // initialized by binder (LocalsContainer)
-        node.typeArguments = undefined; // used in quick info
+        node.endFlowNode = undefined;
+        node.returnFlowNode = undefined;
         return node;
     }
 
@@ -6007,6 +6022,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
         node.locals = undefined; // initialized by binder (LocalsContainer)
         node.nextContainer = undefined; // initialized by binder (LocalsContainer)
+        node.endFlowNode = undefined;
         return node;
     }
 
