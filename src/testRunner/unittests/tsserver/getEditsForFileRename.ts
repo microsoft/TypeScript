@@ -1,6 +1,16 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { createProjectService, textSpanFromSubstring, createSession, openFilesForSession, executeSessionRequest, protocolTextSpanFromSubstring } from "./helpers";
+import {
+    createServerHost,
+    File,
+} from "../virtualFileSystemWithWatch";
+import {
+    createProjectService,
+    createSession,
+    executeSessionRequest,
+    openFilesForSession,
+    protocolTextSpanFromSubstring,
+    textSpanFromSubstring,
+} from "./helpers";
 
 describe("unittests:: tsserver:: getEditsForFileRename", () => {
     it("works for host implementing 'resolveModuleNames' and 'getResolvedModuleWithFailedLookupLocationsFromCache'", () => {

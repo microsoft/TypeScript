@@ -1,6 +1,16 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { createSession, openFilesForSession, makeSessionRequest, createLoggerWithInMemoryLogs, baselineTsserverLogs } from "./helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
+    createSession,
+    makeSessionRequest,
+    openFilesForSession,
+} from "./helpers";
 
 describe("unittests:: tsserver:: navigate-to for javascript project", () => {
     function findNavToItem(items: ts.server.protocol.NavtoItem[], itemName: string, itemKind: string) {

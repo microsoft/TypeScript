@@ -1,6 +1,17 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { createSession, openFilesForSession, makeReferenceItem, MakeReferenceItem, executeSessionRequest, protocolFileLocationFromSubstring, protocolLocationFromSubstring } from "./helpers";
+import {
+    createServerHost,
+    File,
+} from "../virtualFileSystemWithWatch";
+import {
+    createSession,
+    executeSessionRequest,
+    makeReferenceItem,
+    MakeReferenceItem,
+    openFilesForSession,
+    protocolFileLocationFromSubstring,
+    protocolLocationFromSubstring,
+} from "./helpers";
 
 describe("unittests:: tsserver:: getExportReferences", () => {
     const exportVariable = "export const value = 0;";

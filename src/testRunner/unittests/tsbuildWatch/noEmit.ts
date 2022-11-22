@@ -1,4 +1,7 @@
-import { createWatchedSystem, libFile } from "../virtualFileSystemWithWatch";
+import {
+    createWatchedSystem,
+    libFile,
+} from "../virtualFileSystemWithWatch";
 import { libContent } from "../tsc/helpers";
 import { verifyTscWatch } from "../tscWatch/helpers";
 

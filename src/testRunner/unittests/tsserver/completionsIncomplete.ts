@@ -1,6 +1,12 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { openFilesForSession, createSession } from "./helpers";
+import {
+    createServerHost,
+    File,
+} from "../virtualFileSystemWithWatch";
+import {
+    createSession,
+    openFilesForSession,
+} from "./helpers";
 
 function createExportingModuleFile(path: string, exportPrefix: string, exportCount: number): File {
     return {

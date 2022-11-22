@@ -1,10 +1,35 @@
 import {
-    CodeFixAllContext, Diagnostics, factory, getJSDocTypeTag, getTokenAtPosition, idText, isCallExpression,
-    isIdentifier, isInJSFile, isNewExpression, isParameter, isParenthesizedExpression, isParenthesizedTypeNode,
-    isTypeReferenceNode, isUnionTypeNode, NewExpression, ParameterDeclaration, Program, skipTrivia, some,
-    SourceFile, SyntaxKind, textChanges, TextSpan, TypeFlags,
+    CodeFixAllContext,
+    Diagnostics,
+    factory,
+    getJSDocTypeTag,
+    getTokenAtPosition,
+    idText,
+    isCallExpression,
+    isIdentifier,
+    isInJSFile,
+    isNewExpression,
+    isParameter,
+    isParenthesizedExpression,
+    isParenthesizedTypeNode,
+    isTypeReferenceNode,
+    isUnionTypeNode,
+    NewExpression,
+    ParameterDeclaration,
+    Program,
+    skipTrivia,
+    some,
+    SourceFile,
+    SyntaxKind,
+    textChanges,
+    TextSpan,
+    TypeFlags,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixName = "addVoidToPromise";
 const fixId = "addVoidToPromise";

@@ -1,8 +1,15 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
+import {
+    createServerHost,
+    File,
+} from "../virtualFileSystemWithWatch";
 import { createProjectService } from "../tsserver/helpers";
-import { extractTest, newLineCharacter, notImplementedHost } from "./extract/helpers";
+import {
+    extractTest,
+    newLineCharacter,
+    notImplementedHost,
+} from "./extract/helpers";
 
 const libFile: File = {
     path: "/a/lib/lib.d.ts",

@@ -6,9 +6,9 @@ import { task } from "hereby";
 import _glob from "glob";
 import util from "util";
 import chalk from "chalk";
-import { exec, readJson, getDiffTool, getDirSize, memoize, needsUpdate, Debouncer, Deferred } from "./scripts/build/utils.mjs";
-import { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline, cleanTestDirs } from "./scripts/build/tests.mjs";
-import { buildProject as realBuildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
+import { Debouncer, Deferred, exec, getDiffTool, getDirSize, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
+import { cleanTestDirs, localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
+import { cleanProject, buildProject as realBuildProject, watchProject } from "./scripts/build/projects.mjs";
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
 import esbuild from "esbuild";
@@ -328,10 +328,21 @@ function entrypointBuildTask(options) {
         },
     });
 
+    const mainDeps = options.mainDeps?.slice(0) ?? [];
+    if (cmdLineOptions.bundle) {
+        mainDeps.push(bundle);
+        if (cmdLineOptions.typecheck) {
+            mainDeps.push(build);
+        }
+    }
+    else {
+        mainDeps.push(build, shim);
+    }
+
     const main = task({
         name: options.name,
         description: options.description,
-        dependencies: (options.mainDeps ?? []).concat(cmdLineOptions.bundle ? [bundle] : [build, shim]),
+        dependencies: mainDeps,
     });
 
     const watch = task({
@@ -358,7 +369,7 @@ function entrypointBuildTask(options) {
 }
 
 
-const { main: tsc, build: buildTsc, watch: watchTsc } = entrypointBuildTask({
+const { main: tsc, watch: watchTsc } = entrypointBuildTask({
     name: "tsc",
     description: "Builds the command-line compiler",
     buildDeps: [generateDiagnostics],
@@ -396,7 +407,7 @@ export const dtsServices = task({
 });
 
 
-const { main: tsserver, build: buildTsserver, watch: watchTsserver } = entrypointBuildTask({
+const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     name: "tsserver",
     description: "Builds the language server",
     buildDeps: [generateDiagnostics],
@@ -414,15 +425,10 @@ const { main: tsserver, build: buildTsserver, watch: watchTsserver } = entrypoin
 export { tsserver, watchTsserver };
 
 
-const buildMin = task({
-    name: "build-min",
-    dependencies: [buildTsc, buildTsserver],
-});
-
 export const min = task({
     name: "min",
     description: "Builds only tsc and tsserver",
-    dependencies: [tsc, tsserver].concat(cmdLineOptions.typecheck ? [buildMin] : []),
+    dependencies: [tsc, tsserver],
 });
 
 export const watchMin = task({
@@ -591,15 +597,10 @@ export const watchOtherOutputs = task({
     dependencies: [watchCancellationToken, watchTypingsInstaller, watchWatchGuard, generateTypesMap, copyBuiltLocalDiagnosticMessages],
 });
 
-const buildLocal = task({
-    name: "build-local",
-    dependencies: [buildTsc, buildTsserver, buildServices, buildLssl]
-});
-
 export const local = task({
     name: "local",
     description: "Builds the full compiler and services",
-    dependencies: [localize, tsc, tsserver, services, lssl, otherOutputs, dts].concat(cmdLineOptions.typecheck ? [buildLocal] : []),
+    dependencies: [localize, tsc, tsserver, services, lssl, otherOutputs, dts],
 });
 export default local;
 
@@ -610,7 +611,7 @@ export const watchLocal = task({
     dependencies: [localize, watchTsc, watchTsserver, watchServices, watchLssl, watchOtherOutputs, dts, watchSrc],
 });
 
-const runtestsDeps = [tests, generateLibs].concat(cmdLineOptions.typecheck ? [dts, buildSrc] : []);
+const runtestsDeps = [tests, generateLibs].concat(cmdLineOptions.typecheck ? [dts] : []);
 
 export const runTests = task({
     name: "runtests",
