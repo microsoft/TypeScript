@@ -4,8 +4,8 @@ import {
     AllAccessorDeclarations, and, AnonymousType, AnyImportOrReExport, AnyImportSyntax, append, appendIfUnique,
     ArrayBindingPattern, arrayFrom, arrayIsHomogeneous, ArrayLiteralExpression, arrayOf, arraysEqual, arrayToMultiMap,
     ArrayTypeNode, ArrowFunction, AssertionExpression, AssignmentDeclarationKind, AssignmentKind, AssignmentPattern,
-    AwaitExpression, BaseType, BigIntLiteral, BigIntLiteralType, BinaryExpression, BinaryOperatorToken, binarySearch,
-    BindableObjectDefinePropertyCall, BindingElement, BindingElementGrandparent, BindingName, BindingPattern,
+    AwaitExpression, BaseType, BigIntLiteral, BigIntLiteralType, BinaryExpression, BinaryOperator, BinaryOperatorToken,
+    binarySearch, BindableObjectDefinePropertyCall, BindingElement, BindingElementGrandparent, BindingName, BindingPattern,
     bindSourceFile, Block, BreakOrContinueStatement, CallChain, CallExpression, CallLikeExpression,
     CallSignatureDeclaration, CancellationToken, canHaveDecorators, canHaveExportModifier, canHaveIllegalDecorators,
     canHaveIllegalModifiers, canHaveModifiers, cartesianProduct, CaseBlock, CaseClause, CaseOrDefaultClause, cast,
@@ -88,7 +88,7 @@ import {
     isCallExpression, isCallLikeExpression, isCallOrNewExpression, isCallSignatureDeclaration, isCatchClause,
     isCatchClauseVariableDeclarationOrBindingElement, isCheckJsEnabledForFile, isChildOfNodeWithKind,
     isClassDeclaration, isClassElement, isClassExpression, isClassLike, isClassStaticBlockDeclaration, isCommaSequence,
-    isCommonJsExportedExpression, isCommonJsExportPropertyAssignment, isComputedNonLiteralName, isComputedPropertyName,
+    isCommonJsExportedExpression, isCommonJsExportPropertyAssignment, isCompoundAssignment, isComputedNonLiteralName, isComputedPropertyName,
     isConstructorDeclaration, isConstructorTypeNode, isConstTypeReference, isDeclaration, isDeclarationName,
     isDeclarationReadonly, isDecorator, isDefaultedExpandoInitializer, isDeleteTarget, isDottedName, isDynamicName,
     isEffectiveExternalModule, isElementAccessExpression, isEntityName, isEntityNameExpression, isEnumConst,
@@ -142,7 +142,7 @@ import {
     isValueSignatureDeclaration, isVarConst, isVariableDeclaration,
     isVariableDeclarationInitializedToBareOrAccessedRequire, isVariableDeclarationInVariableStatement,
     isVariableDeclarationList, isVariableLike, isVariableLikeOrAccessor, isVariableStatement, isWriteAccess,
-    isWriteOnlyAccess, IterableOrIteratorType, IterationTypes, JSDoc, JSDocAugmentsTag, JSDocCallbackTag, JSDocComment,
+    isWriteOnlyAccess, isWriteOnlyUsage, IterableOrIteratorType, IterationTypes, JSDoc, JSDocAugmentsTag, JSDocCallbackTag, JSDocComment,
     JSDocContainer, JSDocEnumTag, JSDocFunctionType, JSDocImplementsTag, JSDocLink, JSDocLinkCode, JSDocLinkPlain,
     JSDocMemberName, JSDocNullableType, JSDocOptionalType, JSDocParameterTag, JSDocPrivateTag, JSDocPropertyLikeTag,
     JSDocPropertyTag, JSDocProtectedTag, JSDocPublicTag, JSDocSignature, JSDocTemplateTag, JSDocTypedefTag,
@@ -195,7 +195,7 @@ import {
     usingSingleLineStringWriter, VariableDeclaration, VariableDeclarationList, VariableLikeDeclaration,
     VariableStatement, VarianceFlags, visitEachChild, visitNode, visitNodes, Visitor, VisitResult, VoidExpression,
     walkUpBindingElementsAndPatterns, walkUpParenthesizedExpressions, walkUpParenthesizedTypes,
-    walkUpParenthesizedTypesAndGetParentAndChild, WhileStatement, WideningContext, WithStatement, YieldExpression, ResolutionMode, isWriteOnlyUsage, isCompoundAssignment, BinaryOperator,
+    walkUpParenthesizedTypesAndGetParentAndChild, WhileStatement, WideningContext, WithStatement, YieldExpression, ResolutionMode,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
