@@ -549,10 +549,18 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
             }
             return firstDefined(typeRoots, typeRoot => {
                 const candidate = combinePaths(typeRoot, typeReferenceDirectiveName);
-                const candidateDirectory = getDirectoryPath(candidate);
-                const directoryExists = directoryProbablyExists(candidateDirectory, host);
+                const directoryExists = directoryProbablyExists(typeRoot, host);
                 if (!directoryExists && traceEnabled) {
-                    trace(host, Diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, candidateDirectory);
+                    trace(host, Diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, typeRoot);
+                }
+                if (options.typeRoots) {
+                    // Custom typeRoots resolve as file or directory just like we do modules
+                    const resolvedFromFile = loadModuleFromFile(Extensions.Declaration, candidate, !directoryExists, moduleResolutionState);
+                    if (resolvedFromFile) {
+                        const packageDirectory = parseNodeModuleFromPath(resolvedFromFile.path);
+                        const packageInfo = packageDirectory ? getPackageJsonInfo(packageDirectory, /*onlyRecordFailures*/ false, moduleResolutionState) : undefined;
+                        return resolvedTypeScriptOnly(withPackageId(packageInfo, resolvedFromFile));
+                    }
                 }
                 return resolvedTypeScriptOnly(
                     loadNodeModuleFromDirectory(Extensions.Declaration, candidate,
