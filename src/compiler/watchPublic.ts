@@ -28,7 +28,7 @@ namespace ts {
         host.createHash = maybeBind(system, system.createHash);
         host.disableUseFileVersionAsSignature = system.disableUseFileVersionAsSignature;
         host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
-        setGetSourceFileAsHashVersioned(host, system);
+        setGetSourceFileAsHashVersioned(host);
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
         return host;
     }
@@ -330,7 +330,7 @@ namespace ts {
         }
 
         const compilerHost = createCompilerHostFromProgramHost(host, () => compilerOptions, directoryStructureHost) as CompilerHost & ResolutionCacheHost;
-        setGetSourceFileAsHashVersioned(compilerHost, host);
+        setGetSourceFileAsHashVersioned(compilerHost);
         // Members for CompilerHost
         const getNewSourceFile = compilerHost.getSourceFile;
         compilerHost.getSourceFile = (fileName, ...args) => getVersionedSourceFileByPath(fileName, toPath(fileName), ...args);
@@ -452,9 +452,9 @@ namespace ts {
             const hasInvalidatedResolutions = resolutionCache.createHasInvalidatedResolutions(customHasInvalidatedResolutions);
             const {
                 originalReadFile, originalFileExists, originalDirectoryExists,
-                originalCreateDirectory, originalWriteFile,
+                originalCreateDirectory, originalWriteFile, readFileWithCache,
             } = changeCompilerHostLikeToUseCache(compilerHost, toPath);
-            if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileName => compilerHost.fileExists(fileName), hasInvalidatedResolutions, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
+            if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, path => getSourceVersion(path, readFileWithCache), fileName => compilerHost.fileExists(fileName), hasInvalidatedResolutions, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
                 if (hasChangedConfigFileParsingErrors) {
                     if (reportFileChangeDetectedOnCreateProgram) {
                         reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
@@ -609,9 +609,13 @@ namespace ts {
             }
         }
 
-        function getSourceVersion(path: Path): string | undefined {
+        function getSourceVersion(path: Path, readFileWithCache: (fileName: string) => string | undefined): string | undefined {
             const hostSourceFile = sourceFilesCache.get(path);
-            return !hostSourceFile || !hostSourceFile.version ? undefined : hostSourceFile.version;
+            if (!hostSourceFile) return undefined;
+            if (hostSourceFile.version) return hostSourceFile.version;
+            // Read file and get new version
+            const text = readFileWithCache(path);
+            return text ? (compilerHost.createHash || generateDjb2Hash)(text) : undefined;
         }
 
         function onReleaseOldSourceFile(oldSourceFile: SourceFile, _oldOptions: CompilerOptions, hasSourceFileByPath: boolean) {

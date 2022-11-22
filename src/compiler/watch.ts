@@ -595,12 +595,13 @@ namespace ts {
     export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCompilerOptions: () => CompilerOptions, directoryStructureHost: DirectoryStructureHost = host): CompilerHost {
         const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
         const hostGetNewLine = memoize(() => host.getNewLine());
-        return {
+        const compilerHost: CompilerHost = {
             getSourceFile: (fileName, languageVersionOrOptions, onError) => {
                 let text: string | undefined;
                 try {
                     performance.mark("beforeIORead");
-                    text = host.readFile(fileName, getCompilerOptions().charset);
+                    const encoding = getCompilerOptions().charset;
+                    text = !encoding ? compilerHost.readFile(fileName) : host.readFile(fileName, encoding);
                     performance.mark("afterIORead");
                     performance.measure("I/O Read", "beforeIORead", "afterIORead");
                 }
@@ -632,6 +633,7 @@ namespace ts {
             disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
             storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
         };
+        return compilerHost;
 
         function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
             try {
@@ -659,9 +661,9 @@ namespace ts {
         }
     }
 
-    export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: { createHash?(data: string): string; }) {
+    export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost) {
         const originalGetSourceFile = compilerHost.getSourceFile;
-        const computeHash = maybeBind(host, host.createHash) || generateDjb2Hash;
+        const computeHash = maybeBind(compilerHost, compilerHost.createHash) || generateDjb2Hash;
         compilerHost.getSourceFile = (...args) => {
             const result = originalGetSourceFile.call(compilerHost, ...args);
             if (result) {

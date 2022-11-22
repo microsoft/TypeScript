@@ -101,26 +101,7 @@ FileWatcher:: Triggered with /user/username/projects/myproject/other.d.ts 1:: Wa
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/other.d.ts 1:: WatchInfo: /user/username/projects/myproject/other.d.ts 250 undefined Source file
 Synchronizing program
-[[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
 
-CreatingProgramWith::
-  roots: ["/user/username/projects/myproject/main.ts"]
-  options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-[[90m12:00:30 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["/user/username/projects/myproject/main.ts"]
-Program options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Completely
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/other.d.ts
-/user/username/projects/myproject/main.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
@@ -153,12 +134,12 @@ FileWatcher:: Triggered with /user/username/projects/myproject/other.d.ts 1:: Wa
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/other.d.ts 1:: WatchInfo: /user/username/projects/myproject/other.d.ts 250 undefined Source file
 Synchronizing program
-[[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:31 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
   options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-[[90m12:00:37 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:35 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -211,7 +192,7 @@ FileWatcher:: Triggered with /user/username/projects/myproject/other.d.ts 1:: Wa
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/other.d.ts 1:: WatchInfo: /user/username/projects/myproject/other.d.ts 250 undefined Source file
 Synchronizing program
-[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/main.ts"]
@@ -222,7 +203,7 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File '/user/username/projects/myproject/other.ts' exist - use it as a name resolution result.
 ======== Module name './other' was successfully resolved to '/user/username/projects/myproject/other.ts'. ========
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/other.ts 250 undefined Source file
-[[90m12:00:48 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:00:46 AM[0m] Found 0 errors. Watching for file changes.
 
 
 

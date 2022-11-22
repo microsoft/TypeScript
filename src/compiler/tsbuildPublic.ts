@@ -292,7 +292,7 @@ namespace ts {
         // State of the solution
         const baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
         const compilerHost = createCompilerHostFromProgramHost(host, () => state.projectCompilerOptions) as CompilerHost & ReadBuildProgramHost;
-        setGetSourceFileAsHashVersioned(compilerHost, host);
+        setGetSourceFileAsHashVersioned(compilerHost);
         compilerHost.getParsedCommandLine = fileName => parseConfigFile(state, fileName as ResolvedConfigFileName, toResolvedConfigFilePath(state, fileName as ResolvedConfigFileName));
         compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
         compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
