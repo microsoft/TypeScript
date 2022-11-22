@@ -130,25 +130,7 @@ FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with main.ts 1:: WatchInfo: main.ts 250 undefined Source file
 Synchronizing program
-[[90m12:00:31 AM[0m] File change detected. Starting incremental compilation...
 
-CreatingProgramWith::
-  roots: ["main.ts"]
-  options: {"watch":true,"extendedDiagnostics":true}
-[[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-Program root files: ["main.ts"]
-Program options: {"watch":true,"extendedDiagnostics":true}
-Program structureReused: Completely
-Program files::
-/a/lib/lib.d.ts
-main.ts
-
-Semantic diagnostics in builder refreshed for::
-
-No shapes updated in the builder::
 
 PolledWatches::
 /user/username/projects/project/node_modules/@types:
