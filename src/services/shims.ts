@@ -459,7 +459,7 @@ export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
         if ("getTypeReferenceDirectiveResolutionsForFile" in this.shimHost) {
             this.resolveTypeReferenceDirectives = (typeDirectiveNames, containingFile) => {
                 const typeDirectivesForFile = JSON.parse(this.shimHost.getTypeReferenceDirectiveResolutionsForFile!(containingFile)) as MapLike<ResolvedTypeReferenceDirective>; // TODO: GH#18217
-                return map(typeDirectiveNames as (string | FileReference)[], name => getProperty(typeDirectivesForFile, isString(name) ? name : name.fileName.toLowerCase()));
+                return map(typeDirectiveNames as (string | FileReference)[], name => getProperty(typeDirectivesForFile, isString(name) ? name : toFileNameLowerCase(name.fileName)));
             };
         }
     }
