@@ -1,0 +1,10 @@
+[
+    "======== Resolving type reference directive 'phaser', containing file '/__inferred type names__.ts', root directory '/node_modules/phaser/types'. ========",
+    "Resolving with primary search path '/node_modules/phaser/types'.",
+    "Looking up in 'node_modules' folder, initial location '/'.",
+    "File '/node_modules/phaser/package.json' does not exist.",
+    "File '/node_modules/phaser.d.ts' does not exist.",
+    "File '/node_modules/phaser/index.d.ts' does not exist.",
+    "Directory '/node_modules/@types' does not exist, skipping all lookups in it.",
+    "======== Type reference directive 'phaser' was not resolved. ========"
+]
