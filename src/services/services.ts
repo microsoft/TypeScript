@@ -54,7 +54,7 @@ import {
     TextRange, TextSpan, textSpanEnd, timestamp, TodoComment, TodoCommentDescriptor, Token, toPath, tracing,
     TransformFlags, TransientSymbol, Type, TypeChecker, TypeFlags, TypeNode, TypeParameter, TypePredicate,
     TypeReference, typeToDisplayParts, UnderscoreEscapedMap, UnionOrIntersectionType, UnionType, updateSourceFile,
-    UserPreferences, VariableDeclaration,
+    UserPreferences, VariableDeclaration, hasTabstop,
 } from "./_namespaces/ts";
 
 /** The version of the language service API */
@@ -234,6 +234,9 @@ function addSyntheticNodes(nodes: Push<Node>, pos: number, end: number, parent: 
         const textPos = scanner.getTextPos();
         if (textPos <= end) {
             if (token === SyntaxKind.Identifier) {
+                if (hasTabstop(parent)) {
+                    continue;
+                }
                 Debug.fail(`Did not expect ${Debug.formatSyntaxKind(parent.kind)} to have an Identifier in its trivia`);
             }
             nodes.push(createNode(token, pos, textPos, parent));

@@ -732,7 +732,12 @@ function getExhaustiveCaseSnippets(
             return undefined;
         }
 
-        const newClauses = map(elements, element => {
+        const newClauses = map(elements, (element, i) => {
+            if (preferences.includeCompletionsWithSnippetText) {
+                const tabstopStmt = factory.createEmptyStatement();
+                setSnippetElement(tabstopStmt, { kind: SnippetKind.TabStop, order: i + 1 });
+                return factory.createCaseClause(element, [tabstopStmt]);
+            }
             return factory.createCaseClause(element, []);
         });
         const printer = createSnippetPrinter({
@@ -752,7 +757,7 @@ function getExhaustiveCaseSnippets(
                 factory.createNodeArray(newClauses),
                 sourceFile);
 
-        const firstClause = printer.printSnippetList(ListFormat.SingleLine, factory.createNodeArray([first(newClauses)!]), sourceFile);
+        const firstClause = printer.printSnippetList(ListFormat.SingleLine, factory.createNodeArray([factory.createCaseClause(first(elements), [])]), sourceFile);
         return {
             entry: {
                 name: `${firstClause} ...`,
@@ -761,6 +766,7 @@ function getExhaustiveCaseSnippets(
                 insertText,
                 hasAction: importAdder.hasFixes() || undefined,
                 source: CompletionSource.SwitchCases,
+                isSnippet: preferences.includeCompletionsWithSnippetText ? true : undefined,
             },
             importAdder,
         };

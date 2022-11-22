@@ -90,7 +90,7 @@ import {
     TypePredicate, TypePredicateKind, TypeReferenceNode, unescapeLeadingUnderscores, UnionOrIntersectionTypeNode,
     ValidImportTypeNode, VariableDeclaration, VariableDeclarationInitializedTo, VariableDeclarationList,
     VariableLikeDeclaration, VariableStatement, version, WhileStatement, WithStatement, WriteFileCallback,
-    WriteFileCallbackData, YieldExpression, ResolutionMode, isIdentifierStart,
+    WriteFileCallbackData, YieldExpression, ResolutionMode, isIdentifierStart, getSnippetElement, SnippetKind,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -8690,4 +8690,9 @@ export function canUsePropertyAccess(name: string, languageVersion: ScriptTarget
     return firstChar === CharacterCodes.hash ?
         name.length > 1 && isIdentifierStart(name.charCodeAt(1), languageVersion) :
         isIdentifierStart(firstChar, languageVersion);
+}
+
+/** @internal */
+export function hasTabstop(node: Node): boolean {
+    return getSnippetElement(node)?.kind === SnippetKind.TabStop;
 }
