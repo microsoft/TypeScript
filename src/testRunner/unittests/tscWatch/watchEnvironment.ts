@@ -687,5 +687,27 @@ namespace ts.tscWatch {
                 ]
             });
         });
+
+        verifyTscWatch({
+            scenario,
+            subScenario: "fsEvent for change is repeated",
+            commandLineArgs: ["-w", "main.ts", "--extendedDiagnostics"],
+            sys: () => createWatchedSystem({
+                "/user/username/projects/project/main.ts": `let a: string = "Hello"`,
+                [libFile.path]: libFile.content,
+            }, { currentDirectory: "/user/username/projects/project" }),
+            changes: [
+                {
+                    caption: "change main.ts",
+                    change: sys => replaceFileText(sys, "/user/username/projects/project/main.ts", "Hello", "Hello World"),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+                {
+                    caption: "receive another change event without modifying the file",
+                    change: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                }
+            ]
+        });
     });
 }
