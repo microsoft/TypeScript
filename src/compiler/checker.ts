@@ -32,6 +32,7 @@ import {
     BigIntLiteral,
     BigIntLiteralType,
     BinaryExpression,
+    BinaryOperator,
     BinaryOperatorToken,
     binarySearch,
     BindableObjectDefinePropertyCall,
@@ -442,6 +443,7 @@ import {
     isCommaSequence,
     isCommonJsExportedExpression,
     isCommonJsExportPropertyAssignment,
+    isCompoundAssignment,
     isComputedNonLiteralName,
     isComputedPropertyName,
     isConstructorDeclaration,
@@ -690,6 +692,7 @@ import {
     isVariableStatement,
     isWriteAccess,
     isWriteOnlyAccess,
+    isWriteOnlyUsage,
     IterableOrIteratorType,
     IterationTypes,
     JSDoc,
@@ -1010,9 +1013,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    isWriteOnlyUsage,
-    isCompoundAssignment,
-    BinaryOperator,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
