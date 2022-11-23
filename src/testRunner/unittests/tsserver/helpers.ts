@@ -3,7 +3,6 @@ import * as Harness from "../../_namespaces/Harness";
 import * as Utils from "../../_namespaces/Utils";
 import {
     changeToHostTrackingWrittenFiles,
-    checkArray,
     createServerHost,
     File,
     FileOrFolderOrSymLink,
@@ -584,44 +583,34 @@ export function configuredProjectAt(projectService: ts.server.ProjectService, in
     return iterResult.value;
 }
 
+function checkArray(caption: string, actual: readonly string[], expected: readonly string[]) {
+    const actualSet = new Set(actual);
+    let notInActual: string[] | undefined;
+    let duplicates: string[] | undefined;
+    const seen = new Set<string>();
+    expected.forEach(expectedKey => {
+        if (seen.has(expectedKey)) (duplicates ??= []).push(expectedKey);
+        else {
+            seen.add(expectedKey);
+            if (!actualSet.has(expectedKey)) (notInActual ??= []).push(expectedKey);
+        }
+    });
+    let inActualNotExpected: string[] | undefined;
+    actual.forEach(key => {
+        if (!seen.has(key)) (inActualNotExpected ??= []).push(key);
+        else seen.add(key);
+    });
+    if (notInActual || duplicates || inActualNotExpected) {
+        assert.fail(`${caption}\n\nNotInActual: ${notInActual}\nDuplicates: ${duplicates}\nInActualButNotInExpected: ${inActualNotExpected}`);
+    }
+}
+
 export function checkProjectActualFiles(project: ts.server.Project, expectedFiles: readonly string[]) {
     checkArray(`${ts.server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}:: actual files`, project.getFileNames(), expectedFiles);
 }
 
 export function checkProjectRootFiles(project: ts.server.Project, expectedFiles: readonly string[]) {
     checkArray(`${ts.server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}::, rootFileNames`, project.getRootFiles(), expectedFiles);
-}
-
-export function mapCombinedPathsInAncestor(dir: string, path2: string, mapAncestor: (ancestor: string) => boolean) {
-    dir = ts.normalizePath(dir);
-    const result: string[] = [];
-    ts.forEachAncestorDirectory(dir, ancestor => {
-        if (mapAncestor(ancestor)) {
-            result.push(ts.combinePaths(ancestor, path2));
-        }
-    });
-    return result;
-}
-
-export function getRootsToWatchWithAncestorDirectory(dir: string, path2: string) {
-    return mapCombinedPathsInAncestor(dir, path2, ancestor => ancestor.split(ts.directorySeparator).length > 4);
-}
-
-export const nodeModules = "node_modules";
-export function getNodeModuleDirectories(dir: string) {
-    return getRootsToWatchWithAncestorDirectory(dir, nodeModules);
-}
-
-export const nodeModulesAtTypes = "node_modules/@types";
-export function getTypeRootsFromLocation(currentDirectory: string) {
-    return getRootsToWatchWithAncestorDirectory(currentDirectory, nodeModulesAtTypes);
-}
-
-export function getConfigFilesToWatch(folder: string) {
-    return [
-        ...getRootsToWatchWithAncestorDirectory(folder, "tsconfig.json"),
-        ...getRootsToWatchWithAncestorDirectory(folder, "jsconfig.json")
-    ];
 }
 
 export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.Location {

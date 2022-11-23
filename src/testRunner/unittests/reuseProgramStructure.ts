@@ -21,7 +21,7 @@ import {
 describe("unittests:: Reuse program structure:: General", () => {
     function baselineCache<T>(baselines: string[], cacheType: string, cache: ts.ModeAwareCache<T> | undefined) {
         baselines.push(`${cacheType}: ${!cache ? cache : ""}`);
-        cache?.forEach((resolved, key, mode) => baselines.push(`${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${JSON.stringify(resolved)}`));
+        cache?.forEach((resolved, key, mode) => baselines.push(`${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${JSON.stringify(resolved, /*replacer*/ undefined, 2)}`));
     }
     function baselineProgram(baselines: string[], program: ts.Program, host?: TestCompilerHost) {
         baselines.push(`Program Reused:: ${(ts as any).StructureIsReused[program.structureIsReused]}`);
