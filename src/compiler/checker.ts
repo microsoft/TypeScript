@@ -28432,10 +28432,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         ((node as TypeReferenceNode).typeName as Identifier).escapedText ===
                         (contextualType.symbol.declarations![0] as TypeParameterDeclaration).name.escapedText
                     ) {
-                        return true
+                        return true;
                     }
                 }
-            )
+            );
 
         if (!isContextualTypeDependent) {
             return checkObjectLiteralNonDependently(node, checkMode);
@@ -28456,7 +28456,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(node, Diagnostics.Dependent_contextual_inference_requires_too_many_passes_and_possibly_infinite);
                 return valueType;
             }
-            
+
             const newContextualType = cloneTypeParameter(contextualType as TypeParameter);
             newContextualType.immediateBaseConstraint =
                 instantiateType(
@@ -28466,7 +28466,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (newContextualType.immediateBaseConstraint!.flags & TypeFlags.StructuredType) {
                 newContextualType.immediateBaseConstraint = resolveStructuredTypeMembers(newContextualType.immediateBaseConstraint as StructuredType);
             }
-    
+
             forEachChildRecursively(node, node => {
                 const nodeLinks = getNodeLinks(node);
                 nodeLinks.flags &= ~NodeCheckFlags.TypeChecked;
@@ -28477,22 +28477,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 nodeLinks.resolvedSymbol = undefined;
                 nodeLinks.resolvedIndexInfo = undefined;
                 nodeLinks.contextFreeType = undefined;
-    
+
                 if (node.symbol) {
                     const symbolLinks = getSymbolLinks(node.symbol);
                     symbolLinks.type = undefined;
                     symbolLinks.typeParameters = undefined;
                 }
             });
-    
-            
+
+
             node.contextualType = newContextualType;
             revertDiagnostics();
             previousValueType = valueType;
             valueType = checkObjectLiteralNonDependently(node);
             passes++;
         }
-        
+
         function commitDiagnostics() {
             diagnostics.commitStaged();
             suggestionDiagnostics.commitStaged();
