@@ -46,11 +46,7 @@ describe("unittests:: Reuse program structure:: General", () => {
     }
 
     function runBaseline(scenario: string, baselines: readonly string[]) {
-        Harness.Baseline.runBaseline(
-            `reuseProgramStructure/${scenario.split(" ").join("-")}.js`,
-            baselines.join("\n"),
-            { PrintDiff: true },
-        );
+        Harness.Baseline.runBaseline(`reuseProgramStructure/${scenario.split(" ").join("-")}.js`, baselines.join("\n"));
     }
 
     const target = ts.ScriptTarget.Latest;
