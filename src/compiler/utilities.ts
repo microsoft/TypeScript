@@ -8686,6 +8686,9 @@ export function isOptionalJSDocPropertyLikeTag(node: Node): node is JSDocPropert
 
 /** @internal */
 export function canUsePropertyAccess(name: string, languageVersion: ScriptTarget): boolean {
+    if (name.length === 0) {
+        return false;
+    }
     const firstChar = name.charCodeAt(0);
     return firstChar === CharacterCodes.hash ?
         name.length > 1 && isIdentifierStart(name.charCodeAt(1), languageVersion) :

@@ -882,16 +882,16 @@ function entityNameToExpression(entityName: EntityName, languageVersion: ScriptT
     if (isIdentifier(entityName)) {
         return entityName;
     }
-    const realName = unescapeLeadingUnderscores(entityName.right.escapedText);
-    if (canUsePropertyAccess(realName, languageVersion)) {
+    const unescapedName = unescapeLeadingUnderscores(entityName.right.escapedText);
+    if (canUsePropertyAccess(unescapedName, languageVersion)) {
         return factory.createPropertyAccessExpression(
             entityNameToExpression(entityName.left, languageVersion, quotePreference),
-            realName);
+            unescapedName);
     }
     else {
         return factory.createElementAccessExpression(
             entityNameToExpression(entityName.left, languageVersion, quotePreference),
-            factory.createStringLiteral(realName, quotePreference === QuotePreference.Single));
+            factory.createStringLiteral(unescapedName, quotePreference === QuotePreference.Single));
     }
 }
 
