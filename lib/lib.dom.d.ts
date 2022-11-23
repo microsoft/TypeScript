@@ -4379,8 +4379,15 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     readonly documentElement: HTMLElement;
     /** Returns document's URL. */
     readonly documentURI: string;
-    /** Sets or gets the security domain of the document. */
-    domain: string;
+    /**
+     * Gets the security domain of the document.
+     */
+    get domain(): string;
+    /**
+     * Sets the security domain of the document.
+     * @deprecated
+     */
+    set domain(sting): void;
     /** Retrieves a collection of all embed objects in the document. */
     readonly embeds: HTMLCollectionOf<HTMLEmbedElement>;
     /**
