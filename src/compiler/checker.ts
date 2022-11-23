@@ -33801,8 +33801,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         assignNonContextualParameterTypes(signature);
                     }
                 }
-                if (contextualSignature && !getReturnTypeFromAnnotation(node)) {
-                    signature.resolvedReturnType = getReturnTypeFromBody(node, checkMode);
+                if (contextualSignature && !getReturnTypeFromAnnotation(node) && !signature.resolvedReturnType) {
+                    const returnType = getReturnTypeFromBody(node, checkMode);
+                    if (!signature.resolvedReturnType) {
+                        signature.resolvedReturnType = returnType;
+                    }
                 }
                 checkSignatureDeclaration(node);
             }
