@@ -4732,9 +4732,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createNamedImports(elements: readonly ImportSpecifier[]): NamedImports {
+    function createNamedImports(elements: readonly ImportSpecifier[], hasTrailingComma?: boolean): NamedImports {
         const node = createBaseNode<NamedImports>(SyntaxKind.NamedImports);
-        node.elements = createNodeArray(elements);
+        node.elements = createNodeArray(elements, hasTrailingComma);
         node.transformFlags |= propagateChildrenFlags(node.elements);
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return node;
@@ -4743,7 +4743,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[]) {
         return node.elements !== elements
-            ? update(createNamedImports(elements), node)
+            ? update(createNamedImports(elements, node.elements.hasTrailingComma), node)
             : node;
     }
 
@@ -4859,9 +4859,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createNamedExports(elements: readonly ExportSpecifier[]) {
+    function createNamedExports(elements: readonly ExportSpecifier[], hasTrailingComma?: boolean) {
         const node = createBaseNode<NamedExports>(SyntaxKind.NamedExports);
-        node.elements = createNodeArray(elements);
+        node.elements = createNodeArray(elements, hasTrailingComma);
         node.transformFlags |= propagateChildrenFlags(node.elements);
         node.transformFlags &= ~TransformFlags.ContainsPossibleTopLevelAwait; // always parsed in an Await context
         return node;
@@ -4870,7 +4870,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]) {
         return node.elements !== elements
-            ? update(createNamedExports(elements), node)
+            ? update(createNamedExports(elements, node.elements.hasTrailingComma), node)
             : node;
     }
 

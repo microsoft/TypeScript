@@ -132,6 +132,7 @@ import {
     GeneratedIdentifierFlags,
     GeneratedNamePart,
     GeneratedPrivateIdentifier,
+    getAdditionalListFormatFlags,
     getAreDeclarationMapsEnabled,
     getBaseFileName,
     GetCanonicalFileName,
@@ -4862,7 +4863,14 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitList(parentNode: Node | undefined, children: NodeArray<Node> | undefined, format: ListFormat, parenthesizerRule?: ParenthesizerRuleOrSelector<Node>, start?: number, count?: number) {
-        emitNodeList(emit, parentNode, children, format, parenthesizerRule, start, count);
+        emitNodeList(
+            emit,
+            parentNode,
+            children,
+            format | (parentNode ? getAdditionalListFormatFlags(parentNode) : 0),
+            parenthesizerRule,
+            start,
+            count);
     }
 
     function emitExpressionList(parentNode: Node | undefined, children: NodeArray<Node> | undefined, format: ListFormat, parenthesizerRule?: ParenthesizerRuleOrSelector<Expression>, start?: number, count?: number) {

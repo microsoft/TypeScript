@@ -7490,7 +7490,8 @@ export interface EmitNode {
     helpers?: EmitHelper[];                  // Emit helpers for the node
     startsOnNewLine?: boolean;               // If the node should begin on a new line
     snippetElement?: SnippetElement;         // Snippet element of the node
-    typeNode?: TypeNode;                         // VariableDeclaration type
+    typeNode?: TypeNode;                     // VariableDeclaration type
+    listFormat?: ListFormat;                 // Additional ListFormat flags
 }
 
 /** @internal */
