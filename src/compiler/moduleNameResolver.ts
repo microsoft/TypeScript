@@ -54,6 +54,7 @@ import {
     hasProperty,
     hasTrailingDirectorySeparator,
     hostGetCanonicalFileName,
+    inferredTypesContainingFile,
     isArray,
     isExternalModuleNameRelative,
     isRootedDiskPath,
@@ -396,7 +397,7 @@ export function getEffectiveTypeRoots(options: CompilerOptions, host: GetEffecti
     }
 
     if (currentDirectory !== undefined) {
-        return getDefaultTypeRoots(currentDirectory, host);
+        return getDefaultTypeRoots(currentDirectory);
     }
 }
 
@@ -404,19 +405,11 @@ export function getEffectiveTypeRoots(options: CompilerOptions, host: GetEffecti
  * Returns the path to every node_modules/@types directory from some ancestor directory.
  * Returns undefined if there are none.
  */
-function getDefaultTypeRoots(currentDirectory: string, host: { directoryExists?: (directoryName: string) => boolean }): string[] | undefined {
-    if (!host.directoryExists) {
-        return [combinePaths(currentDirectory, nodeModulesAtTypes)];
-        // And if it doesn't exist, tough.
-    }
-
+function getDefaultTypeRoots(currentDirectory: string): string[] | undefined {
     let typeRoots: string[] | undefined;
     forEachAncestorDirectory(normalizePath(currentDirectory), directory => {
         const atTypes = combinePaths(directory, nodeModulesAtTypes);
-        if (host.directoryExists!(atTypes)) {
-            (typeRoots || (typeRoots = [])).push(atTypes);
-        }
-        return undefined;
+        (typeRoots ??= []).push(atTypes);
     });
     return typeRoots;
 }
@@ -576,20 +569,24 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
 
     function secondaryLookup(): PathAndPackageId | undefined {
         const initialLocationForSecondaryLookup = containingFile && getDirectoryPath(containingFile);
-
         if (initialLocationForSecondaryLookup !== undefined) {
-            // check secondary locations
-            if (traceEnabled) {
-                trace(host, Diagnostics.Looking_up_in_node_modules_folder_initial_location_0, initialLocationForSecondaryLookup);
-            }
             let result: Resolved | undefined;
-            if (!isExternalModuleNameRelative(typeReferenceDirectiveName)) {
-                const searchResult = loadModuleFromNearestNodeModulesDirectory(Extensions.Declaration, typeReferenceDirectiveName, initialLocationForSecondaryLookup, moduleResolutionState, /*cache*/ undefined, /*redirectedReference*/ undefined);
-                result = searchResult && searchResult.value;
+            if (!options.typeRoots || !endsWith(containingFile!, inferredTypesContainingFile)) {
+                // check secondary locations
+                if (traceEnabled) {
+                    trace(host, Diagnostics.Looking_up_in_node_modules_folder_initial_location_0, initialLocationForSecondaryLookup);
+                }
+                if (!isExternalModuleNameRelative(typeReferenceDirectiveName)) {
+                    const searchResult = loadModuleFromNearestNodeModulesDirectory(Extensions.Declaration, typeReferenceDirectiveName, initialLocationForSecondaryLookup, moduleResolutionState, /*cache*/ undefined, /*redirectedReference*/ undefined);
+                    result = searchResult && searchResult.value;
+                }
+                else {
+                    const { path: candidate } = normalizePathForCJSResolution(initialLocationForSecondaryLookup, typeReferenceDirectiveName);
+                    result = nodeLoadModuleByRelativeName(Extensions.Declaration, candidate, /*onlyRecordFailures*/ false, moduleResolutionState, /*considerPackageJson*/ true);
+                }
             }
-            else {
-                const { path: candidate } = normalizePathForCJSResolution(initialLocationForSecondaryLookup, typeReferenceDirectiveName);
-                result = nodeLoadModuleByRelativeName(Extensions.Declaration, candidate, /*onlyRecordFailures*/ false, moduleResolutionState, /*considerPackageJson*/ true);
+            else if (traceEnabled) {
+                trace(host, Diagnostics.Resolving_type_reference_directive_for_program_that_specifies_custom_typeRoots_skipping_lookup_in_node_modules_folder);
             }
             return resolvedTypeScriptOnly(result);
         }

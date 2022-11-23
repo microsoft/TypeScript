@@ -3,7 +3,7 @@ Input::
 let x = 1
 
 //// [/a/b/tsconfig.json]
-{"compilerOptions":{"types":["node"]}}
+{"compilerOptions":{"types":["node"],"typeRoots":[]}}
 
 //// [/a/b/node_modules/@types/node/index.d.ts]
 declare var process: any
@@ -27,27 +27,31 @@ Output::
 >> Screen clear
 [[90m12:00:25 AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS2688: [0mCannot find type definition file for 'node'.
+  The file is in the program because:
+    Entry point of type library 'node' specified in compilerOptions
+
+  [96m../b/tsconfig.json[0m:[93m1[0m:[93m30[0m
+    [7m1[0m {"compilerOptions":{"types":["node"],"typeRoots":[]}}
+    [7m [0m [96m                             ~~~~~~[0m
+    File is entry point of type library specified here.
+
+[[90m12:00:28 AM[0m] Found 1 error. Watching for file changes.
 
 
 
 Program root files: ["/a/b/app.ts"]
-Program options: {"types":["node"],"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
+Program options: {"types":["node"],"typeRoots":[],"watch":true,"project":"/a/b/tsconfig.json","configFilePath":"/a/b/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /a/b/app.ts
-/a/b/node_modules/@types/node/index.d.ts
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/app.ts
-/a/b/node_modules/@types/node/index.d.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/app.ts (used version)
-/a/b/node_modules/@types/node/index.d.ts (used version)
 
 PolledWatches::
 
@@ -56,14 +60,10 @@ FsWatches::
   {}
 /a/b/app.ts:
   {}
-/a/b/node_modules/@types/node/index.d.ts:
-  {}
 /a/lib/lib.d.ts:
   {}
 
 FsWatchesRecursive::
-/a/b/node_modules:
-  {}
 /a/b:
   {}
 
