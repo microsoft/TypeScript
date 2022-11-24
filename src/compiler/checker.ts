@@ -2270,6 +2270,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isDeprecatedSymbol(symbol: Symbol) {
+        if (length(symbol.declarations) > 1) {
+            const parentSymbol = getParentOfSymbol(symbol);
+            if (parentSymbol && parentSymbol.flags & SymbolFlags.Interface) {
+                return some(symbol.declarations, d => !!(getCombinedNodeFlags(d) & NodeFlags.Deprecated));
+            }
+        }
         return !!(getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Deprecated);
     }
 
