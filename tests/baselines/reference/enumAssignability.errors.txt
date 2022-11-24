@@ -1,5 +1,7 @@
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(9,1): error TS2322: Type 'F' is not assignable to type 'E'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(10,1): error TS2322: Type 'E' is not assignable to type 'F'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(11,1): error TS2322: Type '1' is not assignable to type 'E'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(12,1): error TS2322: Type '1' is not assignable to type 'F'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(29,9): error TS2322: Type 'E' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(30,9): error TS2322: Type 'E' is not assignable to type 'boolean'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts(31,9): error TS2322: Type 'E' is not assignable to type 'Date'.
@@ -25,7 +27,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
   'E' is assignable to the constraint of type 'B', but 'B' could be instantiated with a different subtype of constraint 'E'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts (20 errors) ====
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts (22 errors) ====
     // enums assignable to number, any, Object, errors unless otherwise noted
     
     enum E { A }
@@ -41,7 +43,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssi
     ~
 !!! error TS2322: Type 'E' is not assignable to type 'F'.
     e = 1; // ok
+    ~
+!!! error TS2322: Type '1' is not assignable to type 'E'.
     f = 1; // ok
+    ~
+!!! error TS2322: Type '1' is not assignable to type 'F'.
     var x: number = e; // ok
     x = f; // ok
     

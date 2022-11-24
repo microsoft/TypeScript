@@ -14,5 +14,5 @@ export declare const styles: import("styled-components").InterpolationValue[];
 >styles : import("tests/cases/compiler/Folder/node_modules/styled-components/typings/styled-components").InterpolationValue[]
 
 === tests/cases/compiler/Folder/node_modules/styled-components/typings/styled-components.d.ts ===
+
 export interface InterpolationValue {}
-No type information for this code.
