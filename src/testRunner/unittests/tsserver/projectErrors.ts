@@ -15,7 +15,6 @@ import {
     createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
-    executeSessionRequest,
     openFilesForSession,
     toExternalFiles,
     verifyGetErrRequest,
@@ -764,26 +763,17 @@ describe("unittests:: tsserver:: Project Errors with config file change", () => 
         const tsconfig: File = { path: "/tsconfig.json", content: options(/*allowUnusedLabels*/ true) };
 
         const host = createServerHost([aTs, tsconfig]);
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([aTs], session);
 
         host.modifyFile(tsconfig.path, options(/*allowUnusedLabels*/ false));
         host.runQueuedTimeoutCallbacks();
 
-        const response = executeSessionRequest<ts.server.protocol.SemanticDiagnosticsSyncRequest, ts.server.protocol.SemanticDiagnosticsSyncResponse>(session, ts.server.protocol.CommandTypes.SemanticDiagnosticsSync, { file: aTs.path }) as ts.server.protocol.Diagnostic[] | undefined;
-        assert.deepEqual<ts.server.protocol.Diagnostic[] | undefined>(response, [
-            {
-                start: { line: 1, offset: 1 },
-                end: { line: 1, offset: 1 + "label".length },
-                text: "Unused label.",
-                category: "error",
-                code: ts.Diagnostics.Unused_label.code,
-                relatedInformation: undefined,
-                reportsUnnecessary: true,
-                reportsDeprecated: undefined,
-                source: undefined,
-            },
-        ]);
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
+            arguments: { file: aTs.path }
+        });
+        baselineTsserverLogs("projectErrors", `diagnostics after noUnusedLabels changes`, session);
     });
 });
 

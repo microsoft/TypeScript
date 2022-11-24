@@ -1,12 +1,12 @@
 Info 0    [00:00:27.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:28.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/src/fileA.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/src/tsconfig.json]
@@ -307,7 +307,7 @@ Info 77   [00:02:05.000] request:
           "/user/username/projects/myproject/src/fileA.ts"
         ]
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request
@@ -489,7 +489,7 @@ FsWatchesRecursive::
 Info 81   [00:02:09.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 82   [00:02:10.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::
@@ -673,7 +673,7 @@ Info 119  [00:03:02.000] request:
           "/user/username/projects/myproject/src/fileA.ts"
         ]
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Before request
@@ -855,7 +855,7 @@ FsWatchesRecursive::
 Info 123  [00:03:06.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 124  [00:03:07.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::
@@ -1041,7 +1041,7 @@ Info 163  [00:03:59.000] request:
           "/user/username/projects/myproject/src/fileA.ts"
         ]
       },
-      "seq": 3,
+      "seq": 4,
       "type": "request"
     }
 Before request
@@ -1237,7 +1237,7 @@ FsWatchesRecursive::
 Info 167  [00:04:03.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 168  [00:04:04.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::
@@ -1428,7 +1428,7 @@ Info 204  [00:04:54.000] request:
           "/user/username/projects/myproject/src/fileA.ts"
         ]
       },
-      "seq": 4,
+      "seq": 5,
       "type": "request"
     }
 Before request
@@ -1610,7 +1610,7 @@ FsWatchesRecursive::
 Info 208  [00:04:58.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 209  [00:04:59.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":5}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::
@@ -1794,7 +1794,7 @@ Info 246  [00:05:49.000] request:
           "/user/username/projects/myproject/src/fileA.ts"
         ]
       },
-      "seq": 5,
+      "seq": 6,
       "type": "request"
     }
 Before request
@@ -1990,7 +1990,7 @@ FsWatchesRecursive::
 Info 250  [00:05:53.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/fileA.ts","diagnostics":[]}}
 Info 251  [00:05:54.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":5}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":6}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::

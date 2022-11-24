@@ -141,12 +141,12 @@ Info 18   [00:00:47.000] response:
     }
 Info 19   [00:00:48.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/src/main.ts"
-      }
+      },
+      "seq": 3,
+      "type": "request"
     }
 Before request
 

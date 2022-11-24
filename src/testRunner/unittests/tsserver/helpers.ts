@@ -399,6 +399,7 @@ export interface TestSessionOptions extends ts.server.SessionOptions {
     logger: Logger;
 }
 
+export type TestSessionRequest<T extends ts.server.protocol.Request> = Pick<T, "command" | "arguments">;
 export class TestSession extends ts.server.Session {
     private seq = 0;
     public events: ts.server.protocol.Event[] = [];
@@ -430,11 +431,12 @@ export class TestSession extends ts.server.Session {
         return this.baseline("response", super.executeCommand(this.baseline("request", request)));
     }
 
-    public executeCommandSeq<T extends ts.server.protocol.Request>(request: Partial<T>) {
+    public executeCommandSeq<T extends ts.server.protocol.Request>(inputRequest: TestSessionRequest<T>) {
         this.seq++;
+        const request: T = inputRequest as T;
         request.seq = this.seq;
         request.type = "request";
-        return this.executeCommand(request as T);
+        return this.executeCommand(request);
     }
 
     public event<T extends object>(body: T, eventName: string) {
@@ -640,30 +642,6 @@ export interface DocumentSpanFromSubstring {
     contextText?: string;
     contextOptions?: SpanFromSubstringOptions;
 }
-export function protocolFileSpanFromSubstring({ file, text, options }: DocumentSpanFromSubstring): ts.server.protocol.FileSpan {
-    return { file: file.path, ...protocolTextSpanFromSubstring(file.content, text, options) };
-}
-
-interface FileSpanWithContextFromSubString {
-    file: File;
-    text: string;
-    options?: SpanFromSubstringOptions;
-    contextText?: string;
-    contextOptions?: SpanFromSubstringOptions;
-}
-export function protocolFileSpanWithContextFromSubstring({ contextText, contextOptions, ...rest }: FileSpanWithContextFromSubString): ts.server.protocol.FileSpanWithContext {
-    const result = protocolFileSpanFromSubstring(rest);
-    const contextSpan = contextText !== undefined ?
-        protocolFileSpanFromSubstring({ file: rest.file, text: contextText, options: contextOptions }) :
-        undefined;
-    return contextSpan ?
-        {
-            ...result,
-            contextStart: contextSpan.start,
-            contextEnd: contextSpan.end
-        } :
-        result;
-}
 
 export interface ProtocolTextSpanWithContextFromString {
     fileText: string;
@@ -690,12 +668,6 @@ export interface ProtocolRenameSpanFromSubstring extends ProtocolTextSpanWithCon
     prefixSuffixText?: {
         readonly prefixText?: string;
         readonly suffixText?: string;
-    };
-}
-export function protocolRenameSpanFromSubstring({ prefixSuffixText, ...rest }: ProtocolRenameSpanFromSubstring): ts.server.protocol.RenameTextSpan {
-    return {
-        ...protocolTextSpanWithContextFromSubstring(rest),
-        ...prefixSuffixText
     };
 }
 
@@ -765,49 +737,29 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
     }
 }
 
-export function makeSessionRequest<T>(command: string, args: T): ts.server.protocol.Request {
-    return {
-        seq: 0,
-        type: "request",
-        command,
-        arguments: args
-    };
-}
-
-export function executeSessionRequest<TRequest extends ts.server.protocol.Request, TResponse extends ts.server.protocol.Response>(session: ts.server.Session, command: TRequest["command"], args: TRequest["arguments"]): TResponse["body"] {
-    return session.executeCommand(makeSessionRequest(command, args)).response as TResponse["body"];
-}
-
-export function executeSessionRequestNoResponse<TRequest extends ts.server.protocol.Request>(session: ts.server.Session, command: TRequest["command"], args: TRequest["arguments"]): void {
-    session.executeCommand(makeSessionRequest(command, args));
-}
-
-export function openFilesForSession(files: readonly (File | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: ts.server.Session): void {
+export function openFilesForSession(files: readonly (string | File | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: TestSession): void {
     for (const file of files) {
-        session.executeCommand(makeSessionRequest<ts.server.protocol.OpenRequestArgs>(ts.server.CommandNames.Open,
-            "projectRootPath" in file ? { file: typeof file.file === "string" ? file.file : file.file.path, projectRootPath: file.projectRootPath } : { file: file.path })); // eslint-disable-line local/no-in-operator
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+            command: ts.server.CommandNames.Open,
+            arguments: ts.isString(file) ?
+                { file } :
+                "projectRootPath" in file ? // eslint-disable-line local/no-in-operator
+                    {
+                        file: typeof file.file === "string" ? file.file : file.file.path,
+                        projectRootPath: file.projectRootPath
+                    } :
+                    { file: file.path }
+        });
     }
 }
 
-export function closeFilesForSession(files: readonly File[], session: ts.server.Session): void {
+export function closeFilesForSession(files: readonly File[], session: TestSession): void {
     for (const file of files) {
-        session.executeCommand(makeSessionRequest<ts.server.protocol.FileRequestArgs>(ts.server.CommandNames.Close, { file: file.path }));
+        session.executeCommandSeq<ts.server.protocol.CloseRequest>({
+            command: ts.server.CommandNames.Close,
+            arguments: { file: file.path }
+        });
     }
-}
-
-export interface MakeReferenceItem extends DocumentSpanFromSubstring {
-    isDefinition?: boolean;
-    isWriteAccess?: boolean;
-    lineText?: string;
-}
-
-export function makeReferenceItem({ isDefinition, isWriteAccess, lineText, ...rest }: MakeReferenceItem): ts.server.protocol.ReferencesResponseItem {
-    return {
-        ...protocolFileSpanWithContextFromSubstring(rest),
-        isDefinition,
-        isWriteAccess: isWriteAccess === undefined ? !!isDefinition : isWriteAccess,
-        lineText,
-    };
 }
 
 export interface VerifyGetErrRequestBase {

@@ -21,9 +21,9 @@ import {
     createProjectService,
     createSession,
     customTypesMap,
-    makeSessionRequest,
     openFilesForSession,
     protocolFileLocationFromSubstring,
+    TestSessionRequest,
     toExternalFile,
     toExternalFiles,
     verifyGetErrRequest,
@@ -40,17 +40,18 @@ describe("unittests:: tsserver:: Projects", () => {
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([file1], session);
 
-        const getErrRequest = makeSessionRequest<ts.server.protocol.SemanticDiagnosticsSyncRequestArgs>(
-            ts.server.CommandNames.SemanticDiagnosticsSync,
-            { file: file1.path }
-        );
-
         // Two errors: CommonFile2 not found and cannot find name y
-        session.executeCommand(getErrRequest);
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: file1.path }
+        });
 
         host.writeFile(commonFile2.path, commonFile2.content);
         host.runQueuedTimeoutCallbacks();
-        session.executeCommand(getErrRequest);
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: file1.path }
+        });
         baselineTsserverLogs("projects", "handles the missing files added with tripleslash ref", session);
     });
 
@@ -700,24 +701,18 @@ describe("unittests:: tsserver:: Projects", () => {
             content: JSON.stringify({ compilerOptions: { allowJs: true } })
         };
         const host = createServerHost([file1, file2, config]);
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        // HTML file will not be included in any projects yet
         openFilesForSession([file1], session);
         const projectService = session.getProjectService();
 
-        // HTML file will not be included in any projects yet
-        checkNumberOfProjects(projectService, { configuredProjects: 1 });
-        const configuredProj = configuredProjectAt(projectService, 0);
-        checkProjectActualFiles(configuredProj, [file1.path, config.path]);
-
         // Specify .html extension as mixed content
         const extraFileExtensions = [{ extension: ".html", scriptKind: ts.ScriptKind.JS, isMixedContent: true }];
-        const configureHostRequest = makeSessionRequest<ts.server.protocol.ConfigureRequestArguments>(ts.server.CommandNames.Configure, { extraFileExtensions });
-        session.executeCommand(configureHostRequest);
-
         // The configured project should now be updated to include html file
-        checkNumberOfProjects(projectService, { configuredProjects: 1 });
-        assert.strictEqual(configuredProjectAt(projectService, 0), configuredProj, "Same configured project should be updated");
-        checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.CommandNames.Configure,
+            arguments: { extraFileExtensions }
+        });
 
         // Open HTML file
         projectService.applyChangesInOpenFiles(ts.singleIterator({
@@ -727,13 +722,17 @@ describe("unittests:: tsserver:: Projects", () => {
             content: `var hello = "hello";`
         }));
         // Now HTML file is included in the project
-        checkNumberOfProjects(projectService, { configuredProjects: 1 });
-        checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
 
         // Check identifiers defined in HTML content are available in .ts file
-        const project = configuredProjectAt(projectService, 0);
-        let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1, ts.emptyOptions);
-        assert(completions && ts.some(completions.entries, e => e.name === "hello"), `expected entry hello to be in completion list`);
+        session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+            command: ts.server.protocol.CommandTypes.CompletionInfo,
+            arguments: {
+                file: file1.path,
+                position: 1,
+                line: undefined!,
+                offset: undefined!,
+            }
+        });
 
         // Close HTML file
         projectService.applyChangesInOpenFiles(
@@ -742,12 +741,18 @@ describe("unittests:: tsserver:: Projects", () => {
             /*closedFiles*/[file2.path]);
 
         // HTML file is still included in project
-        checkNumberOfProjects(projectService, { configuredProjects: 1 });
-        checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
 
         // Check identifiers defined in HTML content are not available in .ts file
-        completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5, ts.emptyOptions);
-        assert(completions && completions.entries[0].name !== "hello", `unexpected hello entry in completion list`);
+        session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+            command: ts.server.protocol.CommandTypes.CompletionInfo,
+            arguments: {
+                file: file1.path,
+                position: 5,
+                line: undefined!,
+                offset: undefined!,
+            }
+        });
+        baselineTsserverLogs("projects", "tsconfig script block support", session);
     });
 
     it("no tsconfig script block diagnostic errors", () => {
@@ -767,20 +772,11 @@ describe("unittests:: tsserver:: Projects", () => {
         };
 
         let host = createServerHost([file1, file2, config1, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") });
-        let session = createSession(host);
+        const logger = createLoggerWithInMemoryLogs(host);
 
         // Specify .html extension as mixed content in a configure host request
         const extraFileExtensions = [{ extension: ".html", scriptKind: ts.ScriptKind.JS, isMixedContent: true }];
-        const configureHostRequest = makeSessionRequest<ts.server.protocol.ConfigureRequestArguments>(ts.server.CommandNames.Configure, { extraFileExtensions });
-        session.executeCommand(configureHostRequest);
-
-        openFilesForSession([file1], session);
-        let projectService = session.getProjectService();
-
-        checkNumberOfProjects(projectService, { configuredProjects: 1 });
-
-        let diagnostics = configuredProjectAt(projectService, 0).getLanguageService().getCompilerOptionsDiagnostics();
-        assert.deepEqual(diagnostics, []);
+        verfiy(config1);
 
         //  #2. Ensure no errors when allowJs is false
         const config2 = {
@@ -789,17 +785,7 @@ describe("unittests:: tsserver:: Projects", () => {
         };
 
         host = createServerHost([file1, file2, config2, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") });
-        session = createSession(host);
-
-        session.executeCommand(configureHostRequest);
-
-        openFilesForSession([file1], session);
-        projectService = session.getProjectService();
-
-        checkNumberOfProjects(projectService, { configuredProjects: 1 });
-
-        diagnostics = configuredProjectAt(projectService, 0).getLanguageService().getCompilerOptionsDiagnostics();
-        assert.deepEqual(diagnostics, []);
+        verfiy(config2);
 
         //  #3. Ensure no errors when compiler options aren't specified
         const config3 = {
@@ -808,17 +794,7 @@ describe("unittests:: tsserver:: Projects", () => {
         };
 
         host = createServerHost([file1, file2, config3, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") });
-        session = createSession(host);
-
-        session.executeCommand(configureHostRequest);
-
-        openFilesForSession([file1], session);
-        projectService = session.getProjectService();
-
-        checkNumberOfProjects(projectService, { configuredProjects: 1 });
-
-        diagnostics = configuredProjectAt(projectService, 0).getLanguageService().getCompilerOptionsDiagnostics();
-        assert.deepEqual(diagnostics, []);
+        verfiy(config3);
 
         //  #4. Ensure no errors when files are explicitly specified in tsconfig
         const config4 = {
@@ -827,17 +803,7 @@ describe("unittests:: tsserver:: Projects", () => {
         };
 
         host = createServerHost([file1, file2, config4, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") });
-        session = createSession(host);
-
-        session.executeCommand(configureHostRequest);
-
-        openFilesForSession([file1], session);
-        projectService = session.getProjectService();
-
-        checkNumberOfProjects(projectService, { configuredProjects: 1 });
-
-        diagnostics = configuredProjectAt(projectService, 0).getLanguageService().getCompilerOptionsDiagnostics();
-        assert.deepEqual(diagnostics, []);
+        verfiy(config4);
 
         //  #4. Ensure no errors when files are explicitly excluded in tsconfig
         const config5 = {
@@ -846,17 +812,26 @@ describe("unittests:: tsserver:: Projects", () => {
         };
 
         host = createServerHost([file1, file2, config5, libFile], { executingFilePath: ts.combinePaths(ts.getDirectoryPath(libFile.path), "tsc.js") });
-        session = createSession(host);
+        const session = verfiy(config5);
+        baselineTsserverLogs("projects", "no tsconfig script block diagnostic errors", session);
 
-        session.executeCommand(configureHostRequest);
-
-        openFilesForSession([file1], session);
-        projectService = session.getProjectService();
-
-        checkNumberOfProjects(projectService, { configuredProjects: 1 });
-
-        diagnostics = configuredProjectAt(projectService, 0).getLanguageService().getCompilerOptionsDiagnostics();
-        assert.deepEqual(diagnostics, []);
+        function verfiy(config: File) {
+            logger.host = host;
+            const session = createSession(host, { logger });
+            session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+                command: ts.server.CommandNames.Configure,
+                arguments: { extraFileExtensions }
+            });
+            openFilesForSession([file1], session);
+            session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+                command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
+                arguments: {
+                    file: config.path,
+                    projectFileName: config.path,
+                }
+            });
+            return session;
+        }
     });
 
     it("project structure update is deferred if files are not added\removed", () => {
@@ -1206,7 +1181,7 @@ describe("unittests:: tsserver:: Projects", () => {
             };
 
             const host = createServerHost([file1, file2, tsconfig]);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             const projectService = session.getProjectService();
             session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
                 command: ts.server.protocol.CommandTypes.Configure,
@@ -1215,30 +1190,32 @@ describe("unittests:: tsserver:: Projects", () => {
 
             // Configure the deferred extension.
             const extraFileExtensions = [{ extension: ".deferred", scriptKind: ts.ScriptKind.Deferred, isMixedContent: true }];
-            const configureHostRequest = makeSessionRequest<ts.server.protocol.ConfigureRequestArguments>(ts.server.CommandNames.Configure, { extraFileExtensions });
-            session.executeCommand(configureHostRequest);
+            session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+                command: ts.server.CommandNames.Configure,
+                arguments: { extraFileExtensions }
+            });
 
             // Open external project
             const projectName = "/proj1";
-            projectService.openExternalProject({
-                projectFileName: projectName,
-                rootFiles: toExternalFiles([file1.path, file2.path, tsconfig.path]),
-                options: {}
+            session.executeCommandSeq<ts.server.protocol.OpenExternalProjectRequest>({
+                command: ts.server.protocol.CommandTypes.OpenExternalProject,
+                arguments: {
+                    projectFileName: projectName,
+                    rootFiles: toExternalFiles([file1.path, file2.path, tsconfig.path]),
+                    options: {}
+                }
             });
 
-            // Assert
-            checkNumberOfProjects(projectService, { configuredProjects: 1 });
-
-            const configuredProject = configuredProjectAt(projectService, 0);
             if (lazyConfiguredProjectsFromExternalProject) {
                 // configured project is just created and not yet loaded
-                checkProjectActualFiles(configuredProject, ts.emptyArray);
+                session.logger.info("Calling ensureInferredProjectsUpToDate_TestOnly");
                 projectService.ensureInferredProjectsUpToDate_TestOnly();
             }
-            checkProjectActualFiles(configuredProject, [file1.path, tsconfig.path]);
 
             // Allow allowNonTsExtensions will be set to true for deferred extensions.
-            assert.isTrue(configuredProject.getCompilerOptions().allowNonTsExtensions);
+            session.logger.info(`Has allowNonTsExtension: ${session.getProjectService().configuredProjects.get(tsconfig.path)!.getCompilerOptions().allowNonTsExtensions}`);
+
+            baselineTsserverLogs("projects", `deferred files in the project context${lazyConfiguredProjectsFromExternalProject ? " with lazyConfiguredProjectsFromExternalProject" : ""}`, session);
         }
 
         it("when lazyConfiguredProjectsFromExternalProject not set", () => {
@@ -1641,7 +1618,7 @@ describe("unittests:: tsserver:: Projects", () => {
     });
 
     describe("file opened is in configured project that will be removed", () => {
-        function runOnTs<T extends ts.server.protocol.Request>(scenario: string, getRequest: (innerFile: File) => Partial<T>) {
+        function runOnTs<T extends ts.server.protocol.Request>(scenario: string, getRequest: (innerFile: File) => TestSessionRequest<T>) {
             it(scenario, () => {
                 const testsConfig: File = {
                     path: `/user/username/projects/myproject/playground/tsconfig.json`,

@@ -1,12 +1,12 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:30.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/usage/usage.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
@@ -158,7 +158,7 @@ Info 29   [00:01:04.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/usage/usage.ts"
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request
@@ -224,7 +224,7 @@ Info 31   [00:01:06.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/usage/usage.ts"
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Before request
@@ -304,7 +304,7 @@ Info 33   [00:01:08.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/usage/usage.ts"
       },
-      "seq": 3,
+      "seq": 4,
       "type": "request"
     }
 Before request
@@ -370,7 +370,7 @@ Info 35   [00:01:10.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/fns.ts"
       },
-      "seq": 4,
+      "seq": 5,
       "type": "request"
     }
 Before request
@@ -436,7 +436,7 @@ Info 37   [00:01:12.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/fns.ts"
       },
-      "seq": 5,
+      "seq": 6,
       "type": "request"
     }
 Before request
@@ -502,7 +502,7 @@ Info 39   [00:01:14.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/fns.ts"
       },
-      "seq": 6,
+      "seq": 7,
       "type": "request"
     }
 Before request
@@ -569,7 +569,7 @@ Info 41   [00:01:16.000] request:
         "file": "/user/username/projects/myproject/usage/usage.ts",
         "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
       },
-      "seq": 7,
+      "seq": 8,
       "type": "request"
     }
 Before request
@@ -636,7 +636,7 @@ Info 43   [00:01:18.000] request:
         "file": "/user/username/projects/myproject/usage/usage.ts",
         "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
       },
-      "seq": 8,
+      "seq": 9,
       "type": "request"
     }
 Before request
@@ -717,7 +717,7 @@ Info 45   [00:01:20.000] request:
         "file": "/user/username/projects/myproject/usage/usage.ts",
         "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
       },
-      "seq": 9,
+      "seq": 10,
       "type": "request"
     }
 Before request
@@ -784,7 +784,7 @@ Info 47   [00:01:22.000] request:
         "file": "/user/username/projects/myproject/dependency/fns.ts",
         "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
       },
-      "seq": 10,
+      "seq": 11,
       "type": "request"
     }
 Before request
@@ -851,7 +851,7 @@ Info 49   [00:01:24.000] request:
         "file": "/user/username/projects/myproject/dependency/fns.ts",
         "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
       },
-      "seq": 11,
+      "seq": 12,
       "type": "request"
     }
 Before request
@@ -918,7 +918,7 @@ Info 51   [00:01:26.000] request:
         "file": "/user/username/projects/myproject/dependency/fns.ts",
         "projectFileName": "/user/username/projects/myproject/usage/tsconfig.json"
       },
-      "seq": 12,
+      "seq": 13,
       "type": "request"
     }
 Before request
