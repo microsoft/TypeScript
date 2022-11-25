@@ -1,43 +1,215 @@
 import {
-    AccessorDeclaration, addRelatedInfo, AllAccessorDeclarations, AnyImportSyntax, append, ArrayBindingElement,
-    arrayFrom, AssertClause, BindingElement, BindingName, BindingPattern, Bundle, CallSignatureDeclaration,
-    canHaveModifiers, canProduceDiagnostics, ClassDeclaration, CommentRange, compact, concatenate, ConditionalTypeNode,
-    ConstructorDeclaration, ConstructorTypeNode, ConstructSignatureDeclaration, contains, createDiagnosticForNode,
-    createEmptyExports, createGetSymbolAccessibilityDiagnosticForNode,
-    createGetSymbolAccessibilityDiagnosticForNodeName, createSymbolTable, createUnparsedSourceFile, Debug, Declaration,
-    DeclarationDiagnosticProducing, DeclarationName, declarationNameToString, Diagnostics, DiagnosticWithLocation,
-    EmitFlags, EmitHost, EmitResolver, emptyArray, EntityNameOrEntityNameExpression, EnumDeclaration, ESMap,
-    ExportAssignment, ExportDeclaration, ExpressionWithTypeArguments, factory, FileReference, filter, flatMap, flatten,
-    forEach, FunctionDeclaration, FunctionTypeNode, GeneratedIdentifierFlags, GetAccessorDeclaration, getCommentRange,
-    getDirectoryPath, getEffectiveBaseTypeNode, getEffectiveModifierFlags,
-    getExternalModuleImportEqualsDeclarationExpression, getExternalModuleNameFromDeclaration,
-    getFirstConstructorWithBody, getLeadingCommentRanges, getLeadingCommentRangesOfNode, getLineAndCharacterOfPosition,
-    getNameOfDeclaration, getOriginalNodeId, getOutputPathsFor, getParseTreeNode, getRelativePathToDirectoryOrUrl,
-    getResolutionModeOverrideForClause, getResolvedExternalModuleName, getSetAccessorValueParameter,
-    getSourceFileOfNode, GetSymbolAccessibilityDiagnostic, getTextOfNode, getThisParameter, getTrailingCommentRanges,
-    hasDynamicName, hasEffectiveModifier, hasExtension, hasJSDocNodes, HasModifiers, hasSyntacticModifier,
-    HeritageClause, Identifier, ImportDeclaration, ImportEqualsDeclaration, ImportTypeNode, IndexSignatureDeclaration,
-    InterfaceDeclaration, isAnyImportSyntax, isArray, isBindingPattern, isClassDeclaration, isDeclaration, isEntityName,
-    isEntityNameExpression, isExportAssignment, isExportDeclaration, isExternalModule, isExternalModuleAugmentation,
-    isExternalModuleIndicator, isExternalModuleReference, isExternalOrCommonJsModule, isFunctionDeclaration,
-    isFunctionLike, isGlobalScopeAugmentation, isIdentifier, isImportDeclaration, isImportEqualsDeclaration,
-    isIndexSignatureDeclaration, isInterfaceDeclaration, isJsonSourceFile, isLateVisibilityPaintedStatement,
-    isLiteralImportTypeNode, isMappedTypeNode, isMethodDeclaration, isMethodSignature, isModifier, isModuleDeclaration,
-    isNightly, isOmittedExpression, isPrivateIdentifier, isPropertyAccessExpression, isPropertySignature,
-    isSemicolonClassElement, isSetAccessorDeclaration, isSourceFile, isSourceFileJS, isSourceFileNotJson,
-    isStringANonContextualKeyword, isStringLiteral, isStringLiteralLike, isTupleTypeNode, isTypeAliasDeclaration,
-    isTypeNode, isTypeParameterDeclaration, isTypeQueryNode, isUnparsedSource, last, LateBoundDeclaration,
-    LateVisibilityPaintedStatement, length, map, Map, mapDefined, MethodDeclaration, MethodSignature, Modifier,
-    ModifierFlags, ModuleBody, ModuleDeclaration, NamedDeclaration, NamespaceDeclaration,
-    needsScopeMarker, Node, NodeArray, NodeBuilderFlags, NodeFlags, NodeId, normalizeSlashes, OmittedExpression,
-    orderedRemoveItem, ParameterDeclaration, parseNodeFactory, pathContainsNodeModules, pathIsRelative,
-    PropertyDeclaration, PropertySignature, pushIfUnique, removeAllComments, Set, SetAccessorDeclaration,
-    setCommentRange, setEmitFlags, setOriginalNode, setParent, setTextRange, SignatureDeclaration, skipTrivia, some,
-    SourceFile, startsWith, Statement, stringContains, StringLiteral, Symbol, SymbolAccessibility,
-    SymbolAccessibilityResult, SymbolFlags, SymbolTracker, SyntaxKind, toFileNameLowerCase, toPath,
-    TransformationContext, transformNodes, tryCast, TypeAliasDeclaration, TypeNode, TypeParameterDeclaration,
-    TypeReferenceNode, unescapeLeadingUnderscores, UnparsedSource, VariableDeclaration, VariableStatement, visitArray,
-    visitEachChild, visitNode, visitNodes, VisitResult,
+    AccessorDeclaration,
+    addRelatedInfo,
+    AllAccessorDeclarations,
+    AnyImportSyntax,
+    append,
+    ArrayBindingElement,
+    arrayFrom,
+    AssertClause,
+    BindingElement,
+    BindingName,
+    BindingPattern,
+    Bundle,
+    CallSignatureDeclaration,
+    canHaveModifiers,
+    canProduceDiagnostics,
+    ClassDeclaration,
+    CommentRange,
+    compact,
+    concatenate,
+    ConditionalTypeNode,
+    ConstructorDeclaration,
+    ConstructorTypeNode,
+    ConstructSignatureDeclaration,
+    contains,
+    createDiagnosticForNode,
+    createEmptyExports,
+    createGetSymbolAccessibilityDiagnosticForNode,
+    createGetSymbolAccessibilityDiagnosticForNodeName,
+    createSymbolTable,
+    createUnparsedSourceFile,
+    Debug,
+    Declaration,
+    DeclarationDiagnosticProducing,
+    DeclarationName,
+    declarationNameToString,
+    Diagnostics,
+    DiagnosticWithLocation,
+    EmitFlags,
+    EmitHost,
+    EmitResolver,
+    emptyArray,
+    EntityNameOrEntityNameExpression,
+    EnumDeclaration,
+    ExportAssignment,
+    ExportDeclaration,
+    ExpressionWithTypeArguments,
+    factory,
+    FileReference,
+    filter,
+    flatMap,
+    flatten,
+    forEach,
+    FunctionDeclaration,
+    FunctionTypeNode,
+    GeneratedIdentifierFlags,
+    GetAccessorDeclaration,
+    getCommentRange,
+    getDirectoryPath,
+    getEffectiveBaseTypeNode,
+    getEffectiveModifierFlags,
+    getExternalModuleImportEqualsDeclarationExpression,
+    getExternalModuleNameFromDeclaration,
+    getFirstConstructorWithBody,
+    getLeadingCommentRanges,
+    getLeadingCommentRangesOfNode,
+    getLineAndCharacterOfPosition,
+    getNameOfDeclaration,
+    getOriginalNodeId,
+    getOutputPathsFor,
+    getParseTreeNode,
+    getRelativePathToDirectoryOrUrl,
+    getResolutionModeOverrideForClause,
+    getResolvedExternalModuleName,
+    getSetAccessorValueParameter,
+    getSourceFileOfNode,
+    GetSymbolAccessibilityDiagnostic,
+    getTextOfNode,
+    getThisParameter,
+    getTrailingCommentRanges,
+    hasDynamicName,
+    hasEffectiveModifier,
+    hasExtension,
+    hasJSDocNodes,
+    HasModifiers,
+    hasSyntacticModifier,
+    HeritageClause,
+    Identifier,
+    ImportDeclaration,
+    ImportEqualsDeclaration,
+    ImportTypeNode,
+    IndexSignatureDeclaration,
+    InterfaceDeclaration,
+    isAnyImportSyntax,
+    isArray,
+    isBindingPattern,
+    isClassDeclaration,
+    isDeclaration,
+    isEntityName,
+    isEntityNameExpression,
+    isExportAssignment,
+    isExportDeclaration,
+    isExternalModule,
+    isExternalModuleAugmentation,
+    isExternalModuleIndicator,
+    isExternalModuleReference,
+    isExternalOrCommonJsModule,
+    isFunctionDeclaration,
+    isFunctionLike,
+    isGlobalScopeAugmentation,
+    isIdentifier,
+    isImportDeclaration,
+    isImportEqualsDeclaration,
+    isIndexSignatureDeclaration,
+    isInterfaceDeclaration,
+    isJsonSourceFile,
+    isLateVisibilityPaintedStatement,
+    isLiteralImportTypeNode,
+    isMappedTypeNode,
+    isMethodDeclaration,
+    isMethodSignature,
+    isModifier,
+    isModuleDeclaration,
+    isNightly,
+    isOmittedExpression,
+    isPrivateIdentifier,
+    isPropertyAccessExpression,
+    isPropertySignature,
+    isSemicolonClassElement,
+    isSetAccessorDeclaration,
+    isSourceFile,
+    isSourceFileJS,
+    isSourceFileNotJson,
+    isStringANonContextualKeyword,
+    isStringLiteral,
+    isStringLiteralLike,
+    isTupleTypeNode,
+    isTypeAliasDeclaration,
+    isTypeNode,
+    isTypeParameterDeclaration,
+    isTypeQueryNode,
+    isUnparsedSource,
+    last,
+    LateBoundDeclaration,
+    LateVisibilityPaintedStatement,
+    length,
+    map,
+    mapDefined,
+    MethodDeclaration,
+    MethodSignature,
+    Modifier,
+    ModifierFlags,
+    ModuleBody,
+    ModuleDeclaration,
+    NamedDeclaration,
+    NamespaceDeclaration,
+    needsScopeMarker,
+    Node,
+    NodeArray,
+    NodeBuilderFlags,
+    NodeFlags,
+    NodeId,
+    normalizeSlashes,
+    OmittedExpression,
+    orderedRemoveItem,
+    ParameterDeclaration,
+    parseNodeFactory,
+    pathContainsNodeModules,
+    pathIsRelative,
+    PropertyDeclaration,
+    PropertySignature,
+    pushIfUnique,
+    removeAllComments,
+    ResolutionMode,
+    SetAccessorDeclaration,
+    setCommentRange,
+    setEmitFlags,
+    setOriginalNode,
+    setParent,
+    setTextRange,
+    SignatureDeclaration,
+    skipTrivia,
+    some,
+    SourceFile,
+    startsWith,
+    Statement,
+    stringContains,
+    StringLiteral,
+    Symbol,
+    SymbolAccessibility,
+    SymbolAccessibilityResult,
+    SymbolFlags,
+    SymbolTracker,
+    SyntaxKind,
+    toFileNameLowerCase,
+    toPath,
+    TransformationContext,
+    transformNodes,
+    tryCast,
+    TypeAliasDeclaration,
+    TypeNode,
+    TypeParameterDeclaration,
+    TypeReferenceNode,
+    unescapeLeadingUnderscores,
+    UnparsedSource,
+    VariableDeclaration,
+    VariableStatement,
+    visitArray,
+    visitEachChild,
+    visitNode,
+    visitNodes,
+    VisitResult,
 } from "../_namespaces/ts";
 import * as moduleSpecifiers from "../_namespaces/ts.moduleSpecifiers";
 
@@ -103,9 +275,9 @@ export function transformDeclarations(context: TransformationContext) {
     let needsScopeFixMarker = false;
     let resultHasScopeMarker = false;
     let enclosingDeclaration: Node;
-    let necessaryTypeReferences: Set<[specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined]> | undefined;
+    let necessaryTypeReferences: Set<[specifier: string, mode: ResolutionMode]> | undefined;
     let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
-    let lateStatementReplacementMap: ESMap<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
+    let lateStatementReplacementMap: Map<NodeId, VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
     let suppressNewDiagnosticContexts: boolean;
     let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
 
@@ -130,15 +302,15 @@ export function transformDeclarations(context: TransformationContext) {
     let errorFallbackNode: Declaration | undefined;
 
     let currentSourceFile: SourceFile;
-    let refs: ESMap<NodeId, SourceFile>;
-    let libs: ESMap<string, boolean>;
+    let refs: Map<NodeId, SourceFile>;
+    let libs: Map<string, boolean>;
     let emittedImports: readonly AnyImportSyntax[] | undefined; // must be declared in container so it can be `undefined` while transformer's first pass
     const resolver = context.getEmitResolver();
     const options = context.getCompilerOptions();
     const { noResolve, stripInternal } = options;
     return transformRoot;
 
-    function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined][] | undefined): void {
+    function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: readonly [specifier: string, mode: ResolutionMode][] | undefined): void {
         if (!typeReferenceDirectives) {
             return;
         }
@@ -408,7 +580,7 @@ export function transformDeclarations(context: TransformationContext) {
             return necessaryTypeReferences ? mapDefined(arrayFrom(necessaryTypeReferences.keys()), getFileReferenceForSpecifierModeTuple) : [];
         }
 
-        function getFileReferenceForSpecifierModeTuple([typeName, mode]: [specifier: string, mode: SourceFile["impliedNodeFormat"] | undefined]): FileReference | undefined {
+        function getFileReferenceForSpecifierModeTuple([typeName, mode]: [specifier: string, mode: ResolutionMode]): FileReference | undefined {
             // Elide type references for which we have imports
             if (emittedImports) {
                 for (const importStatement of emittedImports) {
@@ -477,7 +649,7 @@ export function transformDeclarations(context: TransformationContext) {
         }
     }
 
-    function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: ESMap<NodeId, SourceFile>) {
+    function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: Map<NodeId, SourceFile>) {
         if (noResolve || (!isUnparsedSource(sourceFile) && isSourceFileJS(sourceFile))) return ret;
         forEach(sourceFile.referencedFiles, f => {
             const elem = host.getSourceFileFromReference(sourceFile, f);
@@ -488,7 +660,7 @@ export function transformDeclarations(context: TransformationContext) {
         return ret;
     }
 
-    function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: ESMap<string, boolean>) {
+    function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: Map<string, boolean>) {
         forEach(sourceFile.libReferenceDirectives, ref => {
             const lib = host.getLibFileFromReference(ref);
             if (lib) {

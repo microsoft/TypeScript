@@ -1,5 +1,16 @@
-import { Diagnostics, hasProperty, quote, SourceFile, textChanges, UserPreferences } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    Diagnostics,
+    hasProperty,
+    quote,
+    SourceFile,
+    textChanges,
+    UserPreferences,
+} from "../_namespaces/ts";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixIdExpression = "fixInvalidJsxCharacters_expression";
 const fixIdHtmlEntity = "fixInvalidJsxCharacters_htmlEntity";

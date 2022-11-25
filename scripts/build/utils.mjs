@@ -7,6 +7,7 @@ import which from "which";
 import { spawn } from "child_process";
 import assert from "assert";
 import JSONC from "jsonc-parser";
+import { CancelError } from "@esfx/canceltoken";
 
 /**
  * Executes the provided command once with the supplied arguments.
@@ -18,6 +19,7 @@ import JSONC from "jsonc-parser";
  * @property {boolean} [ignoreExitCode]
  * @property {boolean} [hidePrompt]
  * @property {boolean} [waitForExit=true]
+ * @property {import("@esfx/canceltoken").CancelToken} [token]
  */
 export async function exec(cmd, args, options = {}) {
     return /**@type {Promise<{exitCode?: number}>}*/(new Promise((resolve, reject) => {
@@ -26,16 +28,24 @@ export async function exec(cmd, args, options = {}) {
         if (!options.hidePrompt) console.log(`> ${chalk.green(cmd)} ${args.join(" ")}`);
         const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? "inherit" : "ignore" });
         if (waitForExit) {
+            const onCanceled = () => {
+                proc.kill();
+            };
+            const subscription = options.token?.subscribe(onCanceled);
             proc.on("exit", exitCode => {
                 if (exitCode === 0 || ignoreExitCode) {
                     resolve({ exitCode: exitCode ?? undefined });
                 }
                 else {
-                    reject(new Error(`Process exited with code: ${exitCode}`));
+                    const reason = options.token?.signaled ? options.token.reason ?? new CancelError() :
+                        new Error(`Process exited with code: ${exitCode}`);
+                    reject(reason);
                 }
+                subscription?.unsubscribe();
             });
             proc.on("error", error => {
                 reject(error);
+                subscription?.unsubscribe();
             });
         }
         else {
@@ -150,8 +160,12 @@ export function getDirSize(root) {
         .reduce((acc, num) => acc + num, 0);
 }
 
-class Deferred {
+/**
+ * @template T
+ */
+export class Deferred {
     constructor() {
+        /** @type {Promise<T>} */
         this.promise = new Promise((resolve, reject) => {
             this.resolve = resolve;
             this.reject = reject;
@@ -162,12 +176,14 @@ class Deferred {
 export class Debouncer {
     /**
      * @param {number} timeout
-     * @param {() => Promise<any>} action
+     * @param {() => Promise<any> | void} action
      */
     constructor(timeout, action) {
         this._timeout = timeout;
         this._action = action;
     }
+
+    get empty() { return !this._deferred; }
 
     enqueue() {
         if (this._timer) {

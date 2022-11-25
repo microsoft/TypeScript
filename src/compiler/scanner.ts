@@ -1,8 +1,31 @@
 import {
-    append, arraysEqual, binarySearch, CharacterCodes, CommentDirective, CommentDirectiveType, CommentKind,
-    CommentRange, compareValues, Debug, DiagnosticMessage, Diagnostics, ESMap, getEntries, identity, JSDocSyntaxKind,
-    JsxTokenSyntaxKind, KeywordSyntaxKind, LanguageVariant, LineAndCharacter, Map, MapLike, parsePseudoBigInt,
-    positionIsSynthesized, ScriptTarget, SourceFileLike, SyntaxKind, TokenFlags, trimStringStart,
+    append,
+    arraysEqual,
+    binarySearch,
+    CharacterCodes,
+    CommentDirective,
+    CommentDirectiveType,
+    CommentKind,
+    CommentRange,
+    compareValues,
+    Debug,
+    DiagnosticMessage,
+    Diagnostics,
+    getEntries,
+    identity,
+    JSDocSyntaxKind,
+    JsxTokenSyntaxKind,
+    KeywordSyntaxKind,
+    LanguageVariant,
+    LineAndCharacter,
+    MapLike,
+    parsePseudoBigInt,
+    positionIsSynthesized,
+    ScriptTarget,
+    SourceFileLike,
+    SyntaxKind,
+    TokenFlags,
+    trimStringStart,
 } from "./_namespaces/ts";
 
 export type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
@@ -347,7 +370,7 @@ function isUnicodeIdentifierPart(code: number, languageVersion: ScriptTarget | u
             lookupInUnicodeMap(code, unicodeES3IdentifierPart);
 }
 
-function makeReverseMap(source: ESMap<string, number>): string[] {
+function makeReverseMap(source: Map<string, number>): string[] {
     const result: string[] = [];
     source.forEach((value, name) => {
         result[value] = name;

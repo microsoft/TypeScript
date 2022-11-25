@@ -1,6 +1,15 @@
 import {
-    addNodeFactoryPatcher, buildOverload, EntityName, factory, ImportTypeAssertionContainer, ImportTypeNode, isArray,
-    isEntityName, isImportTypeAssertionContainer, NodeFactory, TypeNode,
+    addNodeFactoryPatcher,
+    buildOverload,
+    EntityName,
+    factory,
+    ImportTypeAssertionContainer,
+    ImportTypeNode,
+    isArray,
+    isEntityName,
+    isImportTypeAssertionContainer,
+    NodeFactory,
+    TypeNode,
 } from "../_namespaces/ts";
 
 // DEPRECATION: Overloads to createImportTypeNode/updateImportTypeNode that do not accept `assertions`
