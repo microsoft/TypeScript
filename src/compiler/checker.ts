@@ -26334,7 +26334,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const filtered = filterType(type, t => isTypePresencePossible(t, name, assumeTrue));
                 // without `noUncheckedIndexedAccess` we can't narrow any further
                 // `{ [x: PropertyKey]: T }[prop]` already returns `T`
-                if (!compilerOptions.noUncheckedIndexedAccess) {
+                if (!assumeTrue || !compilerOptions.noUncheckedIndexedAccess) {
                     return filtered;
                 }
                 return mapType(filtered, t => {

@@ -16,4 +16,11 @@ function f2(obj: Record<string, string>) {
   return "default"
 }
 
-
+function f3(obj: Record<string, string>) {
+  if ("test" in obj) {
+    obj.test
+  }
+  else {
+    obj.test
+  }
+}
