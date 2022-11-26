@@ -1,6 +1,12 @@
 import {
     Bundle,
-    chainBundle, Node, SourceFile, TransformationContext, TransformFlags, visitEachChild, VisitResult,
+    chainBundle,
+    Node,
+    SourceFile,
+    TransformationContext,
+    TransformFlags,
+    visitEachChild,
+    VisitResult,
 } from "../_namespaces/ts";
 
 /** @internal */

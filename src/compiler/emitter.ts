@@ -1,83 +1,447 @@
 import * as ts from "./_namespaces/ts";
 import {
-    AccessorDeclaration, ArrayBindingPattern, ArrayLiteralExpression, arrayToMap, ArrayTypeNode, ArrowFunction,
-    AsExpression, AssertClause, AssertEntry, AwaitExpression, base64encode, BigIntLiteral, BinaryExpression,
-    BinaryOperatorToken, BindingElement, BindingPattern, Block, BlockLike, BreakStatement, BuildInfo, Bundle,
-    BundleBuildInfo, BundleFileInfo, BundleFileSectionKind, BundleFileTextLike, BundleFileTextLikeKind, CallExpression,
-    CallSignatureDeclaration, CaseBlock, CaseClause, CaseOrDefaultClause, cast, CatchClause, changeExtension,
-    CharacterCodes, ClassDeclaration, ClassExpression, ClassStaticBlockDeclaration, clone, combinePaths,
-    CommaListExpression, CommentRange, compareEmitHelpers, comparePaths, Comparison, CompilerHost, CompilerOptions,
-    computeCommonSourceDirectoryOfFilenames, ComputedPropertyName, computeLineStarts, computeSignature,
-    ConditionalExpression, ConditionalTypeNode, ConstructorDeclaration, ConstructorTypeNode,
-    ConstructSignatureDeclaration, contains, ContinueStatement, createBinaryExpressionTrampoline,
-    createDiagnosticCollection, createGetCanonicalFileName, createInputFilesWithFileTexts, createMultiMap,
-    createPrependNodes, createSourceMapGenerator, createTextWriter, CustomTransformers, Debug, DebuggerStatement,
-    DeclarationName, Decorator, DefaultClause, DeleteExpression, directorySeparator, DoStatement, DotToken,
-    ElementAccessExpression, emitDetachedComments, EmitFileNames, EmitFlags, EmitHint, EmitHost,
-    emitNewLineBeforeLeadingCommentOfPosition, EmitOnly, EmitResolver, EmitResult, EmitTextWriter, EmitTransformers,
-    emptyArray, ensurePathIsNonModuleName, ensureTrailingDirectorySeparator, EntityName, EnumDeclaration, EnumMember,
-    escapeJsxAttributeString, escapeLeadingUnderscores, escapeNonAsciiString, escapeString, every,
-    ExportAssignment, ExportDeclaration, ExportSpecifier, Expression, ExpressionStatement, ExpressionWithTypeArguments,
-    Extension, ExternalModuleReference, factory, fileExtensionIs, fileExtensionIsOneOf, FileReference, filter,
-    findIndex, firstOrUndefined, forEach, forEachChild, forEachLeadingCommentRange, forEachTrailingCommentRange,
-    ForInOrOfStatement, ForInStatement, formatGeneratedName, formatGeneratedNamePart, ForOfStatement, ForStatement,
-    FunctionDeclaration, FunctionExpression, FunctionLikeDeclaration, FunctionTypeNode, GeneratedIdentifier,
-    GeneratedIdentifierFlags, GeneratedNamePart, GeneratedPrivateIdentifier, getAreDeclarationMapsEnabled,
-    getBaseFileName, GetCanonicalFileName, getCommentRange, getConstantValue, getContainingNodeArray,
-    getDeclarationEmitExtensionForPath, getDeclarationEmitOutputFilePath, getDirectoryPath, getEmitDeclarations,
-    getEmitFlags, getEmitHelpers, getEmitModuleKind, getExternalHelpersModuleName, getExternalModuleName,
-    getLeadingCommentRanges, getLineAndCharacterOfPosition, getLinesBetweenPositionAndNextNonWhitespaceCharacter,
-    getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter, getLinesBetweenRangeEndAndRangeStart, getLineStarts,
-    getLiteralText, GetLiteralTextFlags, getNewLineCharacter, getNodeForGeneratedName, getNodeId,
-    getNormalizedAbsolutePath, getOriginalNode, getOwnEmitOutputFilePath, getParseTreeNode,
-    getRelativePathFromDirectory, getRelativePathToDirectoryOrUrl, getRootLength, getShebang, getSnippetElement,
-    getSourceFileOfNode, getSourceFilePathInNewDir, getSourceFilesToEmit, getSourceMapRange,
-    getSourceTextOfNodeFromSourceFile, getStartsOnNewLine, getSyntheticLeadingComments, getSyntheticTrailingComments,
-    getTextOfJSDocComment, getTrailingCommentRanges, getTrailingSemicolonDeferringWriter, getTransformers, getTypeNode,
-    guessIndentation, hasRecordedExternalHelpers, HeritageClause, Identifier, idText, IfStatement, ImportClause,
-    ImportDeclaration, ImportEqualsDeclaration, ImportOrExportSpecifier, ImportSpecifier, ImportTypeNode,
-    IndexedAccessTypeNode, IndexSignatureDeclaration, InferTypeNode, InterfaceDeclaration, IntersectionTypeNode,
-    isAccessExpression, isArray, isArrowFunction, isBinaryExpression, isBindingPattern, isBlock, isBundle,
-    isBundleFileTextLike, isDeclaration, isDeclarationFileName, isDecorator, isEmptyStatement, isExportAssignment,
-    isExportSpecifier, isExpression, isFunctionLike, isGeneratedIdentifier, isGeneratedPrivateIdentifier, isIdentifier,
-    isIncrementalCompilation, isInJsonFile, isInternalDeclaration, isJSDocLikeText, isJsonSourceFile,
-    isJsxClosingElement, isJsxOpeningElement, isKeyword, isLet, isLiteralExpression, isMemberName, isModifier,
-    isModuleDeclaration, isNodeDescendantOf, isNumericLiteral, isParenthesizedExpression, isPartiallyEmittedExpression,
-    isPinnedComment, isPrivateIdentifier, isPrologueDirective, isRecognizedTripleSlashComment, isSourceFile,
-    isSourceFileNotJson, isStringLiteral, isTemplateLiteralKind, isTokenKind, isTypeParameterDeclaration,
-    isUnparsedNode, isUnparsedPrepend, isUnparsedSource, isVarConst, isVariableStatement, JSDoc, JSDocAugmentsTag,
-    JSDocCallbackTag, JSDocComment, JSDocEnumTag, JSDocFunctionType, JSDocImplementsTag, JSDocNameReference,
-    JSDocNonNullableType, JSDocNullableType, JSDocOptionalType, JSDocPropertyLikeTag, JSDocReturnTag, JSDocSeeTag,
-    JSDocSignature, JSDocTag, JSDocTemplateTag, JSDocThisTag, JSDocTypedefTag, JSDocTypeExpression, JSDocTypeLiteral,
-    JSDocTypeTag, JSDocVariadicType, JsxAttribute, JsxAttributes, JsxClosingElement, JsxClosingFragment, JsxElement,
-    JsxEmit, JsxExpression, JsxFragment, JsxOpeningElement, JsxOpeningFragment, JsxSelfClosingElement,
-    JsxSpreadAttribute, JsxTagNameExpression, JsxText, LabeledStatement, last, lastOrUndefined, LateBoundDeclaration,
-    length, ListFormat, LiteralExpression, LiteralLikeNode, LiteralTypeNode, makeIdentifierFromModuleName,
-    MappedTypeNode, maybeBind, memoize, MetaProperty, MethodDeclaration, MethodSignature, Modifier, ModifierLike,
-    ModuleBlock, ModuleDeclaration, ModuleKind, ModuleReference, NamedDeclaration, NamedExports, NamedImports,
-    NamedImportsOrExports, NamedTupleMember, NamespaceExport, NamespaceExportDeclaration, NamespaceImport,
-    NewExpression, Node, NodeArray, NodeFlags, nodeIsSynthesized, noEmitNotification, noEmitSubstitution,
-    NonNullExpression, normalizePath, normalizeSlashes, notImplemented, NumericLiteral, ObjectBindingPattern,
-    ObjectLiteralExpression, OptionalTypeNode, outFile, OutputFile, ParameterDeclaration, ParenthesizedExpression,
-    ParenthesizedTypeNode, ParsedCommandLine, PartiallyEmittedExpression, Placeholder, positionIsSynthesized,
-    positionsAreOnSameLine, PostfixUnaryExpression, PrefixUnaryExpression, Printer, PrinterOptions, PrintHandlers,
-    PrivateIdentifier, ProgramBuildInfo, ProgramBundleEmitBuildInfo, ProjectReference, PropertyAccessExpression,
-    PropertyAssignment, PropertyDeclaration, PropertySignature, QualifiedName, rangeEndIsOnSameLineAsRangeStart,
-    rangeEndPositionsAreOnSameLine, rangeIsOnSingleLine, rangeStartPositionsAreOnSameLine, readJsonOrUndefined,
-    removeFileExtension, resolvePath, RestTypeNode, returnFalse, ReturnStatement, returnUndefined, SatisfiesExpression,
-    ScriptTarget, setEachParent, setOriginalNode, setParent, setTextRange, setTextRangePosEnd,
-    setTextRangePosWidth, ShorthandPropertyAssignment, SignatureDeclaration, singleOrUndefined,
-    skipPartiallyEmittedExpressions, skipTrivia, SnippetElement, SnippetKind, some, SourceFile,
-    SourceFilePrologueDirective, SourceFilePrologueInfo, SourceMapEmitResult, SourceMapGenerator, SourceMapSource,
-    SpreadAssignment, SpreadElement, stableSort, Statement, stringContains, StringLiteral, supportedJSExtensionsFlat,
-    SwitchStatement, Symbol, SymbolFlags, SyntaxKind, SynthesizedComment, sys, TabStop, TaggedTemplateExpression,
-    TemplateExpression, TemplateLiteralTypeNode, TemplateLiteralTypeSpan, TemplateSpan, TextRange, ThrowStatement,
-    tokenToString, tracing, TransformationResult, transformNodes, tryParseRawSourceMap, TryStatement, TupleTypeNode,
-    TypeAliasDeclaration, TypeAssertion, TypeLiteralNode, TypeNode, TypeOfExpression, TypeOperatorNode,
-    TypeParameterDeclaration, TypePredicateNode, TypeQueryNode, TypeReferenceNode, UnionTypeNode, UnparsedNode,
-    UnparsedPrepend, UnparsedPrologue, UnparsedSource, UnparsedSyntheticReference, UnparsedTextLike,
-    VariableDeclaration, VariableDeclarationList, VariableStatement, VoidExpression, WhileStatement, WithStatement,
-    writeCommentRange, writeFile, WriteFileCallbackData, YieldExpression,
+    AccessorDeclaration,
+    ArrayBindingPattern,
+    ArrayLiteralExpression,
+    arrayToMap,
+    ArrayTypeNode,
+    ArrowFunction,
+    AsExpression,
+    AssertClause,
+    AssertEntry,
+    AwaitExpression,
+    base64encode,
+    BigIntLiteral,
+    BinaryExpression,
+    BinaryOperatorToken,
+    BindingElement,
+    BindingPattern,
+    Block,
+    BlockLike,
+    BreakStatement,
+    BuildInfo,
+    Bundle,
+    BundleBuildInfo,
+    BundleFileInfo,
+    BundleFileSectionKind,
+    BundleFileTextLike,
+    BundleFileTextLikeKind,
+    CallExpression,
+    CallSignatureDeclaration,
+    CaseBlock,
+    CaseClause,
+    CaseOrDefaultClause,
+    cast,
+    CatchClause,
+    changeExtension,
+    CharacterCodes,
+    ClassDeclaration,
+    ClassExpression,
+    ClassStaticBlockDeclaration,
+    clone,
+    combinePaths,
+    CommaListExpression,
+    CommentRange,
+    compareEmitHelpers,
+    comparePaths,
+    Comparison,
+    CompilerHost,
+    CompilerOptions,
+    computeCommonSourceDirectoryOfFilenames,
+    ComputedPropertyName,
+    computeLineStarts,
+    computeSignature,
+    ConditionalExpression,
+    ConditionalTypeNode,
+    ConstructorDeclaration,
+    ConstructorTypeNode,
+    ConstructSignatureDeclaration,
+    contains,
+    ContinueStatement,
+    createBinaryExpressionTrampoline,
+    createDiagnosticCollection,
+    createGetCanonicalFileName,
+    createInputFilesWithFileTexts,
+    createMultiMap,
+    createPrependNodes,
+    createSourceMapGenerator,
+    createTextWriter,
+    CustomTransformers,
+    Debug,
+    DebuggerStatement,
+    DeclarationName,
+    Decorator,
+    DefaultClause,
+    DeleteExpression,
+    directorySeparator,
+    DoStatement,
+    DotToken,
+    ElementAccessExpression,
+    emitDetachedComments,
+    EmitFileNames,
+    EmitFlags,
+    EmitHint,
+    EmitHost,
+    emitNewLineBeforeLeadingCommentOfPosition,
+    EmitOnly,
+    EmitResolver,
+    EmitResult,
+    EmitTextWriter,
+    EmitTransformers,
+    emptyArray,
+    ensurePathIsNonModuleName,
+    ensureTrailingDirectorySeparator,
+    EntityName,
+    EnumDeclaration,
+    EnumMember,
+    escapeJsxAttributeString,
+    escapeLeadingUnderscores,
+    escapeNonAsciiString,
+    escapeString,
+    every,
+    ExportAssignment,
+    ExportDeclaration,
+    ExportSpecifier,
+    Expression,
+    ExpressionStatement,
+    ExpressionWithTypeArguments,
+    Extension,
+    ExternalModuleReference,
+    factory,
+    fileExtensionIs,
+    fileExtensionIsOneOf,
+    FileReference,
+    filter,
+    findIndex,
+    firstOrUndefined,
+    forEach,
+    forEachChild,
+    forEachLeadingCommentRange,
+    forEachTrailingCommentRange,
+    ForInOrOfStatement,
+    ForInStatement,
+    formatGeneratedName,
+    formatGeneratedNamePart,
+    ForOfStatement,
+    ForStatement,
+    FunctionDeclaration,
+    FunctionExpression,
+    FunctionLikeDeclaration,
+    FunctionTypeNode,
+    GeneratedIdentifier,
+    GeneratedIdentifierFlags,
+    GeneratedNamePart,
+    GeneratedPrivateIdentifier,
+    getAreDeclarationMapsEnabled,
+    getBaseFileName,
+    GetCanonicalFileName,
+    getCommentRange,
+    getConstantValue,
+    getContainingNodeArray,
+    getDeclarationEmitExtensionForPath,
+    getDeclarationEmitOutputFilePath,
+    getDirectoryPath,
+    getEmitDeclarations,
+    getEmitFlags,
+    getEmitHelpers,
+    getEmitModuleKind,
+    getExternalHelpersModuleName,
+    getExternalModuleName,
+    getLeadingCommentRanges,
+    getLineAndCharacterOfPosition,
+    getLinesBetweenPositionAndNextNonWhitespaceCharacter,
+    getLinesBetweenPositionAndPrecedingNonWhitespaceCharacter,
+    getLinesBetweenRangeEndAndRangeStart,
+    getLineStarts,
+    getLiteralText,
+    GetLiteralTextFlags,
+    getNewLineCharacter,
+    getNodeForGeneratedName,
+    getNodeId,
+    getNormalizedAbsolutePath,
+    getOriginalNode,
+    getOwnEmitOutputFilePath,
+    getParseTreeNode,
+    getRelativePathFromDirectory,
+    getRelativePathToDirectoryOrUrl,
+    getRootLength,
+    getShebang,
+    getSnippetElement,
+    getSourceFileOfNode,
+    getSourceFilePathInNewDir,
+    getSourceFilesToEmit,
+    getSourceMapRange,
+    getSourceTextOfNodeFromSourceFile,
+    getStartsOnNewLine,
+    getSyntheticLeadingComments,
+    getSyntheticTrailingComments,
+    getTextOfJSDocComment,
+    getTrailingCommentRanges,
+    getTrailingSemicolonDeferringWriter,
+    getTransformers,
+    getTypeNode,
+    guessIndentation,
+    hasRecordedExternalHelpers,
+    HeritageClause,
+    Identifier,
+    idText,
+    IfStatement,
+    ImportClause,
+    ImportDeclaration,
+    ImportEqualsDeclaration,
+    ImportOrExportSpecifier,
+    ImportSpecifier,
+    ImportTypeNode,
+    IndexedAccessTypeNode,
+    IndexSignatureDeclaration,
+    InferTypeNode,
+    InterfaceDeclaration,
+    IntersectionTypeNode,
+    isAccessExpression,
+    isArray,
+    isArrowFunction,
+    isBinaryExpression,
+    isBindingPattern,
+    isBlock,
+    isBundle,
+    isBundleFileTextLike,
+    isDeclaration,
+    isDeclarationFileName,
+    isDecorator,
+    isEmptyStatement,
+    isExportAssignment,
+    isExportSpecifier,
+    isExpression,
+    isFunctionLike,
+    isGeneratedIdentifier,
+    isGeneratedPrivateIdentifier,
+    isIdentifier,
+    isIncrementalCompilation,
+    isInJsonFile,
+    isInternalDeclaration,
+    isJSDocLikeText,
+    isJsonSourceFile,
+    isJsxClosingElement,
+    isJsxOpeningElement,
+    isKeyword,
+    isLet,
+    isLiteralExpression,
+    isMemberName,
+    isModifier,
+    isModuleDeclaration,
+    isNodeDescendantOf,
+    isNumericLiteral,
+    isParenthesizedExpression,
+    isPartiallyEmittedExpression,
+    isPinnedComment,
+    isPrivateIdentifier,
+    isPrologueDirective,
+    isRecognizedTripleSlashComment,
+    isSourceFile,
+    isSourceFileNotJson,
+    isStringLiteral,
+    isTemplateLiteralKind,
+    isTokenKind,
+    isTypeParameterDeclaration,
+    isUnparsedNode,
+    isUnparsedPrepend,
+    isUnparsedSource,
+    isVarConst,
+    isVariableStatement,
+    JSDoc,
+    JSDocAugmentsTag,
+    JSDocCallbackTag,
+    JSDocComment,
+    JSDocEnumTag,
+    JSDocFunctionType,
+    JSDocImplementsTag,
+    JSDocNameReference,
+    JSDocNonNullableType,
+    JSDocNullableType,
+    JSDocOptionalType,
+    JSDocPropertyLikeTag,
+    JSDocReturnTag,
+    JSDocSeeTag,
+    JSDocSignature,
+    JSDocTag,
+    JSDocTemplateTag,
+    JSDocThisTag,
+    JSDocTypedefTag,
+    JSDocTypeExpression,
+    JSDocTypeLiteral,
+    JSDocTypeTag,
+    JSDocVariadicType,
+    JsxAttribute,
+    JsxAttributes,
+    JsxClosingElement,
+    JsxClosingFragment,
+    JsxElement,
+    JsxEmit,
+    JsxExpression,
+    JsxFragment,
+    JsxOpeningElement,
+    JsxOpeningFragment,
+    JsxSelfClosingElement,
+    JsxSpreadAttribute,
+    JsxTagNameExpression,
+    JsxText,
+    LabeledStatement,
+    last,
+    lastOrUndefined,
+    LateBoundDeclaration,
+    length,
+    ListFormat,
+    LiteralExpression,
+    LiteralLikeNode,
+    LiteralTypeNode,
+    makeIdentifierFromModuleName,
+    MappedTypeNode,
+    maybeBind,
+    memoize,
+    MetaProperty,
+    MethodDeclaration,
+    MethodSignature,
+    Modifier,
+    ModifierLike,
+    ModuleBlock,
+    ModuleDeclaration,
+    ModuleKind,
+    ModuleReference,
+    NamedDeclaration,
+    NamedExports,
+    NamedImports,
+    NamedImportsOrExports,
+    NamedTupleMember,
+    NamespaceExport,
+    NamespaceExportDeclaration,
+    NamespaceImport,
+    NewExpression,
+    Node,
+    NodeArray,
+    NodeFlags,
+    nodeIsSynthesized,
+    noEmitNotification,
+    noEmitSubstitution,
+    NonNullExpression,
+    normalizePath,
+    normalizeSlashes,
+    notImplemented,
+    NumericLiteral,
+    ObjectBindingPattern,
+    ObjectLiteralExpression,
+    OptionalTypeNode,
+    outFile,
+    OutputFile,
+    ParameterDeclaration,
+    ParenthesizedExpression,
+    ParenthesizedTypeNode,
+    ParsedCommandLine,
+    PartiallyEmittedExpression,
+    Placeholder,
+    positionIsSynthesized,
+    positionsAreOnSameLine,
+    PostfixUnaryExpression,
+    PrefixUnaryExpression,
+    Printer,
+    PrinterOptions,
+    PrintHandlers,
+    PrivateIdentifier,
+    ProgramBuildInfo,
+    ProgramBundleEmitBuildInfo,
+    ProjectReference,
+    PropertyAccessExpression,
+    PropertyAssignment,
+    PropertyDeclaration,
+    PropertySignature,
+    QualifiedName,
+    rangeEndIsOnSameLineAsRangeStart,
+    rangeEndPositionsAreOnSameLine,
+    rangeIsOnSingleLine,
+    rangeStartPositionsAreOnSameLine,
+    readJsonOrUndefined,
+    removeFileExtension,
+    resolvePath,
+    RestTypeNode,
+    returnFalse,
+    ReturnStatement,
+    returnUndefined,
+    SatisfiesExpression,
+    ScriptTarget,
+    setEachParent,
+    setOriginalNode,
+    setParent,
+    setTextRange,
+    setTextRangePosEnd,
+    setTextRangePosWidth,
+    ShorthandPropertyAssignment,
+    SignatureDeclaration,
+    singleOrUndefined,
+    skipPartiallyEmittedExpressions,
+    skipTrivia,
+    SnippetElement,
+    SnippetKind,
+    some,
+    SourceFile,
+    SourceFilePrologueDirective,
+    SourceFilePrologueInfo,
+    SourceMapEmitResult,
+    SourceMapGenerator,
+    SourceMapSource,
+    SpreadAssignment,
+    SpreadElement,
+    stableSort,
+    Statement,
+    stringContains,
+    StringLiteral,
+    supportedJSExtensionsFlat,
+    SwitchStatement,
+    Symbol,
+    SymbolFlags,
+    SyntaxKind,
+    SynthesizedComment,
+    sys,
+    TabStop,
+    TaggedTemplateExpression,
+    TemplateExpression,
+    TemplateLiteralTypeNode,
+    TemplateLiteralTypeSpan,
+    TemplateSpan,
+    TextRange,
+    ThrowStatement,
+    tokenToString,
+    tracing,
+    TransformationResult,
+    transformNodes,
+    tryParseRawSourceMap,
+    TryStatement,
+    TupleTypeNode,
+    TypeAliasDeclaration,
+    TypeAssertion,
+    TypeLiteralNode,
+    TypeNode,
+    TypeOfExpression,
+    TypeOperatorNode,
+    TypeParameterDeclaration,
+    TypePredicateNode,
+    TypeQueryNode,
+    TypeReferenceNode,
+    UnionTypeNode,
+    UnparsedNode,
+    UnparsedPrepend,
+    UnparsedPrologue,
+    UnparsedSource,
+    UnparsedSyntheticReference,
+    UnparsedTextLike,
+    VariableDeclaration,
+    VariableDeclarationList,
+    VariableStatement,
+    VoidExpression,
+    WhileStatement,
+    WithStatement,
+    writeCommentRange,
+    writeFile,
+    WriteFileCallbackData,
+    YieldExpression,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -192,10 +556,10 @@ function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
 /** @internal */
 export function getOutputExtension(fileName: string, options: CompilerOptions): Extension {
     return fileExtensionIs(fileName, Extension.Json) ? Extension.Json :
-        options.jsx === JsxEmit.Preserve && fileExtensionIsOneOf(fileName, [Extension.Jsx, Extension.Tsx]) ? Extension.Jsx :
-            fileExtensionIsOneOf(fileName, [Extension.Mts, Extension.Mjs]) ? Extension.Mjs :
-                fileExtensionIsOneOf(fileName, [Extension.Cts, Extension.Cjs]) ? Extension.Cjs :
-                    Extension.Js;
+    options.jsx === JsxEmit.Preserve && fileExtensionIsOneOf(fileName, [Extension.Jsx, Extension.Tsx]) ? Extension.Jsx :
+    fileExtensionIsOneOf(fileName, [Extension.Mts, Extension.Mjs]) ? Extension.Mjs :
+    fileExtensionIsOneOf(fileName, [Extension.Cts, Extension.Cjs]) ? Extension.Cjs :
+    Extension.Js;
 }
 
 function getOutputPathWithoutChangingExt(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, outputDir: string | undefined, getCommonSourceDirectory?: () => string) {
@@ -637,7 +1001,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             if (sourceMapFilePath) {
                 const sourceMap = sourceMapGenerator.toString();
                 writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap, /*writeByteOrderMark*/ false, sourceFiles);
-                if (printer.bundleFileInfo) printer.bundleFileInfo.mapHash = computeSignature(sourceMap, maybeBind(host, host.createHash));
+                if (printer.bundleFileInfo) printer.bundleFileInfo.mapHash = computeSignature(sourceMap, host);
             }
         }
         else {
@@ -649,7 +1013,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         writeFile(host, emitterDiagnostics, jsFilePath, text, !!compilerOptions.emitBOM, sourceFiles, { sourceMapUrlPos, diagnostics: transform.diagnostics });
         // We store the hash of the text written in the buildinfo to ensure that text of the referenced d.ts file is same as whats in the buildinfo
         // This is needed because incremental can be toggled between two runs and we might use stale file text to do text manipulation in prepend mode
-        if (printer.bundleFileInfo) printer.bundleFileInfo.hash = computeSignature(text, maybeBind(host, host.createHash));
+        if (printer.bundleFileInfo) printer.bundleFileInfo.hash = computeSignature(text, host);
 
         // Reset state
         writer.clear();
@@ -846,7 +1210,6 @@ function emitUsingBuildInfoWorker(
     getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined,
     customTransformers?: CustomTransformers
 ): EmitUsingBuildInfoResult {
-    const createHash = maybeBind(host, host.createHash);
     const { buildInfoPath, jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false);
     // If host directly provides buildinfo we can get it directly. This allows host to cache the buildinfo
     const buildInfo = host.getBuildInfo!(buildInfoPath!, config.options.configFilePath);
@@ -856,20 +1219,20 @@ function emitUsingBuildInfoWorker(
     const jsFileText = host.readFile(Debug.checkDefined(jsFilePath));
     if (!jsFileText) return jsFilePath!;
     // If the jsFileText is not same has what it was created with, tsbuildinfo is stale so dont use it
-    if (computeSignature(jsFileText, createHash) !== buildInfo.bundle.js.hash) return jsFilePath!;
+    if (computeSignature(jsFileText, host) !== buildInfo.bundle.js.hash) return jsFilePath!;
     const sourceMapText = sourceMapFilePath && host.readFile(sourceMapFilePath);
     // error if no source map or for now if inline sourcemap
     if ((sourceMapFilePath && !sourceMapText) || config.options.inlineSourceMap) return sourceMapFilePath || "inline sourcemap decoding";
-    if (sourceMapFilePath && computeSignature(sourceMapText!, createHash) !== buildInfo.bundle.js.mapHash) return sourceMapFilePath;
+    if (sourceMapFilePath && computeSignature(sourceMapText!, host) !== buildInfo.bundle.js.mapHash) return sourceMapFilePath;
 
     // read declaration text
     const declarationText = declarationFilePath && host.readFile(declarationFilePath);
     if (declarationFilePath && !declarationText) return declarationFilePath;
-    if (declarationFilePath && computeSignature(declarationText!, createHash) !== buildInfo.bundle.dts!.hash) return declarationFilePath;
+    if (declarationFilePath && computeSignature(declarationText!, host) !== buildInfo.bundle.dts!.hash) return declarationFilePath;
     const declarationMapText = declarationMapPath && host.readFile(declarationMapPath);
     // error if no source map or for now if inline sourcemap
     if ((declarationMapPath && !declarationMapText) || config.options.inlineSourceMap) return declarationMapPath || "inline sourcemap decoding";
-    if (declarationMapPath && computeSignature(declarationMapText!, createHash) !== buildInfo.bundle.dts!.mapHash) return declarationMapPath;
+    if (declarationMapPath && computeSignature(declarationMapText!, host) !== buildInfo.bundle.dts!.mapHash) return declarationMapPath;
 
     const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(buildInfoPath!, host.getCurrentDirectory()));
     const ownPrependInput = createInputFilesWithFileTexts(
@@ -936,7 +1299,7 @@ function emitUsingBuildInfoWorker(
             const program = buildInfo.program;
             if (program && changedDtsText !== undefined && config.options.composite) {
                 // Update the output signature
-                (program as ProgramBundleEmitBuildInfo).outSignature = computeSignature(changedDtsText, createHash, changedDtsData);
+                (program as ProgramBundleEmitBuildInfo).outSignature = computeSignature(changedDtsText, host, changedDtsData);
             }
             // Update sourceFileInfo
             const { js, dts, sourceFiles } = buildInfo.bundle!;
@@ -950,7 +1313,7 @@ function emitUsingBuildInfoWorker(
         getSourceFileFromReference: returnUndefined,
         redirectTargetsMap: createMultiMap(),
         getFileIncludeReasons: notImplemented,
-        createHash,
+        createHash: maybeBind(host, host.createHash),
     };
     emitFiles(
         notImplementedResolver,
@@ -1363,7 +1726,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 if (onEmitNode !== noEmitNotification && (!isEmitNotificationEnabled || isEmitNotificationEnabled(node))) {
                     return pipelineEmitWithNotification;
                 }
-            // falls through
+                // falls through
             case PipelinePhase.Substitution:
                 if (substituteNode !== noEmitSubstitution && (lastSubstitution = substituteNode(emitHint, node) || node) !== node) {
                     if (currentParenthesizerRule) {
@@ -1371,17 +1734,17 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     }
                     return pipelineEmitWithSubstitution;
                 }
-            // falls through
+                // falls through
             case PipelinePhase.Comments:
                 if (shouldEmitComments(node)) {
                     return pipelineEmitWithComments;
                 }
-            // falls through
+                // falls through
             case PipelinePhase.SourceMaps:
                 if (shouldEmitSourceMaps(node)) {
                     return pipelineEmitWithSourceMaps;
                 }
-            // falls through
+                // falls through
             case PipelinePhase.Emit:
                 return pipelineEmitWithHint;
             default:
@@ -5081,7 +5444,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 const text = isNumericLiteral(textSourceNode) ? textSourceNode.text : getTextOfNode(textSourceNode);
                 return jsxAttributeEscape ? `"${escapeJsxAttributeString(text)}"` :
                     neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(text)}"` :
-                        `"${escapeNonAsciiString(text)}"`;
+                    `"${escapeNonAsciiString(text)}"`;
             }
             else {
                 return getLiteralTextOfNode(textSourceNode, neverAsciiEscape, jsxAttributeEscape);
@@ -5509,7 +5872,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      */
     function makeName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
         const prefix = formatGeneratedNamePart(name.autoGeneratePrefix, generateName);
-        const suffix = formatGeneratedNamePart(name.autoGenerateSuffix);
+        const suffix = formatGeneratedNamePart (name.autoGenerateSuffix);
         switch (name.autoGenerateFlags & GeneratedIdentifierFlags.KindMask) {
             case GeneratedIdentifierFlags.Auto:
                 return makeTempVariableName(TempFlags.Auto, !!(name.autoGenerateFlags & GeneratedIdentifierFlags.ReservedInNestedScopes), isPrivateIdentifier(name), prefix, suffix);
@@ -5829,7 +6192,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
-        if (!currentSourceFile) return;
+        if(!currentSourceFile) return;
         // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
 
         emitPos(commentPos);
@@ -6134,5 +6497,5 @@ function emitListItemWithParenthesizerRule(node: Node, emit: (node: Node, parent
 function getEmitListItem<T extends Node, R extends ParenthesizerRuleOrSelector<T> | undefined>(emit: (node: Node, parenthesizerRule?: ((node: Node) => Node) | undefined) => void, parenthesizerRule: R): (node: Node, emit: (node: Node, parenthesizerRule?: ((node: Node) => Node) | undefined) => void, parenthesizerRule: R, index: number) => void {
     return emit.length === 1 ? emitListItemNoParenthesizer :
         typeof parenthesizerRule === "object" ? emitListItemWithParenthesizerRuleSelector :
-            emitListItemWithParenthesizerRule;
+        emitListItemWithParenthesizerRule;
 }

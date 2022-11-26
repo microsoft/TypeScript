@@ -1,6 +1,23 @@
 import * as ts from "../../_namespaces/ts";
-import { createWatchedSystem, File, getTsBuildProjectFile, getTsBuildProjectFilePath, libFile, TestServerHost } from "../virtualFileSystemWithWatch";
-import { commonFile1, commonFile2, createBaseline, createSolutionBuilderWithWatchHostForBaseline, noopChange, runWatchBaseline, TscWatchCompileChange, verifyTscWatch } from "../tscWatch/helpers";
+import {
+    createWatchedSystem,
+    File,
+    getTsBuildProjectFile,
+    getTsBuildProjectFilePath,
+    libFile,
+    TestServerHost,
+} from "../virtualFileSystemWithWatch";
+import {
+    commonFile1,
+    commonFile2,
+    createBaseline,
+    createSolutionBuilderWithWatchHostForBaseline,
+    noopChange,
+    runWatchBaseline,
+    TscWatchCompileChange,
+    verifyTscWatch,
+} from "../tscWatch/helpers";
+
 describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
     const enum SubProject {
         core = "core",

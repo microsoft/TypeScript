@@ -1,7 +1,33 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { commonFile1, commonFile2 } from "../tscWatch/helpers";
-import { createSession, createLoggerWithInMemoryLogs, openFilesForSession, makeSessionRequest, baselineTsserverLogs, createProjectService, configuredProjectAt, checkProjectRootFiles, checkNumberOfConfiguredProjects, checkNumberOfInferredProjects, toExternalFiles, checkNumberOfProjects, checkProjectActualFiles, customTypesMap, toExternalFile, closeFilesForSession, verifyGetErrRequest, protocolFileLocationFromSubstring } from "./helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    commonFile1,
+    commonFile2,
+} from "../tscWatch/helpers";
+import {
+    baselineTsserverLogs,
+    checkNumberOfConfiguredProjects,
+    checkNumberOfInferredProjects,
+    checkNumberOfProjects,
+    checkProjectActualFiles,
+    checkProjectRootFiles,
+    closeFilesForSession,
+    configuredProjectAt,
+    createLoggerWithInMemoryLogs,
+    createProjectService,
+    createSession,
+    customTypesMap,
+    makeSessionRequest,
+    openFilesForSession,
+    protocolFileLocationFromSubstring,
+    toExternalFile,
+    toExternalFiles,
+    verifyGetErrRequest,
+} from "./helpers";
 
 describe("unittests:: tsserver:: Projects", () => {
     it("handles the missing files - that were added to program because they were added with ///<ref", () => {

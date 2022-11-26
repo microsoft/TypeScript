@@ -89,7 +89,7 @@ interface Array<T> { length: number; [n: number]: T; }
 Output::
 ======== Resolving module 'typescript-fsa' from '/user/username/projects/myproject/plugin-one/action.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'typescript-fsa' from 'node_modules' folder, target file type 'TypeScript'.
+Loading module 'typescript-fsa' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Found 'package.json' at '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json'.
 'package.json' does not have a 'typesVersions' field.
 File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa.ts' does not exist.
@@ -105,7 +105,7 @@ Resolving real path for '/user/username/projects/myproject/plugin-one/node_modul
 ======== Module name 'typescript-fsa' was successfully resolved to '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts' with Package ID 'typescript-fsa/index.d.ts@3.0.0-beta-2'. ========
 ======== Resolving module 'plugin-two' from '/user/username/projects/myproject/plugin-one/index.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'plugin-two' from 'node_modules' folder, target file type 'TypeScript'.
+Loading module 'plugin-two' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/package.json' does not exist.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two.ts' does not exist.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two.tsx' does not exist.
@@ -117,7 +117,7 @@ Resolving real path for '/user/username/projects/myproject/plugin-one/node_modul
 ======== Module name 'plugin-two' was successfully resolved to '/user/username/projects/myproject/plugin-two/index.d.ts'. ========
 ======== Resolving module 'typescript-fsa' from '/user/username/projects/myproject/plugin-two/index.d.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'typescript-fsa' from 'node_modules' folder, target file type 'TypeScript'.
+Loading module 'typescript-fsa' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Found 'package.json' at '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/package.json'.
 'package.json' does not have a 'typesVersions' field.
 File '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa.ts' does not exist.
