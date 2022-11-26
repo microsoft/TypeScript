@@ -12881,6 +12881,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const typeParameter = getTypeParameterFromMappedType(type);
         const constraintType = getConstraintTypeFromMappedType(type);
         const nameType = getNameTypeFromMappedType(type.target as MappedType || type);
+        const isFilteringMappedType = nameType && isTypeAssignableTo(nameType, typeParameter);
         const templateType = getTemplateTypeFromMappedType(type.target as MappedType || type);
         const modifiersType = getApparentType(getModifiersTypeFromMappedType(type)); // The 'T' in 'keyof T'
         const templateModifiers = getMappedTypeModifiers(type);
@@ -12927,9 +12928,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     prop.keyType = keyType;
                     if (modifiersProp) {
                         prop.syntheticOrigin = modifiersProp;
-                        // If the mapped type has an `as XXX` clause, the property name likely won't match the declaration name and
-                        // multiple properties may map to the same name. Thus, we attach no declarations to the symbol.
-                        prop.declarations = nameType ? undefined : modifiersProp.declarations;
+                        prop.declarations = !nameType || isFilteringMappedType ? modifiersProp.declarations : undefined;
                     }
                     members.set(propName, prop);
                 }
