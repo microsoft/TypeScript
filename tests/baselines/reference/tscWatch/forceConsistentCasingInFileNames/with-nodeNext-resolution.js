@@ -48,7 +48,7 @@ File '/Users/name/projects/package.json' does not exist according to earlier cac
 File '/Users/name/package.json' does not exist according to earlier cached lookups.
 File '/Users/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-Loading module 'yargs' from 'node_modules' folder, target file type 'TypeScript'.
+Loading module 'yargs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
 Directory '/Users/name/projects/web/src/node_modules' does not exist, skipping all lookups in it.
 File '/Users/name/projects/web/node_modules/yargs.ts' does not exist.
 File '/Users/name/projects/web/node_modules/yargs.tsx' does not exist.
@@ -68,6 +68,7 @@ Resolving with primary search path '/Users/name/projects/web/node_modules/@types
 File '/Users/name/projects/web/node_modules/@types/yargs/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
+'package.json' does not have a 'main' field.
 File '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' exist - use it as a name resolution result.
 Resolving real path for '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts', result '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts'.
 ======== Type reference directive 'yargs' was successfully resolved to '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' with Package ID 'yargs/index.d.ts@17.0.12', primary: true. ========

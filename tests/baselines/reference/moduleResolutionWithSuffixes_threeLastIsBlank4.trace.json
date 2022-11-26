@@ -1,7 +1,7 @@
 [
     "======== Resolving module './foo' from '/index.ts'. ========",
     "Explicitly specified module resolution kind: 'NodeJs'.",
-    "Loading module as file / folder, candidate module location '/foo', target file type 'TypeScript'.",
+    "Loading module as file / folder, candidate module location '/foo', target file types: TypeScript, Declaration.",
     "File '/foo-ios.ts' does not exist.",
     "File '/foo__native.ts' does not exist.",
     "File '/foo.ts' does not exist.",
@@ -12,7 +12,7 @@
     "File '/foo__native.d.ts' does not exist.",
     "File '/foo.d.ts' does not exist.",
     "Directory '/foo' does not exist, skipping all lookups in it.",
-    "Loading module as file / folder, candidate module location '/foo', target file type 'JavaScript'.",
+    "Loading module as file / folder, candidate module location '/foo', target file types: JavaScript.",
     "File '/foo-ios.js' does not exist.",
     "File '/foo__native.js' does not exist.",
     "File '/foo.js' does not exist.",

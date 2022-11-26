@@ -75,12 +75,13 @@ import {Fragment} from "./renderer";
 <></>
 
 === tests/cases/conformance/jsx/inline/snabbdomy-only-fragment-no-jsx.tsx ===
+
 /* @jsx jsx */
-No type information for this code./* @jsxfrag null */
-No type information for this code.import {} from "./renderer";
-No type information for this code.<></>
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/jsx/inline/preacty-no-fragment.tsx ===
+/* @jsxfrag null */
+import {} from "./renderer";
+<></>
+
+=== tests/cases/conformance/jsx/inline/preacty-no-fragment.tsx ===
 /**
  * @jsx h
  * @jsxFrag Fragment
