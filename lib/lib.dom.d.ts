@@ -7262,7 +7262,7 @@ interface HTMLMediaElement extends HTMLElement {
     readonly seeking: boolean;
     /** The address or URL of the a media resource that is to be considered. */
     src: string;
-    srcObject: MediaProvider | null;
+    srcObject: MediaStream | null;
     readonly textTracks: TextTrackList;
     /** Gets or sets the volume level for audio portions of the media element. */
     volume: number;
