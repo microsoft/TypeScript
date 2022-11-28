@@ -3,58 +3,54 @@
 // @Filename: /tsconfig.json
 ////{
 ////  "compilerOptions": {
-////    "module": "Node16",
+////    "moduleResolution": "Node16",
 ////  }
 ////}
 
+// @Filename: /package.json
+//// { "type": "module" }
+
 // @Filename: /main.ts
-////[|function someLibFn(): string {
-////     return someOtherFn();
+////[|export function someLibFn(): string {
+////     return main();
 ////}|]
 ////
-////function someOtherFn(): string {
+////function main(): string {
 ////    return "hello world!";
 ////}
 ////console.log(someLibFn());
+
+// @Filename: /other.ts
+////import { someLibFn } from "./main.js";
+////
+////function someOtherFn(): string {
+////    return someLibFn();
+////}
+
 
 verify.moveToNewFile({
     newFileContents: {
       "/main.ts": 
 `import { someLibFn } from "./someLibFn.js";
 
-export function someOtherFn(): string {
+export function main(): string {
     return "hello world!";
 }
 console.log(someLibFn());`,
 
       "/someLibFn.ts": 
-`import { someOtherFn } from "./main.js";
+`import { main } from "./main.js";
 
 export function someLibFn(): string {
-    return someOtherFn();
+    return main();
 }
 `,
+
+  "/other.ts": 
+`import { someLibFn } from "./someLibFn.js";
+
+function someOtherFn(): string {
+    return someLibFn();
+}`,
     }
-  });
-
-
-// "compilerOptions": {
-//     "composite": true,
-//     "declaration": true,
-//     "declarationMap": true,
-//     "downlevelIteration": true,
-//     "isolatedModules": true,
-//     "module": "NodeNext",
-//     "rootDir": "./",
-//     "sourceMap": true,
-//     "target": "esnext",
-//     "newLine": "lf",
-//     "useDefineForClassFields": true,
-//     "strict": true,
-//     "alwaysStrict": true,
-//     "exactOptionalPropertyTypes": true,
-//     "noImplicitOverride": true,
-//     "noUncheckedIndexedAccess": true,
-//     "importsNotUsedAsValues": "error",
-//     "forceConsistentCasingInFileNames": true
-// }
+});
