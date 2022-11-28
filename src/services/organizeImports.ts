@@ -7,6 +7,7 @@ import {
     compareValues,
     Comparison,
     createScanner,
+    EmitFlags,
     emptyArray,
     ExportDeclaration,
     ExportSpecifier,
@@ -45,7 +46,7 @@ import {
     Program,
     rangeIsOnSingleLine,
     Scanner,
-    setPreferNewLineListFormat,
+    setEmitFlags,
     some,
     SortedReadonlyArray,
     SourceFile,
@@ -352,7 +353,11 @@ export function coalesceImports(importGroup: readonly ImportDeclaration[], sourc
 
         newImportSpecifiers.push(...getNewImportSpecifiers(namedImports));
 
-        const sortedImportSpecifiers = sortSpecifiers(newImportSpecifiers);
+        const sortedImportSpecifiers = factory.createNodeArray(
+            sortSpecifiers(newImportSpecifiers),
+            (namedImports[0]?.importClause!.namedBindings as NamedImports)?.elements.hasTrailingComma
+        );
+
         const importDecl = defaultImports.length > 0
             ? defaultImports[0]
             : namedImports[0];
@@ -370,7 +375,7 @@ export function coalesceImports(importGroup: readonly ImportDeclaration[], sourc
             namedImports[0]?.importClause!.namedBindings &&
             !rangeIsOnSingleLine(namedImports[0].importClause.namedBindings, sourceFile)
         ) {
-            setPreferNewLineListFormat(newNamedImports);
+            setEmitFlags(newNamedImports, EmitFlags.MultiLine);
         }
 
         // Type-only imports are not allowed to mix default, namespace, and named imports in any combination.

@@ -132,7 +132,6 @@ import {
     GeneratedIdentifierFlags,
     GeneratedNamePart,
     GeneratedPrivateIdentifier,
-    getAdditionalListFormatFlags,
     getAreDeclarationMapsEnabled,
     getBaseFileName,
     GetCanonicalFileName,
@@ -4867,7 +4866,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             emit,
             parentNode,
             children,
-            format | (parentNode ? getAdditionalListFormatFlags(parentNode) : 0),
+            format | (parentNode && getEmitFlags(parentNode) & EmitFlags.MultiLine ? ListFormat.PreferNewLine : 0),
             parenthesizerRule,
             start,
             count);

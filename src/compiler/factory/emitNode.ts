@@ -9,7 +9,6 @@ import {
     getParseTreeNode,
     getSourceFileOfNode,
     isParseTreeNode,
-    ListFormat,
     Node,
     orderedRemoveItem,
     SnippetElement,
@@ -147,18 +146,6 @@ export function getStartsOnNewLine(node: Node) {
  */
 export function setStartsOnNewLine<T extends Node>(node: T, newLine: boolean) {
     getOrCreateEmitNode(node).startsOnNewLine = newLine;
-    return node;
-}
-
-/** @internal */
-export function getAdditionalListFormatFlags<T extends Node>(node: T) {
-    return node.emitNode?.listFormat ?? 0;
-}
-
-
-/** @internal */
-export function setPreferNewLineListFormat<T extends Node>(node: T) {
-    getOrCreateEmitNode(node).listFormat = ListFormat.PreferNewLine;
     return node;
 }
 
