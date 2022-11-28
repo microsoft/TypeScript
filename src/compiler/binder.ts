@@ -82,6 +82,7 @@ import {
     getContainingClass,
     getEffectiveContainerForJSDocTemplateTag,
     getElementOrPropertyAccessName,
+    getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getEnclosingBlockScopeContainer,
     getErrorSpanForNode,
@@ -227,6 +228,7 @@ import {
     ModifierFlags,
     ModuleBlock,
     ModuleDeclaration,
+    ModuleResolutionKind,
     Mutable,
     NamespaceExportDeclaration,
     Node,
@@ -3583,6 +3585,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         if (!isBindingPattern(node.name)) {
             const possibleVariableDecl = node.kind === SyntaxKind.VariableDeclaration ? node : node.parent.parent;
             if (isInJSFile(node) &&
+                getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Hybrid &&
                 isVariableDeclarationInitializedToBareOrAccessedRequire(possibleVariableDecl) &&
                 !getJSDocTypeTag(node) &&
                 !(getCombinedModifierFlags(node) & ModifierFlags.Export)
