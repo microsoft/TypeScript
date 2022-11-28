@@ -1014,23 +1014,25 @@ Change:: Modify project 3
 
 Input::
 //// [/a/b/project3.tsconfig.json]
-{"extends":["./extendsConfig1.tsconfig.json","./extendsConfig2.tsconfig.json"],"files":["/a/b/other2.ts"]}
+{"extends":["./extendsConfig1.tsconfig.json","./extendsConfig2.tsconfig.json"],"compilerOptions":{"composite":false},"files":["/a/b/other2.ts"]}
 
 
 Output::
 >> Screen clear
 [[90m12:03:06 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:03:07 AM[0m] Project 'project3.tsconfig.json' is out of date because output file 'project3.tsconfig.tsbuildinfo' does not exist
+[[90m12:03:07 AM[0m] Project 'project3.tsconfig.json' is out of date because output 'other2.js' is older than input 'project3.tsconfig.json'
 
 [[90m12:03:08 AM[0m] Building project '/a/b/project3.tsconfig.json'...
 
-[[90m12:03:16 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:03:09 AM[0m] Updating unchanged output timestamps of project '/a/b/project3.tsconfig.json'...
+
+[[90m12:03:11 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/a/b/other2.ts"]
-Program options: {"composite":true,"strictNullChecks":true,"watch":true,"configFilePath":"/a/b/project3.tsconfig.json"}
+Program options: {"composite":false,"strictNullChecks":true,"watch":true,"configFilePath":"/a/b/project3.tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -1072,57 +1074,7 @@ FsWatchesRecursive::
 
 exitCode:: ExitStatus.undefined
 
-//// [/a/b/other2.d.ts]
-declare let k: number;
-
-
-//// [/a/b/project3.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../lib/lib.d.ts","./other2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"2287258045-let k = 0;","signature":"3820390125-declare let k: number;\n","affectsGlobalScope":true}],"options":{"composite":true,"strictNullChecks":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1],"latestChangedDtsFile":"./other2.d.ts"},"version":"FakeTSVersion"}
-
-//// [/a/b/project3.tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "program": {
-    "fileNames": [
-      "../lib/lib.d.ts",
-      "./other2.ts"
-    ],
-    "fileInfos": {
-      "../lib/lib.d.ts": {
-        "original": {
-          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-          "affectsGlobalScope": true
-        },
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-        "affectsGlobalScope": true
-      },
-      "./other2.ts": {
-        "original": {
-          "version": "2287258045-let k = 0;",
-          "signature": "3820390125-declare let k: number;\n",
-          "affectsGlobalScope": true
-        },
-        "version": "2287258045-let k = 0;",
-        "signature": "3820390125-declare let k: number;\n",
-        "affectsGlobalScope": true
-      }
-    },
-    "options": {
-      "composite": true,
-      "strictNullChecks": true
-    },
-    "referencedMap": {},
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "./other2.ts",
-      "../lib/lib.d.ts"
-    ],
-    "latestChangedDtsFile": "./other2.d.ts"
-  },
-  "version": "FakeTSVersion",
-  "size": 780
-}
-
+//// [/a/b/other2.js] file changed its modified time
 
 Change:: Delete extendedConfigFile2 and report error
 
@@ -1131,13 +1083,13 @@ Input::
 
 Output::
 >> Screen clear
-[[90m12:03:18 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:03:13 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:03:19 AM[0m] Project 'project3.tsconfig.json' is up to date because newest input 'other2.ts' is older than output 'project3.tsconfig.tsbuildinfo'
+[[90m12:03:14 AM[0m] Project 'project3.tsconfig.json' is up to date because newest input 'other2.ts' is older than output 'other2.js'
 
 [91merror[0m[90m TS5083: [0mCannot read file '/a/b/extendsConfig2.tsconfig.json'.
 
-[[90m12:03:20 AM[0m] Found 1 error. Watching for file changes.
+[[90m12:03:15 AM[0m] Found 1 error. Watching for file changes.
 
 
 

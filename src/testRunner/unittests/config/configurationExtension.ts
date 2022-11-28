@@ -378,54 +378,54 @@ describe("unittests:: config:: configurationExtension", () => {
                 testSuccess("can lookup via an implicit tsconfig in a package-relative directory with extension", "tsconfig.extendsBoxImpliedPath.json", { strict: true }, [ts.combinePaths(basePath, "main.ts")]);
             });
 
-                it("adds extendedSourceFiles only once", () => {
-                    const sourceFile = ts.readJsonConfigFile("configs/fourth.json", (path) => host.readFile(path));
-                    const dir = ts.combinePaths(basePath, "configs");
-                    const expected = [
-                        ts.combinePaths(dir, "third.json"),
-                        ts.combinePaths(dir, "second.json"),
-                        ts.combinePaths(dir, "base.json"),
-                    ];
-                    ts.parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "fourth.json");
-                    assert.deepEqual(sourceFile.extendedSourceFiles, expected);
-                    ts.parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "fourth.json");
-                    assert.deepEqual(sourceFile.extendedSourceFiles, expected);
-                });
-            });
-
-            describe(testName, () => {
-                it("adds extendedSourceFiles from an array only once", () => {
-                    const sourceFile = ts.readJsonConfigFile("configs/extendsArrayFifth.json", (path) => host.readFile(path));
-                    const dir = ts.combinePaths(basePath, "configs");
-                    const expected = [
-                        ts.combinePaths(dir, "extendsArrayFirst.json"),
-                        ts.combinePaths(dir, "extendsArraySecond.json"),
-                        ts.combinePaths(dir, "extendsArrayThird.json"),
-                        ts.combinePaths(dir, "extendsArrayFourth.json"),
-                    ];
-                    ts.parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "extendsArrayFifth.json");
-                    assert.deepEqual(sourceFile.extendedSourceFiles, expected);
-                    ts.parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "extendsArrayFifth.json");
-                    assert.deepEqual(sourceFile.extendedSourceFiles, expected);
-                });
-
-                testSuccess("can overwrite top-level compilerOptions", "configs/extendsArrayFifth.json", {
-                    allowJs: true,
-                    noImplicitAny: false,
-                    strictNullChecks: false,
-                    module: ts.ModuleKind.System
-                }, []);
-
-                testFailure("can report missing configurations", "extendsArrayFails.json", [{
-                    code: 6053,
-                    messageText: `File './missingFile' not found.`
-                }]);
-
-                testFailure("can error when 'extends' is not a string or Array2", "extendsArrayFails2.json", [{
-                    code: 5024,
-                    messageText: `Compiler option 'extends' requires a value of type string.`
-                }]);
+            it("adds extendedSourceFiles only once", () => {
+                const sourceFile = ts.readJsonConfigFile("configs/fourth.json", (path) => host.readFile(path));
+                const dir = ts.combinePaths(basePath, "configs");
+                const expected = [
+                    ts.combinePaths(dir, "third.json"),
+                    ts.combinePaths(dir, "second.json"),
+                    ts.combinePaths(dir, "base.json"),
+                ];
+                ts.parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "fourth.json");
+                assert.deepEqual(sourceFile.extendedSourceFiles, expected);
+                ts.parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "fourth.json");
+                assert.deepEqual(sourceFile.extendedSourceFiles, expected);
             });
         });
+
+        describe(testName, () => {
+            it("adds extendedSourceFiles from an array only once", () => {
+                const sourceFile = ts.readJsonConfigFile("configs/extendsArrayFifth.json", (path) => host.readFile(path));
+                const dir = ts.combinePaths(basePath, "configs");
+                const expected = [
+                    ts.combinePaths(dir, "extendsArrayFirst.json"),
+                    ts.combinePaths(dir, "extendsArraySecond.json"),
+                    ts.combinePaths(dir, "extendsArrayThird.json"),
+                    ts.combinePaths(dir, "extendsArrayFourth.json"),
+                ];
+                ts.parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "extendsArrayFifth.json");
+                assert.deepEqual(sourceFile.extendedSourceFiles, expected);
+                ts.parseJsonSourceFileConfigFileContent(sourceFile, host, dir, {}, "extendsArrayFifth.json");
+                assert.deepEqual(sourceFile.extendedSourceFiles, expected);
+            });
+
+            testSuccess("can overwrite top-level compilerOptions", "configs/extendsArrayFifth.json", {
+                allowJs: true,
+                noImplicitAny: false,
+                strictNullChecks: false,
+                module: ts.ModuleKind.System
+            }, []);
+
+            testFailure("can report missing configurations", "extendsArrayFails.json", [{
+                code: 6053,
+                messageText: `File './missingFile' not found.`
+            }]);
+
+            testFailure("can error when 'extends' is not a string or Array2", "extendsArrayFails2.json", [{
+                code: 5024,
+                messageText: `Compiler option 'extends' requires a value of type string.`
+            }]);
+        });
     });
+});
 

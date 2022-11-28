@@ -87,25 +87,25 @@ function updateTsconfigFiles(program: Program, changeTracker: textChanges.Change
                 }
                 return;
             }
-                case "compilerOptions":
-                    forEachProperty(property.initializer, (property, propertyName) => {
-                        const option = getOptionFromName(propertyName);
-                        Debug.assert(option?.type !== "listOrElement");
-                        if (option && (option.isFilePath || option.type === "list" && option.element.isFilePath)) {
-                            updatePaths(property);
-                        }
-                        else if (propertyName === "paths") {
-                            forEachProperty(property.initializer, (pathsProperty) => {
-                                if (!isArrayLiteralExpression(pathsProperty.initializer)) return;
-                                for (const e of pathsProperty.initializer.elements) {
-                                    tryUpdateString(e);
-                                }
-                            });
-                        }
-                    });
-                    return;
-            }
-        });
+            case "compilerOptions":
+                forEachProperty(property.initializer, (property, propertyName) => {
+                    const option = getOptionFromName(propertyName);
+                    Debug.assert(option?.type !== "listOrElement");
+                    if (option && (option.isFilePath || option.type === "list" && option.element.isFilePath)) {
+                        updatePaths(property);
+                    }
+                    else if (propertyName === "paths") {
+                        forEachProperty(property.initializer, (pathsProperty) => {
+                            if (!isArrayLiteralExpression(pathsProperty.initializer)) return;
+                            for (const e of pathsProperty.initializer.elements) {
+                                tryUpdateString(e);
+                            }
+                        });
+                    }
+                });
+                return;
+        }
+    });
 
     function updatePaths(property: PropertyAssignment): boolean {
         const elements = isArrayLiteralExpression(property.initializer) ? property.initializer.elements : [property.initializer];

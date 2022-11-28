@@ -1116,7 +1116,7 @@ function getBuildInfo(state: BuilderProgramState, getCanonicalFileName: GetCanon
 
 function convertToReusableCompilerOptionValue(option: CommandLineOption | undefined, value: CompilerOptionsValue, relativeToBuildInfo: (path: string) => string) {
     if (option) {
-            Debug.assert(option.type !== "listOrElement");
+        Debug.assert(option.type !== "listOrElement");
         if (option.type === "list") {
             const values = value as readonly (string | number)[];
             if (option.element.isFilePath && values.length) {

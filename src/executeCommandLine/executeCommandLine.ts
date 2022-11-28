@@ -177,16 +177,16 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
     // name and description
     const name = getDisplayNameTextOfOption(option);
 
-        // value type and possible value
-        const valueCandidates = getValueCandidate(option);
-        const defaultValueDescription =
-            typeof option.defaultValueDescription === "object"
-                ? getDiagnosticText(option.defaultValueDescription)
-                : formatDefaultValue(
-                    option.defaultValueDescription,
-                    option.type === "list" || option.type === "listOrElement" ? option.element.type : option.type
-                );
-        const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;
+    // value type and possible value
+    const valueCandidates = getValueCandidate(option);
+    const defaultValueDescription =
+        typeof option.defaultValueDescription === "object"
+            ? getDiagnosticText(option.defaultValueDescription)
+            : formatDefaultValue(
+                option.defaultValueDescription,
+                option.type === "list" || option.type === "listOrElement" ? option.element.type : option.type
+            );
+    const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;
 
     // Note: child_process might return `terminalWidth` as undefined.
     if (terminalWidth >= 80) {
@@ -295,7 +295,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
         };
 
         function getValueType(option: CommandLineOption) {
-                Debug.assert(option.type !== "listOrElement");
+            Debug.assert(option.type !== "listOrElement");
             switch (option.type) {
                 case "string":
                 case "number":
@@ -308,34 +308,34 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
             }
         }
 
-            function getPossibleValues(option: CommandLineOption) {
-                let possibleValues: string;
-                switch (option.type) {
-                    case "string":
-                    case "number":
-                    case "boolean":
-                        possibleValues = option.type;
-                        break;
-                    case "list":
-                    case "listOrElement":
-                        possibleValues = getPossibleValues(option.element);
-                        break;
-                    case "object":
-                        possibleValues = "";
-                        break;
-                    default:
-                        // ESMap<string, number | string>
-                        // Group synonyms: es6/es2015
-                        const inverted: { [value: string]: string[] } = {};
-                        option.type.forEach((value, name) => {
-                            (inverted[value] ||= []).push(name);
-                        });
-                        return getEntries(inverted)
-                            .map(([, synonyms]) => synonyms.join("/"))
-                            .join(", ");
-                }
-                return possibleValues;
+        function getPossibleValues(option: CommandLineOption) {
+            let possibleValues: string;
+            switch (option.type) {
+                case "string":
+                case "number":
+                case "boolean":
+                    possibleValues = option.type;
+                    break;
+                case "list":
+                case "listOrElement":
+                    possibleValues = getPossibleValues(option.element);
+                    break;
+                case "object":
+                    possibleValues = "";
+                    break;
+                default:
+                    // ESMap<string, number | string>
+                    // Group synonyms: es6/es2015
+                    const inverted: { [value: string]: string[] } = {};
+                    option.type.forEach((value, name) => {
+                        (inverted[value] ||= []).push(name);
+                    });
+                    return getEntries(inverted)
+                        .map(([, synonyms]) => synonyms.join("/"))
+                        .join(", ");
             }
+            return possibleValues;
+        }
         }
     }
 

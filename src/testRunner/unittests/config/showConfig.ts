@@ -147,10 +147,10 @@ describe("unittests:: config:: showConfig", () => {
                 }
                 break;
             }
-                case "listOrElement": {
-                    ts.Debug.fail();
-                    break;
-                }
+            case "listOrElement": {
+                ts.Debug.fail();
+                break;
+            }
             case "string": {
                 if (option.isTSConfigOnly) {
                     args = ["-p", "tsconfig.json"];

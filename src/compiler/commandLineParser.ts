@@ -1751,9 +1751,9 @@ function parseOptionValue(
                         i++;
                     }
                     break;
-                    case "listOrElement":
-                        Debug.fail("listOrElement not supported here");
-                        break;
+                case "listOrElement":
+                    Debug.fail("listOrElement not supported here");
+                    break;
                 // If not a primitive, the possible types are specified in what is effectively a map of options.
                 default:
                     options[opt.name] = parseCustomTypeOption(opt as CommandLineOptionOfCustomType, args[i], errors);
@@ -1994,91 +1994,91 @@ function getCommandLineTypeAcquisitionMap() {
     return commandLineTypeAcquisitionMapCache || (commandLineTypeAcquisitionMapCache = commandLineOptionsToMap(typeAcquisitionDeclarations));
 }
 
-    const extendsOptionDeclaration: CommandLineOptionOfListType = {
+const extendsOptionDeclaration: CommandLineOptionOfListType = {
+    name: "extends",
+    type: "listOrElement",
+    element: {
         name: "extends",
-        type: "listOrElement",
-        element: {
-            name: "extends",
-            type: "string"
-        },
-        category: Diagnostics.File_Management,
-    };
-    let _tsconfigRootOptions: TsConfigOnlyOption;
-    function getTsconfigRootOptionsMap() {
-        if (_tsconfigRootOptions === undefined) {
-            _tsconfigRootOptions = {
-                name: undefined!, // should never be needed since this is root
-                type: "object",
-                elementOptions: commandLineOptionsToMap([
-                    {
-                        name: "compilerOptions",
-                        type: "object",
-                        elementOptions: getCommandLineCompilerOptionsMap(),
-                        extraKeyDiagnostics: compilerOptionsDidYouMeanDiagnostics,
-                    },
-                    {
-                        name: "watchOptions",
-                        type: "object",
-                        elementOptions: getCommandLineWatchOptionsMap(),
-                        extraKeyDiagnostics: watchOptionsDidYouMeanDiagnostics,
-                    },
-                    {
-                        name: "typingOptions",
-                        type: "object",
-                        elementOptions: getCommandLineTypeAcquisitionMap(),
-                        extraKeyDiagnostics: typeAcquisitionDidYouMeanDiagnostics,
-                    },
-                    {
-                        name: "typeAcquisition",
-                        type: "object",
-                        elementOptions: getCommandLineTypeAcquisitionMap(),
-                        extraKeyDiagnostics: typeAcquisitionDidYouMeanDiagnostics
-                    },
-                    extendsOptionDeclaration,
-                    {
+        type: "string"
+    },
+    category: Diagnostics.File_Management,
+};
+let _tsconfigRootOptions: TsConfigOnlyOption;
+function getTsconfigRootOptionsMap() {
+    if (_tsconfigRootOptions === undefined) {
+        _tsconfigRootOptions = {
+            name: undefined!, // should never be needed since this is root
+            type: "object",
+            elementOptions: commandLineOptionsToMap([
+                {
+                    name: "compilerOptions",
+                    type: "object",
+                    elementOptions: getCommandLineCompilerOptionsMap(),
+                    extraKeyDiagnostics: compilerOptionsDidYouMeanDiagnostics,
+                },
+                {
+                    name: "watchOptions",
+                    type: "object",
+                    elementOptions: getCommandLineWatchOptionsMap(),
+                    extraKeyDiagnostics: watchOptionsDidYouMeanDiagnostics,
+                },
+                {
+                    name: "typingOptions",
+                    type: "object",
+                    elementOptions: getCommandLineTypeAcquisitionMap(),
+                    extraKeyDiagnostics: typeAcquisitionDidYouMeanDiagnostics,
+                },
+                {
+                    name: "typeAcquisition",
+                    type: "object",
+                    elementOptions: getCommandLineTypeAcquisitionMap(),
+                    extraKeyDiagnostics: typeAcquisitionDidYouMeanDiagnostics
+                },
+                extendsOptionDeclaration,
+                {
+                    name: "references",
+                    type: "list",
+                    element: {
                         name: "references",
-                        type: "list",
-                        element: {
-                            name: "references",
-                            type: "object"
-                        },
-                        category: Diagnostics.Projects,
+                        type: "object"
                     },
-                    {
+                    category: Diagnostics.Projects,
+                },
+                {
+                    name: "files",
+                    type: "list",
+                    element: {
                         name: "files",
-                        type: "list",
-                        element: {
-                            name: "files",
-                            type: "string"
-                        },
-                        category: Diagnostics.File_Management,
+                        type: "string"
                     },
-                    {
+                    category: Diagnostics.File_Management,
+                },
+                {
+                    name: "include",
+                    type: "list",
+                    element: {
                         name: "include",
-                        type: "list",
-                        element: {
-                            name: "include",
-                            type: "string"
-                        },
-                        category: Diagnostics.File_Management,
-                        defaultValueDescription: Diagnostics.if_files_is_specified_otherwise_Asterisk_Asterisk_Slash_Asterisk
+                        type: "string"
                     },
-                    {
+                    category: Diagnostics.File_Management,
+                    defaultValueDescription: Diagnostics.if_files_is_specified_otherwise_Asterisk_Asterisk_Slash_Asterisk
+                },
+                {
+                    name: "exclude",
+                    type: "list",
+                    element: {
                         name: "exclude",
-                        type: "list",
-                        element: {
-                            name: "exclude",
-                            type: "string"
-                        },
-                        category: Diagnostics.File_Management,
-                        defaultValueDescription: Diagnostics.node_modules_bower_components_jspm_packages_plus_the_value_of_outDir_if_one_is_specified
+                        type: "string"
                     },
-                    compileOnSaveCommandLineOption
-                ])
-            };
-        }
-        return _tsconfigRootOptions;
+                    category: Diagnostics.File_Management,
+                    defaultValueDescription: Diagnostics.node_modules_bower_components_jspm_packages_plus_the_value_of_outDir_if_one_is_specified
+                },
+                compileOnSaveCommandLineOption
+            ])
+        };
     }
+    return _tsconfigRootOptions;
+}
 
 /** @internal */
 export interface JsonConversionNotifier {
@@ -2529,7 +2529,7 @@ function serializeOptionBaseObject(
             const value = options[name] as CompilerOptionsValue;
             const optionDefinition = optionsNameMap.get(name.toLowerCase());
             if (optionDefinition) {
-                    Debug.assert(optionDefinition.type !== "listOrElement");
+                Debug.assert(optionDefinition.type !== "listOrElement");
                 const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
                 if (!customTypeMap) {
                     // There is no map associated with this compiler option then use the value as-is
@@ -3002,15 +3002,15 @@ function isSuccessfulParsedTsconfig(value: ParsedTsconfig) {
     return !!value.options;
 }
 
-    interface ExtendsResult {
-        options: CompilerOptions;
-        watchOptions?: WatchOptions;
-        include?: string[];
-        exclude?: string[];
-        files?: string[];
-        compileOnSave?: boolean;
-        extendedSourceFiles?: Set<string>
-    }
+interface ExtendsResult {
+    options: CompilerOptions;
+    watchOptions?: WatchOptions;
+    include?: string[];
+    exclude?: string[];
+    files?: string[];
+    compileOnSave?: boolean;
+    extendedSourceFiles?: Set<string>
+}
 /**
  * This *just* extracts options/include/exclude/files out of a config file.
  * It does *not* resolve the included files.
@@ -3037,63 +3037,63 @@ function parseConfig(
         parseOwnConfigOfJson(json, host, basePath, configFileName, errors) :
         parseOwnConfigOfJsonSourceFile(sourceFile!, host, basePath, configFileName, errors);
 
-        if (ownConfig.options?.paths) {
-            // If we end up needing to resolve relative paths from 'paths' relative to
-            // the config file location, we'll need to know where that config file was.
-            // Since 'paths' can be inherited from an extended config in another directory,
-            // we wouldn't know which directory to use unless we store it here.
-            ownConfig.options.pathsBasePath = basePath;
+    if (ownConfig.options?.paths) {
+        // If we end up needing to resolve relative paths from 'paths' relative to
+        // the config file location, we'll need to know where that config file was.
+        // Since 'paths' can be inherited from an extended config in another directory,
+        // we wouldn't know which directory to use unless we store it here.
+        ownConfig.options.pathsBasePath = basePath;
+    }
+    if (ownConfig.extendedConfigPath) {
+        // copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios.
+        resolutionStack = resolutionStack.concat([resolvedPath]);
+        const result: ExtendsResult = { options:{} };
+        if (isString(ownConfig.extendedConfigPath)) {
+            applyExtendedConfig(result, ownConfig.extendedConfigPath);
         }
-        if (ownConfig.extendedConfigPath) {
-            // copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios.
-            resolutionStack = resolutionStack.concat([resolvedPath]);
-            const result: ExtendsResult = { options:{} };
-            if (isString(ownConfig.extendedConfigPath)) {
-                applyExtendedConfig(result, ownConfig.extendedConfigPath);
-            }
-            else {
-                ownConfig.extendedConfigPath.forEach(extendedConfigPath => applyExtendedConfig(result, extendedConfigPath));
-            }
-            if (!ownConfig.raw.include && result.include) ownConfig.raw.include = result.include;
-            if (!ownConfig.raw.exclude && result.exclude) ownConfig.raw.exclude = result.exclude;
-            if (!ownConfig.raw.files && result.files) ownConfig.raw.files = result.files;
-            if (ownConfig.raw.compileOnSave === undefined && result.compileOnSave) ownConfig.raw.compileOnSave = result.compileOnSave;
-            if (sourceFile && result.extendedSourceFiles) sourceFile.extendedSourceFiles = arrayFrom(result.extendedSourceFiles.keys());
-
-            ownConfig.options = assign(result.options, ownConfig.options);
-            ownConfig.watchOptions = ownConfig.watchOptions && result.watchOptions ?
-                assign(result.watchOptions, ownConfig.watchOptions) :
-                ownConfig.watchOptions || result.watchOptions;
+        else {
+            ownConfig.extendedConfigPath.forEach(extendedConfigPath => applyExtendedConfig(result, extendedConfigPath));
         }
-        return ownConfig;
+        if (!ownConfig.raw.include && result.include) ownConfig.raw.include = result.include;
+        if (!ownConfig.raw.exclude && result.exclude) ownConfig.raw.exclude = result.exclude;
+        if (!ownConfig.raw.files && result.files) ownConfig.raw.files = result.files;
+        if (ownConfig.raw.compileOnSave === undefined && result.compileOnSave) ownConfig.raw.compileOnSave = result.compileOnSave;
+        if (sourceFile && result.extendedSourceFiles) sourceFile.extendedSourceFiles = arrayFrom(result.extendedSourceFiles.keys());
 
-        function applyExtendedConfig(result: ExtendsResult, extendedConfigPath: string){
-            const extendedConfig = getExtendedConfig(sourceFile, extendedConfigPath, host, resolutionStack, errors, extendedConfigCache, result);
-            if (extendedConfig && isSuccessfulParsedTsconfig(extendedConfig)) {
-                const extendsRaw = extendedConfig.raw;
-                let relativeDifference: string | undefined ;
-                const setPropertyInResultIfNotUndefined = (propertyName: "include" | "exclude" | "files") => {
-                    if (extendsRaw[propertyName]) {
-                        result[propertyName] = map(extendsRaw[propertyName], (path: string) => isRootedDiskPath(path) ? path : combinePaths(
-                            relativeDifference ||= convertToRelativePath(getDirectoryPath(extendedConfigPath), basePath, createGetCanonicalFileName(host.useCaseSensitiveFileNames)),
-                            path
-                        ));
-                    }
-                };
-                setPropertyInResultIfNotUndefined("include");
-                setPropertyInResultIfNotUndefined("exclude");
-                setPropertyInResultIfNotUndefined("files");
-                if (extendsRaw.compileOnSave !== undefined) {
-                    result.compileOnSave = extendsRaw.compileOnSave;
+        ownConfig.options = assign(result.options, ownConfig.options);
+        ownConfig.watchOptions = ownConfig.watchOptions && result.watchOptions ?
+            assign(result.watchOptions, ownConfig.watchOptions) :
+            ownConfig.watchOptions || result.watchOptions;
+        }
+    return ownConfig;
+
+    function applyExtendedConfig(result: ExtendsResult, extendedConfigPath: string){
+        const extendedConfig = getExtendedConfig(sourceFile, extendedConfigPath, host, resolutionStack, errors, extendedConfigCache, result);
+        if (extendedConfig && isSuccessfulParsedTsconfig(extendedConfig)) {
+            const extendsRaw = extendedConfig.raw;
+            let relativeDifference: string | undefined ;
+            const setPropertyInResultIfNotUndefined = (propertyName: "include" | "exclude" | "files") => {
+                if (extendsRaw[propertyName]) {
+                    result[propertyName] = map(extendsRaw[propertyName], (path: string) => isRootedDiskPath(path) ? path : combinePaths(
+                        relativeDifference ||= convertToRelativePath(getDirectoryPath(extendedConfigPath), basePath, createGetCanonicalFileName(host.useCaseSensitiveFileNames)),
+                        path
+                    ));
                 }
-                assign(result.options, extendedConfig.options);
-                result.watchOptions = result.watchOptions && extendedConfig.watchOptions ?
-                    assign({}, result.watchOptions, extendedConfig.watchOptions) :
-                    result.watchOptions || extendedConfig.watchOptions;
-                // TODO extend type typeAcquisition
+            };
+            setPropertyInResultIfNotUndefined("include");
+            setPropertyInResultIfNotUndefined("exclude");
+            setPropertyInResultIfNotUndefined("files");
+            if (extendsRaw.compileOnSave !== undefined) {
+                result.compileOnSave = extendsRaw.compileOnSave;
             }
+            assign(result.options, extendedConfig.options);
+            result.watchOptions = result.watchOptions && extendedConfig.watchOptions ?
+                assign({}, result.watchOptions, extendedConfig.watchOptions) :
+                result.watchOptions || extendedConfig.watchOptions;
+            // TODO extend type typeAcquisition
         }
     }
+}
 
 function parseOwnConfigOfJson(
     json: any,
@@ -3120,22 +3120,22 @@ function parseOwnConfigOfJson(
         }
         else {
             const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
-                if (isString(json.extends)) {
-                    extendedConfigPath = getExtendsConfigPath(json.extends, host, newBase, errors, createCompilerDiagnostic);
+            if (isString(json.extends)) {
+                extendedConfigPath = getExtendsConfigPath(json.extends, host, newBase, errors, createCompilerDiagnostic);
+            }
+            else {
+                extendedConfigPath = [];
+                for (const fileName of json.extends as unknown[]) {
+                    if (isString(fileName)) {
+                        extendedConfigPath = append(extendedConfigPath, getExtendsConfigPath(fileName, host, newBase, errors, createCompilerDiagnostic));
                 }
-                else {
-                    extendedConfigPath = [];
-                    for (const fileName of json.extends as unknown[]) {
-                        if (isString(fileName)) {
-                            extendedConfigPath = append(extendedConfigPath, getExtendsConfigPath(fileName, host, newBase, errors, createCompilerDiagnostic));
-                    }
-                        else {
-                            errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", getCompilerOptionValueTypeString(extendsOptionDeclaration.element)));
-                        }
+                    else {
+                        errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", getCompilerOptionValueTypeString(extendsOptionDeclaration.element)));
                     }
                 }
             }
         }
+    }
     return { raw: json, options, watchOptions, typeAcquisition, extendedConfigPath };
 }
 
@@ -3175,37 +3175,37 @@ function parseOwnConfigOfJsonSourceFile(
             currentOption[option.name] = normalizeOptionValue(option, basePath, value);
         },
         onSetValidOptionKeyValueInRoot(key: string, _keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression) {
-                switch (key) {
-                    case "extends":
-                        const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
-                            if (isString(value)) {
-                            extendedConfigPath = getExtendsConfigPath(
-                                value,
-                                host,
-                                newBase,
-                                errors,
-                                (message, arg0) =>
-                                    createDiagnosticForNodeInSourceFile(sourceFile, valueNode, message, arg0)
-                            );
-                            }
-                            else {
-                                extendedConfigPath = [];
-                                for (let index = 0; index < (value as unknown[]).length; index++) {
-                                    const fileName = (value as unknown[])[index];
-                                    if (isString(fileName)) {
-                                        extendedConfigPath = append(extendedConfigPath, getExtendsConfigPath(
-                                            fileName,
-                                            host,
-                                            newBase,
-                                            errors,
-                                            (message, arg0) =>
-                                                createDiagnosticForNodeInSourceFile(sourceFile, (valueNode as ArrayLiteralExpression).elements[index], message, arg0)
-                                        ));
-                                    }
+            switch (key) {
+                case "extends":
+                    const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
+                        if (isString(value)) {
+                        extendedConfigPath = getExtendsConfigPath(
+                            value,
+                            host,
+                            newBase,
+                            errors,
+                            (message, arg0) =>
+                                createDiagnosticForNodeInSourceFile(sourceFile, valueNode, message, arg0)
+                        );
+                        }
+                        else {
+                            extendedConfigPath = [];
+                            for (let index = 0; index < (value as unknown[]).length; index++) {
+                                const fileName = (value as unknown[])[index];
+                                if (isString(fileName)) {
+                                    extendedConfigPath = append(extendedConfigPath, getExtendsConfigPath(
+                                        fileName,
+                                        host,
+                                        newBase,
+                                        errors,
+                                        (message, arg0) =>
+                                            createDiagnosticForNodeInSourceFile(sourceFile, (valueNode as ArrayLiteralExpression).elements[index], message, arg0)
+                                    ));
                                 }
                             }
-                        return;
-                }
+                        }
+                    return;
+            }
         },
         onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, _value: CompilerOptionsValue, _valueNode: Expression) {
             if (key === "excludes") {
@@ -3846,9 +3846,9 @@ function getOptionValueWithEmptyStrings(value: any, option: CommandLineOption): 
             return typeof value === "number" ? value : "";
         case "boolean":
             return typeof value === "boolean" ? value : "";
-            case "listOrElement":
-                if (!isArray(value)) return getOptionValueWithEmptyStrings(value, option.element);
-                // fall through to list
+        case "listOrElement":
+            if (!isArray(value)) return getOptionValueWithEmptyStrings(value, option.element);
+            // fall through to list
         case "list":
             const elementType = option.element;
             return isArray(value) ? value.map(v => getOptionValueWithEmptyStrings(v, elementType)) : "";
@@ -3873,8 +3873,8 @@ function getDefaultValueForOption(option: CommandLineOption): {} {
             return option.isFilePath ? `./${defaultValue && typeof defaultValue === "string" ? defaultValue : ""}` : "";
         case "list":
             return [];
-            case "listOrElement":
-                return getDefaultValueForOption(option.element);
+        case "listOrElement":
+            return getDefaultValueForOption(option.element);
         case "object":
             return {};
         default:

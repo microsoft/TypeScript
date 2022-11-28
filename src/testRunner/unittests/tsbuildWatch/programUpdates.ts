@@ -618,44 +618,44 @@ export function someFn() { }`),
                     files: [otherFile.path]
                 })
             };
-                const otherFile2: File = {
-                    path: "/a/b/other2.ts",
-                    content: "let k = 0;",
-                };
-                const extendsConfigFile1: File = {
-                    path: "/a/b/extendsConfig1.tsconfig.json",
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            composite: true,
-                        }
-                    })
-                };
-                const extendsConfigFile2: File = {
-                    path: "/a/b/extendsConfig2.tsconfig.json",
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            strictNullChecks: false,
-                        }
-                    })
-                };
-                const extendsConfigFile3: File = {
-                    path: "/a/b/extendsConfig3.tsconfig.json",
-                    content: JSON.stringify({
-                        compilerOptions: {
-                            noImplicitAny: true,
-                        }
-                    })
-                };
-                const project3Config: File = {
-                    path: "/a/b/project3.tsconfig.json",
-                    content: JSON.stringify({
-                        extends: ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json", "./extendsConfig3.tsconfig.json"],
-                        compilerOptions: {
-                            composite: false,
-                        },
-                        files: [otherFile2.path]
-                    })
-                };
+            const otherFile2: File = {
+                path: "/a/b/other2.ts",
+                content: "let k = 0;",
+            };
+            const extendsConfigFile1: File = {
+                path: "/a/b/extendsConfig1.tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                    }
+                })
+            };
+            const extendsConfigFile2: File = {
+                path: "/a/b/extendsConfig2.tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        strictNullChecks: false,
+                    }
+                })
+            };
+            const extendsConfigFile3: File = {
+                path: "/a/b/extendsConfig3.tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        noImplicitAny: true,
+                    }
+                })
+            };
+            const project3Config: File = {
+                path: "/a/b/project3.tsconfig.json",
+                content: JSON.stringify({
+                    extends: ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json", "./extendsConfig3.tsconfig.json"],
+                    compilerOptions: {
+                        composite: false,
+                    },
+                    files: [otherFile2.path]
+                })
+            };
             return createWatchedSystem([
                 libFile,
                 alphaExtendedConfigFile, project1Config, commonFile1, commonFile2,
@@ -727,6 +727,7 @@ export function someFn() { }`),
                 caption: "Modify project 3",
                 change: sys => sys.writeFile("/a/b/project3.tsconfig.json", JSON.stringify({
                     extends: ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json"],
+                    compilerOptions: { composite: false },
                     files: ["/a/b/other2.ts"]
                 })),
                 timeouts: sys => { // Build project3
