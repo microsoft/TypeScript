@@ -1,6 +1,17 @@
 import * as ts from "../../../_namespaces/ts";
-import { createServerHost, File, libFile } from "../../virtualFileSystemWithWatch";
-import { createSessionWithEventTracking, checkNumberOfProjects, configuredProjectAt, createProjectService, createLoggerWithInMemoryLogs, baselineTsserverLogs } from "../helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../../virtualFileSystemWithWatch";
+import {
+    baselineTsserverLogs,
+    checkNumberOfProjects,
+    configuredProjectAt,
+    createLoggerWithInMemoryLogs,
+    createProjectService,
+    createSessionWithEventTracking,
+} from "../helpers";
 
 describe("unittests:: tsserver:: events:: ProjectLanguageServiceStateEvent", () => {
     it("language service disabled events are triggered", () => {

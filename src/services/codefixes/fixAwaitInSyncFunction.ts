@@ -1,9 +1,30 @@
 import {
-    addToSeen, ArrowFunction, Diagnostics, factory, findChildOfKind, first, FunctionDeclaration, FunctionExpression,
-    getContainingFunction, getEntityNameFromTypeNode, getNodeId, getTokenAtPosition, isFunctionTypeNode,
-    isVariableDeclaration, MethodDeclaration, Node, SourceFile, SyntaxKind, textChanges, TypeNode,
+    addToSeen,
+    ArrowFunction,
+    Diagnostics,
+    factory,
+    findChildOfKind,
+    first,
+    FunctionDeclaration,
+    FunctionExpression,
+    getContainingFunction,
+    getEntityNameFromTypeNode,
+    getNodeId,
+    getTokenAtPosition,
+    isFunctionTypeNode,
+    isVariableDeclaration,
+    MethodDeclaration,
+    Node,
+    SourceFile,
+    SyntaxKind,
+    textChanges,
+    TypeNode,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "fixAwaitInSyncFunction";
 const errorCodes = [

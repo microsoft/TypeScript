@@ -1,6 +1,7 @@
 import * as ts from "../_namespaces/ts";
 
 const enum ChangedPart {
+    none = 0,
     references = 1 << 0,
     importsAndExports = 1 << 1,
     program = 1 << 2
@@ -24,6 +25,7 @@ export interface ProgramWithSourceTexts extends ts.Program {
 
 export interface TestCompilerHost extends ts.CompilerHost {
     getTrace(): string[];
+    clearTrace(): void;
 }
 
 export class SourceText implements ts.IScriptSnapshot {
@@ -32,7 +34,7 @@ export class SourceText implements ts.IScriptSnapshot {
     constructor(private references: string,
         private importsAndExports: string,
         private program: string,
-        private changedPart: ChangedPart = 0,
+        private changedPart = ChangedPart.none,
         private version = 0) {
     }
 
@@ -123,6 +125,7 @@ export function createTestCompilerHost(texts: readonly NamedSourceText[], target
     const result: TestCompilerHost = {
         trace: s => trace.push(s),
         getTrace: () => trace,
+        clearTrace: () => trace.length = 0,
         getSourceFile: fileName => files.get(fileName),
         getDefaultLibFileName: () => "lib.d.ts",
         writeFile: ts.notImplemented,
@@ -173,42 +176,6 @@ export function checkResolvedTypeDirective(actual: ts.ResolvedTypeReferenceDirec
     assert.equal(actual.resolvedFileName, expected.resolvedFileName, `'resolvedFileName': expected '${actual.resolvedFileName}' to be equal to '${expected.resolvedFileName}'`);
     assert.equal(actual.primary, expected.primary, `'primary': expected '${actual.primary}' to be equal to '${expected.primary}'`);
     return true;
-}
-
-function checkCache<T>(caption: string, program: ts.Program, fileName: string, expectedContent: Map<string, T> | undefined, getCache: (f: ts.SourceFile) => ts.ModeAwareCache<T> | undefined, entryChecker: (expected: T, original: T) => boolean): void {
-    const file = program.getSourceFile(fileName);
-    assert.isTrue(file !== undefined, `cannot find file ${fileName}`);
-    const cache = getCache(file!);
-    if (expectedContent === undefined) {
-        assert.isTrue(cache === undefined, `expected ${caption} to be undefined`);
-    }
-    else {
-        assert.isTrue(cache !== undefined, `expected ${caption} to be set`);
-        assert.isTrue(mapEqualToCache(expectedContent, cache!, entryChecker), `contents of ${caption} did not match the expected contents.`);
-    }
-}
-
-/** True if the maps have the same keys and values. */
-function mapEqualToCache<T>(left: Map<string, T>, right: ts.ModeAwareCache<T>, valuesAreEqual?: (left: T, right: T) => boolean): boolean {
-    if (left as any === right) return true; // given the type mismatch (the tests never pass a cache), this'll never be true
-    if (!left || !right) return false;
-    const someInLeftHasNoMatch = ts.forEachEntry(left, (leftValue, leftKey) => {
-        if (!right.has(leftKey, /*mode*/ undefined)) return true;
-        const rightValue = right.get(leftKey, /*mode*/ undefined)!;
-        return !(valuesAreEqual ? valuesAreEqual(leftValue, rightValue) : leftValue === rightValue);
-    });
-    if (someInLeftHasNoMatch) return false;
-    let someInRightHasNoMatch = false;
-    right.forEach((_, rightKey) => someInRightHasNoMatch = someInRightHasNoMatch || !left.has(rightKey));
-    return !someInRightHasNoMatch;
-}
-
-export function checkResolvedModulesCache(program: ts.Program, fileName: string, expectedContent: Map<string, ts.ResolvedModule | undefined> | undefined): void {
-    checkCache("resolved modules", program, fileName, expectedContent, f => f.resolvedModules, checkResolvedModule);
-}
-
-export function checkResolvedTypeDirectivesCache(program: ts.Program, fileName: string, expectedContent: Map<string, ts.ResolvedTypeReferenceDirective> | undefined): void {
-    checkCache("resolved type directives", program, fileName, expectedContent, f => f.resolvedTypeReferenceDirectiveNames, checkResolvedTypeDirective);
 }
 
 export function createResolvedModule(resolvedFileName: string, isExternalLibraryImport = false): ts.ResolvedModuleFull {

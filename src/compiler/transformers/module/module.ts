@@ -1,31 +1,140 @@
 import {
-    addEmitHelper, addEmitHelpers, addInternalEmitFlags, addRange, append, ArrowFunction, BinaryExpression, BindingElement,
+    addEmitHelper,
+    addEmitHelpers,
+    addInternalEmitFlags,
+    addRange,
+    append,
+    ArrowFunction,
+    BinaryExpression,
+    BindingElement,
     Bundle,
-    CallExpression, chainBundle, ClassDeclaration, collectExternalModuleInfo, Debug, Declaration,
-    DestructuringAssignment, EmitFlags, EmitHelper, EmitHint, emptyArray, EndOfDeclarationMarker, ExportAssignment,
-    ExportDeclaration, Expression, ExpressionStatement, ExternalModuleInfo, firstOrUndefined,
-    flattenDestructuringAssignment, FlattenLevel, ForStatement, FunctionDeclaration, FunctionExpression,
-    GeneratedIdentifierFlags, getEmitFlags, getEmitModuleKind, getEmitScriptTarget, getESModuleInterop,
-    getExportNeedsImportStarHelper, getExternalHelpersModuleName, getExternalModuleNameLiteral,
-    getImportNeedsImportDefaultHelper, getImportNeedsImportStarHelper, getInternalEmitFlags, getLocalNameForExternalImport,
-    getNamespaceDeclarationNode, getNodeId, getOriginalNodeId, getStrictOptionValue, getTextOfIdentifierOrLiteral,
-    hasJsonModuleEmitEnabled, hasSyntacticModifier, Identifier, idText, ImportCall, ImportDeclaration,
-    ImportEqualsDeclaration, InitializedVariableDeclaration, insertStatementsAfterStandardPrologue,
+    CallExpression,
+    chainBundle,
+    ClassDeclaration,
+    collectExternalModuleInfo,
+    Debug,
+    Declaration,
+    DestructuringAssignment,
+    EmitFlags,
+    EmitHelper,
+    EmitHint,
+    emptyArray,
+    EndOfDeclarationMarker,
+    ExportAssignment,
+    ExportDeclaration,
+    Expression,
+    ExpressionStatement,
+    ExternalModuleInfo,
+    firstOrUndefined,
+    flattenDestructuringAssignment,
+    FlattenLevel,
+    ForStatement,
+    FunctionDeclaration,
+    FunctionExpression,
+    GeneratedIdentifierFlags,
+    getEmitFlags,
+    getEmitModuleKind,
+    getEmitScriptTarget,
+    getESModuleInterop,
+    getExportNeedsImportStarHelper,
+    getExternalHelpersModuleName,
+    getExternalModuleNameLiteral,
+    getImportNeedsImportDefaultHelper,
+    getImportNeedsImportStarHelper,
+    getInternalEmitFlags,
+    getLocalNameForExternalImport,
+    getNamespaceDeclarationNode,
+    getNodeId,
+    getOriginalNodeId,
+    getStrictOptionValue,
+    getTextOfIdentifierOrLiteral,
+    hasJsonModuleEmitEnabled,
+    hasSyntacticModifier,
+    Identifier,
+    idText,
+    ImportCall,
+    ImportDeclaration,
+    ImportEqualsDeclaration,
+    InitializedVariableDeclaration,
+    insertStatementsAfterStandardPrologue,
     InternalEmitFlags,
-    isArrayLiteralExpression, isArrowFunction, isAssignmentOperator, isBindingPattern, isClassExpression,
-    isDeclarationNameOfEnumOrNamespace, isDefaultImport, isDestructuringAssignment, isEffectiveExternalModule,
-    isExportDeclaration, isExportName, isExportNamespaceAsDefaultDeclaration, isExpression, isExternalModule,
-    isExternalModuleImportEqualsDeclaration, isForInitializer, isFunctionExpression, isGeneratedIdentifier,
-    isIdentifier, isImportCall, isImportClause, isImportEqualsDeclaration, isImportSpecifier, isJsonSourceFile,
-    isLocalName, isModifier, isModifierLike, isNamedExports, isObjectLiteralExpression, isOmittedExpression,
-    isPrefixUnaryExpression, isShorthandPropertyAssignment, isSimpleCopiableExpression, isSimpleInlineableExpression,
-    isSpreadElement, isStatement, isStringLiteral, length, mapDefined, MergeDeclarationMarker, Modifier, ModifierFlags,
-    ModuleKind, Node, NodeArray, NodeFlags, ObjectLiteralElementLike, outFile, ParameterDeclaration,
-    ParenthesizedExpression, PartiallyEmittedExpression, PostfixUnaryExpression, PrefixUnaryExpression, reduceLeft,
-    removeAllComments, ScriptTarget, setEmitFlags, setOriginalNode, setTextRange, ShorthandPropertyAssignment,
-    singleOrMany, SourceFile, startOnNewLine, Statement, SyntaxKind, TaggedTemplateExpression, TextRange,
-    TransformationContext, TransformFlags, tryGetModuleNameFromFile, VariableDeclaration, VariableStatement,
-    visitEachChild, visitIterationBody, visitNode, visitNodes, VisitResult,
+    isArrayLiteralExpression,
+    isArrowFunction,
+    isAssignmentOperator,
+    isBindingPattern,
+    isClassExpression,
+    isDeclarationNameOfEnumOrNamespace,
+    isDefaultImport,
+    isDestructuringAssignment,
+    isEffectiveExternalModule,
+    isExportDeclaration,
+    isExportName,
+    isExportNamespaceAsDefaultDeclaration,
+    isExpression,
+    isExternalModule,
+    isExternalModuleImportEqualsDeclaration,
+    isForInitializer,
+    isFunctionExpression,
+    isGeneratedIdentifier,
+    isIdentifier,
+    isImportCall,
+    isImportClause,
+    isImportEqualsDeclaration,
+    isImportSpecifier,
+    isJsonSourceFile,
+    isLocalName,
+    isModifier,
+    isModifierLike,
+    isNamedExports,
+    isObjectLiteralExpression,
+    isOmittedExpression,
+    isPrefixUnaryExpression,
+    isShorthandPropertyAssignment,
+    isSimpleCopiableExpression,
+    isSimpleInlineableExpression,
+    isSpreadElement,
+    isStatement,
+    isStringLiteral,
+    length,
+    mapDefined,
+    MergeDeclarationMarker,
+    Modifier,
+    ModifierFlags,
+    ModuleKind,
+    Node,
+    NodeArray,
+    NodeFlags,
+    ObjectLiteralElementLike,
+    outFile,
+    ParameterDeclaration,
+    ParenthesizedExpression,
+    PartiallyEmittedExpression,
+    PostfixUnaryExpression,
+    PrefixUnaryExpression,
+    reduceLeft,
+    removeAllComments,
+    ScriptTarget,
+    setEmitFlags,
+    setOriginalNode,
+    setTextRange,
+    ShorthandPropertyAssignment,
+    singleOrMany,
+    SourceFile,
+    startOnNewLine,
+    Statement,
+    SyntaxKind,
+    TaggedTemplateExpression,
+    TextRange,
+    TransformationContext,
+    TransformFlags,
+    tryGetModuleNameFromFile,
+    VariableDeclaration,
+    VariableStatement,
+    visitEachChild,
+    visitIterationBody,
+    visitNode,
+    visitNodes,
+    VisitResult,
 } from "../../_namespaces/ts";
 
 /** @internal */
@@ -851,32 +960,57 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     function createImportCallExpressionCommonJS(arg: Expression | undefined, isInlineable?: boolean): Expression {
         // import(x)
         // emit as
-        // var _a;
-        // (_a = x, Promise.resolve().then(() => require(_a)) /*CommonJs Require*/
+        // Promise.resolve(`${x}`).then((s) => require(s)) /*CommonJs Require*/
         // We have to wrap require in then callback so that require is done in asynchronously
         // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
-        // If the arg is not inlineable, we have to evaluate it in the current scope with a temp var
-        const temp = arg && !isSimpleInlineableExpression(arg) && !isInlineable ? factory.createTempVariable(hoistVariableDeclaration) : undefined;
+        // If the arg is not inlineable, we have to evaluate and ToString() it in the current scope
+        // Otherwise, we inline it in require() so that it's statically analyzable
+        const needSyncEval = arg && !isSimpleInlineableExpression(arg) && !isInlineable;
+
         const promiseResolveCall = factory.createCallExpression(
             factory.createPropertyAccessExpression(factory.createIdentifier("Promise"), "resolve"),
             /*typeArguments*/ undefined,
-            /*argumentsArray*/ [],
+            /*argumentsArray*/ needSyncEval
+                ? languageVersion >= ScriptTarget.ES2015
+                    ? [
+                          factory.createTemplateExpression(factory.createTemplateHead(""), [
+                              factory.createTemplateSpan(arg, factory.createTemplateTail("")),
+                          ]),
+                      ]
+                    : [
+                          factory.createCallExpression(
+                              factory.createPropertyAccessExpression(factory.createStringLiteral(""), "concat"),
+                              /*typeArguments*/ undefined,
+                              [arg]
+                          ),
+                      ]
+                : []
         );
+
         let requireCall: Expression = factory.createCallExpression(
             factory.createIdentifier("require"),
             /*typeArguments*/ undefined,
-            temp ? [temp] : arg ? [arg] : [],
+            needSyncEval ? [factory.createIdentifier("s")] : arg ? [arg] : [],
         );
         if (getESModuleInterop(compilerOptions)) {
             requireCall = emitHelpers().createImportStarHelper(requireCall);
         }
+
+        const parameters = needSyncEval
+            ? [
+                factory.createParameterDeclaration(
+                    /*modifiers*/ undefined,
+                    /*dotDotDotToken*/ undefined,
+                    /*name*/ "s"),
+            ]
+            : [];
 
         let func: FunctionExpression | ArrowFunction;
         if (languageVersion >= ScriptTarget.ES2015) {
             func = factory.createArrowFunction(
                 /*modifiers*/ undefined,
                 /*typeParameters*/ undefined,
-                /*parameters*/ [],
+                /*parameters*/ parameters,
                 /*type*/ undefined,
                 /*equalsGreaterThanToken*/ undefined,
                 requireCall);
@@ -887,14 +1021,14 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 /*asteriskToken*/ undefined,
                 /*name*/ undefined,
                 /*typeParameters*/ undefined,
-                /*parameters*/ [],
+                /*parameters*/ parameters,
                 /*type*/ undefined,
                 factory.createBlock([factory.createReturnStatement(requireCall)]));
         }
 
         const downleveledImport = factory.createCallExpression(factory.createPropertyAccessExpression(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
 
-        return temp === undefined ? downleveledImport : factory.createCommaListExpression([factory.createAssignment(temp, arg!), downleveledImport]);
+        return downleveledImport;
     }
 
     function getHelperExpressionForExport(node: ExportDeclaration, innerExpr: Expression) {

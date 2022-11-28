@@ -1,6 +1,12 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { createSession, openFilesForSession } from "./helpers";
+import {
+    createServerHost,
+    File,
+} from "../virtualFileSystemWithWatch";
+import {
+    createSession,
+    openFilesForSession,
+} from "./helpers";
 
 describe("unittests:: tsserver:: jsdoc @link ", () => {
     const config: File = {

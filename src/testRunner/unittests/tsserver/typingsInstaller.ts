@@ -1,6 +1,23 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile, TestServerHost } from "../virtualFileSystemWithWatch";
-import { TestTypingsInstaller, createTypesRegistry, createProjectService, checkProjectActualFiles, configuredProjectAt, createLoggerWithInMemoryLogs, baselineTsserverLogs, checkNumberOfProjects, toExternalFile, customTypesMap, createSession } from "./helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+    TestServerHost,
+} from "../virtualFileSystemWithWatch";
+import {
+    baselineTsserverLogs,
+    checkNumberOfProjects,
+    checkProjectActualFiles,
+    configuredProjectAt,
+    createLoggerWithInMemoryLogs,
+    createProjectService,
+    createSession,
+    createTypesRegistry,
+    customTypesMap,
+    TestTypingsInstaller,
+    toExternalFile,
+} from "./helpers";
 
 import validatePackageName = ts.JsTyping.validatePackageName;
 import NameValidationResult = ts.JsTyping.NameValidationResult;

@@ -1,7 +1,17 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import { createWatchedSystem, File, libFile, SymLink } from "../virtualFileSystemWithWatch";
-import { createBaseline, createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline, runWatchBaseline, verifyTscWatch } from "./helpers";
+import {
+    createWatchedSystem,
+    File,
+    libFile,
+    SymLink,
+} from "../virtualFileSystemWithWatch";
+import {
+    createBaseline,
+    createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline,
+    runWatchBaseline,
+    verifyTscWatch,
+} from "./helpers";
 
 describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution caching", () => {
     const scenario = "resolutionCache";

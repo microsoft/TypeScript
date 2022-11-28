@@ -1,9 +1,35 @@
 import {
-    CharacterCodes, combinePaths, compareStringsCaseSensitive, CompilerOptions, Debug, deduplicate,
-    equateStringsCaseSensitive, Extension, fileExtensionIs, flatMap, forEach, getBaseFileName, getDirectoryPath,
-    getEntries, getNormalizedAbsolutePath, getOwnKeys, getPathComponents, getProperty, hasJSFileExtension,
-    mapDefined, MapLike, normalizePath, Path, readConfigFile, removeFileExtension,
-    removeMinAndVersionNumbers, some, TypeAcquisition, Version, versionMajorMinor,
+    CharacterCodes,
+    combinePaths,
+    compareStringsCaseSensitive,
+    CompilerOptions,
+    Debug,
+    deduplicate,
+    equateStringsCaseSensitive,
+    Extension,
+    fileExtensionIs,
+    flatMap,
+    forEach,
+    getBaseFileName,
+    getDirectoryPath,
+    getEntries,
+    getNormalizedAbsolutePath,
+    getOwnKeys,
+    getPathComponents,
+    getProperty,
+    hasJSFileExtension,
+    mapDefined,
+    MapLike,
+    normalizePath,
+    Path,
+    readConfigFile,
+    removeFileExtension,
+    removeMinAndVersionNumbers,
+    some,
+    toFileNameLowerCase,
+    TypeAcquisition,
+    Version,
+    versionMajorMinor,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -288,8 +314,8 @@ export function discoverTypings(
                     // packages. So that needs this dance here.
                     const pathComponents = getPathComponents(normalizePath(manifestPath));
                     const isScoped = pathComponents[pathComponents.length - 3][0] === "@";
-                    return isScoped && pathComponents[pathComponents.length - 4].toLowerCase() === modulesDirName || // `node_modules/@foo/bar`
-                        !isScoped && pathComponents[pathComponents.length - 3].toLowerCase() === modulesDirName; // `node_modules/foo`
+                    return isScoped && toFileNameLowerCase(pathComponents[pathComponents.length - 4]) === modulesDirName || // `node_modules/@foo/bar`
+                        !isScoped && toFileNameLowerCase(pathComponents[pathComponents.length - 3]) === modulesDirName; // `node_modules/foo`
                 });
 
         if (log) log(`Searching for typing names in ${packagesFolderPath}; all files: ${JSON.stringify(dependencyManifestNames)}`);
@@ -336,7 +362,7 @@ export function discoverTypings(
         const fromFileNames = mapDefined(fileNames, j => {
             if (!hasJSFileExtension(j)) return undefined;
 
-            const inferredTypingName = removeFileExtension(getBaseFileName(j.toLowerCase()));
+            const inferredTypingName = removeFileExtension(toFileNameLowerCase(getBaseFileName(j)));
             const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);
             return safeList.get(cleanedTypingName);
         });

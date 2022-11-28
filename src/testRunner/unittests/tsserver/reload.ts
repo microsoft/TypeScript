@@ -1,6 +1,12 @@
-import { createServerHost, libFile } from "../virtualFileSystemWithWatch";
+import {
+    createServerHost,
+    libFile,
+} from "../virtualFileSystemWithWatch";
 import * as ts from "../../_namespaces/ts";
-import { createSession, checkNumberOfProjects } from "./helpers";
+import {
+    checkNumberOfProjects,
+    createSession,
+} from "./helpers";
 
 describe("unittests:: tsserver:: reload", () => {
     it("should work with temp file", () => {

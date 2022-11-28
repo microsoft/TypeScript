@@ -1,8 +1,20 @@
 import {
-    ErrorInfo, ParallelClientMessage, ParallelHostMessage, RunnerTask, shimNoopTestInterface, Task, TaskResult,
-    TestInfo, UnitTestTask,
+    ErrorInfo,
+    ParallelClientMessage,
+    ParallelHostMessage,
+    RunnerTask,
+    shimNoopTestInterface,
+    Task,
+    TaskResult,
+    TestInfo,
+    UnitTestTask,
 } from "../_namespaces/Harness.Parallel";
-import { createRunner, globalTimeout, RunnerBase, runUnitTests } from "../_namespaces/Harness";
+import {
+    createRunner,
+    globalTimeout,
+    RunnerBase,
+    runUnitTests,
+} from "../_namespaces/Harness";
 
 export function start() {
     function hookUncaughtExceptions() {

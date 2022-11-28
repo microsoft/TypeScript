@@ -1,7 +1,18 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
-import { createWatchedSystem, File, libFile, TestServerHostTrackingWrittenFiles } from "../virtualFileSystemWithWatch";
-import { applyChange, createBaseline, createWatchCompilerHostOfConfigFileForBaseline, runWatchBaseline, watchBaseline } from "./helpers";
+import {
+    createWatchedSystem,
+    File,
+    libFile,
+    TestServerHostTrackingWrittenFiles,
+} from "../virtualFileSystemWithWatch";
+import {
+    applyChange,
+    createBaseline,
+    createWatchCompilerHostOfConfigFileForBaseline,
+    runWatchBaseline,
+    watchBaseline,
+} from "./helpers";
 import { commandLineCallbacks } from "../tsc/helpers";
 
 describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolution", () => {

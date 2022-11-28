@@ -1,6 +1,14 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { createSession, openFilesForSession, executeSessionRequest } from "./helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    createSession,
+    executeSessionRequest,
+    openFilesForSession,
+} from "./helpers";
 
 function setup(fileName: string, content: string) {
     const file: File = { path: fileName, content };

@@ -2,16 +2,39 @@ import * as fs from "fs";
 import * as path from "path";
 
 import {
-    installNpmPackages, Log, RequestCompletedAction, TypingsInstaller,
+    installNpmPackages,
+    Log,
+    RequestCompletedAction,
+    TypingsInstaller,
 } from "./_namespaces/ts.server.typingsInstaller";
 import {
-    ActionPackageInstalled, Arguments, EventTypesRegistry, findArgument, hasArgument, InitializationFailedResponse,
-    InstallTypingHost, nowString, PackageInstalledResponse, TypesRegistryResponse, TypingInstallerRequestUnion,
+    ActionPackageInstalled,
+    Arguments,
+    EventTypesRegistry,
+    findArgument,
+    hasArgument,
+    InitializationFailedResponse,
+    InstallTypingHost,
+    nowString,
+    PackageInstalledResponse,
+    TypesRegistryResponse,
+    TypingInstallerRequestUnion,
     TypingInstallerResponseUnion,
 } from "./_namespaces/ts.server";
 import {
-    combinePaths, createGetCanonicalFileName, Debug, forEachAncestorDirectory, getDirectoryPath, getEntries,
-    MapLike, normalizePath, normalizeSlashes, stringContains, sys, toPath, version,
+    combinePaths,
+    createGetCanonicalFileName,
+    Debug,
+    forEachAncestorDirectory,
+    getDirectoryPath,
+    getEntries,
+    MapLike,
+    normalizePath,
+    normalizeSlashes,
+    stringContains,
+    sys,
+    toPath,
+    version,
 } from "./_namespaces/ts";
 
 class FileLog implements Log {
