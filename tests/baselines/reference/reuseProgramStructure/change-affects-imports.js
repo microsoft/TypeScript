@@ -34,7 +34,7 @@ File: c.ts
 import x from 'b'
 var z = 1;
 resolvedModules: 
-b: {"resolvedFileName":"b.ts","extension":".ts","isExternalLibraryImport":false}
+b: {"resolvedFileName":"b.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
 resolvedTypeReferenceDirectiveNames: undefined
 
 File: b.ts

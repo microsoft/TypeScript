@@ -49,7 +49,7 @@ import { B } from './b1';
 export let BB = B;
 declare module './b1' { interface B { y: string; } }
 resolvedModules: 
-./b1: {"resolvedFileName":"b1.ts","extension":".ts","isExternalLibraryImport":false}
+./b1: {"resolvedFileName":"b1.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
 resolvedTypeReferenceDirectiveNames: 
 typerefs1: {"primary":true,"resolvedFileName":"node_modules/@types/typerefs1/index.d.ts","isExternalLibraryImport":false}
 
@@ -60,8 +60,8 @@ import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
 resolvedModules: 
-./b2: {"resolvedFileName":"b2.ts","extension":".ts","isExternalLibraryImport":false}
-./f1: {"resolvedFileName":"f1.ts","extension":".ts","isExternalLibraryImport":false}
+./b2: {"resolvedFileName":"b2.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
+./f1: {"resolvedFileName":"f1.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
 resolvedTypeReferenceDirectiveNames: 
 typerefs2: {"primary":true,"resolvedFileName":"node_modules/@types/typerefs2/index.d.ts","isExternalLibraryImport":false}
 
@@ -147,7 +147,7 @@ import { B } from './b1';
 export let BB = B;
 declare module './b1' { interface B { y: string; } }
 resolvedModules: 
-./b1: {"resolvedFileName":"b1.ts","extension":".ts","isExternalLibraryImport":false}
+./b1: {"resolvedFileName":"b1.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
 resolvedTypeReferenceDirectiveNames: 
 typerefs1: {"primary":true,"resolvedFileName":"node_modules/@types/typerefs1/index.d.ts","isExternalLibraryImport":false}
 
@@ -158,8 +158,8 @@ import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
 resolvedModules: 
-./b2: {"resolvedFileName":"b2.ts","extension":".ts","isExternalLibraryImport":false}
-./f1: {"resolvedFileName":"f1.ts","extension":".ts","isExternalLibraryImport":false}
+./b2: {"resolvedFileName":"b2.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
+./f1: {"resolvedFileName":"f1.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
 resolvedTypeReferenceDirectiveNames: 
 typerefs2: {"primary":true,"resolvedFileName":"node_modules/@types/typerefs2/index.d.ts","isExternalLibraryImport":false}
 
@@ -234,7 +234,7 @@ import { B } from './b1';
 export let BB = B;
 declare module './b1' { interface B { y: string; } }
 resolvedModules: 
-./b1: {"resolvedFileName":"b1.ts","extension":".ts","isExternalLibraryImport":false}
+./b1: {"resolvedFileName":"b1.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
 resolvedTypeReferenceDirectiveNames: undefined
 
 File: f2.ts
@@ -244,8 +244,8 @@ import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
 resolvedModules: 
-./b2: {"resolvedFileName":"b2.ts","extension":".ts","isExternalLibraryImport":false}
-./f1: {"resolvedFileName":"f1.ts","extension":".ts","isExternalLibraryImport":false}
+./b2: {"resolvedFileName":"b2.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
+./f1: {"resolvedFileName":"f1.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
 resolvedTypeReferenceDirectiveNames: 
 typerefs2: {"primary":true,"resolvedFileName":"node_modules/@types/typerefs2/index.d.ts","isExternalLibraryImport":false}
 
@@ -315,7 +315,7 @@ import { B } from './b1';
 export let BB = B;
 declare module './b1' { interface B { y: string; } }
 resolvedModules: 
-./b1: {"resolvedFileName":"b1.ts","extension":".ts","isExternalLibraryImport":false}
+./b1: {"resolvedFileName":"b1.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
 resolvedTypeReferenceDirectiveNames: undefined
 
 File: f2.ts
@@ -325,8 +325,8 @@ import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
 resolvedModules: 
-./b2: {"resolvedFileName":"b2.ts","extension":".ts","isExternalLibraryImport":false}
-./f1: {"resolvedFileName":"f1.ts","extension":".ts","isExternalLibraryImport":false}
+./b2: {"resolvedFileName":"b2.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
+./f1: {"resolvedFileName":"f1.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
 resolvedTypeReferenceDirectiveNames: 
 typerefs2: {"primary":true,"resolvedFileName":"node_modules/@types/typerefs2/index.d.ts","isExternalLibraryImport":false}
 
@@ -395,7 +395,7 @@ File: f1.ts
 import { B } from './b1';
 declare module './b1' { interface B { y: string; } }
 resolvedModules: 
-./b1: {"resolvedFileName":"b1.ts","extension":".ts","isExternalLibraryImport":false}
+./b1: {"resolvedFileName":"b1.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
 resolvedTypeReferenceDirectiveNames: undefined
 
 File: f2.ts
@@ -405,8 +405,8 @@ import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
 resolvedModules: 
-./b2: {"resolvedFileName":"b2.ts","extension":".ts","isExternalLibraryImport":false}
-./f1: {"resolvedFileName":"f1.ts","extension":".ts","isExternalLibraryImport":false}
+./b2: {"resolvedFileName":"b2.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
+./f1: {"resolvedFileName":"f1.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
 resolvedTypeReferenceDirectiveNames: 
 typerefs2: {"primary":true,"resolvedFileName":"node_modules/@types/typerefs2/index.d.ts","isExternalLibraryImport":false}
 
@@ -473,7 +473,7 @@ File: f1.ts
 import { B } from './b1';
 
 resolvedModules: 
-./b1: {"resolvedFileName":"b1.ts","extension":".ts","isExternalLibraryImport":false}
+./b1: {"resolvedFileName":"b1.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
 resolvedTypeReferenceDirectiveNames: undefined
 
 File: f2.ts
@@ -483,8 +483,8 @@ import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
 resolvedModules: 
-./b2: {"resolvedFileName":"b2.ts","extension":".ts","isExternalLibraryImport":false}
-./f1: {"resolvedFileName":"f1.ts","extension":".ts","isExternalLibraryImport":false}
+./b2: {"resolvedFileName":"b2.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
+./f1: {"resolvedFileName":"f1.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
 resolvedTypeReferenceDirectiveNames: 
 typerefs2: {"primary":true,"resolvedFileName":"node_modules/@types/typerefs2/index.d.ts","isExternalLibraryImport":false}
 
@@ -563,8 +563,8 @@ import { B } from './b2';
 import { BB } from './f1';
 (new BB).x; (new BB).y;
 resolvedModules: 
-./b2: {"resolvedFileName":"b2.ts","extension":".ts","isExternalLibraryImport":false}
-./f1: {"resolvedFileName":"f1.ts","extension":".ts","isExternalLibraryImport":false}
+./b2: {"resolvedFileName":"b2.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
+./f1: {"resolvedFileName":"f1.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
 resolvedTypeReferenceDirectiveNames: 
 typerefs2: {"primary":true,"resolvedFileName":"node_modules/@types/typerefs2/index.d.ts","isExternalLibraryImport":false}
 
