@@ -51,6 +51,10 @@ if (options.built) {
     options.lkg = false;
 }
 
+if (!options.bundle && !options.typecheck) {
+    throw new Error("--no-typecheck cannot be passed when bundling is disabled");
+}
+
 export default options;
 
 

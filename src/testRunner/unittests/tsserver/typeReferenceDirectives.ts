@@ -1,5 +1,13 @@
-import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { createProjectService, checkNumberOfProjects, checkProjectActualFiles } from "./helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    checkNumberOfProjects,
+    checkProjectActualFiles,
+    createProjectService,
+} from "./helpers";
 
 describe("unittests:: tsserver:: typeReferenceDirectives", () => {
     it("when typeReferenceDirective contains UpperCasePackage", () => {

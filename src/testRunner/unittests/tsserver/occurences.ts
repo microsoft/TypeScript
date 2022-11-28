@@ -1,6 +1,12 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { createSession, makeSessionRequest } from "./helpers";
+import {
+    createServerHost,
+    File,
+} from "../virtualFileSystemWithWatch";
+import {
+    createSession,
+    makeSessionRequest,
+} from "./helpers";
 
 describe("unittests:: tsserver:: occurrence highlight on string", () => {
     it("should be marked if only on string values", () => {

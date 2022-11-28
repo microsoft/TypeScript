@@ -1,6 +1,10 @@
 import * as ts from "../_namespaces/ts";
 import * as Harness from "../_namespaces/Harness";
-import { checkResolvedModule, checkResolvedModuleWithFailedLookupLocations, createResolvedModule } from "./helpers";
+import {
+    checkResolvedModule,
+    checkResolvedModuleWithFailedLookupLocations,
+    createResolvedModule,
+} from "./helpers";
 
 interface File {
     name: string;
@@ -45,7 +49,7 @@ function getDiagnosticOfFileFromProgram(program: ts.Program, filePath: string, s
 }
 
 function createModuleResolutionHost(hasDirectoryExists: boolean, ...files: File[]): ts.ModuleResolutionHost {
-    const map = new ts.Map<string, File>();
+    const map = new Map<string, File>();
     for (const file of files) {
         map.set(file.name, file);
         if (file.symlinks) {
@@ -56,7 +60,7 @@ function createModuleResolutionHost(hasDirectoryExists: boolean, ...files: File[
     }
 
     if (hasDirectoryExists) {
-        const directories = new ts.Map<string, string>();
+        const directories = new Map<string, string>();
         for (const f of files) {
             let name = ts.getDirectoryPath(f.name);
             while (true) {
@@ -484,7 +488,7 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
 });
 
 describe("unittests:: moduleResolution:: Relative imports", () => {
-    function test(files: ts.ESMap<string, string>, currentDirectory: string, rootFiles: string[], expectedFilesCount: number, relativeNamesToCheck: string[]) {
+    function test(files: Map<string, string>, currentDirectory: string, rootFiles: string[], expectedFilesCount: number, relativeNamesToCheck: string[]) {
         const options: ts.CompilerOptions = { module: ts.ModuleKind.CommonJS };
         const host: ts.CompilerHost = {
             getSourceFile: (fileName: string, languageVersion: ts.ScriptTarget) => {
@@ -521,7 +525,7 @@ describe("unittests:: moduleResolution:: Relative imports", () => {
     }
 
     it("should find all modules", () => {
-        const files = new ts.Map(ts.getEntries({
+        const files = new Map(ts.getEntries({
             "/a/b/c/first/shared.ts": `
 class A {}
 export = A`,
@@ -540,7 +544,7 @@ export = C;
     });
 
     it("should find modules in node_modules", () => {
-        const files = new ts.Map(ts.getEntries({
+        const files = new Map(ts.getEntries({
             "/parent/node_modules/mod/index.d.ts": "export var x",
             "/parent/app/myapp.ts": `import {x} from "mod"`
         }));
@@ -548,7 +552,7 @@ export = C;
     });
 
     it("should find file referenced via absolute and relative names", () => {
-        const files = new ts.Map(ts.getEntries({
+        const files = new Map(ts.getEntries({
             "/a/b/c.ts": `/// <reference path="b.ts"/>`,
             "/a/b/b.ts": "var x"
         }));
@@ -559,7 +563,7 @@ export = C;
 describe("unittests:: moduleResolution:: Files with different casing with forceConsistentCasingInFileNames", () => {
     let library: ts.SourceFile;
     function test(
-        files: ts.ESMap<string, string>,
+        files: Map<string, string>,
         options: ts.CompilerOptions,
         currentDirectory: string,
         useCaseSensitiveFileNames: boolean,
@@ -569,7 +573,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
         const getCanonicalFileName = ts.createGetCanonicalFileName(useCaseSensitiveFileNames);
         if (!useCaseSensitiveFileNames) {
             const oldFiles = files;
-            files = new ts.Map<string, string>();
+            files = new Map<string, string>();
             oldFiles.forEach((file, fileName) => {
                 files.set(getCanonicalFileName(fileName), file);
             });
@@ -606,7 +610,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
     }
 
     it("should succeed when the same file is referenced using absolute and relative names", () => {
-        const files = new ts.Map(ts.getEntries({
+        const files = new Map(ts.getEntries({
             "/a/b/c.ts": `/// <reference path="d.ts"/>`,
             "/a/b/d.ts": "var x"
         }));
@@ -621,7 +625,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
     });
 
     it("should fail when two files used in program differ only in casing (tripleslash references)", () => {
-        const files = new ts.Map(ts.getEntries({
+        const files = new Map(ts.getEntries({
             "/a/b/c.ts": `/// <reference path="D.ts"/>`,
             "/a/b/d.ts": "var x"
         }));
@@ -658,7 +662,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
     });
 
     it("should fail when two files used in program differ only in casing (imports)", () => {
-        const files = new ts.Map(ts.getEntries({
+        const files = new Map(ts.getEntries({
             "/a/b/c.ts": `import {x} from "D"`,
             "/a/b/d.ts": "export var x"
         }));
@@ -695,7 +699,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
     });
 
     it("should fail when two files used in program differ only in casing (imports, relative module names)", () => {
-        const files = new ts.Map(ts.getEntries({
+        const files = new Map(ts.getEntries({
             "moduleA.ts": `import {x} from "./ModuleB"`,
             "moduleB.ts": "export var x"
         }));
@@ -732,7 +736,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
     });
 
     it("should fail when two files exist on disk that differs only in casing", () => {
-        const files = new ts.Map(ts.getEntries({
+        const files = new Map(ts.getEntries({
             "/a/b/c.ts": `import {x} from "D"`,
             "/a/b/D.ts": "export var x",
             "/a/b/d.ts": "export var y"
@@ -770,7 +774,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
     });
 
     it("should fail when module name in 'require' calls has inconsistent casing", () => {
-        const files = new ts.Map(ts.getEntries({
+        const files = new Map(ts.getEntries({
             "moduleA.ts": `import a = require("./ModuleC")`,
             "moduleB.ts": `import a = require("./moduleC")`,
             "moduleC.ts": "export var x"
@@ -844,7 +848,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
     });
 
     it("should fail when module names in 'require' calls has inconsistent casing and current directory has uppercase chars", () => {
-        const files = new ts.Map(ts.getEntries({
+        const files = new Map(ts.getEntries({
             "/a/B/c/moduleA.ts": `import a = require("./ModuleC")`,
             "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
             "/a/B/c/moduleC.ts": "export var x",
@@ -897,7 +901,7 @@ import b = require("./moduleB");
         );
     });
     it("should not fail when module names in 'require' calls has consistent casing and current directory has uppercase chars", () => {
-        const files = new ts.Map(ts.getEntries({
+        const files = new Map(ts.getEntries({
             "/a/B/c/moduleA.ts": `import a = require("./moduleC")`,
             "/a/B/c/moduleB.ts": `import a = require("./moduleC")`,
             "/a/B/c/moduleC.ts": "export var x",
@@ -917,7 +921,7 @@ import b = require("./moduleB");
     });
 
     it("should succeed when the two files in program differ only in drive letter in their names", () => {
-        const files = new ts.Map(ts.getEntries({
+        const files = new Map(ts.getEntries({
             "d:/someFolder/moduleA.ts": `import a = require("D:/someFolder/moduleC")`,
             "d:/someFolder/moduleB.ts": `import a = require("./moduleC")`,
             "D:/someFolder/moduleC.ts": "export const x = 10",

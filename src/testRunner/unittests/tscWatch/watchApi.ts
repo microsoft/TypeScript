@@ -1,7 +1,18 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
-import { createWatchedSystem, File, libFile, TestServerHostTrackingWrittenFiles } from "../virtualFileSystemWithWatch";
-import { applyChange, createBaseline, createWatchCompilerHostOfConfigFileForBaseline, runWatchBaseline, watchBaseline } from "./helpers";
+import {
+    createWatchedSystem,
+    File,
+    libFile,
+    TestServerHostTrackingWrittenFiles,
+} from "../virtualFileSystemWithWatch";
+import {
+    applyChange,
+    createBaseline,
+    createWatchCompilerHostOfConfigFileForBaseline,
+    runWatchBaseline,
+    watchBaseline,
+} from "./helpers";
 import { commandLineCallbacks } from "../tsc/helpers";
 
 describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolution", () => {
@@ -527,7 +538,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
             optionsToExtend: { extendedDiagnostics: true }
         });
         compilerHost.useSourceOfProjectReferenceRedirect = useSourceOfProjectReferenceRedirect;
-        const calledGetParsedCommandLine = new ts.Set<string>();
+        const calledGetParsedCommandLine = new Set<string>();
         compilerHost.getParsedCommandLine = fileName => {
             assert.isFalse(calledGetParsedCommandLine.has(fileName), `Already called on ${fileName}`);
             calledGetParsedCommandLine.add(fileName);

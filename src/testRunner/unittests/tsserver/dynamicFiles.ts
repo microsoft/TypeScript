@@ -1,6 +1,20 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { checkNumberOfProjects, checkProjectActualFiles, checkProjectRootFiles, createProjectService, createSession, executeSessionRequest, executeSessionRequestNoResponse, openFilesForSession, verifyDynamic } from "./helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    checkNumberOfProjects,
+    checkProjectActualFiles,
+    checkProjectRootFiles,
+    createProjectService,
+    createSession,
+    executeSessionRequest,
+    executeSessionRequestNoResponse,
+    openFilesForSession,
+    verifyDynamic,
+} from "./helpers";
 
 function verifyPathRecognizedAsDynamic(path: string) {
     const file: File = {

@@ -1,6 +1,10 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import { createWatchedSystem, File, libFile } from "../virtualFileSystemWithWatch";
+import {
+    createWatchedSystem,
+    File,
+    libFile,
+} from "../virtualFileSystemWithWatch";
 import { verifyTscWatch } from "./helpers";
 
 describe("unittests:: tsc-watch:: moduleResolution", () => {

@@ -1,22 +1,92 @@
 import * as ts from "./_namespaces/ts";
 import {
-    arrayFrom, BuilderProgram, BuildOptions, buildOpts, changeCompilerHostLikeToUseCache, CharacterCodes, combinePaths,
-    CommandLineOption, compareStringsCaseInsensitive, CompilerOptions, contains, convertToOptionsWithAbsolutePaths,
-    convertToTSConfig, createBuilderStatusReporter, createCompilerDiagnostic, createCompilerHostWorker,
-    createDiagnosticReporter, createGetCanonicalFileName, createIncrementalCompilerHost, createProgram, CreateProgram,
-    CreateProgramOptions, createSolutionBuilder, createSolutionBuilderHost, createSolutionBuilderWithWatch,
-    createSolutionBuilderWithWatchHost, createWatchCompilerHostOfConfigFile,
-    createWatchCompilerHostOfFilesAndCompilerOptions, createWatchProgram, Debug, Diagnostic, DiagnosticMessage,
-    DiagnosticReporter, Diagnostics, dumpTracingLegend, EmitAndSemanticDiagnosticsBuilderProgram,
-    emitFilesAndReportErrorsAndGetExitStatus, ESMap, ExitStatus, ExtendedConfigCacheEntry, Extension, fileExtensionIs,
-    fileExtensionIsOneOf, filter, findConfigFile, forEach, formatMessage, generateTSConfig,
-    getBuildOrderFromAnyBuildOrder, getCompilerOptionsDiffValue, getConfigFileParsingDiagnostics, getDiagnosticText,
-    getEntries, getErrorSummaryText, getLineStarts, getNormalizedAbsolutePath, isIncrementalCompilation, isWatchSet,
-    Map, normalizePath, optionDeclarations, optionsForBuild, optionsForWatch, padLeft, padRight, parseBuildCommand,
-    parseCommandLine, parseConfigFileWithSystem, ParsedCommandLine, Program, reduceLeftIterator, ReportEmitErrorSummary,
-    SolutionBuilder, SolutionBuilderHostBase, sort, SourceFile, startsWith, startTracing, stringContains,
-    supportedJSExtensionsFlat, supportedTSExtensionsFlat, sys, System, toPath, tracing, validateLocaleAndSetLanguage,
-    version, WatchCompilerHost, WatchOptions,
+    arrayFrom,
+    BuilderProgram,
+    BuildOptions,
+    buildOpts,
+    changeCompilerHostLikeToUseCache,
+    CharacterCodes,
+    combinePaths,
+    CommandLineOption,
+    compareStringsCaseInsensitive,
+    CompilerOptions,
+    contains,
+    convertToOptionsWithAbsolutePaths,
+    convertToTSConfig,
+    createBuilderStatusReporter,
+    createCompilerDiagnostic,
+    createCompilerHostWorker,
+    createDiagnosticReporter,
+    createGetCanonicalFileName,
+    createIncrementalCompilerHost,
+    createProgram,
+    CreateProgram,
+    CreateProgramOptions,
+    createSolutionBuilder,
+    createSolutionBuilderHost,
+    createSolutionBuilderWithWatch,
+    createSolutionBuilderWithWatchHost,
+    createWatchCompilerHostOfConfigFile,
+    createWatchCompilerHostOfFilesAndCompilerOptions,
+    createWatchProgram,
+    Debug,
+    Diagnostic,
+    DiagnosticMessage,
+    DiagnosticReporter,
+    Diagnostics,
+    dumpTracingLegend,
+    EmitAndSemanticDiagnosticsBuilderProgram,
+    emitFilesAndReportErrorsAndGetExitStatus,
+    ExitStatus,
+    ExtendedConfigCacheEntry,
+    Extension,
+    fileExtensionIs,
+    fileExtensionIsOneOf,
+    filter,
+    findConfigFile,
+    forEach,
+    formatMessage,
+    generateTSConfig,
+    getBuildOrderFromAnyBuildOrder,
+    getCompilerOptionsDiffValue,
+    getConfigFileParsingDiagnostics,
+    getDiagnosticText,
+    getEntries,
+    getErrorSummaryText,
+    getLineStarts,
+    getNormalizedAbsolutePath,
+    isIncrementalCompilation,
+    isWatchSet,
+    normalizePath,
+    optionDeclarations,
+    optionsForBuild,
+    optionsForWatch,
+    padLeft,
+    padRight,
+    parseBuildCommand,
+    parseCommandLine,
+    parseConfigFileWithSystem,
+    ParsedCommandLine,
+    Program,
+    reduceLeftIterator,
+    ReportEmitErrorSummary,
+    SolutionBuilder,
+    SolutionBuilderHostBase,
+    sort,
+    SourceFile,
+    startsWith,
+    startTracing,
+    stringContains,
+    supportedJSExtensionsFlat,
+    supportedTSExtensionsFlat,
+    sys,
+    System,
+    toPath,
+    tracing,
+    validateLocaleAndSetLanguage,
+    version,
+    WatchCompilerHost,
+    WatchOptions,
 } from "./_namespaces/ts";
 import * as performance from "../compiler/_namespaces/ts.performance";
 
@@ -32,7 +102,7 @@ export enum StatisticType {
     memory,
 }
 
-function countLines(program: Program): Map<number> {
+function countLines(program: Program): Map<string, number> {
     const counts = getCountsMap();
     forEach(program.getSourceFiles(), file => {
         const key = getCountKey(program, file);
@@ -278,13 +348,13 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
     }
 
     function getValueCandidate(option: CommandLineOption): ValueCandidate | undefined {
-        // option.type might be "string" | "number" | "boolean" | "object" | "list" | ESMap<string, number | string>
+        // option.type might be "string" | "number" | "boolean" | "object" | "list" | Map<string, number | string>
         // string -- any of: string
         // number -- any of: number
         // boolean -- any of: boolean
         // object -- null
         // list -- one or more: , content depends on `option.element.type`, the same as others
-        // ESMap<string, number | string> -- any of: key1, key2, ....
+        // Map<string, number | string> -- any of: key1, key2, ....
         if (option.type === "object") {
             return undefined;
         }
@@ -324,7 +394,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
                     possibleValues = "";
                     break;
                 default:
-                    // ESMap<string, number | string>
+                    // Map<string, number | string>
                     // Group synonyms: es6/es2015
                     const inverted: { [value: string]: string[] } = {};
                     option.type.forEach((value, name) => {
@@ -925,7 +995,7 @@ function createWatchOfConfigFile(
     configParseResult: ParsedCommandLine,
     optionsToExtend: CompilerOptions,
     watchOptionsToExtend: WatchOptions | undefined,
-    extendedConfigCache: Map<ExtendedConfigCacheEntry>,
+    extendedConfigCache: Map<string, ExtendedConfigCacheEntry>,
 ) {
     const watchCompilerHost = createWatchCompilerHostOfConfigFile({
         configFileName: configParseResult.options.configFilePath!,
@@ -975,7 +1045,7 @@ function enableSolutionPerformance(system: System, options: BuildOptions) {
 }
 
 function createSolutionPerfomrance(): SolutionPerformance {
-    let statistics: ESMap<string, Statistic> | undefined;
+    let statistics: Map<string, Statistic> | undefined;
     return {
         addAggregateStatistic,
         forEachAggregateStatistics: forEachAggreateStatistics,

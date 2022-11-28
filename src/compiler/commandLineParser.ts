@@ -1,24 +1,123 @@
 import {
-    AlternateModeDiagnostics, append, arrayFrom, ArrayLiteralExpression, arrayToMap, assign, BuildOptions,
-    changeExtension, CharacterCodes, combinePaths, CommandLineOption, CommandLineOptionOfCustomType,
-    CommandLineOptionOfListType, CompilerOptions, CompilerOptionsValue, ConfigFileSpecs, containsPath,
-    convertToRelativePath, createCompilerDiagnostic, createDiagnosticForNodeInSourceFile, createGetCanonicalFileName,
-    Debug, Diagnostic, DiagnosticMessage, Diagnostics, DidYouMeanOptionsDiagnostics, directorySeparator, emptyArray,
-    endsWith, ensureTrailingDirectorySeparator, ESMap, every, Expression, extend, Extension, FileExtensionInfo,
-    fileExtensionIs, fileExtensionIsOneOf, filter, filterMutate, find, findIndex, firstDefined, flatten, forEach,
-    forEachEntry, getBaseFileName, getDirectoryPath, getEntries, getFileMatcherPatterns, getLocaleSpecificMessage,
-    getNormalizedAbsolutePath, getRegexFromPattern, getRegularExpressionForWildcard, getRegularExpressionsForWildcards,
-    getRelativePathFromFile, getSpellingSuggestion, getSupportedExtensions,
-    getSupportedExtensionsWithJsonIfResolveJsonModule, getTextOfPropertyName, getTsConfigPropArray,
-    getTsConfigPropArrayElementValue, hasExtension, hasProperty, ImportsNotUsedAsValues, isArray,
-    isArrayLiteralExpression, isComputedNonLiteralName, isImplicitGlob, isObjectLiteralExpression, isRootedDiskPath,
-    isString, isStringDoubleQuoted, isStringLiteral, JsonSourceFile, JsxEmit, length, map, Map, mapDefined, mapIterator,
-    MapLike, ModuleDetectionKind, ModuleKind, ModuleResolutionKind, NewLineKind, Node, NodeArray,
-    nodeModuleNameResolver, normalizePath, normalizeSlashes, NumericLiteral, ObjectLiteralExpression, ParseConfigHost,
-    ParsedCommandLine, parseJsonText, Path, PollingWatchKind, PrefixUnaryExpression, ProjectReference, PropertyName,
-    Push, removeTrailingDirectorySeparator, returnTrue, ScriptTarget, startsWith, StringLiteral, SyntaxKind, sys,
-    toFileNameLowerCase, toPath, tracing, trimString, TsConfigOnlyOption, TsConfigSourceFile, TypeAcquisition,
-    unescapeLeadingUnderscores, WatchDirectoryFlags, WatchDirectoryKind, WatchFileKind, WatchOptions,
+    AlternateModeDiagnostics,
+    append,
+    arrayFrom,
+    ArrayLiteralExpression,
+    arrayToMap,
+    assign,
+    BuildOptions,
+    changeExtension,
+    CharacterCodes,
+    combinePaths,
+    CommandLineOption,
+    CommandLineOptionOfCustomType,
+    CommandLineOptionOfListType,
+    CompilerOptions,
+    CompilerOptionsValue,
+    ConfigFileSpecs,
+    containsPath,
+    convertToRelativePath,
+    createCompilerDiagnostic,
+    createDiagnosticForNodeInSourceFile,
+    createGetCanonicalFileName,
+    Debug,
+    Diagnostic,
+    DiagnosticMessage,
+    Diagnostics,
+    DidYouMeanOptionsDiagnostics,
+    directorySeparator,
+    emptyArray,
+    endsWith,
+    ensureTrailingDirectorySeparator,
+    every,
+    Expression,
+    extend,
+    Extension,
+    FileExtensionInfo,
+    fileExtensionIs,
+    fileExtensionIsOneOf,
+    filter,
+    filterMutate,
+    find,
+    findIndex,
+    firstDefined,
+    flatten,
+    forEach,
+    forEachEntry,
+    getBaseFileName,
+    getDirectoryPath,
+    getEntries,
+    getFileMatcherPatterns,
+    getLocaleSpecificMessage,
+    getNormalizedAbsolutePath,
+    getRegexFromPattern,
+    getRegularExpressionForWildcard,
+    getRegularExpressionsForWildcards,
+    getRelativePathFromFile,
+    getSpellingSuggestion,
+    getSupportedExtensions,
+    getSupportedExtensionsWithJsonIfResolveJsonModule,
+    getTextOfPropertyName,
+    getTsConfigPropArray,
+    getTsConfigPropArrayElementValue,
+    hasExtension,
+    hasProperty,
+    ImportsNotUsedAsValues,
+    isArray,
+    isArrayLiteralExpression,
+    isComputedNonLiteralName,
+    isImplicitGlob,
+    isObjectLiteralExpression,
+    isRootedDiskPath,
+    isString,
+    isStringDoubleQuoted,
+    isStringLiteral,
+    JsonSourceFile,
+    JsxEmit,
+    length,
+    map,
+    mapDefined,
+    mapIterator,
+    MapLike,
+    ModuleDetectionKind,
+    ModuleKind,
+    ModuleResolutionKind,
+    NewLineKind,
+    Node,
+    NodeArray,
+    nodeModuleNameResolver,
+    normalizePath,
+    normalizeSlashes,
+    NumericLiteral,
+    ObjectLiteralExpression,
+    ParseConfigHost,
+    ParsedCommandLine,
+    parseJsonText,
+    Path,
+    PollingWatchKind,
+    PrefixUnaryExpression,
+    ProjectReference,
+    PropertyName,
+    Push,
+    removeTrailingDirectorySeparator,
+    returnTrue,
+    ScriptTarget,
+    startsWith,
+    StringLiteral,
+    SyntaxKind,
+    sys,
+    toFileNameLowerCase,
+    toPath,
+    tracing,
+    trimString,
+    TsConfigOnlyOption,
+    TsConfigSourceFile,
+    TypeAcquisition,
+    unescapeLeadingUnderscores,
+    WatchDirectoryFlags,
+    WatchDirectoryKind,
+    WatchFileKind,
+    WatchOptions,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -1490,8 +1589,8 @@ export const typeAcquisitionDeclarations: CommandLineOption[] = [
 
 /** @internal */
 export interface OptionsNameMap {
-    optionsNameMap: ESMap<string, CommandLineOption>;
-    shortOptionNames: ESMap<string, string>;
+    optionsNameMap: Map<string, CommandLineOption>;
+    shortOptionNames: Map<string, string>;
 }
 
 /** @internal */
@@ -1888,7 +1987,7 @@ export function getParsedCommandLineOfConfigFile(
     configFileName: string,
     optionsToExtend: CompilerOptions | undefined,
     host: ParseConfigFileHost,
-    extendedConfigCache?: Map<ExtendedConfigCacheEntry>,
+    extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>,
     watchOptionsToExtend?: WatchOptions,
     extraFileExtensions?: readonly FileExtensionInfo[],
 ): ParsedCommandLine | undefined {
@@ -1981,15 +2080,15 @@ const watchOptionsDidYouMeanDiagnostics: ParseCommandLineWorkerDiagnostics = {
     optionTypeMismatchDiagnostic: Diagnostics.Watch_option_0_requires_a_value_of_type_1
 };
 
-let commandLineCompilerOptionsMapCache: ESMap<string, CommandLineOption>;
+let commandLineCompilerOptionsMapCache: Map<string, CommandLineOption>;
 function getCommandLineCompilerOptionsMap() {
     return commandLineCompilerOptionsMapCache || (commandLineCompilerOptionsMapCache = commandLineOptionsToMap(optionDeclarations));
 }
-let commandLineWatchOptionsMapCache: ESMap<string, CommandLineOption>;
+let commandLineWatchOptionsMapCache: Map<string, CommandLineOption>;
 function getCommandLineWatchOptionsMap() {
     return commandLineWatchOptionsMapCache || (commandLineWatchOptionsMapCache = commandLineOptionsToMap(optionsForWatch));
 }
-let commandLineTypeAcquisitionMapCache: ESMap<string, CommandLineOption>;
+let commandLineTypeAcquisitionMapCache: Map<string, CommandLineOption>;
 function getCommandLineTypeAcquisitionMap() {
     return commandLineTypeAcquisitionMapCache || (commandLineTypeAcquisitionMapCache = commandLineOptionsToMap(typeAcquisitionDeclarations));
 }
@@ -2160,13 +2259,13 @@ export function convertToObjectWorker(
 
     return convertPropertyValueToJson(rootExpression, knownRootOptions);
 
-    function isRootOptionMap(knownOptions: ESMap<string, CommandLineOption> | undefined) {
+    function isRootOptionMap(knownOptions: Map<string, CommandLineOption> | undefined) {
         return knownRootOptions && (knownRootOptions as TsConfigOnlyOption).elementOptions === knownOptions;
     }
 
     function convertObjectLiteralExpressionToJson(
         node: ObjectLiteralExpression,
-        knownOptions: ESMap<string, CommandLineOption> | undefined,
+        knownOptions: Map<string, CommandLineOption> | undefined,
         extraKeyDiagnostics: DidYouMeanOptionsDiagnostics | undefined,
         parentOption: string | undefined
     ): any {
@@ -2446,7 +2545,7 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
 }
 
 /** @internal */
-export function optionMapToObject(optionMap: ESMap<string, CompilerOptionsValue>): object {
+export function optionMapToObject(optionMap: Map<string, CompilerOptionsValue>): object {
     return {
         ...arrayFrom(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
     };
@@ -2476,7 +2575,7 @@ function matchesSpecs(path: string, includeSpecs: readonly string[] | undefined,
     return returnTrue;
 }
 
-function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): ESMap<string, string | number> | undefined {
+function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): Map<string, string | number> | undefined {
     if (optionDefinition.type === "string" || optionDefinition.type === "number" || optionDefinition.type === "boolean" || optionDefinition.type === "object") {
         // this is of a type CommandLineOptionOfPrimitiveType
         return undefined;
@@ -2490,7 +2589,7 @@ function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption
 }
 
 /** @internal */
-export function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: ESMap<string, string | number>): string | undefined {
+export function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: Map<string, string | number>): string | undefined {
     // There is a typeMap associated with this command-line option so use it to map value back to its name
     return forEachEntry(customTypeMap, (mapValue, key) => {
         if (mapValue === value) {
@@ -2503,7 +2602,7 @@ export function getNameOfCompilerOptionValue(value: CompilerOptionsValue, custom
 export function serializeCompilerOptions(
     options: CompilerOptions,
     pathOptions?: { configFilePath: string, useCaseSensitiveFileNames: boolean }
-): ESMap<string, CompilerOptionsValue> {
+): Map<string, CompilerOptionsValue> {
     return serializeOptionBaseObject(options, getOptionsNameMap(), pathOptions);
 }
 
@@ -2515,7 +2614,7 @@ function serializeOptionBaseObject(
     options: OptionsBase,
     { optionsNameMap }: OptionsNameMap,
     pathOptions?: { configFilePath: string, useCaseSensitiveFileNames: boolean }
-): ESMap<string, CompilerOptionsValue> {
+): Map<string, CompilerOptionsValue> {
     const result = new Map<string, CompilerOptionsValue>();
     const getCanonicalFileName = pathOptions && createGetCanonicalFileName(pathOptions.useCaseSensitiveFileNames);
 
@@ -2570,7 +2669,7 @@ export function getCompilerOptionsDiffValue(options: CompilerOptions, newLine: s
 
     function getOverwrittenDefaultOptions() {
         const result: string[] = [];
-         const tab = makePadding(2);
+        const tab = makePadding(2);
         commandOptionsWithoutBuild.forEach(cmd => {
             if (!compilerOptionsMap.has(cmd.name)) {
                 return;
@@ -2593,7 +2692,7 @@ export function getCompilerOptionsDiffValue(options: CompilerOptions, newLine: s
  * Get the compiler options to be written into the tsconfig.json.
  * @param options commandlineOptions to be included in the compileOptions.
  */
-function getSerializedCompilerOption(options: CompilerOptions): ESMap<string, CompilerOptionsValue> {
+function getSerializedCompilerOption(options: CompilerOptions): Map<string, CompilerOptionsValue> {
     const compilerOptions = extend(options, defaultInitCompilerOptions);
     return serializeCompilerOptions(compilerOptions);
 }
@@ -2735,7 +2834,7 @@ function convertToOptionValueWithAbsolutePaths(option: CommandLineOption | undef
  * @param basePath A root directory to resolve relative path entries in the config
  *    file to. e.g. outDir
  */
-export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
+export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
     return parseJsonConfigFileContentWorker(json, /*sourceFile*/ undefined, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
 }
 
@@ -2746,7 +2845,7 @@ export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, bas
  * @param basePath A root directory to resolve relative path entries in the config
  *    file to. e.g. outDir
  */
-export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
+export function parseJsonSourceFileConfigFileContent(sourceFile: TsConfigSourceFile, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: readonly FileExtensionInfo[], extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>, existingWatchOptions?: WatchOptions): ParsedCommandLine {
     tracing?.push(tracing.Phase.Parse, "parseJsonSourceFileConfigFileContent", { path: sourceFile.fileName });
     const result = parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, existingWatchOptions, configFileName, resolutionStack, extraFileExtensions, extendedConfigCache);
     tracing?.pop();
@@ -2792,7 +2891,7 @@ function parseJsonConfigFileContentWorker(
     configFileName?: string,
     resolutionStack: Path[] = [],
     extraFileExtensions: readonly FileExtensionInfo[] = [],
-    extendedConfigCache?: ESMap<string, ExtendedConfigCacheEntry>
+    extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>
 ): ParsedCommandLine {
     Debug.assert((json === undefined && sourceFile !== undefined) || (json !== undefined && sourceFile === undefined));
     const errors: Diagnostic[] = [];
@@ -3023,7 +3122,7 @@ function parseConfig(
     configFileName: string | undefined,
     resolutionStack: string[],
     errors: Push<Diagnostic>,
-    extendedConfigCache?: ESMap<string, ExtendedConfigCacheEntry>
+    extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>
 ): ParsedTsconfig {
     basePath = normalizeSlashes(basePath);
     const resolvedPath = getNormalizedAbsolutePath(configFileName || "", basePath);
@@ -3369,11 +3468,11 @@ function convertWatchOptionsFromJsonWorker(jsonOptions: any, basePath: string, e
     return convertOptionsFromJson(getCommandLineWatchOptionsMap(), jsonOptions, basePath, /*defaultOptions*/ undefined, watchOptionsDidYouMeanDiagnostics, errors);
 }
 
-function convertOptionsFromJson(optionsNameMap: ESMap<string, CommandLineOption>, jsonOptions: any, basePath: string,
+function convertOptionsFromJson(optionsNameMap: Map<string, CommandLineOption>, jsonOptions: any, basePath: string,
     defaultOptions: undefined, diagnostics: DidYouMeanOptionsDiagnostics, errors: Push<Diagnostic>): WatchOptions | undefined;
-function convertOptionsFromJson(optionsNameMap: ESMap<string, CommandLineOption>, jsonOptions: any, basePath: string,
+function convertOptionsFromJson(optionsNameMap: Map<string, CommandLineOption>, jsonOptions: any, basePath: string,
     defaultOptions: CompilerOptions | TypeAcquisition, diagnostics: DidYouMeanOptionsDiagnostics, errors: Push<Diagnostic>): CompilerOptions | TypeAcquisition;
-function convertOptionsFromJson(optionsNameMap: ESMap<string, CommandLineOption>, jsonOptions: any, basePath: string,
+function convertOptionsFromJson(optionsNameMap: Map<string, CommandLineOption>, jsonOptions: any, basePath: string,
     defaultOptions: CompilerOptions | TypeAcquisition | WatchOptions | undefined, diagnostics: DidYouMeanOptionsDiagnostics, errors: Push<Diagnostic>) {
 
     if (!jsonOptions) {
@@ -3397,7 +3496,7 @@ export function convertJsonOption(opt: CommandLineOption, value: any, basePath: 
     if (isCompilerOptionsValue(opt, value)) {
         const optType = opt.type;
         if (optType === "list" && isArray(value)) {
-            return convertJsonOptionOfListType(opt , value, basePath, errors);
+            return convertJsonOptionOfListType(opt, value, basePath, errors);
         }
         else if (optType === "listOrElement") {
             return isArray(value) ?
@@ -3772,7 +3871,7 @@ function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: b
  *
  * @param file The path to the file.
  */
-function hasFileWithHigherPriorityExtension(file: string, literalFiles: ESMap<string, string>, wildcardFiles: ESMap<string, string>, extensions: readonly string[][], keyMapper: (value: string) => string) {
+function hasFileWithHigherPriorityExtension(file: string, literalFiles: Map<string, string>, wildcardFiles: Map<string, string>, extensions: readonly string[][], keyMapper: (value: string) => string) {
     const extensionGroup = forEach(extensions, group => fileExtensionIsOneOf(file, group) ? group : undefined);
     if (!extensionGroup) {
         return false;
@@ -3802,7 +3901,7 @@ function hasFileWithHigherPriorityExtension(file: string, literalFiles: ESMap<st
  *
  * @param file The path to the file.
  */
-function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: ESMap<string, string>, extensions: readonly string[][], keyMapper: (value: string) => string) {
+function removeWildcardFilesWithLowerPriorityExtension(file: string, wildcardFiles: Map<string, string>, extensions: readonly string[][], keyMapper: (value: string) => string) {
     const extensionGroup = forEach(extensions, group => fileExtensionIsOneOf(file, group) ? group : undefined);
     if (!extensionGroup) {
         return;
