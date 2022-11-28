@@ -3377,7 +3377,7 @@ function getExtendedConfig(
     host: ParseConfigHost,
     resolutionStack: string[],
     errors: Push<Diagnostic>,
-    extendedConfigCache: ESMap<string, ExtendedConfigCacheEntry> | undefined,
+    extendedConfigCache: Map<string, ExtendedConfigCacheEntry> | undefined,
         result: ExtendsResult
 ): ParsedTsconfig | undefined {
     const path = host.useCaseSensitiveFileNames ? extendedConfigPath : toFileNameLowerCase(extendedConfigPath);
