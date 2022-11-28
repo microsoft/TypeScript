@@ -12,7 +12,11 @@ File: /a.ts
 var x = $
 resolvedModules: undefined
 resolvedTypeReferenceDirectiveNames: 
-typedefs: {"primary":true,"resolvedFileName":"/types/typedefs/index.d.ts","isExternalLibraryImport":false}
+typedefs: {
+  "primary": true,
+  "resolvedFileName": "/types/typedefs/index.d.ts",
+  "isExternalLibraryImport": false
+}
 
 
 MissingPaths:: ["lib.d.ts"]
@@ -34,7 +38,11 @@ File: /a.ts
 var x = 2
 resolvedModules: undefined
 resolvedTypeReferenceDirectiveNames: 
-typedefs: {"primary":true,"resolvedFileName":"/types/typedefs/index.d.ts","isExternalLibraryImport":false}
+typedefs: {
+  "primary": true,
+  "resolvedFileName": "/types/typedefs/index.d.ts",
+  "isExternalLibraryImport": false
+}
 
 
 MissingPaths:: ["lib.d.ts"]
@@ -72,7 +80,11 @@ File: /a.ts
 var x = 2
 resolvedModules: undefined
 resolvedTypeReferenceDirectiveNames: 
-typedefs: {"primary":true,"resolvedFileName":"/types/typedefs/index.d.ts","isExternalLibraryImport":false}
+typedefs: {
+  "primary": true,
+  "resolvedFileName": "/types/typedefs/index.d.ts",
+  "isExternalLibraryImport": false
+}
 typedefs2: undefined
 
 

@@ -13,7 +13,6 @@ import {
     createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
-    makeSessionRequest,
     openFilesForSession,
     TestTypingsInstaller,
     toExternalFiles,
@@ -101,24 +100,25 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem add the
         const host = createServerHost([file1]);
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([file1], session);
-        const getErrRequest = makeSessionRequest<ts.server.protocol.SemanticDiagnosticsSyncRequestArgs>(
-            ts.server.CommandNames.SemanticDiagnosticsSync,
-            { file: file1.path }
-        );
-        session.executeCommand(getErrRequest);
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: file1.path }
+        });
 
         host.writeFile(moduleFile.path, moduleFile.content);
         host.runQueuedTimeoutCallbacks();
 
         // Make a change to trigger the program rebuild
-        const changeRequest = makeSessionRequest<ts.server.protocol.ChangeRequestArgs>(
-            ts.server.CommandNames.Change,
-            { file: file1.path, line: 1, offset: 44, endLine: 1, endOffset: 44, insertString: "\n" }
-        );
-        session.executeCommand(changeRequest);
+        session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+            command: ts.server.CommandNames.Change,
+            arguments: { file: file1.path, line: 1, offset: 44, endLine: 1, endOffset: 44, insertString: "\n" }
+        });
 
         // Recheck
-        session.executeCommand(getErrRequest);
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: file1.path }
+        });
         baselineTsserverLogs("resolutionCache", "should remove the module not found error", session);
     });
 
@@ -250,29 +250,33 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
         openFilesForSession([file1], session);
-        const getErrRequest = makeSessionRequest<ts.server.protocol.SemanticDiagnosticsSyncRequestArgs>(
-            ts.server.CommandNames.SemanticDiagnosticsSync,
-            { file: file1.path }
-        );
-        session.executeCommand(getErrRequest);
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: file1.path }
+        });
 
         const moduleFileNewPath = "/a/b/moduleFile1.ts";
         host.renameFile(moduleFile.path, moduleFileNewPath);
         host.runQueuedTimeoutCallbacks();
-        session.executeCommand(getErrRequest);
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: file1.path }
+        });
 
         host.renameFile(moduleFileNewPath, moduleFile.path);
         host.runQueuedTimeoutCallbacks();
 
         // Make a change to trigger the program rebuild
-        const changeRequest = makeSessionRequest<ts.server.protocol.ChangeRequestArgs>(
-            ts.server.CommandNames.Change,
-            { file: file1.path, line: 1, offset: 44, endLine: 1, endOffset: 44, insertString: "\n" }
-        );
-        session.executeCommand(changeRequest);
+        session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+            command: ts.server.CommandNames.Change,
+            arguments: { file: file1.path, line: 1, offset: 44, endLine: 1, endOffset: 44, insertString: "\n" }
+        });
         host.runQueuedTimeoutCallbacks();
 
-        session.executeCommand(getErrRequest);
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: file1.path }
+        });
         baselineTsserverLogs("resolutionCache", "renaming module should restore the states for inferred projects", session);
     });
 
@@ -293,20 +297,25 @@ describe("unittests:: tsserver:: resolutionCache:: tsserverProjectSystem rename 
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
         openFilesForSession([file1], session);
-        const getErrRequest = makeSessionRequest<ts.server.protocol.SemanticDiagnosticsSyncRequestArgs>(
-            ts.server.CommandNames.SemanticDiagnosticsSync,
-            { file: file1.path }
-        );
-        session.executeCommand(getErrRequest);
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: file1.path }
+        });
 
         const moduleFileNewPath = "/a/b/moduleFile1.ts";
         host.renameFile(moduleFile.path, moduleFileNewPath);
         host.runQueuedTimeoutCallbacks();
-        session.executeCommand(getErrRequest);
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: file1.path }
+        });
 
         host.renameFile(moduleFileNewPath, moduleFile.path);
         host.runQueuedTimeoutCallbacks();
-        session.executeCommand(getErrRequest);
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: file1.path }
+        });
         baselineTsserverLogs("resolutionCache", "renaming module should restore the states for configured projects", session);
     });
 

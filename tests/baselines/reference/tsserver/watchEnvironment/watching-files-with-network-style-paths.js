@@ -2,12 +2,12 @@ Info 0    [00:00:15.000] For files of style c:/myprojects/project/x.js
 Info 1    [00:00:16.000] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
 Info 2    [00:00:17.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "c:/myprojects/project/x.js"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [c:/a/lib/lib.d.ts]
@@ -89,12 +89,12 @@ Info 16   [00:00:17.000] For files of style //vda1cs4850/myprojects/project/x.js
 Info 17   [00:00:18.000] Provided types map file "//vda1cs4850/a/lib/typesMap.json" doesn't exist
 Info 18   [00:00:19.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "//vda1cs4850/myprojects/project/x.js"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [//vda1cs4850/a/lib/lib.d.ts]
@@ -176,12 +176,12 @@ Info 32   [00:00:19.000] For files of style //vda1cs4850/c$/myprojects/project/x
 Info 33   [00:00:20.000] Provided types map file "//vda1cs4850/a/lib/typesMap.json" doesn't exist
 Info 34   [00:00:21.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "//vda1cs4850/c$/myprojects/project/x.js"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [//vda1cs4850/a/lib/lib.d.ts]
@@ -263,12 +263,12 @@ Info 48   [00:00:19.000] For files of style c:/users/username/myprojects/project
 Info 49   [00:00:20.000] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
 Info 50   [00:00:21.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "c:/users/username/myprojects/project/x.js"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [c:/a/lib/lib.d.ts]
@@ -350,12 +350,12 @@ Info 64   [00:00:23.000] For files of style //vda1cs4850/c$/users/username/mypro
 Info 65   [00:00:24.000] Provided types map file "//vda1cs4850/a/lib/typesMap.json" doesn't exist
 Info 66   [00:00:25.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "//vda1cs4850/c$/users/username/myprojects/project/x.js"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [//vda1cs4850/a/lib/lib.d.ts]

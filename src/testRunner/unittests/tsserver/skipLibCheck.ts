@@ -1,8 +1,9 @@
 import { createServerHost } from "../virtualFileSystemWithWatch";
 import * as ts from "../../_namespaces/ts";
 import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
     createSession,
-    makeSessionRequest,
     openFilesForSession,
     toExternalFiles,
 } from "./helpers";
@@ -26,24 +27,30 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
                 };`
         };
         const host = createServerHost([file1, file2]);
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([file1, file2], session);
 
-        const file2GetErrRequest = makeSessionRequest<ts.server.protocol.SemanticDiagnosticsSyncRequestArgs>(
-            ts.server.CommandNames.SemanticDiagnosticsSync,
-            { file: file2.path }
-        );
-        let errorResult = session.executeCommand(file2GetErrRequest).response as ts.server.protocol.Diagnostic[];
-        assert.isTrue(errorResult.length === 0);
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: file2.path }
+        });
 
-        const closeFileRequest = makeSessionRequest<ts.server.protocol.FileRequestArgs>(ts.server.CommandNames.Close, { file: file1.path });
-        session.executeCommand(closeFileRequest);
-        errorResult = session.executeCommand(file2GetErrRequest).response as ts.server.protocol.Diagnostic[];
-        assert.isTrue(errorResult.length !== 0);
+        session.executeCommandSeq<ts.server.protocol.CloseRequest>({
+            command: ts.server.CommandNames.Close,
+            arguments: { file: file1.path }
+        });
+
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: file2.path }
+        });
 
         openFilesForSession([file1], session);
-        errorResult = session.executeCommand(file2GetErrRequest).response as ts.server.protocol.Diagnostic[];
-        assert.isTrue(errorResult.length === 0);
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: file2.path }
+        });
+        baselineTsserverLogs("skipLibCheck", "jsonly inferred project", session);
     });
 
     it("should be turned on for js-only external projects", () => {
@@ -62,24 +69,22 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
                 };`
         };
         const host = createServerHost([jsFile, dTsFile]);
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
-        const openExternalProjectRequest = makeSessionRequest<ts.server.protocol.OpenExternalProjectArgs>(
-            ts.server.CommandNames.OpenExternalProject,
-            {
+        session.executeCommandSeq<ts.server.protocol.OpenExternalProjectRequest>({
+            command: ts.server.CommandNames.OpenExternalProject,
+            arguments: {
                 projectFileName: "project1",
                 rootFiles: toExternalFiles([jsFile.path, dTsFile.path]),
                 options: {}
             }
-        );
-        session.executeCommand(openExternalProjectRequest);
+        });
 
-        const dTsFileGetErrRequest = makeSessionRequest<ts.server.protocol.SemanticDiagnosticsSyncRequestArgs>(
-            ts.server.CommandNames.SemanticDiagnosticsSync,
-            { file: dTsFile.path }
-        );
-        const errorResult = session.executeCommand(dTsFileGetErrRequest).response as ts.server.protocol.Diagnostic[];
-        assert.isTrue(errorResult.length === 0);
+        session.executeCommandSeq({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: dTsFile.path }
+        });
+        baselineTsserverLogs("skipLibCheck", "jsonly external project", session);
     });
 
     it("should be turned on for js-only external projects with skipLibCheck=false", () => {
@@ -98,24 +103,22 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
                 };`
         };
         const host = createServerHost([jsFile, dTsFile]);
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
-        const openExternalProjectRequest = makeSessionRequest<ts.server.protocol.OpenExternalProjectArgs>(
-            ts.server.CommandNames.OpenExternalProject,
-            {
+        session.executeCommandSeq<ts.server.protocol.OpenExternalProjectRequest>({
+            command: ts.server.CommandNames.OpenExternalProject,
+            arguments: {
                 projectFileName: "project1",
                 rootFiles: toExternalFiles([jsFile.path, dTsFile.path]),
                 options: { skipLibCheck: false }
             }
-        );
-        session.executeCommand(openExternalProjectRequest);
+        });
 
-        const dTsFileGetErrRequest = makeSessionRequest<ts.server.protocol.SemanticDiagnosticsSyncRequestArgs>(
-            ts.server.CommandNames.SemanticDiagnosticsSync,
-            { file: dTsFile.path }
-        );
-        const errorResult = session.executeCommand(dTsFileGetErrRequest).response as ts.server.protocol.Diagnostic[];
-        assert.isTrue(errorResult.length === 0);
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: dTsFile.path }
+        });
+        baselineTsserverLogs("skipLibCheck", "jsonly external project with skipLibCheck as false", session);
     });
 
     it("should not report bind errors for declaration files with skipLibCheck=true", () => {
@@ -141,18 +144,16 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
         const session = createSession(host);
         openFilesForSession([jsFile], session);
 
-        const dTsFile1GetErrRequest = makeSessionRequest<ts.server.protocol.SemanticDiagnosticsSyncRequestArgs>(
-            ts.server.CommandNames.SemanticDiagnosticsSync,
-            { file: dTsFile1.path }
-        );
-        const error1Result = session.executeCommand(dTsFile1GetErrRequest).response as ts.server.protocol.Diagnostic[];
+        const error1Result = session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: dTsFile1.path }
+        }).response as ts.server.protocol.Diagnostic[];
         assert.isTrue(error1Result.length === 0);
 
-        const dTsFile2GetErrRequest = makeSessionRequest<ts.server.protocol.SemanticDiagnosticsSyncRequestArgs>(
-            ts.server.CommandNames.SemanticDiagnosticsSync,
-            { file: dTsFile2.path }
-        );
-        const error2Result = session.executeCommand(dTsFile2GetErrRequest).response as ts.server.protocol.Diagnostic[];
+        const error2Result = session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: dTsFile2.path }
+        }).response as ts.server.protocol.Diagnostic[];
         assert.isTrue(error2Result.length === 0);
     });
 
@@ -166,16 +167,15 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
         };
 
         const host = createServerHost([jsFile]);
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([jsFile], session);
 
-        const getErrRequest = makeSessionRequest<ts.server.protocol.SemanticDiagnosticsSyncRequestArgs>(
-            ts.server.CommandNames.SemanticDiagnosticsSync,
-            { file: jsFile.path }
-        );
-        const errorResult = session.executeCommand(getErrRequest).response as ts.server.protocol.Diagnostic[];
-        assert.isTrue(errorResult.length === 1);
-        assert.equal(errorResult[0].code, ts.Diagnostics.This_comparison_appears_to_be_unintentional_because_the_types_0_and_1_have_no_overlap.code);
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: jsFile.path }
+        });
+
+        baselineTsserverLogs("skipLibCheck", "reports semantic error with tscheck", session);
     });
 
     it("should report semantic errors for configured js project with '// @ts-check' and skipLibCheck=true", () => {
@@ -193,16 +193,14 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
         };
 
         const host = createServerHost([jsconfigFile, jsFile]);
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([jsFile], session);
 
-        const getErrRequest = makeSessionRequest<ts.server.protocol.SemanticDiagnosticsSyncRequestArgs>(
-            ts.server.CommandNames.SemanticDiagnosticsSync,
-            { file: jsFile.path }
-        );
-        const errorResult = session.executeCommand(getErrRequest).response as ts.server.protocol.Diagnostic[];
-        assert.isTrue(errorResult.length === 1);
-        assert.equal(errorResult[0].code, ts.Diagnostics.This_comparison_appears_to_be_unintentional_because_the_types_0_and_1_have_no_overlap.code);
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: jsFile.path }
+        }).response as ts.server.protocol.Diagnostic[];
+        baselineTsserverLogs("skipLibCheck", "reports semantic error in configured project with tscheck", session);
     });
 
     it("should report semantic errors for configured js project with checkJs=true and skipLibCheck=true", () => {
@@ -222,15 +220,13 @@ describe("unittests:: tsserver:: with skipLibCheck", () => {
         };
 
         const host = createServerHost([jsconfigFile, jsFile]);
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([jsFile], session);
 
-        const getErrRequest = makeSessionRequest<ts.server.protocol.SemanticDiagnosticsSyncRequestArgs>(
-            ts.server.CommandNames.SemanticDiagnosticsSync,
-            { file: jsFile.path }
-        );
-        const errorResult = session.executeCommand(getErrRequest).response as ts.server.protocol.Diagnostic[];
-        assert.isTrue(errorResult.length === 1);
-        assert.equal(errorResult[0].code, ts.Diagnostics.This_comparison_appears_to_be_unintentional_because_the_types_0_and_1_have_no_overlap.code);
+        session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+            command: ts.server.CommandNames.SemanticDiagnosticsSync,
+            arguments: { file: jsFile.path }
+        }).response as ts.server.protocol.Diagnostic[];
+        baselineTsserverLogs("skipLibCheck", "reports semantic error in configured js project with tscheck", session);
     });
 });
