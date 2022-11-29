@@ -69,14 +69,17 @@ import {
     ResolutionCacheHost,
     ResolutionMode,
     ResolvedModule,
+    ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
     ResolvedTypeReferenceDirective,
+    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     returnFalse,
     returnTrue,
     ScriptTarget,
     setGetSourceFileAsHashVersioned,
     SharedExtendedConfigFileWatcher,
     SourceFile,
+    StringLiteralLike,
     sys,
     System,
     toPath,
@@ -202,10 +205,34 @@ export interface ProgramHost<T extends BuilderProgram> {
     /** If provided is used to get the environment variable */
     getEnvironmentVariable?(name: string): string | undefined;
 
-    /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
+    /**
+     * @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolutions
+     *
+     * If provided, used to resolve the module names, otherwise typescript's default module resolution
+     */
     resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
-    /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
+    /**
+     * @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolutions
+     *
+     * If provided, used to resolve type reference directives, otherwise typescript's default resolution
+     */
     resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveModuleNameLiterals?(
+        moduleLiterals: readonly StringLiteralLike[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile,
+        reusedNames: readonly StringLiteralLike[] | undefined,
+    ): readonly ResolvedModuleWithFailedLookupLocations[];
+    resolveTypeReferenceDirectiveReferences?<T extends FileReference | string>(
+        typeDirectiveReferences: readonly T[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile | undefined,
+        reusedNames: readonly T[] | undefined
+    ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
     /** If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives */
     hasInvalidatedResolutions?(filePath: Path): boolean;
     /**
@@ -463,16 +490,21 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         /*logChangesWhenResolvingModule*/ false
     );
     // Resolve module using host module resolution strategy if provided otherwise use resolution cache to resolve module names
-    compilerHost.resolveModuleNames = host.resolveModuleNames ?
-        ((...args) => host.resolveModuleNames!(...args)) :
-        ((moduleNames, containingFile, reusedNames, redirectedReference, _options, sourceFile, resolutionInfo) => resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference, sourceFile, resolutionInfo));
-    compilerHost.resolveTypeReferenceDirectives = host.resolveTypeReferenceDirectives ?
-        ((...args) => host.resolveTypeReferenceDirectives!(...args)) :
-        ((typeDirectiveNames, containingFile, redirectedReference, _options, containingFileMode, resolutionInfo) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference, containingFileMode, resolutionInfo));
-    compilerHost.getModuleResolutionCache = host.resolveModuleNames ?
+    compilerHost.resolveModuleNameLiterals = maybeBind(host, host.resolveModuleNameLiterals);
+    compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
+    if (!compilerHost.resolveModuleNameLiterals && !compilerHost.resolveModuleNames) {
+        compilerHost.resolveModuleNameLiterals = resolutionCache.resolveModuleNameLiterals.bind(resolutionCache);
+    }
+    compilerHost.resolveTypeReferenceDirectiveReferences = maybeBind(host, host.resolveTypeReferenceDirectiveReferences);
+    compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
+    if (!compilerHost.resolveTypeReferenceDirectiveReferences && !compilerHost.resolveTypeReferenceDirectives) {
+       compilerHost.resolveTypeReferenceDirectiveReferences = resolutionCache.resolveTypeReferenceDirectiveReferences.bind(resolutionCache);
+    }
+    compilerHost.getModuleResolutionCache = host.resolveModuleNameLiterals || host.resolveModuleNames ?
         maybeBind(host, host.getModuleResolutionCache) :
         (() => resolutionCache.getModuleResolutionCache());
-    const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
+    const userProvidedResolution = !!host.resolveModuleNameLiterals || !!host.resolveTypeReferenceDirectiveReferences ||
+        !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
     // All resolutions are invalid if user provided resolutions and didnt supply hasInvalidatedResolutions
     const customHasInvalidatedResolutions = userProvidedResolution ?
         maybeBind(host, host.hasInvalidatedResolutions) || returnTrue :

@@ -424,7 +424,9 @@ import {
     RequireVariableStatement,
     ResolutionMode,
     ResolvedModuleFull,
+    ResolvedModuleWithFailedLookupLocations,
     ResolvedTypeReferenceDirective,
+    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     ReturnStatement,
     SatisfiesExpression,
     ScriptKind,
@@ -702,11 +704,11 @@ export function getFullWidth(node: Node) {
 
 /** @internal */
 export function getResolvedModule(sourceFile: SourceFile | undefined, moduleNameText: string, mode: ResolutionMode): ResolvedModuleFull | undefined {
-    return sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText, mode);
+    return sourceFile?.resolvedModules?.get(moduleNameText, mode)?.resolvedModule;
 }
 
 /** @internal */
-export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull | undefined, mode: ResolutionMode): void {
+export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleWithFailedLookupLocations, mode: ResolutionMode): void {
     if (!sourceFile.resolvedModules) {
         sourceFile.resolvedModules = createModeAwareCache();
     }
@@ -715,7 +717,7 @@ export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string
 }
 
 /** @internal */
-export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined, mode: ResolutionMode): void {
+export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, mode: ResolutionMode): void {
     if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
         sourceFile.resolvedTypeReferenceDirectiveNames = createModeAwareCache();
     }
@@ -725,7 +727,7 @@ export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeRe
 
 /** @internal */
 export function getResolvedTypeReferenceDirective(sourceFile: SourceFile | undefined, typeReferenceDirectiveName: string, mode: ResolutionMode): ResolvedTypeReferenceDirective | undefined {
-    return sourceFile?.resolvedTypeReferenceDirectiveNames?.get(typeReferenceDirectiveName, mode);
+    return sourceFile?.resolvedTypeReferenceDirectiveNames?.get(typeReferenceDirectiveName, mode)?.resolvedTypeReferenceDirective;
 }
 
 /** @internal */
@@ -736,12 +738,16 @@ export function projectReferenceIsEqualTo(oldRef: ProjectReference, newRef: Proj
 }
 
 /** @internal */
-export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleFull, newResolution: ResolvedModuleFull): boolean {
-    return oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport &&
-        oldResolution.extension === newResolution.extension &&
-        oldResolution.resolvedFileName === newResolution.resolvedFileName &&
-        oldResolution.originalPath === newResolution.originalPath &&
-        packageIdIsEqual(oldResolution.packageId, newResolution.packageId);
+export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFailedLookupLocations, newResolution: ResolvedModuleWithFailedLookupLocations): boolean {
+    return oldResolution === newResolution ||
+        oldResolution.resolvedModule === newResolution.resolvedModule ||
+        !!oldResolution.resolvedModule &&
+        !!newResolution.resolvedModule &&
+        oldResolution.resolvedModule.isExternalLibraryImport === newResolution.resolvedModule.isExternalLibraryImport &&
+        oldResolution.resolvedModule.extension === newResolution.resolvedModule.extension &&
+        oldResolution.resolvedModule.resolvedFileName === newResolution.resolvedModule.resolvedFileName &&
+        oldResolution.resolvedModule.originalPath === newResolution.resolvedModule.originalPath &&
+        packageIdIsEqual(oldResolution.resolvedModule.packageId, newResolution.resolvedModule.packageId);
 }
 
 function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
@@ -759,10 +765,14 @@ export function packageIdToString(packageId: PackageId): string {
 }
 
 /** @internal */
-export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
-    return oldResolution.resolvedFileName === newResolution.resolvedFileName
-        && oldResolution.primary === newResolution.primary
-        && oldResolution.originalPath === newResolution.originalPath;
+export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, newResolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations): boolean {
+    return oldResolution === newResolution ||
+        oldResolution.resolvedTypeReferenceDirective === newResolution.resolvedTypeReferenceDirective ||
+        !!oldResolution.resolvedTypeReferenceDirective &&
+        !!newResolution.resolvedTypeReferenceDirective &&
+        oldResolution.resolvedTypeReferenceDirective.resolvedFileName === newResolution.resolvedTypeReferenceDirective.resolvedFileName &&
+        !!oldResolution.resolvedTypeReferenceDirective.primary === !!newResolution.resolvedTypeReferenceDirective.primary &&
+        oldResolution.resolvedTypeReferenceDirective.originalPath === newResolution.resolvedTypeReferenceDirective.originalPath;
 }
 
 /** @internal */
@@ -7723,7 +7733,7 @@ export interface SymlinkCache {
      * don't include automatic type reference directives. Must be called only when
      * `hasProcessedResolutions` returns false (once per cache instance).
      */
-    setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirective | undefined> | undefined): void;
+    setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations> | undefined): void;
     /**
      * @internal
      * Whether `setSymlinksFromResolutions` has already been called.
@@ -7759,9 +7769,9 @@ export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonic
             Debug.assert(!hasProcessedResolutions);
             hasProcessedResolutions = true;
             for (const file of files) {
-                file.resolvedModules?.forEach(resolution => processResolution(this, resolution));
+                file.resolvedModules?.forEach(resolution => processResolution(this, resolution.resolvedModule));
             }
-            typeReferenceDirectives?.forEach(resolution => processResolution(this, resolution));
+            typeReferenceDirectives?.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
         },
         hasProcessedResolutions: () => hasProcessedResolutions,
     };

@@ -182,8 +182,8 @@ import {
     isTagName,
     isTextWhiteSpaceLike,
     isThisTypeParameter,
-    JsDoc,
     JSDoc,
+    JsDoc,
     JSDocContainer,
     JSDocTagInfo,
     JsonSourceFile,
@@ -252,9 +252,9 @@ import {
     RenameInfo,
     RenameInfoOptions,
     RenameLocation,
-    ResolvedModuleFull,
+    ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
-    ResolvedTypeReferenceDirective,
+    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     returnFalse,
     scanner,
     ScriptElementKind,
@@ -1025,8 +1025,8 @@ class SourceFileObject extends NodeObject implements SourceFile {
     public languageVariant!: LanguageVariant;
     public identifiers!: Map<string, string>;
     public nameTable: UnderscoreEscapedMap<number> | undefined;
-    public resolvedModules: ModeAwareCache<ResolvedModuleFull> | undefined;
-    public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirective>;
+    public resolvedModules: ModeAwareCache<ResolvedModuleWithFailedLookupLocations> | undefined;
+    public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     public imports!: readonly StringLiteralLike[];
     public moduleAugmentations!: StringLiteral[];
     private namedDeclarations: Map<string, Declaration[]> | undefined;
@@ -1663,6 +1663,8 @@ export function createLanguageService(
             getModuleResolutionCache: maybeBind(host, host.getModuleResolutionCache),
             createHash: maybeBind(host, host.createHash),
             resolveTypeReferenceDirectives: maybeBind(host, host.resolveTypeReferenceDirectives),
+            resolveModuleNameLiterals: maybeBind(host, host.resolveModuleNameLiterals),
+            resolveTypeReferenceDirectiveReferences: maybeBind(host, host.resolveTypeReferenceDirectiveReferences),
             useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
             getParsedCommandLine,
         };

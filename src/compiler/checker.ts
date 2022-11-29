@@ -1332,8 +1332,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         host.getSourceFiles().forEach(sf => {
             if (!sf.resolvedModules) return;
 
-            sf.resolvedModules.forEach(r => {
-                if (r && r.packageId) map.set(r.packageId.name, r.extension === Extension.Dts || !!map.get(r.packageId.name));
+            sf.resolvedModules.forEach(({ resolvedModule }) => {
+                if (resolvedModule?.packageId) map.set(resolvedModule.packageId.name, resolvedModule.extension === Extension.Dts || !!map.get(resolvedModule.packageId.name));
             });
         });
         return map;
@@ -44924,15 +44924,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // this variable and functions that use it are deliberately moved here from the outer scope
         // to avoid scope pollution
         const resolvedTypeReferenceDirectives = host.getResolvedTypeReferenceDirectives();
-        let fileToDirective: Map<string, [specifier: string, mode: ResolutionMode | undefined]>;
+        let fileToDirective: Map<string, [specifier: string, mode: ResolutionMode]>;
         if (resolvedTypeReferenceDirectives) {
             // populate reverse mapping: file path -> type reference directive that was resolved to this file
-            fileToDirective = new Map<string, [specifier: string, mode: ResolutionMode | undefined]>();
-            resolvedTypeReferenceDirectives.forEach((resolvedDirective, key, mode) => {
-                if (!resolvedDirective || !resolvedDirective.resolvedFileName) {
+            fileToDirective = new Map<string, [specifier: string, mode: ResolutionMode]>();
+            resolvedTypeReferenceDirectives.forEach(({ resolvedTypeReferenceDirective }, key, mode) => {
+                if (!resolvedTypeReferenceDirective?.resolvedFileName) {
                     return;
                 }
-                const file = host.getSourceFile(resolvedDirective.resolvedFileName);
+                const file = host.getSourceFile(resolvedTypeReferenceDirective.resolvedFileName);
                 if (file) {
                     // Add the transitive closure of path references loaded by this file (as long as they are not)
                     // part of an existing type reference.
@@ -45059,7 +45059,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // defined here to avoid outer scope pollution
-        function getTypeReferenceDirectivesForEntityName(node: EntityNameOrEntityNameExpression): [specifier: string, mode: ResolutionMode | undefined][] | undefined {
+        function getTypeReferenceDirectivesForEntityName(node: EntityNameOrEntityNameExpression): [specifier: string, mode: ResolutionMode][] | undefined {
             // program does not have any files with type reference directives - bail out
             if (!fileToDirective) {
                 return undefined;
@@ -45084,13 +45084,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // defined here to avoid outer scope pollution
-        function getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: ResolutionMode | undefined][] | undefined {
+        function getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: ResolutionMode][] | undefined {
             // program does not have any files with type reference directives - bail out
             if (!fileToDirective || !isSymbolFromTypeDeclarationFile(symbol)) {
                 return undefined;
             }
             // check what declarations in the symbol can contribute to the target meaning
-            let typeReferenceDirectives: [specifier: string, mode: ResolutionMode | undefined][] | undefined;
+            let typeReferenceDirectives: [specifier: string, mode: ResolutionMode][] | undefined;
             for (const decl of symbol.declarations!) {
                 // check meaning of the local symbol to see if declaration needs to be analyzed further
                 if (decl.symbol && decl.symbol.flags & meaning!) {
@@ -45141,7 +45141,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
         }
 
-        function addReferencedFilesToTypeDirective(file: SourceFile, key: string, mode: ResolutionMode | undefined) {
+        function addReferencedFilesToTypeDirective(file: SourceFile, key: string, mode: ResolutionMode) {
             if (fileToDirective.has(file.path)) return;
             fileToDirective.set(file.path, [key, mode]);
             for (const { fileName, resolutionMode } of file.referencedFiles) {
