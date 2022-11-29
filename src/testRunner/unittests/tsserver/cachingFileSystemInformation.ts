@@ -14,8 +14,8 @@ import {
     createProjectService,
     createSession,
     Logger,
-    makeSessionRequest,
     openFilesForSession,
+    TestProjectService,
 } from "./helpers";
 
 describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectSystem CachingFileSystemInformation", () => {
@@ -76,7 +76,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         }
     }
 
-    function logSemanticDiagnostics(projectService: ts.server.ProjectService, project: ts.server.Project, file: File) {
+    function logSemanticDiagnostics(projectService: TestProjectService, project: ts.server.Project, file: File) {
         const diags = project.getLanguageService().getSemanticDiagnostics(file.path);
         projectService.logger.info(`getSemanticDiagnostics:: ${file.path}:: ${diags.length}`);
         diags.forEach(d => projectService.logger.info(ts.formatDiagnostic(d, project)));
@@ -219,13 +219,15 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
         const logCacheAndClear = createLoggerTrackingHostCalls(host);
 
         // Get definitions shouldnt make host requests
-        const getDefinitionRequest = makeSessionRequest<ts.server.protocol.FileLocationRequestArgs>(ts.server.protocol.CommandTypes.Definition, {
-            file: clientFile.path,
-            position: clientFile.content.indexOf("/vessel") + 1,
-            line: undefined!, // TODO: GH#18217
-            offset: undefined! // TODO: GH#18217
+        session.executeCommandSeq<ts.server.protocol.DefinitionRequest>({
+            command: ts.server.protocol.CommandTypes.Definition,
+            arguments: {
+                file: clientFile.path,
+                position: clientFile.content.indexOf("/vessel") + 1,
+                line: undefined!, // TODO: GH#18217
+                offset: undefined! // TODO: GH#18217
+            }
         });
-        session.executeCommand(getDefinitionRequest);
         logCacheAndClear(session.logger);
 
         // Open the file should call only file exists on module directory and use cached value for parental directory

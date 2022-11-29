@@ -1,13 +1,13 @@
 Info 0    [00:00:24.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:25.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/Logger.ts",
         "projectRootPath": "/user/username/projects/myproject"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/Logger.ts]
@@ -123,7 +123,7 @@ Info 23   [00:00:53.000] request:
           "/user/username/projects/myproject/Logger.ts"
         ]
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request
@@ -263,7 +263,7 @@ FsWatchesRecursive::
 Info 27   [00:00:57.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/Logger.ts","diagnostics":[]}}
 Info 28   [00:00:58.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::
@@ -288,12 +288,12 @@ Info 31   [00:01:04.000] DirectoryWatcher:: Triggered with /user/username/projec
 Info 32   [00:01:05.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/logger.ts :: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 33   [00:01:06.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/Logger.ts"
-      }
+      },
+      "seq": 3,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/logger.ts] file was renamed from file /user/username/projects/myproject/Logger.ts
@@ -346,13 +346,13 @@ Info 35   [00:01:12.000] response:
     }
 Info 36   [00:01:13.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/logger.ts",
         "projectRootPath": "/user/username/projects/myproject"
-      }
+      },
+      "seq": 4,
+      "type": "request"
     }
 Before request
 
@@ -411,13 +411,13 @@ Info 43   [00:01:26.000] response:
     }
 Info 44   [00:01:27.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/another.ts",
         "projectRootPath": "/user/username/projects/myproject"
-      }
+      },
+      "seq": 5,
+      "type": "request"
     }
 Before request
 
@@ -492,7 +492,7 @@ Info 49   [00:01:40.000] request:
           }
         ]
       },
-      "seq": 2,
+      "seq": 6,
       "type": "request"
     }
 Before request
@@ -542,7 +542,7 @@ Info 51   [00:01:42.000] request:
           "/user/username/projects/myproject/another.ts"
         ]
       },
-      "seq": 3,
+      "seq": 7,
       "type": "request"
     }
 Before request
@@ -773,7 +773,7 @@ FsWatchesRecursive::
 Info 61   [00:01:52.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/another.ts","diagnostics":[]}}
 Info 62   [00:01:53.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":7}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::

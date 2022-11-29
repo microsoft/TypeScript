@@ -1,12 +1,12 @@
 Info 0    [00:01:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:01:18.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/project/src/common/input/keyboard.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/project/src/common/tsconfig.json]
@@ -350,12 +350,12 @@ Info 28   [00:01:54.000] response:
     }
 Info 29   [00:01:55.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/project/src/terminal.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -493,7 +493,7 @@ Info 48   [00:02:25.000] request:
         "line": 2,
         "offset": 17
       },
-      "seq": 1,
+      "seq": 3,
       "type": "request"
     }
 Before request

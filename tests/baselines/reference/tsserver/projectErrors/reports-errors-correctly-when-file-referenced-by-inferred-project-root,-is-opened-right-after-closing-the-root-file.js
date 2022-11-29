@@ -1,13 +1,13 @@
 Info 0    [00:00:33.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:34.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/src/client/app.js",
         "projectRootPath": "/user/username/projects/myproject"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/lib/lib.d.ts]
@@ -107,13 +107,13 @@ Info 18   [00:00:57.000] response:
     }
 Info 19   [00:00:58.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/test/backend/index.js",
         "projectRootPath": "/user/username/projects/myproject"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -239,7 +239,7 @@ Info 35   [00:01:22.000] request:
           "/user/username/projects/myproject/src/client/app.js"
         ]
       },
-      "seq": 1,
+      "seq": 3,
       "type": "request"
     }
 Before request
@@ -805,7 +805,7 @@ FsWatchesRecursive::
 Info 42   [00:01:29.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/client/app.js","diagnostics":[]}}
 Info 43   [00:01:30.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::
@@ -850,12 +850,12 @@ FsWatchesRecursive::
 
 Info 44   [00:01:31.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/test/backend/index.js"
-      }
+      },
+      "seq": 4,
+      "type": "request"
     }
 Before request
 
@@ -953,13 +953,13 @@ Info 50   [00:01:43.000] response:
     }
 Info 51   [00:01:44.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/src/server/utilities.js",
         "projectRootPath": "/user/username/projects/myproject"
-      }
+      },
+      "seq": 5,
+      "type": "request"
     }
 Before request
 
@@ -1093,7 +1093,7 @@ Info 71   [00:02:12.000] request:
           "/user/username/projects/myproject/src/client/app.js"
         ]
       },
-      "seq": 2,
+      "seq": 6,
       "type": "request"
     }
 Before request
@@ -1555,7 +1555,7 @@ FsWatchesRecursive::
 Info 78   [00:02:19.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/client/app.js","diagnostics":[]}}
 Info 79   [00:02:20.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":6}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::

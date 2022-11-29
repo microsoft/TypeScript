@@ -7490,7 +7490,7 @@ export interface EmitNode {
     helpers?: EmitHelper[];                  // Emit helpers for the node
     startsOnNewLine?: boolean;               // If the node should begin on a new line
     snippetElement?: SnippetElement;         // Snippet element of the node
-    typeNode?: TypeNode;                         // VariableDeclaration type
+    typeNode?: TypeNode;                     // VariableDeclaration type
 }
 
 /** @internal */
@@ -7520,38 +7520,39 @@ export const enum SnippetKind {
 export const enum EmitFlags {
     None = 0,
     SingleLine = 1 << 0,                    // The contents of this node should be emitted on a single line.
-    AdviseOnEmitNode = 1 << 1,              // The printer should invoke the onEmitNode callback when printing this node.
-    NoSubstitution = 1 << 2,                // Disables further substitution of an expression.
-    CapturesThis = 1 << 3,                  // The function captures a lexical `this`
-    NoLeadingSourceMap = 1 << 4,            // Do not emit a leading source map location for this node.
-    NoTrailingSourceMap = 1 << 5,           // Do not emit a trailing source map location for this node.
+    MultiLine = 1 << 1,
+    AdviseOnEmitNode = 1 << 2,              // The printer should invoke the onEmitNode callback when printing this node.
+    NoSubstitution = 1 << 3,                // Disables further substitution of an expression.
+    CapturesThis = 1 << 4,                  // The function captures a lexical `this`
+    NoLeadingSourceMap = 1 << 5,            // Do not emit a leading source map location for this node.
+    NoTrailingSourceMap = 1 << 6,           // Do not emit a trailing source map location for this node.
     NoSourceMap = NoLeadingSourceMap | NoTrailingSourceMap, // Do not emit a source map location for this node.
-    NoNestedSourceMaps = 1 << 6,            // Do not emit source map locations for children of this node.
-    NoTokenLeadingSourceMaps = 1 << 7,      // Do not emit leading source map location for token nodes.
-    NoTokenTrailingSourceMaps = 1 << 8,     // Do not emit trailing source map location for token nodes.
+    NoNestedSourceMaps = 1 << 7,            // Do not emit source map locations for children of this node.
+    NoTokenLeadingSourceMaps = 1 << 8,      // Do not emit leading source map location for token nodes.
+    NoTokenTrailingSourceMaps = 1 << 9,     // Do not emit trailing source map location for token nodes.
     NoTokenSourceMaps = NoTokenLeadingSourceMaps | NoTokenTrailingSourceMaps, // Do not emit source map locations for tokens of this node.
-    NoLeadingComments = 1 << 9,             // Do not emit leading comments for this node.
-    NoTrailingComments = 1 << 10,           // Do not emit trailing comments for this node.
+    NoLeadingComments = 1 << 10,            // Do not emit leading comments for this node.
+    NoTrailingComments = 1 << 11,           // Do not emit trailing comments for this node.
     NoComments = NoLeadingComments | NoTrailingComments, // Do not emit comments for this node.
-    NoNestedComments = 1 << 11,
-    HelperName = 1 << 12,                   // The Identifier refers to an *unscoped* emit helper (one that is emitted at the top of the file)
-    ExportName = 1 << 13,                   // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
-    LocalName = 1 << 14,                    // Ensure an export prefix is not added for an identifier that points to an exported declaration.
-    InternalName = 1 << 15,                 // The name is internal to an ES5 class body function.
-    Indented = 1 << 16,                     // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
-    NoIndentation = 1 << 17,                // Do not indent the node.
-    AsyncFunctionBody = 1 << 18,
-    ReuseTempVariableScope = 1 << 19,       // Reuse the existing temp variable scope during emit.
-    CustomPrologue = 1 << 20,               // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
-    NoHoisting = 1 << 21,                   // Do not hoist this declaration in --module system
-    HasEndOfDeclarationMarker = 1 << 22,    // Declaration has an associated NotEmittedStatement to mark the end of the declaration
-    Iterator = 1 << 23,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
-    NoAsciiEscaping = 1 << 24,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
-    /** @internal */ TypeScriptClassWrapper = 1 << 25, // The node is an IIFE class wrapper created by the ts transform.
-    /** @internal */ NeverApplyImportHelper = 1 << 26, // Indicates the node should never be wrapped with an import star helper (because, for example, it imports tslib itself)
-    /** @internal */ IgnoreSourceNewlines = 1 << 27,   // Overrides `printerOptions.preserveSourceNewlines` to print this node (and all descendants) with default whitespace.
-    /** @internal */ Immutable = 1 << 28,      // Indicates a node is a singleton intended to be reused in multiple locations. Any attempt to make further changes to the node will result in an error.
-    /** @internal */ IndirectCall = 1 << 29,   // Emit CallExpression as an indirect call: `(0, f)()`
+    NoNestedComments = 1 << 12,
+    HelperName = 1 << 13,                   // The Identifier refers to an *unscoped* emit helper (one that is emitted at the top of the file)
+    ExportName = 1 << 14,                   // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
+    LocalName = 1 << 15,                    // Ensure an export prefix is not added for an identifier that points to an exported declaration.
+    InternalName = 1 << 16,                 // The name is internal to an ES5 class body function.
+    Indented = 1 << 17,                     // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+    NoIndentation = 1 << 18,                // Do not indent the node.
+    AsyncFunctionBody = 1 << 19,
+    ReuseTempVariableScope = 1 << 20,       // Reuse the existing temp variable scope during emit.
+    CustomPrologue = 1 << 21,               // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
+    NoHoisting = 1 << 22,                   // Do not hoist this declaration in --module system
+    HasEndOfDeclarationMarker = 1 << 23,    // Declaration has an associated NotEmittedStatement to mark the end of the declaration
+    Iterator = 1 << 24,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
+    NoAsciiEscaping = 1 << 25,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
+    /** @internal */ TypeScriptClassWrapper = 1 << 26, // The node is an IIFE class wrapper created by the ts transform.
+    /** @internal */ NeverApplyImportHelper = 1 << 27, // Indicates the node should never be wrapped with an import star helper (because, for example, it imports tslib itself)
+    /** @internal */ IgnoreSourceNewlines = 1 << 28,   // Overrides `printerOptions.preserveSourceNewlines` to print this node (and all descendants) with default whitespace.
+    /** @internal */ Immutable = 1 << 29,      // Indicates a node is a singleton intended to be reused in multiple locations. Any attempt to make further changes to the node will result in an error.
+    /** @internal */ IndirectCall = 1 << 30,   // Emit CallExpression as an indirect call: `(0, f)()`
 }
 
 export interface EmitHelperBase {

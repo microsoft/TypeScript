@@ -1,12 +1,12 @@
 Info 0    [00:00:35.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:36.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/playground/tests.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/playground/tsconfig.json]
@@ -122,12 +122,12 @@ Info 21   [00:01:02.000] response:
     }
 Info 22   [00:01:03.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/playground/tests.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -187,12 +187,12 @@ Info 24   [00:01:09.000] response:
     }
 Info 25   [00:01:10.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/playground/tsconfig-json/tests/spec.ts"
-      }
+      },
+      "seq": 3,
+      "type": "request"
     }
 Before request
 
@@ -321,7 +321,7 @@ Info 58   [00:01:49.000] request:
         "line": 1,
         "offset": 17
       },
-      "seq": 1,
+      "seq": 4,
       "type": "request"
     }
 Before request
