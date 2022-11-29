@@ -706,6 +706,16 @@ namespace ts.tscWatch {
                     caption: "receive another change event without modifying the file",
                     change: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+                {
+                    caption: "change main.ts to empty text",
+                    change: sys => sys.writeFile("/user/username/projects/project/main.ts", ""),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                },
+                {
+                    caption: "receive another change event without modifying the file",
+                    change: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                    timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 }
             ]
         });
