@@ -372,6 +372,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
                 case "boolean":
                     return getDiagnosticText(Diagnostics.type_Colon);
                 case "list":
+                case "string | list":
                     return getDiagnosticText(Diagnostics.one_or_more_Colon);
                 default:
                     return getDiagnosticText(Diagnostics.one_of_Colon);
@@ -389,6 +390,9 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
                 case "list":
                 case "listOrElement":
                     possibleValues = getPossibleValues(option.element);
+                    break;
+                case "string | list":
+                    possibleValues = "string";
                     break;
                 case "object":
                     possibleValues = "";

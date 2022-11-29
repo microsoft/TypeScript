@@ -6960,7 +6960,7 @@ export interface CreateProgramOptions {
 /** @internal */
 export interface CommandLineOptionBase {
     name: string;
-    type: "string" | "number" | "boolean" | "object" | "list" | "listOrElement" | Map<string, number | string> ;    // a value of a primitive type, or an object literal mapping named values to actual values
+    type: "string" | "number" | "boolean" | "object" | "list" | "listOrElement" | "string | list" | Map<string, number | string> ;    // a value of a primitive type, or an object literal mapping named values to actual values
     isFilePath?: boolean;                                   // True if option value is a path or fileName
     shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
     description?: DiagnosticMessage;                        // The message describing what the command line switch does.
@@ -7030,7 +7030,7 @@ export interface TsConfigOnlyOption extends CommandLineOptionBase {
 
 /** @internal */
 export interface CommandLineOptionOfListType extends CommandLineOptionBase {
-    type: "list" | "listOrElement";
+    type: "list" | "listOrElement" | "string | list";
     element: CommandLineOptionOfCustomType | CommandLineOptionOfStringType | CommandLineOptionOfNumberType | CommandLineOptionOfBooleanType | TsConfigOnlyOption;
     listPreserveFalsyValues?: boolean;
 }
