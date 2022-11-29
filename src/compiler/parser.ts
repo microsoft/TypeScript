@@ -3,7 +3,6 @@ import {
     AccessorDeclaration,
     addRange,
     addRelatedInfo,
-    AmdDependency,
     append,
     ArrayBindingElement,
     ArrayBindingPattern,
@@ -36,7 +35,6 @@ import {
     CaseOrDefaultClause,
     CatchClause,
     CharacterCodes,
-    CheckJsDirective,
     ClassDeclaration,
     ClassElement,
     ClassExpression,
@@ -88,7 +86,6 @@ import {
     ExpressionWithTypeArguments,
     ExternalModuleReference,
     fileExtensionIsOneOf,
-    FileReference,
     findIndex,
     forEach,
     ForEachChildNodes,
@@ -287,6 +284,7 @@ import {
     PlusToken,
     PostfixUnaryExpression,
     PostfixUnaryOperator,
+    PragmaContext,
     PragmaDefinition,
     PragmaKindFlags,
     PragmaMap,
@@ -10107,19 +10105,6 @@ namespace IncrementalParser {
 /** @internal */
 export function isDeclarationFileName(fileName: string): boolean {
     return fileExtensionIsOneOf(fileName, supportedDeclarationExtensions);
-}
-
-/** @internal */
-export interface PragmaContext {
-    languageVersion: ScriptTarget;
-    pragmas?: PragmaMap;
-    checkJsDirective?: CheckJsDirective;
-    referencedFiles: FileReference[];
-    typeReferenceDirectives: FileReference[];
-    libReferenceDirectives: FileReference[];
-    amdDependencies: AmdDependency[];
-    hasNoDefaultLib?: boolean;
-    moduleName?: string;
 }
 
 function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ResolutionMode {

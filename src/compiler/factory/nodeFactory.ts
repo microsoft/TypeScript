@@ -1,4 +1,5 @@
 import {
+    __String,
     addRange,
     append,
     appendIfUnique,
@@ -108,6 +109,7 @@ import {
     GeneratedIdentifier,
     GeneratedIdentifierFlags,
     GeneratedNamePart,
+    GeneratedPrivateIdentifier,
     GetAccessorDeclaration,
     getAllUnscopedEmitHelpers,
     getBuildInfo,
@@ -167,6 +169,7 @@ import {
     isFunctionDeclaration,
     isFunctionExpression,
     isGeneratedIdentifier,
+    isGeneratedPrivateIdentifier,
     isGetAccessorDeclaration,
     isHoistedFunction,
     isHoistedVariableStatement,
@@ -346,6 +349,7 @@ import {
     ParenthesizedTypeNode,
     parseNodeFactory,
     PartiallyEmittedExpression,
+    Path,
     PlusToken,
     PostfixUnaryExpression,
     PostfixUnaryOperator,
@@ -371,6 +375,7 @@ import {
     QuestionDotToken,
     QuestionToken,
     ReadonlyKeyword,
+    RedirectInfo,
     reduceLeft,
     RegularExpressionLiteral,
     RestTypeNode,
@@ -914,6 +919,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         updateEnumMember,
         createSourceFile,
         updateSourceFile,
+        createRedirectedSourceFile,
         createBundle,
         updateBundle,
         createUnparsedSource,
@@ -1141,23 +1147,16 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // Identifiers
     //
 
-    function createBaseIdentifier(text: string, originalKeywordKind: SyntaxKind | undefined) {
-        if (originalKeywordKind === undefined && text) {
-            originalKeywordKind = stringToToken(text);
-        }
-        if (originalKeywordKind === SyntaxKind.Identifier) {
-            originalKeywordKind = undefined;
-        }
+    function createBaseIdentifier(escapedText: __String, originalKeywordKind: SyntaxKind | undefined) {
         const node = baseFactory.createBaseIdentifierNode(SyntaxKind.Identifier) as Mutable<Identifier>;
         node.originalKeywordKind = originalKeywordKind;
-        node.escapedText = escapeLeadingUnderscores(text);
-
-        node.flowNode = undefined; // initialized by binder (FlowContainer)
+        node.escapedText = escapedText;
+        node.autoGenerateFlags = GeneratedIdentifierFlags.None;
         return node;
     }
 
     function createBaseGeneratedIdentifier(text: string, autoGenerateFlags: GeneratedIdentifierFlags, prefix: string | GeneratedNamePart | undefined, suffix: string | undefined) {
-        const node = createBaseIdentifier(text, /*originalKeywordKind*/ undefined) as Mutable<GeneratedIdentifier>;
+        const node = createBaseIdentifier(escapeLeadingUnderscores(text), /*originalKeywordKind*/ undefined) as Mutable<GeneratedIdentifier>;
         node.autoGenerateFlags = autoGenerateFlags;
         node.autoGenerateId = nextAutoGenerateId;
         node.autoGeneratePrefix = prefix;
@@ -1168,22 +1167,29 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     // @api
     function createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind, hasExtendedUnicodeEscape?: boolean): Identifier {
-        const node = createBaseIdentifier(text, originalKeywordKind);
-        node.typeArguments = undefined;
-        if (typeArguments) {
-            // NOTE: we do not include transform flags of typeArguments in an identifier as they do not contribute to transformations
-            node.typeArguments = createNodeArray(typeArguments);
+        if (originalKeywordKind === undefined && text) {
+            originalKeywordKind = stringToToken(text);
         }
+        if (originalKeywordKind === SyntaxKind.Identifier) {
+            originalKeywordKind = undefined;
+        }
+
+        const node = createBaseIdentifier(escapeLeadingUnderscores(text), originalKeywordKind);
+        node.typeArguments = asNodeArray(typeArguments);
+        node.hasExtendedUnicodeEscape = hasExtendedUnicodeEscape;
+        node.jsDoc = undefined; // initialized by parser (JsDocContainer)
+        node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
+        node.flowNode = undefined; // initialized by binder (FlowContainer)
+        node.symbol = undefined!; // initialized by checker
+
+        // NOTE: we do not include transform flags of typeArguments in an identifier as they do not contribute to transformations
         if (node.originalKeywordKind === SyntaxKind.AwaitKeyword) {
             node.transformFlags |= TransformFlags.ContainsPossibleTopLevelAwait;
         }
-        if (hasExtendedUnicodeEscape) {
-            node.hasExtendedUnicodeEscape = hasExtendedUnicodeEscape;
+        if (node.hasExtendedUnicodeEscape) {
             node.transformFlags |= TransformFlags.ContainsES2015;
         }
 
-        node.jsDoc = undefined; // initialized by parser (JsDocContainer)
-        node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
         return node;
     }
 
@@ -1234,9 +1240,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return name;
     }
 
-    function createBasePrivateIdentifier(text: string) {
+    function createBasePrivateIdentifier(escapedText: __String) {
         const node = baseFactory.createBasePrivateIdentifierNode(SyntaxKind.PrivateIdentifier) as Mutable<PrivateIdentifier>;
-        node.escapedText = escapeLeadingUnderscores(text);
+        node.escapedText = escapedText;
+        node.autoGenerateFlags = GeneratedIdentifierFlags.None;
         node.transformFlags |= TransformFlags.ContainsClassFields;
         return node;
     }
@@ -1244,11 +1251,11 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     // @api
     function createPrivateIdentifier(text: string): PrivateIdentifier {
         if (!startsWith(text, "#")) Debug.fail("First character of private identifier must be #: " + text);
-        return createBasePrivateIdentifier(text);
+        return createBasePrivateIdentifier(escapeLeadingUnderscores(text));
     }
 
     function createBaseGeneratedPrivateIdentifier(text: string, autoGenerateFlags: GeneratedIdentifierFlags, prefix: string | GeneratedNamePart | undefined, suffix: string | undefined) {
-        const node = createBasePrivateIdentifier(text);
+        const node = createBasePrivateIdentifier(escapeLeadingUnderscores(text));
         node.autoGenerateFlags = autoGenerateFlags;
         node.autoGenerateId = nextAutoGenerateId;
         node.autoGeneratePrefix = prefix;
@@ -1472,6 +1479,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.default = defaultType;
         node.transformFlags = TransformFlags.ContainsTypeScript;
 
+        node.expression = undefined; // initialized by parser to report grammar errors
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
         node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
         return node;
@@ -2093,6 +2101,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.type = type!; // TODO(rbuckton): We mark this as required in IndexSignatureDeclaration, but it looks like the parser allows it to be elided.
         node.transformFlags = TransformFlags.ContainsTypeScript;
 
+        node.illegalDecorators = undefined; // initialized by parser to report grammar errors
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
         node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
         node.locals = undefined; // initialized by binder (LocalsContainer)
@@ -2194,6 +2203,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
         node.locals = undefined; // initialized by binder (LocalsContainer)
         node.nextContainer = undefined; // initialized by binder (LocalsContainer)
+        node.typeArguments = undefined; // used in quick info
         return node;
     }
 
@@ -4104,6 +4114,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
         node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
         node.flowNode = undefined; // initialized by binder (FlowContainer)
+        node.possiblyExhaustive = false; // initialized by binder
         return node;
     }
 
@@ -6009,13 +6020,17 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.statements = createNodeArray(statements);
         node.endOfFileToken = endOfFileToken;
         node.flags |= flags;
-        node.fileName = "";
         node.text = "";
+        node.fileName = "";
+        node.path = "" as Path;
+        node.resolvedPath = "" as Path;
+        node.originalFileName = "";
         node.languageVersion = 0;
         node.languageVariant = 0;
         node.scriptKind = 0;
         node.isDeclarationFile = false;
         node.hasNoDefaultLib = false;
+
         node.transformFlags |=
             propagateChildrenFlags(node.statements) |
             propagateChildFlags(node.endOfFileToken);
@@ -6023,6 +6038,84 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.locals = undefined; // initialized by binder (LocalsContainer)
         node.nextContainer = undefined; // initialized by binder (LocalsContainer)
         node.endFlowNode = undefined;
+
+        node.nodeCount = 0;
+        node.identifierCount = 0;
+        node.symbolCount = 0;
+        node.parseDiagnostics = undefined!;
+        node.bindDiagnostics = undefined!;
+        node.bindSuggestionDiagnostics = undefined;
+        node.lineMap = undefined!;
+        node.externalModuleIndicator = undefined;
+        node.setExternalModuleIndicator = undefined;
+        node.pragmas = undefined!;
+        node.checkJsDirective = undefined;
+        node.referencedFiles = undefined!;
+        node.typeReferenceDirectives = undefined!;
+        node.libReferenceDirectives = undefined!;
+        node.amdDependencies = undefined!;
+        node.commentDirectives = undefined;
+        node.identifiers = undefined!;
+        node.packageJsonLocations = undefined;
+        node.packageJsonScope = undefined;
+        node.imports = undefined!;
+        node.moduleAugmentations = undefined!;
+        node.ambientModuleNames = undefined!;
+        node.resolvedModules = undefined;
+        node.classifiableNames = undefined;
+        node.impliedNodeFormat = undefined;
+        return node;
+    }
+
+    function createRedirectedSourceFile(redirectInfo: RedirectInfo) {
+        const node: SourceFile = Object.create(redirectInfo.redirectTarget);
+        Object.defineProperties(node, {
+            id: {
+                get(this: SourceFile) { return this.redirectInfo!.redirectTarget.id; },
+                set(this: SourceFile, value: SourceFile["id"]) { this.redirectInfo!.redirectTarget.id = value; },
+            },
+            symbol: {
+                get(this: SourceFile) { return this.redirectInfo!.redirectTarget.symbol; },
+                set(this: SourceFile, value: SourceFile["symbol"]) { this.redirectInfo!.redirectTarget.symbol = value; },
+            },
+        });
+        node.redirectInfo = redirectInfo;
+        return node;
+    }
+
+    function cloneRedirectedSourceFile(source: SourceFile) {
+        const node = createRedirectedSourceFile(source.redirectInfo!) as Mutable<SourceFile>;
+        node.flags |= source.flags & ~NodeFlags.Synthesized;
+        node.fileName = source.fileName;
+        node.path = source.path;
+        node.resolvedPath = source.resolvedPath;
+        node.originalFileName = source.originalFileName;
+        node.packageJsonLocations = source.packageJsonLocations;
+        node.packageJsonScope = source.packageJsonScope;
+        node.emitNode = undefined;
+        return node;
+    }
+
+    function cloneSourceFileWorker(source: SourceFile) {
+        // TODO: explicit property assignments instead of for..in
+        const node = baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile) as Mutable<SourceFile>;
+        node.flags |= source.flags & ~NodeFlags.Synthesized;
+        for (const p in source) {
+            if (hasProperty(node, p) || !hasProperty(source, p)) {
+                continue;
+            }
+            if (p === "emitNode") {
+                node.emitNode = undefined;
+                continue;
+            }
+            (node as any)[p] = (source as any)[p];
+        }
+        return node;
+    }
+
+    function cloneSourceFile(source: SourceFile) {
+        const node = source.redirectInfo ? cloneRedirectedSourceFile(source) : cloneSourceFileWorker(source);
+        setOriginalNode(node, source);
         return node;
     }
 
@@ -6035,14 +6128,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         hasNoDefaultLib: boolean,
         libReferences: readonly FileReference[]
     ) {
-        const node = (source.redirectInfo ? Object.create(source.redirectInfo.redirectTarget) : baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile)) as Mutable<SourceFile>;
-        for (const p in source) {
-            if (p === "emitNode" || hasProperty(node, p) || !hasProperty(source, p)) continue;
-            (node as any)[p] = (source as any)[p];
-        }
-        node.flags |= source.flags;
+        const node = cloneSourceFile(source);
         node.statements = createNodeArray(statements);
-        node.endOfFileToken = source.endOfFileToken;
         node.isDeclarationFile = isDeclarationFile;
         node.referencedFiles = referencedFiles;
         node.typeReferenceDirectives = typeReferences;
@@ -6051,7 +6138,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.transformFlags =
             propagateChildrenFlags(node.statements) |
             propagateChildFlags(node.endOfFileToken);
-        node.impliedNodeFormat = source.impliedNodeFormat;
         return node;
     }
 
@@ -6080,6 +6166,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const node = createBaseNode<Bundle>(SyntaxKind.Bundle);
         node.prepends = prepends;
         node.sourceFiles = sourceFiles;
+        node.syntheticFileReferences = undefined;
+        node.syntheticTypeReferences = undefined;
+        node.syntheticLibReferences = undefined;
+        node.hasNoDefaultLib = undefined;
         return node;
     }
 
@@ -6278,6 +6368,52 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             : node;
     }
 
+    function cloneGeneratedIdentifier(node: GeneratedIdentifier): GeneratedIdentifier {
+        const clone = createBaseIdentifier(node.escapedText, /*originalKeywordKind*/ undefined) as Mutable<GeneratedIdentifier>;
+        clone.flags |= node.flags & ~NodeFlags.Synthesized;
+        clone.autoGenerateFlags = node.autoGenerateFlags;
+        clone.autoGenerateId = node.autoGenerateId;
+        clone.autoGeneratePrefix = node.autoGeneratePrefix;
+        clone.autoGenerateSuffix = node.autoGenerateSuffix;
+        clone.transformFlags = node.transformFlags;
+        setOriginalNode(clone, node);
+        return clone;
+    }
+
+    function cloneIdentifier(node: Identifier): Identifier {
+        const clone = createBaseIdentifier(node.escapedText, node.originalKeywordKind);
+        clone.flags |= node.flags & ~NodeFlags.Synthesized;
+        clone.typeArguments = node.typeArguments;
+        clone.hasExtendedUnicodeEscape = node.hasExtendedUnicodeEscape;
+        clone.jsDoc = node.jsDoc;
+        clone.jsDocCache = node.jsDocCache;
+        clone.flowNode = node.flowNode;
+        clone.symbol = node.symbol;
+        clone.transformFlags = node.transformFlags;
+        setOriginalNode(clone, node);
+        return clone;
+    }
+
+    function cloneGeneratedPrivateIdentifier(node: GeneratedPrivateIdentifier): GeneratedPrivateIdentifier {
+        const clone = createBasePrivateIdentifier(node.escapedText) as Mutable<GeneratedPrivateIdentifier>;
+        clone.flags |= node.flags & ~NodeFlags.Synthesized;
+        clone.autoGenerateFlags = node.autoGenerateFlags;
+        clone.autoGenerateId = node.autoGenerateId;
+        clone.autoGeneratePrefix = node.autoGeneratePrefix;
+        clone.autoGenerateSuffix = node.autoGenerateSuffix;
+        clone.transformFlags = node.transformFlags;
+        setOriginalNode(clone, node);
+        return clone;
+    }
+
+    function clonePrivateIdentifier(node: PrivateIdentifier): PrivateIdentifier {
+        const clone = createBasePrivateIdentifier(node.escapedText);
+        clone.flags |= node.flags & ~NodeFlags.Synthesized;
+        clone.transformFlags = node.transformFlags;
+        setOriginalNode(clone, node);
+        return clone;
+    }
+
     // @api
     function cloneNode<T extends Node | undefined>(node: T): T;
     function cloneNode<T extends Node>(node: T) {
@@ -6287,11 +6423,23 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         if (node === undefined) {
             return node;
         }
+        if (isSourceFile(node)) {
+            return cloneSourceFile(node) as T & SourceFile;
+        }
+        if (isGeneratedIdentifier(node)) {
+            return cloneGeneratedIdentifier(node) as T & GeneratedIdentifier;
+        }
+        if (isIdentifier(node)) {
+            return cloneIdentifier(node) as T & Identifier;
+        }
+        if (isGeneratedPrivateIdentifier(node)) {
+            return cloneGeneratedPrivateIdentifier(node) as T & GeneratedPrivateIdentifier;
+        }
+        if (isPrivateIdentifier(node)) {
+            return clonePrivateIdentifier(node) as T & PrivateIdentifier;
+        }
 
         const clone =
-            isSourceFile(node) ? baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile) as T :
-            isIdentifier(node) ? baseFactory.createBaseIdentifierNode(SyntaxKind.Identifier) as T :
-            isPrivateIdentifier(node) ? baseFactory.createBasePrivateIdentifierNode(SyntaxKind.PrivateIdentifier) as T :
             !isNodeKind(node.kind) ? baseFactory.createBaseTokenNode(node.kind) as T :
             baseFactory.createBaseNode(node.kind) as T;
 

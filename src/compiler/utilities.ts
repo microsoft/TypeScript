@@ -7310,6 +7310,7 @@ function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) 
     this.flags = NodeFlags.None;
     this.transformFlags = TransformFlags.None;
     this.parent = undefined!;
+    this.emitNode = undefined;
 }
 
 function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
@@ -7321,6 +7322,7 @@ function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: num
     this.transformFlags = TransformFlags.None;
     this.parent = undefined!;
     this.original = undefined;
+    this.emitNode = undefined;
     (this as Identifier).flowNode = undefined;
 }
 

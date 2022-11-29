@@ -4326,7 +4326,7 @@ export interface SourceFile extends Declaration, LocalsContainer {
     // JS identifier-declarations that are intended to merge with globals
     /** @internal */ jsGlobalAugmentations?: SymbolTable;
 
-    /** @internal */ identifiers: Map<string, string>; // Map from a string to an interned string
+    /** @internal */ identifiers: ReadonlyMap<string, string>; // Map from a string to an interned string
     /** @internal */ nodeCount: number;
     /** @internal */ identifierCount: number;
     /** @internal */ symbolCount: number;
@@ -4372,6 +4372,31 @@ export interface SourceFile extends Declaration, LocalsContainer {
     /** @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     /** @internal */ endFlowNode?: FlowNode;
 }
+
+/** @internal */
+export interface ReadonlyPragmaContext {
+    languageVersion: ScriptTarget;
+    pragmas?: ReadonlyPragmaMap;
+    checkJsDirective?: CheckJsDirective;
+    referencedFiles: readonly FileReference[];
+    typeReferenceDirectives: readonly FileReference[];
+    libReferenceDirectives: readonly FileReference[];
+    amdDependencies: readonly AmdDependency[];
+    hasNoDefaultLib?: boolean;
+    moduleName?: string;
+}
+
+/** @internal */
+export interface PragmaContext extends ReadonlyPragmaContext {
+    pragmas?: PragmaMap;
+    referencedFiles: FileReference[];
+    typeReferenceDirectives: FileReference[];
+    libReferenceDirectives: FileReference[];
+    amdDependencies: AmdDependency[];
+}
+
+/** @internal */
+export interface SourceFile extends ReadonlyPragmaContext {}
 
 /** @internal */
 export interface CommentDirective {
@@ -8571,6 +8596,8 @@ export interface NodeFactory {
 
     createSourceFile(statements: readonly Statement[], endOfFileToken: EndOfFileToken, flags: NodeFlags): SourceFile;
     updateSourceFile(node: SourceFile, statements: readonly Statement[], isDeclarationFile?: boolean, referencedFiles?: readonly FileReference[], typeReferences?: readonly FileReference[], hasNoDefaultLib?: boolean, libReferences?: readonly FileReference[]): SourceFile;
+
+    /** @internal */ createRedirectedSourceFile(redirectInfo: RedirectInfo): SourceFile;
 
     /** @internal */ createUnparsedSource(prologues: readonly UnparsedPrologue[], syntheticReferences: readonly UnparsedSyntheticReference[] | undefined, texts: readonly UnparsedSourceText[]): UnparsedSource;
     /** @internal */ createUnparsedPrologue(data?: string): UnparsedPrologue;
