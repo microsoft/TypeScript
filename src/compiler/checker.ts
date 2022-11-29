@@ -2402,10 +2402,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (sourceSymbolFile && targetSymbolFile && amalgamatedDuplicates && !isEitherEnum && sourceSymbolFile !== targetSymbolFile) {
                 const firstFile = comparePaths(sourceSymbolFile.path, targetSymbolFile.path) === Comparison.LessThan ? sourceSymbolFile : targetSymbolFile;
                 const secondFile = firstFile === sourceSymbolFile ? targetSymbolFile : sourceSymbolFile;
-                const filesDuplicates = getOrUpdate(amalgamatedDuplicates, `${firstFile.path}|${secondFile.path}`, () =>
-                    ({ firstFile, secondFile, conflictingSymbols: new Map() } as DuplicateInfoForFiles));
-                const conflictingSymbolInfo = getOrUpdate(filesDuplicates.conflictingSymbols, symbolName, () =>
-                    ({ isBlockScoped: isEitherBlockScoped, firstFileLocations: [], secondFileLocations: [] } as DuplicateInfoForSymbol));
+                const filesDuplicates = getOrUpdate(amalgamatedDuplicates, `${firstFile.path}|${secondFile.path}`, (): DuplicateInfoForFiles =>
+                    ({ firstFile, secondFile, conflictingSymbols: new Map() }));
+                const conflictingSymbolInfo = getOrUpdate(filesDuplicates.conflictingSymbols, symbolName, (): DuplicateInfoForSymbol =>
+                    ({ isBlockScoped: isEitherBlockScoped, firstFileLocations: [], secondFileLocations: [] }));
                 if (!isSourcePlainJs) addDuplicateLocations(conflictingSymbolInfo.firstFileLocations, source);
                 if (!isTargetPlainJs) addDuplicateLocations(conflictingSymbolInfo.secondFileLocations, target);
             }
@@ -5062,7 +5062,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     interface ExportCollisionTracker {
         specifierText: string;
-        exportsWithDuplicate: ExportDeclaration[];
+        exportsWithDuplicate?: ExportDeclaration[];
     }
 
     type ExportCollisionTrackerTable = UnderscoreEscapedMap<ExportCollisionTracker>;
@@ -5082,7 +5082,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (lookupTable && exportNode) {
                     lookupTable.set(id, {
                         specifierText: getTextOfNode(exportNode.moduleSpecifier!)
-                    } as ExportCollisionTracker);
+                    });
                 }
             }
             else if (lookupTable && exportNode && targetSymbol && resolveSymbol(targetSymbol) !== resolveSymbol(sourceSymbol)) {
