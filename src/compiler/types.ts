@@ -5953,10 +5953,17 @@ export interface NodeLinks {
     isExhaustive?: boolean | 0;         // Is node an exhaustive switch statement (0 indicates in-process resolution)
     skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
     declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
-    serializedTypes?: Map<string, TypeNode & {truncating?: boolean, addedLength: number}>; // Collection of types serialized at this location
+    serializedTypes?: Map<string, SerializedTypeEntry>; // Collection of types serialized at this location
 
     contextualType?: Type;              // Used to temporarily assign a contextual type during overload resolution
     inferenceContext?: InferenceContext; // Inference context for contextual type
+}
+
+/** @internal */
+export interface SerializedTypeEntry {
+    node: TypeNode;
+    truncating?: boolean;
+    addedLength: number;
 }
 
 export const enum TypeFlags {

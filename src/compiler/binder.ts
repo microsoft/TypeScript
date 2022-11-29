@@ -2348,8 +2348,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         const saveCurrentFlow = currentFlow;
         for (const typeAlias of delayedTypeAliases) {
             const host = typeAlias.parent.parent;
-            container = findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) as IsContainer | undefined || file;
-            blockScopeContainer = getEnclosingBlockScopeContainer(host) as IsBlockScopedContainer | undefined || file;
+            container = (findAncestor(host.parent, n => !!(getContainerFlags(n) & ContainerFlags.IsContainer)) as IsContainer | undefined) || file;
+            blockScopeContainer = (getEnclosingBlockScopeContainer(host) as IsBlockScopedContainer | undefined) || file;
             currentFlow = initFlowNode({ flags: FlowFlags.Start });
             parent = typeAlias;
             bind(typeAlias.typeExpression);

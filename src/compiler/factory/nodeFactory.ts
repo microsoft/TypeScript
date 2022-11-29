@@ -2319,9 +2319,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const node = createBaseDeclaration<TypeLiteralNode>(SyntaxKind.TypeLiteral);
         node.members = createNodeArray(members);
         node.transformFlags = TransformFlags.ContainsTypeScript;
-
-        // node.locals = undefined; // initialized by binder (LocalsContainer)
-        // node.nextContainer = undefined; // initialized by binder (LocalsContainer)
         return node;
     }
 
@@ -2749,8 +2746,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
         node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
-        // node.locals = undefined; // initialized by binder (LocalsContainer)
-        // node.nextContainer = undefined; // initialized by binder (LocalsContainer)
         return node;
     }
 
@@ -3585,8 +3580,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
         node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
-        // node.locals = undefined; // initialized by binder (LocalsContainer)
-        // node.nextContainer = undefined; // initialized by binder (LocalsContainer)
         return node;
     }
 
@@ -4373,8 +4366,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
         node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
-        // node.locals = undefined; // initialized by binder (LocalsContainer)
-        // node.nextContainer = undefined; // initialized by binder (LocalsContainer)
         return node;
     }
 
@@ -4415,8 +4406,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.illegalDecorators = undefined; // initialized by parser for grammar errors
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
         node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
-        // node.locals = undefined; // initialized by binder (LocalsContainer)
-        // node.nextContainer = undefined; // initialized by binder (LocalsContainer)
         return node;
     }
 
@@ -4510,8 +4499,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.illegalDecorators = undefined; // initialized by parser for grammar errors
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
         node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
-        // node.locals = undefined; // initialized by binder (LocalsContainer)
-        // node.nextContainer = undefined; // initialized by binder (LocalsContainer)
         return node;
     }
 
@@ -5142,8 +5129,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         const node = createBaseDeclaration<JSDocTypeLiteral>(SyntaxKind.JSDocTypeLiteral);
         node.jsDocPropertyTags = asNodeArray(propertyTags);
         node.isArrayType = isArrayType;
-        // node.locals = undefined; // initialized by binder (LocalsContainer)
-        // node.nextContainer = undefined; // initialized by binder (LocalsContainer)
         return node;
     }
 
@@ -5738,8 +5723,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.transformFlags |=
             propagateChildrenFlags(node.properties) |
             TransformFlags.ContainsJsx;
-        // node.locals = undefined; // initialized by binder (LocalsContainer)
-        // node.nextContainer = undefined; // initialized by binder (LocalsContainer)
         return node;
     }
 
@@ -6097,7 +6080,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     function cloneSourceFileWorker(source: SourceFile) {
-        // TODO: explicit property assignments instead of for..in
+        // TODO: This mechanism for cloning results in megamorphic property reads and writes. In future perf-related
+        //       work, we should consider switching explicit property assignments instead of using `for..in`.
         const node = baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile) as Mutable<SourceFile>;
         node.flags |= source.flags & ~NodeFlags.Synthesized;
         for (const p in source) {

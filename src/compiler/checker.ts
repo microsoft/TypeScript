@@ -57,8 +57,8 @@ import {
     canHaveJSDoc,
     canHaveLocals,
     canHaveModifiers,
-    canUsePropertyAccess,
     canHaveSymbol,
+    canUsePropertyAccess,
     cartesianProduct,
     CaseBlock,
     CaseClause,
@@ -6597,7 +6597,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         context.truncating = true;
                     }
                     context.approximateLength += cachedResult.addedLength;
-                    return deepCloneOrReuseNode(cachedResult) as TypeNode as T;
+                    return deepCloneOrReuseNode(cachedResult.node) as T;
                 }
 
                 let depth: number | undefined;
@@ -6613,11 +6613,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const result = transform(type);
                 const addedLength = context.approximateLength - startLength;
                 if (!context.reportedDiagnostic && !context.encounteredError) {
-                    if (context.truncating) {
-                        (result as any).truncating = true;
-                    }
-                    (result as any).addedLength = addedLength;
-                    links?.serializedTypes?.set(key, result as TypeNode as TypeNode & {truncating?: boolean, addedLength: number});
+                    links?.serializedTypes?.set(key, { node: result, truncating: context.truncating, addedLength });
                 }
                 context.visitedTypes.delete(typeId);
                 if (id) {

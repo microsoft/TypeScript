@@ -1580,7 +1580,7 @@ namespace Parser {
         // Prime the scanner.
         nextToken();
         const pos = getNodePos();
-        let statements, endOfFileToken: EndOfFileToken;
+        let statements, endOfFileToken;
         if (token() === SyntaxKind.EndOfFileToken) {
             statements = createNodeArray([], pos, pos);
             endOfFileToken = parseTokenNode<EndOfFileToken>();
