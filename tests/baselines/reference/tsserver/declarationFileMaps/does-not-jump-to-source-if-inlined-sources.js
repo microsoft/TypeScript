@@ -54,9 +54,9 @@ Info 3    [00:00:34.000] For info: /user/user.ts :: No config files found.
 Info 4    [00:00:35.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 5    [00:00:36.000] FileWatcher:: Added:: WatchInfo: /a/bin/a.d.ts 500 undefined WatchType: Closed Script info
 Info 6    [00:00:37.000] FileWatcher:: Added:: WatchInfo: /b/bin/b.d.ts 500 undefined WatchType: Closed Script info
-Info 7    [00:00:38.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 8    [00:00:39.000] DirectoryWatcher:: Added:: WatchInfo: /user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 9    [00:00:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 7    [00:00:38.000] DirectoryWatcher:: Added:: WatchInfo: /user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 8    [00:00:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 9    [00:00:40.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info 10   [00:00:41.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 11   [00:00:42.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 12   [00:00:43.000] 	Files (3)
@@ -83,9 +83,9 @@ Info 14   [00:00:50.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -114,9 +114,9 @@ Info 15   [00:00:52.000] request:
 Before request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -131,9 +131,9 @@ Info 16   [00:00:53.000] FileWatcher:: Added:: WatchInfo: /a/bin/a.d.ts.map 500 
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -197,9 +197,9 @@ Info 18   [00:00:55.000] request:
 Before request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -217,9 +217,9 @@ Info 20   [00:00:57.000] FileWatcher:: Added:: WatchInfo: /b/b.ts 500 undefined 
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -285,9 +285,9 @@ Info 22   [00:00:59.000] request:
 Before request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -313,9 +313,9 @@ Info 24   [00:01:04.000] Open files:
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -350,9 +350,9 @@ Info 25   [00:01:06.000] request:
 Before request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -374,9 +374,9 @@ FsWatchesRecursive::
 Info 26   [00:01:07.000] Search path: /dummy
 Info 27   [00:01:08.000] For info: /dummy/dummy.ts :: No config files found.
 Info 28   [00:01:09.000] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
-Info 29   [00:01:10.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
-Info 30   [00:01:11.000] DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
-Info 31   [00:01:12.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info 29   [00:01:10.000] DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info 30   [00:01:11.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /dummy/node_modules/@types 1 undefined Project: /dev/null/inferredProject2* WatchType: Type roots
+Info 31   [00:01:12.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
 Info 32   [00:01:13.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 33   [00:01:14.000] Project '/dev/null/inferredProject2*' (Inferred)
 Info 34   [00:01:15.000] 	Files (1)

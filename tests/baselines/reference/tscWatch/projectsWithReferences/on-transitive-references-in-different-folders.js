@@ -290,8 +290,6 @@ FsWatches::
   {}
 /user/username/projects/transitivereferences/c/index.ts:
   {}
-/user/username/projects/transitivereferences:
-  {}
 /user/username/projects/transitivereferences/b/index.d.ts:
   {}
 /user/username/projects/transitivereferences/a/index.d.ts:
@@ -300,13 +298,15 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
+/user/username/projects/transitivereferences:
+  {}
 
 FsWatchesRecursive::
+/user/username/projects/transitivereferences/a:
+  {}
 /user/username/projects/transitivereferences/b:
   {}
 /user/username/projects/transitivereferences/refs:
-  {}
-/user/username/projects/transitivereferences/a:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -474,8 +474,6 @@ FsWatches::
   {}
 /user/username/projects/transitivereferences/c/index.ts:
   {}
-/user/username/projects/transitivereferences:
-  {}
 /user/username/projects/transitivereferences/b/index.d.ts:
   {}
 /user/username/projects/transitivereferences/a/index.d.ts:
@@ -484,13 +482,15 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
+/user/username/projects/transitivereferences:
+  {}
 
 FsWatchesRecursive::
+/user/username/projects/transitivereferences/a:
+  {}
 /user/username/projects/transitivereferences/b:
   {}
 /user/username/projects/transitivereferences/refs:
-  {}
-/user/username/projects/transitivereferences/a:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -612,17 +612,17 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitivereferences:
-  {}
 /user/username/projects/transitivereferences/nrefs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences:
   {}
 
 FsWatchesRecursive::
+/user/username/projects/transitivereferences/a:
+  {}
 /user/username/projects/transitivereferences/b:
   {}
 /user/username/projects/transitivereferences/nrefs:
-  {}
-/user/username/projects/transitivereferences/a:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -739,17 +739,17 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitivereferences:
-  {}
 /user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences:
   {}
 
 FsWatchesRecursive::
+/user/username/projects/transitivereferences/a:
+  {}
 /user/username/projects/transitivereferences/b:
   {}
 /user/username/projects/transitivereferences/refs:
-  {}
-/user/username/projects/transitivereferences/a:
   {}
 
 exitCode:: ExitStatus.undefined
@@ -845,9 +845,9 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitivereferences:
-  {}
 /user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences:
   {}
 /user/username/projects/transitivereferences/nrefs/a.d.ts:
   {}
@@ -944,9 +944,9 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitivereferences:
-  {}
 /user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences:
   {}
 
 FsWatchesRecursive::
@@ -1046,9 +1046,9 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitivereferences:
-  {}
 /user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences:
   {}
 /user/username/projects/transitivereferences/b/index.ts:
   {}
@@ -1152,9 +1152,9 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitivereferences:
-  {}
 /user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences:
   {}
 /user/username/projects/transitivereferences/a/tsconfig.json:
   {}
@@ -1260,9 +1260,9 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitivereferences:
-  {}
 /user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences:
   {}
 /user/username/projects/transitivereferences/a/tsconfig.json:
   {}
@@ -1368,9 +1368,9 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/transitivereferences:
-  {}
 /user/username/projects/transitivereferences/refs/a.d.ts:
+  {}
+/user/username/projects/transitivereferences:
   {}
 /user/username/projects/transitivereferences/a/tsconfig.json:
   {}

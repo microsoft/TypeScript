@@ -57,9 +57,11 @@ Info 7    [00:00:24.000] FileWatcher:: Added:: WatchInfo: /a/extremlylarge.d.ts 
 Info 8    [00:00:25.000] FileWatcher:: Added:: WatchInfo: /a/largefile.js 500 undefined WatchType: Closed Script info
 Info 9    [00:00:26.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info 10   [00:00:27.000] Starting updateGraphWorker: Project: /a/jsconfig.json
-Info 11   [00:00:28.000] Finishing updateGraphWorker: Project: /a/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 12   [00:00:29.000] Project '/a/jsconfig.json' (Configured)
-Info 13   [00:00:30.000] 	Files (2)
+Info 11   [00:00:28.000] DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/jsconfig.json WatchType: Type roots
+Info 12   [00:00:29.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/node_modules/@types 1 undefined Project: /a/jsconfig.json WatchType: Type roots
+Info 13   [00:00:30.000] Finishing updateGraphWorker: Project: /a/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 14   [00:00:31.000] Project '/a/jsconfig.json' (Configured)
+Info 15   [00:00:32.000] 	Files (2)
 	/a/lib/lib.d.ts
 	/a/app.js
 
@@ -69,13 +71,13 @@ Info 13   [00:00:30.000] 	Files (2)
 	app.js
 	  Matched by default include pattern '**/*'
 
-Info 14   [00:00:31.000] -----------------------------------------------
-Info 15   [00:00:32.000] Project '/a/jsconfig.json' (Configured)
-Info 15   [00:00:33.000] 	Files (2)
+Info 16   [00:00:33.000] -----------------------------------------------
+Info 17   [00:00:34.000] Project '/a/jsconfig.json' (Configured)
+Info 17   [00:00:35.000] 	Files (2)
 
-Info 15   [00:00:34.000] -----------------------------------------------
-Info 15   [00:00:35.000] Open files: 
-Info 15   [00:00:36.000] 	FileName: /a/app.js ProjectRootPath: undefined
-Info 15   [00:00:37.000] 		Projects: /a/jsconfig.json
-Info 15   [00:00:38.000] languageServiceEnabled: false
-Info 16   [00:00:39.000] lastFileExceededProgramSize: /a/largefile.js
+Info 17   [00:00:36.000] -----------------------------------------------
+Info 17   [00:00:37.000] Open files: 
+Info 17   [00:00:38.000] 	FileName: /a/app.js ProjectRootPath: undefined
+Info 17   [00:00:39.000] 		Projects: /a/jsconfig.json
+Info 17   [00:00:40.000] languageServiceEnabled: false
+Info 18   [00:00:41.000] lastFileExceededProgramSize: /a/largefile.js

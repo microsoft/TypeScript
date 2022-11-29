@@ -61,9 +61,9 @@ PluginFactory Invoke
 Info 11   [00:00:32.000] Plugin validation succeeded
 Info 12   [00:00:33.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info 13   [00:00:34.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 14   [00:00:35.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/somefile.txt 500 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Missing file
-Info 15   [00:00:36.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info 16   [00:00:37.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 14   [00:00:35.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 15   [00:00:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
+Info 16   [00:00:37.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/somefile.txt 500 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Missing file
 Info 17   [00:00:38.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 18   [00:00:39.000] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info 19   [00:00:40.000] 	Files (2)
@@ -87,9 +87,9 @@ Info 21   [00:00:47.000] 		Projects: /user/username/projects/myproject/tsconfig.
 After request
 
 PolledWatches::
-/user/username/projects/myproject/somefile.txt:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/somefile.txt:
   {"pollingInterval":500}
 
 FsWatches::
@@ -117,9 +117,9 @@ Before running timeout callbacks
 
 
 PolledWatches::
-/user/username/projects/myproject/somefile.txt:
-  {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/somefile.txt:
   {"pollingInterval":500}
 
 FsWatches::

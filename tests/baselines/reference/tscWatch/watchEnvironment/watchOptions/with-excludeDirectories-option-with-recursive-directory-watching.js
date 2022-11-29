@@ -72,13 +72,13 @@ FsWatches::
   {}
 /user/username/projects/myproject/node_modules/bar/index.d.ts:
   {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/node_modules/bar:
-  {}
 /user/username/projects/myproject/node_modules/bar/foo.d.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+/user/username/projects/myproject/node_modules/bar:
   {}
 /user/username/projects/myproject/src:
   {}
@@ -114,13 +114,13 @@ FsWatches::
   {}
 /user/username/projects/myproject/node_modules/bar/index.d.ts:
   {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/node_modules/bar:
-  {}
 /user/username/projects/myproject/node_modules/bar/foo.d.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+/user/username/projects/myproject/node_modules/bar:
   {}
 /user/username/projects/myproject/src:
   {}
@@ -152,13 +152,13 @@ FsWatches::
   {}
 /user/username/projects/myproject/node_modules/bar/index.d.ts:
   {}
-/user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/node_modules/bar:
-  {}
 /user/username/projects/myproject/node_modules/bar/foo.d.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/node_modules:
+  {}
+/user/username/projects/myproject/node_modules/bar:
   {}
 /user/username/projects/myproject/src:
   {}

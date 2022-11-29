@@ -48,9 +48,9 @@ Info 7    [00:00:26.000] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined 
 Info 8    [00:00:27.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Info 9    [00:00:28.000] FileWatcher:: Added:: WatchInfo: /a/b/file2.ts 500 undefined WatchType: Closed Script info
 Info 10   [00:00:29.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info 11   [00:00:30.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info 12   [00:00:31.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 13   [00:00:32.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 11   [00:00:30.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 12   [00:00:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 13   [00:00:32.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
 Info 14   [00:00:33.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 15   [00:00:34.000] Project '/a/b/tsconfig.json' (Configured)
 Info 16   [00:00:35.000] 	Files (2)
@@ -75,9 +75,9 @@ Info 18   [00:00:42.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -106,9 +106,9 @@ Info 19   [00:00:44.000] request:
 Before request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -136,9 +136,9 @@ Info 23   [00:00:55.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -165,9 +165,9 @@ Info 24   [00:00:57.000] request:
 Before request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -193,9 +193,9 @@ Info 29   [00:01:02.000] Config: /a/c/tsconfig.json : {
 Info 30   [00:01:03.000] DirectoryWatcher:: Added:: WatchInfo: /a/c 1 undefined Config: /a/c/tsconfig.json WatchType: Wild card directory
 Info 31   [00:01:04.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/c 1 undefined Config: /a/c/tsconfig.json WatchType: Wild card directory
 Info 32   [00:01:05.000] Starting updateGraphWorker: Project: /a/c/tsconfig.json
-Info 33   [00:01:06.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/c/tsconfig.json WatchType: Missing file
-Info 34   [00:01:07.000] DirectoryWatcher:: Added:: WatchInfo: /a/c/node_modules/@types 1 undefined Project: /a/c/tsconfig.json WatchType: Type roots
-Info 35   [00:01:08.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/c/node_modules/@types 1 undefined Project: /a/c/tsconfig.json WatchType: Type roots
+Info 33   [00:01:06.000] DirectoryWatcher:: Added:: WatchInfo: /a/c/node_modules/@types 1 undefined Project: /a/c/tsconfig.json WatchType: Type roots
+Info 34   [00:01:07.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/c/node_modules/@types 1 undefined Project: /a/c/tsconfig.json WatchType: Type roots
+Info 35   [00:01:08.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/c/tsconfig.json WatchType: Missing file
 Info 36   [00:01:09.000] Finishing updateGraphWorker: Project: /a/c/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 37   [00:01:10.000] Project '/a/c/tsconfig.json' (Configured)
 Info 38   [00:01:11.000] 	Files (2)
@@ -227,9 +227,9 @@ Info 40   [00:01:25.000] 		Projects: /a/c/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 /a/c/node_modules/@types:
   {"pollingInterval":500}
@@ -262,9 +262,9 @@ Info 41   [00:01:27.000] request:
 Before request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 /a/c/node_modules/@types:
   {"pollingInterval":500}
@@ -316,9 +316,9 @@ Info 44   [00:01:55.000] 		Projects: /a/c/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 /a/c/node_modules/@types:
   {"pollingInterval":500}

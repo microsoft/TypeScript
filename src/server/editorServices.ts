@@ -1585,7 +1585,6 @@ export class ProjectService {
             }
             else {
                 // Change in referenced project config file
-                project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(this.toPath(canonicalConfigFilePath));
                 this.delayUpdateProjectGraph(project);
             }
         });

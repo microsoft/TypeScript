@@ -89,13 +89,13 @@ Info 6    [00:01:04.000] Starting updateGraphWorker: Project: /dev/null/inferred
 Info 7    [00:01:05.000] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info 8    [00:01:06.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info 9    [00:01:07.000] FileWatcher:: Added:: WatchInfo: c:/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 10   [00:01:08.000] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 11   [00:01:09.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info 12   [00:01:10.000] FileWatcher:: Added:: WatchInfo: e:/myproject/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info 13   [00:01:11.000] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info 14   [00:01:12.000] FileWatcher:: Added:: WatchInfo: e:/myproject/node_modules/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info 15   [00:01:13.000] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
-Info 16   [00:01:14.000] FileWatcher:: Added:: WatchInfo: e:/myproject/node_modules/@types/prop-types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info 10   [00:01:08.000] FileWatcher:: Added:: WatchInfo: e:/myproject/node_modules/@types/prop-types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info 11   [00:01:09.000] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info 12   [00:01:10.000] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 13   [00:01:11.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info 14   [00:01:12.000] FileWatcher:: Added:: WatchInfo: e:/myproject/node_modules/@types/react/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info 15   [00:01:13.000] FileWatcher:: Added:: WatchInfo: e:/myproject/node_modules/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info 16   [00:01:14.000] FileWatcher:: Added:: WatchInfo: c:/typescript/node_modules/@types/react-router-dom/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info 17   [00:01:15.000] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info 18   [00:01:16.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info 19   [00:01:17.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -151,15 +151,15 @@ e:/myproject/src/bower_components:
 FsWatches::
 c:/a/lib/lib.d.ts:
   {}
-e:/myproject/node_modules/@types/react/package.json:
+e:/myproject/node_modules/@types/prop-types/package.json:
   {}
 c:/typescript/node_modules/@types/react/package.json:
+  {}
+e:/myproject/node_modules/@types/react/package.json:
   {}
 e:/myproject/node_modules/react-router-dom/package.json:
   {}
 c:/typescript/node_modules/@types/react-router-dom/package.json:
-  {}
-e:/myproject/node_modules/@types/prop-types/package.json:
   {}
 e:/myproject/package.json:
   {}
@@ -202,15 +202,15 @@ e:/myproject/src/bower_components:
 FsWatches::
 c:/a/lib/lib.d.ts:
   {}
-e:/myproject/node_modules/@types/react/package.json:
+e:/myproject/node_modules/@types/prop-types/package.json:
   {}
 c:/typescript/node_modules/@types/react/package.json:
+  {}
+e:/myproject/node_modules/@types/react/package.json:
   {}
 e:/myproject/node_modules/react-router-dom/package.json:
   {}
 c:/typescript/node_modules/@types/react-router-dom/package.json:
-  {}
-e:/myproject/node_modules/@types/prop-types/package.json:
   {}
 e:/myproject/package.json:
   {}
@@ -247,15 +247,15 @@ e:/myproject/src/bower_components:
 FsWatches::
 c:/a/lib/lib.d.ts:
   {}
-e:/myproject/node_modules/@types/react/package.json:
+e:/myproject/node_modules/@types/prop-types/package.json:
   {}
 c:/typescript/node_modules/@types/react/package.json:
+  {}
+e:/myproject/node_modules/@types/react/package.json:
   {}
 e:/myproject/node_modules/react-router-dom/package.json:
   {}
 c:/typescript/node_modules/@types/react-router-dom/package.json:
-  {}
-e:/myproject/node_modules/@types/prop-types/package.json:
   {}
 e:/myproject/package.json:
   {}

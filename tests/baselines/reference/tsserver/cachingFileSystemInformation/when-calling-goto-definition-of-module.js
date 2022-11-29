@@ -62,9 +62,9 @@ Info 8    [00:00:31.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info 9    [00:00:32.000] FileWatcher:: Added:: WatchInfo: /a/b/models/vessel.ts 500 undefined WatchType: Closed Script info
 Info 10   [00:00:33.000] FileWatcher:: Added:: WatchInfo: /a/b/utils/db.ts 500 undefined WatchType: Closed Script info
 Info 11   [00:00:34.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info 12   [00:00:35.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es6.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info 13   [00:00:36.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 14   [00:00:37.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 12   [00:00:35.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 13   [00:00:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 14   [00:00:37.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es6.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
 Info 15   [00:00:38.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 16   [00:00:39.000] Project '/a/b/tsconfig.json' (Configured)
 Info 17   [00:00:40.000] 	Files (3)
@@ -93,9 +93,9 @@ Info 19   [00:00:47.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -127,9 +127,9 @@ Info 20   [00:00:49.000] request:
 Before request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -147,9 +147,9 @@ FsWatchesRecursive::
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -198,9 +198,9 @@ Info 27   [00:00:56.000] request:
 Before request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -230,9 +230,9 @@ Info 31   [00:01:07.000] 		Projects: /a/b/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.es6.d.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 
 FsWatches::

@@ -137,9 +137,9 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/a/b:
-  {}
 /a/b/modulefile1.ts:
+  {}
+/a/b:
   {}
 
 FsWatchesRecursive::

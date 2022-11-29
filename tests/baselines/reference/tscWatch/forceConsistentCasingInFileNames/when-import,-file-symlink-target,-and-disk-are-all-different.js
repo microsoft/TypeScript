@@ -88,11 +88,11 @@ FsWatches::
   {}
 /user/username/projects/myproject/b.ts:
   {}
-/user/username/projects/myproject:
-  {}
 /user/username/projects/myproject/link.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject:
   {}
 
 FsWatchesRecursive::
@@ -188,11 +188,11 @@ FsWatches::
   {}
 /user/username/projects/myproject/b.ts:
   {}
-/user/username/projects/myproject:
-  {}
 /user/username/projects/myproject/link.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject:
   {}
 
 FsWatchesRecursive::

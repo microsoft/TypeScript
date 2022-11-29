@@ -99,24 +99,24 @@ Info 42   [00:01:23.000] File '/user/username/projects/myproject/product/src/mod
 Info 43   [00:01:24.000] File '/user/username/projects/myproject/product/src/module1}.jsx' does not exist.
 Info 44   [00:01:25.000] Directory '/user/username/projects/myproject/product/src/module1}' does not exist, skipping all lookups in it.
 Info 45   [00:01:26.000] ======== Module name '../src/module1}' was not resolved. ========
-Info 46   [00:01:27.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info 47   [00:01:28.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
-Info 48   [00:01:29.000] ======== Resolving module '../module2' from '/user/username/projects/myproject/product/test/file4.ts'. ========
-Info 49   [00:01:30.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 50   [00:01:31.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/module2', target file types: TypeScript, Declaration.
-Info 51   [00:01:32.000] File '/user/username/projects/myproject/product/module2.ts' exist - use it as a name resolution result.
-Info 52   [00:01:33.000] ======== Module name '../module2' was successfully resolved to '/user/username/projects/myproject/product/module2.ts'. ========
-Info 53   [00:01:34.000] ======== Resolving module '../../src/module1' from '/user/username/projects/myproject/product/test/src/file3.ts'. ========
-Info 54   [00:01:35.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 55   [00:01:36.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/src/module1', target file types: TypeScript, Declaration.
-Info 56   [00:01:37.000] File '/user/username/projects/myproject/product/src/module1.ts' exist - use it as a name resolution result.
-Info 57   [00:01:38.000] ======== Module name '../../src/module1' was successfully resolved to '/user/username/projects/myproject/product/src/module1.ts'. ========
-Info 58   [00:01:39.000] ======== Resolving module '../../module2' from '/user/username/projects/myproject/product/test/src/file3.ts'. ========
-Info 59   [00:01:40.000] Module resolution kind is not specified, using 'NodeJs'.
-Info 60   [00:01:41.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/module2', target file types: TypeScript, Declaration.
-Info 61   [00:01:42.000] File '/user/username/projects/myproject/product/module2.ts' exist - use it as a name resolution result.
-Info 62   [00:01:43.000] ======== Module name '../../module2' was successfully resolved to '/user/username/projects/myproject/product/module2.ts'. ========
-Info 63   [00:01:44.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 46   [00:01:27.000] ======== Resolving module '../module2' from '/user/username/projects/myproject/product/test/file4.ts'. ========
+Info 47   [00:01:28.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 48   [00:01:29.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/module2', target file types: TypeScript, Declaration.
+Info 49   [00:01:30.000] File '/user/username/projects/myproject/product/module2.ts' exist - use it as a name resolution result.
+Info 50   [00:01:31.000] ======== Module name '../module2' was successfully resolved to '/user/username/projects/myproject/product/module2.ts'. ========
+Info 51   [00:01:32.000] ======== Resolving module '../../src/module1' from '/user/username/projects/myproject/product/test/src/file3.ts'. ========
+Info 52   [00:01:33.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 53   [00:01:34.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/src/module1', target file types: TypeScript, Declaration.
+Info 54   [00:01:35.000] File '/user/username/projects/myproject/product/src/module1.ts' exist - use it as a name resolution result.
+Info 55   [00:01:36.000] ======== Module name '../../src/module1' was successfully resolved to '/user/username/projects/myproject/product/src/module1.ts'. ========
+Info 56   [00:01:37.000] ======== Resolving module '../../module2' from '/user/username/projects/myproject/product/test/src/file3.ts'. ========
+Info 57   [00:01:38.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 58   [00:01:39.000] Loading module as file / folder, candidate module location '/user/username/projects/myproject/product/module2', target file types: TypeScript, Declaration.
+Info 59   [00:01:40.000] File '/user/username/projects/myproject/product/module2.ts' exist - use it as a name resolution result.
+Info 60   [00:01:41.000] ======== Module name '../../module2' was successfully resolved to '/user/username/projects/myproject/product/module2.ts'. ========
+Info 61   [00:01:42.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 62   [00:01:43.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
+Info 63   [00:01:44.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/product 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info 64   [00:01:45.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info 65   [00:01:46.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info 66   [00:01:47.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms

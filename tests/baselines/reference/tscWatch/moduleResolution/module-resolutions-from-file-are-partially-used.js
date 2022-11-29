@@ -167,9 +167,9 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject:
-  {}
 /user/username/projects/myproject/node_modules/pkg/package.json:
+  {}
+/user/username/projects/myproject:
   {}
 /user/username/projects/myproject/node_modules/pkg1/package.json:
   {}
@@ -301,9 +301,9 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject:
-  {}
 /user/username/projects/myproject/node_modules/pkg/package.json:
+  {}
+/user/username/projects/myproject:
   {}
 /user/username/projects/myproject/node_modules/pkg1/package.json:
   {}

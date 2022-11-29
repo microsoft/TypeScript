@@ -33,9 +33,9 @@ Info 1    [00:00:30.000] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info 2    [00:00:31.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info 3    [00:00:32.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info 4    [00:00:33.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/project.csproj
-Info 5    [00:00:34.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":[]} Project: /user/username/projects/myproject/project.csproj WatchType: Failed Lookup Locations
-Info 6    [00:00:35.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":[]} Project: /user/username/projects/myproject/project.csproj WatchType: Failed Lookup Locations
-Info 7    [00:00:36.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 5    [00:00:34.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 6    [00:00:35.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":[]} Project: /user/username/projects/myproject/project.csproj WatchType: Failed Lookup Locations
+Info 7    [00:00:36.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules 1 {"excludeDirectories":[]} Project: /user/username/projects/myproject/project.csproj WatchType: Failed Lookup Locations
 Info 8    [00:00:37.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":[]} Project: /user/username/projects/myproject/project.csproj WatchType: Failed Lookup Locations
 Info 9    [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 {"excludeDirectories":[]} Project: /user/username/projects/myproject/project.csproj WatchType: Failed Lookup Locations
 Info 10   [00:00:39.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"excludeDirectories":[]} Project: /user/username/projects/myproject/project.csproj WatchType: Type roots

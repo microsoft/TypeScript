@@ -37,9 +37,9 @@ Info 2    [00:00:15.000] Search path: /a/b
 Info 3    [00:00:16.000] For info: /a/b/commonFile1.ts :: No config files found.
 Info 4    [00:00:17.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 5    [00:00:18.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 6    [00:00:19.000] FileWatcher:: Added:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 7    [00:00:20.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 8    [00:00:21.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 6    [00:00:19.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 7    [00:00:20.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 8    [00:00:21.000] FileWatcher:: Added:: WatchInfo: /a/b/commonfile2.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info 9    [00:00:22.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 10   [00:00:23.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 11   [00:00:24.000] 	Files (2)
@@ -63,9 +63,9 @@ Info 13   [00:00:31.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/a/b/commonfile2.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/commonfile2.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -90,9 +90,9 @@ Info 14   [00:00:33.000] request:
 Before request
 
 PolledWatches::
-/a/b/commonfile2.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/commonfile2.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -104,9 +104,9 @@ FsWatchesRecursive::
 After request
 
 PolledWatches::
-/a/b/commonfile2.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/commonfile2.ts:
   {"pollingInterval":500}
 
 FsWatches::

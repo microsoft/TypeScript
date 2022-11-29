@@ -39,11 +39,11 @@ Info 5    [00:00:34.000] Config: /user/username/projects/myproject/a/tsconfig.js
 }
 Info 6    [00:00:35.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/extended/alpha.tsconfig.json 2000 undefined Config: /user/username/projects/myproject/a/tsconfig.json WatchType: Extended config file
 Info 7    [00:00:36.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/a/tsconfig.json
-Info 8    [00:00:37.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Missing file
-Info 9    [00:00:38.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
-Info 10   [00:00:39.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
-Info 11   [00:00:40.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
-Info 12   [00:00:41.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
+Info 8    [00:00:37.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
+Info 9    [00:00:38.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
+Info 10   [00:00:39.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
+Info 11   [00:00:40.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Type roots
+Info 12   [00:00:41.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /user/username/projects/myproject/a/tsconfig.json WatchType: Missing file
 Info 13   [00:00:42.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 14   [00:00:43.000] Project '/user/username/projects/myproject/a/tsconfig.json' (Configured)
 Info 15   [00:00:44.000] 	Files (1)
@@ -75,11 +75,11 @@ Info 21   [00:00:56.000] Config: /user/username/projects/myproject/b/tsconfig.js
 }
 Info 22   [00:00:57.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/extended/bravo.tsconfig.json 2000 undefined Config: /user/username/projects/myproject/b/tsconfig.json WatchType: Extended config file
 Info 23   [00:00:58.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/b/tsconfig.json
-Info 24   [00:00:59.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Missing file
-Info 25   [00:01:00.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
-Info 26   [00:01:01.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
-Info 27   [00:01:02.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
-Info 28   [00:01:03.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
+Info 24   [00:00:59.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
+Info 25   [00:01:00.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
+Info 26   [00:01:01.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
+Info 27   [00:01:02.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Type roots
+Info 28   [00:01:03.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /user/username/projects/myproject/b/tsconfig.json WatchType: Missing file
 Info 29   [00:01:04.000] Finishing updateGraphWorker: Project: /user/username/projects/myproject/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 30   [00:01:05.000] Project '/user/username/projects/myproject/b/tsconfig.json' (Configured)
 Info 31   [00:01:06.000] 	Files (1)
@@ -114,11 +114,11 @@ Before checking timeout queue length (3) and running
 
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/username/projects/myproject/a/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 /user/username/projects/myproject/b/node_modules/@types:
   {"pollingInterval":500}
@@ -195,11 +195,11 @@ Info 53   [00:02:03.000] 		Projects: /user/username/projects/myproject/b/tsconfi
 After checking timeout queue length (3) and running
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/username/projects/myproject/a/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 /user/username/projects/myproject/b/node_modules/@types:
   {"pollingInterval":500}
@@ -226,11 +226,11 @@ Before checking timeout queue length (2) and running
 
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/username/projects/myproject/a/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 /user/username/projects/myproject/b/node_modules/@types:
   {"pollingInterval":500}
@@ -293,11 +293,11 @@ Info 66   [00:02:41.000] 		Projects: /user/username/projects/myproject/b/tsconfi
 After checking timeout queue length (2) and running
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/username/projects/myproject/a/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 /user/username/projects/myproject/b/node_modules/@types:
   {"pollingInterval":500}
@@ -324,11 +324,11 @@ Before checking timeout queue length (2) and running
 
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/username/projects/myproject/a/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 /user/username/projects/myproject/b/node_modules/@types:
   {"pollingInterval":500}
@@ -394,11 +394,11 @@ Info 82   [00:03:22.000] 		Projects: /user/username/projects/myproject/b/tsconfi
 After checking timeout queue length (2) and running
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/username/projects/myproject/a/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 /user/username/projects/myproject/b/node_modules/@types:
   {"pollingInterval":500}
@@ -426,11 +426,11 @@ Before checking timeout queue length (3) and running
 
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/username/projects/myproject/a/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 /user/username/projects/myproject/b/node_modules/@types:
   {"pollingInterval":500}
@@ -505,11 +505,11 @@ Info 102  [00:04:07.000] 		Projects: /user/username/projects/myproject/b/tsconfi
 After checking timeout queue length (3) and running
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /user/username/projects/myproject/a/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 /user/username/projects/myproject/b/node_modules/@types:
   {"pollingInterval":500}

@@ -1426,9 +1426,7 @@ function getCacheResolutions(state: BuilderProgramState) {
     }
     const automaticTypeDirectiveNames = state.program!.getAutomaticTypeDirectiveNames();
     if (automaticTypeDirectiveNames.length) {
-        const currentDirectory = state.program!.getCurrentDirectory();
-        const containingDirectory = state.compilerOptions.configFilePath ? getDirectoryPath(state.compilerOptions.configFilePath) : currentDirectory;
-        const containingPath = toPath(containingDirectory, currentDirectory, state.program!.getCanonicalFileName);
+        const containingPath = toPath(state.program!.getAutomaticTypeDirectiveContainingFile(), state.program!.getCurrentDirectory(), state.program!.getCanonicalFileName);
         typeRefs = toPerDirectoryAndNonRelativeNameCache(state, typeRefs, getOriginalOrResolvedTypeReferenceFileName, state.program!.getAutomaticTypeDirectiveResolutions(), containingPath);
     }
     return state.cacheResolutions = { modules, typeRefs };
@@ -1439,16 +1437,16 @@ function toPerDirectoryAndNonRelativeNameCache<T>(
     perDirectoryAndNonRelativeNameCache: PerDirectoryAndNonRelativeNameCache<T> | undefined,
     getResolvedFileName: (resolved: T) => string | undefined,
     cache: ModeAwareCache<T> | undefined,
-    fOrDirPath: SourceFile | Path,
+    fOrPath: SourceFile | Path,
 ) {
     if (!cache?.size()) return perDirectoryAndNonRelativeNameCache;
     let dirPath: Path, redirectedReference: ResolvedProjectReference | undefined;
-    if (!isString(fOrDirPath)) {
-        redirectedReference = state.program!.getRedirectReferenceForResolution(fOrDirPath);
-        dirPath = getDirectoryPath(fOrDirPath.path);
+    if (!isString(fOrPath)) {
+        redirectedReference = state.program!.getRedirectReferenceForResolution(fOrPath);
+        dirPath = getDirectoryPath(fOrPath.path);
     }
     else {
-        dirPath = fOrDirPath;
+        dirPath = getDirectoryPath(fOrPath);
     }
     const mapForRedirects = perDirectoryAndNonRelativeNameCache?.perDirectory.perDirectoryMap.getMapOfCacheRedirects(redirectedReference);
     let dirCache = mapForRedirects?.get(dirPath);

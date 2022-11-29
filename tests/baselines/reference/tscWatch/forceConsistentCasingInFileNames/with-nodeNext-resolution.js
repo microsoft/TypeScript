@@ -123,9 +123,9 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/users/name/projects/web:
-  {}
 /users/name/projects/web/node_modules/@types/yargs/package.json:
+  {}
+/users/name/projects/web:
   {}
 
 FsWatchesRecursive::

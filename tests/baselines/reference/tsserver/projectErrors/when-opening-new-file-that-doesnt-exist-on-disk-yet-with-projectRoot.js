@@ -42,10 +42,10 @@ Info 2    [00:00:27.000] Search path:
 Info 3    [00:00:28.000] For info: untitled:Untitled-1 :: No config files found.
 Info 4    [00:00:29.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 5    [00:00:30.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 6    [00:00:31.000] FileWatcher:: Added:: WatchInfo: /typings/@epic/core.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 7    [00:00:32.000] FileWatcher:: Added:: WatchInfo: /user/someuser/projects/somefolder/src/somefile.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 8    [00:00:33.000] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/someFolder/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info 9    [00:00:34.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/someFolder/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 6    [00:00:31.000] DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/someFolder/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 7    [00:00:32.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/someuser/projects/someFolder/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info 8    [00:00:33.000] FileWatcher:: Added:: WatchInfo: /typings/@epic/core.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info 9    [00:00:34.000] FileWatcher:: Added:: WatchInfo: /user/someuser/projects/somefolder/src/somefile.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info 10   [00:00:35.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 11   [00:00:36.000] Project '/dev/null/inferredProject1*' (Inferred)
 Info 12   [00:00:37.000] 	Files (2)
@@ -69,9 +69,9 @@ Info 14   [00:00:44.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
 /user/someuser/projects/somefolder/node_modules/@types:
+  {"pollingInterval":500}
+/typings/@epic/core.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -94,9 +94,9 @@ path: /a/lib/lib.d.ts fileName: /a/lib/lib.d.ts
 Checking timeout queue length: 0
 
 PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
 /user/someuser/projects/somefolder/node_modules/@types:
+  {"pollingInterval":500}
+/typings/@epic/core.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -122,9 +122,9 @@ Info 15   [00:00:46.000] request:
 Before request
 
 PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
 /user/someuser/projects/somefolder/node_modules/@types:
+  {"pollingInterval":500}
+/typings/@epic/core.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -138,9 +138,9 @@ FsWatchesRecursive::
 After request
 
 PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
 /user/someuser/projects/somefolder/node_modules/@types:
+  {"pollingInterval":500}
+/typings/@epic/core.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -158,9 +158,9 @@ Info 16   [00:00:47.000] response:
 Before checking timeout queue length (1) and running
 
 PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
 /user/someuser/projects/somefolder/node_modules/@types:
+  {"pollingInterval":500}
+/typings/@epic/core.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -176,9 +176,9 @@ Info 17   [00:00:48.000] event:
 After checking timeout queue length (1) and running
 
 PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
 /user/someuser/projects/somefolder/node_modules/@types:
+  {"pollingInterval":500}
+/typings/@epic/core.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -192,9 +192,9 @@ FsWatchesRecursive::
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
 /user/someuser/projects/somefolder/node_modules/@types:
+  {"pollingInterval":500}
+/typings/@epic/core.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -210,9 +210,9 @@ Info 18   [00:00:49.000] event:
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
 /user/someuser/projects/somefolder/node_modules/@types:
+  {"pollingInterval":500}
+/typings/@epic/core.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -226,9 +226,9 @@ FsWatchesRecursive::
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
 /user/someuser/projects/somefolder/node_modules/@types:
+  {"pollingInterval":500}
+/typings/@epic/core.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -246,9 +246,9 @@ Info 20   [00:00:51.000] event:
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::
-/typings/@epic/core.d.ts:
-  {"pollingInterval":500}
 /user/someuser/projects/somefolder/node_modules/@types:
+  {"pollingInterval":500}
+/typings/@epic/core.d.ts:
   {"pollingInterval":500}
 
 FsWatches::

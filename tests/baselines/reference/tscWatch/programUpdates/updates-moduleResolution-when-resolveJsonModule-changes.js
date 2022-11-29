@@ -62,9 +62,9 @@ FsWatches::
   {}
 /user/username/projects/myproject/a.ts:
   {}
-/user/username/projects/myproject:
-  {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject:
   {}
 
 FsWatchesRecursive::
@@ -123,9 +123,9 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject:
-  {}
 /user/username/projects/myproject/data.json:
+  {}
+/user/username/projects/myproject:
   {}
 
 FsWatchesRecursive::

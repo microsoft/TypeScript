@@ -383,13 +383,13 @@ FsWatches::
   {}
 /user/username/projects/demo/animals/dog.ts:
   {}
-/user/username/projects/demo/animals:
-  {}
 /user/username/projects/demo/animals/index.ts:
   {}
 /user/username/projects/demo/core/utilities.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/demo/animals:
   {}
 
 FsWatchesRecursive::

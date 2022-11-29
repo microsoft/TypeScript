@@ -35,9 +35,9 @@ Info 6    [00:00:15.000] Config: /Foo/tsconfig.json : {
  }
 }
 Info 7    [00:00:16.000] Starting updateGraphWorker: Project: /Foo/tsconfig.json
-Info 8    [00:00:17.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /Foo/tsconfig.json WatchType: Missing file
-Info 9    [00:00:18.000] DirectoryWatcher:: Added:: WatchInfo: /Foo/node_modules/@types 1 undefined Project: /Foo/tsconfig.json WatchType: Type roots
-Info 10   [00:00:19.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Foo/node_modules/@types 1 undefined Project: /Foo/tsconfig.json WatchType: Type roots
+Info 8    [00:00:17.000] DirectoryWatcher:: Added:: WatchInfo: /Foo/node_modules/@types 1 undefined Project: /Foo/tsconfig.json WatchType: Type roots
+Info 9    [00:00:18.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Foo/node_modules/@types 1 undefined Project: /Foo/tsconfig.json WatchType: Type roots
+Info 10   [00:00:19.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /Foo/tsconfig.json WatchType: Missing file
 Info 11   [00:00:20.000] Finishing updateGraphWorker: Project: /Foo/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info 12   [00:00:21.000] Project '/Foo/tsconfig.json' (Configured)
 Info 13   [00:00:22.000] 	Files (1)
@@ -58,9 +58,9 @@ Info 15   [00:00:29.000] 		Projects: /Foo/tsconfig.json
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /foo/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -91,9 +91,9 @@ Info 16   [00:00:31.000] request:
 Before request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /foo/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -105,9 +105,9 @@ FsWatchesRecursive::
 After request
 
 PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
 /foo/node_modules/@types:
+  {"pollingInterval":500}
+/a/lib/lib.d.ts:
   {"pollingInterval":500}
 
 FsWatches::

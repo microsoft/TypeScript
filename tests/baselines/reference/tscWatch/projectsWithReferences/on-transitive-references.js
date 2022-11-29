@@ -938,17 +938,7 @@ Output::
 
 Reusing resolution of module './b' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
-======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
-'baseUrl' option is set to '/user/username/projects/transitiveReferences', using this value to resolve non-relative module name '@ref/a'.
-'paths' option is specified, looking for a pattern to match module name '@ref/a'.
-Module name '@ref/a', matched pattern '@ref/*'.
-Trying substitution './refs/*', candidate module location: './refs/a'.
-Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/refs/a', target file types: TypeScript, Declaration.
-File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
-File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
-File '/user/username/projects/transitiveReferences/refs/a.d.ts' exist - use it as a name resolution result.
-======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
+Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 [96mtsconfig.c.json[0m:[93m1[0m:[93m100[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/tsconfig.b.json' not found.
 
 [7m1[0m {"files":["c.ts"],"compilerOptions":{"baseUrl":"./","paths":{"@ref/*":["./refs/*"]}},"references":[{"path":"tsconfig.b.json"}]}

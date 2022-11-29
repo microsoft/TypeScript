@@ -802,8 +802,13 @@ export interface CacheWithRedirects<K, V> {
     redirectsMap: Map<CompilerOptions, Map<K, V>>;
 }
 
+/** @internal */
+export type RedirectsCacheKey = string & { __compilerOptionsKey: any; };
+/** @internal */
+export function createRedirectsCacheKey(options: CompilerOptions) {
+    return getKeyForCompilerOptions(options, moduleResolutionOptionDeclarations) as RedirectsCacheKey;
+}
 function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | undefined): CacheWithRedirects<K, V> {
-    type RedirectsCacheKey = string & { __compilerOptionsKey: any; };
     const redirectsMap = new Map<CompilerOptions, Map<K, V>>();
     const optionsToRedirectsKey = new Map<CompilerOptions, RedirectsCacheKey>();
     const redirectsKeyToMap = new Map<RedirectsCacheKey, Map<K, V>>();
@@ -873,9 +878,7 @@ function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | undefined)
 
     function getRedirectsCacheKey(options: CompilerOptions) {
         let result = optionsToRedirectsKey.get(options);
-        if (!result) {
-            optionsToRedirectsKey.set(options, result = getKeyForCompilerOptions(options, moduleResolutionOptionDeclarations) as RedirectsCacheKey);
-        }
+        if (!result) optionsToRedirectsKey.set(options, result = createRedirectsCacheKey(options));
         return result;
     }
 }

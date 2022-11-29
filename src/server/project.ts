@@ -929,6 +929,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
         Debug.assert(this.projectService.serverMode !== LanguageServiceMode.Syntactic);
         this.languageService.cleanupSemanticCache();
+        this.resolutionCache.clear();
         this.languageServiceEnabled = false;
         this.lastFileExceededProgramSize = lastFileExceededProgramSize;
         this.builderState = undefined;
@@ -936,7 +937,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             this.autoImportProviderHost.close();
         }
         this.autoImportProviderHost = undefined;
-        this.resolutionCache.closeTypeRootsWatch();
         this.clearGeneratedFileWatch();
         this.projectService.onUpdateLanguageServiceStateForProject(this, /*languageServiceEnabled*/ false);
     }
@@ -1191,11 +1191,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         if (this.isRoot(info)) {
             this.removeRoot(info);
         }
-        if (fileExists) {
-            // If file is present, just remove the resolutions for the file
-            this.resolutionCache.removeResolutionsOfFile(info.path);
-        }
-        else {
+        if (!fileExists) {
             this.resolutionCache.invalidateResolutionOfFile(info.path);
         }
         this.cachedUnresolvedImportsPerFile.delete(info.path);
@@ -1367,7 +1363,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                     if (!newFile || (f.resolvedPath === f.path && newFile.resolvedPath !== f.path)) {
                         // new program does not contain this file - detach it from the project
                         // - remove resolutions only if the new program doesnt contain source file by the path (not resolvedPath since path is used for resolution)
-                        this.detachScriptInfoFromProject(f.fileName, !!this.program.getSourceFileByPath(f.path));
+                        this.detachScriptInfoFromProject(f.fileName);
                     }
                 }
 
@@ -1417,11 +1413,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                         });
                     }
                 }
-            }
-
-            // Watch the type locations that would be added to program as part of automatic type resolutions
-            if (this.languageServiceEnabled && this.projectService.serverMode === LanguageServiceMode.Semantic) {
-                this.resolutionCache.updateTypeRootsWatch();
             }
         }
 
@@ -1481,14 +1472,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         this.projectService.sendPerformanceEvent(kind, durationMs);
     }
 
-    private detachScriptInfoFromProject(uncheckedFileName: string, noRemoveResolution?: boolean) {
-        const scriptInfoToDetach = this.projectService.getScriptInfo(uncheckedFileName);
-        if (scriptInfoToDetach) {
-            scriptInfoToDetach.detachFromProject(this);
-            if (!noRemoveResolution) {
-                this.resolutionCache.removeResolutionsOfFile(scriptInfoToDetach.path);
-            }
-        }
+    private detachScriptInfoFromProject(uncheckedFileName: string) {
+        this.projectService.getScriptInfo(uncheckedFileName)?.detachFromProject(this);
     }
 
     private addMissingFileWatcher(missingFilePath: Path) {

@@ -55,9 +55,9 @@ Shape signatures in builder refreshed for::
 /a/b/referencefile1.ts (used version)
 
 PolledWatches::
-/a/b/modulefile2.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile2.ts:
   {"pollingInterval":500}
 
 FsWatches::
@@ -128,9 +128,9 @@ Shape signatures in builder refreshed for::
 /a/b/referencefile1.ts (computed .d.ts)
 
 PolledWatches::
-/a/b/modulefile2.ts:
-  {"pollingInterval":500}
 /a/b/node_modules/@types:
+  {"pollingInterval":500}
+/a/b/modulefile2.ts:
   {"pollingInterval":500}
 
 FsWatches::

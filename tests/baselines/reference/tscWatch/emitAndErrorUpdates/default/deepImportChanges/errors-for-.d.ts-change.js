@@ -74,13 +74,13 @@ FsWatches::
   {}
 /user/username/projects/myproject/a.ts:
   {}
-/user/username/projects/myproject:
-  {}
 /user/username/projects/myproject/b.d.ts:
   {}
 /user/username/projects/myproject/c.d.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject:
   {}
 
 FsWatchesRecursive::
@@ -149,13 +149,13 @@ FsWatches::
   {}
 /user/username/projects/myproject/a.ts:
   {}
-/user/username/projects/myproject:
-  {}
 /user/username/projects/myproject/b.d.ts:
   {}
 /user/username/projects/myproject/c.d.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject:
   {}
 
 FsWatchesRecursive::
@@ -211,13 +211,13 @@ FsWatches::
   {}
 /user/username/projects/myproject/a.ts:
   {}
-/user/username/projects/myproject:
-  {}
 /user/username/projects/myproject/b.d.ts:
   {}
 /user/username/projects/myproject/c.d.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject:
   {}
 
 FsWatchesRecursive::
@@ -278,13 +278,13 @@ FsWatches::
   {}
 /user/username/projects/myproject/a.ts:
   {}
-/user/username/projects/myproject:
-  {}
 /user/username/projects/myproject/b.d.ts:
   {}
 /user/username/projects/myproject/c.d.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject:
   {}
 
 FsWatchesRecursive::

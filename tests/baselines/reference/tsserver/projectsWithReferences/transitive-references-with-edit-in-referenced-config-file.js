@@ -105,18 +105,18 @@ Info 9    [00:00:48.000] Config: /user/username/projects/myproject/a/tsconfig.js
  }
 }
 Info 10   [00:00:49.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Config file
-Info 11   [00:00:50.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Info 12   [00:00:51.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Info 13   [00:00:52.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Info 14   [00:00:53.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Info 15   [00:00:54.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/index.ts 500 undefined WatchType: Closed Script info
-Info 16   [00:00:55.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/index.ts 500 undefined WatchType: Closed Script info
-Info 17   [00:00:56.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refs/a.d.ts 500 undefined WatchType: Closed Script info
-Info 18   [00:00:57.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info 19   [00:00:58.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refs 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Info 20   [00:00:59.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refs 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Info 21   [00:01:00.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
-Info 22   [00:01:01.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
+Info 11   [00:00:50.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b/index.ts 500 undefined WatchType: Closed Script info
+Info 12   [00:00:51.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a/index.ts 500 undefined WatchType: Closed Script info
+Info 13   [00:00:52.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refs/a.d.ts 500 undefined WatchType: Closed Script info
+Info 14   [00:00:53.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info 15   [00:00:54.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
+Info 16   [00:00:55.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
+Info 17   [00:00:56.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
+Info 18   [00:00:57.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
+Info 19   [00:00:58.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
+Info 20   [00:00:59.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
+Info 21   [00:01:00.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refs 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
+Info 22   [00:01:01.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/refs 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Failed Lookup Locations
 Info 23   [00:01:02.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/c/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
 Info 24   [00:01:03.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/c/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
 Info 25   [00:01:04.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/c/tsconfig.json WatchType: Type roots
@@ -178,8 +178,6 @@ FsWatches::
   {}
 /user/username/projects/myproject/a/tsconfig.json:
   {}
-/user/username/projects/myproject:
-  {}
 /user/username/projects/myproject/b/index.ts:
   {}
 /user/username/projects/myproject/a/index.ts:
@@ -188,13 +186,15 @@ FsWatches::
   {}
 /a/lib/lib.d.ts:
   {}
+/user/username/projects/myproject:
+  {}
 
 FsWatchesRecursive::
+/user/username/projects/myproject/a:
+  {}
 /user/username/projects/myproject/b:
   {}
 /user/username/projects/myproject/refs:
-  {}
-/user/username/projects/myproject/a:
   {}
 
 Info 37   [00:01:29.000] Running: /user/username/projects/myproject/c/tsconfig.json
@@ -280,8 +280,6 @@ FsWatches::
   {}
 /user/username/projects/myproject/a/tsconfig.json:
   {}
-/user/username/projects/myproject:
-  {}
 /user/username/projects/myproject/b/index.ts:
   {}
 /user/username/projects/myproject/a/index.ts:
@@ -289,6 +287,8 @@ FsWatches::
 /user/username/projects/myproject/refs/a.d.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject:
   {}
 /user/username/projects/myproject/nrefs/a.d.ts:
   {}
@@ -323,8 +323,6 @@ FsWatches::
   {}
 /user/username/projects/myproject/a/tsconfig.json:
   {}
-/user/username/projects/myproject:
-  {}
 /user/username/projects/myproject/b/index.ts:
   {}
 /user/username/projects/myproject/a/index.ts:
@@ -332,6 +330,8 @@ FsWatches::
 /user/username/projects/myproject/refs/a.d.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject:
   {}
 /user/username/projects/myproject/nrefs/a.d.ts:
   {}
@@ -426,8 +426,6 @@ FsWatches::
   {}
 /user/username/projects/myproject/a/tsconfig.json:
   {}
-/user/username/projects/myproject:
-  {}
 /user/username/projects/myproject/b/index.ts:
   {}
 /user/username/projects/myproject/a/index.ts:
@@ -435,6 +433,8 @@ FsWatches::
 /user/username/projects/myproject/refs/a.d.ts:
   {}
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject:
   {}
 /user/username/projects/myproject/nrefs/a.d.ts:
   {}
