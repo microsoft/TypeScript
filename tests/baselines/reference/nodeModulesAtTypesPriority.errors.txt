@@ -1,0 +1,34 @@
+error TS6504: File '/packages/a/node_modules/react/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+  The file is in the program because:
+    Root file specified for compilation
+error TS6504: File '/packages/a/node_modules/redux/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+  The file is in the program because:
+    Root file specified for compilation
+
+
+!!! error TS6504: File '/packages/a/node_modules/react/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+!!! error TS6504:   The file is in the program because:
+!!! error TS6504:     Root file specified for compilation
+!!! error TS6504: File '/packages/a/node_modules/redux/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+!!! error TS6504:   The file is in the program because:
+!!! error TS6504:     Root file specified for compilation
+==== /node_modules/@types/react/index.d.ts (0 errors) ====
+    declare const React: any;
+    export = React;
+    
+==== /node_modules/@types/redux/index.d.ts (0 errors) ====
+    export declare function createStore(): void;
+    
+==== /packages/a/node_modules/react/index.js (0 errors) ====
+    module.exports = {};
+    
+==== /packages/a/node_modules/redux/index.d.ts (0 errors) ====
+    export declare function createStore(): void;
+    
+==== /packages/a/node_modules/redux/index.js (0 errors) ====
+    module.exports = {};
+    
+==== /packages/a/index.ts (0 errors) ====
+    import React from "react";
+    import { createStore } from "redux";
+    

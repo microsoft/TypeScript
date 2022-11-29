@@ -31,30 +31,29 @@ Info 5    [00:00:18.000] Config: /a/b/tsconfig.json : {
 }
 Info 6    [00:00:19.000] DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Info 7    [00:00:20.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
-Info 8    [00:00:21.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 9    [00:00:22.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info 10   [00:00:23.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info 11   [00:00:24.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 12   [00:00:25.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
-Info 13   [00:00:26.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 14   [00:00:27.000] Project '/a/b/tsconfig.json' (Configured)
-Info 15   [00:00:28.000] 	Files (1)
+Info 8    [00:00:21.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info 9    [00:00:22.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
+Info 10   [00:00:23.000] DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 11   [00:00:24.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/b/node_modules/@types 1 undefined Project: /a/b/tsconfig.json WatchType: Type roots
+Info 12   [00:00:25.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 13   [00:00:26.000] Project '/a/b/tsconfig.json' (Configured)
+Info 14   [00:00:27.000] 	Files (1)
 	/a/b/app.js
 
 
 	app.js
 	  Matched by default include pattern '**/*'
 
-Info 16   [00:00:29.000] -----------------------------------------------
-Info 17   [00:00:34.000] Project '/a/b/tsconfig.json' (Configured)
-Info 17   [00:00:35.000] 	Files (1)
+Info 15   [00:00:28.000] -----------------------------------------------
+Info 16   [00:00:33.000] Project '/a/b/tsconfig.json' (Configured)
+Info 16   [00:00:34.000] 	Files (1)
 
-Info 17   [00:00:36.000] -----------------------------------------------
-Info 17   [00:00:37.000] Open files: 
-Info 17   [00:00:38.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
-Info 17   [00:00:39.000] 		Projects: /a/b/tsconfig.json
-Info 17   [00:00:48.000] Scheduled: /a/b/tsconfig.json
-Info 18   [00:00:49.000] Scheduled: *ensureProjectForOpenFiles*
+Info 16   [00:00:35.000] -----------------------------------------------
+Info 16   [00:00:36.000] Open files: 
+Info 16   [00:00:37.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
+Info 16   [00:00:38.000] 		Projects: /a/b/tsconfig.json
+Info 16   [00:00:47.000] Scheduled: /a/b/tsconfig.json
+Info 17   [00:00:48.000] Scheduled: *ensureProjectForOpenFiles*
 Before checking timeout queue length (2) and running
 //// [/a/data/package.json]
 { "private": true }
@@ -83,11 +82,11 @@ FsWatchesRecursive::
 /a/b:
   {}
 
-Info 19   [00:00:50.000] Running: /a/b/tsconfig.json
-Info 20   [00:00:51.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
-Info 21   [00:00:52.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 22   [00:00:53.000] Project '/a/b/tsconfig.json' (Configured)
-Info 23   [00:00:54.000] 	Files (2)
+Info 18   [00:00:49.000] Running: /a/b/tsconfig.json
+Info 19   [00:00:50.000] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info 20   [00:00:51.000] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 21   [00:00:52.000] Project '/a/b/tsconfig.json' (Configured)
+Info 22   [00:00:53.000] 	Files (2)
 	/a/b/app.js
 	/a/data/node_modules/@types/jquery/index.d.ts
 
@@ -97,24 +96,24 @@ Info 23   [00:00:54.000] 	Files (2)
 	../data/node_modules/@types/jquery/index.d.ts
 	  Matched by default include pattern '**/*'
 
-Info 24   [00:00:55.000] -----------------------------------------------
-Info 25   [00:00:56.000] Running: *ensureProjectForOpenFiles*
-Info 26   [00:00:57.000] Before ensureProjectForOpenFiles:
-Info 27   [00:00:58.000] Project '/a/b/tsconfig.json' (Configured)
-Info 27   [00:00:59.000] 	Files (2)
+Info 23   [00:00:54.000] -----------------------------------------------
+Info 24   [00:00:55.000] Running: *ensureProjectForOpenFiles*
+Info 25   [00:00:56.000] Before ensureProjectForOpenFiles:
+Info 26   [00:00:57.000] Project '/a/b/tsconfig.json' (Configured)
+Info 26   [00:00:58.000] 	Files (2)
 
-Info 27   [00:01:00.000] -----------------------------------------------
-Info 27   [00:01:01.000] Open files: 
-Info 27   [00:01:02.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
-Info 27   [00:01:03.000] 		Projects: /a/b/tsconfig.json
-Info 27   [00:01:04.000] After ensureProjectForOpenFiles:
-Info 28   [00:01:05.000] Project '/a/b/tsconfig.json' (Configured)
-Info 28   [00:01:06.000] 	Files (2)
+Info 26   [00:00:59.000] -----------------------------------------------
+Info 26   [00:01:00.000] Open files: 
+Info 26   [00:01:01.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
+Info 26   [00:01:02.000] 		Projects: /a/b/tsconfig.json
+Info 26   [00:01:03.000] After ensureProjectForOpenFiles:
+Info 27   [00:01:04.000] Project '/a/b/tsconfig.json' (Configured)
+Info 27   [00:01:05.000] 	Files (2)
 
-Info 28   [00:01:07.000] -----------------------------------------------
-Info 28   [00:01:08.000] Open files: 
-Info 28   [00:01:09.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
-Info 28   [00:01:10.000] 		Projects: /a/b/tsconfig.json
+Info 27   [00:01:06.000] -----------------------------------------------
+Info 27   [00:01:07.000] Open files: 
+Info 27   [00:01:08.000] 	FileName: /a/b/app.js ProjectRootPath: undefined
+Info 27   [00:01:09.000] 		Projects: /a/b/tsconfig.json
 After checking timeout queue length (2) and running
 
 PolledWatches::

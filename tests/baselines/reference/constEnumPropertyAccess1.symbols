@@ -62,7 +62,7 @@ class C {
 >A : Symbol(G.A, Decl(constEnumPropertyAccess1.ts, 4, 14))
 
     get [G.B]() {
->[G.B] : Symbol(C[G.B], Decl(constEnumPropertyAccess1.ts, 22, 15))
+>[G.B] : Symbol(C[G.B], Decl(constEnumPropertyAccess1.ts, 22, 15), Decl(constEnumPropertyAccess1.ts, 25, 5))
 >G.B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
 >G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
 >B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
@@ -70,7 +70,7 @@ class C {
         return true;
     }
     set [G.B](x: number) { }
->[G.B] : Symbol(C[G.B], Decl(constEnumPropertyAccess1.ts, 25, 5))
+>[G.B] : Symbol(C[G.B], Decl(constEnumPropertyAccess1.ts, 22, 15), Decl(constEnumPropertyAccess1.ts, 25, 5))
 >G.B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
 >G : Symbol(G, Decl(constEnumPropertyAccess1.ts, 0, 0))
 >B : Symbol(G.B, Decl(constEnumPropertyAccess1.ts, 5, 10))
