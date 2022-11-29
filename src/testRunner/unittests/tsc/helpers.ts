@@ -568,10 +568,12 @@ type ReadableProgramBuildInfoResolutionCacheWithRedirects = ReadableProgramBuild
     own: ReadableProgramBuildInfoResolutionCacheEntry[] | undefined;
     redirects: readonly ReadableProgramBuildInfoResolutionRedirectsCache[];
 };
+type ReadableProgramBuildInfoHash = string | [file: string, hash: string];
 type ReadableProgramBuildInfoCacheResolutions = Omit<ts.ProgramBuildInfoCacheResolutions,
-    "resolutions" | "resolutionEntries" | "modules" | "typeRefs"
+    "resolutions" | "hash" | "resolutionEntries" | "modules" | "typeRefs"
 > & {
     resolutions: readonly ReadableWithOriginal<ReadableProgramBuildInfoResolution, ts.ProgramBuildInfoResolution>[];
+    hash: readonly ReadableProgramBuildInfoHash[] | undefined;
     resolutionEntries: readonly ReadableWithOriginal<ReadableProgramBuildInfoResolutionEntry, ts.ProgramBuildInfoResolutionEntry>[];
     modules: ReadableProgramBuildInfoResolutionCacheWithRedirects | undefined;
     typeRefs: ReadableProgramBuildInfoResolutionCacheWithRedirects | undefined;
@@ -751,8 +753,13 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             resolutions: resolutions.withOriginals,
             resolutionEntries: resolutionEntries.withOriginals,
             modules: toReadableProgramBuildInfoResolutionCacheWithRedirects(cacheResolutions.modules),
-            typeRefs: toReadableProgramBuildInfoResolutionCacheWithRedirects(cacheResolutions.typeRefs)
+            typeRefs: toReadableProgramBuildInfoResolutionCacheWithRedirects(cacheResolutions.typeRefs),
+            hash: cacheResolutions.hash?.map(toReadableProgramBuildInfoHash),
         };
+    }
+
+    function toReadableProgramBuildInfoHash(hash: ts.ProgramBuildInfoHash): ReadableProgramBuildInfoHash {
+        return ts.isArray(hash) ? [toFileName(hash[0]), hash[1]] : toFileName(hash);
     }
 
     function toReadableProgramBuildInfoResolutionCacheWithRedirects(cache: ts.ProgramBuildInfoResolutionCacheWithRedirects | undefined): ReadableProgramBuildInfoResolutionCacheWithRedirects | undefined {

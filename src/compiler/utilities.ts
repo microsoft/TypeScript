@@ -6429,8 +6429,8 @@ export function base64decode(host: { base64decode?(input: string): string } | un
 }
 
 /** @internal */
-export function readJsonOrUndefined(path: string, hostOrText: { readFile(fileName: string): string | undefined } | string): object | undefined {
-    const jsonText = isString(hostOrText) ? hostOrText : hostOrText.readFile(path);
+export function readJsonOrUndefined(path: string, hostOrText: { readFile(fileName: string): string | undefined } | string | undefined): object | undefined {
+    const jsonText = isString(hostOrText) ? hostOrText : hostOrText?.readFile(path);
     if (!jsonText) return undefined;
     // gracefully handle if readFile fails or returns not JSON
     const result = parseConfigFileTextToJson(path, jsonText);
@@ -6438,8 +6438,8 @@ export function readJsonOrUndefined(path: string, hostOrText: { readFile(fileNam
 }
 
 /** @internal */
-export function readJson(path: string, host: { readFile(fileName: string): string | undefined }): object {
-    return readJsonOrUndefined(path, host) || {};
+export function readJson(path: string, hostOrText: { readFile(fileName: string): string | undefined } | string | undefined): object {
+    return readJsonOrUndefined(path, hostOrText) || {};
 }
 
 /** @internal */

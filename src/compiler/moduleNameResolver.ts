@@ -2170,6 +2170,7 @@ export interface PackageJsonInfo {
 }
 /** @internal */
 export interface PackageJsonInfoContents {
+    packageJsonText: string | undefined;
     packageJsonContent: PackageJsonPathFields;
     /** false: versionPaths are not present. undefined: not yet resolved */
     versionPaths: VersionPaths | false | undefined;
@@ -2228,11 +2229,12 @@ export function getPackageJsonInfo(packageDirectory: string, onlyRecordFailures:
     }
     const directoryExists = directoryProbablyExists(packageDirectory, host);
     if (directoryExists && host.fileExists(packageJsonPath)) {
-        const packageJsonContent = readJson(packageJsonPath, host) as PackageJson;
+        const packageJsonText = host.readFile(packageJsonPath);
+        const packageJsonContent = readJson(packageJsonPath, packageJsonText) as PackageJson;
         if (traceEnabled) {
             trace(host, Diagnostics.Found_package_json_at_0, packageJsonPath);
         }
-        const result: PackageJsonInfo = { packageDirectory, contents: { packageJsonContent, versionPaths: undefined, resolvedEntrypoints: undefined } };
+        const result: PackageJsonInfo = { packageDirectory, contents: { packageJsonText, packageJsonContent, versionPaths: undefined, resolvedEntrypoints: undefined } };
         state.packageJsonInfoCache?.setPackageJsonInfo(packageJsonPath, result);
         state.affectingLocations.push(packageJsonPath);
         return result;
