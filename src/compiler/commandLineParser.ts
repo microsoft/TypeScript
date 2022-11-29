@@ -2372,9 +2372,9 @@ export function convertToObjectWorker(
                 }
                 reportInvalidOptionValue(option && isString(option.type) && option.type !== "string" && (option.type !== "listOrElement" || (isString(option.element.type) && option.element.type !== "string")));
                 const text = (valueExpression as StringLiteral).text;
-                    if (option) {
-                        Debug.assert(option.type !== "listOrElement" || option.element.type === "string", "Only string or array of string is handled for now");
-                    }
+                if (option) {
+                    Debug.assert(option.type !== "listOrElement" || option.element.type === "string", "Only string or array of string is handled for now");
+                }
                 if (option && !isString(option.type)) {
                     const customOption = option as CommandLineOptionOfCustomType;
                     // Validate custom option type
@@ -2584,16 +2584,6 @@ function matchesSpecs(path: string, includeSpecs: readonly string[] | undefined,
 }
 
 function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): Map<string, string | number> | undefined {
-    // if (optionDefinition.type === "string" || optionDefinition.type === "number" || optionDefinition.type === "boolean" || optionDefinition.type === "object") {
-    //     // this is of a type CommandLineOptionOfPrimitiveType
-    //     return undefined;
-    // }
-    // else if (optionDefinition.type === "list" || optionDefinition.type === "listOrElement") {
-    //     return getCustomTypeMapOfCommandLineOption(optionDefinition.element);
-    // }
-    // else {
-    //     return optionDefinition.type;
-    // }
     switch (optionDefinition.type) {
         case "string":
         case "number":
@@ -3298,33 +3288,33 @@ function parseOwnConfigOfJsonSourceFile(
             switch (key) {
                 case "extends":
                     const newBase = configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath;
-                        if (isString(value)) {
-                        extendedConfigPath = getExtendsConfigPath(
-                            value,
-                            host,
-                            newBase,
-                            errors,
-                            (message, arg0) =>
-                                createDiagnosticForNodeInSourceFile(sourceFile, valueNode, message, arg0)
-                        );
-                        }
-                        else {
-                            extendedConfigPath = [];
-                            for (let index = 0; index < (value as unknown[]).length; index++) {
-                                const fileName = (value as unknown[])[index];
-                                if (isString(fileName)) {
-                                    extendedConfigPath = append(extendedConfigPath, getExtendsConfigPath(
-                                        fileName,
-                                        host,
-                                        newBase,
-                                        errors,
-                                        (message, arg0) =>
-                                            createDiagnosticForNodeInSourceFile(sourceFile, (valueNode as ArrayLiteralExpression).elements[index], message, arg0)
-                                    ));
-                                }
+                    if (isString(value)) {
+                    extendedConfigPath = getExtendsConfigPath(
+                        value,
+                        host,
+                        newBase,
+                        errors,
+                        (message, arg0) =>
+                            createDiagnosticForNodeInSourceFile(sourceFile, valueNode, message, arg0)
+                    );
+                    }
+                    else {
+                        extendedConfigPath = [];
+                        for (let index = 0; index < (value as unknown[]).length; index++) {
+                            const fileName = (value as unknown[])[index];
+                            if (isString(fileName)) {
+                                extendedConfigPath = append(extendedConfigPath, getExtendsConfigPath(
+                                    fileName,
+                                    host,
+                                    newBase,
+                                    errors,
+                                    (message, arg0) =>
+                                        createDiagnosticForNodeInSourceFile(sourceFile, (valueNode as ArrayLiteralExpression).elements[index], message, arg0)
+                                ));
                             }
                         }
-                    return;
+                    }
+                return;
             }
         },
         onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, _value: CompilerOptionsValue, _valueNode: Expression) {
@@ -3399,7 +3389,7 @@ function getExtendedConfig(
     resolutionStack: string[],
     errors: Push<Diagnostic>,
     extendedConfigCache: Map<string, ExtendedConfigCacheEntry> | undefined,
-        result: ExtendsResult
+    result: ExtendsResult
 ): ParsedTsconfig | undefined {
     const path = host.useCaseSensitiveFileNames ? extendedConfigPath : toFileNameLowerCase(extendedConfigPath);
     let value: ExtendedConfigCacheEntry | undefined;
@@ -3422,10 +3412,10 @@ function getExtendedConfig(
         (result.extendedSourceFiles ??= new Set()).add(extendedResult.fileName);
         if (extendedResult.extendedSourceFiles) {
             for (const extenedSourceFile of extendedResult.extendedSourceFiles) {
-                    result.extendedSourceFiles.add(extenedSourceFile);
+                result.extendedSourceFiles.add(extenedSourceFile);
             }
         }
-        }
+    }
     if (extendedResult.parseDiagnostics.length) {
         errors.push(...extendedResult.parseDiagnostics);
         return undefined;
@@ -3538,7 +3528,7 @@ export function convertJsonOption(opt: CommandLineOption, value: any, basePath: 
 function normalizeOptionValue(option: CommandLineOption, basePath: string, value: any): CompilerOptionsValue {
     if (isNullOrUndefined(value)) return undefined;
     if (option.type === "listOrElement" && !isArray(value)) return normalizeOptionValue(option.element, basePath, value);
-        else if (option.type === "list" || option.type === "listOrElement") {
+    else if (option.type === "list" || option.type === "listOrElement") {
         const listOption = option;
         if (listOption.element.isFilePath || !isString(listOption.element.type)) {
             return filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => listOption.listPreserveFalsyValues ? true : !!v) as CompilerOptionsValue;

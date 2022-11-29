@@ -120,8 +120,7 @@ function updateTsconfigFiles(program: Program, changeTracker: textChanges.Change
                 if (foundExactMatch || propertyName !== "include" || !isArrayLiteralExpression(property.initializer)) return;
                 const includes = mapDefined(property.initializer.elements, e => isStringLiteral(e) ? e.text : undefined);
                 if (includes.length === 0) return;
-                const matchers = getFileMatcherPatterns(
-                    configDir, /*excludes*/[], includes, useCaseSensitiveFileNames, currentDirectory);
+                const matchers = getFileMatcherPatterns(configDir, /*excludes*/[], includes, useCaseSensitiveFileNames, currentDirectory);
                 // If there isn't some include for this, add a new one.
                 if (getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
                     !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)) {

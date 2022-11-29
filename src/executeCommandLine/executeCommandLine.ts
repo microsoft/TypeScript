@@ -406,8 +406,8 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
             }
             return possibleValues;
         }
-        }
     }
+}
 
 function generateGroupOptionOutput(sys: System, optionsList: readonly CommandLineOption[]) {
     let maxLength = 0;
