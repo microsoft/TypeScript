@@ -1655,7 +1655,7 @@ namespace ts {
                     if (!buildInfoVersionMap) buildInfoVersionMap = getBuildInfoFileVersionMap(buildInfoProgram, buildInfoPath!, host);
                     version = buildInfoVersionMap.get(toPath(state, inputFile));
                     const text = version ? state.readFileWithCache(inputFile) : undefined;
-                    currentVersion = text && (host.createHash || generateDjb2Hash)(text);
+                    currentVersion = text !== undefined ? (host.createHash || generateDjb2Hash)(text) : undefined;
                     if (version && version === currentVersion) pseudoInputUpToDate = true;
                 }
 

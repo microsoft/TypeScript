@@ -615,7 +615,7 @@ namespace ts {
             if (hostSourceFile.version) return hostSourceFile.version;
             // Read file and get new version
             const text = readFileWithCache(path);
-            return text ? (compilerHost.createHash || generateDjb2Hash)(text) : undefined;
+            return text !== undefined ? (compilerHost.createHash || generateDjb2Hash)(text) : undefined;
         }
 
         function onReleaseOldSourceFile(oldSourceFile: SourceFile, _oldOptions: CompilerOptions, hasSourceFileByPath: boolean) {
