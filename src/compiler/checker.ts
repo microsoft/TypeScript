@@ -18759,7 +18759,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // An object type S is considered to be derived from an object type T if
     // S is a union type and every constituent of S is derived from T,
     // T is a union type and S is derived from at least one constituent of T, or
-    // S is a type variable with a base constraint that is derived from T,
+    // S is an intersection type and some constituent of S is derived from T, or
+    // S is a type variable with a base constraint that is derived from T, or
+    // T is {} and S is an object-like type (ensuring {} is less derived than Object), or
     // T is one of the global types Object and Function and S is a subtype of T, or
     // T occurs directly or indirectly in an 'extends' clause of S.
     // Note that this check ignores type parameters and only considers the
@@ -18767,8 +18769,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isTypeDerivedFrom(source: Type, target: Type): boolean {
         return source.flags & TypeFlags.Union ? every((source as UnionType).types, t => isTypeDerivedFrom(t, target)) :
             target.flags & TypeFlags.Union ? some((target as UnionType).types, t => isTypeDerivedFrom(source, t)) :
+            source.flags & TypeFlags.Intersection ? some((source as IntersectionType).types, t => isTypeDerivedFrom(t, target)) :
             source.flags & TypeFlags.InstantiableNonPrimitive ? isTypeDerivedFrom(getBaseConstraintOfType(source) || unknownType, target) :
-            target === globalObjectType ? !!(source.flags & (TypeFlags.Object | TypeFlags.NonPrimitive)) :
+            isEmptyAnonymousObjectType(target) ? !!(source.flags & (TypeFlags.Object | TypeFlags.NonPrimitive)) :
+            target === globalObjectType ? !!(source.flags & (TypeFlags.Object | TypeFlags.NonPrimitive)) && !isEmptyAnonymousObjectType(source) :
             target === globalFunctionType ? !!(source.flags & TypeFlags.Object) && isFunctionObjectType(source as ObjectType) :
             hasBaseType(source, getTargetType(target)) || (isArrayType(target) && !isReadonlyArrayType(target) && isTypeDerivedFrom(source, globalReadonlyArrayType));
     }
