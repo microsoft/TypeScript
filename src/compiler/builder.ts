@@ -1078,8 +1078,8 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
         const seenFiles = new Set<Path>();
         for (const path of arrayFrom(state.affectedFilesPendingEmit.keys()).sort(compareStringsCaseSensitive)) {
             if (tryAddToSet(seenFiles, path)) {
-                const file = state.program!.getSourceFileByPath(path)!;
-                if (!sourceFileMayBeEmitted(file, state.program!)) continue;
+                const file = state.program!.getSourceFileByPath(path);
+                if (!file || !sourceFileMayBeEmitted(file, state.program!)) continue;
                 const fileId = toFileId(path), pendingEmit = state.affectedFilesPendingEmit.get(path)!;
                 (affectedFilesPendingEmit ||= []).push(
                     pendingEmit === fullEmitForOptions ?
