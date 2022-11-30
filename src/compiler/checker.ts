@@ -5262,7 +5262,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!length(candidates)) {
             return undefined;
         }
-        return mapDefined(candidates, candidate => getAliasForSymbolInContainer(candidate, symbol) ? candidate : undefined);
+        return mapDefined(deduplicate(candidates, equateValues), candidate => getAliasForSymbolInContainer(candidate, symbol) ? candidate : undefined);
 
         function fileSymbolIfFileSymbolExportEqualsContainer(d: Declaration) {
             return container && getFileSymbolIfFileSymbolExportEqualsContainer(d, container);
