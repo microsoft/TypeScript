@@ -626,8 +626,8 @@ export class Verify extends VerifyNegatable {
         this.state.noMoveToNewFile();
     }
 
-    public organizeImports(newContent: string, mode?: ts.OrganizeImportsMode): void {
-        this.state.verifyOrganizeImports(newContent, mode);
+    public organizeImports(newContent: string, mode?: ts.OrganizeImportsMode, preferences?: ts.UserPreferences): void {
+        this.state.verifyOrganizeImports(newContent, mode, preferences);
     }
 }
 

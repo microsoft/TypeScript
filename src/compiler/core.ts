@@ -955,6 +955,33 @@ export function arrayIsSorted<T>(array: readonly T[], comparer: Comparer<T>) {
 }
 
 /** @internal */
+export const enum SortKind {
+    None = 0,
+    CaseSensitive = 1,
+    CaseInsensitive = 2,
+}
+
+/** @internal */
+export function detectSortCaseSensitivity(array: readonly string[]): SortKind;
+export function detectSortCaseSensitivity<T>(array: readonly T[], getString: (element: T) => string): SortKind;
+export function detectSortCaseSensitivity<T>(array: readonly T[], getString?: (element: T) => string): SortKind {
+    if (array.length < 2) return SortKind.CaseSensitive;
+    const caseSensitiveComparer = getString
+        ? (a: T, b: T) => compareStringsCaseSensitive(getString(a), getString(b))
+        : compareStringsCaseSensitive as (a: T | undefined, b: T | undefined) => Comparison;
+    if (arrayIsSorted(array, caseSensitiveComparer)) {
+        return SortKind.CaseSensitive;
+    }
+    const caseInsensitiveComparer = getString
+        ? (a: T, b: T) => compareStringsCaseInsensitive(getString(a), getString(b))
+        : compareStringsCaseInsensitive as (a: T | undefined, b: T | undefined) => Comparison;
+    if (arrayIsSorted(array, caseInsensitiveComparer)) {
+        return SortKind.CaseInsensitive;
+    }
+    return SortKind.None;
+}
+
+/** @internal */
 export function arrayIsEqualTo<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
     if (!array1 || !array2) {
         return array1 === array2;

@@ -6,6 +6,7 @@ import {
 } from "../virtualFileSystemWithWatch";
 import { createProjectService } from "../tsserver/helpers";
 import { newLineCharacter } from "./extract/helpers";
+import { SortKind } from "../../_namespaces/ts";
 
 describe("unittests:: services:: organizeImports", () => {
     describe("Sort imports", () => {
@@ -45,13 +46,13 @@ describe("unittests:: services:: organizeImports", () => {
 
     describe("Coalesce imports", () => {
         it("No imports", () => {
-            assert.isEmpty(ts.OrganizeImports.coalesceImports([]));
+            assert.isEmpty(ts.OrganizeImports.coalesceImports([], /*ignoreCase*/ true));
         });
 
         it("Sort specifiers - case-insensitive", () => {
             const sortedImports = parseImports(`import { default as M, a as n, B, y, Z as O } from "lib";`);
-            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
-            const expectedCoalescedImports = parseImports(`import { a as n, B, default as M, y, Z as O } from "lib";`);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
+            const expectedCoalescedImports = parseImports(`import { B, default as M, a as n, Z as O, y } from "lib";`);
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
 
@@ -59,7 +60,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import "lib";`,
                 `import "lib";`);
-            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
             const expectedCoalescedImports = parseImports(`import "lib";`);
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -68,7 +69,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import * as x from "lib";`,
                 `import * as y from "lib";`);
-            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
             const expectedCoalescedImports = sortedImports;
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -77,7 +78,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import x from "lib";`,
                 `import y from "lib";`);
-            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
             const expectedCoalescedImports = parseImports(`import { default as x, default as y } from "lib";`);
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -86,7 +87,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import { x } from "lib";`,
                 `import { y as z } from "lib";`);
-            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
             const expectedCoalescedImports = parseImports(`import { x, y as z } from "lib";`);
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -95,7 +96,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import "lib";`,
                 `import * as x from "lib";`);
-            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
             const expectedCoalescedImports = sortedImports;
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -104,7 +105,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import "lib";`,
                 `import x from "lib";`);
-            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
             const expectedCoalescedImports = sortedImports;
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -113,7 +114,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import "lib";`,
                 `import { x } from "lib";`);
-            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
             const expectedCoalescedImports = sortedImports;
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -122,7 +123,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import * as x from "lib";`,
                 `import y from "lib";`);
-            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
             const expectedCoalescedImports = parseImports(
                 `import y, * as x from "lib";`);
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
@@ -132,7 +133,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import * as x from "lib";`,
                 `import { y } from "lib";`);
-            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
             const expectedCoalescedImports = sortedImports;
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -141,7 +142,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedImports = parseImports(
                 `import x from "lib";`,
                 `import { y } from "lib";`);
-            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
             const expectedCoalescedImports = parseImports(
                 `import x, { y } from "lib";`);
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
@@ -157,7 +158,7 @@ describe("unittests:: services:: organizeImports", () => {
                 `import * as x from "lib";`,
                 `import z from "lib";`,
                 `import { a } from "lib";`);
-            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
             const expectedCoalescedImports = parseImports(
                 `import "lib";`,
                 `import * as x from "lib";`,
@@ -172,7 +173,7 @@ describe("unittests:: services:: organizeImports", () => {
                 `import * as x from "lib";`,
                 `import * as y from "lib";`,
                 `import z from "lib";`);
-            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
             const expectedCoalescedImports = sortedImports;
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -182,7 +183,7 @@ describe("unittests:: services:: organizeImports", () => {
                 `import type { x } from "lib";`,
                 `import type { y } from "lib";`,
                 `import { z } from "lib";`);
-            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
             const expectedCoalescedImports = parseImports(
                 `import { z } from "lib";`,
                 `import type { x, y } from "lib";`);
@@ -196,7 +197,7 @@ describe("unittests:: services:: organizeImports", () => {
                 `import type z from "lib";`);
             // Default import could be rewritten as a named import to combine with `x`,
             // but seems of debatable merit.
-            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
             const expectedCoalescedImports = actualCoalescedImports;
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -204,19 +205,19 @@ describe("unittests:: services:: organizeImports", () => {
 
     describe("Coalesce exports", () => {
         it("No exports", () => {
-            assert.isEmpty(ts.OrganizeImports.coalesceExports([]));
+            assert.isEmpty(ts.OrganizeImports.coalesceExports([], /*ignoreCase*/ true));
         });
 
         it("Sort specifiers - case-insensitive", () => {
             const sortedExports = parseExports(`export { default as M, a as n, B, y, Z as O } from "lib";`);
-            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
-            const expectedCoalescedExports = parseExports(`export { a as n, B, default as M, y, Z as O } from "lib";`);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports, /*ignoreCase*/ true);
+            const expectedCoalescedExports = parseExports(`export { B, default as M, a as n, Z as O, y } from "lib";`);
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
         });
 
         it("Sort specifiers - type-only", () => {
             const sortedImports = parseImports(`import { type z, y, type x, c, type b, a } from "lib";`);
-            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports);
+            const actualCoalescedImports = ts.OrganizeImports.coalesceImports(sortedImports, /*ignoreCase*/ true);
             const expectedCoalescedImports = parseImports(`import { a, c, y, type b, type x, type z } from "lib";`);
             assertListEqual(actualCoalescedImports, expectedCoalescedImports);
         });
@@ -225,7 +226,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedExports = parseExports(
                 `export * from "lib";`,
                 `export * from "lib";`);
-            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports, /*ignoreCase*/ true);
             const expectedCoalescedExports = parseExports(`export * from "lib";`);
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
         });
@@ -234,7 +235,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedExports = parseExports(
                 `export { x };`,
                 `export { y as z };`);
-            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports, /*ignoreCase*/ true);
             const expectedCoalescedExports = parseExports(`export { x, y as z };`);
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
         });
@@ -243,7 +244,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedExports = parseExports(
                 `export { x } from "lib";`,
                 `export { y as z } from "lib";`);
-            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports, /*ignoreCase*/ true);
             const expectedCoalescedExports = parseExports(`export { x, y as z } from "lib";`);
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
         });
@@ -252,7 +253,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedExports = parseExports(
                 `export * from "lib";`,
                 `export { y } from "lib";`);
-            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports, /*ignoreCase*/ true);
             const expectedCoalescedExports = sortedExports;
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
         });
@@ -262,9 +263,9 @@ describe("unittests:: services:: organizeImports", () => {
                 `export { x };`,
                 `export { y as w, z as default };`,
                 `export { w as q };`);
-            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports, /*ignoreCase*/ true);
             const expectedCoalescedExports = parseExports(
-                `export { w as q, x, y as w, z as default };`);
+                `export { z as default, w as q, y as w, x };`);
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
         });
 
@@ -273,10 +274,10 @@ describe("unittests:: services:: organizeImports", () => {
                 `export { x as a, y } from "lib";`,
                 `export * from "lib";`,
                 `export { z as b } from "lib";`);
-            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports, /*ignoreCase*/ true);
             const expectedCoalescedExports = parseExports(
                 `export * from "lib";`,
-                `export { x as a, y, z as b } from "lib";`);
+                `export { x as a, z as b, y } from "lib";`);
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
         });
 
@@ -284,7 +285,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedExports = parseExports(
                 `export { x };`,
                 `export type { y };`);
-            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports, /*ignoreCase*/ true);
             const expectedCoalescedExports = sortedExports;
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
         });
@@ -293,7 +294,7 @@ describe("unittests:: services:: organizeImports", () => {
             const sortedExports = parseExports(
                 `export type { x };`,
                 `export type { y };`);
-            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports);
+            const actualCoalescedExports = ts.OrganizeImports.coalesceExports(sortedExports, /*ignoreCase*/ true);
             const expectedCoalescedExports = parseExports(
                 `export type { x, y };`);
             assertListEqual(actualCoalescedExports, expectedCoalescedExports);
