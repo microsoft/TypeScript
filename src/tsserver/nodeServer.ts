@@ -5,7 +5,6 @@ import {
     ActionPackageInstalled,
     ActionSet,
     Arguments,
-    BaseLogger,
     BeginInstallTypes,
     createInstallTypingsRequest,
     EndInstallTypes,
@@ -27,6 +26,7 @@ import {
     LogLevel,
     ModuleImportResult,
     Msg,
+    nowString,
     nullCancellationToken,
     nullTypingsInstaller,
     PackageInstalledResponse,
@@ -36,9 +36,9 @@ import {
     ServerCancellationToken,
     ServerHost,
     Session,
+    SessionOptions,
     SetTypings,
     StartInput,
-    StartSessionOptions,
     stringifyIndented,
     toEvent,
     TypesRegistryResponse,
@@ -65,6 +65,7 @@ import {
     noopFileWatcher,
     normalizePath,
     normalizeSlashes,
+    perfLogger,
     resolveJSModule,
     SortedReadonlyArray,
     startTracing,
@@ -163,6 +164,74 @@ function parseServerMode(): LanguageServiceMode | string | undefined {
             return LanguageServiceMode.Syntactic;
         default:
             return mode;
+    }
+}
+/** @internal */
+export class BaseLogger implements Logger {
+    private seq = 0;
+    private inGroup = false;
+    private firstInGroup = true;
+    constructor(protected readonly level: LogLevel) {
+    }
+    static padStringRight(str: string, padding: string) {
+        return (str + padding).slice(0, padding.length);
+    }
+    close() {
+    }
+    getLogFileName(): string | undefined {
+        return undefined;
+    }
+    perftrc(s: string) {
+        this.msg(s, Msg.Perf);
+    }
+    info(s: string) {
+        this.msg(s, Msg.Info);
+    }
+    err(s: string) {
+        this.msg(s, Msg.Err);
+    }
+    startGroup() {
+        this.inGroup = true;
+        this.firstInGroup = true;
+    }
+    endGroup() {
+        this.inGroup = false;
+    }
+    loggingEnabled() {
+        return true;
+    }
+    hasLevel(level: LogLevel) {
+        return this.loggingEnabled() && this.level >= level;
+    }
+    msg(s: string, type: Msg = Msg.Err) {
+        switch (type) {
+            case Msg.Info:
+                perfLogger.logInfoEvent(s);
+                break;
+            case Msg.Perf:
+                perfLogger.logPerfEvent(s);
+                break;
+            default: // Msg.Err
+                perfLogger.logErrEvent(s);
+                break;
+        }
+
+        if (!this.canWrite()) return;
+
+        s = `[${nowString()}] ${s}\n`;
+        if (!this.inGroup || this.firstInGroup) {
+            const prefix = BaseLogger.padStringRight(type + " " + this.seq.toString(), "          ");
+            s = prefix + s;
+        }
+        this.write(s, type);
+        if (!this.inGroup) {
+            this.seq++;
+        }
+    }
+    protected canWrite() {
+        return true;
+    }
+    protected write(_s: string, _type: Msg) {
     }
 }
 
@@ -463,7 +532,18 @@ function parseEventPort(eventPortStr: string | undefined) {
     const eventPort = eventPortStr === undefined ? undefined : parseInt(eventPortStr);
     return eventPort !== undefined && !isNaN(eventPort) ? eventPort : undefined;
 }
-
+/** @internal */
+export interface StartSessionOptions {
+    globalPlugins: SessionOptions["globalPlugins"];
+    pluginProbeLocations: SessionOptions["pluginProbeLocations"];
+    allowLocalPluginLoads: SessionOptions["allowLocalPluginLoads"];
+    useSingleInferredProject: SessionOptions["useSingleInferredProject"];
+    useInferredProjectPerProjectRoot: SessionOptions["useInferredProjectPerProjectRoot"];
+    suppressDiagnosticEvents: SessionOptions["suppressDiagnosticEvents"];
+    noGetErrOnBackgroundUpdate: SessionOptions["noGetErrOnBackgroundUpdate"];
+    syntaxOnly: SessionOptions["syntaxOnly"];
+    serverMode: SessionOptions["serverMode"];
+}
 function startNodeSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
     const childProcess: {
         fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
