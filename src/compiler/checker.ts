@@ -5204,65 +5204,65 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.extendedContainers = results || emptyArray;
     }
 
-        /**
-         * Attempts to find the symbol corresponding to the container a symbol is in - usually this
-         * is just its' `.parent`, but for locals, this value is `undefined`
-         */
-        function getContainersOfSymbol(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags): Symbol[] | undefined {
-            const container = getParentOfSymbol(symbol);
-            // Type parameters end up in the `members` lists but are not externally visible
-            if (container && !(symbol.flags & SymbolFlags.TypeParameter)) {
-                const additionalContainers = mapDefined(container.declarations, fileSymbolIfFileSymbolExportEqualsContainer);
-                const reexportContainers = enclosingDeclaration && getAlternativeContainingModules(symbol, enclosingDeclaration);
-                const objectLiteralContainer = getVariableDeclarationOfObjectLiteral(container, meaning);
-                if (
-                    enclosingDeclaration &&
-                    container.flags & getQualifiedLeftMeaning(meaning) &&
-                    getAccessibleSymbolChain(container, enclosingDeclaration, SymbolFlags.Namespace, /*externalOnly*/ false)
-                ) {
-                    return append(concatenate(concatenate([container], additionalContainers), reexportContainers), objectLiteralContainer); // This order expresses a preference for the real container if it is in scope
-                }
-                // we potentially have a symbol which is a member of the instance side of something - look for a variable in scope with the container's type
-                // which may be acting like a namespace (eg, `Symbol` acts like a namespace when looking up `Symbol.toStringTag`)
-                const firstVariableMatch = !(container.flags & getQualifiedLeftMeaning(meaning))
-                    && container.flags & SymbolFlags.Type
-                    && getDeclaredTypeOfSymbol(container).flags & TypeFlags.Object
-                    && meaning === SymbolFlags.Value
-                ? forEachSymbolTableInScope(enclosingDeclaration, t => {
-                    return forEachEntry(t, s => {
-                        if (s.flags & getQualifiedLeftMeaning(meaning) && getTypeOfSymbol(s) === getDeclaredTypeOfSymbol(container)) {
-                            return s;
-                        }
-                    });
-                }) : undefined;
-                let res = firstVariableMatch ? [firstVariableMatch, ...additionalContainers, container] : [...additionalContainers, container];
-                res = append(res, objectLiteralContainer);
-                res = addRange(res, reexportContainers);
-                return res;
+    /**
+     * Attempts to find the symbol corresponding to the container a symbol is in - usually this
+     * is just its' `.parent`, but for locals, this value is `undefined`
+     */
+    function getContainersOfSymbol(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags): Symbol[] | undefined {
+        const container = getParentOfSymbol(symbol);
+        // Type parameters end up in the `members` lists but are not externally visible
+        if (container && !(symbol.flags & SymbolFlags.TypeParameter)) {
+            const additionalContainers = mapDefined(container.declarations, fileSymbolIfFileSymbolExportEqualsContainer);
+            const reexportContainers = enclosingDeclaration && getAlternativeContainingModules(symbol, enclosingDeclaration);
+            const objectLiteralContainer = getVariableDeclarationOfObjectLiteral(container, meaning);
+            if (
+                enclosingDeclaration &&
+                container.flags & getQualifiedLeftMeaning(meaning) &&
+                getAccessibleSymbolChain(container, enclosingDeclaration, SymbolFlags.Namespace, /*externalOnly*/ false)
+            ) {
+                return append(concatenate(concatenate([container], additionalContainers), reexportContainers), objectLiteralContainer); // This order expresses a preference for the real container if it is in scope
             }
-            const candidates = mapDefined(symbol.declarations, d => {
-                if (!isAmbientModule(d) && d.parent){
-                    // direct children of a module
-                    if (hasNonGlobalAugmentationExternalModuleSymbol(d.parent)) {
-                        return getSymbolOfNode(d.parent);
+            // we potentially have a symbol which is a member of the instance side of something - look for a variable in scope with the container's type
+            // which may be acting like a namespace (eg, `Symbol` acts like a namespace when looking up `Symbol.toStringTag`)
+            const firstVariableMatch = !(container.flags & getQualifiedLeftMeaning(meaning))
+                && container.flags & SymbolFlags.Type
+                && getDeclaredTypeOfSymbol(container).flags & TypeFlags.Object
+                && meaning === SymbolFlags.Value
+            ? forEachSymbolTableInScope(enclosingDeclaration, t => {
+                return forEachEntry(t, s => {
+                    if (s.flags & getQualifiedLeftMeaning(meaning) && getTypeOfSymbol(s) === getDeclaredTypeOfSymbol(container)) {
+                        return s;
                     }
-                    // members of ambient modules
-                    if (isModuleBlock(d.parent) && d.parent.parent && !isGlobalScopeAugmentation(d.parent.parent)) {
-                      return getSymbolOfNode(d.parent.parent);
-                    }
+                });
+            }) : undefined;
+            let res = firstVariableMatch ? [firstVariableMatch, ...additionalContainers, container] : [...additionalContainers, container];
+            res = append(res, objectLiteralContainer);
+            res = addRange(res, reexportContainers);
+            return res;
+        }
+        const candidates = mapDefined(symbol.declarations, d => {
+            if (!isAmbientModule(d) && d.parent){
+                // direct children of a module
+                if (hasNonGlobalAugmentationExternalModuleSymbol(d.parent)) {
+                    return getSymbolOfNode(d.parent);
                 }
-                if (isClassExpression(d) && isBinaryExpression(d.parent) && d.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAccessExpression(d.parent.left) && isEntityNameExpression(d.parent.left.expression)) {
-                    if (isModuleExportsAccessExpression(d.parent.left) || isExportsIdentifier(d.parent.left.expression)) {
-                        return getSymbolOfNode(getSourceFileOfNode(d));
-                    }
-                    checkExpressionCached(d.parent.left.expression);
-                    return getNodeLinks(d.parent.left.expression).resolvedSymbol;
+                // members of ambient modules
+                if (isModuleBlock(d.parent) && d.parent.parent && !isGlobalScopeAugmentation(d.parent.parent)) {
+                  return getSymbolOfNode(d.parent.parent);
                 }
-            });
-            if (!length(candidates)) {
-                return undefined;
             }
-            return mapDefined(candidates, candidate => getAliasForSymbolInContainer(candidate, symbol) ? candidate : undefined);
+            if (isClassExpression(d) && isBinaryExpression(d.parent) && d.parent.operatorToken.kind === SyntaxKind.EqualsToken && isAccessExpression(d.parent.left) && isEntityNameExpression(d.parent.left.expression)) {
+                if (isModuleExportsAccessExpression(d.parent.left) || isExportsIdentifier(d.parent.left.expression)) {
+                    return getSymbolOfNode(getSourceFileOfNode(d));
+                }
+                checkExpressionCached(d.parent.left.expression);
+                return getNodeLinks(d.parent.left.expression).resolvedSymbol;
+            }
+        });
+        if (!length(candidates)) {
+            return undefined;
+        }
+        return mapDefined(candidates, candidate => getAliasForSymbolInContainer(candidate, symbol) ? candidate : undefined);
 
         function fileSymbolIfFileSymbolExportEqualsContainer(d: Declaration) {
             return container && getFileSymbolIfFileSymbolExportEqualsContainer(d, container);
