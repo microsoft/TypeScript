@@ -2,10 +2,8 @@ import { getModuleSpecifier } from "../../compiler/moduleSpecifiers";
 import {
     AnyImportOrRequireStatement, append, ApplicableRefactorInfo, AssignmentDeclarationKind, BinaryExpression,
     BindingElement, BindingName, CallExpression, canHaveDecorators, canHaveModifiers, cast, ClassDeclaration, codefix,
-    combinePaths, concatenate, contains, copyEntries, createModuleSpecifierResolutionHost, createTextRangeFromSpan, Debug, Declaration, DeclarationStatement,
-    Diagnostics, emptyArray,
-    // ensurePathIsNonModuleName, ISABEL
-    EnumDeclaration, escapeLeadingUnderscores, Expression,
+    combinePaths, concatenate, contains, copyEntries, createModuleSpecifierResolutionHost, createTextRangeFromSpan,
+    Debug, Declaration, DeclarationStatement, Diagnostics, emptyArray, EnumDeclaration, escapeLeadingUnderscores, Expression,
     ExpressionStatement, extensionFromPath, ExternalModuleReference, factory, find, FindAllReferences, findIndex,
     firstDefined, flatMap, forEachEntry, FunctionDeclaration, getAssignmentDeclarationKind, getBaseFileName,
     GetCanonicalFileName, getDecorators, getDirectoryPath, getLocaleSpecificMessage, getModifiers,
@@ -18,13 +16,8 @@ import {
     isPropertyAssignment, isRequireCall, isSourceFile, isStringLiteral, isStringLiteralLike, isVariableDeclaration,
     isVariableDeclarationList, isVariableStatement, LanguageServiceHost, last, length, makeImportIfNecessary, Map,
     mapDefined, ModifierFlags, ModifierLike, ModuleDeclaration, NamedImportBindings, Node, NodeFlags, nodeSeenTracker,
-    normalizePath, ObjectBindingElementWithoutPropertyName, Program,
-    // programContainsEsModules,
-    PropertyAccessExpression, PropertyAssignment,
-    QuotePreference, rangeContainsRange, RefactorContext, RefactorEditInfo,
-    // removeExtension,
-    // removeFileExtension,
-    RequireOrImportCall,
+    normalizePath, ObjectBindingElementWithoutPropertyName, Program, PropertyAccessExpression, PropertyAssignment,
+    QuotePreference, rangeContainsRange, RefactorContext, RefactorEditInfo, RequireOrImportCall,
     RequireVariableStatement, resolvePath, ScriptTarget, skipAlias, some, SourceFile, Statement, StringLiteralLike, Symbol,
     SymbolFlags, symbolNameNoDefault, SyntaxKind, takeWhile, textChanges, TransformFlags, tryCast, TypeAliasDeclaration,
     TypeChecker, TypeNode, UserPreferences, VariableDeclaration, VariableDeclarationList, VariableStatement,
@@ -93,10 +86,9 @@ function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes
 
     const currentDirectory = getDirectoryPath(oldFile.fileName);
     const extension = extensionFromPath(oldFile.fileName);
-    // const newModuleName = makeUniqueModuleName(getNewModuleName(usage.oldFileImportsFromNewFile, usage.movedSymbols), extension, currentDirectory, host);
     const newFileName = makeUniqueModuleName(getNewModuleName(usage.oldFileImportsFromNewFile, usage.movedSymbols), extension, currentDirectory, host);
 
-    // If previous file was global, this is easy. ISABEL added host to getNewStatementsAndRemoveFromOldFile call
+    // If previous file was global, this is easy.
     changes.createNewFile(oldFile, combinePaths(currentDirectory, newFileName + extension), getNewStatementsAndRemoveFromOldFile(oldFile, usage, changes, toMove, program, host, newFileName, extension, preferences));
 
     addNewFileToTsconfig(program, changes, oldFile.fileName, newFileName + extension, hostGetCanonicalFileName(host));
@@ -172,8 +164,7 @@ function getNewStatementsAndRemoveFromOldFile( // ISABEL added host to function
     const useEsModuleSyntax = !!oldFile.externalModuleIndicator;
     const quotePreference = getQuotePreference(oldFile, preferences);
     const newModuleNameWithExtension = newModuleName + extension;
-    // ISABEL added host to function call
-    // const importsFromNewFile = createOldFileImportsFromNewFile(usage.oldFileImportsFromNewFile, newModuleName, useEsModuleSyntax, quotePreference);
+
     const importsFromNewFile = createOldFileImportsFromNewFile(oldFile, usage.oldFileImportsFromNewFile, newModuleNameWithExtension, program, host, useEsModuleSyntax, quotePreference);
     if (importsFromNewFile) {
         insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true);
@@ -183,7 +174,6 @@ function getNewStatementsAndRemoveFromOldFile( // ISABEL added host to function
     deleteMovedStatements(oldFile, toMove.ranges, changes);
     updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, newModuleName, extension);
 
-    // ISABEL added Program, Host
     const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference);
     const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEsModuleSyntax);
     if (imports.length && body.length) {
@@ -230,7 +220,7 @@ function updateImportsInOtherFiles(changes: textChanges.ChangeTracker, program: 
                     return !!symbol && movedSymbols.has(symbol);
                 };
                 deleteUnusedImports(sourceFile, importNode, changes, shouldMove); // These will be changed to imports from the new file
-                const newFileNameWithExtension = resolvePath(getDirectoryPath(sourceFile.path), newModuleName + extension);
+                const newFileNameWithExtension = resolvePath(getDirectoryPath(oldFile.path), newModuleName + extension);
                 const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, newFileNameWithExtension, createModuleSpecifierResolutionHost(program, host));
                 //ISABEL fix variable names
                 // newFileNameWithExtension = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, newFileNameWithExtension, createModuleSpecifierResolutionHost(program, host));
@@ -360,14 +350,16 @@ function createOldFileImportsFromNewFile(sourceFile: SourceFile, newFileNeedExpo
 function makeImportOrRequire(
     sourceFile: SourceFile,
     defaultImport: Identifier | undefined,
-    imports: readonly string[], newFileNameWithExtension: string,
-    program: Program, host: LanguageServiceHost,
+    imports: readonly string[],
+    newFileNameWithExtension: string,
+    program: Program,
+    host: LanguageServiceHost,
     useEs6Imports: boolean,
     quotePreference: QuotePreference
     ): AnyImportOrRequireStatement | undefined {
     //DEBUG
-    newFileNameWithExtension = resolvePath(getDirectoryPath(sourceFile.path), newFileNameWithExtension);
-    newFileNameWithExtension = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, newFileNameWithExtension, createModuleSpecifierResolutionHost(program, host));
+    const pathToNewFileWithExtension = resolvePath(getDirectoryPath(sourceFile.path), newFileNameWithExtension);
+    newFileNameWithExtension = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, pathToNewFileWithExtension, createModuleSpecifierResolutionHost(program, host));
 
     //    const getCanonicalFileName = hostGetCanonicalFileName(host);
     // const newFilePath = getRelativePathFromFile(cfg.fileName, newFileAbsolutePath, getCanonicalFileName);
