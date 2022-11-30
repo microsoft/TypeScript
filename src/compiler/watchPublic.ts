@@ -715,7 +715,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         if (hostSourceFile.version) return hostSourceFile.version;
         // Read file and get new version
         const text = readFileWithCache(path);
-        return text ? getSourceFileVersionAsHashFromText(compilerHost, text) : undefined;
+        return text !== undefined ? getSourceFileVersionAsHashFromText(compilerHost, text) : undefined;
     }
 
     function onReleaseOldSourceFile(oldSourceFile: SourceFile, _oldOptions: CompilerOptions, hasSourceFileByPath: boolean) {
