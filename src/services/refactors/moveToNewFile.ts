@@ -478,7 +478,7 @@ function makeImportOrRequire(
         Debug.assert(!defaultImport, "No default import should exist"); // If there's a default export, it should have been an es6 module.
         const bindingElements = imports.map(i => factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, i));
         return bindingElements.length
-            ? makeVariableStatement(factory.createObjectBindingPattern(bindingElements), /*type*/ undefined, createRequireCall(factory.createStringLiteral(newFileNameWithExtension))) as RequireVariableStatement
+            ? makeVariableStatement(factory.createObjectBindingPattern(bindingElements), /*type*/ undefined, createRequireCall(factory.createStringLiteral(pathToNewFileWithCorrectExtension))) as RequireVariableStatement
             : undefined;
     }
 }
