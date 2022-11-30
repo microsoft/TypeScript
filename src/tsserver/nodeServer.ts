@@ -79,7 +79,7 @@ import {
 import {
     StartInput,
     StartSessionOptions,
-} from './common'
+} from "./common";
 
 interface LogOptions {
     file?: string;
