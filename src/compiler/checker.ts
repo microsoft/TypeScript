@@ -22633,7 +22633,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isUnitLikeType(type: Type): boolean {
-        return isUnitType(getBaseConstraintOrType(type));
+        // Intersections that reduce to 'never' (e.g. 'T & null' where 'T extends {}') are not unit types.
+        const t = getBaseConstraintOrType(type);
+        // Scan intersections such that tagged literal types are considered unit types.
+        return t.flags & TypeFlags.Intersection ? some((t as IntersectionType).types, isUnitType) : isUnitType(t);
     }
 
     function extractUnitType(type: Type) {
