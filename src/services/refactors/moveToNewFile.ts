@@ -151,7 +151,7 @@ function addNewFileToTsconfig(program: Program, changes: textChanges.ChangeTrack
     }
 }
 
-function getNewStatementsAndRemoveFromOldFile( // ISABEL added host to function
+function getNewStatementsAndRemoveFromOldFile(
     oldFile: SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, newModuleName: string, extension: string, preferences: UserPreferences,
 ) {
     const checker = program.getTypeChecker();
@@ -163,9 +163,7 @@ function getNewStatementsAndRemoveFromOldFile( // ISABEL added host to function
 
     const useEsModuleSyntax = !!oldFile.externalModuleIndicator;
     const quotePreference = getQuotePreference(oldFile, preferences);
-    const newModuleNameWithExtension = newModuleName + extension;
-
-    const importsFromNewFile = createOldFileImportsFromNewFile(oldFile, usage.oldFileImportsFromNewFile, newModuleNameWithExtension, program, host, useEsModuleSyntax, quotePreference);
+    const importsFromNewFile = createOldFileImportsFromNewFile(oldFile, usage.oldFileImportsFromNewFile, newModuleName + extension, program, host, useEsModuleSyntax, quotePreference);
     if (importsFromNewFile) {
         insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true);
     }
@@ -205,7 +203,9 @@ function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Statement[
     }
 }
 
-function updateImportsInOtherFiles(changes: textChanges.ChangeTracker, program: Program, host: LanguageServiceHost, oldFile: SourceFile, movedSymbols: ReadonlySymbolSet, newModuleName: string, extension: string): void {
+function updateImportsInOtherFiles(
+    changes: textChanges.ChangeTracker, program: Program, host: LanguageServiceHost, oldFile: SourceFile, movedSymbols: ReadonlySymbolSet, newModuleName: string, extension: string
+): void {
     const checker = program.getTypeChecker();
     for (const sourceFile of program.getSourceFiles()) {
         if (sourceFile === oldFile) continue;
@@ -220,17 +220,14 @@ function updateImportsInOtherFiles(changes: textChanges.ChangeTracker, program: 
                     return !!symbol && movedSymbols.has(symbol);
                 };
                 deleteUnusedImports(sourceFile, importNode, changes, shouldMove); // These will be changed to imports from the new file
-                const newFileNameWithExtension = resolvePath(getDirectoryPath(oldFile.path), newModuleName + extension);
-                const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, newFileNameWithExtension, createModuleSpecifierResolutionHost(program, host));
-                //ISABEL fix variable names
-                // newFileNameWithExtension = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, newFileNameWithExtension, createModuleSpecifierResolutionHost(program, host));
+
+                const pathToNewFileWithExtension = resolvePath(getDirectoryPath(oldFile.path), newModuleName + extension);
+                const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, pathToNewFileWithExtension, createModuleSpecifierResolutionHost(program, host));
                 const newImportDeclaration = filterImport(importNode, factory.createStringLiteral(newModuleSpecifier), shouldMove);
                 if (newImportDeclaration) changes.insertNodeAfter(sourceFile, statement, newImportDeclaration);
 
                 const ns = getNamespaceLikeImport(importNode);
-                if (ns) {
-                    updateNamespaceLikeImport(changes, sourceFile, checker, movedSymbols, newModuleName, newModuleSpecifier, ns, importNode);
-                }
+                if (ns) updateNamespaceLikeImport(changes, sourceFile, checker, movedSymbols, newModuleName, newModuleSpecifier, ns, importNode);
             });
         }
     }
@@ -332,7 +329,15 @@ type SupportedImportStatement =
     | ImportEqualsDeclaration
     | VariableStatement;
 
-function createOldFileImportsFromNewFile(sourceFile: SourceFile, newFileNeedExport: ReadonlySymbolSet, newFileNameWithExtension: string, program: Program, host: LanguageServiceHost, useEs6Imports: boolean, quotePreference: QuotePreference): AnyImportOrRequireStatement | undefined {
+function createOldFileImportsFromNewFile(
+    sourceFile: SourceFile,
+    newFileNeedExport: ReadonlySymbolSet,
+    newFileNameWithExtension: string,
+    program: Program,
+    host: LanguageServiceHost,
+    useEs6Imports: boolean,
+    quotePreference: QuotePreference
+): AnyImportOrRequireStatement | undefined {
     let defaultImport: Identifier | undefined;
     const imports: string[] = [];
     newFileNeedExport.forEach(symbol => {
@@ -343,7 +348,6 @@ function createOldFileImportsFromNewFile(sourceFile: SourceFile, newFileNeedExpo
             imports.push(symbol.name);
         }
     });
-    //ISABEL added sourceFile, program, host to function call
     return makeImportOrRequire(sourceFile, defaultImport, imports, newFileNameWithExtension, program, host, useEs6Imports, quotePreference);
 }
 
@@ -356,19 +360,13 @@ function makeImportOrRequire(
     host: LanguageServiceHost,
     useEs6Imports: boolean,
     quotePreference: QuotePreference
-    ): AnyImportOrRequireStatement | undefined {
-    //DEBUG
-    const pathToNewFileWithExtension = resolvePath(getDirectoryPath(sourceFile.path), newFileNameWithExtension);
-    newFileNameWithExtension = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, pathToNewFileWithExtension, createModuleSpecifierResolutionHost(program, host));
+): AnyImportOrRequireStatement | undefined {
+    const pathToNewFile = resolvePath(getDirectoryPath(sourceFile.path), newFileNameWithExtension);
+    const pathToNewFileWithCorrectExtension = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, pathToNewFile, createModuleSpecifierResolutionHost(program, host));
 
-    //    const getCanonicalFileName = hostGetCanonicalFileName(host);
-    // const newFilePath = getRelativePathFromFile(cfg.fileName, newFileAbsolutePath, getCanonicalFileName);
-    //ISABEL added sourceFile, host to function call and changed path to require module specifier
-    // path = ensurePathIsNonModuleName(path);
-    // normalizePath(combinePaths(oldFileName, "..", newFileNameWithExtension));
     if (useEs6Imports) {
         const specifiers = imports.map(i => factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, factory.createIdentifier(i)));
-        return makeImportIfNecessary(defaultImport, specifiers, newFileNameWithExtension, quotePreference);
+        return makeImportIfNecessary(defaultImport, specifiers, pathToNewFileWithCorrectExtension, quotePreference);
     }
     else {
         Debug.assert(!defaultImport, "No default import should exist"); // If there's a default export, it should have been an es6 module.
@@ -484,7 +482,7 @@ function getNewFileImportsAndAddExportInOldFile(
     changes: textChanges.ChangeTracker,
     checker: TypeChecker,
     program: Program,
-    host: LanguageServiceHost, //ISABEL added program, host
+    host: LanguageServiceHost,
     useEsModuleSyntax: boolean,
     quotePreference: QuotePreference,
 ): readonly SupportedImportStatement[] {
@@ -521,8 +519,6 @@ function getNewFileImportsAndAddExportInOldFile(
         }
     });
 
-    // ISABEL changed makeImportOrRequire call
-    // append(copiedOldImports, makeImportOrRequire(oldFileDefault, oldFileNamedImports, removeFileExtension(getBaseFileName(oldFile.fileName)), useEsModuleSyntax, quotePreference));
     append(copiedOldImports, makeImportOrRequire(oldFile, oldFileDefault, oldFileNamedImports, getBaseFileName(oldFile.fileName), program, host, useEsModuleSyntax, quotePreference));
     return copiedOldImports;
 }
