@@ -84,4 +84,24 @@ case F.F:`,
             includeCompletionsWithInsertText: true,
         },
     },
+    {
+        marker: "3",
+        isNewIdentifierLocation: false,
+        includes: [
+            {
+                name: "case F.D: ...",
+                source: completion.CompletionSource.SwitchCases,
+                sortText: completion.SortText.GlobalsOrKeywords,
+                isSnippet: true,
+                insertText:
+`case F.D: $1
+case F.E: $2
+case F.F: $3`,
+            },
+        ],
+        preferences: {
+            includeCompletionsWithInsertText: true,
+            includeCompletionsWithSnippetText: true,
+        },
+    },
 );

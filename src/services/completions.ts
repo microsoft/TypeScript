@@ -2008,19 +2008,28 @@ export function getCompletionEntryDetails(
                 host,
                 program,
                 /*formatContext*/ undefined)!;
-            const changes = textChanges.ChangeTracker.with(
-                { host, formatContext, preferences },
-                importAdder.writeFixes);
+            if (importAdder.hasFixes()) {
+                const changes = textChanges.ChangeTracker.with(
+                    { host, formatContext, preferences },
+                    importAdder.writeFixes);
+                return {
+                    name: entry.name,
+                    kind: ScriptElementKind.unknown,
+                    kindModifiers: "",
+                    displayParts: [],
+                    sourceDisplay: undefined,
+                    codeActions: [{
+                        changes,
+                        description: diagnosticToString([Diagnostics.Includes_imports_of_types_referenced_by_0, name]),
+                    }],
+                };
+            }
             return {
                 name: entry.name,
                 kind: ScriptElementKind.unknown,
                 kindModifiers: "",
                 displayParts: [],
                 sourceDisplay: undefined,
-                codeActions: [{
-                    changes,
-                    description: diagnosticToString([Diagnostics.Includes_imports_of_types_referenced_by_0, name]),
-                }],
             };
         }
         case "none":
