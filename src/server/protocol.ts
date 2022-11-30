@@ -1,8 +1,22 @@
 import * as ts from "./_namespaces/ts";
 import {
-    CompilerOptionsValue, EndOfLineState, FileExtensionInfo, HighlightSpanKind, MapLike, OutliningSpanKind, OutputFile,
-    PluginImport, ProjectReference, RenameLocation, ScriptElementKind, ScriptKind, TextChange, TextInsertion,
-    TodoComment, TodoCommentDescriptor, TypeAcquisition,
+    CompilerOptionsValue,
+    EndOfLineState,
+    FileExtensionInfo,
+    HighlightSpanKind,
+    MapLike,
+    OutliningSpanKind,
+    OutputFile,
+    PluginImport,
+    ProjectReference,
+    RenameLocation,
+    ScriptElementKind,
+    ScriptKind,
+    TextChange,
+    TextInsertion,
+    TodoComment,
+    TodoCommentDescriptor,
+    TypeAcquisition,
 } from "./_namespaces/ts";
 
 /**

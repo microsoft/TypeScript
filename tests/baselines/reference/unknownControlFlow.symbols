@@ -995,3 +995,51 @@ function x<T_AB extends AB>(x: T_AB & undefined, y: any) {
 >T_AB : Symbol(T_AB, Decl(unknownControlFlow.ts, 425, 11))
 } 
 
+// Repro from #51538
+
+type Left = 'left';
+>Left : Symbol(Left, Decl(unknownControlFlow.ts, 427, 1))
+
+type Right = 'right' & { right: 'right' };
+>Right : Symbol(Right, Decl(unknownControlFlow.ts, 431, 19))
+>right : Symbol(right, Decl(unknownControlFlow.ts, 432, 24))
+
+type Either = Left | Right;
+>Either : Symbol(Either, Decl(unknownControlFlow.ts, 432, 42))
+>Left : Symbol(Left, Decl(unknownControlFlow.ts, 427, 1))
+>Right : Symbol(Right, Decl(unknownControlFlow.ts, 431, 19))
+
+function assertNever(v: never): never {
+>assertNever : Symbol(assertNever, Decl(unknownControlFlow.ts, 433, 27))
+>v : Symbol(v, Decl(unknownControlFlow.ts, 435, 21))
+
+    throw new Error('never');
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+function fx20(value: Either) {
+>fx20 : Symbol(fx20, Decl(unknownControlFlow.ts, 437, 1))
+>value : Symbol(value, Decl(unknownControlFlow.ts, 439, 14))
+>Either : Symbol(Either, Decl(unknownControlFlow.ts, 432, 42))
+
+    if (value === 'left') {
+>value : Symbol(value, Decl(unknownControlFlow.ts, 439, 14))
+
+        const foo: 'left' = value;
+>foo : Symbol(foo, Decl(unknownControlFlow.ts, 441, 13))
+>value : Symbol(value, Decl(unknownControlFlow.ts, 439, 14))
+    }
+    else if (value === 'right') {
+>value : Symbol(value, Decl(unknownControlFlow.ts, 439, 14))
+
+        const bar: 'right' = value;
+>bar : Symbol(bar, Decl(unknownControlFlow.ts, 444, 13))
+>value : Symbol(value, Decl(unknownControlFlow.ts, 439, 14))
+    }
+    else {
+        assertNever(value);
+>assertNever : Symbol(assertNever, Decl(unknownControlFlow.ts, 433, 27))
+>value : Symbol(value, Decl(unknownControlFlow.ts, 439, 14))
+    }
+}
+

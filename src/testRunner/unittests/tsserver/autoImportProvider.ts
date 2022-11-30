@@ -1,6 +1,14 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { openFilesForSession, checkNumberOfInferredProjects, checkNumberOfConfiguredProjects, createSession } from "./helpers";
+import {
+    createServerHost,
+    File,
+} from "../virtualFileSystemWithWatch";
+import {
+    checkNumberOfConfiguredProjects,
+    checkNumberOfInferredProjects,
+    createSession,
+    openFilesForSession,
+} from "./helpers";
 
 const angularFormsDts: File = {
     path: "/node_modules/@angular/forms/forms.d.ts",

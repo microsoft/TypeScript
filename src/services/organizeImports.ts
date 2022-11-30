@@ -1,14 +1,62 @@
 import {
-    AnyImportOrRequireStatement, arrayIsSorted, binarySearch, compareBooleans, compareStringsCaseInsensitive,
-    compareValues, Comparison, createScanner, emptyArray, ExportDeclaration, ExportSpecifier, Expression, factory,
+    AnyImportOrRequireStatement,
+    arrayIsSorted,
+    binarySearch,
+    compareBooleans,
+    compareStringsCaseInsensitive,
+    compareValues,
+    Comparison,
+    createScanner,
+    EmitFlags,
+    emptyArray,
+    ExportDeclaration,
+    ExportSpecifier,
+    Expression,
+    factory,
     FileTextChanges,
-    FindAllReferences, flatMap, formatting, getNewLineOrDefaultFromHost, group, Identifier, identity, ImportDeclaration,
-    ImportOrExportSpecifier, ImportSpecifier, isAmbientModule, isExportDeclaration, isExternalModuleNameRelative,
-    isExternalModuleReference, isImportDeclaration, isNamedExports, isNamedImports, isNamespaceImport, isString,
-    isStringLiteral, isStringLiteralLike, jsxModeNeedsExplicitImport, LanguageServiceHost, length, map,
-    NamedImportBindings, NamedImports, NamespaceImport, OrganizeImportsMode, Program, Scanner, some,
-    SortedReadonlyArray, SourceFile, stableSort, suppressLeadingTrivia, SyntaxKind, textChanges, TransformFlags,
-    tryCast, UserPreferences,
+    FindAllReferences,
+    flatMap,
+    formatting,
+    getNewLineOrDefaultFromHost,
+    group,
+    Identifier,
+    identity,
+    ImportDeclaration,
+    ImportOrExportSpecifier,
+    ImportSpecifier,
+    isAmbientModule,
+    isExportDeclaration,
+    isExternalModuleNameRelative,
+    isExternalModuleReference,
+    isImportDeclaration,
+    isNamedExports,
+    isNamedImports,
+    isNamespaceImport,
+    isString,
+    isStringLiteral,
+    isStringLiteralLike,
+    jsxModeNeedsExplicitImport,
+    LanguageServiceHost,
+    length,
+    map,
+    NamedImportBindings,
+    NamedImports,
+    NamespaceImport,
+    OrganizeImportsMode,
+    Program,
+    rangeIsOnSingleLine,
+    Scanner,
+    setEmitFlags,
+    some,
+    SortedReadonlyArray,
+    SourceFile,
+    stableSort,
+    suppressLeadingTrivia,
+    SyntaxKind,
+    textChanges,
+    TransformFlags,
+    tryCast,
+    UserPreferences,
 } from "./_namespaces/ts";
 
 /**
@@ -34,7 +82,7 @@ export function organizeImports(
     const maybeRemove = shouldRemove ? removeUnusedImports : identity;
     const maybeCoalesce = shouldCombine ? coalesceImports : identity;
     const processImportsOfSameModuleSpecifier = (importGroup: readonly ImportDeclaration[]) => {
-        const processedDeclarations = maybeCoalesce(maybeRemove(importGroup, sourceFile, program));
+        const processedDeclarations = maybeCoalesce(maybeRemove(importGroup, sourceFile, program), sourceFile);
         return shouldSort
             ? stableSort(processedDeclarations, (s1, s2) => compareImportsOrRequireStatements(s1, s2))
             : processedDeclarations;
@@ -251,7 +299,7 @@ function getExternalModuleName(specifier: Expression) {
  *
  * @internal
  */
-export function coalesceImports(importGroup: readonly ImportDeclaration[]) {
+export function coalesceImports(importGroup: readonly ImportDeclaration[], sourceFile?: SourceFile) {
     if (importGroup.length === 0) {
         return importGroup;
     }
@@ -305,7 +353,11 @@ export function coalesceImports(importGroup: readonly ImportDeclaration[]) {
 
         newImportSpecifiers.push(...getNewImportSpecifiers(namedImports));
 
-        const sortedImportSpecifiers = sortSpecifiers(newImportSpecifiers);
+        const sortedImportSpecifiers = factory.createNodeArray(
+            sortSpecifiers(newImportSpecifiers),
+            (namedImports[0]?.importClause!.namedBindings as NamedImports)?.elements.hasTrailingComma
+        );
+
         const importDecl = defaultImports.length > 0
             ? defaultImports[0]
             : namedImports[0];
@@ -317,6 +369,14 @@ export function coalesceImports(importGroup: readonly ImportDeclaration[]) {
             : namedImports.length === 0
                 ? factory.createNamedImports(sortedImportSpecifiers)
                 : factory.updateNamedImports(namedImports[0].importClause!.namedBindings as NamedImports, sortedImportSpecifiers); // TODO: GH#18217
+
+        if (sourceFile &&
+            newNamedImports &&
+            namedImports[0]?.importClause!.namedBindings &&
+            !rangeIsOnSingleLine(namedImports[0].importClause.namedBindings, sourceFile)
+        ) {
+            setEmitFlags(newNamedImports, EmitFlags.MultiLine);
+        }
 
         // Type-only imports are not allowed to mix default, namespace, and named imports in any combination.
         // We could rewrite a default import as a named import (`import { default as name }`), but we currently

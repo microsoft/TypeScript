@@ -1,5 +1,8 @@
 import { createServerHost } from "../virtualFileSystemWithWatch";
-import { createProjectService, toExternalFile } from "./helpers";
+import {
+    createProjectService,
+    toExternalFile,
+} from "./helpers";
 
 describe("unittests:: tsserver:: import helpers", () => {
     it("should not crash in tsserver", () => {

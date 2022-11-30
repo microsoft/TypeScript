@@ -1,6 +1,10 @@
 import * as ts from "../../_namespaces/ts";
 import { createServerHost } from "../virtualFileSystemWithWatch";
-import { createSession, TestServerCancellationToken } from "./helpers";
+import {
+    createSession,
+    TestServerCancellationToken,
+    TestSessionRequest,
+} from "./helpers";
 
 describe("unittests:: tsserver:: cancellationToken", () => {
     // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
@@ -256,7 +260,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             } as ts.server.protocol.OutliningSpansRequestFull);
         }
 
-        function verifyExecuteCommandSeqIsCancellable<T extends ts.server.protocol.Request>(request: Partial<T>) {
+        function verifyExecuteCommandSeqIsCancellable<T extends ts.server.protocol.Request>(request: TestSessionRequest<T>) {
             // Set the next request to be cancellable
             // The cancellation token will cancel the request the third time
             // isCancellationRequested() is called.

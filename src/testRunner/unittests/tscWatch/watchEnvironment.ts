@@ -1,6 +1,19 @@
 import * as ts from "../../_namespaces/ts";
-import { createWatchedSystem, File, libFile, SymLink, TestServerHost, Tsc_WatchDirectory, Tsc_WatchFile } from "../virtualFileSystemWithWatch";
-import { commonFile1, commonFile2, noopChange, verifyTscWatch } from "./helpers";
+import {
+    createWatchedSystem,
+    File,
+    libFile,
+    SymLink,
+    TestServerHost,
+    Tsc_WatchDirectory,
+    Tsc_WatchFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    commonFile1,
+    commonFile2,
+    noopChange,
+    verifyTscWatch,
+} from "./helpers";
 
 describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different polling/non polling options", () => {
     const scenario = "watchEnvironment";
@@ -688,5 +701,37 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 },
             ]
         });
+    });
+
+    verifyTscWatch({
+        scenario,
+        subScenario: "fsEvent for change is repeated",
+        commandLineArgs: ["-w", "main.ts", "--extendedDiagnostics"],
+        sys: () => createWatchedSystem({
+            "/user/username/projects/project/main.ts": `let a: string = "Hello"`,
+            [libFile.path]: libFile.content,
+        }, { currentDirectory: "/user/username/projects/project" }),
+        changes: [
+            {
+                caption: "change main.ts",
+                change: sys => sys.replaceFileText("/user/username/projects/project/main.ts", "Hello", "Hello World"),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+            {
+                caption: "receive another change event without modifying the file",
+                change: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+            {
+                caption: "change main.ts to empty text",
+                change: sys => sys.writeFile("/user/username/projects/project/main.ts", ""),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+            {
+                caption: "receive another change event without modifying the file",
+                change: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            }
+        ]
     });
 });

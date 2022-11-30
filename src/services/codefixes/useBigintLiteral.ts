@@ -1,7 +1,18 @@
 import {
-    Diagnostics, factory, getTokenAtPosition, isNumericLiteral, SourceFile, textChanges, TextSpan, tryCast,
+    Diagnostics,
+    factory,
+    getTokenAtPosition,
+    isNumericLiteral,
+    SourceFile,
+    textChanges,
+    TextSpan,
+    tryCast,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "useBigintLiteral";
 const errorCodes = [

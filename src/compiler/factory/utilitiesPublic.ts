@@ -1,4 +1,11 @@
-import { HasDecorators, HasModifiers, Node, setTextRangePosEnd, SyntaxKind, TextRange } from "../_namespaces/ts";
+import {
+    HasDecorators,
+    HasModifiers,
+    Node,
+    setTextRangePosEnd,
+    SyntaxKind,
+    TextRange,
+} from "../_namespaces/ts";
 
 export function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T {
     return location ? setTextRangePosEnd(range, location.pos, location.end) : range;
