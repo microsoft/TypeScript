@@ -37,6 +37,8 @@ import {
     ServerHost,
     Session,
     SetTypings,
+    StartInput,
+    StartSessionOptions,
     stringifyIndented,
     toEvent,
     TypesRegistryResponse,
@@ -76,10 +78,6 @@ import {
     versionMajorMinor,
     WatchOptions,
 } from "./_namespaces/ts";
-import {
-    StartInput,
-    StartSessionOptions,
-} from "./common";
 
 interface LogOptions {
     file?: string;
