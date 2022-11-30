@@ -50,6 +50,6 @@ with any additional questions or comments.
 
 For details on our planned features and future direction please refer to our [roadmap](https://github.com/microsoft/TypeScript/wiki/Roadmap).
 
-## Product Support and Lifecycle
+## Product Support and EOL
 
 Product support and lifecycles vary based on the patches and new versions that are released. To find more information regarding further releases follow the link here https://devblogs.microsoft.com/typescript/. This blog will keep up-to-date with the latest patches and updates to TypeScript. For further information, please consult the Roadmap.  
