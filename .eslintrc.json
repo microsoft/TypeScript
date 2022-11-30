@@ -13,6 +13,12 @@
         "@typescript-eslint", "no-null", "import", "eslint-plugin-local"
     ],
     "rules": {
+        "sort-imports": ["error", {
+            "ignoreCase": true,
+            "ignoreDeclarationSort": true,
+            "allowSeparatedGroups": true
+        }],
+
         "@typescript-eslint/adjacent-overload-signatures": "error",
         "@typescript-eslint/array-type": "error",
         "@typescript-eslint/no-array-constructor": "error",

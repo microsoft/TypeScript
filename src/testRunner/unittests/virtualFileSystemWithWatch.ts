@@ -1,12 +1,46 @@
 import * as Harness from "../_namespaces/Harness";
 import {
-    arrayFrom, arrayToMap, clear, clone, combinePaths, compareStringsCaseSensitive, createGetCanonicalFileName,
-    createMultiMap, createSystemWatchFunctions, Debug, directorySeparator, ESMap, FileSystemEntryKind, FileWatcher,
-    FileWatcherCallback, FileWatcherEventKind, filterMutate, forEach, FormatDiagnosticsHost, FsWatchCallback,
-    FsWatchWorkerWatcher, generateDjb2Hash, getBaseFileName, getDirectoryPath, getNormalizedAbsolutePath,
-    getRelativePathToDirectoryOrUrl, hasProperty, HostWatchDirectory, HostWatchFile, identity, insertSorted, isArray,
-    isNumber, isString, Map, mapDefined, matchFiles, ModuleResolutionHost, MultiMap, noop,
-    patchWriteFileEnsuringDirectory, Path, PollingInterval, ReadonlyESMap, RequireResult, server, SortedArray, sys, toPath,
+    clear,
+    clone,
+    combinePaths,
+    compareStringsCaseSensitive,
+    createGetCanonicalFileName,
+    createMultiMap,
+    createSystemWatchFunctions,
+    Debug,
+    directorySeparator,
+    FileSystemEntryKind,
+    FileWatcher,
+    FileWatcherCallback,
+    FileWatcherEventKind,
+    filterMutate,
+    FormatDiagnosticsHost,
+    FsWatchCallback,
+    FsWatchWorkerWatcher,
+    generateDjb2Hash,
+    getBaseFileName,
+    getDirectoryPath,
+    getNormalizedAbsolutePath,
+    getRelativePathToDirectoryOrUrl,
+    hasProperty,
+    HostWatchDirectory,
+    HostWatchFile,
+    insertSorted,
+    isArray,
+    isString,
+    mapDefined,
+    matchFiles,
+    ModuleResolutionHost,
+    MultiMap,
+    noop,
+    patchWriteFileEnsuringDirectory,
+    Path,
+    PollingInterval,
+    RequireResult,
+    server,
+    SortedArray,
+    sys,
+    toPath,
 } from "../_namespaces/ts";
 import { timeIncrements } from "../_namespaces/vfs";
 
@@ -35,7 +69,7 @@ export interface TestServerHostCreationParameters {
     currentDirectory?: string;
     newLine?: string;
     windowsStyleRoot?: string;
-    environmentVariables?: ESMap<string, string>;
+    environmentVariables?: Map<string, string>;
     runWithoutRecursiveWatches?: boolean;
     runWithFallbackPolling?: boolean;
     inodeWatching?: boolean;
@@ -135,74 +169,6 @@ function createWatcher<T>(map: MultiMap<Path, T>, path: Path, callback: T): File
             closed = true;
         }
     };
-}
-
-export function getDiffInKeys<T>(map: ESMap<string, T>, expectedKeys: readonly string[]) {
-    if (map.size === expectedKeys.length) {
-        return "";
-    }
-    const notInActual: string[] = [];
-    const duplicates: string[] = [];
-    const seen = new Map<string, true>();
-    forEach(expectedKeys, expectedKey => {
-        if (seen.has(expectedKey)) {
-            duplicates.push(expectedKey);
-            return;
-        }
-        seen.set(expectedKey, true);
-        if (!map.has(expectedKey)) {
-            notInActual.push(expectedKey);
-        }
-    });
-    const inActualNotExpected: string[] = [];
-    map.forEach((_value, key) => {
-        if (!seen.has(key)) {
-            inActualNotExpected.push(key);
-        }
-        seen.set(key, true);
-    });
-    return `\n\nNotInActual: ${notInActual}\nDuplicates: ${duplicates}\nInActualButNotInExpected: ${inActualNotExpected}`;
-}
-
-export function verifyMapSize(caption: string, map: ESMap<string, any>, expectedKeys: readonly string[]) {
-    assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(map.keys())} Expected: ${expectedKeys}${getDiffInKeys(map, expectedKeys)}`);
-}
-
-export type MapValueTester<T, U> = [ESMap<string, U[]> | undefined, (value: T) => U];
-
-export function checkMap<T, U = undefined>(caption: string, actual: MultiMap<string, T>, expectedKeys: ReadonlyESMap<string, number>, valueTester?: MapValueTester<T,U>): void;
-export function checkMap<T, U = undefined>(caption: string, actual: MultiMap<string, T>, expectedKeys: readonly string[], eachKeyCount: number, valueTester?: MapValueTester<T, U>): void;
-export function checkMap<T>(caption: string, actual: ESMap<string, T> | MultiMap<string, T>, expectedKeys: readonly string[], eachKeyCount: undefined): void;
-export function checkMap<T, U = undefined>(
-    caption: string,
-    actual: ESMap<string, T> | MultiMap<string, T>,
-    expectedKeysMapOrArray: ReadonlyESMap<string, number> | readonly string[],
-    eachKeyCountOrValueTester?: number | MapValueTester<T, U>,
-    valueTester?: MapValueTester<T, U>) {
-    const expectedKeys = isArray(expectedKeysMapOrArray) ? arrayToMap(expectedKeysMapOrArray, s => s, () => eachKeyCountOrValueTester as number) : expectedKeysMapOrArray;
-    verifyMapSize(caption, actual, isArray(expectedKeysMapOrArray) ? expectedKeysMapOrArray : arrayFrom(expectedKeys.keys()));
-    if (!isNumber(eachKeyCountOrValueTester)) {
-        valueTester = eachKeyCountOrValueTester;
-    }
-    const [expectedValues, valueMapper] = valueTester || [undefined, undefined!];
-    expectedKeys.forEach((count, name) => {
-        assert.isTrue(actual.has(name), `${caption}: expected to contain ${name}, actual keys: ${arrayFrom(actual.keys())}`);
-        // Check key information only if eachKeyCount is provided
-        if (!isArray(expectedKeysMapOrArray) || eachKeyCountOrValueTester !== undefined) {
-            assert.equal((actual as MultiMap<string, T>).get(name)!.length, count, `${caption}: Expected to be have ${count} entries for ${name}. Actual entry: ${JSON.stringify(actual.get(name))}`);
-            if (expectedValues) {
-                assert.deepEqual(
-                    (actual as MultiMap<string, T>).get(name)!.map(valueMapper),
-                    expectedValues.get(name),
-                    `${caption}:: expected values mismatch for ${name}`
-                );
-            }
-        }
-    });
-}
-
-export function checkArray(caption: string, actual: readonly string[], expected: readonly string[]) {
-    checkMap(caption, arrayToMap(actual, identity), expected, /*eachKeyCount*/ undefined);
 }
 
 interface CallbackData {
@@ -313,7 +279,7 @@ export interface TestServerHostOptions {
     currentDirectory: string;
     newLine?: string;
     useWindowsStylePaths?: boolean;
-    environmentVariables?: ESMap<string, string>;
+    environmentVariables?: Map<string, string>;
 }
 
 export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost, ModuleResolutionHost {
@@ -321,7 +287,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
 
     private readonly output: string[] = [];
 
-    private fs: ESMap<Path, FSEntry> = new Map();
+    private fs: Map<Path, FSEntry> = new Map();
     private time = timeIncrements;
     getCanonicalFileName: (s: string) => string;
     private toPath: (f: string) => Path;
@@ -336,14 +302,14 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
     public readonly useCaseSensitiveFileNames: boolean;
     public readonly newLine: string;
     public readonly windowsStyleRoot?: string;
-    private readonly environmentVariables?: ESMap<string, string>;
+    private readonly environmentVariables?: Map<string, string>;
     private readonly executingFilePath: string;
     private readonly currentDirectory: string;
     public require: ((initialPath: string, moduleName: string) => RequireResult) | undefined;
     public storeFilesChangingSignatureDuringEmit = true;
     watchFile: HostWatchFile;
     private inodeWatching: boolean | undefined;
-    private readonly inodes?: ESMap<Path, number>;
+    private readonly inodes?: Map<Path, number>;
     watchDirectory: HostWatchDirectory;
     constructor(
         fileOrFolderorSymLinkList: FileOrFolderOrSymLinkMap | readonly FileOrFolderOrSymLink[],
@@ -720,7 +686,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         }
     }
 
-    private invokeFsWatches(fullPath: string, eventName: "rename" | "change", modifiedTime: Date | undefined, useTildeSuffix: boolean | undefined) {
+    invokeFsWatches(fullPath: string, eventName: "rename" | "change", modifiedTime: Date | undefined, useTildeSuffix: boolean | undefined) {
         this.invokeFsWatchesCallbacks(fullPath, eventName, modifiedTime, fullPath, useTildeSuffix);
         this.invokeFsWatchesCallbacks(getDirectoryPath(fullPath), eventName, modifiedTime, fullPath, useTildeSuffix);
         this.invokeRecursiveFsWatches(fullPath, eventName, modifiedTime, /*entryFullPath*/ undefined, useTildeSuffix);
@@ -1007,7 +973,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         this.clearOutput();
     }
 
-    snap(): ESMap<Path, FSEntry> {
+    snap(): Map<Path, FSEntry> {
         const result = new Map<Path, FSEntry>();
         this.fs.forEach((value, key) => {
             const cloneValue = clone(value);
@@ -1020,8 +986,8 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         return result;
     }
 
-    writtenFiles?: ESMap<Path, number>;
-    diff(baseline: string[], base: ESMap<Path, FSEntry> = new Map()) {
+    writtenFiles?: Map<Path, number>;
+    diff(baseline: string[], base: Map<Path, FSEntry> = new Map()) {
         this.fs.forEach((newFsEntry, path) => {
             diffFsEntry(baseline, base.get(path), newFsEntry, this.inodes?.get(path), this.writtenFiles);
         });
@@ -1085,7 +1051,7 @@ function diffFsSymLink(baseline: string[], fsEntry: FsSymLink, newInode: number 
 function inodeString(inode: number | undefined) {
     return inode !== undefined ? ` Inode:: ${inode}` : "";
 }
-function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsEntry: FSEntry | undefined, newInode: number | undefined, writtenFiles: ESMap<string, any> | undefined): void {
+function diffFsEntry(baseline: string[], oldFsEntry: FSEntry | undefined, newFsEntry: FSEntry | undefined, newInode: number | undefined, writtenFiles: Map<string, any> | undefined): void {
     const file = newFsEntry && newFsEntry.fullPath;
     if (isFsFile(oldFsEntry)) {
         if (isFsFile(newFsEntry)) {
@@ -1161,7 +1127,7 @@ function baselineOutputs(baseline: string[], output: readonly string[], start: n
     if (baselinedOutput) baseline.push(baselinedOutput.join(""));
 }
 
-export type TestServerHostTrackingWrittenFiles = TestServerHost & { writtenFiles: ESMap<Path, number>; };
+export type TestServerHostTrackingWrittenFiles = TestServerHost & { writtenFiles: Map<Path, number>; };
 
 export function changeToHostTrackingWrittenFiles(inputHost: TestServerHost) {
     const host = inputHost as TestServerHostTrackingWrittenFiles;

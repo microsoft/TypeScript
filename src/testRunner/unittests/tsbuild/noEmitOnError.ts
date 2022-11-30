@@ -1,4 +1,9 @@
-import { loadProjectFromDisk, noChangeRun, noChangeWithExportsDiscrepancyRun, verifyTscWithEdits } from "../tsc/helpers";
+import {
+    loadProjectFromDisk,
+    noChangeRun,
+    noChangeWithExportsDiscrepancyRun,
+    verifyTscWithEdits,
+} from "../tsc/helpers";
 import * as vfs from "../../_namespaces/vfs";
 
 describe("unittests:: tsbuild - with noEmitOnError", () => {

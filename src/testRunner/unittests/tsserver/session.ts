@@ -3,7 +3,10 @@ import { expect } from "chai";
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
 import * as Utils from "../../_namespaces/Utils";
-import { nullLogger, createHasErrorMessageLogger } from "./helpers";
+import {
+    createHasErrorMessageLogger,
+    nullLogger,
+} from "./helpers";
 
 let lastWrittenToHost: string;
 const noopFileWatcher: ts.FileWatcher = { close: ts.noop };
@@ -186,7 +189,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             };
 
             const expected: ts.server.protocol.StatusResponseBody = {
-                version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+                version: ts.version,
             };
             assert.deepEqual(session.executeCommand(req).response, expected);
         });
@@ -632,7 +635,7 @@ describe("unittests:: tsserver:: Session:: an example of using the Session API t
         private server: InProcSession | undefined;
         private seq = 0;
         private callbacks: ((resp: ts.server.protocol.Response) => void)[] = [];
-        private eventHandlers = new ts.Map<string, (args: any) => void>();
+        private eventHandlers = new Map<string, (args: any) => void>();
 
         handle(msg: ts.server.protocol.Message): void {
             if (msg.type === "response") {

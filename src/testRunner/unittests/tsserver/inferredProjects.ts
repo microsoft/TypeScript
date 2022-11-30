@@ -1,7 +1,20 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../virtualFileSystemWithWatch";
 import { commonFile1 } from "../tscWatch/helpers";
-import { createProjectService, createLoggerWithInMemoryLogs, baselineTsserverLogs, checkNumberOfConfiguredProjects, checkNumberOfInferredProjects, checkProjectActualFiles, checkNumberOfProjects, createSession } from "./helpers";
+import {
+    baselineTsserverLogs,
+    checkNumberOfConfiguredProjects,
+    checkNumberOfInferredProjects,
+    checkNumberOfProjects,
+    checkProjectActualFiles,
+    createLoggerWithInMemoryLogs,
+    createProjectService,
+    createSession,
+} from "./helpers";
 
 describe("unittests:: tsserver:: Inferred projects", () => {
     it("create inferred project", () => {
@@ -359,8 +372,8 @@ describe("unittests:: tsserver:: Inferred projects", () => {
         const projectService = createProjectService(host);
         const originalSet = projectService.configuredProjects.set;
         const originalDelete = projectService.configuredProjects.delete;
-        const configuredCreated = new ts.Map<string, true>();
-        const configuredRemoved = new ts.Map<string, true>();
+        const configuredCreated = new Map<string, true>();
+        const configuredRemoved = new Map<string, true>();
         projectService.configuredProjects.set = (key, value) => {
             assert.isFalse(configuredCreated.has(key));
             configuredCreated.set(key, true);

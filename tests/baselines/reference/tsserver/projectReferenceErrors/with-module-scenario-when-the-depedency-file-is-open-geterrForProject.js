@@ -1,12 +1,12 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:30.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/usage/usage.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
@@ -162,12 +162,12 @@ Info 32   [00:01:07.000] response:
     }
 Info 33   [00:01:08.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/fns.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -277,7 +277,7 @@ Info 54   [00:01:40.000] request:
         "delay": 0,
         "file": "/user/username/projects/myproject/usage/usage.ts"
       },
-      "seq": 1,
+      "seq": 3,
       "type": "request"
     }
 Before request
@@ -635,7 +635,7 @@ FsWatchesRecursive::
 Info 61   [00:01:47.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
 Info 62   [00:01:48.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::
@@ -669,7 +669,7 @@ Info 63   [00:01:49.000] request:
         "delay": 0,
         "file": "/user/username/projects/myproject/dependency/fns.ts"
       },
-      "seq": 2,
+      "seq": 4,
       "type": "request"
     }
 Before request
@@ -865,7 +865,7 @@ FsWatchesRecursive::
 Info 67   [00:01:53.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/dependency/fns.ts","diagnostics":[]}}
 Info 68   [00:01:54.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::

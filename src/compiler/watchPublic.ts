@@ -1,25 +1,95 @@
 import * as ts from "./_namespaces/ts";
 import {
-    BuilderProgram, BuildInfo, canJsonReportNoInputFiles, changeCompilerHostLikeToUseCache,
-    changesAffectModuleResolution, cleanExtendedConfigCache, clearMap, clearSharedExtendedConfigFileWatcher,
-    closeFileWatcher, closeFileWatcherOf, CompilerHost, CompilerOptions, ConfigFileDiagnosticsReporter,
-    ConfigFileProgramReloadLevel, createBuilderProgramUsingProgramBuildInfo, createCachedDirectoryStructureHost,
-    createCompilerDiagnostic, createCompilerHostFromProgramHost, createCompilerHostWorker,
-    createEmitAndSemanticDiagnosticsBuilderProgram, createGetCanonicalFileName, createResolutionCache,
-    CreateSourceFileOptions, createWatchCompilerHostOfConfigFile, createWatchCompilerHostOfFilesAndCompilerOptions,
-    createWatchFactory, Debug, Diagnostic, DiagnosticMessage, DiagnosticReporter, Diagnostics, DirectoryStructureHost,
-    DirectoryWatcherCallback, EmitAndSemanticDiagnosticsBuilderProgram, ESMap, ExtendedConfigCacheEntry,
-    FileExtensionInfo, FileReference, FileWatcher, FileWatcherCallback, FileWatcherEventKind, getBuildInfo,
-    getConfigFileParsingDiagnostics, getDirectoryPath, getEntries, getFileNamesFromConfigSpecs, getNewLineCharacter,
-    getNormalizedAbsolutePath, getParsedCommandLineOfConfigFile, getTsBuildInfoEmitOutputFilePath,
-    HasInvalidatedResolutions, isArray, isIgnoredFileFromWildCardWatching, isProgramUptoDate, Map, MapLike, maybeBind,
-    ModuleResolutionCache, ModuleResolutionInfo, noop, noopFileWatcher, parseConfigHostFromCompilerHostLike,
-    ParsedCommandLine, Path, perfLogger, PollingInterval, ProjectReference, ResolutionCacheHost, ResolvedModule,
-    ResolvedProjectReference, ResolvedTypeReferenceDirective, returnFalse, returnTrue, ScriptTarget,
-    setGetSourceFileAsHashVersioned, SharedExtendedConfigFileWatcher, SourceFile, sys, System, toPath,
+    BuilderProgram,
+    BuildInfo,
+    canJsonReportNoInputFiles,
+    changeCompilerHostLikeToUseCache,
+    changesAffectModuleResolution,
+    cleanExtendedConfigCache,
+    clearMap,
+    clearSharedExtendedConfigFileWatcher,
+    closeFileWatcher,
+    closeFileWatcherOf,
+    CompilerHost,
+    CompilerOptions,
+    ConfigFileDiagnosticsReporter,
+    ConfigFileProgramReloadLevel,
+    createBuilderProgramUsingProgramBuildInfo,
+    createCachedDirectoryStructureHost,
+    createCompilerDiagnostic,
+    createCompilerHostFromProgramHost,
+    createCompilerHostWorker,
+    createEmitAndSemanticDiagnosticsBuilderProgram,
+    createGetCanonicalFileName,
+    createResolutionCache,
+    CreateSourceFileOptions,
+    createWatchCompilerHostOfConfigFile,
+    createWatchCompilerHostOfFilesAndCompilerOptions,
+    createWatchFactory,
+    Debug,
+    Diagnostic,
+    DiagnosticMessage,
+    DiagnosticReporter,
+    Diagnostics,
+    DirectoryStructureHost,
+    DirectoryWatcherCallback,
+    EmitAndSemanticDiagnosticsBuilderProgram,
+    ExtendedConfigCacheEntry,
+    FileExtensionInfo,
+    FileReference,
+    FileWatcher,
+    FileWatcherCallback,
+    FileWatcherEventKind,
+    getBuildInfo,
+    getConfigFileParsingDiagnostics,
+    getDirectoryPath,
+    getEntries,
+    getFileNamesFromConfigSpecs,
+    getNewLineCharacter,
+    getNormalizedAbsolutePath,
+    getParsedCommandLineOfConfigFile,
+    getSourceFileVersionAsHashFromText,
+    getTsBuildInfoEmitOutputFilePath,
+    HasInvalidatedResolutions,
+    isArray,
+    isIgnoredFileFromWildCardWatching,
+    isProgramUptoDate,
+    MapLike,
+    maybeBind,
+    ModuleResolutionCache,
+    ModuleResolutionInfo,
+    noop,
+    noopFileWatcher,
+    parseConfigHostFromCompilerHostLike,
+    ParsedCommandLine,
+    Path,
+    perfLogger,
+    PollingInterval,
+    ProjectReference,
+    ResolutionCacheHost,
+    ResolutionMode,
+    ResolvedModule,
+    ResolvedProjectReference,
+    ResolvedTypeReferenceDirective,
+    returnFalse,
+    returnTrue,
+    ScriptTarget,
+    setGetSourceFileAsHashVersioned,
+    SharedExtendedConfigFileWatcher,
+    SourceFile,
+    sys,
+    System,
+    toPath,
     TypeReferenceDirectiveResolutionInfo,
-    updateErrorForNoInputFiles, updateMissingFilePathsWatch, updateSharedExtendedConfigFileWatcher,
-    updateWatchingWildcardDirectories, version, WatchDirectoryFlags, WatchOptions, WatchType, WatchTypeRegistry,
+    updateErrorForNoInputFiles,
+    updateMissingFilePathsWatch,
+    updateSharedExtendedConfigFileWatcher,
+    updateWatchingWildcardDirectories,
+    version,
+    WatchDirectoryFlags,
+    WatchOptions,
+    WatchType,
+    WatchTypeRegistry,
     WildcardDirectoryWatcher,
 } from "./_namespaces/ts";
 
@@ -52,7 +122,7 @@ export function createIncrementalCompilerHost(options: CompilerOptions, system =
     host.createHash = maybeBind(system, system.createHash);
     host.disableUseFileVersionAsSignature = system.disableUseFileVersionAsSignature;
     host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
-    setGetSourceFileAsHashVersioned(host, system);
+    setGetSourceFileAsHashVersioned(host);
     changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
     return host;
 }
@@ -135,7 +205,7 @@ export interface ProgramHost<T extends BuilderProgram> {
     /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
     resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
     /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
-    resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: SourceFile["impliedNodeFormat"] | undefined, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
     /** If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives */
     hasInvalidatedResolutions?(filePath: Path): boolean;
     /**
@@ -213,7 +283,7 @@ export interface WatchCompilerHostOfConfigFile<T extends BuilderProgram> extends
  */
 export interface WatchCompilerHostOfConfigFile<T extends BuilderProgram> extends WatchCompilerHost<T> {
     configFileParsingResult?: ParsedCommandLine;
-    extendedConfigCache?: Map<ExtendedConfigCacheEntry>;
+    extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>;
 }
 
 export interface Watch<T> {
@@ -281,7 +351,7 @@ interface ParsedConfig {
     /** File watcher of the config file */
     watcher?: FileWatcher;
     /** Wild card directories watched from this config file */
-    watchedDirectories?: Map<WildcardDirectoryWatcher>;
+    watchedDirectories?: Map<string, WildcardDirectoryWatcher>;
     /** Reload to be done for this config file */
     reloadLevel?: ConfigFileProgramReloadLevel.Partial | ConfigFileProgramReloadLevel.Full;
 }
@@ -310,12 +380,12 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
 
     let builderProgram: T;
     let reloadLevel: ConfigFileProgramReloadLevel;                      // level to indicate if the program needs to be reloaded from config file/just filenames etc
-    let missingFilesMap: ESMap<Path, FileWatcher>;                       // Map of file watchers for the missing files
-    let watchedWildcardDirectories: ESMap<string, WildcardDirectoryWatcher>; // map of watchers for the wild card directories in the config file
+    let missingFilesMap: Map<Path, FileWatcher>;                        // Map of file watchers for the missing files
+    let watchedWildcardDirectories: Map<string, WildcardDirectoryWatcher>; // map of watchers for the wild card directories in the config file
     let timerToUpdateProgram: any;                                      // timer callback to recompile the program
     let timerToInvalidateFailedLookupResolutions: any;                  // timer callback to invalidate resolutions for changes in failed lookup locations
-    let parsedConfigs: ESMap<Path, ParsedConfig> | undefined;           // Parsed commandline and watching cached for referenced projects
-    let sharedExtendedConfigFileWatchers: ESMap<Path, SharedExtendedConfigFileWatcher<Path>>; // Map of file watchers for extended files, shared between different referenced projects
+    let parsedConfigs: Map<Path, ParsedConfig> | undefined;             // Parsed commandline and watching cached for referenced projects
+    let sharedExtendedConfigFileWatchers: Map<Path, SharedExtendedConfigFileWatcher<Path>>; // Map of file watchers for extended files, shared between different referenced projects
     let extendedConfigCache = host.extendedConfigCache;                 // Cache for extended config evaluation
     let reportFileChangeDetectedOnCreateProgram = false;                // True if synchronizeProgram should report "File change detected..." when a new program is created
 
@@ -360,7 +430,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     }
 
     const compilerHost = createCompilerHostFromProgramHost(host, () => compilerOptions, directoryStructureHost) as CompilerHost & ResolutionCacheHost;
-    setGetSourceFileAsHashVersioned(compilerHost, host);
+    setGetSourceFileAsHashVersioned(compilerHost);
     // Members for CompilerHost
     const getNewSourceFile = compilerHost.getSourceFile;
     compilerHost.getSourceFile = (fileName, ...args) => getVersionedSourceFileByPath(fileName, toPath(fileName), ...args);
@@ -482,9 +552,9 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         const hasInvalidatedResolutions = resolutionCache.createHasInvalidatedResolutions(customHasInvalidatedResolutions);
         const {
             originalReadFile, originalFileExists, originalDirectoryExists,
-            originalCreateDirectory, originalWriteFile,
+            originalCreateDirectory, originalWriteFile, readFileWithCache
         } = changeCompilerHostLikeToUseCache(compilerHost, toPath);
-        if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileName => compilerHost.fileExists(fileName), hasInvalidatedResolutions, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
+        if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, path => getSourceVersion(path, readFileWithCache), fileName => compilerHost.fileExists(fileName), hasInvalidatedResolutions, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
             if (hasChangedConfigFileParsingErrors) {
                 if (reportFileChangeDetectedOnCreateProgram) {
                     reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
@@ -639,9 +709,13 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         }
     }
 
-    function getSourceVersion(path: Path): string | undefined {
+    function getSourceVersion(path: Path, readFileWithCache: (file: string) => string | undefined): string | undefined {
         const hostSourceFile = sourceFilesCache.get(path);
-        return !hostSourceFile || !hostSourceFile.version ? undefined : hostSourceFile.version;
+        if (!hostSourceFile) return undefined;
+        if (hostSourceFile.version) return hostSourceFile.version;
+        // Read file and get new version
+        const text = readFileWithCache(path);
+        return text ? getSourceFileVersionAsHashFromText(compilerHost, text) : undefined;
     }
 
     function onReleaseOldSourceFile(oldSourceFile: SourceFile, _oldOptions: CompilerOptions, hasSourceFileByPath: boolean) {

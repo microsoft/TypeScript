@@ -1,6 +1,18 @@
-import { Debug, every, FormatCodeSettings, FormattingHost, SyntaxKind } from "../_namespaces/ts";
 import {
-    anyContext, FormatContext, FormattingContext, getAllRules, Rule, RuleAction, RuleSpec,
+    Debug,
+    every,
+    FormatCodeSettings,
+    FormattingHost,
+    SyntaxKind,
+} from "../_namespaces/ts";
+import {
+    anyContext,
+    FormatContext,
+    FormattingContext,
+    getAllRules,
+    Rule,
+    RuleAction,
+    RuleSpec,
 } from "../_namespaces/ts.formatting";
 
 /** @internal */
@@ -22,7 +34,7 @@ function getRulesMap(): RulesMap {
  * cannot be applied at the same position.
  */
 function getRuleActionExclusion(ruleAction: RuleAction): RuleAction {
-    let mask: RuleAction = 0;
+    let mask = RuleAction.None;
     if (ruleAction & RuleAction.StopProcessingSpaceActions) {
         mask |= RuleAction.ModifySpaceAction;
     }

@@ -1,8 +1,21 @@
 import {
-    Diagnostics, factory, getContainingClass, getTokenAtPosition, Identifier, isIdentifier, isPrivateIdentifier,
-    PrivateIdentifier, SourceFile, suppressLeadingAndTrailingTrivia, textChanges,
+    Diagnostics,
+    factory,
+    getContainingClass,
+    getTokenAtPosition,
+    Identifier,
+    isIdentifier,
+    isPrivateIdentifier,
+    PrivateIdentifier,
+    SourceFile,
+    suppressLeadingAndTrailingTrivia,
+    textChanges,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "forgottenThisPropertyAccess";
 const didYouMeanStaticMemberCode = Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0.code;

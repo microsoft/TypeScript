@@ -1,7 +1,21 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import * as vfs from "../../_namespaces/vfs";
-import { appendText, compilerOptionsToConfigJson, libContent, loadProjectFromDisk, loadProjectFromFiles, noChangeOnlyRuns, noChangeRun, noChangeWithExportsDiscrepancyRun, prependText, replaceText, TestTscEdit, verifyTsc, verifyTscWithEdits } from "./helpers";
+import {
+    appendText,
+    compilerOptionsToConfigJson,
+    libContent,
+    loadProjectFromDisk,
+    loadProjectFromFiles,
+    noChangeOnlyRuns,
+    noChangeRun,
+    noChangeWithExportsDiscrepancyRun,
+    prependText,
+    replaceText,
+    TestTscEdit,
+    verifyTsc,
+    verifyTscWithEdits,
+} from "./helpers";
 
 describe("unittests:: tsc:: incremental::", () => {
     verifyTscWithEdits({
@@ -818,5 +832,48 @@ console.log(a);`,
             ],
             baselinePrograms: true,
         });
+    });
+
+    verifyTscWithEdits({
+        scenario: "incremental",
+        subScenario: "when file is deleted",
+        commandLineArgs: ["-p", `/src/project`],
+        fs: () => loadProjectFromFiles({
+            "/src/project/tsconfig.json": JSON.stringify({
+                compilerOptions: {
+                    composite: true,
+                    outDir: "outDir",
+                },
+            }),
+            "/src/project/file1.ts": `export class  C { }`,
+            "/src/project/file2.ts": `export class D { }`,
+        }),
+        edits: [
+            {
+                subScenario: "delete file with imports",
+                modifyFs: fs => fs.unlinkSync("/src/project/file2.ts"),
+            },
+        ]
+    });
+
+    verifyTscWithEdits({
+        scenario: "incremental",
+        subScenario: "file deleted before fixing error with noEmitOnError",
+        fs: () => loadProjectFromFiles({
+            "/src/project/tsconfig.json": JSON.stringify({
+                compilerOptions: {
+                    outDir: "outDir",
+                    noEmitOnError: true,
+                },
+            }),
+            "/src/project/file1.ts": `export const x: 30 = "hello";`,
+            "/src/project/file2.ts": `export class D { }`,
+        }),
+        commandLineArgs: ["--p", "/src/project", "-i"],
+        edits: [{
+            subScenario: "delete file without error",
+            modifyFs: fs => fs.unlinkSync("/src/project/file2.ts"),
+        }],
+        baselinePrograms: true,
     });
 });

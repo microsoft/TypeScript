@@ -2,16 +2,39 @@ import * as fs from "fs";
 import * as path from "path";
 
 import {
-    installNpmPackages, Log, RequestCompletedAction, TypingsInstaller,
+    installNpmPackages,
+    Log,
+    RequestCompletedAction,
+    TypingsInstaller,
 } from "./_namespaces/ts.server.typingsInstaller";
 import {
-    ActionPackageInstalled, Arguments, EventTypesRegistry, findArgument, hasArgument, InitializationFailedResponse,
-    InstallTypingHost, nowString, PackageInstalledResponse, TypesRegistryResponse, TypingInstallerRequestUnion,
+    ActionPackageInstalled,
+    Arguments,
+    EventTypesRegistry,
+    findArgument,
+    hasArgument,
+    InitializationFailedResponse,
+    InstallTypingHost,
+    nowString,
+    PackageInstalledResponse,
+    TypesRegistryResponse,
+    TypingInstallerRequestUnion,
     TypingInstallerResponseUnion,
 } from "./_namespaces/ts.server";
 import {
-    combinePaths, createGetCanonicalFileName, Debug, ESMap, forEachAncestorDirectory, getDirectoryPath, getEntries, Map,
-    MapLike, normalizePath, normalizeSlashes, stringContains, sys, toPath, version,
+    combinePaths,
+    createGetCanonicalFileName,
+    Debug,
+    forEachAncestorDirectory,
+    getDirectoryPath,
+    getEntries,
+    MapLike,
+    normalizePath,
+    normalizeSlashes,
+    stringContains,
+    sys,
+    toPath,
+    version,
 } from "./_namespaces/ts";
 
 class FileLog implements Log {
@@ -51,7 +74,7 @@ interface TypesRegistryFile {
     entries: MapLike<MapLike<string>>;
 }
 
-function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): ESMap<string, MapLike<string>> {
+function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypingHost, log: Log): Map<string, MapLike<string>> {
     if (!host.fileExists(typesRegistryFilePath)) {
         if (log.isEnabled()) {
             log.writeLine(`Types registry file '${typesRegistryFilePath}' does not exist`);
@@ -84,7 +107,7 @@ type ExecSync = (command: string, options: ExecSyncOptions) => string;
 export class NodeTypingsInstaller extends TypingsInstaller {
     private readonly nodeExecSync: ExecSync;
     private readonly npmPath: string;
-    readonly typesRegistry: ESMap<string, MapLike<string>>;
+    readonly typesRegistry: Map<string, MapLike<string>>;
 
     private delayedInitializationError: InitializationFailedResponse | undefined;
 

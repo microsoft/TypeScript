@@ -1,23 +1,110 @@
 import {
-    addRange, BuilderProgram, CancellationToken, chainDiagnosticMessages, CharacterCodes, combinePaths, CompilerHost,
-    CompilerOptions, contains, convertToRelativePath, copyProperties, countWhere, createCompilerDiagnostic,
-    createEmitAndSemanticDiagnosticsBuilderProgram, createGetCanonicalFileName, createGetSourceFile,
-    createIncrementalCompilerHost, createIncrementalProgram, CreateProgram, createWriteFileMeasuringIO,
-    CustomTransformers, Debug, Diagnostic, DiagnosticCategory, DiagnosticMessage, DiagnosticMessageChain,
-    DiagnosticReporter, Diagnostics, DirectoryStructureHost, EmitAndSemanticDiagnosticsBuilderProgram, EmitResult, emptyArray,
-    endsWith, ExitStatus, ExtendedConfigCacheEntry, Extension, externalHelpersModuleNameText, FileExtensionInfo,
-    fileExtensionIs, FileIncludeKind, FileIncludeReason, FileWatcher, filter, find, flattenDiagnosticMessageText,
-    forEach, forEachEntry, ForegroundColorEscapeSequences, formatColorAndReset, formatDiagnostic, FormatDiagnosticsHost,
-    formatDiagnosticsWithColorAndContext, generateDjb2Hash, getDefaultLibFileName, getDirectoryPath,
-    getEmitScriptTarget, getLineAndCharacterOfPosition, getNewLineCharacter, getNormalizedAbsolutePath,
-    getParsedCommandLineOfConfigFile, getPatternFromSpec, getReferencedFileLocation, getRegexFromPattern,
-    getRelativePathFromDirectory, getWatchFactory, HasCurrentDirectory, isExternalOrCommonJsModule, isLineBreak,
-    isReferencedFile, isReferenceFileLocation, isString, last, Map, maybeBind, memoize, ModuleKind, noop, normalizePath,
-    outFile, packageIdToString, ParseConfigFileHost, ParsedCommandLine, pathIsAbsolute, Program, ProgramHost, ProjectReference,
-    ReportEmitErrorSummary, ReportFileInError, sortAndDeduplicateDiagnostics, SortedReadonlyArray, SourceFile, sourceMapCommentRegExp,
-    sourceMapCommentRegExpDontCareLineStart, sys, System, targetOptionDeclaration, WatchCompilerHost,
-    WatchCompilerHostOfConfigFile, WatchCompilerHostOfFilesAndCompilerOptions, WatchFactory, WatchFactoryHost, WatchHost,
-    WatchLogLevel, WatchOptions, WatchStatusReporter, whitespaceOrMapCommentRegExp, WriteFileCallback,
+    addRange,
+    BuilderProgram,
+    CancellationToken,
+    chainDiagnosticMessages,
+    CharacterCodes,
+    combinePaths,
+    CompilerHost,
+    CompilerOptions,
+    contains,
+    convertToRelativePath,
+    copyProperties,
+    countWhere,
+    createCompilerDiagnostic,
+    createEmitAndSemanticDiagnosticsBuilderProgram,
+    createGetCanonicalFileName,
+    createGetSourceFile,
+    createIncrementalCompilerHost,
+    createIncrementalProgram,
+    CreateProgram,
+    createWriteFileMeasuringIO,
+    CustomTransformers,
+    Debug,
+    Diagnostic,
+    DiagnosticCategory,
+    DiagnosticMessage,
+    DiagnosticMessageChain,
+    DiagnosticReporter,
+    Diagnostics,
+    DirectoryStructureHost,
+    EmitAndSemanticDiagnosticsBuilderProgram,
+    EmitResult,
+    emptyArray,
+    endsWith,
+    ExitStatus,
+    ExtendedConfigCacheEntry,
+    Extension,
+    externalHelpersModuleNameText,
+    FileExtensionInfo,
+    fileExtensionIs,
+    FileIncludeKind,
+    FileIncludeReason,
+    FileWatcher,
+    filter,
+    find,
+    flattenDiagnosticMessageText,
+    forEach,
+    forEachEntry,
+    ForegroundColorEscapeSequences,
+    formatColorAndReset,
+    formatDiagnostic,
+    FormatDiagnosticsHost,
+    formatDiagnosticsWithColorAndContext,
+    generateDjb2Hash,
+    getDefaultLibFileName,
+    getDirectoryPath,
+    getEmitScriptTarget,
+    getLineAndCharacterOfPosition,
+    getNewLineCharacter,
+    getNormalizedAbsolutePath,
+    getParsedCommandLineOfConfigFile,
+    getPatternFromSpec,
+    getReferencedFileLocation,
+    getRegexFromPattern,
+    getRelativePathFromDirectory,
+    getWatchFactory,
+    HasCurrentDirectory,
+    isExternalOrCommonJsModule,
+    isLineBreak,
+    isReferencedFile,
+    isReferenceFileLocation,
+    isString,
+    last,
+    maybeBind,
+    memoize,
+    ModuleKind,
+    noop,
+    normalizePath,
+    outFile,
+    packageIdToString,
+    ParseConfigFileHost,
+    ParsedCommandLine,
+    pathIsAbsolute,
+    Program,
+    ProgramHost,
+    ProjectReference,
+    ReportEmitErrorSummary,
+    ReportFileInError,
+    sortAndDeduplicateDiagnostics,
+    SortedReadonlyArray,
+    SourceFile,
+    sourceMapCommentRegExp,
+    sourceMapCommentRegExpDontCareLineStart,
+    sys,
+    System,
+    targetOptionDeclaration,
+    WatchCompilerHost,
+    WatchCompilerHostOfConfigFile,
+    WatchCompilerHostOfFilesAndCompilerOptions,
+    WatchFactory,
+    WatchFactoryHost,
+    WatchHost,
+    WatchLogLevel,
+    WatchOptions,
+    WatchStatusReporter,
+    whitespaceOrMapCommentRegExp,
+    WriteFileCallback,
 } from "./_namespaces/ts";
 
 const sysFormatDiagnosticsHost: FormatDiagnosticsHost | undefined = sys ? {
@@ -120,7 +207,7 @@ export function createWatchStatusReporter(system: System, pretty?: boolean): Wat
  *
  * @internal
  */
-export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, extendedConfigCache: Map<ExtendedConfigCacheEntry> | undefined, watchOptionsToExtend: WatchOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter): ParsedCommandLine | undefined {
+export function parseConfigFileWithSystem(configFileName: string, optionsToExtend: CompilerOptions, extendedConfigCache: Map<string, ExtendedConfigCacheEntry> | undefined, watchOptionsToExtend: WatchOptions | undefined, system: System, reportDiagnostic: DiagnosticReporter): ParsedCommandLine | undefined {
     const host: ParseConfigFileHost = system as any;
     host.onUnRecoverableConfigFileDiagnostic = diagnostic => reportUnrecoverableDiagnostic(system, reportDiagnostic, diagnostic);
     const result = getParsedCommandLineOfConfigFile(configFileName, optionsToExtend, host, extendedConfigCache, watchOptionsToExtend);
@@ -137,17 +224,17 @@ export function getErrorCountForSummary(diagnostics: readonly Diagnostic[]) {
 export function getFilesInErrorForSummary(diagnostics: readonly Diagnostic[]): (ReportFileInError | undefined)[] {
     const filesInError =
         filter(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error)
-        .map(
-            errorDiagnostic => {
-                if(errorDiagnostic.file === undefined) return;
-                return `${errorDiagnostic.file.fileName}`;
-        });
+            .map(
+                errorDiagnostic => {
+                    if (errorDiagnostic.file === undefined) return;
+                    return `${errorDiagnostic.file.fileName}`;
+                });
     return filesInError.map((fileName: string) => {
         const diagnosticForFileName = find(diagnostics, diagnostic =>
             diagnostic.file !== undefined && diagnostic.file.fileName === fileName
         );
 
-        if(diagnosticForFileName !== undefined) {
+        if (diagnosticForFileName !== undefined) {
             const { line } = getLineAndCharacterOfPosition(diagnosticForFileName.file!, diagnosticForFileName.start!);
             return {
                 fileName,
@@ -652,9 +739,9 @@ export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { tra
 export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCompilerOptions: () => CompilerOptions, directoryStructureHost: DirectoryStructureHost = host): CompilerHost {
     const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
     const hostGetNewLine = memoize(() => host.getNewLine());
-    return {
+    const compilerHost: CompilerHost = {
         getSourceFile: createGetSourceFile(
-            (fileName, encoding) => host.readFile(fileName, encoding),
+            (fileName, encoding) => !encoding ? compilerHost.readFile(fileName) : host.readFile(fileName, encoding),
             getCompilerOptions,
             /*setParentNodes*/ undefined
         ),
@@ -681,6 +768,7 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
         disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
         storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
     };
+    return compilerHost;
 }
 
 /** @internal */
@@ -713,7 +801,7 @@ export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "cre
                 break;
             }
             // If we see a non-whitespace/map comment-like line, break, to avoid scanning up the entire file
-            else if (!line.match(whitespaceOrMapCommentRegExp)){
+            else if (!line.match(whitespaceOrMapCommentRegExp)) {
                 break;
             }
             lineEnd = lineStart;
@@ -723,12 +811,12 @@ export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "cre
 }
 
 /** @internal */
-export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: { createHash?(data: string): string; }) {
+export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost) {
     const originalGetSourceFile = compilerHost.getSourceFile;
     compilerHost.getSourceFile = (...args) => {
         const result = originalGetSourceFile.call(compilerHost, ...args);
         if (result) {
-            result.version = getSourceFileVersionAsHashFromText(host, result.text);
+            result.version = getSourceFileVersionAsHashFromText(compilerHost, result.text);
         }
         return result;
     };

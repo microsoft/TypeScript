@@ -1,7 +1,15 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
 import * as Utils from "../../_namespaces/Utils";
-import { changeToHostTrackingWrittenFiles, checkArray, createServerHost, File, FileOrFolderOrSymLink, libFile, TestServerHost, TestServerHostTrackingWrittenFiles } from "../virtualFileSystemWithWatch";
+import {
+    changeToHostTrackingWrittenFiles,
+    createServerHost,
+    File,
+    FileOrFolderOrSymLink,
+    libFile,
+    TestServerHost,
+    TestServerHostTrackingWrittenFiles,
+} from "../virtualFileSystemWithWatch";
 import { ensureErrorFreeBuild } from "../tscWatch/helpers";
 
 const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
@@ -167,7 +175,7 @@ export class TestTypingsInstaller extends ts.server.typingsInstaller.TypingsInst
         readonly globalTypingsCacheLocation: string,
         throttleLimit: number,
         installTypingHost: ts.server.ServerHost,
-        readonly typesRegistry = new ts.Map<string, ts.MapLike<string>>(),
+        readonly typesRegistry = new Map<string, ts.MapLike<string>>(),
         log?: ts.server.typingsInstaller.Log) {
         super(installTypingHost, globalTypingsCacheLocation, "/safeList.json" as ts.Path, customTypesMap.path, throttleLimit, log);
     }
@@ -231,7 +239,7 @@ function createNpmPackageJsonString(installedTypings: string[]): string {
     return JSON.stringify({ dependencies });
 }
 
-export function createTypesRegistry(...list: string[]): ts.ESMap<string, ts.MapLike<string>> {
+export function createTypesRegistry(...list: string[]): Map<string, ts.MapLike<string>> {
     const versionMap = {
         "latest": "1.3.0",
         "ts2.0": "1.0.0",
@@ -243,7 +251,7 @@ export function createTypesRegistry(...list: string[]): ts.ESMap<string, ts.MapL
         "ts2.6": "1.3.0",
         "ts2.7": "1.3.0"
     };
-    const map = new ts.Map<string, ts.MapLike<string>>();
+    const map = new Map<string, ts.MapLike<string>>();
     for (const l of list) {
         map.set(l, versionMap);
     }
@@ -320,7 +328,7 @@ export class TestServerEventManager {
             configFileName: "tsconfig.json",
             projectType: "configured",
             languageServiceEnabled: true,
-            version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+            version: ts.version,
             ...partial,
         });
     }
@@ -391,6 +399,7 @@ export interface TestSessionOptions extends ts.server.SessionOptions {
     logger: Logger;
 }
 
+export type TestSessionRequest<T extends ts.server.protocol.Request> = Pick<T, "command" | "arguments">;
 export class TestSession extends ts.server.Session {
     private seq = 0;
     public events: ts.server.protocol.Event[] = [];
@@ -422,11 +431,12 @@ export class TestSession extends ts.server.Session {
         return this.baseline("response", super.executeCommand(this.baseline("request", request)));
     }
 
-    public executeCommandSeq<T extends ts.server.protocol.Request>(request: Partial<T>) {
+    public executeCommandSeq<T extends ts.server.protocol.Request>(inputRequest: TestSessionRequest<T>) {
         this.seq++;
+        const request: T = inputRequest as T;
         request.seq = this.seq;
         request.type = "request";
-        return this.executeCommand(request as T);
+        return this.executeCommand(request);
     }
 
     public event<T extends object>(body: T, eventName: string) {
@@ -575,44 +585,34 @@ export function configuredProjectAt(projectService: ts.server.ProjectService, in
     return iterResult.value;
 }
 
+function checkArray(caption: string, actual: readonly string[], expected: readonly string[]) {
+    const actualSet = new Set(actual);
+    let notInActual: string[] | undefined;
+    let duplicates: string[] | undefined;
+    const seen = new Set<string>();
+    expected.forEach(expectedKey => {
+        if (seen.has(expectedKey)) (duplicates ??= []).push(expectedKey);
+        else {
+            seen.add(expectedKey);
+            if (!actualSet.has(expectedKey)) (notInActual ??= []).push(expectedKey);
+        }
+    });
+    let inActualNotExpected: string[] | undefined;
+    actual.forEach(key => {
+        if (!seen.has(key)) (inActualNotExpected ??= []).push(key);
+        else seen.add(key);
+    });
+    if (notInActual || duplicates || inActualNotExpected) {
+        assert.fail(`${caption}\n\nNotInActual: ${notInActual}\nDuplicates: ${duplicates}\nInActualButNotInExpected: ${inActualNotExpected}`);
+    }
+}
+
 export function checkProjectActualFiles(project: ts.server.Project, expectedFiles: readonly string[]) {
     checkArray(`${ts.server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}:: actual files`, project.getFileNames(), expectedFiles);
 }
 
 export function checkProjectRootFiles(project: ts.server.Project, expectedFiles: readonly string[]) {
     checkArray(`${ts.server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}::, rootFileNames`, project.getRootFiles(), expectedFiles);
-}
-
-export function mapCombinedPathsInAncestor(dir: string, path2: string, mapAncestor: (ancestor: string) => boolean) {
-    dir = ts.normalizePath(dir);
-    const result: string[] = [];
-    ts.forEachAncestorDirectory(dir, ancestor => {
-        if (mapAncestor(ancestor)) {
-            result.push(ts.combinePaths(ancestor, path2));
-        }
-    });
-    return result;
-}
-
-export function getRootsToWatchWithAncestorDirectory(dir: string, path2: string) {
-    return mapCombinedPathsInAncestor(dir, path2, ancestor => ancestor.split(ts.directorySeparator).length > 4);
-}
-
-export const nodeModules = "node_modules";
-export function getNodeModuleDirectories(dir: string) {
-    return getRootsToWatchWithAncestorDirectory(dir, nodeModules);
-}
-
-export const nodeModulesAtTypes = "node_modules/@types";
-export function getTypeRootsFromLocation(currentDirectory: string) {
-    return getRootsToWatchWithAncestorDirectory(currentDirectory, nodeModulesAtTypes);
-}
-
-export function getConfigFilesToWatch(folder: string) {
-    return [
-        ...getRootsToWatchWithAncestorDirectory(folder, "tsconfig.json"),
-        ...getRootsToWatchWithAncestorDirectory(folder, "jsconfig.json")
-    ];
 }
 
 export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.Location {
@@ -642,30 +642,6 @@ export interface DocumentSpanFromSubstring {
     contextText?: string;
     contextOptions?: SpanFromSubstringOptions;
 }
-export function protocolFileSpanFromSubstring({ file, text, options }: DocumentSpanFromSubstring): ts.server.protocol.FileSpan {
-    return { file: file.path, ...protocolTextSpanFromSubstring(file.content, text, options) };
-}
-
-interface FileSpanWithContextFromSubString {
-    file: File;
-    text: string;
-    options?: SpanFromSubstringOptions;
-    contextText?: string;
-    contextOptions?: SpanFromSubstringOptions;
-}
-export function protocolFileSpanWithContextFromSubstring({ contextText, contextOptions, ...rest }: FileSpanWithContextFromSubString): ts.server.protocol.FileSpanWithContext {
-    const result = protocolFileSpanFromSubstring(rest);
-    const contextSpan = contextText !== undefined ?
-        protocolFileSpanFromSubstring({ file: rest.file, text: contextText, options: contextOptions }) :
-        undefined;
-    return contextSpan ?
-        {
-            ...result,
-            contextStart: contextSpan.start,
-            contextEnd: contextSpan.end
-        } :
-        result;
-}
 
 export interface ProtocolTextSpanWithContextFromString {
     fileText: string;
@@ -692,12 +668,6 @@ export interface ProtocolRenameSpanFromSubstring extends ProtocolTextSpanWithCon
     prefixSuffixText?: {
         readonly prefixText?: string;
         readonly suffixText?: string;
-    };
-}
-export function protocolRenameSpanFromSubstring({ prefixSuffixText, ...rest }: ProtocolRenameSpanFromSubstring): ts.server.protocol.RenameTextSpan {
-    return {
-        ...protocolTextSpanWithContextFromSubstring(rest),
-        ...prefixSuffixText
     };
 }
 
@@ -767,49 +737,29 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
     }
 }
 
-export function makeSessionRequest<T>(command: string, args: T): ts.server.protocol.Request {
-    return {
-        seq: 0,
-        type: "request",
-        command,
-        arguments: args
-    };
-}
-
-export function executeSessionRequest<TRequest extends ts.server.protocol.Request, TResponse extends ts.server.protocol.Response>(session: ts.server.Session, command: TRequest["command"], args: TRequest["arguments"]): TResponse["body"] {
-    return session.executeCommand(makeSessionRequest(command, args)).response as TResponse["body"];
-}
-
-export function executeSessionRequestNoResponse<TRequest extends ts.server.protocol.Request>(session: ts.server.Session, command: TRequest["command"], args: TRequest["arguments"]): void {
-    session.executeCommand(makeSessionRequest(command, args));
-}
-
-export function openFilesForSession(files: readonly (File | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: ts.server.Session): void {
+export function openFilesForSession(files: readonly (string | File | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: TestSession): void {
     for (const file of files) {
-        session.executeCommand(makeSessionRequest<ts.server.protocol.OpenRequestArgs>(ts.server.CommandNames.Open,
-            "projectRootPath" in file ? { file: typeof file.file === "string" ? file.file : file.file.path, projectRootPath: file.projectRootPath } : { file: file.path })); // eslint-disable-line local/no-in-operator
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+            command: ts.server.CommandNames.Open,
+            arguments: ts.isString(file) ?
+                { file } :
+                "projectRootPath" in file ? // eslint-disable-line local/no-in-operator
+                    {
+                        file: typeof file.file === "string" ? file.file : file.file.path,
+                        projectRootPath: file.projectRootPath
+                    } :
+                    { file: file.path }
+        });
     }
 }
 
-export function closeFilesForSession(files: readonly File[], session: ts.server.Session): void {
+export function closeFilesForSession(files: readonly File[], session: TestSession): void {
     for (const file of files) {
-        session.executeCommand(makeSessionRequest<ts.server.protocol.FileRequestArgs>(ts.server.CommandNames.Close, { file: file.path }));
+        session.executeCommandSeq<ts.server.protocol.CloseRequest>({
+            command: ts.server.CommandNames.Close,
+            arguments: { file: file.path }
+        });
     }
-}
-
-export interface MakeReferenceItem extends DocumentSpanFromSubstring {
-    isDefinition?: boolean;
-    isWriteAccess?: boolean;
-    lineText?: string;
-}
-
-export function makeReferenceItem({ isDefinition, isWriteAccess, lineText, ...rest }: MakeReferenceItem): ts.server.protocol.ReferencesResponseItem {
-    return {
-        ...protocolFileSpanWithContextFromSubstring(rest),
-        isDefinition,
-        isWriteAccess: isWriteAccess === undefined ? !!isDefinition : isWriteAccess,
-        lineText,
-    };
 }
 
 export interface VerifyGetErrRequestBase {

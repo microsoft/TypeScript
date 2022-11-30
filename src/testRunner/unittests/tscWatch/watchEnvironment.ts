@@ -1,6 +1,19 @@
 import * as ts from "../../_namespaces/ts";
-import { createWatchedSystem, File, libFile, SymLink, TestServerHost, Tsc_WatchDirectory, Tsc_WatchFile } from "../virtualFileSystemWithWatch";
-import { commonFile1, commonFile2, noopChange, verifyTscWatch } from "./helpers";
+import {
+    createWatchedSystem,
+    File,
+    libFile,
+    SymLink,
+    TestServerHost,
+    Tsc_WatchDirectory,
+    Tsc_WatchFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    commonFile1,
+    commonFile2,
+    noopChange,
+    verifyTscWatch,
+} from "./helpers";
 
 describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different polling/non polling options", () => {
     const scenario = "watchEnvironment";
@@ -14,7 +27,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 path: `${projectFolder}/typescript.ts`,
                 content: "var z = 10;"
             };
-            const environmentVariables = new ts.Map<string, string>();
+            const environmentVariables = new Map<string, string>();
             environmentVariables.set("TSC_WATCHFILE", Tsc_WatchFile.DynamicPolling);
             return createWatchedSystem([file1, libFile], { environmentVariables });
         },
@@ -144,7 +157,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 commandLineArgs: ["--w", "-p", configFile.path],
                 sys: () => {
                     const files = [file, configFile, libFile];
-                    const environmentVariables = new ts.Map<string, string>();
+                    const environmentVariables = new Map<string, string>();
                     environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
                     return createWatchedSystem(files, { environmentVariables });
                 },
@@ -212,7 +225,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     symLink: `${cwd}/node_modules/a`
                 };
                 const files = [libFile, file1, tsconfig, realA, realB, symLinkA, symLinkB, symLinkBInA, symLinkAInB];
-                const environmentVariables = new ts.Map<string, string>();
+                const environmentVariables = new Map<string, string>();
                 environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
                 return createWatchedSystem(files, { environmentVariables, currentDirectory: cwd });
             },
@@ -688,5 +701,27 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 },
             ]
         });
+    });
+
+    verifyTscWatch({
+        scenario,
+        subScenario: "fsEvent for change is repeated",
+        commandLineArgs: ["-w", "main.ts", "--extendedDiagnostics"],
+        sys: () => createWatchedSystem({
+            "/user/username/projects/project/main.ts": `let a: string = "Hello"`,
+            [libFile.path]: libFile.content,
+        }, { currentDirectory: "/user/username/projects/project" }),
+        changes: [
+            {
+                caption: "change main.ts",
+                change: sys => sys.replaceFileText("/user/username/projects/project/main.ts", "Hello", "Hello World"),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            },
+            {
+                caption: "receive another change event without modifying the file",
+                change: sys => sys.invokeFsWatches("/user/username/projects/project/main.ts", "change", /*modifiedTime*/ undefined, /*useTildeSuffix*/ undefined),
+                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+            }
+        ]
     });
 });

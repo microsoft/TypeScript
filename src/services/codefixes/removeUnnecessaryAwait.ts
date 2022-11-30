@@ -1,8 +1,24 @@
 import {
-    AwaitKeywordToken, Diagnostics, findPrecedingToken, getLeftmostExpression, getTokenAtPosition, isAwaitExpression,
-    isIdentifier, isParenthesizedExpression, Node, SourceFile, SyntaxKind, textChanges, TextSpan, tryCast,
+    AwaitKeywordToken,
+    Diagnostics,
+    findPrecedingToken,
+    getLeftmostExpression,
+    getTokenAtPosition,
+    isAwaitExpression,
+    isIdentifier,
+    isParenthesizedExpression,
+    Node,
+    SourceFile,
+    SyntaxKind,
+    textChanges,
+    TextSpan,
+    tryCast,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "removeUnnecessaryAwait";
 const errorCodes = [
