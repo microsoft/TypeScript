@@ -23,3 +23,8 @@ exports.__esModule = true;
 exports.nsDebuggerFoo = exports.NsExportedAlias = void 0;
 exports.NsExportedAlias = ns.ExportedAlias;
 exports.nsDebuggerFoo = ns.getFoo();
+
+
+//// [b.d.ts]
+export declare const NsExportedAlias: typeof ns.ExportedAlias;
+export declare const nsDebuggerFoo: ns.debugger.Foo;

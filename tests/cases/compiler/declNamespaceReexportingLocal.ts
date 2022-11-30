@@ -1,4 +1,5 @@
 // @Filename: /a.d.ts
+// @declaration: true
 declare namespace ns {
   class Local {}
   export {Local as ExportedAlias};
