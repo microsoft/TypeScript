@@ -32704,13 +32704,13 @@ namespace ts {
 
         function checkSatisfiesExpression(node: SatisfiesExpression) {
             checkSourceElement(node.type);
+            const exprType = checkExpression(node.expression);
 
             const targetType = getTypeFromTypeNode(node.type);
             if (isErrorType(targetType)) {
                 return targetType;
             }
 
-            const exprType = checkExpression(node.expression);
             checkTypeAssignableToAndOptionallyElaborate(exprType, targetType, node.type, node.expression, Diagnostics.Type_0_does_not_satisfy_the_expected_type_1);
 
             return exprType;
