@@ -1,7 +1,6 @@
 import {
     loadProjectFromDisk,
     noChangeRun,
-    noChangeWithExportsDiscrepancyRun,
     verifyTscWithEdits,
 } from "../tsc/helpers";
 import * as vfs from "../../_namespaces/vfs";
@@ -80,7 +79,7 @@ const a: string = "hello";`, "utf-8"),
 const a: string = 10;`, "utf-8"),
         commandLineArgs: ["--b", "/src/tsconfig.json", "--incremental"],
         edits: [
-            noChangeWithExportsDiscrepancyRun,
+            noChangeRun,
             {
                 subScenario: "Fix error",
                 modifyFs: fs => fs.writeFileSync("/src/src/main.ts", `import { A } from "../shared/types/db";

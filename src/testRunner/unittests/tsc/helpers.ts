@@ -8,10 +8,15 @@ import {
     TestServerHost,
 } from "../virtualFileSystemWithWatch";
 
+export interface DtsSignatureData {
+    signature: string | undefined;
+    exportedModules: string[] | undefined;
+}
+
 export type TscCompileSystem = fakes.System & {
     writtenFiles: Set<ts.Path>;
     baseLine(): { file: string; text: string; };
-    disableUseFileVersionAsSignature?: boolean;
+    dtsSignaures?: Map<ts.Path, Map<string, DtsSignatureData>>;
     storeFilesChangingSignatureDuringEmit?: boolean;
 };
 
@@ -22,13 +27,6 @@ export function compilerOptionsToConfigJson(options: ts.CompilerOptions) {
 export const noChangeRun: TestTscEdit = {
     subScenario: "no-change-run",
     modifyFs: ts.noop
-};
-export const noChangeWithExportsDiscrepancyRun: TestTscEdit = {
-    ...noChangeRun,
-    discrepancyExplanation: () => [
-        "Incremental build did not emit and has .ts as signature so exports has all imported modules/referenced files",
-        "Clean build always uses d.ts for signature for testing thus does not contain non exported modules/referenced files that arent needed"
-    ]
 };
 export const noChangeOnlyRuns = [noChangeRun];
 
@@ -77,7 +75,7 @@ export function commandLineCallbacks(
 export interface TestTscCompileLikeBase extends VerifyTscCompileLike {
     diffWithInitial?: boolean;
     modifyFs?: (fs: vfs.FileSystem) => void;
-    disableUseFileVersionAsSignature?: boolean;
+    computeDtsSignatures?: boolean;
     environmentVariables?: Record<string, string>;
 }
 
@@ -103,7 +101,6 @@ export function testTscCompileLike(input: TestTscCompileLike) {
 
     // Create system
     const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc", env: environmentVariables }) as TscCompileSystem;
-    if (input.disableUseFileVersionAsSignature) sys.disableUseFileVersionAsSignature = true;
     sys.storeFilesChangingSignatureDuringEmit = true;
     sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
     sys.exit = exitCode => sys.exitCode = exitCode;
@@ -203,6 +200,7 @@ export function testTscCompile(input: TestTscCompile) {
 
     function additionalBaseline(sys: TscCompileSystem) {
         const { baselineSourceMap, baselineReadFileCalls, baselinePrograms: shouldBaselinePrograms, baselineDependencies } = input;
+        if (input.computeDtsSignatures) storeDtsSignatures(sys, getPrograms!());
         if (shouldBaselinePrograms) {
             const baseline: string[] = [];
             baselinePrograms(baseline, getPrograms!, ts.emptyArray, baselineDependencies);
@@ -214,6 +212,40 @@ export function testTscCompile(input: TestTscCompile) {
         if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
         actualReadFileMap = undefined;
         getPrograms = undefined;
+    }
+}
+
+function storeDtsSignatures(sys: TscCompileSystem, programs: readonly CommandLineProgram[]) {
+    for (const [program, builderProgram] of programs) {
+        if (!builderProgram) continue;
+        const buildInfoPath = ts.getTsBuildInfoEmitOutputFilePath(program.getCompilerOptions());
+        if (!buildInfoPath) continue;
+        sys.dtsSignaures ??= new Map();
+        const dtsSignatureData = new Map<string, DtsSignatureData>();
+        sys.dtsSignaures.set(`${toPathWithSystem(sys, buildInfoPath)}.readable.baseline.txt` as ts.Path, dtsSignatureData);
+        const state = builderProgram.getState();
+        state.hasCalledUpdateShapeSignature?.forEach(resolvedPath => {
+            const file = program.getSourceFileByPath(resolvedPath);
+            if (!file || file.isDeclarationFile) return;
+            // Compute dts and exported map and store it
+            ts.BuilderState.computeDtsSignature(
+                program,
+                file,
+                /*cancellationToken*/ undefined,
+                sys,
+                (signature, sourceFiles) => {
+                    const exportedModules = ts.BuilderState.getExportedModules(state.exportedModulesMap && sourceFiles[0].exportedModulesFromDeclarationEmit);
+                    dtsSignatureData.set(relativeToBuildInfo(resolvedPath), { signature, exportedModules: exportedModules && ts.arrayFrom(exportedModules.keys(), relativeToBuildInfo) });
+                },
+            );
+        });
+
+        function relativeToBuildInfo(path: string) {
+            const currentDirectory = program.getCurrentDirectory();
+            const getCanonicalFileName = ts.createGetCanonicalFileName(program.useCaseSensitiveFileNames());
+            const buildInfoDirectory = ts.getDirectoryPath(ts.getNormalizedAbsolutePath(buildInfoPath!, currentDirectory));
+            return ts.ensurePathIsNonModuleName(ts.getRelativePathFromDirectory(buildInfoDirectory, path, getCanonicalFileName));
+        }
     }
 }
 
@@ -676,7 +708,7 @@ function verifyTscEditDiscrepancies({
             if (modifyFs) modifyFs(fs);
             editFs(fs);
         },
-        disableUseFileVersionAsSignature: true,
+        computeDtsSignatures: true,
     });
     let headerAdded = false;
     for (const outputFile of ts.arrayFrom(sys.writtenFiles.keys())) {
@@ -695,17 +727,20 @@ function verifyTscEditDiscrepancies({
             // Verify build info without affectedFilesPendingEmit
             const { buildInfo: incrementalBuildInfo, readableBuildInfo: incrementalReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(incrementalBuildText);
             const { buildInfo: cleanBuildInfo, readableBuildInfo: cleanReadableBuildInfo } = getBuildInfoForIncrementalCorrectnessCheck(cleanBuildText);
+            const dtsSignaures = sys.dtsSignaures?.get(outputFile);
             verifyTextEqual(incrementalBuildInfo, cleanBuildInfo, `TsBuild info text without affectedFilesPendingEmit:: ${outputFile}::`);
                 // Verify file info sigantures
             verifyMapLike(
                 incrementalReadableBuildInfo?.program?.fileInfos as ReadableProgramMultiFileEmitBuildInfo["fileInfos"],
                 cleanReadableBuildInfo?.program?.fileInfos as ReadableProgramMultiFileEmitBuildInfo["fileInfos"],
                 (key, incrementalFileInfo, cleanFileInfo) => {
-                    if (incrementalFileInfo.signature !== cleanFileInfo.signature && incrementalFileInfo.signature !== incrementalFileInfo.version) {
+                    const dtsForKey = dtsSignaures?.get(key);
+                    if (!incrementalFileInfo || !cleanFileInfo || incrementalFileInfo.signature !== cleanFileInfo.signature && (!dtsForKey || incrementalFileInfo.signature !== dtsForKey.signature)) {
                         return [
                             `Incremental signature is neither dts signature nor file version for File:: ${key}`,
                             `Incremental:: ${JSON.stringify(incrementalFileInfo, /*replacer*/ undefined, 2)}`,
-                            `Clean:: ${JSON.stringify(cleanFileInfo, /*replacer*/ undefined, 2)}`
+                            `Clean:: ${JSON.stringify(cleanFileInfo, /*replacer*/ undefined, 2)}`,
+                            `Dts Signature:: $${JSON.stringify(dtsForKey?.signature)}`
                         ];
                     }
                 },
@@ -718,13 +753,14 @@ function verifyTscEditDiscrepancies({
                     incrementalReadableBuildInfo?.program?.exportedModulesMap,
                     cleanReadableBuildInfo?.program?.exportedModulesMap,
                     (key, incrementalReferenceSet, cleanReferenceSet) => {
-                        if (!ts.arrayIsEqualTo(incrementalReferenceSet, cleanReferenceSet) && !ts.arrayIsEqualTo(incrementalReferenceSet, (incrementalReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).referencedMap![key])) {
+                        const dtsForKey = dtsSignaures?.get(key);
+                        if (!ts.arrayIsEqualTo(incrementalReferenceSet, cleanReferenceSet) &&
+                            (!dtsForKey || !ts.arrayIsEqualTo(incrementalReferenceSet, dtsForKey.exportedModules))) {
                             return [
                                 `Incremental Reference set is neither from dts nor files reference map for File:: ${key}::`,
                                 `Incremental:: ${JSON.stringify(incrementalReferenceSet, /*replacer*/ undefined, 2)}`,
                                 `Clean:: ${JSON.stringify(cleanReferenceSet, /*replacer*/ undefined, 2)}`,
-                                `IncrementalReferenceMap:: ${JSON.stringify((incrementalReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).referencedMap![key], /*replacer*/ undefined, 2)}`,
-                                `CleanReferenceMap:: ${JSON.stringify((cleanReadableBuildInfo!.program! as ReadableProgramMultiFileEmitBuildInfo).referencedMap![key], /*replacer*/ undefined, 2)}`,
+                                `DtsExportsMap:: ${JSON.stringify(dtsForKey?.exportedModules, /*replacer*/ undefined, 2)}`
                             ];
                         }
                     },
@@ -767,32 +803,25 @@ function verifyTscEditDiscrepancies({
         if (incrementalText !== cleanText) writeNotEqual(incrementalText, cleanText, message);
     }
 
-    function verifyMapLike<T>(incremental: ts.MapLike<T> | undefined, clean: ts.MapLike<T> | undefined, verifyValue: (key: string, incrementalValue: T, cleanValue: T) => string[] | undefined, message: string) {
+    function verifyMapLike<T>(
+        incremental: ts.MapLike<T> | undefined,
+        clean: ts.MapLike<T> | undefined,
+        verifyValue: (key: string, incrementalValue: T | undefined, cleanValue: T | undefined) => string[] | undefined,
+        message: string,
+    ) {
         verifyPresenceAbsence(incremental, clean, `Incremental and clean do not match:: ${message}`);
         if (!incremental || !clean) return;
         const incrementalMap = new Map(ts.getEntries(incremental));
         const cleanMap = new Map(ts.getEntries(clean));
-        if (incrementalMap.size !== cleanMap.size) {
-            addBaseline(
-                `Incremental and clean size of maps do not match:: ${message}`,
-                `Incremental: ${JSON.stringify(incremental, /*replacer*/ undefined, 2)}`,
-                `Clean: ${JSON.stringify(clean, /*replacer*/ undefined, 2)}`,
-            );
-            return;
-        }
         cleanMap.forEach((cleanValue, key) => {
-            const incrementalValue = incrementalMap.get(key);
-            if (!incrementalValue) {
-                addBaseline(
-                    `Incremental does not contain ${key} which is present in clean:: ${message}`,
-                    `Incremental: ${JSON.stringify(incremental, /*replacer*/ undefined, 2)}`,
-                    `Clean: ${JSON.stringify(clean, /*replacer*/ undefined, 2)}`,
-                );
-            }
-            else {
-                const result = verifyValue(key, incrementalMap.get(key)!, cleanValue);
-                if (result) addBaseline(...result);
-            }
+            const result = verifyValue(key, incrementalMap.get(key), cleanValue);
+            if (result) addBaseline(...result);
+        });
+        incrementalMap.forEach((incremetnalValue, key) => {
+            if (cleanMap.has(key)) return;
+            // This is value only in incremental Map
+            const result = verifyValue(key, incremetnalValue, /*cleanValue*/ undefined);
+            if (result) addBaseline(...result);
         });
     }
 
