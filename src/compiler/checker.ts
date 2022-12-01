@@ -29079,21 +29079,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined, forceTuple: boolean | undefined): Type {
-        if (!forceTuple && !useMap && isJsonSourceFile(getSourceFileOfNode(node))) {
-            useMap = true;
-            const links = getNodeLinks(node);
-            links.objectLiteralTypeMap = new Map();
-            const type = checkJSONArrayLiteral(node, checkMode);
-            useMap = false;
-            return type;
-        }
+        // if (!forceTuple && !useMap && isJsonSourceFile(getSourceFileOfNode(node))) {
+        //     useMap = true;
+        //     const links = getNodeLinks(node);
+        //     links.objectLiteralTypeMap = new Map();
+        //     const type = checkJSONArrayLiteral(node, checkMode);
+        //     useMap = false;
+        //     return type;
+        // }
         const elements = node.elements;
         const elementCount = elements.length;
         const elementTypes: Type[] = [];
         const elementFlags: ElementFlags[] = [];
+        const typeIds = new Set<TypeId>();
         const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
         const inDestructuringPattern = isAssignmentTarget(node);
         const inConstContext = isConstContext(node);
+        const todoPreserveTypes = inDestructuringPattern || forceTuple || inConstContext || contextualType && someType(contextualType, isTupleLikeType);
+        const oldUseMap = useMap;
+        if (!todoPreserveTypes && !useMap) {
+            useMap = true;
+            const links = getNodeLinks(node);
+            links.objectLiteralTypeMap = new Map();
+        }
+        
         let hasOmittedExpression = false;
         for (let i = 0; i < elementCount; i++) {
             const e = elements[i];
@@ -29103,8 +29112,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 const spreadType = checkExpression((e as SpreadElement).expression, checkMode, forceTuple);
                 if (isArrayLikeType(spreadType)) {
-                    elementTypes.push(spreadType);
-                    elementFlags.push(ElementFlags.Variadic);
+                    // elementTypes.push(spreadType);
+                    // elementFlags.push(ElementFlags.Variadic);
+                    pushType(spreadType, ElementFlags.Variadic);
                 }
                 else if (inDestructuringPattern) {
                     // Given the following situation:
@@ -29122,24 +29132,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const restElementType = getIndexTypeOfType(spreadType, numberType) ||
                         getIteratedTypeOrElementType(IterationUse.Destructuring, spreadType, undefinedType, /*errorNode*/ undefined, /*checkAssignability*/ false) ||
                         unknownType;
-                    elementTypes.push(restElementType);
-                    elementFlags.push(ElementFlags.Rest);
+                    // elementTypes.push(restElementType);
+                    // elementFlags.push(ElementFlags.Rest);
+                    pushType(restElementType, ElementFlags.Rest);
                 }
                 else {
-                    elementTypes.push(checkIteratedTypeOrElementType(IterationUse.Spread, spreadType, undefinedType, (e as SpreadElement).expression));
-                    elementFlags.push(ElementFlags.Rest);
+                    // elementTypes.push(checkIteratedTypeOrElementType(IterationUse.Spread, spreadType, undefinedType, (e as SpreadElement).expression));
+                    // elementFlags.push(ElementFlags.Rest);
+                    pushType(
+                        checkIteratedTypeOrElementType(IterationUse.Spread, spreadType, undefinedType, (e as SpreadElement).expression),
+                        ElementFlags.Rest,
+                    );
                 }
             }
             else if (exactOptionalPropertyTypes && e.kind === SyntaxKind.OmittedExpression) {
                 hasOmittedExpression = true;
-                elementTypes.push(missingType);
-                elementFlags.push(ElementFlags.Optional);
+                // elementTypes.push(missingType);
+                // elementFlags.push(ElementFlags.Optional);
+                pushType(missingType, ElementFlags.Optional);
             }
             else {
                 const elementContextualType = getContextualTypeForElementExpression(contextualType, elementTypes.length);
                 const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType, forceTuple);
-                elementTypes.push(addOptionality(type, /*isProperty*/ true, hasOmittedExpression));
-                elementFlags.push(hasOmittedExpression ? ElementFlags.Optional : ElementFlags.Required);
+                // elementTypes.push(addOptionality(type, /*isProperty*/ true, hasOmittedExpression));
+                // elementFlags.push(hasOmittedExpression ? ElementFlags.Optional : ElementFlags.Required);
+                pushType(
+                    addOptionality(type, /*isProperty*/ true, hasOmittedExpression),
+                    hasOmittedExpression ? ElementFlags.Optional : ElementFlags.Required,
+                );
                 if (contextualType && someType(contextualType, isTupleLikeType) && checkMode && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && isContextSensitive(e)) {
                     const inferenceContext = getInferenceContext(node);
                     Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
@@ -29153,9 +29173,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (forceTuple || inConstContext || contextualType && someType(contextualType, isTupleLikeType)) {
             return createArrayLiteralType(createTupleType(elementTypes, elementFlags, /*readonly*/ inConstContext));
         }
+        useMap = oldUseMap;
         return createArrayLiteralType(createArrayType(elementTypes.length ?
             getUnionType(sameMap(elementTypes, (t, i) => elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessTypeOrUndefined(t, numberType) || anyType : t), UnionReduction.Subtype) :
             strictNullChecks ? implicitNeverType : undefinedWideningType, inConstContext));
+
+        function pushType(type: Type, flags: ElementFlags) {
+            if (!todoPreserveTypes) {
+                if (typeIds.has(type.id)) {
+                    return;
+                }
+                typeIds.add(type.id);
+            }
+            elementTypes.push(type);
+            elementFlags.push(flags);
+        }
     }
 
     /*
@@ -29163,30 +29195,30 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             - forceTuple is false
             - No need for checking omitted exp & variadic for now (starting with JSON array only)
     */
-    function checkJSONArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined): Type {
-        const elements = node.elements;
-        const elementTypes: Type[] = [];
-        const typeIds = new Set<TypeId>();
-        const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
-        const inConstContext = isConstContext(node);
+    // function checkJSONArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined): Type {
+    //     const elements = node.elements;
+    //     const elementTypes: Type[] = [];
+    //     const typeIds = new Set<TypeId>();
+    //     const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
+    //     const inConstContext = isConstContext(node);
 
-        const links = getNodeLinks(node);
-        links.objectLiteralTypeMap = new Map();
+    //     // const links = getNodeLinks(node);
+    //     // links.objectLiteralTypeMap = new Map();
 
-        for (const e of elements) {
-            const elementContextualType = getContextualTypeForElementExpression(contextualType, elementTypes.length);
-            let type = checkExpressionForMutableLocation(e, checkMode, elementContextualType, /*forceTuple*/ false);
-            if (typeIds.has(type.id)) {
-                continue;
-            }
-            elementTypes.push(type);
-            typeIds.add(type.id);
-        }
+    //     for (const e of elements) {
+    //         const elementContextualType = getContextualTypeForElementExpression(contextualType, elementTypes.length);
+    //         let type = checkExpressionForMutableLocation(e, checkMode, elementContextualType, /*forceTuple*/ false);
+    //         if (typeIds.has(type.id)) {
+    //             continue;
+    //         }
+    //         elementTypes.push(type);
+    //         typeIds.add(type.id);
+    //     }
 
-        return createArrayLiteralType(createArrayType(elementTypes.length ?
-            getUnionType(elementTypes, UnionReduction.Subtype) :
-            strictNullChecks ? implicitNeverType : undefinedWideningType, inConstContext));
-    }
+    //     return createArrayLiteralType(createArrayType(elementTypes.length ?
+    //         getUnionType(elementTypes, UnionReduction.Subtype) :
+    //         strictNullChecks ? implicitNeverType : undefinedWideningType, inConstContext));
+    // }
 
 
     function createArrayLiteralType(type: Type) {
