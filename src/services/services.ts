@@ -122,6 +122,7 @@ import {
     hasProperty,
     hasStaticModifier,
     hasSyntacticModifier,
+    hasTabstop,
     HighlightSpanKind,
     HostCancellationToken,
     hostGetCanonicalFileName,
@@ -182,8 +183,8 @@ import {
     isTagName,
     isTextWhiteSpaceLike,
     isThisTypeParameter,
-    JsDoc,
     JSDoc,
+    JsDoc,
     JSDocContainer,
     JSDocTagInfo,
     JsonSourceFile,
@@ -318,7 +319,6 @@ import {
     updateSourceFile,
     UserPreferences,
     VariableDeclaration,
-    hasTabstop,
 } from "./_namespaces/ts";
 
 /** The version of the language service API */
