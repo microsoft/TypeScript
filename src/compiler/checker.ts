@@ -2037,6 +2037,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     let lastFlowNodeReachable: boolean;
     let flowTypeCache: Type[] | undefined;
 
+    let useMap = false;
+
     const emptyStringType = getStringLiteralType("");
     const zeroType = getNumberLiteralType(0);
     const zeroBigIntType = getBigIntLiteralType({ negative: false, base10Value: "0" });
@@ -2546,6 +2548,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getNodeLinks(node: Node): NodeLinks {
         const nodeId = getNodeId(node);
         return nodeLinks[nodeId] || (nodeLinks[nodeId] = new (NodeLinks as any)());
+    }
+
+    function hasNodeLinks(node: Node): NodeLinks | undefined {
+        const nodeId = getNodeId(node);
+        return nodeLinks[nodeId];
     }
 
     function isGlobalSourceFile(node: Node) {
@@ -29072,6 +29079,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined, forceTuple: boolean | undefined): Type {
+        if (!forceTuple && !useMap && isJsonSourceFile(getSourceFileOfNode(node))) {
+            useMap = true;
+            const links = getNodeLinks(node);
+            links.objectLiteralTypeMap = new Map();
+            const type = checkJSONArrayLiteral(node, checkMode);
+            useMap = false;
+            return type;
+        }
         const elements = node.elements;
         const elementCount = elements.length;
         const elementTypes: Type[] = [];
@@ -29142,6 +29157,37 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             getUnionType(sameMap(elementTypes, (t, i) => elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessTypeOrUndefined(t, numberType) || anyType : t), UnionReduction.Subtype) :
             strictNullChecks ? implicitNeverType : undefinedWideningType, inConstContext));
     }
+
+    /*
+        Assume:
+            - forceTuple is false
+            - No need for checking omitted exp & variadic for now (starting with JSON array only)
+    */
+    function checkJSONArrayLiteral(node: ArrayLiteralExpression, checkMode: CheckMode | undefined): Type {
+        const elements = node.elements;
+        const elementTypes: Type[] = [];
+        const typeIds = new Set<TypeId>();
+        const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
+        const inConstContext = isConstContext(node);
+
+        const links = getNodeLinks(node);
+        links.objectLiteralTypeMap = new Map();
+
+        for (const e of elements) {
+            const elementContextualType = getContextualTypeForElementExpression(contextualType, elementTypes.length);
+            let type = checkExpressionForMutableLocation(e, checkMode, elementContextualType, /*forceTuple*/ false);
+            if (typeIds.has(type.id)) {
+                continue;
+            }
+            elementTypes.push(type);
+            typeIds.add(type.id);
+        }
+
+        return createArrayLiteralType(createArrayType(elementTypes.length ?
+            getUnionType(elementTypes, UnionReduction.Subtype) :
+            strictNullChecks ? implicitNeverType : undefinedWideningType, inConstContext));
+    }
+
 
     function createArrayLiteralType(type: Type) {
         if (!(getObjectFlags(type) & ObjectFlags.Reference)) {
@@ -29271,6 +29317,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let hasComputedNumberProperty = false;
         let hasComputedSymbolProperty = false;
 
+        let objectLiteralMap: Map<string, ResolvedType> | undefined;
+        if (useMap) {
+            findAncestor(node, (node: Node) => {
+                if (isArrayLiteralExpression(node)) {
+                    const links = hasNodeLinks(node);
+                    if (links && links.objectLiteralTypeMap) {
+                        objectLiteralMap = links.objectLiteralTypeMap;
+                        return "quit";
+                    }
+                }
+                return false;
+            });
+        }
+
         // Spreads may cause an early bail; ensure computed names are always checked (this is cached)
         // As otherwise they may not be checked until exports for the type at this position are retrieved,
         // which may never occur.
@@ -29361,7 +29421,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     checkExternalEmitHelpers(memberDecl, ExternalEmitHelpers.Assign);
                 }
                 if (propertiesArray.length > 0) {
-                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, objectFlags, inConstContext);
+                    spread = getSpreadType(spread, getObjectLiteralType(), node.symbol, objectFlags, inConstContext);
                     propertiesArray = [];
                     propertiesTable = createSymbolTable();
                     hasComputedStringProperty = false;
@@ -29456,23 +29516,41 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         if (spread !== emptyObjectType) {
             if (propertiesArray.length > 0) {
-                spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, objectFlags, inConstContext);
+                spread = getSpreadType(spread, getObjectLiteralType(), node.symbol, objectFlags, inConstContext);
                 propertiesArray = [];
                 propertiesTable = createSymbolTable();
                 hasComputedStringProperty = false;
                 hasComputedNumberProperty = false;
             }
             // remap the raw emptyObjectType fed in at the top into a fresh empty object literal type, unique to this use site
-            return mapType(spread, t => t === emptyObjectType ? createObjectLiteralType() : t);
+            return mapType(spread, t => t === emptyObjectType ? getObjectLiteralType() : t);
         }
+        
+        return getObjectLiteralType();
 
-        return createObjectLiteralType();
-
-        function createObjectLiteralType() {
+        function getObjectLiteralType() {
             const indexInfos = [];
             if (hasComputedStringProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, stringType));
             if (hasComputedNumberProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, numberType));
             if (hasComputedSymbolProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, esSymbolType));
+            let hasMethodsOrAccessors = some(propertiesArray, propSymbol => !!(propSymbol.flags & (SymbolFlags.Accessor | SymbolFlags.Method))); // >> TODO: maybe compute that above
+            if (objectLiteralMap
+                && indexInfos.length === 0
+                && !inDestructuringPattern
+                && !hasMethodsOrAccessors
+                && every(propertiesArray, propertyNameIsValidKey)) { // >> TODO: do we need those? why?
+                const key = getObjectLiteralTypeKey(propertiesArray);
+                if (objectLiteralMap.has(key)) {
+                    return objectLiteralMap.get(key) as ResolvedType;
+                }
+                const result = makeObjectLiteralType(indexInfos);
+                objectLiteralMap.set(key, result);
+                return result;
+            }
+            return makeObjectLiteralType(indexInfos);
+        }
+
+        function makeObjectLiteralType(indexInfos: IndexInfo[]) {
             const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, indexInfos);
             result.objectFlags |= objectFlags | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
             if (isJSObjectLiteral) {
@@ -29486,6 +29564,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return result;
         }
+    }
+
+    function propertyNameIsValidKey(symbol: Symbol): boolean {
+        return (symbol.escapedName as string).indexOf(":") < 0;
+    }
+
+    function getObjectLiteralTypeKey(properties: Symbol[]): string {
+        return map(properties, p => p.escapedName + (p.flags & SymbolFlags.Optional ? ":?" : ":") + getTypeOfSymbol(p).id).join(",");
     }
 
     function isValidSpreadType(type: Type): boolean {
