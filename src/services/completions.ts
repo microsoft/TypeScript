@@ -1025,32 +1025,25 @@ function getExhaustiveCaseSnippets(
             return undefined;
         }
 
-        const newClauses = map(elements, (element, i) => {
-            if (preferences.includeCompletionsWithSnippetText) {
-                const tabstopStmt = factory.createEmptyStatement();
-                setSnippetElement(tabstopStmt, { kind: SnippetKind.TabStop, order: i + 1 });
-                return factory.createCaseClause(element, [tabstopStmt]);
-            }
-            return factory.createCaseClause(element, []);
-        });
+        const newClauses = map(elements, element => factory.createCaseClause(element, []));
+        const newLineChar = getNewLineCharacter(options, maybeBind(host, host.getNewLine));
         const printer = createSnippetPrinter({
             removeComments: true,
             module: options.module,
             target: options.target,
-            newLine: getNewLineKind(getNewLineCharacter(options, maybeBind(host, host.getNewLine))),
+            newLine: getNewLineKind(newLineChar),
         });
-        const insertText = formatContext
-            ? printer.printAndFormatSnippetList(
-                ListFormat.MultiLine | ListFormat.NoTrailingNewLine,
-                factory.createNodeArray(newClauses),
-                sourceFile,
-                formatContext)
-            : printer.printSnippetList(
-                ListFormat.MultiLine | ListFormat.NoTrailingNewLine,
-                factory.createNodeArray(newClauses),
-                sourceFile);
+        const printNode = formatContext
+            ? (node: Node) => printer.printAndFormatNode(EmitHint.Unspecified, node, sourceFile, formatContext)
+            : (node: Node) => printer.printNode(EmitHint.Unspecified, node, sourceFile);
+        const insertText = map(newClauses, (clause, i) => {
+            if (preferences.includeCompletionsWithSnippetText) {
+                return `${printNode(clause)}$${i+1}`;
+            }
+            return `${printNode(clause)}`;
+        }).join(newLineChar);
 
-        const firstClause = printer.printSnippetList(ListFormat.SingleLine, factory.createNodeArray([factory.createCaseClause(first(elements), [])]), sourceFile);
+        const firstClause = printer.printNode(EmitHint.Unspecified, newClauses[0], sourceFile);
         return {
             entry: {
                 name: `${firstClause} ...`,
@@ -1821,6 +1814,8 @@ function createSnippetPrinter(
     return {
         printSnippetList,
         printAndFormatSnippetList,
+        printNode,
+        printAndFormatNode,
     };
 
     // The formatter/scanner will have issues with snippet-escaped text,
@@ -1840,7 +1835,7 @@ function createSnippetPrinter(
         }
     }
 
-    /* Snippet-escaping version of `printer.printList`. */
+    /** Snippet-escaping version of `printer.printList`. */
     function printSnippetList(
         format: ListFormat,
         list: NodeArray<Node>,
@@ -1888,6 +1883,50 @@ function createSnippetPrinter(
                 /* delta */ 0,
                 { ...formatContext, options: formatOptions });
         });
+
+        const allChanges = escapes
+            ? stableSort(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
+            : changes;
+        return textChanges.applyChanges(syntheticFile.text, allChanges);
+    }
+
+    /** Snippet-escaping version of `printer.printNode`. */
+    function printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string {
+        const unescaped = printUnescapedNode(hint, node, sourceFile);
+        return escapes ? textChanges.applyChanges(unescaped, escapes) : unescaped;
+    }
+
+    function printUnescapedNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string {
+        escapes = undefined;
+        writer.clear();
+        printer.writeNode(hint, node, sourceFile, writer);
+        return writer.getText();
+    }
+
+    function printAndFormatNode(
+        hint: EmitHint,
+        node: Node,
+        sourceFile: SourceFile,
+        formatContext: formatting.FormatContext): string {
+        const syntheticFile = {
+            text: printUnescapedNode(
+                hint,
+                node,
+                sourceFile),
+            getLineAndCharacterOfPosition(pos: number) {
+                return getLineAndCharacterOfPosition(this, pos);
+            },
+        };
+
+        const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
+        const nodeWithPos = textChanges.assignPositionsToNode(node);
+        const changes = formatting.formatNodeGivenIndentation(
+            nodeWithPos,
+            syntheticFile,
+            sourceFile.languageVariant,
+            /* indentation */ 0,
+            /* delta */ 0,
+            { ...formatContext, options: formatOptions });
 
         const allChanges = escapes
             ? stableSort(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))

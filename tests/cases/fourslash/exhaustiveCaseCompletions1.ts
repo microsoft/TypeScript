@@ -94,9 +94,9 @@ case F.F:`,
                 sortText: completion.SortText.GlobalsOrKeywords,
                 isSnippet: true,
                 insertText:
-`case F.D: $1
-case F.E: $2
-case F.F: $3`,
+`case F.D:$1
+case F.E:$2
+case F.F:$3`,
             },
         ],
         preferences: {
