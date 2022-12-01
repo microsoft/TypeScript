@@ -99,6 +99,7 @@ import {
     createFileDiagnostic,
     createGetCanonicalFileName,
     createGetSymbolWalker,
+    createModeAwareCacheKey,
     createPrinter,
     createPropertyNameNodeForIdentifierOrLiteral,
     createScanner,
@@ -337,8 +338,8 @@ import {
     hasAccessorModifier,
     hasAmbientModifier,
     hasContextSensitiveParameters,
-    hasDecorators,
     HasDecorators,
+    hasDecorators,
     hasDynamicName,
     hasEffectiveModifier,
     hasEffectiveModifiers,
@@ -347,8 +348,8 @@ import {
     hasExtension,
     HasIllegalDecorators,
     HasIllegalModifiers,
-    hasInitializer,
     HasInitializer,
+    hasInitializer,
     hasJSDocNodes,
     hasJSDocParameterTags,
     hasJsonModuleEmitEnabled,
@@ -7406,7 +7407,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const contextFile = getSourceFileOfNode(getOriginalNode(context.enclosingDeclaration));
             const resolutionMode = overrideImportMode || contextFile?.impliedNodeFormat;
-            const cacheKey = getSpecifierCacheKey(contextFile.path, resolutionMode);
+            const cacheKey = createModeAwareCacheKey(contextFile.path, resolutionMode);
             const links = getSymbolLinks(symbol);
             let specifier = links.specifierCache && links.specifierCache.get(cacheKey);
             if (!specifier) {
@@ -7435,10 +7436,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 links.specifierCache.set(cacheKey, specifier);
             }
             return specifier;
-
-            function getSpecifierCacheKey(path: string, mode: ResolutionMode | undefined) {
-                return mode === undefined ? path : `${mode}|${path}`;
-            }
         }
 
         function symbolToEntityNameNode(symbol: Symbol): EntityName {
