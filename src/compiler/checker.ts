@@ -26517,7 +26517,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (strictNullChecks && optionalChainContainsReference(target, reference) && assumeTrue === (literal.text !== "undefined")) {
                     type = getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
                 }
-                const propertyAccess = getDiscriminantPropertyAccess(typeOfExpr.expression, type);
+                const propertyAccess = getDiscriminantPropertyAccess(target, type);
                 if (propertyAccess) {
                     return narrowTypeByDiscriminant(type, propertyAccess, t => narrowTypeByLiteralExpression(t, literal, assumeTrue));
                 }
