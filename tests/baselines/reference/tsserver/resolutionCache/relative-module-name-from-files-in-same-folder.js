@@ -83,7 +83,7 @@ Info 29   [00:00:58.000] 	Files (5)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	module2.ts
 	  Matched by default include pattern '**/*'
 	  Imported via "../module2" from file 'src/file1.ts'

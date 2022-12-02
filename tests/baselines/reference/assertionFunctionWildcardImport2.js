@@ -22,7 +22,7 @@ function test(obj: string | null): void {
 
 //// [asserts.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.isNonNullable = void 0;
 function isNonNullable(obj) {
     if (obj === undefined || obj === null) {
@@ -32,7 +32,7 @@ function isNonNullable(obj) {
 exports.isNonNullable = isNonNullable;
 //// [test.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var asserts = require("./asserts");
 function test(obj) {
     asserts.isNonNullable(obj);

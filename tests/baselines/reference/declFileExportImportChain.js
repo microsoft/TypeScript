@@ -43,7 +43,7 @@ define(["require", "exports"], function (require, exports) {
 //// [declFileExportImportChain_b.js]
 define(["require", "exports", "declFileExportImportChain_a"], function (require, exports, a) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = a;
 });
 //// [declFileExportImportChain_b1.js]
@@ -54,13 +54,13 @@ define(["require", "exports", "declFileExportImportChain_b"], function (require,
 //// [declFileExportImportChain_c.js]
 define(["require", "exports", "declFileExportImportChain_b1"], function (require, exports, b1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.b1 = b1;
 });
 //// [declFileExportImportChain_d.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = void 0;
 });
 

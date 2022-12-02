@@ -100,11 +100,11 @@ var A = /** @class */ (function () {
             }
         };
         this.prop4 = {
-            a: function () { return this; }
+            a: function () { return this; },
         };
         this.prop5 = function () {
             return {
-                a: function () { return this; }
+                a: function () { return this; },
             };
         };
     }

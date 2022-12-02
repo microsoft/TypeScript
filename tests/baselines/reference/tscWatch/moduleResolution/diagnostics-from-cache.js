@@ -84,7 +84,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/dist/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.thing = void 0;
 var me = require("@this/package");
 me.thing();

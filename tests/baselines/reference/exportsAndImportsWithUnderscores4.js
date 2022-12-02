@@ -35,7 +35,7 @@ _hi();
 
 //// [m1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.___hello = exports.__esmodule = exports.__proto = exports._hi = exports.___ = exports.__ = exports._ = void 0;
 function _() {
     console.log("_");
@@ -67,7 +67,7 @@ function ___hello() {
 exports.___hello = ___hello;
 //// [m2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var m1_1 = require("./m1");
 (0, m1_1._)();
 (0, m1_1.__)();

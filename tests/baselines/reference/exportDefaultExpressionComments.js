@@ -7,11 +7,11 @@ export default null
 
 //// [exportDefaultExpressionComments.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * JSDoc Comments
  */
-exports["default"] = null;
+exports.default = null;
 
 
 //// [exportDefaultExpressionComments.d.ts]

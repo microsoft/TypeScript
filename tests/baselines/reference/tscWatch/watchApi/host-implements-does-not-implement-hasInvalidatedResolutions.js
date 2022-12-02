@@ -87,7 +87,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
@@ -279,7 +279,7 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/myproject/main.js] file written with same contents
 //// [/user/username/projects/myproject/other.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
 function foo() { }
 exports.foo = foo;

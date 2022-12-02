@@ -67,7 +67,7 @@ Info 14   [00:00:31.000] 	Files (3)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	moduleFile1.ts
 	  Imported via "./moduleFile1" from file 'file1Consumer1.ts'
 	file1Consumer1.ts

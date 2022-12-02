@@ -60,7 +60,7 @@ let a = 10;
 
 //// [/user/username/projects/myproject/dependency/FnS.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.fn5 = exports.fn4 = exports.fn3 = exports.fn2 = exports.fn1 = void 0;
 function fn1() { }
 exports.fn1 = fn1;
@@ -125,7 +125,7 @@ exports.fn5 = fn5;
 
 //// [/user/username/projects/myproject/main/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var fns_1 = require("../decls/fns");
 (0, fns_1.fn1)();
 (0, fns_1.fn2)();
@@ -261,7 +261,7 @@ Info 23   [00:01:27.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	main.ts
 	  Matched by default include pattern '**/*'
 
@@ -352,7 +352,7 @@ Info 39   [00:01:49.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	FnS.ts
 	  Matched by default include pattern '**/*'
 
@@ -464,7 +464,7 @@ Info 59   [00:02:20.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	random.ts
 	  Matched by default include pattern '**/*'
 
@@ -838,7 +838,7 @@ Info 84   [00:03:03.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../decls/fns.d.ts
 	  Imported via '../decls/fns' from file 'main.ts'
 	main.ts
@@ -2829,7 +2829,7 @@ Info 141  [00:05:06.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../decls/fns.d.ts
 	  Imported via '../decls/fns' from file 'main.ts'
 	main.ts
@@ -2853,7 +2853,7 @@ Info 154  [00:05:19.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	FnS.ts
 	  Matched by default include pattern '**/*'
 

@@ -62,7 +62,7 @@ Info 15   [00:00:37.000] 	Files (2)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	ui.ts
 	  Matched by default include pattern '**/*'
 

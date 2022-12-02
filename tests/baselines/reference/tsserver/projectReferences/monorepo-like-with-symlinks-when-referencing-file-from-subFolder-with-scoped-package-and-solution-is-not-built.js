@@ -121,7 +121,7 @@ Info 35   [00:01:22.000] 	Files (4)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../B/src/foo.ts
 	  Imported via '@issue/b/lib/foo' from file 'src/test.ts'
 	../B/src/bar/foo.ts

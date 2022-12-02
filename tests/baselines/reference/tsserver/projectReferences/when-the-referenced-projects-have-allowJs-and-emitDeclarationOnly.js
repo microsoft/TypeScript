@@ -130,7 +130,7 @@ Info 37   [00:01:20.000] 	Files (4)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../emit-composite/src/testModule.js
 	  Imported via './testModule' from file '../emit-composite/src/index.js'
 	../emit-composite/src/index.js
