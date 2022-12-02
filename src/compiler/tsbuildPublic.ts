@@ -244,7 +244,6 @@ export interface SolutionBuilderHostBase<T extends BuilderProgram> extends Progr
     // TODO: To do better with watch mode and normal build mode api that creates program and emits files
     // This currently helps enable --diagnostics and --extendedDiagnostics
     afterProgramEmitAndDiagnostics?(program: T): void;
-    /** @internal */ beforeEmitBundle?(config: ParsedCommandLine): void;
     /** @internal */ afterEmitBundle?(config: ParsedCommandLine): void;
 
     // For testing
@@ -397,7 +396,7 @@ interface SolutionBuilderState<T extends BuilderProgram = BuilderProgram> extend
     readonly projectPendingBuild: Map<ResolvedConfigFilePath, ConfigFileProgramReloadLevel>;
     readonly projectErrorsReported: Map<ResolvedConfigFilePath, true>;
 
-    readonly compilerHost: CompilerHost & ReadBuildProgramHost;
+    readonly compilerHost: CompilerHost;
     readonly moduleResolutionCache: ModuleResolutionCache | undefined;
     readonly typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache | undefined;
 
@@ -1235,7 +1234,6 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
         // Update js, and source map
         const { compilerHost } = state;
         state.projectCompilerOptions = config.options;
-        state.host.beforeEmitBundle?.(config);
         const outputFiles = emitUsingBuildInfo(
             config,
             compilerHost,

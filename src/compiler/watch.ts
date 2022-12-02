@@ -14,11 +14,10 @@ import {
     createCompilerDiagnostic,
     createEmitAndSemanticDiagnosticsBuilderProgram,
     createGetCanonicalFileName,
-    createGetSourceFile,
     createIncrementalCompilerHost,
     createIncrementalProgram,
     CreateProgram,
-    createWriteFileMeasuringIO,
+    createSourceFile,
     CustomTransformers,
     Debug,
     Diagnostic,
@@ -105,7 +104,9 @@ import {
     WatchStatusReporter,
     whitespaceOrMapCommentRegExp,
     WriteFileCallback,
+    writeFileEnsuringDirectories,
 } from "./_namespaces/ts";
+import * as performance from "./_namespaces/ts.performance";
 
 const sysFormatDiagnosticsHost: FormatDiagnosticsHost | undefined = sys ? {
     getCurrentDirectory: () => sys.getCurrentDirectory(),
@@ -740,18 +741,26 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
     const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
     const hostGetNewLine = memoize(() => host.getNewLine());
     const compilerHost: CompilerHost = {
-        getSourceFile: createGetSourceFile(
-            (fileName, encoding) => !encoding ? compilerHost.readFile(fileName) : host.readFile(fileName, encoding),
-            getCompilerOptions,
-            /*setParentNodes*/ undefined
-        ),
+        getSourceFile: (fileName, languageVersionOrOptions, onError) => {
+            let text: string | undefined;
+            try {
+                performance.mark("beforeIORead");
+                text = host.readFile(fileName, getCompilerOptions().charset);
+                performance.mark("afterIORead");
+                performance.measure("I/O Read", "beforeIORead", "afterIORead");
+            }
+            catch (e) {
+                if (onError) {
+                    onError(e.message);
+                }
+                text = "";
+            }
+
+            return text !== undefined ? createSourceFile(fileName, text, languageVersionOrOptions) : undefined;
+        },
         getDefaultLibLocation: maybeBind(host, host.getDefaultLibLocation),
         getDefaultLibFileName: options => host.getDefaultLibFileName(options),
-        writeFile: createWriteFileMeasuringIO(
-            (path, data, writeByteOrderMark) => host.writeFile!(path, data, writeByteOrderMark),
-            path => host.createDirectory!(path),
-            path => host.directoryExists!(path)
-        ),
+        writeFile,
         getCurrentDirectory: memoize(() => host.getCurrentDirectory()),
         useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
         getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
@@ -769,6 +778,31 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
         storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
     };
     return compilerHost;
+
+    function writeFile(fileName: string, text: string, writeByteOrderMark: boolean, onError: (message: string) => void) {
+        try {
+            performance.mark("beforeIOWrite");
+
+            // NOTE: If patchWriteFileEnsuringDirectory has been called,
+            // the host.writeFile will do its own directory creation and
+            // the ensureDirectoriesExist call will always be redundant.
+            writeFileEnsuringDirectories(
+                fileName,
+                text,
+                writeByteOrderMark,
+                (path, data, writeByteOrderMark) => host.writeFile!(path, data, writeByteOrderMark),
+                path => host.createDirectory!(path),
+                path => host.directoryExists!(path));
+
+            performance.mark("afterIOWrite");
+            performance.measure("I/O Write", "beforeIOWrite", "afterIOWrite");
+        }
+        catch (e) {
+            if (onError) {
+                onError(e.message);
+            }
+        }
+    }
 }
 
 /** @internal */
