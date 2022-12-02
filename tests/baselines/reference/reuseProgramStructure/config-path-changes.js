@@ -1,10 +1,9 @@
 Program Reused:: Not
 File: c.ts
 
-import x from 'b'
+
 var z = 1;
-resolvedModules: 
-b: undefined
+resolvedModules: undefined
 resolvedTypeReferenceDirectiveNames: undefined
 
 File: b.ts
@@ -18,29 +17,28 @@ File: a.ts
 
 /// <reference path='b.ts'/>
 /// <reference path='non-existing-file.ts'/>
-/// <reference types="typerefs1" />
+/// <reference types="typerefs" />
 
-var x = 100
+
+var x = 1
 resolvedModules: undefined
 resolvedTypeReferenceDirectiveNames: 
-typerefs1: undefined
+typerefs: undefined
 
 
 MissingPaths:: ["non-existing-file.ts","lib.d.ts"]
 
 a.ts(3,22): error TS6053: File 'non-existing-file.ts' not found.
-a.ts(4,23): error TS2688: Cannot find type definition file for 'typerefs1'.
-c.ts(2,15): error TS2307: Cannot find module 'b' or its corresponding type declarations.
+a.ts(4,23): error TS2688: Cannot find type definition file for 'typerefs'.
 
 
 
 Program Reused:: Not
 File: c.ts
 
-import x from 'b'
+
 var z = 1;
-resolvedModules: 
-b: undefined
+resolvedModules: undefined
 resolvedTypeReferenceDirectiveNames: undefined
 
 File: b.ts
@@ -54,18 +52,18 @@ File: a.ts
 
 /// <reference path='b.ts'/>
 /// <reference path='non-existing-file.ts'/>
-/// <reference types="typerefs1" />
+/// <reference types="typerefs" />
 
-var x = 100
+
+var x = 1
 resolvedModules: undefined
 resolvedTypeReferenceDirectiveNames: 
-typerefs1: undefined
+typerefs: undefined
 
 
 MissingPaths:: ["non-existing-file.ts","lib.d.ts"]
 
 a.ts(3,22): error TS6053: File 'non-existing-file.ts' not found.
-a.ts(4,23): error TS2688: Cannot find type definition file for 'typerefs1'.
-c.ts(2,15): error TS2307: Cannot find module 'b' or its corresponding type declarations.
+a.ts(4,23): error TS2688: Cannot find type definition file for 'typerefs'.
 
 

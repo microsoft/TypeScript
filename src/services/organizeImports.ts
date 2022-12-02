@@ -19,6 +19,7 @@ import {
     Comparison,
     SortedReadonlyArray,
 } from "../compiler/corePublic";
+import { setEmitFlags } from "../compiler/factory/emitNode";
 import { factory } from "../compiler/factory/nodeFactory";
 import {
     isExportDeclaration,
@@ -35,6 +36,7 @@ import {
 } from "../compiler/scanner";
 import {
     AnyImportOrRequireStatement,
+    EmitFlags,
     ExportDeclaration,
     ExportSpecifier,
     Expression,
@@ -51,7 +53,7 @@ import {
     TransformFlags,
     UserPreferences,
 } from "../compiler/types";
-import { isAmbientModule } from "../compiler/utilities";
+import { isAmbientModule, rangeIsOnSingleLine } from "../compiler/utilities";
 import {
     isExternalModuleNameRelative,
     isStringLiteralLike,
@@ -97,7 +99,7 @@ export function organizeImports(
     const maybeRemove = shouldRemove ? removeUnusedImports : identity;
     const maybeCoalesce = shouldCombine ? coalesceImports : identity;
     const processImportsOfSameModuleSpecifier = (importGroup: readonly ImportDeclaration[]) => {
-        const processedDeclarations = maybeCoalesce(maybeRemove(importGroup, sourceFile, program));
+        const processedDeclarations = maybeCoalesce(maybeRemove(importGroup, sourceFile, program), sourceFile);
         return shouldSort
             ? stableSort(processedDeclarations, (s1, s2) => compareImportsOrRequireStatements(s1, s2))
             : processedDeclarations;
@@ -314,7 +316,7 @@ function getExternalModuleName(specifier: Expression) {
  *
  * @internal
  */
-export function coalesceImports(importGroup: readonly ImportDeclaration[]) {
+export function coalesceImports(importGroup: readonly ImportDeclaration[], sourceFile?: SourceFile) {
     if (importGroup.length === 0) {
         return importGroup;
     }
@@ -368,7 +370,11 @@ export function coalesceImports(importGroup: readonly ImportDeclaration[]) {
 
         newImportSpecifiers.push(...getNewImportSpecifiers(namedImports));
 
-        const sortedImportSpecifiers = sortSpecifiers(newImportSpecifiers);
+        const sortedImportSpecifiers = factory.createNodeArray(
+            sortSpecifiers(newImportSpecifiers),
+            (namedImports[0]?.importClause!.namedBindings as NamedImports)?.elements.hasTrailingComma
+        );
+
         const importDecl = defaultImports.length > 0
             ? defaultImports[0]
             : namedImports[0];
@@ -380,6 +386,14 @@ export function coalesceImports(importGroup: readonly ImportDeclaration[]) {
             : namedImports.length === 0
                 ? factory.createNamedImports(sortedImportSpecifiers)
                 : factory.updateNamedImports(namedImports[0].importClause!.namedBindings as NamedImports, sortedImportSpecifiers); // TODO: GH#18217
+
+        if (sourceFile &&
+            newNamedImports &&
+            namedImports[0]?.importClause!.namedBindings &&
+            !rangeIsOnSingleLine(namedImports[0].importClause.namedBindings, sourceFile)
+        ) {
+            setEmitFlags(newNamedImports, EmitFlags.MultiLine);
+        }
 
         // Type-only imports are not allowed to mix default, namespace, and named imports in any combination.
         // We could rewrite a default import as a named import (`import { default as name }`), but we currently

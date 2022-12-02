@@ -1,12 +1,12 @@
 Info 0    [00:00:23.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:24.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/a/b/controllers/vessels/client.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/b/controllers/vessels/client.ts]
@@ -116,13 +116,13 @@ Info 19   [00:00:48.000] response:
     }
 Info 20   [00:00:49.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "definition",
       "arguments": {
         "file": "/a/b/controllers/vessels/client.ts",
         "position": 54
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -188,12 +188,12 @@ Info 25   [00:00:54.000] readFile:: []
 Info 26   [00:00:55.000] readDirectory:: []
 Info 27   [00:00:56.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/a/b/models/vessel.ts"
-      }
+      },
+      "seq": 3,
+      "type": "request"
     }
 Before request
 

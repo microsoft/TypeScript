@@ -1,12 +1,12 @@
 Info 0    [00:00:33.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:34.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/users/username/projects/myproject/src/a.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/lib/lib.d.ts]
@@ -154,7 +154,7 @@ Info 26   [00:01:05.000] request:
           "/users/username/projects/myproject/src/a.ts"
         ]
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request
@@ -294,7 +294,7 @@ FsWatchesRecursive::
 Info 30   [00:01:09.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":44},"text":"'myModule' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true},{"start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"text":"'foo' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
 Info 31   [00:01:10.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::
@@ -324,7 +324,7 @@ Info 32   [00:01:11.000] request:
         "endOffset": 8,
         "insertString": "o"
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Before request
@@ -394,7 +394,7 @@ Info 34   [00:01:13.000] request:
           "/users/username/projects/myproject/src/a.ts"
         ]
       },
-      "seq": 3,
+      "seq": 4,
       "type": "request"
     }
 Before request
@@ -537,7 +537,7 @@ FsWatchesRecursive::
 Info 41   [00:01:20.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/myproject/src/a.ts","diagnostics":[{"start":{"line":1,"offset":1},"end":{"line":1,"offset":44},"text":"'myModule' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true},{"start":{"line":2,"offset":10},"end":{"line":2,"offset":13},"text":"'foo' is declared but its value is never read.","code":6133,"category":"suggestion","reportsUnnecessary":true}]}}
 Info 42   [00:01:21.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::

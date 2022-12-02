@@ -6,6 +6,7 @@ import {
     compareTextSpans,
     concatenate,
     createSortedArray,
+    endsWith,
     every,
     filter,
     find,
@@ -17,6 +18,7 @@ import {
     last,
     lastOrUndefined,
     length,
+    map,
     mapDefined,
     maybeBind,
     memoize,
@@ -43,10 +45,13 @@ import {
     isBinaryExpression,
     isBindingElement,
     isCallExpression,
+    isCaseBlock,
     isCaseClause,
     isClassStaticBlockDeclaration,
     isComputedPropertyName,
     isConstructorDeclaration,
+    isDefaultClause,
+    isEnumMember,
     isExportAssignment,
     isExportDeclaration,
     isExternalModuleReference,
@@ -100,14 +105,19 @@ import {
     BinaryExpression,
     BreakOrContinueStatement,
     CancellationToken,
+    CaseBlock,
+    CaseClause,
     CharacterCodes,
     ClassElement,
     CompilerOptions,
     ConstructorDeclaration,
     ContextFlags,
     Declaration,
+    DefaultClause,
     EmitHint,
     EmitTextWriter,
+    EntityName,
+    EnumMember,
     Expression,
     FunctionLikeDeclaration,
     Identifier,
@@ -116,6 +126,7 @@ import {
     ImportOrExportSpecifier,
     ImportSpecifier,
     ImportTypeNode,
+    IndexedAccessTypeNode,
     InternalSymbolName,
     JSDocParameterTag,
     JSDocPropertyTag,
@@ -133,6 +144,8 @@ import {
     JsxSpreadAttribute,
     LanguageVariant,
     ListFormat,
+    LiteralType,
+    LiteralTypeNode,
     MemberOverrideStatus,
     MethodDeclaration,
     ModifierFlags,
@@ -144,10 +157,12 @@ import {
     NodeArray,
     NodeBuilderFlags,
     NodeFlags,
+    NumericLiteral,
     ObjectBindingPattern,
     ObjectLiteralExpression,
     ObjectType,
     ObjectTypeDeclaration,
+    ParenthesizedTypeNode,
     PrinterOptions,
     Program,
     PropertyAccessExpression,
@@ -173,7 +188,10 @@ import {
     TypeElement,
     TypeFlags,
     TypeLiteralNode,
+    TypeNode,
     TypeOnlyAliasDeclaration,
+    TypeQueryNode,
+    TypeReferenceNode,
     UnionReduction,
     UnionType,
     UserPreferences,
@@ -181,6 +199,7 @@ import {
 } from "../compiler/types";
 import {
     addToSeen,
+    canUsePropertyAccess,
     compareNumberOfDirectorySeparators,
     escapeSnippetText,
     getAllSuperTypeNodes,
@@ -224,6 +243,7 @@ import {
     modifiersToFlags,
     modifierToFlag,
     nodeIsMissing,
+    parseBigInt,
     positionsAreOnSameLine,
     pseudoBigIntToString,
     rangeIsOnSingleLine,
@@ -254,6 +274,7 @@ import {
     isFunctionLikeKind,
     isJSDocTag,
     isJsxOpeningLikeElement,
+    isLiteralExpression,
     isMemberName,
     isModifier,
     isModifierKind,
@@ -381,6 +402,7 @@ import {
     shouldUseUriStyleNodeCoreModules,
     textPart,
 } from "./utilities";
+import { codefix } from "./_namespaces/ts";
 
 // Exported only for tests
 /** @internal */
@@ -442,6 +464,8 @@ export enum CompletionSource {
     TypeOnlyAlias = "TypeOnlyAlias/",
     /** Auto-import that comes attached to an object literal method snippet */
     ObjectLiteralMethodSnippet = "ObjectLiteralMethodSnippet/",
+    /** Case completions for switch statements */
+    SwitchCases = "SwitchCases/",
 }
 
 /** @internal */
@@ -963,6 +987,16 @@ function completionInfoFromData(
         getJSCompletionEntries(sourceFile, location.pos, uniqueNames, getEmitScriptTarget(compilerOptions), entries);
     }
 
+    let caseBlock: CaseBlock | undefined;
+    if (preferences.includeCompletionsWithInsertText
+        && contextToken
+        && (caseBlock = findAncestor(contextToken, isCaseBlock))) {
+        const cases = getExhaustiveCaseSnippets(caseBlock, sourceFile, preferences, compilerOptions, host, program, formatContext);
+        if (cases) {
+            entries.push(cases.entry);
+        }
+    }
+
     return {
         flags: completionData.flags,
         isGlobalCompletion: isInSnippetScope,
@@ -976,6 +1010,224 @@ function completionInfoFromData(
 
 function isCheckedFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
     return !isSourceFileJS(sourceFile) || !!isCheckJsEnabledForFile(sourceFile, compilerOptions);
+}
+
+function getExhaustiveCaseSnippets(
+    caseBlock: CaseBlock,
+    sourceFile: SourceFile,
+    preferences: UserPreferences,
+    options: CompilerOptions,
+    host: LanguageServiceHost,
+    program: Program,
+    formatContext: FormatContext | undefined): { entry: CompletionEntry, importAdder: codefix.ImportAdder } | undefined {
+
+    const clauses = caseBlock.clauses;
+    const checker = program.getTypeChecker();
+    const switchType = checker.getTypeAtLocation(caseBlock.parent.expression);
+    if (switchType && switchType.isUnion() && every(switchType.types, type => type.isLiteral())) {
+        // Collect constant values in existing clauses.
+        const tracker = newCaseClauseTracker(checker, clauses);
+
+        const target = getEmitScriptTarget(options);
+        const quotePreference = getQuotePreference(sourceFile, preferences);
+        const importAdder = createImportAdder(sourceFile, program, preferences, host, /*useAutoImportProvider*/ false);
+        const elements: Expression[] = [];
+        for (const type of switchType.types as LiteralType[]) {
+            // Enums
+            if (type.flags & TypeFlags.EnumLiteral) {
+                Debug.assert(type.symbol, "An enum member type should have a symbol");
+                Debug.assert(type.symbol.parent, "An enum member type should have a parent symbol (the enum symbol)");
+                // Filter existing enums by their values
+                const enumValue = type.symbol.valueDeclaration && checker.getConstantValue(type.symbol.valueDeclaration as EnumMember);
+                if (enumValue !== undefined) {
+                    if (tracker.hasValue(enumValue)) {
+                        continue;
+                    }
+                    tracker.addValue(enumValue);
+                }
+                const typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, caseBlock, target);
+                if (!typeNode) {
+                    return undefined;
+                }
+                const expr = typeNodeToExpression(typeNode, target, quotePreference);
+                if (!expr) {
+                    return undefined;
+                }
+                elements.push(expr);
+            }
+            // Literals
+            else if (!tracker.hasValue(type.value)) {
+                switch (typeof type.value) {
+                    case "object":
+                        elements.push(factory.createBigIntLiteral(type.value));
+                        break;
+                    case "number":
+                        elements.push(factory.createNumericLiteral(type.value));
+                        break;
+                    case "string":
+                        elements.push(factory.createStringLiteral(type.value));
+                        break;
+                }
+            }
+        }
+        if (elements.length === 0) {
+            return undefined;
+        }
+
+        const newClauses = map(elements, element => factory.createCaseClause(element, []));
+        const newLineChar = getNewLineCharacter(options, maybeBind(host, host.getNewLine));
+        const printer = createSnippetPrinter({
+            removeComments: true,
+            module: options.module,
+            target: options.target,
+            newLine: getNewLineKind(newLineChar),
+        });
+        const printNode = formatContext
+            ? (node: Node) => printer.printAndFormatNode(EmitHint.Unspecified, node, sourceFile, formatContext)
+            : (node: Node) => printer.printNode(EmitHint.Unspecified, node, sourceFile);
+        const insertText = map(newClauses, (clause, i) => {
+            if (preferences.includeCompletionsWithSnippetText) {
+                return `${printNode(clause)}$${i+1}`;
+            }
+            return `${printNode(clause)}`;
+        }).join(newLineChar);
+
+        const firstClause = printer.printNode(EmitHint.Unspecified, newClauses[0], sourceFile);
+        return {
+            entry: {
+                name: `${firstClause} ...`,
+                kind: ScriptElementKind.unknown,
+                sortText: SortText.GlobalsOrKeywords,
+                insertText,
+                hasAction: importAdder.hasFixes() || undefined,
+                source: CompletionSource.SwitchCases,
+                isSnippet: preferences.includeCompletionsWithSnippetText ? true : undefined,
+            },
+            importAdder,
+        };
+    }
+
+    return undefined;
+}
+
+interface CaseClauseTracker {
+    addValue(value: string | number): void;
+    hasValue(value: string | number | PseudoBigInt): boolean;
+}
+
+function newCaseClauseTracker(checker: TypeChecker, clauses: readonly (CaseClause | DefaultClause)[]): CaseClauseTracker {
+    const existingStrings = new Set<string>();
+    const existingNumbers = new Set<number>();
+    const existingBigInts = new Set<string>();
+
+    for (const clause of clauses) {
+        if (!isDefaultClause(clause)) {
+            if (isLiteralExpression(clause.expression)) {
+                const expression = clause.expression;
+                switch (expression.kind) {
+                    case SyntaxKind.NoSubstitutionTemplateLiteral:
+                    case SyntaxKind.StringLiteral:
+                        existingStrings.add(expression.text);
+                        break;
+                    case SyntaxKind.NumericLiteral:
+                        existingNumbers.add(parseInt(expression.text));
+                        break;
+                    case SyntaxKind.BigIntLiteral:
+                        const parsedBigInt = parseBigInt(endsWith(expression.text, "n") ? expression.text.slice(0, -1) : expression.text);
+                        if (parsedBigInt) {
+                            existingBigInts.add(pseudoBigIntToString(parsedBigInt));
+                        }
+                        break;
+                }
+            }
+            else {
+                const symbol = checker.getSymbolAtLocation(clause.expression);
+                if (symbol && symbol.valueDeclaration && isEnumMember(symbol.valueDeclaration)) {
+                    const enumValue = checker.getConstantValue(symbol.valueDeclaration);
+                    if (enumValue !== undefined) {
+                        addValue(enumValue);
+                    }
+                }
+            }
+        }
+    }
+
+    return {
+        addValue,
+        hasValue,
+    };
+
+    function addValue(value: string | number) {
+        switch (typeof value) {
+            case "string":
+                existingStrings.add(value);
+                break;
+            case "number":
+                existingNumbers.add(value);
+        }
+    }
+
+    function hasValue(value: string | number | PseudoBigInt): boolean {
+        switch (typeof value) {
+            case "string":
+                return existingStrings.has(value);
+            case "number":
+                return existingNumbers.has(value);
+            case "object":
+                return existingBigInts.has(pseudoBigIntToString(value));
+        }
+    }
+}
+
+function typeNodeToExpression(typeNode: TypeNode, languageVersion: ScriptTarget, quotePreference: QuotePreference): Expression | undefined {
+    switch (typeNode.kind) {
+        case SyntaxKind.TypeReference:
+            const typeName = (typeNode as TypeReferenceNode).typeName;
+            return entityNameToExpression(typeName, languageVersion, quotePreference);
+        case SyntaxKind.IndexedAccessType:
+            const objectExpression =
+                typeNodeToExpression((typeNode as IndexedAccessTypeNode).objectType, languageVersion, quotePreference);
+            const indexExpression =
+                typeNodeToExpression((typeNode as IndexedAccessTypeNode).indexType, languageVersion, quotePreference);
+            return objectExpression
+                && indexExpression
+                && factory.createElementAccessExpression(objectExpression, indexExpression);
+        case SyntaxKind.LiteralType:
+            const literal = (typeNode as LiteralTypeNode).literal;
+            switch (literal.kind) {
+                case SyntaxKind.StringLiteral:
+                    return factory.createStringLiteral(literal.text, quotePreference === QuotePreference.Single);
+                case SyntaxKind.NumericLiteral:
+                    return factory.createNumericLiteral(literal.text, (literal as NumericLiteral).numericLiteralFlags);
+            }
+            return undefined;
+        case SyntaxKind.ParenthesizedType:
+            const exp = typeNodeToExpression((typeNode as ParenthesizedTypeNode).type, languageVersion, quotePreference);
+            return exp && (isIdentifier(exp) ? exp : factory.createParenthesizedExpression(exp));
+        case SyntaxKind.TypeQuery:
+            return entityNameToExpression((typeNode as TypeQueryNode).exprName, languageVersion, quotePreference);
+        case SyntaxKind.ImportType:
+            Debug.fail(`We should not get an import type after calling 'codefix.typeToAutoImportableTypeNode'.`);
+    }
+
+    return undefined;
+}
+
+function entityNameToExpression(entityName: EntityName, languageVersion: ScriptTarget, quotePreference: QuotePreference): Expression {
+    if (isIdentifier(entityName)) {
+        return entityName;
+    }
+    const unescapedName = unescapeLeadingUnderscores(entityName.right.escapedText);
+    if (canUsePropertyAccess(unescapedName, languageVersion)) {
+        return factory.createPropertyAccessExpression(
+            entityNameToExpression(entityName.left, languageVersion, quotePreference),
+            unescapedName);
+    }
+    else {
+        return factory.createElementAccessExpression(
+            entityNameToExpression(entityName.left, languageVersion, quotePreference),
+            factory.createStringLiteral(unescapedName, quotePreference === QuotePreference.Single));
+    }
 }
 
 function isMemberCompletionKind(kind: CompletionKind): boolean {
@@ -1611,6 +1863,8 @@ function createSnippetPrinter(
     return {
         printSnippetList,
         printAndFormatSnippetList,
+        printNode,
+        printAndFormatNode,
     };
 
     // The formatter/scanner will have issues with snippet-escaped text,
@@ -1630,7 +1884,7 @@ function createSnippetPrinter(
         }
     }
 
-    /* Snippet-escaping version of `printer.printList`. */
+    /** Snippet-escaping version of `printer.printList`. */
     function printSnippetList(
         format: ListFormat,
         list: NodeArray<Node>,
@@ -1678,6 +1932,50 @@ function createSnippetPrinter(
                 /* delta */ 0,
                 { ...formatContext, options: formatOptions });
         });
+
+        const allChanges = escapes
+            ? stableSort(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
+            : changes;
+        return applyChanges(syntheticFile.text, allChanges);
+    }
+
+    /** Snippet-escaping version of `printer.printNode`. */
+    function printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string {
+        const unescaped = printUnescapedNode(hint, node, sourceFile);
+        return escapes ? applyChanges(unescaped, escapes) : unescaped;
+    }
+
+    function printUnescapedNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string {
+        escapes = undefined;
+        writer.clear();
+        printer.writeNode(hint, node, sourceFile, writer);
+        return writer.getText();
+    }
+
+    function printAndFormatNode(
+        hint: EmitHint,
+        node: Node,
+        sourceFile: SourceFile,
+        formatContext: FormatContext): string {
+        const syntheticFile = {
+            text: printUnescapedNode(
+                hint,
+                node,
+                sourceFile),
+            getLineAndCharacterOfPosition(pos: number) {
+                return getLineAndCharacterOfPosition(this, pos);
+            },
+        };
+
+        const formatOptions = getFormatCodeSettingsForWriting(formatContext, sourceFile);
+        const nodeWithPos = assignPositionsToNode(node);
+        const changes = formatNodeGivenIndentation(
+            nodeWithPos,
+            syntheticFile,
+            sourceFile.languageVariant,
+            /* indentation */ 0,
+            /* delta */ 0,
+            { ...formatContext, options: formatOptions });
 
         const allChanges = escapes
             ? stableSort(concatenate(changes, escapes), (a, b) => compareTextSpans(a.span, b.span))
@@ -1976,7 +2274,10 @@ function getSymbolCompletionFromEntryId(
     entryId: CompletionEntryIdentifier,
     host: LanguageServiceHost,
     preferences: UserPreferences,
-): SymbolCompletion | { type: "request", request: Request } | { type: "literal", literal: string | number | PseudoBigInt } | { type: "none" } {
+): SymbolCompletion | { type: "request", request: Request } | { type: "literal", literal: string | number | PseudoBigInt } | { type: "cases" } | { type: "none" } {
+    if (entryId.source === CompletionSource.SwitchCases) {
+        return { type: "cases" };
+    }
     if (entryId.data) {
         const autoImport = getAutoImportSymbolFromCompletionEntryData(entryId.name, entryId.data, program, host);
         if (autoImport) {
@@ -2047,9 +2348,9 @@ export function getCompletionEntryDetails(
     const compilerOptions = program.getCompilerOptions();
     const { name, source, data } = entryId;
 
-    const contextToken = findPrecedingToken(position, sourceFile);
-    if (isInString(sourceFile, position, contextToken)) {
-        return StringCompletions.getStringLiteralCompletionDetails(name, sourceFile, position, contextToken, typeChecker, compilerOptions, host, cancellationToken, preferences);
+    const { previousToken, contextToken } = getRelevantTokens(position, sourceFile);
+    if (isInString(sourceFile, position, previousToken)) {
+        return StringCompletions.getStringLiteralCompletionDetails(name, sourceFile, position, previousToken, typeChecker, compilerOptions, host, cancellationToken, preferences);
     }
 
     // Compute all the completion symbols again.
@@ -2078,6 +2379,37 @@ export function getCompletionEntryDetails(
         case "literal": {
             const { literal } = symbolCompletion;
             return createSimpleDetails(completionNameForLiteral(sourceFile, preferences, literal), ScriptElementKind.string, typeof literal === "string" ? SymbolDisplayPartKind.stringLiteral : SymbolDisplayPartKind.numericLiteral);
+        }
+        case "cases": {
+            const { entry, importAdder } = getExhaustiveCaseSnippets(
+                contextToken!.parent as CaseBlock,
+                sourceFile,
+                preferences,
+                program.getCompilerOptions(),
+                host,
+                program,
+                /*formatContext*/ undefined)!;
+            if (importAdder.hasFixes()) {
+                const changes = ChangeTracker.with({ host, formatContext, preferences }, importAdder.writeFixes);
+                return {
+                    name: entry.name,
+                    kind: ScriptElementKind.unknown,
+                    kindModifiers: "",
+                    displayParts: [],
+                    sourceDisplay: undefined,
+                    codeActions: [{
+                        changes,
+                        description: diagnosticToString([Diagnostics.Includes_imports_of_types_referenced_by_0, name]),
+                    }],
+                };
+            }
+            return {
+                name: entry.name,
+                kind: ScriptElementKind.unknown,
+                kindModifiers: "",
+                displayParts: [],
+                sourceDisplay: undefined,
+            };
         }
         case "none":
             // Didn't find a symbol with this name.  See if we can find a keyword instead.

@@ -20,7 +20,7 @@ File: a.ts
 /// <reference types="typerefs" />
 
 
-var x = 100
+var x = 1
 resolvedModules: undefined
 resolvedTypeReferenceDirectiveNames: 
 typerefs: undefined
@@ -53,7 +53,7 @@ File: a.ts
                 /// <reference path='c.ts'/>
                 
 
-var x = 100
+var x = 1
 resolvedModules: undefined
 resolvedTypeReferenceDirectiveNames: undefined
 

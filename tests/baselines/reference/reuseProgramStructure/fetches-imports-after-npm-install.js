@@ -54,7 +54,11 @@ File: file1.ts
 import * as a from "a";
 const myX: number = a.x;
 resolvedModules: 
-a: {"resolvedFileName":"node_modules/a/index.d.ts","extension":".d.ts","isExternalLibraryImport":true}
+a: {
+  "resolvedFileName": "node_modules/a/index.d.ts",
+  "extension": ".d.ts",
+  "isExternalLibraryImport": true
+}
 resolvedTypeReferenceDirectiveNames: undefined
 
 File: file2.ts

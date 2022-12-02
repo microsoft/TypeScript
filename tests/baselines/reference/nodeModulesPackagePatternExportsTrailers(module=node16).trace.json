@@ -1,13 +1,11 @@
 [
     "Found 'package.json' at 'tests/cases/conformance/node/package.json'.",
-    "'package.json' does not have a 'typesVersions' field.",
     "======== Resolving module 'inner/cjs/index.cjs' from 'tests/cases/conformance/node/index.ts'. ========",
     "Module resolution kind is not specified, using 'Node16'.",
     "Resolving in ESM mode with conditions 'node', 'import', 'types'.",
     "File 'tests/cases/conformance/node/package.json' exists according to earlier cached lookups.",
     "Loading module 'inner/cjs/index.cjs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.",
     "Found 'package.json' at 'tests/cases/conformance/node/node_modules/inner/package.json'.",
-    "'package.json' does not have a 'typesVersions' field.",
     "Using 'exports' subpath './cjs/*.cjs' with target './index.cjs'.",
     "File name 'tests/cases/conformance/node/node_modules/inner/index.cjs' has a '.cjs' extension - stripping it.",
     "File 'tests/cases/conformance/node/node_modules/inner/index.cts' does not exist.",
