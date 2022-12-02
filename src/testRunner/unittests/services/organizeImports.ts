@@ -39,8 +39,8 @@ describe("unittests:: services:: organizeImports", () => {
 
         function assertSortsBefore(importString1: string, importString2: string) {
             const [{moduleSpecifier: moduleSpecifier1}, {moduleSpecifier: moduleSpecifier2}] = parseImports(importString1, importString2);
-            assert.equal(ts.OrganizeImports.compareModuleSpecifiers(moduleSpecifier1, moduleSpecifier2), ts.Comparison.LessThan);
-            assert.equal(ts.OrganizeImports.compareModuleSpecifiers(moduleSpecifier2, moduleSpecifier1), ts.Comparison.GreaterThan);
+            assert.equal(ts.OrganizeImports.compareModuleSpecifiers(moduleSpecifier1, moduleSpecifier2, /*ignoreCase*/ true), ts.Comparison.LessThan);
+            assert.equal(ts.OrganizeImports.compareModuleSpecifiers(moduleSpecifier2, moduleSpecifier1, /*ignoreCase*/ true), ts.Comparison.GreaterThan);
         }
     });
 
