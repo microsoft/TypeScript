@@ -9210,6 +9210,19 @@ declare namespace ts {
          */
         update(options: CompilerOptions): void;
     }
+    interface NonRelativeNameResolutionCache<T> {
+        getOrCreateCacheForNonRelativeName(nonRelativeName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerNonRelativeNameCache<T>;
+        clear(): void;
+        /**
+         *  Updates with the current compilerOptions the cache will operate with.
+         *  This updates the redirects map as well if needed so module resolutions are cached if they can across the projects
+         */
+        update(options: CompilerOptions): void;
+    }
+    interface PerNonRelativeNameCache<T> {
+        get(directory: string): T | undefined;
+        set(directory: string, result: T): void;
+    }
     interface ModuleResolutionCache extends PerDirectoryResolutionCache<ResolvedModuleWithFailedLookupLocations>, NonRelativeModuleNameResolutionCache, PackageJsonInfoCache {
         getPackageJsonInfoCache(): PackageJsonInfoCache;
     }
@@ -9217,16 +9230,13 @@ declare namespace ts {
      * Stored map from non-relative module name to a table: directory -> result of module lookup in this directory
      * We support only non-relative module names because resolution of relative module names is usually more deterministic and thus less expensive.
      */
-    interface NonRelativeModuleNameResolutionCache extends PackageJsonInfoCache {
+    interface NonRelativeModuleNameResolutionCache extends NonRelativeNameResolutionCache<ResolvedModuleWithFailedLookupLocations>, PackageJsonInfoCache {
         getOrCreateCacheForModuleName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerModuleNameCache;
     }
     interface PackageJsonInfoCache {
         clear(): void;
     }
-    interface PerModuleNameCache {
-        get(directory: string): ResolvedModuleWithFailedLookupLocations | undefined;
-        set(directory: string, result: ResolvedModuleWithFailedLookupLocations): void;
-    }
+    type PerModuleNameCache = PerNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations>;
     /**
      * Visits a Node using the supplied visitor, possibly returning a new Node in its place.
      *
