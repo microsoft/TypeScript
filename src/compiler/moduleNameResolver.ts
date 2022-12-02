@@ -450,7 +450,7 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
     const perFolderCache = containingDirectory ? cache && cache.getOrCreateCacheForDirectory(containingDirectory, redirectedReference) : undefined;
     let result = perFolderCache && perFolderCache.get(typeReferenceDirectiveName, /*mode*/ resolutionMode);
     if (!result && containingDirectory && !isExternalModuleNameRelative(typeReferenceDirectiveName)) {
-        result = cache?.getOrCreateCacheForNonRelativeName(typeReferenceDirectiveName, resolutionMode, redirectedReference).get(containingDirectory);
+        result = cache?.getFromNonRelativeNameCache(typeReferenceDirectiveName, resolutionMode, containingDirectory, redirectedReference);
     }
 
     if (result) {
@@ -704,6 +704,7 @@ export interface ModeAwareCache<T> {
  * This assumes that any module id will have the same resolution for sibling files located in the same folder.
  */
 export interface PerDirectoryResolutionCache<T> {
+    getFromDirectoryCache(name: string, mode: ResolutionMode, directoryName: string, redirectedReference: ResolvedProjectReference | undefined): T | undefined;
     getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): ModeAwareCache<T>;
     clear(): void;
     /**
@@ -714,6 +715,7 @@ export interface PerDirectoryResolutionCache<T> {
 }
 
 export interface NonRelativeNameResolutionCache<T> {
+    getFromNonRelativeNameCache(nonRelativeName: string, mode: ResolutionMode, directoryName: string, redirectedReference: ResolvedProjectReference | undefined): T | undefined;
     getOrCreateCacheForNonRelativeName(nonRelativeName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerNonRelativeNameCache<T>;
     clear(): void;
     /**
@@ -774,6 +776,7 @@ export function getKeyForCompilerOptions(options: CompilerOptions, affectingOpti
 
 /** @internal */
 export interface CacheWithRedirects<K, V> {
+    getMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V> | undefined;
     getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V>;
     update(newOptions: CompilerOptions): void;
     clear(): void;
@@ -788,26 +791,35 @@ export function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | und
     let ownMap = new Map<K, V>();
     if (ownOptions) redirectsMap.set(ownOptions, ownMap);
     return {
+        getMapOfCacheRedirects,
         getOrCreateMapOfCacheRedirects,
         update,
         clear,
     };
 
+    function getMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V> | undefined {
+        return redirectedReference ?
+            getOrCreateMap(redirectedReference.commandLine.options, /*create*/ false) :
+            ownMap;
+    }
+
     function getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<K, V> {
         return redirectedReference ?
-            getOrCreateMap(redirectedReference.commandLine.options) :
+            getOrCreateMap(redirectedReference.commandLine.options, /*create*/ true) :
             ownMap;
     }
 
     function update(newOptions: CompilerOptions) {
         if (ownOptions !== newOptions) {
-            if (ownOptions) ownMap = getOrCreateMap(newOptions); // set new map for new options as ownMap
+            if (ownOptions) ownMap = getOrCreateMap(newOptions, /*create*/ true); // set new map for new options as ownMap
             else redirectsMap.set(newOptions, ownMap); // Use existing map if oldOptions = undefined
             ownOptions = newOptions;
         }
     }
 
-    function getOrCreateMap(redirectOptions: CompilerOptions): Map<K, V> {
+    function getOrCreateMap(redirectOptions: CompilerOptions, create: true): Map<K, V>;
+    function getOrCreateMap(redirectOptions: CompilerOptions, create: false): Map<K, V> | undefined;
+    function getOrCreateMap(redirectOptions: CompilerOptions, create: boolean): Map<K, V> | undefined {
         let result = redirectsMap.get(redirectOptions);
         if (result) return result;
         const key = getRedirectsCacheKey(redirectOptions);
@@ -818,9 +830,10 @@ export function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | und
                 if (ownKey === key) result = ownMap;
                 else if (!redirectsKeyToMap.has(ownKey)) redirectsKeyToMap.set(ownKey, ownMap);
             }
-            redirectsKeyToMap.set(key, result ??= new Map());
+            if (create) result ??= new Map();
+            if (result) redirectsKeyToMap.set(key, result);
         }
-        redirectsMap.set(redirectOptions, result);
+        if (result) redirectsMap.set(redirectOptions, result);
         return result;
     }
 
@@ -879,6 +892,7 @@ function getOrCreateCache<K, V>(cacheWithRedirects: CacheWithRedirects<K, V>, re
 function createPerDirectoryResolutionCache<T>(currentDirectory: string, getCanonicalFileName: GetCanonicalFileName, options: CompilerOptions | undefined): PerDirectoryResolutionCache<T> {
     const directoryToModuleNameMap = createCacheWithRedirects<Path, ModeAwareCache<T>>(options);
     return {
+        getFromDirectoryCache,
         getOrCreateCacheForDirectory,
         clear,
         update,
@@ -895,6 +909,11 @@ function createPerDirectoryResolutionCache<T>(currentDirectory: string, getCanon
     function getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference) {
         const path = toPath(directoryName, currentDirectory, getCanonicalFileName);
         return getOrCreateCache(directoryToModuleNameMap, redirectedReference, path, () => createModeAwareCache());
+    }
+
+    function getFromDirectoryCache(name: string, mode: ResolutionMode, directoryName: string, redirectedReference: ResolvedProjectReference | undefined) {
+        const path = toPath(directoryName, currentDirectory, getCanonicalFileName);
+        return directoryToModuleNameMap.getMapOfCacheRedirects(redirectedReference)?.get(path)?.get(name, mode);
     }
 }
 
@@ -976,6 +995,7 @@ function createNonRelativeNameResolutionCache<T>(
 ): NonRelativeNameResolutionCache<T> {
     const moduleNameToDirectoryMap = createCacheWithRedirects<ModeAwareCacheKey, PerNonRelativeNameCache<T>>(options);
     return {
+        getFromNonRelativeNameCache,
         getOrCreateCacheForNonRelativeName,
         clear,
         update,
@@ -987,6 +1007,11 @@ function createNonRelativeNameResolutionCache<T>(
 
     function update(options: CompilerOptions) {
         moduleNameToDirectoryMap.update(options);
+    }
+
+    function getFromNonRelativeNameCache(nonRelativeModuleName: string, mode: ResolutionMode, directoryName: string, redirectedReference?: ResolvedProjectReference): T | undefined {
+        Debug.assert(!isExternalModuleNameRelative(nonRelativeModuleName));
+        return moduleNameToDirectoryMap.getMapOfCacheRedirects(redirectedReference)?.get(createModeAwareCacheKey(nonRelativeModuleName, mode))?.get(directoryName);
     }
 
     function getOrCreateCacheForNonRelativeName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerNonRelativeNameCache<T> {
@@ -1221,7 +1246,7 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
             perFolderCache.set(moduleName, resolutionMode, result);
             if (!isExternalModuleNameRelative(moduleName)) {
                 // put result in per-module name cache
-                cache.getOrCreateCacheForModuleName(moduleName, resolutionMode, redirectedReference).set(containingDirectory, result);
+                cache.getOrCreateCacheForNonRelativeName(moduleName, resolutionMode, redirectedReference).set(containingDirectory, result);
             }
         }
     }
@@ -2577,7 +2602,7 @@ function loadModuleFromNearestNodeModulesDirectoryTypesScope(moduleName: string,
 }
 
 function loadModuleFromNearestNodeModulesDirectoryWorker(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, typesScopeOnly: boolean, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): SearchResult<Resolved> {
-    const perModuleNameCache = cache && cache.getOrCreateCacheForModuleName(moduleName, state.features === 0 ? undefined : state.features & NodeResolutionFeatures.EsmMode ? ModuleKind.ESNext : ModuleKind.CommonJS, redirectedReference);
+    const mode = state.features === 0 ? undefined : state.features & NodeResolutionFeatures.EsmMode ? ModuleKind.ESNext : ModuleKind.CommonJS;
     // Do (up to) two passes through node_modules:
     //   1. For each ancestor node_modules directory, try to find:
     //      i.  TS/DTS files in the implementation package
@@ -2599,7 +2624,7 @@ function loadModuleFromNearestNodeModulesDirectoryWorker(extensions: Extensions,
     function lookup(extensions: Extensions) {
         return forEachAncestorDirectory(normalizeSlashes(directory), ancestorDirectory => {
             if (getBaseFileName(ancestorDirectory) !== "node_modules") {
-                const resolutionFromCache = tryFindNonRelativeModuleNameInCache(perModuleNameCache, moduleName, ancestorDirectory, state);
+                const resolutionFromCache = tryFindNonRelativeModuleNameInCache(cache, moduleName, mode, ancestorDirectory, redirectedReference, state);
                 if (resolutionFromCache) {
                     return resolutionFromCache;
                 }
@@ -2784,8 +2809,8 @@ export function unmangleScopedPackageName(typesPackageName: string): string {
         typesPackageName;
 }
 
-function tryFindNonRelativeModuleNameInCache(cache: PerModuleNameCache | undefined, moduleName: string, containingDirectory: string, state: ModuleResolutionState): SearchResult<Resolved> {
-    const result = cache && cache.get(containingDirectory);
+function tryFindNonRelativeModuleNameInCache(cache: NonRelativeModuleNameResolutionCache | undefined, moduleName: string, mode: ResolutionMode, containingDirectory: string, redirectedReference: ResolvedProjectReference | undefined, state: ModuleResolutionState): SearchResult<Resolved> {
+    const result = cache && cache.getFromNonRelativeNameCache(moduleName, mode, containingDirectory, redirectedReference);
     if (result) {
         if (state.traceEnabled) {
             trace(state.host, Diagnostics.Resolution_for_module_0_was_found_in_cache_from_location_1, moduleName, containingDirectory);
@@ -2834,10 +2859,9 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
         }
 
         if (!isExternalModuleNameRelative(moduleName)) {
-            const perModuleNameCache = cache && cache.getOrCreateCacheForModuleName(moduleName, /*mode*/ undefined, redirectedReference);
             // Climb up parent directories looking for a module.
             const resolved = forEachAncestorDirectory(containingDirectory, directory => {
-                const resolutionFromCache = tryFindNonRelativeModuleNameInCache(perModuleNameCache, moduleName, directory, state);
+                const resolutionFromCache = tryFindNonRelativeModuleNameInCache(cache, moduleName, /*mode*/ undefined, directory, redirectedReference, state);
                 if (resolutionFromCache) {
                     return resolutionFromCache;
                 }
