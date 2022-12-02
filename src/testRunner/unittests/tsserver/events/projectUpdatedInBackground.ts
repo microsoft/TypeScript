@@ -1,6 +1,19 @@
 import * as ts from "../../../_namespaces/ts";
-import { createServerHost, File, libFile, TestServerHost } from "../../virtualFileSystemWithWatch";
-import { TestSession, Logger, createLoggerWithInMemoryLogs, baselineTsserverLogs, createSessionWithEventTracking, createSessionWithDefaultEventHandler, createHasErrorMessageLogger } from "../helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+    TestServerHost,
+} from "../../virtualFileSystemWithWatch";
+import {
+    baselineTsserverLogs,
+    createHasErrorMessageLogger,
+    createLoggerWithInMemoryLogs,
+    createSessionWithDefaultEventHandler,
+    createSessionWithEventTracking,
+    Logger,
+    TestSession,
+} from "../helpers";
 
 describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
     function verifyFiles(caption: string, actual: readonly string[], expected: readonly string[]) {

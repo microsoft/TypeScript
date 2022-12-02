@@ -1,6 +1,14 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File } from "../virtualFileSystemWithWatch";
-import { createSession, openFilesForSession, executeSessionRequest } from "./helpers";
+import {
+    createServerHost,
+    File,
+} from "../virtualFileSystemWithWatch";
+import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
+    createSession,
+    openFilesForSession,
+} from "./helpers";
 
 describe("unittests:: tsserver:: duplicate packages", () => {
     // Tests that 'moduleSpecifiers.ts' will import from the redirecting file, and not from the file it redirects to, if that can provide a global module specifier.
@@ -21,36 +29,23 @@ describe("unittests:: tsserver:: duplicate packages", () => {
         };
 
         const host = createServerHost([aFooIndex, aFooPackage, bFooIndex, bFooPackage, aUser, bUser, tsconfig]);
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
         openFilesForSession([aUser, bUser], session);
 
         for (const user of [aUser, bUser]) {
-            const response = executeSessionRequest<ts.server.protocol.CodeFixRequest, ts.server.protocol.CodeFixResponse>(session, ts.server.protocol.CommandTypes.GetCodeFixes, {
-                file: user.path,
-                startLine: 2,
-                startOffset: 1,
-                endLine: 2,
-                endOffset: 4,
-                errorCodes: [ts.Diagnostics.Cannot_find_name_0.code],
+            session.executeCommandSeq<ts.server.protocol.CodeFixRequest>({
+                command: ts.server.protocol.CommandTypes.GetCodeFixes,
+                arguments: {
+                    file: user.path,
+                    startLine: 2,
+                    startOffset: 1,
+                    endLine: 2,
+                    endOffset: 4,
+                    errorCodes: [ts.Diagnostics.Cannot_find_name_0.code],
+                }
             });
-            assert.deepEqual<readonly ts.server.protocol.CodeFixAction[] | undefined>(response, [
-                {
-                    description: `Add import from "foo"`,
-                    fixName: "import",
-                    changes: [{
-                        fileName: user.path,
-                        textChanges: [{
-                            start: { line: 1, offset: 1 },
-                            end: { line: 1, offset: 1 },
-                            newText: 'import { foo } from "foo";\n\n',
-                        }],
-                    }],
-                    commands: undefined,
-                    fixId: undefined,
-                    fixAllDescription: undefined
-                },
-            ]);
         }
+        baselineTsserverLogs("duplicatePackages", "works with import fixes", session);
     });
 });

@@ -5,7 +5,11 @@ import * as vfs from "./_namespaces/vfs";
 import * as compiler from "./_namespaces/compiler";
 import * as documents from "./_namespaces/documents";
 import * as fakes from "./_namespaces/fakes";
-import { RunnerBase, TypeWriterResult, TypeWriterWalker } from "./_namespaces/Harness";
+import {
+    RunnerBase,
+    TypeWriterResult,
+    TypeWriterWalker,
+} from "./_namespaces/Harness";
 
 export interface IO {
     newLine(): string;

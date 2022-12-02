@@ -1,6 +1,21 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { createSession, createLoggerWithInMemoryLogs, TestSession, openFilesForSession, closeFilesForSession, baselineTsserverLogs, protocolFileLocationFromSubstring, checkNumberOfProjects, checkProjectActualFiles } from "./helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    baselineTsserverLogs,
+    checkNumberOfProjects,
+    checkProjectActualFiles,
+    closeFilesForSession,
+    createLoggerWithInMemoryLogs,
+    createSession,
+    openFilesForSession,
+    protocolFileLocationFromSubstring,
+    TestSession,
+    TestSessionRequest,
+} from "./helpers";
 
 describe("unittests:: tsserver:: Semantic operations on Syntax server", () => {
     function setup() {
@@ -33,7 +48,7 @@ import { something } from "something";
         return { host, session, file1, file2, file3, something, configFile };
     }
 
-    function verifySessionException<T extends ts.server.protocol.Request>(session: TestSession, request: Partial<T>) {
+    function verifySessionException<T extends ts.server.protocol.Request>(session: TestSession, request: TestSessionRequest<T>) {
         try {
             session.executeCommandSeq(request);
         }
@@ -89,8 +104,6 @@ import { something } from "something";
         const service = session.getProjectService();
         openFilesForSession([file1], session);
         verifySessionException<ts.server.protocol.SemanticDiagnosticsSyncRequest>(session, {
-            type: "request",
-            seq: 1,
             command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
             arguments: { file: file1.path }
         });

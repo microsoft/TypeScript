@@ -1,12 +1,12 @@
 Info 0    [00:01:10.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:01:11.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/container/compositeExec/index.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/lib/lib.d.ts]
@@ -462,7 +462,7 @@ Info 27   [00:01:46.000] request:
         "line": 3,
         "offset": 16
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request

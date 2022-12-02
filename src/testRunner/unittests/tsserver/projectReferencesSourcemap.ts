@@ -1,6 +1,20 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile, TestServerHost } from "../virtualFileSystemWithWatch";
-import { TestSession, closeFilesForSession, openFilesForSession, createHostWithSolutionBuild, createSession, createLoggerWithInMemoryLogs, baselineTsserverLogs } from "./helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+    TestServerHost,
+} from "../virtualFileSystemWithWatch";
+import {
+    baselineTsserverLogs,
+    closeFilesForSession,
+    createHostWithSolutionBuild,
+    createLoggerWithInMemoryLogs,
+    createSession,
+    openFilesForSession,
+    TestSession,
+    TestSessionRequest,
+} from "./helpers";
 
 describe("unittests:: tsserver:: with project references and tsbuild source map", () => {
     const dependecyLocation = `/user/username/projects/myproject/dependency`;
@@ -78,14 +92,14 @@ fn5();
         );
     }
 
-    function goToDefFromMainTs(fn: number): Partial<ts.server.protocol.DefinitionAndBoundSpanRequest> {
+    function goToDefFromMainTs(fn: number): TestSessionRequest<ts.server.protocol.DefinitionAndBoundSpanRequest> {
         return {
             command: ts.server.protocol.CommandTypes.DefinitionAndBoundSpan,
             arguments: { file: mainTs.path, line: fn + 8, offset: 1 }
         };
     }
 
-    function renameFromDependencyTs(fn: number): Partial<ts.server.protocol.RenameRequest> {
+    function renameFromDependencyTs(fn: number): TestSessionRequest<ts.server.protocol.RenameRequest> {
         return {
             command: ts.server.protocol.CommandTypes.Rename,
             arguments: { file: dependencyTs.path, line: fn, offset: 17 }
@@ -129,7 +143,7 @@ fn5();
 
     function verifyAllFnAction<Req extends ts.server.protocol.Request>(
         session: TestSession,
-        action: (fn: number) => Partial<Req>,
+        action: (fn: number) => TestSessionRequest<Req>,
         existingDependencyMap: ts.server.ScriptInfo | undefined,
         existingDocumentPositionMapper: ts.server.ScriptInfo["documentPositionMapper"],
         existingMapEqual: boolean,

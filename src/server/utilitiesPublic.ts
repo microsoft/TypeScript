@@ -1,8 +1,16 @@
 import {
-    getNormalizedAbsolutePath, isRootedDiskPath, normalizePath, Path, SortedArray, SortedReadonlyArray,
+    getNormalizedAbsolutePath,
+    isRootedDiskPath,
+    normalizePath,
+    Path,
+    SortedArray,
+    SortedReadonlyArray,
     TypeAcquisition,
 } from "./_namespaces/ts";
-import { DiscoverTypings, Project } from "./_namespaces/ts.server";
+import {
+    DiscoverTypings,
+    Project,
+} from "./_namespaces/ts.server";
 
 export enum LogLevel {
     terse,

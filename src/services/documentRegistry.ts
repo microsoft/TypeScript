@@ -1,9 +1,31 @@
 import {
-    arrayFrom, CompilerOptions, createGetCanonicalFileName, createLanguageServiceSourceFile, CreateSourceFileOptions,
-    Debug, ensureScriptKind, firstDefinedIterator, forEachEntry, getCompilerOptionValue, getEmitScriptTarget,
-    getImpliedNodeFormatForFile, getOrUpdate, getSetExternalModuleIndicator, hasProperty, identity, isArray,
-    IScriptSnapshot, isDeclarationFileName, map, MinimalResolutionCacheHost, Path, ResolutionMode, ScriptKind,
-    ScriptTarget, SourceFile, sourceFileAffectingCompilerOptions, toPath, tracing, updateLanguageServiceSourceFile,
+    arrayFrom,
+    CompilerOptions,
+    createGetCanonicalFileName,
+    createLanguageServiceSourceFile,
+    CreateSourceFileOptions,
+    Debug,
+    ensureScriptKind,
+    firstDefinedIterator,
+    forEachEntry,
+    getEmitScriptTarget,
+    getImpliedNodeFormatForFile,
+    getKeyForCompilerOptions,
+    getOrUpdate,
+    getSetExternalModuleIndicator,
+    identity,
+    IScriptSnapshot,
+    isDeclarationFileName,
+    MinimalResolutionCacheHost,
+    Path,
+    ResolutionMode,
+    ScriptKind,
+    ScriptTarget,
+    SourceFile,
+    sourceFileAffectingCompilerOptions,
+    toPath,
+    tracing,
+    updateLanguageServiceSourceFile,
 } from "./_namespaces/ts";
 
 /**
@@ -382,24 +404,8 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
     };
 }
 
-function compilerOptionValueToString(value: unknown): string {
-    if (value === null || typeof value !== "object") { // eslint-disable-line no-null/no-null
-        return "" + value;
-    }
-    if (isArray(value)) {
-        return `[${map(value, e => compilerOptionValueToString(e))?.join(",")}]`;
-    }
-    let str = "{";
-    for (const key in value) {
-        if (hasProperty(value, key)) {
-            str += `${key}: ${compilerOptionValueToString((value as any)[key])}`;
-        }
-    }
-    return str + "}";
-}
-
 function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
-    return sourceFileAffectingCompilerOptions.map(option => compilerOptionValueToString(getCompilerOptionValue(settings, option))).join("|") + (settings.pathsBasePath ? `|${settings.pathsBasePath}` : undefined) as DocumentRegistryBucketKey;
+    return getKeyForCompilerOptions(settings, sourceFileAffectingCompilerOptions) as DocumentRegistryBucketKey;
 }
 
 function getDocumentRegistryBucketKeyWithMode(key: DocumentRegistryBucketKey, mode: ResolutionMode) {

@@ -1,13 +1,13 @@
 Info 0    [00:00:35.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:36.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/users/username/projects/a/a.ts",
         "projectRootPath": "/users/username/projects/a"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/users/username/projects/c/fc.ts]
@@ -116,13 +116,13 @@ Info 18   [00:00:59.000] response:
     }
 Info 19   [00:01:00.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/users/username/projects/b/b.ts",
         "projectRootPath": "/users/username/projects/b"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -224,13 +224,13 @@ Info 35   [00:01:27.000] response:
     }
 Info 36   [00:01:28.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/users/username/projects/a/c/fc.ts",
         "projectRootPath": "/users/username/projects/a"
-      }
+      },
+      "seq": 3,
+      "type": "request"
     }
 Before request
 
@@ -306,13 +306,13 @@ Info 40   [00:01:45.000] response:
     }
 Info 41   [00:01:46.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/users/username/projects/b/c/fc.ts",
         "projectRootPath": "/users/username/projects/b"
-      }
+      },
+      "seq": 4,
+      "type": "request"
     }
 Before request
 
@@ -386,14 +386,14 @@ Info 45   [00:02:05.000] response:
     }
 Info 46   [00:02:06.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "rename",
       "arguments": {
         "file": "/users/username/projects/a/c/fc.ts",
         "line": 1,
         "offset": 14
-      }
+      },
+      "seq": 5,
+      "type": "request"
     }
 Before request
 

@@ -1,6 +1,13 @@
 import {
-    Debug, FileWatcher, ModulePath, ModuleSpecifierCache, ModuleSpecifierOptions, nodeModulesPathPart, Path,
-    ResolvedModuleSpecifierInfo, UserPreferences,
+    Debug,
+    FileWatcher,
+    ModulePath,
+    ModuleSpecifierCache,
+    ModuleSpecifierOptions,
+    nodeModulesPathPart,
+    Path,
+    ResolvedModuleSpecifierInfo,
+    UserPreferences,
 } from "./_namespaces/ts";
 
 /** @internal */

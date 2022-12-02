@@ -1,7 +1,20 @@
 import {
-    BaseNodeFactory, CreateSourceFileOptions, EmitHelperFactory, MapLike, ModeAwareCache,
-    ModuleResolutionCache, MultiMap, NodeFactoryFlags, OptionsNameMap, PackageJsonInfo, PackageJsonInfoCache, Pattern,
-    ProgramBuildInfo, Push, SymlinkCache,
+    BaseNodeFactory,
+    CreateSourceFileOptions,
+    EmitHelperFactory,
+    MapLike,
+    ModeAwareCache,
+    ModeAwareCacheKey,
+    ModuleResolutionCache,
+    MultiMap,
+    NodeFactoryFlags,
+    OptionsNameMap,
+    PackageJsonInfo,
+    PackageJsonInfoCache,
+    Pattern,
+    ProgramBuildInfo,
+    Push,
+    SymlinkCache,
 } from "./_namespaces/ts";
 
 // branded string type used to store absolute, normalized and canonicalized paths
@@ -5491,7 +5504,7 @@ export interface SymbolLinks {
     enumKind?: EnumKind;                        // Enum declaration classification
     originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
     lateSymbol?: Symbol;                        // Late-bound symbol for a computed property
-    specifierCache?: Map<string, string>;     // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
+    specifierCache?: Map<ModeAwareCacheKey, string>; // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
     extendedContainers?: Symbol[];              // Containers (other than the parent) which this symbol is aliased in
     extendedContainersByFile?: Map<NodeId, Symbol[]>; // Containers (other than the parent) which this symbol is aliased in
     variances?: VarianceFlags[];                // Alias symbol type argument variance cache
@@ -5514,6 +5527,7 @@ export const enum EnumKind {
 
 /** @internal */
 export const enum CheckFlags {
+    None              = 0,
     Instantiated      = 1 << 0,         // Instantiated symbol
     SyntheticProperty = 1 << 1,         // Property in union or intersection type
     SyntheticMethod   = 1 << 2,         // Method in union or intersection type
@@ -5611,31 +5625,32 @@ export interface PatternAmbientModule {
 
 /** @internal */
 export const enum NodeCheckFlags {
-    TypeChecked                              = 0x00000001,  // Node has been type checked
-    LexicalThis                              = 0x00000002,  // Lexical 'this' reference
-    CaptureThis                              = 0x00000004,  // Lexical 'this' used in body
-    CaptureNewTarget                         = 0x00000008,  // Lexical 'new.target' used in body
-    SuperInstance                            = 0x00000100,  // Instance 'super' reference
-    SuperStatic                              = 0x00000200,  // Static 'super' reference
-    ContextChecked                           = 0x00000400,  // Contextual types have been assigned
-    MethodWithSuperPropertyAccessInAsync     = 0x00000800,  // A method that contains a SuperProperty access in an async context.
-    MethodWithSuperPropertyAssignmentInAsync = 0x00001000,  // A method that contains a SuperProperty assignment in an async context.
-    CaptureArguments                         = 0x00002000,  // Lexical 'arguments' used in body
-    EnumValuesComputed                       = 0x00004000,  // Values for enum members have been computed, and any errors have been reported for them.
-    LexicalModuleMergesWithClass             = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
-    LoopWithCapturedBlockScopedBinding       = 0x00010000,  // Loop that contains block scoped variable captured in closure
-    ContainsCapturedBlockScopeBinding        = 0x00020000,  // Part of a loop that contains block scoped variable captured in closure
-    CapturedBlockScopedBinding               = 0x00040000,  // Block-scoped binding that is captured in some function
-    BlockScopedBindingInLoop                 = 0x00080000,  // Block-scoped binding with declaration nested inside iteration statement
-    ClassWithBodyScopedClassBinding          = 0x00100000,  // Decorated class that contains a binding to itself inside of the class body.
-    BodyScopedClassBinding                   = 0x00200000,  // Binding to a decorated class inside of the class's body.
-    NeedsLoopOutParameter                    = 0x00400000,  // Block scoped binding whose value should be explicitly copied outside of the converted loop
-    AssignmentsMarked                        = 0x00800000,  // Parameter assignments have been marked
-    ClassWithConstructorReference            = 0x01000000,  // Class that contains a binding to its constructor inside of the class body.
-    ConstructorReferenceInClass              = 0x02000000,  // Binding to a class constructor inside of the class's body.
-    ContainsClassWithPrivateIdentifiers      = 0x04000000,  // Marked on all block-scoped containers containing a class with private identifiers.
-    ContainsSuperPropertyInStaticInitializer = 0x08000000,  // Marked on all block-scoped containers containing a static initializer with 'super.x' or 'super[x]'.
-    InCheckIdentifier                        = 0x10000000,
+    None                                     = 0,
+    TypeChecked                              = 1 << 0,   // Node has been type checked
+    LexicalThis                              = 1 << 1,   // Lexical 'this' reference
+    CaptureThis                              = 1 << 2,   // Lexical 'this' used in body
+    CaptureNewTarget                         = 1 << 3,   // Lexical 'new.target' used in body
+    SuperInstance                            = 1 << 4,   // Instance 'super' reference
+    SuperStatic                              = 1 << 5,   // Static 'super' reference
+    ContextChecked                           = 1 << 6,   // Contextual types have been assigned
+    MethodWithSuperPropertyAccessInAsync     = 1 << 7,   // A method that contains a SuperProperty access in an async context.
+    MethodWithSuperPropertyAssignmentInAsync = 1 << 8,   // A method that contains a SuperProperty assignment in an async context.
+    CaptureArguments                         = 1 << 9,   // Lexical 'arguments' used in body
+    EnumValuesComputed                       = 1 << 10,  // Values for enum members have been computed, and any errors have been reported for them.
+    LexicalModuleMergesWithClass             = 1 << 11,  // Instantiated lexical module declaration is merged with a previous class declaration.
+    LoopWithCapturedBlockScopedBinding       = 1 << 12,  // Loop that contains block scoped variable captured in closure
+    ContainsCapturedBlockScopeBinding        = 1 << 13,  // Part of a loop that contains block scoped variable captured in closure
+    CapturedBlockScopedBinding               = 1 << 14,  // Block-scoped binding that is captured in some function
+    BlockScopedBindingInLoop                 = 1 << 15,  // Block-scoped binding with declaration nested inside iteration statement
+    ClassWithBodyScopedClassBinding          = 1 << 16,  // Decorated class that contains a binding to itself inside of the class body.
+    BodyScopedClassBinding                   = 1 << 17,  // Binding to a decorated class inside of the class's body.
+    NeedsLoopOutParameter                    = 1 << 18,  // Block scoped binding whose value should be explicitly copied outside of the converted loop
+    AssignmentsMarked                        = 1 << 19,  // Parameter assignments have been marked
+    ClassWithConstructorReference            = 1 << 20,  // Class that contains a binding to its constructor inside of the class body.
+    ConstructorReferenceInClass              = 1 << 21,  // Binding to a class constructor inside of the class's body.
+    ContainsClassWithPrivateIdentifiers      = 1 << 22,  // Marked on all block-scoped containers containing a class with private identifiers.
+    ContainsSuperPropertyInStaticInitializer = 1 << 23,  // Marked on all block-scoped containers containing a static initializer with 'super.x' or 'super[x]'.
+    InCheckIdentifier                        = 1 << 24,
 }
 
 /** @internal */
@@ -5842,6 +5857,7 @@ export interface EnumType extends Type {
 // are specific to certain types and reuse the same bit position. Those ObjectFlags require a check
 // for a certain TypeFlags value to determine their meaning.
 export const enum ObjectFlags {
+    None             = 0,
     Class            = 1 << 0,  // Class
     Interface        = 1 << 1,  // Interface
     Reference        = 1 << 2,  // Generic type reference
@@ -6384,6 +6400,7 @@ export type TypeMapper =
     | { kind: TypeMapKind.Composite | TypeMapKind.Merged, mapper1: TypeMapper, mapper2: TypeMapper };
 
 export const enum InferencePriority {
+    None                         = 0,
     NakedTypeVariable            = 1 << 0,  // Naked type variable in union or intersection type
     SpeculativeTuple             = 1 << 1,  // Speculative tuple inference
     SubstituteSource             = 1 << 2,  // Source of inference originated within a substitution type's substitute
@@ -7475,7 +7492,7 @@ export interface EmitNode {
     helpers?: EmitHelper[];                  // Emit helpers for the node
     startsOnNewLine?: boolean;               // If the node should begin on a new line
     snippetElement?: SnippetElement;         // Snippet element of the node
-    typeNode?: TypeNode;                         // VariableDeclaration type
+    typeNode?: TypeNode;                     // VariableDeclaration type
 }
 
 /** @internal */
@@ -7505,38 +7522,39 @@ export const enum SnippetKind {
 export const enum EmitFlags {
     None = 0,
     SingleLine = 1 << 0,                    // The contents of this node should be emitted on a single line.
-    AdviseOnEmitNode = 1 << 1,              // The printer should invoke the onEmitNode callback when printing this node.
-    NoSubstitution = 1 << 2,                // Disables further substitution of an expression.
-    CapturesThis = 1 << 3,                  // The function captures a lexical `this`
-    NoLeadingSourceMap = 1 << 4,            // Do not emit a leading source map location for this node.
-    NoTrailingSourceMap = 1 << 5,           // Do not emit a trailing source map location for this node.
+    MultiLine = 1 << 1,
+    AdviseOnEmitNode = 1 << 2,              // The printer should invoke the onEmitNode callback when printing this node.
+    NoSubstitution = 1 << 3,                // Disables further substitution of an expression.
+    CapturesThis = 1 << 4,                  // The function captures a lexical `this`
+    NoLeadingSourceMap = 1 << 5,            // Do not emit a leading source map location for this node.
+    NoTrailingSourceMap = 1 << 6,           // Do not emit a trailing source map location for this node.
     NoSourceMap = NoLeadingSourceMap | NoTrailingSourceMap, // Do not emit a source map location for this node.
-    NoNestedSourceMaps = 1 << 6,            // Do not emit source map locations for children of this node.
-    NoTokenLeadingSourceMaps = 1 << 7,      // Do not emit leading source map location for token nodes.
-    NoTokenTrailingSourceMaps = 1 << 8,     // Do not emit trailing source map location for token nodes.
+    NoNestedSourceMaps = 1 << 7,            // Do not emit source map locations for children of this node.
+    NoTokenLeadingSourceMaps = 1 << 8,      // Do not emit leading source map location for token nodes.
+    NoTokenTrailingSourceMaps = 1 << 9,     // Do not emit trailing source map location for token nodes.
     NoTokenSourceMaps = NoTokenLeadingSourceMaps | NoTokenTrailingSourceMaps, // Do not emit source map locations for tokens of this node.
-    NoLeadingComments = 1 << 9,             // Do not emit leading comments for this node.
-    NoTrailingComments = 1 << 10,           // Do not emit trailing comments for this node.
+    NoLeadingComments = 1 << 10,            // Do not emit leading comments for this node.
+    NoTrailingComments = 1 << 11,           // Do not emit trailing comments for this node.
     NoComments = NoLeadingComments | NoTrailingComments, // Do not emit comments for this node.
-    NoNestedComments = 1 << 11,
-    HelperName = 1 << 12,                   // The Identifier refers to an *unscoped* emit helper (one that is emitted at the top of the file)
-    ExportName = 1 << 13,                   // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
-    LocalName = 1 << 14,                    // Ensure an export prefix is not added for an identifier that points to an exported declaration.
-    InternalName = 1 << 15,                 // The name is internal to an ES5 class body function.
-    Indented = 1 << 16,                     // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
-    NoIndentation = 1 << 17,                // Do not indent the node.
-    AsyncFunctionBody = 1 << 18,
-    ReuseTempVariableScope = 1 << 19,       // Reuse the existing temp variable scope during emit.
-    CustomPrologue = 1 << 20,               // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
-    NoHoisting = 1 << 21,                   // Do not hoist this declaration in --module system
-    HasEndOfDeclarationMarker = 1 << 22,    // Declaration has an associated NotEmittedStatement to mark the end of the declaration
-    Iterator = 1 << 23,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
-    NoAsciiEscaping = 1 << 24,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
-    /** @internal */ TypeScriptClassWrapper = 1 << 25, // The node is an IIFE class wrapper created by the ts transform.
-    /** @internal */ NeverApplyImportHelper = 1 << 26, // Indicates the node should never be wrapped with an import star helper (because, for example, it imports tslib itself)
-    /** @internal */ IgnoreSourceNewlines = 1 << 27,   // Overrides `printerOptions.preserveSourceNewlines` to print this node (and all descendants) with default whitespace.
-    /** @internal */ Immutable = 1 << 28,      // Indicates a node is a singleton intended to be reused in multiple locations. Any attempt to make further changes to the node will result in an error.
-    /** @internal */ IndirectCall = 1 << 29,   // Emit CallExpression as an indirect call: `(0, f)()`
+    NoNestedComments = 1 << 12,
+    HelperName = 1 << 13,                   // The Identifier refers to an *unscoped* emit helper (one that is emitted at the top of the file)
+    ExportName = 1 << 14,                   // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
+    LocalName = 1 << 15,                    // Ensure an export prefix is not added for an identifier that points to an exported declaration.
+    InternalName = 1 << 16,                 // The name is internal to an ES5 class body function.
+    Indented = 1 << 17,                     // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+    NoIndentation = 1 << 18,                // Do not indent the node.
+    AsyncFunctionBody = 1 << 19,
+    ReuseTempVariableScope = 1 << 20,       // Reuse the existing temp variable scope during emit.
+    CustomPrologue = 1 << 21,               // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
+    NoHoisting = 1 << 22,                   // Do not hoist this declaration in --module system
+    HasEndOfDeclarationMarker = 1 << 23,    // Declaration has an associated NotEmittedStatement to mark the end of the declaration
+    Iterator = 1 << 24,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
+    NoAsciiEscaping = 1 << 25,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
+    /** @internal */ TypeScriptClassWrapper = 1 << 26, // The node is an IIFE class wrapper created by the ts transform.
+    /** @internal */ NeverApplyImportHelper = 1 << 27, // Indicates the node should never be wrapped with an import star helper (because, for example, it imports tslib itself)
+    /** @internal */ IgnoreSourceNewlines = 1 << 28,   // Overrides `printerOptions.preserveSourceNewlines` to print this node (and all descendants) with default whitespace.
+    /** @internal */ Immutable = 1 << 29,      // Indicates a node is a singleton intended to be reused in multiple locations. Any attempt to make further changes to the node will result in an error.
+    /** @internal */ IndirectCall = 1 << 30,   // Emit CallExpression as an indirect call: `(0, f)()`
 }
 
 export interface EmitHelperBase {

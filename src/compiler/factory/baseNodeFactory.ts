@@ -1,4 +1,8 @@
-import { Node, objectAllocator, SyntaxKind } from "../_namespaces/ts";
+import {
+    Node,
+    objectAllocator,
+    SyntaxKind,
+} from "../_namespaces/ts";
 
 /**
  * A `BaseNodeFactory` is an abstraction over an `ObjectAllocator` that handles caching `Node` constructors

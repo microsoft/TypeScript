@@ -1,6 +1,15 @@
 import * as ts from "../../_namespaces/ts";
-import { getTsBuildProjectFile, getTsBuildProjectFilePath, libFile, TestServerHost } from "../virtualFileSystemWithWatch";
-import { createSolutionBuilder, createSystemWithSolutionBuild, verifyTscWatch } from "./helpers";
+import {
+    getTsBuildProjectFile,
+    getTsBuildProjectFilePath,
+    libFile,
+    TestServerHost,
+} from "../virtualFileSystemWithWatch";
+import {
+    createSolutionBuilder,
+    createSystemWithSolutionBuild,
+    verifyTscWatch,
+} from "./helpers";
 
 describe("unittests:: tsc-watch:: projects with references: invoking when references are already built", () => {
     verifyTscWatch({
@@ -21,7 +30,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
             ],
             { currentDirectory: `/user/username/projects/sample1` }
         ),
-        commandLineArgs: ["-w", "-p", "tests"],
+        commandLineArgs: ["-w", "-p", "tests", "--traceResolution", "--explainFiles"],
         changes: [
             {
                 caption: "local edit in logic ts, and build logic",
@@ -82,7 +91,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
             ],
             { currentDirectory: `/user/username/projects/transitiveReferences` }
         ),
-        commandLineArgs: ["-w", "-p", "tsconfig.c.json"],
+        commandLineArgs: ["-w", "-p", "tsconfig.c.json", "--traceResolution", "--explainFiles"],
         changes: [
             {
                 caption: "non local edit b ts, and build b",
@@ -170,7 +179,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
             ],
             { currentDirectory: `/user/username/projects/transitiveReferences` }
         ),
-        commandLineArgs: ["-w", "-p", "tsconfig.c.json"],
+        commandLineArgs: ["-w", "-p", "tsconfig.c.json", "--traceResolution", "--explainFiles"],
         changes: ts.emptyArray,
         baselineDependencies: true,
     });
@@ -225,7 +234,7 @@ X;`,
             ],
             { currentDirectory: `/user/username/projects/transitiveReferences` }
         ),
-        commandLineArgs: ["-w", "-p", "c"],
+        commandLineArgs: ["-w", "-p", "c", "--traceResolution", "--explainFiles"],
         changes: [
             {
                 caption: "non local edit b ts, and build b",
@@ -344,7 +353,7 @@ X;`,
             ],
             { currentDirectory: `/user/username/projects/transitiveReferences` }
         ),
-        commandLineArgs: ["-w", "-p", "c"],
+        commandLineArgs: ["-w", "-p", "c", "--traceResolution", "--explainFiles"],
         changes: [
             {
                 caption: "non local edit b ts, and build b",
@@ -430,7 +439,7 @@ X;`,
             ],
             { currentDirectory: `/user/username/projects/sample1` }
         ),
-        commandLineArgs: ["-w", "-p", "logic"],
+        commandLineArgs: ["-w", "-p", "logic", "--traceResolution", "--explainFiles"],
         changes: [
             {
                 caption: "change declration map in core",

@@ -1,12 +1,12 @@
 Info 0    [00:01:03.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:01:04.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/main/main.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/dependency/FnS.ts]
@@ -319,12 +319,12 @@ Info 28   [00:01:37.000] response:
     }
 Info 29   [00:01:38.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/random/random.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -441,7 +441,7 @@ Info 47   [00:02:07.000] request:
         "line": 9,
         "offset": 1
       },
-      "seq": 1,
+      "seq": 3,
       "type": "request"
     }
 Before request
@@ -677,7 +677,7 @@ Info 62   [00:02:47.000] request:
         "line": 9,
         "offset": 1
       },
-      "seq": 2,
+      "seq": 4,
       "type": "request"
     }
 Before request
@@ -797,7 +797,7 @@ Info 64   [00:02:49.000] request:
         "line": 10,
         "offset": 1
       },
-      "seq": 3,
+      "seq": 5,
       "type": "request"
     }
 Before request
@@ -917,7 +917,7 @@ Info 66   [00:02:51.000] request:
         "line": 11,
         "offset": 1
       },
-      "seq": 4,
+      "seq": 6,
       "type": "request"
     }
 Before request
@@ -1037,7 +1037,7 @@ Info 68   [00:02:53.000] request:
         "line": 12,
         "offset": 1
       },
-      "seq": 5,
+      "seq": 7,
       "type": "request"
     }
 Before request
@@ -1157,7 +1157,7 @@ Info 70   [00:02:55.000] request:
         "line": 13,
         "offset": 1
       },
-      "seq": 6,
+      "seq": 8,
       "type": "request"
     }
 Before request
