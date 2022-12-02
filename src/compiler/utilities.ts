@@ -7501,11 +7501,11 @@ export function getSetExternalModuleIndicator(options: CompilerOptions): (file: 
 }
 
 /** @internal */
-export function getEmitScriptTarget(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}) {
+export function getEmitScriptTarget(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}): ScriptTarget {
     return compilerOptions.target ||
         (compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
         (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
-        ScriptTarget.ES3;
+        ScriptTarget.ES5;
 }
 
 /** @internal */
