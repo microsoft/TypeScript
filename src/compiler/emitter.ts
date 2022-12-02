@@ -261,6 +261,7 @@ import {
     JSDocOptionalType,
     JSDocPropertyLikeTag,
     JSDocReturnTag,
+    JSDocSatisfiesTag,
     JSDocSeeTag,
     JSDocSignature,
     JSDocTag,
@@ -2122,7 +2123,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 case SyntaxKind.JSDocReturnTag:
                 case SyntaxKind.JSDocThisTag:
                 case SyntaxKind.JSDocTypeTag:
-                    return emitJSDocSimpleTypedTag(node as JSDocTypeTag);
+                case SyntaxKind.JSDocSatisfiesTag:
+                    return emitJSDocSimpleTypedTag(node as JSDocTypeTag | JSDocReturnTag | JSDocThisTag | JSDocTypeTag | JSDocSatisfiesTag);
                 case SyntaxKind.JSDocTemplateTag:
                     return emitJSDocTemplateTag(node as JSDocTemplateTag);
                 case SyntaxKind.JSDocTypedefTag:
@@ -4299,7 +4301,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         write("*/");
     }
 
-    function emitJSDocSimpleTypedTag(tag: JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocReturnTag) {
+    function emitJSDocSimpleTypedTag(tag: JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocReturnTag | JSDocSatisfiesTag) {
         emitJSDocTagName(tag.tagName);
         emitJSDocTypeExpression(tag.typeExpression);
         emitJSDocComment(tag.comment);

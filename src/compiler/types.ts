@@ -430,6 +430,7 @@ export const enum SyntaxKind {
     JSDocTypedefTag,
     JSDocSeeTag,
     JSDocPropertyTag,
+    JSDocSatisfiesTag,
 
     // Synthesized list
     SyntaxList,
@@ -954,6 +955,7 @@ export type ForEachChildNodes =
     | JSDocReadonlyTag
     | JSDocDeprecatedTag
     | JSDocOverrideTag
+    | JSDocSatisfiesTag
     ;
 
 /** @internal */
@@ -3855,6 +3857,16 @@ export interface JSDocTypeLiteral extends JSDocType {
     readonly jsDocPropertyTags?: readonly JSDocPropertyLikeTag[];
     /** If true, then this type literal represents an *array* of its type. */
     readonly isArrayType: boolean;
+}
+
+export interface JSDocSatisfiesTag extends JSDocTag {
+    readonly kind: SyntaxKind.JSDocSatisfiesTag;
+    readonly typeExpression: JSDocTypeExpression;
+}
+
+/** @internal */
+export interface JSDocSatisfiesExpression extends ParenthesizedExpression {
+    readonly _jsDocSatisfiesExpressionBrand: never;
 }
 
 // NOTE: Ensure this is up-to-date with src/debug/debug.ts
@@ -8237,6 +8249,8 @@ export interface NodeFactory {
     updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
     createJSDocOverrideTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
     updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
+    createJSDocSatisfiesTag(tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment?: string | NodeArray<JSDocComment>): JSDocSatisfiesTag;
+    updateJSDocSatisfiesTag(node: JSDocSatisfiesTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocSatisfiesTag;
     createJSDocText(text: string): JSDocText;
     updateJSDocText(node: JSDocText, text: string): JSDocText;
     createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;

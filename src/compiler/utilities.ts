@@ -167,6 +167,7 @@ import {
     getJSDocPublicTagNoCache,
     getJSDocReadonlyTagNoCache,
     getJSDocReturnType,
+    getJSDocSatisfiesTag,
     getJSDocTags,
     getJSDocType,
     getJSDocTypeParameterTags,
@@ -193,8 +194,8 @@ import {
     getTrailingCommentRanges,
     HasExpressionInitializer,
     hasExtension,
-    HasInitializer,
     hasInitializer,
+    HasInitializer,
     HasJSDoc,
     hasJSDocNodes,
     HasModifiers,
@@ -330,6 +331,7 @@ import {
     JSDocMemberName,
     JSDocParameterTag,
     JSDocPropertyLikeTag,
+    JSDocSatisfiesExpression,
     JSDocSignature,
     JSDocTag,
     JSDocTemplateTag,
@@ -9127,4 +9129,17 @@ export function canUsePropertyAccess(name: string, languageVersion: ScriptTarget
 /** @internal */
 export function hasTabstop(node: Node): boolean {
     return getSnippetElement(node)?.kind === SnippetKind.TabStop;
+}
+
+/** @internal */
+export function isJSDocSatisfiesExpression(node: Node): node is JSDocSatisfiesExpression {
+    return isInJSFile(node) && isParenthesizedExpression(node) && !!getJSDocSatisfiesTag(node);
+}
+
+/** @internal */
+export function getJSDocSatisfiesExpressionType(node: JSDocSatisfiesExpression) {
+    const tag = getJSDocSatisfiesTag(node);
+    const type = tag && tag.typeExpression && tag.typeExpression.type;
+    Debug.assertIsDefined(type);
+    return type;
 }

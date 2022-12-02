@@ -274,6 +274,7 @@ import {
     getJSDocHost,
     getJSDocParameterTags,
     getJSDocRoot,
+    getJSDocSatisfiesExpressionType,
     getJSDocTags,
     getJSDocThisTag,
     getJSDocType,
@@ -338,8 +339,8 @@ import {
     hasAccessorModifier,
     hasAmbientModifier,
     hasContextSensitiveParameters,
-    HasDecorators,
     hasDecorators,
+    HasDecorators,
     hasDynamicName,
     hasEffectiveModifier,
     hasEffectiveModifiers,
@@ -348,8 +349,8 @@ import {
     hasExtension,
     HasIllegalDecorators,
     HasIllegalModifiers,
-    HasInitializer,
     hasInitializer,
+    HasInitializer,
     hasJSDocNodes,
     hasJSDocParameterTags,
     hasJsonModuleEmitEnabled,
@@ -539,6 +540,7 @@ import {
     isJSDocParameterTag,
     isJSDocPropertyLikeTag,
     isJSDocReturnTag,
+    isJSDocSatisfiesExpression,
     isJSDocSignature,
     isJSDocTemplateTag,
     isJSDocTypeAlias,
@@ -713,6 +715,7 @@ import {
     JSDocPropertyTag,
     JSDocProtectedTag,
     JSDocPublicTag,
+    JSDocSatisfiesTag,
     JSDocSignature,
     JSDocTemplateTag,
     JSDocTypedefTag,
@@ -28682,6 +28685,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 Debug.assert(parent.parent.kind === SyntaxKind.TemplateExpression);
                 return getContextualTypeForSubstitutionExpression(parent.parent as TemplateExpression, node);
             case SyntaxKind.ParenthesizedExpression: {
+                if (isJSDocSatisfiesExpression(parent)) {
+                    return getTypeFromTypeNode(getJSDocSatisfiesExpressionType(parent));
+                }
                 // Like in `checkParenthesizedExpression`, an `/** @type {xyz} */` comment before a parenthesized expression acts as a type cast.
                 const tag = isInJSFile(parent) ? getJSDocTypeTag(parent) : undefined;
                 return !tag ? getContextualType(parent as ParenthesizedExpression, contextFlags) :
@@ -33674,15 +33680,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkSatisfiesExpression(node: SatisfiesExpression) {
         checkSourceElement(node.type);
-        const exprType = checkExpression(node.expression);
+        return checkSatisfiesExpressionWorker(node.expression, node.type);
+    }
 
-        const targetType = getTypeFromTypeNode(node.type);
+    function checkSatisfiesExpressionWorker(expression: Expression, target: TypeNode, checkMode?: CheckMode) {
+        const exprType = checkExpression(expression, checkMode);
+        const targetType = getTypeFromTypeNode(target);
         if (isErrorType(targetType)) {
             return targetType;
         }
-
-        checkTypeAssignableToAndOptionallyElaborate(exprType, targetType, node.type, node.expression, Diagnostics.Type_0_does_not_satisfy_the_expected_type_1);
-
+        checkTypeAssignableToAndOptionallyElaborate(exprType, targetType, target, expression, Diagnostics.Type_0_does_not_satisfy_the_expected_type_1);
         return exprType;
     }
 
@@ -36406,9 +36413,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode): Type {
-        if (hasJSDocNodes(node) && isJSDocTypeAssertion(node)) {
-            const type = getJSDocTypeAssertionType(node);
-            return checkAssertionWorker(type, type, node.expression, checkMode);
+        if (hasJSDocNodes(node)) {
+            if (isJSDocSatisfiesExpression(node)) {
+                return checkSatisfiesExpressionWorker(node.expression, getJSDocSatisfiesExpressionType(node), checkMode);
+            }
+            if (isJSDocTypeAssertion(node)) {
+                const type = getJSDocTypeAssertionType(node);
+                return checkAssertionWorker(type, type, node.expression, checkMode);
+            }
         }
         return checkExpression(node.expression, checkMode);
     }
@@ -38629,6 +38641,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkJSDocTypeTag(node: JSDocTypeTag) {
+        checkSourceElement(node.typeExpression);
+    }
+
+    function checkJSDocSatisfiesTag(node: JSDocSatisfiesTag) {
         checkSourceElement(node.typeExpression);
     }
 
@@ -43138,6 +43154,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.JSDocProtectedTag:
             case SyntaxKind.JSDocPrivateTag:
                 return checkJSDocAccessibilityModifiers(node as JSDocPublicTag | JSDocProtectedTag | JSDocPrivateTag);
+            case SyntaxKind.JSDocSatisfiesTag:
+                return checkJSDocSatisfiesTag(node as JSDocSatisfiesTag);
             case SyntaxKind.IndexedAccessType:
                 return checkIndexedAccessType(node as IndexedAccessTypeNode);
             case SyntaxKind.MappedType:

@@ -77,8 +77,8 @@ import {
     getJSDocCommentsAndTags,
     getJSDocTypeParameterDeclarations,
     hasAccessorModifier,
-    hasDecorators,
     HasDecorators,
+    hasDecorators,
     HasExpressionInitializer,
     HasInitializer,
     HasJSDoc,
@@ -129,6 +129,7 @@ import {
     isJSDocPublicTag,
     isJSDocReadonlyTag,
     isJSDocReturnTag,
+    isJSDocSatisfiesTag,
     isJSDocSignature,
     isJSDocTemplateTag,
     isJSDocThisTag,
@@ -175,6 +176,7 @@ import {
     JSDocPublicTag,
     JSDocReadonlyTag,
     JSDocReturnTag,
+    JSDocSatisfiesTag,
     JSDocSignature,
     JSDocTag,
     JSDocTemplateTag,
@@ -1085,6 +1087,10 @@ export function getJSDocReturnTag(node: Node): JSDocReturnTag | undefined {
 /** Gets the JSDoc template tag for the node if present */
 export function getJSDocTemplateTag(node: Node): JSDocTemplateTag | undefined {
     return getFirstJSDocTag(node, isJSDocTemplateTag);
+}
+
+export function getJSDocSatisfiesTag(node: Node): JSDocSatisfiesTag | undefined {
+    return getFirstJSDocTag(node, isJSDocSatisfiesTag);
 }
 
 /** Gets the JSDoc type tag for the node if present and valid */

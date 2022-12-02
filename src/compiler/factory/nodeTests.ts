@@ -105,6 +105,7 @@ import {
     JSDocPublicTag,
     JSDocReadonlyTag,
     JSDocReturnTag,
+    JSDocSatisfiesTag,
     JSDocSeeTag,
     JSDocSignature,
     JSDocTemplateTag,
@@ -1174,6 +1175,10 @@ export function isJSDocPropertyTag(node: Node): node is JSDocPropertyTag {
 
 export function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag {
     return node.kind === SyntaxKind.JSDocImplementsTag;
+}
+
+export function isJSDocSatisfiesTag(node: Node): node is JSDocSatisfiesTag {
+    return node.kind === SyntaxKind.JSDocSatisfiesTag;
 }
 
 // Synthesized list

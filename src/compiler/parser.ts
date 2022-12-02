@@ -143,6 +143,7 @@ import {
     isJSDocFunctionType,
     isJSDocNullableType,
     isJSDocReturnTag,
+    isJSDocSatisfiesTag,
     isJSDocTypeTag,
     isJsxOpeningElement,
     isJsxOpeningFragment,
@@ -189,6 +190,7 @@ import {
     JSDocPublicTag,
     JSDocReadonlyTag,
     JSDocReturnTag,
+    JSDocSatisfiesTag,
     JSDocSeeTag,
     JSDocSignature,
     JSDocSyntaxKind,
@@ -1100,10 +1102,12 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.typeExpression) ||
             (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     },
-    [SyntaxKind.JSDocReturnTag]: forEachChildInJSDocReturnTag,
-    [SyntaxKind.JSDocTypeTag]: forEachChildInJSDocReturnTag,
-    [SyntaxKind.JSDocThisTag]: forEachChildInJSDocReturnTag,
-    [SyntaxKind.JSDocEnumTag]: forEachChildInJSDocReturnTag,
+    [SyntaxKind.JSDocReturnTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocTypeTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocThisTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocEnumTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocSatisfiesTag]: forEachChildInJSDocTypeLikeTag,
+
     [SyntaxKind.JSDocSignature]: function forEachChildInJSDocSignature<T>(node: JSDocSignature, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return forEach(node.typeParameters, cbNode) ||
             forEach(node.parameters, cbNode) ||
@@ -1197,7 +1201,7 @@ function forEachChildInJSDocParameterOrPropertyTag<T>(node: JSDocParameterTag | 
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
 
-function forEachChildInJSDocReturnTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInJSDocTypeLikeTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocSatisfiesTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
     return visitNode(cbNode, node.tagName) ||
         visitNode(cbNode, node.typeExpression) ||
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
@@ -8782,6 +8786,9 @@ namespace Parser {
                     case "callback":
                         tag = parseCallbackTag(start, tagName, margin, indentText);
                         break;
+                    case "satisfies":
+                        tag = parseSatisfiesTag(start, tagName, margin, indentText);
+                        break;
                     case "see":
                         tag = parseSeeTag(start, tagName, margin, indentText);
                         break;
@@ -9135,6 +9142,16 @@ namespace Parser {
             function parseAugmentsTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocAugmentsTag {
                 const className = parseExpressionWithTypeArgumentsForAugments();
                 return finishNode(factory.createJSDocAugmentsTag(tagName, className, parseTrailingTagComments(start, getNodePos(), margin, indentText)), start);
+            }
+
+            function parseSatisfiesTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocSatisfiesTag {
+                if (some(tags, isJSDocSatisfiesTag)) {
+                    parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
+                }
+
+                const typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
+                const comments = margin !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), margin, indentText) : undefined;
+                return finishNode(factory.createJSDocSatisfiesTag(tagName, typeExpression, comments), start);
             }
 
             function parseExpressionWithTypeArgumentsForAugments(): ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression } {
