@@ -108,7 +108,7 @@ export var r10: typeof E;
 >E : typeof E
 
 export var r11: typeof E.A;
->r11 : E
+>r11 : E.A
 >E.A : E
 >E : typeof E
 >A : E

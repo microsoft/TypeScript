@@ -15197,7 +15197,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // or property access expression(section 4.10),
             // the widened type(section 3.9) of which becomes the result.
             const type = checkExpressionWithTypeArguments(node);
-            links.resolvedType = getRegularTypeOfLiteralType(getWidenedType(type));
+            links.resolvedType = getWidenedType(type);
         }
         return links.resolvedType;
     }

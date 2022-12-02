@@ -19,7 +19,7 @@ type All = typeof ALL;
 
 const result: Collection<All> = new Collection();
 >result : Collection<"all">
->new Collection() : Collection<"all">
+>new Collection() : Collection<string>
 >Collection : CollectionStatic
 
 const ANOTHER = "another";
@@ -35,6 +35,6 @@ type Both = Another | All;
 
 const result2: Collection<Both> = new Collection();
 >result2 : Collection<Both>
->new Collection() : Collection<Both>
+>new Collection() : Collection<string>
 >Collection : CollectionStatic
 
