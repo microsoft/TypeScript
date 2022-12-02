@@ -447,8 +447,7 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
     }
 
     const containingDirectory = containingFile ? getDirectoryPath(containingFile) : undefined;
-    const perFolderCache = containingDirectory ? cache && cache.getOrCreateCacheForDirectory(containingDirectory, redirectedReference) : undefined;
-    let result = perFolderCache && perFolderCache.get(typeReferenceDirectiveName, /*mode*/ resolutionMode);
+    let result = containingDirectory ? cache?.getFromDirectoryCache(typeReferenceDirectiveName, resolutionMode, containingDirectory, redirectedReference) : undefined;
     if (!result && containingDirectory && !isExternalModuleNameRelative(typeReferenceDirectiveName)) {
         result = cache?.getFromNonRelativeNameCache(typeReferenceDirectiveName, resolutionMode, containingDirectory, redirectedReference);
     }
@@ -542,9 +541,11 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
         affectingLocations: initializeResolutionField(affectingLocations),
         resolutionDiagnostics: initializeResolutionField(diagnostics),
     };
-    perFolderCache?.set(typeReferenceDirectiveName, /*mode*/ resolutionMode, result);
-    if (containingDirectory && !isExternalModuleNameRelative(typeReferenceDirectiveName)) {
-        cache?.getOrCreateCacheForNonRelativeName(typeReferenceDirectiveName, resolutionMode, redirectedReference).set(containingDirectory, result);
+    if (containingDirectory) {
+        cache?.getOrCreateCacheForDirectory(containingDirectory, redirectedReference).set(typeReferenceDirectiveName, /*mode*/ resolutionMode, result);
+        if (!isExternalModuleNameRelative(typeReferenceDirectiveName)) {
+            cache?.getOrCreateCacheForNonRelativeName(typeReferenceDirectiveName, resolutionMode, redirectedReference).set(containingDirectory, result);
+        }
     }
     if (traceEnabled) traceResult(result);
     return result;
@@ -1171,9 +1172,7 @@ export function createTypeReferenceDirectiveResolutionCache(
 
 export function resolveModuleNameFromCache(moduleName: string, containingFile: string, cache: ModuleResolutionCache, mode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined {
     const containingDirectory = getDirectoryPath(containingFile);
-    const perFolderCache = cache && cache.getOrCreateCacheForDirectory(containingDirectory);
-    if (!perFolderCache) return undefined;
-    return perFolderCache.get(moduleName, mode);
+    return cache.getFromDirectoryCache(moduleName, mode, containingDirectory, /*redirectedReference*/ undefined);
 }
 
 export function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations {
@@ -1188,8 +1187,7 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
         }
     }
     const containingDirectory = getDirectoryPath(containingFile);
-    const perFolderCache = cache && cache.getOrCreateCacheForDirectory(containingDirectory, redirectedReference);
-    let result = perFolderCache && perFolderCache.get(moduleName, resolutionMode);
+    let result = cache?.getFromDirectoryCache(moduleName, resolutionMode, containingDirectory, redirectedReference);
 
     if (result) {
         if (traceEnabled) {
@@ -1243,12 +1241,10 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
         if (result && result.resolvedModule) perfLogger.logInfoEvent(`Module "${moduleName}" resolved to "${result.resolvedModule.resolvedFileName}"`);
         perfLogger.logStopResolveModule((result && result.resolvedModule) ? "" + result.resolvedModule.resolvedFileName : "null");
 
-        if (perFolderCache) {
-            perFolderCache.set(moduleName, resolutionMode, result);
-            if (!isExternalModuleNameRelative(moduleName)) {
-                // put result in per-module name cache
-                cache.getOrCreateCacheForNonRelativeName(moduleName, resolutionMode, redirectedReference).set(containingDirectory, result);
-            }
+        cache?.getOrCreateCacheForDirectory(containingDirectory, redirectedReference).set(moduleName, resolutionMode, result);
+        if (!isExternalModuleNameRelative(moduleName)) {
+            // put result in per-module name cache
+            cache?.getOrCreateCacheForNonRelativeName(moduleName, resolutionMode, redirectedReference).set(containingDirectory, result);
         }
     }
 
