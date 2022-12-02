@@ -814,17 +814,16 @@ export function loadWithTypeDirectiveCache<T>(names: string[] | readonly FileRef
         return [];
     }
     const resolutions: T[] = [];
-    const cache = new Map<string, T>();
+    const cache = createModeAwareCache<T>();
     for (const name of names) {
         let result: T;
         const mode = getModeForFileReference(name, containingFileMode);
         const strName = getResolutionName(name);
-        const cacheKey = mode !== undefined ? `${mode}|${strName}` : strName;
-        if (cache.has(cacheKey)) {
-            result = cache.get(cacheKey)!;
+        if (cache.has(strName, mode)) {
+            result = cache.get(strName, mode)!;
         }
         else {
-            cache.set(cacheKey, result = loader(strName, containingFile, redirectedReference, mode));
+            cache.set(strName, mode, result = loader(strName, containingFile, redirectedReference, mode));
         }
         resolutions.push(result);
     }
@@ -944,7 +943,7 @@ export function loadWithModeAwareCache<T>(names: readonly StringLiteralLike[] | 
         return [];
     }
     const resolutions: T[] = [];
-    const cache = new Map<string, T>();
+    const cache = createModeAwareCache<T>();
     let i = 0;
     for (const entry of resolutionInfo ? resolutionInfo.names : names) {
         let result: T;
@@ -953,12 +952,11 @@ export function loadWithModeAwareCache<T>(names: readonly StringLiteralLike[] | 
             getModeForResolutionAtIndex(containingFile, i);
         i++;
         const name = isString(entry) ? entry : entry.text;
-        const cacheKey = mode !== undefined ? `${mode}|${name}` : name;
-        if (cache.has(cacheKey)) {
-            result = cache.get(cacheKey)!;
+        if (cache.has(name, mode)) {
+            result = cache.get(name, mode)!;
         }
         else {
-            cache.set(cacheKey, result = loader(name, mode, containingFileName, redirectedReference));
+            cache.set(name, mode, result = loader(name, mode, containingFileName, redirectedReference));
         }
         resolutions.push(result);
     }

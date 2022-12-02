@@ -739,9 +739,9 @@ export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { tra
 export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCompilerOptions: () => CompilerOptions, directoryStructureHost: DirectoryStructureHost = host): CompilerHost {
     const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
     const hostGetNewLine = memoize(() => host.getNewLine());
-    return {
+    const compilerHost: CompilerHost = {
         getSourceFile: createGetSourceFile(
-            (fileName, encoding) => host.readFile(fileName, encoding),
+            (fileName, encoding) => !encoding ? compilerHost.readFile(fileName) : host.readFile(fileName, encoding),
             getCompilerOptions,
             /*setParentNodes*/ undefined
         ),
@@ -768,6 +768,7 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
         disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
         storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
     };
+    return compilerHost;
 }
 
 /** @internal */
@@ -810,12 +811,12 @@ export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "cre
 }
 
 /** @internal */
-export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: { createHash?(data: string): string; }) {
+export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost) {
     const originalGetSourceFile = compilerHost.getSourceFile;
     compilerHost.getSourceFile = (...args) => {
         const result = originalGetSourceFile.call(compilerHost, ...args);
         if (result) {
-            result.version = getSourceFileVersionAsHashFromText(host, result.text);
+            result.version = getSourceFileVersionAsHashFromText(compilerHost, result.text);
         }
         return result;
     };

@@ -54,7 +54,6 @@ File '/Users/name/projects/web/node_modules/yargs.ts' does not exist.
 File '/Users/name/projects/web/node_modules/yargs.tsx' does not exist.
 File '/Users/name/projects/web/node_modules/yargs.d.ts' does not exist.
 Found 'package.json' at '/Users/name/projects/web/node_modules/@types/yargs/package.json'.
-'package.json' does not have a 'typesVersions' field.
 Matched 'exports' condition 'types'.
 Saw non-matching condition 'import'.
 Matched 'exports' condition 'default'.
@@ -66,6 +65,7 @@ File '/Users/name/projects/web/node_modules/@types/yargs/package.json' exists ac
 ======== Resolving type reference directive 'yargs', containing file '/Users/name/projects/web/__inferred type names__.ts', root directory '/Users/name/projects/web/node_modules/@types'. ========
 Resolving with primary search path '/Users/name/projects/web/node_modules/@types'.
 File '/Users/name/projects/web/node_modules/@types/yargs/package.json' exists according to earlier cached lookups.
+'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' does not have a 'main' field.

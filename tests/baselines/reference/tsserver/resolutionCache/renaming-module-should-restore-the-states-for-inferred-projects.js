@@ -1,12 +1,12 @@
 Info 0    [00:00:11.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:12.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/a/b/file1.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/b/moduleFile.ts]
@@ -69,12 +69,12 @@ Info 13   [00:00:30.000] response:
     }
 Info 14   [00:00:31.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "semanticDiagnosticsSync",
       "arguments": {
         "file": "/a/b/file1.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -181,12 +181,12 @@ FsWatchesRecursive::
 
 Info 34   [00:01:06.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "semanticDiagnosticsSync",
       "arguments": {
         "file": "/a/b/file1.ts"
-      }
+      },
+      "seq": 3,
+      "type": "request"
     }
 Before request
 
@@ -286,8 +286,6 @@ FsWatchesRecursive::
 
 Info 45   [00:01:20.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "change",
       "arguments": {
         "file": "/a/b/file1.ts",
@@ -296,7 +294,9 @@ Info 45   [00:01:20.000] request:
         "endLine": 1,
         "endOffset": 44,
         "insertString": "\n"
-      }
+      },
+      "seq": 4,
+      "type": "request"
     }
 Before request
 
@@ -403,12 +403,12 @@ FsWatchesRecursive::
 
 Info 61   [00:01:48.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "semanticDiagnosticsSync",
       "arguments": {
         "file": "/a/b/file1.ts"
-      }
+      },
+      "seq": 5,
+      "type": "request"
     }
 Before request
 

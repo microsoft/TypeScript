@@ -52,6 +52,7 @@ import {
     canHaveIllegalDecorators,
     canHaveIllegalModifiers,
     canHaveModifiers,
+    canUsePropertyAccess,
     cartesianProduct,
     CaseBlock,
     CaseClause,
@@ -99,9 +100,9 @@ import {
     createFileDiagnostic,
     createGetCanonicalFileName,
     createGetSymbolWalker,
+    createModeAwareCacheKey,
     createPrinter,
     createPropertyNameNodeForIdentifierOrLiteral,
-    createScanner,
     createSymbolTable,
     createTextWriter,
     createUnderscoreEscapedMultiMap,
@@ -337,8 +338,8 @@ import {
     hasAccessorModifier,
     hasAmbientModifier,
     hasContextSensitiveParameters,
-    hasDecorators,
     HasDecorators,
+    hasDecorators,
     hasDynamicName,
     hasEffectiveModifier,
     hasEffectiveModifiers,
@@ -347,8 +348,8 @@ import {
     hasExtension,
     HasIllegalDecorators,
     HasIllegalModifiers,
-    hasInitializer,
     HasInitializer,
+    hasInitializer,
     hasJSDocNodes,
     hasJSDocParameterTags,
     hasJsonModuleEmitEnabled,
@@ -499,7 +500,6 @@ import {
     isGlobalScopeAugmentation,
     isHeritageClause,
     isIdentifier,
-    isIdentifierStart,
     isIdentifierText,
     isIdentifierTypePredicate,
     isIdentifierTypeReference,
@@ -677,6 +677,7 @@ import {
     isTypeReferenceNode,
     isTypeReferenceType,
     isUMDExportSymbol,
+    isValidBigIntString,
     isValidESSymbolDeclaration,
     isValidTypeOnlyAliasUseSite,
     isValueSignatureDeclaration,
@@ -826,6 +827,7 @@ import {
     parseIsolatedEntityName,
     parseNodeFactory,
     parsePseudoBigInt,
+    parseValidBigInt,
     Path,
     pathIsRelative,
     PatternAmbientModule,
@@ -7406,7 +7408,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const contextFile = getSourceFileOfNode(getOriginalNode(context.enclosingDeclaration));
             const resolutionMode = overrideImportMode || contextFile?.impliedNodeFormat;
-            const cacheKey = getSpecifierCacheKey(contextFile.path, resolutionMode);
+            const cacheKey = createModeAwareCacheKey(contextFile.path, resolutionMode);
             const links = getSymbolLinks(symbol);
             let specifier = links.specifierCache && links.specifierCache.get(cacheKey);
             if (!specifier) {
@@ -7435,10 +7437,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 links.specifierCache.set(cacheKey, specifier);
             }
             return specifier;
-
-            function getSpecifierCacheKey(path: string, mode: ResolutionMode | undefined) {
-                return mode === undefined ? path : `${mode}|${path}`;
-            }
         }
 
         function symbolToEntityNameNode(symbol: Symbol): EntityName {
@@ -7694,10 +7692,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isSingleOrDoubleQuote(firstChar) && some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
                     return factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context));
                 }
-                const canUsePropertyAccess = firstChar === CharacterCodes.hash ?
-                    symbolName.length > 1 && isIdentifierStart(symbolName.charCodeAt(1), languageVersion) :
-                    isIdentifierStart(firstChar, languageVersion);
-                if (index === 0 || canUsePropertyAccess) {
+                if (index === 0 || canUsePropertyAccess(symbolName, languageVersion)) {
                     const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                     identifier.symbol = symbol;
 
@@ -7735,23 +7730,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getPropertyNameNodeForSymbol(symbol: Symbol, context: NodeBuilderContext) {
+            const stringNamed = !!length(symbol.declarations) && every(symbol.declarations, isStringNamed);
             const singleQuote = !!length(symbol.declarations) && every(symbol.declarations, isSingleQuotedStringNamed);
-            const fromNameType = getPropertyNameNodeForSymbolFromNameType(symbol, context, singleQuote);
+            const fromNameType = getPropertyNameNodeForSymbolFromNameType(symbol, context, singleQuote, stringNamed);
             if (fromNameType) {
                 return fromNameType;
             }
             const rawName = unescapeLeadingUnderscores(symbol.escapedName);
-            const stringNamed = !!length(symbol.declarations) && every(symbol.declarations, isStringNamed);
             return createPropertyNameNodeForIdentifierOrLiteral(rawName, getEmitScriptTarget(compilerOptions), singleQuote, stringNamed);
         }
 
         // See getNameForSymbolFromNameType for a stringy equivalent
-        function getPropertyNameNodeForSymbolFromNameType(symbol: Symbol, context: NodeBuilderContext, singleQuote?: boolean) {
+        function getPropertyNameNodeForSymbolFromNameType(symbol: Symbol, context: NodeBuilderContext, singleQuote?: boolean, stringNamed?: boolean) {
             const nameType = getSymbolLinks(symbol).nameType;
             if (nameType) {
                 if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
                     const name = "" + (nameType as StringLiteralType | NumberLiteralType).value;
-                    if (!isIdentifierText(name, getEmitScriptTarget(compilerOptions)) && !isNumericLiteralName(name)) {
+                    if (!isIdentifierText(name, getEmitScriptTarget(compilerOptions)) && (stringNamed || !isNumericLiteralName(name))) {
                         return factory.createStringLiteral(name, !!singleQuote);
                     }
                     if (isNumericLiteralName(name) && startsWith(name, "-")) {
@@ -18759,7 +18754,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // An object type S is considered to be derived from an object type T if
     // S is a union type and every constituent of S is derived from T,
     // T is a union type and S is derived from at least one constituent of T, or
-    // S is a type variable with a base constraint that is derived from T,
+    // S is an intersection type and some constituent of S is derived from T, or
+    // S is a type variable with a base constraint that is derived from T, or
+    // T is {} and S is an object-like type (ensuring {} is less derived than Object), or
     // T is one of the global types Object and Function and S is a subtype of T, or
     // T occurs directly or indirectly in an 'extends' clause of S.
     // Note that this check ignores type parameters and only considers the
@@ -18767,8 +18764,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isTypeDerivedFrom(source: Type, target: Type): boolean {
         return source.flags & TypeFlags.Union ? every((source as UnionType).types, t => isTypeDerivedFrom(t, target)) :
             target.flags & TypeFlags.Union ? some((target as UnionType).types, t => isTypeDerivedFrom(source, t)) :
+            source.flags & TypeFlags.Intersection ? some((source as IntersectionType).types, t => isTypeDerivedFrom(t, target)) :
             source.flags & TypeFlags.InstantiableNonPrimitive ? isTypeDerivedFrom(getBaseConstraintOfType(source) || unknownType, target) :
-            target === globalObjectType ? !!(source.flags & (TypeFlags.Object | TypeFlags.NonPrimitive)) :
+            isEmptyAnonymousObjectType(target) ? !!(source.flags & (TypeFlags.Object | TypeFlags.NonPrimitive)) :
+            target === globalObjectType ? !!(source.flags & (TypeFlags.Object | TypeFlags.NonPrimitive)) && !isEmptyAnonymousObjectType(source) :
             target === globalFunctionType ? !!(source.flags & TypeFlags.Object) && isFunctionObjectType(source as ObjectType) :
             hasBaseType(source, getTargetType(target)) || (isArrayType(target) && !isReadonlyArrayType(target) && isTypeDerivedFrom(source, globalReadonlyArrayType));
     }
@@ -22629,7 +22628,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isUnitLikeType(type: Type): boolean {
-        return isUnitType(getBaseConstraintOrType(type));
+        // Intersections that reduce to 'never' (e.g. 'T & null' where 'T extends {}') are not unit types.
+        const t = getBaseConstraintOrType(type);
+        // Scan intersections such that tagged literal types are considered unit types.
+        return t.flags & TypeFlags.Intersection ? some((t as IntersectionType).types, isUnitType) : isUnitType(t);
     }
 
     function extractUnitType(type: Type) {
@@ -23529,35 +23531,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @param text a valid bigint string excluding a trailing `n`, but including a possible prefix `-`. Use `isValidBigIntString(text, roundTripOnly)` before calling this function.
      */
     function parseBigIntLiteralType(text: string) {
-        const negative = text.startsWith("-");
-        const base10Value = parsePseudoBigInt(`${negative ? text.slice(1) : text}n`);
-        return getBigIntLiteralType({ negative, base10Value });
-    }
-
-    /**
-     * Tests whether the provided string can be parsed as a bigint.
-     * @param s The string to test.
-     * @param roundTripOnly Indicates the resulting bigint matches the input when converted back to a string.
-     */
-    function isValidBigIntString(s: string, roundTripOnly: boolean): boolean {
-        if (s === "") return false;
-        const scanner = createScanner(ScriptTarget.ESNext, /*skipTrivia*/ false);
-        let success = true;
-        scanner.setOnError(() => success = false);
-        scanner.setText(s + "n");
-        let result = scanner.scan();
-        const negative = result === SyntaxKind.MinusToken;
-        if (negative) {
-            result = scanner.scan();
-        }
-        const flags = scanner.getTokenFlags();
-        // validate that
-        // * scanning proceeded without error
-        // * a bigint can be scanned, and that when it is scanned, it is
-        // * the full length of the input string (so the scanner is one character beyond the augmented input length)
-        // * it does not contain a numeric seperator (the `BigInt` constructor does not accept a numeric seperator in its input)
-        return success && result === SyntaxKind.BigIntLiteral && scanner.getTextPos() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator)
-            && (!roundTripOnly || s === pseudoBigIntToString({ negative, base10Value: parsePseudoBigInt(scanner.getTokenValue()) }));
+        return getBigIntLiteralType(parseValidBigInt(text));
     }
 
     function isMemberOfStringMapping(source: Type, target: Type): boolean {
@@ -33700,13 +33674,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkSatisfiesExpression(node: SatisfiesExpression) {
         checkSourceElement(node.type);
+        const exprType = checkExpression(node.expression);
 
         const targetType = getTypeFromTypeNode(node.type);
         if (isErrorType(targetType)) {
             return targetType;
         }
 
-        const exprType = checkExpression(node.expression);
         checkTypeAssignableToAndOptionallyElaborate(exprType, targetType, node.type, node.expression, Diagnostics.Type_0_does_not_satisfy_the_expected_type_1);
 
         return exprType;
@@ -34998,7 +34972,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function hasEmptyObjectIntersection(type: Type): boolean {
-        return someType(type, t => t === unknownEmptyObjectType || !!(t.flags & TypeFlags.Intersection) && some((t as IntersectionType).types, isEmptyAnonymousObjectType));
+        return someType(type, t => t === unknownEmptyObjectType || !!(t.flags & TypeFlags.Intersection) && isEmptyAnonymousObjectType(getBaseConstraintOrType(t)));
     }
 
     function checkInExpression(left: Expression, right: Expression, leftType: Type, rightType: Type): Type {

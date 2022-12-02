@@ -58,13 +58,13 @@ Info 2    [00:00:31.000] response:
     }
 Info 3    [00:00:32.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/src/main.ts",
         "projectRootPath": "/user/username/projects/myproject"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 

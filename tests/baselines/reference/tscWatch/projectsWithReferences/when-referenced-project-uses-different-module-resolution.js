@@ -197,17 +197,49 @@ a_1.X;
 
 
 
-/a/lib/tsc.js -w -p tsconfig.c.json
+/a/lib/tsc.js -w -p tsconfig.c.json --traceResolution --explainFiles
 Output::
 >> Screen clear
 [[90m12:00:53 AM[0m] Starting compilation in watch mode...
 
+======== Resolving module './b' from '/user/username/projects/transitiveReferences/c.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, Declaration.
+File '/user/username/projects/transitiveReferences/b.ts' exist - use it as a name resolution result.
+======== Module name './b' was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'. ========
+======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+'baseUrl' option is set to '/user/username/projects/transitiveReferences', using this value to resolve non-relative module name '@ref/a'.
+'paths' option is specified, looking for a pattern to match module name '@ref/a'.
+Module name '@ref/a', matched pattern '@ref/*'.
+Trying substitution './refs/*', candidate module location: './refs/a'.
+Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/refs/a', target file types: TypeScript, Declaration.
+File '/user/username/projects/transitiveReferences/refs/a.ts' does not exist.
+File '/user/username/projects/transitiveReferences/refs/a.tsx' does not exist.
+File '/user/username/projects/transitiveReferences/refs/a.d.ts' exist - use it as a name resolution result.
+======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
+======== Resolving module 'a' from '/user/username/projects/transitiveReferences/b.ts'. ========
+Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/tsconfig.b.json'.
+Explicitly specified module resolution kind: 'Classic'.
+======== Module name 'a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
+../../../../a/lib/lib.d.ts
+  Default library for target 'es3'
+a.d.ts
+  Imported via "a" from file 'b.d.ts'
+  File is output of project reference source 'a.ts'
+b.d.ts
+  Imported via './b' from file 'c.ts'
+  File is output of project reference source 'b.ts'
+refs/a.d.ts
+  Imported via "@ref/a" from file 'c.ts'
+c.ts
+  Part of 'files' list in tsconfig.json
 [[90m12:00:57 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/transitiveReferences/c.ts"]
-Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
+Program options: {"baseUrl":"/user/username/projects/transitiveReferences","paths":{"@ref/*":["./refs/*"]},"pathsBasePath":"/user/username/projects/transitiveReferences","watch":true,"project":"/user/username/projects/transitiveReferences/tsconfig.c.json","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/transitiveReferences/tsconfig.c.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

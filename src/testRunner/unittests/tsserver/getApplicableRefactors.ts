@@ -4,18 +4,22 @@ import {
     File,
 } from "../virtualFileSystemWithWatch";
 import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
     createSession,
-    executeSessionRequest,
     openFilesForSession,
 } from "./helpers";
 
 describe("unittests:: tsserver:: getApplicableRefactors", () => {
     it("works when taking position", () => {
         const aTs: File = { path: "/a.ts", content: "" };
-        const session = createSession(createServerHost([aTs]));
+        const host = createServerHost([aTs]);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([aTs], session);
-        const response = executeSessionRequest<ts.server.protocol.GetApplicableRefactorsRequest, ts.server.protocol.GetApplicableRefactorsResponse>(
-            session, ts.server.protocol.CommandTypes.GetApplicableRefactors, { file: aTs.path, line: 1, offset: 1 });
-        assert.deepEqual<readonly ts.server.protocol.ApplicableRefactorInfo[] | undefined>(response, []);
+        session.executeCommandSeq<ts.server.protocol.GetApplicableRefactorsRequest>({
+            command: ts.server.protocol.CommandTypes.GetApplicableRefactors,
+            arguments: { file: aTs.path, line: 1, offset: 1 }
+        });
+        baselineTsserverLogs("getApplicableRefactors", "works when taking position", session);
     });
 });

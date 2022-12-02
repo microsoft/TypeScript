@@ -1,12 +1,12 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:30.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/usage/usage.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
@@ -150,7 +150,7 @@ Info 27   [00:01:02.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/fns.ts"
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request
@@ -245,7 +245,7 @@ Info 31   [00:01:18.000] request:
         "endOffset": 1,
         "insertString": "function fn3() { }"
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Before request
@@ -310,7 +310,7 @@ Info 33   [00:01:20.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/usage/usage.ts"
       },
-      "seq": 3,
+      "seq": 4,
       "type": "request"
     }
 Before request
@@ -403,7 +403,7 @@ Info 40   [00:01:39.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/usage/usage.ts"
       },
-      "seq": 4,
+      "seq": 5,
       "type": "request"
     }
 Before request
@@ -481,7 +481,7 @@ Info 45   [00:01:46.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/usage/usage.ts"
       },
-      "seq": 5,
+      "seq": 6,
       "type": "request"
     }
 Before request

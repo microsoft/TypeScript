@@ -805,7 +805,7 @@ function baselineAcceptTask(localBaseline, refBaseline) {
         }
         const toDelete = await glob(`${localBaseline}/**/*.delete`, { nodir: true });
         for (const p of toDelete) {
-            const out = localPathToRefPath(p);
+            const out = localPathToRefPath(p).replace(/\.delete$/, "");
             await fs.promises.rm(out);
         }
     };
