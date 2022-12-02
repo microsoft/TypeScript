@@ -9233,6 +9233,7 @@ declare namespace ts {
      * We support only non-relative module names because resolution of relative module names is usually more deterministic and thus less expensive.
      */
     interface NonRelativeModuleNameResolutionCache extends NonRelativeNameResolutionCache<ResolvedModuleWithFailedLookupLocations>, PackageJsonInfoCache {
+        /** @deprecated Use getOrCreateCacheForNonRelativeName */
         getOrCreateCacheForModuleName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerModuleNameCache;
     }
     interface PackageJsonInfoCache {
