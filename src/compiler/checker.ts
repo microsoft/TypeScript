@@ -1811,6 +1811,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     const unresolvedSymbols = new Map<string, TransientSymbol>();
     const errorTypes = new Map<string, Type>();
 
+    // We specifically create the `undefined` and `null` types before any other types that can occur in
+    // unions such that they are given low type IDs and occur first in the sorted list of union constituents.
+    // We can then just examine the first constituent(s) of a union to check for their presence.
+
     const anyType = createIntrinsicType(TypeFlags.Any, "any");
     const autoType = createIntrinsicType(TypeFlags.Any, "any", ObjectFlags.NonInferrableType);
     const wildcardType = createIntrinsicType(TypeFlags.Any, "any");
@@ -1822,9 +1826,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     const nonNullUnknownType = createIntrinsicType(TypeFlags.Unknown, "unknown");
     const undefinedType = createIntrinsicType(TypeFlags.Undefined, "undefined");
     const undefinedWideningType = strictNullChecks ? undefinedType : createIntrinsicType(TypeFlags.Undefined, "undefined", ObjectFlags.ContainsWideningType);
-    const optionalType = createIntrinsicType(TypeFlags.Undefined, "undefined");
     const missingType = createIntrinsicType(TypeFlags.Undefined, "undefined");
     const undefinedOrMissingType = exactOptionalPropertyTypes ? missingType : undefinedType;
+    const optionalType = createIntrinsicType(TypeFlags.Undefined, "undefined");
     const nullType = createIntrinsicType(TypeFlags.Null, "null");
     const nullWideningType = strictNullChecks ? nullType : createIntrinsicType(TypeFlags.Null, "null", ObjectFlags.ContainsWideningType);
     const stringType = createIntrinsicType(TypeFlags.String, "string");
@@ -15954,9 +15958,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     includes & TypeFlags.Null || containsType(typeSet, unknownType) ? unknownType : nonNullUnknownType;
             }
             if (includes & TypeFlags.Undefined) {
-                const missingIndex = binarySearch(typeSet, missingType, getTypeId, compareValues);
-                if (missingIndex >= 0 && containsType(typeSet, undefinedType)) {
-                    orderedRemoveItemAt(typeSet, missingIndex);
+                // If type set contains both undefinedType and missingType, remove missingType
+                if (typeSet.length >= 2 && typeSet[0] === undefinedType && typeSet[1] === missingType) {
+                    orderedRemoveItemAt(typeSet, 1);
                 }
             }
             if (includes & (TypeFlags.Literal | TypeFlags.UniqueESSymbol | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) || includes & TypeFlags.Void && includes & TypeFlags.Undefined) {
@@ -16321,7 +16325,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     result = getIntersectionType(typeSet, aliasSymbol, aliasTypeArguments);
                 }
                 else if (eachIsUnionContaining(typeSet, TypeFlags.Undefined)) {
-                    const containedUndefinedType = some(typeSet, t => containsType((t as UnionType).types, missingType)) ? missingType : undefinedType;
+                    const containedUndefinedType = some(typeSet, containsMissingType) ? missingType : undefinedType;
                     removeFromEach(typeSet, TypeFlags.Undefined);
                     result = getUnionType([getIntersectionType(typeSet), containedUndefinedType], UnionReduction.Literal, aliasSymbol, aliasTypeArguments);
                 }
@@ -20418,8 +20422,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getUndefinedStrippedTargetIfNeeded(source: Type, target: Type) {
-            // As a builtin type, `undefined` is a very low type ID - making it almsot always first, making this a very fast check to see
-            // if we need to strip `undefined` from the target
             if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union &&
                 !((source as UnionType).types[0].flags & TypeFlags.Undefined) && (target as UnionType).types[0].flags & TypeFlags.Undefined) {
                 return extractTypesOfKind(target, ~TypeFlags.Undefined);
@@ -22785,7 +22787,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getOptionalType(type: Type, isProperty = false): Type {
         Debug.assert(strictNullChecks);
         const missingOrUndefined = isProperty ? undefinedOrMissingType : undefinedType;
-        return type.flags & TypeFlags.Undefined || type.flags & TypeFlags.Union && (type as UnionType).types[0] === missingOrUndefined ? type : getUnionType([type, missingOrUndefined]);
+        return type === missingOrUndefined || type.flags & TypeFlags.Union && (type as UnionType).types[0] === missingOrUndefined ? type : getUnionType([type, missingOrUndefined]);
     }
 
     function getGlobalNonNullableTypeInstantiation(type: Type) {
@@ -22824,7 +22826,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function containsMissingType(type: Type) {
-        return type === missingType || type.flags & TypeFlags.Union && containsType((type as UnionType).types, missingType);
+        return type === missingType || !!(type.flags & TypeFlags.Union) && (type as UnionType).types[0] === missingType;
     }
 
     function removeMissingOrUndefinedType(type: Type): Type {
