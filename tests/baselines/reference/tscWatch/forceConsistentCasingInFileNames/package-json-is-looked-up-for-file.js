@@ -34,7 +34,6 @@ Output::
 
 File '/Users/name/projects/lib-boilerplate/src/package.json' does not exist.
 Found 'package.json' at '/Users/name/projects/lib-boilerplate/package.json'.
-'package.json' does not have a 'typesVersions' field.
 File '/Users/name/projects/lib-boilerplate/test/package.json' does not exist.
 File '/Users/name/projects/lib-boilerplate/package.json' exists according to earlier cached lookups.
 ======== Resolving module 'lib-boilerplate' from '/Users/name/projects/lib-boilerplate/test/basic.spec.ts'. ========

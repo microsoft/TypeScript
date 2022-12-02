@@ -1,12 +1,12 @@
 Info 0    [00:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:26.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/src/test.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/src/test.ts]
@@ -129,7 +129,7 @@ Info 27   [00:00:58.000] request:
           "/user/username/projects/myproject/src/test.ts"
         ]
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request
@@ -283,7 +283,7 @@ FsWatchesRecursive::
 Info 31   [00:01:02.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/src/test.ts","diagnostics":[]}}
 Info 32   [00:01:03.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::

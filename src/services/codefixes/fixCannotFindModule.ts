@@ -1,8 +1,22 @@
 import {
-    Debug, Diagnostics, getTokenAtPosition, getTypesPackageName, InstallPackageAction, isExternalModuleNameRelative,
-    isStringLiteral, JsTyping, LanguageServiceHost, parsePackageName, SourceFile, tryCast,
+    Debug,
+    Diagnostics,
+    getTokenAtPosition,
+    getTypesPackageName,
+    InstallPackageAction,
+    isExternalModuleNameRelative,
+    isStringLiteral,
+    JsTyping,
+    LanguageServiceHost,
+    parsePackageName,
+    SourceFile,
+    tryCast,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixName = "fixCannotFindModule";
 const fixIdInstallTypesPackage = "installTypesPackage";
