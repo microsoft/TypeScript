@@ -2,8 +2,8 @@
 /// ECMAScript APIs
 /////////////////////////////
 
-declare var NaN: number;
-declare var Infinity: number;
+// declare var NaN: NaN;
+// declare var Infinity: Infinity;
 
 /**
  * Evaluates JavaScript code and executes it.
@@ -566,19 +566,19 @@ interface NumberConstructor {
      * A value that is not a number.
      * In equality comparisons, NaN does not equal any value, including itself. To test whether a value is equivalent to NaN, use the isNaN function.
      */
-    readonly NaN: number;
+    readonly NaN: NaN;
 
     /**
      * A value that is less than the largest negative number that can be represented in JavaScript.
      * JavaScript displays NEGATIVE_INFINITY values as -infinity.
      */
-    readonly NEGATIVE_INFINITY: number;
+    readonly NEGATIVE_INFINITY: -Infinity;
 
     /**
      * A value greater than the largest number that can be represented in JavaScript.
      * JavaScript displays POSITIVE_INFINITY values as infinity.
      */
-    readonly POSITIVE_INFINITY: number;
+    readonly POSITIVE_INFINITY: Infinity;
 }
 
 /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */

@@ -623,8 +623,8 @@ class ListWrapper {
 
     var maxValue = -Infinity;
 >maxValue : number
->-Infinity : number
->Infinity : number
+>-Infinity : -Infinity
+>Infinity : Infinity
 
     for (var index = 0; index < list.length; index++) {
 >index : number

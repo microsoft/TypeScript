@@ -35,9 +35,9 @@ globalThis.Float64Array // ok
 >Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 globalThis.Infinity // ok
->globalThis.Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+>globalThis.Infinity : Symbol(Infinity)
 >globalThis : Symbol(globalThis)
->Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+>Infinity : Symbol(Infinity)
 
 declare let test1: (typeof globalThis)['x'] // ok
 >test1 : Symbol(test1, Decl(globalThisBlockscopedProperties.ts, 12, 11))

@@ -1690,7 +1690,7 @@ define(function () {
 >impl : {}
 >prepareVersionNo : any
 >version : any
->NaN : number
+>NaN : NaN
 
     };
 

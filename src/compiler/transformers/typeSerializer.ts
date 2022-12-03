@@ -23,6 +23,7 @@ import {
     getSetAccessorTypeAnnotationNode,
     getStrictOptionValue,
     Identifier,
+    InfinityOrNaNExpression,
     isAsyncFunction,
     isBinaryExpression,
     isClassLike,
@@ -381,13 +382,17 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                 switch (operand.kind) {
                     case SyntaxKind.NumericLiteral:
                     case SyntaxKind.BigIntLiteral:
-                        return serializeLiteralOfLiteralTypeNode(operand as NumericLiteral | BigIntLiteral);
+                    case SyntaxKind.InfinityKeyword:
+                    case SyntaxKind.NaNKeyword:
+                        return serializeLiteralOfLiteralTypeNode(operand as NumericLiteral | BigIntLiteral | InfinityOrNaNExpression);
                     default:
                         return Debug.failBadSyntaxKind(operand);
                 }
             }
 
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.InfinityKeyword:
+            case SyntaxKind.NaNKeyword:
                 return factory.createIdentifier("Number");
 
             case SyntaxKind.BigIntLiteral:

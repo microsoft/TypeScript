@@ -5,90 +5,90 @@ declare const x: number;
 if (x === NaN) {}
 >x === NaN : boolean
 >x : number
->NaN : number
+>NaN : NaN
 
 if (NaN === x) {}
 >NaN === x : boolean
->NaN : number
+>NaN : NaN
 >x : number
 
 if (x == NaN) {}
 >x == NaN : boolean
 >x : number
->NaN : number
+>NaN : NaN
 
 if (NaN == x) {}
 >NaN == x : boolean
->NaN : number
+>NaN : NaN
 >x : number
 
 if (x !== NaN) {}
 >x !== NaN : boolean
 >x : number
->NaN : number
+>NaN : NaN
 
 if (NaN !== x) {}
 >NaN !== x : boolean
->NaN : number
+>NaN : NaN
 >x : number
 
 if (x != NaN) {}
 >x != NaN : boolean
 >x : number
->NaN : number
+>NaN : NaN
 
 if (NaN != x) {}
 >NaN != x : boolean
->NaN : number
+>NaN : NaN
 >x : number
 
 if (x === ((NaN))) {}
 >x === ((NaN)) : boolean
 >x : number
->((NaN)) : number
->(NaN) : number
->NaN : number
+>((NaN)) : NaN
+>(NaN) : NaN
+>NaN : NaN
 
 if (((NaN)) === x) {}
 >((NaN)) === x : boolean
->((NaN)) : number
->(NaN) : number
->NaN : number
+>((NaN)) : NaN
+>(NaN) : NaN
+>NaN : NaN
 >x : number
 
 if (x !== ((NaN))) {}
 >x !== ((NaN)) : boolean
 >x : number
->((NaN)) : number
->(NaN) : number
->NaN : number
+>((NaN)) : NaN
+>(NaN) : NaN
+>NaN : NaN
 
 if (((NaN)) !== x) {}
 >((NaN)) !== x : boolean
->((NaN)) : number
->(NaN) : number
->NaN : number
+>((NaN)) : NaN
+>(NaN) : NaN
+>NaN : NaN
 >x : number
 
 if (NaN === NaN) {}
 >NaN === NaN : boolean
->NaN : number
->NaN : number
+>NaN : NaN
+>NaN : NaN
 
 if (NaN !== NaN) {}
 >NaN !== NaN : boolean
->NaN : number
->NaN : number
+>NaN : NaN
+>NaN : NaN
 
 if (NaN == NaN) {}
 >NaN == NaN : boolean
->NaN : number
->NaN : number
+>NaN : NaN
+>NaN : NaN
 
 if (NaN != NaN) {}
 >NaN != NaN : boolean
->NaN : number
->NaN : number
+>NaN : NaN
+>NaN : NaN
 
 // ...
 declare let y: any;
@@ -96,7 +96,7 @@ declare let y: any;
 
 if (NaN === y[0][1]) {}
 >NaN === y[0][1] : boolean
->NaN : number
+>NaN : NaN
 >y[0][1] : any
 >y[0] : any
 >y : any

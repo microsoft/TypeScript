@@ -1179,7 +1179,7 @@ define(function () {
 >version : Symbol(version, Decl(fixSignatureCaching.ts, 431, 11))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
 >version : Symbol(version, Decl(fixSignatureCaching.ts, 431, 11))
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
 
     };
 

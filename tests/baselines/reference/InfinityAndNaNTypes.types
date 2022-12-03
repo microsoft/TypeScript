@@ -1,0 +1,402 @@
+=== tests/cases/compiler/InfinityAndNaNTypes.ts ===
+Infinity = 42; // error
+>Infinity = 42 : 42
+>Infinity : any
+>42 : 42
+
+NaN = 42; // error
+>NaN = 42 : 42
+>NaN : any
+>42 : 42
+
+type PositiveInfinity = Infinity;
+>PositiveInfinity : Infinity
+
+type NegativeInfinity = -Infinity;
+>NegativeInfinity : -Infinity
+>-Infinity : -Infinity
+
+type NotANumber = NaN | -NaN;
+>NotANumber : NaN
+>-NaN : NaN
+
+type typeofInfinity = typeof Infinity;
+>typeofInfinity : Infinity
+>Infinity : Infinity
+
+type typeofNaN = typeof NaN;
+>typeofNaN : NaN
+>NaN : NaN
+
+type isInfinity = typeofInfinity extends PositiveInfinity ? true : false;
+>isInfinity : true
+>true : true
+>false : false
+
+type isNaN = NotANumber extends typeofNaN ? true : false;
+>isNaN : true
+>true : true
+>false : false
+
+const c1 = Infinity;
+>c1 : Infinity
+>Infinity : Infinity
+
+const c2 = -Infinity;
+>c2 : -Infinity
+>-Infinity : -Infinity
+>Infinity : Infinity
+
+const c3 = NaN;
+>c3 : NaN
+>NaN : NaN
+
+const c4 = -NaN;
+>c4 : NaN
+>-NaN : NaN
+>NaN : NaN
+
+const c5: Infinity = Infinity;
+>c5 : Infinity
+>Infinity : Infinity
+
+const c6: -Infinity = -Infinity;
+>c6 : -Infinity
+>-Infinity : -Infinity
+>-Infinity : -Infinity
+>Infinity : Infinity
+
+const c7: NaN = NaN;
+>c7 : NaN
+>NaN : NaN
+
+const c8: -NaN = -NaN;
+>c8 : NaN
+>-NaN : NaN
+>-NaN : NaN
+>NaN : NaN
+
+type ExtractNumber<T extends string, U extends number = number> = T extends `${infer T extends U}` ? T : never;
+>ExtractNumber : ExtractNumber<T, U>
+
+type t1 = ExtractNumber<"Infinity">; // never
+>t1 : never
+
+type t2 = ExtractNumber<"-Infinity">; // never
+>t2 : never
+
+type t3 = ExtractNumber<"NaN">; // never
+>t3 : never
+
+type t4 = ExtractNumber<"-NaN">; // never
+>t4 : never
+
+type t5 = ExtractNumber<"Infinity", Infinity>;
+>t5 : Infinity
+
+type t6 = ExtractNumber<"-Infinity", -Infinity>;
+>t6 : -Infinity
+>-Infinity : -Infinity
+
+type t7 = ExtractNumber<"NaN", NaN>;
+>t7 : NaN
+
+type t8 = ExtractNumber<"-NaN", -NaN>; // never
+>t8 : never
+>-NaN : NaN
+
+const o1 = { Infinity, NaN };
+>o1 : { Infinity: number; NaN: number; }
+>{ Infinity, NaN } : { Infinity: number; NaN: number; }
+>Infinity : number
+>NaN : number
+
+o1.Infinity;
+>o1.Infinity : number
+>o1 : { Infinity: number; NaN: number; }
+>Infinity : number
+
+o1.NaN;
+>o1.NaN : number
+>o1 : { Infinity: number; NaN: number; }
+>NaN : number
+
+o1[Infinity];
+>o1[Infinity] : number
+>o1 : { Infinity: number; NaN: number; }
+>Infinity : Infinity
+
+o1[NaN];
+>o1[NaN] : number
+>o1 : { Infinity: number; NaN: number; }
+>NaN : NaN
+
+const o2 = { Infinity, NaN } as const;
+>o2 : { readonly Infinity: Infinity; readonly NaN: NaN; }
+>{ Infinity, NaN } as const : { readonly Infinity: Infinity; readonly NaN: NaN; }
+>{ Infinity, NaN } : { readonly Infinity: Infinity; readonly NaN: NaN; }
+>Infinity : Infinity
+>NaN : NaN
+
+o2.Infinity;
+>o2.Infinity : Infinity
+>o2 : { readonly Infinity: Infinity; readonly NaN: NaN; }
+>Infinity : Infinity
+
+o2.NaN;
+>o2.NaN : NaN
+>o2 : { readonly Infinity: Infinity; readonly NaN: NaN; }
+>NaN : NaN
+
+o2[Infinity];
+>o2[Infinity] : Infinity
+>o2 : { readonly Infinity: Infinity; readonly NaN: NaN; }
+>Infinity : Infinity
+
+o2[NaN];
+>o2[NaN] : NaN
+>o2 : { readonly Infinity: Infinity; readonly NaN: NaN; }
+>NaN : NaN
+
+const o3 = { Infinity: "foo", "-Infinity": "bar", NaN: "baz", "-NaN": "no" };
+>o3 : { Infinity: string; "-Infinity": string; NaN: string; "-NaN": string; }
+>{ Infinity: "foo", "-Infinity": "bar", NaN: "baz", "-NaN": "no" } : { Infinity: string; "-Infinity": string; NaN: string; "-NaN": string; }
+>Infinity : string
+>"foo" : "foo"
+>"-Infinity" : string
+>"bar" : "bar"
+>NaN : string
+>"baz" : "baz"
+>"-NaN" : string
+>"no" : "no"
+
+o3.Infinity;
+>o3.Infinity : string
+>o3 : { Infinity: string; "-Infinity": string; NaN: string; "-NaN": string; }
+>Infinity : string
+
+o3[-Infinity];
+>o3[-Infinity] : string
+>o3 : { Infinity: string; "-Infinity": string; NaN: string; "-NaN": string; }
+>-Infinity : -Infinity
+>Infinity : Infinity
+
+o3.NaN;
+>o3.NaN : string
+>o3 : { Infinity: string; "-Infinity": string; NaN: string; "-NaN": string; }
+>NaN : string
+
+o3[-NaN];
+>o3[-NaN] : string
+>o3 : { Infinity: string; "-Infinity": string; NaN: string; "-NaN": string; }
+>-NaN : NaN
+>NaN : NaN
+
+const o4 = { Infinity: "foo", "-Infinity": "bar", NaN: "baz", "-NaN": "no" } as const;
+>o4 : { readonly Infinity: "foo"; readonly "-Infinity": "bar"; readonly NaN: "baz"; readonly "-NaN": "no"; }
+>{ Infinity: "foo", "-Infinity": "bar", NaN: "baz", "-NaN": "no" } as const : { readonly Infinity: "foo"; readonly "-Infinity": "bar"; readonly NaN: "baz"; readonly "-NaN": "no"; }
+>{ Infinity: "foo", "-Infinity": "bar", NaN: "baz", "-NaN": "no" } : { readonly Infinity: "foo"; readonly "-Infinity": "bar"; readonly NaN: "baz"; readonly "-NaN": "no"; }
+>Infinity : "foo"
+>"foo" : "foo"
+>"-Infinity" : "bar"
+>"bar" : "bar"
+>NaN : "baz"
+>"baz" : "baz"
+>"-NaN" : "no"
+>"no" : "no"
+
+o4[Infinity];
+>o4[Infinity] : "foo"
+>o4 : { readonly Infinity: "foo"; readonly "-Infinity": "bar"; readonly NaN: "baz"; readonly "-NaN": "no"; }
+>Infinity : Infinity
+
+o4[-Infinity];
+>o4[-Infinity] : "bar"
+>o4 : { readonly Infinity: "foo"; readonly "-Infinity": "bar"; readonly NaN: "baz"; readonly "-NaN": "no"; }
+>-Infinity : -Infinity
+>Infinity : Infinity
+
+o4[NaN];
+>o4[NaN] : "baz"
+>o4 : { readonly Infinity: "foo"; readonly "-Infinity": "bar"; readonly NaN: "baz"; readonly "-NaN": "no"; }
+>NaN : NaN
+
+o4[-NaN]; // baz
+>o4[-NaN] : "baz"
+>o4 : { readonly Infinity: "foo"; readonly "-Infinity": "bar"; readonly NaN: "baz"; readonly "-NaN": "no"; }
+>-NaN : NaN
+>NaN : NaN
+
+const o5 = { [Infinity]: "foo", [-Infinity]: "bar", [NaN]: "baz", [-NaN]: "no" };
+>o5 : { Infinity: string; [-Infinity]: string; NaN: string; }
+>{ [Infinity]: "foo", [-Infinity]: "bar", [NaN]: "baz", [-NaN]: "no" } : { Infinity: string; [-Infinity]: string; NaN: string; }
+>[Infinity] : string
+>Infinity : Infinity
+>"foo" : "foo"
+>[-Infinity] : string
+>-Infinity : -Infinity
+>Infinity : Infinity
+>"bar" : "bar"
+>[NaN] : string
+>NaN : NaN
+>"baz" : "baz"
+>[-NaN] : string
+>-NaN : NaN
+>NaN : NaN
+>"no" : "no"
+
+o5.Infinity;
+>o5.Infinity : string
+>o5 : { Infinity: string; [-Infinity]: string; NaN: string; }
+>Infinity : string
+
+o5[-Infinity];
+>o5[-Infinity] : string
+>o5 : { Infinity: string; [-Infinity]: string; NaN: string; }
+>-Infinity : -Infinity
+>Infinity : Infinity
+
+o5.NaN;
+>o5.NaN : string
+>o5 : { Infinity: string; [-Infinity]: string; NaN: string; }
+>NaN : string
+
+o5[-NaN];
+>o5[-NaN] : string
+>o5 : { Infinity: string; [-Infinity]: string; NaN: string; }
+>-NaN : NaN
+>NaN : NaN
+
+const o6 = { [Infinity]: "foo", [-Infinity]: "bar", [NaN]: "baz", [-NaN]: "no" } as const;
+>o6 : { readonly Infinity: "foo"; readonly [-Infinity]: "bar"; readonly NaN: "no"; }
+>{ [Infinity]: "foo", [-Infinity]: "bar", [NaN]: "baz", [-NaN]: "no" } as const : { readonly Infinity: "foo"; readonly [-Infinity]: "bar"; readonly NaN: "no"; }
+>{ [Infinity]: "foo", [-Infinity]: "bar", [NaN]: "baz", [-NaN]: "no" } : { readonly Infinity: "foo"; readonly [-Infinity]: "bar"; readonly NaN: "no"; }
+>[Infinity] : "foo"
+>Infinity : Infinity
+>"foo" : "foo"
+>[-Infinity] : "bar"
+>-Infinity : -Infinity
+>Infinity : Infinity
+>"bar" : "bar"
+>[NaN] : "baz"
+>NaN : NaN
+>"baz" : "baz"
+>[-NaN] : "no"
+>-NaN : NaN
+>NaN : NaN
+>"no" : "no"
+
+o6.Infinity;
+>o6.Infinity : "foo"
+>o6 : { readonly Infinity: "foo"; readonly [-Infinity]: "bar"; readonly NaN: "no"; }
+>Infinity : "foo"
+
+o6["-Infinity"];
+>o6["-Infinity"] : "bar"
+>o6 : { readonly Infinity: "foo"; readonly [-Infinity]: "bar"; readonly NaN: "no"; }
+>"-Infinity" : "-Infinity"
+
+o6.NaN;
+>o6.NaN : "no"
+>o6 : { readonly Infinity: "foo"; readonly [-Infinity]: "bar"; readonly NaN: "no"; }
+>NaN : "no"
+
+o6["-NaN"]; // error
+>o6["-NaN"] : any
+>o6 : { readonly Infinity: "foo"; readonly [-Infinity]: "bar"; readonly NaN: "no"; }
+>"-NaN" : "-NaN"
+
+enum Foo {
+>Foo : Foo
+
+  PositiveInfinity = 1 / 0,
+>PositiveInfinity : Foo.PositiveInfinity
+>1 / 0 : number
+>1 : 1
+>0 : 0
+
+  NegativeInfinity = 1 / -0,
+>NegativeInfinity : Foo.NegativeInfinity
+>1 / -0 : number
+>1 : 1
+>-0 : 0
+>0 : 0
+
+  Infinity = PositiveInfinity,
+>Infinity : Foo.PositiveInfinity
+>PositiveInfinity : Foo.PositiveInfinity
+
+  Zero = 1 / Infinity,
+>Zero : Foo.Zero
+>1 / Infinity : number
+>1 : 1
+>Infinity : Foo.PositiveInfinity
+
+  One,
+>One : Foo.One
+
+  NaN = (-2) ** 0.5,
+>NaN : Foo.NaN
+>(-2) ** 0.5 : number
+>(-2) : -2
+>-2 : -2
+>2 : 2
+>0.5 : 0.5
+}
+
+const e1: Infinity = Foo.PositiveInfinity;
+>e1 : Infinity
+>Foo.PositiveInfinity : Foo.PositiveInfinity
+>Foo : typeof Foo
+>PositiveInfinity : Foo.PositiveInfinity
+
+const e2: -Infinity = Foo.NegativeInfinity;
+>e2 : -Infinity
+>-Infinity : -Infinity
+>Foo.NegativeInfinity : Foo.NegativeInfinity
+>Foo : typeof Foo
+>NegativeInfinity : Foo.NegativeInfinity
+
+const e3: Infinity = Foo.Infinity;
+>e3 : Infinity
+>Foo.Infinity : Foo.PositiveInfinity
+>Foo : typeof Foo
+>Infinity : Foo.PositiveInfinity
+
+const e4: 0 = Foo.Zero;
+>e4 : 0
+>Foo.Zero : Foo.Zero
+>Foo : typeof Foo
+>Zero : Foo.Zero
+
+const e5: 1 = Foo.One;
+>e5 : 1
+>Foo.One : Foo.One
+>Foo : typeof Foo
+>One : Foo.One
+
+const e6: NaN = Foo.NaN;
+>e6 : NaN
+>Foo.NaN : Foo.NaN
+>Foo : typeof Foo
+>NaN : Foo.NaN
+
+// should be widen to number
+let v1 = Infinity;
+>v1 : number
+>Infinity : Infinity
+
+let v2 = -Infinity;
+>v2 : number
+>-Infinity : -Infinity
+>Infinity : Infinity
+
+let v3 = NaN;
+>v3 : number
+>NaN : NaN
+
+let v4 = -NaN;
+>v4 : number
+>-NaN : NaN
+>NaN : NaN
+

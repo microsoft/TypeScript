@@ -1151,6 +1151,8 @@ export function isLiteralTypeLikeExpression(node: Node): node is NullLiteral | B
     return kind === SyntaxKind.NullKeyword
         || kind === SyntaxKind.TrueKeyword
         || kind === SyntaxKind.FalseKeyword
+        || kind === SyntaxKind.InfinityKeyword
+        || kind === SyntaxKind.NaNKeyword
         || isLiteralExpression(node)
         || isPrefixUnaryExpression(node);
 }

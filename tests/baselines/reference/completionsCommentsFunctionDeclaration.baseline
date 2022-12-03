@@ -1868,7 +1868,7 @@
         {
           "name": "Infinity",
           "kind": "var",
-          "kindModifiers": "declare",
+          "kindModifiers": "",
           "sortText": "15",
           "displayParts": [
             {
@@ -1881,19 +1881,7 @@
             },
             {
               "text": "Infinity",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
+              "kind": "propertyName"
             }
           ],
           "documentation": []
@@ -2390,7 +2378,7 @@
         {
           "name": "NaN",
           "kind": "var",
-          "kindModifiers": "declare",
+          "kindModifiers": "",
           "sortText": "15",
           "displayParts": [
             {
@@ -2403,19 +2391,7 @@
             },
             {
               "text": "NaN",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
+              "kind": "propertyName"
             }
           ],
           "documentation": []
@@ -5984,7 +5960,7 @@
         {
           "name": "Infinity",
           "kind": "var",
-          "kindModifiers": "declare",
+          "kindModifiers": "",
           "sortText": "15",
           "displayParts": [
             {
@@ -5997,19 +5973,7 @@
             },
             {
               "text": "Infinity",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
+              "kind": "propertyName"
             }
           ],
           "documentation": []
@@ -6506,7 +6470,7 @@
         {
           "name": "NaN",
           "kind": "var",
-          "kindModifiers": "declare",
+          "kindModifiers": "",
           "sortText": "15",
           "displayParts": [
             {
@@ -6519,19 +6483,7 @@
             },
             {
               "text": "NaN",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
+              "kind": "propertyName"
             }
           ],
           "documentation": []
@@ -9704,7 +9656,7 @@
         {
           "name": "Infinity",
           "kind": "var",
-          "kindModifiers": "declare",
+          "kindModifiers": "",
           "sortText": "15",
           "displayParts": [
             {
@@ -9717,19 +9669,7 @@
             },
             {
               "text": "Infinity",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
+              "kind": "propertyName"
             }
           ],
           "documentation": []
@@ -10226,7 +10166,7 @@
         {
           "name": "NaN",
           "kind": "var",
-          "kindModifiers": "declare",
+          "kindModifiers": "",
           "sortText": "15",
           "displayParts": [
             {
@@ -10239,19 +10179,7 @@
             },
             {
               "text": "NaN",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
-              "kind": "keyword"
+              "kind": "propertyName"
             }
           ],
           "documentation": []

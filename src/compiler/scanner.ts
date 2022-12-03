@@ -143,6 +143,7 @@ export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
     import: SyntaxKind.ImportKeyword,
     in: SyntaxKind.InKeyword,
     infer: SyntaxKind.InferKeyword,
+    Infinity: SyntaxKind.InfinityKeyword,
     instanceof: SyntaxKind.InstanceOfKeyword,
     interface: SyntaxKind.InterfaceKeyword,
     intrinsic: SyntaxKind.IntrinsicKeyword,
@@ -151,6 +152,7 @@ export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
     let: SyntaxKind.LetKeyword,
     module: SyntaxKind.ModuleKeyword,
     namespace: SyntaxKind.NamespaceKeyword,
+    NaN: SyntaxKind.NaNKeyword,
     never: SyntaxKind.NeverKeyword,
     new: SyntaxKind.NewKeyword,
     null: SyntaxKind.NullKeyword,
@@ -1563,11 +1565,11 @@ export function createScanner(languageVersion: ScriptTarget,
     }
 
     function getIdentifierToken(): SyntaxKind.Identifier | KeywordSyntaxKind {
-        // Reserved words are between 2 and 12 characters long and start with a lowercase letter
+        // keywords (including contextual) except Infinity and NaN are between 2 and 12 characters long and start with a lowercase letter
         const len = tokenValue.length;
         if (len >= 2 && len <= 12) {
             const ch = tokenValue.charCodeAt(0);
-            if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
+            if (ch >= CharacterCodes.a && ch <= CharacterCodes.z || tokenValue === "Infinity" || tokenValue === "NaN") {
                 const keyword = textToKeyword.get(tokenValue);
                 if (keyword !== undefined) {
                     return token = keyword;

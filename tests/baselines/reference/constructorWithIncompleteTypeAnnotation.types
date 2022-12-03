@@ -175,16 +175,16 @@ module TypeScriptAllInOne {
             var inf = Number.NEGATIVE_INFINITY - 
 >inf : number
 >Number.NEGATIVE_INFINITY - : number
->Number.NEGATIVE_INFINITY : number
+>Number.NEGATIVE_INFINITY : -Infinity
 >Number : NumberConstructor
->NEGATIVE_INFINITY : number
+>NEGATIVE_INFINITY : -Infinity
 
             var nan = Number.NaN;
 > : any
->nan : number
->Number.NaN : number
+>nan : NaN
+>Number.NaN : NaN
 >Number : NumberConstructor
->NaN : number
+>NaN : NaN
 
             var undef = undefined;
 >undef : any

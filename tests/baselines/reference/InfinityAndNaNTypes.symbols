@@ -1,0 +1,338 @@
+=== tests/cases/compiler/InfinityAndNaNTypes.ts ===
+Infinity = 42; // error
+>Infinity : Symbol(Infinity)
+
+NaN = 42; // error
+>NaN : Symbol(NaN)
+
+type PositiveInfinity = Infinity;
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(InfinityAndNaNTypes.ts, 1, 9))
+
+type NegativeInfinity = -Infinity;
+>NegativeInfinity : Symbol(NegativeInfinity, Decl(InfinityAndNaNTypes.ts, 3, 33))
+
+type NotANumber = NaN | -NaN;
+>NotANumber : Symbol(NotANumber, Decl(InfinityAndNaNTypes.ts, 4, 34))
+
+type typeofInfinity = typeof Infinity;
+>typeofInfinity : Symbol(typeofInfinity, Decl(InfinityAndNaNTypes.ts, 5, 29))
+>Infinity : Symbol(Infinity)
+
+type typeofNaN = typeof NaN;
+>typeofNaN : Symbol(typeofNaN, Decl(InfinityAndNaNTypes.ts, 7, 38))
+>NaN : Symbol(NaN)
+
+type isInfinity = typeofInfinity extends PositiveInfinity ? true : false;
+>isInfinity : Symbol(isInfinity, Decl(InfinityAndNaNTypes.ts, 8, 28))
+>typeofInfinity : Symbol(typeofInfinity, Decl(InfinityAndNaNTypes.ts, 5, 29))
+>PositiveInfinity : Symbol(PositiveInfinity, Decl(InfinityAndNaNTypes.ts, 1, 9))
+
+type isNaN = NotANumber extends typeofNaN ? true : false;
+>isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --), Decl(InfinityAndNaNTypes.ts, 10, 73))
+>NotANumber : Symbol(NotANumber, Decl(InfinityAndNaNTypes.ts, 4, 34))
+>typeofNaN : Symbol(typeofNaN, Decl(InfinityAndNaNTypes.ts, 7, 38))
+
+const c1 = Infinity;
+>c1 : Symbol(c1, Decl(InfinityAndNaNTypes.ts, 13, 5))
+>Infinity : Symbol(Infinity)
+
+const c2 = -Infinity;
+>c2 : Symbol(c2, Decl(InfinityAndNaNTypes.ts, 14, 5))
+>Infinity : Symbol(Infinity)
+
+const c3 = NaN;
+>c3 : Symbol(c3, Decl(InfinityAndNaNTypes.ts, 15, 5))
+>NaN : Symbol(NaN)
+
+const c4 = -NaN;
+>c4 : Symbol(c4, Decl(InfinityAndNaNTypes.ts, 16, 5))
+>NaN : Symbol(NaN)
+
+const c5: Infinity = Infinity;
+>c5 : Symbol(c5, Decl(InfinityAndNaNTypes.ts, 17, 5))
+>Infinity : Symbol(Infinity)
+
+const c6: -Infinity = -Infinity;
+>c6 : Symbol(c6, Decl(InfinityAndNaNTypes.ts, 18, 5))
+>Infinity : Symbol(Infinity)
+
+const c7: NaN = NaN;
+>c7 : Symbol(c7, Decl(InfinityAndNaNTypes.ts, 19, 5))
+>NaN : Symbol(NaN)
+
+const c8: -NaN = -NaN;
+>c8 : Symbol(c8, Decl(InfinityAndNaNTypes.ts, 20, 5))
+>NaN : Symbol(NaN)
+
+type ExtractNumber<T extends string, U extends number = number> = T extends `${infer T extends U}` ? T : never;
+>ExtractNumber : Symbol(ExtractNumber, Decl(InfinityAndNaNTypes.ts, 20, 22))
+>T : Symbol(T, Decl(InfinityAndNaNTypes.ts, 22, 19))
+>U : Symbol(U, Decl(InfinityAndNaNTypes.ts, 22, 36))
+>T : Symbol(T, Decl(InfinityAndNaNTypes.ts, 22, 19))
+>T : Symbol(T, Decl(InfinityAndNaNTypes.ts, 22, 84))
+>U : Symbol(U, Decl(InfinityAndNaNTypes.ts, 22, 36))
+>T : Symbol(T, Decl(InfinityAndNaNTypes.ts, 22, 84))
+
+type t1 = ExtractNumber<"Infinity">; // never
+>t1 : Symbol(t1, Decl(InfinityAndNaNTypes.ts, 22, 111))
+>ExtractNumber : Symbol(ExtractNumber, Decl(InfinityAndNaNTypes.ts, 20, 22))
+
+type t2 = ExtractNumber<"-Infinity">; // never
+>t2 : Symbol(t2, Decl(InfinityAndNaNTypes.ts, 24, 36))
+>ExtractNumber : Symbol(ExtractNumber, Decl(InfinityAndNaNTypes.ts, 20, 22))
+
+type t3 = ExtractNumber<"NaN">; // never
+>t3 : Symbol(t3, Decl(InfinityAndNaNTypes.ts, 25, 37))
+>ExtractNumber : Symbol(ExtractNumber, Decl(InfinityAndNaNTypes.ts, 20, 22))
+
+type t4 = ExtractNumber<"-NaN">; // never
+>t4 : Symbol(t4, Decl(InfinityAndNaNTypes.ts, 26, 31))
+>ExtractNumber : Symbol(ExtractNumber, Decl(InfinityAndNaNTypes.ts, 20, 22))
+
+type t5 = ExtractNumber<"Infinity", Infinity>;
+>t5 : Symbol(t5, Decl(InfinityAndNaNTypes.ts, 27, 32))
+>ExtractNumber : Symbol(ExtractNumber, Decl(InfinityAndNaNTypes.ts, 20, 22))
+
+type t6 = ExtractNumber<"-Infinity", -Infinity>;
+>t6 : Symbol(t6, Decl(InfinityAndNaNTypes.ts, 28, 46))
+>ExtractNumber : Symbol(ExtractNumber, Decl(InfinityAndNaNTypes.ts, 20, 22))
+
+type t7 = ExtractNumber<"NaN", NaN>;
+>t7 : Symbol(t7, Decl(InfinityAndNaNTypes.ts, 29, 48))
+>ExtractNumber : Symbol(ExtractNumber, Decl(InfinityAndNaNTypes.ts, 20, 22))
+
+type t8 = ExtractNumber<"-NaN", -NaN>; // never
+>t8 : Symbol(t8, Decl(InfinityAndNaNTypes.ts, 30, 36))
+>ExtractNumber : Symbol(ExtractNumber, Decl(InfinityAndNaNTypes.ts, 20, 22))
+
+const o1 = { Infinity, NaN };
+>o1 : Symbol(o1, Decl(InfinityAndNaNTypes.ts, 33, 5))
+>Infinity : Symbol(Infinity, Decl(InfinityAndNaNTypes.ts, 33, 12))
+>NaN : Symbol(NaN, Decl(InfinityAndNaNTypes.ts, 33, 22))
+
+o1.Infinity;
+>o1.Infinity : Symbol(Infinity, Decl(InfinityAndNaNTypes.ts, 33, 12))
+>o1 : Symbol(o1, Decl(InfinityAndNaNTypes.ts, 33, 5))
+>Infinity : Symbol(Infinity, Decl(InfinityAndNaNTypes.ts, 33, 12))
+
+o1.NaN;
+>o1.NaN : Symbol(NaN, Decl(InfinityAndNaNTypes.ts, 33, 22))
+>o1 : Symbol(o1, Decl(InfinityAndNaNTypes.ts, 33, 5))
+>NaN : Symbol(NaN, Decl(InfinityAndNaNTypes.ts, 33, 22))
+
+o1[Infinity];
+>o1 : Symbol(o1, Decl(InfinityAndNaNTypes.ts, 33, 5))
+>Infinity : Symbol(Infinity)
+
+o1[NaN];
+>o1 : Symbol(o1, Decl(InfinityAndNaNTypes.ts, 33, 5))
+>NaN : Symbol(NaN)
+
+const o2 = { Infinity, NaN } as const;
+>o2 : Symbol(o2, Decl(InfinityAndNaNTypes.ts, 38, 5))
+>Infinity : Symbol(Infinity, Decl(InfinityAndNaNTypes.ts, 38, 12))
+>NaN : Symbol(NaN, Decl(InfinityAndNaNTypes.ts, 38, 22))
+>const : Symbol(const)
+
+o2.Infinity;
+>o2.Infinity : Symbol(Infinity, Decl(InfinityAndNaNTypes.ts, 38, 12))
+>o2 : Symbol(o2, Decl(InfinityAndNaNTypes.ts, 38, 5))
+>Infinity : Symbol(Infinity, Decl(InfinityAndNaNTypes.ts, 38, 12))
+
+o2.NaN;
+>o2.NaN : Symbol(NaN, Decl(InfinityAndNaNTypes.ts, 38, 22))
+>o2 : Symbol(o2, Decl(InfinityAndNaNTypes.ts, 38, 5))
+>NaN : Symbol(NaN, Decl(InfinityAndNaNTypes.ts, 38, 22))
+
+o2[Infinity];
+>o2 : Symbol(o2, Decl(InfinityAndNaNTypes.ts, 38, 5))
+>Infinity : Symbol(Infinity)
+
+o2[NaN];
+>o2 : Symbol(o2, Decl(InfinityAndNaNTypes.ts, 38, 5))
+>NaN : Symbol(NaN)
+
+const o3 = { Infinity: "foo", "-Infinity": "bar", NaN: "baz", "-NaN": "no" };
+>o3 : Symbol(o3, Decl(InfinityAndNaNTypes.ts, 43, 5))
+>Infinity : Symbol(Infinity, Decl(InfinityAndNaNTypes.ts, 43, 12))
+>"-Infinity" : Symbol("-Infinity", Decl(InfinityAndNaNTypes.ts, 43, 29))
+>NaN : Symbol(NaN, Decl(InfinityAndNaNTypes.ts, 43, 49))
+>"-NaN" : Symbol("-NaN", Decl(InfinityAndNaNTypes.ts, 43, 61))
+
+o3.Infinity;
+>o3.Infinity : Symbol(Infinity, Decl(InfinityAndNaNTypes.ts, 43, 12))
+>o3 : Symbol(o3, Decl(InfinityAndNaNTypes.ts, 43, 5))
+>Infinity : Symbol(Infinity, Decl(InfinityAndNaNTypes.ts, 43, 12))
+
+o3[-Infinity];
+>o3 : Symbol(o3, Decl(InfinityAndNaNTypes.ts, 43, 5))
+>Infinity : Symbol(Infinity)
+
+o3.NaN;
+>o3.NaN : Symbol(NaN, Decl(InfinityAndNaNTypes.ts, 43, 49))
+>o3 : Symbol(o3, Decl(InfinityAndNaNTypes.ts, 43, 5))
+>NaN : Symbol(NaN, Decl(InfinityAndNaNTypes.ts, 43, 49))
+
+o3[-NaN];
+>o3 : Symbol(o3, Decl(InfinityAndNaNTypes.ts, 43, 5))
+>NaN : Symbol(NaN)
+
+const o4 = { Infinity: "foo", "-Infinity": "bar", NaN: "baz", "-NaN": "no" } as const;
+>o4 : Symbol(o4, Decl(InfinityAndNaNTypes.ts, 48, 5))
+>Infinity : Symbol(Infinity, Decl(InfinityAndNaNTypes.ts, 48, 12))
+>"-Infinity" : Symbol("-Infinity", Decl(InfinityAndNaNTypes.ts, 48, 29))
+>NaN : Symbol(NaN, Decl(InfinityAndNaNTypes.ts, 48, 49))
+>"-NaN" : Symbol("-NaN", Decl(InfinityAndNaNTypes.ts, 48, 61))
+>const : Symbol(const)
+
+o4[Infinity];
+>o4 : Symbol(o4, Decl(InfinityAndNaNTypes.ts, 48, 5))
+>Infinity : Symbol(Infinity)
+
+o4[-Infinity];
+>o4 : Symbol(o4, Decl(InfinityAndNaNTypes.ts, 48, 5))
+>Infinity : Symbol(Infinity)
+
+o4[NaN];
+>o4 : Symbol(o4, Decl(InfinityAndNaNTypes.ts, 48, 5))
+>NaN : Symbol(NaN)
+
+o4[-NaN]; // baz
+>o4 : Symbol(o4, Decl(InfinityAndNaNTypes.ts, 48, 5))
+>NaN : Symbol(NaN)
+
+const o5 = { [Infinity]: "foo", [-Infinity]: "bar", [NaN]: "baz", [-NaN]: "no" };
+>o5 : Symbol(o5, Decl(InfinityAndNaNTypes.ts, 53, 5))
+>[Infinity] : Symbol([Infinity], Decl(InfinityAndNaNTypes.ts, 53, 12))
+>Infinity : Symbol(Infinity)
+>[-Infinity] : Symbol([-Infinity], Decl(InfinityAndNaNTypes.ts, 53, 31))
+>Infinity : Symbol(Infinity)
+>[NaN] : Symbol([NaN], Decl(InfinityAndNaNTypes.ts, 53, 51))
+>NaN : Symbol(NaN)
+>[-NaN] : Symbol([-NaN], Decl(InfinityAndNaNTypes.ts, 53, 65))
+>NaN : Symbol(NaN)
+
+o5.Infinity;
+>o5.Infinity : Symbol([Infinity], Decl(InfinityAndNaNTypes.ts, 53, 12))
+>o5 : Symbol(o5, Decl(InfinityAndNaNTypes.ts, 53, 5))
+>Infinity : Symbol([Infinity], Decl(InfinityAndNaNTypes.ts, 53, 12))
+
+o5[-Infinity];
+>o5 : Symbol(o5, Decl(InfinityAndNaNTypes.ts, 53, 5))
+>Infinity : Symbol(Infinity)
+
+o5.NaN;
+>o5.NaN : Symbol([-NaN], Decl(InfinityAndNaNTypes.ts, 53, 65))
+>o5 : Symbol(o5, Decl(InfinityAndNaNTypes.ts, 53, 5))
+>NaN : Symbol([-NaN], Decl(InfinityAndNaNTypes.ts, 53, 65))
+
+o5[-NaN];
+>o5 : Symbol(o5, Decl(InfinityAndNaNTypes.ts, 53, 5))
+>NaN : Symbol(NaN)
+
+const o6 = { [Infinity]: "foo", [-Infinity]: "bar", [NaN]: "baz", [-NaN]: "no" } as const;
+>o6 : Symbol(o6, Decl(InfinityAndNaNTypes.ts, 58, 5))
+>[Infinity] : Symbol([Infinity], Decl(InfinityAndNaNTypes.ts, 58, 12))
+>Infinity : Symbol(Infinity)
+>[-Infinity] : Symbol([-Infinity], Decl(InfinityAndNaNTypes.ts, 58, 31))
+>Infinity : Symbol(Infinity)
+>[NaN] : Symbol([NaN], Decl(InfinityAndNaNTypes.ts, 58, 51))
+>NaN : Symbol(NaN)
+>[-NaN] : Symbol([-NaN], Decl(InfinityAndNaNTypes.ts, 58, 65))
+>NaN : Symbol(NaN)
+>const : Symbol(const)
+
+o6.Infinity;
+>o6.Infinity : Symbol([Infinity], Decl(InfinityAndNaNTypes.ts, 58, 12))
+>o6 : Symbol(o6, Decl(InfinityAndNaNTypes.ts, 58, 5))
+>Infinity : Symbol([Infinity], Decl(InfinityAndNaNTypes.ts, 58, 12))
+
+o6["-Infinity"];
+>o6 : Symbol(o6, Decl(InfinityAndNaNTypes.ts, 58, 5))
+>"-Infinity" : Symbol([-Infinity], Decl(InfinityAndNaNTypes.ts, 58, 31))
+
+o6.NaN;
+>o6.NaN : Symbol([-NaN], Decl(InfinityAndNaNTypes.ts, 58, 65))
+>o6 : Symbol(o6, Decl(InfinityAndNaNTypes.ts, 58, 5))
+>NaN : Symbol([-NaN], Decl(InfinityAndNaNTypes.ts, 58, 65))
+
+o6["-NaN"]; // error
+>o6 : Symbol(o6, Decl(InfinityAndNaNTypes.ts, 58, 5))
+
+enum Foo {
+>Foo : Symbol(Foo, Decl(InfinityAndNaNTypes.ts, 62, 11))
+
+  PositiveInfinity = 1 / 0,
+>PositiveInfinity : Symbol(Foo.PositiveInfinity, Decl(InfinityAndNaNTypes.ts, 64, 10))
+
+  NegativeInfinity = 1 / -0,
+>NegativeInfinity : Symbol(Foo.NegativeInfinity, Decl(InfinityAndNaNTypes.ts, 65, 27))
+
+  Infinity = PositiveInfinity,
+>Infinity : Symbol(Foo.Infinity, Decl(InfinityAndNaNTypes.ts, 66, 28))
+>PositiveInfinity : Symbol(Foo.PositiveInfinity, Decl(InfinityAndNaNTypes.ts, 64, 10))
+
+  Zero = 1 / Infinity,
+>Zero : Symbol(Foo.Zero, Decl(InfinityAndNaNTypes.ts, 67, 30))
+>Infinity : Symbol(Foo.Infinity, Decl(InfinityAndNaNTypes.ts, 66, 28))
+
+  One,
+>One : Symbol(Foo.One, Decl(InfinityAndNaNTypes.ts, 68, 22))
+
+  NaN = (-2) ** 0.5,
+>NaN : Symbol(Foo.NaN, Decl(InfinityAndNaNTypes.ts, 69, 6))
+}
+
+const e1: Infinity = Foo.PositiveInfinity;
+>e1 : Symbol(e1, Decl(InfinityAndNaNTypes.ts, 73, 5))
+>Foo.PositiveInfinity : Symbol(Foo.PositiveInfinity, Decl(InfinityAndNaNTypes.ts, 64, 10))
+>Foo : Symbol(Foo, Decl(InfinityAndNaNTypes.ts, 62, 11))
+>PositiveInfinity : Symbol(Foo.PositiveInfinity, Decl(InfinityAndNaNTypes.ts, 64, 10))
+
+const e2: -Infinity = Foo.NegativeInfinity;
+>e2 : Symbol(e2, Decl(InfinityAndNaNTypes.ts, 74, 5))
+>Foo.NegativeInfinity : Symbol(Foo.NegativeInfinity, Decl(InfinityAndNaNTypes.ts, 65, 27))
+>Foo : Symbol(Foo, Decl(InfinityAndNaNTypes.ts, 62, 11))
+>NegativeInfinity : Symbol(Foo.NegativeInfinity, Decl(InfinityAndNaNTypes.ts, 65, 27))
+
+const e3: Infinity = Foo.Infinity;
+>e3 : Symbol(e3, Decl(InfinityAndNaNTypes.ts, 75, 5))
+>Foo.Infinity : Symbol(Foo.Infinity, Decl(InfinityAndNaNTypes.ts, 66, 28))
+>Foo : Symbol(Foo, Decl(InfinityAndNaNTypes.ts, 62, 11))
+>Infinity : Symbol(Foo.Infinity, Decl(InfinityAndNaNTypes.ts, 66, 28))
+
+const e4: 0 = Foo.Zero;
+>e4 : Symbol(e4, Decl(InfinityAndNaNTypes.ts, 76, 5))
+>Foo.Zero : Symbol(Foo.Zero, Decl(InfinityAndNaNTypes.ts, 67, 30))
+>Foo : Symbol(Foo, Decl(InfinityAndNaNTypes.ts, 62, 11))
+>Zero : Symbol(Foo.Zero, Decl(InfinityAndNaNTypes.ts, 67, 30))
+
+const e5: 1 = Foo.One;
+>e5 : Symbol(e5, Decl(InfinityAndNaNTypes.ts, 77, 5))
+>Foo.One : Symbol(Foo.One, Decl(InfinityAndNaNTypes.ts, 68, 22))
+>Foo : Symbol(Foo, Decl(InfinityAndNaNTypes.ts, 62, 11))
+>One : Symbol(Foo.One, Decl(InfinityAndNaNTypes.ts, 68, 22))
+
+const e6: NaN = Foo.NaN;
+>e6 : Symbol(e6, Decl(InfinityAndNaNTypes.ts, 78, 5))
+>Foo.NaN : Symbol(Foo.NaN, Decl(InfinityAndNaNTypes.ts, 69, 6))
+>Foo : Symbol(Foo, Decl(InfinityAndNaNTypes.ts, 62, 11))
+>NaN : Symbol(Foo.NaN, Decl(InfinityAndNaNTypes.ts, 69, 6))
+
+// should be widen to number
+let v1 = Infinity;
+>v1 : Symbol(v1, Decl(InfinityAndNaNTypes.ts, 81, 3))
+>Infinity : Symbol(Infinity)
+
+let v2 = -Infinity;
+>v2 : Symbol(v2, Decl(InfinityAndNaNTypes.ts, 82, 3))
+>Infinity : Symbol(Infinity)
+
+let v3 = NaN;
+>v3 : Symbol(v3, Decl(InfinityAndNaNTypes.ts, 83, 3))
+>NaN : Symbol(NaN)
+
+let v4 = -NaN;
+>v4 : Symbol(v4, Decl(InfinityAndNaNTypes.ts, 84, 3))
+>NaN : Symbol(NaN)
+

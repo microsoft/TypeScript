@@ -1,0 +1,61 @@
+=== tests/cases/compiler/foo.ts ===
+export const Infinity = "NaN";
+>Infinity : Symbol(Infinity, Decl(foo.ts, 0, 12))
+
+export const NaN = "undefined";
+>NaN : Symbol(NaN, Decl(foo.ts, 1, 12))
+
+export const undefined = "Infinity";
+>undefined : Symbol(undefined, Decl(foo.ts, 2, 12))
+
+=== tests/cases/compiler/bar.ts ===
+import { Infinity, NaN, undefined } from "./foo";
+>Infinity : Symbol(Infinity, Decl(bar.ts, 0, 8))
+>NaN : Symbol(NaN, Decl(bar.ts, 0, 18))
+>undefined : Symbol(undefined, Decl(bar.ts, 0, 23))
+
+import * as foo from "./foo";
+>foo : Symbol(foo, Decl(bar.ts, 1, 6))
+
+Infinity;
+>Infinity : Symbol(Infinity, Decl(bar.ts, 0, 8))
+
+NaN;
+>NaN : Symbol(NaN, Decl(bar.ts, 0, 18))
+
+-Infinity;
+>Infinity : Symbol(Infinity, Decl(bar.ts, 0, 8))
+
+-NaN;
+>NaN : Symbol(NaN, Decl(bar.ts, 0, 18))
+
+foo.Infinity;
+>foo.Infinity : Symbol(Infinity, Decl(foo.ts, 0, 12))
+>foo : Symbol(foo, Decl(bar.ts, 1, 6))
+>Infinity : Symbol(Infinity, Decl(foo.ts, 0, 12))
+
+foo.NaN;
+>foo.NaN : Symbol(NaN, Decl(foo.ts, 1, 12))
+>foo : Symbol(foo, Decl(bar.ts, 1, 6))
+>NaN : Symbol(NaN, Decl(foo.ts, 1, 12))
+
+foo[Infinity];
+>foo : Symbol(foo, Decl(bar.ts, 1, 6))
+>Infinity : Symbol(Infinity, Decl(bar.ts, 0, 8))
+
+foo[NaN];
+>foo : Symbol(foo, Decl(bar.ts, 1, 6))
+>NaN : Symbol(NaN, Decl(bar.ts, 0, 18))
+
+undefined;
+>undefined : Symbol(undefined, Decl(bar.ts, 0, 23))
+
+foo.undefined;
+>foo.undefined : Symbol(undefined, Decl(foo.ts, 2, 12))
+>foo : Symbol(foo, Decl(bar.ts, 1, 6))
+>undefined : Symbol(undefined, Decl(foo.ts, 2, 12))
+
+foo[undefined];
+>foo : Symbol(foo, Decl(bar.ts, 1, 6))
+>undefined : Symbol(undefined, Decl(bar.ts, 0, 23))
+

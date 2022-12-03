@@ -1,0 +1,69 @@
+=== tests/cases/compiler/foo.ts ===
+export const Infinity = "NaN";
+>Infinity : "NaN"
+>"NaN" : "NaN"
+
+export const NaN = "undefined";
+>NaN : "undefined"
+>"undefined" : "undefined"
+
+export const undefined = "Infinity";
+>undefined : "Infinity"
+>"Infinity" : "Infinity"
+
+=== tests/cases/compiler/bar.ts ===
+import { Infinity, NaN, undefined } from "./foo";
+>Infinity : "NaN"
+>NaN : "undefined"
+>undefined : "Infinity"
+
+import * as foo from "./foo";
+>foo : typeof foo
+
+Infinity;
+>Infinity : "NaN"
+
+NaN;
+>NaN : "undefined"
+
+-Infinity;
+>-Infinity : number
+>Infinity : "NaN"
+
+-NaN;
+>-NaN : number
+>NaN : "undefined"
+
+foo.Infinity;
+>foo.Infinity : "NaN"
+>foo : typeof foo
+>Infinity : "NaN"
+
+foo.NaN;
+>foo.NaN : "undefined"
+>foo : typeof foo
+>NaN : "undefined"
+
+foo[Infinity];
+>foo[Infinity] : "undefined"
+>foo : typeof foo
+>Infinity : "NaN"
+
+foo[NaN];
+>foo[NaN] : "Infinity"
+>foo : typeof foo
+>NaN : "undefined"
+
+undefined;
+>undefined : "Infinity"
+
+foo.undefined;
+>foo.undefined : "Infinity"
+>foo : typeof foo
+>undefined : "Infinity"
+
+foo[undefined];
+>foo[undefined] : "NaN"
+>foo : typeof foo
+>undefined : "Infinity"
+

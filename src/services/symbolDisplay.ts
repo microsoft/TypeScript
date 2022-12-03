@@ -144,7 +144,7 @@ function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeCheck
         return ScriptElementKind.memberFunctionElement;
     }
 
-    if (typeChecker.isUndefinedSymbol(symbol)) {
+    if (typeChecker.isUndefinedSymbol(symbol) || typeChecker.isInfinitySymbol(symbol) || typeChecker.isNaNSymbol(symbol)) {
         return ScriptElementKind.variableElement;
     }
     if (typeChecker.isArgumentsSymbol(symbol)) {

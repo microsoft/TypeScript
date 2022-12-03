@@ -2055,6 +2055,8 @@ export function getPossibleTypeArgumentsInfo(tokenIn: Node | undefined, sourceFi
             case SyntaxKind.BigIntLiteral:
             case SyntaxKind.TrueKeyword:
             case SyntaxKind.FalseKeyword:
+            case SyntaxKind.InfinityKeyword:
+            case SyntaxKind.NaNKeyword:
             // falls through
 
             case SyntaxKind.TypeOfKeyword:

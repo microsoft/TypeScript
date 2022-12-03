@@ -1,0 +1,66 @@
+=== tests/cases/compiler/foo.ts ===
+export type Foo = 42;
+>Foo : 42
+
+export type Bar = "no";
+>Bar : "no"
+
+export type Baz = true;
+>Baz : true
+>true : true
+
+export const Foo = 42;
+>Foo : 42
+>42 : 42
+
+export const Bar = "no";
+>Bar : "no"
+>"no" : "no"
+
+export const Baz = true;
+>Baz : true
+>true : true
+
+=== tests/cases/compiler/bar.ts ===
+import { Foo as Infinity, Bar as NaN, Baz as undefined } from "./foo";
+>Foo : 42
+>Infinity : 42
+>Bar : "no"
+>NaN : "no"
+>Baz : true
+>undefined : true
+
+Infinity;
+>Infinity : 42
+
+NaN;
+>NaN : "no"
+
+-Infinity;
+>-Infinity : number
+>Infinity : 42
+
+-NaN;
+>-NaN : number
+>NaN : "no"
+
+undefined;
+>undefined : true
+
+type t1 = Infinity;
+>t1 : Infinity
+
+type t2 = NaN;
+>t2 : NaN
+
+type t3 = -Infinity;
+>t3 : -Infinity
+>-Infinity : -Infinity
+
+type t4 = -NaN;
+>t4 : NaN
+>-NaN : NaN
+
+type t5 = undefined;
+>t5 : undefined
+

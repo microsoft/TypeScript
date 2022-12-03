@@ -2203,6 +2203,11 @@ export function equateValues<T>(a: T, b: T) {
     return a === b;
 }
 
+/** @internal */
+export function sameValueZero<T>(a: T, b: T) {
+    return a === b || typeof a === "number" && typeof b === "number" && isNaN(a) && isNaN(b);
+}
+
 /**
  * Compare the equality of two strings using a case-sensitive ordinal comparison.
  *

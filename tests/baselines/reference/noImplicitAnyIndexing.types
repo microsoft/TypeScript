@@ -98,7 +98,7 @@ var m: MyMap<number> = {
 
     "Okay that's enough for today.": NaN
 >"Okay that's enough for today." : number
->NaN : number
+>NaN : NaN
 
 };
 

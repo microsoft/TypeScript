@@ -2221,6 +2221,8 @@ export function createLanguageService(
             case SyntaxKind.StringLiteral:
             case SyntaxKind.FalseKeyword:
             case SyntaxKind.TrueKeyword:
+            case SyntaxKind.InfinityKeyword:
+            case SyntaxKind.NaNKeyword:
             case SyntaxKind.NullKeyword:
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.ThisKeyword:

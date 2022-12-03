@@ -49,7 +49,7 @@ var v4 = {a: true, b: NaN};  // Should shadow global v2 in this module
 >a : boolean
 >true : true
 >b : number
->NaN : number
+>NaN : NaN
 
 === tests/cases/conformance/externalModules/file5.ts ===
 var x = v2; // Should be global v2 of type number again

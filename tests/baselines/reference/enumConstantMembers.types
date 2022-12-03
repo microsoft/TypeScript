@@ -78,16 +78,16 @@ enum E5 {
 
     e = NaN,
 >e : E5.d
->NaN : number
+>NaN : NaN
 
     f = Infinity,
 >f : E5.a
->Infinity : number
+>Infinity : Infinity
 
     g = -Infinity
 >g : E5.g
->-Infinity : number
->Infinity : number
+>-Infinity : -Infinity
+>Infinity : Infinity
 }
 
 const enum E6 {
@@ -119,15 +119,15 @@ const enum E6 {
 
     e = NaN,
 >e : E6.d
->NaN : number
+>NaN : NaN
 
     f = Infinity,
 >f : E6.a
->Infinity : number
+>Infinity : Infinity
 
     g = -Infinity
 >g : E6.g
->-Infinity : number
->Infinity : number
+>-Infinity : -Infinity
+>Infinity : Infinity
 }
 

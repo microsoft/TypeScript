@@ -4,74 +4,74 @@ declare const x: number;
 
 if (x === NaN) {}
 >x : Symbol(x, Decl(nanEquality.ts, 0, 13))
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
 
 if (NaN === x) {}
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
 >x : Symbol(x, Decl(nanEquality.ts, 0, 13))
 
 if (x == NaN) {}
 >x : Symbol(x, Decl(nanEquality.ts, 0, 13))
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
 
 if (NaN == x) {}
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
 >x : Symbol(x, Decl(nanEquality.ts, 0, 13))
 
 if (x !== NaN) {}
 >x : Symbol(x, Decl(nanEquality.ts, 0, 13))
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
 
 if (NaN !== x) {}
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
 >x : Symbol(x, Decl(nanEquality.ts, 0, 13))
 
 if (x != NaN) {}
 >x : Symbol(x, Decl(nanEquality.ts, 0, 13))
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
 
 if (NaN != x) {}
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
 >x : Symbol(x, Decl(nanEquality.ts, 0, 13))
 
 if (x === ((NaN))) {}
 >x : Symbol(x, Decl(nanEquality.ts, 0, 13))
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
 
 if (((NaN)) === x) {}
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
 >x : Symbol(x, Decl(nanEquality.ts, 0, 13))
 
 if (x !== ((NaN))) {}
 >x : Symbol(x, Decl(nanEquality.ts, 0, 13))
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
 
 if (((NaN)) !== x) {}
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
 >x : Symbol(x, Decl(nanEquality.ts, 0, 13))
 
 if (NaN === NaN) {}
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
+>NaN : Symbol(NaN)
 
 if (NaN !== NaN) {}
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
+>NaN : Symbol(NaN)
 
 if (NaN == NaN) {}
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
+>NaN : Symbol(NaN)
 
 if (NaN != NaN) {}
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
+>NaN : Symbol(NaN)
 
 // ...
 declare let y: any;
 >y : Symbol(y, Decl(nanEquality.ts, 27, 11))
 
 if (NaN === y[0][1]) {}
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN)
 >y : Symbol(y, Decl(nanEquality.ts, 27, 11))
 
 function t1(value: number, NaN: number) {

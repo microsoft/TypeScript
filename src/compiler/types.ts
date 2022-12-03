@@ -189,6 +189,7 @@ export const enum SyntaxKind {
     DeclareKeyword,
     GetKeyword,
     InferKeyword,
+    InfinityKeyword,
     IntrinsicKeyword,
     IsKeyword,
     KeyOfKeyword,
@@ -198,6 +199,7 @@ export const enum SyntaxKind {
     OutKeyword,
     ReadonlyKeyword,
     RequireKeyword,
+    NaNKeyword,
     NumberKeyword,
     ObjectKeyword,
     SatisfiesKeyword,
@@ -605,6 +607,7 @@ export type KeywordSyntaxKind =
     | SyntaxKind.ImplementsKeyword
     | SyntaxKind.ImportKeyword
     | SyntaxKind.InferKeyword
+    | SyntaxKind.InfinityKeyword
     | SyntaxKind.InKeyword
     | SyntaxKind.InstanceOfKeyword
     | SyntaxKind.InterfaceKeyword
@@ -617,6 +620,7 @@ export type KeywordSyntaxKind =
     | SyntaxKind.NeverKeyword
     | SyntaxKind.NewKeyword
     | SyntaxKind.NullKeyword
+    | SyntaxKind.NaNKeyword
     | SyntaxKind.NumberKeyword
     | SyntaxKind.ObjectKeyword
     | SyntaxKind.OfKeyword
@@ -674,8 +678,10 @@ export type KeywordTypeSyntaxKind =
     | SyntaxKind.AnyKeyword
     | SyntaxKind.BigIntKeyword
     | SyntaxKind.BooleanKeyword
+    | SyntaxKind.InfinityKeyword
     | SyntaxKind.IntrinsicKeyword
     | SyntaxKind.NeverKeyword
+    | SyntaxKind.NaNKeyword
     | SyntaxKind.NumberKeyword
     | SyntaxKind.ObjectKeyword
     | SyntaxKind.StringKeyword
@@ -2094,6 +2100,16 @@ export interface LiteralTypeNode extends TypeNode {
     readonly kind: SyntaxKind.LiteralType;
     readonly literal: NullLiteral | BooleanLiteral | LiteralExpression | PrefixUnaryExpression;
 }
+
+export interface InfinityExpression extends LiteralExpression {
+    readonly kind: SyntaxKind.InfinityKeyword;
+}
+
+export interface NaNExpression extends LiteralExpression {
+    readonly kind: SyntaxKind.NaNKeyword;
+}
+
+export type InfinityOrNaNExpression = InfinityExpression | NaNExpression;
 
 export interface StringLiteral extends LiteralExpression, Declaration {
     readonly kind: SyntaxKind.StringLiteral;
@@ -4781,6 +4797,8 @@ export interface TypeChecker {
     isUndefinedSymbol(symbol: Symbol): boolean;
     isArgumentsSymbol(symbol: Symbol): boolean;
     isUnknownSymbol(symbol: Symbol): boolean;
+    isInfinitySymbol(symbol: Symbol): boolean;
+    isNaNSymbol(symbol: Symbol): boolean;
     /** @internal */ getMergedSymbol(symbol: Symbol): Symbol;
 
     getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
@@ -7836,6 +7854,8 @@ export interface NodeFactory {
     createToken(token: SyntaxKind.NullKeyword): NullLiteral;
     createToken(token: SyntaxKind.TrueKeyword): TrueLiteral;
     createToken(token: SyntaxKind.FalseKeyword): FalseLiteral;
+    createToken(token: SyntaxKind.InfinityKeyword): InfinityExpression;
+    createToken(token: SyntaxKind.NaNKeyword): NaNExpression;
     createToken<TKind extends PunctuationSyntaxKind>(token: TKind): PunctuationToken<TKind>;
     createToken<TKind extends KeywordTypeSyntaxKind>(token: TKind): KeywordTypeNode<TKind>;
     createToken<TKind extends ModifierSyntaxKind>(token: TKind): ModifierToken<TKind>;

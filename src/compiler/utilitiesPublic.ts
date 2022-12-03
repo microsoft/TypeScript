@@ -1877,6 +1877,8 @@ function isLeftHandSideExpressionKind(kind: SyntaxKind): boolean {
         case SyntaxKind.ThisKeyword:
         case SyntaxKind.TrueKeyword:
         case SyntaxKind.SuperKeyword:
+        case SyntaxKind.InfinityKeyword:
+        case SyntaxKind.NaNKeyword:
         case SyntaxKind.NonNullExpression:
         case SyntaxKind.ExpressionWithTypeArguments:
         case SyntaxKind.MetaProperty:
