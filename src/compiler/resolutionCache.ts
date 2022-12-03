@@ -47,7 +47,6 @@ import {
     isString,
     isStringLiteralLike,
     isTraceEnabled,
-    length,
     loadModuleFromGlobalCache,
     memoize,
     MinimalResolutionCacheHost,
@@ -80,7 +79,6 @@ import {
     stringContains,
     trace,
     TypeReferenceDirectiveResolutionInfo,
-    unorderedRemoveItem,
     WatchDirectoryFlags,
 } from "./_namespaces/ts";
 
@@ -138,7 +136,7 @@ export interface ResolutionWithFailedLookupLocations {
     isInvalidated?: boolean;
     refCount?: number;
     // Files that have this resolution using
-    files?: Path[];
+    files?: Set<Path>;
 }
 
 interface ResolutionWithResolvedFileName {
@@ -270,9 +268,9 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     let filesWithInvalidatedNonRelativeUnresolvedImports: ReadonlyMap<Path, readonly string[]> | undefined;
     const nonRelativeExternalModuleResolutions = createMultiMap<ResolutionWithFailedLookupLocations>();
 
-    const resolutionsWithFailedLookups: ResolutionWithFailedLookupLocations[] = [];
-    const resolutionsWithOnlyAffectingLocations: ResolutionWithFailedLookupLocations[] = [];
-    const resolvedFileToResolution = createMultiMap<ResolutionWithFailedLookupLocations>();
+    const resolutionsWithFailedLookups = new Set<ResolutionWithFailedLookupLocations>();
+    const resolutionsWithOnlyAffectingLocations = new Set<ResolutionWithFailedLookupLocations>();
+    const resolvedFileToResolution = new Map<string, Set<ResolutionWithFailedLookupLocations>>();
     const impliedFormatPackageJsons = new Map<Path, readonly string[]>();
 
     let hasChangedAutomaticTypeDirectiveNames = false;
@@ -369,8 +367,8 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         resolvedModuleNames.clear();
         resolvedTypeReferenceDirectives.clear();
         resolvedFileToResolution.clear();
-        resolutionsWithFailedLookups.length = 0;
-        resolutionsWithOnlyAffectingLocations.length = 0;
+        resolutionsWithFailedLookups.clear();
+        resolutionsWithOnlyAffectingLocations.clear();
         failedLookupChecks = undefined;
         startsWithPathChecks = undefined;
         isInDirectoryChecks = undefined;
@@ -778,7 +776,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         }
         else {
             resolution.refCount = 1;
-            Debug.assert(length(resolution.files) === 0); // This resolution shouldnt be referenced by any file yet
+            Debug.assert(!resolution.files?.size); // This resolution shouldnt be referenced by any file yet
             if (isExternalModuleNameRelative(name)) {
                 watchFailedLookupLocationOfResolution(resolution);
             }
@@ -787,10 +785,13 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             }
             const resolved = getResolutionWithResolvedFileName(resolution);
             if (resolved && resolved.resolvedFileName) {
-                resolvedFileToResolution.add(resolutionHost.toPath(resolved.resolvedFileName), resolution);
+                const key = resolutionHost.toPath(resolved.resolvedFileName);
+                let resolutions = resolvedFileToResolution.get(key);
+                if (!resolutions) resolvedFileToResolution.set(key, resolutions = new Set());
+                resolutions.add(resolution);
             }
         }
-        (resolution.files || (resolution.files = [])).push(filePath);
+        (resolution.files ??= new Set()).add(filePath);
     }
 
     function watchFailedLookupLocationOfResolution(resolution: ResolutionWithFailedLookupLocations) {
@@ -798,7 +799,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
 
         const { failedLookupLocations, affectingLocations } = resolution;
         if (!failedLookupLocations.length && !affectingLocations.length) return;
-        if (failedLookupLocations.length) resolutionsWithFailedLookups.push(resolution);
+        if (failedLookupLocations.length) resolutionsWithFailedLookups.add(resolution);
 
         let setAtRoot = false;
         for (const failedLookupLocation of failedLookupLocations) {
@@ -833,7 +834,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         Debug.assert(!!resolution.refCount);
         const { affectingLocations } = resolution;
         if (!affectingLocations.length) return;
-        if (addToResolutionsWithOnlyAffectingLocations) resolutionsWithOnlyAffectingLocations.push(resolution);
+        if (addToResolutionsWithOnlyAffectingLocations) resolutionsWithOnlyAffectingLocations.add(resolution);
         // Watch package json
         for (const affectingLocation of affectingLocations) {
             createFileWatcherOfAffectingLocation(affectingLocation, /*forResolution*/ true);
@@ -919,18 +920,20 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         filePath: Path,
         getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
     ) {
-        unorderedRemoveItem(Debug.checkDefined(resolution.files), filePath);
+        Debug.checkDefined(resolution.files).delete(filePath);
         resolution.refCount!--;
         if (resolution.refCount) {
             return;
         }
         const resolved = getResolutionWithResolvedFileName(resolution);
         if (resolved && resolved.resolvedFileName) {
-            resolvedFileToResolution.remove(resolutionHost.toPath(resolved.resolvedFileName), resolution);
+            const key = resolutionHost.toPath(resolved.resolvedFileName);
+            const resolutions = resolvedFileToResolution.get(key);
+            if (resolutions?.delete(resolution) && !resolutions.size) resolvedFileToResolution.delete(key);
         }
 
         const { failedLookupLocations, affectingLocations } = resolution;
-        if (unorderedRemoveItem(resolutionsWithFailedLookups, resolution)) {
+        if (resolutionsWithFailedLookups.delete(resolution)) {
             let removeAtRoot = false;
             for (const failedLookupLocation of failedLookupLocations) {
                 const failedLookupLocationPath = resolutionHost.toPath(failedLookupLocation);
@@ -961,7 +964,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
             }
         }
         else if (affectingLocations.length) {
-            unorderedRemoveItem(resolutionsWithOnlyAffectingLocations, resolution);
+            resolutionsWithOnlyAffectingLocations.delete(resolution);
         }
 
         for (const affectingLocation of affectingLocations) {
@@ -1020,18 +1023,18 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         removeResolutionsOfFileFromCache(resolvedTypeReferenceDirectives, filePath, getResolvedTypeReferenceDirective);
     }
 
-    function invalidateResolutions(resolutions: ResolutionWithFailedLookupLocations[] | undefined, canInvalidate: (resolution: ResolutionWithFailedLookupLocations) => boolean) {
+    function invalidateResolutions(resolutions: Set<ResolutionWithFailedLookupLocations> | undefined, canInvalidate: (resolution: ResolutionWithFailedLookupLocations) => boolean) {
         if (!resolutions) return false;
         let invalidated = false;
-        for (const resolution of resolutions) {
-            if (resolution.isInvalidated || !canInvalidate(resolution)) continue;
+        resolutions.forEach(resolution => {
+            if (resolution.isInvalidated || !canInvalidate(resolution)) return;
             resolution.isInvalidated = invalidated = true;
             for (const containingFilePath of Debug.checkDefined(resolution.files)) {
                 (filesWithInvalidatedResolutions ??= new Set()).add(containingFilePath);
                 // When its a file with inferred types resolution, invalidate type reference directive resolution
                 hasChangedAutomaticTypeDirectiveNames = hasChangedAutomaticTypeDirectiveNames || endsWith(containingFilePath, inferredTypesContainingFile);
             }
-        }
+        });
         return invalidated;
     }
 
