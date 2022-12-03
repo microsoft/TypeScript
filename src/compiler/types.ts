@@ -6701,7 +6701,7 @@ export interface CompilerOptions {
     /** @internal */generateCpuProfile?: string;
     /** @internal */generateTrace?: string;
     /** @internal */help?: boolean;
-    ignoreDeprecations?: DeprecationPhase;
+    ignoreDeprecations?: DeprecationVersion;
     importHelpers?: boolean;
     importsNotUsedAsValues?: ImportsNotUsedAsValues;
     /** @internal */init?: boolean;
@@ -9443,15 +9443,11 @@ export interface Queue<T> {
     isEmpty(): boolean;
 }
 
-export const enum DeprecationPhase {
-    Phase1 = 1,
-    Phase2 = 2,
-    Phase3 = 3,
-}
-
 /** @internal */
-export const DeprecationPhaseToVersionMap = {
-    [DeprecationPhase.Phase1]: "5.0",
-    [DeprecationPhase.Phase2]: "5.5",
-    [DeprecationPhase.Phase3]: "6.0",
-};
+export const enum DeprecationVersion {
+    /* eslint-disable @typescript-eslint/naming-convention */
+    v5_0 = 1,
+    v5_5 = 2,
+    v6_0 = 3,
+    /* eslint-enable @typescript-eslint/naming-convention */
+}

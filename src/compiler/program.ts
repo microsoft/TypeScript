@@ -53,8 +53,7 @@ import {
     CustomTransformers,
     Debug,
     DeclarationWithTypeParameterChildren,
-    DeprecationPhase,
-    DeprecationPhaseToVersionMap,
+    DeprecationVersion,
     Diagnostic,
     DiagnosticCategory,
     diagnosticCategoryName,
@@ -163,10 +162,12 @@ import {
     HeritageClause,
     Identifier,
     identity,
+    ignoreDeprecationsMap,
     ImportClause,
     ImportDeclaration,
     ImportOrExportSpecifier,
     InputFiles,
+    inverseIgnoreDeprecationsMap,
     inverseJsxOptionMap,
     isAmbientModule,
     isAnyImportOrReExport,
@@ -310,7 +311,6 @@ import {
     UnparsedSource,
     VariableDeclaration,
     VariableStatement,
-    Version,
     versionMajorMinor,
     walkUpParenthesizedExpressions,
     WriteFileCallback,
@@ -1413,9 +1413,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     const currentDirectory = host.getCurrentDirectory();
     const supportedExtensions = getSupportedExtensions(options);
     const supportedExtensionsWithJsonIfResolveJsonModule = getSupportedExtensionsWithJsonIfResolveJsonModule(options, supportedExtensions);
-
-    let _typeScriptVersion: Version | undefined;
-    const _ignoreDeprecations = new Map<DeprecationPhase, Version>();
 
     // Map storing if there is emit blocking diagnostics for given input
     const hasEmitBlockingDiagnostics = new Map<string, boolean>();
@@ -4157,51 +4154,52 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function verifyDeprecatedCompilerOptions() {
-        const version = isString(typeScriptVersion) && typeScriptVersion ? new Version(typeScriptVersion) : getTypeScriptVersion();
+        const version = typeScriptVersion || versionMajorMinor;
+        const deprecationVersion = inverseIgnoreDeprecationsMap.get(version) as DeprecationVersion;
         if (options.ignoreDeprecations) {
-            const ignoreDeprecationsVersion = getIgnoreDeprecationsVersion(options.ignoreDeprecations);
-            if (ignoreDeprecationsVersion.compareTo(version) === Comparison.LessThan) {
+            const ignoreDeprecationVersion = options.ignoreDeprecations && ignoreDeprecationsMap.get(options.ignoreDeprecations);
+            if (ignoreDeprecationVersion === undefined || deprecationVersion && options.ignoreDeprecations < deprecationVersion) {
                 createOptionValueDiagnostic("ignoreDeprecations", Diagnostics.Invalid_value_for_ignoreDeprecations);
             }
-            if (ignoreDeprecationsVersion.compareTo(version) >= 0) {
-                return;
+            else {
+                if (deprecationVersion === DeprecationVersion.v5_0) {
+                    return;
+                }
             }
         }
         if (options.target === ScriptTarget.ES3) {
-            createDeprecatedDiagnosticForOption(version, "target", "ES3");
+            createDeprecatedDiagnosticForOption(version, deprecationVersion, "target", "ES3");
         }
         if (options.noImplicitUseStrict) {
-            createDeprecatedDiagnosticForOption(version, "noImplicitUseStrict");
+            createDeprecatedDiagnosticForOption(version, deprecationVersion, "noImplicitUseStrict");
         }
         if (options.keyofStringsOnly) {
-            createDeprecatedDiagnosticForOption(version, "keyofStringsOnly");
+            createDeprecatedDiagnosticForOption(version, deprecationVersion, "keyofStringsOnly");
         }
         if (options.suppressExcessPropertyErrors) {
-            createDeprecatedDiagnosticForOption(version, "suppressExcessPropertyErrors");
+            createDeprecatedDiagnosticForOption(version, deprecationVersion, "suppressExcessPropertyErrors");
         }
         if (options.suppressImplicitAnyIndexErrors) {
-            createDeprecatedDiagnosticForOption(version, "suppressImplicitAnyIndexErrors");
+            createDeprecatedDiagnosticForOption(version, deprecationVersion, "suppressImplicitAnyIndexErrors");
         }
         if (options.noStrictGenericChecks) {
-            createDeprecatedDiagnosticForOption(version, "noStrictGenericChecks");
+            createDeprecatedDiagnosticForOption(version, deprecationVersion, "noStrictGenericChecks");
         }
         if (options.charset) {
-            createDeprecatedDiagnosticForOption(version, "charset");
+            createDeprecatedDiagnosticForOption(version, deprecationVersion, "charset");
         }
         if (options.out) {
-            createDeprecatedDiagnosticForOption(version, "out");
+            createDeprecatedDiagnosticForOption(version, deprecationVersion, "out");
         }
     }
 
-    function createDeprecatedDiagnosticForOption(version: Version, name: string, value?: string) {
-        if (version.compareTo(getIgnoreDeprecationsVersion(DeprecationPhase.Phase3)) === Comparison.EqualTo) {
+    function createDeprecatedDiagnosticForOption(version: string, deprecationVersion: DeprecationVersion, name: string, value?: string) {
+        if (deprecationVersion === DeprecationVersion.v6_0) {
             createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, Diagnostics.Flag_0_is_deprecated_please_remove_it_from_your_configuration, value || name);
         }
         else {
-            const { major, minor } = version;
-            const nextPhase = version.compareTo(getIgnoreDeprecationsVersion(DeprecationPhase.Phase2)) === Comparison.EqualTo ? DeprecationPhase.Phase3 : DeprecationPhase.Phase2;
             createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined,
-                Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationPhaseToVersionMap[nextPhase], `${major}.${minor}`);
+                Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, ignoreDeprecationsMap.get(deprecationVersion + 1), version);
         }
     }
 
@@ -4474,21 +4472,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         }
         return _compilerOptionsObjectLiteralSyntax || undefined;
-    }
-
-    function getTypeScriptVersion() {
-        if (_typeScriptVersion === undefined) {
-            _typeScriptVersion = new Version(versionMajorMinor);
-        }
-        return _typeScriptVersion;
-    }
-
-    function getIgnoreDeprecationsVersion(phase: DeprecationPhase) {
-        let version = _ignoreDeprecations.get(phase);
-        if (version === undefined) {
-            _ignoreDeprecations.set(phase, version = new Version(DeprecationPhaseToVersionMap[phase]));
-        }
-        return version;
     }
 
     function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean {
