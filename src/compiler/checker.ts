@@ -17592,6 +17592,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getTypeOfSymbol(symbol); // intentionally doesn't use resolved symbol so type is cached as expected on the alias
         }
         else {
+            tryGetDeclaredTypeOfSymbol(resolvedSymbol); // call this first to ensure typeParameters is populated (if applicable)
+            const typeParameters = getSymbolLinks(resolvedSymbol).typeParameters;
+            if (node.typeArguments && typeParameters) {
+                addLazyDiagnostic(() => {
+                    checkTypeArgumentConstraints(node, typeParameters);
+                });
+            }
             return getTypeReferenceType(node, resolvedSymbol); // getTypeReferenceType doesn't handle aliases - it must get the resolved symbol
         }
     }
@@ -37238,12 +37245,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getEffectiveTypeArguments(node, typeParameters)[index];
     }
 
-    function getEffectiveTypeArguments(node: TypeReferenceNode | ExpressionWithTypeArguments, typeParameters: readonly TypeParameter[]): Type[] {
+    function getEffectiveTypeArguments(node: TypeReferenceNode | ExpressionWithTypeArguments | NodeWithTypeArguments, typeParameters: readonly TypeParameter[]): Type[] {
         return fillMissingTypeArguments(map(node.typeArguments!, getTypeFromTypeNode), typeParameters,
             getMinTypeArgumentCount(typeParameters), isInJSFile(node));
     }
 
-    function checkTypeArgumentConstraints(node: TypeReferenceNode | ExpressionWithTypeArguments, typeParameters: readonly TypeParameter[]): boolean {
+    function checkTypeArgumentConstraints(node: TypeReferenceNode | ExpressionWithTypeArguments | NodeWithTypeArguments, typeParameters: readonly TypeParameter[]): boolean {
         let typeArguments: Type[] | undefined;
         let mapper: TypeMapper | undefined;
         let result = true;
