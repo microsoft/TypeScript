@@ -646,6 +646,12 @@ Info 54   [00:01:54.000] response:
             "sortText": "15"
           },
           {
+            "name": "Infinity",
+            "kind": "var",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "instanceof",
             "kind": "keyword",
             "kindModifiers": "",
@@ -678,6 +684,12 @@ Info 54   [00:01:54.000] response:
           {
             "name": "namespace",
             "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "NaN",
+            "kind": "var",
             "kindModifiers": "",
             "sortText": "15"
           },
@@ -1209,6 +1221,12 @@ Info 71   [00:02:11.000] response:
             "sortText": "15"
           },
           {
+            "name": "Infinity",
+            "kind": "var",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "instanceof",
             "kind": "keyword",
             "kindModifiers": "",
@@ -1241,6 +1259,12 @@ Info 71   [00:02:11.000] response:
           {
             "name": "namespace",
             "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "NaN",
+            "kind": "var",
             "kindModifiers": "",
             "sortText": "15"
           },
@@ -1769,6 +1793,12 @@ Info 87   [00:02:27.000] response:
             "sortText": "15"
           },
           {
+            "name": "Infinity",
+            "kind": "var",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "instanceof",
             "kind": "keyword",
             "kindModifiers": "",
@@ -1801,6 +1831,12 @@ Info 87   [00:02:27.000] response:
           {
             "name": "namespace",
             "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "NaN",
+            "kind": "var",
             "kindModifiers": "",
             "sortText": "15"
           },

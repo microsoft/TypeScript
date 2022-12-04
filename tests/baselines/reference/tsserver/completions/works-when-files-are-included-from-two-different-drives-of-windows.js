@@ -435,6 +435,12 @@ Info 37   [00:01:41.000] response:
             "sortText": "15"
           },
           {
+            "name": "Infinity",
+            "kind": "var",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "instanceof",
             "kind": "keyword",
             "kindModifiers": "",
@@ -443,6 +449,12 @@ Info 37   [00:01:41.000] response:
           {
             "name": "let",
             "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "NaN",
+            "kind": "var",
             "kindModifiers": "",
             "sortText": "15"
           },

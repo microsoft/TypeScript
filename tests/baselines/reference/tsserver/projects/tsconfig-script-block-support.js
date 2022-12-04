@@ -457,6 +457,12 @@ Info 49   [00:01:28.000] response:
             "sortText": "15"
           },
           {
+            "name": "Infinity",
+            "kind": "var",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "instanceof",
             "kind": "keyword",
             "kindModifiers": "",
@@ -489,6 +495,12 @@ Info 49   [00:01:28.000] response:
           {
             "name": "namespace",
             "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "NaN",
+            "kind": "var",
             "kindModifiers": "",
             "sortText": "15"
           },
@@ -922,6 +934,12 @@ Info 59   [00:01:44.000] response:
             "sortText": "15"
           },
           {
+            "name": "Infinity",
+            "kind": "var",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "instanceof",
             "kind": "keyword",
             "kindModifiers": "",
@@ -954,6 +972,12 @@ Info 59   [00:01:44.000] response:
           {
             "name": "namespace",
             "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "NaN",
+            "kind": "var",
             "kindModifiers": "",
             "sortText": "15"
           },
