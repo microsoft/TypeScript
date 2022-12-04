@@ -132,7 +132,7 @@ verify.completions(
             "arguments",
             completion.globalThisEntry,
             "B", "C", "D", "D1", "D2", "D3", "D4", "D5", "D6", "E", "F", "F2", "G", "G2", "H", "I", "J", "K", "L", "L2", "M", "N", "O",
-            completion.undefinedVarEntry,
+            ...completion.pseudoVars,
             ...completion.insideMethodKeywords,
         ],
     },

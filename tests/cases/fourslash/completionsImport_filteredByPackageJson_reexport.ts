@@ -37,7 +37,7 @@
 verify.completions({
   marker: test.marker(""),
   includes: [
-    completion.undefinedVarEntry,
+    ...completion.pseudoVars,
     {
       name: "css",
       source: "/node_modules/@emotion/core/index",

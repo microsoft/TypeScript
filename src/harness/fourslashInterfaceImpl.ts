@@ -1015,6 +1015,11 @@ export namespace Completion {
         kindModifiers: "declare",
         sortText: SortText.GlobalsOrKeywords
     });
+    const pseudoVarEntry = (name: string): ExpectedCompletionEntryObject => ({
+        name,
+        kind: "var",
+        sortText: SortText.GlobalsOrKeywords
+    });
     const moduleEntry = (name: string): ExpectedCompletionEntryObject => ({
         name,
         kind: "module",
@@ -1065,8 +1070,9 @@ export namespace Completion {
             sortText: SortText.GlobalsOrKeywords
         });
     }
-    export const keywordsWithUndefined: readonly ExpectedCompletionEntryObject[] = res;
-    export const keywords: readonly ExpectedCompletionEntryObject[] = keywordsWithUndefined.filter(k => k.name !== "undefined");
+    const pseudoVarKeywords = ["Infinity", "NaN", "undefined"];
+    export const keywordsWithPseudoVars: readonly ExpectedCompletionEntryObject[] = res;
+    export const keywords: readonly ExpectedCompletionEntryObject[] = keywordsWithPseudoVars.filter(k => pseudoVarKeywords.includes(k.name));
 
     export const typeKeywords: readonly ExpectedCompletionEntryObject[] = [
         "any",
@@ -1446,7 +1452,6 @@ export namespace Completion {
         varEntry("Float32Array"),
         varEntry("Float64Array"),
         varEntry("Function"),
-        varEntry("Infinity"),
         moduleEntry("Intl"),
         varEntry("Int16Array"),
         varEntry("Int32Array"),
@@ -1455,7 +1460,6 @@ export namespace Completion {
         functionEntry("isNaN"),
         varEntry("JSON"),
         varEntry("Math"),
-        varEntry("NaN"),
         varEntry("Number"),
         varEntry("Object"),
         functionEntry("parseFloat"),
@@ -1531,18 +1535,14 @@ export namespace Completion {
         return ts.compareStringsCaseSensitiveUI(typeof a === "string" ? a : a.name, typeof b === "string" ? b : b.name);
     }
 
-    export const undefinedVarEntry: ExpectedCompletionEntryObject = {
-        name: "undefined",
-        kind: "var",
-        sortText: SortText.GlobalsOrKeywords
-    };
+    export const pseudoVars: ExpectedCompletionEntryObject[] = pseudoVarKeywords.map(pseudoVarEntry);
     // TODO: many of these are inappropriate to always provide
     export const globalsInsideFunction = (plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean }): readonly ExpectedCompletionEntry[] => [
         { name: "arguments", kind: "local var" },
         ...plus,
         globalThisEntry,
         ...options?.noLib ? [] : globalsVars,
-        undefinedVarEntry,
+        ...pseudoVars,
         ...globalKeywordsInsideFunction,
     ].sort(compareExpectedCompletionEntries);
 
@@ -1554,7 +1554,7 @@ export namespace Completion {
         globalThisEntry,
         ...options?.noLib ? [] : globalsVars,
         ...plus,
-        undefinedVarEntry,
+        ...pseudoVars,
         ...globalInJsKeywordsInsideFunction,
     ].sort(compareExpectedCompletionEntries);
 
@@ -1682,14 +1682,14 @@ export namespace Completion {
     export const globals: readonly ExpectedCompletionEntryObject[] = [
         globalThisEntry,
         ...globalsVars,
-        undefinedVarEntry,
+        ...pseudoVars,
         ...globalKeywords
     ].sort(compareExpectedCompletionEntries);
 
     export const globalsInJs: readonly ExpectedCompletionEntryObject[] = [
         globalThisEntry,
         ...globalsVars,
-        undefinedVarEntry,
+        ...pseudoVars,
         ...globalInJsKeywords
     ].sort(compareExpectedCompletionEntries);
 
@@ -1697,7 +1697,7 @@ export namespace Completion {
         return combineExpectedCompletionEntries("globalsPlus", [
             globalThisEntry,
             ...options?.noLib ? [] : globalsVars,
-            undefinedVarEntry,
+            ...pseudoVars,
             ...globalKeywords,
         ], plus);
     }
@@ -1706,7 +1706,7 @@ export namespace Completion {
         return combineExpectedCompletionEntries("globalsInJsPlus", [
             globalThisEntry,
             ...options?.noLib ? [] : globalsVars,
-            undefinedVarEntry,
+            ...pseudoVars,
             ...globalInJsKeywords,
         ], plus);
     }

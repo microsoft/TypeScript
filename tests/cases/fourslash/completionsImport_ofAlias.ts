@@ -25,7 +25,7 @@
 verify.completions({
     marker: "",
     includes: [
-        completion.undefinedVarEntry,
+        ...completion.pseudoVars,
         {
             name: "foo",
             source: "/a",

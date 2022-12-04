@@ -35,7 +35,7 @@ verify.completions({
       text: "var foot: string"
     },
     "Service",
-    completion.undefinedVarEntry,
+    ...completion.pseudoVars,
     {
       name: "serve",
       insertText: "this.serve",

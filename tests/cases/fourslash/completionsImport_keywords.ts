@@ -36,7 +36,7 @@ verify.completions(
         unsorted: [
             completion.globalThisEntry,
             ...completion.globalsVars,
-            completion.undefinedVarEntry,
+            ...completion.pseudoVars,
             {
                 name: "unique",
                 source: "/a",

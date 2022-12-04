@@ -7,7 +7,7 @@ verify.completions({
     unsorted: [
         completion.globalThisEntry,
         ...completion.globalsVars,
-        completion.undefinedVarEntry
+        ...completion.pseudoVars
     ].map(e => {
         if (e.sortText === completion.SortText.Deprecated(completion.SortText.GlobalsOrKeywords)) {
             return { ...e, sortText: completion.SortText.Deprecated(completion.SortText.LocationPriority) };

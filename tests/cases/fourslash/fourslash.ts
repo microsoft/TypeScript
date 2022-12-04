@@ -887,7 +887,6 @@ declare namespace completion {
         SwitchCases = "SwitchCases/",
     }
     export const globalThisEntry: Entry;
-    export const undefinedVarEntry: Entry;
     export const globals: ReadonlyArray<Entry>;
     export const globalsInJs: ReadonlyArray<Entry>;
     export const globalKeywords: ReadonlyArray<Entry>;
@@ -895,12 +894,13 @@ declare namespace completion {
     export const insideMethodKeywords: ReadonlyArray<Entry>;
     export const insideMethodInJsKeywords: ReadonlyArray<Entry>;
     export const globalsVars: ReadonlyArray<Entry>;
+    export const pseudoVars: ReadonlyArray<Entry>;
     export function sorted(entries: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
     export function globalsInsideFunction(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: GlobalsPlusOptions): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
     export function globalsInJsInsideFunction(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: GlobalsPlusOptions): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
     export function globalsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: GlobalsPlusOptions): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
     export function globalsInJsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: GlobalsPlusOptions): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
-    export const keywordsWithUndefined: ReadonlyArray<Entry>;
+    export const keywordsWithPseudoVars: ReadonlyArray<Entry>;
     export const keywords: ReadonlyArray<Entry>;
     export const typeKeywords: ReadonlyArray<Entry>;
     export function typeKeywordsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;

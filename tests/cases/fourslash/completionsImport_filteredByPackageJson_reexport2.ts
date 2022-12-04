@@ -43,7 +43,7 @@
 verify.completions({
   marker: test.marker(""),
   includes: [
-    completion.undefinedVarEntry,
+    ...completion.pseudoVars,
     {
       name: "foo",
       source: "/node_modules/b_/index",
