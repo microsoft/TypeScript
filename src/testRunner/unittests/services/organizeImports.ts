@@ -6,7 +6,6 @@ import {
 } from "../virtualFileSystemWithWatch";
 import { createProjectService } from "../tsserver/helpers";
 import { newLineCharacter } from "./extract/helpers";
-import { SortKind } from "../../_namespaces/ts";
 
 describe("unittests:: services:: organizeImports", () => {
     describe("Sort imports", () => {

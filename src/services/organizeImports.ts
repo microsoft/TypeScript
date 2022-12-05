@@ -52,7 +52,6 @@ import {
     Scanner,
     setEmitFlags,
     some,
-    SortedReadonlyArray,
     SortKind,
     SourceFile,
     stableSort,
@@ -575,7 +574,8 @@ export function compareModuleSpecifiers(m1: Expression | undefined, m2: Expressi
     const compareStrings = ignoreCase ? compareStringsCaseInsensitiveEslintCompatible : compareStringsCaseSensitive;
     return compareBooleans(name1 === undefined, name2 === undefined) ||
         compareBooleans(isExternalModuleNameRelative(name1!), isExternalModuleNameRelative(name2!)) ||
-        compareStrings(name1!, name2!);
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        compareStrings(name1!, name2!); // I don't know why eslint is wrong but this one is necessary
 }
 
 function getModuleSpecifierExpression(declaration: AnyImportOrRequireStatement): Expression | undefined {
@@ -641,7 +641,7 @@ export const detectImportSpecifierSorting = memoizeWeak((specifiers: readonly Im
 });
 
 /** @internal */
-export function getImportDeclarationInsertionIndex(sortedImports: SortedReadonlyArray<AnyImportOrRequireStatement>, newImport: AnyImportOrRequireStatement, ignoreCase?: boolean) {
+export function getImportDeclarationInsertionIndex(sortedImports: readonly AnyImportOrRequireStatement[], newImport: AnyImportOrRequireStatement, ignoreCase?: boolean) {
     const index = binarySearch(sortedImports, newImport, identity, (a, b) => compareImportsOrRequireStatements(a, b, ignoreCase));
     return index < 0 ? ~index : index;
 }
