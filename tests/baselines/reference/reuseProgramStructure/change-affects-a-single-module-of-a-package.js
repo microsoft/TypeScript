@@ -12,14 +12,23 @@ export * from './internal';
 
 resolvedModules: 
 ./internal: {
-  "resolvedFileName": "/node_modules/b/internal.d.ts",
-  "extension": ".d.ts",
-  "isExternalLibraryImport": true,
-  "packageId": {
-    "name": "b",
-    "subModuleName": "internal.d.ts",
-    "version": "1.2.3"
-  }
+  "resolvedModule": {
+    "resolvedFileName": "/node_modules/b/internal.d.ts",
+    "extension": ".d.ts",
+    "isExternalLibraryImport": true,
+    "packageId": {
+      "name": "b",
+      "subModuleName": "internal.d.ts",
+      "version": "1.2.3"
+    }
+  },
+  "failedLookupLocations": [
+    "/node_modules/b/internal.ts",
+    "/node_modules/b/internal.tsx"
+  ],
+  "affectingLocations": [
+    "/node_modules/b/package.json"
+  ]
 }
 resolvedTypeReferenceDirectiveNames: undefined
 
@@ -29,14 +38,26 @@ import {b} from 'b'
 var a = b;
 resolvedModules: 
 b: {
-  "resolvedFileName": "/node_modules/b/index.d.ts",
-  "extension": ".d.ts",
-  "isExternalLibraryImport": true,
-  "packageId": {
-    "name": "b",
-    "subModuleName": "index.d.ts",
-    "version": "1.2.3"
-  }
+  "resolvedModule": {
+    "resolvedFileName": "/node_modules/b/index.d.ts",
+    "extension": ".d.ts",
+    "isExternalLibraryImport": true,
+    "packageId": {
+      "name": "b",
+      "subModuleName": "index.d.ts",
+      "version": "1.2.3"
+    }
+  },
+  "failedLookupLocations": [
+    "/node_modules/b.ts",
+    "/node_modules/b.tsx",
+    "/node_modules/b.d.ts",
+    "/node_modules/b/index.ts",
+    "/node_modules/b/index.tsx"
+  ],
+  "affectingLocations": [
+    "/node_modules/b/package.json"
+  ]
 }
 resolvedTypeReferenceDirectiveNames: undefined
 
@@ -60,14 +81,23 @@ export * from './internal';
 
 resolvedModules: 
 ./internal: {
-  "resolvedFileName": "/node_modules/b/internal.d.ts",
-  "extension": ".d.ts",
-  "isExternalLibraryImport": true,
-  "packageId": {
-    "name": "b",
-    "subModuleName": "internal.d.ts",
-    "version": "1.2.3"
-  }
+  "resolvedModule": {
+    "resolvedFileName": "/node_modules/b/internal.d.ts",
+    "extension": ".d.ts",
+    "isExternalLibraryImport": true,
+    "packageId": {
+      "name": "b",
+      "subModuleName": "internal.d.ts",
+      "version": "1.2.3"
+    }
+  },
+  "failedLookupLocations": [
+    "/node_modules/b/internal.ts",
+    "/node_modules/b/internal.tsx"
+  ],
+  "affectingLocations": [
+    "/node_modules/b/package.json"
+  ]
 }
 resolvedTypeReferenceDirectiveNames: undefined
 
@@ -77,14 +107,26 @@ import {b} from 'b'
 var a = b;
 resolvedModules: 
 b: {
-  "resolvedFileName": "/node_modules/b/index.d.ts",
-  "extension": ".d.ts",
-  "isExternalLibraryImport": true,
-  "packageId": {
-    "name": "b",
-    "subModuleName": "index.d.ts",
-    "version": "1.2.3"
-  }
+  "resolvedModule": {
+    "resolvedFileName": "/node_modules/b/index.d.ts",
+    "extension": ".d.ts",
+    "isExternalLibraryImport": true,
+    "packageId": {
+      "name": "b",
+      "subModuleName": "index.d.ts",
+      "version": "1.2.3"
+    }
+  },
+  "failedLookupLocations": [
+    "/node_modules/b.ts",
+    "/node_modules/b.tsx",
+    "/node_modules/b.d.ts",
+    "/node_modules/b/index.ts",
+    "/node_modules/b/index.tsx"
+  ],
+  "affectingLocations": [
+    "/node_modules/b/package.json"
+  ]
 }
 resolvedTypeReferenceDirectiveNames: undefined
 

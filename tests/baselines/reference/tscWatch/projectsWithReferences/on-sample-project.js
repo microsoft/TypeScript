@@ -395,17 +395,50 @@ export declare const m: typeof mod;
 }
 
 
-/a/lib/tsc.js -w -p tests
+/a/lib/tsc.js -w -p tests --traceResolution --explainFiles
 Output::
 >> Screen clear
 [[90m12:01:16 AM[0m] Starting compilation in watch mode...
 
+======== Resolving module '../core/index' from '/user/username/projects/sample1/tests/index.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/index', target file types: TypeScript, Declaration.
+File '/user/username/projects/sample1/core/index.ts' exist - use it as a name resolution result.
+======== Module name '../core/index' was successfully resolved to '/user/username/projects/sample1/core/index.ts'. ========
+======== Resolving module '../logic/index' from '/user/username/projects/sample1/tests/index.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module as file / folder, candidate module location '/user/username/projects/sample1/logic/index', target file types: TypeScript, Declaration.
+File '/user/username/projects/sample1/logic/index.ts' exist - use it as a name resolution result.
+======== Module name '../logic/index' was successfully resolved to '/user/username/projects/sample1/logic/index.ts'. ========
+======== Resolving module '../core/anotherModule' from '/user/username/projects/sample1/tests/index.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/anotherModule', target file types: TypeScript, Declaration.
+File '/user/username/projects/sample1/core/anotherModule.ts' exist - use it as a name resolution result.
+======== Module name '../core/anotherModule' was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'. ========
+======== Resolving module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts'. ========
+Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
+Module resolution kind is not specified, using 'NodeJs'.
+======== Module name '../core/anotherModule' was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'. ========
+../../../../a/lib/lib.d.ts
+  Default library for target 'es3'
+core/index.d.ts
+  Imported via '../core/index' from file 'tests/index.ts'
+  File is output of project reference source 'core/index.ts'
+core/anotherModule.d.ts
+  Imported via '../core/anotherModule' from file 'logic/index.d.ts'
+  Imported via '../core/anotherModule' from file 'tests/index.ts'
+  File is output of project reference source 'core/anotherModule.ts'
+logic/index.d.ts
+  Imported via '../logic/index' from file 'tests/index.ts'
+  File is output of project reference source 'logic/index.ts'
+tests/index.ts
+  Part of 'files' list in tsconfig.json
 [[90m12:01:17 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/sample1/tests/index.ts"]
-Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"project":"/user/username/projects/sample1/tests","configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
+Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"project":"/user/username/projects/sample1/tests","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -733,12 +766,27 @@ Output::
 >> Screen clear
 [[90m12:01:51 AM[0m] File change detected. Starting incremental compilation...
 
+Reusing resolution of module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'.
+../../../../a/lib/lib.d.ts
+  Default library for target 'es3'
+core/index.d.ts
+  Imported via '../core/index' from file 'tests/index.ts'
+  File is output of project reference source 'core/index.ts'
+core/anotherModule.d.ts
+  Imported via '../core/anotherModule' from file 'logic/index.d.ts'
+  Imported via '../core/anotherModule' from file 'tests/index.ts'
+  File is output of project reference source 'core/anotherModule.ts'
+logic/index.d.ts
+  Imported via '../logic/index' from file 'tests/index.ts'
+  File is output of project reference source 'logic/index.ts'
+tests/index.ts
+  Part of 'files' list in tsconfig.json
 [[90m12:01:58 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/sample1/tests/index.ts"]
-Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"project":"/user/username/projects/sample1/tests","configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
+Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"project":"/user/username/projects/sample1/tests","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -1009,12 +1057,33 @@ Output::
 >> Screen clear
 [[90m12:02:20 AM[0m] File change detected. Starting incremental compilation...
 
+Reusing resolution of module '../core/index' from '/user/username/projects/sample1/tests/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/index.ts'.
+Reusing resolution of module '../logic/index' from '/user/username/projects/sample1/tests/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/logic/index.ts'.
+Reusing resolution of module '../core/anotherModule' from '/user/username/projects/sample1/tests/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'.
+======== Resolving module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts'. ========
+Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
+Module resolution kind is not specified, using 'NodeJs'.
+======== Module name '../core/anotherModule' was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'. ========
+../../../../a/lib/lib.d.ts
+  Default library for target 'es3'
+core/index.d.ts
+  Imported via '../core/index' from file 'tests/index.ts'
+  File is output of project reference source 'core/index.ts'
+core/anotherModule.d.ts
+  Imported via '../core/anotherModule' from file 'logic/decls/index.d.ts'
+  Imported via '../core/anotherModule' from file 'tests/index.ts'
+  File is output of project reference source 'core/anotherModule.ts'
+logic/decls/index.d.ts
+  Imported via '../logic/index' from file 'tests/index.ts'
+  File is output of project reference source 'logic/index.ts'
+tests/index.ts
+  Part of 'files' list in tsconfig.json
 [[90m12:02:27 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/sample1/tests/index.ts"]
-Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"project":"/user/username/projects/sample1/tests","configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
+Program options: {"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"project":"/user/username/projects/sample1/tests","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/sample1/tests/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts

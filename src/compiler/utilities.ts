@@ -124,7 +124,6 @@ import {
     FileExtensionInfo,
     fileExtensionIs,
     fileExtensionIsOneOf,
-    FileReference,
     FileWatcher,
     filter,
     find,
@@ -184,16 +183,15 @@ import {
     getPathComponents,
     getPathFromPathComponents,
     getRelativePathToDirectoryOrUrl,
-    getResolutionMode,
-    getResolutionName,
     getRootLength,
+    getSnippetElement,
     getStringComparer,
     getSymbolId,
     getTrailingCommentRanges,
     HasExpressionInitializer,
     hasExtension,
-    hasInitializer,
     HasInitializer,
+    hasInitializer,
     HasJSDoc,
     hasJSDocNodes,
     HasModifiers,
@@ -257,6 +255,7 @@ import {
     isGetAccessorDeclaration,
     isHeritageClause,
     isIdentifier,
+    isIdentifierStart,
     isIdentifierText,
     isImportTypeNode,
     isInterfaceDeclaration,
@@ -423,8 +422,11 @@ import {
     RequireOrImportCall,
     RequireVariableStatement,
     ResolutionMode,
+    ResolutionNameAndModeGetter,
     ResolvedModuleFull,
+    ResolvedModuleWithFailedLookupLocations,
     ResolvedTypeReferenceDirective,
+    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     ReturnStatement,
     SatisfiesExpression,
     ScriptKind,
@@ -440,6 +442,7 @@ import {
     singleOrUndefined,
     skipOuterExpressions,
     skipTrivia,
+    SnippetKind,
     some,
     sort,
     SortedArray,
@@ -702,11 +705,11 @@ export function getFullWidth(node: Node) {
 
 /** @internal */
 export function getResolvedModule(sourceFile: SourceFile | undefined, moduleNameText: string, mode: ResolutionMode): ResolvedModuleFull | undefined {
-    return sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText, mode);
+    return sourceFile?.resolvedModules?.get(moduleNameText, mode)?.resolvedModule;
 }
 
 /** @internal */
-export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull | undefined, mode: ResolutionMode): void {
+export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleWithFailedLookupLocations, mode: ResolutionMode): void {
     if (!sourceFile.resolvedModules) {
         sourceFile.resolvedModules = createModeAwareCache();
     }
@@ -715,7 +718,7 @@ export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string
 }
 
 /** @internal */
-export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined, mode: ResolutionMode): void {
+export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, mode: ResolutionMode): void {
     if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
         sourceFile.resolvedTypeReferenceDirectiveNames = createModeAwareCache();
     }
@@ -725,7 +728,7 @@ export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeRe
 
 /** @internal */
 export function getResolvedTypeReferenceDirective(sourceFile: SourceFile | undefined, typeReferenceDirectiveName: string, mode: ResolutionMode): ResolvedTypeReferenceDirective | undefined {
-    return sourceFile?.resolvedTypeReferenceDirectiveNames?.get(typeReferenceDirectiveName, mode);
+    return sourceFile?.resolvedTypeReferenceDirectiveNames?.get(typeReferenceDirectiveName, mode)?.resolvedTypeReferenceDirective;
 }
 
 /** @internal */
@@ -736,12 +739,16 @@ export function projectReferenceIsEqualTo(oldRef: ProjectReference, newRef: Proj
 }
 
 /** @internal */
-export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleFull, newResolution: ResolvedModuleFull): boolean {
-    return oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport &&
-        oldResolution.extension === newResolution.extension &&
-        oldResolution.resolvedFileName === newResolution.resolvedFileName &&
-        oldResolution.originalPath === newResolution.originalPath &&
-        packageIdIsEqual(oldResolution.packageId, newResolution.packageId);
+export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFailedLookupLocations, newResolution: ResolvedModuleWithFailedLookupLocations): boolean {
+    return oldResolution === newResolution ||
+        oldResolution.resolvedModule === newResolution.resolvedModule ||
+        !!oldResolution.resolvedModule &&
+        !!newResolution.resolvedModule &&
+        oldResolution.resolvedModule.isExternalLibraryImport === newResolution.resolvedModule.isExternalLibraryImport &&
+        oldResolution.resolvedModule.extension === newResolution.resolvedModule.extension &&
+        oldResolution.resolvedModule.resolvedFileName === newResolution.resolvedModule.resolvedFileName &&
+        oldResolution.resolvedModule.originalPath === newResolution.resolvedModule.originalPath &&
+        packageIdIsEqual(oldResolution.resolvedModule.packageId, newResolution.resolvedModule.packageId);
 }
 
 function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
@@ -759,26 +766,32 @@ export function packageIdToString(packageId: PackageId): string {
 }
 
 /** @internal */
-export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
-    return oldResolution.resolvedFileName === newResolution.resolvedFileName
-        && oldResolution.primary === newResolution.primary
-        && oldResolution.originalPath === newResolution.originalPath;
+export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, newResolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations): boolean {
+    return oldResolution === newResolution ||
+        oldResolution.resolvedTypeReferenceDirective === newResolution.resolvedTypeReferenceDirective ||
+        !!oldResolution.resolvedTypeReferenceDirective &&
+        !!newResolution.resolvedTypeReferenceDirective &&
+        oldResolution.resolvedTypeReferenceDirective.resolvedFileName === newResolution.resolvedTypeReferenceDirective.resolvedFileName &&
+        !!oldResolution.resolvedTypeReferenceDirective.primary === !!newResolution.resolvedTypeReferenceDirective.primary &&
+        oldResolution.resolvedTypeReferenceDirective.originalPath === newResolution.resolvedTypeReferenceDirective.originalPath;
 }
 
 /** @internal */
-export function hasChangesInResolutions<T>(
-    names: readonly StringLiteralLike[] | readonly FileReference[],
+export function hasChangesInResolutions<K, V>(
+    names: readonly K[],
     newSourceFile: SourceFile,
-    newResolutions: readonly T[],
-    oldResolutions: ModeAwareCache<T> | undefined,
-    comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
+    newResolutions: readonly V[],
+    oldResolutions: ModeAwareCache<V> | undefined,
+    comparer: (oldResolution: V, newResolution: V) => boolean,
+    nameAndModeGetter: ResolutionNameAndModeGetter<K, SourceFile>,
+): boolean {
     Debug.assert(names.length === newResolutions.length);
 
     for (let i = 0; i < names.length; i++) {
         const newResolution = newResolutions[i];
         const entry = names[i];
-        const name = getResolutionName(entry);
-        const mode = getResolutionMode(entry, newSourceFile);
+        const name = nameAndModeGetter.getName(entry);
+        const mode = nameAndModeGetter.getMode(entry, newSourceFile);
         const oldResolution = oldResolutions && oldResolutions.get(name, mode);
         const changed =
             oldResolution
@@ -7723,7 +7736,7 @@ export interface SymlinkCache {
      * don't include automatic type reference directives. Must be called only when
      * `hasProcessedResolutions` returns false (once per cache instance).
      */
-    setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirective | undefined> | undefined): void;
+    setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>): void;
     /**
      * @internal
      * Whether `setSymlinksFromResolutions` has already been called.
@@ -7759,9 +7772,10 @@ export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonic
             Debug.assert(!hasProcessedResolutions);
             hasProcessedResolutions = true;
             for (const file of files) {
-                file.resolvedModules?.forEach(resolution => processResolution(this, resolution));
+                file.resolvedModules?.forEach(resolution => processResolution(this, resolution.resolvedModule));
+                file.resolvedTypeReferenceDirectiveNames?.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
             }
-            typeReferenceDirectives?.forEach(resolution => processResolution(this, resolution));
+            typeReferenceDirectives.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
         },
         hasProcessedResolutions: () => hasProcessedResolutions,
     };
@@ -8556,6 +8570,51 @@ export function pseudoBigIntToString({negative, base10Value}: PseudoBigInt): str
 }
 
 /** @internal */
+export function parseBigInt(text: string): PseudoBigInt | undefined {
+    if (!isValidBigIntString(text, /*roundTripOnly*/ false)) {
+        return undefined;
+    }
+    return parseValidBigInt(text);
+}
+
+/**
+ * @internal
+ * @param text a valid bigint string excluding a trailing `n`, but including a possible prefix `-`. Use `isValidBigIntString(text, roundTripOnly)` before calling this function.
+ */
+export function parseValidBigInt(text: string): PseudoBigInt {
+    const negative = text.startsWith("-");
+    const base10Value = parsePseudoBigInt(`${negative ? text.slice(1) : text}n`);
+    return { negative, base10Value };
+}
+
+/**
+ * @internal
+ * Tests whether the provided string can be parsed as a bigint.
+ * @param s The string to test.
+ * @param roundTripOnly Indicates the resulting bigint matches the input when converted back to a string.
+ */
+export function isValidBigIntString(s: string, roundTripOnly: boolean): boolean {
+    if (s === "") return false;
+    const scanner = createScanner(ScriptTarget.ESNext, /*skipTrivia*/ false);
+    let success = true;
+    scanner.setOnError(() => success = false);
+    scanner.setText(s + "n");
+    let result = scanner.scan();
+    const negative = result === SyntaxKind.MinusToken;
+    if (negative) {
+        result = scanner.scan();
+    }
+    const flags = scanner.getTokenFlags();
+    // validate that
+    // * scanning proceeded without error
+    // * a bigint can be scanned, and that when it is scanned, it is
+    // * the full length of the input string (so the scanner is one character beyond the augmented input length)
+    // * it does not contain a numeric seperator (the `BigInt` constructor does not accept a numeric seperator in its input)
+    return success && result === SyntaxKind.BigIntLiteral && scanner.getTextPos() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator)
+        && (!roundTripOnly || s === pseudoBigIntToString({ negative, base10Value: parsePseudoBigInt(scanner.getTokenValue()) }));
+}
+
+/** @internal */
 export function isValidTypeOnlyAliasUseSite(useSite: Node): boolean {
     return !!(useSite.flags & NodeFlags.Ambient)
         || isPartOfTypeQuery(useSite)
@@ -9062,4 +9121,21 @@ export function isOptionalJSDocPropertyLikeTag(node: Node): node is JSDocPropert
     }
     const { isBracketed, typeExpression } = node;
     return isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
+
+}
+
+/** @internal */
+export function canUsePropertyAccess(name: string, languageVersion: ScriptTarget): boolean {
+    if (name.length === 0) {
+        return false;
+    }
+    const firstChar = name.charCodeAt(0);
+    return firstChar === CharacterCodes.hash ?
+        name.length > 1 && isIdentifierStart(name.charCodeAt(1), languageVersion) :
+        isIdentifierStart(firstChar, languageVersion);
+}
+
+/** @internal */
+export function hasTabstop(node: Node): boolean {
+    return getSnippetElement(node)?.kind === SnippetKind.TabStop;
 }

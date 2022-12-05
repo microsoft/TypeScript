@@ -163,17 +163,37 @@ export declare function multiply(a: number, b: number): number;
 }
 
 
-/a/lib/tsc.js -w -p logic
+/a/lib/tsc.js -w -p logic --traceResolution --explainFiles
 Output::
 >> Screen clear
 [[90m12:00:50 AM[0m] Starting compilation in watch mode...
 
+======== Resolving module '../core/index' from '/user/username/projects/sample1/logic/index.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/index', target file types: TypeScript, Declaration.
+File '/user/username/projects/sample1/core/index.ts' exist - use it as a name resolution result.
+======== Module name '../core/index' was successfully resolved to '/user/username/projects/sample1/core/index.ts'. ========
+======== Resolving module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts'. ========
+Module resolution kind is not specified, using 'NodeJs'.
+Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/anotherModule', target file types: TypeScript, Declaration.
+File '/user/username/projects/sample1/core/anotherModule.ts' exist - use it as a name resolution result.
+======== Module name '../core/anotherModule' was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'. ========
+../../../../a/lib/lib.d.ts
+  Default library for target 'es3'
+core/index.d.ts
+  Imported via '../core/index' from file 'logic/index.ts'
+  File is output of project reference source 'core/index.ts'
+core/anotherModule.d.ts
+  Imported via '../core/anotherModule' from file 'logic/index.ts'
+  File is output of project reference source 'core/anotherModule.ts'
+logic/index.ts
+  Matched by default include pattern '**/*'
 [[90m12:00:59 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
-Program options: {"composite":true,"declaration":true,"sourceMap":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"project":"/user/username/projects/sample1/logic","configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program options: {"composite":true,"declaration":true,"sourceMap":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"project":"/user/username/projects/sample1/logic","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -432,12 +452,24 @@ Output::
 >> Screen clear
 [[90m12:01:18 AM[0m] File change detected. Starting incremental compilation...
 
+Reusing resolution of module '../core/index' from '/user/username/projects/sample1/logic/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/index.ts'.
+Reusing resolution of module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'.
+../../../../a/lib/lib.d.ts
+  Default library for target 'es3'
+core/index.d.ts
+  Imported via '../core/index' from file 'logic/index.ts'
+  File is output of project reference source 'core/index.ts'
+core/anotherModule.d.ts
+  Imported via '../core/anotherModule' from file 'logic/index.ts'
+  File is output of project reference source 'core/anotherModule.ts'
+logic/index.ts
+  Matched by default include pattern '**/*'
 [[90m12:01:19 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 Program root files: ["/user/username/projects/sample1/logic/index.ts"]
-Program options: {"composite":true,"declaration":true,"sourceMap":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"project":"/user/username/projects/sample1/logic","configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
+Program options: {"composite":true,"declaration":true,"sourceMap":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"watch":true,"project":"/user/username/projects/sample1/logic","traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/sample1/logic/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
