@@ -26484,12 +26484,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const target = getReferenceCandidate(typeOfExpr.expression);
             if (!isMatchingReference(reference, target)) {
-                const propertyAccess = getDiscriminantPropertyAccess(typeOfExpr.expression, type);
+                if (strictNullChecks && optionalChainContainsReference(target, reference) && assumeTrue === (literal.text !== "undefined")) {
+                    type = getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
+                }
+                const propertyAccess = getDiscriminantPropertyAccess(target, type);
                 if (propertyAccess) {
                     return narrowTypeByDiscriminant(type, propertyAccess, t => narrowTypeByLiteralExpression(t, literal, assumeTrue));
-                }
-                if (strictNullChecks && optionalChainContainsReference(target, reference) && assumeTrue === (literal.text !== "undefined")) {
-                    return getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
                 }
                 return type;
             }
