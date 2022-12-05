@@ -1755,8 +1755,6 @@ function loadModuleFromFile(extensions: Extensions, candidate: string, onlyRecor
             return resolvedByAddingExtension;
         }
     }
-
-    return loadModuleFromFileNoImplicitExtensions(extensions, candidate, onlyRecordFailures, state);
 }
 
 function loadModuleFromFileNoImplicitExtensions(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {

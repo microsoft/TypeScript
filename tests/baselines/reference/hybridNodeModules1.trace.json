@@ -4,7 +4,6 @@
     "File '/package.json' does not exist.",
     "Loading module 'dual' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.",
     "Found 'package.json' at '/node_modules/dual/package.json'.",
-    "'package.json' does not have a 'typesVersions' field.",
     "Matched 'exports' condition 'import'.",
     "Using 'exports' subpath '.' with target './index.js'.",
     "File name '/node_modules/dual/index.js' has a '.js' extension - stripping it.",

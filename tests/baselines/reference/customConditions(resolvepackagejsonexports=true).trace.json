@@ -4,7 +4,6 @@
     "File '/package.json' does not exist.",
     "Loading module 'lodash' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.",
     "Found 'package.json' at '/node_modules/lodash/package.json'.",
-    "'package.json' does not have a 'typesVersions' field.",
     "Saw non-matching condition 'browser'.",
     "Matched 'exports' condition 'webpack'.",
     "Using 'exports' subpath '.' with target './webpack.js'.",

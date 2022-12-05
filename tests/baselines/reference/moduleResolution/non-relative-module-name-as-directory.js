@@ -9,7 +9,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/a/node_modules/foo/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/c/node_modules/d/node_modules/foo/package.json",
@@ -64,7 +65,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/a/node_modules/foo/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/c/node_modules/d/node_modules/foo/package.json",

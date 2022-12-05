@@ -12,7 +12,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/a/b/c/bar/c/d/e.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/b/c/bar.ts",
@@ -39,7 +40,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/a/b/c/bar/c/d/e.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/b/c/bar.ts",
@@ -66,7 +68,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/a/bar/e.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/bar.ts",
@@ -93,7 +96,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/a/bar/e.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/bar.ts",
@@ -120,7 +124,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/bar/e.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/bar.ts",
@@ -147,7 +152,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/bar/e.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/bar.ts",
@@ -174,7 +180,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "c:/bar/e.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "c:/bar.ts",
@@ -201,7 +208,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "c:/bar/e.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "c:/bar.ts",

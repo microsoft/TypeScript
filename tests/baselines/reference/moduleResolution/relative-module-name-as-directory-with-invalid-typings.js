@@ -15,7 +15,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -57,7 +58,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -99,7 +101,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -141,7 +144,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -183,7 +187,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -225,7 +230,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -267,7 +273,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -309,7 +316,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -351,7 +359,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",
@@ -393,7 +402,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/node_modules/b/package.json",

@@ -55,10 +55,6 @@ File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.d.ts' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.js' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.jsx' does not exist.
-File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
-File '/user/username/projects/myproject/src/fileB.mts' does not exist.
-File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
@@ -175,10 +171,6 @@ File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extensi
 File '/user/username/projects/myproject/src/fileB.mts' does not exist.
 File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
-File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
-File '/user/username/projects/myproject/src/fileB.mts' does not exist.
-File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
@@ -283,10 +275,6 @@ File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.d.ts' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.js' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.jsx' does not exist.
-File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
-File '/user/username/projects/myproject/src/fileB.mts' does not exist.
-File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
@@ -482,10 +470,6 @@ File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extensi
 File '/user/username/projects/myproject/src/fileB.mts' does not exist.
 File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
-File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
-File '/user/username/projects/myproject/src/fileB.mts' does not exist.
-File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
@@ -597,10 +581,6 @@ File '/user/username/projects/myproject/src/fileB.mjs.tsx' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.d.ts' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.js' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.jsx' does not exist.
-File name '/user/username/projects/myproject/src/fileB.mjs' has a '.mjs' extension - stripping it.
-File '/user/username/projects/myproject/src/fileB.mts' does not exist.
-File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
-File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations

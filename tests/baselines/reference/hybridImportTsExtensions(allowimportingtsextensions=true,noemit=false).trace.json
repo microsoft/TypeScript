@@ -96,8 +96,6 @@
     "File '/project/a.d.ts.d.ts' does not exist.",
     "File '/project/a.d.ts.js' does not exist.",
     "File '/project/a.d.ts.jsx' does not exist.",
-    "File name '/project/a.d.ts' has a '.d.ts' extension - stripping it.",
-    "File '/project/a.d.ts' does not exist.",
     "Directory '/project/a.d.ts' does not exist, skipping all lookups in it.",
     "======== Module name './a.d.ts' was not resolved. ========"
 ]
