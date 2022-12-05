@@ -962,7 +962,9 @@ export const enum SortKind {
 
 /** @internal */
 export function detectSortCaseSensitivity(array: readonly string[], useEslintOrdering?: boolean): SortKind;
+/** @internal */
 export function detectSortCaseSensitivity<T>(array: readonly T[], useEslintOrdering: boolean, getString: (element: T) => string): SortKind;
+/** @internal */
 export function detectSortCaseSensitivity<T>(array: readonly T[], useEslintOrdering: boolean, getString?: (element: T) => string): SortKind {
     let kind = SortKind.Both;
     if (array.length < 2) return kind;
@@ -2180,6 +2182,11 @@ export function memoizeOne<A extends string | number | boolean | undefined, T>(c
     };
 }
 
+/**
+ * A version of `memoize` that supports a single non-primitive argument, stored as keys of a WeakMap.
+ *
+ * @internal
+ */
 export function memoizeWeak<A extends object, T>(callback: (arg: A) => T): (arg: A) => T {
     const map = new WeakMap<A, T>();
     return (arg: A) => {
