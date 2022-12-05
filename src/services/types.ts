@@ -357,10 +357,10 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
      *
      * If this is implemented, `getResolvedModuleWithFailedLookupLocationsFromCache` should be too.
      */
-    /** @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolutions */
+    /** @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolution modes like nodenext */
     resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
     getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
-    /** @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolutions */
+    /** @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext */
     resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode): (ResolvedTypeReferenceDirective | undefined)[];
     resolveModuleNameLiterals?(
         moduleLiterals: readonly StringLiteralLike[],

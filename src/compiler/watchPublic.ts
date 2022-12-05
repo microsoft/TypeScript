@@ -204,13 +204,13 @@ export interface ProgramHost<T extends BuilderProgram> {
     getEnvironmentVariable?(name: string): string | undefined;
 
     /**
-     * @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolutions
+     * @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolution modes like nodenext
      *
      * If provided, used to resolve the module names, otherwise typescript's default module resolution
      */
     resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
     /**
-     * @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolutions
+     * @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext
      *
      * If provided, used to resolve type reference directives, otherwise typescript's default resolution
      */

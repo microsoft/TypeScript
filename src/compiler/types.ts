@@ -7337,14 +7337,14 @@ export interface CompilerHost extends ModuleResolutionHost {
      * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
      * 'throw new Error("NotImplemented")'
      */
-    /** @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolutions */
+    /** @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolution modes like nodenext */
     resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
     /**
      * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
      */
     getModuleResolutionCache?(): ModuleResolutionCache | undefined;
     /**
-     * @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolutions
+     * @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext
      *
      * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
      */
