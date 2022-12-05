@@ -23700,8 +23700,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Source and target are types originating in the same generic type alias declaration.
                     // Simply infer from source type arguments to target type arguments, with defaults applied.
                     const params = getSymbolLinks(source.aliasSymbol).typeParameters!;
-                    const sourceTypes = fillMissingTypeArguments(source.aliasTypeArguments, params, getMinTypeArgumentCount(params), /*isJs*/ false);
-                    const targetTypes = fillMissingTypeArguments(target.aliasTypeArguments, params, getMinTypeArgumentCount(params), /*isJs*/ false);
+                    const minParams = getMinTypeArgumentCount(params);
+                    const sourceTypes = fillMissingTypeArguments(source.aliasTypeArguments, params, minParams, /*isJs*/ false);
+                    const targetTypes = fillMissingTypeArguments(target.aliasTypeArguments, params, minParams, /*isJs*/ false);
                     inferFromTypeArguments(sourceTypes, targetTypes!, getAliasVariances(source.aliasSymbol));
                 }
                 // And if there weren't any type arguments, there's no reason to run inference as the types must be the same.
