@@ -1,0 +1,29 @@
+=== tests/cases/conformance/types/typeRelationships/comparable/equalityWithtNullishCoalescingAssignment.ts ===
+function foo(a?: boolean): void {
+>foo : (a?: boolean) => void
+>a : boolean
+
+    a ??= true;
+>a ??= true : boolean
+>a : boolean
+>true : true
+
+    if (a === false) {
+>a === false : boolean
+>a : boolean
+>false : false
+
+        console.log(a);
+>console.log(a) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>a : false
+    }
+}
+
+foo(false);
+>foo(false) : void
+>foo : (a?: boolean) => void
+>false : false
+
