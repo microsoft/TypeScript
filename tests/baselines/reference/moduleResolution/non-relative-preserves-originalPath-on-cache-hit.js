@@ -34,8 +34,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/app/node_modules/linked/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "linked" from /app/lib/main.ts
@@ -76,6 +75,5 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/app/node_modules/linked/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
