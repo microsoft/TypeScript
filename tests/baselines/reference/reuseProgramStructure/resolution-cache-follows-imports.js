@@ -11,7 +11,12 @@ File: a.ts
 import {_} from 'b'
 var x = 1
 resolvedModules: 
-b: {"resolvedFileName":"b.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
+b: {
+  "resolvedFileName": "b.ts",
+  "extension": ".ts",
+  "isExternalLibraryImport": false,
+  "resolvedUsingTsExtension": false
+}
 resolvedTypeReferenceDirectiveNames: undefined
 
 
@@ -34,7 +39,12 @@ File: a.ts
 import {_} from 'b'
 var x = 2
 resolvedModules: 
-b: {"resolvedFileName":"b.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
+b: {
+  "resolvedFileName": "b.ts",
+  "extension": ".ts",
+  "isExternalLibraryImport": false,
+  "resolvedUsingTsExtension": false
+}
 resolvedTypeReferenceDirectiveNames: undefined
 
 
@@ -73,7 +83,12 @@ import x from 'b'
                 
 var x = 2
 resolvedModules: 
-b: {"resolvedFileName":"b.ts","extension":".ts","isExternalLibraryImport":false,"resolvedUsingTsExtension":false}
+b: {
+  "resolvedFileName": "b.ts",
+  "extension": ".ts",
+  "isExternalLibraryImport": false,
+  "resolvedUsingTsExtension": false
+}
 c: undefined
 resolvedTypeReferenceDirectiveNames: undefined
 

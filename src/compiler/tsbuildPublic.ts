@@ -436,7 +436,7 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
     // State of the solution
     const baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
     const compilerHost = createCompilerHostFromProgramHost(host, () => state.projectCompilerOptions) as CompilerHost & ReadBuildProgramHost;
-    setGetSourceFileAsHashVersioned(compilerHost, host);
+    setGetSourceFileAsHashVersioned(compilerHost);
     compilerHost.getParsedCommandLine = fileName => parseConfigFile(state, fileName as ResolvedConfigFileName, toResolvedConfigFilePath(state, fileName as ResolvedConfigFileName));
     compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
     compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
@@ -1811,7 +1811,7 @@ function getUpToDateStatusWorker(state: SolutionBuilderState, project: ParsedCom
                 if (!buildInfoVersionMap) buildInfoVersionMap = getBuildInfoFileVersionMap(buildInfoProgram, buildInfoPath!, host);
                 version = buildInfoVersionMap.get(toPath(state, inputFile));
                 const text = version ? state.readFileWithCache(inputFile) : undefined;
-                currentVersion = text && getSourceFileVersionAsHashFromText(host, text);
+                currentVersion = text !== undefined ? getSourceFileVersionAsHashFromText(host, text) : undefined;
                 if (version && version === currentVersion) pseudoInputUpToDate = true;
             }
 

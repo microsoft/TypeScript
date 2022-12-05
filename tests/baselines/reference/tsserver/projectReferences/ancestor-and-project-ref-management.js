@@ -1,12 +1,12 @@
 Info 0    [00:01:14.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:01:15.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/container/compositeExec/index.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/lib/lib.d.ts]
@@ -459,12 +459,12 @@ Info 26   [00:01:49.000] response:
     }
 Info 27   [00:01:50.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/temp/temp.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -565,7 +565,7 @@ Info 40   [00:02:17.000] request:
         "line": 3,
         "offset": 16
       },
-      "seq": 1,
+      "seq": 3,
       "type": "request"
     }
 Before request
@@ -823,12 +823,12 @@ Info 79   [00:03:12.000] 	FileName: /user/username/projects/container/compositeE
 Info 79   [00:03:13.000] 		Projects: /user/username/projects/container/compositeExec/tsconfig.json
 Info 79   [00:03:14.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/temp/temp.ts"
-      }
+      },
+      "seq": 4,
+      "type": "request"
     }
 Before request
 
@@ -998,12 +998,12 @@ Info 95   [00:04:22.000] -----------------------------------------------
 Info 95   [00:04:23.000] Open files: 
 Info 95   [00:04:24.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/temp/temp.ts"
-      }
+      },
+      "seq": 5,
+      "type": "request"
     }
 Before request
 

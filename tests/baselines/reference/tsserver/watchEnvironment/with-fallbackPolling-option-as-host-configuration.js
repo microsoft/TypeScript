@@ -57,13 +57,13 @@ Info 4    [00:00:21.000] response:
     }
 Info 5    [00:00:22.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/a/b/commonFile1.ts",
         "projectRootPath": "/a/b"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 

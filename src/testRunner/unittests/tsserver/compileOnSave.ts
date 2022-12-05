@@ -6,11 +6,9 @@ import {
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,
-    checkNumberOfProjects,
-    checkProjectRootFiles,
     createLoggerWithInMemoryLogs,
     createSession,
-    makeSessionRequest,
+    Logger,
     openFilesForSession,
     protocolTextSpanFromSubstring,
     TestSession,
@@ -23,203 +21,241 @@ function createTestTypingsInstaller(host: ts.server.ServerHost) {
 }
 
 describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
-    function sendAffectedFileRequestAndCheckResult(session: ts.server.Session, request: ts.server.protocol.Request, expectedFileList: { projectFileName: string, files: File[] }[]) {
-        const response = session.executeCommand(request).response as ts.server.protocol.CompileOnSaveAffectedFileListSingleProject[];
-        const actualResult = response.sort((list1, list2) => ts.compareStringsCaseSensitive(list1.projectFileName, list2.projectFileName));
-        expectedFileList = expectedFileList.sort((list1, list2) => ts.compareStringsCaseSensitive(list1.projectFileName, list2.projectFileName));
-
-        assert.equal(actualResult.length, expectedFileList.length, `Actual result project number is different from the expected project number`);
-
-        for (let i = 0; i < actualResult.length; i++) {
-            const actualResultSingleProject = actualResult[i];
-            const expectedResultSingleProject = expectedFileList[i];
-            assert.equal(actualResultSingleProject.projectFileName, expectedResultSingleProject.projectFileName, `Actual result contains different projects than the expected result`);
-
-            const actualResultSingleProjectFileNameList = actualResultSingleProject.fileNames.sort();
-            const expectedResultSingleProjectFileNameList = ts.map(expectedResultSingleProject.files, f => f.path).sort();
-            assert.isTrue(
-                ts.arrayIsEqualTo(actualResultSingleProjectFileNameList, expectedResultSingleProjectFileNameList),
-                `For project ${actualResultSingleProject.projectFileName}, the actual result is ${actualResultSingleProjectFileNameList}, while expected ${expectedResultSingleProjectFileNameList}`);
-        }
-    }
-
     describe("for configured projects", () => {
-        let moduleFile1: File;
-        let file1Consumer1: File;
-        let file1Consumer2: File;
-        let moduleFile2: File;
-        let globalFile3: File;
-        let configFile: File;
-        let changeModuleFile1ShapeRequest1: ts.server.protocol.Request;
-        let changeModuleFile1InternalRequest1: ts.server.protocol.Request;
-        // A compile on save affected file request using file1
-        let moduleFile1FileListRequest: ts.server.protocol.Request;
-
-        beforeEach(() => {
-            moduleFile1 = {
+        function files() {
+            const moduleFile1: File = {
                 path: "/a/b/moduleFile1.ts",
                 content: "export function Foo() { };"
             };
 
-            file1Consumer1 = {
+            const file1Consumer1: File = {
                 path: "/a/b/file1Consumer1.ts",
                 content: `import {Foo} from "./moduleFile1"; export var y = 10;`
             };
 
-            file1Consumer2 = {
+            const file1Consumer2: File = {
                 path: "/a/b/file1Consumer2.ts",
                 content: `import {Foo} from "./moduleFile1"; let z = 10;`
             };
 
-            moduleFile2 = {
+            const moduleFile2: File = {
                 path: "/a/b/moduleFile2.ts",
                 content: `export var Foo4 = 10;`
             };
 
-            globalFile3 = {
+            const globalFile3: File = {
                 path: "/a/b/globalFile3.ts",
                 content: `interface GlobalFoo { age: number }`
             };
 
-            configFile = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                         "compileOnSave": true
                     }`
             };
-
-            // Change the content of file1 to `export var T: number;export function Foo() { };`
-            changeModuleFile1ShapeRequest1 = makeSessionRequest<ts.server.protocol.ChangeRequestArgs>(ts.server.CommandNames.Change, {
-                file: moduleFile1.path,
-                line: 1,
-                offset: 1,
-                endLine: 1,
-                endOffset: 1,
-                insertString: `export var T: number;`
-            });
-
-            // Change the content of file1 to `export var T: number;export function Foo() { };`
-            changeModuleFile1InternalRequest1 = makeSessionRequest<ts.server.protocol.ChangeRequestArgs>(ts.server.CommandNames.Change, {
-                file: moduleFile1.path,
-                line: 1,
-                offset: 1,
-                endLine: 1,
-                endOffset: 1,
-                insertString: `var T1: number;`
-            });
-
-            moduleFile1FileListRequest = makeSessionRequest<ts.server.protocol.FileRequestArgs>(ts.server.CommandNames.CompileOnSaveAffectedFileList, { file: moduleFile1.path, projectFileName: configFile.path });
-        });
+            return { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile };
+        }
 
         it("should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed", () => {
+            const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller });
+            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([moduleFile1, file1Consumer1], session);
 
             // Send an initial compileOnSave request
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
-            session.executeCommand(changeModuleFile1ShapeRequest1);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
+            session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                command: ts.server.CommandNames.Change,
+                arguments: {
+                    file: moduleFile1.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 1,
+                    insertString: `export var T: number;`
+                }
+            });
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
 
             // Change the content of file1 to `export var T: number;export function Foo() { console.log('hi'); };`
-            const changeFile1InternalRequest = makeSessionRequest<ts.server.protocol.ChangeRequestArgs>(ts.server.CommandNames.Change, {
-                file: moduleFile1.path,
-                line: 1,
-                offset: 46,
-                endLine: 1,
-                endOffset: 46,
-                insertString: `console.log('hi');`
+            session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                command: ts.server.CommandNames.Change,
+                arguments: {
+                    file: moduleFile1.path,
+                    line: 1,
+                    offset: 46,
+                    endLine: 1,
+                    endOffset: 46,
+                    insertString: `console.log('hi');`
+                }
             });
-            session.executeCommand(changeFile1InternalRequest);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1] }]);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
+            baselineTsserverLogs("compileOnSave", "configProjects module shape changed", session);
         });
 
         it("should be up-to-date with the reference map changes", () => {
+            const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller });
+            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([moduleFile1, file1Consumer1], session);
 
             // Send an initial compileOnSave request
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
 
             // Change file2 content to `let y = Foo();`
-            const removeFile1Consumer1ImportRequest = makeSessionRequest<ts.server.protocol.ChangeRequestArgs>(ts.server.CommandNames.Change, {
-                file: file1Consumer1.path,
-                line: 1,
-                offset: 1,
-                endLine: 1,
-                endOffset: 28,
-                insertString: ""
+            session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                command: ts.server.CommandNames.Change,
+                arguments: {
+                    file: file1Consumer1.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 28,
+                    insertString: ""
+                }
             });
-            session.executeCommand(removeFile1Consumer1ImportRequest);
-            session.executeCommand(changeModuleFile1ShapeRequest1);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer2] }]);
+            session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                command: ts.server.CommandNames.Change,
+                arguments: {
+                    file: moduleFile1.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 1,
+                    insertString: `export var T: number;`
+                }
+            });
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
 
             // Add the import statements back to file2
-            const addFile2ImportRequest = makeSessionRequest<ts.server.protocol.ChangeRequestArgs>(ts.server.CommandNames.Change, {
-                file: file1Consumer1.path,
-                line: 1,
-                offset: 1,
-                endLine: 1,
-                endOffset: 1,
-                insertString: `import {Foo} from "./moduleFile1";`
+            session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                command: ts.server.CommandNames.Change,
+                arguments: {
+                    file: file1Consumer1.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 1,
+                    insertString: `import {Foo} from "./moduleFile1";`
+                }
             });
-            session.executeCommand(addFile2ImportRequest);
 
             // Change the content of file1 to `export var T2: string;export var T: number;export function Foo() { };`
-            const changeModuleFile1ShapeRequest2 = makeSessionRequest<ts.server.protocol.ChangeRequestArgs>(ts.server.CommandNames.Change, {
-                file: moduleFile1.path,
-                line: 1,
-                offset: 1,
-                endLine: 1,
-                endOffset: 1,
-                insertString: `export var T2: string;`
+            session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                command: ts.server.CommandNames.Change,
+                arguments: {
+                    file: moduleFile1.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 1,
+                    insertString: `export var T2: string;`
+                }
             });
-            session.executeCommand(changeModuleFile1ShapeRequest2);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
+            baselineTsserverLogs("compileOnSave", "configProjects uptodate with reference map changes", session);
         });
 
         it("should be up-to-date with changes made in non-open files", () => {
+            const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller });
+            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([moduleFile1], session);
 
             // Send an initial compileOnSave request
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
 
             host.writeFile(file1Consumer1.path, `let y = 10;`);
 
-            session.executeCommand(changeModuleFile1ShapeRequest1);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer2] }]);
+            session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                command: ts.server.CommandNames.Change,
+                arguments: {
+                    file: moduleFile1.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 1,
+                    insertString: `export var T: number;`
+                }
+            });
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
+            baselineTsserverLogs("compileOnSave", "configProjects uptodate with changes in non open files", session);
         });
 
         it("should be up-to-date with deleted files", () => {
+            const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller });
+            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([moduleFile1], session);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
 
-            session.executeCommand(changeModuleFile1ShapeRequest1);
+            session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                command: ts.server.CommandNames.Change,
+                arguments: {
+                    file: moduleFile1.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 1,
+                    insertString: `export var T: number;`
+                }
+            });
             // Delete file1Consumer2
             host.deleteFile(file1Consumer2.path);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1] }]);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
+            baselineTsserverLogs("compileOnSave", "configProjects uptodate with deleted files", session);
         });
 
         it("should be up-to-date with newly created files", () => {
+            const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller });
+            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([moduleFile1], session);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
 
             const file1Consumer3: File = {
                 path: "/a/b/file1Consumer3.ts",
@@ -227,22 +263,36 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
             };
             host.writeFile(file1Consumer3.path, file1Consumer3.content);
             host.runQueuedTimeoutCallbacks();
-            session.executeCommand(changeModuleFile1ShapeRequest1);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2, file1Consumer3] }]);
+            session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                command: ts.server.CommandNames.Change,
+                arguments: {
+                    file: moduleFile1.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 1,
+                    insertString: `export var T: number;`
+                }
+            });
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
+            baselineTsserverLogs("compileOnSave", "configProjects uptodate with new files", session);
         });
 
         it("should detect changes in non-root files", () => {
-            moduleFile1 = {
+            const moduleFile1: File = {
                 path: "/a/b/moduleFile1.ts",
                 content: "export function Foo() { };"
             };
 
-            file1Consumer1 = {
+            const file1Consumer1: File = {
                 path: "/a/b/file1Consumer1.ts",
                 content: `import {Foo} from "./moduleFile1"; let y = Foo();`
             };
 
-            configFile = {
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                         "compileOnSave": true,
@@ -252,56 +302,98 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
 
             const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller });
+            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([moduleFile1, file1Consumer1], session);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1] }]);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
 
             // change file1 shape now, and verify both files are affected
-            session.executeCommand(changeModuleFile1ShapeRequest1);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1] }]);
+            session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                command: ts.server.CommandNames.Change,
+                arguments: {
+                    file: moduleFile1.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 1,
+                    insertString: `export var T: number;`
+                }
+            });
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
 
             // change file1 internal, and verify only file1 is affected
-            session.executeCommand(changeModuleFile1InternalRequest1);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1] }]);
+            session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                command: ts.server.CommandNames.Change,
+                arguments: {
+                    file: moduleFile1.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 1,
+                    insertString: `var T1: number;`
+                }
+            });
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
+            baselineTsserverLogs("compileOnSave", "configProjects detect changes in non-root files", session);
         });
 
         it("should return all files if a global file changed shape", () => {
+            const { moduleFile1, file1Consumer1, file1Consumer2, moduleFile2, globalFile3, configFile } = files();
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller });
+            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([globalFile3], session);
-            const changeGlobalFile3ShapeRequest = makeSessionRequest<ts.server.protocol.ChangeRequestArgs>(ts.server.CommandNames.Change, {
-                file: globalFile3.path,
-                line: 1,
-                offset: 1,
-                endLine: 1,
-                endOffset: 1,
-                insertString: `var T2: string;`
-            });
 
             // check after file1 shape changes
-            session.executeCommand(changeGlobalFile3ShapeRequest);
-            const globalFile3FileListRequest = makeSessionRequest<ts.server.protocol.FileRequestArgs>(ts.server.CommandNames.CompileOnSaveAffectedFileList, { file: globalFile3.path });
-            sendAffectedFileRequestAndCheckResult(session, globalFile3FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2] }]);
+            session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                command: ts.server.CommandNames.Change,
+                arguments: {
+                    file: globalFile3.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 1,
+                    insertString: `var T2: string;`
+                }
+            });
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: globalFile3.path }
+            });
+            baselineTsserverLogs("compileOnSave", "configProjects global file shape changed", session);
         });
 
         it("should return empty array if CompileOnSave is not enabled", () => {
-            configFile = {
+            const { moduleFile1, file1Consumer1, file1Consumer2 } = files();
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{}`
             };
 
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller });
+            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([moduleFile1], session);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, []);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
+            baselineTsserverLogs("compileOnSave", "configProjects compileOnSave disabled", session);
         });
 
         it("should return empty array if noEmit is set", () => {
-            configFile = {
+            const { moduleFile1, file1Consumer1, file1Consumer2 } = files();
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                         "compileOnSave": true,
@@ -313,13 +405,18 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
 
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller });
+            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([moduleFile1], session);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, []);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
+            baselineTsserverLogs("compileOnSave", "configProjects noEmit", session);
         });
 
         it("should save when compileOnSave is enabled in base tsconfig.json", () => {
-            configFile = {
+            const { moduleFile1, file1Consumer1, file1Consumer2 } = files();
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                         "extends": "/a/tsconfig.json"
@@ -335,14 +432,19 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
 
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile2, configFile, libFile]);
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller });
+            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([moduleFile1, file1Consumer1], session);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
+            baselineTsserverLogs("compileOnSave", "configProjects compileOnSave in base tsconfig", session);
         });
 
         it("should always return the file itself if '--isolatedModules' is specified", () => {
-            configFile = {
+            const { moduleFile1, file1Consumer1 } = files();
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                         "compileOnSave": true,
@@ -354,23 +456,30 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
 
             const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller });
+            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([moduleFile1], session);
 
-            const file1ChangeShapeRequest = makeSessionRequest<ts.server.protocol.ChangeRequestArgs>(ts.server.CommandNames.Change, {
-                file: moduleFile1.path,
-                line: 1,
-                offset: 27,
-                endLine: 1,
-                endOffset: 27,
-                insertString: `Point,`
+            session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                command: ts.server.CommandNames.Change,
+                arguments: {
+                    file: moduleFile1.path,
+                    line: 1,
+                    offset: 27,
+                    endLine: 1,
+                    endOffset: 27,
+                    insertString: `Point,`
+                }
             });
-            session.executeCommand(file1ChangeShapeRequest);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1] }]);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
+            baselineTsserverLogs("compileOnSave", "configProjects isolatedModules", session);
         });
 
         it("should always return the file itself if '--out' or '--outFile' is specified", () => {
-            configFile = {
+            const { moduleFile1, file1Consumer1 } = files();
+            const configFile: File = {
                 path: "/a/b/tsconfig.json",
                 content: `{
                         "compileOnSave": true,
@@ -383,47 +492,74 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
 
             const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller });
+            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([moduleFile1], session);
 
-            const file1ChangeShapeRequest = makeSessionRequest<ts.server.protocol.ChangeRequestArgs>(ts.server.CommandNames.Change, {
-                file: moduleFile1.path,
-                line: 1,
-                offset: 27,
-                endLine: 1,
-                endOffset: 27,
-                insertString: `Point,`
+            session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                command: ts.server.CommandNames.Change,
+                arguments: {
+                    file: moduleFile1.path,
+                    line: 1,
+                    offset: 27,
+                    endLine: 1,
+                    endOffset: 27,
+                    insertString: `Point,`
+                }
             });
-            session.executeCommand(file1ChangeShapeRequest);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1] }]);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
+            baselineTsserverLogs("compileOnSave", "configProjects outFile", session);
         });
 
         it("should return cascaded affected file list", () => {
+            const { moduleFile1, file1Consumer1, globalFile3, configFile } = files();
             const file1Consumer1Consumer1: File = {
                 path: "/a/b/file1Consumer1Consumer1.ts",
                 content: `import {y} from "./file1Consumer1";`
             };
             const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer1Consumer1, globalFile3, configFile, libFile]);
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller });
+            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([moduleFile1, file1Consumer1], session);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer1Consumer1] }]);
-
-            const changeFile1Consumer1ShapeRequest = makeSessionRequest<ts.server.protocol.ChangeRequestArgs>(ts.server.CommandNames.Change, {
-                file: file1Consumer1.path,
-                line: 2,
-                offset: 1,
-                endLine: 2,
-                endOffset: 1,
-                insertString: `export var T: number;`
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
             });
-            session.executeCommand(changeModuleFile1ShapeRequest1);
-            session.executeCommand(changeFile1Consumer1ShapeRequest);
-            sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer1Consumer1] }]);
+
+            session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                command: ts.server.CommandNames.Change,
+                arguments: {
+                    file: moduleFile1.path,
+                    line: 1,
+                    offset: 1,
+                    endLine: 1,
+                    endOffset: 1,
+                    insertString: `export var T: number;`
+                }
+            });
+            session.executeCommandSeq<ts.server.protocol.ChangeRequest>({
+                command: ts.server.CommandNames.Change,
+                arguments: {
+                    file: file1Consumer1.path,
+                    line: 2,
+                    offset: 1,
+                    endLine: 2,
+                    endOffset: 1,
+                    insertString: `export var T: number;`
+                }
+            });
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path, projectFileName: configFile.path }
+            });
+            baselineTsserverLogs("compileOnSave", "configProjects cascaded affected file list", session);
         });
 
         it("should work fine for files with circular references", () => {
+            const { configFile } = files();
             const file1: File = {
                 path: "/a/b/file1.ts",
                 content: `
@@ -438,11 +574,14 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
             };
             const host = createServerHost([file1, file2, configFile]);
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = createSession(host, { typingsInstaller });
+            const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([file1, file2], session);
-            const file1AffectedListRequest = makeSessionRequest<ts.server.protocol.FileRequestArgs>(ts.server.CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
-            sendAffectedFileRequestAndCheckResult(session, file1AffectedListRequest, [{ projectFileName: configFile.path, files: [file1, file2] }]);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: file1.path }
+            });
+            baselineTsserverLogs("compileOnSave", "configProjects circular references", session);
         });
 
         it("should return results for all projects if not specifying projectFileName", () => {
@@ -453,18 +592,18 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
             const configFile2: File = { path: "/a/c/tsconfig.json", content: `{ "compileOnSave": true }` };
 
             const host = createServerHost([file1, file2, file3, configFile1, configFile2]);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([file1, file2, file3], session);
-            const file1AffectedListRequest = makeSessionRequest<ts.server.protocol.FileRequestArgs>(ts.server.CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
-
-            sendAffectedFileRequestAndCheckResult(session, file1AffectedListRequest, [
-                { projectFileName: configFile1.path, files: [file1, file2] },
-                { projectFileName: configFile2.path, files: [file1, file3] }
-            ]);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: file1.path }
+            });
+            baselineTsserverLogs("compileOnSave", "configProjects all projects without projectPath", session);
         });
 
         it("should detect removed code file", () => {
+            const { moduleFile1, configFile } = files();
             const referenceFile1: File = {
                 path: "/a/b/referenceFile1.ts",
                 content: `
@@ -472,20 +611,24 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                     export var x = Foo();`
             };
             const host = createServerHost([moduleFile1, referenceFile1, configFile]);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([referenceFile1], session);
             host.deleteFile(moduleFile1.path);
 
-            const request = makeSessionRequest<ts.server.protocol.FileRequestArgs>(ts.server.CommandNames.CompileOnSaveAffectedFileList, { file: referenceFile1.path });
-            sendAffectedFileRequestAndCheckResult(session, request, [
-                { projectFileName: configFile.path, files: [referenceFile1] }
-            ]);
-            const requestForMissingFile = makeSessionRequest<ts.server.protocol.FileRequestArgs>(ts.server.CommandNames.CompileOnSaveAffectedFileList, { file: moduleFile1.path });
-            sendAffectedFileRequestAndCheckResult(session, requestForMissingFile, []);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: referenceFile1.path }
+            });
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: moduleFile1.path }
+            });
+            baselineTsserverLogs("compileOnSave", "configProjects removed code", session);
         });
 
         it("should detect non-existing code file", () => {
+            const { configFile } = files();
             const referenceFile1: File = {
                 path: "/a/b/referenceFile1.ts",
                 content: `
@@ -493,120 +636,85 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
                     export var x = Foo();`
             };
             const host = createServerHost([referenceFile1, configFile]);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
 
             openFilesForSession([referenceFile1], session);
-            const request = makeSessionRequest<ts.server.protocol.FileRequestArgs>(ts.server.CommandNames.CompileOnSaveAffectedFileList, { file: referenceFile1.path });
-            sendAffectedFileRequestAndCheckResult(session, request, [
-                { projectFileName: configFile.path, files: [referenceFile1] }
-            ]);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                command: ts.server.CommandNames.CompileOnSaveAffectedFileList,
+                arguments: { file: referenceFile1.path }
+            });
+            baselineTsserverLogs("compileOnSave", "configProjects non existing code", session);
         });
     });
 
     describe("for changes in declaration files", () => {
-        function testDTS(dtsFileContents: string, tsFileContents: string, opts: ts.CompilerOptions, expectDTSEmit: boolean) {
-            const dtsFile = {
-                path: "/a/runtime/a.d.ts",
-                content: dtsFileContents
-            };
-            const f2 = {
-                path: "/a/b.ts",
-                content: tsFileContents
-            };
-            const config = {
-                path: "/a/tsconfig.json",
-                content: JSON.stringify({
-                    compilerOptions: opts,
-                    compileOnSave: true
-                })
-            };
-            const host = createServerHost([dtsFile, f2, config]);
-            const session = createSession(host);
-            session.executeCommand({
-                seq: 1,
-                type: "request",
-                command: "open",
-                arguments: { file: dtsFile.path }
-            } as ts.server.protocol.OpenRequest);
-            const projectService = session.getProjectService();
-            checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            const project = projectService.configuredProjects.get(config.path)!;
-            checkProjectRootFiles(project, [dtsFile.path, f2.path]);
-            session.executeCommand({
-                seq: 2,
-                type: "request",
-                command: "open",
-                arguments: { file: f2.path }
-            } as ts.server.protocol.OpenRequest);
-            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
-            const { response } = session.executeCommand({
-                seq: 3,
-                type: "request",
-                command: "compileOnSaveAffectedFileList",
-                arguments: { file: dtsFile.path }
-            } as ts.server.protocol.CompileOnSaveAffectedFileListRequest);
-            if (expectDTSEmit) {
-                assert.equal((response as ts.server.protocol.CompileOnSaveAffectedFileListSingleProject[]).length, 1, "expected output from 1 project");
-                assert.equal((response as ts.server.protocol.CompileOnSaveAffectedFileListSingleProject[])[0].fileNames.length, 2, "expected to affect 2 files");
-            }
-            else {
-                assert.equal((response as ts.server.protocol.CompileOnSaveAffectedFileListSingleProject[]).length, 0, "expected no output");
-            }
-
-
-            const { response: response2 } = session.executeCommand({
-                seq: 4,
-                type: "request",
-                command: "compileOnSaveAffectedFileList",
-                arguments: { file: f2.path }
-            } as ts.server.protocol.CompileOnSaveAffectedFileListRequest);
-            assert.equal((response2 as ts.server.protocol.CompileOnSaveAffectedFileListSingleProject[]).length, 1, "expected output from 1 project");
+        function testDTS(subScenario: string, dtsFileContents: string, tsFileContents: string, opts: ts.CompilerOptions) {
+            it(subScenario, () => {
+                const dtsFile = {
+                    path: "/a/runtime/a.d.ts",
+                    content: dtsFileContents
+                };
+                const f2 = {
+                    path: "/a/b.ts",
+                    content: tsFileContents
+                };
+                const config = {
+                    path: "/a/tsconfig.json",
+                    content: JSON.stringify({
+                        compilerOptions: opts,
+                        compileOnSave: true
+                    })
+                };
+                const host = createServerHost([dtsFile, f2, config]);
+                const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+                openFilesForSession([dtsFile], session);
+                openFilesForSession([f2], session);
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                    arguments: { file: dtsFile.path }
+                });
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                    command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
+                    arguments: { file: f2.path }
+                });
+                baselineTsserverLogs("compileOnSave", subScenario, session);
+            });
         }
 
-        it("should return empty array if change is made in a global declaration file", () => {
-            testDTS(
-                /*dtsFileContents*/ "declare const x: string;",
-                /*tsFileContents*/ "var y = 1;",
-                /*opts*/ {},
-                /*expectDTSEmit*/ false
-            );
-        });
+        testDTS(
+            "dtsFileChange in global file",
+            /*dtsFileContents*/ "declare const x: string;",
+            /*tsFileContents*/ "var y = 1;",
+            /*opts*/ {},
+        );
 
-        it("should return empty array if change is made in a module declaration file", () => {
-            testDTS(
-                /*dtsFileContents*/ "export const x: string;",
-                /*tsFileContents*/  "import { x } from './runtime/a;",
-                /*opts*/ {},
-                /*expectDTSEmit*/ false
-            );
-        });
+        testDTS(
+            "dtsFileChange in module file",
+            /*dtsFileContents*/ "export const x: string;",
+            /*tsFileContents*/  "import { x } from './runtime/a;",
+            /*opts*/ {},
+        );
 
-        it("should return results if change is made in a global declaration file with declaration emit", () => {
-            testDTS(
-                /*dtsFileContents*/ "declare const x: string;",
-                /*tsFileContents*/ "var y = 1;",
-                /*opts*/ { declaration: true },
-                /*expectDTSEmit*/ true
-            );
-        });
+        testDTS(
+            "dtsFileChange in global file with dts emit",
+            /*dtsFileContents*/ "declare const x: string;",
+            /*tsFileContents*/ "var y = 1;",
+            /*opts*/ { declaration: true },
+        );
 
-        it("should return results if change is made in a global declaration file with composite enabled", () => {
-            testDTS(
-                /*dtsFileContents*/ "declare const x: string;",
-                /*tsFileContents*/ "var y = 1;",
-                /*opts*/ { composite: true },
-                /*expectDTSEmit*/ true
-            );
-        });
+        testDTS(
+            "dtsFileChange in global file with composite",
+            /*dtsFileContents*/ "declare const x: string;",
+            /*tsFileContents*/ "var y = 1;",
+            /*opts*/ { composite: true },
+        );
 
-        it("should return results if change is made in a global declaration file with decorator emit enabled", () => {
-            testDTS(
-                /*dtsFileContents*/ "declare const x: string;",
-                /*tsFileContents*/ "var y = 1;",
-                /*opts*/ { experimentalDecorators: true, emitDecoratorMetadata: true },
-                /*expectDTSEmit*/ true
-            );
-        });
+        testDTS(
+            "dtsFileChange in global file with decorator emit",
+            /*dtsFileContents*/ "declare const x: string;",
+            /*tsFileContents*/ "var y = 1;",
+            /*opts*/ { experimentalDecorators: true, emitDecoratorMetadata: true },
+        );
     });
 
     describe("tsserverProjectSystem emit with outFile or out setting", () => {
@@ -645,10 +753,11 @@ describe("unittests:: tsserver:: compileOnSave:: affected list", () => {
 
 describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
     it("should respect line endings", () => {
-        test("\n");
-        test("\r\n");
+        const logger = test("\n");
+        test("\r\n", logger);
+        baselineTsserverLogs("compileOnSave", "line endings", { logger });
 
-        function test(newLine: string) {
+        function test(newLine: string, logger?: Logger) {
             const lines = ["var x = 1;", "var y = 2;"];
             const path = "/a/app";
             const f = {
@@ -656,23 +765,15 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
                 content: lines.join(newLine)
             };
             const host = createServerHost([f], { newLine });
-            const session = createSession(host);
-            const openRequest: ts.server.protocol.OpenRequest = {
-                seq: 1,
-                type: "request",
-                command: ts.server.protocol.CommandTypes.Open,
-                arguments: { file: f.path }
-            };
-            session.executeCommand(openRequest);
-            const emitFileRequest: ts.server.protocol.CompileOnSaveEmitFileRequest = {
-                seq: 2,
-                type: "request",
+            if (logger) logger.host = host;
+            else logger = createLoggerWithInMemoryLogs(host);
+            const session = createSession(host, { logger });
+            openFilesForSession([f], session);
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
                 command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                 arguments: { file: f.path }
-            };
-            session.executeCommand(emitFileRequest);
-            const emitOutput = host.readFile(path + ts.Extension.Js);
-            assert.equal(emitOutput, f.content + newLine, "content of emit output should be identical with the input + newline");
+            });
+            return logger;
         }
     });
 
@@ -691,15 +792,15 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
         };
         const host = createServerHost([file1, file2, configFile, libFile], { newLine: "\r\n" });
         const typingsInstaller = createTestTypingsInstaller(host);
-        const session = createSession(host, { typingsInstaller });
+        const session = createSession(host, { typingsInstaller, logger: createLoggerWithInMemoryLogs(host) });
 
         openFilesForSession([file1, file2], session);
-        const compileFileRequest = makeSessionRequest<ts.server.protocol.CompileOnSaveEmitFileRequestArgs>(ts.server.CommandNames.CompileOnSaveEmitFile, { file: file1.path, projectFileName: configFile.path });
-        session.executeCommand(compileFileRequest);
+        session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+            command: ts.server.CommandNames.CompileOnSaveEmitFile,
+            arguments: { file: file1.path, projectFileName: configFile.path }
+        });
 
-        const expectedEmittedFileName = "/a/b/f1.js";
-        assert.isTrue(host.fileExists(expectedEmittedFileName));
-        assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nexports.__esModule = true;\r\nexports.Foo = void 0;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
+        baselineTsserverLogs("compileOnSave", "emit specified file", session);
     });
 
     it("shoud not emit js files in external projects", () => {
@@ -718,28 +819,26 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
         };
         const externalProjectName = "/a/b/externalproject";
         const host = createServerHost([file1, file2, file3, libFile]);
-        const session = createSession(host);
-        const projectService = session.getProjectService();
-
-        projectService.openExternalProject({
-            rootFiles: toExternalFiles([file1.path, file2.path]),
-            options: {
-                allowJs: true,
-                outFile: "dist.js",
-                compileOnSave: true
-            },
-            projectFileName: externalProjectName
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        session.executeCommandSeq<ts.server.protocol.OpenExternalProjectRequest>({
+            command: ts.server.protocol.CommandTypes.OpenExternalProject,
+            arguments: {
+                rootFiles: toExternalFiles([file1.path, file2.path]),
+                options: {
+                    allowJs: true,
+                    outFile: "dist.js",
+                    compileOnSave: true
+                },
+                projectFileName: externalProjectName
+            }
         });
 
-        const emitRequest = makeSessionRequest<ts.server.protocol.CompileOnSaveEmitFileRequestArgs>(ts.server.CommandNames.CompileOnSaveEmitFile, { file: file1.path });
-        session.executeCommand(emitRequest);
+        session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+            command: ts.server.CommandNames.CompileOnSaveEmitFile,
+            arguments: { file: file1.path }
+        });
 
-        const expectedOutFileName = "/a/b/dist.js";
-        assert.isTrue(host.fileExists(expectedOutFileName));
-        const outFileContent = host.readFile(expectedOutFileName)!;
-        assert.isTrue(outFileContent.indexOf(file1.content) !== -1);
-        assert.isTrue(outFileContent.indexOf(file2.content) === -1);
-        assert.isTrue(outFileContent.indexOf(file3.content) === -1);
+        baselineTsserverLogs("compileOnSave", "should not emit js files in external projects", session);
     });
 
     it("should use project root as current directory so that compile on save results in correct file mapping", () => {
@@ -750,39 +849,24 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
         };
         const externalProjectName = "/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj";
         const host = createServerHost([file1, libFile]);
-        const session = createSession(host);
-        const projectService = session.getProjectService();
-
-        const outFileName = "bar.js";
-        projectService.openExternalProject({
-            rootFiles: toExternalFiles([file1.path]),
-            options: {
-                outFile: outFileName,
-                sourceMap: true,
-                compileOnSave: true
-            },
-            projectFileName: externalProjectName
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        session.executeCommandSeq<ts.server.protocol.OpenExternalProjectRequest>({
+            command: ts.server.protocol.CommandTypes.OpenExternalProject,
+            arguments: {
+                rootFiles: toExternalFiles([file1.path]),
+                options: {
+                    outFile: "bar.js",
+                    sourceMap: true,
+                    compileOnSave: true
+                },
+                projectFileName: externalProjectName
+            }
         });
-
-        const emitRequest = makeSessionRequest<ts.server.protocol.CompileOnSaveEmitFileRequestArgs>(ts.server.CommandNames.CompileOnSaveEmitFile, { file: file1.path });
-        session.executeCommand(emitRequest);
-
-        // Verify js file
-        const expectedOutFileName = "/root/TypeScriptProject3/TypeScriptProject3/" + outFileName;
-        assert.isTrue(host.fileExists(expectedOutFileName));
-        const outFileContent = host.readFile(expectedOutFileName)!;
-        verifyContentHasString(outFileContent, file1.content);
-        verifyContentHasString(outFileContent, `//# ${"sourceMappingURL"}=${outFileName}.map`); // Sometimes tools can sometimes see this line as a source mapping url comment, so we obfuscate it a little
-
-        // Verify map file
-        const expectedMapFileName = expectedOutFileName + ".map";
-        assert.isTrue(host.fileExists(expectedMapFileName));
-        const mapFileContent = host.readFile(expectedMapFileName)!;
-        verifyContentHasString(mapFileContent, `"sources":["${inputFileName}"]`);
-
-        function verifyContentHasString(content: string, str: string) {
-            assert.isTrue(ts.stringContains(content, str), `Expected "${content}" to have "${str}"`);
-        }
+        session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+            command: ts.server.CommandNames.CompileOnSaveEmitFile,
+            arguments: { file: file1.path }
+        });
+        baselineTsserverLogs("compileOnSave", "use projectRoot as current directory", session);
     });
 
     describe("compile on save emit with and without richResponse", () => {
@@ -818,52 +902,22 @@ describe("unittests:: tsserver:: compileOnSave:: EmitFile test", () => {
                 content: "const y = 2;"
             };
             const host = createServerHost([file1, file2, config, libFile]);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([file1], session);
 
-            const affectedFileResponse = session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
                 command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                 arguments: { file: file1.path }
-            }).response as ts.server.protocol.CompileOnSaveAffectedFileListSingleProject[];
-            assert.deepEqual(affectedFileResponse, [
-                { fileNames: [file1.path, file2.path], projectFileName: config.path, projectUsesOutFile: false }
-            ]);
-            const file1SaveResponse = session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+            });
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
                 command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                 arguments: { file: file1.path, richResponse }
-            }).response;
-            if (richResponse) {
-                assert.deepEqual(file1SaveResponse, { emitSkipped: false, diagnostics: ts.emptyArray });
-            }
-            else {
-                assert.isTrue(file1SaveResponse);
-            }
-            assert.strictEqual(host.readFile(`/user/username/projects/myproject/test/file1.d.ts`), "declare const x = 1;\n");
-            const file2SaveResponse = session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+            });
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
                 command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                 arguments: { file: file2.path, richResponse }
-            }).response;
-            if (richResponse) {
-                assert.deepEqual(file2SaveResponse, {
-                    emitSkipped: true,
-                    diagnostics: [{
-                        start: undefined,
-                        end: undefined,
-                        fileName: undefined,
-                        text: ts.formatStringFromArgs(ts.Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file.message, [`/user/username/projects/myproject/test/file1.d.ts`]),
-                        code: ts.Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file.code,
-                        category: ts.diagnosticCategoryName(ts.Diagnostics.Cannot_write_file_0_because_it_would_overwrite_input_file),
-                        reportsUnnecessary: undefined,
-                        reportsDeprecated: undefined,
-                        relatedInformation: undefined,
-                        source: undefined
-                    }]
-                });
-            }
-            else {
-                assert.isFalse(file2SaveResponse);
-            }
-            assert.isFalse(host.fileExists(`/user/username/projects/myproject/test/file2.d.ts`));
+            });
+            baselineTsserverLogs("compileOnSave", `emit with richRepsonse as ${richResponse}`, session);
         }
     });
 
@@ -919,16 +973,14 @@ function bar() {
             };
             const files = [file1, file2, file3, ...(hasModule ? [module] : ts.emptyArray)];
             const host = createServerHost([...files, config, libFile]);
-            const session = createSession(host);
+            const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
             openFilesForSession([file1, file2], session);
 
-            const affectedFileResponse = session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+            session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
                 command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                 arguments: { file: file1.path }
-            }).response as ts.server.protocol.CompileOnSaveAffectedFileListSingleProject[];
-            assert.deepEqual(affectedFileResponse, [
-                { fileNames: files.map(f => f.path), projectFileName: config.path, projectUsesOutFile: false }
-            ]);
+            });
+
             verifyFileSave(file1);
             verifyFileSave(file2);
             verifyFileSave(file3);
@@ -940,32 +992,17 @@ function bar() {
             verifyLocalEdit(file1, "hello", "world");
 
             // Change file2 get affected file list = will return only file2 if --declaration otherwise all files
-            verifyLocalEdit(file2, "world", "hello", /*returnsAllFilesAsAffected*/ !declaration);
+            verifyLocalEdit(file2, "world", "hello");
+            baselineTsserverLogs("compileOnSave", `emit in project${hasModule ? " with module" : ""}${declaration ? " with dts emit" : ""}`, session);
 
             function verifyFileSave(file: File) {
-                const response = session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveEmitFileRequest>({
                     command: ts.server.protocol.CommandTypes.CompileOnSaveEmitFile,
                     arguments: { file: file.path }
-                }).response;
-                assert.isTrue(response);
-                assert.strictEqual(
-                    host.readFile(ts.changeExtension(file.path, ".js")),
-                    file === module ?
-                        `"use strict";\nexports.__esModule = true;\nexports.xyz = void 0;\nexports.xyz = 4;\n` :
-                        `${file.content.replace("const", "var")}\n`
-                );
-                if (declaration) {
-                    assert.strictEqual(
-                        host.readFile(ts.changeExtension(file.path, ".d.ts")),
-                        (file.content.substr(0, file.content.indexOf(" {") === -1 ? file.content.length : file.content.indexOf(" {"))
-                            .replace("const ", "declare const ")
-                            .replace("function ", "declare function ")
-                            .replace(")", "): string;")) + "\n"
-                    );
-                }
+                });
             }
 
-            function verifyLocalEdit(file: File, oldText: string, newText: string, returnsAllFilesAsAffected?: boolean) {
+            function verifyLocalEdit(file: File, oldText: string, newText: string) {
                 // Change file1 get affected file list
                 session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({
                     command: ts.server.protocol.CommandTypes.UpdateOpen,
@@ -979,13 +1016,10 @@ function bar() {
                         }]
                     }
                 });
-                const affectedFileResponse = session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
+                session.executeCommandSeq<ts.server.protocol.CompileOnSaveAffectedFileListRequest>({
                     command: ts.server.protocol.CommandTypes.CompileOnSaveAffectedFileList,
                     arguments: { file: file.path }
-                }).response as ts.server.protocol.CompileOnSaveAffectedFileListSingleProject[];
-                assert.deepEqual(affectedFileResponse, [
-                    { fileNames: [file.path, ...(returnsAllFilesAsAffected ? files.filter(f => f !== file).map(f => f.path) : ts.emptyArray)], projectFileName: config.path, projectUsesOutFile: false }
-                ]);
+                });
                 file.content = file.content.replace(oldText, newText);
                 verifyFileSave(file);
             }
