@@ -223,7 +223,7 @@ Using compiler options of project reference redirect '/user/username/projects/tr
 Explicitly specified module resolution kind: 'Classic'.
 ======== Module name 'a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a.d.ts
   Imported via "a" from file 'b.d.ts'
   File is output of project reference source 'a.ts'

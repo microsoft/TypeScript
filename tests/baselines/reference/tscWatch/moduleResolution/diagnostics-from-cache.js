@@ -107,7 +107,7 @@ export declare function thing(): void;
 
 //// [/user/username/projects/myproject/dist/index2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.thing = void 0;
 function thing() { }
 exports.thing = thing;
