@@ -14,10 +14,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "./file3" from /root/folder2/file2.ts
@@ -27,10 +24,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "/root/folder1/file1" from /root/folder2/file2.ts
@@ -40,10 +34,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "folder2/file2" from /root/folder1/file1.ts
@@ -53,10 +44,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "./file3" from /root/folder2/file2.ts
@@ -66,10 +54,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "/root/folder1/file1" from /root/folder2/file2.ts
@@ -79,10 +64,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 //// [/root/folder1/file1.ts]
@@ -101,10 +83,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "./file3" from /root/folder2/file2.ts with host that doesnt have directoryExists
@@ -114,10 +93,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "/root/folder1/file1" from /root/folder2/file2.ts with host that doesnt have directoryExists
@@ -127,10 +103,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "folder2/file2" from /root/folder1/file1.ts with host that doesnt have directoryExists
@@ -140,10 +113,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "./file3" from /root/folder2/file2.ts with host that doesnt have directoryExists
@@ -153,10 +123,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "/root/folder1/file1" from /root/folder2/file2.ts with host that doesnt have directoryExists
@@ -166,8 +133,5 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }

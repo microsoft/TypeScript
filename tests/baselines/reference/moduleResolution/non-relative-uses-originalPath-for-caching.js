@@ -33,8 +33,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/sub/node_modules/a/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "a" from /sub/foo.ts
@@ -64,8 +63,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/sub/node_modules/a/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "a" from /foo.ts
@@ -86,7 +84,5 @@ Resolution:: {
     "/node_modules/a.jsx",
     "/node_modules/a/index.js",
     "/node_modules/a/index.jsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }

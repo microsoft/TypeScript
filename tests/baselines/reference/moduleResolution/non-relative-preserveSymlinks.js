@@ -25,8 +25,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/app/node_modules/linked/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 //// [/linked/index.d.ts]
@@ -55,6 +54,5 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/app/node_modules/linked/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }

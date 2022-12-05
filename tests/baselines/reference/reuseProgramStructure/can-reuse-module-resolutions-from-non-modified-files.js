@@ -50,16 +50,23 @@ export let BB = B;
 declare module './b1' { interface B { y: string; } }
 resolvedModules: 
 ./b1: {
-  "resolvedFileName": "b1.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "b1.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 resolvedTypeReferenceDirectiveNames: 
 typerefs1: {
-  "primary": true,
-  "resolvedFileName": "node_modules/@types/typerefs1/index.d.ts",
-  "isExternalLibraryImport": false
+  "resolvedTypeReferenceDirective": {
+    "primary": true,
+    "resolvedFileName": "node_modules/@types/typerefs1/index.d.ts",
+    "isExternalLibraryImport": false
+  },
+  "failedLookupLocations": [
+    "node_modules/@types/typerefs1/package.json"
+  ]
 }
 
 File: f2.ts
@@ -70,22 +77,31 @@ import { BB } from './f1';
 (new BB).x; (new BB).y;
 resolvedModules: 
 ./b2: {
-  "resolvedFileName": "b2.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "b2.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 ./f1: {
-  "resolvedFileName": "f1.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "f1.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 resolvedTypeReferenceDirectiveNames: 
 typerefs2: {
-  "primary": true,
-  "resolvedFileName": "node_modules/@types/typerefs2/index.d.ts",
-  "isExternalLibraryImport": false
+  "resolvedTypeReferenceDirective": {
+    "primary": true,
+    "resolvedFileName": "node_modules/@types/typerefs2/index.d.ts",
+    "isExternalLibraryImport": false
+  },
+  "failedLookupLocations": [
+    "node_modules/@types/typerefs2/package.json"
+  ]
 }
 
 ======== Resolving type reference directive 'typerefs1', containing file 'f1.ts', root directory 'node_modules/@types'. ========
@@ -171,16 +187,23 @@ export let BB = B;
 declare module './b1' { interface B { y: string; } }
 resolvedModules: 
 ./b1: {
-  "resolvedFileName": "b1.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "b1.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 resolvedTypeReferenceDirectiveNames: 
 typerefs1: {
-  "primary": true,
-  "resolvedFileName": "node_modules/@types/typerefs1/index.d.ts",
-  "isExternalLibraryImport": false
+  "resolvedTypeReferenceDirective": {
+    "primary": true,
+    "resolvedFileName": "node_modules/@types/typerefs1/index.d.ts",
+    "isExternalLibraryImport": false
+  },
+  "failedLookupLocations": [
+    "node_modules/@types/typerefs1/package.json"
+  ]
 }
 
 File: f2.ts
@@ -191,22 +214,31 @@ import { BB } from './f1';
 (new BB).x; (new BB).y;
 resolvedModules: 
 ./b2: {
-  "resolvedFileName": "b2.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "b2.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 ./f1: {
-  "resolvedFileName": "f1.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "f1.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 resolvedTypeReferenceDirectiveNames: 
 typerefs2: {
-  "primary": true,
-  "resolvedFileName": "node_modules/@types/typerefs2/index.d.ts",
-  "isExternalLibraryImport": false
+  "resolvedTypeReferenceDirective": {
+    "primary": true,
+    "resolvedFileName": "node_modules/@types/typerefs2/index.d.ts",
+    "isExternalLibraryImport": false
+  },
+  "failedLookupLocations": [
+    "node_modules/@types/typerefs2/package.json"
+  ]
 }
 
 ======== Resolving type reference directive 'typerefs1', containing file 'f1.ts', root directory 'node_modules/@types'. ========
@@ -281,10 +313,12 @@ export let BB = B;
 declare module './b1' { interface B { y: string; } }
 resolvedModules: 
 ./b1: {
-  "resolvedFileName": "b1.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "b1.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 resolvedTypeReferenceDirectiveNames: undefined
 
@@ -296,22 +330,31 @@ import { BB } from './f1';
 (new BB).x; (new BB).y;
 resolvedModules: 
 ./b2: {
-  "resolvedFileName": "b2.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "b2.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 ./f1: {
-  "resolvedFileName": "f1.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "f1.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 resolvedTypeReferenceDirectiveNames: 
 typerefs2: {
-  "primary": true,
-  "resolvedFileName": "node_modules/@types/typerefs2/index.d.ts",
-  "isExternalLibraryImport": false
+  "resolvedTypeReferenceDirective": {
+    "primary": true,
+    "resolvedFileName": "node_modules/@types/typerefs2/index.d.ts",
+    "isExternalLibraryImport": false
+  },
+  "failedLookupLocations": [
+    "node_modules/@types/typerefs2/package.json"
+  ]
 }
 
 ======== Resolving module './b1' from 'f1.ts'. ========
@@ -381,10 +424,12 @@ export let BB = B;
 declare module './b1' { interface B { y: string; } }
 resolvedModules: 
 ./b1: {
-  "resolvedFileName": "b1.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "b1.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 resolvedTypeReferenceDirectiveNames: undefined
 
@@ -396,22 +441,31 @@ import { BB } from './f1';
 (new BB).x; (new BB).y;
 resolvedModules: 
 ./b2: {
-  "resolvedFileName": "b2.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "b2.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 ./f1: {
-  "resolvedFileName": "f1.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "f1.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 resolvedTypeReferenceDirectiveNames: 
 typerefs2: {
-  "primary": true,
-  "resolvedFileName": "node_modules/@types/typerefs2/index.d.ts",
-  "isExternalLibraryImport": false
+  "resolvedTypeReferenceDirective": {
+    "primary": true,
+    "resolvedFileName": "node_modules/@types/typerefs2/index.d.ts",
+    "isExternalLibraryImport": false
+  },
+  "failedLookupLocations": [
+    "node_modules/@types/typerefs2/package.json"
+  ]
 }
 
 ======== Resolving module './b1' from 'f1.ts'. ========
@@ -480,10 +534,12 @@ import { B } from './b1';
 declare module './b1' { interface B { y: string; } }
 resolvedModules: 
 ./b1: {
-  "resolvedFileName": "b1.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "b1.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 resolvedTypeReferenceDirectiveNames: undefined
 
@@ -495,22 +551,31 @@ import { BB } from './f1';
 (new BB).x; (new BB).y;
 resolvedModules: 
 ./b2: {
-  "resolvedFileName": "b2.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "b2.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 ./f1: {
-  "resolvedFileName": "f1.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "f1.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 resolvedTypeReferenceDirectiveNames: 
 typerefs2: {
-  "primary": true,
-  "resolvedFileName": "node_modules/@types/typerefs2/index.d.ts",
-  "isExternalLibraryImport": false
+  "resolvedTypeReferenceDirective": {
+    "primary": true,
+    "resolvedFileName": "node_modules/@types/typerefs2/index.d.ts",
+    "isExternalLibraryImport": false
+  },
+  "failedLookupLocations": [
+    "node_modules/@types/typerefs2/package.json"
+  ]
 }
 
 ======== Resolving module './b1' from 'f1.ts'. ========
@@ -577,10 +642,12 @@ import { B } from './b1';
 
 resolvedModules: 
 ./b1: {
-  "resolvedFileName": "b1.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "b1.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 resolvedTypeReferenceDirectiveNames: undefined
 
@@ -592,22 +659,31 @@ import { BB } from './f1';
 (new BB).x; (new BB).y;
 resolvedModules: 
 ./b2: {
-  "resolvedFileName": "b2.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "b2.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 ./f1: {
-  "resolvedFileName": "f1.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "f1.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 resolvedTypeReferenceDirectiveNames: 
 typerefs2: {
-  "primary": true,
-  "resolvedFileName": "node_modules/@types/typerefs2/index.d.ts",
-  "isExternalLibraryImport": false
+  "resolvedTypeReferenceDirective": {
+    "primary": true,
+    "resolvedFileName": "node_modules/@types/typerefs2/index.d.ts",
+    "isExternalLibraryImport": false
+  },
+  "failedLookupLocations": [
+    "node_modules/@types/typerefs2/package.json"
+  ]
 }
 
 ======== Resolving module './b1' from 'f1.ts'. ========
@@ -686,22 +762,31 @@ import { BB } from './f1';
 (new BB).x; (new BB).y;
 resolvedModules: 
 ./b2: {
-  "resolvedFileName": "b2.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "b2.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 ./f1: {
-  "resolvedFileName": "f1.ts",
-  "extension": ".ts",
-  "isExternalLibraryImport": false,
-  "resolvedUsingTsExtension": false
+  "resolvedModule": {
+    "resolvedFileName": "f1.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
 }
 resolvedTypeReferenceDirectiveNames: 
 typerefs2: {
-  "primary": true,
-  "resolvedFileName": "node_modules/@types/typerefs2/index.d.ts",
-  "isExternalLibraryImport": false
+  "resolvedTypeReferenceDirective": {
+    "primary": true,
+    "resolvedFileName": "node_modules/@types/typerefs2/index.d.ts",
+    "isExternalLibraryImport": false
+  },
+  "failedLookupLocations": [
+    "node_modules/@types/typerefs2/package.json"
+  ]
 }
 
 Reusing resolution of type reference directive 'typerefs2' from 'f2.ts' of old program, it was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts'.

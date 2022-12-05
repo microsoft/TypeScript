@@ -12,10 +12,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "./foo" from /foo/bar/baz.ts when module has extension: .ts with host that doesnt have directoryExists
@@ -31,10 +28,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "./foo" from /foo/bar/baz.ts when module has extension: .tsx
@@ -53,9 +47,7 @@ Resolution:: {
   },
   "failedLookupLocations": [
     "/foo/bar/foo.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "./foo" from /foo/bar/baz.ts when module has extension: .tsx with host that doesnt have directoryExists
@@ -74,9 +66,7 @@ Resolution:: {
   },
   "failedLookupLocations": [
     "/foo/bar/foo.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "./foo" from /foo/bar/baz.ts when module has extension: .d.ts
@@ -96,9 +86,7 @@ Resolution:: {
   "failedLookupLocations": [
     "/foo/bar/foo.ts",
     "/foo/bar/foo.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "./foo" from /foo/bar/baz.ts when module has extension: .d.ts with host that doesnt have directoryExists
@@ -118,9 +106,7 @@ Resolution:: {
   "failedLookupLocations": [
     "/foo/bar/foo.ts",
     "/foo/bar/foo.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 
@@ -138,10 +124,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "../foo" from /foo/bar/baz.ts when module has extension: .ts with host that doesnt have directoryExists
@@ -157,10 +140,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "../foo" from /foo/bar/baz.ts when module has extension: .tsx
@@ -179,9 +159,7 @@ Resolution:: {
   },
   "failedLookupLocations": [
     "/foo/foo.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "../foo" from /foo/bar/baz.ts when module has extension: .tsx with host that doesnt have directoryExists
@@ -200,9 +178,7 @@ Resolution:: {
   },
   "failedLookupLocations": [
     "/foo/foo.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "../foo" from /foo/bar/baz.ts when module has extension: .d.ts
@@ -222,9 +198,7 @@ Resolution:: {
   "failedLookupLocations": [
     "/foo/foo.ts",
     "/foo/foo.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "../foo" from /foo/bar/baz.ts when module has extension: .d.ts with host that doesnt have directoryExists
@@ -244,9 +218,7 @@ Resolution:: {
   "failedLookupLocations": [
     "/foo/foo.ts",
     "/foo/foo.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 
@@ -264,10 +236,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "/foo" from /foo/bar/baz.ts when module has extension: .ts with host that doesnt have directoryExists
@@ -283,10 +252,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "/foo" from /foo/bar/baz.ts when module has extension: .tsx
@@ -305,9 +271,7 @@ Resolution:: {
   },
   "failedLookupLocations": [
     "/foo.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "/foo" from /foo/bar/baz.ts when module has extension: .tsx with host that doesnt have directoryExists
@@ -326,9 +290,7 @@ Resolution:: {
   },
   "failedLookupLocations": [
     "/foo.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "/foo" from /foo/bar/baz.ts when module has extension: .d.ts
@@ -348,9 +310,7 @@ Resolution:: {
   "failedLookupLocations": [
     "/foo.ts",
     "/foo.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "/foo" from /foo/bar/baz.ts when module has extension: .d.ts with host that doesnt have directoryExists
@@ -370,9 +330,7 @@ Resolution:: {
   "failedLookupLocations": [
     "/foo.ts",
     "/foo.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 
@@ -390,10 +348,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "c:/foo" from c:/foo/bar/baz.ts when module has extension: .ts with host that doesnt have directoryExists
@@ -409,10 +364,7 @@ Resolution:: {
     "extension": ".ts",
     "isExternalLibraryImport": false,
     "resolvedUsingTsExtension": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "c:/foo" from c:/foo/bar/baz.ts when module has extension: .tsx
@@ -431,9 +383,7 @@ Resolution:: {
   },
   "failedLookupLocations": [
     "c:/foo.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "c:/foo" from c:/foo/bar/baz.ts when module has extension: .tsx with host that doesnt have directoryExists
@@ -452,9 +402,7 @@ Resolution:: {
   },
   "failedLookupLocations": [
     "c:/foo.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "c:/foo" from c:/foo/bar/baz.ts when module has extension: .d.ts
@@ -474,9 +422,7 @@ Resolution:: {
   "failedLookupLocations": [
     "c:/foo.ts",
     "c:/foo.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "c:/foo" from c:/foo/bar/baz.ts when module has extension: .d.ts with host that doesnt have directoryExists
@@ -496,8 +442,6 @@ Resolution:: {
   "failedLookupLocations": [
     "c:/foo.ts",
     "c:/foo.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 

@@ -30,7 +30,6 @@ import {
     extensionIsTS,
     fileExtensionIs,
     fileExtensionIsOneOf,
-    FileReference,
     filter,
     firstDefined,
     forEach,
@@ -44,7 +43,6 @@ import {
     GetEffectiveTypeRootsHost,
     getEmitModuleKind,
     getEmitModuleResolutionKind,
-    getModeForUsageLocation,
     getNormalizedAbsolutePath,
     getOwnKeys,
     getPathComponents,
@@ -63,7 +61,6 @@ import {
     isExternalModuleNameRelative,
     isRootedDiskPath,
     isString,
-    isStringLiteralLike,
     lastOrUndefined,
     length,
     MapLike,
@@ -91,6 +88,7 @@ import {
     removeFileExtension,
     removePrefix,
     ResolutionMode,
+    ResolutionNameAndModeGetter,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
     ResolvedTypeReferenceDirective,
@@ -100,11 +98,9 @@ import {
     SourceFile,
     startsWith,
     stringContains,
-    StringLiteralLike,
     supportedDeclarationExtensions,
     supportedTSExtensionsFlat,
     supportedTSImplementationExtensions,
-    toFileNameLowerCase,
     toPath,
     tryExtractTSExtension,
     tryGetExtensionFromPath,
@@ -221,8 +217,9 @@ function createResolvedModuleWithFailedLookupLocations(
     resultFromCache: ResolvedModuleWithFailedLookupLocations | undefined
 ): ResolvedModuleWithFailedLookupLocations {
     if (resultFromCache) {
-        resultFromCache.failedLookupLocations.push(...failedLookupLocations);
-        resultFromCache.affectingLocations.push(...affectingLocations);
+        resultFromCache.failedLookupLocations = updateResolutionField(resultFromCache.failedLookupLocations, failedLookupLocations);
+        resultFromCache.affectingLocations = updateResolutionField(resultFromCache.affectingLocations, affectingLocations);
+        resultFromCache.resolutionDiagnostics = updateResolutionField(resultFromCache.resolutionDiagnostics, diagnostics);
         return resultFromCache;
     }
     return {
@@ -234,10 +231,20 @@ function createResolvedModuleWithFailedLookupLocations(
             packageId: resolved.packageId,
             resolvedUsingTsExtension: !!resolved.resolvedUsingTsExtension,
         },
-        failedLookupLocations,
-        affectingLocations,
-        resolutionDiagnostics: diagnostics,
+        failedLookupLocations: initializeResolutionField(failedLookupLocations),
+        affectingLocations: initializeResolutionField(affectingLocations),
+        resolutionDiagnostics: initializeResolutionField(diagnostics),
     };
+}
+function initializeResolutionField<T>(value: T[]): T[] | undefined {
+    return value.length ? value : undefined;
+}
+/** @internal */
+export function updateResolutionField<T>(to: T[] | undefined, value: T[] | undefined) {
+    if (!value?.length) return to;
+    if (!to?.length) return value;
+    to.push(...value);
+    return to;
 }
 
 /** @internal */
@@ -539,7 +546,12 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
             isExternalLibraryImport: pathContainsNodeModules(fileName),
         };
     }
-    result = { resolvedTypeReferenceDirective, failedLookupLocations, affectingLocations, resolutionDiagnostics: diagnostics };
+    result = {
+        resolvedTypeReferenceDirective,
+        failedLookupLocations: initializeResolutionField(failedLookupLocations),
+        affectingLocations: initializeResolutionField(affectingLocations),
+        resolutionDiagnostics: initializeResolutionField(diagnostics),
+    };
     perFolderCache?.set(typeReferenceDirectiveName, /*mode*/ resolutionMode, result);
     if (traceEnabled) traceResult(result);
     return result;
@@ -960,23 +972,17 @@ export function createModeAwareCache<T>(): ModeAwareCache<T> {
 }
 
 /** @internal */
-export function getResolutionName(entry: string | FileReference | StringLiteralLike) {
-    // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-    return !isString(entry) ? isStringLiteralLike(entry) ? entry.text : toFileNameLowerCase(entry.fileName) : entry;
-}
-
-/** @internal */
-export function getResolutionMode(entry: FileReference | StringLiteralLike, file: SourceFile) {
-    return isStringLiteralLike(entry) ? getModeForUsageLocation(file, entry) : entry.resolutionMode || file.impliedNodeFormat;
-}
-
-/** @internal */
-export function zipToModeAwareCache<V>(file: SourceFile, keys: readonly StringLiteralLike[] | readonly FileReference[], values: readonly V[]): ModeAwareCache<V> {
+export function zipToModeAwareCache<K, V>(
+    file: SourceFile,
+    keys: readonly K[],
+    values: readonly V[],
+    nameAndModeGetter: ResolutionNameAndModeGetter<K, SourceFile>,
+): ModeAwareCache<V> {
     Debug.assert(keys.length === values.length);
     const map = createModeAwareCache<V>();
     for (let i = 0; i < keys.length; ++i) {
         const entry = keys[i];
-        map.set(getResolutionName(entry), getResolutionMode(entry, file), values[i]);
+        map.set(nameAndModeGetter.getName(entry), nameAndModeGetter.getMode(entry, file), values[i]);
     }
     return map;
 }
@@ -1425,7 +1431,7 @@ function tryLoadModuleUsingBaseUrl(extensions: Extensions, moduleName: string, l
 export function resolveJSModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string {
     const { resolvedModule, failedLookupLocations } = tryResolveJSModuleWorker(moduleName, initialDir, host);
     if (!resolvedModule) {
-        throw new Error(`Could not resolve JS module '${moduleName}' starting at '${initialDir}'. Looked in: ${failedLookupLocations.join(", ")}`);
+        throw new Error(`Could not resolve JS module '${moduleName}' starting at '${initialDir}'. Looked in: ${failedLookupLocations?.join(", ")}`);
     }
     return resolvedModule.resolvedFileName;
 }
