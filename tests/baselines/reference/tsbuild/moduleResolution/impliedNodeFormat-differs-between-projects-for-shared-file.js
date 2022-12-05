@@ -83,7 +83,6 @@ src/projects/node_modules/@types/pg/index.d.ts
 
 File '/src/projects/b/src/package.json' does not exist.
 Found 'package.json' at '/src/projects/b/package.json'.
-'package.json' does not have a 'typesVersions' field.
 ======== Resolving module 'pg' from '/src/projects/b/src/index.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
 Resolving in ESM mode with conditions 'node', 'import', 'types'.
