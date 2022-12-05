@@ -4114,8 +4114,8 @@ export interface SourceFile extends Declaration {
     // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
     // It is used to resolve module names in the checker.
     // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-    /** @internal */ resolvedModules?: ModeAwareCache<ResolvedModuleFull | undefined>;
-    /** @internal */ resolvedTypeReferenceDirectiveNames: ModeAwareCache<ResolvedTypeReferenceDirective | undefined>;
+    /** @internal */ resolvedModules?: ModeAwareCache<ResolvedModuleWithFailedLookupLocations>;
+    /** @internal */ resolvedTypeReferenceDirectiveNames?: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     /** @internal */ imports: readonly StringLiteralLike[];
     // Identifier only if `declare global`
     /** @internal */ moduleAugmentations: readonly (StringLiteral | Identifier)[];
@@ -4386,7 +4386,8 @@ export type FileIncludeReason =
 /** @internal */
 export const enum FilePreprocessingDiagnosticsKind {
     FilePreprocessingReferencedDiagnostic,
-    FilePreprocessingFileExplainingDiagnostic
+    FilePreprocessingFileExplainingDiagnostic,
+    ResolutionDiagnostics,
 }
 
 /** @internal */
@@ -4407,7 +4408,13 @@ export interface FilePreprocessingFileExplainingDiagnostic {
 }
 
 /** @internal */
-export type FilePreprocessingDiagnostics = FilePreprocessingReferencedDiagnostic | FilePreprocessingFileExplainingDiagnostic;
+export interface ResolutionDiagnostics {
+    kind: FilePreprocessingDiagnosticsKind.ResolutionDiagnostics;
+    diagnostics: readonly Diagnostic[];
+}
+
+/** @internal */
+export type FilePreprocessingDiagnostics = FilePreprocessingReferencedDiagnostic | FilePreprocessingFileExplainingDiagnostic | ResolutionDiagnostics;
 
 /** @internal */
 export const enum EmitOnly{
@@ -4483,7 +4490,9 @@ export interface Program extends ScriptReferenceHost {
     getRelationCacheSizes(): { assignable: number, identity: number, subtype: number, strictSubtype: number };
 
     /** @internal */ getFileProcessingDiagnostics(): FilePreprocessingDiagnostics[] | undefined;
-    /** @internal */ getResolvedTypeReferenceDirectives(): ModeAwareCache<ResolvedTypeReferenceDirective | undefined>;
+    /** @internal */ getResolvedTypeReferenceDirectives(): ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
+    /** @internal */ getAutomaticTypeDirectiveNames(): string[];
+    /** @internal */ getAutomaticTypeDirectiveResolutions(): ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     isSourceFileFromExternalLibrary(file: SourceFile): boolean;
     isSourceFileDefaultLibrary(file: SourceFile): boolean;
 
@@ -4520,8 +4529,6 @@ export interface Program extends ScriptReferenceHost {
     isEmittedFile(file: string): boolean;
     /** @internal */ getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
     /** @internal */ useCaseSensitiveFileNames(): boolean;
-
-    /** @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, mode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
 
     getProjectReferences(): readonly ProjectReference[] | undefined;
     getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
@@ -4646,7 +4653,7 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
 
     getSourceFiles(): readonly SourceFile[];
     getSourceFile(fileName: string): SourceFile | undefined;
-    getResolvedTypeReferenceDirectives(): ModeAwareCache<ResolvedTypeReferenceDirective | undefined>;
+    getResolvedTypeReferenceDirectives(): ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     getProjectReferenceRedirect(fileName: string): string | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
 
@@ -5343,8 +5350,8 @@ export interface EmitResolver {
     moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
     isArgumentsLocalBinding(node: Identifier): boolean;
     getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode | ImportCall): SourceFile | undefined;
-    getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): [specifier: string, mode: ResolutionMode | undefined][] | undefined;
-    getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: ResolutionMode | undefined][] | undefined;
+    getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): [specifier: string, mode: ResolutionMode][] | undefined;
+    getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: ResolutionMode][] | undefined;
     isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
     getJsxFactoryEntity(location?: Node): EntityName | undefined;
     getJsxFragmentFactoryEntity(location?: Node): EntityName | undefined;
@@ -7275,11 +7282,11 @@ export const enum Extension {
 export interface ResolvedModuleWithFailedLookupLocations {
     readonly resolvedModule: ResolvedModuleFull | undefined;
     /** @internal */
-    readonly failedLookupLocations: string[];
+    failedLookupLocations?: string[];
     /** @internal */
-    readonly affectingLocations: string[];
+    affectingLocations?: string[];
     /** @internal */
-    readonly resolutionDiagnostics: Diagnostic[]
+    resolutionDiagnostics?: Diagnostic[]
 }
 
 export interface ResolvedTypeReferenceDirective {
@@ -7300,22 +7307,15 @@ export interface ResolvedTypeReferenceDirective {
 
 export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
     readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
-    readonly failedLookupLocations: string[];
-    /** @internal */ readonly affectingLocations: string[];
-    /** @internal */ resolutionDiagnostics: Diagnostic[];
+    /** @internal */ failedLookupLocations?: string[];
+    /** @internal */ affectingLocations?: string[];
+    /** @internal */ resolutionDiagnostics?: Diagnostic[];
 }
 
 /** @internal */
 export type HasInvalidatedResolutions = (sourceFile: Path) => boolean;
 /** @internal */
 export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
-
-export interface ResolutionInfo<T> {
-    names: readonly T[];
-    reusedNames: readonly T[] | undefined;
-}
-export type ModuleResolutionInfo = ResolutionInfo<StringLiteralLike>;
-export type TypeReferenceDirectiveResolutionInfo = ResolutionInfo<string | FileReference>;
 
 export interface CompilerHost extends ModuleResolutionHost {
     getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
@@ -7337,15 +7337,34 @@ export interface CompilerHost extends ModuleResolutionHost {
      * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
      * 'throw new Error("NotImplemented")'
      */
-    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
+    /** @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolution modes like nodenext */
+    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
     /**
      * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
      */
     getModuleResolutionCache?(): ModuleResolutionCache | undefined;
     /**
+     * @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext
+     *
      * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
      */
-    resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode | undefined, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveModuleNameLiterals?(
+        moduleLiterals: readonly StringLiteralLike[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile,
+        reusedNames: readonly StringLiteralLike[] | undefined,
+    ): readonly ResolvedModuleWithFailedLookupLocations[];
+    resolveTypeReferenceDirectiveReferences?<T extends FileReference | string>(
+        typeDirectiveReferences: readonly T[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile | undefined,
+        reusedNames: readonly T[] | undefined
+    ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
     getEnvironmentVariable?(name: string): string | undefined;
     /** @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
     /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;

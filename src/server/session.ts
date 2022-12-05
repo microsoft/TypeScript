@@ -1578,15 +1578,13 @@ export class Session<TMessage = string> implements EventSender {
                 if (entrypoints && some(entrypoints, e => project.toPath(e) === path)) {
                     // This file was the main entrypoint of a package. Try to resolve that same package name with
                     // the auxiliary project that only resolves to implementation files.
-                    const [implementationResolution] = auxiliaryProject.resolveModuleNames([packageName], resolveFromFile);
-                    return implementationResolution?.resolvedFileName;
+                    return auxiliaryProject.resolutionCache.resolveSingleModuleNameWithoutWatching(packageName, resolveFromFile).resolvedModule?.resolvedFileName;
                 }
                 else {
                     // It wasn't the main entrypoint but we are in node_modules. Try a subpath into the package.
                     const pathToFileInPackage = fileName.substring(nodeModulesPathParts.packageRootIndex + 1);
                     const specifier = `${packageName}/${removeFileExtension(pathToFileInPackage)}`;
-                    const [implementationResolution] = auxiliaryProject.resolveModuleNames([specifier], resolveFromFile);
-                    return implementationResolution?.resolvedFileName;
+                    return auxiliaryProject.resolutionCache.resolveSingleModuleNameWithoutWatching(specifier, resolveFromFile).resolvedModule?.resolvedFileName;
                 }
             }
             // We're not in node_modules, and we only get to this function if non-dts module resolution failed.

@@ -13,10 +13,7 @@ Resolution:: {
     "resolvedFileName": "/root/x/m1.ts",
     "extension": ".ts",
     "isExternalLibraryImport": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "m2" from /root/a/b/main.ts
@@ -39,9 +36,7 @@ Resolution:: {
     "/root/m2.ts",
     "/root/m2.tsx",
     "/root/m2.d.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 //// [/root/a/b/main.ts]
@@ -59,10 +54,7 @@ Resolution:: {
     "resolvedFileName": "/root/x/m1.ts",
     "extension": ".ts",
     "isExternalLibraryImport": false
-  },
-  "failedLookupLocations": [],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  }
 }
 
 Resolving "m2" from /root/a/b/main.ts with host that doesnt have directoryExists
@@ -85,7 +77,5 @@ Resolution:: {
     "/root/m2.ts",
     "/root/m2.tsx",
     "/root/m2.d.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }

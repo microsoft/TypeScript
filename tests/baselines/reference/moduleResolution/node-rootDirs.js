@@ -25,9 +25,7 @@ Resolution:: {
     "/root/folder1/file2/index.ts",
     "/root/folder1/file2/index.tsx",
     "/root/folder1/file2/index.d.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "../folder1/file1" from /root/generated/folder2/file3.ts
@@ -45,9 +43,7 @@ Resolution:: {
     "/root/generated/folder1/file1/index.ts",
     "/root/generated/folder1/file1/index.tsx",
     "/root/generated/folder1/file1/index.d.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "../folder1/file1_1" from /root/generated/folder2/file3.ts
@@ -71,9 +67,7 @@ Resolution:: {
     "/root/folder1/file1_1/package.json",
     "/root/folder1/file1_1/index.ts",
     "/root/folder1/file1_1/index.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 //// [/root/folder1/file1.ts]
@@ -103,9 +97,7 @@ Resolution:: {
     "/root/folder1/file2/index.ts",
     "/root/folder1/file2/index.tsx",
     "/root/folder1/file2/index.d.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "../folder1/file1" from /root/generated/folder2/file3.ts with host that doesnt have directoryExists
@@ -123,9 +115,7 @@ Resolution:: {
     "/root/generated/folder1/file1/index.ts",
     "/root/generated/folder1/file1/index.tsx",
     "/root/generated/folder1/file1/index.d.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "../folder1/file1_1" from /root/generated/folder2/file3.ts with host that doesnt have directoryExists
@@ -149,7 +139,5 @@ Resolution:: {
     "/root/folder1/file1_1/package.json",
     "/root/folder1/file1_1/index.ts",
     "/root/folder1/file1_1/index.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
