@@ -14896,7 +14896,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const resolved = resolveAlias(aliasSymbol);
                     if (resolved && resolved.flags & SymbolFlags.TypeAlias) {
                         newAliasSymbol = resolved;
-                        aliasTypeArguments = typeArgumentsFromTypeReferenceNode(node);
+                        aliasTypeArguments = typeArgumentsFromTypeReferenceNode(node) || (typeParameters ? [] : undefined);
                     }
                 }
             }
