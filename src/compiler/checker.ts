@@ -775,6 +775,7 @@ import {
     ModuleInstanceState,
     ModuleKind,
     ModuleResolutionKind,
+    ModuleSpecifierResolutionHost,
     NamedDeclaration,
     NamedExports,
     NamedImportsOrExports,
@@ -5962,7 +5963,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function typeToString(type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer: EmitTextWriter = createTextWriter("")): string {
         const noTruncation = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation;
-        const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | (noTruncation ? NodeBuilderFlags.NoTruncation : 0), writer);
+        const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | (noTruncation ? NodeBuilderFlags.NoTruncation : 0));
         if (typeNode === undefined) return Debug.fail("should always get typenode");
         // The unresolved type gets a synthesized comment on `any` to hint to users that it's not a plain `any`.
         // Otherwise, we always strip comments out.
@@ -6046,23 +6047,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function withContext<T>(enclosingDeclaration: Node | undefined, flags: NodeBuilderFlags | undefined, tracker: SymbolTracker | undefined, cb: (context: NodeBuilderContext) => T): T | undefined {
             Debug.assert(enclosingDeclaration === undefined || (enclosingDeclaration.flags & NodeFlags.Synthesized) === 0);
+            const moduleResolverHost =
+                tracker?.trackSymbol ? tracker.moduleResolverHost :
+                flags! & NodeBuilderFlags.DoNotIncludeSymbolChain ? createBasicNodeBuilderModuleSpecifierResolutionHost(host) :
+                undefined;
             const context: NodeBuilderContext = {
                 enclosingDeclaration,
                 flags: flags || NodeBuilderFlags.None,
-                // If no full tracker is provided, fake up a dummy one with a basic limited-functionality moduleResolverHost
-                tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: () => false, moduleResolverHost: flags! & NodeBuilderFlags.DoNotIncludeSymbolChain ? {
-                    getCommonSourceDirectory: !!(host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
-                    getCurrentDirectory: () => host.getCurrentDirectory(),
-                    getSymlinkCache: maybeBind(host, host.getSymlinkCache),
-                    getPackageJsonInfoCache: () => host.getPackageJsonInfoCache?.(),
-                    useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
-                    redirectTargetsMap: host.redirectTargetsMap,
-                    getProjectReferenceRedirect: fileName => host.getProjectReferenceRedirect(fileName),
-                    isSourceOfProjectReferenceRedirect: fileName => host.isSourceOfProjectReferenceRedirect(fileName),
-                    fileExists: fileName => host.fileExists(fileName),
-                    getFileIncludeReasons: () => host.getFileIncludeReasons(),
-                    readFile: host.readFile ? (fileName => host.readFile!(fileName)) : undefined,
-                } : undefined },
+                tracker: undefined!,
                 encounteredError: false,
                 reportedDiagnostic: false,
                 visitedTypes: undefined,
@@ -6070,43 +6062,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 inferTypeParameters: undefined,
                 approximateLength: 0
             };
-            context.tracker = wrapSymbolTrackerToReportForContext(context, context.tracker);
+            context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
             const resultingNode = cb(context);
             if (context.truncating && context.flags & NodeBuilderFlags.NoTruncation) {
-                context.tracker?.reportTruncationError?.();
+                context.tracker.reportTruncationError();
             }
             return context.encounteredError ? undefined : resultingNode;
-        }
-
-        function wrapSymbolTrackerToReportForContext(context: NodeBuilderContext, tracker: SymbolTracker): SymbolTracker {
-            const oldTrackSymbol = tracker.trackSymbol;
-            return {
-                ...tracker,
-                reportCyclicStructureError: wrapReportedDiagnostic(tracker.reportCyclicStructureError),
-                reportInaccessibleThisError: wrapReportedDiagnostic(tracker.reportInaccessibleThisError),
-                reportInaccessibleUniqueSymbolError: wrapReportedDiagnostic(tracker.reportInaccessibleUniqueSymbolError),
-                reportLikelyUnsafeImportRequiredError: wrapReportedDiagnostic(tracker.reportLikelyUnsafeImportRequiredError),
-                reportNonlocalAugmentation: wrapReportedDiagnostic(tracker.reportNonlocalAugmentation),
-                reportPrivateInBaseOfClassExpression: wrapReportedDiagnostic(tracker.reportPrivateInBaseOfClassExpression),
-                reportNonSerializableProperty: wrapReportedDiagnostic(tracker.reportNonSerializableProperty),
-                trackSymbol: oldTrackSymbol && ((...args) => {
-                    const result = oldTrackSymbol(...args);
-                    if (result) {
-                        context.reportedDiagnostic = true;
-                    }
-                    return result;
-                }),
-            };
-
-            function wrapReportedDiagnostic<T extends (...args: any[]) => any>(method: T | undefined): T | undefined {
-                if (!method) {
-                    return method;
-                }
-                return (((...args) => {
-                    context.reportedDiagnostic = true;
-                    return method(...args);
-                }) as T);
-            }
         }
 
         function checkTruncationLength(context: NodeBuilderContext): boolean {
@@ -6256,9 +6217,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowThisInObjectLiteral)) {
                         context.encounteredError = true;
                     }
-                    if (context.tracker.reportInaccessibleThisError) {
-                        context.tracker.reportInaccessibleThisError();
-                    }
+                    context.tracker.reportInaccessibleThisError?.();
                 }
                 context.approximateLength += 4;
                 return factory.createThisTypeNode();
@@ -6899,7 +6858,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 anyType : getNonMissingTypeOfSymbol(propertySymbol);
             const saveEnclosingDeclaration = context.enclosingDeclaration;
             context.enclosingDeclaration = undefined;
-            if (context.tracker.trackSymbol && isLateBoundName(propertySymbol.escapedName)) {
+            if (context.tracker.canTrackSymbol && isLateBoundName(propertySymbol.escapedName)) {
                 if (propertySymbol.declarations) {
                     const decl = first(propertySymbol.declarations);
                     if (hasLateBindableName(decl)) {
@@ -6914,7 +6873,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                 }
-                else if (context.tracker?.reportNonSerializableProperty) {
+                else {
                     context.tracker.reportNonSerializableProperty(symbolToString(propertySymbol));
                 }
             }
@@ -7218,7 +7177,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             function cloneBindingName(node: BindingName): BindingName {
                 return elideInitializerAndSetEmitFlags(node) as BindingName;
                 function elideInitializerAndSetEmitFlags(node: Node): Node {
-                    if (context.tracker.trackSymbol && isComputedPropertyName(node) && isLateBindableName(node)) {
+                    if (context.tracker.canTrackSymbol && isComputedPropertyName(node) && isLateBindableName(node)) {
                         trackComputedName(node.expression, context.enclosingDeclaration, context);
                     }
                     let visited = visitEachChild(node, elideInitializerAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags)!;
@@ -7239,7 +7198,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function trackComputedName(accessExpression: EntityNameOrEntityNameExpression, enclosingDeclaration: Node | undefined, context: NodeBuilderContext) {
-            if (!context.tracker.trackSymbol) return;
+            if (!context.tracker.canTrackSymbol) return;
             // get symbol of the first identifier of the entityName
             const firstIdentifier = getFirstIdentifier(accessExpression);
             const name = resolveName(firstIdentifier, firstIdentifier.escapedText, SymbolFlags.Value | SymbolFlags.ExportValue, /*nodeNotFoundErrorMessage*/ undefined, /*nameArg*/ undefined, /*isUse*/ true);
@@ -7249,7 +7208,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function lookupSymbolChain(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, yieldModuleSymbol?: boolean) {
-            context.tracker.trackSymbol!(symbol, context.enclosingDeclaration, meaning); // TODO: GH#18217
+            context.tracker.trackSymbol(symbol, context.enclosingDeclaration, meaning);
             return lookupSymbolChainWorker(symbol, context, meaning, yieldModuleSymbol);
         }
 
@@ -7789,7 +7748,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (initial.typeParameterSymbolList) {
                 initial.typeParameterSymbolList = new Set(initial.typeParameterSymbolList);
             }
-            initial.tracker = wrapSymbolTrackerToReportForContext(initial, initial.tracker);
+            initial.tracker = new SymbolTrackerImpl(initial, initial.tracker.inner, initial.tracker.moduleResolverHost);
             return initial;
         }
 
@@ -7871,7 +7830,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     introducesError = true;
                 }
                 else {
-                    context.tracker?.trackSymbol?.(sym, context.enclosingDeclaration, SymbolFlags.All);
+                    context.tracker.trackSymbol(sym, context.enclosingDeclaration, SymbolFlags.All);
                     includePrivateSymbol?.(sym);
                 }
                 if (isIdentifier(node)) {
@@ -8078,25 +8037,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 ...oldcontext,
                 usedSymbolNames: new Set(oldcontext.usedSymbolNames),
                 remappedSymbolNames: new Map(),
-                tracker: {
-                    ...oldcontext.tracker,
-                    trackSymbol: (sym, decl, meaning) => {
-                        const accessibleResult = isSymbolAccessible(sym, decl, meaning, /*computeAliases*/ false);
-                        if (accessibleResult.accessibility === SymbolAccessibility.Accessible) {
-                            // Lookup the root symbol of the chain of refs we'll use to access it and serialize it
-                            const chain = lookupSymbolChainWorker(sym, context, meaning);
-                            if (!(sym.flags & SymbolFlags.Property)) {
-                                includePrivateSymbol(chain[0]);
-                            }
+                tracker: undefined!,
+            };
+            const tracker: SymbolTracker = {
+                ...oldcontext.tracker.inner,
+                trackSymbol: (sym, decl, meaning) => {
+                    const accessibleResult = isSymbolAccessible(sym, decl, meaning, /*computeAliases*/ false);
+                    if (accessibleResult.accessibility === SymbolAccessibility.Accessible) {
+                        // Lookup the root symbol of the chain of refs we'll use to access it and serialize it
+                        const chain = lookupSymbolChainWorker(sym, context, meaning);
+                        if (!(sym.flags & SymbolFlags.Property)) {
+                            includePrivateSymbol(chain[0]);
                         }
-                        else if (oldcontext.tracker && oldcontext.tracker.trackSymbol) {
-                            return oldcontext.tracker.trackSymbol(sym, decl, meaning);
-                        }
-                        return false;
-                    },
+                    }
+                    else if (oldcontext.tracker.inner?.trackSymbol) {
+                        return oldcontext.tracker.inner.trackSymbol(sym, decl, meaning);
+                    }
+                    return false;
                 },
             };
-            context.tracker = wrapSymbolTrackerToReportForContext(context, context.tracker);
+            context.tracker = new SymbolTrackerImpl(context, tracker, oldcontext.tracker.moduleResolverHost);
             forEachEntry(symbolTable, (symbol, name) => {
                 const baseName = unescapeLeadingUnderscores(name);
                 void getInternalSymbolName(symbol, baseName); // Called to cache values into `usedSymbolNames` and `remappedSymbolNames`
@@ -8397,7 +8357,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     ),
                                     ModifierFlags.None
                                 );
-                                context.tracker.trackSymbol!(type.symbol, context.enclosingDeclaration, SymbolFlags.Value);
+                                context.tracker.trackSymbol(type.symbol, context.enclosingDeclaration, SymbolFlags.Value);
                             }
                             else {
                                 const statement = setTextRange(factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
@@ -9091,8 +9051,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // issue a visibility error on it. Only anonymous classes that an alias points at _would_ issue
                     // a visibility error here (as they're not visible within any scope), but we want to hoist them
                     // into the containing scope anyway, so we want to skip the visibility checks.
-                    const oldTrack = context.tracker.trackSymbol;
-                    context.tracker.trackSymbol = () => false;
+                    const prevDisableTrackSymbol = context.tracker.disableTrackSymbol;
+                    context.tracker.disableTrackSymbol = true;
                     if (isExportAssignmentCompatibleSymbolName) {
                         results.push(factory.createExportAssignment(
                             /*modifiers*/ undefined,
@@ -9120,7 +9080,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             serializeExportSpecifier(name, varName);
                         }
                     }
-                    context.tracker.trackSymbol = oldTrack;
+                    context.tracker.disableTrackSymbol = prevDisableTrackSymbol;
                     return true;
                 }
                 else {
@@ -9523,28 +9483,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return node && node.parent &&
             node.parent.kind === SyntaxKind.ModuleBlock &&
             isExternalModuleAugmentation(node.parent.parent);
-    }
-
-    interface NodeBuilderContext {
-        enclosingDeclaration: Node | undefined;
-        flags: NodeBuilderFlags;
-        tracker: SymbolTracker;
-
-        // State
-        encounteredError: boolean;
-        reportedDiagnostic: boolean;
-        visitedTypes: Set<number> | undefined;
-        symbolDepth: Map<string, number> | undefined;
-        inferTypeParameters: TypeParameter[] | undefined;
-        approximateLength: number;
-        truncating?: boolean;
-        typeParameterSymbolList?: Set<number>;
-        typeParameterNames?: Map<TypeId, Identifier>;
-        typeParameterNamesByText?: Set<string>;
-        typeParameterNamesByTextNextNameCount?: Map<string, number>;
-        usedSymbolNames?: Set<string>;
-        remappedSymbolNames?: Map<SymbolId, string>;
-        reverseMappedStack?: ReverseMappedSymbol[];
     }
 
     function isDefaultBindingContext(location: Node) {
@@ -47199,4 +47137,152 @@ export function signatureHasRestParameter(s: Signature) {
 /** @internal */
 export function signatureHasLiteralTypes(s: Signature) {
     return !!(s.flags & SignatureFlags.HasLiteralTypes);
+}
+
+function createBasicNodeBuilderModuleSpecifierResolutionHost(host: TypeCheckerHost): ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string } {
+    return {
+        getCommonSourceDirectory: !!(host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
+        getCurrentDirectory: () => host.getCurrentDirectory(),
+        getSymlinkCache: maybeBind(host, host.getSymlinkCache),
+        getPackageJsonInfoCache: () => host.getPackageJsonInfoCache?.(),
+        useCaseSensitiveFileNames: maybeBind(host, host.useCaseSensitiveFileNames),
+        redirectTargetsMap: host.redirectTargetsMap,
+        getProjectReferenceRedirect: fileName => host.getProjectReferenceRedirect(fileName),
+        isSourceOfProjectReferenceRedirect: fileName => host.isSourceOfProjectReferenceRedirect(fileName),
+        fileExists: fileName => host.fileExists(fileName),
+        getFileIncludeReasons: () => host.getFileIncludeReasons(),
+        readFile: host.readFile ? (fileName => host.readFile!(fileName)) : undefined,
+    };
+}
+
+interface NodeBuilderContext {
+    enclosingDeclaration: Node | undefined;
+    flags: NodeBuilderFlags;
+    tracker: SymbolTrackerImpl;
+
+    // State
+    encounteredError: boolean;
+    reportedDiagnostic: boolean;
+    visitedTypes: Set<number> | undefined;
+    symbolDepth: Map<string, number> | undefined;
+    inferTypeParameters: TypeParameter[] | undefined;
+    approximateLength: number;
+    truncating?: boolean;
+    typeParameterSymbolList?: Set<number>;
+    typeParameterNames?: Map<TypeId, Identifier>;
+    typeParameterNamesByText?: Set<string>;
+    typeParameterNamesByTextNextNameCount?: Map<string, number>;
+    usedSymbolNames?: Set<string>;
+    remappedSymbolNames?: Map<SymbolId, string>;
+    reverseMappedStack?: ReverseMappedSymbol[];
+}
+
+class SymbolTrackerImpl implements SymbolTracker {
+    readonly inner: SymbolTracker | undefined = undefined;
+    readonly canTrackSymbol: boolean = false;
+    context: NodeBuilderContext = undefined!;
+    moduleResolverHost: ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string } | undefined = undefined;
+    disableTrackSymbol = false;
+
+    constructor(context: NodeBuilderContext, tracker: SymbolTracker | undefined, moduleResolverHost: ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string } | undefined) {
+        while (tracker instanceof SymbolTrackerImpl) {
+            tracker = tracker.inner;
+        }
+
+        this.inner = tracker;
+        this.canTrackSymbol = !!this.inner?.trackSymbol;
+        this.context = context;
+        this.moduleResolverHost = moduleResolverHost;
+    }
+
+    trackSymbol(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags): boolean {
+        if (this.inner?.trackSymbol && !this.disableTrackSymbol) {
+            if (this.inner.trackSymbol(symbol, enclosingDeclaration, meaning)) {
+                this.onDiagnosticReported();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    reportInaccessibleThisError(): void {
+        if (this.inner?.reportInaccessibleThisError) {
+            this.onDiagnosticReported();
+            this.inner.reportInaccessibleThisError();
+        }
+    }
+
+    reportPrivateInBaseOfClassExpression(propertyName: string): void {
+        if (this.inner?.reportPrivateInBaseOfClassExpression) {
+            this.onDiagnosticReported();
+            this.inner.reportPrivateInBaseOfClassExpression(propertyName);
+        }
+    }
+
+    reportInaccessibleUniqueSymbolError(): void {
+        if (this.inner?.reportInaccessibleUniqueSymbolError) {
+            this.onDiagnosticReported();
+            this.inner.reportInaccessibleUniqueSymbolError();
+        }
+    }
+
+    reportCyclicStructureError(): void {
+        if (this.inner?.reportCyclicStructureError) {
+            this.onDiagnosticReported();
+            this.inner.reportCyclicStructureError();
+        }
+    }
+
+    reportLikelyUnsafeImportRequiredError(specifier: string): void {
+        if (this.inner?.reportLikelyUnsafeImportRequiredError) {
+            this.onDiagnosticReported();
+            this.inner.reportLikelyUnsafeImportRequiredError(specifier);
+        }
+    }
+
+    reportTruncationError(): void {
+        if (this.inner?.reportTruncationError) {
+            this.onDiagnosticReported();
+            this.inner.reportTruncationError();
+        }
+    }
+
+    trackReferencedAmbientModule(decl: ModuleDeclaration, symbol: Symbol): void {
+        if (this.inner?.trackReferencedAmbientModule) {
+            this.onDiagnosticReported();
+            this.inner.trackReferencedAmbientModule(decl, symbol);
+        }
+    }
+
+    trackExternalModuleSymbolOfImportTypeNode(symbol: Symbol): void {
+        if (this.inner?.trackExternalModuleSymbolOfImportTypeNode) {
+            this.onDiagnosticReported();
+            this.inner.trackExternalModuleSymbolOfImportTypeNode(symbol);
+        }
+    }
+
+    reportNonlocalAugmentation(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void {
+        if (this.inner?.reportNonlocalAugmentation) {
+            this.onDiagnosticReported();
+            this.inner.reportNonlocalAugmentation(containingFile, parentSymbol, augmentingSymbol);
+        }
+    }
+
+    reportNonSerializableProperty(propertyName: string): void {
+        if (this.inner?.reportNonSerializableProperty) {
+            this.onDiagnosticReported();
+            this.inner.reportNonSerializableProperty(propertyName);
+        }
+    }
+
+    reportImportTypeNodeResolutionModeOverride(): void {
+        if (this.inner?.reportImportTypeNodeResolutionModeOverride) {
+            this.onDiagnosticReported();
+            this.inner.reportImportTypeNodeResolutionModeOverride();
+        }
+    }
+
+    private onDiagnosticReported() {
+        this.context.reportedDiagnostic = true;
+    }
 }

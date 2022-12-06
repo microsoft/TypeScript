@@ -5115,7 +5115,7 @@ export interface SymbolWalker {
 
 // This was previously deprecated in our public API, but is still used internally
 /** @internal */
-export interface SymbolWriter extends SymbolTracker {
+export interface SymbolWriter {
     writeKeyword(text: string): void;
     writeOperator(text: string): void;
     writePunctuation(text: string): void;

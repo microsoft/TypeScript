@@ -271,7 +271,6 @@ import {
     nodeIsMissing,
     nodeIsPresent,
     nodeIsSynthesized,
-    noop,
     normalizePath,
     NoSubstitutionTemplateLiteral,
     notImplemented,
@@ -2721,10 +2720,6 @@ function getDisplayPartWriter(): DisplayPartsSymbolWriter {
         increaseIndent: () => { indent++; },
         decreaseIndent: () => { indent--; },
         clear: resetWriter,
-        trackSymbol: () => false,
-        reportInaccessibleThisError: noop,
-        reportInaccessibleUniqueSymbolError: noop,
-        reportPrivateInBaseOfClassExpression: noop,
     };
 
     function writeIndent() {
