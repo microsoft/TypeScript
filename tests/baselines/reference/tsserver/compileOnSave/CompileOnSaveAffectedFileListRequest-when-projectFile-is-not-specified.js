@@ -1,12 +1,12 @@
 Info 0    [00:00:33.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:34.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/app1/app.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/lib/lib.d.ts]
@@ -112,12 +112,12 @@ Info 18   [00:00:57.000] response:
     }
 Info 19   [00:00:58.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/app2/app.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -213,12 +213,12 @@ Info 34   [00:01:24.000] response:
     }
 Info 35   [00:01:25.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/core/core.ts"
-      }
+      },
+      "seq": 3,
+      "type": "request"
     }
 Before request
 
@@ -295,7 +295,7 @@ Info 40   [00:01:43.000] request:
         "endOffset": 1,
         "insertString": "let k = 1"
       },
-      "seq": 1,
+      "seq": 4,
       "type": "request"
     }
 Before request
@@ -353,7 +353,7 @@ Info 42   [00:01:45.000] request:
         "endOffset": 1,
         "insertString": "let k = 1"
       },
-      "seq": 2,
+      "seq": 5,
       "type": "request"
     }
 Before request
@@ -408,7 +408,7 @@ Info 44   [00:01:47.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/core/core.ts"
       },
-      "seq": 3,
+      "seq": 6,
       "type": "request"
     }
 Before request

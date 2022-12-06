@@ -122,6 +122,7 @@ import {
     hasProperty,
     hasStaticModifier,
     hasSyntacticModifier,
+    hasTabstop,
     HighlightSpanKind,
     HostCancellationToken,
     hostGetCanonicalFileName,
@@ -182,8 +183,8 @@ import {
     isTagName,
     isTextWhiteSpaceLike,
     isThisTypeParameter,
-    JsDoc,
     JSDoc,
+    JsDoc,
     JSDocContainer,
     JSDocTagInfo,
     JsonSourceFile,
@@ -252,9 +253,9 @@ import {
     RenameInfo,
     RenameInfoOptions,
     RenameLocation,
-    ResolvedModuleFull,
+    ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
-    ResolvedTypeReferenceDirective,
+    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     returnFalse,
     scanner,
     ScriptElementKind,
@@ -497,6 +498,9 @@ function addSyntheticNodes(nodes: Push<Node>, pos: number, end: number, parent: 
         const textPos = scanner.getTextPos();
         if (textPos <= end) {
             if (token === SyntaxKind.Identifier) {
+                if (hasTabstop(parent)) {
+                    continue;
+                }
                 Debug.fail(`Did not expect ${Debug.formatSyntaxKind(parent.kind)} to have an Identifier in its trivia`);
             }
             nodes.push(createNode(token, pos, textPos, parent));
@@ -1025,8 +1029,8 @@ class SourceFileObject extends NodeObject implements SourceFile {
     public languageVariant!: LanguageVariant;
     public identifiers!: Map<string, string>;
     public nameTable: UnderscoreEscapedMap<number> | undefined;
-    public resolvedModules: ModeAwareCache<ResolvedModuleFull> | undefined;
-    public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirective>;
+    public resolvedModules: ModeAwareCache<ResolvedModuleWithFailedLookupLocations> | undefined;
+    public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     public imports!: readonly StringLiteralLike[];
     public moduleAugmentations!: StringLiteral[];
     private namedDeclarations: Map<string, Declaration[]> | undefined;
@@ -1663,6 +1667,8 @@ export function createLanguageService(
             getModuleResolutionCache: maybeBind(host, host.getModuleResolutionCache),
             createHash: maybeBind(host, host.createHash),
             resolveTypeReferenceDirectives: maybeBind(host, host.resolveTypeReferenceDirectives),
+            resolveModuleNameLiterals: maybeBind(host, host.resolveModuleNameLiterals),
+            resolveTypeReferenceDirectiveReferences: maybeBind(host, host.resolveTypeReferenceDirectiveReferences),
             useSourceOfProjectReferenceRedirect: maybeBind(host, host.useSourceOfProjectReferenceRedirect),
             getParsedCommandLine,
         };

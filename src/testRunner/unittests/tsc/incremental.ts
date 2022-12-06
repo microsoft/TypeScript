@@ -855,4 +855,25 @@ console.log(a);`,
             },
         ]
     });
+
+    verifyTscWithEdits({
+        scenario: "incremental",
+        subScenario: "file deleted before fixing error with noEmitOnError",
+        fs: () => loadProjectFromFiles({
+            "/src/project/tsconfig.json": JSON.stringify({
+                compilerOptions: {
+                    outDir: "outDir",
+                    noEmitOnError: true,
+                },
+            }),
+            "/src/project/file1.ts": `export const x: 30 = "hello";`,
+            "/src/project/file2.ts": `export class D { }`,
+        }),
+        commandLineArgs: ["--p", "/src/project", "-i"],
+        edits: [{
+            subScenario: "delete file without error",
+            modifyFs: fs => fs.unlinkSync("/src/project/file2.ts"),
+        }],
+        baselinePrograms: true,
+    });
 });

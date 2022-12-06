@@ -233,7 +233,7 @@ export namespace BuilderState {
 
         // Handle type reference directives
         if (sourceFile.resolvedTypeReferenceDirectiveNames) {
-            sourceFile.resolvedTypeReferenceDirectiveNames.forEach((resolvedTypeReferenceDirective) => {
+            sourceFile.resolvedTypeReferenceDirectiveNames.forEach(({ resolvedTypeReferenceDirective }) => {
                 if (!resolvedTypeReferenceDirective) {
                     return;
                 }

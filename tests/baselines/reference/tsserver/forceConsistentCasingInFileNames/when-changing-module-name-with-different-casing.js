@@ -1,13 +1,13 @@
 Info 0    [00:00:24.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:25.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/another.ts",
         "projectRootPath": "/user/username/projects/myproject"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/Logger.ts]
@@ -123,7 +123,7 @@ Info 23   [00:00:53.000] request:
           "/user/username/projects/myproject/another.ts"
         ]
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request
@@ -263,7 +263,7 @@ FsWatchesRecursive::
 Info 27   [00:00:57.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/another.ts","diagnostics":[]}}
 Info 28   [00:00:58.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::
@@ -305,7 +305,7 @@ Info 29   [00:00:59.000] request:
           }
         ]
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Before request
@@ -358,7 +358,7 @@ Info 31   [00:01:01.000] request:
           "/user/username/projects/myproject/another.ts"
         ]
       },
-      "seq": 3,
+      "seq": 4,
       "type": "request"
     }
 Before request
@@ -501,7 +501,7 @@ FsWatchesRecursive::
 Info 38   [00:01:08.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/user/username/projects/myproject/another.ts","diagnostics":[]}}
 Info 39   [00:01:09.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":4}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::

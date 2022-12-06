@@ -1,12 +1,12 @@
 Info 0    [00:01:03.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:01:04.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/main/main.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/dependency/FnS.ts]
@@ -294,12 +294,12 @@ Info 24   [00:01:33.000] response:
     }
 Info 25   [00:01:34.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/FnS.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -407,12 +407,12 @@ Info 44   [00:02:04.000] response:
     }
 Info 45   [00:02:05.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/random/random.ts"
-      }
+      },
+      "seq": 3,
+      "type": "request"
     }
 Before request
 
@@ -539,7 +539,7 @@ Info 63   [00:02:39.000] request:
         "line": 9,
         "offset": 1
       },
-      "seq": 1,
+      "seq": 4,
       "type": "request"
     }
 Before request
@@ -658,7 +658,7 @@ Info 66   [00:02:42.000] request:
         "line": 10,
         "offset": 1
       },
-      "seq": 2,
+      "seq": 5,
       "type": "request"
     }
 Before request
@@ -778,7 +778,7 @@ Info 68   [00:02:44.000] request:
         "line": 11,
         "offset": 1
       },
-      "seq": 3,
+      "seq": 6,
       "type": "request"
     }
 Before request
@@ -898,7 +898,7 @@ Info 70   [00:02:46.000] request:
         "line": 12,
         "offset": 1
       },
-      "seq": 4,
+      "seq": 7,
       "type": "request"
     }
 Before request
@@ -1018,7 +1018,7 @@ Info 72   [00:02:48.000] request:
         "line": 13,
         "offset": 1
       },
-      "seq": 5,
+      "seq": 8,
       "type": "request"
     }
 Before request
@@ -1138,7 +1138,7 @@ Info 74   [00:02:50.000] request:
         "line": 1,
         "offset": 17
       },
-      "seq": 6,
+      "seq": 9,
       "type": "request"
     }
 Before request
@@ -1304,7 +1304,7 @@ Info 78   [00:02:54.000] request:
         "line": 2,
         "offset": 17
       },
-      "seq": 7,
+      "seq": 10,
       "type": "request"
     }
 Before request
@@ -1470,7 +1470,7 @@ Info 82   [00:02:58.000] request:
         "line": 3,
         "offset": 17
       },
-      "seq": 8,
+      "seq": 11,
       "type": "request"
     }
 Before request
@@ -1636,7 +1636,7 @@ Info 86   [00:03:02.000] request:
         "line": 4,
         "offset": 17
       },
-      "seq": 9,
+      "seq": 12,
       "type": "request"
     }
 Before request
@@ -1802,7 +1802,7 @@ Info 90   [00:03:06.000] request:
         "line": 5,
         "offset": 17
       },
-      "seq": 10,
+      "seq": 13,
       "type": "request"
     }
 Before request
@@ -1962,12 +1962,12 @@ Info 93   [00:03:09.000] response:
     }
 Info 94   [00:03:10.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/random/random.ts"
-      }
+      },
+      "seq": 14,
+      "type": "request"
     }
 Before request
 
@@ -2067,12 +2067,12 @@ Info 96   [00:03:26.000] response:
     }
 Info 97   [00:03:27.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/random/random.ts"
-      }
+      },
+      "seq": 15,
+      "type": "request"
     }
 Before request
 
@@ -2176,12 +2176,12 @@ Info 101  [00:03:47.000] response:
     }
 Info 102  [00:03:48.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/main/main.ts"
-      }
+      },
+      "seq": 16,
+      "type": "request"
     }
 Before request
 
@@ -2281,12 +2281,12 @@ Info 104  [00:04:04.000] response:
     }
 Info 105  [00:04:05.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/FnS.ts"
-      }
+      },
+      "seq": 17,
+      "type": "request"
     }
 Before request
 
@@ -2388,12 +2388,12 @@ Info 107  [00:04:19.000] response:
     }
 Info 108  [00:04:20.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/random/random.ts"
-      }
+      },
+      "seq": 18,
+      "type": "request"
     }
 Before request
 
@@ -2497,12 +2497,12 @@ Info 110  [00:04:32.000] response:
     }
 Info 111  [00:04:33.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/random/random.ts"
-      }
+      },
+      "seq": 19,
+      "type": "request"
     }
 Before request
 

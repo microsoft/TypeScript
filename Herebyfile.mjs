@@ -416,11 +416,6 @@ const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     builtEntrypoint: "./built/local/tsserver/server.js",
     output: "./built/local/tsserver.js",
     mainDeps: [generateLibs],
-    // Even though this seems like an exectuable, so could be the default CJS,
-    // this is used in the browser too. Do the same thing that we do for our
-    // libraries and generate an IIFE with name `ts`, as to not pollute the global
-    // scope.
-    bundlerOptions: { exportIsTsObject: true },
 });
 export { tsserver, watchTsserver };
 
@@ -805,7 +800,7 @@ function baselineAcceptTask(localBaseline, refBaseline) {
         }
         const toDelete = await glob(`${localBaseline}/**/*.delete`, { nodir: true });
         for (const p of toDelete) {
-            const out = localPathToRefPath(p);
+            const out = localPathToRefPath(p).replace(/\.delete$/, "");
             await fs.promises.rm(out);
         }
     };
