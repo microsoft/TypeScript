@@ -127,6 +127,7 @@ import {
     isCallExpression,
     isCaseBlock,
     isCaseClause,
+    isCaseKeyword,
     isCheckJsEnabledForFile,
     isClassElement,
     isClassLike,
@@ -191,6 +192,7 @@ import {
     isNamedImports,
     isNamedImportsOrExports,
     isNamespaceImport,
+    isNodeDescendantOf,
     isObjectBindingPattern,
     isObjectLiteralExpression,
     isObjectTypeDeclaration,
@@ -352,8 +354,6 @@ import {
     UserPreferences,
     VariableDeclaration,
     walkUpParenthesizedExpressions,
-    isCaseKeyword,
-    isNodeDescendantOf,
 } from "./_namespaces/ts";
 import { StringCompletions } from "./_namespaces/ts.Completions";
 
@@ -891,7 +891,7 @@ function completionInfoFromData(
 
     // When the completion is for the expression of a case clause (e.g. `case |`),
     // filter literals & enum symbols whose values are already present in existing case clauses.
-    let caseClause = findAncestor(contextToken, isCaseClause);
+    const caseClause = findAncestor(contextToken, isCaseClause);
     if (caseClause && (isCaseKeyword(contextToken!) || isNodeDescendantOf(contextToken!, caseClause.expression))) {
         const tracker = newCaseClauseTracker(checker, caseClause.parent.clauses);
         literals = literals.filter(literal => !tracker.hasValue(literal));
