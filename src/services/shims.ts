@@ -449,7 +449,7 @@ export class LanguageServiceShimHostAdapter implements LanguageServiceHost {
                 const resolutionsInFile = JSON.parse(this.shimHost.getModuleResolutionsForFile!(containingFile)) as MapLike<string>; // TODO: GH#18217
                 return map(moduleNames, name => {
                     const result = getProperty(resolutionsInFile, name);
-                    return result ? { resolvedFileName: result, extension: extensionFromPath(result), isExternalLibraryImport: false, resolvedUsingTsExtension: false } : undefined;
+                    return result ? { resolvedFileName: result, extension: extensionFromPath(result), isExternalLibraryImport: false } : undefined;
                 });
             };
         }

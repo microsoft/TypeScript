@@ -50,7 +50,6 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
                 resolvedFileName: resolvedModule.resolvedFileName,
                 isExternalLibraryImport: resolvedModule.isExternalLibraryImport,
                 originalFileName: resolvedModule.originalPath,
-                resolvedUsingTsExtension: false,
             };
         });
         const watch = ts.createWatchProgram(host);
