@@ -431,6 +431,7 @@ export const enum SymbolOriginInfoKind {
     ResolvedExport      = 1 << 5,
     TypeOnlyAlias       = 1 << 6,
     ObjectLiteralMethod = 1 << 7,
+    Ignore              = 1 << 8,
 
     SymbolMemberNoExport = SymbolMember,
     SymbolMemberExport   = SymbolMember | Export,
@@ -507,6 +508,10 @@ function originIsTypeOnlyAlias(origin: SymbolOriginInfo | undefined): origin is 
 
 function originIsObjectLiteralMethod(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoObjectLiteralMethod {
     return !!(origin && origin.kind & SymbolOriginInfoKind.ObjectLiteralMethod);
+}
+
+function originIsIgnore(origin: SymbolOriginInfo | undefined): boolean {
+    return !!(origin && origin.kind & SymbolOriginInfoKind.Ignore);
 }
 
 /** @internal */
@@ -885,19 +890,19 @@ function completionInfoFromData(
     }
 
     let caseClause = findAncestor(contextToken, isCaseClause);
-    if (caseClause && (isCaseKeyword(contextToken!) || isNodeDescendantOf(contextToken!, caseClause.expression))) { // >> TODO: this needs to be expanded, for cases like `case foo.bar.| etc (what others?)
+    if (caseClause && (isCaseKeyword(contextToken!) || isNodeDescendantOf(contextToken!, caseClause.expression))) {
         // Filter existing literals
         const tracker = newCaseClauseTracker(checker, caseClause.parent.clauses);
         literals = literals.filter(literal => !tracker.hasValue(literal));
-        symbols = symbols.filter(symbol => {
-            if (symbol.valueDeclaration && isEnumMember(symbol.valueDeclaration)) { // >> TODO: if isEnum
-                // const enumValue = type.symbol.valueDeclaration && checker.getConstantValue(type.symbol.valueDeclaration as EnumMember);
+        // Mark already present symbols to be ignored
+        symbols.forEach((symbol, i) => {
+            if (symbol.valueDeclaration && isEnumMember(symbol.valueDeclaration)) {
                 const value = checker.getConstantValue(symbol.valueDeclaration);
-                return !value || !tracker.hasValue(value);
+                if (value !== undefined && tracker.hasValue(value)) {
+                    symbolToOriginInfoMap[i] = { kind: SymbolOriginInfoKind.Ignore };
+                }
             }
-            return true;
-        }); // >> TODO: can't really use filter and modify symbol array because symbolToSortTextMap and symbolToOriginMap are arrays that depend on symbol's index
-
+        });
     }
 
     const entries = createSortedArray<CompletionEntry>();
@@ -4529,6 +4534,9 @@ function getCompletionEntryDisplayNameForSymbol(
     kind: CompletionKind,
     jsxIdentifierExpected: boolean,
 ): CompletionEntryDisplayNameForSymbol | undefined {
+    if (originIsIgnore(origin)) {
+        return undefined;
+    }
     const name = originIncludesSymbolName(origin) ? origin.symbolName : symbol.name;
     if (name === undefined
         // If the symbol is external module, don't show it in the completion list
