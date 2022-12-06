@@ -1,0 +1,5 @@
+==== outside.ts (0 errors) ====
+    export const a = 1;
+    
+==== nested/consume.ts (0 errors) ====
+    import "../outside";

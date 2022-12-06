@@ -2670,7 +2670,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             return flatDiagnostics;
         }
 
-        const { diagnostics, directives } = getDiagnosticsWithPrecedingDirectives(sourceFile, sourceFile.commentDirectives, flatDiagnostics);
+        const { diagnostics, directives } = getDiagnosticsWithPrecedingDirectives(sourceFile, sourceFile.commentDirectives, flatDiagnostics, programDiagnostics.getDiagnostics(sourceFile.fileName));
 
         for (const errorExpectation of directives.getUnusedExpectations()) {
             diagnostics.push(createDiagnosticForRange(sourceFile, errorExpectation.range, Diagnostics.Unused_ts_expect_error_directive));
@@ -2683,10 +2683,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
      * Creates a map of comment directives along with the diagnostics immediately preceded by one of them.
      * Comments that match to any of those diagnostics are marked as used.
      */
-    function getDiagnosticsWithPrecedingDirectives(sourceFile: SourceFile, commentDirectives: CommentDirective[], flatDiagnostics: Diagnostic[]) {
+    function getDiagnosticsWithPrecedingDirectives(sourceFile: SourceFile, commentDirectives: CommentDirective[], flatDiagnostics: readonly Diagnostic[], additionalDiagnostics: readonly Diagnostic[] = []) {
         // Diagnostics are only reported if there is no comment directive preceding them
         // This will modify the directives map by marking "used" ones with a corresponding diagnostic
         const directives = createCommentDirectivesMap(sourceFile, commentDirectives);
+
+        // Other diagnostics may also need to be accounted for when clearing directives,
+        // such as program diagnostics when finding bind and check diagnostics
+        for (const diagnostic of additionalDiagnostics) {
+            markPrecedingCommentDirectiveLine(diagnostic, directives);
+        }
+
         const diagnostics = flatDiagnostics.filter(diagnostic => markPrecedingCommentDirectiveLine(diagnostic, directives) === -1);
 
         return { diagnostics, directives };

@@ -1,0 +1,21 @@
+{
+    "scenario": "out-of-root project diagnostic, ignored with // @ts-expect-error",
+    "projectRoot": "tests/cases/projects/IgnoredProgramDiagnostic",
+    "rootDir": "nested",
+    "ignoredFiles": [
+        "outside.ts"
+    ],
+    "inputFiles": [
+        "nested/consume.ts"
+    ],
+    "runTest": true,
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "outside.ts",
+        "nested/consume.ts"
+    ],
+    "emittedFiles": [
+        "outside.js",
+        "nested/consume.js"
+    ]
+}
