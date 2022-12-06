@@ -1,3 +1,5 @@
+// @strict: true
+
 declare const a: { error: { prop: string }, result: undefined } | { error: undefined, result: { prop: number } }
 
 if (typeof a.error === 'undefined') {
@@ -11,5 +13,10 @@ if (typeof a.error !== 'undefined') {
     a.error.prop; // string
 }
 else {
+    a.result.prop; // number
+}
+
+// extra parens on purpose
+if (typeof (a.error) === 'undefined') {
     a.result.prop; // number
 }
