@@ -2,6 +2,7 @@ import {
     BaseNodeFactory,
     CreateSourceFileOptions,
     EmitHelperFactory,
+    GetCanonicalFileName,
     MapLike,
     ModeAwareCache,
     ModeAwareCacheKey,
@@ -4529,6 +4530,7 @@ export interface Program extends ScriptReferenceHost {
     isEmittedFile(file: string): boolean;
     /** @internal */ getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
     /** @internal */ useCaseSensitiveFileNames(): boolean;
+    /** @internal */ getCanonicalFileName: GetCanonicalFileName;
 
     getProjectReferences(): readonly ProjectReference[] | undefined;
     getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;

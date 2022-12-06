@@ -42,7 +42,6 @@ import {
     forEachEntry,
     forEachKey,
     generateDjb2Hash,
-    GetCanonicalFileName,
     getDirectoryPath,
     getEmitDeclarations,
     getNormalizedAbsolutePath,
@@ -450,7 +449,6 @@ function getEmitSignatureFromOldSignature(options: CompilerOptions, oldOptions: 
 function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newProgram: Program): readonly Diagnostic[] {
     if (!diagnostics.length) return emptyArray;
     let buildInfoDirectory: string | undefined;
-    let getCanonicalFileName: GetCanonicalFileName | undefined;
     return diagnostics.map(diagnostic => {
         const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPath);
         result.reportsUnnecessary = diagnostic.reportsUnnecessary;
@@ -468,7 +466,7 @@ function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newPro
 
     function toPath(path: string) {
         buildInfoDirectory ??= getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(newProgram.getCompilerOptions())!, newProgram.getCurrentDirectory()));
-        return ts.toPath(path, buildInfoDirectory, getCanonicalFileName ??= createGetCanonicalFileName(newProgram.useCaseSensitiveFileNames()));
+        return ts.toPath(path, buildInfoDirectory, newProgram.getCanonicalFileName);
     }
 }
 
@@ -962,7 +960,6 @@ export function isProgramBundleEmitBuildInfo(info: ProgramBuildInfo): info is Pr
  */
 function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | undefined): BuildInfo {
     const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
-    const getCanonicalFileName = createGetCanonicalFileName(state.program!.useCaseSensitiveFileNames());
     const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
     // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
     const latestChangedDtsFile = state.latestChangedDtsFile ? relativeToBuildInfoEnsuringAbsolutePath(state.latestChangedDtsFile) : undefined;
@@ -1119,7 +1116,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
     }
 
     function relativeToBuildInfo(path: string) {
-        return ensurePathIsNonModuleName(getRelativePathFromDirectory(buildInfoDirectory, path, getCanonicalFileName));
+        return ensurePathIsNonModuleName(getRelativePathFromDirectory(buildInfoDirectory, path, state.program!.getCanonicalFileName));
     }
 
     function toFileId(path: Path): ProgramBuildInfoFileId {
@@ -1262,7 +1259,6 @@ export function computeSignatureWithDiagnostics(
     host: HostForComputeHash,
     data: WriteFileCallbackData | undefined
 ) {
-    let getCanonicalFileName: GetCanonicalFileName | undefined;
     text = getTextHandlingSourceMapForSignature(text, data);
     let sourceFileDirectory: string | undefined;
     if (data?.diagnostics?.length) {
@@ -1288,7 +1284,7 @@ export function computeSignatureWithDiagnostics(
         return `${ensurePathIsNonModuleName(getRelativePathFromDirectory(
             sourceFileDirectory,
             diagnostic.file.resolvedPath,
-            getCanonicalFileName ??= createGetCanonicalFileName(program.useCaseSensitiveFileNames())
+            program.getCanonicalFileName,
         ))}(${diagnostic.start},${diagnostic.length})`;
     }
 }

@@ -344,8 +344,7 @@ export function listFiles<T extends BuilderProgram>(program: Program | T, write:
 /** @internal */
 export function explainFiles(program: Program, write: (s: string) => void) {
     const reasons = program.getFileIncludeReasons();
-    const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
-    const relativeFileName = (fileName: string) => convertToRelativePath(fileName, program.getCurrentDirectory(), getCanonicalFileName);
+    const relativeFileName = (fileName: string) => convertToRelativePath(fileName, program.getCurrentDirectory(), program.getCanonicalFileName);
     for (const file of program.getSourceFiles()) {
         write(`${toFileName(file, relativeFileName)}`);
         reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, reason, relativeFileName).messageText}`));
@@ -411,10 +410,9 @@ export function getMatchedFileSpec(program: Program, fileName: string) {
     const configFile = program.getCompilerOptions().configFile;
     if (!configFile?.configFileSpecs?.validatedFilesSpec) return undefined;
 
-    const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
-    const filePath = getCanonicalFileName(fileName);
+    const filePath = program.getCanonicalFileName(fileName);
     const basePath = getDirectoryPath(getNormalizedAbsolutePath(configFile.fileName, program.getCurrentDirectory()));
-    return find(configFile.configFileSpecs.validatedFilesSpec, fileSpec => getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
+    return find(configFile.configFileSpecs.validatedFilesSpec, fileSpec => program.getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
 }
 
 /** @internal */
