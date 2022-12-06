@@ -47,7 +47,7 @@ CreatingProgramWith::
 FileWatcher:: Added:: WatchInfo: /src/project/fileWithImports.ts 250 undefined Source file
 ======== Resolving module 'pkg0' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'pkg0' from 'node_modules' folder, target file type 'TypeScript'.
+Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/src/project/node_modules/pkg0/package.json' does not exist.
 File '/src/project/node_modules/pkg0.ts' does not exist.
 File '/src/project/node_modules/pkg0.tsx' does not exist.
@@ -59,14 +59,14 @@ Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/sr
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'pkg1' from 'node_modules' folder, target file type 'TypeScript'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/src/project/node_modules/pkg1.ts' does not exist.
 File '/src/project/node_modules/pkg1.tsx' does not exist.
 File '/src/project/node_modules/pkg1.d.ts' does not exist.
 Directory '/src/project/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'pkg1' from 'node_modules' folder, target file type 'JavaScript'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: JavaScript.
 File '/src/project/node_modules/pkg1.js' does not exist.
 File '/src/project/node_modules/pkg1.jsx' does not exist.
 Directory '/src/node_modules' does not exist, skipping all lookups in it.
@@ -340,7 +340,7 @@ CreatingProgramWith::
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module 'pkg1' from 'node_modules' folder, target file type 'TypeScript'.
+Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/src/project/node_modules/pkg1/package.json' does not exist.
 File '/src/project/node_modules/pkg1.ts' does not exist.
 File '/src/project/node_modules/pkg1.tsx' does not exist.

@@ -1,13 +1,13 @@
 Info 0    [00:00:25.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:26.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/users/username/projects/project/b.ts",
         "projectRootPath": "/users/username/projects/project"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/users/username/projects/project/sub/a.ts]
@@ -114,13 +114,13 @@ Info 22   [00:00:53.000] response:
     }
 Info 23   [00:00:54.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/users/username/projects/project/sub/a.ts",
         "projectRootPath": "/users/username/projects/project"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -236,12 +236,12 @@ FsWatchesRecursive::
 
 Info 38   [00:01:21.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/users/username/projects/project/sub/a.ts"
-      }
+      },
+      "seq": 3,
+      "type": "request"
     }
 Before request
 
@@ -306,13 +306,13 @@ FsWatchesRecursive::
 
 Info 42   [00:01:31.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/users/username/projects/project/a.ts",
         "projectRootPath": "/users/username/projects/project"
-      }
+      },
+      "seq": 4,
+      "type": "request"
     }
 Before request
 
@@ -437,12 +437,12 @@ FsWatchesRecursive::
 
 Info 57   [00:02:10.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/users/username/projects/project/a.ts"
-      }
+      },
+      "seq": 5,
+      "type": "request"
     }
 Before request
 
@@ -507,13 +507,13 @@ FsWatchesRecursive::
 
 Info 61   [00:02:20.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/users/username/projects/project/sub/a.ts",
         "projectRootPath": "/users/username/projects/project"
-      }
+      },
+      "seq": 6,
+      "type": "request"
     }
 Before request
 
@@ -751,7 +751,7 @@ Info 102  [00:03:39.000] request:
           "/users/username/projects/project/sub/a.ts"
         ]
       },
-      "seq": 1,
+      "seq": 7,
       "type": "request"
     }
 Before request
@@ -1094,7 +1094,7 @@ FsWatchesRecursive::
 Info 118  [00:03:55.000] event:
     {"seq":0,"type":"event","event":"suggestionDiag","body":{"file":"/users/username/projects/project/sub/a.ts","diagnostics":[]}}
 Info 119  [00:03:56.000] event:
-    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":1}}
+    {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":7}}
 Before running immediate callbacks and checking length (1)
 
 PolledWatches::

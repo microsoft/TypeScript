@@ -1,12 +1,12 @@
 Info 0    [00:00:37.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:38.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/mocks/cssMock.js"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/tsconfig.json]
@@ -127,12 +127,12 @@ Info 23   [00:01:06.000] response:
     }
 Info 24   [00:01:07.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/mocks/cssMock.js"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -188,12 +188,12 @@ Info 26   [00:01:13.000] response:
     }
 Info 27   [00:01:14.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js"
-      }
+      },
+      "seq": 3,
+      "type": "request"
     }
 Before request
 

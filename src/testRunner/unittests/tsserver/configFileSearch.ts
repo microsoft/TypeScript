@@ -1,5 +1,16 @@
-import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { createProjectService, checkNumberOfConfiguredProjects, checkNumberOfInferredProjects, createLoggerWithInMemoryLogs, checkNumberOfProjects, baselineTsserverLogs } from "./helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    baselineTsserverLogs,
+    checkNumberOfConfiguredProjects,
+    checkNumberOfInferredProjects,
+    checkNumberOfProjects,
+    createLoggerWithInMemoryLogs,
+    createProjectService,
+} from "./helpers";
 
 describe("unittests:: tsserver:: searching for config file", () => {
     it("should stop at projectRootPath if given", () => {

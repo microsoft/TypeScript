@@ -1,6 +1,9 @@
-import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import { createWatchedSystem, File, libFile } from "../virtualFileSystemWithWatch";
+import {
+    createWatchedSystem,
+    File,
+    libFile,
+} from "../virtualFileSystemWithWatch";
 import { verifyTscWatch } from "./helpers";
 
 describe("unittests:: tsc-watch:: moduleResolution", () => {
@@ -113,10 +116,20 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                         export function thing(): void {}
                     `
             },
+            {
+                path: `/user/username/projects/myproject/index2.ts`,
+                content: Utils.dedent`
+                        export function thing(): void {}
+                    `
+            },
             libFile
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
-        changes: ts.emptyArray
+        changes: [{
+            caption: "Add import to index2",
+            change: sys => sys.prependFile(`/user/username/projects/myproject/index2.ts`, `import * as me from "./index.js";`),
+            timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+        }]
     });
 
     describe("package json file is edited", () => {

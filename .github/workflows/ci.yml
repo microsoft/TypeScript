@@ -109,10 +109,14 @@ jobs:
         npm init --yes
         npm install $PACKAGE tslib
 
+        echo "Testing tsc..."
         npx tsc --version
+
+        echo "Testing tsserver..."
         echo '{"seq": 1, "command": "status"}' | npx tsserver
 
-        cat > smoke.js << EOF
+        cat > smoke.js << 'EOF'
+        console.log(`Testing ${process.argv[2]}...`);
         const { __importDefault, __importStar } = require("tslib");
         const ts = require(process.argv[2]);
 
@@ -132,16 +136,16 @@ jobs:
             success = !!fn();
           }
           catch {}
-          if (success !== shouldSucceed) {
-            if (success) {
-              console.error(`${fn.toString()} unexpectedly succeeded.`);
-            }
-            else {
-              console.error(`${fn.toString()} did not succeed.`);
-            }
+          const status = success ? "succeeded" : "failed";
+          if (success === shouldSucceed) {
+            console.log(`${fn.toString()} ${status} as expected.`);
+          }
+          else {
+            console.log(`${fn.toString()} unexpectedly ${status}.`);
             process.exitCode = 1;
           }
         }
+        console.log("ok");
         EOF
 
         node ./smoke.js typescript

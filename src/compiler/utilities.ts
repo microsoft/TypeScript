@@ -1,96 +1,523 @@
 import {
-    __String, AccessExpression, AccessorDeclaration, addRange, affectsDeclarationPathOptionDeclarations,
-    affectsEmitOptionDeclarations, AllAccessorDeclarations, AmbientModuleDeclaration, AnyImportOrBareOrAccessedRequire,
-    AnyImportOrReExport, AnyImportSyntax, AnyValidImportOrReExport, arrayFrom, ArrayLiteralExpression, ArrayTypeNode,
-    ArrowFunction, AsExpression, AssertionExpression, assertType, AssignmentDeclarationKind, AssignmentExpression,
-    AssignmentOperatorToken, BinaryExpression, binarySearch, BindableObjectDefinePropertyCall,
-    BindableStaticAccessExpression, BindableStaticElementAccessExpression, BindableStaticNameExpression, BindingElement,
-    Block, BundleFileSection, BundleFileSectionKind, BundleFileTextLike, CallExpression, CallLikeExpression,
-    canHaveDecorators, canHaveIllegalDecorators, canHaveModifiers, CaseBlock, CaseClause, CaseOrDefaultClause,
-    CatchClause, changeAnyExtension, CharacterCodes, CheckFlags, ClassDeclaration, ClassElement, ClassLikeDeclaration,
-    ClassStaticBlockDeclaration, combinePaths, CommaListExpression, CommandLineOption, CommentDirective,
-    CommentDirectivesMap, CommentDirectiveType, CommentRange, compareStringsCaseSensitive, compareValues, Comparison,
-    CompilerOptions, ComputedPropertyName, computeLineAndCharacterOfPosition, computeLineOfPosition, computeLineStarts,
-    concatenate, ConditionalExpression, ConstructorDeclaration, contains, containsPath, createGetCanonicalFileName,
-    createModeAwareCache, createMultiMap, createScanner, createTextSpan, createTextSpanFromBounds, Debug, Declaration,
-    DeclarationName, DeclarationWithTypeParameterChildren, DeclarationWithTypeParameters, Decorator, DefaultClause,
-    DestructuringAssignment, Diagnostic, DiagnosticCollection, DiagnosticMessage, DiagnosticMessageChain,
-    DiagnosticRelatedInformation, Diagnostics, DiagnosticWithDetachedLocation, DiagnosticWithLocation,
-    directorySeparator, DoStatement, DynamicNamedBinaryExpression, DynamicNamedDeclaration, ElementAccessExpression,
-    EmitFlags, EmitHost, EmitResolver, EmitTextWriter, emptyArray, ensurePathIsNonModuleName,
-    ensureTrailingDirectorySeparator, EntityName, EntityNameExpression, EntityNameOrEntityNameExpression,
-    EnumDeclaration, EqualityComparer, equalOwnProperties, EqualsToken, equateValues, escapeLeadingUnderscores,
-    every, ExportAssignment, ExportDeclaration, ExportSpecifier, Expression, ExpressionStatement,
-    ExpressionWithTypeArguments, Extension, ExternalModuleReference, factory, FileExtensionInfo, fileExtensionIs,
-    fileExtensionIsOneOf, FileReference, FileWatcher, filter, find, findAncestor, findBestPatternMatch, findIndex,
-    findLast, firstDefined, firstOrUndefined, flatMap, flatMapToMutable, flatten, forEach, forEachAncestorDirectory,
-    forEachChild, forEachChildRecursively, ForInOrOfStatement, ForInStatement, ForOfStatement, ForStatement,
-    FunctionBody, FunctionDeclaration, FunctionExpression, FunctionLikeDeclaration, GetAccessorDeclaration,
-    getBaseFileName, GetCanonicalFileName, getCombinedModifierFlags, getCombinedNodeFlags, getDirectoryPath, getEntries,
-    getJSDocAugmentsTag, getJSDocDeprecatedTagNoCache, getJSDocImplementsTags, getJSDocOverrideTagNoCache,
-    getJSDocParameterTags, getJSDocParameterTagsNoCache, getJSDocPrivateTagNoCache, getJSDocProtectedTagNoCache,
-    getJSDocPublicTagNoCache, getJSDocReadonlyTagNoCache, getJSDocReturnType, getJSDocTags, getJSDocType,
-    getJSDocTypeParameterTags, getJSDocTypeParameterTagsNoCache, getJSDocTypeTag, getLeadingCommentRanges,
-    getLineAndCharacterOfPosition, getLinesBetweenPositions, getLineStarts, getNameOfDeclaration,
-    getNormalizedAbsolutePath, getNormalizedPathComponents, getOwnKeys, getParseTreeNode, getPathComponents,
-    getPathFromPathComponents, getRelativePathToDirectoryOrUrl, getResolutionMode, getResolutionName, getRootLength,
-    getStringComparer, getSymbolId, getTrailingCommentRanges, HasExpressionInitializer, hasExtension, hasInitializer,
-    HasInitializer, HasJSDoc, hasJSDocNodes, HasModifiers, hasProperty, HasType, HasTypeArguments, HeritageClause,
-    Identifier, IdentifierTypePredicate, identity, idText, IfStatement, ignoredPaths, ImportCall, ImportClause,
-    ImportDeclaration, ImportEqualsDeclaration, ImportMetaProperty, ImportSpecifier, ImportTypeNode, IndexInfo,
-    indexOfAnyCharCode, InitializedVariableDeclaration, insertSorted, InterfaceDeclaration, isAccessor,
-    isAnyDirectorySeparator, isArray, isArrayLiteralExpression, isArrowFunction, isBigIntLiteral, isBinaryExpression,
-    isBindingPattern, isCallExpression, isClassDeclaration, isClassElement, isClassExpression, isClassLike,
-    isClassStaticBlockDeclaration, isCommaListExpression, isComputedPropertyName, isConstructorDeclaration,
-    isDeclaration, isDecorator, isElementAccessExpression, isEnumDeclaration, isEnumMember, isExportAssignment,
-    isExportDeclaration, isExpressionStatement, isExpressionWithTypeArguments, isExternalModule,
-    isExternalModuleReference, isFileProbablyExternalModule, isForStatement, isFunctionDeclaration,
-    isFunctionExpression, isFunctionLike, isFunctionLikeDeclaration, isFunctionLikeOrClassStaticBlockDeclaration,
-    isGetAccessorDeclaration, isHeritageClause, isIdentifier, isIdentifierText, isImportTypeNode,
-    isInterfaceDeclaration, isJSDoc, isJSDocFunctionType, isJSDocLinkLike, isJSDocMemberName, isJSDocNameReference,
-    isJSDocNode, isJSDocParameterTag, isJSDocPropertyLikeTag, isJSDocSignature, isJSDocTag, isJSDocTemplateTag,
-    isJSDocTypeExpression, isJSDocTypeLiteral, isJSDocTypeTag, isJsxChild, isJsxFragment, isJsxOpeningLikeElement,
-    isJsxText, isLeftHandSideExpression, isLineBreak, isLiteralTypeNode, isMemberName, isMetaProperty,
-    isMethodOrAccessor, isModuleDeclaration, isNamedDeclaration, isNamespaceExport, isNamespaceExportDeclaration,
-    isNamespaceImport, isNoSubstitutionTemplateLiteral, isNumericLiteral, isObjectLiteralExpression,
-    isOmittedExpression, isParameter, isParameterPropertyDeclaration, isParenthesizedExpression,
-    isParenthesizedTypeNode, isPrefixUnaryExpression, isPrivateIdentifier, isPropertyAccessExpression,
-    isPropertyAssignment, isPropertyDeclaration, isPropertyName, isPropertySignature, isQualifiedName, isRootedDiskPath,
-    isSetAccessorDeclaration, isShorthandPropertyAssignment, isSourceFile, isString, isStringLiteral,
-    isStringLiteralLike, isTypeAliasDeclaration, isTypeElement, isTypeLiteralNode, isTypeNode, isTypeReferenceNode,
-    isVariableDeclaration, isVariableStatement, isVoidExpression, isWhiteSpaceLike, isWhiteSpaceSingleLine, JSDoc,
-    JSDocCallbackTag, JSDocEnumTag, JSDocMemberName, JSDocParameterTag, JSDocPropertyLikeTag, JSDocSignature, JSDocTag,
-    JSDocTemplateTag, JSDocTypedefTag, JsonSourceFile, JsxChild, JsxElement, JsxEmit, JsxFragment, JsxOpeningElement,
-    JsxOpeningLikeElement, JsxSelfClosingElement, JsxTagNameExpression, KeywordSyntaxKind, LabeledStatement,
-    LanguageVariant, last, lastOrUndefined, LateVisibilityPaintedStatement, length, LiteralImportTypeNode,
-    LiteralLikeElementAccessExpression, LiteralLikeNode, LogicalOrCoalescingAssignmentOperator, map, mapDefined,
-    MapLike, MemberName, MethodDeclaration, ModeAwareCache, ModifierFlags, ModifierLike, ModuleBlock, ModuleDeclaration,
-    ModuleDetectionKind, ModuleKind, ModuleResolutionKind, moduleResolutionOptionDeclarations, MultiMap,
-    NamedDeclaration, NamedExports, NamedImports, NamedImportsOrExports, NamespaceExport, NamespaceImport,
-    NewExpression, NewLineKind, Node, NodeArray, NodeFlags, nodeModulesPathPart, NonNullExpression, noop, normalizePath,
-    NoSubstitutionTemplateLiteral, NumericLiteral, ObjectFlags, ObjectFlagsType, ObjectLiteralElement,
-    ObjectLiteralExpression, ObjectLiteralExpressionBase, ObjectTypeDeclaration, optionsAffectingProgramStructure, or,
-    OuterExpressionKinds, PackageId, ParameterDeclaration, ParenthesizedExpression, ParenthesizedTypeNode,
-    parseConfigFileTextToJson, PartiallyEmittedExpression, Path, pathIsRelative, Pattern, PostfixUnaryExpression,
-    PrefixUnaryExpression, PrinterOptions, PrintHandlers, PrivateIdentifier, ProjectReference, PrologueDirective,
-    PropertyAccessEntityNameExpression, PropertyAccessExpression, PropertyAssignment, PropertyDeclaration, PropertyName,
-    PropertyNameLiteral, PseudoBigInt, QualifiedName, ReadonlyCollection, ReadonlyTextRange,
-    removeTrailingDirectorySeparator, RequireOrImportCall, RequireVariableStatement, ResolvedModuleFull,
-    ResolvedTypeReferenceDirective, ReturnStatement, SatisfiesExpression, ScriptKind, ScriptTarget,
-    semanticDiagnosticsOptionDeclarations, SetAccessorDeclaration, ShorthandPropertyAssignment, Signature,
-    SignatureDeclaration, SignatureFlags, SignatureKind, singleElementArray, singleOrUndefined, skipOuterExpressions,
-    skipTrivia, some, sort, SortedArray, SourceFile, SourceFileLike, SourceFileMayBeEmittedHost, SourceMapSource,
-    startsWith, startsWithUseStrict, Statement, stringContains, StringLiteral, StringLiteralLike, stringToToken,
-    SuperCall, SuperExpression, SuperProperty, SwitchStatement, Symbol, SymbolFlags, SymbolTable, SyntaxKind,
-    SyntaxList, sys, TaggedTemplateExpression, TemplateLiteral, TemplateLiteralLikeNode, TemplateLiteralTypeSpan,
-    TemplateSpan, TextRange, TextSpan, ThisTypePredicate, Token, TokenFlags, tokenToString, toPath, tracing,
-    TransformFlags, TransientSymbol, trimString, trimStringStart, TriviaSyntaxKind, tryCast, tryRemovePrefix,
-    TryStatement, TsConfigSourceFile, TupleTypeNode, Type, TypeAliasDeclaration, TypeAssertion, TypeChecker,
-    TypeElement, TypeFlags, TypeLiteralNode, TypeNode, TypeNodeSyntaxKind, TypeParameter, TypeParameterDeclaration,
-    TypePredicate, TypePredicateKind, TypeReferenceNode, unescapeLeadingUnderscores, UnionOrIntersectionTypeNode,
-    ValidImportTypeNode, VariableDeclaration, VariableDeclarationInitializedTo, VariableDeclarationList,
-    VariableLikeDeclaration, VariableStatement, version, WhileStatement, WithStatement, WriteFileCallback,
-    WriteFileCallbackData, YieldExpression, ResolutionMode,
+    __String,
+    AccessExpression,
+    AccessorDeclaration,
+    addRange,
+    affectsDeclarationPathOptionDeclarations,
+    affectsEmitOptionDeclarations,
+    AllAccessorDeclarations,
+    AmbientModuleDeclaration,
+    AnyImportOrBareOrAccessedRequire,
+    AnyImportOrReExport,
+    AnyImportSyntax,
+    AnyValidImportOrReExport,
+    arrayFrom,
+    ArrayLiteralExpression,
+    ArrayTypeNode,
+    ArrowFunction,
+    AsExpression,
+    AssertionExpression,
+    assertType,
+    AssignmentDeclarationKind,
+    AssignmentExpression,
+    AssignmentOperatorToken,
+    BinaryExpression,
+    binarySearch,
+    BindableObjectDefinePropertyCall,
+    BindableStaticAccessExpression,
+    BindableStaticElementAccessExpression,
+    BindableStaticNameExpression,
+    BindingElement,
+    Block,
+    BundleFileSection,
+    BundleFileSectionKind,
+    BundleFileTextLike,
+    CallExpression,
+    CallLikeExpression,
+    canHaveDecorators,
+    canHaveIllegalDecorators,
+    canHaveModifiers,
+    CaseBlock,
+    CaseClause,
+    CaseOrDefaultClause,
+    CatchClause,
+    changeAnyExtension,
+    CharacterCodes,
+    CheckFlags,
+    ClassDeclaration,
+    ClassElement,
+    ClassLikeDeclaration,
+    ClassStaticBlockDeclaration,
+    combinePaths,
+    CommaListExpression,
+    CommandLineOption,
+    CommentDirective,
+    CommentDirectivesMap,
+    CommentDirectiveType,
+    CommentRange,
+    compareStringsCaseSensitive,
+    compareValues,
+    Comparison,
+    CompilerOptions,
+    ComputedPropertyName,
+    computeLineAndCharacterOfPosition,
+    computeLineOfPosition,
+    computeLineStarts,
+    concatenate,
+    ConditionalExpression,
+    ConstructorDeclaration,
+    contains,
+    containsPath,
+    createGetCanonicalFileName,
+    createModeAwareCache,
+    createMultiMap,
+    createScanner,
+    createTextSpan,
+    createTextSpanFromBounds,
+    Debug,
+    Declaration,
+    DeclarationName,
+    DeclarationWithTypeParameterChildren,
+    DeclarationWithTypeParameters,
+    Decorator,
+    DefaultClause,
+    DestructuringAssignment,
+    Diagnostic,
+    DiagnosticCollection,
+    DiagnosticMessage,
+    DiagnosticMessageChain,
+    DiagnosticRelatedInformation,
+    Diagnostics,
+    DiagnosticWithDetachedLocation,
+    DiagnosticWithLocation,
+    directorySeparator,
+    DoStatement,
+    DynamicNamedBinaryExpression,
+    DynamicNamedDeclaration,
+    ElementAccessExpression,
+    EmitFlags,
+    EmitHost,
+    EmitResolver,
+    EmitTextWriter,
+    emptyArray,
+    ensurePathIsNonModuleName,
+    ensureTrailingDirectorySeparator,
+    EntityName,
+    EntityNameExpression,
+    EntityNameOrEntityNameExpression,
+    EnumDeclaration,
+    EqualityComparer,
+    equalOwnProperties,
+    EqualsToken,
+    equateValues,
+    escapeLeadingUnderscores,
+    every,
+    ExportAssignment,
+    ExportDeclaration,
+    ExportSpecifier,
+    Expression,
+    ExpressionStatement,
+    ExpressionWithTypeArguments,
+    Extension,
+    ExternalModuleReference,
+    factory,
+    FileExtensionInfo,
+    fileExtensionIs,
+    fileExtensionIsOneOf,
+    FileWatcher,
+    filter,
+    find,
+    findAncestor,
+    findBestPatternMatch,
+    findIndex,
+    findLast,
+    firstDefined,
+    firstOrUndefined,
+    flatMap,
+    flatMapToMutable,
+    flatten,
+    forEach,
+    forEachAncestorDirectory,
+    forEachChild,
+    forEachChildRecursively,
+    ForInOrOfStatement,
+    ForInStatement,
+    ForOfStatement,
+    ForStatement,
+    FunctionBody,
+    FunctionDeclaration,
+    FunctionExpression,
+    FunctionLikeDeclaration,
+    GetAccessorDeclaration,
+    getBaseFileName,
+    GetCanonicalFileName,
+    getCombinedModifierFlags,
+    getCombinedNodeFlags,
+    getDirectoryPath,
+    getEntries,
+    getJSDocAugmentsTag,
+    getJSDocDeprecatedTagNoCache,
+    getJSDocImplementsTags,
+    getJSDocOverrideTagNoCache,
+    getJSDocParameterTags,
+    getJSDocParameterTagsNoCache,
+    getJSDocPrivateTagNoCache,
+    getJSDocProtectedTagNoCache,
+    getJSDocPublicTagNoCache,
+    getJSDocReadonlyTagNoCache,
+    getJSDocReturnType,
+    getJSDocTags,
+    getJSDocType,
+    getJSDocTypeParameterTags,
+    getJSDocTypeParameterTagsNoCache,
+    getJSDocTypeTag,
+    getLeadingCommentRanges,
+    getLineAndCharacterOfPosition,
+    getLinesBetweenPositions,
+    getLineStarts,
+    getNameOfDeclaration,
+    getNormalizedAbsolutePath,
+    getNormalizedPathComponents,
+    getOwnKeys,
+    getParseTreeNode,
+    getPathComponents,
+    getPathFromPathComponents,
+    getRelativePathToDirectoryOrUrl,
+    getRootLength,
+    getSnippetElement,
+    getStringComparer,
+    getSymbolId,
+    getTrailingCommentRanges,
+    HasExpressionInitializer,
+    hasExtension,
+    HasInitializer,
+    hasInitializer,
+    HasJSDoc,
+    hasJSDocNodes,
+    HasModifiers,
+    hasProperty,
+    HasType,
+    HasTypeArguments,
+    HeritageClause,
+    Identifier,
+    IdentifierTypePredicate,
+    identity,
+    idText,
+    IfStatement,
+    ignoredPaths,
+    ImportCall,
+    ImportClause,
+    ImportDeclaration,
+    ImportEqualsDeclaration,
+    ImportMetaProperty,
+    ImportSpecifier,
+    ImportTypeNode,
+    IndexInfo,
+    indexOfAnyCharCode,
+    InitializedVariableDeclaration,
+    insertSorted,
+    InterfaceDeclaration,
+    isAccessor,
+    isAnyDirectorySeparator,
+    isArray,
+    isArrayLiteralExpression,
+    isArrowFunction,
+    isBigIntLiteral,
+    isBinaryExpression,
+    isBindingPattern,
+    isCallExpression,
+    isClassDeclaration,
+    isClassElement,
+    isClassExpression,
+    isClassLike,
+    isClassStaticBlockDeclaration,
+    isCommaListExpression,
+    isComputedPropertyName,
+    isConstructorDeclaration,
+    isDeclaration,
+    isDecorator,
+    isElementAccessExpression,
+    isEnumDeclaration,
+    isEnumMember,
+    isExportAssignment,
+    isExportDeclaration,
+    isExpressionStatement,
+    isExpressionWithTypeArguments,
+    isExternalModule,
+    isExternalModuleReference,
+    isFileProbablyExternalModule,
+    isForStatement,
+    isFunctionDeclaration,
+    isFunctionExpression,
+    isFunctionLike,
+    isFunctionLikeDeclaration,
+    isFunctionLikeOrClassStaticBlockDeclaration,
+    isGetAccessorDeclaration,
+    isHeritageClause,
+    isIdentifier,
+    isIdentifierStart,
+    isIdentifierText,
+    isImportTypeNode,
+    isInterfaceDeclaration,
+    isJSDoc,
+    isJSDocFunctionType,
+    isJSDocLinkLike,
+    isJSDocMemberName,
+    isJSDocNameReference,
+    isJSDocNode,
+    isJSDocParameterTag,
+    isJSDocPropertyLikeTag,
+    isJSDocSignature,
+    isJSDocTag,
+    isJSDocTemplateTag,
+    isJSDocTypeExpression,
+    isJSDocTypeLiteral,
+    isJSDocTypeTag,
+    isJsxChild,
+    isJsxFragment,
+    isJsxOpeningLikeElement,
+    isJsxText,
+    isLeftHandSideExpression,
+    isLineBreak,
+    isLiteralTypeNode,
+    isMemberName,
+    isMetaProperty,
+    isMethodOrAccessor,
+    isModuleDeclaration,
+    isNamedDeclaration,
+    isNamespaceExport,
+    isNamespaceExportDeclaration,
+    isNamespaceImport,
+    isNoSubstitutionTemplateLiteral,
+    isNumericLiteral,
+    isObjectLiteralExpression,
+    isOmittedExpression,
+    isParameter,
+    isParameterPropertyDeclaration,
+    isParenthesizedExpression,
+    isParenthesizedTypeNode,
+    isPrefixUnaryExpression,
+    isPrivateIdentifier,
+    isPropertyAccessExpression,
+    isPropertyAssignment,
+    isPropertyDeclaration,
+    isPropertyName,
+    isPropertySignature,
+    isQualifiedName,
+    isRootedDiskPath,
+    isSetAccessorDeclaration,
+    isShorthandPropertyAssignment,
+    isSourceFile,
+    isString,
+    isStringLiteral,
+    isStringLiteralLike,
+    isTypeAliasDeclaration,
+    isTypeElement,
+    isTypeLiteralNode,
+    isTypeNode,
+    isTypeReferenceNode,
+    isVariableDeclaration,
+    isVariableStatement,
+    isVoidExpression,
+    isWhiteSpaceLike,
+    isWhiteSpaceSingleLine,
+    JSDoc,
+    JSDocCallbackTag,
+    JSDocEnumTag,
+    JSDocMemberName,
+    JSDocParameterTag,
+    JSDocPropertyLikeTag,
+    JSDocSignature,
+    JSDocTag,
+    JSDocTemplateTag,
+    JSDocTypedefTag,
+    JsonSourceFile,
+    JsxChild,
+    JsxElement,
+    JsxEmit,
+    JsxFragment,
+    JsxOpeningElement,
+    JsxOpeningLikeElement,
+    JsxSelfClosingElement,
+    JsxTagNameExpression,
+    KeywordSyntaxKind,
+    LabeledStatement,
+    LanguageVariant,
+    last,
+    lastOrUndefined,
+    LateVisibilityPaintedStatement,
+    length,
+    LiteralImportTypeNode,
+    LiteralLikeElementAccessExpression,
+    LiteralLikeNode,
+    LogicalOrCoalescingAssignmentOperator,
+    map,
+    mapDefined,
+    MapLike,
+    MemberName,
+    MethodDeclaration,
+    ModeAwareCache,
+    ModifierFlags,
+    ModifierLike,
+    ModuleBlock,
+    ModuleDeclaration,
+    ModuleDetectionKind,
+    ModuleKind,
+    ModuleResolutionKind,
+    moduleResolutionOptionDeclarations,
+    MultiMap,
+    NamedDeclaration,
+    NamedExports,
+    NamedImports,
+    NamedImportsOrExports,
+    NamespaceExport,
+    NamespaceImport,
+    NewExpression,
+    NewLineKind,
+    Node,
+    NodeArray,
+    NodeFlags,
+    nodeModulesPathPart,
+    NonNullExpression,
+    noop,
+    normalizePath,
+    NoSubstitutionTemplateLiteral,
+    NumericLiteral,
+    ObjectFlags,
+    ObjectFlagsType,
+    ObjectLiteralElement,
+    ObjectLiteralExpression,
+    ObjectLiteralExpressionBase,
+    ObjectTypeDeclaration,
+    optionsAffectingProgramStructure,
+    or,
+    OuterExpressionKinds,
+    PackageId,
+    ParameterDeclaration,
+    ParenthesizedExpression,
+    ParenthesizedTypeNode,
+    parseConfigFileTextToJson,
+    PartiallyEmittedExpression,
+    Path,
+    pathIsRelative,
+    Pattern,
+    PostfixUnaryExpression,
+    PrefixUnaryExpression,
+    PrinterOptions,
+    PrintHandlers,
+    PrivateIdentifier,
+    ProjectReference,
+    PrologueDirective,
+    PropertyAccessEntityNameExpression,
+    PropertyAccessExpression,
+    PropertyAssignment,
+    PropertyDeclaration,
+    PropertyName,
+    PropertyNameLiteral,
+    PseudoBigInt,
+    QualifiedName,
+    ReadonlyCollection,
+    ReadonlyTextRange,
+    removeTrailingDirectorySeparator,
+    RequireOrImportCall,
+    RequireVariableStatement,
+    ResolutionMode,
+    ResolutionNameAndModeGetter,
+    ResolvedModuleFull,
+    ResolvedModuleWithFailedLookupLocations,
+    ResolvedTypeReferenceDirective,
+    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
+    ReturnStatement,
+    SatisfiesExpression,
+    ScriptKind,
+    ScriptTarget,
+    semanticDiagnosticsOptionDeclarations,
+    SetAccessorDeclaration,
+    ShorthandPropertyAssignment,
+    Signature,
+    SignatureDeclaration,
+    SignatureFlags,
+    SignatureKind,
+    singleElementArray,
+    singleOrUndefined,
+    skipOuterExpressions,
+    skipTrivia,
+    SnippetKind,
+    some,
+    sort,
+    SortedArray,
+    SourceFile,
+    SourceFileLike,
+    SourceFileMayBeEmittedHost,
+    SourceMapSource,
+    startsWith,
+    startsWithUseStrict,
+    Statement,
+    stringContains,
+    StringLiteral,
+    StringLiteralLike,
+    stringToToken,
+    SuperCall,
+    SuperExpression,
+    SuperProperty,
+    SwitchStatement,
+    Symbol,
+    SymbolFlags,
+    SymbolTable,
+    SyntaxKind,
+    SyntaxList,
+    sys,
+    TaggedTemplateExpression,
+    TemplateLiteral,
+    TemplateLiteralLikeNode,
+    TemplateLiteralTypeSpan,
+    TemplateSpan,
+    TextRange,
+    TextSpan,
+    ThisTypePredicate,
+    Token,
+    TokenFlags,
+    tokenToString,
+    toPath,
+    tracing,
+    TransformFlags,
+    TransientSymbol,
+    trimString,
+    trimStringStart,
+    TriviaSyntaxKind,
+    tryCast,
+    tryRemovePrefix,
+    TryStatement,
+    TsConfigSourceFile,
+    TupleTypeNode,
+    Type,
+    TypeAliasDeclaration,
+    TypeAssertion,
+    TypeChecker,
+    TypeElement,
+    TypeFlags,
+    TypeLiteralNode,
+    TypeNode,
+    TypeNodeSyntaxKind,
+    TypeParameter,
+    TypeParameterDeclaration,
+    TypePredicate,
+    TypePredicateKind,
+    TypeReferenceNode,
+    unescapeLeadingUnderscores,
+    UnionOrIntersectionTypeNode,
+    ValidImportTypeNode,
+    VariableDeclaration,
+    VariableDeclarationInitializedTo,
+    VariableDeclarationList,
+    VariableLikeDeclaration,
+    VariableStatement,
+    version,
+    WhileStatement,
+    WithStatement,
+    WriteFileCallback,
+    WriteFileCallbackData,
+    YieldExpression,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -278,11 +705,11 @@ export function getFullWidth(node: Node) {
 
 /** @internal */
 export function getResolvedModule(sourceFile: SourceFile | undefined, moduleNameText: string, mode: ResolutionMode): ResolvedModuleFull | undefined {
-    return sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText, mode);
+    return sourceFile?.resolvedModules?.get(moduleNameText, mode)?.resolvedModule;
 }
 
 /** @internal */
-export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull | undefined, mode: ResolutionMode): void {
+export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleWithFailedLookupLocations, mode: ResolutionMode): void {
     if (!sourceFile.resolvedModules) {
         sourceFile.resolvedModules = createModeAwareCache();
     }
@@ -291,7 +718,7 @@ export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string
 }
 
 /** @internal */
-export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined, mode: ResolutionMode): void {
+export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, mode: ResolutionMode): void {
     if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
         sourceFile.resolvedTypeReferenceDirectiveNames = createModeAwareCache();
     }
@@ -301,7 +728,7 @@ export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeRe
 
 /** @internal */
 export function getResolvedTypeReferenceDirective(sourceFile: SourceFile | undefined, typeReferenceDirectiveName: string, mode: ResolutionMode): ResolvedTypeReferenceDirective | undefined {
-    return sourceFile?.resolvedTypeReferenceDirectiveNames?.get(typeReferenceDirectiveName, mode);
+    return sourceFile?.resolvedTypeReferenceDirectiveNames?.get(typeReferenceDirectiveName, mode)?.resolvedTypeReferenceDirective;
 }
 
 /** @internal */
@@ -312,12 +739,16 @@ export function projectReferenceIsEqualTo(oldRef: ProjectReference, newRef: Proj
 }
 
 /** @internal */
-export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleFull, newResolution: ResolvedModuleFull): boolean {
-    return oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport &&
-        oldResolution.extension === newResolution.extension &&
-        oldResolution.resolvedFileName === newResolution.resolvedFileName &&
-        oldResolution.originalPath === newResolution.originalPath &&
-        packageIdIsEqual(oldResolution.packageId, newResolution.packageId);
+export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFailedLookupLocations, newResolution: ResolvedModuleWithFailedLookupLocations): boolean {
+    return oldResolution === newResolution ||
+        oldResolution.resolvedModule === newResolution.resolvedModule ||
+        !!oldResolution.resolvedModule &&
+        !!newResolution.resolvedModule &&
+        oldResolution.resolvedModule.isExternalLibraryImport === newResolution.resolvedModule.isExternalLibraryImport &&
+        oldResolution.resolvedModule.extension === newResolution.resolvedModule.extension &&
+        oldResolution.resolvedModule.resolvedFileName === newResolution.resolvedModule.resolvedFileName &&
+        oldResolution.resolvedModule.originalPath === newResolution.resolvedModule.originalPath &&
+        packageIdIsEqual(oldResolution.resolvedModule.packageId, newResolution.resolvedModule.packageId);
 }
 
 function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
@@ -335,26 +766,32 @@ export function packageIdToString(packageId: PackageId): string {
 }
 
 /** @internal */
-export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
-    return oldResolution.resolvedFileName === newResolution.resolvedFileName
-        && oldResolution.primary === newResolution.primary
-        && oldResolution.originalPath === newResolution.originalPath;
+export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, newResolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations): boolean {
+    return oldResolution === newResolution ||
+        oldResolution.resolvedTypeReferenceDirective === newResolution.resolvedTypeReferenceDirective ||
+        !!oldResolution.resolvedTypeReferenceDirective &&
+        !!newResolution.resolvedTypeReferenceDirective &&
+        oldResolution.resolvedTypeReferenceDirective.resolvedFileName === newResolution.resolvedTypeReferenceDirective.resolvedFileName &&
+        !!oldResolution.resolvedTypeReferenceDirective.primary === !!newResolution.resolvedTypeReferenceDirective.primary &&
+        oldResolution.resolvedTypeReferenceDirective.originalPath === newResolution.resolvedTypeReferenceDirective.originalPath;
 }
 
 /** @internal */
-export function hasChangesInResolutions<T>(
-    names: readonly StringLiteralLike[] | readonly FileReference[],
+export function hasChangesInResolutions<K, V>(
+    names: readonly K[],
     newSourceFile: SourceFile,
-    newResolutions: readonly T[],
-    oldResolutions: ModeAwareCache<T> | undefined,
-    comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
+    newResolutions: readonly V[],
+    oldResolutions: ModeAwareCache<V> | undefined,
+    comparer: (oldResolution: V, newResolution: V) => boolean,
+    nameAndModeGetter: ResolutionNameAndModeGetter<K, SourceFile>,
+): boolean {
     Debug.assert(names.length === newResolutions.length);
 
     for (let i = 0; i < names.length; i++) {
         const newResolution = newResolutions[i];
         const entry = names[i];
-        const name = getResolutionName(entry);
-        const mode = getResolutionMode(entry, newSourceFile);
+        const name = nameAndModeGetter.getName(entry);
+        const mode = nameAndModeGetter.getMode(entry, newSourceFile);
         const oldResolution = oldResolutions && oldResolutions.get(name, mode);
         const changed =
             oldResolution
@@ -7299,7 +7736,7 @@ export interface SymlinkCache {
      * don't include automatic type reference directives. Must be called only when
      * `hasProcessedResolutions` returns false (once per cache instance).
      */
-    setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirective | undefined> | undefined): void;
+    setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>): void;
     /**
      * @internal
      * Whether `setSymlinksFromResolutions` has already been called.
@@ -7335,9 +7772,10 @@ export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonic
             Debug.assert(!hasProcessedResolutions);
             hasProcessedResolutions = true;
             for (const file of files) {
-                file.resolvedModules?.forEach(resolution => processResolution(this, resolution));
+                file.resolvedModules?.forEach(resolution => processResolution(this, resolution.resolvedModule));
+                file.resolvedTypeReferenceDirectiveNames?.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
             }
-            typeReferenceDirectives?.forEach(resolution => processResolution(this, resolution));
+            typeReferenceDirectives.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
         },
         hasProcessedResolutions: () => hasProcessedResolutions,
     };
@@ -7776,6 +8214,8 @@ const allSupportedExtensions: readonly Extension[][] = [[Extension.Ts, Extension
 const allSupportedExtensionsWithJson: readonly Extension[][] = [...allSupportedExtensions, [Extension.Json]];
 /** @internal */
 export const supportedDeclarationExtensions: readonly Extension[] = [Extension.Dts, Extension.Dcts, Extension.Dmts];
+/** @internal */
+export const supportedTSImplementationExtensions: readonly Extension[] = [Extension.Ts, Extension.Cts, Extension.Mts, Extension.Tsx];
 
 /** @internal */
 export function getSupportedExtensions(options?: CompilerOptions): readonly Extension[][];
@@ -8127,6 +8567,51 @@ export function parsePseudoBigInt(stringValue: string): string {
 /** @internal */
 export function pseudoBigIntToString({negative, base10Value}: PseudoBigInt): string {
     return (negative && base10Value !== "0" ? "-" : "") + base10Value;
+}
+
+/** @internal */
+export function parseBigInt(text: string): PseudoBigInt | undefined {
+    if (!isValidBigIntString(text, /*roundTripOnly*/ false)) {
+        return undefined;
+    }
+    return parseValidBigInt(text);
+}
+
+/**
+ * @internal
+ * @param text a valid bigint string excluding a trailing `n`, but including a possible prefix `-`. Use `isValidBigIntString(text, roundTripOnly)` before calling this function.
+ */
+export function parseValidBigInt(text: string): PseudoBigInt {
+    const negative = text.startsWith("-");
+    const base10Value = parsePseudoBigInt(`${negative ? text.slice(1) : text}n`);
+    return { negative, base10Value };
+}
+
+/**
+ * @internal
+ * Tests whether the provided string can be parsed as a bigint.
+ * @param s The string to test.
+ * @param roundTripOnly Indicates the resulting bigint matches the input when converted back to a string.
+ */
+export function isValidBigIntString(s: string, roundTripOnly: boolean): boolean {
+    if (s === "") return false;
+    const scanner = createScanner(ScriptTarget.ESNext, /*skipTrivia*/ false);
+    let success = true;
+    scanner.setOnError(() => success = false);
+    scanner.setText(s + "n");
+    let result = scanner.scan();
+    const negative = result === SyntaxKind.MinusToken;
+    if (negative) {
+        result = scanner.scan();
+    }
+    const flags = scanner.getTokenFlags();
+    // validate that
+    // * scanning proceeded without error
+    // * a bigint can be scanned, and that when it is scanned, it is
+    // * the full length of the input string (so the scanner is one character beyond the augmented input length)
+    // * it does not contain a numeric seperator (the `BigInt` constructor does not accept a numeric seperator in its input)
+    return success && result === SyntaxKind.BigIntLiteral && scanner.getTextPos() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator)
+        && (!roundTripOnly || s === pseudoBigIntToString({ negative, base10Value: parsePseudoBigInt(scanner.getTokenValue()) }));
 }
 
 /** @internal */
@@ -8636,4 +9121,21 @@ export function isOptionalJSDocPropertyLikeTag(node: Node): node is JSDocPropert
     }
     const { isBracketed, typeExpression } = node;
     return isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType;
+
+}
+
+/** @internal */
+export function canUsePropertyAccess(name: string, languageVersion: ScriptTarget): boolean {
+    if (name.length === 0) {
+        return false;
+    }
+    const firstChar = name.charCodeAt(0);
+    return firstChar === CharacterCodes.hash ?
+        name.length > 1 && isIdentifierStart(name.charCodeAt(1), languageVersion) :
+        isIdentifierStart(firstChar, languageVersion);
+}
+
+/** @internal */
+export function hasTabstop(node: Node): boolean {
+    return getSnippetElement(node)?.kind === SnippetKind.TabStop;
 }

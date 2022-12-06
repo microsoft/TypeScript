@@ -1,4 +1,9 @@
-import { combinePaths, Extension, fileExtensionIs, ResolvedConfigFileName } from "./_namespaces/ts";
+import {
+    combinePaths,
+    Extension,
+    fileExtensionIs,
+    ResolvedConfigFileName,
+} from "./_namespaces/ts";
 
 /** @internal */
 export enum UpToDateStatusType {

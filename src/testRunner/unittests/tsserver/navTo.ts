@@ -1,16 +1,17 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { createSession, openFilesForSession, makeSessionRequest, createLoggerWithInMemoryLogs, baselineTsserverLogs } from "./helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
+    createSession,
+    openFilesForSession,
+} from "./helpers";
 
 describe("unittests:: tsserver:: navigate-to for javascript project", () => {
-    function findNavToItem(items: ts.server.protocol.NavtoItem[], itemName: string, itemKind: string) {
-        return ts.find(items, item => item.name === itemName && item.kind === itemKind);
-    }
-
-    function containsNavToItem(items: ts.server.protocol.NavtoItem[], itemName: string, itemKind: string) {
-        return findNavToItem(items, itemName, itemKind) !== undefined;
-    }
-
     it("should not include type symbols", () => {
         const file1: File = {
             path: "/a/b/file1.js",
@@ -21,17 +22,20 @@ describe("unittests:: tsserver:: navigate-to for javascript project", () => {
             content: "{}"
         };
         const host = createServerHost([file1, configFile, libFile]);
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([file1], session);
 
         // Try to find some interface type defined in lib.d.ts
-        const libTypeNavToRequest = makeSessionRequest<ts.server.protocol.NavtoRequestArgs>(ts.server.CommandNames.Navto, { searchValue: "Document", file: file1.path, projectFileName: configFile.path });
-        const items = session.executeCommand(libTypeNavToRequest).response as ts.server.protocol.NavtoItem[];
-        assert.isFalse(containsNavToItem(items, "Document", "interface"), `Found lib.d.ts symbol in JavaScript project nav to request result.`);
+        session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
+            command: ts.server.CommandNames.Navto,
+            arguments: { searchValue: "Document", file: file1.path, projectFileName: configFile.path }
+        }).response as ts.server.protocol.NavtoItem[];
 
-        const localFunctionNavToRequst = makeSessionRequest<ts.server.protocol.NavtoRequestArgs>(ts.server.CommandNames.Navto, { searchValue: "foo", file: file1.path, projectFileName: configFile.path });
-        const items2 = session.executeCommand(localFunctionNavToRequst).response as ts.server.protocol.NavtoItem[];
-        assert.isTrue(containsNavToItem(items2, "foo", "function"), `Cannot find function symbol "foo".`);
+        session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
+            command: ts.server.CommandNames.Navto,
+            arguments: { searchValue: "foo", file: file1.path, projectFileName: configFile.path }
+        }).response as ts.server.protocol.NavtoItem[];
+        baselineTsserverLogs("navTo", "should not include type symbols", session);
     });
 
     it("should de-duplicate symbols", () => {
@@ -67,8 +71,10 @@ export const ghijkl = a.abcdef;`
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([file1, file2], session);
 
-        const request = makeSessionRequest<ts.server.protocol.NavtoRequestArgs>(ts.server.CommandNames.Navto, { searchValue: "abcdef", file: file1.path });
-        session.executeCommand(request).response as ts.server.protocol.NavtoItem[];
+        session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
+            command: ts.server.CommandNames.Navto,
+            arguments: { searchValue: "abcdef", file: file1.path }
+        });
 
         baselineTsserverLogs("navTo", "should de-duplicate symbols", session);
     });
@@ -113,8 +119,10 @@ export const ghijkl = a.abcdef;`
         const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([file1], session);
 
-        const request = makeSessionRequest<ts.server.protocol.NavtoRequestArgs>(ts.server.CommandNames.Navto, { searchValue: "abcdef" });
-        session.executeCommand(request).response as ts.server.protocol.NavtoItem[];
+        session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
+            command: ts.server.CommandNames.Navto,
+            arguments: { searchValue: "abcdef" }
+        });
         baselineTsserverLogs("navTo", "should de-duplicate symbols when searching all projects", session);
     });
 
@@ -128,14 +136,14 @@ export const ghijkl = a.abcdef;`
             content: "{}"
         };
         const host = createServerHost([file1, configFile, libFile]);
-        const session = createSession(host);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([file1], session);
 
         // Try to find some interface type defined in lib.d.ts
-        const libTypeNavToRequest = makeSessionRequest<ts.server.protocol.NavtoRequestArgs>(ts.server.CommandNames.Navto, { searchValue: "foo", file: file1.path, projectFileName: configFile.path });
-        const items = session.executeCommand(libTypeNavToRequest).response as ts.server.protocol.NavtoItem[];
-        const fooItem = findNavToItem(items, "foo", "function");
-        assert.isNotNull(fooItem, `Cannot find function symbol "foo".`);
-        assert.isTrue(fooItem?.kindModifiers?.includes("deprecated"));
+        session.executeCommandSeq<ts.server.protocol.NavtoRequest>({
+            command: ts.server.CommandNames.Navto,
+            arguments: { searchValue: "foo", file: file1.path, projectFileName: configFile.path }
+        });
+        baselineTsserverLogs("navTo", "should work with Deprecated", session);
     });
 });

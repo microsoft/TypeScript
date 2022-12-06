@@ -1,32 +1,132 @@
 import * as ts from "./_namespaces/ts";
 import {
-    AffectedFileResult, arrayToMap, assertType, BuilderProgram, BuildInfo, CancellationToken, canJsonReportNoInputFiles,
-    changeCompilerHostLikeToUseCache, clearMap, closeFileWatcher, closeFileWatcherOf, commonOptionsWithBuild,
-    CompilerHost, CompilerOptions, CompilerOptionsValue, ConfigFileProgramReloadLevel, convertToRelativePath,
-    copyProperties, createCompilerDiagnostic, createCompilerHostFromProgramHost, createDiagnosticCollection,
-    createDiagnosticReporter, createGetCanonicalFileName, createModuleResolutionCache, CreateProgram, createProgramHost,
-    createTypeReferenceDirectiveResolutionCache, createWatchFactory, createWatchHost, CustomTransformers, Debug,
-    Diagnostic, DiagnosticCollection, DiagnosticMessage, DiagnosticReporter, Diagnostics,
-    EmitAndSemanticDiagnosticsBuilderProgram, emitFilesAndReportErrors, EmitResult, emitUsingBuildInfo, emptyArray,
-    ExitStatus, ExtendedConfigCacheEntry, FileWatcher, FileWatcherCallback, findIndex,
-    flattenDiagnosticMessageText, forEach, ForegroundColorEscapeSequences, formatColorAndReset, getAllProjectOutputs,
-    getBuildInfoFileVersionMap, GetCanonicalFileName, getConfigFileParsingDiagnostics, getDirectoryPath, getEntries,
-    getErrorCountForSummary, getFileNamesFromConfigSpecs, getFilesInErrorForSummary, getFirstProjectOutput,
-    getLocaleTimeString, getNormalizedAbsolutePath, getParsedCommandLineOfConfigFile, getPendingEmitKind,
-    getSourceFileVersionAsHashFromText, getTsBuildInfoEmitOutputFilePath, getWatchErrorSummaryDiagnosticMessage,
-    hasProperty, identity, isArray, isIgnoredFileFromWildCardWatching, isIncrementalCompilation, isString, listFiles,
-    loadWithModeAwareCache, loadWithTypeDirectiveCache, map, maybeBind, missingFileModifiedTime,
-    ModuleResolutionCache, mutateMap, mutateMapSkippingNewValues, noop, outFile, OutputFile, ParseConfigFileHost,
-    parseConfigHostFromCompilerHostLike, ParsedCommandLine, Path, PollingInterval, Program, ProgramBuildInfo,
-    ProgramBundleEmitBuildInfo, ProgramHost, ProgramMultiFileEmitBuildInfo, readBuilderProgram, ReadBuildProgramHost,
-    ResolutionMode,
-    resolveConfigFileProjectName, ResolvedConfigFileName, ResolvedProjectReference, ResolvedTypeReferenceDirective,
-    resolveModuleName, resolvePath, resolveProjectReferencePath, resolveTypeReferenceDirective, returnUndefined,
-    SemanticDiagnosticsBuilderProgram, setGetSourceFileAsHashVersioned, SharedExtendedConfigFileWatcher, some,
-    SourceFile, Status, sys, System, TypeReferenceDirectiveResolutionCache, unorderedRemoveItem,
-    updateErrorForNoInputFiles, updateSharedExtendedConfigFileWatcher, updateWatchingWildcardDirectories,
-    UpToDateStatus, UpToDateStatusType, version, WatchFactory, WatchHost, WatchOptions, WatchStatusReporter, WatchType,
-    WildcardDirectoryWatcher, writeFile, WriteFileCallback,
+    AffectedFileResult,
+    arrayToMap,
+    assertType,
+    BuilderProgram,
+    BuildInfo,
+    CancellationToken,
+    canJsonReportNoInputFiles,
+    changeCompilerHostLikeToUseCache,
+    clearMap,
+    closeFileWatcher,
+    closeFileWatcherOf,
+    commonOptionsWithBuild,
+    CompilerHost,
+    CompilerOptions,
+    CompilerOptionsValue,
+    ConfigFileProgramReloadLevel,
+    convertToRelativePath,
+    copyProperties,
+    createCompilerDiagnostic,
+    createCompilerHostFromProgramHost,
+    createDiagnosticCollection,
+    createDiagnosticReporter,
+    createGetCanonicalFileName,
+    createModuleResolutionCache,
+    createModuleResolutionLoader,
+    CreateProgram,
+    createProgramHost,
+    createTypeReferenceDirectiveResolutionCache,
+    createTypeReferenceResolutionLoader,
+    createWatchFactory,
+    createWatchHost,
+    CustomTransformers,
+    Debug,
+    Diagnostic,
+    DiagnosticCollection,
+    DiagnosticMessage,
+    DiagnosticReporter,
+    Diagnostics,
+    EmitAndSemanticDiagnosticsBuilderProgram,
+    emitFilesAndReportErrors,
+    EmitResult,
+    emitUsingBuildInfo,
+    emptyArray,
+    ExitStatus,
+    ExtendedConfigCacheEntry,
+    FileWatcher,
+    FileWatcherCallback,
+    findIndex,
+    flattenDiagnosticMessageText,
+    forEach,
+    ForegroundColorEscapeSequences,
+    formatColorAndReset,
+    getAllProjectOutputs,
+    getBuildInfoFileVersionMap,
+    GetCanonicalFileName,
+    getConfigFileParsingDiagnostics,
+    getDirectoryPath,
+    getEntries,
+    getErrorCountForSummary,
+    getFileNamesFromConfigSpecs,
+    getFilesInErrorForSummary,
+    getFirstProjectOutput,
+    getLocaleTimeString,
+    getNormalizedAbsolutePath,
+    getParsedCommandLineOfConfigFile,
+    getPendingEmitKind,
+    getSourceFileVersionAsHashFromText,
+    getTsBuildInfoEmitOutputFilePath,
+    getWatchErrorSummaryDiagnosticMessage,
+    hasProperty,
+    identity,
+    isArray,
+    isIgnoredFileFromWildCardWatching,
+    isIncrementalCompilation,
+    isString,
+    listFiles,
+    loadWithModeAwareCache,
+    map,
+    maybeBind,
+    missingFileModifiedTime,
+    ModuleResolutionCache,
+    mutateMap,
+    mutateMapSkippingNewValues,
+    noop,
+    outFile,
+    OutputFile,
+    ParseConfigFileHost,
+    parseConfigHostFromCompilerHostLike,
+    ParsedCommandLine,
+    Path,
+    PollingInterval,
+    Program,
+    ProgramBuildInfo,
+    ProgramBundleEmitBuildInfo,
+    ProgramHost,
+    ProgramMultiFileEmitBuildInfo,
+    readBuilderProgram,
+    ReadBuildProgramHost,
+    resolveConfigFileProjectName,
+    ResolvedConfigFileName,
+    resolvePath,
+    resolveProjectReferencePath,
+    returnUndefined,
+    SemanticDiagnosticsBuilderProgram,
+    setGetSourceFileAsHashVersioned,
+    SharedExtendedConfigFileWatcher,
+    some,
+    SourceFile,
+    Status,
+    sys,
+    System,
+    TypeReferenceDirectiveResolutionCache,
+    unorderedRemoveItem,
+    updateErrorForNoInputFiles,
+    updateSharedExtendedConfigFileWatcher,
+    updateWatchingWildcardDirectories,
+    UpToDateStatus,
+    UpToDateStatusType,
+    version,
+    WatchFactory,
+    WatchHost,
+    WatchOptions,
+    WatchStatusReporter,
+    WatchType,
+    WildcardDirectoryWatcher,
+    writeFile,
+    WriteFileCallback,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -332,24 +432,42 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
     // State of the solution
     const baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
     const compilerHost = createCompilerHostFromProgramHost(host, () => state.projectCompilerOptions) as CompilerHost & ReadBuildProgramHost;
-    setGetSourceFileAsHashVersioned(compilerHost, host);
+    setGetSourceFileAsHashVersioned(compilerHost);
     compilerHost.getParsedCommandLine = fileName => parseConfigFile(state, fileName as ResolvedConfigFileName, toResolvedConfigFilePath(state, fileName as ResolvedConfigFileName));
+    compilerHost.resolveModuleNameLiterals = maybeBind(host, host.resolveModuleNameLiterals);
+    compilerHost.resolveTypeReferenceDirectiveReferences = maybeBind(host, host.resolveTypeReferenceDirectiveReferences);
     compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
     compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
     compilerHost.getModuleResolutionCache = maybeBind(host, host.getModuleResolutionCache);
-    const moduleResolutionCache = !compilerHost.resolveModuleNames ? createModuleResolutionCache(currentDirectory, getCanonicalFileName) : undefined;
-    const typeReferenceDirectiveResolutionCache = !compilerHost.resolveTypeReferenceDirectives ? createTypeReferenceDirectiveResolutionCache(currentDirectory, getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache()) : undefined;
-    if (!compilerHost.resolveModuleNames) {
-        const loader = (moduleName: string, resolverMode: ResolutionMode, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) =>
-            resolveModuleName(moduleName, containingFile, state.projectCompilerOptions, compilerHost, moduleResolutionCache, redirectedReference, resolverMode).resolvedModule;
-        compilerHost.resolveModuleNames = (moduleNames, containingFile, _reusedNames, redirectedReference, _options, containingSourceFile, resolutionInfo) =>
-            loadWithModeAwareCache(Debug.checkEachDefined(moduleNames), Debug.checkDefined(containingSourceFile), containingFile, redirectedReference, resolutionInfo, loader);
+    let moduleResolutionCache: ModuleResolutionCache | undefined, typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache | undefined;
+    if (!compilerHost.resolveModuleNameLiterals && !compilerHost.resolveModuleNames) {
+        moduleResolutionCache = createModuleResolutionCache(currentDirectory, getCanonicalFileName);
+        compilerHost.resolveModuleNameLiterals = (moduleNames, containingFile, redirectedReference, options, containingSourceFile) =>
+            loadWithModeAwareCache(
+                moduleNames,
+                containingFile,
+                redirectedReference,
+                options,
+                containingSourceFile,
+                host,
+                moduleResolutionCache,
+                createModuleResolutionLoader,
+            );
         compilerHost.getModuleResolutionCache = () => moduleResolutionCache;
     }
-    if (!compilerHost.resolveTypeReferenceDirectives) {
-        const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined, containingFileMode: ResolutionMode) => resolveTypeReferenceDirective(moduleName, containingFile, state.projectCompilerOptions, compilerHost, redirectedReference, state.typeReferenceDirectiveResolutionCache, containingFileMode).resolvedTypeReferenceDirective!;
-        compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile, redirectedReference, _options, containingFileMode) =>
-            loadWithTypeDirectiveCache<ResolvedTypeReferenceDirective>(Debug.checkEachDefined(typeReferenceDirectiveNames), containingFile, redirectedReference, containingFileMode, loader);
+    if (!compilerHost.resolveTypeReferenceDirectiveReferences && !compilerHost.resolveTypeReferenceDirectives) {
+        typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(currentDirectory, getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache());
+        compilerHost.resolveTypeReferenceDirectiveReferences = (typeDirectiveNames, containingFile, redirectedReference, options, containingSourceFile) =>
+            loadWithModeAwareCache(
+                typeDirectiveNames,
+                containingFile,
+                redirectedReference,
+                options,
+                containingSourceFile,
+                host,
+                typeReferenceDirectiveResolutionCache,
+                createTypeReferenceResolutionLoader,
+            );
     }
     compilerHost.getBuildInfo = (fileName, configFilePath) => getBuildInfo(state, fileName, toResolvedConfigFilePath(state, configFilePath as ResolvedConfigFileName), /*modifiedTime*/ undefined);
 
@@ -1707,7 +1825,7 @@ function getUpToDateStatusWorker(state: SolutionBuilderState, project: ParsedCom
                 if (!buildInfoVersionMap) buildInfoVersionMap = getBuildInfoFileVersionMap(buildInfoProgram, buildInfoPath!, host);
                 version = buildInfoVersionMap.get(toPath(state, inputFile));
                 const text = version ? state.readFileWithCache(inputFile) : undefined;
-                currentVersion = text && getSourceFileVersionAsHashFromText(host, text);
+                currentVersion = text !== undefined ? getSourceFileVersionAsHashFromText(host, text) : undefined;
                 if (version && version === currentVersion) pseudoInputUpToDate = true;
             }
 

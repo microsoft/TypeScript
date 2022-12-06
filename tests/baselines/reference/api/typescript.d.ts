@@ -2783,6 +2783,7 @@ declare namespace ts {
     interface EnumType extends Type {
     }
     enum ObjectFlags {
+        None = 0,
         Class = 1,
         Interface = 2,
         Reference = 4,
@@ -2953,6 +2954,7 @@ declare namespace ts {
         declaration?: IndexSignatureDeclaration;
     }
     enum InferencePriority {
+        None = 0,
         NakedTypeVariable = 1,
         SpeculativeTuple = 2,
         SubstituteSource = 4,
@@ -3380,14 +3382,7 @@ declare namespace ts {
     }
     interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
         readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
-        readonly failedLookupLocations: string[];
     }
-    interface ResolutionInfo<T> {
-        names: readonly T[];
-        reusedNames: readonly T[] | undefined;
-    }
-    type ModuleResolutionInfo = ResolutionInfo<StringLiteralLike>;
-    type TypeReferenceDirectiveResolutionInfo = ResolutionInfo<string | FileReference>;
     interface CompilerHost extends ModuleResolutionHost {
         getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
         getSourceFileByPath?(fileName: string, path: Path, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
@@ -3400,15 +3395,20 @@ declare namespace ts {
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
         readDirectory?(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[], depth?: number): string[];
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
+        /** @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolution modes like nodenext */
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
         /**
          * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
          */
         getModuleResolutionCache?(): ModuleResolutionCache | undefined;
         /**
+         * @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext
+         *
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode | undefined, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveModuleNameLiterals?(moduleLiterals: readonly StringLiteralLike[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile: SourceFile, reusedNames: readonly StringLiteralLike[] | undefined): readonly ResolvedModuleWithFailedLookupLocations[];
+        resolveTypeReferenceDirectiveReferences?<T extends FileReference | string>(typeDirectiveReferences: readonly T[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile: SourceFile | undefined, reusedNames: readonly T[] | undefined): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
         getEnvironmentVariable?(name: string): string | undefined;
         /** If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives */
         hasInvalidatedResolutions?(filePath: Path): boolean;
@@ -3429,33 +3429,34 @@ declare namespace ts {
     enum EmitFlags {
         None = 0,
         SingleLine = 1,
-        AdviseOnEmitNode = 2,
-        NoSubstitution = 4,
-        CapturesThis = 8,
-        NoLeadingSourceMap = 16,
-        NoTrailingSourceMap = 32,
-        NoSourceMap = 48,
-        NoNestedSourceMaps = 64,
-        NoTokenLeadingSourceMaps = 128,
-        NoTokenTrailingSourceMaps = 256,
-        NoTokenSourceMaps = 384,
-        NoLeadingComments = 512,
-        NoTrailingComments = 1024,
-        NoComments = 1536,
-        NoNestedComments = 2048,
-        HelperName = 4096,
-        ExportName = 8192,
-        LocalName = 16384,
-        InternalName = 32768,
-        Indented = 65536,
-        NoIndentation = 131072,
-        AsyncFunctionBody = 262144,
-        ReuseTempVariableScope = 524288,
-        CustomPrologue = 1048576,
-        NoHoisting = 2097152,
-        HasEndOfDeclarationMarker = 4194304,
-        Iterator = 8388608,
-        NoAsciiEscaping = 16777216
+        MultiLine = 2,
+        AdviseOnEmitNode = 4,
+        NoSubstitution = 8,
+        CapturesThis = 16,
+        NoLeadingSourceMap = 32,
+        NoTrailingSourceMap = 64,
+        NoSourceMap = 96,
+        NoNestedSourceMaps = 128,
+        NoTokenLeadingSourceMaps = 256,
+        NoTokenTrailingSourceMaps = 512,
+        NoTokenSourceMaps = 768,
+        NoLeadingComments = 1024,
+        NoTrailingComments = 2048,
+        NoComments = 3072,
+        NoNestedComments = 4096,
+        HelperName = 8192,
+        ExportName = 16384,
+        LocalName = 32768,
+        InternalName = 65536,
+        Indented = 131072,
+        NoIndentation = 262144,
+        AsyncFunctionBody = 524288,
+        ReuseTempVariableScope = 1048576,
+        CustomPrologue = 2097152,
+        NoHoisting = 4194304,
+        HasEndOfDeclarationMarker = 8388608,
+        Iterator = 16777216,
+        NoAsciiEscaping = 33554432
     }
     interface EmitHelperBase {
         readonly name: string;
@@ -5496,10 +5497,6 @@ declare namespace ts {
     } | undefined;
     interface BuilderProgramHost {
         /**
-         * return true if file names are treated with case sensitivity
-         */
-        useCaseSensitiveFileNames(): boolean;
-        /**
          * If provided this would be used this hash instead of actual file shape text for detecting changes
          */
         createHash?: (data: string) => string;
@@ -5679,10 +5676,20 @@ declare namespace ts {
         trace?(s: string): void;
         /** If provided is used to get the environment variable */
         getEnvironmentVariable?(name: string): string | undefined;
-        /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
-        /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
+        /**
+         * @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolution modes like nodenext
+         *
+         * If provided, used to resolve the module names, otherwise typescript's default module resolution
+         */
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
+        /**
+         * @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext
+         *
+         * If provided, used to resolve type reference directives, otherwise typescript's default resolution
+         */
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveModuleNameLiterals?(moduleLiterals: readonly StringLiteralLike[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile: SourceFile, reusedNames: readonly StringLiteralLike[] | undefined): readonly ResolvedModuleWithFailedLookupLocations[];
+        resolveTypeReferenceDirectiveReferences?<T extends FileReference | string>(typeDirectiveReferences: readonly T[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile: SourceFile | undefined, reusedNames: readonly T[] | undefined): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
         /** If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives */
         hasInvalidatedResolutions?(filePath: Path): boolean;
         /**
@@ -5987,9 +5994,13 @@ declare namespace ts {
         readFile(path: string, encoding?: string): string | undefined;
         fileExists(path: string): boolean;
         getTypeRootsVersion?(): number;
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
+        /** @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolution modes like nodenext */
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
         getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
-        resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
+        /** @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext */
+        resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode): (ResolvedTypeReferenceDirective | undefined)[];
+        resolveModuleNameLiterals?(moduleLiterals: readonly StringLiteralLike[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile: SourceFile, reusedNames: readonly StringLiteralLike[] | undefined): readonly ResolvedModuleWithFailedLookupLocations[];
+        resolveTypeReferenceDirectiveReferences?<T extends FileReference | string>(typeDirectiveReferences: readonly T[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile: SourceFile | undefined, reusedNames: readonly T[] | undefined): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
         getDirectories?(directoryName: string): string[];
         /**
          * Gets a set of custom transformers to use during emit.

@@ -1,7 +1,30 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile, SymLink } from "../virtualFileSystemWithWatch";
-import { commonFile1, commonFile2, ensureErrorFreeBuild } from "../tscWatch/helpers";
-import { createProjectService, createLoggerWithInMemoryLogs, baselineTsserverLogs, checkNumberOfConfiguredProjects, configuredProjectAt, checkProjectRootFiles, checkNumberOfInferredProjects, checkNumberOfProjects, checkProjectActualFiles, createSessionWithEventTracking, createSession, openFilesForSession, verifyGetErrRequest } from "./helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+    SymLink,
+} from "../virtualFileSystemWithWatch";
+import {
+    commonFile1,
+    commonFile2,
+    ensureErrorFreeBuild,
+} from "../tscWatch/helpers";
+import {
+    baselineTsserverLogs,
+    checkNumberOfConfiguredProjects,
+    checkNumberOfInferredProjects,
+    checkNumberOfProjects,
+    checkProjectActualFiles,
+    checkProjectRootFiles,
+    configuredProjectAt,
+    createLoggerWithInMemoryLogs,
+    createProjectService,
+    createSession,
+    createSessionWithEventTracking,
+    openFilesForSession,
+    verifyGetErrRequest,
+} from "./helpers";
 
 describe("unittests:: tsserver:: ConfiguredProjects", () => {
     it("create configured project without file list", () => {
