@@ -192,12 +192,12 @@ function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes
 
     const currentDirectory = getDirectoryPath(oldFile.fileName);
     const extension = extensionFromPath(oldFile.fileName);
-    const newFileName = makeUniqueModuleName(getNewModuleName(usage.oldFileImportsFromNewFile, usage.movedSymbols), extension, currentDirectory, host);
+    const newFileBasename = makeUniqueModuleName(getNewModuleName(usage.oldFileImportsFromNewFile, usage.movedSymbols), extension, currentDirectory, host);
 
     // If previous file was global, this is easy.
-    changes.createNewFile(oldFile, combinePaths(currentDirectory, newFileName + extension), getNewStatementsAndRemoveFromOldFile(oldFile, usage, changes, toMove, program, host, newFileName, extension, preferences));
+    changes.createNewFile(oldFile, combinePaths(currentDirectory, newFileBasename + extension), getNewStatementsAndRemoveFromOldFile(oldFile, usage, changes, toMove, program, host, newFileBasename, extension, preferences));
 
-    addNewFileToTsconfig(program, changes, oldFile.fileName, newFileName + extension, hostGetCanonicalFileName(host));
+    addNewFileToTsconfig(program, changes, oldFile.fileName, newFileBasename + extension, hostGetCanonicalFileName(host));
 }
 
 interface StatementRange {
