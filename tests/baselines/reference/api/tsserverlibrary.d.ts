@@ -7264,7 +7264,7 @@ declare namespace ts {
          * True if the original module reference used a .ts extension to refer directly to a .ts file,
          * which should produce an error during checking if emit is enabled.
          */
-        resolvedUsingTsExtension: boolean;
+        resolvedUsingTsExtension?: boolean;
     }
     /**
      * ResolvedModule with an explicitly provided `extension` property.
