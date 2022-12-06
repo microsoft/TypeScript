@@ -47,7 +47,7 @@ export interface TscWatchCompileBase<T extends ts.BuilderProgram = ts.EmitAndSem
     scenario: string;
     subScenario: string;
     commandLineArgs: readonly string[];
-    changes: readonly TscWatchCompileChange<T>[];
+    edits?: readonly TscWatchCompileChange<T>[];
 }
 export interface TscWatchCompile extends TscWatchCompileBase {
     sys: () => TestServerHost;
@@ -65,7 +65,7 @@ function tscWatchCompile(input: TscWatchCompile) {
         const { sys, baseline, oldSnap } = createBaseline(input.sys());
         const {
             scenario, subScenario,
-            commandLineArgs, changes,
+            commandLineArgs, edits,
             baselineSourceMap, baselineDependencies
         } = input;
 
@@ -86,7 +86,7 @@ function tscWatchCompile(input: TscWatchCompile) {
             getPrograms,
             baselineSourceMap,
             baselineDependencies,
-            changes,
+            edits,
             watchOrSolution
         });
     });
@@ -185,7 +185,7 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
     scenario, subScenario, commandLineArgs,
     getPrograms, sys, baseline, oldSnap,
     baselineSourceMap, baselineDependencies,
-    changes, watchOrSolution
+    edits, watchOrSolution
 }: RunWatchBaseline<T>) {
     baseline.push(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}`);
     let programs = watchBaseline({
@@ -198,18 +198,20 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
         baselineDependencies,
     });
 
-    for (const { caption, change, timeouts } of changes) {
-        oldSnap = applyChange(sys, baseline, change, caption);
-        timeouts(sys, programs, watchOrSolution);
-        programs = watchBaseline({
-            baseline,
-            getPrograms,
-            oldPrograms: programs,
-            sys,
-            oldSnap,
-            baselineSourceMap,
-            baselineDependencies,
-        });
+    if (edits) {
+        for (const { caption, change, timeouts } of edits) {
+            oldSnap = applyChange(sys, baseline, change, caption);
+            timeouts(sys, programs, watchOrSolution);
+            programs = watchBaseline({
+                baseline,
+                getPrograms,
+                oldPrograms: programs,
+                sys,
+                oldSnap,
+                baselineSourceMap,
+                baselineDependencies,
+            });
+        }
     }
     Baseline.runBaseline(`${ts.isBuild(commandLineArgs) ? "tsbuild" : "tsc"}${isWatch(commandLineArgs) ? "Watch" : ""}/${scenario}/${subScenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
 }

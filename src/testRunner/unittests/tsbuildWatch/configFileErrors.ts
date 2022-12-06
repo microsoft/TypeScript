@@ -36,7 +36,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
             { currentDirectory: "/user/username/projects/myproject" }
         ),
         commandLineArgs: ["--b", "-w"],
-        changes: [
+        edits: [
             {
                 caption: "reports syntax errors after change to config file",
                 change: sys => sys.replaceFileText(`/user/username/projects/myproject/tsconfig.json`, ",", `,

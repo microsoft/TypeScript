@@ -60,7 +60,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             libFile
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["--project", "./packages/pkg1/tsconfig.json", "-w", "--traceResolution"],
-        changes: [
+        edits: [
             {
                 caption: "reports import errors after change to package file",
                 change: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `index.js`, `other.js`),
@@ -125,7 +125,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             libFile
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
-        changes: [{
+        edits: [{
             caption: "Add import to index2",
             change: sys => sys.prependFile(`/user/username/projects/myproject/index2.ts`, `import * as me from "./index.js";`),
             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
@@ -172,7 +172,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             subScenario: "package json file is edited",
             commandLineArgs: ["--w", "--p", "src", "--extendedDiagnostics", "-traceResolution", "--explainFiles"],
             sys: () => getSys(JSON.stringify({ name: "app", version: "1.0.0" })),
-            changes: [
+            edits: [
                 {
                     caption: "Modify package json file to add type module",
                     change: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, JSON.stringify({
@@ -227,7 +227,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             sys: () => getSys(JSON.stringify({
                 name: "app", version: "1.0.0", type: "module",
             })),
-            changes: [
+            edits: [
                 {
                     caption: "Modify package.json file to remove type module",
                     change: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
@@ -335,7 +335,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             libFile
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
-        changes: [
+        edits: [
             {
                 caption: "modify aFile by adding import",
                 change: sys => sys.appendFile(`/user/username/projects/myproject/a.ts`, `import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" }`),
@@ -424,7 +424,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             libFile
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
-        changes: [
+        edits: [
             {
                 caption: "modify aFile by adding import",
                 change: sys => sys.prependFile(`/user/username/projects/myproject/a.ts`, `/// <reference types="pkg" resolution-mode="import"/>\n`),

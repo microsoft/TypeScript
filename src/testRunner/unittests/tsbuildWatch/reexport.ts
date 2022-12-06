@@ -23,7 +23,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced p
             ],
             { currentDirectory: `/user/username/projects/reexport` }
         ),
-        changes: [
+        edits: [
             {
                 caption: "Introduce error",
                 change: sys => sys.replaceFileText(`/user/username/projects/reexport/src/pure/session.ts`, "// ", ""),

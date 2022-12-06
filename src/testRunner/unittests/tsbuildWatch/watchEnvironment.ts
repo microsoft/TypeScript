@@ -36,7 +36,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
             baseline,
             oldSnap,
             getPrograms,
-            changes: [
+            edits: [
                 {
                     caption: "modify typing file",
                     change: sys => sys.writeFile(typing.path, `${typing.content}export const typing1 = 10;`),

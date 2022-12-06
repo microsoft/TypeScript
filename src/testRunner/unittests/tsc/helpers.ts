@@ -652,29 +652,30 @@ export function baselineBuildInfo(
 }
 interface VerifyTscEditDiscrepanciesInput {
     index: number;
+    edits: readonly TestTscEdit[];
     scenario: TestTscCompile["scenario"];
-    subScenario: TestTscCompile["subScenario"];
     baselines: string[] | undefined;
     commandLineArgs: TestTscCompile["commandLineArgs"];
     modifyFs: TestTscCompile["modifyFs"];
-    editFs: TestTscEdit["modifyFs"];
     baseFs: vfs.FileSystem;
     newSys: TscCompileSystem;
-    discrepancyExplanation: TestTscEdit["discrepancyExplanation"];
 }
 function verifyTscEditDiscrepancies({
-    index, scenario, subScenario, commandLineArgs,
-    discrepancyExplanation, baselines,
-    modifyFs, editFs, baseFs, newSys
+    index, edits, scenario, commandLineArgs,
+    baselines,
+    modifyFs, baseFs, newSys
 }: VerifyTscEditDiscrepanciesInput): string[] | undefined {
+    const { subScenario, discrepancyExplanation } = edits[index];
     const sys = testTscCompile({
         scenario,
         subScenario,
         fs: () => baseFs.makeReadonly(),
-        commandLineArgs,
+        commandLineArgs: edits[index].commandLineArgs || commandLineArgs,
         modifyFs: fs => {
             if (modifyFs) modifyFs(fs);
-            editFs(fs);
+            for (let i = 0; i <= index; i++) {
+                edits[i].modifyFs(fs);
+            }
         },
         disableUseFileVersionAsSignature: true,
     });
@@ -938,18 +939,12 @@ export function verifyTscWithEdits({
             for (let index = 0; index < edits.length; index++) {
                 baselines = verifyTscEditDiscrepancies({
                     index,
+                    edits,
                     scenario,
-                    subScenario: edits[index].subScenario,
                     baselines,
                     baseFs,
                     newSys: editsSys[index],
-                    commandLineArgs: edits[index].commandLineArgs || commandLineArgs,
-                    discrepancyExplanation: edits[index].discrepancyExplanation,
-                    editFs: fs => {
-                        for (let i = 0; i <= index; i++) {
-                            edits[i].modifyFs(fs);
-                        }
-                    },
+                    commandLineArgs,
                     modifyFs
                 });
             }

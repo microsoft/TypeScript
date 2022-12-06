@@ -23,7 +23,7 @@ describe("unittests:: tsc-watch:: emit with outFile or out setting", () => {
                 "/a/tsconfig.json": JSON.stringify({ compilerOptions: { out, outFile } }),
                 [libFile.path]: libFile.content,
             }),
-            changes: [
+            edits: [
                 {
                     caption: "Make change in the file",
                     change: sys => sys.writeFile("/a/a.ts", "let x = 11"),
@@ -74,7 +74,6 @@ describe("unittests:: tsc-watch:: emit with outFile or out setting", () => {
                 };
                 return createWatchedSystem([file1, file2, file3, file4, libFile, configFile]);
             },
-            changes: ts.emptyArray
         });
     }
     verifyFilesEmittedOnce("with --outFile and multiple declaration files in the program", /*useOutFile*/ true);
@@ -145,7 +144,7 @@ describe("unittests:: tsc-watch:: emit for configured projects", () => {
                     files
                 );
             },
-            changes
+            edits: changes
         });
     }
 
@@ -374,7 +373,7 @@ describe("unittests:: tsc-watch:: emit file content", () => {
                 ],
                 { newLine }
             ),
-            changes: [
+            edits: [
                 {
                     caption: "Append a line",
                     change: sys => sys.appendFile("/a/app.ts", newLine + "var z = 3;"),
@@ -412,7 +411,7 @@ describe("unittests:: tsc-watch:: emit file content", () => {
             };
             return createWatchedSystem([file1, file2, file3, configFile, libFile]);
         },
-        changes: [
+        edits: [
             {
                 caption: "Append content to f1",
                 change: sys => sys.appendFile("/a/b/f1.ts", "export function foo2() { return 2; }"),
@@ -446,7 +445,7 @@ describe("unittests:: tsc-watch:: emit file content", () => {
             };
             return createWatchedSystem([file1, file2, file3, libFile]);
         },
-        changes: [
+        edits: [
             {
                 caption: "Append content to file3",
                 change: sys => sys.appendFile("/user/someone/projects/myproject/file3.ts", "function foo2() { return 2; }"),
@@ -476,7 +475,7 @@ describe("unittests:: tsc-watch:: emit file content", () => {
             const files = [file, configFile, libFile];
             return createWatchedSystem(files, { currentDirectory: projectLocation, useCaseSensitiveFileNames: true });
         },
-        changes: [
+        edits: [
             {
                 caption: "file is deleted and then created to modify content",
                 change: sys => sys.appendFile("/home/username/project/app/file.ts", "\nvar b = 10;", { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
@@ -515,7 +514,7 @@ describe("unittests:: tsc-watch:: emit with when module emit is specified as nod
             };
             return createWatchedSystem([configFile, file1, file2, libFile]);
         },
-        changes: [
+        edits: [
             {
                 caption: "Modify typescript file",
                 change: sys => sys.modifyFile(

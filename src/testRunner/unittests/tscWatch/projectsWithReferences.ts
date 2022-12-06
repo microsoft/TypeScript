@@ -1,4 +1,3 @@
-import * as ts from "../../_namespaces/ts";
 import {
     getTsBuildProjectFile,
     getTsBuildProjectFilePath,
@@ -31,7 +30,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
             { currentDirectory: `/user/username/projects/sample1` }
         ),
         commandLineArgs: ["-w", "-p", "tests", "--traceResolution", "--explainFiles"],
-        changes: [
+        edits: [
             {
                 caption: "local edit in logic ts, and build logic",
                 change: sys => {
@@ -92,7 +91,7 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
             { currentDirectory: `/user/username/projects/transitiveReferences` }
         ),
         commandLineArgs: ["-w", "-p", "tsconfig.c.json", "--traceResolution", "--explainFiles"],
-        changes: [
+        edits: [
             {
                 caption: "non local edit b ts, and build b",
                 change: sys => {
@@ -180,7 +179,6 @@ describe("unittests:: tsc-watch:: projects with references: invoking when refere
             { currentDirectory: `/user/username/projects/transitiveReferences` }
         ),
         commandLineArgs: ["-w", "-p", "tsconfig.c.json", "--traceResolution", "--explainFiles"],
-        changes: ts.emptyArray,
         baselineDependencies: true,
     });
 
@@ -235,7 +233,7 @@ X;`,
             { currentDirectory: `/user/username/projects/transitiveReferences` }
         ),
         commandLineArgs: ["-w", "-p", "c", "--traceResolution", "--explainFiles"],
-        changes: [
+        edits: [
             {
                 caption: "non local edit b ts, and build b",
                 change: sys => {
@@ -354,7 +352,7 @@ X;`,
             { currentDirectory: `/user/username/projects/transitiveReferences` }
         ),
         commandLineArgs: ["-w", "-p", "c", "--traceResolution", "--explainFiles"],
-        changes: [
+        edits: [
             {
                 caption: "non local edit b ts, and build b",
                 change: sys => {
@@ -440,7 +438,7 @@ X;`,
             { currentDirectory: `/user/username/projects/sample1` }
         ),
         commandLineArgs: ["-w", "-p", "logic", "--traceResolution", "--explainFiles"],
-        changes: [
+        edits: [
             {
                 caption: "change declration map in core",
                 change: sys => {

@@ -404,6 +404,5 @@ export const Fragment: unique symbol;
             [libFile.path]: libFile.content,
         }),
         commandLineArgs: ["--p", "src/project", "-i", "-w"],
-        changes: ts.emptyArray
     });
 });

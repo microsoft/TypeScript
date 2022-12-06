@@ -43,7 +43,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
             ],
             { currentDirectory: `/user/username/projects/noEmitOnError` }
         ),
-        changes: [
+        edits: [
             noChange,
             change("Fix Syntax error", `import { A } from "../shared/types/db";
 const a = {

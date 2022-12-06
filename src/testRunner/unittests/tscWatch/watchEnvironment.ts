@@ -31,7 +31,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             environmentVariables.set("TSC_WATCHFILE", Tsc_WatchFile.DynamicPolling);
             return createWatchedSystem([file1, libFile], { environmentVariables });
         },
-        changes: [
+        edits: [
             {
                 caption: "Time spent to Transition libFile and file1 to low priority queue",
                 change: ts.noop,
@@ -97,7 +97,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             const files = [libFile, commonFile1, commonFile2, configFile];
             return createWatchedSystem(files);
         },
-        changes: [
+        edits: [
             {
                 caption: "The timeout is to check the status of all files",
                 change: ts.noop,
@@ -161,7 +161,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
                     return createWatchedSystem(files, { environmentVariables });
                 },
-                changes: [
+                edits: [
                     {
                         caption: "Rename file1 to file2",
                         // Rename the file:
@@ -229,7 +229,6 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
                 return createWatchedSystem(files, { environmentVariables, currentDirectory: cwd });
             },
-            changes: ts.emptyArray
         });
 
         verifyTscWatch({
@@ -252,7 +251,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 const files = [libFile, file1, file2, configFile];
                 return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
             },
-            changes: [
+            edits: [
                 {
                     caption: "Directory watch updates because of file1.js creation",
                     change: ts.noop,
@@ -343,7 +342,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 const files = [libFile, file1, file2, configFile];
                 return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
             },
-            changes: [
+            edits: [
                 noopChange,
                 {
                     caption: "Add new file, should schedule and run timeout to update directory watcher",
@@ -384,7 +383,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 const files = [libFile, file1, file2, configFile];
                 return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
             },
-            changes: [
+            edits: [
                 noopChange,
                 {
                     caption: "rename the file",
@@ -425,7 +424,6 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 const files = [libFile, commonFile1, commonFile2, configFile];
                 return createWatchedSystem(files);
             },
-            changes: ts.emptyArray
         });
 
         verifyTscWatch({
@@ -444,7 +442,6 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 const files = [libFile, commonFile1, commonFile2, configFile];
                 return createWatchedSystem(files, { runWithoutRecursiveWatches: true });
             },
-            changes: ts.emptyArray
         });
 
         verifyTscWatch({
@@ -463,7 +460,6 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 const files = [libFile, commonFile1, commonFile2, configFile];
                 return createWatchedSystem(files, { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
             },
-            changes: ts.emptyArray
         });
 
         verifyTscWatch({
@@ -478,7 +474,6 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                 const files = [libFile, commonFile1, commonFile2, configFile];
                 return createWatchedSystem(files);
             },
-            changes: ts.emptyArray
         });
 
         describe("exclude options", () => {
@@ -517,7 +512,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     subScenario: `watchOptions/with excludeFiles option${additionalFlags.join("")}`,
                     commandLineArgs: ["-w", ...additionalFlags],
                     sys: () => sys({ excludeFiles: ["node_modules/*"] }),
-                    changes: [
+                    edits: [
                         {
                             caption: "Change foo",
                             change: sys => sys.replaceFileText(`/user/username/projects/myproject/node_modules/bar/foo.d.ts`, "foo", "fooBar"),
@@ -531,7 +526,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     subScenario: `watchOptions/with excludeDirectories option${additionalFlags.join("")}`,
                     commandLineArgs: ["-w", ...additionalFlags],
                     sys: () => sys({ excludeDirectories: ["node_modules"] }),
-                    changes: [
+                    edits: [
                         {
                             caption: "delete fooBar",
                             change: sys => sys.deleteFile(`/user/username/projects/myproject/node_modules/bar/fooBar.d.ts`),
@@ -544,7 +539,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     subScenario: `watchOptions/with excludeDirectories option with recursive directory watching${additionalFlags.join("")}`,
                     commandLineArgs: ["-w", ...additionalFlags],
                     sys: () => sys({ excludeDirectories: ["**/temp"] }, /*runWithoutRecursiveWatches*/ true),
-                    changes: [
+                    edits: [
                         {
                             caption: "Directory watch updates because of main.js creation",
                             change: ts.noop,
@@ -583,7 +578,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             },
             { currentDirectory: "/user/username/projects/myproject", }
         ),
-        changes: [
+        edits: [
             {
                 caption: "Introduce error such that when callback happens file is already appeared",
                 // vm's wq generates this kind of event
@@ -619,7 +614,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     inodeWatching: true
                 }
             ),
-            changes: [
+            edits: [
                 {
                     caption: "Replace file with rename event that introduces error",
                     change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo2(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true }),
@@ -649,7 +644,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     inodeWatching: true
                 }
             ),
-            changes: [
+            edits: [
                 {
                     caption: "Replace file with rename event that introduces error",
                     change: sys => sys.modifyFile(`/user/username/projects/myproject/foo.d.ts`, `export function foo2(): string;`, { invokeFileDeleteCreateAsPartInsteadOfChange: true, useTildeAsSuffixInRenameEventFileName: true }),
@@ -682,7 +677,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
                     inodeWatching: true,
                 }
             ),
-            changes: [
+            edits: [
                 {
                     caption: "Introduce error such that when callback happens file is already appeared",
                     // vm's wq generates this kind of event
@@ -711,7 +706,7 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
             "/user/username/projects/project/main.ts": `let a: string = "Hello"`,
             [libFile.path]: libFile.content,
         }, { currentDirectory: "/user/username/projects/project" }),
-        changes: [
+        edits: [
             {
                 caption: "change main.ts",
                 change: sys => sys.replaceFileText("/user/username/projects/project/main.ts", "Hello", "Hello World"),

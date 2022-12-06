@@ -68,7 +68,6 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
         subScenario: `resolves specifier in output declaration file from referenced project correctly`,
         sys,
         commandLineArgs: ["-b", "packages/pkg1", "--verbose", "--traceResolution"],
-        changes: ts.emptyArray
     });
 
     verifyTscWatch({
@@ -76,7 +75,6 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
         subScenario: `resolves specifier in output declaration file from referenced project correctly with preserveSymlinks`,
         sys: () => sys({ preserveSymlinks: true }),
         commandLineArgs: ["-b", "packages/pkg1", "--verbose", "--traceResolution"],
-        changes: ts.emptyArray
     });
 
     verifyTsc({

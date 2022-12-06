@@ -50,7 +50,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
             ));
             return sys;
         },
-        changes: [
+        edits: [
             {
                 caption: "Fix error",
                 change: sys => sys.writeFile(coreFiles[0].path, coreFiles[0].content),
@@ -73,7 +73,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
 ${coreFiles[1].content}`);
             return sys;
         },
-        changes: [
+        edits: [
             {
                 caption: "Prepend a line",
                 change: sys => sys.writeFile(coreFiles[1].path, `

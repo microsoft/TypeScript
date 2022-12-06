@@ -46,7 +46,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
             { currentDirectory: "/user/username/projects/myproject" }
         ),
         commandLineArgs: ["--b", "-w", "-v"],
-        changes: [
+        edits: [
             {
                 caption: "Append text",
                 change: sys => sys.appendFile(`/user/username/projects/myproject/project1/index.ts`, "const bar = 10;"),
@@ -121,7 +121,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
             { ...libFile, path: `/a/lib/lib.es2022.full.d.ts` }
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-b", "packages/pkg1", "-w", "--verbose", "--traceResolution"],
-        changes: [
+        edits: [
             {
                 caption: "reports import errors after change to package file",
                 change: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg1/package.json`, `"module"`, `"commonjs"`),
@@ -215,7 +215,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
             libFile
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-b", "packages/pkg1", "--verbose", "-w", "--traceResolution"],
-        changes: [
+        edits: [
             {
                 caption: "reports import errors after change to package file",
                 change: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `index.js`, `other.js`),

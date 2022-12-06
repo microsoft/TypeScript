@@ -86,7 +86,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
         subScenario: "creates solution in watch mode",
         commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`],
         sys: () => createWatchedSystem(allFiles, { currentDirectory: "/user/username/projects" }),
-        changes: ts.emptyArray
     });
 
     it("verify building references watches only those projects", () => {
@@ -102,7 +101,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
             baseline,
             oldSnap,
             getPrograms,
-            changes: ts.emptyArray,
             watchOrSolution: solutionBuilder
         });
     });
@@ -132,7 +130,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
                     allFilesGetter(),
                     { currentDirectory: "/user/username/projects" }
                 ),
-                changes: [
+                edits: [
                     changeCore(() => `${core[1].content}
 export class someClass { }`, "Make change to core"),
                     buildLogicAndTests,
@@ -164,7 +162,7 @@ export class someClass2 { }`);
                     allFilesGetter(),
                     { currentDirectory: "/user/username/projects" }
                 ),
-                changes: [
+                edits: [
                     changeCore(() => `${core[1].content}
 function foo() { }`, "Make local change to core"),
                 ]
@@ -181,7 +179,7 @@ function foo() { }`, "Make local change to core"),
                     allFilesGetter(),
                     { currentDirectory: "/user/username/projects" }
                 ),
-                changes: [
+                edits: [
                     changeNewFile(newFile.content),
                     buildLogicAndTests,
                     changeNewFile(`${newFile.content}
@@ -224,7 +222,7 @@ export class someClass2 { }`),
             [libFile, ...core, logic[1], ...tests],
             { currentDirectory: "/user/username/projects" }
         ),
-        changes: [
+        edits: [
             {
                 caption: "Write logic tsconfig and build logic",
                 change: sys => sys.writeFile(logic[0].path, logic[0].content),
@@ -286,7 +284,7 @@ export class someClass2 { }`),
                 };
                 return createWatchedSystem([libFile, coreTsConfig, coreIndex, logicTsConfig, logicIndex], { currentDirectory: "/user/username/projects" });
             },
-            changes: [
+            edits: [
                 changeCore(() => `${coreIndex.content}
 function myFunc() { return 10; }`, "Make non local change and build core"),
                 buildLogic,
@@ -337,7 +335,7 @@ createSomeObject().message;`
                 const files = [libFile, libraryTs, libraryTsconfig, appTs, appTsconfig];
                 return createWatchedSystem(files, { currentDirectory: `${"/user/username/projects"}/sample1` });
             },
-            changes: [
+            edits: [
                 {
                     caption: "Introduce error",
                     // Change message in library to message2
@@ -368,7 +366,7 @@ createSomeObject().message;`
                 subScenario: `reportErrors/${subScenario}`,
                 commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`, ...buildOptions],
                 sys: () => createWatchedSystem(allFiles, { currentDirectory: "/user/username/projects" }),
-                changes: [
+                edits: [
                     {
                         caption: "change logic",
                         change: sys => sys.writeFile(logic[1].path, `${logic[1].content}
@@ -445,7 +443,7 @@ let x: string = 10;`),
                     [libFile, fileWithError, fileWithoutError, tsconfig],
                     { currentDirectory: `${"/user/username/projects"}/${solution}` }
                 ),
-                changes: [
+                edits: [
                     fixError
                 ]
             });
@@ -458,7 +456,7 @@ let x: string = 10;`),
                     [libFile, fileWithError, fileWithoutError, tsconfig],
                     { currentDirectory: `${"/user/username/projects"}/${solution}` }
                 ),
-                changes: [
+                edits: [
                     changeFileWithoutError
                 ]
             });
@@ -478,7 +476,7 @@ let x: string = 10;`),
                         [libFile, fileWithFixedError, fileWithoutError, tsconfig],
                         { currentDirectory: `${"/user/username/projects"}/${solution}` }
                     ),
-                    changes: [
+                    edits: [
                         introduceError,
                         fixError
                     ]
@@ -492,7 +490,7 @@ let x: string = 10;`),
                         [libFile, fileWithFixedError, fileWithoutError, tsconfig],
                         { currentDirectory: `${"/user/username/projects"}/${solution}` }
                     ),
-                    changes: [
+                    edits: [
                         introduceError,
                         changeFileWithoutError
                     ]
@@ -506,7 +504,7 @@ let x: string = 10;`),
         subScenario: "incremental updates in verbose mode",
         commandLineArgs: ["-b", "-w", `sample1/${SubProject.tests}`, "-verbose"],
         sys: () => createWatchedSystem(allFiles, { currentDirectory: "/user/username/projects" }),
-        changes: [
+        edits: [
             {
                 caption: "Make non dts change",
                 change: sys => sys.writeFile(logic[1].path, `${logic[1].content}
@@ -547,7 +545,7 @@ export function someFn() { }`),
             };
             return createWatchedSystem([index, configFile, libFile], { currentDirectory: "/user/username/projects/myproject" });
         },
-        changes: [
+        edits: [
             {
                 caption: "Change tsconfig to set noUnusedParameters to false",
                 change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({
@@ -565,7 +563,7 @@ export function someFn() { }`),
         subScenario: "should not trigger recompilation because of program emit",
         commandLineArgs: ["-b", "-w", `sample1/${SubProject.core}`, "-verbose"],
         sys: () => createWatchedSystem([libFile, ...core], { currentDirectory: "/user/username/projects" }),
-        changes: [
+        edits: [
             noopChange,
             {
                 caption: "Add new file",
@@ -585,7 +583,7 @@ export function someFn() { }`),
             const newCoreConfig: File = { path: coreConfig.path, content: JSON.stringify({ compilerOptions: { composite: true, outDir: "outDir" } }) };
             return createWatchedSystem([libFile, newCoreConfig, ...rest], { currentDirectory: "/user/username/projects" });
         },
-        changes: [
+        edits: [
             noopChange,
             {
                 caption: "Add new file",
@@ -641,7 +639,7 @@ export function someFn() { }`),
                 bravoExtendedConfigFile, project2Config, otherFile
             ], { currentDirectory: "/a/b" });
         },
-        changes: [
+        edits: [
             {
                 caption: "Modify alpha config",
                 change: sys => sys.writeFile("/a/b/alpha.tsconfig.json", JSON.stringify({
@@ -759,7 +757,7 @@ export function someFn() { }`),
                 bravoExtendedConfigFile, project2Config, otherFile
             ], { currentDirectory: "/a/b" });
         },
-        changes: [
+        edits: [
             {
                 caption: "Remove project2 from base config",
                 change: sys => sys.modifyFile("/a/b/tsconfig.json", JSON.stringify({
@@ -788,6 +786,5 @@ export function someFn() { }`),
             [libFile.path]: libFile.content,
         }),
         commandLineArgs: ["--b", "src/project", "-i", "-w"],
-        changes: ts.emptyArray
     });
 });

@@ -61,7 +61,6 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
             baseline,
             oldSnap,
             getPrograms,
-            changes: ts.emptyArray,
             watchOrSolution: watch
         });
     });
@@ -96,7 +95,7 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
                     baseline,
                     oldSnap,
                     getPrograms,
-                    changes: [
+                    edits: [
                         {
                             caption: "write other with same contents",
                             change: sys => sys.appendFile(`/user/username/projects/myproject/other.d.ts`, ""),
@@ -163,7 +162,6 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch expose error count to wat
             baseline,
             oldSnap,
             getPrograms,
-            changes: ts.emptyArray,
             watchOrSolution: watch
         });
     });
@@ -196,7 +194,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost does not implement s
             baseline,
             oldSnap,
             getPrograms,
-            changes: [{
+            edits: [{
                 caption: "Write a file",
                 change: sys => sys.writeFile(`/user/username/projects/myproject/bar.ts`, "const y =10;"),
                 timeouts: sys => {
@@ -242,7 +240,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost can add extraFileExt
             baseline,
             oldSnap,
             getPrograms,
-            changes: [{
+            edits: [{
                 caption: "Write a file",
                 change: sys => sys.writeFile(`/user/username/projects/myproject/other2.vue`, otherFile.content),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
@@ -360,7 +358,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             baseline,
             oldSnap,
             getPrograms,
-            changes: [{
+            edits: [{
                 caption: "Modify a file",
                 change: sys => sys.appendFile(mainFile.path, "\n// SomeComment"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
@@ -562,7 +560,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
             subScenario: "when new file is added to the referenced project with host implementing getParsedCommandLine",
             commandLineArgs: ["--w", "-p", config2.path, "--extendedDiagnostics"],
             ...baseline,
-            changes: [
+            edits: [
                 {
                     caption: "Add class3 to project1",
                     change: sys => {
@@ -593,7 +591,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
             subScenario: "when new file is added to the referenced project with host implementing getParsedCommandLine without implementing useSourceOfProjectReferenceRedirect",
             commandLineArgs: ["--w", "-p", config2.path, "--extendedDiagnostics"],
             ...baseline,
-            changes: [
+            edits: [
                 {
                     caption: "Add class3 to project1",
                     change: sys => {
@@ -656,7 +654,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                 subScenario,
                 commandLineArgs: ["--w", "--extendedDiagnostics"],
                 ...baseline,
-                changes: [
+                edits: [
                     {
                         caption: "Fix error but run emit with emitOnlyDts",
                         change: sys => {

@@ -44,7 +44,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             baseline,
             oldSnap,
             getPrograms,
-            changes: [
+            edits: [
                 {
                     caption: "Adding text doesnt re-resole the imports",
                     change: sys => {
@@ -139,7 +139,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             baseline,
             oldSnap,
             getPrograms,
-            changes: [{
+            edits: [{
                 caption: "write imported file",
                 change: sys => {
                     fileExistsCalledForBar = false;
@@ -195,7 +195,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             baseline,
             oldSnap,
             getPrograms,
-            changes: [
+            edits: [
                 {
                     caption: "Delete imported file",
                     change: sys => {
@@ -232,7 +232,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             path: "/a/b/foo.ts",
             content: `import * as fs from "fs";`
         }, libFile], { currentDirectory: "/a/b" }),
-        changes: [
+        edits: [
             {
                 caption: "npm install node types",
                 change: sys => {
@@ -284,7 +284,7 @@ declare module "url" {
             };
             return createWatchedSystem([root, file, libFile], { currentDirectory: "/a/b" });
         },
-        changes: [
+        edits: [
             {
                 caption: "Add fs definition",
                 change: sys => sys.appendFile("/a/b/bar.d.ts", `
@@ -331,7 +331,7 @@ declare module "fs" {
             };
             return createWatchedSystem([file1, file2, module1, libFile, configFile], { currentDirectory: "/a/b/projects/myProject/" });
         },
-        changes: [
+        edits: [
             {
                 caption: "Add new line to file1",
                 change: sys => sys.appendFile("/a/b/projects/myProject/src/file1.ts", "\n;"),
@@ -355,7 +355,7 @@ declare module "fs" {
             };
             return createWatchedSystem([file, libFile, module], { currentDirectory: "/user/username/projects/myproject" });
         },
-        changes: [
+        edits: [
             {
                 caption: "npm install",
                 change: sys => sys.renameFolder(`/user/username/projects/myproject/node_modules2`, `/user/username/projects/myproject/node_modules`),
@@ -385,7 +385,7 @@ declare module "fs" {
                     };
                     return createWatchedSystem([libFile, file1, file2, config]);
                 },
-                changes: [
+                edits: [
                     {
                         caption: "npm install file and folder that start with '.'",
                         change: sys => sys.ensureFileOrFolder({
@@ -421,7 +421,7 @@ declare module "fs" {
             };
             return createWatchedSystem([app, tsconfig, libFile]);
         },
-        changes: [
+        edits: [
             {
                 caption: "npm install ts-types",
                 change: sys => {
@@ -495,7 +495,6 @@ declare namespace myapp {
             const files = [libFile, mainFile, config, linkedPackageInMain, linkedPackageJson, linkedPackageIndex, linkedPackageOther];
             return createWatchedSystem(files, { currentDirectory: mainPackageRoot });
         },
-        changes: ts.emptyArray
     });
 
     describe("works when installing something in node_modules or @types when there is no notification from fs for index file", () => {
@@ -540,7 +539,7 @@ declare namespace NodeJS {
                 const { nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals } = getNodeAtTypes();
                 return createWatchedSystem([file, libFile, tsconfig, nodeAtTypesIndex, nodeAtTypesBase, nodeAtTypes36Base, nodeAtTypesGlobals], { currentDirectory: "/user/username/projects/myproject" });
             },
-            changes: [
+            edits: [
                 {
                     caption: "npm ci step one: remove all node_modules files",
                     change: sys => sys.deleteFolder(`/user/username/projects/myproject/node_modules/@types`, /*recursive*/ true),
@@ -603,7 +602,7 @@ declare namespace NodeJS {
             [libFile.path]: libFile.content,
         }, { currentDirectory: "/src/project" }),
         commandLineArgs: ["-w", "--explainFiles", "--extendedDiagnostics"],
-        changes: [
+        edits: [
             {
                 caption: "write file not resolved by import",
                 change: sys => sys.ensureFileOrFolder({ path: "/src/project/node_modules/pkg1/index.d.ts", content: `export interface Import1 {}` }),

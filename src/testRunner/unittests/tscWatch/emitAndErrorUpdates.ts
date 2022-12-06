@@ -35,7 +35,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
                 files(),
                 { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
             ),
-            changes,
+            edits: changes,
             baselineIncremental: true
         });
 
@@ -47,7 +47,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
                 files(),
                 { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
             ),
-            changes,
+            edits: changes,
             baselineIncremental: true
         });
 
@@ -59,7 +59,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
                 files(),
                 { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
             ),
-            changes,
+            edits: changes,
             baselineIncremental: true
         });
 
@@ -71,7 +71,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
                 files(),
                 { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
             ),
-            changes,
+            edits: changes,
             baselineIncremental: true
         });
 
@@ -83,7 +83,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
                 files(),
                 { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
             ),
-            changes,
+            edits: changes,
             baselineIncremental: true
         });
 
@@ -95,7 +95,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
                 files(),
                 { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
             ),
-            changes,
+            edits: changes,
             baselineIncremental: true
         });
     }

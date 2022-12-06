@@ -64,7 +64,7 @@ export function f22() { } // trailing`
         baseline,
         oldSnap,
         getPrograms,
-        changes: [
+        edits: [
             {
                 caption: "change to shared",
                 change: sys => sys.prependFile(sharedIndex.path, "export function fooBar() {}"),
