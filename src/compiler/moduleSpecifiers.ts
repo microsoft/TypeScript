@@ -860,16 +860,16 @@ function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileNam
         return undefined;
     }
 
-        const normalizedSourcePaths = getPathsRelativeToRootDirs(sourceDirectory, rootDirs, getCanonicalFileName);
-        const relativePaths = flatMap(normalizedSourcePaths, sourcePath => {
-            return map(normalizedTargetPaths, targetPath => ensurePathIsNonModuleName(getRelativePathFromDirectory(sourcePath, targetPath, getCanonicalFileName)));
-        });
-        const shortest = min(relativePaths, compareNumberOfDirectorySeparators);
-        if (!shortest) {
-            return undefined;
-        }
-        return processEnding(shortest, ending, compilerOptions);
+    const normalizedSourcePaths = getPathsRelativeToRootDirs(sourceDirectory, rootDirs, getCanonicalFileName);
+    const relativePaths = flatMap(normalizedSourcePaths, sourcePath => {
+        return map(normalizedTargetPaths, targetPath => ensurePathIsNonModuleName(getRelativePathFromDirectory(sourcePath, targetPath, getCanonicalFileName)));
+    });
+    const shortest = min(relativePaths, compareNumberOfDirectorySeparators);
+    if (!shortest) {
+        return undefined;
     }
+    return processEnding(shortest, ending, compilerOptions);
+}
 
 function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, sourceDirectory }: Info, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, options: CompilerOptions, userPreferences: UserPreferences, packageNameOnly?: boolean, overrideMode?: ResolutionMode): string | undefined {
     if (!host.fileExists || !host.readFile) {
