@@ -4547,6 +4547,7 @@ declare namespace ts {
     type AssertsKeyword = KeywordToken<SyntaxKind.AssertsKeyword>;
     type AssertKeyword = KeywordToken<SyntaxKind.AssertKeyword>;
     type AwaitKeyword = KeywordToken<SyntaxKind.AwaitKeyword>;
+    type CaseKeyword = KeywordToken<SyntaxKind.CaseKeyword>;
     /** @deprecated Use `AwaitKeyword` instead. */
     type AwaitKeywordToken = AwaitKeyword;
     /** @deprecated Use `AssertsKeyword` instead. */
