@@ -352,6 +352,8 @@ import {
     UserPreferences,
     VariableDeclaration,
     walkUpParenthesizedExpressions,
+    isCaseKeyword,
+    isNodeDescendantOf,
 } from "./_namespaces/ts";
 import { StringCompletions } from "./_namespaces/ts.Completions";
 
@@ -859,7 +861,6 @@ function completionInfoFromData(
         location,
         propertyAccessToConvert,
         keywordFilters,
-        literals,
         symbolToOriginInfoMap,
         recommendedCompletion,
         isJsxInitializer,
@@ -868,9 +869,12 @@ function completionInfoFromData(
         isRightOfOpenTag,
         importStatementCompletion,
         insideJsDocTagTypeExpression,
-        symbolToSortTextMap: symbolToSortTextMap,
+        symbolToSortTextMap,
         hasUnresolvedAutoImports,
     } = completionData;
+    let literals = completionData.literals;
+
+    const checker = program.getTypeChecker();
 
     // Verify if the file is JSX language variant
     if (getLanguageVariant(sourceFile.scriptKind) === LanguageVariant.JSX) {
@@ -878,6 +882,22 @@ function completionInfoFromData(
         if (completionInfo) {
             return completionInfo;
         }
+    }
+
+    let caseClause = findAncestor(contextToken, isCaseClause);
+    if (caseClause && (isCaseKeyword(contextToken!) || isNodeDescendantOf(contextToken!, caseClause.expression))) { // >> TODO: this needs to be expanded, for cases like `case foo.bar.| etc (what others?)
+        // Filter existing literals
+        const tracker = newCaseClauseTracker(checker, caseClause.parent.clauses);
+        literals = literals.filter(literal => !tracker.hasValue(literal));
+        symbols = symbols.filter(symbol => {
+            if (symbol.valueDeclaration && isEnumMember(symbol.valueDeclaration)) { // >> TODO: if isEnum
+                // const enumValue = type.symbol.valueDeclaration && checker.getConstantValue(type.symbol.valueDeclaration as EnumMember);
+                const value = checker.getConstantValue(symbol.valueDeclaration);
+                return !value || !tracker.hasValue(value);
+            }
+            return true;
+        }); // >> TODO: can't really use filter and modify symbol array because symbolToSortTextMap and symbolToOriginMap are arrays that depend on symbol's index
+
     }
 
     const entries = createSortedArray<CompletionEntry>();
