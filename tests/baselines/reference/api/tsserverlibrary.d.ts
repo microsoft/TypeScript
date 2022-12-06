@@ -2801,6 +2801,7 @@ declare namespace ts {
                 readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
                 readonly includeInlayEnumMemberValueHints?: boolean;
                 readonly autoImportFileExcludePatterns?: string[];
+                readonly organizeImportsIgnoreCase?: "auto" | boolean;
                 /**
                  * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
                  */
