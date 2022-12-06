@@ -889,12 +889,12 @@ function completionInfoFromData(
         }
     }
 
+    // When the completion is for the expression of a case clause (e.g. `case |`),
+    // filter literals & enum symbols whose values are already present in existing case clauses.
     let caseClause = findAncestor(contextToken, isCaseClause);
     if (caseClause && (isCaseKeyword(contextToken!) || isNodeDescendantOf(contextToken!, caseClause.expression))) {
-        // Filter existing literals
         const tracker = newCaseClauseTracker(checker, caseClause.parent.clauses);
         literals = literals.filter(literal => !tracker.hasValue(literal));
-        // Mark already present symbols to be ignored
         symbols.forEach((symbol, i) => {
             if (symbol.valueDeclaration && isEnumMember(symbol.valueDeclaration)) {
                 const value = checker.getConstantValue(symbol.valueDeclaration);
