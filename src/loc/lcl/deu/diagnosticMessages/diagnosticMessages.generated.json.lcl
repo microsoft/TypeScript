@@ -6150,6 +6150,24 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Export_0_from_module_1_90059" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Export '{0}' from module '{1}']]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Exportieren von "{0}" aus Modul "{1}"]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Export_all_referenced_locals_90060" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Export all referenced locals]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Alle referenzierten lokalen Elemente exportieren]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Export_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_export_default_or__1203" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.]]></Val>
@@ -8453,6 +8471,15 @@
           <Val><![CDATA[Mapped object type implicitly has an 'any' template type.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Der zugeordnete Objekttyp weist implizit einen any-Vorlagentyp auf.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Matched_0_condition_1_6403" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Matched '{0}' condition '{1}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Übereinstimmung mit "{0}" Bedingung "{1}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -11301,6 +11328,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Resolving_in_0_mode_with_conditions_1_6402" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Resolving in {0} mode with conditions {1}.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Wird im {0}-Modus mit Bedingungen "{1}" aufgelöst.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Resolving_module_0_from_1_6086" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[======== Resolving module '{0}' from '{1}'. ========]]></Val>
@@ -11813,6 +11849,15 @@
           <Val><![CDATA[Save .tsbuildinfo files to allow for incremental compilation of projects.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Speichern Sie die .tsbuildinfo-Dateien, um eine inkrementelle Kompilierung von Projekten zuzulassen.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Saw_non_matching_condition_0_6405" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Saw non-matching condition '{0}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Die nicht übereinstimmende Bedingung "{0}" wurde angezeigt.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -15284,6 +15329,15 @@
           <Val><![CDATA[Use synthetic 'default' member.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Verwenden Sie den synthetischen Member "default".]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";Using_0_subpath_1_with_target_2_6404" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Using '{0}' subpath '{1}' with target '{2}'.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Verwenden von "{0}" Unterpfad "{1}" mit Ziel "{2}".]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
