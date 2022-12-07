@@ -1806,6 +1806,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getSymlinkCache,
         realpath: host.realpath?.bind(host),
         useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
+        getCanonicalFileName,
         getFileIncludeReasons: () => fileReasons,
         structureIsReused,
         writeFile,
