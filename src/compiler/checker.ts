@@ -52,6 +52,7 @@ import {
     canHaveIllegalDecorators,
     canHaveIllegalModifiers,
     canHaveModifiers,
+    canUsePropertyAccess,
     cartesianProduct,
     CaseBlock,
     CaseClause,
@@ -102,7 +103,6 @@ import {
     createModeAwareCacheKey,
     createPrinter,
     createPropertyNameNodeForIdentifierOrLiteral,
-    createScanner,
     createSymbolTable,
     createTextWriter,
     createUnderscoreEscapedMultiMap,
@@ -500,7 +500,6 @@ import {
     isGlobalScopeAugmentation,
     isHeritageClause,
     isIdentifier,
-    isIdentifierStart,
     isIdentifierText,
     isIdentifierTypePredicate,
     isIdentifierTypeReference,
@@ -678,6 +677,7 @@ import {
     isTypeReferenceNode,
     isTypeReferenceType,
     isUMDExportSymbol,
+    isValidBigIntString,
     isValidESSymbolDeclaration,
     isValidTypeOnlyAliasUseSite,
     isValueSignatureDeclaration,
@@ -827,6 +827,7 @@ import {
     parseIsolatedEntityName,
     parseNodeFactory,
     parsePseudoBigInt,
+    parseValidBigInt,
     Path,
     pathIsRelative,
     PatternAmbientModule,
@@ -1332,8 +1333,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         host.getSourceFiles().forEach(sf => {
             if (!sf.resolvedModules) return;
 
-            sf.resolvedModules.forEach(r => {
-                if (r && r.packageId) map.set(r.packageId.name, r.extension === Extension.Dts || !!map.get(r.packageId.name));
+            sf.resolvedModules.forEach(({ resolvedModule }) => {
+                if (resolvedModule?.packageId) map.set(resolvedModule.packageId.name, resolvedModule.extension === Extension.Dts || !!map.get(resolvedModule.packageId.name));
             });
         });
         return map;
@@ -2271,6 +2272,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isDeprecatedSymbol(symbol: Symbol) {
+        if (length(symbol.declarations) > 1) {
+            const parentSymbol = getParentOfSymbol(symbol);
+            if (parentSymbol && parentSymbol.flags & SymbolFlags.Interface) {
+                return some(symbol.declarations, d => !!(getCombinedNodeFlags(d) & NodeFlags.Deprecated));
+            }
+        }
         return !!(getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Deprecated);
     }
 
@@ -2403,10 +2410,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (sourceSymbolFile && targetSymbolFile && amalgamatedDuplicates && !isEitherEnum && sourceSymbolFile !== targetSymbolFile) {
                 const firstFile = comparePaths(sourceSymbolFile.path, targetSymbolFile.path) === Comparison.LessThan ? sourceSymbolFile : targetSymbolFile;
                 const secondFile = firstFile === sourceSymbolFile ? targetSymbolFile : sourceSymbolFile;
-                const filesDuplicates = getOrUpdate(amalgamatedDuplicates, `${firstFile.path}|${secondFile.path}`, () =>
-                    ({ firstFile, secondFile, conflictingSymbols: new Map() } as DuplicateInfoForFiles));
-                const conflictingSymbolInfo = getOrUpdate(filesDuplicates.conflictingSymbols, symbolName, () =>
-                    ({ isBlockScoped: isEitherBlockScoped, firstFileLocations: [], secondFileLocations: [] } as DuplicateInfoForSymbol));
+                const filesDuplicates = getOrUpdate(amalgamatedDuplicates, `${firstFile.path}|${secondFile.path}`, (): DuplicateInfoForFiles =>
+                    ({ firstFile, secondFile, conflictingSymbols: new Map() }));
+                const conflictingSymbolInfo = getOrUpdate(filesDuplicates.conflictingSymbols, symbolName, (): DuplicateInfoForSymbol =>
+                    ({ isBlockScoped: isEitherBlockScoped, firstFileLocations: [], secondFileLocations: [] }));
                 if (!isSourcePlainJs) addDuplicateLocations(conflictingSymbolInfo.firstFileLocations, source);
                 if (!isTargetPlainJs) addDuplicateLocations(conflictingSymbolInfo.secondFileLocations, target);
             }
@@ -5063,7 +5070,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     interface ExportCollisionTracker {
         specifierText: string;
-        exportsWithDuplicate: ExportDeclaration[];
+        exportsWithDuplicate?: ExportDeclaration[];
     }
 
     type ExportCollisionTrackerTable = UnderscoreEscapedMap<ExportCollisionTracker>;
@@ -5083,7 +5090,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (lookupTable && exportNode) {
                     lookupTable.set(id, {
                         specifierText: getTextOfNode(exportNode.moduleSpecifier!)
-                    } as ExportCollisionTracker);
+                    });
                 }
             }
             else if (lookupTable && exportNode && targetSymbol && resolveSymbol(targetSymbol) !== resolveSymbol(sourceSymbol)) {
@@ -7691,10 +7698,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isSingleOrDoubleQuote(firstChar) && some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
                     return factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context));
                 }
-                const canUsePropertyAccess = firstChar === CharacterCodes.hash ?
-                    symbolName.length > 1 && isIdentifierStart(symbolName.charCodeAt(1), languageVersion) :
-                    isIdentifierStart(firstChar, languageVersion);
-                if (index === 0 || canUsePropertyAccess) {
+                if (index === 0 || canUsePropertyAccess(symbolName, languageVersion)) {
                     const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
                     identifier.symbol = symbol;
 
@@ -14898,7 +14902,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     const resolved = resolveAlias(aliasSymbol);
                     if (resolved && resolved.flags & SymbolFlags.TypeAlias) {
                         newAliasSymbol = resolved;
-                        aliasTypeArguments = typeArgumentsFromTypeReferenceNode(node);
+                        aliasTypeArguments = typeArgumentsFromTypeReferenceNode(node) || (typeParameters ? [] : undefined);
                     }
                 }
             }
@@ -23533,35 +23537,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @param text a valid bigint string excluding a trailing `n`, but including a possible prefix `-`. Use `isValidBigIntString(text, roundTripOnly)` before calling this function.
      */
     function parseBigIntLiteralType(text: string) {
-        const negative = text.startsWith("-");
-        const base10Value = parsePseudoBigInt(`${negative ? text.slice(1) : text}n`);
-        return getBigIntLiteralType({ negative, base10Value });
-    }
-
-    /**
-     * Tests whether the provided string can be parsed as a bigint.
-     * @param s The string to test.
-     * @param roundTripOnly Indicates the resulting bigint matches the input when converted back to a string.
-     */
-    function isValidBigIntString(s: string, roundTripOnly: boolean): boolean {
-        if (s === "") return false;
-        const scanner = createScanner(ScriptTarget.ESNext, /*skipTrivia*/ false);
-        let success = true;
-        scanner.setOnError(() => success = false);
-        scanner.setText(s + "n");
-        let result = scanner.scan();
-        const negative = result === SyntaxKind.MinusToken;
-        if (negative) {
-            result = scanner.scan();
-        }
-        const flags = scanner.getTokenFlags();
-        // validate that
-        // * scanning proceeded without error
-        // * a bigint can be scanned, and that when it is scanned, it is
-        // * the full length of the input string (so the scanner is one character beyond the augmented input length)
-        // * it does not contain a numeric seperator (the `BigInt` constructor does not accept a numeric seperator in its input)
-        return success && result === SyntaxKind.BigIntLiteral && scanner.getTextPos() === (s.length + 1) && !(flags & TokenFlags.ContainsSeparator)
-            && (!roundTripOnly || s === pseudoBigIntToString({ negative, base10Value: parsePseudoBigInt(scanner.getTokenValue()) }));
+        return getBigIntLiteralType(parseValidBigInt(text));
     }
 
     function isMemberOfStringMapping(source: Type, target: Type): boolean {
@@ -26514,12 +26490,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const target = getReferenceCandidate(typeOfExpr.expression);
             if (!isMatchingReference(reference, target)) {
-                const propertyAccess = getDiscriminantPropertyAccess(typeOfExpr.expression, type);
+                if (strictNullChecks && optionalChainContainsReference(target, reference) && assumeTrue === (literal.text !== "undefined")) {
+                    type = getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
+                }
+                const propertyAccess = getDiscriminantPropertyAccess(target, type);
                 if (propertyAccess) {
                     return narrowTypeByDiscriminant(type, propertyAccess, t => narrowTypeByLiteralExpression(t, literal, assumeTrue));
-                }
-                if (strictNullChecks && optionalChainContainsReference(target, reference) && assumeTrue === (literal.text !== "undefined")) {
-                    return getAdjustedTypeWithFacts(type, TypeFacts.NEUndefinedOrNull);
                 }
                 return type;
             }
@@ -40885,7 +40861,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let hasDuplicateDefaultClause = false;
 
         const expressionType = checkExpression(node.expression);
-        const expressionIsLiteral = isLiteralType(expressionType);
+
         forEach(node.caseBlock.clauses, clause => {
             // Grammar check for duplicate default clauses, skip if we already report duplicate default clause
             if (clause.kind === SyntaxKind.DefaultClause && !hasDuplicateDefaultClause) {
@@ -40911,16 +40887,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // TypeScript 1.0 spec (April 2014): 5.9
                     // In a 'switch' statement, each 'case' expression must be of a type that is comparable
                     // to or from the type of the 'switch' expression.
-                    let caseType = checkExpression(clause.expression);
-                    const caseIsLiteral = isLiteralType(caseType);
-                    let comparedExpressionType = expressionType;
-                    if (!caseIsLiteral || !expressionIsLiteral) {
-                        caseType = caseIsLiteral ? getBaseTypeOfLiteralType(caseType) : caseType;
-                        comparedExpressionType = getBaseTypeOfLiteralType(expressionType);
-                    }
-                    if (!isTypeEqualityComparableTo(comparedExpressionType, caseType)) {
+                    const caseType = checkExpression(clause.expression);
+
+                    if (!isTypeEqualityComparableTo(expressionType, caseType)) {
                         // expressionType is not comparable to caseType, try the reversed check and report errors if it fails
-                        checkTypeComparableTo(caseType, comparedExpressionType, clause.expression, /*headMessage*/ undefined);
+                        checkTypeComparableTo(caseType, expressionType, clause.expression, /*headMessage*/ undefined);
                     }
                 };
             }
@@ -44927,15 +44898,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // this variable and functions that use it are deliberately moved here from the outer scope
         // to avoid scope pollution
         const resolvedTypeReferenceDirectives = host.getResolvedTypeReferenceDirectives();
-        let fileToDirective: Map<string, [specifier: string, mode: ResolutionMode | undefined]>;
+        let fileToDirective: Map<string, [specifier: string, mode: ResolutionMode]>;
         if (resolvedTypeReferenceDirectives) {
             // populate reverse mapping: file path -> type reference directive that was resolved to this file
-            fileToDirective = new Map<string, [specifier: string, mode: ResolutionMode | undefined]>();
-            resolvedTypeReferenceDirectives.forEach((resolvedDirective, key, mode) => {
-                if (!resolvedDirective || !resolvedDirective.resolvedFileName) {
+            fileToDirective = new Map<string, [specifier: string, mode: ResolutionMode]>();
+            resolvedTypeReferenceDirectives.forEach(({ resolvedTypeReferenceDirective }, key, mode) => {
+                if (!resolvedTypeReferenceDirective?.resolvedFileName) {
                     return;
                 }
-                const file = host.getSourceFile(resolvedDirective.resolvedFileName);
+                const file = host.getSourceFile(resolvedTypeReferenceDirective.resolvedFileName);
                 if (file) {
                     // Add the transitive closure of path references loaded by this file (as long as they are not)
                     // part of an existing type reference.
@@ -45062,7 +45033,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // defined here to avoid outer scope pollution
-        function getTypeReferenceDirectivesForEntityName(node: EntityNameOrEntityNameExpression): [specifier: string, mode: ResolutionMode | undefined][] | undefined {
+        function getTypeReferenceDirectivesForEntityName(node: EntityNameOrEntityNameExpression): [specifier: string, mode: ResolutionMode][] | undefined {
             // program does not have any files with type reference directives - bail out
             if (!fileToDirective) {
                 return undefined;
@@ -45087,13 +45058,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // defined here to avoid outer scope pollution
-        function getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: ResolutionMode | undefined][] | undefined {
+        function getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: ResolutionMode][] | undefined {
             // program does not have any files with type reference directives - bail out
             if (!fileToDirective || !isSymbolFromTypeDeclarationFile(symbol)) {
                 return undefined;
             }
             // check what declarations in the symbol can contribute to the target meaning
-            let typeReferenceDirectives: [specifier: string, mode: ResolutionMode | undefined][] | undefined;
+            let typeReferenceDirectives: [specifier: string, mode: ResolutionMode][] | undefined;
             for (const decl of symbol.declarations!) {
                 // check meaning of the local symbol to see if declaration needs to be analyzed further
                 if (decl.symbol && decl.symbol.flags & meaning!) {
@@ -45144,7 +45115,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return false;
         }
 
-        function addReferencedFilesToTypeDirective(file: SourceFile, key: string, mode: ResolutionMode | undefined) {
+        function addReferencedFilesToTypeDirective(file: SourceFile, key: string, mode: ResolutionMode) {
             if (fileToDirective.has(file.path)) return;
             fileToDirective.set(file.path, [key, mode]);
             for (const { fileName, resolutionMode } of file.referencedFiles) {

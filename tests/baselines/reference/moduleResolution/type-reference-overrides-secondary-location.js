@@ -17,7 +17,5 @@ Resolution:: {
   "failedLookupLocations": [
     "/root/src/types/lib.d.ts",
     "/root/src/types/lib/package.json"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }

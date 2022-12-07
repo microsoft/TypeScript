@@ -21,8 +21,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/root/src/libs/guid/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 //// [/root/src/app.ts]
@@ -48,6 +47,5 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/root/src/libs/guid/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }

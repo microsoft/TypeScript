@@ -50,10 +50,10 @@ describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
             ));
             return sys;
         },
-        changes: [
+        edits: [
             {
                 caption: "Fix error",
-                change: sys => sys.writeFile(coreFiles[0].path, coreFiles[0].content),
+                edit: sys => sys.writeFile(coreFiles[0].path, coreFiles[0].content),
                 timeouts: sys => {
                     sys.checkTimeoutQueueLengthAndRun(1); // build core
                     sys.checkTimeoutQueueLengthAndRun(1); // build animals, zoo and solution
@@ -73,10 +73,10 @@ describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
 ${coreFiles[1].content}`);
             return sys;
         },
-        changes: [
+        edits: [
             {
                 caption: "Prepend a line",
-                change: sys => sys.writeFile(coreFiles[1].path, `
+                edit: sys => sys.writeFile(coreFiles[1].path, `
 import * as A from '../animals';
 ${coreFiles[1].content}`),
                 // build core
