@@ -60,10 +60,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             libFile
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["--project", "./packages/pkg1/tsconfig.json", "-w", "--traceResolution"],
-        changes: [
+        edits: [
             {
                 caption: "reports import errors after change to package file",
-                change: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `index.js`, `other.js`),
+                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `index.js`, `other.js`),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // invalidates failed lookups
                     sys.runQueuedTimeoutCallbacks(); // actual update
@@ -71,7 +71,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             },
             {
                 caption: "removes those errors when a package file is changed back",
-                change: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `other.js`, `index.js`),
+                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `other.js`, `index.js`),
                 timeouts: sys => {
                     sys.runQueuedTimeoutCallbacks(); // invalidates failed lookups
                     sys.runQueuedTimeoutCallbacks(); // actual update
@@ -125,9 +125,9 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             libFile
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
-        changes: [{
+        edits: [{
             caption: "Add import to index2",
-            change: sys => sys.prependFile(`/user/username/projects/myproject/index2.ts`, `import * as me from "./index.js";`),
+            edit: sys => sys.prependFile(`/user/username/projects/myproject/index2.ts`, `import * as me from "./index.js";`),
             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
         }]
     });
@@ -172,10 +172,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             subScenario: "package json file is edited",
             commandLineArgs: ["--w", "--p", "src", "--extendedDiagnostics", "-traceResolution", "--explainFiles"],
             sys: () => getSys(JSON.stringify({ name: "app", version: "1.0.0" })),
-            changes: [
+            edits: [
                 {
                     caption: "Modify package json file to add type module",
-                    change: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, JSON.stringify({
+                    edit: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, JSON.stringify({
                         name: "app", version: "1.0.0", type: "module",
                     })),
                     timeouts: host => {
@@ -185,7 +185,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Modify package.json file to remove type module",
-                    change: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
+                    edit: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -193,7 +193,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Delete package.json",
-                    change: sys => sys.deleteFile(`/user/username/projects/myproject/package.json`),
+                    edit: sys => sys.deleteFile(`/user/username/projects/myproject/package.json`),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -201,7 +201,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Modify package json file to add type module",
-                    change: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, JSON.stringify({
+                    edit: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, JSON.stringify({
                         name: "app", version: "1.0.0", type: "module",
                     })),
                     timeouts: host => {
@@ -211,7 +211,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Delete package.json",
-                    change: sys => sys.deleteFile(`/user/username/projects/myproject/package.json`),
+                    edit: sys => sys.deleteFile(`/user/username/projects/myproject/package.json`),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -227,10 +227,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             sys: () => getSys(JSON.stringify({
                 name: "app", version: "1.0.0", type: "module",
             })),
-            changes: [
+            edits: [
                 {
                     caption: "Modify package.json file to remove type module",
-                    change: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
+                    edit: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -238,7 +238,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Modify package json file to add type module",
-                    change: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, JSON.stringify({
+                    edit: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, JSON.stringify({
                         name: "app", version: "1.0.0", type: "module",
                     })),
                     timeouts: host => {
@@ -248,7 +248,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Delete package.json",
-                    change: sys => sys.deleteFile(`/user/username/projects/myproject/package.json`),
+                    edit: sys => sys.deleteFile(`/user/username/projects/myproject/package.json`),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -256,7 +256,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Modify package json file to without type module",
-                    change: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
+                    edit: sys => sys.writeFile(`/user/username/projects/myproject/package.json`, JSON.stringify({ name: "app", version: "1.0.0" })),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -264,7 +264,7 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
                 },
                 {
                     caption: "Delete package.json",
-                    change: sys => sys.deleteFile(`/user/username/projects/myproject/package.json`),
+                    edit: sys => sys.deleteFile(`/user/username/projects/myproject/package.json`),
                     timeouts: host => {
                         host.runQueuedTimeoutCallbacks(); // Failed lookup updates
                         host.runQueuedTimeoutCallbacks(); // Actual update
@@ -335,10 +335,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             libFile
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
-        changes: [
+        edits: [
             {
                 caption: "modify aFile by adding import",
-                change: sys => sys.appendFile(`/user/username/projects/myproject/a.ts`, `import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" }`),
+                edit: sys => sys.appendFile(`/user/username/projects/myproject/a.ts`, `import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" }`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
@@ -424,10 +424,10 @@ describe("unittests:: tsc-watch:: moduleResolution", () => {
             libFile
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-w", "--traceResolution"],
-        changes: [
+        edits: [
             {
                 caption: "modify aFile by adding import",
-                change: sys => sys.prependFile(`/user/username/projects/myproject/a.ts`, `/// <reference types="pkg" resolution-mode="import"/>\n`),
+                edit: sys => sys.prependFile(`/user/username/projects/myproject/a.ts`, `/// <reference types="pkg" resolution-mode="import"/>\n`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]

@@ -11,7 +11,7 @@ import {
     CommandLineProgram,
 } from "../tsc/helpers";
 import {
-    applyChange,
+    applyEdit,
     createBaseline,
     watchBaseline,
 } from "../tscWatch/helpers";
@@ -87,7 +87,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
 
             // Cancel on first semantic operation
             // Change
-            oldSnap = applyChange(
+            oldSnap = applyEdit(
                 sys,
                 baseline,
                 sys => sys.appendFile(cFile.path, "export function foo() {}"),
@@ -125,7 +125,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
             Harness.Baseline.runBaseline(`tsc/cancellationToken/${scenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
 
             function noChange(caption: string) {
-                oldSnap = applyChange(sys, baseline, ts.noop, caption);
+                oldSnap = applyEdit(sys, baseline, ts.noop, caption);
             }
 
             function updatePrograms() {
