@@ -21,7 +21,7 @@ describe("unittests:: tsc-watch:: console clearing", () => {
 
     const makeChangeToFile: TscWatchCompileChange[] = [{
         caption: "Comment added to file f",
-        change: sys => sys.modifyFile(file.path, "//"),
+        edit: sys => sys.modifyFile(file.path, "//"),
         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
     }];
 

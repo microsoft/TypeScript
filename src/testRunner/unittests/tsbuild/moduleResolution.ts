@@ -8,7 +8,6 @@ import {
     loadProjectFromFiles,
     noChangeOnlyRuns,
     verifyTsc,
-    verifyTscWithEdits,
 } from "../tsc/helpers";
 import { verifyTscWatch } from "../tscWatch/helpers";
 
@@ -99,7 +98,7 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
 });
 
 describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs between projects for shared file", () => {
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "moduleResolution",
         subScenario: "impliedNodeFormat differs between projects for shared file",
         fs: () => loadProjectFromFiles({

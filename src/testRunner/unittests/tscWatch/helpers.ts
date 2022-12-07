@@ -32,7 +32,7 @@ export const commonFile2: File = {
 export type WatchOrSolution<T extends ts.BuilderProgram> = void | ts.SolutionBuilder<T> | ts.WatchOfConfigFile<T> | ts.WatchOfFilesAndCompilerOptions<T>;
 export interface TscWatchCompileChange<T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram> {
     caption: string;
-    change: (sys: TestServerHostTrackingWrittenFiles) => void;
+    edit: (sys: TestServerHostTrackingWrittenFiles) => void;
     timeouts: (
         sys: TestServerHostTrackingWrittenFiles,
         programs: readonly CommandLineProgram[],
@@ -55,7 +55,7 @@ export interface TscWatchCompile extends TscWatchCompileBase {
 
 export const noopChange: TscWatchCompileChange = {
     caption: "No change",
-    change: ts.noop,
+    edit: ts.noop,
     timeouts: sys => sys.checkTimeoutQueueLength(0),
 };
 
@@ -167,10 +167,10 @@ function updateWatchHostForBaseline<T extends ts.BuilderProgram>(host: ts.WatchC
     return host;
 }
 
-export function applyChange(sys: BaselineBase["sys"], baseline: BaselineBase["baseline"], change: TscWatchCompileChange["change"], caption?: TscWatchCompileChange["caption"]) {
+export function applyEdit(sys: BaselineBase["sys"], baseline: BaselineBase["baseline"], edit: TscWatchCompileChange["edit"], caption?: TscWatchCompileChange["caption"]) {
     const oldSnap = sys.snap();
     baseline.push(`Change::${caption ? " " + caption : ""}`, "");
-    change(sys);
+    edit(sys);
     baseline.push("Input::");
     sys.diff(baseline, oldSnap);
     return sys.snap();
@@ -199,8 +199,8 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
     });
 
     if (edits) {
-        for (const { caption, change, timeouts } of edits) {
-            oldSnap = applyChange(sys, baseline, change, caption);
+        for (const { caption, edit, timeouts } of edits) {
+            oldSnap = applyEdit(sys, baseline, edit, caption);
             timeouts(sys, programs, watchOrSolution);
             programs = watchBaseline({
                 baseline,

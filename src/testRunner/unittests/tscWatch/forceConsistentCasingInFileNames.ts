@@ -41,7 +41,7 @@ describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
         changes: [
             {
                 caption: "Change module name from logger to Logger",
-                change: sys => sys.writeFile(anotherFile.path, anotherFile.content.replace("./logger", "./Logger")),
+                edit: sys => sys.writeFile(anotherFile.path, anotherFile.content.replace("./logger", "./Logger")),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
@@ -52,7 +52,7 @@ describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
         changes: [
             {
                 caption: "Change name of file from logger to Logger",
-                change: sys => sys.renameFile(loggerFile.path, `/user/username/projects/myproject/Logger.ts`),
+                edit: sys => sys.renameFile(loggerFile.path, `/user/username/projects/myproject/Logger.ts`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
@@ -84,7 +84,7 @@ describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
         edits: [
             {
                 caption: "Prepend a line to moduleA",
-                change: sys => sys.prependFile(`/user/username/projects/myproject/moduleA.ts`, `// some comment
+                edit: sys => sys.prependFile(`/user/username/projects/myproject/moduleA.ts`, `// some comment
                     `),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
@@ -161,7 +161,7 @@ a;b;
             edits: [
                 {
                     caption: "Prepend a line to moduleA",
-                    change: sys => sys.prependFile(`${windowsStyleRoot}/${projectRootRelative}/a.ts`, `// some comment
+                    edit: sys => sys.prependFile(`${windowsStyleRoot}/${projectRootRelative}/a.ts`, `// some comment
                         `),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 }
@@ -208,7 +208,7 @@ a;b;
             edits: [
                 {
                     caption: "Prepend a line to moduleA",
-                    change: sys => sys.prependFile(diskPath, `// some comment
+                    edit: sys => sys.prependFile(diskPath, `// some comment
                         `),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 }
@@ -259,7 +259,7 @@ a;b;
             edits: [
                 {
                     caption: "Prepend a line to moduleA",
-                    change: sys => sys.prependFile(`${diskPath}/a.ts`, `// some comment
+                    edit: sys => sys.prependFile(`${diskPath}/a.ts`, `// some comment
                         `),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 }

@@ -50,7 +50,7 @@ describe("unittests:: tsc-watch:: nodeNextWatch:: emit when module emit is speci
         edits: [
             {
                 caption: "Modify typescript file",
-                change: sys => sys.modifyFile(
+                edit: sys => sys.modifyFile(
                     "/project/src/index.ts",
                     Utils.dedent`
                             import * as Thing from "thing";

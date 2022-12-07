@@ -109,7 +109,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
         edits: [
             {
                 caption: "Create commonFile2",
-                change: sys => sys.writeFile(commonFile2.path, commonFile2.content),
+                edit: sys => sys.writeFile(commonFile2.path, commonFile2.content),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
@@ -144,17 +144,17 @@ describe("unittests:: tsc-watch:: program updates", () => {
         edits: [
             {
                 caption: "change file to ensure signatures are updated",
-                change: sys => sys.appendFile(commonFile2.path, ";let xy = 10;"),
+                edit: sys => sys.appendFile(commonFile2.path, ";let xy = 10;"),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "delete file2",
-                change: sys => sys.deleteFile(commonFile2.path),
+                edit: sys => sys.deleteFile(commonFile2.path),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "recreate file2",
-                change: sys => sys.writeFile(commonFile2.path, commonFile2.content),
+                edit: sys => sys.writeFile(commonFile2.path, commonFile2.content),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
@@ -175,7 +175,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
         edits: [
             {
                 caption: "create file2",
-                change: sys => sys.writeFile(commonFile2.path, commonFile2.content),
+                edit: sys => sys.writeFile(commonFile2.path, commonFile2.content),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
@@ -198,12 +198,12 @@ describe("unittests:: tsc-watch:: program updates", () => {
         edits: [
             {
                 caption: "change file to ensure signatures are updated",
-                change: sys => sys.appendFile(commonFile2.path, ";let xy = 10;"),
+                edit: sys => sys.appendFile(commonFile2.path, ";let xy = 10;"),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "Change config",
-                change: sys => sys.writeFile(configFilePath, `{
+                edit: sys => sys.writeFile(configFilePath, `{
                         "compilerOptions": {},
                         "files": ["${commonFile1.path}"]
                     }`),
@@ -229,7 +229,7 @@ describe("unittests:: tsc-watch:: program updates", () => {
         edits: [
             {
                 caption: "Modify config without changing content",
-                change: sys => sys.modifyFile(configFilePath, `{
+                edit: sys => sys.modifyFile(configFilePath, `{
                         "compilerOptions": {},
                         "files": ["${commonFile1.path}", "${commonFile2.path}"]
                     }`),
@@ -258,14 +258,14 @@ describe("unittests:: tsc-watch:: program updates", () => {
         edits: [
             {
                 caption: "Disable  allowUnsusedLabels",
-                change: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
+                edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
                     compilerOptions: { allowUnusedLabels: false }
                 })),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
             },
             {
                 caption: "Enable  allowUnsusedLabels",
-                change: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
+                edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
                     compilerOptions: { allowUnusedLabels: true }
                 })),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
@@ -301,7 +301,7 @@ export class A {
         edits: [
             {
                 caption: "Enable experimentalDecorators",
-                change: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
+                edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
                     compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true }
                 })),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
@@ -309,7 +309,7 @@ export class A {
             },
             {
                 caption: "Enable emitDecoratorMetadata",
-                change: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
+                edit: sys => sys.modifyFile("/tsconfig.json", JSON.stringify({
                     compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true, emitDecoratorMetadata: true }
                 })),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
@@ -368,7 +368,7 @@ export class A {
         edits: [
             {
                 caption: "Change module resolution to classic",
-                change: sys => sys.writeFile(configFile.path, `{
+                edit: sys => sys.writeFile(configFile.path, `{
                         "compilerOptions": {
                             "moduleResolution": "classic"
                         },
@@ -421,7 +421,7 @@ export class A {
             {
                 caption: "Modify f2 to include f3",
                 // now inferred project should inclule file3
-                change: sys => sys.modifyFile("/a/b/f2.ts", `export * from "../c/f3"`),
+                edit: sys => sys.modifyFile("/a/b/f2.ts", `export * from "../c/f3"`),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
@@ -449,7 +449,7 @@ export class A {
         edits: [
             {
                 caption: "Delete f2",
-                change: sys => sys.deleteFile("/a/b/f2.ts"),
+                edit: sys => sys.deleteFile("/a/b/f2.ts"),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
@@ -477,7 +477,7 @@ export class A {
         edits: [
             {
                 caption: "Delete f2",
-                change: sys => sys.deleteFile("/a/b/f2.ts"),
+                edit: sys => sys.deleteFile("/a/b/f2.ts"),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
@@ -522,7 +522,7 @@ export class A {
         edits: [{
             caption: "change `module` to 'none'",
             timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
-            change: sys => {
+            edit: sys => {
                 sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: { module: "none" } }));
             }
         }]
@@ -599,7 +599,7 @@ export class A {
         edits: [
             {
                 caption: "Write f2",
-                change: sys => sys.writeFile("/a/b/f2.ts", "let y = 1"),
+                edit: sys => sys.writeFile("/a/b/f2.ts", "let y = 1"),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
@@ -627,7 +627,7 @@ export class A {
         edits: [
             {
                 caption: "Modify config to make f2 as root too",
-                change: sys => sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })),
+                edit: sys => sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: {}, files: ["f1.ts", "f2.ts"] })),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
@@ -655,12 +655,12 @@ export class A {
         edits: [
             {
                 caption: "Add new file",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/new-file.ts`, "export const z = 1;"),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/new-file.ts`, "export const z = 1;"),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "Import new file",
-                change: sys => sys.prependFile(`/user/username/projects/myproject/f1.ts`, `import { z } from "./new-file";`),
+                edit: sys => sys.prependFile(`/user/username/projects/myproject/f1.ts`, `import { z } from "./new-file";`),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
@@ -684,7 +684,7 @@ export class A {
         edits: [
             {
                 caption: "Write file2",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/Project/file2.ts`, "export const y = 10;"),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/Project/file2.ts`, "export const y = 10;"),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
             }
         ]
@@ -712,7 +712,7 @@ export class A {
         edits: [
             {
                 caption: "Modify config to set outFile option",
-                change: sys => sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] })),
+                edit: sys => sys.writeFile(configFilePath, JSON.stringify({ compilerOptions: { outFile: "out.js" }, files: ["f1.ts", "f2.ts"] })),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
@@ -740,7 +740,7 @@ export class A {
         edits: [
             {
                 caption: "Delete f2",
-                change: sys => sys.deleteFile("/a/b/f2.ts"),
+                edit: sys => sys.deleteFile("/a/b/f2.ts"),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
@@ -764,7 +764,7 @@ export class A {
         edits: [
             {
                 caption: "Delete config file",
-                change: sys => sys.deleteFile(configFilePath),
+                edit: sys => sys.deleteFile(configFilePath),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }
         ]
@@ -825,7 +825,7 @@ declare const eval: any`
         edits: [
             {
                 caption: "Change the lib in config",
-                change: sys => sys.writeFile("/src/tsconfig.json", JSON.stringify(
+                edit: sys => sys.writeFile("/src/tsconfig.json", JSON.stringify(
                     {
                         compilerOptions: {
                             module: "commonjs",
@@ -874,7 +874,7 @@ declare const eval: any`
 
     const changeModuleFileToModuleFile1: TscWatchCompileChange = {
         caption: "Rename moduleFile to moduleFile1",
-        change: sys => {
+        edit: sys => {
             sys.renameFile("/a/b/moduleFile.ts", "/a/b/moduleFile1.ts");
             sys.deleteFile("/a/b/moduleFile.js");
         },
@@ -882,7 +882,7 @@ declare const eval: any`
     };
     const changeModuleFile1ToModuleFile: TscWatchCompileChange = {
         caption: "Rename moduleFile1 back to moduleFile",
-        change: sys => sys.renameFile("/a/b/moduleFile1.ts", "/a/b/moduleFile.ts"),
+        edit: sys => sys.renameFile("/a/b/moduleFile1.ts", "/a/b/moduleFile.ts"),
         timeouts: runQueuedTimeoutCallbacksTwice,
     };
 
@@ -966,7 +966,7 @@ declare const eval: any`
         edits: [
             {
                 caption: "Create module file",
-                change: sys => sys.writeFile("/a/b/moduleFile.ts", "export function bar() { }"),
+                edit: sys => sys.writeFile("/a/b/moduleFile.ts", "export function bar() { }"),
                 timeouts: runQueuedTimeoutCallbacksTwice,
             }
         ]
@@ -1027,7 +1027,7 @@ declare const eval: any`
         edits: [
             {
                 caption: "change config file to add error",
-                change: sys => sys.writeFile(configFilePath, `{
+                edit: sys => sys.writeFile(configFilePath, `{
                         "compilerOptions": {
                             "haha": 123
                         }
@@ -1036,7 +1036,7 @@ declare const eval: any`
             },
             {
                 caption: "change config file to remove error",
-                change: sys => sys.writeFile(configFilePath, `{
+                edit: sys => sys.writeFile(configFilePath, `{
                         "compilerOptions": {
                         }
                     }`),
@@ -1144,7 +1144,7 @@ declare const eval: any`
         edits: [
             {
                 caption: "Remove the comment from config file",
-                change: sys => sys.writeFile(configFilePath, `
+                edit: sys => sys.writeFile(configFilePath, `
 {
     "compilerOptions": {
         "inlineSourceMap": true,
@@ -1183,7 +1183,7 @@ declare const eval: any`
                     noopChange,
                     {
                         caption: "Add new file",
-                        change: sys => sys.writeFile(`/user/username/projects/myproject/src/file3.ts`, `export const y = 10;`),
+                        edit: sys => sys.writeFile(`/user/username/projects/myproject/src/file3.ts`, `export const y = 10;`),
                         timeouts: sys => sys.checkTimeoutQueueLengthAndRun(2), // To update program and failed lookups
                     },
                     noopChange,
@@ -1241,7 +1241,7 @@ function two() {
         edits: [
             {
                 caption: "Change file to module",
-                change: sys => sys.writeFile("/a/b/file.ts", `function one() {}
+                edit: sys => sys.writeFile("/a/b/file.ts", `function one() {}
 export function two() {
     return function three() {
         one();
@@ -1272,7 +1272,7 @@ export function two() {
         edits: [
             {
                 caption: "Rename file1 to file2",
-                change: sys => sys.renameFile("/home/username/project/src/file1.ts", "/home/username/project/src/file2.ts"),
+                edit: sys => sys.renameFile("/home/username/project/src/file1.ts", "/home/username/project/src/file2.ts"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
@@ -1281,7 +1281,7 @@ export function two() {
     function changeParameterTypeOfBFile(parameterName: string, toType: string): TscWatchCompileChange {
         return {
             caption: `Changed ${parameterName} type to ${toType}`,
-            change: sys => sys.replaceFileText(`/user/username/projects/myproject/b.ts`, new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`),
+            edit: sys => sys.replaceFileText(`/user/username/projects/myproject/b.ts`, new RegExp(`${parameterName}\: [a-z]*`), `${parameterName}: ${toType}`),
             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
         };
     }
@@ -1342,17 +1342,17 @@ foo().hello`
         edits: [
             {
                 caption: "Enable strict null checks",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { strictNullChecks: true } })),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { strictNullChecks: true } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Set always strict false",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { strict: true, alwaysStrict: false } })), // Avoid changing 'alwaysStrict' or must re-bind
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { strict: true, alwaysStrict: false } })), // Avoid changing 'alwaysStrict' or must re-bind
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Disable strict",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: {} })),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: {} })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
@@ -1385,7 +1385,7 @@ v === 'foo';`
         edits: [
             {
                 caption: "Enable noErrorTruncation",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { noErrorTruncation: true } })),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { noErrorTruncation: true } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
@@ -1410,7 +1410,7 @@ class D extends C { prop = 1; }`
         edits: [
             {
                 caption: "Enable useDefineForClassFields",
-                change: sys => sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { target: "es6", useDefineForClassFields: true } })),
+                edit: sys => sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { target: "es6", useDefineForClassFields: true } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
@@ -1439,17 +1439,17 @@ export function f(p: C) { return p; }`
         edits: [
             {
                 caption: 'Set to "remove"',
-                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "remove" } })),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "remove" } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: 'Set to "error"',
-                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "error" } })),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "error" } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: 'Set to "preserve"',
-                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "preserve" } })),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { importsNotUsedAsValues: "preserve" } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
@@ -1478,7 +1478,7 @@ export function f(p: C) { return p; }`
         edits: [
             {
                 caption: "Enable forceConsistentCasingInFileNames",
-                change: sys => sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: true } })),
+                edit: sys => sys.writeFile(`/tsconfig.json`, JSON.stringify({ compilerOptions: { forceConsistentCasingInFileNames: true } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
@@ -1506,7 +1506,7 @@ export function f(p: C) { return p; }`
         edits: [
             {
                 caption: "Enable resolveJsonModule",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { moduleResolution: "node", resolveJsonModule: true } })),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({ compilerOptions: { moduleResolution: "node", resolveJsonModule: true } })),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
@@ -1533,14 +1533,14 @@ export function f(p: C) { return p; }`
             {
                 caption: "Create b.ts with same content",
                 // Create bts with same file contents
-                change: sys => sys.writeFile(`/user/username/projects/myproject/b.ts`, `declare module 'a' {
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/b.ts`, `declare module 'a' {
   type foo = number;
 }`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "Delete b.ts",
-                change: sys => sys.deleteFile(`/user/username/projects/myproject/b.ts`),
+                edit: sys => sys.deleteFile(`/user/username/projects/myproject/b.ts`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
@@ -1570,12 +1570,12 @@ interface Document {
                     edits: [
                         {
                             caption: "Remove document declaration from file",
-                            change: sys => sys.writeFile(aFile.path, aFile.content.replace(fieldWithoutReadonly, "var x: string;")),
+                            edit: sys => sys.writeFile(aFile.path, aFile.content.replace(fieldWithoutReadonly, "var x: string;")),
                             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                         },
                         {
                             caption: "Rever the file to contain document declaration",
-                            change: sys => sys.writeFile(aFile.path, aFile.content),
+                            edit: sys => sys.writeFile(aFile.path, aFile.content),
                             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                         },
                     ]
@@ -1613,7 +1613,7 @@ var y: number;
         const configFileContent = JSON.stringify({ compilerOptions });
         return {
             caption: `Changing config to ${configFileContent}`,
-            change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, configFileContent),
+            edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, configFileContent),
             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
         };
     }
@@ -1686,7 +1686,7 @@ const b: string = a;`
         edits: [
             {
                 caption: "Change shape of a",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/a.ts`, `export const a: number = 1`),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/a.ts`, `export const a: number = 1`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
@@ -1719,7 +1719,7 @@ const b: string = a;`
         edits: [
             {
                 caption: "Make changes to file a",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/a.ts`, `
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/a.ts`, `
 
 import { x } from "../b";`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
@@ -1749,7 +1749,7 @@ import { x } from "../b";`),
         edits: [
             {
                 caption: "Update 'jsx' to 'react'",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, '{ "compilerOptions": { "jsx": "react" } }'),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, '{ "compilerOptions": { "jsx": "react" } }'),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]
@@ -1788,7 +1788,7 @@ import { x } from "../b";`),
         edits: [
             {
                 caption: "Change config to extend another config",
-                change: sys => sys.modifyFile(configFilePath, JSON.stringify({
+                edit: sys => sys.modifyFile(configFilePath, JSON.stringify({
                     extends: "./second.tsconfig.json",
                     compilerOptions: {},
                     files: [commonFile1.path, commonFile2.path]
@@ -1797,7 +1797,7 @@ import { x } from "../b";`),
             },
             {
                 caption: "Change first extended config",
-                change: sys => sys.modifyFile("/a/b/first.tsconfig.json", JSON.stringify({
+                edit: sys => sys.modifyFile("/a/b/first.tsconfig.json", JSON.stringify({
                     compilerOptions: {
                         strict: false,
                     }
@@ -1806,7 +1806,7 @@ import { x } from "../b";`),
             },
             {
                 caption: "Change second extended config",
-                change: sys => sys.modifyFile("/a/b/second.tsconfig.json", JSON.stringify({
+                edit: sys => sys.modifyFile("/a/b/second.tsconfig.json", JSON.stringify({
                     extends: "./first.tsconfig.json",
                     compilerOptions: {
                         strictNullChecks: true,
@@ -1816,7 +1816,7 @@ import { x } from "../b";`),
             },
             {
                 caption: "Change config to stop extending another config",
-                change: sys => sys.modifyFile(configFilePath, JSON.stringify({
+                edit: sys => sys.modifyFile(configFilePath, JSON.stringify({
                     compilerOptions: {},
                     files: [commonFile1.path, commonFile2.path]
                 })),
@@ -1857,7 +1857,7 @@ import { x } from "../b";`),
         edits: [
             {
                 caption: "Add module3 to folder2",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/client/linktofolder2/module3.ts`, `import * as M from "folder1/module1";`),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/client/linktofolder2/module3.ts`, `import * as M from "folder1/module1";`),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
         ]
@@ -1908,27 +1908,27 @@ import { x } from "../b";`),
         edits: [
             {
                 caption: "Add class3 to project1",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.ts`, `class class3 {}`),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.ts`, `class class3 {}`),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "Add output of class3",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "Add excluded file to project1",
-                change: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
+                edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
                 timeouts: sys => sys.checkTimeoutQueueLength(0),
             },
             {
                 caption: "Delete output of class3",
-                change: sys => sys.deleteFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`),
+                edit: sys => sys.deleteFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
             {
                 caption: "Add output of class3",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
         ]
@@ -1952,7 +1952,7 @@ import { x } from "../b";`),
         edits: [
             {
                 caption: "Create foo in project root",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/foo`, ``),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/foo`, ``),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             },
         ]
