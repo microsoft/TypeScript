@@ -33609,6 +33609,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkExpressionWithTypeArguments(node: ExpressionWithTypeArguments | TypeQueryNode) {
         checkGrammarExpressionWithTypeArguments(node);
+        forEach(node.typeArguments, checkSourceElement);
         const exprType = node.kind === SyntaxKind.ExpressionWithTypeArguments ? checkExpression(node.expression) :
             isThisIdentifier(node.exprName) ? checkThisExpression(node.exprName) :
             checkExpression(node.exprName);
