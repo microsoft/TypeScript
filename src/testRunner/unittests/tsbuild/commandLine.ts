@@ -4,7 +4,6 @@ import {
     compilerOptionsToConfigJson,
     loadProjectFromFiles,
     noChangeRun,
-    noChangeWithExportsDiscrepancyRun,
     replaceText,
     TestTscEdit,
     verifyTsc,
@@ -40,12 +39,6 @@ describe("unittests:: tsbuild:: commandLine::", () => {
                 `Incremental build info has js section from old build`
             ];
             return edit;
-        }
-        function withOptionChangeAndExportExplanation(caption: string, ...options: readonly string[]): TestTscEdit {
-            return {
-                ...withOptionChange(caption, ...options),
-                discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
-            };
         }
         function nochangeWithIncrementalDeclarationFromBeforeExplaination(): TestTscEdit {
             return {
@@ -129,8 +122,8 @@ describe("unittests:: tsbuild:: commandLine::", () => {
             fs: () => fs({ incremental: true }),
             commandLineArgs: ["--b", "/src/project", "--verbose"],
             edits: [
-                withOptionChangeAndExportExplanation("with sourceMap", "--sourceMap"),
-                withOptionChangeAndExportExplanation("should re-emit only js so they dont contain sourcemap"),
+                withOptionChange("with sourceMap", "--sourceMap"),
+                withOptionChange("should re-emit only js so they dont contain sourcemap"),
                 withOptionChange("with declaration, emit Dts and should not emit js", "--declaration"),
                 withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
                 nochangeWithIncrementalDeclarationFromBeforeExplaination(),

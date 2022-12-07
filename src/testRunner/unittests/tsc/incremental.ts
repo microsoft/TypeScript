@@ -9,7 +9,6 @@ import {
     loadProjectFromFiles,
     noChangeOnlyRuns,
     noChangeRun,
-    noChangeWithExportsDiscrepancyRun,
     prependText,
     replaceText,
     TestTscEdit,
@@ -122,7 +121,7 @@ describe("unittests:: tsc:: incremental::", () => {
                 commandLineArgs: ["--incremental", "-p", "src"],
                 modifyFs,
                 edits: [
-                    noChangeWithExportsDiscrepancyRun,
+                    noChangeRun,
                     {
                         caption: "incremental-declaration-doesnt-change",
                         edit: fixModifyFs
@@ -156,28 +155,21 @@ const a: string = 10;`, "utf-8"),
 
         function verifyNoEmitChanges(compilerOptions: ts.CompilerOptions) {
             const discrepancyExplanation = () => [
-                ...noChangeWithExportsDiscrepancyRun.discrepancyExplanation!(),
                 "Clean build will not have latestChangedDtsFile as there was no emit and emitSignatures as undefined for files",
                 "Incremental will store the past latestChangedDtsFile and emitSignatures",
             ];
-            const discrepancyIfNoDtsEmit = ts.getEmitDeclarations(compilerOptions) ?
-                undefined :
-                noChangeWithExportsDiscrepancyRun.discrepancyExplanation;
             const noChangeRunWithNoEmit: TestTscEdit = {
                 ...noChangeRun,
                 caption: "No Change run with noEmit",
                 commandLineArgs: ["--p", "src/project", "--noEmit"],
                 discrepancyExplanation: compilerOptions.composite ?
                     discrepancyExplanation :
-                    !compilerOptions.declaration ?
-                        noChangeWithExportsDiscrepancyRun.discrepancyExplanation :
-                        undefined,
+                    undefined,
             };
             const noChangeRunWithEmit: TestTscEdit = {
                 ...noChangeRun,
                 caption: "No Change run with emit",
                 commandLineArgs: ["--p", "src/project"],
-                discrepancyExplanation: discrepancyIfNoDtsEmit,
             };
             let optionsString = "";
             for (const key in compilerOptions) {
@@ -200,14 +192,11 @@ const a: string = 10;`, "utf-8"),
                         edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
                         discrepancyExplanation: compilerOptions.composite ?
                             discrepancyExplanation :
-                            compilerOptions.declaration ?
-                                noChangeWithExportsDiscrepancyRun.discrepancyExplanation :
-                                undefined,
+                            undefined,
                     },
                     {
                         caption: "Fix error and emit",
                         edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
-                        discrepancyExplanation: discrepancyIfNoDtsEmit,
                     },
                     noChangeRunWithEmit,
                     noChangeRunWithNoEmit,
@@ -216,7 +205,6 @@ const a: string = 10;`, "utf-8"),
                     {
                         caption: "Introduce error and emit",
                         edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop", "prop1"),
-                        discrepancyExplanation: discrepancyIfNoDtsEmit,
                     },
                     noChangeRunWithEmit,
                     noChangeRunWithNoEmit,
@@ -228,7 +216,7 @@ const a: string = 10;`, "utf-8"),
                         edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
                         discrepancyExplanation: compilerOptions.composite ?
                             discrepancyExplanation :
-                            noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
+                            undefined,
                     },
                     noChangeRunWithEmit,
                     noChangeRunWithNoEmit,
@@ -254,7 +242,7 @@ const a: string = 10;`, "utf-8"),
                         edit: fs => replaceText(fs, "/src/project/src/class.ts", "prop1", "prop"),
                         discrepancyExplanation: compilerOptions.composite ?
                             discrepancyExplanation :
-                            noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
+                            undefined,
                     },
                     noChangeRunWithEmit,
                 ],
@@ -691,12 +679,6 @@ console.log(a);`,
             ];
             return edit;
         }
-        function withOptionChangeAndExportExplanation(caption: string, ...options: readonly string[]): TestTscEdit {
-            return {
-                ...withOptionChange(caption, ...options),
-                discrepancyExplanation: noChangeWithExportsDiscrepancyRun.discrepancyExplanation,
-            };
-        }
         function nochangeWithIncrementalDeclarationFromBeforeExplaination(): TestTscEdit {
             return {
                 ...noChangeRun,
@@ -793,8 +775,8 @@ console.log(a);`,
             fs: () => fs({ incremental: true }),
             commandLineArgs: ["--p", "/src/project"],
             edits: [
-                withOptionChangeAndExportExplanation("with sourceMap", "--sourceMap"),
-                withOptionChangeAndExportExplanation("should re-emit only js so they dont contain sourcemap"),
+                withOptionChange("with sourceMap", "--sourceMap"),
+                withOptionChange("should re-emit only js so they dont contain sourcemap"),
                 withOptionChange("with declaration, emit Dts and should not emit js", "--declaration"),
                 withOptionChange("with declaration and declarationMap", "--declaration", "--declarationMap"),
                 nochangeWithIncrementalDeclarationFromBeforeExplaination(),
