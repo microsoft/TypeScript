@@ -896,10 +896,13 @@ export interface Node extends ReadonlyTextRange {
     /** @internal */ modifierFlagsCache: ModifierFlags;
     /** @internal */ readonly transformFlags: TransformFlags; // Flags for transforms
     /** @internal */ id?: NodeId;                          // Unique id (used to look up NodeLinks)
-    readonly parent: Node;                                // Parent node (initialized by binding)
+    readonly parent: Node;                                 // Parent node (initialized by binding)
     /** @internal */ original?: Node;                      // The original node if this is an updated node.
-
     /** @internal */ emitNode?: EmitNode;                  // Associated EmitNode (initialized by transforms)
+    // NOTE: `symbol` and `localSymbol` have been moved to `Declaration`
+    //       `locals` and `nextContainer` have been moved to `LocalsContainer`
+    //       `flowNode` has been moved to `FlowContainer`
+    //       see: https://github.com/microsoft/TypeScript/pull/51682
 }
 
 export interface JSDocContainer extends Node {
@@ -5381,7 +5384,7 @@ export interface SymbolWalker {
 
 // This was previously deprecated in our public API, but is still used internally
 /** @internal */
-export interface SymbolWriter extends SymbolTracker {
+export interface SymbolWriter {
     writeKeyword(text: string): void;
     writeOperator(text: string): void;
     writePunctuation(text: string): void;

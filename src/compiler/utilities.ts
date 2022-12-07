@@ -607,10 +607,6 @@ function createSingleLineStringWriter(): EmitTextWriter {
         increaseIndent: noop,
         decreaseIndent: noop,
         clear: () => str = "",
-        trackSymbol: () => false,
-        reportInaccessibleThisError: noop,
-        reportInaccessibleUniqueSymbolError: noop,
-        reportPrivateInBaseOfClassExpression: noop,
     };
 }
 
@@ -5325,10 +5321,6 @@ export function createTextWriter(newLine: string): EmitTextWriter {
         hasTrailingComment: () => hasTrailingComment,
         hasTrailingWhitespace: () => !!output.length && isWhiteSpaceLike(output.charCodeAt(output.length - 1)),
         clear: reset,
-        reportInaccessibleThisError: noop,
-        reportPrivateInBaseOfClassExpression: noop,
-        reportInaccessibleUniqueSymbolError: noop,
-        trackSymbol: () => false,
         writeKeyword: write,
         writeOperator: write,
         writeParameter: write,
