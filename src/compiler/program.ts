@@ -4211,7 +4211,23 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if (options.preserveValueImports && getEmitModuleKind(options) < ModuleKind.ES2015) {
-            createOptionValueDiagnostic("importsNotUsedAsValues", Diagnostics.Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later);
+            createDiagnosticForOptionName(Diagnostics.Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later, "preserveValueImports");
+        }
+
+        if (options.verbatimModuleSyntax) {
+            const moduleKind = getEmitModuleKind(options);
+            if (moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.UMD || moduleKind === ModuleKind.System) {
+                createDiagnosticForOptionName(Diagnostics.Option_verbatimModuleSyntax_cannot_be_used_when_module_is_set_to_UMD_AMD_or_System, "verbatimModuleSyntax");
+            }
+            if (options.isolatedModules) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_is_redundant_and_cannot_be_specified_with_option_1, "isolatedModules", "verbatimModuleSyntax");
+            }
+            if (options.preserveValueImports) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_is_redundant_and_cannot_be_specified_with_option_1, "preserveValueImports", "verbatimModuleSyntax");
+            }
+            if (options.importsNotUsedAsValues) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_is_redundant_and_cannot_be_specified_with_option_1, "importsNotUsedAsValues", "verbatimModuleSyntax");
+            }
         }
 
         // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files

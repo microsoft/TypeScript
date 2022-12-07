@@ -6797,6 +6797,7 @@ export interface CompilerOptions {
     types?: string[];
     /** Paths used to compute primary types search locations */
     typeRoots?: string[];
+    verbatimModuleSyntax?: boolean;
     /** @internal */ version?: boolean;
     /** @internal */ watch?: boolean;
     esModuleInterop?: boolean;

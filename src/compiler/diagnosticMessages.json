@@ -635,7 +635,7 @@
         "category": "Error",
         "code": 1203
     },
-    "Re-exporting a type when the '--isolatedModules' flag is provided requires using 'export type'.": {
+    "Re-exporting a type when '{0}' is enabled requires using 'export type'.": {
         "category": "Error",
         "code": 1205
     },
@@ -646,10 +646,6 @@
     "Decorators cannot be applied to multiple get/set accessors of the same name.": {
         "category": "Error",
         "code": 1207
-    },
-    "'{0}' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.": {
-        "category": "Error",
-        "code": 1208
     },
     "Invalid optional chain from new expression. Did you mean to call '{0}()'?": {
         "category": "Error",
@@ -875,7 +871,7 @@
         "category": "Error",
         "code": 1268
     },
-    "Cannot use 'export import' on a type or type-only namespace when the '--isolatedModules' flag is provided.": {
+    "Cannot use 'export import' on a type or type-only namespace when '{0}' is enabled.": {
         "category": "Error",
         "code": 1269
     },
@@ -906,6 +902,14 @@
     "An 'accessor' property cannot be declared optional.": {
         "category": "Error",
         "code": 1276
+    },
+    "Namespaces are not allowed in global script files when '{0}' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.": {
+        "category": "Error",
+        "code": 1277
+    },
+    "Top-level enums are not allowed in global script files when '{0}' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.": {
+        "category": "Error",
+        "code": 1278
     },
 
     "'with' statements are not allowed in an async function block.": {
@@ -1436,7 +1440,7 @@
         "category": "Error",
         "code": 1446
     },
-    "'{0}' resolves to a type-only declaration and must be re-exported using a type-only re-export when 'isolatedModules' is enabled.": {
+    "'{0}' resolves to a type-only declaration and must be re-exported using a type-only re-export when '{1}' is enabled.": {
         "category": "Error",
         "code": 1448
     },
@@ -1548,6 +1552,14 @@
     "To convert this file to an ECMAScript module, create a local package.json file with `{ \"type\": \"module\" }`.": {
         "category": "Message",
         "code": 1483
+    },
+    "'{0}' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.": {
+        "category": "Error",
+        "code": 1484
+    },
+    "'{0}' resolves to a type-only declaration and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.": {
+        "category": "Error",
+        "code": 1485
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -3215,7 +3227,7 @@
         "category": "Error",
         "code": 2747
     },
-    "Cannot access ambient const enums when the '--isolatedModules' flag is provided.": {
+    "Cannot access ambient const enums when '{0}' is enabled.": {
         "category": "Error",
         "code": 2748
     },
@@ -4201,7 +4213,7 @@
         "category": "Error",
         "code": 5090
     },
-    "Option 'preserveConstEnums' cannot be disabled when 'isolatedModules' is enabled.": {
+    "Option 'preserveConstEnums' cannot be disabled when '{0}' is enabled.": {
         "category": "Error",
         "code": 5091
     },
@@ -4220,6 +4232,14 @@
     "Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.": {
         "category": "Error",
         "code": 5095
+    },
+    "Option '{0}' is redundant and cannot be specified with option '{1}'.": {
+        "category": "Error",
+        "code": 5096
+    },
+    "Option 'verbatimModuleSyntax' cannot be used when 'module' is set to 'UMD', 'AMD', or 'System'.": {
+        "category": "Error",
+        "code": 5097
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -5918,6 +5938,10 @@
     "Default catch clause variables as 'unknown' instead of 'any'.": {
         "category": "Message",
         "code": 6803
+    },
+    "Do not transform or elide any imports or exports not marked as type-only, ensuring they are written in the output file's format based on the 'module' setting.": {
+        "category": "Message",
+        "code": 6804
     },
 
     "one of:": {
