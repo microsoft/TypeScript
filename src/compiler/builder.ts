@@ -286,8 +286,8 @@ function hasSameKeys(map1: ReadonlyCollection<string> | undefined, map2: Readonl
 /**
  * Create the state so that we can iterate on changedFiles/affected files
  */
-function createBuilderProgramState(newProgram: Program, oldState: Readonly<ReusableBuilderProgramState> | undefined, disableUseFileVersionAsSignature: boolean | undefined): BuilderProgramState {
-    const state = BuilderState.create(newProgram, oldState, disableUseFileVersionAsSignature) as BuilderProgramState;
+function createBuilderProgramState(newProgram: Program, oldState: Readonly<ReusableBuilderProgramState> | undefined): BuilderProgramState {
+    const state = BuilderState.create(newProgram, oldState, /*disableUseFileVersionAsSignature*/ false) as BuilderProgramState;
     state.program = newProgram;
     const compilerOptions = newProgram.getCompilerOptions();
     state.compilerOptions = compilerOptions;
@@ -699,7 +699,7 @@ function handleDtsMayChangeOf(
                 sourceFile,
                 cancellationToken,
                 host,
-                !host.disableUseFileVersionAsSignature
+                /*useFileVersionAsSignature*/ true
             );
             // If not dts emit, nothing more to do
             if (getEmitDeclarations(state.compilerOptions)) {
@@ -1312,7 +1312,7 @@ export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, hos
         return oldProgram;
     }
 
-    const state = createBuilderProgramState(newProgram, oldState, host.disableUseFileVersionAsSignature);
+    const state = createBuilderProgramState(newProgram, oldState);
     newProgram.getBuildInfo = bundle => getBuildInfo(state, bundle);
 
     // To ensure that we arent storing any references to old program or new program without state
