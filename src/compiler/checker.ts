@@ -20763,7 +20763,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (variances === emptyArray) {
                     return Ternary.Unknown;
                 }
-                const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances, intersectionState);
+                const params = getSymbolLinks(source.aliasSymbol).typeParameters!;
+                const minParams = getMinTypeArgumentCount(params);
+                const sourceTypes = fillMissingTypeArguments(source.aliasTypeArguments, params, minParams, isInJSFile(source.aliasSymbol.valueDeclaration));
+                const targetTypes = fillMissingTypeArguments(target.aliasTypeArguments, params, minParams, isInJSFile(source.aliasSymbol.valueDeclaration));
+                const varianceResult = relateVariances(sourceTypes, targetTypes, variances, intersectionState);
                 if (varianceResult !== undefined) {
                     return varianceResult;
                 }
@@ -23701,8 +23705,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Simply infer from source type arguments to target type arguments, with defaults applied.
                     const params = getSymbolLinks(source.aliasSymbol).typeParameters!;
                     const minParams = getMinTypeArgumentCount(params);
-                    const sourceTypes = fillMissingTypeArguments(source.aliasTypeArguments, params, minParams, /*isJs*/ false);
-                    const targetTypes = fillMissingTypeArguments(target.aliasTypeArguments, params, minParams, /*isJs*/ false);
+                    const sourceTypes = fillMissingTypeArguments(source.aliasTypeArguments, params, minParams, isInJSFile(source.aliasSymbol.valueDeclaration));
+                    const targetTypes = fillMissingTypeArguments(target.aliasTypeArguments, params, minParams, isInJSFile(source.aliasSymbol.valueDeclaration));
                     inferFromTypeArguments(sourceTypes, targetTypes!, getAliasVariances(source.aliasSymbol));
                 }
                 // And if there weren't any type arguments, there's no reason to run inference as the types must be the same.
