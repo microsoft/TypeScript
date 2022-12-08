@@ -42312,29 +42312,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // The following checks only apply on a non-ambient instantiated module declaration.
             if (symbol.flags & SymbolFlags.ValueModule
                 && !inAmbientContext
-                && symbol.declarations
-                && symbol.declarations.length > 1
-                && isInstantiatedModule(node, shouldPreserveConstEnums(compilerOptions))) {
-                const firstNonAmbientClassOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
-                if (firstNonAmbientClassOrFunc) {
-                    if (getSourceFileOfNode(node) !== getSourceFileOfNode(firstNonAmbientClassOrFunc)) {
-                        error(node.name, Diagnostics.A_namespace_declaration_cannot_be_in_a_different_file_from_a_class_or_function_with_which_it_is_merged);
-                    }
-                    else if (node.pos < firstNonAmbientClassOrFunc.pos) {
-                        error(node.name, Diagnostics.A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged);
-                    }
-                }
-
-                // if the module merges with a class declaration in the same lexical scope,
-                // we need to track this to ensure the correct emit.
-                const mergedClass = getDeclarationOfKind(symbol, SyntaxKind.ClassDeclaration);
-                if (mergedClass &&
-                    inSameLexicalScope(node, mergedClass)) {
-                    getNodeLinks(node).flags |= NodeCheckFlags.LexicalModuleMergesWithClass;
-                }
-
+                && isInstantiatedModule(node, shouldPreserveConstEnums(compilerOptions))
+            ) {
                 if (getIsolatedModules(compilerOptions) && !getSourceFileOfNode(node).externalModuleIndicator) {
+                    // This could be loosened a little if needed. The only problem we are trying to avoid is unqualified
+                    // references to namespace members declared in other files. But use of namespaces is discouraged anyway,
+                    // so for now we will just not allow them in scripts, which is the only place they can merge cross-file.
                     error(node.name, Diagnostics.Namespaces_are_not_allowed_in_global_script_files_when_0_is_enabled_If_this_file_is_not_intended_to_be_a_global_script_set_moduleDetection_to_force_or_add_an_empty_export_statement, isolatedModulesLikeFlagName);
+                }
+                if (symbol.declarations?.length > 1) {
+                    const firstNonAmbientClassOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
+                    if (firstNonAmbientClassOrFunc) {
+                        if (getSourceFileOfNode(node) !== getSourceFileOfNode(firstNonAmbientClassOrFunc)) {
+                            error(node.name, Diagnostics.A_namespace_declaration_cannot_be_in_a_different_file_from_a_class_or_function_with_which_it_is_merged);
+                        }
+                        else if (node.pos < firstNonAmbientClassOrFunc.pos) {
+                            error(node.name, Diagnostics.A_namespace_declaration_cannot_be_located_prior_to_a_class_or_function_with_which_it_is_merged);
+                        }
+                    }
+
+                    // if the module merges with a class declaration in the same lexical scope,
+                    // we need to track this to ensure the correct emit.
+                    const mergedClass = getDeclarationOfKind(symbol, SyntaxKind.ClassDeclaration);
+                    if (mergedClass &&
+                        inSameLexicalScope(node, mergedClass)) {
+                        getNodeLinks(node).flags |= NodeCheckFlags.LexicalModuleMergesWithClass;
+                    }
                 }
             }
 
