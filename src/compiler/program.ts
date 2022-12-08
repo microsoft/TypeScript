@@ -4086,21 +4086,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const languageVersion = getEmitScriptTarget(options);
 
         const firstNonAmbientExternalModuleSourceFile = find(files, f => isExternalModule(f) && !f.isDeclarationFile);
-        if (options.isolatedModules) {
-            if (options.module === ModuleKind.None && languageVersion < ScriptTarget.ES2015) {
+        if (options.isolatedModules || options.verbatimModuleSyntax) {
+            if (options.module === ModuleKind.None && languageVersion < ScriptTarget.ES2015 && options.isolatedModules) {
                 createDiagnosticForOptionName(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher, "isolatedModules", "target");
             }
 
             if (options.preserveConstEnums === false) {
-                createDiagnosticForOptionName(Diagnostics.Option_preserveConstEnums_cannot_be_disabled_when_isolatedModules_is_enabled, "preserveConstEnums", "isolatedModules");
-            }
-
-            for (const file of files) {
-                if (!isExternalModule(file) && !isSourceFileJS(file) && !file.isDeclarationFile && file.scriptKind !== ScriptKind.JSON) {
-                    const span = getErrorSpanForNode(file, file);
-                    programDiagnostics.add(createFileDiagnostic(file, span.start, span.length,
-                        Diagnostics._0_cannot_be_compiled_under_isolatedModules_because_it_is_considered_a_global_script_file_Add_an_import_export_or_an_empty_export_statement_to_make_it_a_module, getBaseFileName(file.fileName)));
-                }
+                createDiagnosticForOptionName(Diagnostics.Option_preserveConstEnums_cannot_be_disabled_when_0_is_enabled, options.verbatimModuleSyntax ? "verbatimModuleSyntax" : "isolatedModules", "preserveConstEnums");
             }
         }
         else if (firstNonAmbientExternalModuleSourceFile && languageVersion < ScriptTarget.ES2015 && options.module === ModuleKind.None) {

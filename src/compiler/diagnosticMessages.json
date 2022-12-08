@@ -907,7 +907,7 @@
         "category": "Error",
         "code": 1277
     },
-    "Top-level enums are not allowed in global script files when '{0}' is enabled. If this file is not intended to be a global script, set 'moduleDetection' to 'force' or add an empty 'export {}' statement.": {
+    "Cannot access '{0}' from another file without qualification when '{1}' is enabled. Use '{2}' instead.": {
         "category": "Error",
         "code": 1278
     },

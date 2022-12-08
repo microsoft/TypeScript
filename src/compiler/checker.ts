@@ -268,6 +268,7 @@ import {
     getInitializerOfBinaryExpression,
     getInterfaceBaseTypeNodes,
     getInvokedExpression,
+    getIsolatedModules,
     getJSDocClassTag,
     getJSDocDeprecatedTag,
     getJSDocEnumTag,
@@ -1406,6 +1407,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
     const requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
+    const isolatedModulesLikeFlagName = compilerOptions.verbatimModuleSyntax ? "verbatimModuleSyntax" : "isolatedModules";
 
     /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
     let apparentArgumentCount: number | undefined;
@@ -3014,6 +3016,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     break;
                 case SyntaxKind.EnumDeclaration:
                     if (result = lookup(getSymbolOfNode(location)?.exports || emptySymbols, name, meaning & SymbolFlags.EnumMember)) {
+                        if (nameNotFoundMessage && getIsolatedModules(compilerOptions) && !(location.flags & NodeFlags.Ambient) && getSourceFileOfNode(location) !== getSourceFileOfNode(result.valueDeclaration)) {
+                            error(
+                                errorLocation,
+                                Diagnostics.Cannot_access_0_from_another_file_without_qualification_when_1_is_enabled_Use_2_instead,
+                                unescapeLeadingUnderscores(name),
+                                isolatedModulesLikeFlagName,
+                                `${unescapeLeadingUnderscores(getSymbolOfNode(location)!.escapedName)}.${unescapeLeadingUnderscores(name)}`);
+                        }
                         break loop;
                     }
                     break;
@@ -36406,7 +36416,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             Debug.assert(!!(type.symbol.flags & SymbolFlags.ConstEnum));
             const constEnumDeclaration = type.symbol.valueDeclaration as EnumDeclaration;
             if (constEnumDeclaration.flags & NodeFlags.Ambient) {
-                error(node, Diagnostics.Cannot_access_ambient_const_enums_when_the_isolatedModules_flag_is_provided);
+                error(node, Diagnostics.Cannot_access_ambient_const_enums_when_0_is_enabled, isolatedModulesLikeFlagName);
             }
         }
     }
@@ -42322,6 +42332,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     inSameLexicalScope(node, mergedClass)) {
                     getNodeLinks(node).flags |= NodeCheckFlags.LexicalModuleMergesWithClass;
                 }
+
+                if (getIsolatedModules(compilerOptions) && !getSourceFileOfNode(node).externalModuleIndicator) {
+                    error(node.name, Diagnostics.Namespaces_are_not_allowed_in_global_script_files_when_0_is_enabled_If_this_file_is_not_intended_to_be_a_global_script_set_moduleDetection_to_force_or_add_an_empty_export_statement, isolatedModulesLikeFlagName);
+                }
             }
 
             if (isAmbientExternalModule) {
@@ -42522,7 +42536,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(node, message, symbolToString(symbol));
             }
 
-            if (compilerOptions.isolatedModules
+            if (getIsolatedModules(compilerOptions)
                 && !isTypeOnlyImportOrExportDeclaration(node)
                 && !(node.flags & NodeFlags.Ambient)) {
                 const typeOnlyAlias = getTypeOnlyAliasDeclaration(symbol);
@@ -42535,8 +42549,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             if (compilerOptions.preserveValueImports) {
                                 Debug.assertIsDefined(node.name, "An ImportClause with a symbol should have a name");
                                 const message = isType
-                                    ? Diagnostics._0_is_a_type_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedModules_are_both_enabled
-                                    : Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedModules_are_both_enabled;
+                                    ? compilerOptions.verbatimModuleSyntax
+                                        ? Diagnostics._0_is_a_type_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled
+                                        : Diagnostics._0_is_a_type_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedModules_are_both_enabled
+                                    : compilerOptions.verbatimModuleSyntax
+                                        ? Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_imported_using_a_type_only_import_when_verbatimModuleSyntax_is_enabled
+                                        : Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_imported_using_a_type_only_import_when_preserveValueImports_and_isolatedModules_are_both_enabled;
                                 const name = idText(node.kind === SyntaxKind.ImportSpecifier ? node.propertyName || node.name : node.name);
                                 addTypeOnlyDeclarationRelatedInfo(
                                     error(node, message, name),
@@ -42545,7 +42563,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 );
                             }
                             if (isType && node.kind === SyntaxKind.ImportEqualsDeclaration && hasEffectiveModifier(node, ModifierFlags.Export)) {
-                                error(node, Diagnostics.Cannot_use_export_import_on_a_type_or_type_only_namespace_when_the_isolatedModules_flag_is_provided);
+                                error(node, Diagnostics.Cannot_use_export_import_on_a_type_or_type_only_namespace_when_0_is_enabled, isolatedModulesLikeFlagName);
                             }
                             break;
                         }
@@ -42553,16 +42571,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             // Don't allow re-exporting an export that will be elided when `--isolatedModules` is set.
                             // The exception is that `import type { A } from './a'; export { A }` is allowed
                             // because single-file analysis can determine that the export should be dropped.
-                            if (getSourceFileOfNode(typeOnlyAlias) !== getSourceFileOfNode(node)) {
-                                const message = isType
-                                    ? Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type
-                                    : Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_re_exported_using_a_type_only_re_export_when_isolatedModules_is_enabled;
+                            if (compilerOptions.verbatimModuleSyntax || getSourceFileOfNode(typeOnlyAlias) !== getSourceFileOfNode(node)) {
                                 const name = idText(node.propertyName || node.name);
-                                addTypeOnlyDeclarationRelatedInfo(
-                                    error(node, message, name),
-                                    isType ? undefined : typeOnlyAlias,
-                                    name
-                                );
+                                const diagnostic = isType
+                                    ? error(node, Diagnostics.Re_exporting_a_type_when_0_is_enabled_requires_using_export_type, isolatedModulesLikeFlagName)
+                                    : error(node, Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_re_exported_using_a_type_only_re_export_when_1_is_enabled, name, isolatedModulesLikeFlagName);
+                                addTypeOnlyDeclarationRelatedInfo(diagnostic, isType ? undefined : typeOnlyAlias, name);
                                 return;
                             }
                         }
