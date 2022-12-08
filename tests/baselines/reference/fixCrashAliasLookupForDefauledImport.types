@@ -8,7 +8,7 @@ import {Foo} from "./input";
 
 function bar<T>(element: Foo) {
 >bar : <T>(element: Foo) => number
->element : Foo
+>element : Foo<string>
 
     return 1;
 >1 : 1
@@ -16,7 +16,7 @@ function bar<T>(element: Foo) {
 
 bar(1 as Foo<number>);
 >bar(1 as Foo<number>) : number
->bar : <T>(element: Foo) => number
+>bar : <T>(element: Foo<string>) => number
 >1 as Foo<number> : Foo<number>
 >1 : 1
 
