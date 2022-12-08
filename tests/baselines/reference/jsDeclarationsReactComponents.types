@@ -60,8 +60,8 @@ import React from "react";
  * @type {React.SFC}
  */
 const TabbedShowLayout = () => {
->TabbedShowLayout : React.SFC<any>
->() => {    return (        <div className="" key="">            ok        </div>    );} : { (): JSX.Element; defaultProps: Partial<any> | undefined; }
+>TabbedShowLayout : React.SFC<{}>
+>() => {    return (        <div className="" key="">            ok        </div>    );} : { (): JSX.Element; defaultProps: Partial<{}> | undefined; }
 
     return (
 >(        <div className="" key="">            ok        </div>    ) : JSX.Element
@@ -81,9 +81,9 @@ const TabbedShowLayout = () => {
 
 TabbedShowLayout.defaultProps = {
 >TabbedShowLayout.defaultProps = {    tabs: "default value"} : { tabs: string; }
->TabbedShowLayout.defaultProps : Partial<any> | undefined
->TabbedShowLayout : React.SFC<any>
->defaultProps : Partial<any> | undefined
+>TabbedShowLayout.defaultProps : Partial<{}> | undefined
+>TabbedShowLayout : React.SFC<{}>
+>defaultProps : Partial<{}> | undefined
 >{    tabs: "default value"} : { tabs: string; }
 
     tabs: "default value"
@@ -93,7 +93,7 @@ TabbedShowLayout.defaultProps = {
 };
 
 export default TabbedShowLayout;
->TabbedShowLayout : React.SFC<any>
+>TabbedShowLayout : React.SFC<{}>
 
 === tests/cases/conformance/jsdoc/declarations/jsDeclarationsReactComponents3.jsx ===
 import React from "react";
