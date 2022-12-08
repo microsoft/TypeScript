@@ -42320,7 +42320,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // so for now we will just not allow them in scripts, which is the only place they can merge cross-file.
                     error(node.name, Diagnostics.Namespaces_are_not_allowed_in_global_script_files_when_0_is_enabled_If_this_file_is_not_intended_to_be_a_global_script_set_moduleDetection_to_force_or_add_an_empty_export_statement, isolatedModulesLikeFlagName);
                 }
-                if (symbol.declarations?.length > 1) {
+                if (symbol.declarations?.length! > 1) {
                     const firstNonAmbientClassOrFunc = getFirstNonAmbientClassOrFunctionDeclaration(symbol);
                     if (firstNonAmbientClassOrFunc) {
                         if (getSourceFileOfNode(node) !== getSourceFileOfNode(firstNonAmbientClassOrFunc)) {
@@ -42549,7 +42549,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         case SyntaxKind.ImportClause:
                         case SyntaxKind.ImportSpecifier:
                         case SyntaxKind.ImportEqualsDeclaration: {
-                            if (compilerOptions.preserveValueImports) {
+                            if (compilerOptions.preserveValueImports || compilerOptions.verbatimModuleSyntax) {
                                 Debug.assertIsDefined(node.name, "An ImportClause with a symbol should have a name");
                                 const message = isType
                                     ? compilerOptions.verbatimModuleSyntax
@@ -44514,6 +44514,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isValueAliasDeclaration(node: Node): boolean {
+        Debug.assert(!compilerOptions.verbatimModuleSyntax);
         switch (node.kind) {
             case SyntaxKind.ImportEqualsDeclaration:
                 return isAliasResolvedToValue(getSymbolOfNode(node));
@@ -44567,6 +44568,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean {
+        Debug.assert(!compilerOptions.verbatimModuleSyntax);
         if (isAliasSymbolDeclaration(node)) {
             const symbol = getSymbolOfNode(node);
             const links = symbol && getSymbolLinks(symbol);
