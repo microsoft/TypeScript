@@ -22,7 +22,6 @@ import {
     createCompilerHostFromProgramHost,
     createDiagnosticCollection,
     createDiagnosticReporter,
-    createGetCanonicalFileName,
     createModuleResolutionCache,
     createModuleResolutionLoader,
     CreateProgram,
@@ -54,7 +53,6 @@ import {
     formatColorAndReset,
     getAllProjectOutputs,
     getBuildInfoFileVersionMap,
-    GetCanonicalFileName,
     getConfigFileParsingDiagnostics,
     getDirectoryPath,
     getEntries,
@@ -370,8 +368,6 @@ interface BuildInfoCacheEntry {
 interface SolutionBuilderState<T extends BuilderProgram = BuilderProgram> extends WatchFactory<WatchType, ResolvedConfigFileName> {
     readonly host: SolutionBuilderHost<T>;
     readonly hostWithWatch: SolutionBuilderWithWatchHost<T>;
-    readonly currentDirectory: string;
-    readonly getCanonicalFileName: GetCanonicalFileName;
     readonly parseConfigFileHost: ParseConfigFileHost;
     readonly write: ((s: string) => void) | undefined;
 
@@ -426,8 +422,6 @@ interface SolutionBuilderState<T extends BuilderProgram = BuilderProgram> extend
 function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: readonly string[], options: BuildOptions, baseWatchOptions: WatchOptions | undefined): SolutionBuilderState<T> {
     const host = hostOrHostWithWatch as SolutionBuilderHost<T>;
     const hostWithWatch = hostOrHostWithWatch as SolutionBuilderWithWatchHost<T>;
-    const currentDirectory = host.getCurrentDirectory();
-    const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
 
     // State of the solution
     const baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
@@ -441,7 +435,7 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
     compilerHost.getModuleResolutionCache = maybeBind(host, host.getModuleResolutionCache);
     let moduleResolutionCache: ModuleResolutionCache | undefined, typeReferenceDirectiveResolutionCache: TypeReferenceDirectiveResolutionCache | undefined;
     if (!compilerHost.resolveModuleNameLiterals && !compilerHost.resolveModuleNames) {
-        moduleResolutionCache = createModuleResolutionCache(currentDirectory, getCanonicalFileName);
+        moduleResolutionCache = createModuleResolutionCache(compilerHost.getCurrentDirectory(), compilerHost.getCanonicalFileName);
         compilerHost.resolveModuleNameLiterals = (moduleNames, containingFile, redirectedReference, options, containingSourceFile) =>
             loadWithModeAwareCache(
                 moduleNames,
@@ -456,7 +450,7 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
         compilerHost.getModuleResolutionCache = () => moduleResolutionCache;
     }
     if (!compilerHost.resolveTypeReferenceDirectiveReferences && !compilerHost.resolveTypeReferenceDirectives) {
-        typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(currentDirectory, getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache());
+        typeReferenceDirectiveResolutionCache = createTypeReferenceDirectiveResolutionCache(compilerHost.getCurrentDirectory(), compilerHost.getCanonicalFileName, /*options*/ undefined, moduleResolutionCache?.getPackageJsonInfoCache());
         compilerHost.resolveTypeReferenceDirectiveReferences = (typeDirectiveNames, containingFile, redirectedReference, options, containingSourceFile) =>
             loadWithModeAwareCache(
                 typeDirectiveNames,
@@ -476,8 +470,6 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
     const state: SolutionBuilderState<T> = {
         host,
         hostWithWatch,
-        currentDirectory,
-        getCanonicalFileName,
         parseConfigFileHost: parseConfigHostFromCompilerHostLike(host),
         write: maybeBind(host, host.trace),
 
@@ -534,7 +526,7 @@ function createSolutionBuilderState<T extends BuilderProgram>(watch: boolean, ho
 }
 
 function toPath(state: SolutionBuilderState, fileName: string) {
-    return ts.toPath(fileName, state.currentDirectory, state.getCanonicalFileName);
+    return ts.toPath(fileName, state.compilerHost.getCurrentDirectory(), state.compilerHost.getCanonicalFileName);
 }
 
 function toResolvedConfigFilePath(state: SolutionBuilderState, fileName: ResolvedConfigFileName): ResolvedConfigFilePath {
@@ -583,7 +575,7 @@ function parseConfigFile(state: SolutionBuilderState, configFileName: ResolvedCo
 }
 
 function resolveProjectName(state: SolutionBuilderState, name: string): ResolvedConfigFileName {
-    return resolveConfigFileProjectName(resolvePath(state.currentDirectory, name));
+    return resolveConfigFileProjectName(resolvePath(state.compilerHost.getCurrentDirectory(), name));
 }
 
 function createBuildOrder(state: SolutionBuilderState, roots: readonly ResolvedConfigFileName[]): AnyBuildOrder {
@@ -887,7 +879,7 @@ function createUpdateOutputFileStampsProject(
         projectPath,
         buildOrder,
         getCompilerOptions: () => config.options,
-        getCurrentDirectory: () => state.currentDirectory,
+        getCurrentDirectory: () => state.compilerHost.getCurrentDirectory(),
         updateOutputFileStatmps: () => {
             updateOutputTimestamps(state, config, projectPath);
             updateOutputFileStampsPending = false;
@@ -935,7 +927,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             projectPath,
             buildOrder,
             getCompilerOptions: () => config.options,
-            getCurrentDirectory: () => state.currentDirectory,
+            getCurrentDirectory: () => state.compilerHost.getCurrentDirectory(),
             getBuilderProgram: () => withProgramOrUndefined(identity),
             getProgram: () =>
                 withProgramOrUndefined(
@@ -1000,7 +992,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             projectPath,
             buildOrder,
             getCompilerOptions: () => config.options,
-            getCurrentDirectory: () => state.currentDirectory,
+            getCurrentDirectory: () => state.compilerHost.getCurrentDirectory(),
             emit: (writeFile: WriteFileCallback | undefined, customTransformers: CustomTransformers | undefined) => {
                 if (step !== BuildStep.EmitBundle) return invalidatedProjectOfBundle;
                 return emitBundle(writeFile, customTransformers);
@@ -2334,7 +2326,7 @@ function watchWildCardDirectories(state: SolutionBuilderState, resolved: Resolve
                     fileOrDirectory,
                     fileOrDirectoryPath: toPath(state, fileOrDirectory),
                     configFileName: resolved,
-                    currentDirectory: state.currentDirectory,
+                    currentDirectory: state.compilerHost.getCurrentDirectory(),
                     options: parsed.options,
                     program: state.builderPrograms.get(resolvedPath) || getCachedParsedConfigFile(state, resolvedPath)?.fileNames,
                     useCaseSensitiveFileNames: state.parseConfigFileHost.useCaseSensitiveFileNames,
@@ -2454,7 +2446,7 @@ function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, h
 }
 
 function relName(state: SolutionBuilderState, path: string): string {
-    return convertToRelativePath(path, state.currentDirectory, f => state.getCanonicalFileName(f));
+    return convertToRelativePath(path, state.compilerHost.getCurrentDirectory(), state.compilerHost.getCanonicalFileName);
 }
 
 function reportStatus(state: SolutionBuilderState, message: DiagnosticMessage, ...args: string[]) {

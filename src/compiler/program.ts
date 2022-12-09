@@ -1806,6 +1806,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getSymlinkCache,
         realpath: host.realpath?.bind(host),
         useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
+        getCanonicalFileName,
         getFileIncludeReasons: () => fileReasons,
         structureIsReused,
         writeFile,
@@ -1855,7 +1856,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // This may totally change if/when the issue of output paths not mapping to input files is fixed in a broader context
         // When it is, how we extract diagnostics from the module name resolver will have the be refined - the current cache
         // APIs wrapping the underlying resolver make it almost impossible to smuggle the diagnostics out in a generalized way
-        const fromCache = moduleResolutionCache.getOrCreateCacheForModuleName(name, mode, redirectedReference).get(containingDir);
+        const fromCache = moduleResolutionCache.getFromNonRelativeNameCache(name, mode, containingDir, redirectedReference);
         if (fromCache) addResolutionDiagnostics(fromCache);
     }
 

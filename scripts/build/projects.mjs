@@ -35,7 +35,7 @@ const execTsc = (/** @type {string[]} */ ...args) =>
           "-b", ...args],
          { hidePrompt: true });
 
-const projectBuilder = new ProjectQueue((projects) => execTsc(...projects));
+const projectBuilder = new ProjectQueue((projects) => execTsc(...(cmdLineOptions.bundle ? [] : ["--emitDeclarationOnly", "false"]), ...projects));
 
 /**
  * @param {string} project
