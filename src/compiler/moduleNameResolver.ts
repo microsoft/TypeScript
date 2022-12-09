@@ -2842,7 +2842,7 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
     // No originalPath because classic resolution doesn't resolve realPath
     return createResolvedModuleWithFailedLookupLocations(
         resolved && resolved.value,
-         /*isExternalLibraryImport*/ false,
+        resolved?.value && pathContainsNodeModules(resolved.value.path),
         failedLookupLocations,
         affectingLocations,
         diagnostics,
