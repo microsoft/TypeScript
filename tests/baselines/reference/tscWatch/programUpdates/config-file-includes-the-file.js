@@ -77,19 +77,19 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/f1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 5;
 
 
 //// [/a/c/f2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/a/c/f3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 1;
 

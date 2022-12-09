@@ -1,12 +1,12 @@
 Info 0    [00:00:29.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:30.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/usage/usage.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/dependency/fns.ts]
@@ -100,7 +100,7 @@ Info 24   [00:00:53.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../dependency/fns.ts
 	  Imported via '../decls/fns' from file 'usage.ts'
 	usage.ts
@@ -150,7 +150,7 @@ Info 27   [00:01:02.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/fns.ts"
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request
@@ -244,7 +244,7 @@ Info 35   [00:01:25.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/usage/usage.ts"
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Before request
@@ -342,7 +342,7 @@ Info 42   [00:01:44.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/usage/usage.ts"
       },
-      "seq": 3,
+      "seq": 4,
       "type": "request"
     }
 Before request
@@ -377,7 +377,7 @@ Info 45   [00:01:49.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 After request
 //// [/user/username/projects/myproject/usage/usage.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var fns_1 = require("../decls/fns");
 (0, fns_1.fn1)();
 (0, fns_1.fn2)();
@@ -419,7 +419,7 @@ Info 47   [00:01:51.000] request:
       "arguments": {
         "file": "/user/username/projects/myproject/usage/usage.ts"
       },
-      "seq": 4,
+      "seq": 5,
       "type": "request"
     }
 Before request
@@ -481,7 +481,7 @@ Info 48   [00:01:52.000] response:
           {
             "name": "/user/username/projects/myproject/usage/usage.js",
             "writeByteOrderMark": false,
-            "text": "\"use strict\";\nexports.__esModule = true;\nvar fns_1 = require(\"../decls/fns\");\n(0, fns_1.fn1)();\n(0, fns_1.fn2)();\n"
+            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nvar fns_1 = require(\"../decls/fns\");\n(0, fns_1.fn1)();\n(0, fns_1.fn2)();\n"
           }
         ],
         "emitSkipped": false,

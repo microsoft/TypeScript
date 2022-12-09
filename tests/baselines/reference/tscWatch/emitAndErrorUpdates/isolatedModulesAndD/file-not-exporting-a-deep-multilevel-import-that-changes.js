@@ -130,7 +130,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/a.d.ts]
@@ -146,7 +146,7 @@ export interface Coords {
 
 //// [/user/username/projects/myproject/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/b.d.ts]
@@ -157,7 +157,7 @@ export interface PointWrapper extends Point {
 
 //// [/user/username/projects/myproject/c.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPoint = void 0;
 function getPoint() {
     return {
@@ -179,7 +179,7 @@ export declare function getPoint(): PointWrapper;
 
 //// [/user/username/projects/myproject/d.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var c_1 = require("./c");
 (0, c_1.getPoint)().c.x;
 
@@ -190,7 +190,7 @@ export {};
 
 //// [/user/username/projects/myproject/e.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 require("./d");
 
 

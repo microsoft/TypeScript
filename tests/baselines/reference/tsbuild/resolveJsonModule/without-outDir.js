@@ -119,9 +119,9 @@ export default _default;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var hello_json_1 = __importDefault(require("./hello.json"));
-exports["default"] = hello_json_1["default"].hello;
+exports.default = hello_json_1.default.hello;
 
 
 //// [/src/tsconfig_withFiles.tsbuildinfo]
@@ -142,6 +142,10 @@ exports["default"] = hello_json_1["default"].hello;
     ],
     "fileInfos": {
       "../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -151,6 +155,10 @@ exports["default"] = hello_json_1["default"].hello;
         "signature": "6651571919-{\n  \"hello\": \"world\"\n}"
       },
       "./src/index.ts": {
+        "original": {
+          "version": "-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello",
+          "signature": "-1680156224-declare const _default: string;\r\nexport default _default;\r\n"
+        },
         "version": "-27703454282-import hello from \"./hello.json\"\n\nexport default hello.hello",
         "signature": "-1680156224-declare const _default: string;\r\nexport default _default;\r\n"
       }

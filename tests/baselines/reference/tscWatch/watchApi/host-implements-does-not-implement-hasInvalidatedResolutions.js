@@ -36,7 +36,7 @@ CreatingProgramWith::
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main.ts 250 undefined Source file
 ======== Resolving module './other' from '/user/username/projects/myproject/main.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file type 'TypeScript'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, Declaration.
 File '/user/username/projects/myproject/other.ts' does not exist.
 File '/user/username/projects/myproject/other.tsx' does not exist.
 File '/user/username/projects/myproject/other.d.ts' exist - use it as a name resolution result.
@@ -87,7 +87,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
@@ -108,7 +108,7 @@ CreatingProgramWith::
   options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 ======== Resolving module './other' from '/user/username/projects/myproject/main.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file type 'TypeScript'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, Declaration.
 File '/user/username/projects/myproject/other.ts' does not exist.
 File '/user/username/projects/myproject/other.tsx' does not exist.
 File '/user/username/projects/myproject/other.d.ts' exist - use it as a name resolution result.
@@ -167,7 +167,7 @@ CreatingProgramWith::
   options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 ======== Resolving module './other' from '/user/username/projects/myproject/main.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file type 'TypeScript'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, Declaration.
 File '/user/username/projects/myproject/other.ts' does not exist.
 File '/user/username/projects/myproject/other.tsx' does not exist.
 File '/user/username/projects/myproject/other.d.ts' exist - use it as a name resolution result.
@@ -232,7 +232,7 @@ CreatingProgramWith::
   options: {"traceResolution":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 ======== Resolving module './other' from '/user/username/projects/myproject/main.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file type 'TypeScript'.
+Loading module as file / folder, candidate module location '/user/username/projects/myproject/other', target file types: TypeScript, Declaration.
 File '/user/username/projects/myproject/other.ts' exist - use it as a name resolution result.
 ======== Module name './other' was successfully resolved to '/user/username/projects/myproject/other.ts'. ========
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/other.ts 250 undefined Source file
@@ -279,7 +279,7 @@ exitCode:: ExitStatus.undefined
 //// [/user/username/projects/myproject/main.js] file written with same contents
 //// [/user/username/projects/myproject/other.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
 function foo() { }
 exports.foo = foo;

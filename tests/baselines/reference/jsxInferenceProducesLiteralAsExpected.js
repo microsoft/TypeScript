@@ -18,7 +18,7 @@ const el2 = <Test<TestObject> model={model} foo="c" />;
 
 //// [jsxInferenceProducesLiteralAsExpected.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var TestObject = /** @class */ (function () {
     function TestObject() {
