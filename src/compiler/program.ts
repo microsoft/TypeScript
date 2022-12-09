@@ -2290,7 +2290,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken | undefined) => readonly T[],
         cancellationToken: CancellationToken | undefined): readonly T[] {
         if (sourceFile) {
-            return getDiagnostics(sourceFile, cancellationToken);
+            return sortAndDeduplicateDiagnostics(getDiagnostics(sourceFile, cancellationToken));
         }
         return sortAndDeduplicateDiagnostics(flatMap(program.getSourceFiles(), sourceFile => {
             if (cancellationToken) {
@@ -2413,7 +2413,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function getMergedBindAndCheckDiagnostics(sourceFile: SourceFile, includeBindAndCheckDiagnostics: boolean, ...allDiagnostics: (readonly Diagnostic[] | undefined)[]) {
-        const flatDiagnostics = Array.from(sortAndDeduplicateDiagnostics(flatten(allDiagnostics)));
+        const flatDiagnostics = flatten(allDiagnostics);
 
         if (!includeBindAndCheckDiagnostics || !sourceFile.commentDirectives?.length) {
             return flatDiagnostics;
