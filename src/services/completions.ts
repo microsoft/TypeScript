@@ -1392,7 +1392,9 @@ function createCompletionEntry(
         sortText = SortText.SortBelow(sortText);
     }
 
-    if (isJsxIdentifierExpected && !isRightOfOpenTag && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle && preferences.jsxAttributeCompletionStyle !== "none") {
+    if (isJsxIdentifierExpected && !isRightOfOpenTag
+        && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle
+        && preferences.jsxAttributeCompletionStyle !== "none" && !(isJsxAttribute(location.parent) && location.parent.initializer)) {
         let useBraces = preferences.jsxAttributeCompletionStyle === "braces";
         const type = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
 
