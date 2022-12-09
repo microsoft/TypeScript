@@ -86,6 +86,7 @@
         "build": "npm run build:compiler && npm run build:tests",
         "build:compiler": "hereby local",
         "build:tests": "hereby tests",
+        "build:tests:notypecheck": "hereby tests --no-typecheck",
         "start": "node lib/tsc",
         "clean": "hereby clean",
         "gulp": "hereby",
