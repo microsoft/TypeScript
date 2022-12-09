@@ -44,7 +44,7 @@ Using 'exports' subpath '.' with target './dist/index.js'.
 File '/user/username/projects/myproject/index.ts' exist - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/index.ts', result '/user/username/projects/myproject/index.ts'.
 ======== Module name '@this/package' was successfully resolved to '/user/username/projects/myproject/index.ts'. ========
-File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+Directory '/user/username/projects/myproject' resolves to '/user/username/projects/myproject/package.json' scope according to cache.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
@@ -133,11 +133,11 @@ Output::
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
-File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+Directory '/user/username/projects/myproject' resolves to '/user/username/projects/myproject/package.json' scope according to cache.
+Directory '/user/username/projects/myproject' resolves to '/user/username/projects/myproject/package.json' scope according to cache.
+Directory '/user/username/projects/myproject' resolves to '/user/username/projects/myproject/package.json' scope according to cache.
 Reusing resolution of module '@this/package' from '/user/username/projects/myproject/index.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/index.ts'.
-File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
+Directory '/user/username/projects/myproject' resolves to '/user/username/projects/myproject/package.json' scope according to cache.
 ======== Resolving module './index.js' from '/user/username/projects/myproject/index2.ts'. ========
 Explicitly specified module resolution kind: 'NodeNext'.
 Resolving in ESM mode with conditions 'node', 'import', 'types'.
@@ -145,9 +145,7 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/index.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/index.ts' exist - use it as a name resolution result.
 ======== Module name './index.js' was successfully resolved to '/user/username/projects/myproject/index.ts'. ========
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/a/lib' has no containing package.json scope according to cache.
 [91merror[0m[90m TS2209: [0mThe project root is ambiguous, but is required to resolve export map entry '.' in file '/user/username/projects/myproject/package.json'. Supply the `rootDir` compiler option to disambiguate.
 
 [[90m12:00:50 AM[0m] Found 1 error. Watching for file changes.

@@ -83,12 +83,8 @@
     "======== Module name '#type' was successfully resolved to 'tests/cases/conformance/node/index.ts'. ========",
     "File 'package.json' does not exist.",
     "File '/package.json' does not exist.",
-    "File 'package.json' does not exist according to earlier cached lookups.",
-    "File '/package.json' does not exist according to earlier cached lookups.",
-    "File 'package.json' does not exist according to earlier cached lookups.",
-    "File '/package.json' does not exist according to earlier cached lookups.",
-    "File 'package.json' does not exist according to earlier cached lookups.",
-    "File '/package.json' does not exist according to earlier cached lookups.",
-    "File 'package.json' does not exist according to earlier cached lookups.",
-    "File '/package.json' does not exist according to earlier cached lookups."
+    "Directory '/.ts' has no containing package.json scope according to cache.",
+    "Directory '/.ts' has no containing package.json scope according to cache.",
+    "Directory '/.ts' has no containing package.json scope according to cache.",
+    "Directory '/.ts' has no containing package.json scope according to cache."
 ]

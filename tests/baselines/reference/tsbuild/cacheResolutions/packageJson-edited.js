@@ -95,37 +95,22 @@ Loading module as file / folder, candidate module location '/src/projects/projec
 File name '/src/projects/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/src/projects/project/src/fileB.mts' exist - use it as a name resolution result.
 ======== Module name './fileB.mjs' was successfully resolved to '/src/projects/project/src/fileB.mts'. ========
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/src/projects/project/src/a/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/src/projects/project/src/b/ba/package.json' does not exist.
 File '/src/projects/project/src/b/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/b/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/b' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/src/projects/project/src/c/ca/package.json' does not exist.
 File '/src/projects/project/src/c/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/src/projects/project/src/c/ca/caa/package.json' does not exist.
-File '/src/projects/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src/c/ca' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/src/projects/project/src/c/ca/caa/caaa/package.json' does not exist.
-File '/src/projects/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src/c/ca/caa' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/src/projects/project/src/c/cb/package.json' does not exist.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src/c' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist.
 File '/src/projects/project/src/d/da/daa/daaa/x/y/package.json' does not exist.
 File '/src/projects/project/src/d/da/daa/daaa/x/package.json' does not exist.
@@ -133,61 +118,30 @@ File '/src/projects/project/src/d/da/daa/daaa/package.json' does not exist.
 File '/src/projects/project/src/d/da/daa/package.json' does not exist.
 File '/src/projects/project/src/d/da/package.json' does not exist.
 File '/src/projects/project/src/d/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da/daa/daaa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da/daa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/src/projects/project/src/e/ea/package.json' does not exist.
 File '/src/projects/project/src/e/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/src/projects/project/src/e/ea/eaa/package.json' does not exist.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src/e/ea' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/src/projects/project/src/e/ea/eaa/eaaa/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src/e/ea/eaa' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist.
 File '/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist.
 File '/src/projects/project/src/e/ea/eaa/eaaa/x/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src/e/ea/eaa/eaaa' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/src/projects/project/src/f/fa/faa/x/y/z/package.json' does not exist.
 File '/src/projects/project/src/f/fa/faa/x/y/package.json' does not exist.
 File '/src/projects/project/src/f/fa/faa/x/package.json' does not exist.
 File '/src/projects/project/src/f/fa/faa/package.json' does not exist.
 File '/src/projects/project/src/f/fa/package.json' does not exist.
 File '/src/projects/project/src/f/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/src/projects/project/src/f/fa/faa/faaa/package.json' does not exist.
-File '/src/projects/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/f/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src/f/fa/faa' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist.
 [96msrc/projects/project/src/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./fileB.mjs")' call instead.
@@ -262,16 +216,26 @@ src/projects/project/src/f/fa/faa/faaa/randomFile.ts
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+File: /lib/lib.es2016.full.d.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/lib/package.json",
+    "/package.json"
+  ]
+}
+
 File: /src/projects/project/src/fileA.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 resolvedModules:
 ./fileB.mjs: commonjs: {
@@ -284,218 +248,254 @@ resolvedModules:
 
 File: /src/projects/project/src/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/a/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/b/ba/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/b/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/ca/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/ca/caa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/ca/caa/caaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/cb/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/daa/daaa/x/y/z/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/daa/daaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/daa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/eaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/eaa/eaaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/eaa/eaaa/x/y/z/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/f/fa/faa/x/y/z/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/f/fa/faa/faaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 
@@ -1009,25 +1009,26 @@ export const x = 10;export const y = 10;
 Output::
 /lib/tsc --b /src/projects/project/src --explainFiles
 Found 'package.json' at '/src/projects/project/package.json'.
+Directory '/src/projects/project/src' resolves to '/src/projects/project/package.json' scope according to cache.
 Reusing resolution of module './fileB.mjs' from '/src/projects/project/src/fileA.ts' found in cache from location '/src/projects/project/src', it was successfully resolved to '/src/projects/project/src/fileB.mts'.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/a' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/b/ba' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/b' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/c/ca' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/c/ca/caa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/c/ca/caa/caaa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/c/cb' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da/daa/daaa/x/y/z' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da/daa/daaa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da/daa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/e/ea' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/e/ea/eaa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/e/ea/eaa/eaaa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/e/ea/eaa/eaaa/x/y/z' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/f/fa/faa/x/y/z' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/f/fa/faa/faaa' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist.
 [96msrc/projects/project/src/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./fileB.mjs")' call instead.
@@ -1102,16 +1103,26 @@ src/projects/project/src/f/fa/faa/faaa/randomFile.ts
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+File: /lib/lib.es2016.full.d.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/lib/package.json",
+    "/package.json"
+  ]
+}
+
 File: /src/projects/project/src/fileA.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 resolvedModules:
 ./fileB.mjs: commonjs: {
@@ -1123,218 +1134,254 @@ resolvedModules:
 
 File: /src/projects/project/src/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/a/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/b/ba/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/b/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/ca/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/ca/caa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/ca/caa/caaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/cb/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/daa/daaa/x/y/z/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/daa/daaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/daa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/eaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/eaa/eaaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/eaa/eaaa/x/y/z/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/f/fa/faa/x/y/z/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/f/fa/faa/faaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 
@@ -1849,6 +1896,7 @@ Input::
 Output::
 /lib/tsc --b /src/projects/project/src --explainFiles
 Found 'package.json' at '/src/projects/project/package.json'.
+Directory '/src/projects/project/src' resolves to '/src/projects/project/package.json' scope according to cache.
 ======== Resolving module './fileB.mjs' from '/src/projects/project/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
 Resolving in ESM mode with conditions 'node', 'import', 'types'.
@@ -1856,24 +1904,24 @@ Loading module as file / folder, candidate module location '/src/projects/projec
 File name '/src/projects/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/src/projects/project/src/fileB.mts' exist - use it as a name resolution result.
 ======== Module name './fileB.mjs' was successfully resolved to '/src/projects/project/src/fileB.mts'. ========
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/a' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/b/ba' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/b' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/c/ca' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/c/ca/caa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/c/ca/caa/caaa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/c/cb' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da/daa/daaa/x/y/z' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da/daa/daaa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da/daa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/e/ea' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/e/ea/eaa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/e/ea/eaa/eaaa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/e/ea/eaa/eaaa/x/y/z' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/f/fa/faa/x/y/z' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/f/fa/faa/faaa' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist.
 lib/lib.es2016.full.d.ts
@@ -1939,9 +1987,16 @@ src/projects/project/src/f/fa/faa/faaa/randomFile.ts
   Part of 'files' list in tsconfig.json
   File is ECMAScript module because 'src/projects/project/package.json' has field "type" with value "module"
 exitCode:: ExitStatus.Success
+File: /lib/lib.es2016.full.d.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/lib/package.json",
+    "/package.json"
+  ]
+}
+
 File: /src/projects/project/src/fileA.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -1949,7 +2004,10 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 resolvedModules:
 ./fileB.mjs: esnext: {
@@ -1962,7 +2020,6 @@ resolvedModules:
 
 File: /src/projects/project/src/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -1970,12 +2027,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/a/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -1983,12 +2042,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/b/ba/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -1996,12 +2057,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/b/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -2009,12 +2072,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/ca/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -2022,12 +2087,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/ca/caa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -2035,12 +2102,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/ca/caa/caaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -2048,12 +2117,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/cb/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -2061,12 +2132,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/daa/daaa/x/y/z/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -2074,12 +2147,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/daa/daaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -2087,12 +2162,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/daa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -2100,12 +2177,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -2113,12 +2192,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -2126,12 +2207,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/eaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -2139,12 +2222,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/eaa/eaaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -2152,12 +2237,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/eaa/eaaa/x/y/z/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -2165,12 +2252,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/f/fa/faa/x/y/z/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -2178,12 +2267,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/f/fa/faa/faaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -2191,7 +2282,10 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 
@@ -2761,6 +2855,7 @@ export const x = 10;export const y = 10;export const z = 10;
 Output::
 /lib/tsc --b /src/projects/project/src --explainFiles
 Found 'package.json' at '/src/projects/project/package.json'.
+Directory '/src/projects/project/src' resolves to '/src/projects/project/package.json' scope according to cache.
 ======== Resolving module './fileB.mjs' from '/src/projects/project/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
 Resolving in CJS mode with conditions 'node', 'require', 'types'.
@@ -2768,24 +2863,24 @@ Loading module as file / folder, candidate module location '/src/projects/projec
 File name '/src/projects/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/src/projects/project/src/fileB.mts' exist - use it as a name resolution result.
 ======== Module name './fileB.mjs' was successfully resolved to '/src/projects/project/src/fileB.mts'. ========
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/a' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/b/ba' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/b' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/c/ca' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/c/ca/caa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/c/ca/caa/caaa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/c/cb' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da/daa/daaa/x/y/z' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da/daa/daaa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da/daa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/e/ea' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/e/ea/eaa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/e/ea/eaa/eaaa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/e/ea/eaa/eaaa/x/y/z' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/f/fa/faa/x/y/z' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/f/fa/faa/faaa' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist.
 [96msrc/projects/project/src/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./fileB.mjs")' call instead.
@@ -2860,16 +2955,26 @@ src/projects/project/src/f/fa/faa/faaa/randomFile.ts
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+File: /lib/lib.es2016.full.d.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/lib/package.json",
+    "/package.json"
+  ]
+}
+
 File: /src/projects/project/src/fileA.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 resolvedModules:
 ./fileB.mjs: commonjs: {
@@ -2882,218 +2987,254 @@ resolvedModules:
 
 File: /src/projects/project/src/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/a/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/b/ba/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/b/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/ca/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/ca/caa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/ca/caa/caaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/cb/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/daa/daaa/x/y/z/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/daa/daaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/daa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/eaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/eaa/eaaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/eaa/eaaa/x/y/z/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/f/fa/faa/x/y/z/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/f/fa/faa/faaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\"}",
     "packageJsonContent": {
       "name": "app",
       "version": "1.0.0"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 
@@ -3607,61 +3748,22 @@ File '/src/projects/package.json' does not exist.
 File '/src/package.json' does not exist.
 File '/package.json' does not exist.
 Reusing resolution of module './fileB.mjs' from '/src/projects/project/src/fileA.ts' found in cache from location '/src/projects/project/src', it was successfully resolved to '/src/projects/project/src/fileB.mts'.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src' has no containing package.json scope according to cache.
 File '/src/projects/project/src/a/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src' has no containing package.json scope according to cache.
 File '/src/projects/project/src/b/ba/package.json' does not exist.
 File '/src/projects/project/src/b/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/b/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src' has no containing package.json scope according to cache.
+Directory '/src/projects/project/src/b' has no containing package.json scope according to cache.
 File '/src/projects/project/src/c/ca/package.json' does not exist.
 File '/src/projects/project/src/c/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src' has no containing package.json scope according to cache.
 File '/src/projects/project/src/c/ca/caa/package.json' does not exist.
-File '/src/projects/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src/c/ca' has no containing package.json scope according to cache.
 File '/src/projects/project/src/c/ca/caa/caaa/package.json' does not exist.
-File '/src/projects/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src/c/ca/caa' has no containing package.json scope according to cache.
 File '/src/projects/project/src/c/cb/package.json' does not exist.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src/c' has no containing package.json scope according to cache.
 File '/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist.
 File '/src/projects/project/src/d/da/daa/daaa/x/y/package.json' does not exist.
 File '/src/projects/project/src/d/da/daa/daaa/x/package.json' does not exist.
@@ -3669,93 +3771,32 @@ File '/src/projects/project/src/d/da/daa/daaa/package.json' does not exist.
 File '/src/projects/project/src/d/da/daa/package.json' does not exist.
 File '/src/projects/project/src/d/da/package.json' does not exist.
 File '/src/projects/project/src/d/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src' has no containing package.json scope according to cache.
+Directory '/src/projects/project/src/d/da/daa/daaa' has no containing package.json scope according to cache.
+Directory '/src/projects/project/src/d/da/daa' has no containing package.json scope according to cache.
+Directory '/src/projects/project/src/d/da' has no containing package.json scope according to cache.
 File '/src/projects/project/src/e/ea/package.json' does not exist.
 File '/src/projects/project/src/e/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src' has no containing package.json scope according to cache.
 File '/src/projects/project/src/e/ea/eaa/package.json' does not exist.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src/e/ea' has no containing package.json scope according to cache.
 File '/src/projects/project/src/e/ea/eaa/eaaa/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src/e/ea/eaa' has no containing package.json scope according to cache.
 File '/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist.
 File '/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist.
 File '/src/projects/project/src/e/ea/eaa/eaaa/x/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src/e/ea/eaa/eaaa' has no containing package.json scope according to cache.
 File '/src/projects/project/src/f/fa/faa/x/y/z/package.json' does not exist.
 File '/src/projects/project/src/f/fa/faa/x/y/package.json' does not exist.
 File '/src/projects/project/src/f/fa/faa/x/package.json' does not exist.
 File '/src/projects/project/src/f/fa/faa/package.json' does not exist.
 File '/src/projects/project/src/f/fa/package.json' does not exist.
 File '/src/projects/project/src/f/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src' has no containing package.json scope according to cache.
 File '/src/projects/project/src/f/fa/faa/faaa/package.json' does not exist.
-File '/src/projects/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/f/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src/f/fa/faa' has no containing package.json scope according to cache.
 File '/lib/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
 [96msrc/projects/project/src/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./fileB.mjs")' call instead.
   To convert this file to an ECMAScript module, change its file extension to '.mts', or add the field `"type": "module"` to '/src/projects/project/package.json'.
 
@@ -3828,13 +3869,831 @@ src/projects/project/src/f/fa/faa/faaa/randomFile.ts
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+File: /lib/lib.es2016.full.d.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
 File: /src/projects/project/src/fileA.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
 resolvedModules:
 ./fileB.mjs: commonjs: {
   "resolvedModule": {
     "resolvedFileName": "/src/projects/project/src/fileB.mts",
     "extension": ".mts"
   }
+}
+
+File: /src/projects/project/src/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/a/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/b/ba/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/b/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/c/ca/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/c/ca/caa/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/c/ca/caa/caaa/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/c/cb/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/d/da/daa/daaa/x/y/z/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/d/da/daa/daaa/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/d/da/daa/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/d/da/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/e/ea/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/e/ea/eaa/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/e/ea/eaa/eaaa/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/e/ea/eaa/eaaa/x/y/z/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/f/fa/faa/x/y/z/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/f/fa/faa/faaa/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
 }
 
 
@@ -3850,6 +4709,7 @@ Input::
 Output::
 /lib/tsc --b /src/projects/project/src --explainFiles
 Found 'package.json' at '/src/projects/project/package.json'.
+Directory '/src/projects/project/src' resolves to '/src/projects/project/package.json' scope according to cache.
 ======== Resolving module './fileB.mjs' from '/src/projects/project/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
 Resolving in ESM mode with conditions 'node', 'import', 'types'.
@@ -3857,24 +4717,24 @@ Loading module as file / folder, candidate module location '/src/projects/projec
 File name '/src/projects/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/src/projects/project/src/fileB.mts' exist - use it as a name resolution result.
 ======== Module name './fileB.mjs' was successfully resolved to '/src/projects/project/src/fileB.mts'. ========
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
-File '/src/projects/project/package.json' exists according to earlier cached lookups.
+Directory '/src/projects/project/src' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/a' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/b/ba' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/b' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/c/ca' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/c/ca/caa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/c/ca/caa/caaa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/c/cb' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da/daa/daaa/x/y/z' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da/daa/daaa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da/daa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/d/da' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/e/ea' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/e/ea/eaa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/e/ea/eaa/eaaa' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/e/ea/eaa/eaaa/x/y/z' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/f/fa/faa/x/y/z' resolves to '/src/projects/project/package.json' scope according to cache.
+Directory '/src/projects/project/src/f/fa/faa/faaa' resolves to '/src/projects/project/package.json' scope according to cache.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist.
 lib/lib.es2016.full.d.ts
@@ -3940,9 +4800,16 @@ src/projects/project/src/f/fa/faa/faaa/randomFile.ts
   Part of 'files' list in tsconfig.json
   File is ECMAScript module because 'src/projects/project/package.json' has field "type" with value "module"
 exitCode:: ExitStatus.Success
+File: /lib/lib.es2016.full.d.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/lib/package.json",
+    "/package.json"
+  ]
+}
+
 File: /src/projects/project/src/fileA.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -3950,7 +4817,10 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 resolvedModules:
 ./fileB.mjs: esnext: {
@@ -3963,7 +4833,6 @@ resolvedModules:
 
 File: /src/projects/project/src/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -3971,12 +4840,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/a/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -3984,12 +4855,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/b/ba/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -3997,12 +4870,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/b/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -4010,12 +4885,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/ca/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -4023,12 +4900,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/ca/caa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -4036,12 +4915,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/ca/caa/caaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -4049,12 +4930,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/c/cb/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -4062,12 +4945,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/daa/daaa/x/y/z/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -4075,12 +4960,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/daa/daaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -4088,12 +4975,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/daa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -4101,12 +4990,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/d/da/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -4114,12 +5005,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -4127,12 +5020,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/eaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -4140,12 +5035,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/eaa/eaaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -4153,12 +5050,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/e/ea/eaa/eaaa/x/y/z/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -4166,12 +5065,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/f/fa/faa/x/y/z/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -4179,12 +5080,14 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 File: /src/projects/project/src/f/fa/faa/faaa/randomFile.ts
 packageJsonScope:: {
-  "packageDirectory": "/src/projects/project",
   "contents": {
     "packageJsonText": "{\"name\":\"app\",\"version\":\"1.0.0\",\"type\":\"module\"}",
     "packageJsonContent": {
@@ -4192,7 +5095,10 @@ packageJsonScope:: {
       "version": "1.0.0",
       "type": "module"
     }
-  }
+  },
+  "affectingLocations": [
+    "/src/projects/project/package.json"
+  ]
 }
 
 
@@ -4638,61 +5544,22 @@ Loading module as file / folder, candidate module location '/src/projects/projec
 File name '/src/projects/project/src/fileB.mjs' has a '.mjs' extension - stripping it.
 File '/src/projects/project/src/fileB.mts' exist - use it as a name resolution result.
 ======== Module name './fileB.mjs' was successfully resolved to '/src/projects/project/src/fileB.mts'. ========
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src' has no containing package.json scope according to cache.
 File '/src/projects/project/src/a/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src' has no containing package.json scope according to cache.
 File '/src/projects/project/src/b/ba/package.json' does not exist.
 File '/src/projects/project/src/b/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/b/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src' has no containing package.json scope according to cache.
+Directory '/src/projects/project/src/b' has no containing package.json scope according to cache.
 File '/src/projects/project/src/c/ca/package.json' does not exist.
 File '/src/projects/project/src/c/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src' has no containing package.json scope according to cache.
 File '/src/projects/project/src/c/ca/caa/package.json' does not exist.
-File '/src/projects/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src/c/ca' has no containing package.json scope according to cache.
 File '/src/projects/project/src/c/ca/caa/caaa/package.json' does not exist.
-File '/src/projects/project/src/c/ca/caa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/ca/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src/c/ca/caa' has no containing package.json scope according to cache.
 File '/src/projects/project/src/c/cb/package.json' does not exist.
-File '/src/projects/project/src/c/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src/c' has no containing package.json scope according to cache.
 File '/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json' does not exist.
 File '/src/projects/project/src/d/da/daa/daaa/x/y/package.json' does not exist.
 File '/src/projects/project/src/d/da/daa/daaa/x/package.json' does not exist.
@@ -4700,93 +5567,32 @@ File '/src/projects/project/src/d/da/daa/daaa/package.json' does not exist.
 File '/src/projects/project/src/d/da/daa/package.json' does not exist.
 File '/src/projects/project/src/d/da/package.json' does not exist.
 File '/src/projects/project/src/d/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/daaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/daa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/da/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/d/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src' has no containing package.json scope according to cache.
+Directory '/src/projects/project/src/d/da/daa/daaa' has no containing package.json scope according to cache.
+Directory '/src/projects/project/src/d/da/daa' has no containing package.json scope according to cache.
+Directory '/src/projects/project/src/d/da' has no containing package.json scope according to cache.
 File '/src/projects/project/src/e/ea/package.json' does not exist.
 File '/src/projects/project/src/e/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src' has no containing package.json scope according to cache.
 File '/src/projects/project/src/e/ea/eaa/package.json' does not exist.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src/e/ea' has no containing package.json scope according to cache.
 File '/src/projects/project/src/e/ea/eaa/eaaa/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src/e/ea/eaa' has no containing package.json scope according to cache.
 File '/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json' does not exist.
 File '/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json' does not exist.
 File '/src/projects/project/src/e/ea/eaa/eaaa/x/package.json' does not exist.
-File '/src/projects/project/src/e/ea/eaa/eaaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/eaa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/ea/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/e/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src/e/ea/eaa/eaaa' has no containing package.json scope according to cache.
 File '/src/projects/project/src/f/fa/faa/x/y/z/package.json' does not exist.
 File '/src/projects/project/src/f/fa/faa/x/y/package.json' does not exist.
 File '/src/projects/project/src/f/fa/faa/x/package.json' does not exist.
 File '/src/projects/project/src/f/fa/faa/package.json' does not exist.
 File '/src/projects/project/src/f/fa/package.json' does not exist.
 File '/src/projects/project/src/f/package.json' does not exist.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src' has no containing package.json scope according to cache.
 File '/src/projects/project/src/f/fa/faa/faaa/package.json' does not exist.
-File '/src/projects/project/src/f/fa/faa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/f/fa/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/f/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/project/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/package.json' does not exist according to earlier cached lookups.
-File '/src/package.json' does not exist according to earlier cached lookups.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/src/projects/project/src/f/fa/faa' has no containing package.json scope according to cache.
 File '/lib/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
 [96msrc/projects/project/src/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS1479: [0mThe current file is a CommonJS module whose imports will produce 'require' calls; however, the referenced file is an ECMAScript module and cannot be imported with 'require'. Consider writing a dynamic 'import("./fileB.mjs")' call instead.
   To convert this file to an ECMAScript module, change its file extension to '.mts' or create a local package.json file with `{ "type": "module" }`.
 
@@ -4859,7 +5665,87 @@ src/projects/project/src/f/fa/faa/faaa/randomFile.ts
 Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+File: /lib/lib.es2016.full.d.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
 File: /src/projects/project/src/fileA.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
 resolvedModules:
 ./fileB.mjs: commonjs: {
   "resolvedModule": {
@@ -4867,6 +5753,744 @@ resolvedModules:
     "extension": ".mts",
     "isExternalLibraryImport": false
   }
+}
+
+File: /src/projects/project/src/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/a/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/b/ba/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/b/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/c/ca/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/c/ca/caa/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/c/ca/caa/caaa/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/c/cb/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/d/da/daa/daaa/x/y/z/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/d/da/daa/daaa/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/d/da/daa/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/d/da/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/e/ea/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/e/ea/eaa/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/e/ea/eaa/eaaa/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/e/ea/eaa/eaaa/x/y/z/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/f/fa/faa/x/y/z/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
+}
+
+File: /src/projects/project/src/f/fa/faa/faaa/randomFile.ts
+packageJsonScope:: {
+  "failedLookupLocations": [
+    "/src/projects/project/src/package.json",
+    "/src/projects/project/package.json",
+    "/src/projects/package.json",
+    "/src/package.json",
+    "/package.json",
+    "/src/projects/project/src/a/package.json",
+    "/src/projects/project/src/b/ba/package.json",
+    "/src/projects/project/src/b/package.json",
+    "/src/projects/project/src/c/ca/package.json",
+    "/src/projects/project/src/c/package.json",
+    "/src/projects/project/src/c/ca/caa/package.json",
+    "/src/projects/project/src/c/ca/caa/caaa/package.json",
+    "/src/projects/project/src/c/cb/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/z/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/y/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/x/package.json",
+    "/src/projects/project/src/d/da/daa/daaa/package.json",
+    "/src/projects/project/src/d/da/daa/package.json",
+    "/src/projects/project/src/d/da/package.json",
+    "/src/projects/project/src/d/package.json",
+    "/src/projects/project/src/e/ea/package.json",
+    "/src/projects/project/src/e/package.json",
+    "/src/projects/project/src/e/ea/eaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/z/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/y/package.json",
+    "/src/projects/project/src/e/ea/eaa/eaaa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/z/package.json",
+    "/src/projects/project/src/f/fa/faa/x/y/package.json",
+    "/src/projects/project/src/f/fa/faa/x/package.json",
+    "/src/projects/project/src/f/fa/faa/package.json",
+    "/src/projects/project/src/f/fa/package.json",
+    "/src/projects/project/src/f/package.json",
+    "/src/projects/project/src/f/fa/faa/faaa/package.json",
+    "/lib/package.json"
+  ]
 }
 
 

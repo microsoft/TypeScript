@@ -255,14 +255,21 @@ function storeDtsSignatures(sys: TscCompileSystem, programs: readonly CommandLin
     }
 }
 
+function strigifyResolution(resolution: any) {
+    return JSON.stringify({
+        ...resolution,
+        files: undefined,
+        isInvalidated: undefined,
+        watchedFailed: undefined,
+        watchedAffected: undefined,
+        setAtRoot: undefined,
+    }, /*replacer*/ undefined, 2,);
+}
+
 function baselineCache<T>(baseline: string[], cacheType: string, cache: ts.ModeAwareCache<T> | undefined) {
     if (!cache?.size()) return;
     baseline.push(`${cacheType}:`);
-    cache.forEach((resolved, key, mode) => baseline.push(`${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${JSON.stringify(
-        { ...resolved, files: undefined, isInvalidated: undefined, watchedFailed: undefined, watchedAffected: undefined, setAtRoot: undefined },
-        /*replacer*/ undefined,
-        2,
-    )}`));
+    cache.forEach((resolved, key, mode) => baseline.push(`${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${strigifyResolution(resolved)}`));
 }
 
 export function baselineModulesAndTypeRefs(baseline: string[], programs: readonly CommandLineProgram[]) {
@@ -270,13 +277,7 @@ export function baselineModulesAndTypeRefs(baseline: string[], programs: readonl
         for (const f of program.getSourceFiles()) {
             if (!f.resolvedModules && !f.resolvedTypeReferenceDirectiveNames && !f.packageJsonScope) continue;
             baseline.push(`File: ${f.fileName}`);
-            if (f.packageJsonScope) {
-                baseline.push(`packageJsonScope:: ${JSON.stringify(
-                    f.packageJsonScope,
-                    /*replacer*/ undefined,
-                    2,
-                )}`);
-            }
+            if (f.packageJsonScope) baseline.push(`packageJsonScope:: ${strigifyResolution(f.packageJsonScope)}`);
             baselineCache(baseline, "resolvedModules", f.resolvedModules);
             baselineCache(baseline, "resolvedTypeReferenceDirectiveNames", f.resolvedTypeReferenceDirectiveNames);
             baseline.push("");

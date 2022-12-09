@@ -9,6 +9,7 @@ import {
     CompilerOptions,
     createModeAwareCache,
     createModuleResolutionCache,
+    createPerNonRelativeNameCache,
     createRedirectsCacheKey,
     createTypeReferenceDirectiveResolutionCache,
     createTypeReferenceResolutionLoader,
@@ -16,7 +17,6 @@ import {
     Diagnostics,
     directorySeparator,
     DirectoryWatcherCallback,
-    emptyArray,
     emptyIterator,
     endsWith,
     Extension,
@@ -32,7 +32,10 @@ import {
     getNormalizedAbsolutePath,
     getOriginalOrResolvedModuleFileName,
     getOriginalOrResolvedTypeReferenceFileName,
+    getPackageJsonInfo,
+    getPackageJsonLocationFromScope,
     getRootLength,
+    getTemporaryModuleResolutionState,
     HasInvalidatedResolutions,
     ignoredPaths,
     inferredTypesContainingFile,
@@ -43,7 +46,6 @@ import {
     isRootedDiskPath,
     isString,
     isTraceEnabled,
-    last,
     loadModuleFromGlobalCache,
     memoize,
     MinimalResolutionCacheHost,
@@ -54,13 +56,16 @@ import {
     noop,
     noopFileWatcher,
     normalizePath,
+    OldPackageJsonInfoCache,
     OldResolutionCache,
     PackageId,
     packageIdToString,
+    PackageJsonScope,
     parseNodeModuleFromPath,
     Path,
     pathContainsNodeModules,
     PerDirectoryAndNonRelativeNameCache,
+    PerNonRelativeNameCache,
     Program,
     RedirectsCacheKey,
     removeSuffix,
@@ -138,6 +143,14 @@ export interface ResolutionCache {
     getTypeReferenceDirectiveResolutionCache(): TypeReferenceDirectiveResolutionCache;
 
     clear(): void;
+}
+
+/** @internal */
+export interface CachePackageJsonScope extends PackageJsonScope {
+    isInvalidated?: boolean;
+    files?: Set<Path>;
+    watchedFailed?: number;
+    watchedAffected?: number;
 }
 
 /** @internal */
@@ -297,7 +310,9 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     const resolutionsWithFailedLookups = new Set<ResolutionWithFailedLookupLocations>();
     const resolutionsWithOnlyAffectingLocations = new Set<ResolutionWithFailedLookupLocations>();
     const resolvedFileToResolution = new Map<Path, Set<ResolutionWithFailedLookupLocations>>();
-    const impliedFormatPackageJsons = new Map<Path, readonly string[]>();
+    const perFilePackageJsonScope = new Map<Path, CachePackageJsonScope>();
+    const watchedPackageJsonScopes = new Set<CachePackageJsonScope>();
+    let packageJsonsToCloseWatcherOn: CachePackageJsonScope[] | undefined;
     let resolutionsToCloseWatcherOn: { resolution: ResolutionWithFailedLookupLocations; getResolved: GetResolutionWithResolvedFileName; }[] | undefined;
 
     let hasChangedAutomaticTypeDirectiveNames = false;
@@ -310,6 +325,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     const getCurrentDirectory = memoize(() => resolutionHost.getCurrentDirectory!()); // TODO: GH#18217
     const cachedDirectoryStructureHost = resolutionHost.getCachedDirectoryStructureHost();
     let oldModuleAndTypeRefCache: OldModuleAndTypeRefCache | undefined;
+    let oldPackageJsonInfoCache: OldPackageJsonInfoCache | undefined;
 
     // The resolvedModuleNames and resolvedTypeReferenceDirectives are the cache of resolutions per file.
     // The key in the map is source file's path.
@@ -392,18 +408,21 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         resolvedFileToResolution.clear();
         resolutionsWithFailedLookups.clear();
         resolutionsWithOnlyAffectingLocations.clear();
+        watchedPackageJsonScopes.clear();
         failedLookupChecks = undefined;
         startsWithPathChecks = undefined;
         isInDirectoryChecks = undefined;
         affectingPathChecks = undefined;
         affectingPathChecksForFile = undefined;
         resolutionsToCloseWatcherOn = undefined;
+        packageJsonsToCloseWatcherOn = undefined;
         oldModuleAndTypeRefCache = undefined;
+        oldPackageJsonInfoCache = undefined;
         moduleResolutionCache.clear();
         typeReferenceDirectiveResolutionCache.clear();
         moduleResolutionCache.update(resolutionHost.getCompilationSettings());
         typeReferenceDirectiveResolutionCache.update(resolutionHost.getCompilationSettings());
-        impliedFormatPackageJsons.clear();
+        perFilePackageJsonScope.clear();
         hasChangedAutomaticTypeDirectiveNames = false;
     }
 
@@ -427,14 +446,18 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     }
 
     function startCachingPerDirectoryResolution() {
-        moduleResolutionCache.clearAllExceptPackageJsonInfoCache();
-        typeReferenceDirectiveResolutionCache.clearAllExceptPackageJsonInfoCache();
+        const packageJsonInfoCache = moduleResolutionCache.getPackageJsonInfoCache();
+        const internalCache = packageJsonInfoCache.getInternalMap();
+        moduleResolutionCache.clear();
+        typeReferenceDirectiveResolutionCache.clear();
         moduleResolutionCache.update(resolutionHost.getCompilationSettings());
         typeReferenceDirectiveResolutionCache.update(resolutionHost.getCompilationSettings());
         if (oldModuleAndTypeRefCache) {
             moduleResolutionCache.setOldResolutionCache(oldModuleAndTypeRefCache.modules);
             typeReferenceDirectiveResolutionCache.setOldResolutionCache(oldModuleAndTypeRefCache.typeRefs);
         }
+        packageJsonInfoCache.setInternalMap(internalCache);
+        packageJsonInfoCache.setOldPackageJsonScopeCache(oldPackageJsonInfoCache);
     }
 
     function finishCachingPerDirectoryResolution(newProgram: Program | undefined, oldProgram: Program | undefined) {
@@ -447,6 +470,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         const needsResolutionUpdate = newProgram.structureIsReused !== StructureIsReused.Completely;
         let modules: PerDirectoryAndNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations> | undefined;
         let typeRefs: PerDirectoryAndNonRelativeNameCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations> | undefined;
+        let packageJsonScopes: PerNonRelativeNameCache<PackageJsonScope> | undefined;
         for (const newFile of newProgram.getSourceFiles()) {
             if (needsResolutionUpdate) {
                 modules = ensureResolutionsOfFile(
@@ -468,7 +492,7 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                     getResolvedTypeReferenceDirective,
                 );
             }
-            ensurePackageJsonWatchesForFile(newProgram, newFile);
+            packageJsonScopes = ensurePackageJsonWatchesForFile(newProgram, packageJsonScopes, newFile);
         }
         if (needsResolutionUpdate) {
             const newProgramAutoTypeRefContainingFile = resolutionHost.toPath(newProgram.getAutomaticTypeDirectiveContainingFile());
@@ -493,16 +517,19 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
                 }
             }
         }
-        impliedFormatPackageJsons.forEach((existing, path) => {
+        perFilePackageJsonScope.forEach((existing, path) => {
             if (!newProgram?.getSourceFileByPath(path)) {
-                existing.forEach(location => fileWatchesOfAffectingLocations.get(location)!.files--);
-                impliedFormatPackageJsons.delete(path);
+                stopWatchingPackageJsonScope(existing, path);
+                perFilePackageJsonScope.delete(path);
             }
         });
+        oldPackageJsonInfoCache = getOldPackageJsonInfoCache(packageJsonScopes);
         if (needsResolutionUpdate && (!oldProgram || newProgram.getCompilerOptions() !== oldProgram.getCompilerOptions())) updateTypeRootsWatch();
         // Remove symlinked watchers that have zero ref count
         resolutionsToCloseWatcherOn?.forEach(closeWatchersOfResolution);
         resolutionsToCloseWatcherOn = undefined;
+        packageJsonsToCloseWatcherOn?.forEach(closeWatchersOfPackageJsonScope);
+        packageJsonsToCloseWatcherOn = undefined;
         fileWatchesOfAffectingLocations.forEach((watcher, path) => {
             if (watcher.files === 0 && watcher.resolutions === 0) {
                 fileWatchesOfAffectingLocations.delete(path);
@@ -511,34 +538,86 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
         });
     }
 
-    function ensurePackageJsonWatchesForFile(newProgram: Program, newFile: SourceFile) {
-        const options = newProgram.getCompilerOptions();
-        const existing = impliedFormatPackageJsons.get(newFile.path) ?? emptyArray;
-        let expected = isExternalOrCommonJsModule(newFile) ? newFile.packageJsonLocations ?? emptyArray : emptyArray;
-        if (!options.cacheResolutions) {
-            for (let i = existing.length; i < expected.length; i++) {
-                createFileWatcherOfAffectingLocation(expected[i], /*forResolution*/ false);
-            }
-            if (existing.length > expected.length) {
-                for (let i = expected.length; i < existing.length; i++) {
-                    fileWatchesOfAffectingLocations.get(existing[i])!.files--;
-                }
-            }
+    function ensurePackageJsonWatchesForFile(
+        newProgram: Program,
+        packageJsonScopes: PerNonRelativeNameCache<CachePackageJsonScope> | undefined,
+        newFile: SourceFile,
+    ): PerNonRelativeNameCache<PackageJsonScope> | undefined {
+        const existing = perFilePackageJsonScope.get(newFile.path);
+        const scope = isExternalOrCommonJsModule(newFile) ? newFile.packageJsonScope as CachePackageJsonScope : undefined;
+        if (scope) {
+            (scope.files ??= new Set()).add(newFile.path);
+            watchPackageJsonScopeLocations(scope, scope.failedLookupLocations, "watchedFailed");
+            watchPackageJsonScopeLocations(scope, scope.affectingLocations, "watchedAffected");
+            perFilePackageJsonScope.set(newFile.path, scope);
+            (packageJsonScopes ??= createPerNonRelativeNameCache(
+                newProgram.getCurrentDirectory(),
+                newProgram.getCanonicalFileName,
+                getPackageJsonLocationFromScope,
+            )).setWithPath(getDirectoryPath(newFile.resolvedPath), scope, noop);
         }
-        else {
-            // Do not watch failed lookups for source file's package.json when caching resolutions
-            expected = expected.length && newFile.packageJsonScope ? [last(expected)] : expected;
-            if (expected.length !== 1 || existing.length !== 1 || expected[0] !== existing[0]) {
-                for (const location of expected) {
-                    createFileWatcherOfAffectingLocation(location, /*forResolution*/ false);
-                }
-                for (const location of existing) {
-                    fileWatchesOfAffectingLocations.get(location)!.files--;
-                }
-            }
+        if (existing && scope !== existing) stopWatchingPackageJsonScope(existing, newFile.path);
+        return packageJsonScopes;
+    }
+
+    function stopWatchingPackageJsonScope(scope: CachePackageJsonScope, path: Path) {
+        scope.files?.delete(path);
+        if (!scope.files?.size) (packageJsonsToCloseWatcherOn ??= []).push(scope);
+    }
+
+    function watchPackageJsonScopeLocations(scope: CachePackageJsonScope, locations: string[] | undefined, field: "watchedFailed" | "watchedAffected") {
+        const locationsLength = locations?.length ?? 0;
+        if (!locationsLength || scope[field] === locationsLength) return;
+        if (!scope.watchedFailed && !scope.watchedAffected) watchedPackageJsonScopes.add(scope);
+        for (let i = scope[field] ?? 0; i < locationsLength; i++) {
+            createFileWatcherOfAffectingLocation(locations![i], /*forResolution*/ false);
         }
-        if (expected.length) impliedFormatPackageJsons.set(newFile.path, expected);
-        else impliedFormatPackageJsons.delete(newFile.path);
+        scope[field] = locationsLength;
+    }
+
+    function closeWatchersOfPackageJsonScope(scope: CachePackageJsonScope) {
+        // Either in use or already closed, skip
+        if (scope.files?.size || !scope.files) return;
+        scope.files = undefined;
+        watchedPackageJsonScopes.delete(scope);
+        stopWatchingPackageJsonScopeLocations(scope, scope.failedLookupLocations, "watchedFailed");
+        stopWatchingPackageJsonScopeLocations(scope, scope.affectingLocations, "watchedAffected");
+    }
+
+    function stopWatchingPackageJsonScopeLocations(scope: CachePackageJsonScope, locations: string[] | undefined, field: "watchedFailed" | "watchedAffected") {
+        if (!scope[field]) return;
+        for (let i = 0; i < scope[field]!; i++){
+            fileWatchesOfAffectingLocations.get(locations![i])!.files--;
+        }
+        scope[field] = undefined;
+    }
+
+    function getOldPackageJsonInfoCache(packageJsonScopes: PerNonRelativeNameCache<CachePackageJsonScope> | undefined): OldPackageJsonInfoCache | undefined {
+        if (!packageJsonScopes) return undefined;
+        let packageJsons: Map<string, PackageJsonScope | false> | undefined;
+        return {
+            getPackageJsonScope: dir => {
+                const scope = packageJsonScopes.get(dir);
+                if (!scope) return undefined;
+                if (!scope.isInvalidated) return scope;
+                if (!resolutionHost.getCompilationSettings().cacheResolutions || !scope.contents) return undefined;
+                const packageJson = getPackageJsonLocationFromScope(scope)!;
+                let result = packageJsons?.get(packageJson);
+                if (result !== undefined) return result || undefined;
+                if (resolutionHost.fileExists(packageJson)) {
+                    result = {
+                        contents: getPackageJsonInfo(
+                            getDirectoryPath(packageJson),
+                             /*onlyRecordFailures*/ false,
+                            getTemporaryModuleResolutionState(moduleResolutionCache.getPackageJsonInfoCache(), resolutionHost.getCompilerHost?.() || resolutionHost, resolutionHost.getCompilationSettings())
+                        )!.contents,
+                        affectingLocations: [packageJson],
+                    };
+                }
+                (packageJsons ??= new Map()).set(packageJson, result || false);
+                return result;
+            }
+        };
     }
 
     function ensureResolutionsOfFile<T extends ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName>(
@@ -1283,12 +1362,15 @@ export function createResolutionCache(resolutionHost: ResolutionCacheHost, rootD
     function invalidateResolutionsOfFailedLookupLocations() {
         let invalidated = false;
         if (affectingPathChecksForFile) {
-            resolutionHost.getCurrentProgram()?.getSourceFiles().forEach(f => {
-                if (some(f.packageJsonLocations, location => affectingPathChecksForFile!.has(location))) {
-                    (filesWithInvalidatedResolutions ??= new Set()).add(f.path);
+            for (const scope of watchedPackageJsonScopes) {
+                if (scope.isInvalidated) continue;
+                if (some(scope.failedLookupLocations, location => affectingPathChecksForFile!.has(location)) ||
+                    some(scope.affectingLocations, location => affectingPathChecksForFile!.has(location))) {
+                    scope.isInvalidated = true;
                     invalidated = true;
+                    scope.files?.forEach(path => (filesWithInvalidatedResolutions ??= new Set()).add(path));
                 }
-            });
+            }
             affectingPathChecksForFile = undefined;
         }
 

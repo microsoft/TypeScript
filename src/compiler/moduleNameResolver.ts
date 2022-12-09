@@ -690,7 +690,6 @@ export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: M
 }
 
 export interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, NonRelativeNameResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache {
-    /** @internal */ clearAllExceptPackageJsonInfoCache(): void;
 }
 
 export interface ModeAwareCache<T> {
@@ -744,11 +743,11 @@ export interface PerNonRelativeNameCache<T> {
     set(directory: string, result: T): void;
     /** @internal */ getWithPath(directory: Path): T | undefined;
     /** @internal */ setWithPath(directory: Path, result: T, ancestoryWorker: (directory: Path) => void): void;
+    /** @internal */ clear(): void;
 }
 
 export interface ModuleResolutionCache extends PerDirectoryResolutionCache<ResolvedModuleWithFailedLookupLocations>, NonRelativeModuleNameResolutionCache, PackageJsonInfoCache {
     getPackageJsonInfoCache(): PackageJsonInfoCache;
-    /** @internal */ clearAllExceptPackageJsonInfoCache(): void;
 }
 
 /**
@@ -760,12 +759,32 @@ export interface NonRelativeModuleNameResolutionCache extends NonRelativeNameRes
     getOrCreateCacheForModuleName(nonRelativeModuleName: string, mode: ResolutionMode, redirectedReference?: ResolvedProjectReference): PerModuleNameCache;
 }
 
+/** @internal */
+export interface PackageJsonScope {
+    contents: PackageJsonInfoContents | undefined;
+    failedLookupLocations?: string[];
+    affectingLocations?: string[];
+}
+/** @internal */
+export function getPackageJsonLocationFromScope(scope: PackageJsonScope) {
+    return lastOrUndefined(scope.affectingLocations);
+}
+
+/** @internal */
+export interface OldPackageJsonInfoCache {
+    getPackageJsonScope(dir: string): PackageJsonScope | undefined;
+}
+
 export interface PackageJsonInfoCache {
     /** @internal */ getPackageJsonInfo(packageJsonPath: string): PackageJsonInfo | boolean | undefined;
     /** @internal */ setPackageJsonInfo(packageJsonPath: string, info: PackageJsonInfo | boolean): void;
     /** @internal */ entries(): [Path, PackageJsonInfo | boolean][];
     /** @internal */ getInternalMap(): Map<Path, PackageJsonInfo | boolean> | undefined;
+    /** @internal */ setInternalMap(value: Map<Path, PackageJsonInfo | boolean> | undefined): void;
     /** @internal */ clone(): PackageJsonInfoCache;
+    /** @internal */ getPackageJsonScope(dir: string): PackageJsonScope | undefined;
+    /** @internal */ setPackageJsonScope(dir: string, scope: PackageJsonScope): void;
+    /** @internal */ setOldPackageJsonScopeCache(cache: OldPackageJsonInfoCache | undefined): void;
     clear(): void;
 }
 
@@ -886,7 +905,20 @@ function createCacheWithRedirects<K, V>(ownOptions: CompilerOptions | undefined)
 }
 
 function createPackageJsonInfoCache(currentDirectory: string, getCanonicalFileName: (s: string) => string, cache?: Map<Path, PackageJsonInfo | boolean>): PackageJsonInfoCache {
-    return { getPackageJsonInfo, setPackageJsonInfo, clear, entries, getInternalMap, clone };
+    const packageJsonScopes = createPerNonRelativeNameCache(currentDirectory, getCanonicalFileName, getPackageJsonLocationFromScope);
+    let oldPackageJsonInfoCache: OldPackageJsonInfoCache | undefined;
+    return {
+        getPackageJsonInfo,
+        setPackageJsonInfo,
+        clear,
+        entries,
+        getInternalMap: () => cache,
+        setInternalMap: value => cache = value,
+        clone,
+        getPackageJsonScope,
+        setPackageJsonScope,
+        setOldPackageJsonScopeCache: cache => oldPackageJsonInfoCache = cache,
+    };
     function getPackageJsonInfo(packageJsonPath: string) {
         return cache?.get(toPath(packageJsonPath, currentDirectory, getCanonicalFileName));
     }
@@ -894,17 +926,22 @@ function createPackageJsonInfoCache(currentDirectory: string, getCanonicalFileNa
         (cache ||= new Map()).set(toPath(packageJsonPath, currentDirectory, getCanonicalFileName), info);
     }
     function clear() {
+        oldPackageJsonInfoCache = undefined;
         cache = undefined;
+        packageJsonScopes.clear();
     }
     function entries() {
         const iter = cache?.entries();
         return iter ? arrayFrom(iter) : [];
     }
-    function getInternalMap() {
-        return cache;
-    }
     function clone() {
         return createPackageJsonInfoCache(currentDirectory, getCanonicalFileName, cache && new Map(cache));
+    }
+    function getPackageJsonScope(dir: string) {
+        return packageJsonScopes.get(dir) || oldPackageJsonInfoCache?.getPackageJsonScope(dir);
+    }
+    function setPackageJsonScope(dir: string, scope: PackageJsonScope) {
+        packageJsonScopes.set(dir, scope);
     }
 }
 
@@ -1041,7 +1078,11 @@ export function createPerNonRelativeNameCache<T>(
 ): PerNonRelativeNameCache<T> {
     const directoryPathMap = new Map<Path, T>();
 
-    return { get, set, getWithPath, setWithPath };
+    return { get, set, getWithPath, setWithPath, clear };
+
+    function clear() {
+        directoryPathMap.clear();
+    }
 
     function get(directory: string): T | undefined {
         return getWithPath(toPath(directory, currentDirectory, getCanonicalFileName));
@@ -1242,7 +1283,6 @@ export function toPerDirectoryAndNonRelativeNameCache<T, U, V>(
 
 interface ModuleOrTypeReferenceResolutionCache<T> extends PerDirectoryResolutionCache<T>, NonRelativeNameResolutionCache<T>, PackageJsonInfoCache {
     getPackageJsonInfoCache(): PackageJsonInfoCache;
-    clearAllExceptPackageJsonInfoCache(): void;
 }
 function createModuleOrTypeReferenceResolutionCache<T>(
     currentDirectory: string,
@@ -1261,18 +1301,13 @@ function createModuleOrTypeReferenceResolutionCache<T>(
         clear,
         update,
         getPackageJsonInfoCache: () => packageJsonInfoCache!,
-        clearAllExceptPackageJsonInfoCache,
         setOldResolutionCache,
     };
 
     function clear() {
-        clearAllExceptPackageJsonInfoCache();
-        packageJsonInfoCache!.clear();
-    }
-
-    function clearAllExceptPackageJsonInfoCache() {
         perDirectory.clear();
         perNonRelativeName.clear();
+        packageJsonInfoCache!.clear();
     }
 
     function update(options: CompilerOptions) {
@@ -2189,15 +2224,51 @@ export interface PackageJsonInfoContents {
     /** false: resolved to nothing. undefined: not yet resolved */
     resolvedEntrypoints: string[] | false | undefined;
 }
+/** @internal */
+export function getPackageScope(
+    dir: string,
+    packageJsonInfoCache: PackageJsonInfoCache | undefined,
+    host: ModuleResolutionHost,
+    options: CompilerOptions,
+): PackageJsonScope {
+    const state = getTemporaryModuleResolutionState(packageJsonInfoCache, host, options);
+    const failedLookupLocations: string[] = [];
+    const affectingLocations: string[] = [];
+    state.failedLookupLocations = failedLookupLocations;
+    state.affectingLocations = affectingLocations;
+    const result: PackageJsonScope = forEachAncestorDirectory(dir, directory => {
+        const fromCache = state.packageJsonInfoCache?.getPackageJsonScope(directory);
+        if (fromCache) {
+            const { host, traceEnabled } = state;
+            if (traceEnabled) {
+                trace(
+                    host,
+                    fromCache.contents ?
+                        Diagnostics.Directory_0_resolves_to_1_scope_according_to_cache :
+                        Diagnostics.Directory_0_has_no_containing_package_json_scope_according_to_cache,
+                    directory,
+                    getPackageJsonLocationFromScope(fromCache)
+                );
+            }
+            return fromCache;
+        }
+
+        const contents = getPackageJsonInfo(directory, /*onlyRecordFailures*/ false, state)?.contents;
+        if (contents) return { contents };
+    }) || { contents: undefined };
+    result.failedLookupLocations = updateResolutionField(result.failedLookupLocations, !options.cacheResolutions || !result.contents ? failedLookupLocations : undefined);
+    result.affectingLocations = updateResolutionField(result.affectingLocations, affectingLocations);
+    packageJsonInfoCache?.setPackageJsonScope(dir, result);
+    return result;
+}
 
 /**
  * A function for locating the package.json scope for a given path
  *
  * @internal
  */
- export function getPackageScopeForPath(fileName: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
-    const parts = getPathComponents(fileName);
-    parts.pop();
+export function getPackageScopeForPath(dir: string, state: ModuleResolutionState): PackageJsonInfo | undefined {
+    const parts = getPathComponents(dir);
     while (parts.length > 0) {
         const pkg = getPackageJsonInfo(getPathFromPathComponents(parts), /*onlyRecordFailures*/ false, state);
         if (pkg) {
@@ -2362,7 +2433,7 @@ function noKeyStartsWithDot(obj: MapLike<unknown>) {
 }
 
 function loadModuleFromSelfNameReference(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): SearchResult<Resolved> {
-    const directoryPath = getNormalizedAbsolutePath(combinePaths(directory, "dummy"), state.host.getCurrentDirectory?.());
+    const directoryPath = getNormalizedAbsolutePath(directory, state.host.getCurrentDirectory?.());
     const scope = getPackageScopeForPath(directoryPath, state);
     if (!scope || !scope.contents.packageJsonContent.exports) {
         return undefined;
@@ -2423,7 +2494,7 @@ function loadModuleFromImports(extensions: Extensions, moduleName: string, direc
         }
         return toSearchResult(/*value*/ undefined);
     }
-    const directoryPath = getNormalizedAbsolutePath(combinePaths(directory, "dummy"), state.host.getCurrentDirectory?.());
+    const directoryPath = getNormalizedAbsolutePath(directory, state.host.getCurrentDirectory?.());
     const scope = getPackageScopeForPath(directoryPath, state);
     if (!scope) {
         if (state.traceEnabled) {

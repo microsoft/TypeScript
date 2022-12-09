@@ -5154,6 +5154,14 @@
         "category": "Message",
         "code": 6261
     },
+    "Directory '{0}' resolves to '{1}' scope according to cache.": {
+        "category": "Message",
+        "code": 6263
+    },
+    "Directory '{0}' has no containing package.json scope according to cache.": {
+        "category": "Message",
+        "code": 6264
+    },
 
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
         "category": "Message",

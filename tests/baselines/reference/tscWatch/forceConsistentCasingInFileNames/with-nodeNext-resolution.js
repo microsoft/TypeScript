@@ -74,7 +74,7 @@ Resolving real path for '/Users/name/projects/web/node_modules/@types/yargs/inde
 ======== Type reference directive 'yargs' was successfully resolved to '/Users/name/projects/web/node_modules/@types/yargs/index.d.ts' with Package ID 'yargs/index.d.ts@17.0.12', primary: true. ========
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
-File '/package.json' does not exist according to earlier cached lookups.
+Directory '/' has no containing package.json scope according to cache.
 ../../../../a/lib/lib.d.ts
   Default library for target 'es5'
 node_modules/@types/yargs/index.d.ts

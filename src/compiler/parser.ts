@@ -277,7 +277,7 @@ import {
     ObjectLiteralExpression,
     OperatorPrecedence,
     OptionalTypeNode,
-    PackageJsonInfo,
+    PackageJsonScope,
     ParameterDeclaration,
     ParenthesizedExpression,
     ParenthesizedTypeNode,
@@ -1303,8 +1303,7 @@ function gatherPossibleChildren(node: Node) {
 
  /** @internal */
  export interface SourceFilePackageJsonInfo {
-    packageJsonLocations?: readonly string[];
-    packageJsonScope?: PackageJsonInfo;
+    packageJsonScope?: PackageJsonScope;
 }
 
 export interface CreateSourceFileOptions {

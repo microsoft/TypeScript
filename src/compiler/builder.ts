@@ -55,6 +55,7 @@ import {
     getOriginalOrResolvedModuleFileName,
     getOriginalOrResolvedTypeReferenceFileName,
     getOwnKeys,
+    getPackageJsonLocationFromScope,
     getRelativePathFromDirectory,
     getTsBuildInfoEmitOutputFilePath,
     handleNoEmitOptions,
@@ -66,7 +67,6 @@ import {
     isJsonSourceFile,
     isNumber,
     isString,
-    last,
     map,
     mapDefined,
     maybeBind,
@@ -78,8 +78,9 @@ import {
     OldBuildInfoProgramConstructor,
     OldBuildInfoProgramHost,
     outFile,
-    PackageJsonInfo,
     PackageJsonInfoCache,
+    PackageJsonInfoContents,
+    PackageJsonScope,
     Path,
     PerDirectoryAndNonRelativeNameCache,
     PerNonRelativeNameCache,
@@ -187,7 +188,7 @@ export interface ReusableBuilderProgramState extends BuilderState {
         modules: PerDirectoryAndNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations> | undefined;
         typeRefs: PerDirectoryAndNonRelativeNameCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations> | undefined;
         packageJsons: Map<Path, string> | undefined;
-        nonRelativePackageJsonsCache: PerNonRelativeNameCache<string> | undefined;
+        packageJsonScopes: PerNonRelativeNameCache<PackageJsonScope> | undefined;
         packageJsonCache: PackageJsonInfoCache | undefined;
     };
     resuableCacheResolutions?: {
@@ -1472,20 +1473,19 @@ function getCacheResolutions(state: BuilderProgramState) {
     let modules: PerDirectoryAndNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations> | undefined;
     let typeRefs: PerDirectoryAndNonRelativeNameCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations> | undefined;
     let packageJsons: Map<Path, string> | undefined;
-    let nonRelativePackageJsonsCache: PerNonRelativeNameCache<string> | undefined;
+    let packageJsonScopes: PerNonRelativeNameCache<PackageJsonScope> | undefined;
     for (const f of state.program!.getSourceFiles()) {
         modules = toPerDirectoryAndNonRelativeNameCache(state, modules, getOriginalOrResolvedModuleFileName, f.resolvedModules, f);
         typeRefs = toPerDirectoryAndNonRelativeNameCache(state, typeRefs, getOriginalOrResolvedTypeReferenceFileName, f.resolvedTypeReferenceDirectiveNames, f);
-        if (f.packageJsonScope) {
+        if (f.packageJsonScope?.contents) {
             const dirPath = getDirectoryPath(f.resolvedPath);
-            if (!nonRelativePackageJsonsCache?.getWithPath(dirPath)) {
-                const result = last(f.packageJsonLocations!);
-                (packageJsons ??= new Map()).set(dirPath, result);
-                (nonRelativePackageJsonsCache ??= createPerNonRelativeNameCache(
+            if (!packageJsonScopes?.getWithPath(dirPath)) {
+                (packageJsons ??= new Map()).set(dirPath, getPackageJsonLocationFromScope(f.packageJsonScope));
+                (packageJsonScopes ??= createPerNonRelativeNameCache(
                     state.program!.getCurrentDirectory(),
                     state.program!.getCanonicalFileName,
-                    identity,
-                )).setWithPath(dirPath, result, ancestorPath => packageJsons!.delete(ancestorPath));
+                    getPackageJsonLocationFromScope,
+                )).setWithPath(dirPath, f.packageJsonScope, ancestorPath => packageJsons!.delete(ancestorPath));
             }
         }
     }
@@ -1498,7 +1498,7 @@ function getCacheResolutions(state: BuilderProgramState) {
         modules,
         typeRefs,
         packageJsons,
-        nonRelativePackageJsonsCache,
+        packageJsonScopes,
         packageJsonCache: state.program!.getModuleResolutionCache()?.getPackageJsonInfoCache().clone(),
     };
 }
@@ -2158,6 +2158,7 @@ export function createOldBuildInfoProgram(
     if (!cacheResolutions && !resuableCacheResolutions) return undefined;
     const fileExistsMap = new Map<string, boolean>();
     const affectingLoationsSameMap = new Map<string, boolean>();
+    const packageJsonInfoContentsMap = new Map<string, PackageJsonInfoContents | false>();
 
     type Resolution = ResolvedModuleWithFailedLookupLocations & ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
     type ResolutionEntry = [name: string, resolutionId: ProgramBuildInfoResolutionId, mode: ResolutionMode];
@@ -2168,6 +2169,7 @@ export function createOldBuildInfoProgram(
     const reusableResolvedModules = intializeReusableResolutionsCache(resuableCacheResolutions?.cache.modules);
     const reusableResolvedTypeRefs = intializeReusableResolutionsCache(resuableCacheResolutions?.cache.typeRefs);
     let decodedPackageJsons: PerNonRelativeNameCache<string> | undefined;
+    let packageJsonScopes: Map<string, PackageJsonScope | false> | undefined;
     let decodedHashes: Map<ProgramBuildInfoAbsoluteFileId, string | undefined> | undefined;
     let resolutions: (Resolution | false)[] | undefined;
     let originalPathOrResolvedFileNames: string[] | undefined;
@@ -2194,7 +2196,7 @@ export function createOldBuildInfoProgram(
             dirPath,
             redirectedReference,
         ),
-        getPackageJsonPath,
+        getPackageJsonScope,
     };
 
     function intializeReusableResolutionsCache(reusable: ProgramBuildInfoResolutionCacheWithRedirects | undefined): ReusableResolutionsCache | undefined {
@@ -2209,7 +2211,7 @@ export function createOldBuildInfoProgram(
 
     function affectingLocationsSame(
         fileName: string,
-        expected: PackageJsonInfo | boolean | string | undefined
+        expected: PackageJsonInfoContents | string | undefined
     ): boolean {
         let result = affectingLoationsSameMap.get(fileName);
         if (result !== undefined) return result;
@@ -2219,17 +2221,34 @@ export function createOldBuildInfoProgram(
             result = !!currentText && (host.createHash ?? generateDjb2Hash)(currentText) === expected;
         }
         else {
-            const expectedText = typeof expected === "object" ? expected.contents.packageJsonText : undefined;
-            result = currentText === expectedText;
+            result = currentText === expected?.packageJsonText;
         }
         affectingLoationsSameMap.set(fileName, result);
         return result;
     }
 
-    function getPackageJsonPath(dir: string) {
-        const fromCache = cacheResolutions?.nonRelativePackageJsonsCache?.get(dir);
+    function getPackageJsonInfoContents(fileName: string) {
+        let result = packageJsonInfoContentsMap.get(fileName);
+        if (result === undefined) packageJsonInfoContentsMap.set(fileName, result = host.getPackageJsonInfo(fileName)?.contents || false);
+        return result || undefined;
+    }
+
+    function getPackageJsonScope(dir: string): PackageJsonScope | undefined{
+        const fromCache = cacheResolutions?.packageJsonScopes?.get(dir);
         if (fromCache) {
-            return fileExists(fromCache) ? fromCache : undefined;
+            const packageJson = getPackageJsonLocationFromScope(fromCache)!;
+            let result = packageJsonScopes?.get(packageJson);
+            if (result === undefined) {
+                (packageJsonScopes ??= new Map()).set(
+                    packageJson,
+                    result = affectingLocationsSame(packageJson, fromCache.contents) ?
+                        fromCache :
+                        fileExists(packageJson) ?
+                            { contents: getPackageJsonInfoContents(packageJson), affectingLocations: [packageJson] } :
+                            false
+                );
+            }
+            return result || undefined;
         }
         if (!resuableCacheResolutions?.cache.packageJsons) return;
         if (!decodedPackageJsons) {
@@ -2252,8 +2271,27 @@ export function createOldBuildInfoProgram(
                 decodedPackageJsons.setWithPath(dirPath, packageJson, noop);
             }
         }
-        const fromDecoded = decodedPackageJsons.get(dir);
-        return fromDecoded && fileExists(fromDecoded) ? fromDecoded : undefined;
+        return toPackageJsonScope(decodedPackageJsons.get(dir));
+    }
+
+    function toPackageJsonScope(file: string | undefined): PackageJsonScope | undefined {
+        if (!file) return undefined;
+        let result = packageJsonScopes?.get(file);
+        if (result !== undefined) return result || undefined;
+        (packageJsonScopes ??= new Map());
+        if (fileExists(file)) {
+             result = {
+                contents: getPackageJsonInfoContents(file),
+                affectingLocations: [file]
+            };
+        }
+        packageJsonScopes.set(file, result || false);
+        return result;
+    }
+
+    function getPackageJsonContentsFromCachedResolutions(fileName: string) {
+        const info = cacheResolutions!.packageJsonCache?.getPackageJsonInfo(fileName);
+        return typeof info === "object" ? info.contents : undefined;
     }
 
     function getResolvedFromCache<T extends ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations>(
@@ -2277,7 +2315,7 @@ export function createOldBuildInfoProgram(
                 fromCache.affectingLocations,
                 fileName => affectingLocationsSame(
                     fileName,
-                    cacheResolutions!.packageJsonCache?.getPackageJsonInfo(fileName)
+                    getPackageJsonContentsFromCachedResolutions(fileName)
                 )
             ) ? fromCache : undefined;
         }
