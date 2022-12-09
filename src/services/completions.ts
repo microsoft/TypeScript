@@ -56,6 +56,7 @@ import {
     every,
     ExportKind,
     Expression,
+    ExpressionWithTypeArguments,
     factory,
     filter,
     find,
@@ -167,6 +168,8 @@ import {
     isInString,
     isIntersectionTypeNode,
     isJSDoc,
+    isJSDocAugmentsTag,
+    isJSDocImplementsTag,
     isJSDocParameterTag,
     isJSDocTag,
     isJSDocTemplateTag,
@@ -866,6 +869,7 @@ function completionInfoFromData(
         isTypeOnlyLocation,
         isJsxIdentifierExpected,
         isRightOfOpenTag,
+        isRightOfDotOrQuestionDot,
         importStatementCompletion,
         insideJsDocTagTypeExpression,
         symbolToSortTextMap: symbolToSortTextMap,
@@ -941,6 +945,8 @@ function completionInfoFromData(
     let caseBlock: CaseBlock | undefined;
     if (preferences.includeCompletionsWithInsertText
         && contextToken
+        && !isRightOfOpenTag
+        && !isRightOfDotOrQuestionDot
         && (caseBlock = findAncestor(contextToken, isCaseBlock))) {
         const cases = getExhaustiveCaseSnippets(caseBlock, sourceFile, preferences, compilerOptions, host, program, formatContext);
         if (cases) {
@@ -2524,6 +2530,7 @@ interface CompletionData {
     /** In JSX tag name and attribute names, identifiers like "my-tag" or "aria-name" is valid identifier. */
     readonly isJsxIdentifierExpected: boolean;
     readonly isRightOfOpenTag: boolean;
+    readonly isRightOfDotOrQuestionDot: boolean;
     readonly importStatementCompletion?: ImportStatementCompletionInfo;
     readonly hasUnresolvedAutoImports?: boolean;
     readonly flags: CompletionInfoFlags;
@@ -2940,6 +2947,7 @@ function getCompletionData(
         isTypeOnlyLocation,
         isJsxIdentifierExpected,
         isRightOfOpenTag,
+        isRightOfDotOrQuestionDot: isRightOfDot || isRightOfQuestionDot,
         importStatementCompletion,
         hasUnresolvedAutoImports,
         flags,
@@ -2962,10 +2970,13 @@ function getCompletionData(
         }
     }
 
-    function tryGetTypeExpressionFromTag(tag: JSDocTag): JSDocTypeExpression | undefined {
+    function tryGetTypeExpressionFromTag(tag: JSDocTag): JSDocTypeExpression | ExpressionWithTypeArguments | undefined {
         if (isTagWithTypeExpression(tag)) {
             const typeExpression = isJSDocTemplateTag(tag) ? tag.constraint : tag.typeExpression;
             return typeExpression && typeExpression.kind === SyntaxKind.JSDocTypeExpression ? typeExpression : undefined;
+        }
+        if (isJSDocAugmentsTag(tag) || isJSDocImplementsTag(tag)) {
+            return tag.class;
         }
         return undefined;
     }

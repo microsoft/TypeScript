@@ -35,10 +35,10 @@ export const name2 = ns.default.name;
 }
 //// [index.js]
 import pkg from "./package.json";
-export const name = pkg.name;
+export var name = pkg.name;
 import * as ns from "./package.json";
-export const thing = ns;
-export const name2 = ns.default.name;
+export var thing = ns;
+export var name2 = ns.default.name;
 //// [index.cjs]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -69,17 +69,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.name2 = exports.thing = exports.name = void 0;
-const package_json_1 = __importDefault(require("./package.json"));
+var package_json_1 = __importDefault(require("./package.json"));
 exports.name = package_json_1.default.name;
-const ns = __importStar(require("./package.json"));
+var ns = __importStar(require("./package.json"));
 exports.thing = ns;
 exports.name2 = ns.default.name;
 //// [index.mjs]
 import pkg from "./package.json";
-export const name = pkg.name;
+export var name = pkg.name;
 import * as ns from "./package.json";
-export const thing = ns;
-export const name2 = ns.default.name;
+export var thing = ns;
+export var name2 = ns.default.name;
 
 
 //// [index.d.ts]

@@ -176,7 +176,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/core/anotherModule.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.World = void 0;
 exports.World = "hello";
 
@@ -187,7 +187,7 @@ export declare const World = "hello";
 
 //// [/user/username/projects/sample1/core/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
@@ -262,7 +262,7 @@ export declare function multiply(a: number, b: number): number;
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = exports.getSecondsInDay = void 0;
 var c = require("../core/index");
 function getSecondsInDay() {
@@ -358,7 +358,7 @@ export declare const m: typeof mod;
 
 //// [/user/username/projects/sample1/tests/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = void 0;
 var c = require("../core/index");
 var logic = require("../logic/index");
@@ -587,7 +587,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/core/newfile.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.newFileConst = void 0;
 exports.newFileConst = 30;
 
@@ -788,7 +788,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/core/newfile.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.someClass2 = exports.newFileConst = void 0;
 exports.newFileConst = 30;
 var someClass2 = /** @class */ (function () {

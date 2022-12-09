@@ -79,7 +79,7 @@ Info 16   [00:00:31.000] 	Files (2)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	app.ts
 	  Part of 'files' list in tsconfig.json
 

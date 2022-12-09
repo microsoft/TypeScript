@@ -30,8 +30,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/a/b/foo/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "./foo" from /a/b/c.ts with host that doesnt have directoryExists
@@ -66,6 +65,5 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/a/b/foo/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }

@@ -24,7 +24,7 @@ var y: Promise2<string, boolean>;
 
 //// [promiseIdentityWithAny2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 // Error because type parameter arity doesn't match
 var x;
 var x;

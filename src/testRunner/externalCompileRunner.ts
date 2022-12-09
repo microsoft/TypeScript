@@ -144,7 +144,11 @@ export class DockerfileRunner extends ExternalCompileRunnerBase {
         describe(`${this.kind()} code samples`, function (this: Mocha.Suite) {
             this.timeout(cls.timeout); // 20 minutes
             before(() => {
-                cls.exec("docker", ["build", ".", "-t", "typescript/typescript"], { cwd: IO.getWorkspaceRoot() }); // cached because workspace is hashed to determine cacheability
+                // cached because workspace is hashed to determine cacheability
+                cls.exec("docker", ["build", ".", "-t", "typescript/typescript", "-f", cls.testDir + "Dockerfile"], {
+                    cwd: IO.getWorkspaceRoot(),
+                    env: { ...process.env, DOCKER_BUILDKIT: "1" }, // We need buildkit to allow Dockerfile.dockerignore to work.
+                });
             });
             for (const test of testList) {
                 const directory = typeof test === "string" ? test : test.file;
@@ -160,7 +164,7 @@ export class DockerfileRunner extends ExternalCompileRunnerBase {
     }
 
     private timeout = 1_200_000; // 20 minutes;
-    private exec(command: string, args: string[], options: { cwd: string }): void {
+    private exec(command: string, args: string[], options: { cwd: string; env?: NodeJS.ProcessEnv }): void {
         const cp: typeof import("child_process") = require("child_process");
         const stdio = isWorker ? "pipe" : "inherit";
         const res = cp.spawnSync(isWorker ? `${command} 2>&1` : command, args, { timeout: this.timeout, shell: true, stdio, ...options });

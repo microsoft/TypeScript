@@ -21,8 +21,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/a/b/c/bar/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "./bar" from /a/b/c/d.ts with typings: c/d/e.d.ts with host that doesnt have directoryExists
@@ -48,8 +47,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/a/b/c/bar/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "../../bar" from /a/b/c/d.ts with typings: e.d.ts
@@ -75,8 +73,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/a/bar/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "../../bar" from /a/b/c/d.ts with typings: e.d.ts with host that doesnt have directoryExists
@@ -102,8 +99,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/a/bar/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "/bar" from /a/b/c/d.ts with typings: e.d.ts
@@ -129,8 +125,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/bar/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "/bar" from /a/b/c/d.ts with typings: e.d.ts with host that doesnt have directoryExists
@@ -156,8 +151,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/bar/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "c:/bar" from c:/a/b/c/d.ts with typings: e.d.ts
@@ -183,8 +177,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "c:/bar/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "c:/bar" from c:/a/b/c/d.ts with typings: e.d.ts with host that doesnt have directoryExists
@@ -210,6 +203,5 @@ Resolution:: {
   ],
   "affectingLocations": [
     "c:/bar/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
