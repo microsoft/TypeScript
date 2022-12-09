@@ -911,6 +911,14 @@
         "category": "Error",
         "code": 1278
     },
+    "An 'export =' declaration must reference a value when 'verbatimModuleSyntax' is enabled, but '{0}' only refers to a type.": {
+        "category": "Error",
+        "code": 1279
+    },
+    "An 'export =' declaration must reference a real value when 'verbatimModuleSyntax' is enabled, but '{0}' resolves to a type-only declaration.": {
+        "category": "Error",
+        "code": 1280
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",

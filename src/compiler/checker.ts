@@ -42931,18 +42931,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (sym) {
                 markAliasReferenced(sym, id);
                 // If not a value, we're interpreting the identifier as a type export, along the lines of (`export { Id as default }`)
-                const target = sym.flags & SymbolFlags.Alias ? resolveAlias(sym) : sym;
-                if (getAllSymbolFlags(target) & SymbolFlags.Value) {
+                if (getAllSymbolFlags(sym) & SymbolFlags.Value) {
                     // However if it is a value, we need to check it's being used correctly
-                    checkExpressionCached(node.expression);
+                    checkExpressionCached(id);
+                    if (compilerOptions.verbatimModuleSyntax && getTypeOnlyAliasDeclaration(sym, SymbolFlags.Value)) {
+                        error(id, Diagnostics.An_export_declaration_must_reference_a_real_value_when_verbatimModuleSyntax_is_enabled_but_0_resolves_to_a_type_only_declaration, idText(id));
+                    }
+                }
+                else if (compilerOptions.verbatimModuleSyntax) {
+                    error(id, Diagnostics.An_export_declaration_must_reference_a_value_when_verbatimModuleSyntax_is_enabled_but_0_only_refers_to_a_type, idText(id));
                 }
             }
             else {
-                checkExpressionCached(node.expression); // doesn't resolve, check as expression to mark as error
+                checkExpressionCached(id); // doesn't resolve, check as expression to mark as error
             }
 
             if (getEmitDeclarations(compilerOptions)) {
-                collectLinkedAliases(node.expression as Identifier, /*setVisibility*/ true);
+                collectLinkedAliases(id, /*setVisibility*/ true);
             }
         }
         else {
