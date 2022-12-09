@@ -25,7 +25,6 @@ import {
     TscCompileSystem,
     verifyTsc,
     verifyTscCompileLike,
-    verifyTscWithEdits,
 } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: on 'sample1' project", () => {
@@ -100,7 +99,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
     });
 
     describe("clean builds", () => {
-        verifyTscWithEdits({
+        verifyTsc({
             scenario: "sample1",
             subScenario: "removes all files it built",
             fs: getSampleFsAfterBuild,
@@ -134,7 +133,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
     });
 
     describe("force builds", () => {
-        verifyTscWithEdits({
+        verifyTsc({
             scenario: "sample1",
             subScenario: "always builds under with force option",
             fs: () => projFs,
@@ -144,7 +143,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
     });
 
     describe("can detect when and what to rebuild", () => {
-        verifyTscWithEdits({
+        verifyTsc({
             scenario: "sample1",
             subScenario: "can detect when and what to rebuild",
             fs: getSampleFsAfterBuild,
@@ -152,30 +151,30 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             edits: [
                 // Update a file in the leaf node (tests), only it should rebuild the last one
                 {
-                    subScenario: "Only builds the leaf node project",
-                    modifyFs: fs => fs.writeFileSync("/src/tests/index.ts", "const m = 10;"),
+                    caption: "Only builds the leaf node project",
+                    edit: fs => fs.writeFileSync("/src/tests/index.ts", "const m = 10;"),
                 },
                 // Update a file in the parent (without affecting types), should get fast downstream builds
                 {
-                    subScenario: "Detects type-only changes in upstream projects",
-                    modifyFs: fs => replaceText(fs, "/src/core/index.ts", "HELLO WORLD", "WELCOME PLANET"),
+                    caption: "Detects type-only changes in upstream projects",
+                    edit: fs => replaceText(fs, "/src/core/index.ts", "HELLO WORLD", "WELCOME PLANET"),
                 },
                 {
-                    subScenario: "rebuilds when tsconfig changes",
-                    modifyFs: fs => replaceText(fs, "/src/tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es3"`),
+                    caption: "rebuilds when tsconfig changes",
+                    edit: fs => replaceText(fs, "/src/tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es3"`),
                 },
             ]
         });
 
-        verifyTscWithEdits({
+        verifyTsc({
             scenario: "sample1",
             subScenario: "when input file text does not change but its modified time changes",
             fs: () => projFs,
             commandLineArgs: ["--b", "/src/tests", "--verbose"],
             edits: [
                 {
-                    subScenario: "upstream project changes without changing file text",
-                    modifyFs: fs => {
+                    caption: "upstream project changes without changing file text",
+                    edit: fs => {
                         const time = new Date(fs.time());
                         fs.utimesSync("/src/core/index.ts", time, time);
                     },
@@ -183,19 +182,19 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             ]
         });
 
-        verifyTscWithEdits({
+        verifyTsc({
             scenario: "sample1",
             subScenario: "when declarationMap changes",
             fs: () => projFs,
             commandLineArgs: ["--b", "/src/tests", "--verbose"],
             edits: [
                 {
-                    subScenario: "Disable declarationMap",
-                    modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", `"declarationMap": true,`, `"declarationMap": false,`),
+                    caption: "Disable declarationMap",
+                    edit: fs => replaceText(fs, "/src/core/tsconfig.json", `"declarationMap": true,`, `"declarationMap": false,`),
                 },
                 {
-                    subScenario: "Enable declarationMap",
-                    modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", `"declarationMap": false,`, `"declarationMap": true,`),
+                    caption: "Enable declarationMap",
+                    edit: fs => replaceText(fs, "/src/core/tsconfig.json", `"declarationMap": false,`, `"declarationMap": true,`),
                 },
             ]
         });
@@ -214,7 +213,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             commandLineArgs: ["--b", "/src/tests", "--verbose", "--force"],
         });
 
-        verifyTscWithEdits({
+        verifyTsc({
             scenario: "sample1",
             subScenario: "tsbuildinfo has error",
             fs: () => loadProjectFromFiles({
@@ -224,8 +223,8 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             }),
             commandLineArgs: ["--b", "src/project", "-i", "-v"],
             edits: [{
-                subScenario: "tsbuildinfo written has error",
-                modifyFs: fs => prependText(fs, "/src/project/tsconfig.tsbuildinfo", "Some random string"),
+                caption: "tsbuildinfo written has error",
+                edit: fs => prependText(fs, "/src/project/tsconfig.tsbuildinfo", "Some random string"),
             }]
         });
 
@@ -262,7 +261,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             },
         });
 
-        verifyTscWithEdits({
+        verifyTsc({
             scenario: "sample1",
             subScenario: "rebuilds when extended config file changes",
             fs: () => projFs,
@@ -272,8 +271,8 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                 replaceText(fs, "/src/tests/tsconfig.json", `"references": [`, `"extends": "./tsconfig.base.json", "references": [`);
             },
             edits: [{
-                subScenario: "incremental-declaration-changes",
-                modifyFs: fs => fs.writeFileSync("/src/tests/tsconfig.base.json", JSON.stringify({ compilerOptions: {} }))
+                caption: "incremental-declaration-changes",
+                edit: fs => fs.writeFileSync("/src/tests/tsconfig.base.json", JSON.stringify({ compilerOptions: {} }))
             }]
         });
 
@@ -362,7 +361,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
     });
 
     describe("downstream-blocked compilations", () => {
-        verifyTscWithEdits({
+        verifyTsc({
             scenario: "sample1",
             subScenario: "does not build downstream projects if upstream projects have errors",
             fs: () => projFs,
@@ -436,34 +435,34 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
 
     const coreChanges: TestTscEdit[] = [
         {
-            subScenario: "incremental-declaration-changes",
-            modifyFs: fs => appendText(fs, "/src/core/index.ts", `
+            caption: "incremental-declaration-changes",
+            edit: fs => appendText(fs, "/src/core/index.ts", `
 export class someClass { }`),
         },
         {
-            subScenario: "incremental-declaration-doesnt-change",
-            modifyFs: fs => appendText(fs, "/src/core/index.ts", `
+            caption: "incremental-declaration-doesnt-change",
+            edit: fs => appendText(fs, "/src/core/index.ts", `
 class someClass2 { }`),
         },
         noChangeRun,
     ];
 
     describe("lists files", () => {
-        verifyTscWithEdits({
+        verifyTsc({
             scenario: "sample1",
             subScenario: "listFiles",
             fs: () => projFs,
             commandLineArgs: ["--b", "/src/tests", "--listFiles"],
             edits: coreChanges
         });
-        verifyTscWithEdits({
+        verifyTsc({
             scenario: "sample1",
             subScenario: "listEmittedFiles",
             fs: () => projFs,
             commandLineArgs: ["--b", "/src/tests", "--listEmittedFiles"],
             edits: coreChanges
         });
-        verifyTscWithEdits({
+        verifyTsc({
             scenario: "sample1",
             subScenario: "explainFiles",
             fs: () => projFs,
@@ -473,7 +472,7 @@ class someClass2 { }`),
     });
 
     describe("emit output", () => {
-        verifyTscWithEdits({
+        verifyTsc({
             subScenario: "sample",
             fs: () => projFs,
             scenario: "sample1",
@@ -483,8 +482,8 @@ class someClass2 { }`),
             edits: [
                 ...coreChanges,
                 {
-                    subScenario: "when logic config changes declaration dir",
-                    modifyFs: fs => replaceText(fs, "/src/logic/tsconfig.json", `"declaration": true,`, `"declaration": true,
+                    caption: "when logic config changes declaration dir",
+                    edit: fs => replaceText(fs, "/src/logic/tsconfig.json", `"declaration": true,`, `"declaration": true,
         "declarationDir": "decls",`),
                 },
                 noChangeRun,
@@ -502,7 +501,7 @@ class someClass2 { }`),
             baselineReadFileCalls: true
         });
 
-        verifyTscWithEdits({
+        verifyTsc({
             subScenario: "when declaration option changes",
             fs: () => projFs,
             scenario: "sample1",
@@ -514,12 +513,12 @@ class someClass2 { }`),
     }
 }`),
             edits: [{
-                subScenario: "incremental-declaration-changes",
-                modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", `"incremental": true,`, `"incremental": true, "declaration": true,`),
+                caption: "incremental-declaration-changes",
+                edit: fs => replaceText(fs, "/src/core/tsconfig.json", `"incremental": true,`, `"incremental": true, "declaration": true,`),
             }],
         });
 
-        verifyTscWithEdits({
+        verifyTsc({
             subScenario: "when target option changes",
             fs: () => projFs,
             scenario: "sample1",
@@ -540,12 +539,12 @@ class someClass2 { }`),
 }`);
             },
             edits: [{
-                subScenario: "incremental-declaration-changes",
-                modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", "esnext", "es5"),
+                caption: "incremental-declaration-changes",
+                edit: fs => replaceText(fs, "/src/core/tsconfig.json", "esnext", "es5"),
             }],
         });
 
-        verifyTscWithEdits({
+        verifyTsc({
             subScenario: "when module option changes",
             fs: () => projFs,
             scenario: "sample1",
@@ -557,12 +556,12 @@ class someClass2 { }`),
     }
 }`),
             edits: [{
-                subScenario: "incremental-declaration-changes",
-                modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", `"module": "commonjs"`, `"module": "amd"`),
+                caption: "incremental-declaration-changes",
+                edit: fs => replaceText(fs, "/src/core/tsconfig.json", `"module": "commonjs"`, `"module": "amd"`),
             }],
         });
 
-        verifyTscWithEdits({
+        verifyTsc({
             subScenario: "when esModuleInterop option changes",
             fs: () => projFs,
             scenario: "sample1",
@@ -582,8 +581,8 @@ class someClass2 { }`),
     }
 }`),
             edits: [{
-                subScenario: "incremental-declaration-changes",
-                modifyFs: fs => replaceText(fs, "/src/tests/tsconfig.json", `"esModuleInterop": false`, `"esModuleInterop": true`),
+                caption: "incremental-declaration-changes",
+                edit: fs => replaceText(fs, "/src/tests/tsconfig.json", `"esModuleInterop": false`, `"esModuleInterop": true`),
             }],
         });
 

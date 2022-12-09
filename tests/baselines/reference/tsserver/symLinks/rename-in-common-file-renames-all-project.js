@@ -77,7 +77,7 @@ Info 16   [00:00:51.000] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	c/fc.ts
 	  Imported via "./c/fc" from file 'a.ts'
 	  Matched by default include pattern '**/*'
@@ -171,7 +171,7 @@ Info 33   [00:01:14.000] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	c/fc.ts
 	  Imported via "./c/fc" from file 'b.ts'
 	  Matched by default include pattern '**/*'

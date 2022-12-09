@@ -37,7 +37,7 @@ Output::
 [[90m12:00:27 AM[0m] Starting compilation in watch mode...
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 XY/a.ts
   Imported via "./XY/a" from file 'b.ts'
   Matched by default include pattern '**/*'
@@ -147,7 +147,7 @@ Output::
 [[90m12:00:33 AM[0m] File change detected. Starting incremental compilation...
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 XY/a.ts
   Imported via "./XY/a" from file 'b.ts'
   Matched by default include pattern '**/*'

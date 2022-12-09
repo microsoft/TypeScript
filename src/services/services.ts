@@ -1512,7 +1512,8 @@ const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[]
     "prepareCallHierarchy",
     "provideCallHierarchyIncomingCalls",
     "provideCallHierarchyOutgoingCalls",
-    "provideInlayHints"
+    "provideInlayHints",
+    "getSupportedCodeFixes",
 ];
 
 const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
@@ -3046,6 +3047,7 @@ export function createLanguageService(
         commentSelection,
         uncommentSelection,
         provideInlayHints,
+        getSupportedCodeFixes,
     };
 
     switch (languageServiceMode) {

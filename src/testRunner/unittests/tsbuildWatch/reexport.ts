@@ -23,10 +23,10 @@ describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced p
             ],
             { currentDirectory: `/user/username/projects/reexport` }
         ),
-        changes: [
+        edits: [
             {
                 caption: "Introduce error",
-                change: sys => sys.replaceFileText(`/user/username/projects/reexport/src/pure/session.ts`, "// ", ""),
+                edit: sys => sys.replaceFileText(`/user/username/projects/reexport/src/pure/session.ts`, "// ", ""),
                 timeouts: sys => {
                     sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
                     sys.checkTimeoutQueueLengthAndRun(1); // build src/main and src
@@ -35,7 +35,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: with reexport when referenced p
             },
             {
                 caption: "Fix error",
-                change: sys => sys.replaceFileText(`/user/username/projects/reexport/src/pure/session.ts`, "bar: ", "// bar: "),
+                edit: sys => sys.replaceFileText(`/user/username/projects/reexport/src/pure/session.ts`, "bar: ", "// bar: "),
                 timeouts: sys => {
                     sys.checkTimeoutQueueLengthAndRun(1); // build src/pure
                     sys.checkTimeoutQueueLengthAndRun(1); // build src/main and src

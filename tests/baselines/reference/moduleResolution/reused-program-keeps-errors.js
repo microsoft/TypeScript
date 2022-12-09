@@ -14,7 +14,7 @@ declare var x: number;
 Program1 Options Diagnostics::
 error TS6053: File 'lib.d.ts' not found.
   The file is in the program because:
-    Default library for target 'es3'
+    Default library for target 'es5'
 
 
 Program Reused:: Completely
@@ -22,5 +22,5 @@ Program Reused:: Completely
 Program2 Options Diagnostics::
 error TS6053: File 'lib.d.ts' not found.
   The file is in the program because:
-    Default library for target 'es3'
+    Default library for target 'es5'
 

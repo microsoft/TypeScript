@@ -79,7 +79,7 @@ Info 18   [00:00:55.000] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	apps/editor/scripts/createConfigVariable.js
 	  Matched by default include pattern '**/*'
 	apps/editor/src/src.js
@@ -251,7 +251,7 @@ Info 47   [00:01:34.000] 	Files (2)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/src.js
 	  Matched by include pattern './src' in 'tsconfig.json'
 
@@ -270,7 +270,7 @@ Info 53   [00:01:40.000] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	apps/editor/scripts/createConfigVariable.js
 	  Matched by default include pattern '**/*'
 	apps/editor/src/src.js

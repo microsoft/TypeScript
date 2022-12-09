@@ -53,8 +53,8 @@ export default _default;
 
 //// [/src/project/constants.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = 1;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = 1;
 
 
 //// [/src/project/reexport.d.ts]
@@ -63,21 +63,10 @@ export { default as ConstantNumber } from "./constants";
 
 //// [/src/project/reexport.js]
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConstantNumber = void 0;
 var constants_1 = require("./constants");
-__createBinding(exports, constants_1, "default", "ConstantNumber");
+Object.defineProperty(exports, "ConstantNumber", { enumerable: true, get: function () { return constants_1.default; } });
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
@@ -212,8 +201,8 @@ export default _default;
 
 //// [/src/project/constants.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = 2;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = 2;
 
 
 //// [/src/project/reexport.js] file written with same contents

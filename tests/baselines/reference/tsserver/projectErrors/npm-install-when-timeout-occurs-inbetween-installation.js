@@ -68,7 +68,7 @@ Info 20   [00:00:43.000] 	Files (2)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/main.ts
 	  Matched by default include pattern '**/*'
 
@@ -1244,7 +1244,7 @@ Info 195  [00:04:37.000] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	node_modules/@angular/core/index.d.ts
 	  Imported via '@angular/core' from file 'src/main.ts'
 	src/main.ts

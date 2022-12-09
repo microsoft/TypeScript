@@ -93,7 +93,7 @@ Info 16   [00:00:50.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	types.ts
 	  Part of 'files' list in tsconfig.json
 	program.ts
