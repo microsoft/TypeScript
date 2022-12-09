@@ -131,6 +131,18 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
         return functionDeclaration ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
     }
 
+    if (node.kind === SyntaxKind.AwaitKeyword) {
+        const functionDeclaration = findAncestor(node, n => isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
+        const isAsyncFunction = functionDeclaration && some(functionDeclaration.modifiers, (node) => node.kind === SyntaxKind.AsyncKeyword);
+        return isAsyncFunction ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
+    }
+
+    if (node.kind === SyntaxKind.YieldKeyword) {
+        const functionDeclaration = findAncestor(node, n => isFunctionLikeDeclaration(n)) as FunctionLikeDeclaration | undefined;
+        const isGeneratorFunction = functionDeclaration && functionDeclaration.asteriskToken;
+        return isGeneratorFunction ? [createDefinitionFromSignatureDeclaration(typeChecker, functionDeclaration)] : undefined;
+    }
+
     if (isStaticModifier(node) && isClassStaticBlockDeclaration(node.parent)) {
         const classDecl = node.parent.parent;
         const { symbol, failedAliasResolution } = getSymbol(classDecl, typeChecker, stopAtAlias);
