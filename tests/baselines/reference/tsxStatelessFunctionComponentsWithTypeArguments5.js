@@ -21,7 +21,7 @@ function Bar<T extends { prop: number }>(arg: T) {
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     function createComponent(arg) {
         var a1 = <Component {...arg}/>;
         var a2 = <Component {...arg} prop1/>;

@@ -48,7 +48,7 @@ interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/project/out/input/keyboard.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.evaluateKeyboardEvent = void 0;
 function bar() { return "just a random function so .d.ts location doesnt match"; }
 function evaluateKeyboardEvent() { }
@@ -64,7 +64,7 @@ export declare function evaluateKeyboardEvent(): void;
 
 //// [/user/username/projects/project/out/input/keyboard.test.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var keyboard_1 = require("common/input/keyboard");
 function testEvaluateKeyboardEvent() {
     return (0, keyboard_1.evaluateKeyboardEvent)();
@@ -145,7 +145,7 @@ export {};
 
 //// [/user/username/projects/project/out/terminal.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var keyboard_1 = require("common/input/keyboard");
 function foo() {
     return (0, keyboard_1.evaluateKeyboardEvent)();
@@ -161,7 +161,7 @@ export {};
 
 //// [/user/username/projects/project/out/common/input/keyboard.test.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var keyboard_1 = require("common/input/keyboard");
 function testEvaluateKeyboardEvent() {
     return (0, keyboard_1.evaluateKeyboardEvent)();
@@ -295,7 +295,7 @@ Info 20   [00:01:37.000] 	Files (3)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	input/keyboard.ts
 	  Imported via 'common/input/keyboard' from file 'input/keyboard.test.ts'
 	  Matched by include pattern './**/*' in 'tsconfig.json'
@@ -430,7 +430,7 @@ Info 44   [00:02:10.000] 	Files (4)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../out/input/keyboard.d.ts
 	  Imported via 'common/input/keyboard' from file 'terminal.ts'
 	  Imported via 'common/input/keyboard' from file 'common/input/keyboard.test.ts'

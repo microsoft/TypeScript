@@ -8,7 +8,7 @@ export namespace TypeGuards {
 
 //// [typeGuardOnContainerTypeNoHang.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.TypeGuards = void 0;
 var TypeGuards;
 (function (TypeGuards) {

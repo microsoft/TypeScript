@@ -23,6 +23,6 @@ var Foo = /** @class */ (function () {
     __decorate([
         PropDeco,
         __metadata("design:type", String)
-    ], Foo.prototype, "foo");
+    ], Foo.prototype, "foo", void 0);
     return Foo;
 }());
