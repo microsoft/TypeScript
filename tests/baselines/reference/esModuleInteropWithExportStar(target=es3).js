@@ -40,12 +40,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 exports.y = exports.x = void 0;
 var fs = __importStar(require("./fs"));
 fs;
 __exportStar(require("./fs"), exports);
 var fs_1 = require("./fs");
-Object.defineProperty(exports, "x", { enumerable: true, get: function () { return fs_1.x; } });
+__createBinding(exports, fs_1, "x");
 var fs_2 = require("./fs");
-Object.defineProperty(exports, "y", { enumerable: true, get: function () { return fs_2.x; } });
+__createBinding(exports, fs_2, "x", "y");
