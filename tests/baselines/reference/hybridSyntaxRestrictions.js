@@ -21,12 +21,12 @@ export const a = "a";
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = "a";
 //// [mainJs.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 Promise.resolve().then(function () { return require("./a"); });
 var _ = require("./a"); // No resolution
 _.a; // any
