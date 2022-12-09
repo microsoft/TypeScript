@@ -1,3 +1,4 @@
+/foo/tsconfig.json(3,19): error TS5097: Flag 'ES3' is deprecated, please remove it from your configuration.
 /foo/tsconfig.json(4,9): error TS5097: Flag 'noImplicitUseStrict' is deprecated, please remove it from your configuration.
 /foo/tsconfig.json(5,9): error TS5097: Flag 'keyofStringsOnly' is deprecated, please remove it from your configuration.
 /foo/tsconfig.json(6,9): error TS5097: Flag 'suppressExcessPropertyErrors' is deprecated, please remove it from your configuration.
@@ -8,10 +9,12 @@
 /foo/tsconfig.json(11,31): error TS5098: Invalid value for '--ignoreDeprecations'.
 
 
-==== /foo/tsconfig.json (8 errors) ====
+==== /foo/tsconfig.json (9 errors) ====
     {
         "compilerOptions": {
             "target": "ES3",
+                      ~~~~~
+!!! error TS5097: Flag 'ES3' is deprecated, please remove it from your configuration.
             "noImplicitUseStrict": true,
             ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS5097: Flag 'noImplicitUseStrict' is deprecated, please remove it from your configuration.
