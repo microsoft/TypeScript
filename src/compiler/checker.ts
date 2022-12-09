@@ -10090,8 +10090,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // If the parent is a tuple type, the rest element has a tuple type of the
                 // remaining tuple element types. Otherwise, the rest element has an array type with same
                 // element type as the parent type.
-                type = everyType(parentType, isTupleType) ?
-                    mapType(parentType, t => sliceTupleType(t as TupleTypeReference, index)) :
+                const baseConstraint = getBaseConstraintOrType(parentType);
+                type = everyType(baseConstraint, isTupleType) ?
+                    mapType(baseConstraint, t => sliceTupleType(t as TupleTypeReference, index)) :
                     createArrayType(elementType);
             }
             else if (isArrayLikeType(parentType)) {
