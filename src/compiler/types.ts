@@ -6710,7 +6710,7 @@ export interface CompilerOptions {
     /** @internal */generateCpuProfile?: string;
     /** @internal */generateTrace?: string;
     /** @internal */help?: boolean;
-    ignoreDeprecations?: DeprecationVersion;
+    ignoreDeprecations?: string;
     importHelpers?: boolean;
     importsNotUsedAsValues?: ImportsNotUsedAsValues;
     /** @internal */init?: boolean;
@@ -9466,8 +9466,8 @@ export interface Queue<T> {
 /** @internal */
 export const enum DeprecationVersion {
     /* eslint-disable @typescript-eslint/naming-convention */
-    v5_0 = 1,
-    v5_5 = 2,
-    v6_0 = 3,
+    v5_0 = "5.0",
+    v5_5 = "5.5",
+    v6_0 = "6.0",
     /* eslint-enable @typescript-eslint/naming-convention */
 }

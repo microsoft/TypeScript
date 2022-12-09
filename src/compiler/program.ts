@@ -159,12 +159,10 @@ import {
     HeritageClause,
     Identifier,
     identity,
-    ignoreDeprecationsMap,
     ImportClause,
     ImportDeclaration,
     ImportOrExportSpecifier,
     InputFiles,
-    inverseIgnoreDeprecationsMap,
     inverseJsxOptionMap,
     isAmbientModule,
     isAnyImportOrReExport,
@@ -4262,51 +4260,48 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function verifyDeprecatedCompilerOptions() {
         const version = typeScriptVersion || versionMajorMinor;
-        const deprecationVersion = inverseIgnoreDeprecationsMap.get(version) as DeprecationVersion;
-        if (options.ignoreDeprecations) {
-            const ignoreDeprecationVersion = options.ignoreDeprecations && ignoreDeprecationsMap.get(options.ignoreDeprecations);
-            if (ignoreDeprecationVersion === undefined || deprecationVersion && options.ignoreDeprecations < deprecationVersion) {
-                createOptionValueDiagnostic("ignoreDeprecations", Diagnostics.Invalid_value_for_ignoreDeprecations);
+        const ignoreDeprecations = options.ignoreDeprecations;
+        if (ignoreDeprecations) {
+            if (ignoreDeprecations === DeprecationVersion.v5_0 && (version === DeprecationVersion.v5_0 || version === DeprecationVersion.v5_5)) {
+                return;
             }
             else {
-                if (deprecationVersion === DeprecationVersion.v5_0) {
-                    return;
-                }
+                createOptionValueDiagnostic("ignoreDeprecations", Diagnostics.Invalid_value_for_ignoreDeprecations);
             }
         }
         if (options.target === ScriptTarget.ES3) {
-            createDeprecatedDiagnosticForOption(version, deprecationVersion, "target", "ES3");
+            createDeprecatedDiagnosticForOption(version, "target", "ES3");
         }
         if (options.noImplicitUseStrict) {
-            createDeprecatedDiagnosticForOption(version, deprecationVersion, "noImplicitUseStrict");
+            createDeprecatedDiagnosticForOption(version, "noImplicitUseStrict");
         }
         if (options.keyofStringsOnly) {
-            createDeprecatedDiagnosticForOption(version, deprecationVersion, "keyofStringsOnly");
+            createDeprecatedDiagnosticForOption(version, "keyofStringsOnly");
         }
         if (options.suppressExcessPropertyErrors) {
-            createDeprecatedDiagnosticForOption(version, deprecationVersion, "suppressExcessPropertyErrors");
+            createDeprecatedDiagnosticForOption(version, "suppressExcessPropertyErrors");
         }
         if (options.suppressImplicitAnyIndexErrors) {
-            createDeprecatedDiagnosticForOption(version, deprecationVersion, "suppressImplicitAnyIndexErrors");
+            createDeprecatedDiagnosticForOption(version, "suppressImplicitAnyIndexErrors");
         }
         if (options.noStrictGenericChecks) {
-            createDeprecatedDiagnosticForOption(version, deprecationVersion, "noStrictGenericChecks");
+            createDeprecatedDiagnosticForOption(version, "noStrictGenericChecks");
         }
         if (options.charset) {
-            createDeprecatedDiagnosticForOption(version, deprecationVersion, "charset");
+            createDeprecatedDiagnosticForOption(version, "charset");
         }
         if (options.out) {
-            createDeprecatedDiagnosticForOption(version, deprecationVersion, "out");
+            createDeprecatedDiagnosticForOption(version, "out");
         }
     }
 
-    function createDeprecatedDiagnosticForOption(version: string, deprecationVersion: DeprecationVersion, name: string, value?: string) {
-        if (deprecationVersion === DeprecationVersion.v6_0) {
+    function createDeprecatedDiagnosticForOption(version: string, name: string, value?: string) {
+        if (version === DeprecationVersion.v6_0) {
             createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, Diagnostics.Flag_0_is_deprecated_please_remove_it_from_your_configuration, value || name);
         }
         else {
             createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined,
-                Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, ignoreDeprecationsMap.get(deprecationVersion + 1), version);
+                Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
         }
     }
 

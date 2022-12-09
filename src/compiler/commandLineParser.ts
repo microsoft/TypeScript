@@ -21,7 +21,6 @@ import {
     createDiagnosticForNodeInSourceFile,
     createGetCanonicalFileName,
     Debug,
-    DeprecationVersion,
     Diagnostic,
     DiagnosticMessage,
     Diagnostics,
@@ -234,18 +233,6 @@ export const libs = libEntries.map(entry => entry[0]);
  * @internal
  */
 export const libMap = new Map(libEntries);
-
-/** @internal */
-export const ignoreDeprecationsMap = new Map([
-    [DeprecationVersion.v5_0, "5.0"],
-    [DeprecationVersion.v5_5, "5.5"],
-    [DeprecationVersion.v6_0, "6.0"],
-]);
-
-/** @internal */
-export const inverseIgnoreDeprecationsMap = new Map(
-    arrayFrom(mapIterator(ignoreDeprecationsMap.entries(), ([key, value]) => [value, key]))
-);
 
 // Watch related options
 /** @internal */
@@ -1486,7 +1473,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
     {
         name: "ignoreDeprecations",
-        type: inverseIgnoreDeprecationsMap,
+        type: "string",
         defaultValueDescription: undefined,
     },
 ];

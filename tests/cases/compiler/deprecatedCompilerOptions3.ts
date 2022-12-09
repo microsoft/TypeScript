@@ -9,7 +9,7 @@
         "suppressImplicitAnyIndexErrors": true,
         "noStrictGenericChecks": true,
         "charset": "utf8",
-        "out": "dist.js"
+        "out": "dist.js",
     }
 }
 
