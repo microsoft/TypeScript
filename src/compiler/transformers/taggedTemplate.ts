@@ -18,6 +18,7 @@ import {
     TemplateLiteralLikeNode,
     TemplateMiddle,
     TemplateTail,
+    TokenFlags,
     TransformationContext,
     visitEachChild,
     visitNode,
@@ -93,7 +94,7 @@ export function processTaggedTemplateExpression(
 }
 
 function createTemplateCooked(template: TemplateHead | TemplateMiddle | TemplateTail | NoSubstitutionTemplateLiteral) {
-    return template.templateFlags ? factory.createVoidZero() : factory.createStringLiteral(template.text);
+    return template.templateFlags! & TokenFlags.ContainsOctalOrInvalidEscape ? factory.createVoidZero() : factory.createStringLiteral(template.text);
 }
 
 /**

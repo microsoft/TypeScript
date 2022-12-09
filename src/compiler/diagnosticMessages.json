@@ -1549,6 +1549,14 @@
         "category": "Message",
         "code": 1483
     },
+    "Octal escape sequences are not allowed in strict mode.": {
+        "category": "Error",
+        "code": 1484
+    },
+    "Octal escape sequences are not allowed in template strings.": {
+        "category": "Error",
+        "code": 1485
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",

@@ -3,4 +3,4 @@ var x = "\u{}";
 
 
 //// [unicodeExtendedEscapesInStrings19_ES5.js]
-var x = "";
+var x = "\u{}";

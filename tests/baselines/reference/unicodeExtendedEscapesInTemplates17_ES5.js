@@ -3,4 +3,4 @@ var x = `\u{r}\u{n}\u{t}`;
 
 
 //// [unicodeExtendedEscapesInTemplates17_ES5.js]
-var x = "r}n}t}";
+var x = "\\u{r}\\u{n}\\u{t}";

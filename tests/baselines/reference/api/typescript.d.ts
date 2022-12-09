@@ -4567,7 +4567,6 @@ declare namespace ts {
         reScanSlashToken(): SyntaxKind;
         reScanAsteriskEqualsToken(): SyntaxKind;
         reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
-        reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxAttributeValue(): SyntaxKind;

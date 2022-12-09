@@ -2154,10 +2154,6 @@ namespace Parser {
         return currentToken = scanner.reScanTemplateToken(isTaggedTemplate);
     }
 
-    function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
-        return currentToken = scanner.reScanTemplateHeadOrNoSubstitutionTemplate();
-    }
-
     function reScanLessThanToken(): SyntaxKind {
         return currentToken = scanner.reScanLessThanToken();
     }
@@ -3607,9 +3603,7 @@ namespace Parser {
     }
 
     function parseTemplateHead(isTaggedTemplate: boolean): TemplateHead {
-        if (isTaggedTemplate) {
-            reScanTemplateHeadOrNoSubstitutionTemplate();
-        }
+        reScanTemplateToken(isTaggedTemplate);
         const fragment = parseLiteralLikeNode(token());
         Debug.assert(fragment.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
         return fragment as TemplateHead;
@@ -3631,14 +3625,13 @@ namespace Parser {
         const pos = getNodePos();
         const node =
             isTemplateLiteralKind(kind) ? factory.createTemplateLiteralLikeNode(kind, scanner.getTokenValue(), getTemplateLiteralRawText(kind), scanner.getTokenFlags() & TokenFlags.TemplateLiteralLikeFlags) :
-            // Octal literals are not allowed in strict mode or ES5
             // Note that theoretically the following condition would hold true literals like 009,
             // which is not octal. But because of how the scanner separates the tokens, we would
             // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
             // We also do not need to check for negatives because any prefix operator would be part of a
             // parent unary expression.
             kind === SyntaxKind.NumericLiteral ? factory.createNumericLiteral(scanner.getTokenValue(), scanner.getNumericLiteralFlags()) :
-            kind === SyntaxKind.StringLiteral ? factory.createStringLiteral(scanner.getTokenValue(), /*isSingleQuote*/ undefined, scanner.hasExtendedUnicodeEscape()) :
+            kind === SyntaxKind.StringLiteral ? factory.createStringLiteral(scanner.getTokenValue(), /*isSingleQuote*/ undefined, scanner.hasExtendedUnicodeEscape(), scanner.getRangesOfOctalSequences()) :
             isLiteralKind(kind) ? factory.createLiteralLikeNode(kind, scanner.getTokenValue()) :
             Debug.fail();
 
@@ -6315,7 +6308,7 @@ namespace Parser {
             tag,
             typeArguments,
             token() === SyntaxKind.NoSubstitutionTemplateLiteral ?
-                (reScanTemplateHeadOrNoSubstitutionTemplate(), parseLiteralNode() as NoSubstitutionTemplateLiteral) :
+                (reScanTemplateToken(/*isTaggedTemplate*/ true), parseLiteralNode() as NoSubstitutionTemplateLiteral) :
                 parseTemplateExpression(/*isTaggedTemplate*/ true)
         );
         if (questionDotToken || tag.flags & NodeFlags.OptionalChain) {
@@ -6415,10 +6408,14 @@ namespace Parser {
 
     function parsePrimaryExpression(): PrimaryExpression {
         switch (token()) {
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                if (scanner.getTokenFlags() & TokenFlags.ContainsOctalOrInvalidEscape) {
+                    reScanTemplateToken(/* isTaggedTemplate */ false);
+                }
+            // falls through
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.BigIntLiteral:
             case SyntaxKind.StringLiteral:
-            case SyntaxKind.NoSubstitutionTemplateLiteral:
                 return parseLiteralNode();
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:

@@ -50,19 +50,19 @@ var es8 = 'unterminated "
 // wrong unicode sequences
 var es9 = "\u00";
 >es9 : string
->"\u00" : ""
+>"\u00" : "\\u00"
 
 var es10 = "\u00GG";
 >es10 : string
->"\u00GG" : "GG"
+>"\u00GG" : "\\u00GG"
 
 var es11 = "\x0";
 >es11 : string
->"\x0" : ""
+>"\x0" : "\\x0"
 
 var es12 = "\xmm";
 >es12 : string
->"\xmm" : "mm"
+>"\xmm" : "\\xmm"
 
 // End of file
 var es13 = " 

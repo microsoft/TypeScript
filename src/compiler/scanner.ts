@@ -21,6 +21,7 @@ import {
     MapLike,
     parsePseudoBigInt,
     positionIsSynthesized,
+    ReadonlyTextRange,
     ScriptTarget,
     SourceFileLike,
     SyntaxKind,
@@ -61,11 +62,12 @@ export interface Scanner {
     getCommentDirectives(): CommentDirective[] | undefined;
     /** @internal */
     getTokenFlags(): TokenFlags;
+    /** @internal */
+    getRangesOfOctalSequences(): ReadonlyTextRange[];
     reScanGreaterToken(): SyntaxKind;
     reScanSlashToken(): SyntaxKind;
     reScanAsteriskEqualsToken(): SyntaxKind;
     reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
-    reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
     scanJsxIdentifier(): SyntaxKind;
     scanJsxAttributeValue(): SyntaxKind;
     reScanJsxAttributeValue(): SyntaxKind;
@@ -984,6 +986,7 @@ export function createScanner(languageVersion: ScriptTarget,
     let token: SyntaxKind;
     let tokenValue!: string;
     let tokenFlags: TokenFlags;
+    let rangesOfOctalSequences: ReadonlyTextRange[];
 
     let commentDirectives: CommentDirective[] | undefined;
     let inJSDocType = 0;
@@ -1007,11 +1010,11 @@ export function createScanner(languageVersion: ScriptTarget,
         getCommentDirectives: () => commentDirectives,
         getNumericLiteralFlags: () => tokenFlags & TokenFlags.NumericLiteralFlags,
         getTokenFlags: () => tokenFlags,
+        getRangesOfOctalSequences: () => rangesOfOctalSequences,
         reScanGreaterToken,
         reScanAsteriskEqualsToken,
         reScanSlashToken,
         reScanTemplateToken,
-        reScanTemplateHeadOrNoSubstitutionTemplate,
         scanJsxIdentifier,
         scanJsxAttributeValue,
         reScanJsxAttributeValue,
@@ -1244,6 +1247,7 @@ export function createScanner(languageVersion: ScriptTarget,
         pos++;
         let result = "";
         let start = pos;
+        rangesOfOctalSequences = [];
         while (true) {
             if (pos >= end) {
                 result += text.substring(start, pos);
@@ -1259,7 +1263,7 @@ export function createScanner(languageVersion: ScriptTarget,
             }
             if (ch === CharacterCodes.backslash && !jsxAttributeString) {
                 result += text.substring(start, pos);
-                result += scanEscapeSequence();
+                result += scanEscapeSequence(/*shouldEmitInvalidEscapeError*/ true);
                 start = pos;
                 continue;
             }
@@ -1278,13 +1282,14 @@ export function createScanner(languageVersion: ScriptTarget,
      * Sets the current 'tokenValue' and returns a NoSubstitutionTemplateLiteral or
      * a literal component of a TemplateExpression.
      */
-    function scanTemplateAndSetTokenValue(isTaggedTemplate: boolean): SyntaxKind {
+    function scanTemplateAndSetTokenValue(shouldEmitInvalidEscapeError: boolean): SyntaxKind {
         const startedWithBacktick = text.charCodeAt(pos) === CharacterCodes.backtick;
 
         pos++;
         let start = pos;
         let contents = "";
         let resultingToken: SyntaxKind;
+        rangesOfOctalSequences = [];
 
         while (true) {
             if (pos >= end) {
@@ -1316,7 +1321,7 @@ export function createScanner(languageVersion: ScriptTarget,
             // Escape character
             if (currChar === CharacterCodes.backslash) {
                 contents += text.substring(start, pos);
-                contents += scanEscapeSequence(isTaggedTemplate);
+                contents += scanEscapeSequence(shouldEmitInvalidEscapeError);
                 start = pos;
                 continue;
             }
@@ -1340,12 +1345,17 @@ export function createScanner(languageVersion: ScriptTarget,
         }
 
         Debug.assert(resultingToken !== undefined);
+        if (shouldEmitInvalidEscapeError) {
+            rangesOfOctalSequences.forEach(range => {
+                error(Diagnostics.Octal_escape_sequences_are_not_allowed_in_template_strings, range.pos, range.end - range.pos);
+            });
+        }
 
         tokenValue = contents;
         return resultingToken;
     }
 
-    function scanEscapeSequence(isTaggedTemplate?: boolean): string {
+    function scanEscapeSequence(shouldEmitInvalidEscapeError?: boolean): string {
         const start = pos;
         pos++;
         if (pos >= end) {
@@ -1356,13 +1366,37 @@ export function createScanner(languageVersion: ScriptTarget,
         pos++;
         switch (ch) {
             case CharacterCodes._0:
-                // '\01'
-                if (isTaggedTemplate && pos < end && isDigit(text.charCodeAt(pos))) {
-                    pos++;
-                    tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                    return text.substring(start, pos);
+                // '\08' is '\0' + '8' but is treated as an octal escape sequence, thus isDigit
+                if (!(pos < end && isDigit(text.charCodeAt(pos)))) {
+                    return "\0";
                 }
-                return "\0";
+            // '\01', '\011'
+            // falls through
+            case CharacterCodes._1:
+            case CharacterCodes._2:
+            case CharacterCodes._3:
+                // '\1', '\17', '\177'
+                if (pos < end && isOctalDigit(text.charCodeAt(pos))) {
+                    pos++;
+                }
+            // '\17', '\177'
+            // falls through
+            case CharacterCodes._4:
+            case CharacterCodes._5:
+            case CharacterCodes._6:
+            case CharacterCodes._7:
+                // '\4', '\47' but not '\477'
+                if (pos < end && isOctalDigit(text.charCodeAt(pos))) {
+                    pos++;
+                }
+            // '\47'
+            // falls through
+            case CharacterCodes._8:
+            case CharacterCodes._9:
+                // the invalid '\8' and '\9'
+                tokenFlags |= TokenFlags.OctalEscape;
+                rangesOfOctalSequences.push({ pos: start, end: pos });
+                return String.fromCharCode(parseInt(text.substring(start + 1, pos), 8));
             case CharacterCodes.b:
                 return "\b";
             case CharacterCodes.t:
@@ -1380,62 +1414,70 @@ export function createScanner(languageVersion: ScriptTarget,
             case CharacterCodes.doubleQuote:
                 return "\"";
             case CharacterCodes.u:
-                if (isTaggedTemplate) {
-                    // '\u' or '\u0' or '\u00' or '\u000'
-                    for (let escapePos = pos; escapePos < pos + 4; escapePos++) {
-                        if (escapePos < end && !isHexDigit(text.charCodeAt(escapePos)) && text.charCodeAt(escapePos) !== CharacterCodes.openBrace) {
-                            pos = escapePos;
-                            tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                            return text.substring(start, pos);
-                        }
-                    }
-                }
-                // '\u{DDDDDDDD}'
                 if (pos < end && text.charCodeAt(pos) === CharacterCodes.openBrace) {
+                    // '\u{DDDDDDDD}'
                     pos++;
-
-                    // '\u{'
-                    if (isTaggedTemplate && !isHexDigit(text.charCodeAt(pos))) {
+                    const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
+                    const escapedValue = escapedValueString ? parseInt(escapedValueString, 16) : -1;
+                    // '\u{Not Code Point' or '\u{CodePoint'
+                    if (escapedValue < 0) {
                         tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (shouldEmitInvalidEscapeError) {
+                            error(Diagnostics.Hexadecimal_digit_expected);
+                        }
                         return text.substring(start, pos);
                     }
-
-                    if (isTaggedTemplate) {
-                        const savePos = pos;
-                        const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
-                        const escapedValue = escapedValueString ? parseInt(escapedValueString, 16) : -1;
-
-                        // '\u{Not Code Point' or '\u{CodePoint'
-                        if (!isCodePoint(escapedValue) || text.charCodeAt(pos) !== CharacterCodes.closeBrace) {
-                            tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                            return text.substring(start, pos);
+                    if (!isCodePoint(escapedValue)) {
+                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (shouldEmitInvalidEscapeError) {
+                            error(Diagnostics.An_extended_Unicode_escape_value_must_be_between_0x0_and_0x10FFFF_inclusive);
                         }
-                        else {
-                            pos = savePos;
-                        }
+                        return text.substring(start, pos);
                     }
+                    if (pos >= end) {
+                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (shouldEmitInvalidEscapeError) {
+                            error(Diagnostics.Unexpected_end_of_text);
+                        }
+                        return text.substring(start, pos);
+                    }
+                    if (text.charCodeAt(pos) !== CharacterCodes.closeBrace) {
+                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (shouldEmitInvalidEscapeError) {
+                            error(Diagnostics.Unterminated_Unicode_escape_sequence);
+                        }
+                        return text.substring(start, pos);
+                    }
+                    pos++;
                     tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
-                    return scanExtendedUnicodeEscape();
+                    return utf16EncodeAsString(escapedValue);
                 }
-
-                tokenFlags |= TokenFlags.UnicodeEscape;
                 // '\uDDDD'
-                return scanHexadecimalEscape(/*numDigits*/ 4);
+                for (; pos < start + 6; pos++) {
+                    if (!(pos < end && isHexDigit(text.charCodeAt(pos)))) {
+                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (shouldEmitInvalidEscapeError) {
+                            error(Diagnostics.Hexadecimal_digit_expected);
+                        }
+                        return text.substring(start, pos);
+                    }
+                }
+                tokenFlags |= TokenFlags.UnicodeEscape;
+                return String.fromCharCode(parseInt(text.substring(start + 2, pos), 16));
 
             case CharacterCodes.x:
-                if (isTaggedTemplate) {
-                    if (!isHexDigit(text.charCodeAt(pos))) {
+                // '\xDD'
+                for (; pos < start + 4; pos++) {
+                    if (!(pos < end && isHexDigit(text.charCodeAt(pos)))) {
                         tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                        return text.substring(start, pos);
-                    }
-                    else if (!isHexDigit(text.charCodeAt(pos + 1))) {
-                        pos++;
-                        tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                        if (shouldEmitInvalidEscapeError) {
+                            error(Diagnostics.Hexadecimal_digit_expected);
+                        }
                         return text.substring(start, pos);
                     }
                 }
-                // '\xDD'
-                return scanHexadecimalEscape(/*numDigits*/ 2);
+                tokenFlags |= TokenFlags.HexEscape;
+                return String.fromCharCode(parseInt(text.substring(start + 2, pos), 16));
 
             // when encountering a LineContinuation (i.e. a backslash and a line terminator sequence),
             // the line terminator is interpreted to be "the empty code unit sequence".
@@ -1450,18 +1492,6 @@ export function createScanner(languageVersion: ScriptTarget,
                 return "";
             default:
                 return String.fromCharCode(ch);
-        }
-    }
-
-    function scanHexadecimalEscape(numDigits: number): string {
-        const escapedValue = scanExactNumberOfHexDigits(numDigits, /*canHaveSeparators*/ false);
-
-        if (escapedValue >= 0) {
-            return String.fromCharCode(escapedValue);
-        }
-        else {
-            error(Diagnostics.Hexadecimal_digit_expected);
-            return "";
         }
     }
 
@@ -1724,7 +1754,7 @@ export function createScanner(languageVersion: ScriptTarget,
                     tokenValue = scanString();
                     return token = SyntaxKind.StringLiteral;
                 case CharacterCodes.backtick:
-                    return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ false);
+                    return token = scanTemplateAndSetTokenValue(/*shouldEmitInvalidEscapeError*/ false);
                 case CharacterCodes.percent:
                     if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.PercentEqualsToken;
@@ -2288,14 +2318,8 @@ export function createScanner(languageVersion: ScriptTarget,
      * Unconditionally back up and scan a template expression portion.
      */
     function reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind {
-        Debug.assert(token === SyntaxKind.CloseBraceToken, "'reScanTemplateToken' should only be called on a '}'");
         pos = tokenPos;
-        return token = scanTemplateAndSetTokenValue(isTaggedTemplate);
-    }
-
-    function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
-        pos = tokenPos;
-        return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ true);
+        return token = scanTemplateAndSetTokenValue(!isTaggedTemplate);
     }
 
     function reScanJsxToken(allowMultilineJsxText = true): JsxTokenSyntaxKind {
@@ -2550,6 +2574,7 @@ export function createScanner(languageVersion: ScriptTarget,
         const saveToken = token;
         const saveTokenValue = tokenValue;
         const saveTokenFlags = tokenFlags;
+        const saveRangesOfOctalSequences = rangesOfOctalSequences;
         const result = callback();
 
         // If our callback returned something 'falsy' or we're just looking ahead,
@@ -2561,6 +2586,7 @@ export function createScanner(languageVersion: ScriptTarget,
             token = saveToken;
             tokenValue = saveTokenValue;
             tokenFlags = saveTokenFlags;
+            rangesOfOctalSequences = saveRangesOfOctalSequences;
         }
         return result;
     }
@@ -2573,6 +2599,7 @@ export function createScanner(languageVersion: ScriptTarget,
         const saveToken = token;
         const saveTokenValue = tokenValue;
         const saveTokenFlags = tokenFlags;
+        const saveRangesOfOctalSequences = rangesOfOctalSequences;
         const saveErrorExpectations = commentDirectives;
 
         setText(text, start, length);
@@ -2585,6 +2612,7 @@ export function createScanner(languageVersion: ScriptTarget,
         token = saveToken;
         tokenValue = saveTokenValue;
         tokenFlags = saveTokenFlags;
+        rangesOfOctalSequences = saveRangesOfOctalSequences;
         commentDirectives = saveErrorExpectations;
 
         return result;

@@ -2565,8 +2565,15 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
     }
 
+    function checkStrictModeStringLiteral(node: StringLiteral) {
+        if (languageVersion >= ScriptTarget.ES5 && inStrictMode && node.rangesOfOctalSequences) {
+            file.bindDiagnostics.push(...node.rangesOfOctalSequences.map(
+                range => createFileDiagnostic(file, range.pos, range.end - range.pos, Diagnostics.Octal_escape_sequences_are_not_allowed_in_strict_mode)));
+        }
+    }
+
     function checkStrictModeNumericLiteral(node: NumericLiteral) {
-        if (languageVersion < ScriptTarget.ES5 && inStrictMode && node.numericLiteralFlags & TokenFlags.Octal) {
+        if (languageVersion >= ScriptTarget.ES5 && inStrictMode && node.numericLiteralFlags & TokenFlags.Octal) {
             file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
         }
     }
@@ -2815,6 +2822,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 return checkStrictModeCatchClause(node as CatchClause);
             case SyntaxKind.DeleteExpression:
                 return checkStrictModeDeleteExpression(node as DeleteExpression);
+            case SyntaxKind.StringLiteral:
+                return checkStrictModeStringLiteral(node as StringLiteral);
             case SyntaxKind.NumericLiteral:
                 return checkStrictModeNumericLiteral(node as NumericLiteral);
             case SyntaxKind.PostfixUnaryExpression:
