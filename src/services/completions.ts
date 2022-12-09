@@ -56,6 +56,7 @@ import {
     every,
     ExportKind,
     Expression,
+    ExpressionWithTypeArguments,
     factory,
     filter,
     find,
@@ -167,6 +168,8 @@ import {
     isInString,
     isIntersectionTypeNode,
     isJSDoc,
+    isJSDocAugmentsTag,
+    isJSDocImplementsTag,
     isJSDocParameterTag,
     isJSDocTag,
     isJSDocTemplateTag,
@@ -2967,10 +2970,13 @@ function getCompletionData(
         }
     }
 
-    function tryGetTypeExpressionFromTag(tag: JSDocTag): JSDocTypeExpression | undefined {
+    function tryGetTypeExpressionFromTag(tag: JSDocTag): JSDocTypeExpression | ExpressionWithTypeArguments | undefined {
         if (isTagWithTypeExpression(tag)) {
             const typeExpression = isJSDocTemplateTag(tag) ? tag.constraint : tag.typeExpression;
             return typeExpression && typeExpression.kind === SyntaxKind.JSDocTypeExpression ? typeExpression : undefined;
+        }
+        if (isJSDocAugmentsTag(tag) || isJSDocImplementsTag(tag)) {
+            return tag.class;
         }
         return undefined;
     }
