@@ -35,6 +35,7 @@ export interface TestTscCompile extends TestTscCompileLikeBase {
     baselineReadFileCalls?: boolean;
     baselinePrograms?: boolean;
     baselineDependencies?: boolean;
+    baselineModulesAndTypeRefs?: boolean;
 }
 
 export type CommandLineProgram = [ts.Program, ts.BuilderProgram?];
@@ -206,6 +207,11 @@ export function testTscCompile(input: TestTscCompile) {
             baselinePrograms(baseline, getPrograms!, ts.emptyArray, baselineDependencies);
             sys.write(baseline.join("\n"));
         }
+        if (input.baselineModulesAndTypeRefs) {
+            const baseline: string[] = [];
+            baselineModulesAndTypeRefs(baseline, getPrograms!());
+            sys.write(baseline.join("\n"));
+        }
         if (baselineReadFileCalls) {
             sys.write(`readFiles:: ${JSON.stringify(actualReadFileMap, /*replacer*/ undefined, " ")} `);
         }
@@ -245,6 +251,40 @@ function storeDtsSignatures(sys: TscCompileSystem, programs: readonly CommandLin
             const getCanonicalFileName = ts.createGetCanonicalFileName(program.useCaseSensitiveFileNames());
             const buildInfoDirectory = ts.getDirectoryPath(ts.getNormalizedAbsolutePath(buildInfoPath!, currentDirectory));
             return ts.ensurePathIsNonModuleName(ts.getRelativePathFromDirectory(buildInfoDirectory, path, getCanonicalFileName));
+        }
+    }
+}
+
+function baselineCache<T>(baseline: string[], cacheType: string, cache: ts.ModeAwareCache<T> | undefined) {
+    if (!cache?.size()) return;
+    baseline.push(`${cacheType}:`);
+    cache.forEach((resolved, key, mode) => baseline.push(`${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${JSON.stringify(
+        { ...resolved, refCount: undefined, files: undefined, isInvalidated: undefined, },
+        /*replacer*/ undefined,
+        2,
+    )}`));
+}
+
+export function baselineModulesAndTypeRefs(baseline: string[], programs: readonly CommandLineProgram[]) {
+    for (const [program] of programs) {
+        for (const f of program.getSourceFiles()) {
+            if (!f.resolvedModules && !f.resolvedTypeReferenceDirectiveNames && !f.packageJsonScope) continue;
+            baseline.push(`File: ${f.fileName}`);
+            if (f.packageJsonScope) {
+                baseline.push(`packageJsonScope:: ${JSON.stringify(
+                    f.packageJsonScope,
+                    /*replacer*/ undefined,
+                    2,
+                )}`);
+            }
+            baselineCache(baseline, "resolvedModules", f.resolvedModules);
+            baselineCache(baseline, "resolvedTypeReferenceDirectiveNames", f.resolvedTypeReferenceDirectiveNames);
+            baseline.push("");
+        }
+        const autoTypes = program.getAutomaticTypeDirectiveResolutions();
+        if (autoTypes.size()) {
+            baselineCache(baseline, "automaticTypeDirectiveResolutions", autoTypes);
+            baseline.push("");
         }
     }
 }
@@ -903,7 +943,7 @@ export interface VerifyTscWithEditsInput extends TestTscCompile {
  */
 export function verifyTsc({
     subScenario, fs, scenario, commandLineArgs, environmentVariables,
-    baselineSourceMap, modifyFs, baselineReadFileCalls, baselinePrograms,
+    baselineSourceMap, modifyFs, baselineReadFileCalls, baselinePrograms, baselineDependencies, baselineModulesAndTypeRefs,
     edits
 }: VerifyTscWithEditsInput) {
     describe(`tsc ${commandLineArgs.join(" ")} ${scenario}:: ${subScenario}`, () => {
@@ -921,6 +961,8 @@ export function verifyTsc({
                 baselineSourceMap,
                 baselineReadFileCalls,
                 baselinePrograms,
+                baselineDependencies,
+                baselineModulesAndTypeRefs,
                 environmentVariables,
             });
             edits?.forEach((
@@ -937,6 +979,8 @@ export function verifyTsc({
                     baselineSourceMap,
                     baselineReadFileCalls,
                     baselinePrograms,
+                    baselineDependencies,
+                    baselineModulesAndTypeRefs,
                     environmentVariables,
                 }));
             });

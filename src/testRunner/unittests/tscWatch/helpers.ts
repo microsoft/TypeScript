@@ -12,6 +12,7 @@ import {
     TestServerHostTrackingWrittenFiles,
 } from "../virtualFileSystemWithWatch";
 import {
+    baselineModulesAndTypeRefs,
     baselinePrograms,
     commandLineCallbacks,
     CommandLineCallbacks,
@@ -42,6 +43,7 @@ export interface TscWatchCompileChange<T extends ts.BuilderProgram = ts.EmitAndS
 export interface TscWatchCheckOptions {
     baselineSourceMap?: boolean;
     baselineDependencies?: boolean;
+    baselineModulesAndTypeRefs?: boolean;
 }
 export interface TscWatchCompileBase<T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram> extends TscWatchCheckOptions {
     scenario: string;
@@ -66,7 +68,7 @@ function tscWatchCompile(input: TscWatchCompile) {
         const {
             scenario, subScenario,
             commandLineArgs, edits,
-            baselineSourceMap, baselineDependencies
+            baselineSourceMap, baselineDependencies, baselineModulesAndTypeRefs,
         } = input;
 
         if (!isWatch(commandLineArgs)) sys.exit = exitCode => sys.exitCode = exitCode;
@@ -86,6 +88,7 @@ function tscWatchCompile(input: TscWatchCompile) {
             getPrograms,
             baselineSourceMap,
             baselineDependencies,
+            baselineModulesAndTypeRefs,
             edits,
             watchOrSolution
         });
@@ -184,7 +187,7 @@ export interface RunWatchBaseline<T extends ts.BuilderProgram> extends BaselineB
 export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanticDiagnosticsBuilderProgram>({
     scenario, subScenario, commandLineArgs,
     getPrograms, sys, baseline, oldSnap,
-    baselineSourceMap, baselineDependencies,
+    baselineSourceMap, baselineDependencies, baselineModulesAndTypeRefs,
     edits, watchOrSolution
 }: RunWatchBaseline<T>) {
     baseline.push(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}`);
@@ -196,6 +199,7 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
         oldSnap,
         baselineSourceMap,
         baselineDependencies,
+        baselineModulesAndTypeRefs,
     });
 
     if (edits) {
@@ -210,6 +214,7 @@ export function runWatchBaseline<T extends ts.BuilderProgram = ts.EmitAndSemanti
                 oldSnap,
                 baselineSourceMap,
                 baselineDependencies,
+                baselineModulesAndTypeRefs,
             });
         }
     }
@@ -228,10 +233,11 @@ export interface WatchBaseline extends BaselineBase, TscWatchCheckOptions {
     oldPrograms: readonly (CommandLineProgram | undefined)[];
     getPrograms: () => readonly CommandLineProgram[];
 }
-export function watchBaseline({ baseline, getPrograms, oldPrograms, sys, oldSnap, baselineSourceMap, baselineDependencies }: WatchBaseline) {
+export function watchBaseline({ baseline, getPrograms, oldPrograms, sys, oldSnap, baselineSourceMap, baselineDependencies, baselineModulesAndTypeRefs: shouldBaselineModulesAndTypeRefs }: WatchBaseline) {
     if (baselineSourceMap) generateSourceMapBaselineFiles(sys);
     sys.serializeOutput(baseline);
     const programs = baselinePrograms(baseline, getPrograms, oldPrograms, baselineDependencies);
+    if (shouldBaselineModulesAndTypeRefs) baselineModulesAndTypeRefs(baseline, programs);
     sys.serializeWatches(baseline);
     baseline.push(`exitCode:: ExitStatus.${ts.ExitStatus[sys.exitCode as ts.ExitStatus]}`, "");
     sys.diff(baseline, oldSnap);
