@@ -1,3 +1,5 @@
+import * as evaluator from "../../_namespaces/evaluator";
+
 describe("unittests:: evaluation:: templateLiteral", () => {
     it("toString() over valueOf()", () => {
         const result = evaluator.evaluateTypeScript(`

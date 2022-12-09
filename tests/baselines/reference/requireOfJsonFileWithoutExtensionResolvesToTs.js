@@ -34,7 +34,7 @@ module.exports = { a: true, b: "hello" };
 }
 //// [out/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var c1 = require("./c"); // resolves to c.ts 
 var x2 = c1.a;
 var c2 = require("./c.json"); // resolves to c.json
