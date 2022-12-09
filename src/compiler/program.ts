@@ -2639,7 +2639,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken | undefined) => readonly T[],
         cancellationToken: CancellationToken | undefined): readonly T[] {
         if (sourceFile) {
-            return getDiagnostics(sourceFile, cancellationToken);
+            return sortAndDeduplicateDiagnostics(getDiagnostics(sourceFile, cancellationToken));
         }
         return sortAndDeduplicateDiagnostics(flatMap(program.getSourceFiles(), sourceFile => {
             if (cancellationToken) {
