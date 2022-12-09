@@ -1,5 +1,9 @@
 import * as Utils from "../../_namespaces/Utils";
-import { loadProjectFromFiles, noChangeRun, verifyTsc, verifyTscWithEdits } from "./helpers";
+import {
+    loadProjectFromFiles,
+    noChangeRun,
+    verifyTsc,
+} from "./helpers";
 
 describe("unittests:: tsc:: listFilesOnly::", () => {
     verifyTsc({
@@ -22,7 +26,7 @@ describe("unittests:: tsc:: listFilesOnly::", () => {
         commandLineArgs: ["/src/test.ts", "--listFilesOnly"]
     });
 
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "listFilesOnly",
         subScenario: "combined with incremental",
         fs: () => loadProjectFromFiles({

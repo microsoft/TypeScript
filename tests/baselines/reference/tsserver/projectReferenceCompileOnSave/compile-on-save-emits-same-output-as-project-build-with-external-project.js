@@ -1,12 +1,12 @@
 Info 0    [00:00:53.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:54.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/SiblingClass/Source.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/lib/lib.d.ts]
@@ -363,7 +363,7 @@ Info 24   [00:01:23.000] request:
         "file": "/user/username/projects/myproject/SiblingClass/Source.ts",
         "projectFileName": "/user/username/projects/myproject/SiblingClass/tsconfig.json"
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request

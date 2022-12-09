@@ -1,4 +1,8 @@
-import { Node, SyntaxKind, TypeAssertion } from "../_namespaces/ts";
+import {
+    Node,
+    SyntaxKind,
+    TypeAssertion,
+} from "../_namespaces/ts";
 import { deprecate } from "../deprecate";
 
 // DEPRECATION: Renamed node tests

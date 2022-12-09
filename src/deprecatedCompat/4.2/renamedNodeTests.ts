@@ -1,4 +1,8 @@
-import { isMemberName, MemberName, Node } from "../_namespaces/ts";
+import {
+    isMemberName,
+    MemberName,
+    Node,
+} from "../_namespaces/ts";
 import { deprecate } from "../deprecate";
 
 // DEPRECATION: Renamed node tests

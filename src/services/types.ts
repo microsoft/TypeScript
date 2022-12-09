@@ -1,11 +1,44 @@
 import {
-    CancellationToken, CompilerHost, CompilerOptions, CustomTransformers, Diagnostic, DiagnosticWithLocation,
-    DocumentHighlights, DocumentPositionMapper, EmitOutput, ExportInfoMap, FileReference,
-    GetEffectiveTypeRootsHost, HasChangedAutomaticTypeDirectiveNames, HasInvalidatedResolutions, LineAndCharacter,
-    MinimalResolutionCacheHost, ModuleResolutionCache, ModuleResolutionInfo, ModuleSpecifierCache,
-    ParsedCommandLine, Path, Program, ProjectReference, ResolutionMode, ResolvedModule, ResolvedModuleWithFailedLookupLocations,
-    ResolvedProjectReference, ResolvedTypeReferenceDirective, ScriptKind, SourceFile, SourceFileLike, SourceMapper,
-    Symbol, SymlinkCache, TextChangeRange, textChanges, TextRange, TextSpan, TypeReferenceDirectiveResolutionInfo, UserPreferences,
+    CancellationToken,
+    CompilerHost,
+    CompilerOptions,
+    CustomTransformers,
+    Diagnostic,
+    DiagnosticWithLocation,
+    DocumentHighlights,
+    DocumentPositionMapper,
+    EmitOutput,
+    ExportInfoMap,
+    FileReference,
+    GetEffectiveTypeRootsHost,
+    HasChangedAutomaticTypeDirectiveNames,
+    HasInvalidatedResolutions,
+    LineAndCharacter,
+    MinimalResolutionCacheHost,
+    ModuleResolutionCache,
+    ModuleSpecifierCache,
+    ParsedCommandLine,
+    Path,
+    Program,
+    ProjectReference,
+    ResolutionMode,
+    ResolvedModule,
+    ResolvedModuleWithFailedLookupLocations,
+    ResolvedProjectReference,
+    ResolvedTypeReferenceDirective,
+    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
+    ScriptKind,
+    SourceFile,
+    SourceFileLike,
+    SourceMapper,
+    StringLiteralLike,
+    Symbol,
+    SymlinkCache,
+    TextChangeRange,
+    textChanges,
+    TextRange,
+    TextSpan,
+    UserPreferences,
 } from "./_namespaces/ts";
 
 declare module "../compiler/types" {
@@ -324,9 +357,27 @@ export interface LanguageServiceHost extends GetEffectiveTypeRootsHost, MinimalR
      *
      * If this is implemented, `getResolvedModuleWithFailedLookupLocationsFromCache` should be too.
      */
-    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
+    /** @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolution modes like nodenext */
+    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
     getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
-    resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
+    /** @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext */
+    resolveTypeReferenceDirectives?(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveModuleNameLiterals?(
+        moduleLiterals: readonly StringLiteralLike[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile,
+        reusedNames: readonly StringLiteralLike[] | undefined,
+    ): readonly ResolvedModuleWithFailedLookupLocations[];
+    resolveTypeReferenceDirectiveReferences?<T extends FileReference | string>(
+        typeDirectiveReferences: readonly T[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile | undefined,
+        reusedNames: readonly T[] | undefined
+    ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
     /** @internal */ hasInvalidatedResolutions?: HasInvalidatedResolutions;
     /** @internal */ hasChangedAutomaticTypeDirectiveNames?: HasChangedAutomaticTypeDirectiveNames;
     /** @internal */ getGlobalTypingsCacheLocation?(): string | undefined;
@@ -605,6 +656,8 @@ export interface LanguageService {
     toggleMultilineComment(fileName: string, textRange: TextRange): TextChange[];
     commentSelection(fileName: string, textRange: TextRange): TextChange[];
     uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
+
+    getSupportedCodeFixes(fileName?: string): readonly string[];
 
     dispose(): void;
 }

@@ -1,12 +1,12 @@
 Info 0    [00:00:09.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:10.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/a/b/file1.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/b/file1.ts]
@@ -68,12 +68,12 @@ Info 16   [00:00:31.000] response:
     }
 Info 17   [00:00:32.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "semanticDiagnosticsSync",
       "arguments": {
         "file": "/a/b/file1.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -169,8 +169,6 @@ FsWatchesRecursive::
 
 Info 25   [00:00:42.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "change",
       "arguments": {
         "file": "/a/b/file1.ts",
@@ -179,7 +177,9 @@ Info 25   [00:00:42.000] request:
         "endLine": 1,
         "endOffset": 44,
         "insertString": "\n"
-      }
+      },
+      "seq": 3,
+      "type": "request"
     }
 Before request
 
@@ -219,12 +219,12 @@ Info 26   [00:00:43.000] response:
     }
 Info 27   [00:00:44.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "semanticDiagnosticsSync",
       "arguments": {
         "file": "/a/b/file1.ts"
-      }
+      },
+      "seq": 4,
+      "type": "request"
     }
 Before request
 

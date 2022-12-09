@@ -1,6 +1,18 @@
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
-import { addRest, addShebang, addSpread, addTestPrologue, addTripleSlashRef, appendText, enableStrict, loadProjectFromDisk, removeRest, replaceText, verifyTsc, verifyTscWithEdits } from "../tsc/helpers";
+import {
+    addRest,
+    addShebang,
+    addSpread,
+    addTestPrologue,
+    addTripleSlashRef,
+    appendText,
+    enableStrict,
+    loadProjectFromDisk,
+    removeRest,
+    replaceText,
+    verifyTsc,
+} from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
     let outFileFs: vfs.FileSystem;
@@ -22,7 +34,7 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
         modifyFs,
         modifyAgainFs
     }: VerifyOutFileScenarioInput) {
-        verifyTscWithEdits({
+        verifyTsc({
             scenario: "amdModulesWithOut",
             subScenario,
             fs: () => outFileFs,
@@ -31,12 +43,12 @@ describe("unittests:: tsbuild:: outFile:: on amd modules with --out", () => {
             modifyFs,
             edits: [
                 {
-                    subScenario: "incremental-declaration-doesnt-change",
-                    modifyFs: fs => appendText(fs, "/src/lib/file1.ts", "console.log(x);")
+                    caption: "incremental-declaration-doesnt-change",
+                    edit: fs => appendText(fs, "/src/lib/file1.ts", "console.log(x);")
                 },
                 ...(modifyAgainFs ? [{
-                    subScenario: "incremental-headers-change-without-dts-changes",
-                    modifyFs: modifyAgainFs
+                    caption: "incremental-headers-change-without-dts-changes",
+                    edit: modifyAgainFs
                 }] : ts.emptyArray),
             ]
         });

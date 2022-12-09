@@ -1,7 +1,14 @@
-import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import { createWatchedSystem, File, libFile, SymLink } from "../virtualFileSystemWithWatch";
-import { TscWatchCompileChange, verifyTscWatch } from "./helpers";
+import {
+    createWatchedSystem,
+    File,
+    libFile,
+    SymLink,
+} from "../virtualFileSystemWithWatch";
+import {
+    TscWatchCompileChange,
+    verifyTscWatch,
+} from "./helpers";
 
 describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
     const loggerFile: File = {
@@ -25,7 +32,7 @@ describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
             subScenario,
             commandLineArgs: ["--w", "--p", tsconfig.path],
             sys: () => createWatchedSystem([loggerFile, anotherFile, tsconfig, libFile]),
-            changes
+            edits: changes
         });
     }
 
@@ -34,7 +41,7 @@ describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
         changes: [
             {
                 caption: "Change module name from logger to Logger",
-                change: sys => sys.writeFile(anotherFile.path, anotherFile.content.replace("./logger", "./Logger")),
+                edit: sys => sys.writeFile(anotherFile.path, anotherFile.content.replace("./logger", "./Logger")),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
@@ -45,7 +52,7 @@ describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
         changes: [
             {
                 caption: "Change name of file from logger to Logger",
-                change: sys => sys.renameFile(loggerFile.path, `/user/username/projects/myproject/Logger.ts`),
+                edit: sys => sys.renameFile(loggerFile.path, `/user/username/projects/myproject/Logger.ts`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
         ]
@@ -74,10 +81,10 @@ describe("unittests:: tsc-watch:: forceConsistentCasingInFileNames", () => {
             };
             return createWatchedSystem([moduleA, moduleB, moduleC, libFile, tsconfig], { currentDirectory: "/user/username/projects/myproject" });
         },
-        changes: [
+        edits: [
             {
                 caption: "Prepend a line to moduleA",
-                change: sys => sys.prependFile(`/user/username/projects/myproject/moduleA.ts`, `// some comment
+                edit: sys => sys.prependFile(`/user/username/projects/myproject/moduleA.ts`, `// some comment
                     `),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }
@@ -121,7 +128,6 @@ export const Fragment: unique symbol;
                 })
             }
         ], { currentDirectory: "/user/username/projects/myproject" }),
-        changes: ts.emptyArray,
     });
 
     function verifyWindowsStyleRoot(subScenario: string, windowsStyleRoot: string, projectRootRelative: string) {
@@ -152,10 +158,10 @@ a;b;
                 };
                 return createWatchedSystem([moduleA, moduleB, libFile, tsconfig], { windowsStyleRoot, useCaseSensitiveFileNames: false });
             },
-            changes: [
+            edits: [
                 {
                     caption: "Prepend a line to moduleA",
-                    change: sys => sys.prependFile(`${windowsStyleRoot}/${projectRootRelative}/a.ts`, `// some comment
+                    edit: sys => sys.prependFile(`${windowsStyleRoot}/${projectRootRelative}/a.ts`, `// some comment
                         `),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 }
@@ -199,10 +205,10 @@ a;b;
                 };
                 return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], { currentDirectory: "/user/username/projects/myproject" });
             },
-            changes: [
+            edits: [
                 {
                     caption: "Prepend a line to moduleA",
-                    change: sys => sys.prependFile(diskPath, `// some comment
+                    edit: sys => sys.prependFile(diskPath, `// some comment
                         `),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 }
@@ -250,10 +256,10 @@ a;b;
                 };
                 return createWatchedSystem([moduleA, symlinkA, moduleB, libFile, tsconfig], { currentDirectory: "/user/username/projects/myproject" });
             },
-            changes: [
+            edits: [
                 {
                     caption: "Prepend a line to moduleA",
-                    change: sys => sys.prependFile(`${diskPath}/a.ts`, `// some comment
+                    edit: sys => sys.prependFile(`${diskPath}/a.ts`, `// some comment
                         `),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 }
@@ -296,7 +302,6 @@ a;b;
             }),
             [libFile.path]: libFile.content,
         }, { currentDirectory: "/Users/name/projects/web" }),
-        changes: ts.emptyArray,
     });
 
     verifyTscWatch({
@@ -328,7 +333,6 @@ a;b;
             }),
             "/a/lib/lib.esnext.full.d.ts": libFile.content,
         }, { currentDirectory: "/Users/name/projects/web" }),
-        changes: ts.emptyArray,
     });
 
 
@@ -359,6 +363,5 @@ a;b;
             }),
             "/a/lib/lib.es2021.full.d.ts": libFile.content,
         }, { currentDirectory: "/Users/name/projects/lib-boilerplate" }),
-        changes: ts.emptyArray,
     });
 });

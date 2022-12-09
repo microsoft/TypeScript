@@ -1,7 +1,23 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
-import { createServerHost, File, libFile } from "../virtualFileSystemWithWatch";
-import { createProjectService, toExternalFiles, checkProjectActualFiles, toExternalFile, createSession, checkNumberOfProjects, checkNumberOfExternalProjects, checkNumberOfInferredProjects, verifyDynamic, checkProjectRootFiles, configuredProjectAt } from "./helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    checkNumberOfExternalProjects,
+    checkNumberOfInferredProjects,
+    checkNumberOfProjects,
+    checkProjectActualFiles,
+    checkProjectRootFiles,
+    configuredProjectAt,
+    createProjectService,
+    createSession,
+    toExternalFile,
+    toExternalFiles,
+    verifyDynamic,
+} from "./helpers";
 
 describe("unittests:: tsserver:: ExternalProjects", () => {
     describe("can handle tsconfig file name with difference casing", () => {

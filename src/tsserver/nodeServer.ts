@@ -1,21 +1,82 @@
 import * as ts from "./_namespaces/ts";
 import * as server from "./_namespaces/ts.server";
 import {
-    ActionInvalidate, ActionPackageInstalled, ActionSet, Arguments, BaseLogger, BeginInstallTypes,
-    createInstallTypingsRequest, EndInstallTypes, EventBeginInstallTypes, EventEndInstallTypes,
-    EventInitializationFailed, EventTypesRegistry, findArgument, formatMessage, getLogLevel, hasArgument, indent,
-    InitializationFailedResponse, InstallPackageOptionsWithProject, InstallPackageRequest, InvalidateCachedTypings,
-    ITypingsInstaller, Logger, LogLevel, ModuleImportResult, Msg, nullCancellationToken, nullTypingsInstaller,
-    PackageInstalledResponse, Project, ProjectService, protocol, ServerCancellationToken, ServerHost, Session,
-    SetTypings, StartInput, StartSessionOptions, stringifyIndented, toEvent, TypesRegistryResponse,
+    ActionInvalidate,
+    ActionPackageInstalled,
+    ActionSet,
+    Arguments,
+    BeginInstallTypes,
+    createInstallTypingsRequest,
+    EndInstallTypes,
+    EventBeginInstallTypes,
+    EventEndInstallTypes,
+    EventInitializationFailed,
+    EventTypesRegistry,
+    findArgument,
+    formatMessage,
+    getLogLevel,
+    hasArgument,
+    indent,
+    InitializationFailedResponse,
+    InstallPackageOptionsWithProject,
+    InstallPackageRequest,
+    InvalidateCachedTypings,
+    ITypingsInstaller,
+    Logger,
+    LogLevel,
+    ModuleImportResult,
+    Msg,
+    nowString,
+    nullCancellationToken,
+    nullTypingsInstaller,
+    PackageInstalledResponse,
+    Project,
+    ProjectService,
+    protocol,
+    ServerCancellationToken,
+    ServerHost,
+    Session,
+    SetTypings,
+    StartInput,
+    StartSessionOptions,
+    stringifyIndented,
+    toEvent,
+    TypesRegistryResponse,
     TypingInstallerRequestUnion,
 } from "./_namespaces/ts.server";
 import {
-    ApplyCodeActionCommandResult, assertType, CharacterCodes, combinePaths, createQueue, Debug, directorySeparator,
-    DirectoryWatcherCallback, FileWatcher, getDirectoryPath, getEntries, getNodeMajorVersion, getRootLength,
-    JsTyping, LanguageServiceMode, MapLike, noop, noopFileWatcher, normalizePath, normalizeSlashes, resolveJSModule,
-    SortedReadonlyArray, startTracing, stripQuotes, sys, toFileNameLowerCase, tracing, TypeAcquisition,
-    validateLocaleAndSetLanguage, versionMajorMinor, WatchOptions,
+    ApplyCodeActionCommandResult,
+    assertType,
+    CharacterCodes,
+    combinePaths,
+    createQueue,
+    Debug,
+    directorySeparator,
+    DirectoryWatcherCallback,
+    FileWatcher,
+    getDirectoryPath,
+    getEntries,
+    getNodeMajorVersion,
+    getRootLength,
+    JsTyping,
+    LanguageServiceMode,
+    MapLike,
+    noop,
+    noopFileWatcher,
+    normalizePath,
+    normalizeSlashes,
+    perfLogger,
+    resolveJSModule,
+    SortedReadonlyArray,
+    startTracing,
+    stripQuotes,
+    sys,
+    toFileNameLowerCase,
+    tracing,
+    TypeAcquisition,
+    validateLocaleAndSetLanguage,
+    versionMajorMinor,
+    WatchOptions,
 } from "./_namespaces/ts";
 
 interface LogOptions {
@@ -145,14 +206,16 @@ export function initializeNodeSystem(): StartInput {
         stat(path: string, callback?: (err: NodeJS.ErrnoException, stats: Stats) => any): void;
     } = require("fs");
 
-    class Logger extends BaseLogger {
+    class Logger implements Logger {
+        private seq = 0;
+        private inGroup = false;
+        private firstInGroup = true;
         private fd = -1;
         constructor(
             private readonly logFilename: string,
             private readonly traceToConsole: boolean,
-            level: LogLevel
+            private readonly level: LogLevel
         ) {
-            super(level);
             if (this.logFilename) {
                 try {
                     this.fd = fs.openSync(this.logFilename, "w");
@@ -162,25 +225,67 @@ export function initializeNodeSystem(): StartInput {
                 }
             }
         }
-
+        static padStringRight(str: string, padding: string) {
+            return (str + padding).slice(0, padding.length);
+        }
         close() {
             if (this.fd >= 0) {
                 fs.close(this.fd, noop);
             }
         }
-
-        getLogFileName() {
+        getLogFileName(): string | undefined {
             return this.logFilename;
         }
-
+        perftrc(s: string) {
+            this.msg(s, Msg.Perf);
+        }
+        info(s: string) {
+            this.msg(s, Msg.Info);
+        }
+        err(s: string) {
+            this.msg(s, Msg.Err);
+        }
+        startGroup() {
+            this.inGroup = true;
+            this.firstInGroup = true;
+        }
+        endGroup() {
+            this.inGroup = false;
+        }
         loggingEnabled() {
             return !!this.logFilename || this.traceToConsole;
         }
+        hasLevel(level: LogLevel) {
+            return this.loggingEnabled() && this.level >= level;
+        }
+        msg(s: string, type: Msg = Msg.Err) {
+            switch (type) {
+                case Msg.Info:
+                    perfLogger.logInfoEvent(s);
+                    break;
+                case Msg.Perf:
+                    perfLogger.logPerfEvent(s);
+                    break;
+                default: // Msg.Err
+                    perfLogger.logErrEvent(s);
+                    break;
+            }
 
+            if (!this.canWrite()) return;
+
+            s = `[${nowString()}] ${s}\n`;
+            if (!this.inGroup || this.firstInGroup) {
+                const prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
+                s = prefix + s;
+            }
+            this.write(s, type);
+            if (!this.inGroup) {
+                this.seq++;
+            }
+        }
         protected canWrite() {
             return this.fd >= 0 || this.traceToConsole;
         }
-
         protected write(s: string, _type: Msg) {
             if (this.fd >= 0) {
                 const buf = sys.bufferFrom!(s);
@@ -403,7 +508,6 @@ function parseEventPort(eventPortStr: string | undefined) {
     const eventPort = eventPortStr === undefined ? undefined : parseInt(eventPortStr);
     return eventPort !== undefined && !isNaN(eventPort) ? eventPort : undefined;
 }
-
 function startNodeSession(options: StartSessionOptions, logger: Logger, cancellationToken: ServerCancellationToken) {
     const childProcess: {
         fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;

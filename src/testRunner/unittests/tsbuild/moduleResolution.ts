@@ -1,7 +1,14 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import { createWatchedSystem, libFile } from "../virtualFileSystemWithWatch";
-import { loadProjectFromFiles, noChangeOnlyRuns, verifyTsc, verifyTscWithEdits } from "../tsc/helpers";
+import {
+    createWatchedSystem,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    loadProjectFromFiles,
+    noChangeOnlyRuns,
+    verifyTsc,
+} from "../tsc/helpers";
 import { verifyTscWatch } from "../tscWatch/helpers";
 
 describe("unittests:: tsbuild:: moduleResolution:: handles the modules and options from referenced project correctly", () => {
@@ -60,7 +67,6 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
         subScenario: `resolves specifier in output declaration file from referenced project correctly`,
         sys,
         commandLineArgs: ["-b", "packages/pkg1", "--verbose", "--traceResolution"],
-        changes: ts.emptyArray
     });
 
     verifyTscWatch({
@@ -68,7 +74,6 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
         subScenario: `resolves specifier in output declaration file from referenced project correctly with preserveSymlinks`,
         sys: () => sys({ preserveSymlinks: true }),
         commandLineArgs: ["-b", "packages/pkg1", "--verbose", "--traceResolution"],
-        changes: ts.emptyArray
     });
 
     verifyTsc({
@@ -93,7 +98,7 @@ describe("unittests:: tsbuild:: moduleResolution:: handles the modules and optio
 });
 
 describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs between projects for shared file", () => {
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "moduleResolution",
         subScenario: "impliedNodeFormat differs between projects for shared file",
         fs: () => loadProjectFromFiles({

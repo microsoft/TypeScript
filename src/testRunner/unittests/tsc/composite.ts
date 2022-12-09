@@ -1,5 +1,9 @@
 import * as Utils from "../../_namespaces/Utils";
-import { loadProjectFromFiles, replaceText, verifyTsc, verifyTscWithEdits } from "./helpers";
+import {
+    loadProjectFromFiles,
+    replaceText,
+    verifyTsc,
+} from "./helpers";
 
 describe("unittests:: tsc:: composite::", () => {
     verifyTsc({
@@ -84,7 +88,7 @@ describe("unittests:: tsc:: composite::", () => {
         commandLineArgs: ["--composite", "false", "--p", "src/project", "--tsBuildInfoFile", "null"],
     });
 
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "composite",
         subScenario: "converting to modules",
         fs: () => loadProjectFromFiles({
@@ -99,8 +103,8 @@ describe("unittests:: tsc:: composite::", () => {
         commandLineArgs: ["-p", "/src/project"],
         edits: [
             {
-                subScenario: "convert to modules",
-                modifyFs: fs => replaceText(fs, "/src/project/tsconfig.json", "none", "es2015"),
+                caption: "convert to modules",
+                edit: fs => replaceText(fs, "/src/project/tsconfig.json", "none", "es2015"),
             }
         ]
     });

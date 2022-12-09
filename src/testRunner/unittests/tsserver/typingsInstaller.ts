@@ -1,6 +1,23 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, libFile, TestServerHost } from "../virtualFileSystemWithWatch";
-import { TestTypingsInstaller, createTypesRegistry, createProjectService, checkProjectActualFiles, configuredProjectAt, createLoggerWithInMemoryLogs, baselineTsserverLogs, checkNumberOfProjects, toExternalFile, customTypesMap, createSession } from "./helpers";
+import {
+    createServerHost,
+    File,
+    libFile,
+    TestServerHost,
+} from "../virtualFileSystemWithWatch";
+import {
+    baselineTsserverLogs,
+    checkNumberOfProjects,
+    checkProjectActualFiles,
+    configuredProjectAt,
+    createLoggerWithInMemoryLogs,
+    createProjectService,
+    createSession,
+    createTypesRegistry,
+    customTypesMap,
+    TestTypingsInstaller,
+    toExternalFile,
+} from "./helpers";
 
 import validatePackageName = ts.JsTyping.validatePackageName;
 import NameValidationResult = ts.JsTyping.NameValidationResult;
@@ -1947,7 +1964,7 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
     const foooPath = "/a/b/node_modules/fooo/index.d.ts";
     function verifyResolvedModuleOfFooo(project: ts.server.Project) {
         ts.server.updateProjectIfDirty(project);
-        const foooResolution = project.getLanguageService().getProgram()!.getSourceFileByPath(appPath)!.resolvedModules!.get("fooo", /*mode*/ undefined)!;
+        const foooResolution = project.getLanguageService().getProgram()!.getSourceFileByPath(appPath)!.resolvedModules!.get("fooo", /*mode*/ undefined)!.resolvedModule!;
         assert.equal(foooResolution.resolvedFileName, foooPath);
         return foooResolution;
     }

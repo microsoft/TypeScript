@@ -1,7 +1,19 @@
 import * as ts from "../../_namespaces/ts";
-import { createWatchedSystem, File, FileOrFolderOrSymLink, getTsBuildProjectFile, libFile, SymLink } from "../virtualFileSystemWithWatch";
+import {
+    createWatchedSystem,
+    File,
+    FileOrFolderOrSymLink,
+    getTsBuildProjectFile,
+    libFile,
+    SymLink,
+} from "../virtualFileSystemWithWatch";
 import { libContent } from "../tsc/helpers";
-import { createBaseline, createWatchCompilerHostOfConfigFileForBaseline, runWatchBaseline, solutionBuildWithBaseline } from "./helpers";
+import {
+    createBaseline,
+    createWatchCompilerHostOfConfigFileForBaseline,
+    runWatchBaseline,
+    solutionBuildWithBaseline,
+} from "./helpers";
 
 describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedirect", () => {
     interface VerifyWatchInput {
@@ -33,7 +45,6 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
             baseline,
             oldSnap,
             getPrograms,
-            changes: ts.emptyArray,
             watchOrSolution: watch
         });
     }

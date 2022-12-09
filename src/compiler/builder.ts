@@ -1,19 +1,84 @@
 import * as ts from "./_namespaces/ts";
 import {
-    addRange, AffectedFileResult, arrayFrom, arrayToMap, BuilderProgram, BuilderProgramHost, BuilderState, BuildInfo,
-    BundleBuildInfo, CancellationToken, CommandLineOption, compareStringsCaseSensitive, compareValues, CompilerHost,
-    CompilerOptions, compilerOptionsAffectDeclarationPath, compilerOptionsAffectEmit,
-    compilerOptionsAffectSemanticDiagnostics, CompilerOptionsValue, concatenate, convertToOptionsWithAbsolutePaths,
-    createBuildInfo, createGetCanonicalFileName, createProgram, CustomTransformers, Debug, Diagnostic,
-    DiagnosticCategory, DiagnosticMessageChain, DiagnosticRelatedInformation, DiagnosticWithLocation,
-    EmitAndSemanticDiagnosticsBuilderProgram, EmitOnly, EmitResult, emitSkippedWithNoDiagnostics, emptyArray,
-    ensurePathIsNonModuleName, filterSemanticDiagnostics, forEach, forEachEntry, forEachKey, generateDjb2Hash,
-    GetCanonicalFileName, getDirectoryPath, getEmitDeclarations, getNormalizedAbsolutePath, getOptionsNameMap,
-    getOwnKeys, getRelativePathFromDirectory, getTsBuildInfoEmitOutputFilePath, handleNoEmitOptions, HostForComputeHash, isArray,
-    isDeclarationFileName, isJsonSourceFile, isNumber, isString, map, mapDefined, maybeBind, noop, notImplemented,
-    outFile, Path, Program, ProjectReference, ReadBuildProgramHost, ReadonlyCollection,
-    returnFalse, returnUndefined, SemanticDiagnosticsBuilderProgram, skipTypeChecking, some, SourceFile,
-    sourceFileMayBeEmitted, SourceMapEmitResult, toPath, tryAddToSet, WriteFileCallback, WriteFileCallbackData,
+    addRange,
+    AffectedFileResult,
+    arrayFrom,
+    arrayToMap,
+    BuilderProgram,
+    BuilderProgramHost,
+    BuilderState,
+    BuildInfo,
+    BundleBuildInfo,
+    CancellationToken,
+    CommandLineOption,
+    compareStringsCaseSensitive,
+    compareValues,
+    CompilerHost,
+    CompilerOptions,
+    compilerOptionsAffectDeclarationPath,
+    compilerOptionsAffectEmit,
+    compilerOptionsAffectSemanticDiagnostics,
+    CompilerOptionsValue,
+    concatenate,
+    convertToOptionsWithAbsolutePaths,
+    createBuildInfo,
+    createGetCanonicalFileName,
+    createProgram,
+    CustomTransformers,
+    Debug,
+    Diagnostic,
+    DiagnosticCategory,
+    DiagnosticMessageChain,
+    DiagnosticRelatedInformation,
+    DiagnosticWithLocation,
+    EmitAndSemanticDiagnosticsBuilderProgram,
+    EmitOnly,
+    EmitResult,
+    emitSkippedWithNoDiagnostics,
+    emptyArray,
+    ensurePathIsNonModuleName,
+    filterSemanticDiagnostics,
+    forEach,
+    forEachEntry,
+    forEachKey,
+    generateDjb2Hash,
+    getDirectoryPath,
+    getEmitDeclarations,
+    getNormalizedAbsolutePath,
+    getOptionsNameMap,
+    getOwnKeys,
+    getRelativePathFromDirectory,
+    getTsBuildInfoEmitOutputFilePath,
+    handleNoEmitOptions,
+    HostForComputeHash,
+    isArray,
+    isDeclarationFileName,
+    isJsonSourceFile,
+    isNumber,
+    isString,
+    map,
+    mapDefined,
+    maybeBind,
+    noop,
+    notImplemented,
+    outFile,
+    Path,
+    Program,
+    ProjectReference,
+    ReadBuildProgramHost,
+    ReadonlyCollection,
+    returnFalse,
+    returnUndefined,
+    SemanticDiagnosticsBuilderProgram,
+    skipTypeChecking,
+    some,
+    SourceFile,
+    sourceFileMayBeEmitted,
+    SourceMapEmitResult,
+    toPath,
+    tryAddToSet,
+    WriteFileCallback,
+    WriteFileCallbackData,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -220,8 +285,8 @@ function hasSameKeys(map1: ReadonlyCollection<string> | undefined, map2: Readonl
 /**
  * Create the state so that we can iterate on changedFiles/affected files
  */
-function createBuilderProgramState(newProgram: Program, oldState: Readonly<ReusableBuilderProgramState> | undefined, disableUseFileVersionAsSignature: boolean | undefined): BuilderProgramState {
-    const state = BuilderState.create(newProgram, oldState, disableUseFileVersionAsSignature) as BuilderProgramState;
+function createBuilderProgramState(newProgram: Program, oldState: Readonly<ReusableBuilderProgramState> | undefined): BuilderProgramState {
+    const state = BuilderState.create(newProgram, oldState, /*disableUseFileVersionAsSignature*/ false) as BuilderProgramState;
     state.program = newProgram;
     const compilerOptions = newProgram.getCompilerOptions();
     state.compilerOptions = compilerOptions;
@@ -384,7 +449,6 @@ function getEmitSignatureFromOldSignature(options: CompilerOptions, oldOptions: 
 function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newProgram: Program): readonly Diagnostic[] {
     if (!diagnostics.length) return emptyArray;
     let buildInfoDirectory: string | undefined;
-    let getCanonicalFileName: GetCanonicalFileName | undefined;
     return diagnostics.map(diagnostic => {
         const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram, toPath);
         result.reportsUnnecessary = diagnostic.reportsUnnecessary;
@@ -402,7 +466,7 @@ function convertToDiagnostics(diagnostics: readonly ReusableDiagnostic[], newPro
 
     function toPath(path: string) {
         buildInfoDirectory ??= getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(newProgram.getCompilerOptions())!, newProgram.getCurrentDirectory()));
-        return ts.toPath(path, buildInfoDirectory, getCanonicalFileName ??= createGetCanonicalFileName(newProgram.useCaseSensitiveFileNames()));
+        return ts.toPath(path, buildInfoDirectory, newProgram.getCanonicalFileName);
     }
 }
 
@@ -633,7 +697,7 @@ function handleDtsMayChangeOf(
                 sourceFile,
                 cancellationToken,
                 host,
-                !host.disableUseFileVersionAsSignature
+                /*useFileVersionAsSignature*/ true
             );
             // If not dts emit, nothing more to do
             if (getEmitDeclarations(state.compilerOptions)) {
@@ -896,7 +960,6 @@ export function isProgramBundleEmitBuildInfo(info: ProgramBuildInfo): info is Pr
  */
 function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | undefined): BuildInfo {
     const currentDirectory = Debug.checkDefined(state.program).getCurrentDirectory();
-    const getCanonicalFileName = createGetCanonicalFileName(state.program!.useCaseSensitiveFileNames());
     const buildInfoDirectory = getDirectoryPath(getNormalizedAbsolutePath(getTsBuildInfoEmitOutputFilePath(state.compilerOptions)!, currentDirectory));
     // Convert the file name to Path here if we set the fileName instead to optimize multiple d.ts file emits and having to compute Canonical path
     const latestChangedDtsFile = state.latestChangedDtsFile ? relativeToBuildInfoEnsuringAbsolutePath(state.latestChangedDtsFile) : undefined;
@@ -1012,8 +1075,8 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
         const seenFiles = new Set<Path>();
         for (const path of arrayFrom(state.affectedFilesPendingEmit.keys()).sort(compareStringsCaseSensitive)) {
             if (tryAddToSet(seenFiles, path)) {
-                const file = state.program!.getSourceFileByPath(path)!;
-                if (!sourceFileMayBeEmitted(file, state.program!)) continue;
+                const file = state.program!.getSourceFileByPath(path);
+                if (!file || !sourceFileMayBeEmitted(file, state.program!)) continue;
                 const fileId = toFileId(path), pendingEmit = state.affectedFilesPendingEmit.get(path)!;
                 (affectedFilesPendingEmit ||= []).push(
                     pendingEmit === fullEmitForOptions ?
@@ -1053,7 +1116,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
     }
 
     function relativeToBuildInfo(path: string) {
-        return ensurePathIsNonModuleName(getRelativePathFromDirectory(buildInfoDirectory, path, getCanonicalFileName));
+        return ensurePathIsNonModuleName(getRelativePathFromDirectory(buildInfoDirectory, path, state.program!.getCanonicalFileName));
     }
 
     function toFileId(path: Path): ProgramBuildInfoFileId {
@@ -1196,7 +1259,6 @@ export function computeSignatureWithDiagnostics(
     host: HostForComputeHash,
     data: WriteFileCallbackData | undefined
 ) {
-    let getCanonicalFileName: GetCanonicalFileName | undefined;
     text = getTextHandlingSourceMapForSignature(text, data);
     let sourceFileDirectory: string | undefined;
     if (data?.diagnostics?.length) {
@@ -1222,7 +1284,7 @@ export function computeSignatureWithDiagnostics(
         return `${ensurePathIsNonModuleName(getRelativePathFromDirectory(
             sourceFileDirectory,
             diagnostic.file.resolvedPath,
-            getCanonicalFileName ??= createGetCanonicalFileName(program.useCaseSensitiveFileNames())
+            program.getCanonicalFileName,
         ))}(${diagnostic.start},${diagnostic.length})`;
     }
 }
@@ -1246,7 +1308,7 @@ export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, hos
         return oldProgram;
     }
 
-    const state = createBuilderProgramState(newProgram, oldState, host.disableUseFileVersionAsSignature);
+    const state = createBuilderProgramState(newProgram, oldState);
     newProgram.getBuildInfo = bundle => getBuildInfo(state, bundle);
 
     // To ensure that we arent storing any references to old program or new program without state

@@ -1,19 +1,95 @@
 import * as ts from "./_namespaces/ts";
 import {
-    AnyFunction, AssertionLevel, BigIntLiteralType, CheckMode, compareValues, EmitFlags, every, FlowFlags, FlowLabel, FlowNode,
-    FlowNodeBase, FlowSwitchClause, getEffectiveModifierFlagsNoCache, getEmitFlags, getOwnKeys,
-    getParseTreeNode, getSourceFileOfNode, getSourceTextOfNodeFromSourceFile, hasProperty, idText, IntrinsicType,
-    isArrayTypeNode, isBigIntLiteral, isCallSignatureDeclaration, isConditionalTypeNode, isConstructorDeclaration,
-    isConstructorTypeNode, isConstructSignatureDeclaration, isDefaultClause, isFunctionTypeNode, isGeneratedIdentifier,
-    isGetAccessorDeclaration, isIdentifier, isImportTypeNode, isIndexedAccessTypeNode, isIndexSignatureDeclaration,
-    isInferTypeNode, isIntersectionTypeNode, isLiteralTypeNode, isMappedTypeNode, isNamedTupleMember, isNumericLiteral,
-    isOptionalTypeNode, isParameter, isParenthesizedTypeNode, isParseTreeNode, isPrivateIdentifier, isRestTypeNode,
-    isSetAccessorDeclaration, isStringLiteral, isThisTypeNode, isTupleTypeNode, isTypeLiteralNode, isTypeOperatorNode,
-    isTypeParameterDeclaration, isTypePredicateNode, isTypeQueryNode, isTypeReferenceNode, isUnionTypeNode, LiteralType,
-    map, MatchingKeys, ModifierFlags, Node, NodeArray, NodeFlags, nodeIsSynthesized, noop, objectAllocator,
-    ObjectFlags, ObjectType, RelationComparisonResult, Signature, SignatureCheckMode,
-    SignatureFlags, SnippetKind, SortedReadonlyArray, stableSort, Symbol, SymbolFlags, symbolName, SyntaxKind,
-    TransformFlags, Type, TypeFacts, TypeFlags, TypeMapKind, TypeMapper, unescapeLeadingUnderscores, VarianceFlags,
+    AnyFunction,
+    AssertionLevel,
+    BigIntLiteralType,
+    CheckMode,
+    compareValues,
+    EmitFlags,
+    every,
+    FlowFlags,
+    FlowLabel,
+    FlowNode,
+    FlowNodeBase,
+    FlowSwitchClause,
+    getEffectiveModifierFlagsNoCache,
+    getEmitFlags,
+    getOwnKeys,
+    getParseTreeNode,
+    getSourceFileOfNode,
+    getSourceTextOfNodeFromSourceFile,
+    hasProperty,
+    idText,
+    IntrinsicType,
+    isArrayTypeNode,
+    isBigIntLiteral,
+    isCallSignatureDeclaration,
+    isConditionalTypeNode,
+    isConstructorDeclaration,
+    isConstructorTypeNode,
+    isConstructSignatureDeclaration,
+    isDefaultClause,
+    isFunctionTypeNode,
+    isGeneratedIdentifier,
+    isGetAccessorDeclaration,
+    isIdentifier,
+    isImportTypeNode,
+    isIndexedAccessTypeNode,
+    isIndexSignatureDeclaration,
+    isInferTypeNode,
+    isIntersectionTypeNode,
+    isLiteralTypeNode,
+    isMappedTypeNode,
+    isNamedTupleMember,
+    isNumericLiteral,
+    isOptionalTypeNode,
+    isParameter,
+    isParenthesizedTypeNode,
+    isParseTreeNode,
+    isPrivateIdentifier,
+    isRestTypeNode,
+    isSetAccessorDeclaration,
+    isStringLiteral,
+    isThisTypeNode,
+    isTupleTypeNode,
+    isTypeLiteralNode,
+    isTypeOperatorNode,
+    isTypeParameterDeclaration,
+    isTypePredicateNode,
+    isTypeQueryNode,
+    isTypeReferenceNode,
+    isUnionTypeNode,
+    LiteralType,
+    map,
+    MatchingKeys,
+    ModifierFlags,
+    Node,
+    NodeArray,
+    NodeFlags,
+    nodeIsSynthesized,
+    noop,
+    objectAllocator,
+    ObjectFlags,
+    ObjectType,
+    RelationComparisonResult,
+    Signature,
+    SignatureCheckMode,
+    SignatureFlags,
+    SnippetKind,
+    SortedReadonlyArray,
+    stableSort,
+    Symbol,
+    SymbolFlags,
+    symbolName,
+    SyntaxKind,
+    TransformFlags,
+    Type,
+    TypeFacts,
+    TypeFlags,
+    TypeMapKind,
+    TypeMapper,
+    unescapeLeadingUnderscores,
+    VarianceFlags,
     zipWith,
 } from "./_namespaces/ts";
 
@@ -512,23 +588,8 @@ export namespace Debug {
         if (isDebugInfoEnabled) return;
 
         // avoid recomputing
-        let weakTypeTextMap: WeakMap<Type, string> | undefined;
-        let weakNodeTextMap: WeakMap<Node, string> | undefined;
-
-        function getWeakTypeTextMap() {
-            if (weakTypeTextMap === undefined) {
-                if (typeof WeakMap === "function") weakTypeTextMap = new WeakMap();
-            }
-            return weakTypeTextMap;
-        }
-
-        function getWeakNodeTextMap() {
-            if (weakNodeTextMap === undefined) {
-                if (typeof WeakMap === "function") weakNodeTextMap = new WeakMap();
-            }
-            return weakNodeTextMap;
-        }
-
+        const weakTypeTextMap = new WeakMap<Type, string>();
+        const weakNodeTextMap = new WeakMap<Node, string>();
 
         // Add additional properties in debug mode to assist with debugging.
         Object.defineProperties(objectAllocator.getSymbolConstructor().prototype, {
@@ -582,11 +643,10 @@ export namespace Debug {
             __debugTypeToString: {
                 value(this: Type) {
                     // avoid recomputing
-                    const map = getWeakTypeTextMap();
-                    let text = map?.get(this);
+                    let text = weakTypeTextMap.get(this);
                     if (text === undefined) {
                         text = this.checker.typeToString(this);
-                        map?.set(this, text);
+                        weakTypeTextMap.set(this, text);
                     }
                     return text;
                 }
@@ -662,13 +722,12 @@ export namespace Debug {
                         value(this: Node, includeTrivia?: boolean) {
                             if (nodeIsSynthesized(this)) return "";
                             // avoid recomputing
-                            const map = getWeakNodeTextMap();
-                            let text = map?.get(this);
+                            let text = weakNodeTextMap.get(this);
                             if (text === undefined) {
                                 const parseNode = getParseTreeNode(this);
                                 const sourceFile = parseNode && getSourceFileOfNode(parseNode);
                                 text = sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
-                                map?.set(this, text);
+                                weakNodeTextMap.set(this, text);
                             }
                             return text;
                         }

@@ -876,7 +876,7 @@ export class FileSystem {
     private _mknod(dev: number, type: typeof S_IFREG, mode: number, time?: number): FileInode;
     private _mknod(dev: number, type: typeof S_IFDIR, mode: number, time?: number): DirectoryInode;
     private _mknod(dev: number, type: typeof S_IFLNK, mode: number, time?: number): SymlinkInode;
-    private _mknod(dev: number, type: number, mode: number, time = this.time()) {
+    private _mknod(dev: number, type: number, mode: number, time = this.time()): Inode {
         return {
             dev,
             ino: ++inoCount,
@@ -886,7 +886,7 @@ export class FileSystem {
             ctimeMs: time,
             birthtimeMs: time,
             nlink: 0
-        } as Inode;
+        };
     }
 
     private _addLink(parent: DirectoryInode | undefined, links: collections.SortedMap<string, Inode>, name: string, node: Inode, time = this.time()) {
@@ -979,7 +979,7 @@ export class FileSystem {
                 birthtimeMs: root.birthtimeMs,
                 nlink: root.nlink,
                 shadowRoot: root
-            } as Inode;
+            };
 
             if (isSymlink(root)) (shadow as SymlinkInode).symlink = root.symlink;
             shadows.set(shadow.ino, shadow);

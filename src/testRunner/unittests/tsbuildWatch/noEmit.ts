@@ -1,4 +1,7 @@
-import { createWatchedSystem, libFile } from "../virtualFileSystemWithWatch";
+import {
+    createWatchedSystem,
+    libFile,
+} from "../virtualFileSystemWithWatch";
 import { libContent } from "../tsc/helpers";
 import { verifyTscWatch } from "../tscWatch/helpers";
 
@@ -16,10 +19,10 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
             ],
             { currentDirectory: "/user/username/projects/myproject" }
         ),
-        changes: [
+        edits: [
             {
                 caption: "No change",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/a.js`, sys.readFile(`/user/username/projects/myproject/a.js`)!),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/a.js`, sys.readFile(`/user/username/projects/myproject/a.js`)!),
                 // build project
                 timeouts: sys => {
                     sys.checkTimeoutQueueLengthAndRun(1);
@@ -28,7 +31,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
             },
             {
                 caption: "change",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/a.js`, "const x = 10;"),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/a.js`, "const x = 10;"),
                 // build project
                 timeouts: sys => {
                     sys.checkTimeoutQueueLengthAndRun(1);

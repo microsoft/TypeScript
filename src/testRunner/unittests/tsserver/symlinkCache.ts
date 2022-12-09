@@ -1,6 +1,13 @@
 import * as ts from "../../_namespaces/ts";
-import { createServerHost, File, SymLink } from "../virtualFileSystemWithWatch";
-import { openFilesForSession, createSession } from "./helpers";
+import {
+    createServerHost,
+    File,
+    SymLink,
+} from "../virtualFileSystemWithWatch";
+import {
+    createSession,
+    openFilesForSession,
+} from "./helpers";
 
 const appTsconfigJson: File = {
     path: "/packages/app/tsconfig.json",
@@ -64,11 +71,13 @@ describe("unittests:: tsserver:: symlinkCache", () => {
     it("works for paths close to the root", () => {
         const cache = ts.createSymlinkCache("/", ts.createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false));
         // Used to crash, #44953
-        const map = ts.createModeAwareCache<ts.ResolvedTypeReferenceDirective | undefined>();
+        const map = ts.createModeAwareCache<ts.ResolvedTypeReferenceDirectiveWithFailedLookupLocations>();
         map.set("foo", /*mode*/ undefined, {
-            primary: true,
-            originalPath: "/foo",
-            resolvedFileName: "/one/two/foo",
+            resolvedTypeReferenceDirective: {
+                primary: true,
+                originalPath: "/foo",
+                resolvedFileName: "/one/two/foo",
+            }
         });
         cache.setSymlinksFromResolutions([], map);
     });

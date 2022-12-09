@@ -1,13 +1,55 @@
 import {
-    combinePaths, createGetCanonicalFileName, createModuleSpecifierResolutionHost, createRange, Debug, emptyArray,
-    endsWith, ensurePathIsNonModuleName, Expression, factory, FileTextChanges, find, forEach, formatting,
-    GetCanonicalFileName, getDirectoryPath, getFileMatcherPatterns, getModeForUsageLocation, getOptionFromName,
-    getRegexFromPattern, getRelativePathFromDirectory, getRelativePathFromFile, getTsConfigObjectLiteralExpression,
-    hostUsesCaseSensitiveFileNames, isAmbientModule, isArrayLiteralExpression, isObjectLiteralExpression,
-    isPropertyAssignment, isSourceFile, isStringLiteral, LanguageServiceHost, last, mapDefined, ModuleResolutionHost,
-    moduleSpecifiers, normalizePath, Path, pathIsRelative, Program, PropertyAssignment,
-    ResolvedModuleWithFailedLookupLocations, resolveModuleName, SourceFile, SourceFileLike, SourceMapper,
-    StringLiteralLike, Symbol, textChanges, TextRange, tryRemoveDirectoryPrefix, UserPreferences,
+    combinePaths,
+    createGetCanonicalFileName,
+    createModuleSpecifierResolutionHost,
+    createRange,
+    Debug,
+    emptyArray,
+    endsWith,
+    ensurePathIsNonModuleName,
+    Expression,
+    factory,
+    FileTextChanges,
+    find,
+    forEach,
+    formatting,
+    GetCanonicalFileName,
+    getDirectoryPath,
+    getFileMatcherPatterns,
+    getModeForUsageLocation,
+    getOptionFromName,
+    getRegexFromPattern,
+    getRelativePathFromDirectory,
+    getRelativePathFromFile,
+    getTsConfigObjectLiteralExpression,
+    hostUsesCaseSensitiveFileNames,
+    isAmbientModule,
+    isArrayLiteralExpression,
+    isObjectLiteralExpression,
+    isPropertyAssignment,
+    isSourceFile,
+    isStringLiteral,
+    LanguageServiceHost,
+    last,
+    mapDefined,
+    ModuleResolutionHost,
+    moduleSpecifiers,
+    normalizePath,
+    Path,
+    pathIsRelative,
+    Program,
+    PropertyAssignment,
+    ResolvedModuleWithFailedLookupLocations,
+    resolveModuleName,
+    SourceFile,
+    SourceFileLike,
+    SourceMapper,
+    StringLiteralLike,
+    Symbol,
+    textChanges,
+    TextRange,
+    tryRemoveDirectoryPrefix,
+    UserPreferences,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -206,9 +248,9 @@ function getSourceFileToImport(
     }
     else {
         const mode = getModeForUsageLocation(importingSourceFile, importLiteral);
-        const resolved = host.resolveModuleNames
-            ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode)
-            : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);
+        const resolved = host.resolveModuleNameLiterals || !host.resolveModuleNames ?
+            importingSourceFile.resolvedModules?.get(importLiteral.text, mode) :
+            host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);
         return getSourceFileToImportFromResolved(importLiteral, resolved, oldToNew, program.getSourceFiles());
     }
 }

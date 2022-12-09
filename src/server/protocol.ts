@@ -1,8 +1,22 @@
 import * as ts from "./_namespaces/ts";
 import {
-    CompilerOptionsValue, EndOfLineState, FileExtensionInfo, HighlightSpanKind, MapLike, OutliningSpanKind, OutputFile,
-    PluginImport, ProjectReference, RenameLocation, ScriptElementKind, ScriptKind, TextChange, TextInsertion,
-    TodoComment, TodoCommentDescriptor, TypeAcquisition,
+    CompilerOptionsValue,
+    EndOfLineState,
+    FileExtensionInfo,
+    HighlightSpanKind,
+    MapLike,
+    OutliningSpanKind,
+    OutputFile,
+    PluginImport,
+    ProjectReference,
+    RenameLocation,
+    ScriptElementKind,
+    ScriptKind,
+    TextChange,
+    TextInsertion,
+    TodoComment,
+    TodoCommentDescriptor,
+    TypeAcquisition,
 } from "./_namespaces/ts";
 
 /**
@@ -826,6 +840,7 @@ export interface FileLocationRequest extends FileRequest {
  */
 export interface GetSupportedCodeFixesRequest extends Request {
     command: CommandTypes.GetSupportedCodeFixes;
+    arguments?: Partial<FileRequestArgs>;
 }
 
 /**

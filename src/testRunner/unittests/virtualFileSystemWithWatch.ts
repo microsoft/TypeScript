@@ -1,12 +1,46 @@
 import * as Harness from "../_namespaces/Harness";
 import {
-    arrayFrom, arrayToMap, clear, clone, combinePaths, compareStringsCaseSensitive, createGetCanonicalFileName,
-    createMultiMap, createSystemWatchFunctions, Debug, directorySeparator, FileSystemEntryKind, FileWatcher,
-    FileWatcherCallback, FileWatcherEventKind, filterMutate, forEach, FormatDiagnosticsHost, FsWatchCallback,
-    FsWatchWorkerWatcher, generateDjb2Hash, getBaseFileName, getDirectoryPath, getNormalizedAbsolutePath,
-    getRelativePathToDirectoryOrUrl, hasProperty, HostWatchDirectory, HostWatchFile, identity, insertSorted, isArray,
-    isNumber, isString, mapDefined, matchFiles, ModuleResolutionHost, MultiMap, noop,
-    patchWriteFileEnsuringDirectory, Path, PollingInterval, RequireResult, server, SortedArray, sys, toPath,
+    clear,
+    clone,
+    combinePaths,
+    compareStringsCaseSensitive,
+    createGetCanonicalFileName,
+    createMultiMap,
+    createSystemWatchFunctions,
+    Debug,
+    directorySeparator,
+    FileSystemEntryKind,
+    FileWatcher,
+    FileWatcherCallback,
+    FileWatcherEventKind,
+    filterMutate,
+    FormatDiagnosticsHost,
+    FsWatchCallback,
+    FsWatchWorkerWatcher,
+    generateDjb2Hash,
+    getBaseFileName,
+    getDirectoryPath,
+    getNormalizedAbsolutePath,
+    getRelativePathToDirectoryOrUrl,
+    hasProperty,
+    HostWatchDirectory,
+    HostWatchFile,
+    insertSorted,
+    isArray,
+    isString,
+    mapDefined,
+    matchFiles,
+    ModuleResolutionHost,
+    MultiMap,
+    noop,
+    patchWriteFileEnsuringDirectory,
+    Path,
+    PollingInterval,
+    RequireResult,
+    server,
+    SortedArray,
+    sys,
+    toPath,
 } from "../_namespaces/ts";
 import { timeIncrements } from "../_namespaces/vfs";
 
@@ -135,74 +169,6 @@ function createWatcher<T>(map: MultiMap<Path, T>, path: Path, callback: T): File
             closed = true;
         }
     };
-}
-
-export function getDiffInKeys<T>(map: Map<string, T>, expectedKeys: readonly string[]) {
-    if (map.size === expectedKeys.length) {
-        return "";
-    }
-    const notInActual: string[] = [];
-    const duplicates: string[] = [];
-    const seen = new Map<string, true>();
-    forEach(expectedKeys, expectedKey => {
-        if (seen.has(expectedKey)) {
-            duplicates.push(expectedKey);
-            return;
-        }
-        seen.set(expectedKey, true);
-        if (!map.has(expectedKey)) {
-            notInActual.push(expectedKey);
-        }
-    });
-    const inActualNotExpected: string[] = [];
-    map.forEach((_value, key) => {
-        if (!seen.has(key)) {
-            inActualNotExpected.push(key);
-        }
-        seen.set(key, true);
-    });
-    return `\n\nNotInActual: ${notInActual}\nDuplicates: ${duplicates}\nInActualButNotInExpected: ${inActualNotExpected}`;
-}
-
-export function verifyMapSize(caption: string, map: Map<string, any>, expectedKeys: readonly string[]) {
-    assert.equal(map.size, expectedKeys.length, `${caption}: incorrect size of map: Actual keys: ${arrayFrom(map.keys())} Expected: ${expectedKeys}${getDiffInKeys(map, expectedKeys)}`);
-}
-
-export type MapValueTester<T, U> = [Map<string, U[]> | undefined, (value: T) => U];
-
-export function checkMap<T, U = undefined>(caption: string, actual: MultiMap<string, T>, expectedKeys: ReadonlyMap<string, number>, valueTester?: MapValueTester<T,U>): void;
-export function checkMap<T, U = undefined>(caption: string, actual: MultiMap<string, T>, expectedKeys: readonly string[], eachKeyCount: number, valueTester?: MapValueTester<T, U>): void;
-export function checkMap<T>(caption: string, actual: Map<string, T> | MultiMap<string, T>, expectedKeys: readonly string[], eachKeyCount: undefined): void;
-export function checkMap<T, U = undefined>(
-    caption: string,
-    actual: Map<string, T> | MultiMap<string, T>,
-    expectedKeysMapOrArray: ReadonlyMap<string, number> | readonly string[],
-    eachKeyCountOrValueTester?: number | MapValueTester<T, U>,
-    valueTester?: MapValueTester<T, U>) {
-    const expectedKeys = isArray(expectedKeysMapOrArray) ? arrayToMap(expectedKeysMapOrArray, s => s, () => eachKeyCountOrValueTester as number) : expectedKeysMapOrArray;
-    verifyMapSize(caption, actual, isArray(expectedKeysMapOrArray) ? expectedKeysMapOrArray : arrayFrom(expectedKeys.keys()));
-    if (!isNumber(eachKeyCountOrValueTester)) {
-        valueTester = eachKeyCountOrValueTester;
-    }
-    const [expectedValues, valueMapper] = valueTester || [undefined, undefined!];
-    expectedKeys.forEach((count, name) => {
-        assert.isTrue(actual.has(name), `${caption}: expected to contain ${name}, actual keys: ${arrayFrom(actual.keys())}`);
-        // Check key information only if eachKeyCount is provided
-        if (!isArray(expectedKeysMapOrArray) || eachKeyCountOrValueTester !== undefined) {
-            assert.equal((actual as MultiMap<string, T>).get(name)!.length, count, `${caption}: Expected to be have ${count} entries for ${name}. Actual entry: ${JSON.stringify(actual.get(name))}`);
-            if (expectedValues) {
-                assert.deepEqual(
-                    (actual as MultiMap<string, T>).get(name)!.map(valueMapper),
-                    expectedValues.get(name),
-                    `${caption}:: expected values mismatch for ${name}`
-                );
-            }
-        }
-    });
-}
-
-export function checkArray(caption: string, actual: readonly string[], expected: readonly string[]) {
-    checkMap(caption, arrayToMap(actual, identity), expected, /*eachKeyCount*/ undefined);
 }
 
 interface CallbackData {
@@ -720,7 +686,7 @@ export class TestServerHost implements server.ServerHost, FormatDiagnosticsHost,
         }
     }
 
-    private invokeFsWatches(fullPath: string, eventName: "rename" | "change", modifiedTime: Date | undefined, useTildeSuffix: boolean | undefined) {
+    invokeFsWatches(fullPath: string, eventName: "rename" | "change", modifiedTime: Date | undefined, useTildeSuffix: boolean | undefined) {
         this.invokeFsWatchesCallbacks(fullPath, eventName, modifiedTime, fullPath, useTildeSuffix);
         this.invokeFsWatchesCallbacks(getDirectoryPath(fullPath), eventName, modifiedTime, fullPath, useTildeSuffix);
         this.invokeRecursiveFsWatches(fullPath, eventName, modifiedTime, /*entryFullPath*/ undefined, useTildeSuffix);

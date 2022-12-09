@@ -1,7 +1,18 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
-import { createWatchedSystem, File, libFile, TestServerHostTrackingWrittenFiles } from "../virtualFileSystemWithWatch";
-import { applyChange, createBaseline, createWatchCompilerHostOfConfigFileForBaseline, runWatchBaseline, watchBaseline } from "./helpers";
+import {
+    createWatchedSystem,
+    File,
+    libFile,
+    TestServerHostTrackingWrittenFiles,
+} from "../virtualFileSystemWithWatch";
+import {
+    applyEdit,
+    createBaseline,
+    createWatchCompilerHostOfConfigFileForBaseline,
+    runWatchBaseline,
+    watchBaseline,
+} from "./helpers";
 import { commandLineCallbacks } from "../tsc/helpers";
 
 describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolution", () => {
@@ -50,7 +61,6 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
             baseline,
             oldSnap,
             getPrograms,
-            changes: ts.emptyArray,
             watchOrSolution: watch
         });
     });
@@ -85,20 +95,20 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
                     baseline,
                     oldSnap,
                     getPrograms,
-                    changes: [
+                    edits: [
                         {
                             caption: "write other with same contents",
-                            change: sys => sys.appendFile(`/user/username/projects/myproject/other.d.ts`, ""),
+                            edit: sys => sys.appendFile(`/user/username/projects/myproject/other.d.ts`, ""),
                             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                         },
                         {
                             caption: "change other file",
-                            change: sys => sys.appendFile(`/user/username/projects/myproject/other.d.ts`, "export function bar(): void;"),
+                            edit: sys => sys.appendFile(`/user/username/projects/myproject/other.d.ts`, "export function bar(): void;"),
                             timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                         },
                         {
                             caption: "write other with same contents but write ts file",
-                            change: sys => {
+                            edit: sys => {
                                 sys.appendFile(`/user/username/projects/myproject/other.d.ts`, "");
                                 sys.writeFile(`/user/username/projects/myproject/other.ts`, "export function foo() {}");
                             },
@@ -152,7 +162,6 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch expose error count to wat
             baseline,
             oldSnap,
             getPrograms,
-            changes: ts.emptyArray,
             watchOrSolution: watch
         });
     });
@@ -185,9 +194,9 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost does not implement s
             baseline,
             oldSnap,
             getPrograms,
-            changes: [{
+            edits: [{
                 caption: "Write a file",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/bar.ts`, "const y =10;"),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/bar.ts`, "const y =10;"),
                 timeouts: sys => {
                     sys.checkTimeoutQueueLength(0);
                     watch.getProgram();
@@ -231,9 +240,9 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost can add extraFileExt
             baseline,
             oldSnap,
             getPrograms,
-            changes: [{
+            edits: [{
                 caption: "Write a file",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/other2.vue`, otherFile.content),
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/other2.vue`, otherFile.content),
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
             }],
             watchOrSolution: watch
@@ -314,8 +323,8 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
         caption: string
     ) {
         // Change file
-        applyChange(sys, baseline, change, caption);
-        applyChange(emitSys, emitBaseline, change, caption);
+        applyEdit(sys, baseline, change, caption);
+        applyEdit(emitSys, emitBaseline, change, caption);
     }
 
     function verifyBuilder<T extends ts.BuilderProgram>(
@@ -349,9 +358,9 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             baseline,
             oldSnap,
             getPrograms,
-            changes: [{
+            edits: [{
                 caption: "Modify a file",
-                change: sys => sys.appendFile(mainFile.path, "\n// SomeComment"),
+                edit: sys => sys.appendFile(mainFile.path, "\n// SomeComment"),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             }],
             watchOrSolution: watch
@@ -444,7 +453,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
         createWatch(baseline, config, sys, ts.createSemanticDiagnosticsBuilderProgram);
 
         // Fix error and emit
-        applyChange(sys, baseline, sys => sys.writeFile(mainFile.path, "export const x = 10;"), "Fix error");
+        applyEdit(sys, baseline, sys => sys.writeFile(mainFile.path, "export const x = 10;"), "Fix error");
 
         const { cb, getPrograms } = commandLineCallbacks(sys);
         const oldSnap = sys.snap();
@@ -551,10 +560,10 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
             subScenario: "when new file is added to the referenced project with host implementing getParsedCommandLine",
             commandLineArgs: ["--w", "-p", config2.path, "--extendedDiagnostics"],
             ...baseline,
-            changes: [
+            edits: [
                 {
                     caption: "Add class3 to project1",
-                    change: sys => {
+                    edit: sys => {
                         calledGetParsedCommandLine.clear();
                         sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.ts`, `class class3 {}`);
                     },
@@ -562,12 +571,12 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                 },
                 {
                     caption: "Add excluded file to project1",
-                    change: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
+                    edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
                     timeouts: sys => sys.checkTimeoutQueueLength(0),
                 },
                 {
                     caption: "Add output of class3",
-                    change: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                    edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
                     timeouts: sys => sys.checkTimeoutQueueLength(0),
                 },
             ],
@@ -582,10 +591,10 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
             subScenario: "when new file is added to the referenced project with host implementing getParsedCommandLine without implementing useSourceOfProjectReferenceRedirect",
             commandLineArgs: ["--w", "-p", config2.path, "--extendedDiagnostics"],
             ...baseline,
-            changes: [
+            edits: [
                 {
                     caption: "Add class3 to project1",
-                    change: sys => {
+                    edit: sys => {
                         calledGetParsedCommandLine.clear();
                         sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.ts`, `class class3 {}`);
                     },
@@ -593,22 +602,22 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                 },
                 {
                     caption: "Add class3 output to project1",
-                    change: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                    edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
                     timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
                 },
                 {
                     caption: "Add excluded file to project1",
-                    change: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
+                    edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
                     timeouts: sys => sys.checkTimeoutQueueLength(0),
                 },
                 {
                     caption: "Delete output of class3",
-                    change: sys => sys.deleteFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`),
+                    edit: sys => sys.deleteFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`),
                     timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
                 },
                 {
                     caption: "Add output of class3",
-                    change: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
+                    edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
                     timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
                 },
             ],
@@ -645,10 +654,10 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                 subScenario,
                 commandLineArgs: ["--w", "--extendedDiagnostics"],
                 ...baseline,
-                changes: [
+                edits: [
                     {
                         caption: "Fix error but run emit with emitOnlyDts",
-                        change: sys => {
+                        edit: sys => {
                             sys.writeFile(`/user/username/projects/myproject/b.ts`, `export const y = 10;`);
                             callFullEmit = false;
                         },
@@ -656,7 +665,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                     },
                     {
                         caption: "Emit with emitOnlyDts shouldnt emit anything",
-                        change: () => {
+                        edit: () => {
                             const program = watch.getCurrentProgram();
                             program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
                             baseline.cb(program);
@@ -665,7 +674,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                     },
                     {
                         caption: "Emit all files",
-                        change: () => {
+                        edit: () => {
                             const program = watch.getCurrentProgram();
                             program.emit();
                             baseline.cb(program);
@@ -674,7 +683,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                     },
                     {
                         caption: "Emit with emitOnlyDts shouldnt emit anything",
-                        change: () => {
+                        edit: () => {
                             const program = watch.getCurrentProgram();
                             program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
                             baseline.cb(program);
@@ -683,7 +692,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                     },
                     {
                         caption: "Emit full should not emit anything",
-                        change: () => {
+                        edit: () => {
                             const program = watch.getCurrentProgram();
                             program.emit();
                             baseline.cb(program);

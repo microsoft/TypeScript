@@ -1,11 +1,28 @@
 import * as Utils from "../_namespaces/Utils";
 import * as ts from "../_namespaces/ts";
 import {
-    configOption, globalTimeout, IO, keepFailed, lightMode, noColors, runners, runUnitTests, stackTraceLimit,
-    taskConfigsFolder, TestConfig, TestRunnerKind, workerCount,
+    configOption,
+    globalTimeout,
+    IO,
+    keepFailed,
+    lightMode,
+    noColors,
+    runners,
+    runUnitTests,
+    stackTraceLimit,
+    taskConfigsFolder,
+    TestConfig,
+    TestRunnerKind,
+    workerCount,
 } from "../_namespaces/Harness";
 import {
-    ErrorInfo, ParallelClientMessage, ParallelHostMessage, shimNoopTestInterface, Task, TaskTimeout, TestInfo,
+    ErrorInfo,
+    ParallelClientMessage,
+    ParallelHostMessage,
+    shimNoopTestInterface,
+    Task,
+    TaskTimeout,
+    TestInfo,
 } from "../_namespaces/Harness.Parallel";
 
 export function start() {
@@ -355,10 +372,10 @@ export function start() {
                             }
                             worker.currentTasks = taskList;
                             if (taskList.length === 1) {
-                                worker.process.send({ type: "test", payload: taskList[0] } as ParallelHostMessage); // TODO: GH#18217
+                                worker.process.send({ type: "test", payload: taskList[0] } satisfies ParallelHostMessage); // TODO: GH#18217
                             }
                             else {
-                                worker.process.send({ type: "batch", payload: taskList } as ParallelHostMessage); // TODO: GH#18217
+                                worker.process.send({ type: "batch", payload: taskList } satisfies ParallelHostMessage); // TODO: GH#18217
                             }
                         }
                     }

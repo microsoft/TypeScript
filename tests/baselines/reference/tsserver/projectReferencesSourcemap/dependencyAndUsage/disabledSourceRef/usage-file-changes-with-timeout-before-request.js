@@ -1,12 +1,12 @@
 Info 0    [00:01:03.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:01:04.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/main/main.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/dependency/FnS.ts]
@@ -319,12 +319,12 @@ Info 28   [00:01:37.000] response:
     }
 Info 29   [00:01:38.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/FnS.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -422,12 +422,12 @@ Info 44   [00:02:04.000] response:
     }
 Info 45   [00:02:05.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/random/random.ts"
-      }
+      },
+      "seq": 3,
+      "type": "request"
     }
 Before request
 
@@ -554,7 +554,7 @@ Info 63   [00:02:39.000] request:
         "line": 9,
         "offset": 1
       },
-      "seq": 1,
+      "seq": 4,
       "type": "request"
     }
 Before request
@@ -673,7 +673,7 @@ Info 66   [00:02:42.000] request:
         "line": 1,
         "offset": 17
       },
-      "seq": 2,
+      "seq": 5,
       "type": "request"
     }
 Before request
@@ -842,7 +842,7 @@ Info 70   [00:02:46.000] request:
         "endOffset": 1,
         "insertString": "const x = 10;"
       },
-      "seq": 3,
+      "seq": 6,
       "type": "request"
     }
 Before request
@@ -932,7 +932,7 @@ Info 72   [00:02:48.000] request:
         "endOffset": 1,
         "insertString": "const x = 10;"
       },
-      "seq": 4,
+      "seq": 7,
       "type": "request"
     }
 Before request
@@ -1091,7 +1091,7 @@ Info 74   [00:02:50.000] request:
         "line": 9,
         "offset": 1
       },
-      "seq": 5,
+      "seq": 8,
       "type": "request"
     }
 Before request
@@ -1214,7 +1214,7 @@ Info 79   [00:02:55.000] request:
         "line": 10,
         "offset": 1
       },
-      "seq": 6,
+      "seq": 9,
       "type": "request"
     }
 Before request
@@ -1334,7 +1334,7 @@ Info 81   [00:02:57.000] request:
         "line": 11,
         "offset": 1
       },
-      "seq": 7,
+      "seq": 10,
       "type": "request"
     }
 Before request
@@ -1454,7 +1454,7 @@ Info 83   [00:02:59.000] request:
         "line": 12,
         "offset": 1
       },
-      "seq": 8,
+      "seq": 11,
       "type": "request"
     }
 Before request
@@ -1574,7 +1574,7 @@ Info 85   [00:03:01.000] request:
         "line": 13,
         "offset": 1
       },
-      "seq": 9,
+      "seq": 12,
       "type": "request"
     }
 Before request
@@ -1694,7 +1694,7 @@ Info 87   [00:03:03.000] request:
         "line": 1,
         "offset": 17
       },
-      "seq": 10,
+      "seq": 13,
       "type": "request"
     }
 Before request
@@ -1863,7 +1863,7 @@ Info 94   [00:03:10.000] request:
         "line": 2,
         "offset": 17
       },
-      "seq": 11,
+      "seq": 14,
       "type": "request"
     }
 Before request
@@ -2029,7 +2029,7 @@ Info 98   [00:03:14.000] request:
         "line": 3,
         "offset": 17
       },
-      "seq": 12,
+      "seq": 15,
       "type": "request"
     }
 Before request
@@ -2195,7 +2195,7 @@ Info 102  [00:03:18.000] request:
         "line": 4,
         "offset": 17
       },
-      "seq": 13,
+      "seq": 16,
       "type": "request"
     }
 Before request
@@ -2361,7 +2361,7 @@ Info 106  [00:03:22.000] request:
         "line": 5,
         "offset": 17
       },
-      "seq": 14,
+      "seq": 17,
       "type": "request"
     }
 Before request

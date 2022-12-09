@@ -1,8 +1,21 @@
 import {
-    BuilderProgramKind, CancellationToken, CompilerHost, CompilerOptions, createBuilderProgram,
-    createRedirectedBuilderProgram, CustomTransformers, Diagnostic, DiagnosticWithLocation, EmitResult,
-    getBuilderCreationParameters, Program, ProjectReference, ReusableBuilderProgramState, SavedBuildProgramEmitState,
-    SourceFile, WriteFileCallback,
+    BuilderProgramKind,
+    CancellationToken,
+    CompilerHost,
+    CompilerOptions,
+    createBuilderProgram,
+    createRedirectedBuilderProgram,
+    CustomTransformers,
+    Diagnostic,
+    DiagnosticWithLocation,
+    EmitResult,
+    getBuilderCreationParameters,
+    Program,
+    ProjectReference,
+    ReusableBuilderProgramState,
+    SavedBuildProgramEmitState,
+    SourceFile,
+    WriteFileCallback,
 } from "./_namespaces/ts";
 
 export type AffectedFileResult<T> = { result: T; affected: SourceFile | Program; } | undefined;
@@ -17,12 +30,6 @@ export interface BuilderProgramHost {
      * this callback if present would be used to write files
      */
     writeFile?: WriteFileCallback;
-    /**
-     * disable using source file version as signature for testing
-     *
-     * @internal
-     */
-    disableUseFileVersionAsSignature?: boolean;
     /**
      * Store the list of files that update signature during the emit
      *

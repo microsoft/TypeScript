@@ -1,6 +1,16 @@
 import * as ts from "../../_namespaces/ts";
-import { createWatchedSystem, File, libFile } from "../virtualFileSystemWithWatch";
-import { createBaseline, createWatchCompilerHostOfConfigFileForBaseline, runWatchBaseline, TscWatchCompileChange, verifyTscWatch } from "./helpers";
+import {
+    createWatchedSystem,
+    File,
+    libFile,
+} from "../virtualFileSystemWithWatch";
+import {
+    createBaseline,
+    createWatchCompilerHostOfConfigFileForBaseline,
+    runWatchBaseline,
+    TscWatchCompileChange,
+    verifyTscWatch,
+} from "./helpers";
 
 describe("unittests:: tsc-watch:: console clearing", () => {
     const scenario = "consoleClearing";
@@ -11,7 +21,7 @@ describe("unittests:: tsc-watch:: console clearing", () => {
 
     const makeChangeToFile: TscWatchCompileChange[] = [{
         caption: "Comment added to file f",
-        change: sys => sys.modifyFile(file.path, "//"),
+        edit: sys => sys.modifyFile(file.path, "//"),
         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
     }];
 
@@ -21,7 +31,7 @@ describe("unittests:: tsc-watch:: console clearing", () => {
             subScenario,
             commandLineArgs: ["--w", file.path, ...commandLineOptions || ts.emptyArray],
             sys: () => createWatchedSystem([file, libFile]),
-            changes: makeChangeToFile,
+            edits: makeChangeToFile,
         });
     }
 
@@ -53,7 +63,7 @@ describe("unittests:: tsc-watch:: console clearing", () => {
                 commandLineArgs: ["--w", "-p", configFile.path],
                 ...baseline,
                 getPrograms: () => [[watch.getCurrentProgram().getProgram(), watch.getCurrentProgram()]],
-                changes: makeChangeToFile,
+                edits: makeChangeToFile,
                 watchOrSolution: watch
             });
         });
@@ -62,7 +72,7 @@ describe("unittests:: tsc-watch:: console clearing", () => {
             subScenario: "when preserveWatchOutput is true in config file/when createWatchProgram is invoked with configFileParseResult on WatchCompilerHostOfConfigFile",
             commandLineArgs: ["--w", "-p", configFile.path],
             sys: () => createWatchedSystem(files),
-            changes: makeChangeToFile,
+            edits: makeChangeToFile,
         });
     });
 });

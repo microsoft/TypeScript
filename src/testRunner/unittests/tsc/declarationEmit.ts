@@ -1,6 +1,11 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import { createWatchedSystem, FileOrFolderOrSymLink, isSymLink, libFile } from "../virtualFileSystemWithWatch";
+import {
+    createWatchedSystem,
+    FileOrFolderOrSymLink,
+    isSymLink,
+    libFile,
+} from "../virtualFileSystemWithWatch";
 import { verifyTscWatch } from "../tscWatch/helpers";
 
 describe("unittests:: tsc:: declarationEmit::", () => {
@@ -24,7 +29,6 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                 subScenario,
                 sys: () => createWatchedSystem(files, { currentDirectory: "/user/username/projects/myproject" }),
                 commandLineArgs: ["-p", rootProject, "--explainFiles"],
-                changes: ts.emptyArray
             });
         });
 
@@ -38,7 +42,6 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                     { currentDirectory: "/user/username/projects/myproject" }
                 ),
                 commandLineArgs: ["-p", rootProject, "--explainFiles"],
-                changes: ts.emptyArray
             });
         });
     }
