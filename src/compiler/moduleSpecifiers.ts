@@ -116,7 +116,7 @@ interface Preferences {
     /**
      * @param syntaxImpliedNodeFormat Used when the import syntax implies ESM or CJS irrespective of the mode of the file.
      */
-    getAllowedEndingsInPrefererredOrder(syntaxImpliedNodeFormat?: SourceFile["impliedNodeFormat"]): ModuleSpecifierEnding[];
+    getAllowedEndingsInPreferredOrder(syntaxImpliedNodeFormat?: SourceFile["impliedNodeFormat"]): ModuleSpecifierEnding[];
 }
 
 function getPreferences(
@@ -135,8 +135,8 @@ function getPreferences(
             importModuleSpecifierPreference === "non-relative" ? RelativePreference.NonRelative :
             importModuleSpecifierPreference === "project-relative" ? RelativePreference.ExternalNonRelative :
             RelativePreference.Shortest,
-        getAllowedEndingsInPrefererredOrder: syntaxImpliedNodeFormat => {
-            if (syntaxImpliedNodeFormat === ModuleKind.ESNext || (syntaxImpliedNodeFormat ?? importingSourceFile.impliedNodeFormat) === ModuleKind.ESNext) {
+        getAllowedEndingsInPreferredOrder: syntaxImpliedNodeFormat => {
+            if ((syntaxImpliedNodeFormat ?? importingSourceFile.impliedNodeFormat) === ModuleKind.ESNext) {
                 if (shouldAllowImportingTsExtension(compilerOptions, importingSourceFile.fileName)) {
                     return [ModuleSpecifierEnding.TsExtension, ModuleSpecifierEnding.JsExtension];
                 }
@@ -429,7 +429,7 @@ function getInfo(importingSourceFileName: Path, host: ModuleSpecifierResolutionH
 
 function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, preferences: Preferences): string;
 function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, preferences: Preferences, pathsOnly?: boolean): string | undefined;
-function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, { getAllowedEndingsInPrefererredOrder, relativePreference }: Preferences, pathsOnly?: boolean): string | undefined {
+function getLocalModuleSpecifier(moduleFileName: string, info: Info, compilerOptions: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode, { getAllowedEndingsInPreferredOrder: getAllowedEndingsInPrefererredOrder, relativePreference }: Preferences, pathsOnly?: boolean): string | undefined {
     const { baseUrl, paths, rootDirs } = compilerOptions;
     if (pathsOnly && !paths) {
         return undefined;
@@ -883,7 +883,7 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
     // Simplify the full file path to something that can be resolved by Node.
 
     const preferences = getPreferences(userPreferences, options, importingSourceFile);
-    const allowedEndings = preferences.getAllowedEndingsInPrefererredOrder();
+    const allowedEndings = preferences.getAllowedEndingsInPreferredOrder();
     let moduleSpecifier = path;
     let isPackageRootPath = false;
     if (!packageNameOnly) {

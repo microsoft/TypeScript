@@ -1768,7 +1768,9 @@ function loadModuleFromFileNoImplicitExtensions(extensions: Extensions, candidat
     // e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
     if (hasJSFileExtension(candidate) ||
         extensions & Extensions.Json && fileExtensionIs(candidate, Extension.Json) ||
-        extensions & (Extensions.TypeScript | Extensions.Declaration) && moduleResolutionSupportsResolvingTsExtensions(state.compilerOptions) && fileExtensionIsOneOf(candidate, supportedTSExtensionsFlat)
+        extensions & (Extensions.TypeScript | Extensions.Declaration)
+            && moduleResolutionSupportsResolvingTsExtensions(state.compilerOptions)
+            && fileExtensionIsOneOf(candidate, supportedTSExtensionsFlat)
     ) {
         const extensionless = removeFileExtension(candidate);
         const extension = candidate.substring(extensionless.length);
