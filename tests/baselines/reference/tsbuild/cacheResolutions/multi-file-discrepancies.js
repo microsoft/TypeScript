@@ -101,7 +101,6 @@ CleanBuild:
           "original": {
             "resolvedModule": {
               "resolvedFileName": 2,
-              "isExternalLibraryImport": true,
               "packageId": {
                 "name": "pkg0",
                 "subModuleName": "import.d.ts",
@@ -115,7 +114,6 @@ CleanBuild:
           "resolutionId": 1,
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/import.d.ts",
-            "isExternalLibraryImport": true,
             "packageId": {
               "name": "pkg0",
               "subModuleName": "import.d.ts",
@@ -134,8 +132,7 @@ CleanBuild:
                 "name": "pkg2",
                 "subModuleName": "import.d.ts",
                 "version": "0.0.1"
-              },
-              "isExternalLibraryImport": true
+              }
             },
             "affectingLocations": [
               12
@@ -148,8 +145,7 @@ CleanBuild:
               "name": "pkg2",
               "subModuleName": "import.d.ts",
               "version": "0.0.1"
-            },
-            "isExternalLibraryImport": true
+            }
           },
           "affectingLocations": [
             "./node_modules/pkg2/package.json"
@@ -163,8 +159,7 @@ CleanBuild:
                 "name": "pkg3",
                 "subModuleName": "require.d.ts",
                 "version": "0.0.1"
-              },
-              "isExternalLibraryImport": true
+              }
             },
             "affectingLocations": [
               13
@@ -177,8 +172,7 @@ CleanBuild:
               "name": "pkg3",
               "subModuleName": "require.d.ts",
               "version": "0.0.1"
-            },
-            "isExternalLibraryImport": true
+            }
           },
           "affectingLocations": [
             "./node_modules/pkg3/package.json"
@@ -188,15 +182,13 @@ CleanBuild:
           "original": {
             "resolvedTypeReferenceDirective": {
               "primary": true,
-              "resolvedFileName": 9,
-              "isExternalLibraryImport": true
+              "resolvedFileName": 9
             }
           },
           "resolutionId": 4,
           "resolvedTypeReferenceDirective": {
             "primary": true,
-            "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts",
-            "isExternalLibraryImport": true
+            "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts"
           }
         }
       ],
@@ -233,7 +225,6 @@ CleanBuild:
             "resolutionId": 1,
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/import.d.ts",
-              "isExternalLibraryImport": true,
               "packageId": {
                 "name": "pkg0",
                 "subModuleName": "import.d.ts",
@@ -262,8 +253,7 @@ CleanBuild:
                 "name": "pkg2",
                 "subModuleName": "import.d.ts",
                 "version": "0.0.1"
-              },
-              "isExternalLibraryImport": true
+              }
             },
             "affectingLocations": [
               "./node_modules/pkg2/package.json"
@@ -287,8 +277,7 @@ CleanBuild:
                 "name": "pkg3",
                 "subModuleName": "require.d.ts",
                 "version": "0.0.1"
-              },
-              "isExternalLibraryImport": true
+              }
             },
             "affectingLocations": [
               "./node_modules/pkg3/package.json"
@@ -307,8 +296,7 @@ CleanBuild:
             "resolutionId": 4,
             "resolvedTypeReferenceDirective": {
               "primary": true,
-              "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts",
-              "isExternalLibraryImport": true
+              "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts"
             }
           }
         }
@@ -324,7 +312,6 @@ CleanBuild:
                 "resolutionId": 1,
                 "resolvedModule": {
                   "resolvedFileName": "./node_modules/pkg0/import.d.ts",
-                  "isExternalLibraryImport": true,
                   "packageId": {
                     "name": "pkg0",
                     "subModuleName": "import.d.ts",
@@ -355,8 +342,7 @@ CleanBuild:
                     "name": "pkg2",
                     "subModuleName": "import.d.ts",
                     "version": "0.0.1"
-                  },
-                  "isExternalLibraryImport": true
+                  }
                 },
                 "affectingLocations": [
                   "./node_modules/pkg2/package.json"
@@ -375,8 +361,7 @@ CleanBuild:
                     "name": "pkg3",
                     "subModuleName": "require.d.ts",
                     "version": "0.0.1"
-                  },
-                  "isExternalLibraryImport": true
+                  }
                 },
                 "affectingLocations": [
                   "./node_modules/pkg3/package.json"
@@ -391,8 +376,7 @@ CleanBuild:
                 "resolutionId": 4,
                 "resolvedTypeReferenceDirective": {
                   "primary": true,
-                  "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts",
-                  "isExternalLibraryImport": true
+                  "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts"
                 }
               }
             }
@@ -503,7 +487,6 @@ IncrementalBuild:
           "original": {
             "resolvedModule": {
               "resolvedFileName": 2,
-              "isExternalLibraryImport": true,
               "packageId": {
                 "name": "pkg0",
                 "subModuleName": "import.d.ts",
@@ -517,7 +500,6 @@ IncrementalBuild:
           "resolutionId": 1,
           "resolvedModule": {
             "resolvedFileName": "./node_modules/pkg0/import.d.ts",
-            "isExternalLibraryImport": true,
             "packageId": {
               "name": "pkg0",
               "subModuleName": "import.d.ts",
@@ -536,8 +518,7 @@ IncrementalBuild:
                 "name": "pkg2",
                 "subModuleName": "import.d.ts",
                 "version": "0.0.1"
-              },
-              "isExternalLibraryImport": true
+              }
             },
             "affectingLocations": [
               12
@@ -550,8 +531,7 @@ IncrementalBuild:
               "name": "pkg2",
               "subModuleName": "import.d.ts",
               "version": "0.0.1"
-            },
-            "isExternalLibraryImport": true
+            }
           },
           "affectingLocations": [
             "./node_modules/pkg2/package.json"
@@ -565,8 +545,7 @@ IncrementalBuild:
                 "name": "pkg3",
                 "subModuleName": "require.d.ts",
                 "version": "0.0.1"
-              },
-              "isExternalLibraryImport": true
+              }
             },
             "affectingLocations": [
               13
@@ -579,8 +558,7 @@ IncrementalBuild:
               "name": "pkg3",
               "subModuleName": "require.d.ts",
               "version": "0.0.1"
-            },
-            "isExternalLibraryImport": true
+            }
           },
           "affectingLocations": [
             "./node_modules/pkg3/package.json"
@@ -590,15 +568,13 @@ IncrementalBuild:
           "original": {
             "resolvedTypeReferenceDirective": {
               "primary": true,
-              "resolvedFileName": 9,
-              "isExternalLibraryImport": true
+              "resolvedFileName": 9
             }
           },
           "resolutionId": 4,
           "resolvedTypeReferenceDirective": {
             "primary": true,
-            "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts",
-            "isExternalLibraryImport": true
+            "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts"
           }
         }
       ],
@@ -635,7 +611,6 @@ IncrementalBuild:
             "resolutionId": 1,
             "resolvedModule": {
               "resolvedFileName": "./node_modules/pkg0/import.d.ts",
-              "isExternalLibraryImport": true,
               "packageId": {
                 "name": "pkg0",
                 "subModuleName": "import.d.ts",
@@ -664,8 +639,7 @@ IncrementalBuild:
                 "name": "pkg2",
                 "subModuleName": "import.d.ts",
                 "version": "0.0.1"
-              },
-              "isExternalLibraryImport": true
+              }
             },
             "affectingLocations": [
               "./node_modules/pkg2/package.json"
@@ -689,8 +663,7 @@ IncrementalBuild:
                 "name": "pkg3",
                 "subModuleName": "require.d.ts",
                 "version": "0.0.1"
-              },
-              "isExternalLibraryImport": true
+              }
             },
             "affectingLocations": [
               "./node_modules/pkg3/package.json"
@@ -709,8 +682,7 @@ IncrementalBuild:
             "resolutionId": 4,
             "resolvedTypeReferenceDirective": {
               "primary": true,
-              "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts",
-              "isExternalLibraryImport": true
+              "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts"
             }
           }
         }
@@ -726,7 +698,6 @@ IncrementalBuild:
                 "resolutionId": 1,
                 "resolvedModule": {
                   "resolvedFileName": "./node_modules/pkg0/import.d.ts",
-                  "isExternalLibraryImport": true,
                   "packageId": {
                     "name": "pkg0",
                     "subModuleName": "import.d.ts",
@@ -757,8 +728,7 @@ IncrementalBuild:
                     "name": "pkg2",
                     "subModuleName": "import.d.ts",
                     "version": "0.0.1"
-                  },
-                  "isExternalLibraryImport": true
+                  }
                 },
                 "affectingLocations": [
                   "./node_modules/pkg2/package.json"
@@ -777,8 +747,7 @@ IncrementalBuild:
                     "name": "pkg3",
                     "subModuleName": "require.d.ts",
                     "version": "0.0.1"
-                  },
-                  "isExternalLibraryImport": true
+                  }
                 },
                 "affectingLocations": [
                   "./node_modules/pkg3/package.json"
@@ -793,8 +762,7 @@ IncrementalBuild:
                 "resolutionId": 4,
                 "resolvedTypeReferenceDirective": {
                   "primary": true,
-                  "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts",
-                  "isExternalLibraryImport": true
+                  "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts"
                 }
               }
             }

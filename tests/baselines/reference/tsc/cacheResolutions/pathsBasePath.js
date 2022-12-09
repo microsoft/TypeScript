@@ -242,6 +242,7 @@ resolvedModules:
 pkg0: {
   "resolvedModule": {
     "resolvedFileName": "/src/project/lib/pkg0/index.d.ts",
+    "isExternalLibraryImport": false,
     "extension": ".d.ts"
   }
 }
@@ -251,6 +252,7 @@ resolvedModules:
 pkg0: {
   "resolvedModule": {
     "resolvedFileName": "/src/project/lib/pkg0/index.d.ts",
+    "isExternalLibraryImport": false,
     "extension": ".d.ts"
   }
 }

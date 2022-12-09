@@ -61,14 +61,12 @@ CleanBuild:
         {
           "original": {
             "resolvedModule": {
-              "resolvedFileName": 2,
-              "isExternalLibraryImport": true
+              "resolvedFileName": 2
             }
           },
           "resolutionId": 1,
           "resolvedModule": {
-            "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-            "isExternalLibraryImport": true
+            "resolvedFileName": "./node_modules/pkg0/index.d.ts"
           }
         },
         {
@@ -110,8 +108,7 @@ CleanBuild:
           "resolution": {
             "resolutionId": 1,
             "resolvedModule": {
-              "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-              "isExternalLibraryImport": true
+              "resolvedFileName": "./node_modules/pkg0/index.d.ts"
             }
           }
         },
@@ -154,8 +151,7 @@ CleanBuild:
               "resolution": {
                 "resolutionId": 1,
                 "resolvedModule": {
-                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-                  "isExternalLibraryImport": true
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts"
                 }
               }
             },
@@ -253,14 +249,12 @@ IncrementalBuild:
         {
           "original": {
             "resolvedModule": {
-              "resolvedFileName": 2,
-              "isExternalLibraryImport": true
+              "resolvedFileName": 2
             }
           },
           "resolutionId": 1,
           "resolvedModule": {
-            "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-            "isExternalLibraryImport": true
+            "resolvedFileName": "./node_modules/pkg0/index.d.ts"
           }
         },
         {
@@ -326,8 +320,7 @@ IncrementalBuild:
           "resolution": {
             "resolutionId": 1,
             "resolvedModule": {
-              "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-              "isExternalLibraryImport": true
+              "resolvedFileName": "./node_modules/pkg0/index.d.ts"
             }
           }
         },
@@ -398,8 +391,7 @@ IncrementalBuild:
               "resolution": {
                 "resolutionId": 1,
                 "resolvedModule": {
-                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-                  "isExternalLibraryImport": true
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts"
                 }
               }
             },
@@ -561,14 +553,12 @@ CleanBuild:
         {
           "original": {
             "resolvedModule": {
-              "resolvedFileName": 2,
-              "isExternalLibraryImport": true
+              "resolvedFileName": 2
             }
           },
           "resolutionId": 1,
           "resolvedModule": {
-            "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-            "isExternalLibraryImport": true
+            "resolvedFileName": "./node_modules/pkg0/index.d.ts"
           }
         },
         {
@@ -610,8 +600,7 @@ CleanBuild:
           "resolution": {
             "resolutionId": 1,
             "resolvedModule": {
-              "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-              "isExternalLibraryImport": true
+              "resolvedFileName": "./node_modules/pkg0/index.d.ts"
             }
           }
         },
@@ -654,8 +643,7 @@ CleanBuild:
               "resolution": {
                 "resolutionId": 1,
                 "resolvedModule": {
-                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-                  "isExternalLibraryImport": true
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts"
                 }
               }
             },
@@ -756,14 +744,12 @@ IncrementalBuild:
         {
           "original": {
             "resolvedModule": {
-              "resolvedFileName": 2,
-              "isExternalLibraryImport": true
+              "resolvedFileName": 2
             }
           },
           "resolutionId": 1,
           "resolvedModule": {
-            "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-            "isExternalLibraryImport": true
+            "resolvedFileName": "./node_modules/pkg0/index.d.ts"
           }
         },
         {
@@ -829,8 +815,7 @@ IncrementalBuild:
           "resolution": {
             "resolutionId": 1,
             "resolvedModule": {
-              "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-              "isExternalLibraryImport": true
+              "resolvedFileName": "./node_modules/pkg0/index.d.ts"
             }
           }
         },
@@ -901,8 +886,7 @@ IncrementalBuild:
               "resolution": {
                 "resolutionId": 1,
                 "resolvedModule": {
-                  "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-                  "isExternalLibraryImport": true
+                  "resolvedFileName": "./node_modules/pkg0/index.d.ts"
                 }
               }
             },
@@ -1254,14 +1238,12 @@ IncrementalBuild:
         {
           "original": {
             "resolvedModule": {
-              "resolvedFileName": 2,
-              "isExternalLibraryImport": true
+              "resolvedFileName": 2
             }
           },
           "resolutionId": 3,
           "resolvedModule": {
-            "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-            "isExternalLibraryImport": true
+            "resolvedFileName": "./node_modules/pkg0/index.d.ts"
           }
         },
         {
@@ -1356,8 +1338,7 @@ IncrementalBuild:
           "resolution": {
             "resolutionId": 3,
             "resolvedModule": {
-              "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-              "isExternalLibraryImport": true
+              "resolvedFileName": "./node_modules/pkg0/index.d.ts"
             }
           }
         },
@@ -1461,8 +1442,7 @@ IncrementalBuild:
                     "resolution": {
                       "resolutionId": 3,
                       "resolvedModule": {
-                        "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-                        "isExternalLibraryImport": true
+                        "resolvedFileName": "./node_modules/pkg0/index.d.ts"
                       }
                     }
                   },
@@ -1846,14 +1826,12 @@ IncrementalBuild:
         {
           "original": {
             "resolvedModule": {
-              "resolvedFileName": 2,
-              "isExternalLibraryImport": true
+              "resolvedFileName": 2
             }
           },
           "resolutionId": 3,
           "resolvedModule": {
-            "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-            "isExternalLibraryImport": true
+            "resolvedFileName": "./node_modules/pkg0/index.d.ts"
           }
         },
         {
@@ -1948,8 +1926,7 @@ IncrementalBuild:
           "resolution": {
             "resolutionId": 3,
             "resolvedModule": {
-              "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-              "isExternalLibraryImport": true
+              "resolvedFileName": "./node_modules/pkg0/index.d.ts"
             }
           }
         },
@@ -2053,8 +2030,7 @@ IncrementalBuild:
                     "resolution": {
                       "resolutionId": 3,
                       "resolvedModule": {
-                        "resolvedFileName": "./node_modules/pkg0/index.d.ts",
-                        "isExternalLibraryImport": true
+                        "resolvedFileName": "./node_modules/pkg0/index.d.ts"
                       }
                     }
                   },

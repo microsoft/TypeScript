@@ -1258,6 +1258,7 @@ resolvedModules:
 ./fileB.mjs: commonjs: {
   "resolvedModule": {
     "resolvedFileName": "/src/projects/project/src/fileB.mts",
+    "isExternalLibraryImport": false,
     "extension": ".mts"
   }
 }
@@ -3971,6 +3972,7 @@ resolvedModules:
 ./fileB.mjs: commonjs: {
   "resolvedModule": {
     "resolvedFileName": "/src/projects/project/src/fileB.mts",
+    "isExternalLibraryImport": false,
     "extension": ".mts"
   }
 }

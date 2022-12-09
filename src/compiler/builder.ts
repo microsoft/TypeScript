@@ -82,6 +82,7 @@ import {
     PackageJsonInfoContents,
     PackageJsonScope,
     Path,
+    pathContainsNodeModules,
     PerDirectoryAndNonRelativeNameCache,
     PerNonRelativeNameCache,
     Program,
@@ -954,10 +955,10 @@ export type ProgramMultiFileEmitBuildInfoFileInfo = string | ProgramMultiFileEmi
 /** @internal */
 export interface ProgramBuildInfoResolutionBase {
     readonly resolvedFileName: ProgramBuildInfoAbsoluteFileId;
-    readonly isExternalLibraryImport: true | undefined;
     readonly originalPath: ProgramBuildInfoAbsoluteFileId | undefined;
     readonly primary: true | undefined;
     extension: undefined;
+    isExternalLibraryImport: undefined;
 }
 /** @internal */
 export type ProgramBuildInfoResolvedModuleFull = Omit<ResolvedModuleFull, "resolvedFileName" | "isExternalLibraryImport" | "originalPath" | "extension"> & ProgramBuildInfoResolutionBase;
@@ -1460,7 +1461,7 @@ function getBuildInfo(state: BuilderProgramState, host: BuilderProgramHost, bund
         return resolved ? {
             ...resolved,
             resolvedFileName: toAbsoluteFileId(resolved.resolvedFileName!),
-            isExternalLibraryImport: resolved.isExternalLibraryImport ? true : undefined,
+            isExternalLibraryImport: undefined,
             originalPath: resolved.originalPath ? toAbsoluteFileId(resolved.originalPath) : undefined,
             primary: (resolved as ResolvedTypeReferenceDirective).primary || undefined,
             extension: undefined,
@@ -2446,10 +2447,12 @@ export function createOldBuildInfoProgram(
         extension: Extension,
     ): (ResolvedModuleFull & ResolvedTypeReferenceDirective) | undefined {
         if (!resolved) return undefined;
+        const originalPath = resolved.originalPath ? resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath(resolved.originalPath) : undefined;
         return {
             ...resolved,
             resolvedFileName,
-            originalPath: resolved.originalPath ? resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath(resolved.originalPath) : undefined,
+            originalPath,
+            isExternalLibraryImport: pathContainsNodeModules(originalPath || resolvedFileName),
             extension,
         };
     }

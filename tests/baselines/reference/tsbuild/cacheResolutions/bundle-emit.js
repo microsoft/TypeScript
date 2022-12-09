@@ -683,7 +683,7 @@ define("randomFileForTypeRef", ["require", "exports"], function (require, export
 
 
 //// [/out.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src/project","sourceFiles":["./src/project/fileWithImports.ts","./src/project/fileWithTypeRefs.ts","./src/project/randomFileForImport.ts","./src/project/randomFileForTypeRef.ts"],"js":{"sections":[{"pos":0,"end":864,"kind":"text"}],"hash":"-31220064334-define(\"fileWithImports\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n});\r\ndefine(\"fileWithTypeRefs\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    /// <reference types=\"pkg2\"/>\r\n    /// <reference types=\"pkg3\"/>\r\n});\r\ndefine(\"randomFileForImport\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n});\r\ndefine(\"randomFileForTypeRef\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n});\r\n"},"dts":{"sections":[{"pos":0,"end":233,"kind":"text"}],"hash":"407350366-declare module \"fileWithImports\" { }\r\ndeclare module \"fileWithTypeRefs\" {\r\n    export {};\r\n}\r\ndeclare module \"randomFileForImport\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"randomFileForTypeRef\" {\r\n    export const x = 10;\r\n}\r\n"}},"program":{"fileNames":["./lib/lib.d.ts","./src/project/pkg0.d.ts","./src/project/pkg1.d.ts","./src/project/filewithimports.ts","./src/project/node_modules/pkg2/index.d.ts","./src/project/node_modules/pkg3/index.d.ts","./src/project/filewithtyperefs.ts","./src/project/randomfileforimport.ts","./src/project/randomfilefortyperef.ts","./src/project/node_modules/@types/pkg4/index.d.ts","./src/project"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","769951468-export interface ImportInterface0 {}","-3547817137-export interface RequireInterface1 {}","17369432329-import type { ImportInterface0 } from \"pkg0\";\nimport type { RequireInterface1 } from \"pkg1\";\n","1714206242-export {};\ndeclare global {\n    interface ImportInterface2 {}\n}\n","-6568745979-export {};\ndeclare global {\n    interface RequireInterface3 {}\n}\n","-9965483727-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends ImportInterface2, RequireInterface3 {}\nexport {}\n","-10726455937-export const x = 10;","-10726455937-export const x = 10;","-10726455937-export const x = 10;"],"options":{"cacheResolutions":true,"composite":true,"module":2,"out":"./out.js"},"outSignature":"407350366-declare module \"fileWithImports\" { }\r\ndeclare module \"fileWithTypeRefs\" {\r\n    export {};\r\n}\r\ndeclare module \"randomFileForImport\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"randomFileForTypeRef\" {\r\n    export const x = 10;\r\n}\r\n","latestChangedDtsFile":"./out.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2}},{"resolvedModule":{"resolvedFileName":3}},{"resolvedTypeReferenceDirective":{"resolvedFileName":5,"isExternalLibraryImport":true}},{"resolvedTypeReferenceDirective":{"resolvedFileName":6,"isExternalLibraryImport":true}},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":10,"isExternalLibraryImport":true}}],"names":["pkg0","pkg1","pkg2","pkg3","pkg4"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"modules":[[11,[1,2]]],"typeRefs":[[11,[3,4,5]]]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src/project","sourceFiles":["./src/project/fileWithImports.ts","./src/project/fileWithTypeRefs.ts","./src/project/randomFileForImport.ts","./src/project/randomFileForTypeRef.ts"],"js":{"sections":[{"pos":0,"end":864,"kind":"text"}],"hash":"-31220064334-define(\"fileWithImports\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n});\r\ndefine(\"fileWithTypeRefs\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    /// <reference types=\"pkg2\"/>\r\n    /// <reference types=\"pkg3\"/>\r\n});\r\ndefine(\"randomFileForImport\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n});\r\ndefine(\"randomFileForTypeRef\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n});\r\n"},"dts":{"sections":[{"pos":0,"end":233,"kind":"text"}],"hash":"407350366-declare module \"fileWithImports\" { }\r\ndeclare module \"fileWithTypeRefs\" {\r\n    export {};\r\n}\r\ndeclare module \"randomFileForImport\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"randomFileForTypeRef\" {\r\n    export const x = 10;\r\n}\r\n"}},"program":{"fileNames":["./lib/lib.d.ts","./src/project/pkg0.d.ts","./src/project/pkg1.d.ts","./src/project/filewithimports.ts","./src/project/node_modules/pkg2/index.d.ts","./src/project/node_modules/pkg3/index.d.ts","./src/project/filewithtyperefs.ts","./src/project/randomfileforimport.ts","./src/project/randomfilefortyperef.ts","./src/project/node_modules/@types/pkg4/index.d.ts","./src/project"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","769951468-export interface ImportInterface0 {}","-3547817137-export interface RequireInterface1 {}","17369432329-import type { ImportInterface0 } from \"pkg0\";\nimport type { RequireInterface1 } from \"pkg1\";\n","1714206242-export {};\ndeclare global {\n    interface ImportInterface2 {}\n}\n","-6568745979-export {};\ndeclare global {\n    interface RequireInterface3 {}\n}\n","-9965483727-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends ImportInterface2, RequireInterface3 {}\nexport {}\n","-10726455937-export const x = 10;","-10726455937-export const x = 10;","-10726455937-export const x = 10;"],"options":{"cacheResolutions":true,"composite":true,"module":2,"out":"./out.js"},"outSignature":"407350366-declare module \"fileWithImports\" { }\r\ndeclare module \"fileWithTypeRefs\" {\r\n    export {};\r\n}\r\ndeclare module \"randomFileForImport\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"randomFileForTypeRef\" {\r\n    export const x = 10;\r\n}\r\n","latestChangedDtsFile":"./out.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2}},{"resolvedModule":{"resolvedFileName":3}},{"resolvedTypeReferenceDirective":{"resolvedFileName":5}},{"resolvedTypeReferenceDirective":{"resolvedFileName":6}},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":10}}],"names":["pkg0","pkg1","pkg2","pkg3","pkg4"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"modules":[[11,[1,2]]],"typeRefs":[[11,[3,4,5]]]}},"version":"FakeTSVersion"}
 
 //// [/out.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -823,42 +823,36 @@ declare module "randomFileForTypeRef" {
         {
           "original": {
             "resolvedTypeReferenceDirective": {
-              "resolvedFileName": 5,
-              "isExternalLibraryImport": true
+              "resolvedFileName": 5
             }
           },
           "resolutionId": 3,
           "resolvedTypeReferenceDirective": {
-            "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
-            "isExternalLibraryImport": true
+            "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts"
           }
         },
         {
           "original": {
             "resolvedTypeReferenceDirective": {
-              "resolvedFileName": 6,
-              "isExternalLibraryImport": true
+              "resolvedFileName": 6
             }
           },
           "resolutionId": 4,
           "resolvedTypeReferenceDirective": {
-            "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
-            "isExternalLibraryImport": true
+            "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts"
           }
         },
         {
           "original": {
             "resolvedTypeReferenceDirective": {
               "primary": true,
-              "resolvedFileName": 10,
-              "isExternalLibraryImport": true
+              "resolvedFileName": 10
             }
           },
           "resolutionId": 5,
           "resolvedTypeReferenceDirective": {
             "primary": true,
-            "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
-            "isExternalLibraryImport": true
+            "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts"
           }
         }
       ],
@@ -908,8 +902,7 @@ declare module "randomFileForTypeRef" {
           "resolution": {
             "resolutionId": 3,
             "resolvedTypeReferenceDirective": {
-              "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
-              "isExternalLibraryImport": true
+              "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts"
             }
           }
         },
@@ -923,8 +916,7 @@ declare module "randomFileForTypeRef" {
           "resolution": {
             "resolutionId": 4,
             "resolvedTypeReferenceDirective": {
-              "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
-              "isExternalLibraryImport": true
+              "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts"
             }
           }
         },
@@ -939,8 +931,7 @@ declare module "randomFileForTypeRef" {
             "resolutionId": 5,
             "resolvedTypeReferenceDirective": {
               "primary": true,
-              "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
-              "isExternalLibraryImport": true
+              "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts"
             }
           }
         }
@@ -982,8 +973,7 @@ declare module "randomFileForTypeRef" {
               "resolution": {
                 "resolutionId": 3,
                 "resolvedTypeReferenceDirective": {
-                  "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
-                  "isExternalLibraryImport": true
+                  "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts"
                 }
               }
             },
@@ -993,8 +983,7 @@ declare module "randomFileForTypeRef" {
               "resolution": {
                 "resolutionId": 4,
                 "resolvedTypeReferenceDirective": {
-                  "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
-                  "isExternalLibraryImport": true
+                  "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts"
                 }
               }
             },
@@ -1005,8 +994,7 @@ declare module "randomFileForTypeRef" {
                 "resolutionId": 5,
                 "resolvedTypeReferenceDirective": {
                   "primary": true,
-                  "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
-                  "isExternalLibraryImport": true
+                  "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts"
                 }
               }
             }
@@ -1016,7 +1004,7 @@ declare module "randomFileForTypeRef" {
     }
   },
   "version": "FakeTSVersion",
-  "size": 4077
+  "size": 3984
 }
 
 
@@ -1064,12 +1052,14 @@ resolvedModules:
 pkg0: {
   "resolvedModule": {
     "resolvedFileName": "/src/project/pkg0.d.ts",
+    "isExternalLibraryImport": false,
     "extension": ".d.ts"
   }
 }
 pkg1: {
   "resolvedModule": {
     "resolvedFileName": "/src/project/pkg1.d.ts",
+    "isExternalLibraryImport": false,
     "extension": ".d.ts"
   }
 }
@@ -1094,6 +1084,7 @@ resolvedModules:
 pkg0: {
   "resolvedModule": {
     "resolvedFileName": "/src/project/pkg0.d.ts",
+    "isExternalLibraryImport": false,
     "extension": ".d.ts"
   }
 }
@@ -1110,7 +1101,7 @@ pkg4: {
 
 //// [/out.js] file written with same contents
 //// [/out.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src/project","sourceFiles":["./src/project/fileWithImports.ts","./src/project/fileWithTypeRefs.ts","./src/project/randomFileForImport.ts","./src/project/randomFileForTypeRef.ts"],"js":{"sections":[{"pos":0,"end":864,"kind":"text"}],"hash":"-31220064334-define(\"fileWithImports\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n});\r\ndefine(\"fileWithTypeRefs\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    /// <reference types=\"pkg2\"/>\r\n    /// <reference types=\"pkg3\"/>\r\n});\r\ndefine(\"randomFileForImport\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n});\r\ndefine(\"randomFileForTypeRef\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n});\r\n"},"dts":{"sections":[{"pos":0,"end":233,"kind":"text"}],"hash":"407350366-declare module \"fileWithImports\" { }\r\ndeclare module \"fileWithTypeRefs\" {\r\n    export {};\r\n}\r\ndeclare module \"randomFileForImport\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"randomFileForTypeRef\" {\r\n    export const x = 10;\r\n}\r\n"}},"program":{"fileNames":["./lib/lib.d.ts","./src/project/pkg0.d.ts","./src/project/pkg1.d.ts","./src/project/filewithimports.ts","./src/project/node_modules/pkg2/index.d.ts","./src/project/node_modules/pkg3/index.d.ts","./src/project/filewithtyperefs.ts","./src/project/randomfileforimport.ts","./src/project/randomfilefortyperef.ts","./src/project/node_modules/@types/pkg4/index.d.ts","./src/project"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","769951468-export interface ImportInterface0 {}","-3547817137-export interface RequireInterface1 {}","17369432329-import type { ImportInterface0 } from \"pkg0\";\nimport type { RequireInterface1 } from \"pkg1\";\n","1714206242-export {};\ndeclare global {\n    interface ImportInterface2 {}\n}\n","-6568745979-export {};\ndeclare global {\n    interface RequireInterface3 {}\n}\n","-9965483727-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends ImportInterface2, RequireInterface3 {}\nexport {}\n","10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","-10726455937-export const x = 10;","-10726455937-export const x = 10;"],"options":{"cacheResolutions":true,"composite":true,"module":2,"out":"./out.js"},"outSignature":"407350366-declare module \"fileWithImports\" { }\r\ndeclare module \"fileWithTypeRefs\" {\r\n    export {};\r\n}\r\ndeclare module \"randomFileForImport\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"randomFileForTypeRef\" {\r\n    export const x = 10;\r\n}\r\n","latestChangedDtsFile":"./out.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2}},{"resolvedModule":{"resolvedFileName":3}},{"resolvedTypeReferenceDirective":{"resolvedFileName":5,"isExternalLibraryImport":true}},{"resolvedTypeReferenceDirective":{"resolvedFileName":6,"isExternalLibraryImport":true}},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":10,"isExternalLibraryImport":true}}],"names":["pkg0","pkg1","pkg2","pkg3","pkg4"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"modules":[[11,[1,2]]],"typeRefs":[[11,[3,4,5]]]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src/project","sourceFiles":["./src/project/fileWithImports.ts","./src/project/fileWithTypeRefs.ts","./src/project/randomFileForImport.ts","./src/project/randomFileForTypeRef.ts"],"js":{"sections":[{"pos":0,"end":864,"kind":"text"}],"hash":"-31220064334-define(\"fileWithImports\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n});\r\ndefine(\"fileWithTypeRefs\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    /// <reference types=\"pkg2\"/>\r\n    /// <reference types=\"pkg3\"/>\r\n});\r\ndefine(\"randomFileForImport\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n});\r\ndefine(\"randomFileForTypeRef\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n});\r\n"},"dts":{"sections":[{"pos":0,"end":233,"kind":"text"}],"hash":"407350366-declare module \"fileWithImports\" { }\r\ndeclare module \"fileWithTypeRefs\" {\r\n    export {};\r\n}\r\ndeclare module \"randomFileForImport\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"randomFileForTypeRef\" {\r\n    export const x = 10;\r\n}\r\n"}},"program":{"fileNames":["./lib/lib.d.ts","./src/project/pkg0.d.ts","./src/project/pkg1.d.ts","./src/project/filewithimports.ts","./src/project/node_modules/pkg2/index.d.ts","./src/project/node_modules/pkg3/index.d.ts","./src/project/filewithtyperefs.ts","./src/project/randomfileforimport.ts","./src/project/randomfilefortyperef.ts","./src/project/node_modules/@types/pkg4/index.d.ts","./src/project"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","769951468-export interface ImportInterface0 {}","-3547817137-export interface RequireInterface1 {}","17369432329-import type { ImportInterface0 } from \"pkg0\";\nimport type { RequireInterface1 } from \"pkg1\";\n","1714206242-export {};\ndeclare global {\n    interface ImportInterface2 {}\n}\n","-6568745979-export {};\ndeclare global {\n    interface RequireInterface3 {}\n}\n","-9965483727-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends ImportInterface2, RequireInterface3 {}\nexport {}\n","10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","-10726455937-export const x = 10;","-10726455937-export const x = 10;"],"options":{"cacheResolutions":true,"composite":true,"module":2,"out":"./out.js"},"outSignature":"407350366-declare module \"fileWithImports\" { }\r\ndeclare module \"fileWithTypeRefs\" {\r\n    export {};\r\n}\r\ndeclare module \"randomFileForImport\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"randomFileForTypeRef\" {\r\n    export const x = 10;\r\n}\r\n","latestChangedDtsFile":"./out.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2}},{"resolvedModule":{"resolvedFileName":3}},{"resolvedTypeReferenceDirective":{"resolvedFileName":5}},{"resolvedTypeReferenceDirective":{"resolvedFileName":6}},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":10}}],"names":["pkg0","pkg1","pkg2","pkg3","pkg4"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"modules":[[11,[1,2]]],"typeRefs":[[11,[3,4,5]]]}},"version":"FakeTSVersion"}
 
 //// [/out.tsbuildinfo.baseline.txt] file written with same contents
 //// [/out.tsbuildinfo.readable.baseline.txt]
@@ -1205,42 +1196,36 @@ pkg4: {
         {
           "original": {
             "resolvedTypeReferenceDirective": {
-              "resolvedFileName": 5,
-              "isExternalLibraryImport": true
+              "resolvedFileName": 5
             }
           },
           "resolutionId": 3,
           "resolvedTypeReferenceDirective": {
-            "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
-            "isExternalLibraryImport": true
+            "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts"
           }
         },
         {
           "original": {
             "resolvedTypeReferenceDirective": {
-              "resolvedFileName": 6,
-              "isExternalLibraryImport": true
+              "resolvedFileName": 6
             }
           },
           "resolutionId": 4,
           "resolvedTypeReferenceDirective": {
-            "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
-            "isExternalLibraryImport": true
+            "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts"
           }
         },
         {
           "original": {
             "resolvedTypeReferenceDirective": {
               "primary": true,
-              "resolvedFileName": 10,
-              "isExternalLibraryImport": true
+              "resolvedFileName": 10
             }
           },
           "resolutionId": 5,
           "resolvedTypeReferenceDirective": {
             "primary": true,
-            "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
-            "isExternalLibraryImport": true
+            "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts"
           }
         }
       ],
@@ -1290,8 +1275,7 @@ pkg4: {
           "resolution": {
             "resolutionId": 3,
             "resolvedTypeReferenceDirective": {
-              "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
-              "isExternalLibraryImport": true
+              "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts"
             }
           }
         },
@@ -1305,8 +1289,7 @@ pkg4: {
           "resolution": {
             "resolutionId": 4,
             "resolvedTypeReferenceDirective": {
-              "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
-              "isExternalLibraryImport": true
+              "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts"
             }
           }
         },
@@ -1321,8 +1304,7 @@ pkg4: {
             "resolutionId": 5,
             "resolvedTypeReferenceDirective": {
               "primary": true,
-              "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
-              "isExternalLibraryImport": true
+              "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts"
             }
           }
         }
@@ -1364,8 +1346,7 @@ pkg4: {
               "resolution": {
                 "resolutionId": 3,
                 "resolvedTypeReferenceDirective": {
-                  "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
-                  "isExternalLibraryImport": true
+                  "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts"
                 }
               }
             },
@@ -1375,8 +1356,7 @@ pkg4: {
               "resolution": {
                 "resolutionId": 4,
                 "resolvedTypeReferenceDirective": {
-                  "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
-                  "isExternalLibraryImport": true
+                  "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts"
                 }
               }
             },
@@ -1387,8 +1367,7 @@ pkg4: {
                 "resolutionId": 5,
                 "resolvedTypeReferenceDirective": {
                   "primary": true,
-                  "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
-                  "isExternalLibraryImport": true
+                  "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts"
                 }
               }
             }
@@ -1398,7 +1377,7 @@ pkg4: {
     }
   },
   "version": "FakeTSVersion",
-  "size": 4125
+  "size": 4032
 }
 
 
@@ -1447,12 +1426,14 @@ resolvedModules:
 pkg0: {
   "resolvedModule": {
     "resolvedFileName": "/src/project/pkg0.d.ts",
+    "isExternalLibraryImport": false,
     "extension": ".d.ts"
   }
 }
 pkg1: {
   "resolvedModule": {
     "resolvedFileName": "/src/project/pkg1.d.ts",
+    "isExternalLibraryImport": false,
     "extension": ".d.ts"
   }
 }
@@ -1477,6 +1458,7 @@ resolvedModules:
 pkg0: {
   "resolvedModule": {
     "resolvedFileName": "/src/project/pkg0.d.ts",
+    "isExternalLibraryImport": false,
     "extension": ".d.ts"
   }
 }
@@ -1527,7 +1509,7 @@ define("randomFileForTypeRef", ["require", "exports"], function (require, export
 
 
 //// [/out.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./src/project","sourceFiles":["./src/project/fileWithImports.ts","./src/project/fileWithTypeRefs.ts","./src/project/randomFileForImport.ts","./src/project/randomFileForTypeRef.ts"],"js":{"sections":[{"pos":0,"end":899,"kind":"text"}],"hash":"-30350808392-define(\"fileWithImports\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n});\r\ndefine(\"fileWithTypeRefs\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    /// <reference types=\"pkg2\"/>\r\n    /// <reference types=\"pkg3\"/>\r\n});\r\ndefine(\"randomFileForImport\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n});\r\ndefine(\"randomFileForTypeRef\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    /// <reference types=\"pkg2\"/>\r\n    exports.x = 10;\r\n});\r\n"},"dts":{"sections":[{"pos":0,"end":233,"kind":"text"}],"hash":"407350366-declare module \"fileWithImports\" { }\r\ndeclare module \"fileWithTypeRefs\" {\r\n    export {};\r\n}\r\ndeclare module \"randomFileForImport\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"randomFileForTypeRef\" {\r\n    export const x = 10;\r\n}\r\n"}},"program":{"fileNames":["./lib/lib.d.ts","./src/project/pkg0.d.ts","./src/project/pkg1.d.ts","./src/project/filewithimports.ts","./src/project/node_modules/pkg2/index.d.ts","./src/project/node_modules/pkg3/index.d.ts","./src/project/filewithtyperefs.ts","./src/project/randomfileforimport.ts","./src/project/randomfilefortyperef.ts","./src/project/node_modules/@types/pkg4/index.d.ts","./src/project"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","769951468-export interface ImportInterface0 {}","-3547817137-export interface RequireInterface1 {}","17369432329-import type { ImportInterface0 } from \"pkg0\";\nimport type { RequireInterface1 } from \"pkg1\";\n","1714206242-export {};\ndeclare global {\n    interface ImportInterface2 {}\n}\n","-6568745979-export {};\ndeclare global {\n    interface RequireInterface3 {}\n}\n","-9965483727-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends ImportInterface2, RequireInterface3 {}\nexport {}\n","10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","-2210321256-/// <reference types=\"pkg2\"/>\nexport const x = 10;","-10726455937-export const x = 10;"],"options":{"cacheResolutions":true,"composite":true,"module":2,"out":"./out.js"},"outSignature":"407350366-declare module \"fileWithImports\" { }\r\ndeclare module \"fileWithTypeRefs\" {\r\n    export {};\r\n}\r\ndeclare module \"randomFileForImport\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"randomFileForTypeRef\" {\r\n    export const x = 10;\r\n}\r\n","latestChangedDtsFile":"./out.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2}},{"resolvedModule":{"resolvedFileName":3}},{"resolvedTypeReferenceDirective":{"resolvedFileName":5,"isExternalLibraryImport":true}},{"resolvedTypeReferenceDirective":{"resolvedFileName":6,"isExternalLibraryImport":true}},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":10,"isExternalLibraryImport":true}}],"names":["pkg0","pkg1","pkg2","pkg3","pkg4"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"modules":[[11,[1,2]]],"typeRefs":[[11,[3,4,5]]]}},"version":"FakeTSVersion"}
+{"bundle":{"commonSourceDirectory":"./src/project","sourceFiles":["./src/project/fileWithImports.ts","./src/project/fileWithTypeRefs.ts","./src/project/randomFileForImport.ts","./src/project/randomFileForTypeRef.ts"],"js":{"sections":[{"pos":0,"end":899,"kind":"text"}],"hash":"-30350808392-define(\"fileWithImports\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n});\r\ndefine(\"fileWithTypeRefs\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    /// <reference types=\"pkg2\"/>\r\n    /// <reference types=\"pkg3\"/>\r\n});\r\ndefine(\"randomFileForImport\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    exports.x = 10;\r\n});\r\ndefine(\"randomFileForTypeRef\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.x = void 0;\r\n    /// <reference types=\"pkg2\"/>\r\n    exports.x = 10;\r\n});\r\n"},"dts":{"sections":[{"pos":0,"end":233,"kind":"text"}],"hash":"407350366-declare module \"fileWithImports\" { }\r\ndeclare module \"fileWithTypeRefs\" {\r\n    export {};\r\n}\r\ndeclare module \"randomFileForImport\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"randomFileForTypeRef\" {\r\n    export const x = 10;\r\n}\r\n"}},"program":{"fileNames":["./lib/lib.d.ts","./src/project/pkg0.d.ts","./src/project/pkg1.d.ts","./src/project/filewithimports.ts","./src/project/node_modules/pkg2/index.d.ts","./src/project/node_modules/pkg3/index.d.ts","./src/project/filewithtyperefs.ts","./src/project/randomfileforimport.ts","./src/project/randomfilefortyperef.ts","./src/project/node_modules/@types/pkg4/index.d.ts","./src/project"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","769951468-export interface ImportInterface0 {}","-3547817137-export interface RequireInterface1 {}","17369432329-import type { ImportInterface0 } from \"pkg0\";\nimport type { RequireInterface1 } from \"pkg1\";\n","1714206242-export {};\ndeclare global {\n    interface ImportInterface2 {}\n}\n","-6568745979-export {};\ndeclare global {\n    interface RequireInterface3 {}\n}\n","-9965483727-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends ImportInterface2, RequireInterface3 {}\nexport {}\n","10580737119-import type { ImportInterface0 } from \"pkg0\";\nexport const x = 10;","-2210321256-/// <reference types=\"pkg2\"/>\nexport const x = 10;","-10726455937-export const x = 10;"],"options":{"cacheResolutions":true,"composite":true,"module":2,"out":"./out.js"},"outSignature":"407350366-declare module \"fileWithImports\" { }\r\ndeclare module \"fileWithTypeRefs\" {\r\n    export {};\r\n}\r\ndeclare module \"randomFileForImport\" {\r\n    export const x = 10;\r\n}\r\ndeclare module \"randomFileForTypeRef\" {\r\n    export const x = 10;\r\n}\r\n","latestChangedDtsFile":"./out.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2}},{"resolvedModule":{"resolvedFileName":3}},{"resolvedTypeReferenceDirective":{"resolvedFileName":5}},{"resolvedTypeReferenceDirective":{"resolvedFileName":6}},{"resolvedTypeReferenceDirective":{"primary":true,"resolvedFileName":10}}],"names":["pkg0","pkg1","pkg2","pkg3","pkg4"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"modules":[[11,[1,2]]],"typeRefs":[[11,[3,4,5]]]}},"version":"FakeTSVersion"}
 
 //// [/out.tsbuildinfo.baseline.txt]
 ======================================================================
@@ -1668,42 +1650,36 @@ declare module "randomFileForTypeRef" {
         {
           "original": {
             "resolvedTypeReferenceDirective": {
-              "resolvedFileName": 5,
-              "isExternalLibraryImport": true
+              "resolvedFileName": 5
             }
           },
           "resolutionId": 3,
           "resolvedTypeReferenceDirective": {
-            "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
-            "isExternalLibraryImport": true
+            "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts"
           }
         },
         {
           "original": {
             "resolvedTypeReferenceDirective": {
-              "resolvedFileName": 6,
-              "isExternalLibraryImport": true
+              "resolvedFileName": 6
             }
           },
           "resolutionId": 4,
           "resolvedTypeReferenceDirective": {
-            "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
-            "isExternalLibraryImport": true
+            "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts"
           }
         },
         {
           "original": {
             "resolvedTypeReferenceDirective": {
               "primary": true,
-              "resolvedFileName": 10,
-              "isExternalLibraryImport": true
+              "resolvedFileName": 10
             }
           },
           "resolutionId": 5,
           "resolvedTypeReferenceDirective": {
             "primary": true,
-            "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
-            "isExternalLibraryImport": true
+            "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts"
           }
         }
       ],
@@ -1753,8 +1729,7 @@ declare module "randomFileForTypeRef" {
           "resolution": {
             "resolutionId": 3,
             "resolvedTypeReferenceDirective": {
-              "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
-              "isExternalLibraryImport": true
+              "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts"
             }
           }
         },
@@ -1768,8 +1743,7 @@ declare module "randomFileForTypeRef" {
           "resolution": {
             "resolutionId": 4,
             "resolvedTypeReferenceDirective": {
-              "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
-              "isExternalLibraryImport": true
+              "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts"
             }
           }
         },
@@ -1784,8 +1758,7 @@ declare module "randomFileForTypeRef" {
             "resolutionId": 5,
             "resolvedTypeReferenceDirective": {
               "primary": true,
-              "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
-              "isExternalLibraryImport": true
+              "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts"
             }
           }
         }
@@ -1827,8 +1800,7 @@ declare module "randomFileForTypeRef" {
               "resolution": {
                 "resolutionId": 3,
                 "resolvedTypeReferenceDirective": {
-                  "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts",
-                  "isExternalLibraryImport": true
+                  "resolvedFileName": "./src/project/node_modules/pkg2/index.d.ts"
                 }
               }
             },
@@ -1838,8 +1810,7 @@ declare module "randomFileForTypeRef" {
               "resolution": {
                 "resolutionId": 4,
                 "resolvedTypeReferenceDirective": {
-                  "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts",
-                  "isExternalLibraryImport": true
+                  "resolvedFileName": "./src/project/node_modules/pkg3/index.d.ts"
                 }
               }
             },
@@ -1850,8 +1821,7 @@ declare module "randomFileForTypeRef" {
                 "resolutionId": 5,
                 "resolvedTypeReferenceDirective": {
                   "primary": true,
-                  "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts",
-                  "isExternalLibraryImport": true
+                  "resolvedFileName": "./src/project/node_modules/@types/pkg4/index.d.ts"
                 }
               }
             }
@@ -1861,6 +1831,6 @@ declare module "randomFileForTypeRef" {
     }
   },
   "version": "FakeTSVersion",
-  "size": 4196
+  "size": 4103
 }
 
