@@ -167,7 +167,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/packages/pkg2/build/const.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/const.d.ts]
@@ -176,7 +176,7 @@ export type TheNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg2/build/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/index.d.ts]
@@ -185,7 +185,7 @@ export type { TheNum } from './const.js';
 
 //// [/user/username/projects/myproject/packages/pkg2/build/other.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/other.d.ts]
@@ -272,7 +272,7 @@ export type TheStr = string;
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.theNum = void 0;
 exports.theNum = 42;
 

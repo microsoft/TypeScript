@@ -45,7 +45,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 Xy/a.ts
   Imported via "./Xy/a" from file 'b.ts'
   Matched by default include pattern '**/*'
@@ -163,7 +163,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 Xy/a.ts
   Imported via "./Xy/a" from file 'b.ts'
   Matched by default include pattern '**/*'

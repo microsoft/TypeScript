@@ -74,7 +74,7 @@ System.register([], function (exports_1, context_1) {
             var req;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, context_1["import"]('./test')]; // ONE
+                    case 0: return [4 /*yield*/, context_1.import('./test')]; // ONE
                     case 1:
                         req = _a.sent() // ONE
                         ;
@@ -95,7 +95,7 @@ System.register([], function (exports_1, context_1) {
                         var req;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
-                                case 0: return [4 /*yield*/, context_1["import"]('./test')]; // TWO
+                                case 0: return [4 /*yield*/, context_1.import('./test')]; // TWO
                                 case 1:
                                     req = _a.sent() // TWO
                                     ;
@@ -112,7 +112,7 @@ System.register([], function (exports_1, context_1) {
                     var req;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
-                            case 0: return [4 /*yield*/, context_1["import"]('./test')]; // THREE
+                            case 0: return [4 /*yield*/, context_1.import('./test')]; // THREE
                             case 1:
                                 req = _a.sent() // THREE
                                 ;
@@ -129,7 +129,7 @@ System.register([], function (exports_1, context_1) {
                             var req;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
-                                    case 0: return [4 /*yield*/, context_1["import"]('./test')]; // FOUR
+                                    case 0: return [4 /*yield*/, context_1.import('./test')]; // FOUR
                                     case 1:
                                         req = _a.sent() // FOUR
                                         ;
@@ -146,7 +146,7 @@ System.register([], function (exports_1, context_1) {
                 var req;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
-                        case 0: return [4 /*yield*/, context_1["import"]('./test')]; // FIVE
+                        case 0: return [4 /*yield*/, context_1.import('./test')]; // FIVE
                         case 1:
                             req = _a.sent() // FIVE
                             ;

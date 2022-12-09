@@ -9,9 +9,9 @@ export default function Foo() { }
 
 //// [multipleExportDefault2.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = {
-    uhoh: "another default"
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = {
+    uhoh: "another default",
 };
 function Foo() { }
-exports["default"] = Foo;
+exports.default = Foo;

@@ -39,7 +39,7 @@ var D = /** @class */ (function (_super) {
     function D() {
         var _this = this;
         var x = {
-            j: _this._t
+            j: _this._t,
         };
         _this = _super.call(this, undefined) || this;
         return _this;

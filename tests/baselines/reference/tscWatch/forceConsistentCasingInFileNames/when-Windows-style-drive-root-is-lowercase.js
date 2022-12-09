@@ -36,7 +36,7 @@ Output::
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
 a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 project/a.ts
   Matched by default include pattern '**/*'
   Imported via "C://project/a" from file 'project/b.ts'
@@ -87,7 +87,7 @@ exitCode:: ExitStatus.undefined
 
 //// [c:/project/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = void 0;
 exports.a = 1;
 exports.b = 2;
@@ -95,7 +95,7 @@ exports.b = 2;
 
 //// [c:/project/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("C://project/a");
 var a_2 = require("c://project/a");
 a_1.a;
@@ -119,7 +119,7 @@ Output::
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 project/a.ts
   Matched by default include pattern '**/*'
   Imported via "C://project/a" from file 'project/b.ts'
@@ -169,7 +169,7 @@ exitCode:: ExitStatus.undefined
 //// [c:/project/a.js]
 "use strict";
 // some comment
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.a = void 0;
 exports.a = 1;
 exports.b = 2;

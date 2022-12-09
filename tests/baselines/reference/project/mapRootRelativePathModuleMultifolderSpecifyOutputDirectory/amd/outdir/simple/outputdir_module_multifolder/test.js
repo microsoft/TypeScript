@@ -1,6 +1,6 @@
 define(["require", "exports", "ref/m1", "../outputdir_module_multifolder_ref/m2"], function (require, exports, m1, m2) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.a3 = exports.a2 = exports.f1 = exports.instance1 = exports.c1 = exports.a1 = void 0;
     exports.a1 = 10;
     var c1 = /** @class */ (function () {

@@ -15,10 +15,10 @@ bar(1 as Foo<number>);
 
 //// [input.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [usage.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function bar(element) {
     return 1;
 }
