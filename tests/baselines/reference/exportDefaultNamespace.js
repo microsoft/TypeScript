@@ -12,14 +12,14 @@ A.Foo
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var A = {};
-exports["default"] = A;
+exports.default = A;
 (function (A) {
     A.Foo = 1;
 })(A);
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
-a_1["default"].Foo;
+a_1.default.Foo;

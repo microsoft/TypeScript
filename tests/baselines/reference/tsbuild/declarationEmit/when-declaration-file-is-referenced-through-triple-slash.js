@@ -87,7 +87,7 @@ export declare type Nominal<T, Name extends string> = MyNominal<T, Name>;
 
 //// [/src/solution/lib/src/common/nominal.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="./types.d.ts" />
 
 
@@ -164,7 +164,7 @@ export type MyNominal = Nominal<string, 'MyNominal'>;
 
 //// [/src/solution/lib/src/subProject/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/src/solution/lib/src/subProject/tsconfig.tsbuildinfo]
@@ -263,10 +263,10 @@ export {};
 
 //// [/src/solution/lib/src/subProject2/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.getVar = void 0;
 var variable = {
-    key: 'value'
+    key: 'value',
 };
 function getVar() {
     return 'key';

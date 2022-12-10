@@ -106,7 +106,7 @@ export declare const x = 10;
 
 //// [/src/src/folder/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
@@ -161,7 +161,7 @@ export declare const x = 10;
 
 //// [/src/src/folder2/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
@@ -216,7 +216,7 @@ export declare const x = 10;
 
 //// [/src/tests/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 

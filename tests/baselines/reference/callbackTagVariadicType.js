@@ -17,7 +17,7 @@ var res = x('a', 'b')
  * @param {...string} args
  * @returns {number}
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 /** @type {Foo} */
 var x = function () { return 1; };

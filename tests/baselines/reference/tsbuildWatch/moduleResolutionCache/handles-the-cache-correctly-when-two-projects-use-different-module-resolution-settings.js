@@ -133,7 +133,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/project1/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/project1/index.d.ts]
@@ -213,7 +213,7 @@ export {};
 
 //// [/user/username/projects/myproject/project2/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/project2/index.d.ts]
@@ -347,7 +347,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/project1/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var bar = 10;
 
 

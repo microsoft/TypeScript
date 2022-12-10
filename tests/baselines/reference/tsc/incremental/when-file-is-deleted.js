@@ -37,7 +37,7 @@ export declare class C {
 
 //// [/src/project/outDir/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {
@@ -54,7 +54,7 @@ export declare class D {
 
 //// [/src/project/outDir/file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.D = void 0;
 var D = /** @class */ (function () {
     function D() {

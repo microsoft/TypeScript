@@ -344,8 +344,7 @@ export function listFiles<T extends BuilderProgram>(program: Program | T, write:
 /** @internal */
 export function explainFiles(program: Program, write: (s: string) => void) {
     const reasons = program.getFileIncludeReasons();
-    const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
-    const relativeFileName = (fileName: string) => convertToRelativePath(fileName, program.getCurrentDirectory(), getCanonicalFileName);
+    const relativeFileName = (fileName: string) => convertToRelativePath(fileName, program.getCurrentDirectory(), program.getCanonicalFileName);
     for (const file of program.getSourceFiles()) {
         write(`${toFileName(file, relativeFileName)}`);
         reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, reason, relativeFileName).messageText}`));
@@ -411,10 +410,9 @@ export function getMatchedFileSpec(program: Program, fileName: string) {
     const configFile = program.getCompilerOptions().configFile;
     if (!configFile?.configFileSpecs?.validatedFilesSpec) return undefined;
 
-    const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
-    const filePath = getCanonicalFileName(fileName);
+    const filePath = program.getCanonicalFileName(fileName);
     const basePath = getDirectoryPath(getNormalizedAbsolutePath(configFile.fileName, program.getCurrentDirectory()));
-    return find(configFile.configFileSpecs.validatedFilesSpec, fileSpec => getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
+    return find(configFile.configFileSpecs.validatedFilesSpec, fileSpec => program.getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
 }
 
 /** @internal */
@@ -739,9 +737,9 @@ export function createWatchFactory<Y = undefined>(host: WatchFactoryHost & { tra
 export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCompilerOptions: () => CompilerOptions, directoryStructureHost: DirectoryStructureHost = host): CompilerHost {
     const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
     const hostGetNewLine = memoize(() => host.getNewLine());
-    return {
+    const compilerHost: CompilerHost = {
         getSourceFile: createGetSourceFile(
-            (fileName, encoding) => host.readFile(fileName, encoding),
+            (fileName, encoding) => !encoding ? compilerHost.readFile(fileName) : host.readFile(fileName, encoding),
             getCompilerOptions,
             /*setParentNodes*/ undefined
         ),
@@ -765,9 +763,9 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
         getEnvironmentVariable: maybeBind(host, host.getEnvironmentVariable) || (() => ""),
         createHash: maybeBind(host, host.createHash),
         readDirectory: maybeBind(host, host.readDirectory),
-        disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
         storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
     };
+    return compilerHost;
 }
 
 /** @internal */
@@ -810,12 +808,12 @@ export function getSourceFileVersionAsHashFromText(host: Pick<CompilerHost, "cre
 }
 
 /** @internal */
-export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: { createHash?(data: string): string; }) {
+export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost) {
     const originalGetSourceFile = compilerHost.getSourceFile;
     compilerHost.getSourceFile = (...args) => {
         const result = originalGetSourceFile.call(compilerHost, ...args);
         if (result) {
-            result.version = getSourceFileVersionAsHashFromText(host, result.text);
+            result.version = getSourceFileVersionAsHashFromText(compilerHost, result.text);
         }
         return result;
     };
@@ -846,7 +844,6 @@ export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiag
         writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
         createHash: maybeBind(system, system.createHash),
         createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>,
-        disableUseFileVersionAsSignature: system.disableUseFileVersionAsSignature,
         storeFilesChangingSignatureDuringEmit: system.storeFilesChangingSignatureDuringEmit,
         now: maybeBind(system, system.now),
     };

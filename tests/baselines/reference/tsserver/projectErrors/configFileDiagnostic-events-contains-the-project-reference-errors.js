@@ -1,12 +1,12 @@
 Info 0    [00:00:15.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:16.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/a/b/app.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/b/app.ts]
@@ -79,7 +79,7 @@ Info 16   [00:00:31.000] 	Files (2)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	app.ts
 	  Part of 'files' list in tsconfig.json
 

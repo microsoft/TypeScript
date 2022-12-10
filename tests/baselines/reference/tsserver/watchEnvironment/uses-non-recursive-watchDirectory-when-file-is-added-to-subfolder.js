@@ -1,12 +1,12 @@
 Info 0    [00:00:21.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:22.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/a/username/project/src/index.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/username/project/src/index.ts]
@@ -74,7 +74,7 @@ Info 20   [00:00:41.000] 	Files (3)
 
 
 	../../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 	src/index.ts
@@ -121,7 +121,7 @@ Info 23   [00:00:50.000] request:
         "line": 1,
         "offset": 19
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request
@@ -224,7 +224,7 @@ Info 37   [00:01:06.000] 	Files (4)
 
 
 	../../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/file1.ts
 	  Matched by default include pattern '**/*'
 	src/index.ts
@@ -281,7 +281,7 @@ Info 42   [00:01:23.000] request:
         "line": 1,
         "offset": 19
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Before request

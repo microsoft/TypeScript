@@ -563,7 +563,7 @@ No shapes updated in the builder::
 
 //// [/src/project1/src/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 10;
 var aLocal = 10;
@@ -572,7 +572,7 @@ var aa = 10;
 
 //// [/src/project1/src/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
 var bLocal = 10;
@@ -580,7 +580,7 @@ var bLocal = 10;
 
 //// [/src/project1/src/c.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 var a_1 = require("./a");
 exports.c = a_1.a;
@@ -588,7 +588,7 @@ exports.c = a_1.a;
 
 //// [/src/project1/src/d.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = void 0;
 var b_1 = require("./b");
 exports.d = b_1.b;
@@ -930,7 +930,7 @@ No shapes updated in the builder::
 //// [/src/project1/src/b.d.ts] file written with same contents
 //// [/src/project1/src/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
 var bLocal = 10;

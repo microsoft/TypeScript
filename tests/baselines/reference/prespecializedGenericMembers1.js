@@ -22,7 +22,7 @@ var catBag = new CatBag(catThing);
 
 //// [prespecializedGenericMembers1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.CatBag = exports.Cat = void 0;
 var Cat = /** @class */ (function () {
     function Cat() {
