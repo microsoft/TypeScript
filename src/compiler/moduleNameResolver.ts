@@ -200,6 +200,29 @@ function resolvedTypeScriptOnly(resolved: Resolved | undefined): PathAndPackageI
     return { fileName: resolved.path, packageId: resolved.packageId };
 }
 
+function createResolvedModuleWithFailedLookupLocationsHandlingSymlink(
+    resolved: Resolved | undefined,
+    isExternalLibraryImport: boolean | undefined,
+    failedLookupLocations: string[],
+    affectingLocations: string[],
+    diagnostics: Diagnostic[],
+    state: ModuleResolutionState,
+): ResolvedModuleWithFailedLookupLocations {
+    // If this is from node_modules, always respect preserveSymlinks
+    if (!state.resultFromCache && !state.compilerOptions.preserveSymlinks && resolved && isExternalLibraryImport && !resolved.originalPath) {
+        const { resolvedFileName, originalPath } = getOriginalAndResolvedFileName(resolved.path, state.host, state.traceEnabled);
+        if (originalPath) resolved = { ...resolved, path: resolvedFileName, originalPath };
+    }
+    return createResolvedModuleWithFailedLookupLocations(
+        resolved,
+        isExternalLibraryImport,
+        failedLookupLocations,
+        affectingLocations,
+        diagnostics,
+        state.resultFromCache,
+    );
+}
+
 function createResolvedModuleWithFailedLookupLocations(
     resolved: Resolved | undefined,
     isExternalLibraryImport: boolean | undefined,
@@ -434,6 +457,16 @@ function arePathsEqual(path1: string, path2: string, host: ModuleResolutionHost)
     return comparePaths(path1, path2, !useCaseSensitiveFileNames) === Comparison.EqualTo;
 }
 
+function getOriginalAndResolvedFileName(fileName: string, host: ModuleResolutionHost, traceEnabled: boolean) {
+    const resolvedFileName = realPath(fileName, host, traceEnabled);
+    const pathsAreEqual = arePathsEqual(fileName, resolvedFileName, host);
+    return {
+        // If the fileName and realpath are differing only in casing prefer fileName so that we can issue correct errors for casing under forceConsistentCasingInFileNames
+        resolvedFileName: pathsAreEqual ? fileName : resolvedFileName,
+        originalPath: pathsAreEqual ? undefined : fileName,
+    };
+}
+
 /**
  * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
  * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
@@ -524,13 +557,12 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
     let resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
     if (resolved) {
         const { fileName, packageId } = resolved;
-        const resolvedFileName = options.preserveSymlinks ? fileName : realPath(fileName, host, traceEnabled);
-        const pathsAreEqual = arePathsEqual(fileName, resolvedFileName, host);
+        let resolvedFileName = fileName, originalPath: string | undefined;
+        if (!options.preserveSymlinks) ({ resolvedFileName, originalPath } = getOriginalAndResolvedFileName(fileName, host, traceEnabled));
         resolvedTypeReferenceDirective = {
             primary,
-            // If the fileName and realpath are differing only in casing prefer fileName so that we can issue correct errors for casing under forceConsistentCasingInFileNames
-            resolvedFileName: pathsAreEqual ? fileName : resolvedFileName,
-            originalPath: pathsAreEqual ? undefined : fileName,
+            resolvedFileName,
+            originalPath,
             packageId,
             isExternalLibraryImport: pathContainsNodeModules(fileName),
         };
@@ -1610,13 +1642,13 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
         result = tryResolve(extensions);
     }
 
-    return createResolvedModuleWithFailedLookupLocations(
+    return createResolvedModuleWithFailedLookupLocationsHandlingSymlink(
         result?.value?.resolved,
         result?.value?.isExternalLibraryImport,
         failedLookupLocations,
         affectingLocations,
         diagnostics,
-        state.resultFromCache
+        state,
     );
 
     function tryResolve(extensions: Extensions): SearchResult<{ resolved: Resolved, isExternalLibraryImport: boolean }> {
@@ -1640,18 +1672,8 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
                 }
                 resolved = loadModuleFromNearestNodeModulesDirectory(extensions, moduleName, containingDirectory, state, cache, redirectedReference);
             }
-            if (!resolved) return undefined;
-
-            let resolvedValue = resolved.value;
-            if (!compilerOptions.preserveSymlinks && resolvedValue && !resolvedValue.originalPath) {
-                const path = realPath(resolvedValue.path, host, traceEnabled);
-                const pathsAreEqual = arePathsEqual(path, resolvedValue.path, host);
-                const originalPath = pathsAreEqual ? undefined : resolvedValue.path;
-                // If the path and realpath are differing only in casing prefer path so that we can issue correct errors for casing under forceConsistentCasingInFileNames
-                resolvedValue = { ...resolvedValue, path: pathsAreEqual ? resolvedValue.path : path, originalPath };
-            }
             // For node_modules lookups, get the real path so that multiple accesses to an `npm link`-ed module do not create duplicate files.
-            return { value: resolvedValue && { resolved: resolvedValue, isExternalLibraryImport: true } };
+            return resolved && { value: resolved.value && { resolved: resolved.value, isExternalLibraryImport: true } };
         }
         else {
             const { path: candidate, parts } = normalizePathForCJSResolution(containingDirectory, moduleName);
@@ -2840,13 +2862,13 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
         tryResolve(Extensions.TypeScript | Extensions.Declaration) ||
         tryResolve(Extensions.JavaScript | (compilerOptions.resolveJsonModule ? Extensions.Json : 0));
     // No originalPath because classic resolution doesn't resolve realPath
-    return createResolvedModuleWithFailedLookupLocations(
+    return createResolvedModuleWithFailedLookupLocationsHandlingSymlink(
         resolved && resolved.value,
         resolved?.value && pathContainsNodeModules(resolved.value.path),
         failedLookupLocations,
         affectingLocations,
         diagnostics,
-        state.resultFromCache
+        state,
     );
 
     function tryResolve(extensions: Extensions): SearchResult<Resolved> {
