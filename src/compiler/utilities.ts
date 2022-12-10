@@ -28,6 +28,7 @@ import {
     BindableStaticElementAccessExpression,
     BindableStaticNameExpression,
     BindingElement,
+    BindingElementOfBareOrAccessedRequire,
     Block,
     BundleFileSection,
     BundleFileSectionKind,
@@ -190,8 +191,8 @@ import {
     getTrailingCommentRanges,
     HasExpressionInitializer,
     hasExtension,
-    HasInitializer,
     hasInitializer,
+    HasInitializer,
     HasJSDoc,
     hasJSDocNodes,
     HasModifiers,
@@ -224,6 +225,7 @@ import {
     isArrowFunction,
     isBigIntLiteral,
     isBinaryExpression,
+    isBindingElement,
     isBindingPattern,
     isCallExpression,
     isClassDeclaration,
@@ -518,6 +520,7 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
     YieldExpression,
+    AliasDeclarationNode,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -2967,6 +2970,11 @@ export function isVariableDeclarationInitializedToBareOrAccessedRequire(node: No
     return isVariableDeclarationInitializedWithRequireHelper(node, /*allowAccessedRequire*/ true);
 }
 
+/** @internal */
+export function isBindingElementOfBareOrAccessedRequire(node: Node): node is BindingElementOfBareOrAccessedRequire {
+    return isBindingElement(node) && isVariableDeclarationInitializedToBareOrAccessedRequire(node.parent.parent);
+}
+
 function isVariableDeclarationInitializedWithRequireHelper(node: Node, allowAccessedRequire: boolean) {
     return isVariableDeclaration(node) &&
         !!node.initializer &&
@@ -3387,14 +3395,23 @@ export function isFunctionSymbol(symbol: Symbol | undefined) {
 }
 
 /** @internal */
-export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire): StringLiteralLike | undefined {
+export function tryGetModuleSpecifierFromDeclaration(node: AnyImportOrBareOrAccessedRequire | AliasDeclarationNode): StringLiteralLike | undefined {
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
+        case SyntaxKind.BindingElement:
             return findAncestor(node.initializer, (node): node is RequireOrImportCall => isRequireCall(node, /*requireStringLiteralLikeArgument*/ true))?.arguments[0];
         case SyntaxKind.ImportDeclaration:
             return tryCast(node.moduleSpecifier, isStringLiteralLike);
         case SyntaxKind.ImportEqualsDeclaration:
             return tryCast(tryCast(node.moduleReference, isExternalModuleReference)?.expression, isStringLiteralLike);
+        case SyntaxKind.ImportClause:
+        case SyntaxKind.NamespaceExport:
+            return tryCast(node.parent.moduleSpecifier, isStringLiteralLike);
+        case SyntaxKind.NamespaceImport:
+        case SyntaxKind.ExportSpecifier:
+            return tryCast(node.parent.parent.moduleSpecifier, isStringLiteralLike);
+        case SyntaxKind.ImportSpecifier:
+            return tryCast(node.parent.parent.parent.moduleSpecifier, isStringLiteralLike);
         default:
             Debug.assertNever(node);
     }

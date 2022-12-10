@@ -919,6 +919,10 @@
         "category": "Error",
         "code": 1280
     },
+    "ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.": {
+        "category": "Error",
+        "code": 1281
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",

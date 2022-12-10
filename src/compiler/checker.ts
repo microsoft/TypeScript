@@ -7,6 +7,7 @@ import {
     addRange,
     addRelatedInfo,
     addSyntheticLeadingComment,
+    AliasDeclarationNode,
     AllAccessorDeclarations,
     and,
     AnonymousType,
@@ -423,6 +424,7 @@ import {
     isBindableStaticElementAccessExpression,
     isBindableStaticNameExpression,
     isBindingElement,
+    isBindingElementOfBareOrAccessedRequire,
     isBindingPattern,
     isBlock,
     isBlockOrCatchScoped,
@@ -39524,8 +39526,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // For a commonjs `const x = require`, validate the alias and exit
         const symbol = getSymbolOfNode(node);
-        if (symbol.flags & SymbolFlags.Alias && isVariableDeclarationInitializedToBareOrAccessedRequire(node.kind === SyntaxKind.BindingElement ? node.parent.parent : node)) {
-            checkAliasSymbol(node as BindingElement | VariableDeclaration);
+        if (symbol.flags & SymbolFlags.Alias && (isVariableDeclarationInitializedToBareOrAccessedRequire(node) || isBindingElementOfBareOrAccessedRequire(node))) {
+            checkAliasSymbol(node);
             return;
         }
 
@@ -42479,7 +42481,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return true;
     }
 
-    function checkAliasSymbol(node: ImportEqualsDeclaration | VariableDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier | NamespaceExport | BindingElement) {
+    function checkAliasSymbol(node: AliasDeclarationNode) {
         let symbol = getSymbolOfNode(node);
         const target = resolveAlias(symbol);
 
@@ -42580,10 +42582,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     ? error(node, Diagnostics.Re_exporting_a_type_when_0_is_enabled_requires_using_export_type, isolatedModulesLikeFlagName)
                                     : error(node, Diagnostics._0_resolves_to_a_type_only_declaration_and_must_be_re_exported_using_a_type_only_re_export_when_1_is_enabled, name, isolatedModulesLikeFlagName);
                                 addTypeOnlyDeclarationRelatedInfo(diagnostic, isType ? undefined : typeOnlyAlias, name);
-                                return;
+                                break;
                             }
                         }
                     }
+                }
+
+                if (compilerOptions.verbatimModuleSyntax &&
+                    node.kind !== SyntaxKind.ImportEqualsDeclaration &&
+                    !isInJSFile(node) &&
+                    (moduleKind === ModuleKind.CommonJS || getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS)
+                ) {
+                    error(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
                 }
             }
 
