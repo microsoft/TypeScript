@@ -201,6 +201,7 @@ function resolvedTypeScriptOnly(resolved: Resolved | undefined): PathAndPackageI
 }
 
 function createResolvedModuleWithFailedLookupLocationsHandlingSymlink(
+    moduleName: string,
     resolved: Resolved | undefined,
     isExternalLibraryImport: boolean | undefined,
     failedLookupLocations: string[],
@@ -208,8 +209,14 @@ function createResolvedModuleWithFailedLookupLocationsHandlingSymlink(
     diagnostics: Diagnostic[],
     state: ModuleResolutionState,
 ): ResolvedModuleWithFailedLookupLocations {
-    // If this is from node_modules, always respect preserveSymlinks
-    if (!state.resultFromCache && !state.compilerOptions.preserveSymlinks && resolved && isExternalLibraryImport && !resolved.originalPath) {
+    // If this is from node_modules for non relative name, always respect preserveSymlinks
+    if (!state.resultFromCache &&
+        !state.compilerOptions.preserveSymlinks &&
+        resolved &&
+        isExternalLibraryImport &&
+        !resolved.originalPath &&
+        !isExternalModuleNameRelative(moduleName)
+    ) {
         const { resolvedFileName, originalPath } = getOriginalAndResolvedFileName(resolved.path, state.host, state.traceEnabled);
         if (originalPath) resolved = { ...resolved, path: resolvedFileName, originalPath };
     }
@@ -1643,6 +1650,7 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
     }
 
     return createResolvedModuleWithFailedLookupLocationsHandlingSymlink(
+        moduleName,
         result?.value?.resolved,
         result?.value?.isExternalLibraryImport,
         failedLookupLocations,
@@ -2863,6 +2871,7 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
         tryResolve(Extensions.JavaScript | (compilerOptions.resolveJsonModule ? Extensions.Json : 0));
     // No originalPath because classic resolution doesn't resolve realPath
     return createResolvedModuleWithFailedLookupLocationsHandlingSymlink(
+        moduleName,
         resolved && resolved.value,
         resolved?.value && pathContainsNodeModules(resolved.value.path),
         failedLookupLocations,
