@@ -467,7 +467,8 @@ function arePathsEqual(path1: string, path2: string, host: ModuleResolutionHost)
     return comparePaths(path1, path2, !useCaseSensitiveFileNames) === Comparison.EqualTo;
 }
 
-function getOriginalAndResolvedFileName(fileName: string, host: ModuleResolutionHost, traceEnabled: boolean) {
+/** @internal */
+export function getOriginalAndResolvedFileName(fileName: string, host: ModuleResolutionHost, traceEnabled: boolean) {
     const resolvedFileName = realPath(fileName, host, traceEnabled);
     const pathsAreEqual = arePathsEqual(fileName, resolvedFileName, host);
     return {

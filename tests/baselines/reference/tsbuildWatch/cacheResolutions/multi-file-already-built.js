@@ -587,6 +587,7 @@ File '/src/project/package.json' does not exist.
 File '/src/package.json' does not exist.
 File '/package.json' does not exist.
 Found 'package.json' at '/src/project/node_modules/pkg0/package.json'.
+Resolving real path for '/src/project/node_modules/pkg0/import.d.ts', result '/src/project/node_modules/pkg0/import.d.ts'.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/import.d.ts' with Package ID 'pkg0/import.d.ts@0.0.1'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Explicitly specified module resolution kind: 'Node16'.
@@ -619,6 +620,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 File '/src/project/node_modules/pkg0/package.json' exists according to earlier cached lookups.
 Directory '/src/project' has no containing package.json scope according to cache.
 Found 'package.json' at '/src/project/node_modules/pkg2/package.json'.
+Resolving real path for '/src/project/node_modules/pkg2/import.d.ts', result '/src/project/node_modules/pkg2/import.d.ts'.
 Reusing resolution of type reference directive 'pkg2' from '/src/project/fileWithTypeRefs.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg2/import.d.ts' with Package ID 'pkg2/import.d.ts@0.0.1'.
 ======== Resolving type reference directive 'pkg3', containing file '/src/project/fileWithTypeRefs.ts', root directory '/src/project/node_modules/@types'. ========
 Resolving with primary search path '/src/project/node_modules/@types'.
@@ -636,6 +638,7 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 File '/src/project/node_modules/pkg2/package.json' exists according to earlier cached lookups.
 Directory '/src/project' has no containing package.json scope according to cache.
 Directory '/src/project' has no containing package.json scope according to cache.
+Resolving real path for '/src/project/node_modules/@types/pkg4/index.d.ts', result '/src/project/node_modules/@types/pkg4/index.d.ts'.
 Reusing resolution of type reference directive 'pkg4' from '/src/project/__inferred type names__.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/@types/pkg4/index.d.ts'.
 File '/src/project/node_modules/@types/pkg4/package.json' does not exist.
 File '/src/project/node_modules/@types/package.json' does not exist.

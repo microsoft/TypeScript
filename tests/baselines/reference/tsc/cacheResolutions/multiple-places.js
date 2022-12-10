@@ -4554,6 +4554,7 @@ export const x = 10;
 
 Output::
 /lib/tsc -p /src/project --explainFiles
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -8755,6 +8756,7 @@ export const x = 10;
 
 Output::
 /lib/tsc -p /src/project --explainFiles
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -12971,6 +12973,7 @@ export const x = 10;
 
 Output::
 /lib/tsc -p /src/project --explainFiles
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -17202,6 +17205,7 @@ export const x = 10;
 
 Output::
 /lib/tsc -p /src/project --explainFiles
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -21455,6 +21459,7 @@ export const x = 10;
 
 Output::
 /lib/tsc -p /src/project --explainFiles
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -25724,6 +25729,7 @@ export const x = 10;
 
 Output::
 /lib/tsc -p /src/project --explainFiles
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -30256,6 +30262,7 @@ export const x = 10;
 
 Output::
 /lib/tsc -p /src/project --explainFiles
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -35060,6 +35067,7 @@ export const x = 10;
 
 Output::
 /lib/tsc -p /src/project --explainFiles
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -40136,6 +40144,7 @@ export const x = 10;
 
 Output::
 /lib/tsc -p /src/project --explainFiles
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -45997,6 +46006,7 @@ export const x = 10;
 
 Output::
 /lib/tsc -p /src/project --explainFiles
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -52702,6 +52712,7 @@ export const x = 10;
 
 Output::
 /lib/tsc -p /src/project --explainFiles
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -59444,6 +59455,7 @@ export const x = 10;
 
 Output::
 /lib/tsc -p /src/project --explainFiles
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
@@ -67082,6 +67094,7 @@ export interface ImportInterface1 {}
 
 Output::
 /lib/tsc -p /src/project --explainFiles
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.

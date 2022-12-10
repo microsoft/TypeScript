@@ -52,6 +52,7 @@ import {
     getEmitDeclarations,
     getNormalizedAbsolutePath,
     getOptionsNameMap,
+    getOriginalAndResolvedFileName,
     getOriginalOrResolvedModuleFileName,
     getOriginalOrResolvedTypeReferenceFileName,
     getOwnKeys,
@@ -67,6 +68,7 @@ import {
     isJsonSourceFile,
     isNumber,
     isString,
+    isTraceEnabled,
     map,
     mapDefined,
     maybeBind,
@@ -956,7 +958,6 @@ export type ProgramMultiFileEmitBuildInfoFileInfo = string | ProgramMultiFileEmi
 /** @internal */
 export interface ProgramBuildInfoResolved {
     readonly resolvedFileName: ProgramBuildInfoAbsoluteFileId;
-    readonly originalPath: ProgramBuildInfoAbsoluteFileId | undefined;
     readonly packageId: PackageId | undefined;
 }
 /** @internal */
@@ -1455,10 +1456,9 @@ function getBuildInfo(state: BuilderProgramState, host: BuilderProgramHost, bund
 
     function toProgramBuildInfoResolved(resolved: ResolvedModuleFull | ResolvedTypeReferenceDirective | undefined): ProgramBuildInfoAbsoluteFileId | ProgramBuildInfoResolved | undefined {
         if (!resolved) return undefined;
-        const resolvedFileName = toAbsoluteFileId(resolved.resolvedFileName!);
-        const originalPath = resolved.originalPath ? toAbsoluteFileId(resolved.originalPath) : undefined;
-        if (!originalPath && !resolved.packageId) return resolvedFileName;
-        return { resolvedFileName, originalPath, packageId: resolved.packageId };
+        const resolvedFileName = toAbsoluteFileId(resolved.originalPath || resolved.resolvedFileName!);
+        if (!resolved.packageId) return resolvedFileName;
+        return { resolvedFileName, packageId: resolved.packageId };
     }
 }
 
@@ -2168,6 +2168,7 @@ export function createOldBuildInfoProgram(
     let resolutions: (Resolution | false)[] | undefined;
     let originalPathOrResolvedFileNames: string[] | undefined;
     let resolutionEntries: ResolutionEntry[] | undefined;
+    const traceEnabled = isTraceEnabled(host.getCompilerOptions(), host.compilerHost);
     return {
         getCompilerOptions: () => compilerOptions,
         getResolvedModule: (name, mode, dirPath, redirectedReference) => getResolvedFromCache(
@@ -2199,7 +2200,7 @@ export function createOldBuildInfoProgram(
 
     function fileExists(fileName: string) {
         let result = fileExistsMap.get(fileName);
-        if (result === undefined) fileExistsMap.set(fileName, result = host.fileExists(fileName));
+        if (result === undefined) fileExistsMap.set(fileName, result = host.compilerHost.fileExists(fileName));
         return result;
     }
 
@@ -2212,7 +2213,7 @@ export function createOldBuildInfoProgram(
         const packageJsonInfo = host.getPackageJsonInfo(fileName);
         const currentText = typeof packageJsonInfo === "object" ? packageJsonInfo.contents.packageJsonText : undefined;
         if (isString(expected)) {
-            result = !!currentText && (host.createHash ?? generateDjb2Hash)(currentText) === expected;
+            result = !!currentText && (host.compilerHost.createHash ?? generateDjb2Hash)(currentText) === expected;
         }
         else {
             result = currentText === expected?.packageJsonText;
@@ -2303,7 +2304,6 @@ export function createOldBuildInfoProgram(
         // If we are using the cache, directly get from there
         const fromCache = cache?.getFromCache(name, mode, dirPath, options);
         if (fromCache) {
-            // TODO:: symlinks
             const resolvedFileName = getResolvedFileName(fromCache);
             return resolvedFileName && fileExists(resolvedFileName) && every(
                 fromCache.affectingLocations,
@@ -2336,7 +2336,7 @@ export function createOldBuildInfoProgram(
             if (!reusableResolutionsCache.decoded) return undefined;
         }
         const resolutionId = reusableResolutionsCache.decoded.getFromCache(name, mode, dirPath, options);
-        return resolutionId ? toResolution(resolutionId) as T : undefined;
+        return resolutionId ? toResolution(resolutionId, name) as T : undefined;
     }
 
     function setBuildInfoResolutionEntries(
@@ -2382,12 +2382,8 @@ export function createOldBuildInfoProgram(
         return resuableCacheResolutions!.cache.names[nameId - 1];
     }
 
-    function toResolvedFileName(resolved: ProgramBuildInfoAbsoluteFileId | ProgramBuildInfoResolved) {
-        return isNumber(resolved) ? resolved : resolved.resolvedFileName;
-    }
-
     function toOriginalOrResolvedFileName(resolved: ProgramBuildInfoAbsoluteFileId | ProgramBuildInfoResolved) {
-        return isNumber(resolved) ? resolved : resolved.originalPath || resolved.resolvedFileName;
+        return isNumber(resolved) ? resolved : resolved.resolvedFileName;
     }
 
     function toOriginalOrResolvedModuleFileName(resolutionId: ProgramBuildInfoResolutionId): string {
@@ -2413,13 +2409,13 @@ export function createOldBuildInfoProgram(
         return affectingLocationsSame(file, hash) ? file : undefined;
     }
 
-    function toResolution(resolutionId: ProgramBuildInfoResolutionId): Resolution | undefined {
+    function toResolution(resolutionId: ProgramBuildInfoResolutionId, name: string): Resolution | undefined {
         const existing = resolutions?.[resolutionId - 1];
         if (existing !== undefined) return existing || undefined;
         resolutions ??= new Array(resuableCacheResolutions!.cache.resolutions.length);
         const resolution = resuableCacheResolutions!.cache.resolutions[resolutionId - 1];
         const resolvedFileName = resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath(
-            toResolvedFileName(resolution.resolvedModule || resolution.resolvedTypeReferenceDirective!)
+            toOriginalOrResolvedFileName(resolution.resolvedModule || resolution.resolvedTypeReferenceDirective!)
         );
         let affectingLocations: string[] | undefined;
         if (fileExists(resolvedFileName) && every(resolution.affectingLocations, fileId => {
@@ -2430,8 +2426,8 @@ export function createOldBuildInfoProgram(
             // Type Ref doesnt need extension
             const extenstion = resolution.resolvedModule ? extensionFromPath(resolvedFileName) : undefined!;
             return resolutions[resolutionId - 1] = {
-                resolvedModule: toResolved(resolution.resolvedModule, resolvedFileName, extenstion, /*primary*/ undefined),
-                resolvedTypeReferenceDirective: toResolved(resolution.resolvedTypeReferenceDirective, resolvedFileName, extenstion, !resolution.notPrimary),
+                resolvedModule: toResolved(resolution.resolvedModule, resolvedFileName, extenstion, name, /*primary*/ undefined),
+                resolvedTypeReferenceDirective: toResolved(resolution.resolvedTypeReferenceDirective, resolvedFileName, extenstion, /*name*/ undefined, !resolution.notPrimary),
                 affectingLocations,
                 resolutionDiagnostics: resolution.resolutionDiagnostics?.length ? convertToDiagnostics(resolution.resolutionDiagnostics, /*newProgram*/ undefined!) as Diagnostic[] : undefined
             };
@@ -2444,18 +2440,21 @@ export function createOldBuildInfoProgram(
         resolved: ProgramBuildInfoAbsoluteFileId | ProgramBuildInfoResolved | undefined,
         resolvedFileName: string,
         extension: Extension,
+        name: string | undefined,
         primary: boolean | undefined,
     ): (ResolvedModuleFull & ResolvedTypeReferenceDirective) | undefined {
         if (!resolved) return undefined;
-        const originalPath = isNumber(resolved) || !resolved.originalPath ?
-            undefined :
-            resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath(resolved.originalPath);
+        let originalPath: string | undefined;
+        const isExternalLibraryImport = pathContainsNodeModules(resolvedFileName);
+        if (!host.getCompilerOptions().preserveSymlinks && (!name || (isExternalLibraryImport && !isExternalModuleNameRelative(name)))) {
+            ({ resolvedFileName, originalPath } = getOriginalAndResolvedFileName(resolvedFileName, host.compilerHost, traceEnabled));
+        }
         const packageId = isNumber(resolved) ? undefined : resolved.packageId;
         return {
             resolvedFileName,
             originalPath,
             packageId,
-            isExternalLibraryImport: pathContainsNodeModules(originalPath || resolvedFileName),
+            isExternalLibraryImport,
             extension,
             primary,
         };

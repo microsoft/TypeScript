@@ -1582,9 +1582,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     if (!oldProgram && typeof oldProgramOrOldBuildInfoProgramConstructor === "function") {
         const state = getTemporaryModuleResolutionState(moduleResolutionCache?.getPackageJsonInfoCache(), host, options);
         oldBuildInfoProgram = oldProgramOrOldBuildInfoProgramConstructor({
-            fileExists: fileName => host.fileExists(fileName),
+            compilerHost: host,
             getCompilerOptions: () => options,
-            createHash: maybeBind(host, host.createHash),
             getPackageJsonInfo: fileName => getPackageJsonInfo(getDirectoryPath(fileName), /*onlyRecordFailures*/ false, state),
         });
         if (oldBuildInfoProgram) {

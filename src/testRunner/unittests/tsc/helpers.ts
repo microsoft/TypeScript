@@ -538,9 +538,8 @@ type ReadableProgramBuildInfoFileInfo<T> = Omit<ts.BuilderState.FileInfo, "impli
     impliedFormat: string | undefined;
     original: T | undefined;
 };
-type ReadableProgramBuildInfoResolved = string | Omit<ts.ProgramBuildInfoResolved, "resolvedFileName" | "originalPath"> & {
+type ReadableProgramBuildInfoResolved = string | Omit<ts.ProgramBuildInfoResolved, "resolvedFileName"> & {
     readonly resolvedFileName: string;
-    readonly originalPath: string | undefined;
 };
 type ReadableProgramBuildInfoResolution = Omit<ts.ProgramBuildInfoResolution, "resolvedModule" | "resolvedTypeReferenceDirective" | "failedLookupLocations" | "affectingLocations"> & {
     readonly resolutionId: ts.ProgramBuildInfoResolutionId;
@@ -794,7 +793,6 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
         return resolved && (ts.isNumber(resolved) ? toFileName(resolved) : {
             ...resolved,
             resolvedFileName: toFileName(resolved.resolvedFileName),
-            originalPath: resolved.originalPath ? toFileName(resolved.originalPath) : undefined,
         });
     }
 

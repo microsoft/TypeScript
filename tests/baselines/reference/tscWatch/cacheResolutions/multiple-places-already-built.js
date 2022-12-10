@@ -982,6 +982,7 @@ Resolution for module 'pkg1' was found in cache from location '/src/project'.
 >> Screen clear
 [[90m12:02:02 AM[0m] Starting compilation in watch mode...
 
+Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' found in cache from location '/src/project', it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'NodeJs'.
