@@ -113,7 +113,7 @@ export declare const y = 10;
 
 
 //// [/src/project/tsconfig.a.tsbuildinfo]
-{"program":{"fileNames":["../../a/lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./arandomfileforimport.ts","./arandomfileforimport2.ts","./afilewithimports.ts","./","./aRandomFileForImport.ts","./aRandomFileForImport2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"25172849050-import type { ImportInterface0 } from \"pkg0\";\nexport { x } from \"./aRandomFileForImport\";\nexport { x as x2 } from \"./aRandomFileForImport2\";\nexport const y = 10;\n","signature":"-19407286966-export { x } from \"./aRandomFileForImport\";\nexport { x as x2 } from \"./aRandomFileForImport2\";\nexport declare const y = 10;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2,3,4],[3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[[5,2]],"semanticDiagnosticsPerFile":[1,5,3,4,2],"latestChangedDtsFile":"./aFileWithImports.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":2}},{"resolvedModule":{"resolvedFileName":7}},{"resolvedModule":{"resolvedFileName":8}}],"names":["pkg0","./aRandomFileForImport","./aRandomFileForImport2"],"resolutionEntries":[[1,1],[2,2],[3,3]],"modules":[[6,[1,2,3]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../a/lib/lib.d.ts","./node_modules/pkg0/index.d.ts","./arandomfileforimport.ts","./arandomfileforimport2.ts","./afilewithimports.ts","./","./aRandomFileForImport.ts","./aRandomFileForImport2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"769951468-export interface ImportInterface0 {}",{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"25172849050-import type { ImportInterface0 } from \"pkg0\";\nexport { x } from \"./aRandomFileForImport\";\nexport { x as x2 } from \"./aRandomFileForImport2\";\nexport const y = 10;\n","signature":"-19407286966-export { x } from \"./aRandomFileForImport\";\nexport { x as x2 } from \"./aRandomFileForImport2\";\nexport declare const y = 10;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2,3,4],[3,4]],"referencedMap":[[5,1]],"exportedModulesMap":[[5,2]],"semanticDiagnosticsPerFile":[1,5,3,4,2],"latestChangedDtsFile":"./aFileWithImports.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":2},{"resolvedModule":7},{"resolvedModule":8}],"names":["pkg0","./aRandomFileForImport","./aRandomFileForImport2"],"resolutionEntries":[[1,1],[2,2],[3,3]],"modules":[[6,[1,2,3]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.a.tsbuildinfo.readable.baseline.txt]
 {
@@ -207,36 +207,24 @@ export declare const y = 10;
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 2
-            }
+            "resolvedModule": 2
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-          }
+          "resolvedModule": "./node_modules/pkg0/index.d.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 7
-            }
+            "resolvedModule": 7
           },
           "resolutionId": 2,
-          "resolvedModule": {
-            "resolvedFileName": "./aRandomFileForImport.ts"
-          }
+          "resolvedModule": "./aRandomFileForImport.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 8
-            }
+            "resolvedModule": 8
           },
           "resolutionId": 3,
-          "resolvedModule": {
-            "resolvedFileName": "./aRandomFileForImport2.ts"
-          }
+          "resolvedModule": "./aRandomFileForImport2.ts"
         }
       ],
       "names": [
@@ -254,9 +242,7 @@ export declare const y = 10;
           "name": "pkg0",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-            }
+            "resolvedModule": "./node_modules/pkg0/index.d.ts"
           }
         },
         {
@@ -268,9 +254,7 @@ export declare const y = 10;
           "name": "./aRandomFileForImport",
           "resolution": {
             "resolutionId": 2,
-            "resolvedModule": {
-              "resolvedFileName": "./aRandomFileForImport.ts"
-            }
+            "resolvedModule": "./aRandomFileForImport.ts"
           }
         },
         {
@@ -282,9 +266,7 @@ export declare const y = 10;
           "name": "./aRandomFileForImport2",
           "resolution": {
             "resolutionId": 3,
-            "resolvedModule": {
-              "resolvedFileName": "./aRandomFileForImport2.ts"
-            }
+            "resolvedModule": "./aRandomFileForImport2.ts"
           }
         }
       ],
@@ -297,9 +279,7 @@ export declare const y = 10;
               "name": "pkg0",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-                }
+                "resolvedModule": "./node_modules/pkg0/index.d.ts"
               }
             },
             {
@@ -307,9 +287,7 @@ export declare const y = 10;
               "name": "./aRandomFileForImport",
               "resolution": {
                 "resolutionId": 2,
-                "resolvedModule": {
-                  "resolvedFileName": "./aRandomFileForImport.ts"
-                }
+                "resolvedModule": "./aRandomFileForImport.ts"
               }
             },
             {
@@ -317,9 +295,7 @@ export declare const y = 10;
               "name": "./aRandomFileForImport2",
               "resolution": {
                 "resolutionId": 3,
-                "resolvedModule": {
-                  "resolvedFileName": "./aRandomFileForImport2.ts"
-                }
+                "resolvedModule": "./aRandomFileForImport2.ts"
               }
             }
           ]
@@ -328,7 +304,7 @@ export declare const y = 10;
     }
   },
   "version": "FakeTSVersion",
-  "size": 1803
+  "size": 1740
 }
 
 //// [/src/project/bRandomFileForImport.js]
@@ -369,7 +345,7 @@ export declare const x = 10;
 
 
 //// [/src/project/tsconfig.b.tsbuildinfo]
-{"program":{"fileNames":["../../a/lib/lib.d.ts","./arandomfileforimport.d.ts","./arandomfileforimport2.d.ts","./afilewithimports.d.ts","./brandomfileforimport.ts","./node_modules/pkg0/index.d.ts","./bfilewithimports.ts","./brandomfileforimport2.ts","./","./aRandomFileForImport.ts","./aRandomFileForImport2.ts","./aFileWithImports.ts","./bRandomFileForImport.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-6821242887-export declare const x = 10;\n","-6821242887-export declare const x = 10;\n","-19407286966-export { x } from \"./aRandomFileForImport\";\nexport { x as x2 } from \"./aRandomFileForImport2\";\nexport declare const y = 10;\n",{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},"769951468-export interface ImportInterface0 {}",{"version":"-16966571634-export { y } from \"./aFileWithImports\";\nexport { x } from \"./bRandomFileForImport\";\nimport type { ImportInterface0 } from \"pkg0\";\n","signature":"-7362913554-export { y } from \"./aFileWithImports\";\nexport { x } from \"./bRandomFileForImport\";\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2,3],[4,5,6],[4,5]],"referencedMap":[[4,1],[7,2]],"exportedModulesMap":[[4,1],[7,3]],"semanticDiagnosticsPerFile":[1,4,2,3,7,5,8,6],"latestChangedDtsFile":"./bRandomFileForImport2.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":10}},{"resolvedModule":{"resolvedFileName":11}},{"resolvedModule":{"resolvedFileName":12}},{"resolvedModule":{"resolvedFileName":13}},{"resolvedModule":{"resolvedFileName":6}}],"names":["./aRandomFileForImport","./aRandomFileForImport2","./aFileWithImports","./bRandomFileForImport","pkg0"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"modules":[[9,[1,2,3,4,5]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../a/lib/lib.d.ts","./arandomfileforimport.d.ts","./arandomfileforimport2.d.ts","./afilewithimports.d.ts","./brandomfileforimport.ts","./node_modules/pkg0/index.d.ts","./bfilewithimports.ts","./brandomfileforimport2.ts","./","./aRandomFileForImport.ts","./aRandomFileForImport2.ts","./aFileWithImports.ts","./bRandomFileForImport.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-6821242887-export declare const x = 10;\n","-6821242887-export declare const x = 10;\n","-19407286966-export { x } from \"./aRandomFileForImport\";\nexport { x as x2 } from \"./aRandomFileForImport2\";\nexport declare const y = 10;\n",{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},"769951468-export interface ImportInterface0 {}",{"version":"-16966571634-export { y } from \"./aFileWithImports\";\nexport { x } from \"./bRandomFileForImport\";\nimport type { ImportInterface0 } from \"pkg0\";\n","signature":"-7362913554-export { y } from \"./aFileWithImports\";\nexport { x } from \"./bRandomFileForImport\";\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2,3],[4,5,6],[4,5]],"referencedMap":[[4,1],[7,2]],"exportedModulesMap":[[4,1],[7,3]],"semanticDiagnosticsPerFile":[1,4,2,3,7,5,8,6],"latestChangedDtsFile":"./bRandomFileForImport2.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":10},{"resolvedModule":11},{"resolvedModule":12},{"resolvedModule":13},{"resolvedModule":6}],"names":["./aRandomFileForImport","./aRandomFileForImport2","./aFileWithImports","./bRandomFileForImport","pkg0"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5]],"modules":[[9,[1,2,3,4,5]]]}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.b.tsbuildinfo.readable.baseline.txt]
 {
@@ -495,58 +471,38 @@ export declare const x = 10;
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 10
-            }
+            "resolvedModule": 10
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "./aRandomFileForImport.ts"
-          }
+          "resolvedModule": "./aRandomFileForImport.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 11
-            }
+            "resolvedModule": 11
           },
           "resolutionId": 2,
-          "resolvedModule": {
-            "resolvedFileName": "./aRandomFileForImport2.ts"
-          }
+          "resolvedModule": "./aRandomFileForImport2.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 12
-            }
+            "resolvedModule": 12
           },
           "resolutionId": 3,
-          "resolvedModule": {
-            "resolvedFileName": "./aFileWithImports.ts"
-          }
+          "resolvedModule": "./aFileWithImports.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 13
-            }
+            "resolvedModule": 13
           },
           "resolutionId": 4,
-          "resolvedModule": {
-            "resolvedFileName": "./bRandomFileForImport.ts"
-          }
+          "resolvedModule": "./bRandomFileForImport.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 6
-            }
+            "resolvedModule": 6
           },
           "resolutionId": 5,
-          "resolvedModule": {
-            "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-          }
+          "resolvedModule": "./node_modules/pkg0/index.d.ts"
         }
       ],
       "names": [
@@ -566,9 +522,7 @@ export declare const x = 10;
           "name": "./aRandomFileForImport",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "./aRandomFileForImport.ts"
-            }
+            "resolvedModule": "./aRandomFileForImport.ts"
           }
         },
         {
@@ -580,9 +534,7 @@ export declare const x = 10;
           "name": "./aRandomFileForImport2",
           "resolution": {
             "resolutionId": 2,
-            "resolvedModule": {
-              "resolvedFileName": "./aRandomFileForImport2.ts"
-            }
+            "resolvedModule": "./aRandomFileForImport2.ts"
           }
         },
         {
@@ -594,9 +546,7 @@ export declare const x = 10;
           "name": "./aFileWithImports",
           "resolution": {
             "resolutionId": 3,
-            "resolvedModule": {
-              "resolvedFileName": "./aFileWithImports.ts"
-            }
+            "resolvedModule": "./aFileWithImports.ts"
           }
         },
         {
@@ -608,9 +558,7 @@ export declare const x = 10;
           "name": "./bRandomFileForImport",
           "resolution": {
             "resolutionId": 4,
-            "resolvedModule": {
-              "resolvedFileName": "./bRandomFileForImport.ts"
-            }
+            "resolvedModule": "./bRandomFileForImport.ts"
           }
         },
         {
@@ -622,9 +570,7 @@ export declare const x = 10;
           "name": "pkg0",
           "resolution": {
             "resolutionId": 5,
-            "resolvedModule": {
-              "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-            }
+            "resolvedModule": "./node_modules/pkg0/index.d.ts"
           }
         }
       ],
@@ -637,9 +583,7 @@ export declare const x = 10;
               "name": "./aRandomFileForImport",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "./aRandomFileForImport.ts"
-                }
+                "resolvedModule": "./aRandomFileForImport.ts"
               }
             },
             {
@@ -647,9 +591,7 @@ export declare const x = 10;
               "name": "./aRandomFileForImport2",
               "resolution": {
                 "resolutionId": 2,
-                "resolvedModule": {
-                  "resolvedFileName": "./aRandomFileForImport2.ts"
-                }
+                "resolvedModule": "./aRandomFileForImport2.ts"
               }
             },
             {
@@ -657,9 +599,7 @@ export declare const x = 10;
               "name": "./aFileWithImports",
               "resolution": {
                 "resolutionId": 3,
-                "resolvedModule": {
-                  "resolvedFileName": "./aFileWithImports.ts"
-                }
+                "resolvedModule": "./aFileWithImports.ts"
               }
             },
             {
@@ -667,9 +607,7 @@ export declare const x = 10;
               "name": "./bRandomFileForImport",
               "resolution": {
                 "resolutionId": 4,
-                "resolvedModule": {
-                  "resolvedFileName": "./bRandomFileForImport.ts"
-                }
+                "resolvedModule": "./bRandomFileForImport.ts"
               }
             },
             {
@@ -677,9 +615,7 @@ export declare const x = 10;
               "name": "pkg0",
               "resolution": {
                 "resolutionId": 5,
-                "resolvedModule": {
-                  "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-                }
+                "resolvedModule": "./node_modules/pkg0/index.d.ts"
               }
             }
           ]
@@ -688,7 +624,7 @@ export declare const x = 10;
     }
   },
   "version": "FakeTSVersion",
-  "size": 2284
+  "size": 2179
 }
 
 //// [/src/project/cFileWithImports.js]
@@ -729,7 +665,7 @@ export declare const x = 10;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../a/lib/lib.d.ts","./arandomfileforimport.d.ts","./arandomfileforimport2.d.ts","./afilewithimports.d.ts","./brandomfileforimport.d.ts","./bfilewithimports.d.ts","./pkg0.d.ts","./cfilewithimports.ts","./crandomfileforimport.ts","./crandomfileforimport2.ts","./","./bFileWithImports.ts","./aRandomFileForImport.ts","./aRandomFileForImport2.ts","./aFileWithImports.ts","./bRandomFileForImport.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-6821242887-export declare const x = 10;\n","-6821242887-export declare const x = 10;\n","-19407286966-export { x } from \"./aRandomFileForImport\";\nexport { x as x2 } from \"./aRandomFileForImport2\";\nexport declare const y = 10;\n","-6821242887-export declare const x = 10;\n","-7362913554-export { y } from \"./aFileWithImports\";\nexport { x } from \"./bRandomFileForImport\";\n","769951468-export interface ImportInterface0 {}",{"version":"-1053334089-import { y } from \"./bFileWithImports\";\nimport type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"}],"options":{"cacheResolutions":true,"composite":true,"module":2},"fileIdsList":[[2,3],[4,5],[6,7]],"referencedMap":[[4,1],[6,2],[8,3]],"exportedModulesMap":[[4,1],[6,2]],"semanticDiagnosticsPerFile":[1,4,2,3,6,5,8,9,10,7],"latestChangedDtsFile":"./cRandomFileForImport2.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":12}},{"resolvedModule":{"resolvedFileName":7}},{"resolvedModule":{"resolvedFileName":13}},{"resolvedModule":{"resolvedFileName":14}},{"resolvedModule":{"resolvedFileName":15}},{"resolvedModule":{"resolvedFileName":16}}],"names":["./bFileWithImports","pkg0","./aRandomFileForImport","./aRandomFileForImport2","./aFileWithImports","./bRandomFileForImport"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5],[6,6]],"modules":{"own":[[11,[1,2]]],"redirects":[{"options":{"cacheResolutions":true},"cache":[[11,[3,4,5,6]]]}]}}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../a/lib/lib.d.ts","./arandomfileforimport.d.ts","./arandomfileforimport2.d.ts","./afilewithimports.d.ts","./brandomfileforimport.d.ts","./bfilewithimports.d.ts","./pkg0.d.ts","./cfilewithimports.ts","./crandomfileforimport.ts","./crandomfileforimport2.ts","./","./bFileWithImports.ts","./aRandomFileForImport.ts","./aRandomFileForImport2.ts","./aFileWithImports.ts","./bRandomFileForImport.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-6821242887-export declare const x = 10;\n","-6821242887-export declare const x = 10;\n","-19407286966-export { x } from \"./aRandomFileForImport\";\nexport { x as x2 } from \"./aRandomFileForImport2\";\nexport declare const y = 10;\n","-6821242887-export declare const x = 10;\n","-7362913554-export { y } from \"./aFileWithImports\";\nexport { x } from \"./bRandomFileForImport\";\n","769951468-export interface ImportInterface0 {}",{"version":"-1053334089-import { y } from \"./bFileWithImports\";\nimport type { ImportInterface0 } from \"pkg0\";\n","signature":"-3531856636-export {};\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"},{"version":"-10726455937-export const x = 10;","signature":"-6821242887-export declare const x = 10;\n"}],"options":{"cacheResolutions":true,"composite":true,"module":2},"fileIdsList":[[2,3],[4,5],[6,7]],"referencedMap":[[4,1],[6,2],[8,3]],"exportedModulesMap":[[4,1],[6,2]],"semanticDiagnosticsPerFile":[1,4,2,3,6,5,8,9,10,7],"latestChangedDtsFile":"./cRandomFileForImport2.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":12},{"resolvedModule":7},{"resolvedModule":13},{"resolvedModule":14},{"resolvedModule":15},{"resolvedModule":16}],"names":["./bFileWithImports","pkg0","./aRandomFileForImport","./aRandomFileForImport2","./aFileWithImports","./bRandomFileForImport"],"resolutionEntries":[[1,1],[2,2],[3,3],[4,4],[5,5],[6,6]],"modules":{"own":[[11,[1,2]]],"redirects":[{"options":{"cacheResolutions":true},"cache":[[11,[3,4,5,6]]]}]}}},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -871,69 +807,45 @@ export declare const x = 10;
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 12
-            }
+            "resolvedModule": 12
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "./bFileWithImports.ts"
-          }
+          "resolvedModule": "./bFileWithImports.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 7
-            }
+            "resolvedModule": 7
           },
           "resolutionId": 2,
-          "resolvedModule": {
-            "resolvedFileName": "./pkg0.d.ts"
-          }
+          "resolvedModule": "./pkg0.d.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 13
-            }
+            "resolvedModule": 13
           },
           "resolutionId": 3,
-          "resolvedModule": {
-            "resolvedFileName": "./aRandomFileForImport.ts"
-          }
+          "resolvedModule": "./aRandomFileForImport.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 14
-            }
+            "resolvedModule": 14
           },
           "resolutionId": 4,
-          "resolvedModule": {
-            "resolvedFileName": "./aRandomFileForImport2.ts"
-          }
+          "resolvedModule": "./aRandomFileForImport2.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 15
-            }
+            "resolvedModule": 15
           },
           "resolutionId": 5,
-          "resolvedModule": {
-            "resolvedFileName": "./aFileWithImports.ts"
-          }
+          "resolvedModule": "./aFileWithImports.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 16
-            }
+            "resolvedModule": 16
           },
           "resolutionId": 6,
-          "resolvedModule": {
-            "resolvedFileName": "./bRandomFileForImport.ts"
-          }
+          "resolvedModule": "./bRandomFileForImport.ts"
         }
       ],
       "names": [
@@ -954,9 +866,7 @@ export declare const x = 10;
           "name": "./bFileWithImports",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "./bFileWithImports.ts"
-            }
+            "resolvedModule": "./bFileWithImports.ts"
           }
         },
         {
@@ -968,9 +878,7 @@ export declare const x = 10;
           "name": "pkg0",
           "resolution": {
             "resolutionId": 2,
-            "resolvedModule": {
-              "resolvedFileName": "./pkg0.d.ts"
-            }
+            "resolvedModule": "./pkg0.d.ts"
           }
         },
         {
@@ -982,9 +890,7 @@ export declare const x = 10;
           "name": "./aRandomFileForImport",
           "resolution": {
             "resolutionId": 3,
-            "resolvedModule": {
-              "resolvedFileName": "./aRandomFileForImport.ts"
-            }
+            "resolvedModule": "./aRandomFileForImport.ts"
           }
         },
         {
@@ -996,9 +902,7 @@ export declare const x = 10;
           "name": "./aRandomFileForImport2",
           "resolution": {
             "resolutionId": 4,
-            "resolvedModule": {
-              "resolvedFileName": "./aRandomFileForImport2.ts"
-            }
+            "resolvedModule": "./aRandomFileForImport2.ts"
           }
         },
         {
@@ -1010,9 +914,7 @@ export declare const x = 10;
           "name": "./aFileWithImports",
           "resolution": {
             "resolutionId": 5,
-            "resolvedModule": {
-              "resolvedFileName": "./aFileWithImports.ts"
-            }
+            "resolvedModule": "./aFileWithImports.ts"
           }
         },
         {
@@ -1024,9 +926,7 @@ export declare const x = 10;
           "name": "./bRandomFileForImport",
           "resolution": {
             "resolutionId": 6,
-            "resolvedModule": {
-              "resolvedFileName": "./bRandomFileForImport.ts"
-            }
+            "resolvedModule": "./bRandomFileForImport.ts"
           }
         }
       ],
@@ -1040,9 +940,7 @@ export declare const x = 10;
                 "name": "./bFileWithImports",
                 "resolution": {
                   "resolutionId": 1,
-                  "resolvedModule": {
-                    "resolvedFileName": "./bFileWithImports.ts"
-                  }
+                  "resolvedModule": "./bFileWithImports.ts"
                 }
               },
               {
@@ -1050,9 +948,7 @@ export declare const x = 10;
                 "name": "pkg0",
                 "resolution": {
                   "resolutionId": 2,
-                  "resolvedModule": {
-                    "resolvedFileName": "./pkg0.d.ts"
-                  }
+                  "resolvedModule": "./pkg0.d.ts"
                 }
               }
             ]
@@ -1072,9 +968,7 @@ export declare const x = 10;
                     "name": "./aRandomFileForImport",
                     "resolution": {
                       "resolutionId": 3,
-                      "resolvedModule": {
-                        "resolvedFileName": "./aRandomFileForImport.ts"
-                      }
+                      "resolvedModule": "./aRandomFileForImport.ts"
                     }
                   },
                   {
@@ -1082,9 +976,7 @@ export declare const x = 10;
                     "name": "./aRandomFileForImport2",
                     "resolution": {
                       "resolutionId": 4,
-                      "resolvedModule": {
-                        "resolvedFileName": "./aRandomFileForImport2.ts"
-                      }
+                      "resolvedModule": "./aRandomFileForImport2.ts"
                     }
                   },
                   {
@@ -1092,9 +984,7 @@ export declare const x = 10;
                     "name": "./aFileWithImports",
                     "resolution": {
                       "resolutionId": 5,
-                      "resolvedModule": {
-                        "resolvedFileName": "./aFileWithImports.ts"
-                      }
+                      "resolvedModule": "./aFileWithImports.ts"
                     }
                   },
                   {
@@ -1102,9 +992,7 @@ export declare const x = 10;
                     "name": "./bRandomFileForImport",
                     "resolution": {
                       "resolutionId": 6,
-                      "resolvedModule": {
-                        "resolvedFileName": "./bRandomFileForImport.ts"
-                      }
+                      "resolvedModule": "./bRandomFileForImport.ts"
                     }
                   }
                 ]
@@ -1116,7 +1004,7 @@ export declare const x = 10;
     }
   },
   "version": "FakeTSVersion",
-  "size": 2539
+  "size": 2413
 }
 
 

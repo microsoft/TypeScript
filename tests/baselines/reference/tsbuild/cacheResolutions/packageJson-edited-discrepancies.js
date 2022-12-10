@@ -175,14 +175,10 @@ CleanBuild:
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 23
-            }
+            "resolvedModule": 23
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "../src/fileB.mts"
-          }
+          "resolvedModule": "../src/fileB.mts"
         }
       ],
       "names": [
@@ -199,9 +195,7 @@ CleanBuild:
           "name": "./fileB.mjs",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "../src/fileB.mts"
-            }
+            "resolvedModule": "../src/fileB.mts"
           },
           "mode": "commonjs"
         }
@@ -215,9 +209,7 @@ CleanBuild:
               "name": "./fileB.mjs",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "../src/fileB.mts"
-                }
+                "resolvedModule": "../src/fileB.mts"
               },
               "mode": "commonjs"
             }
@@ -421,14 +413,10 @@ IncrementalBuild:
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 23
-            }
+            "resolvedModule": 23
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "../src/fileB.mts"
-          }
+          "resolvedModule": "../src/fileB.mts"
         }
       ],
       "names": [
@@ -445,9 +433,7 @@ IncrementalBuild:
           "name": "./fileB.mjs",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "../src/fileB.mts"
-            }
+            "resolvedModule": "../src/fileB.mts"
           },
           "mode": "commonjs"
         }
@@ -461,9 +447,7 @@ IncrementalBuild:
               "name": "./fileB.mjs",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "../src/fileB.mts"
-                }
+                "resolvedModule": "../src/fileB.mts"
               },
               "mode": "commonjs"
             }
@@ -685,14 +669,10 @@ CleanBuild:
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 23
-            }
+            "resolvedModule": 23
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "../src/fileB.mts"
-          }
+          "resolvedModule": "../src/fileB.mts"
         }
       ],
       "names": [
@@ -709,9 +689,7 @@ CleanBuild:
           "name": "./fileB.mjs",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "../src/fileB.mts"
-            }
+            "resolvedModule": "../src/fileB.mts"
           },
           "mode": "commonjs"
         }
@@ -725,9 +703,7 @@ CleanBuild:
               "name": "./fileB.mjs",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "../src/fileB.mts"
-                }
+                "resolvedModule": "../src/fileB.mts"
               },
               "mode": "commonjs"
             }
@@ -897,14 +873,10 @@ IncrementalBuild:
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 23
-            }
+            "resolvedModule": 23
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "../src/fileB.mts"
-          }
+          "resolvedModule": "../src/fileB.mts"
         }
       ],
       "names": [
@@ -921,9 +893,7 @@ IncrementalBuild:
           "name": "./fileB.mjs",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "../src/fileB.mts"
-            }
+            "resolvedModule": "../src/fileB.mts"
           },
           "mode": "commonjs"
         }
@@ -937,9 +907,7 @@ IncrementalBuild:
               "name": "./fileB.mjs",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "../src/fileB.mts"
-                }
+                "resolvedModule": "../src/fileB.mts"
               },
               "mode": "commonjs"
             }
@@ -1161,14 +1129,10 @@ CleanBuild:
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 23
-            }
+            "resolvedModule": 23
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "../src/fileB.mts"
-          }
+          "resolvedModule": "../src/fileB.mts"
         }
       ],
       "names": [
@@ -1185,9 +1149,7 @@ CleanBuild:
           "name": "./fileB.mjs",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "../src/fileB.mts"
-            }
+            "resolvedModule": "../src/fileB.mts"
           },
           "mode": "commonjs"
         }
@@ -1201,9 +1163,7 @@ CleanBuild:
               "name": "./fileB.mjs",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "../src/fileB.mts"
-                }
+                "resolvedModule": "../src/fileB.mts"
               },
               "mode": "commonjs"
             }
@@ -1373,14 +1333,10 @@ IncrementalBuild:
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 23
-            }
+            "resolvedModule": 23
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "../src/fileB.mts"
-          }
+          "resolvedModule": "../src/fileB.mts"
         }
       ],
       "names": [
@@ -1397,9 +1353,7 @@ IncrementalBuild:
           "name": "./fileB.mjs",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "../src/fileB.mts"
-            }
+            "resolvedModule": "../src/fileB.mts"
           },
           "mode": "commonjs"
         }
@@ -1413,9 +1367,7 @@ IncrementalBuild:
               "name": "./fileB.mjs",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "../src/fileB.mts"
-                }
+                "resolvedModule": "../src/fileB.mts"
               },
               "mode": "commonjs"
             }

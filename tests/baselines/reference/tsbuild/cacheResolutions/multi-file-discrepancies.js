@@ -136,7 +136,8 @@ CleanBuild:
             },
             "affectingLocations": [
               12
-            ]
+            ],
+            "notPrimary": true
           },
           "resolutionId": 2,
           "resolvedTypeReferenceDirective": {
@@ -149,7 +150,8 @@ CleanBuild:
           },
           "affectingLocations": [
             "./node_modules/pkg2/package.json"
-          ]
+          ],
+          "notPrimary": true
         },
         {
           "original": {
@@ -163,7 +165,8 @@ CleanBuild:
             },
             "affectingLocations": [
               13
-            ]
+            ],
+            "notPrimary": true
           },
           "resolutionId": 3,
           "resolvedTypeReferenceDirective": {
@@ -176,20 +179,15 @@ CleanBuild:
           },
           "affectingLocations": [
             "./node_modules/pkg3/package.json"
-          ]
+          ],
+          "notPrimary": true
         },
         {
           "original": {
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": 9
-            }
+            "resolvedTypeReferenceDirective": 9
           },
           "resolutionId": 4,
-          "resolvedTypeReferenceDirective": {
-            "primary": true,
-            "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts"
-          }
+          "resolvedTypeReferenceDirective": "./node_modules/@types/pkg4/index.d.ts"
         }
       ],
       "names": [
@@ -257,7 +255,8 @@ CleanBuild:
             },
             "affectingLocations": [
               "./node_modules/pkg2/package.json"
-            ]
+            ],
+            "notPrimary": true
           },
           "mode": "esnext"
         },
@@ -281,7 +280,8 @@ CleanBuild:
             },
             "affectingLocations": [
               "./node_modules/pkg3/package.json"
-            ]
+            ],
+            "notPrimary": true
           },
           "mode": "commonjs"
         },
@@ -294,10 +294,7 @@ CleanBuild:
           "name": "pkg4",
           "resolution": {
             "resolutionId": 4,
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts"
-            }
+            "resolvedTypeReferenceDirective": "./node_modules/@types/pkg4/index.d.ts"
           }
         }
       ],
@@ -346,7 +343,8 @@ CleanBuild:
                 },
                 "affectingLocations": [
                   "./node_modules/pkg2/package.json"
-                ]
+                ],
+                "notPrimary": true
               },
               "mode": "esnext"
             },
@@ -365,7 +363,8 @@ CleanBuild:
                 },
                 "affectingLocations": [
                   "./node_modules/pkg3/package.json"
-                ]
+                ],
+                "notPrimary": true
               },
               "mode": "commonjs"
             },
@@ -374,10 +373,7 @@ CleanBuild:
               "name": "pkg4",
               "resolution": {
                 "resolutionId": 4,
-                "resolvedTypeReferenceDirective": {
-                  "primary": true,
-                  "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts"
-                }
+                "resolvedTypeReferenceDirective": "./node_modules/@types/pkg4/index.d.ts"
               }
             }
           ]
@@ -522,7 +518,8 @@ IncrementalBuild:
             },
             "affectingLocations": [
               12
-            ]
+            ],
+            "notPrimary": true
           },
           "resolutionId": 2,
           "resolvedTypeReferenceDirective": {
@@ -535,7 +532,8 @@ IncrementalBuild:
           },
           "affectingLocations": [
             "./node_modules/pkg2/package.json"
-          ]
+          ],
+          "notPrimary": true
         },
         {
           "original": {
@@ -549,7 +547,8 @@ IncrementalBuild:
             },
             "affectingLocations": [
               13
-            ]
+            ],
+            "notPrimary": true
           },
           "resolutionId": 3,
           "resolvedTypeReferenceDirective": {
@@ -562,20 +561,15 @@ IncrementalBuild:
           },
           "affectingLocations": [
             "./node_modules/pkg3/package.json"
-          ]
+          ],
+          "notPrimary": true
         },
         {
           "original": {
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": 9
-            }
+            "resolvedTypeReferenceDirective": 9
           },
           "resolutionId": 4,
-          "resolvedTypeReferenceDirective": {
-            "primary": true,
-            "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts"
-          }
+          "resolvedTypeReferenceDirective": "./node_modules/@types/pkg4/index.d.ts"
         }
       ],
       "names": [
@@ -643,7 +637,8 @@ IncrementalBuild:
             },
             "affectingLocations": [
               "./node_modules/pkg2/package.json"
-            ]
+            ],
+            "notPrimary": true
           },
           "mode": "esnext"
         },
@@ -667,7 +662,8 @@ IncrementalBuild:
             },
             "affectingLocations": [
               "./node_modules/pkg3/package.json"
-            ]
+            ],
+            "notPrimary": true
           },
           "mode": "commonjs"
         },
@@ -680,10 +676,7 @@ IncrementalBuild:
           "name": "pkg4",
           "resolution": {
             "resolutionId": 4,
-            "resolvedTypeReferenceDirective": {
-              "primary": true,
-              "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts"
-            }
+            "resolvedTypeReferenceDirective": "./node_modules/@types/pkg4/index.d.ts"
           }
         }
       ],
@@ -732,7 +725,8 @@ IncrementalBuild:
                 },
                 "affectingLocations": [
                   "./node_modules/pkg2/package.json"
-                ]
+                ],
+                "notPrimary": true
               },
               "mode": "esnext"
             },
@@ -751,7 +745,8 @@ IncrementalBuild:
                 },
                 "affectingLocations": [
                   "./node_modules/pkg3/package.json"
-                ]
+                ],
+                "notPrimary": true
               },
               "mode": "commonjs"
             },
@@ -760,10 +755,7 @@ IncrementalBuild:
               "name": "pkg4",
               "resolution": {
                 "resolutionId": 4,
-                "resolvedTypeReferenceDirective": {
-                  "primary": true,
-                  "resolvedFileName": "./node_modules/@types/pkg4/index.d.ts"
-                }
+                "resolvedTypeReferenceDirective": "./node_modules/@types/pkg4/index.d.ts"
               }
             }
           ]

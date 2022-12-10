@@ -78,6 +78,7 @@ import {
     OldBuildInfoProgramConstructor,
     OldBuildInfoProgramHost,
     outFile,
+    PackageId,
     PackageJsonInfoCache,
     PackageJsonInfoContents,
     PackageJsonScope,
@@ -953,23 +954,18 @@ export type ProgramBuildInfoEmitSignature = ProgramBuildInfoFileId | [fileId: Pr
  */
 export type ProgramMultiFileEmitBuildInfoFileInfo = string | ProgramMultiFileEmitBuildInfoBuilderStateFileInfo;
 /** @internal */
-export interface ProgramBuildInfoResolutionBase {
+export interface ProgramBuildInfoResolved {
     readonly resolvedFileName: ProgramBuildInfoAbsoluteFileId;
     readonly originalPath: ProgramBuildInfoAbsoluteFileId | undefined;
-    readonly primary: true | undefined;
-    extension: undefined;
-    isExternalLibraryImport: undefined;
+    readonly packageId: PackageId | undefined;
 }
 /** @internal */
-export type ProgramBuildInfoResolvedModuleFull = Omit<ResolvedModuleFull, "resolvedFileName" | "isExternalLibraryImport" | "originalPath" | "extension"> & ProgramBuildInfoResolutionBase;
-/** @internal */
-export type ProgramBuildInfoResolvedTypeReferenceDirective = Omit<ResolvedTypeReferenceDirective, "resolvedFileName" | "isExternalLibraryImport" | "originalPath" | "primary"> & ProgramBuildInfoResolutionBase;
-/** @internal */
 export interface ProgramBuildInfoResolution {
-    readonly resolvedModule: ProgramBuildInfoResolvedModuleFull | undefined;
-    readonly resolvedTypeReferenceDirective: ProgramBuildInfoResolvedTypeReferenceDirective | undefined;
+    readonly resolvedModule: ProgramBuildInfoAbsoluteFileId | ProgramBuildInfoResolved | undefined;
+    readonly resolvedTypeReferenceDirective: ProgramBuildInfoAbsoluteFileId | ProgramBuildInfoResolved | undefined;
     readonly affectingLocations: readonly ProgramBuildInfoAbsoluteFileId[] | undefined;
     readonly resolutionDiagnostics: readonly ReusableDiagnostic[] | undefined;
+    notPrimary: true | undefined;
 }
 /** @internal */
 export type ProgramBuildInfoHash = ProgramBuildInfoAbsoluteFileId | [fileId: ProgramBuildInfoAbsoluteFileId, hash: string];
@@ -1426,11 +1422,13 @@ function getBuildInfo(state: BuilderProgramState, host: BuilderProgramHost, bund
     }
 
     function toProgramBuildInfoResolution(resolution: ResolvedModuleWithFailedLookupLocations | ResolvedTypeReferenceDirectiveWithFailedLookupLocations): ProgramBuildInfoResolution {
+        const resolvedTypeReferenceDirective = (resolution as ResolvedTypeReferenceDirectiveWithFailedLookupLocations).resolvedTypeReferenceDirective;
         return {
             resolvedModule: toProgramBuildInfoResolved((resolution as ResolvedModuleWithFailedLookupLocations).resolvedModule),
-            resolvedTypeReferenceDirective: toProgramBuildInfoResolved((resolution as ResolvedTypeReferenceDirectiveWithFailedLookupLocations).resolvedTypeReferenceDirective),
+            resolvedTypeReferenceDirective: toProgramBuildInfoResolved(resolvedTypeReferenceDirective),
             affectingLocations: toReadonlyArrayOrUndefined(resolution.affectingLocations, toAffectedFileId),
             resolutionDiagnostics: toReadonlyArrayOrUndefined(resolution.resolutionDiagnostics, toReusableDiagnostic),
+            notPrimary: resolvedTypeReferenceDirective && !resolvedTypeReferenceDirective.primary ? true : undefined,
         };
     }
 
@@ -1455,17 +1453,12 @@ function getBuildInfo(state: BuilderProgramState, host: BuilderProgramHost, bund
         return fileId;
     }
 
-    function toProgramBuildInfoResolved(resolved: ResolvedModuleFull | undefined): ProgramBuildInfoResolvedModuleFull | undefined;
-    function toProgramBuildInfoResolved(resolved: ResolvedTypeReferenceDirective | undefined): ProgramBuildInfoResolvedTypeReferenceDirective | undefined;
-    function toProgramBuildInfoResolved(resolved: ResolvedModuleFull | ResolvedTypeReferenceDirective | undefined): ProgramBuildInfoResolvedModuleFull | ProgramBuildInfoResolvedTypeReferenceDirective | undefined {
-        return resolved ? {
-            ...resolved,
-            resolvedFileName: toAbsoluteFileId(resolved.resolvedFileName!),
-            isExternalLibraryImport: undefined,
-            originalPath: resolved.originalPath ? toAbsoluteFileId(resolved.originalPath) : undefined,
-            primary: (resolved as ResolvedTypeReferenceDirective).primary || undefined,
-            extension: undefined,
-        } : undefined;
+    function toProgramBuildInfoResolved(resolved: ResolvedModuleFull | ResolvedTypeReferenceDirective | undefined): ProgramBuildInfoAbsoluteFileId | ProgramBuildInfoResolved | undefined {
+        if (!resolved) return undefined;
+        const resolvedFileName = toAbsoluteFileId(resolved.resolvedFileName!);
+        const originalPath = resolved.originalPath ? toAbsoluteFileId(resolved.originalPath) : undefined;
+        if (!originalPath && !resolved.packageId) return resolvedFileName;
+        return { resolvedFileName, originalPath, packageId: resolved.packageId };
     }
 }
 
@@ -2389,19 +2382,25 @@ export function createOldBuildInfoProgram(
         return resuableCacheResolutions!.cache.names[nameId - 1];
     }
 
+    function toResolvedFileName(resolved: ProgramBuildInfoAbsoluteFileId | ProgramBuildInfoResolved) {
+        return isNumber(resolved) ? resolved : resolved.resolvedFileName;
+    }
+
+    function toOriginalOrResolvedFileName(resolved: ProgramBuildInfoAbsoluteFileId | ProgramBuildInfoResolved) {
+        return isNumber(resolved) ? resolved : resolved.originalPath || resolved.resolvedFileName;
+    }
+
     function toOriginalOrResolvedModuleFileName(resolutionId: ProgramBuildInfoResolutionId): string {
         return originalPathOrResolvedFileNames?.[resolutionId - 1] ??
             ((originalPathOrResolvedFileNames ??= new Array(resuableCacheResolutions!.cache.resolutions.length))[resolutionId - 1] = resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath(
-                resuableCacheResolutions!.cache.resolutions[resolutionId - 1].resolvedModule!.originalPath ||
-                resuableCacheResolutions!.cache.resolutions[resolutionId - 1].resolvedModule!.resolvedFileName
+                toOriginalOrResolvedFileName(resuableCacheResolutions!.cache.resolutions[resolutionId - 1].resolvedModule!)
             ));
     }
 
     function toOriginalOrResolvedTypeReferenceFileName(resolutionId: ProgramBuildInfoResolutionId): string {
         return originalPathOrResolvedFileNames?.[resolutionId - 1] ??
             ((originalPathOrResolvedFileNames ??= new Array(resuableCacheResolutions!.cache.resolutions.length))[resolutionId - 1] = resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath(
-                resuableCacheResolutions!.cache.resolutions[resolutionId - 1].resolvedTypeReferenceDirective!.originalPath ||
-                resuableCacheResolutions!.cache.resolutions[resolutionId - 1].resolvedTypeReferenceDirective!.resolvedFileName
+                toOriginalOrResolvedFileName(resuableCacheResolutions!.cache.resolutions[resolutionId - 1].resolvedTypeReferenceDirective!)
             ));
     }
 
@@ -2420,7 +2419,7 @@ export function createOldBuildInfoProgram(
         resolutions ??= new Array(resuableCacheResolutions!.cache.resolutions.length);
         const resolution = resuableCacheResolutions!.cache.resolutions[resolutionId - 1];
         const resolvedFileName = resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath(
-            resolution.resolvedModule?.resolvedFileName || resolution.resolvedTypeReferenceDirective!.resolvedFileName
+            toResolvedFileName(resolution.resolvedModule || resolution.resolvedTypeReferenceDirective!)
         );
         let affectingLocations: string[] | undefined;
         if (fileExists(resolvedFileName) && every(resolution.affectingLocations, fileId => {
@@ -2431,8 +2430,8 @@ export function createOldBuildInfoProgram(
             // Type Ref doesnt need extension
             const extenstion = resolution.resolvedModule ? extensionFromPath(resolvedFileName) : undefined!;
             return resolutions[resolutionId - 1] = {
-                resolvedModule: toResolved(resolution.resolvedModule, resolvedFileName, extenstion),
-                resolvedTypeReferenceDirective: toResolved(resolution.resolvedTypeReferenceDirective, resolvedFileName, extenstion),
+                resolvedModule: toResolved(resolution.resolvedModule, resolvedFileName, extenstion, /*primary*/ undefined),
+                resolvedTypeReferenceDirective: toResolved(resolution.resolvedTypeReferenceDirective, resolvedFileName, extenstion, !resolution.notPrimary),
                 affectingLocations,
                 resolutionDiagnostics: resolution.resolutionDiagnostics?.length ? convertToDiagnostics(resolution.resolutionDiagnostics, /*newProgram*/ undefined!) as Diagnostic[] : undefined
             };
@@ -2442,18 +2441,23 @@ export function createOldBuildInfoProgram(
     }
 
     function toResolved(
-        resolved: ProgramBuildInfoResolvedModuleFull & ProgramBuildInfoResolvedTypeReferenceDirective | undefined,
+        resolved: ProgramBuildInfoAbsoluteFileId | ProgramBuildInfoResolved | undefined,
         resolvedFileName: string,
         extension: Extension,
+        primary: boolean | undefined,
     ): (ResolvedModuleFull & ResolvedTypeReferenceDirective) | undefined {
         if (!resolved) return undefined;
-        const originalPath = resolved.originalPath ? resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath(resolved.originalPath) : undefined;
+        const originalPath = isNumber(resolved) || !resolved.originalPath ?
+            undefined :
+            resuableCacheResolutions!.getProgramBuildInfoFilePathDecoder().toFileAbsolutePath(resolved.originalPath);
+        const packageId = isNumber(resolved) ? undefined : resolved.packageId;
         return {
-            ...resolved,
             resolvedFileName,
             originalPath,
+            packageId,
             isExternalLibraryImport: pathContainsNodeModules(originalPath || resolvedFileName),
             extension,
+            primary,
         };
     }
 }

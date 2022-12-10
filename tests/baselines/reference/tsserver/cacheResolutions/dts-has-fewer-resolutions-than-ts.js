@@ -195,7 +195,7 @@ export declare function returnAnotherClass(): anotherClass;
 
 
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/myclass.d.ts","../core/index.d.ts","../core/anotherclass.d.ts","./index.ts","./","../core/myClass.ts","../core/index.ts","../core/anotherClass.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-7432826827-export declare class myClass {\n}\n","-4193260373-export declare function bar(): number;\n","-6928009824-export declare class anotherClass {\n}\n",{"version":"-9720705499-import { myClass } from \"../core/myClass\";\nimport { bar } from \"../core\";\nimport { anotherClass } from \"../core/anotherClass\";\nexport function returnMyClass() {\n    bar();\n    return new myClass();\n}\nexport function returnAnotherClass() {\n    return new anotherClass();\n}\n","signature":"-26318514585-import { myClass } from \"../core/myClass\";\nimport { anotherClass } from \"../core/anotherClass\";\nexport declare function returnMyClass(): myClass;\nexport declare function returnAnotherClass(): anotherClass;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2,3,4],[2,4]],"referencedMap":[[5,1]],"exportedModulesMap":[[5,2]],"semanticDiagnosticsPerFile":[1,4,3,2,5],"latestChangedDtsFile":"./index.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":7}},{"resolvedModule":{"resolvedFileName":8}},{"resolvedModule":{"resolvedFileName":9}}],"names":["../core/myClass","../core","../core/anotherClass"],"resolutionEntries":[[1,1],[2,2],[3,3]],"modules":[[6,[1,2,3]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/myclass.d.ts","../core/index.d.ts","../core/anotherclass.d.ts","./index.ts","./","../core/myClass.ts","../core/index.ts","../core/anotherClass.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-7432826827-export declare class myClass {\n}\n","-4193260373-export declare function bar(): number;\n","-6928009824-export declare class anotherClass {\n}\n",{"version":"-9720705499-import { myClass } from \"../core/myClass\";\nimport { bar } from \"../core\";\nimport { anotherClass } from \"../core/anotherClass\";\nexport function returnMyClass() {\n    bar();\n    return new myClass();\n}\nexport function returnAnotherClass() {\n    return new anotherClass();\n}\n","signature":"-26318514585-import { myClass } from \"../core/myClass\";\nimport { anotherClass } from \"../core/anotherClass\";\nexport declare function returnMyClass(): myClass;\nexport declare function returnAnotherClass(): anotherClass;\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2,3,4],[2,4]],"referencedMap":[[5,1]],"exportedModulesMap":[[5,2]],"semanticDiagnosticsPerFile":[1,4,3,2,5],"latestChangedDtsFile":"./index.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":7},{"resolvedModule":8},{"resolvedModule":9}],"names":["../core/myClass","../core","../core/anotherClass"],"resolutionEntries":[[1,1],[2,2],[3,3]],"modules":[[6,[1,2,3]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -282,36 +282,24 @@ export declare function returnAnotherClass(): anotherClass;
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 7
-            }
+            "resolvedModule": 7
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "../core/myClass.ts"
-          }
+          "resolvedModule": "../core/myClass.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 8
-            }
+            "resolvedModule": 8
           },
           "resolutionId": 2,
-          "resolvedModule": {
-            "resolvedFileName": "../core/index.ts"
-          }
+          "resolvedModule": "../core/index.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 9
-            }
+            "resolvedModule": 9
           },
           "resolutionId": 3,
-          "resolvedModule": {
-            "resolvedFileName": "../core/anotherClass.ts"
-          }
+          "resolvedModule": "../core/anotherClass.ts"
         }
       ],
       "names": [
@@ -329,9 +317,7 @@ export declare function returnAnotherClass(): anotherClass;
           "name": "../core/myClass",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "../core/myClass.ts"
-            }
+            "resolvedModule": "../core/myClass.ts"
           }
         },
         {
@@ -343,9 +329,7 @@ export declare function returnAnotherClass(): anotherClass;
           "name": "../core",
           "resolution": {
             "resolutionId": 2,
-            "resolvedModule": {
-              "resolvedFileName": "../core/index.ts"
-            }
+            "resolvedModule": "../core/index.ts"
           }
         },
         {
@@ -357,9 +341,7 @@ export declare function returnAnotherClass(): anotherClass;
           "name": "../core/anotherClass",
           "resolution": {
             "resolutionId": 3,
-            "resolvedModule": {
-              "resolvedFileName": "../core/anotherClass.ts"
-            }
+            "resolvedModule": "../core/anotherClass.ts"
           }
         }
       ],
@@ -372,9 +354,7 @@ export declare function returnAnotherClass(): anotherClass;
               "name": "../core/myClass",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "../core/myClass.ts"
-                }
+                "resolvedModule": "../core/myClass.ts"
               }
             },
             {
@@ -382,9 +362,7 @@ export declare function returnAnotherClass(): anotherClass;
               "name": "../core",
               "resolution": {
                 "resolutionId": 2,
-                "resolvedModule": {
-                  "resolvedFileName": "../core/index.ts"
-                }
+                "resolvedModule": "../core/index.ts"
               }
             },
             {
@@ -392,9 +370,7 @@ export declare function returnAnotherClass(): anotherClass;
               "name": "../core/anotherClass",
               "resolution": {
                 "resolutionId": 3,
-                "resolvedModule": {
-                  "resolvedFileName": "../core/anotherClass.ts"
-                }
+                "resolvedModule": "../core/anotherClass.ts"
               }
             }
           ]
@@ -403,7 +379,7 @@ export declare function returnAnotherClass(): anotherClass;
     }
   },
   "version": "FakeTSVersion",
-  "size": 1874
+  "size": 1811
 }
 
 //// [/user/username/projects/sample1/tests/index.js]
@@ -418,7 +394,7 @@ export {};
 
 
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/myclass.d.ts","../core/anotherclass.d.ts","../logic/index.d.ts","./index.ts","../logic","../core/myClass.ts","../core/anotherClass.ts","./","../logic/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-7432826827-export declare class myClass {\n}\n","-6928009824-export declare class anotherClass {\n}\n","-26318514585-import { myClass } from \"../core/myClass\";\nimport { anotherClass } from \"../core/anotherClass\";\nexport declare function returnMyClass(): myClass;\nexport declare function returnAnotherClass(): anotherClass;\n",{"version":"-1418876836-import { returnMyClass } from \"../logic\";\nreturnMyClass();\n","signature":"-3531856636-export {};\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2,3],[4]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"latestChangedDtsFile":"./index.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":7}},{"resolvedModule":{"resolvedFileName":8}},{"resolvedModule":{"resolvedFileName":10}}],"names":["../core/myClass","../core/anotherClass","../logic"],"resolutionEntries":[[1,1],[2,2],[3,3]],"modules":[[6,[1,2]],[9,[3]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/myclass.d.ts","../core/anotherclass.d.ts","../logic/index.d.ts","./index.ts","../logic","../core/myClass.ts","../core/anotherClass.ts","./","../logic/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-7432826827-export declare class myClass {\n}\n","-6928009824-export declare class anotherClass {\n}\n","-26318514585-import { myClass } from \"../core/myClass\";\nimport { anotherClass } from \"../core/anotherClass\";\nexport declare function returnMyClass(): myClass;\nexport declare function returnAnotherClass(): anotherClass;\n",{"version":"-1418876836-import { returnMyClass } from \"../logic\";\nreturnMyClass();\n","signature":"-3531856636-export {};\n"}],"options":{"cacheResolutions":true,"composite":true},"fileIdsList":[[2,3],[4]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"latestChangedDtsFile":"./index.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":7},{"resolvedModule":8},{"resolvedModule":10}],"names":["../core/myClass","../core/anotherClass","../logic"],"resolutionEntries":[[1,1],[2,2],[3,3]],"modules":[[6,[1,2]],[9,[3]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -506,36 +482,24 @@ export {};
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 7
-            }
+            "resolvedModule": 7
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "../core/myClass.ts"
-          }
+          "resolvedModule": "../core/myClass.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 8
-            }
+            "resolvedModule": 8
           },
           "resolutionId": 2,
-          "resolvedModule": {
-            "resolvedFileName": "../core/anotherClass.ts"
-          }
+          "resolvedModule": "../core/anotherClass.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 10
-            }
+            "resolvedModule": 10
           },
           "resolutionId": 3,
-          "resolvedModule": {
-            "resolvedFileName": "../logic/index.ts"
-          }
+          "resolvedModule": "../logic/index.ts"
         }
       ],
       "names": [
@@ -553,9 +517,7 @@ export {};
           "name": "../core/myClass",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "../core/myClass.ts"
-            }
+            "resolvedModule": "../core/myClass.ts"
           }
         },
         {
@@ -567,9 +529,7 @@ export {};
           "name": "../core/anotherClass",
           "resolution": {
             "resolutionId": 2,
-            "resolvedModule": {
-              "resolvedFileName": "../core/anotherClass.ts"
-            }
+            "resolvedModule": "../core/anotherClass.ts"
           }
         },
         {
@@ -581,9 +541,7 @@ export {};
           "name": "../logic",
           "resolution": {
             "resolutionId": 3,
-            "resolvedModule": {
-              "resolvedFileName": "../logic/index.ts"
-            }
+            "resolvedModule": "../logic/index.ts"
           }
         }
       ],
@@ -596,9 +554,7 @@ export {};
               "name": "../core/myClass",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "../core/myClass.ts"
-                }
+                "resolvedModule": "../core/myClass.ts"
               }
             },
             {
@@ -606,9 +562,7 @@ export {};
               "name": "../core/anotherClass",
               "resolution": {
                 "resolutionId": 2,
-                "resolvedModule": {
-                  "resolvedFileName": "../core/anotherClass.ts"
-                }
+                "resolvedModule": "../core/anotherClass.ts"
               }
             }
           ]
@@ -621,9 +575,7 @@ export {};
               "name": "../logic",
               "resolution": {
                 "resolutionId": 3,
-                "resolvedModule": {
-                  "resolvedFileName": "../logic/index.ts"
-                }
+                "resolvedModule": "../logic/index.ts"
               }
             }
           ]
@@ -632,7 +584,7 @@ export {};
     }
   },
   "version": "FakeTSVersion",
-  "size": 1644
+  "size": 1581
 }
 
 

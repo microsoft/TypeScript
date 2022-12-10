@@ -538,16 +538,14 @@ type ReadableProgramBuildInfoFileInfo<T> = Omit<ts.BuilderState.FileInfo, "impli
     impliedFormat: string | undefined;
     original: T | undefined;
 };
-interface ReadableProgramBuildInfoResolutionBase {
+type ReadableProgramBuildInfoResolved = string | Omit<ts.ProgramBuildInfoResolved, "resolvedFileName" | "originalPath"> & {
     readonly resolvedFileName: string;
     readonly originalPath: string | undefined;
-}
-type ReadableProgramBuildInfoResolvedModuleFull = Omit<ts.ProgramBuildInfoResolvedModuleFull, "resolvedFileName" | "originalPath"> & ReadableProgramBuildInfoResolutionBase;
-type ReadableProgramBuildInfoResolvedTypeReferenceDirective = Omit<ts.ProgramBuildInfoResolvedTypeReferenceDirective, "resolvedFileName" | "originalPath"> & ReadableProgramBuildInfoResolutionBase;
+};
 type ReadableProgramBuildInfoResolution = Omit<ts.ProgramBuildInfoResolution, "resolvedModule" | "resolvedTypeReferenceDirective" | "failedLookupLocations" | "affectingLocations"> & {
     readonly resolutionId: ts.ProgramBuildInfoResolutionId;
-    readonly resolvedModule: ReadableProgramBuildInfoResolvedModuleFull | undefined;
-    readonly resolvedTypeReferenceDirective: ReadableProgramBuildInfoResolvedTypeReferenceDirective | undefined;
+    readonly resolvedModule: ReadableProgramBuildInfoResolved | undefined;
+    readonly resolvedTypeReferenceDirective: ReadableProgramBuildInfoResolved | undefined;
     readonly affectingLocations: readonly string[] | undefined;
 };
 type ReadableWithOriginal<T, O> = T & {
@@ -792,14 +790,12 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
         };
     }
 
-    function toReadableProgramBuildInfoResolved(resolved: ts.ProgramBuildInfoResolvedModuleFull | undefined): ReadableProgramBuildInfoResolvedModuleFull | undefined;
-    function toReadableProgramBuildInfoResolved(resolved: ts.ProgramBuildInfoResolvedTypeReferenceDirective | undefined): ReadableProgramBuildInfoResolvedTypeReferenceDirective | undefined;
-    function toReadableProgramBuildInfoResolved(resolved: ts.ProgramBuildInfoResolvedModuleFull | ts.ProgramBuildInfoResolvedTypeReferenceDirective | undefined): ReadableProgramBuildInfoResolvedModuleFull | ReadableProgramBuildInfoResolvedTypeReferenceDirective | undefined {
-        return resolved && {
+    function toReadableProgramBuildInfoResolved(resolved: ts.ProgramBuildInfoAbsoluteFileId | ts.ProgramBuildInfoResolved | undefined): ReadableProgramBuildInfoResolved | undefined {
+        return resolved && (ts.isNumber(resolved) ? toFileName(resolved) : {
             ...resolved,
             resolvedFileName: toFileName(resolved.resolvedFileName),
-            originalPath: resolved.originalPath && toFileName(resolved.originalPath)
-        };
+            originalPath: resolved.originalPath ? toFileName(resolved.originalPath) : undefined,
+        });
     }
 
     function toName(nameId: ts.ProgramBuildInfoResolutionNameId): string {

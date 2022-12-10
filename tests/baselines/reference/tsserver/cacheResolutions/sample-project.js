@@ -235,7 +235,7 @@ export declare const m: typeof mod;
 
 
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","./index.ts","./","../core/index.ts","../core/anotherModule.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","-9234818176-export declare const World = \"hello\";\n",{"version":"-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"}],"options":{"cacheResolutions":true,"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"sourceMap":true},"fileIdsList":[[2,3],[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,2]],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"./index.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":6}},{"resolvedModule":{"resolvedFileName":7}}],"names":["../core/index","../core/anotherModule"],"resolutionEntries":[[1,1],[2,2]],"modules":[[5,[1,2]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","./index.ts","./","../core/index.ts","../core/anotherModule.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","-9234818176-export declare const World = \"hello\";\n",{"version":"-5786964698-import * as c from '../core/index';\r\nexport function getSecondsInDay() {\r\n    return c.multiply(10, 15);\r\n}\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"}],"options":{"cacheResolutions":true,"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true,"sourceMap":true},"fileIdsList":[[2,3],[3]],"referencedMap":[[4,1]],"exportedModulesMap":[[4,2]],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"./index.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":6},{"resolvedModule":7}],"names":["../core/index","../core/anotherModule"],"resolutionEntries":[[1,1],[2,2]],"modules":[[5,[1,2]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/logic/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -315,25 +315,17 @@ export declare const m: typeof mod;
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 6
-            }
+            "resolvedModule": 6
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "../core/index.ts"
-          }
+          "resolvedModule": "../core/index.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 7
-            }
+            "resolvedModule": 7
           },
           "resolutionId": 2,
-          "resolvedModule": {
-            "resolvedFileName": "../core/anotherModule.ts"
-          }
+          "resolvedModule": "../core/anotherModule.ts"
         }
       ],
       "names": [
@@ -350,9 +342,7 @@ export declare const m: typeof mod;
           "name": "../core/index",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "../core/index.ts"
-            }
+            "resolvedModule": "../core/index.ts"
           }
         },
         {
@@ -364,9 +354,7 @@ export declare const m: typeof mod;
           "name": "../core/anotherModule",
           "resolution": {
             "resolutionId": 2,
-            "resolvedModule": {
-              "resolvedFileName": "../core/anotherModule.ts"
-            }
+            "resolvedModule": "../core/anotherModule.ts"
           }
         }
       ],
@@ -379,9 +367,7 @@ export declare const m: typeof mod;
               "name": "../core/index",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "../core/index.ts"
-                }
+                "resolvedModule": "../core/index.ts"
               }
             },
             {
@@ -389,9 +375,7 @@ export declare const m: typeof mod;
               "name": "../core/anotherModule",
               "resolution": {
                 "resolutionId": 2,
-                "resolvedModule": {
-                  "resolvedFileName": "../core/anotherModule.ts"
-                }
+                "resolvedModule": "../core/anotherModule.ts"
               }
             }
           ]
@@ -400,7 +384,7 @@ export declare const m: typeof mod;
     }
   },
   "version": "FakeTSVersion",
-  "size": 1774
+  "size": 1732
 }
 
 //// [/user/username/projects/sample1/tests/index.js]
@@ -421,7 +405,7 @@ export declare const m: typeof mod;
 
 
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","../logic/index.d.ts","./index.ts","../logic","../core/anotherModule.ts","./","../core/index.ts","../logic/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","-9234818176-export declare const World = \"hello\";\n","-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",{"version":"12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"2702201019-import * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"}],"options":{"cacheResolutions":true,"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true},"fileIdsList":[[3],[2,3,4]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1],[5,1]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"latestChangedDtsFile":"./index.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":{"resolvedFileName":7}},{"resolvedModule":{"resolvedFileName":9}},{"resolvedModule":{"resolvedFileName":10}},{"resolvedModule":{"resolvedFileName":7}}],"names":["../core/anotherModule","../core/index","../logic/index"],"resolutionEntries":[[1,1],[2,2],[3,3],[1,4]],"modules":[[6,[1]],[8,[2,3,4]]]}},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../core/index.d.ts","../core/anothermodule.d.ts","../logic/index.d.ts","./index.ts","../logic","../core/anotherModule.ts","./","../core/index.ts","../logic/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-7362568283-export declare const someString: string;\nexport declare function leftPad(s: string, n: number): string;\nexport declare function multiply(a: number, b: number): number;\n","-9234818176-export declare const World = \"hello\";\n","-9659407152-export declare function getSecondsInDay(): number;\nimport * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n",{"version":"12336236525-import * as c from '../core/index';\r\nimport * as logic from '../logic/index';\r\n\r\nc.leftPad(\"\", 10);\r\nlogic.getSecondsInDay();\r\n\r\nimport * as mod from '../core/anotherModule';\r\nexport const m = mod;\r\n","signature":"2702201019-import * as mod from '../core/anotherModule';\nexport declare const m: typeof mod;\n"}],"options":{"cacheResolutions":true,"composite":true,"declaration":true,"forceConsistentCasingInFileNames":true,"skipDefaultLibCheck":true},"fileIdsList":[[3],[2,3,4]],"referencedMap":[[4,1],[5,2]],"exportedModulesMap":[[4,1],[5,1]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"latestChangedDtsFile":"./index.d.ts","cacheResolutions":{"resolutions":[{"resolvedModule":7},{"resolvedModule":9},{"resolvedModule":10},{"resolvedModule":7}],"names":["../core/anotherModule","../core/index","../logic/index"],"resolutionEntries":[[1,1],[2,2],[3,3],[1,4]],"modules":[[6,[1]],[8,[2,3,4]]]}},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/sample1/tests/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -516,47 +500,31 @@ export declare const m: typeof mod;
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 7
-            }
+            "resolvedModule": 7
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "../core/anotherModule.ts"
-          }
+          "resolvedModule": "../core/anotherModule.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 9
-            }
+            "resolvedModule": 9
           },
           "resolutionId": 2,
-          "resolvedModule": {
-            "resolvedFileName": "../core/index.ts"
-          }
+          "resolvedModule": "../core/index.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 10
-            }
+            "resolvedModule": 10
           },
           "resolutionId": 3,
-          "resolvedModule": {
-            "resolvedFileName": "../logic/index.ts"
-          }
+          "resolvedModule": "../logic/index.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 7
-            }
+            "resolvedModule": 7
           },
           "resolutionId": 4,
-          "resolvedModule": {
-            "resolvedFileName": "../core/anotherModule.ts"
-          }
+          "resolvedModule": "../core/anotherModule.ts"
         }
       ],
       "names": [
@@ -574,9 +542,7 @@ export declare const m: typeof mod;
           "name": "../core/anotherModule",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "../core/anotherModule.ts"
-            }
+            "resolvedModule": "../core/anotherModule.ts"
           }
         },
         {
@@ -588,9 +554,7 @@ export declare const m: typeof mod;
           "name": "../core/index",
           "resolution": {
             "resolutionId": 2,
-            "resolvedModule": {
-              "resolvedFileName": "../core/index.ts"
-            }
+            "resolvedModule": "../core/index.ts"
           }
         },
         {
@@ -602,9 +566,7 @@ export declare const m: typeof mod;
           "name": "../logic/index",
           "resolution": {
             "resolutionId": 3,
-            "resolvedModule": {
-              "resolvedFileName": "../logic/index.ts"
-            }
+            "resolvedModule": "../logic/index.ts"
           }
         },
         {
@@ -616,9 +578,7 @@ export declare const m: typeof mod;
           "name": "../core/anotherModule",
           "resolution": {
             "resolutionId": 4,
-            "resolvedModule": {
-              "resolvedFileName": "../core/anotherModule.ts"
-            }
+            "resolvedModule": "../core/anotherModule.ts"
           }
         }
       ],
@@ -631,9 +591,7 @@ export declare const m: typeof mod;
               "name": "../core/anotherModule",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "../core/anotherModule.ts"
-                }
+                "resolvedModule": "../core/anotherModule.ts"
               }
             }
           ]
@@ -646,9 +604,7 @@ export declare const m: typeof mod;
               "name": "../core/index",
               "resolution": {
                 "resolutionId": 2,
-                "resolvedModule": {
-                  "resolvedFileName": "../core/index.ts"
-                }
+                "resolvedModule": "../core/index.ts"
               }
             },
             {
@@ -656,9 +612,7 @@ export declare const m: typeof mod;
               "name": "../logic/index",
               "resolution": {
                 "resolutionId": 3,
-                "resolvedModule": {
-                  "resolvedFileName": "../logic/index.ts"
-                }
+                "resolvedModule": "../logic/index.ts"
               }
             },
             {
@@ -666,9 +620,7 @@ export declare const m: typeof mod;
               "name": "../core/anotherModule",
               "resolution": {
                 "resolutionId": 4,
-                "resolvedModule": {
-                  "resolvedFileName": "../core/anotherModule.ts"
-                }
+                "resolvedModule": "../core/anotherModule.ts"
               }
             }
           ]
@@ -677,7 +629,7 @@ export declare const m: typeof mod;
     }
   },
   "version": "FakeTSVersion",
-  "size": 2074
+  "size": 1990
 }
 
 

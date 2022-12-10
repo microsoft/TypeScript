@@ -60,36 +60,24 @@ CleanBuild:
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 2
-            }
+            "resolvedModule": 2
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-          }
+          "resolvedModule": "./node_modules/pkg0/index.d.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 7
-            }
+            "resolvedModule": 7
           },
           "resolutionId": 2,
-          "resolvedModule": {
-            "resolvedFileName": "./aFileWithImports.ts"
-          }
+          "resolvedModule": "./aFileWithImports.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 8
-            }
+            "resolvedModule": 8
           },
           "resolutionId": 3,
-          "resolvedModule": {
-            "resolvedFileName": "./bRandomFileForImport.ts"
-          }
+          "resolvedModule": "./bRandomFileForImport.ts"
         }
       ],
       "names": [
@@ -107,9 +95,7 @@ CleanBuild:
           "name": "pkg0",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-            }
+            "resolvedModule": "./node_modules/pkg0/index.d.ts"
           }
         },
         {
@@ -121,9 +107,7 @@ CleanBuild:
           "name": "./aFileWithImports",
           "resolution": {
             "resolutionId": 2,
-            "resolvedModule": {
-              "resolvedFileName": "./aFileWithImports.ts"
-            }
+            "resolvedModule": "./aFileWithImports.ts"
           }
         },
         {
@@ -135,9 +119,7 @@ CleanBuild:
           "name": "./bRandomFileForImport",
           "resolution": {
             "resolutionId": 3,
-            "resolvedModule": {
-              "resolvedFileName": "./bRandomFileForImport.ts"
-            }
+            "resolvedModule": "./bRandomFileForImport.ts"
           }
         }
       ],
@@ -150,9 +132,7 @@ CleanBuild:
               "name": "pkg0",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-                }
+                "resolvedModule": "./node_modules/pkg0/index.d.ts"
               }
             },
             {
@@ -160,9 +140,7 @@ CleanBuild:
               "name": "./aFileWithImports",
               "resolution": {
                 "resolutionId": 2,
-                "resolvedModule": {
-                  "resolvedFileName": "./aFileWithImports.ts"
-                }
+                "resolvedModule": "./aFileWithImports.ts"
               }
             },
             {
@@ -170,9 +148,7 @@ CleanBuild:
               "name": "./bRandomFileForImport",
               "resolution": {
                 "resolutionId": 3,
-                "resolvedModule": {
-                  "resolvedFileName": "./bRandomFileForImport.ts"
-                }
+                "resolvedModule": "./bRandomFileForImport.ts"
               }
             }
           ]
@@ -248,58 +224,38 @@ IncrementalBuild:
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 2
-            }
+            "resolvedModule": 2
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-          }
+          "resolvedModule": "./node_modules/pkg0/index.d.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 10
-            }
+            "resolvedModule": 10
           },
           "resolutionId": 2,
-          "resolvedModule": {
-            "resolvedFileName": "./aRandomFileForImport.ts"
-          }
+          "resolvedModule": "./aRandomFileForImport.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 11
-            }
+            "resolvedModule": 11
           },
           "resolutionId": 3,
-          "resolvedModule": {
-            "resolvedFileName": "./aRandomFileForImport2.ts"
-          }
+          "resolvedModule": "./aRandomFileForImport2.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 12
-            }
+            "resolvedModule": 12
           },
           "resolutionId": 4,
-          "resolvedModule": {
-            "resolvedFileName": "./aFileWithImports.ts"
-          }
+          "resolvedModule": "./aFileWithImports.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 13
-            }
+            "resolvedModule": 13
           },
           "resolutionId": 5,
-          "resolvedModule": {
-            "resolvedFileName": "./bRandomFileForImport.ts"
-          }
+          "resolvedModule": "./bRandomFileForImport.ts"
         }
       ],
       "names": [
@@ -319,9 +275,7 @@ IncrementalBuild:
           "name": "pkg0",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-            }
+            "resolvedModule": "./node_modules/pkg0/index.d.ts"
           }
         },
         {
@@ -333,9 +287,7 @@ IncrementalBuild:
           "name": "./aRandomFileForImport",
           "resolution": {
             "resolutionId": 2,
-            "resolvedModule": {
-              "resolvedFileName": "./aRandomFileForImport.ts"
-            }
+            "resolvedModule": "./aRandomFileForImport.ts"
           }
         },
         {
@@ -347,9 +299,7 @@ IncrementalBuild:
           "name": "./aRandomFileForImport2",
           "resolution": {
             "resolutionId": 3,
-            "resolvedModule": {
-              "resolvedFileName": "./aRandomFileForImport2.ts"
-            }
+            "resolvedModule": "./aRandomFileForImport2.ts"
           }
         },
         {
@@ -361,9 +311,7 @@ IncrementalBuild:
           "name": "./aFileWithImports",
           "resolution": {
             "resolutionId": 4,
-            "resolvedModule": {
-              "resolvedFileName": "./aFileWithImports.ts"
-            }
+            "resolvedModule": "./aFileWithImports.ts"
           }
         },
         {
@@ -375,9 +323,7 @@ IncrementalBuild:
           "name": "./bRandomFileForImport",
           "resolution": {
             "resolutionId": 5,
-            "resolvedModule": {
-              "resolvedFileName": "./bRandomFileForImport.ts"
-            }
+            "resolvedModule": "./bRandomFileForImport.ts"
           }
         }
       ],
@@ -390,9 +336,7 @@ IncrementalBuild:
               "name": "pkg0",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-                }
+                "resolvedModule": "./node_modules/pkg0/index.d.ts"
               }
             },
             {
@@ -400,9 +344,7 @@ IncrementalBuild:
               "name": "./aRandomFileForImport",
               "resolution": {
                 "resolutionId": 2,
-                "resolvedModule": {
-                  "resolvedFileName": "./aRandomFileForImport.ts"
-                }
+                "resolvedModule": "./aRandomFileForImport.ts"
               }
             },
             {
@@ -410,9 +352,7 @@ IncrementalBuild:
               "name": "./aRandomFileForImport2",
               "resolution": {
                 "resolutionId": 3,
-                "resolvedModule": {
-                  "resolvedFileName": "./aRandomFileForImport2.ts"
-                }
+                "resolvedModule": "./aRandomFileForImport2.ts"
               }
             },
             {
@@ -420,9 +360,7 @@ IncrementalBuild:
               "name": "./aFileWithImports",
               "resolution": {
                 "resolutionId": 4,
-                "resolvedModule": {
-                  "resolvedFileName": "./aFileWithImports.ts"
-                }
+                "resolvedModule": "./aFileWithImports.ts"
               }
             },
             {
@@ -430,9 +368,7 @@ IncrementalBuild:
               "name": "./bRandomFileForImport",
               "resolution": {
                 "resolutionId": 5,
-                "resolvedModule": {
-                  "resolvedFileName": "./bRandomFileForImport.ts"
-                }
+                "resolvedModule": "./bRandomFileForImport.ts"
               }
             }
           ]
@@ -552,36 +488,24 @@ CleanBuild:
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 2
-            }
+            "resolvedModule": 2
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-          }
+          "resolvedModule": "./node_modules/pkg0/index.d.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 7
-            }
+            "resolvedModule": 7
           },
           "resolutionId": 2,
-          "resolvedModule": {
-            "resolvedFileName": "./aFileWithImports.ts"
-          }
+          "resolvedModule": "./aFileWithImports.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 8
-            }
+            "resolvedModule": 8
           },
           "resolutionId": 3,
-          "resolvedModule": {
-            "resolvedFileName": "./bRandomFileForImport.ts"
-          }
+          "resolvedModule": "./bRandomFileForImport.ts"
         }
       ],
       "names": [
@@ -599,9 +523,7 @@ CleanBuild:
           "name": "pkg0",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-            }
+            "resolvedModule": "./node_modules/pkg0/index.d.ts"
           }
         },
         {
@@ -613,9 +535,7 @@ CleanBuild:
           "name": "./aFileWithImports",
           "resolution": {
             "resolutionId": 2,
-            "resolvedModule": {
-              "resolvedFileName": "./aFileWithImports.ts"
-            }
+            "resolvedModule": "./aFileWithImports.ts"
           }
         },
         {
@@ -627,9 +547,7 @@ CleanBuild:
           "name": "./bRandomFileForImport",
           "resolution": {
             "resolutionId": 3,
-            "resolvedModule": {
-              "resolvedFileName": "./bRandomFileForImport.ts"
-            }
+            "resolvedModule": "./bRandomFileForImport.ts"
           }
         }
       ],
@@ -642,9 +560,7 @@ CleanBuild:
               "name": "pkg0",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-                }
+                "resolvedModule": "./node_modules/pkg0/index.d.ts"
               }
             },
             {
@@ -652,9 +568,7 @@ CleanBuild:
               "name": "./aFileWithImports",
               "resolution": {
                 "resolutionId": 2,
-                "resolvedModule": {
-                  "resolvedFileName": "./aFileWithImports.ts"
-                }
+                "resolvedModule": "./aFileWithImports.ts"
               }
             },
             {
@@ -662,9 +576,7 @@ CleanBuild:
               "name": "./bRandomFileForImport",
               "resolution": {
                 "resolutionId": 3,
-                "resolvedModule": {
-                  "resolvedFileName": "./bRandomFileForImport.ts"
-                }
+                "resolvedModule": "./bRandomFileForImport.ts"
               }
             }
           ]
@@ -743,58 +655,38 @@ IncrementalBuild:
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 2
-            }
+            "resolvedModule": 2
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-          }
+          "resolvedModule": "./node_modules/pkg0/index.d.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 10
-            }
+            "resolvedModule": 10
           },
           "resolutionId": 2,
-          "resolvedModule": {
-            "resolvedFileName": "./aRandomFileForImport.ts"
-          }
+          "resolvedModule": "./aRandomFileForImport.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 11
-            }
+            "resolvedModule": 11
           },
           "resolutionId": 3,
-          "resolvedModule": {
-            "resolvedFileName": "./aRandomFileForImport2.ts"
-          }
+          "resolvedModule": "./aRandomFileForImport2.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 12
-            }
+            "resolvedModule": 12
           },
           "resolutionId": 4,
-          "resolvedModule": {
-            "resolvedFileName": "./aFileWithImports.ts"
-          }
+          "resolvedModule": "./aFileWithImports.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 13
-            }
+            "resolvedModule": 13
           },
           "resolutionId": 5,
-          "resolvedModule": {
-            "resolvedFileName": "./bRandomFileForImport.ts"
-          }
+          "resolvedModule": "./bRandomFileForImport.ts"
         }
       ],
       "names": [
@@ -814,9 +706,7 @@ IncrementalBuild:
           "name": "pkg0",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-            }
+            "resolvedModule": "./node_modules/pkg0/index.d.ts"
           }
         },
         {
@@ -828,9 +718,7 @@ IncrementalBuild:
           "name": "./aRandomFileForImport",
           "resolution": {
             "resolutionId": 2,
-            "resolvedModule": {
-              "resolvedFileName": "./aRandomFileForImport.ts"
-            }
+            "resolvedModule": "./aRandomFileForImport.ts"
           }
         },
         {
@@ -842,9 +730,7 @@ IncrementalBuild:
           "name": "./aRandomFileForImport2",
           "resolution": {
             "resolutionId": 3,
-            "resolvedModule": {
-              "resolvedFileName": "./aRandomFileForImport2.ts"
-            }
+            "resolvedModule": "./aRandomFileForImport2.ts"
           }
         },
         {
@@ -856,9 +742,7 @@ IncrementalBuild:
           "name": "./aFileWithImports",
           "resolution": {
             "resolutionId": 4,
-            "resolvedModule": {
-              "resolvedFileName": "./aFileWithImports.ts"
-            }
+            "resolvedModule": "./aFileWithImports.ts"
           }
         },
         {
@@ -870,9 +754,7 @@ IncrementalBuild:
           "name": "./bRandomFileForImport",
           "resolution": {
             "resolutionId": 5,
-            "resolvedModule": {
-              "resolvedFileName": "./bRandomFileForImport.ts"
-            }
+            "resolvedModule": "./bRandomFileForImport.ts"
           }
         }
       ],
@@ -885,9 +767,7 @@ IncrementalBuild:
               "name": "pkg0",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-                }
+                "resolvedModule": "./node_modules/pkg0/index.d.ts"
               }
             },
             {
@@ -895,9 +775,7 @@ IncrementalBuild:
               "name": "./aRandomFileForImport",
               "resolution": {
                 "resolutionId": 2,
-                "resolvedModule": {
-                  "resolvedFileName": "./aRandomFileForImport.ts"
-                }
+                "resolvedModule": "./aRandomFileForImport.ts"
               }
             },
             {
@@ -905,9 +783,7 @@ IncrementalBuild:
               "name": "./aRandomFileForImport2",
               "resolution": {
                 "resolutionId": 3,
-                "resolvedModule": {
-                  "resolvedFileName": "./aRandomFileForImport2.ts"
-                }
+                "resolvedModule": "./aRandomFileForImport2.ts"
               }
             },
             {
@@ -915,9 +791,7 @@ IncrementalBuild:
               "name": "./aFileWithImports",
               "resolution": {
                 "resolutionId": 4,
-                "resolvedModule": {
-                  "resolvedFileName": "./aFileWithImports.ts"
-                }
+                "resolvedModule": "./aFileWithImports.ts"
               }
             },
             {
@@ -925,9 +799,7 @@ IncrementalBuild:
               "name": "./bRandomFileForImport",
               "resolution": {
                 "resolutionId": 5,
-                "resolvedModule": {
-                  "resolvedFileName": "./bRandomFileForImport.ts"
-                }
+                "resolvedModule": "./bRandomFileForImport.ts"
               }
             }
           ]
@@ -1044,25 +916,17 @@ CleanBuild:
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 7
-            }
+            "resolvedModule": 7
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "./bFileWithImports.ts"
-          }
+          "resolvedModule": "./bFileWithImports.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 2
-            }
+            "resolvedModule": 2
           },
           "resolutionId": 2,
-          "resolvedModule": {
-            "resolvedFileName": "./pkg0.d.ts"
-          }
+          "resolvedModule": "./pkg0.d.ts"
         }
       ],
       "names": [
@@ -1079,9 +943,7 @@ CleanBuild:
           "name": "./bFileWithImports",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "./bFileWithImports.ts"
-            }
+            "resolvedModule": "./bFileWithImports.ts"
           }
         },
         {
@@ -1093,9 +955,7 @@ CleanBuild:
           "name": "pkg0",
           "resolution": {
             "resolutionId": 2,
-            "resolvedModule": {
-              "resolvedFileName": "./pkg0.d.ts"
-            }
+            "resolvedModule": "./pkg0.d.ts"
           }
         }
       ],
@@ -1108,9 +968,7 @@ CleanBuild:
               "name": "./bFileWithImports",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "./bFileWithImports.ts"
-                }
+                "resolvedModule": "./bFileWithImports.ts"
               }
             },
             {
@@ -1118,9 +976,7 @@ CleanBuild:
               "name": "pkg0",
               "resolution": {
                 "resolutionId": 2,
-                "resolvedModule": {
-                  "resolvedFileName": "./pkg0.d.ts"
-                }
+                "resolvedModule": "./pkg0.d.ts"
               }
             }
           ]
@@ -1215,80 +1071,52 @@ IncrementalBuild:
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 13
-            }
+            "resolvedModule": 13
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "./bFileWithImports.ts"
-          }
+          "resolvedModule": "./bFileWithImports.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 8
-            }
+            "resolvedModule": 8
           },
           "resolutionId": 2,
-          "resolvedModule": {
-            "resolvedFileName": "./pkg0.d.ts"
-          }
+          "resolvedModule": "./pkg0.d.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 2
-            }
+            "resolvedModule": 2
           },
           "resolutionId": 3,
-          "resolvedModule": {
-            "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-          }
+          "resolvedModule": "./node_modules/pkg0/index.d.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 14
-            }
+            "resolvedModule": 14
           },
           "resolutionId": 4,
-          "resolvedModule": {
-            "resolvedFileName": "./aRandomFileForImport.ts"
-          }
+          "resolvedModule": "./aRandomFileForImport.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 15
-            }
+            "resolvedModule": 15
           },
           "resolutionId": 5,
-          "resolvedModule": {
-            "resolvedFileName": "./aRandomFileForImport2.ts"
-          }
+          "resolvedModule": "./aRandomFileForImport2.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 16
-            }
+            "resolvedModule": 16
           },
           "resolutionId": 6,
-          "resolvedModule": {
-            "resolvedFileName": "./aFileWithImports.ts"
-          }
+          "resolvedModule": "./aFileWithImports.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 17
-            }
+            "resolvedModule": 17
           },
           "resolutionId": 7,
-          "resolvedModule": {
-            "resolvedFileName": "./bRandomFileForImport.ts"
-          }
+          "resolvedModule": "./bRandomFileForImport.ts"
         }
       ],
       "names": [
@@ -1309,9 +1137,7 @@ IncrementalBuild:
           "name": "./bFileWithImports",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "./bFileWithImports.ts"
-            }
+            "resolvedModule": "./bFileWithImports.ts"
           }
         },
         {
@@ -1323,9 +1149,7 @@ IncrementalBuild:
           "name": "pkg0",
           "resolution": {
             "resolutionId": 2,
-            "resolvedModule": {
-              "resolvedFileName": "./pkg0.d.ts"
-            }
+            "resolvedModule": "./pkg0.d.ts"
           }
         },
         {
@@ -1337,9 +1161,7 @@ IncrementalBuild:
           "name": "pkg0",
           "resolution": {
             "resolutionId": 3,
-            "resolvedModule": {
-              "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-            }
+            "resolvedModule": "./node_modules/pkg0/index.d.ts"
           }
         },
         {
@@ -1351,9 +1173,7 @@ IncrementalBuild:
           "name": "./aRandomFileForImport",
           "resolution": {
             "resolutionId": 4,
-            "resolvedModule": {
-              "resolvedFileName": "./aRandomFileForImport.ts"
-            }
+            "resolvedModule": "./aRandomFileForImport.ts"
           }
         },
         {
@@ -1365,9 +1185,7 @@ IncrementalBuild:
           "name": "./aRandomFileForImport2",
           "resolution": {
             "resolutionId": 5,
-            "resolvedModule": {
-              "resolvedFileName": "./aRandomFileForImport2.ts"
-            }
+            "resolvedModule": "./aRandomFileForImport2.ts"
           }
         },
         {
@@ -1379,9 +1197,7 @@ IncrementalBuild:
           "name": "./aFileWithImports",
           "resolution": {
             "resolutionId": 6,
-            "resolvedModule": {
-              "resolvedFileName": "./aFileWithImports.ts"
-            }
+            "resolvedModule": "./aFileWithImports.ts"
           }
         },
         {
@@ -1393,9 +1209,7 @@ IncrementalBuild:
           "name": "./bRandomFileForImport",
           "resolution": {
             "resolutionId": 7,
-            "resolvedModule": {
-              "resolvedFileName": "./bRandomFileForImport.ts"
-            }
+            "resolvedModule": "./bRandomFileForImport.ts"
           }
         }
       ],
@@ -1409,9 +1223,7 @@ IncrementalBuild:
                 "name": "./bFileWithImports",
                 "resolution": {
                   "resolutionId": 1,
-                  "resolvedModule": {
-                    "resolvedFileName": "./bFileWithImports.ts"
-                  }
+                  "resolvedModule": "./bFileWithImports.ts"
                 }
               },
               {
@@ -1419,9 +1231,7 @@ IncrementalBuild:
                 "name": "pkg0",
                 "resolution": {
                   "resolutionId": 2,
-                  "resolvedModule": {
-                    "resolvedFileName": "./pkg0.d.ts"
-                  }
+                  "resolvedModule": "./pkg0.d.ts"
                 }
               }
             ]
@@ -1441,9 +1251,7 @@ IncrementalBuild:
                     "name": "pkg0",
                     "resolution": {
                       "resolutionId": 3,
-                      "resolvedModule": {
-                        "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-                      }
+                      "resolvedModule": "./node_modules/pkg0/index.d.ts"
                     }
                   },
                   {
@@ -1451,9 +1259,7 @@ IncrementalBuild:
                     "name": "./aRandomFileForImport",
                     "resolution": {
                       "resolutionId": 4,
-                      "resolvedModule": {
-                        "resolvedFileName": "./aRandomFileForImport.ts"
-                      }
+                      "resolvedModule": "./aRandomFileForImport.ts"
                     }
                   },
                   {
@@ -1461,9 +1267,7 @@ IncrementalBuild:
                     "name": "./aRandomFileForImport2",
                     "resolution": {
                       "resolutionId": 5,
-                      "resolvedModule": {
-                        "resolvedFileName": "./aRandomFileForImport2.ts"
-                      }
+                      "resolvedModule": "./aRandomFileForImport2.ts"
                     }
                   },
                   {
@@ -1471,9 +1275,7 @@ IncrementalBuild:
                     "name": "./aFileWithImports",
                     "resolution": {
                       "resolutionId": 6,
-                      "resolvedModule": {
-                        "resolvedFileName": "./aFileWithImports.ts"
-                      }
+                      "resolvedModule": "./aFileWithImports.ts"
                     }
                   },
                   {
@@ -1481,9 +1283,7 @@ IncrementalBuild:
                     "name": "./bRandomFileForImport",
                     "resolution": {
                       "resolutionId": 7,
-                      "resolvedModule": {
-                        "resolvedFileName": "./bRandomFileForImport.ts"
-                      }
+                      "resolvedModule": "./bRandomFileForImport.ts"
                     }
                   }
                 ]
@@ -1629,25 +1429,17 @@ CleanBuild:
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 7
-            }
+            "resolvedModule": 7
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "./bFileWithImports.ts"
-          }
+          "resolvedModule": "./bFileWithImports.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 2
-            }
+            "resolvedModule": 2
           },
           "resolutionId": 2,
-          "resolvedModule": {
-            "resolvedFileName": "./pkg0.d.ts"
-          }
+          "resolvedModule": "./pkg0.d.ts"
         }
       ],
       "names": [
@@ -1664,9 +1456,7 @@ CleanBuild:
           "name": "./bFileWithImports",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "./bFileWithImports.ts"
-            }
+            "resolvedModule": "./bFileWithImports.ts"
           }
         },
         {
@@ -1678,9 +1468,7 @@ CleanBuild:
           "name": "pkg0",
           "resolution": {
             "resolutionId": 2,
-            "resolvedModule": {
-              "resolvedFileName": "./pkg0.d.ts"
-            }
+            "resolvedModule": "./pkg0.d.ts"
           }
         }
       ],
@@ -1693,9 +1481,7 @@ CleanBuild:
               "name": "./bFileWithImports",
               "resolution": {
                 "resolutionId": 1,
-                "resolvedModule": {
-                  "resolvedFileName": "./bFileWithImports.ts"
-                }
+                "resolvedModule": "./bFileWithImports.ts"
               }
             },
             {
@@ -1703,9 +1489,7 @@ CleanBuild:
               "name": "pkg0",
               "resolution": {
                 "resolutionId": 2,
-                "resolvedModule": {
-                  "resolvedFileName": "./pkg0.d.ts"
-                }
+                "resolvedModule": "./pkg0.d.ts"
               }
             }
           ]
@@ -1803,80 +1587,52 @@ IncrementalBuild:
       "resolutions": [
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 13
-            }
+            "resolvedModule": 13
           },
           "resolutionId": 1,
-          "resolvedModule": {
-            "resolvedFileName": "./bFileWithImports.ts"
-          }
+          "resolvedModule": "./bFileWithImports.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 8
-            }
+            "resolvedModule": 8
           },
           "resolutionId": 2,
-          "resolvedModule": {
-            "resolvedFileName": "./pkg0.d.ts"
-          }
+          "resolvedModule": "./pkg0.d.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 2
-            }
+            "resolvedModule": 2
           },
           "resolutionId": 3,
-          "resolvedModule": {
-            "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-          }
+          "resolvedModule": "./node_modules/pkg0/index.d.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 14
-            }
+            "resolvedModule": 14
           },
           "resolutionId": 4,
-          "resolvedModule": {
-            "resolvedFileName": "./aRandomFileForImport.ts"
-          }
+          "resolvedModule": "./aRandomFileForImport.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 15
-            }
+            "resolvedModule": 15
           },
           "resolutionId": 5,
-          "resolvedModule": {
-            "resolvedFileName": "./aRandomFileForImport2.ts"
-          }
+          "resolvedModule": "./aRandomFileForImport2.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 16
-            }
+            "resolvedModule": 16
           },
           "resolutionId": 6,
-          "resolvedModule": {
-            "resolvedFileName": "./aFileWithImports.ts"
-          }
+          "resolvedModule": "./aFileWithImports.ts"
         },
         {
           "original": {
-            "resolvedModule": {
-              "resolvedFileName": 17
-            }
+            "resolvedModule": 17
           },
           "resolutionId": 7,
-          "resolvedModule": {
-            "resolvedFileName": "./bRandomFileForImport.ts"
-          }
+          "resolvedModule": "./bRandomFileForImport.ts"
         }
       ],
       "names": [
@@ -1897,9 +1653,7 @@ IncrementalBuild:
           "name": "./bFileWithImports",
           "resolution": {
             "resolutionId": 1,
-            "resolvedModule": {
-              "resolvedFileName": "./bFileWithImports.ts"
-            }
+            "resolvedModule": "./bFileWithImports.ts"
           }
         },
         {
@@ -1911,9 +1665,7 @@ IncrementalBuild:
           "name": "pkg0",
           "resolution": {
             "resolutionId": 2,
-            "resolvedModule": {
-              "resolvedFileName": "./pkg0.d.ts"
-            }
+            "resolvedModule": "./pkg0.d.ts"
           }
         },
         {
@@ -1925,9 +1677,7 @@ IncrementalBuild:
           "name": "pkg0",
           "resolution": {
             "resolutionId": 3,
-            "resolvedModule": {
-              "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-            }
+            "resolvedModule": "./node_modules/pkg0/index.d.ts"
           }
         },
         {
@@ -1939,9 +1689,7 @@ IncrementalBuild:
           "name": "./aRandomFileForImport",
           "resolution": {
             "resolutionId": 4,
-            "resolvedModule": {
-              "resolvedFileName": "./aRandomFileForImport.ts"
-            }
+            "resolvedModule": "./aRandomFileForImport.ts"
           }
         },
         {
@@ -1953,9 +1701,7 @@ IncrementalBuild:
           "name": "./aRandomFileForImport2",
           "resolution": {
             "resolutionId": 5,
-            "resolvedModule": {
-              "resolvedFileName": "./aRandomFileForImport2.ts"
-            }
+            "resolvedModule": "./aRandomFileForImport2.ts"
           }
         },
         {
@@ -1967,9 +1713,7 @@ IncrementalBuild:
           "name": "./aFileWithImports",
           "resolution": {
             "resolutionId": 6,
-            "resolvedModule": {
-              "resolvedFileName": "./aFileWithImports.ts"
-            }
+            "resolvedModule": "./aFileWithImports.ts"
           }
         },
         {
@@ -1981,9 +1725,7 @@ IncrementalBuild:
           "name": "./bRandomFileForImport",
           "resolution": {
             "resolutionId": 7,
-            "resolvedModule": {
-              "resolvedFileName": "./bRandomFileForImport.ts"
-            }
+            "resolvedModule": "./bRandomFileForImport.ts"
           }
         }
       ],
@@ -1997,9 +1739,7 @@ IncrementalBuild:
                 "name": "./bFileWithImports",
                 "resolution": {
                   "resolutionId": 1,
-                  "resolvedModule": {
-                    "resolvedFileName": "./bFileWithImports.ts"
-                  }
+                  "resolvedModule": "./bFileWithImports.ts"
                 }
               },
               {
@@ -2007,9 +1747,7 @@ IncrementalBuild:
                 "name": "pkg0",
                 "resolution": {
                   "resolutionId": 2,
-                  "resolvedModule": {
-                    "resolvedFileName": "./pkg0.d.ts"
-                  }
+                  "resolvedModule": "./pkg0.d.ts"
                 }
               }
             ]
@@ -2029,9 +1767,7 @@ IncrementalBuild:
                     "name": "pkg0",
                     "resolution": {
                       "resolutionId": 3,
-                      "resolvedModule": {
-                        "resolvedFileName": "./node_modules/pkg0/index.d.ts"
-                      }
+                      "resolvedModule": "./node_modules/pkg0/index.d.ts"
                     }
                   },
                   {
@@ -2039,9 +1775,7 @@ IncrementalBuild:
                     "name": "./aRandomFileForImport",
                     "resolution": {
                       "resolutionId": 4,
-                      "resolvedModule": {
-                        "resolvedFileName": "./aRandomFileForImport.ts"
-                      }
+                      "resolvedModule": "./aRandomFileForImport.ts"
                     }
                   },
                   {
@@ -2049,9 +1783,7 @@ IncrementalBuild:
                     "name": "./aRandomFileForImport2",
                     "resolution": {
                       "resolutionId": 5,
-                      "resolvedModule": {
-                        "resolvedFileName": "./aRandomFileForImport2.ts"
-                      }
+                      "resolvedModule": "./aRandomFileForImport2.ts"
                     }
                   },
                   {
@@ -2059,9 +1791,7 @@ IncrementalBuild:
                     "name": "./aFileWithImports",
                     "resolution": {
                       "resolutionId": 6,
-                      "resolvedModule": {
-                        "resolvedFileName": "./aFileWithImports.ts"
-                      }
+                      "resolvedModule": "./aFileWithImports.ts"
                     }
                   },
                   {
@@ -2069,9 +1799,7 @@ IncrementalBuild:
                     "name": "./bRandomFileForImport",
                     "resolution": {
                       "resolutionId": 7,
-                      "resolvedModule": {
-                        "resolvedFileName": "./bRandomFileForImport.ts"
-                      }
+                      "resolvedModule": "./bRandomFileForImport.ts"
                     }
                   }
                 ]
