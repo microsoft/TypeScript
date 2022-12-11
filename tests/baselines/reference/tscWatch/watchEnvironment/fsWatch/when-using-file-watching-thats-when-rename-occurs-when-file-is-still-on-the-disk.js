@@ -79,12 +79,12 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/foo.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo_1 = require("./foo");
 (0, foo_1.foo)();
 

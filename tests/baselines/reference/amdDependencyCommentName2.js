@@ -8,6 +8,6 @@ m1.f();
 ///<amd-dependency path='bar' name='b'/>
 define(["require", "exports", "bar", "m2"], function (require, exports, b, m1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     m1.f();
 });

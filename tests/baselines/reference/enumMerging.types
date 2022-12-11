@@ -78,15 +78,15 @@ module M2 {
 >EComp2 : EComp2
 
         A = 'foo'.length, B = 'foo'.length, C = 'foo'.length
->A : EComp2
+>A : EComp2.A
 >'foo'.length : number
 >'foo' : "foo"
 >length : number
->B : EComp2
+>B : EComp2.B
 >'foo'.length : number
 >'foo' : "foo"
 >length : number
->C : EComp2
+>C : EComp2.C
 >'foo'.length : number
 >'foo' : "foo"
 >length : number
@@ -96,41 +96,41 @@ module M2 {
 >EComp2 : EComp2
 
         D = 'foo'.length, E = 'foo'.length, F = 'foo'.length
->D : EComp2
+>D : EComp2.D
 >'foo'.length : number
 >'foo' : "foo"
 >length : number
->E : EComp2
+>E : EComp2.E
 >'foo'.length : number
 >'foo' : "foo"
 >length : number
->F : EComp2
+>F : EComp2.F
 >'foo'.length : number
 >'foo' : "foo"
 >length : number
     }
 
     var x = [EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F];
->x : EComp2[]
->[EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F] : EComp2[]
->EComp2.A : EComp2
+>x : (EComp2.A | EComp2.B | EComp2.C | EComp2.D | EComp2.E | EComp2.F)[]
+>[EComp2.A, EComp2.B, EComp2.C, EComp2.D, EComp2.E, EComp2.F] : (EComp2.A | EComp2.B | EComp2.C | EComp2.D | EComp2.E | EComp2.F)[]
+>EComp2.A : EComp2.A
 >EComp2 : typeof EComp2
->A : EComp2
->EComp2.B : EComp2
+>A : EComp2.A
+>EComp2.B : EComp2.B
 >EComp2 : typeof EComp2
->B : EComp2
->EComp2.C : EComp2
+>B : EComp2.B
+>EComp2.C : EComp2.C
 >EComp2 : typeof EComp2
->C : EComp2
->EComp2.D : EComp2
+>C : EComp2.C
+>EComp2.D : EComp2.D
 >EComp2 : typeof EComp2
->D : EComp2
->EComp2.E : EComp2
+>D : EComp2.D
+>EComp2.E : EComp2.E
 >EComp2 : typeof EComp2
->E : EComp2
->EComp2.F : EComp2
+>E : EComp2.E
+>EComp2.F : EComp2.F
 >EComp2 : typeof EComp2
->F : EComp2
+>F : EComp2.F
 }
 
 // Enum with initializer in only one of two declarations with constant members with the same root module

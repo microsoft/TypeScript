@@ -22,26 +22,25 @@ FsWatchesRecursive::
 
 Info 2    [00:00:07.000] Search path: /
 Info 3    [00:00:08.000] For info: /a.ts :: No config files found.
-Info 4    [00:00:09.000] Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded
-Info 5    [00:00:10.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info 6    [00:00:11.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info 7    [00:00:12.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info 8    [00:00:13.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 9    [00:00:14.000] 	Files (1)
+Info 4    [00:00:09.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info 5    [00:00:10.000] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
+Info 6    [00:00:11.000] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info 7    [00:00:12.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 8    [00:00:13.000] 	Files (1)
 	/a.ts
 
 
 	a.ts
 	  Root file specified for compilation
 
-Info 10   [00:00:15.000] -----------------------------------------------
-Info 11   [00:00:16.000] Project '/dev/null/inferredProject1*' (Inferred)
-Info 11   [00:00:17.000] 	Files (1)
+Info 9    [00:00:14.000] -----------------------------------------------
+Info 10   [00:00:15.000] Project '/dev/null/inferredProject1*' (Inferred)
+Info 10   [00:00:16.000] 	Files (1)
 
-Info 11   [00:00:18.000] -----------------------------------------------
-Info 11   [00:00:19.000] Open files: 
-Info 11   [00:00:20.000] 	FileName: /a.ts ProjectRootPath: undefined
-Info 11   [00:00:21.000] 		Projects: /dev/null/inferredProject1*
+Info 10   [00:00:17.000] -----------------------------------------------
+Info 10   [00:00:18.000] Open files: 
+Info 10   [00:00:19.000] 	FileName: /a.ts ProjectRootPath: undefined
+Info 10   [00:00:20.000] 		Projects: /dev/null/inferredProject1*
 After request
 
 PolledWatches::
@@ -52,7 +51,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 11   [00:00:22.000] response:
+Info 10   [00:00:21.000] response:
     {
       "responseRequired": false
     }
@@ -66,7 +65,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 12   [00:00:23.000] request:
+Info 11   [00:00:22.000] request:
     {
       "command": "geterr",
       "arguments": {
@@ -88,7 +87,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 13   [00:00:24.000] event:
+Info 12   [00:00:23.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":2}}
 After request
 
@@ -100,7 +99,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 14   [00:00:25.000] response:
+Info 13   [00:00:24.000] response:
     {
       "responseRequired": false
     }
@@ -114,7 +113,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 15   [00:00:26.000] request:
+Info 14   [00:00:25.000] request:
     {
       "command": "geterr",
       "arguments": {
@@ -134,7 +133,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 16   [00:00:27.000] event:
+Info 15   [00:00:26.000] event:
     {"seq":0,"type":"event","event":"requestCompleted","body":{"request_seq":3}}
 After request
 
@@ -146,7 +145,7 @@ FsWatches::
 
 FsWatchesRecursive::
 
-Info 17   [00:00:28.000] response:
+Info 16   [00:00:27.000] response:
     {
       "responseRequired": false
     }

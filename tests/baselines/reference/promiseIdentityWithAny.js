@@ -12,7 +12,7 @@ var x: Promise<string, boolean>;
 
 //// [promiseIdentityWithAny.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 // Should be ok because signature type parameters get erased to any
 var x;
 var x;
