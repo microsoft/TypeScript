@@ -53,10 +53,10 @@
 ////    return <Foo something cla/*11*/ />
 ////}
 ////function fn12() {
-////    return <Foo something='foo' cla/*12*/ />
+////    return <Foo something={false} cla/*12*/ />
 ////}
 ////function fn13() {
-////    return <Foo something={false} cla/*13*/ />
+////    return <Foo something={false} /*13*/ foo />
 ////}
 ////function fn14() {
 ////    return <Foo something={false} cla/*14*/ foo />
