@@ -431,6 +431,7 @@ export const enum SyntaxKind {
     JSDocTypedefTag,
     JSDocSeeTag,
     JSDocPropertyTag,
+    JSDocThrowsTag,
 
     // Synthesized list
     SyntaxList,
@@ -475,9 +476,9 @@ export const enum SyntaxKind {
     LastStatement = DebuggerStatement,
     FirstNode = QualifiedName,
     FirstJSDocNode = JSDocTypeExpression,
-    LastJSDocNode = JSDocPropertyTag,
+    LastJSDocNode = JSDocThrowsTag,
     FirstJSDocTagNode = JSDocTag,
-    LastJSDocTagNode = JSDocPropertyTag,
+    LastJSDocTagNode = JSDocThrowsTag,
     /** @internal */ FirstContextualKeyword = AbstractKeyword,
     /** @internal */ LastContextualKeyword = OfKeyword,
 }
@@ -954,6 +955,7 @@ export type ForEachChildNodes =
     | JSDocProtectedTag
     | JSDocReadonlyTag
     | JSDocDeprecatedTag
+    | JSDocThrowsTag
     | JSDocOverrideTag
     ;
 
@@ -3825,6 +3827,11 @@ export interface JSDocCallbackTag extends JSDocTag, NamedDeclaration {
     readonly fullName?: JSDocNamespaceDeclaration | Identifier;
     readonly name?: Identifier;
     readonly typeExpression: JSDocSignature;
+}
+
+export interface JSDocThrowsTag extends JSDocTag {
+    readonly kind: SyntaxKind.JSDocThrowsTag;
+    readonly typeExpression?: JSDocTypeExpression;
 }
 
 export interface JSDocSignature extends JSDocType, Declaration {
@@ -8257,6 +8264,8 @@ export interface NodeFactory {
     updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
     createJSDocOverrideTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
     updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
+    createJSDocThrowsTag(tagName: Identifier, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag;
+    updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
     createJSDocText(text: string): JSDocText;
     updateJSDocText(node: JSDocText, text: string): JSDocText;
     createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
