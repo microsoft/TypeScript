@@ -32,6 +32,7 @@ import {
     getSynthesizedDeepClone,
     getTokenAtPosition,
     getTsConfigObjectLiteralExpression,
+    hasAbstractModifier,
     Identifier,
     idText,
     IntersectionType,
@@ -118,12 +119,11 @@ export function createMissingMemberNodes(
     context: TypeConstructionContext,
     preferences: UserPreferences,
     importAdder: ImportAdder | undefined,
-    overridesAbstract: boolean,
     addClassElement: (node: AddNode) => void): void {
     const classMembers = classDeclaration.symbol.members!;
     for (const symbol of possiblyMissingSymbols) {
         if (!classMembers.has(symbol.escapedName)) {
-            addNewNodeForMemberSymbol(symbol, classDeclaration, sourceFile, context, preferences, importAdder, addClassElement, /* body */ undefined, overridesAbstract);
+            addNewNodeForMemberSymbol(symbol, classDeclaration, sourceFile, context, preferences, importAdder, addClassElement, /* body */ undefined);
         }
     }
 }
@@ -167,7 +167,6 @@ export function addNewNodeForMemberSymbol(
     importAdder: ImportAdder | undefined,
     addClassElement: (node: AddNode) => void,
     body: Block | undefined,
-    overridesAbstract: boolean,
     preserveOptional = PreserveOptionalFlags.All,
     isAmbient = false,
 ): void {
@@ -307,6 +306,7 @@ export function addNewNodeForMemberSymbol(
         if (method) addClassElement(method);
     }
 
+
     function createModifiers(): NodeArray<Modifier> | undefined {
         let modifiers: Modifier[] | undefined;
 
@@ -314,11 +314,21 @@ export function addNewNodeForMemberSymbol(
             modifiers = combine(modifiers, factory.createModifiersFromModifierFlags(modifierFlags));
         }
 
-        if (overridesAbstract) {
+        if (shouldAddOverrideKeyword()) {
             modifiers = append(modifiers, factory.createToken(SyntaxKind.OverrideKeyword));
         }
 
         return modifiers && factory.createNodeArray(modifiers);
+    }
+
+    function shouldAddOverrideKeyword(): boolean {
+        if (!context.program.getCompilerOptions().noImplicitOverride || !enclosingDeclaration.heritageClauses) {
+            return false;
+        }
+
+        const valueDeclaration = checker.getSymbolAtLocation(enclosingDeclaration.heritageClauses[0].types[0].expression)?.valueDeclaration;
+
+        return !!(valueDeclaration && hasAbstractModifier(valueDeclaration));
     }
 
     function createName(node: PropertyName) {

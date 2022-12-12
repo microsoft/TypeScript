@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @noImplicitOverride: true
 ////abstract class A {
 ////    abstract f(a: number, b: string): boolean;
 ////    abstract f(a: number, b: string): this;

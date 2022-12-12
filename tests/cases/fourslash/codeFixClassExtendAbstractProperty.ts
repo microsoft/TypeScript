@@ -18,8 +18,8 @@ verify.codeFix({
 }
 
 class C extends A {
-    override x: number;
-    override y: this;
-    override z: A;
+    x: number;
+    y: this;
+    z: A;
 }`
 });

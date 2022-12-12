@@ -14,7 +14,7 @@ verify.codeFix({
 }
 
 class C<U> extends A<U> {
-    override f(x: U): U {
+    f(x: U): U {
         throw new Error("Method not implemented.");
     }
 }`

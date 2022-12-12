@@ -14,6 +14,6 @@ verify.codeFix({
 }
 
 class C extends A {
-    public override x: number;
+    public x: number;
 }`,
 });

@@ -1592,7 +1592,6 @@ function getEntryForMemberCompletion(
             completionNodes.push(node);
         },
         body,
-        /* overridesAbstract */ false,
         codefix.PreserveOptionalFlags.Property,
         isAbstract);
 
