@@ -45553,6 +45553,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     break;
 
                 case SyntaxKind.ExportKeyword:
+                    if (compilerOptions.verbatimModuleSyntax &&
+                        !(node.flags & NodeFlags.Ambient) &&
+                        node.kind !== SyntaxKind.TypeAliasDeclaration &&
+                        node.kind !== SyntaxKind.InterfaceDeclaration &&
+                        node.parent.kind === SyntaxKind.SourceFile &&
+                        (moduleKind === ModuleKind.CommonJS || getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.CommonJS)
+                    ) {
+                        return grammarErrorOnNode(modifier, Diagnostics.A_top_level_export_modifier_can_only_be_used_on_type_aliases_and_interfaces_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
+                    }
+
                     if (flags & ModifierFlags.Export) {
                         return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "export");
                     }
@@ -47063,6 +47073,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkGrammarImportCallExpression(node: ImportCall): boolean {
+        if (compilerOptions.verbatimModuleSyntax && moduleKind === ModuleKind.CommonJS) {
+            return grammarErrorOnNode(node, Diagnostics.ESM_syntax_is_not_allowed_in_a_CommonJS_module_when_verbatimModuleSyntax_is_enabled);
+        }
+
         if (moduleKind === ModuleKind.ES2015) {
             return grammarErrorOnNode(node, Diagnostics.Dynamic_imports_are_only_supported_when_the_module_flag_is_set_to_es2020_es2022_esnext_commonjs_amd_system_umd_node16_or_nodenext);
         }

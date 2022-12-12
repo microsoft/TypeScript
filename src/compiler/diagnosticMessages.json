@@ -923,6 +923,10 @@
         "category": "Error",
         "code": 1281
     },
+    "A top-level 'export' modifier can only be used on type aliases and interfaces in a CommonJS module when 'verbatimModuleSyntax' is enabled.": {
+        "category": "Error",
+        "code": 1282
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",

@@ -1,0 +1,60 @@
+=== /decl.d.ts ===
+declare function esmy(): void;
+>esmy : Symbol(esmy, Decl(decl.d.ts, 0, 0))
+
+export default esmy;
+>esmy : Symbol(esmy, Decl(decl.d.ts, 0, 0))
+
+export declare function funciton(): void;
+>funciton : Symbol(funciton, Decl(decl.d.ts, 1, 20))
+
+=== /main.ts ===
+import esmy from "./decl"; // error
+>esmy : Symbol(esmy, Decl(main.ts, 0, 6))
+
+import * as esmy2 from "./decl"; // error
+>esmy2 : Symbol(esmy2, Decl(main.ts, 1, 6))
+
+import { funciton } from "./decl"; // error
+>funciton : Symbol(funciton, Decl(main.ts, 2, 8))
+
+import type { funciton as funciton2 } from "./decl"; // ok I guess?
+>funciton : Symbol(esmy2.funciton, Decl(decl.d.ts, 1, 20))
+>funciton2 : Symbol(funciton2, Decl(main.ts, 3, 13))
+
+import("./decl"); // error
+>"./decl" : Symbol("/decl", Decl(decl.d.ts, 0, 0))
+
+type T = typeof import("./decl"); // ok
+>T : Symbol(T, Decl(main.ts, 4, 17))
+
+export {}; // error
+export const x = 1; // error
+>x : Symbol(x, Decl(main.ts, 7, 12))
+
+export interface I {} // ok
+>I : Symbol(I, Decl(main.ts, 7, 19))
+
+export type { T }; // ok
+>T : Symbol(T, Decl(main.ts, 9, 13))
+
+=== /main2.ts ===
+export interface I {}
+>I : Symbol(I, Decl(main2.ts, 0, 0))
+
+export = { x: 1 };
+>x : Symbol(x, Decl(main2.ts, 1, 10))
+
+=== /main3.ts ===
+namespace ns {
+>ns : Symbol(ns, Decl(main3.ts, 0, 0))
+
+    export const x = 1;
+>x : Symbol(x, Decl(main3.ts, 1, 16))
+
+    export interface I {}
+>I : Symbol(I, Decl(main3.ts, 1, 23))
+}
+export = ns;
+>ns : Symbol(ns, Decl(main3.ts, 0, 0))
+

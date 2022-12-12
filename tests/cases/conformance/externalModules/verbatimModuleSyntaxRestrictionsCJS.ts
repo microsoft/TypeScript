@@ -19,3 +19,15 @@ type T = typeof import("./decl"); // ok
 export {}; // error
 export const x = 1; // error
 export interface I {} // ok
+export type { T }; // ok
+
+// @Filename: /main2.ts
+export interface I {}
+export = { x: 1 };
+
+// @Filename: /main3.ts
+namespace ns {
+    export const x = 1;
+    export interface I {}
+}
+export = ns;

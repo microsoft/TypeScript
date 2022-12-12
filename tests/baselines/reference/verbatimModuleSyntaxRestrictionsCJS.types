@@ -1,0 +1,60 @@
+=== /decl.d.ts ===
+declare function esmy(): void;
+>esmy : () => void
+
+export default esmy;
+>esmy : () => void
+
+export declare function funciton(): void;
+>funciton : () => void
+
+=== /main.ts ===
+import esmy from "./decl"; // error
+>esmy : () => void
+
+import * as esmy2 from "./decl"; // error
+>esmy2 : typeof esmy2
+
+import { funciton } from "./decl"; // error
+>funciton : () => void
+
+import type { funciton as funciton2 } from "./decl"; // ok I guess?
+>funciton : () => void
+>funciton2 : any
+
+import("./decl"); // error
+>import("./decl") : Promise<typeof import("/decl")>
+>"./decl" : "./decl"
+
+type T = typeof import("./decl"); // ok
+>T : typeof import("/decl")
+
+export {}; // error
+export const x = 1; // error
+>x : 1
+>1 : 1
+
+export interface I {} // ok
+export type { T }; // ok
+>T : typeof import("/decl")
+
+=== /main2.ts ===
+export interface I {}
+export = { x: 1 };
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+
+=== /main3.ts ===
+namespace ns {
+>ns : typeof ns
+
+    export const x = 1;
+>x : 1
+>1 : 1
+
+    export interface I {}
+}
+export = ns;
+>ns : typeof ns
+
