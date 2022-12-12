@@ -27027,7 +27027,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // An alias resolving to a const enum cannot be elided if (1) 'isolatedModules' is enabled
                 // (because the const enum value will not be inlined), or if (2) the alias is an export
                 // of a const enum declaration that will be preserved.
-                if (compilerOptions.isolatedModules ||
+                if (getIsolatedModules(compilerOptions) ||
                     shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(location) ||
                     !isConstEnumOrConstEnumOnlyModule(getExportSymbolOfValueSymbolIfExported(target))
                 ) {
@@ -30619,7 +30619,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         //   1. if 'isolatedModules' is enabled, because the const enum value will not be inlined, and
         //   2. if 'preserveConstEnums' is enabled and the expression is itself an export, e.g. `export = Foo.Bar.Baz`.
         if (isIdentifier(left) && parentSymbol && (
-            compilerOptions.isolatedModules ||
+            getIsolatedModules(compilerOptions) ||
             !(prop && (isConstEnumOrConstEnumOnlyModule(prop) || prop.flags & SymbolFlags.EnumMember && node.parent.kind === SyntaxKind.EnumMember)) ||
             shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(node)
         )) {
@@ -36414,7 +36414,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment_or_type_query);
         }
 
-        if (compilerOptions.isolatedModules) {
+        if (getIsolatedModules(compilerOptions)) {
             Debug.assert(!!(type.symbol.flags & SymbolFlags.ConstEnum));
             const constEnumDeclaration = type.symbol.valueDeclaration as EnumDeclaration;
             if (constEnumDeclaration.flags & NodeFlags.Ambient) {
@@ -38455,7 +38455,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 markAliasSymbolAsReferenced(rootSymbol);
             }
             else if (forDecoratorMetadata
-                && compilerOptions.isolatedModules
+                && getIsolatedModules(compilerOptions)
                 && getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015
                 && !symbolIsValue(rootSymbol)
                 && !some(rootSymbol.declarations, isTypeOnlyImportOrExportDeclaration)) {
