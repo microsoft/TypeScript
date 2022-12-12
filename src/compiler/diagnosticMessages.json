@@ -907,7 +907,7 @@
         "category": "Error",
         "code": 1276
     },
-    "'{0}' modifier can only appear on a type parameter of a function or constructor": {
+    "'{0}' modifier can only appear on a type parameter of a function, method or class": {
         "category": "Error",
         "code": 1277
     },

@@ -45421,8 +45421,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (node.kind !== SyntaxKind.EnumDeclaration && node.kind !== SyntaxKind.TypeParameter) {
                         return grammarErrorOnNode(node, Diagnostics.A_class_member_cannot_have_the_0_keyword, tokenToString(SyntaxKind.ConstKeyword));
                     }
-                    if (node.kind === SyntaxKind.TypeParameter && !isFunctionLikeDeclaration(node.parent)) {
-                        return grammarErrorOnNode(modifier, Diagnostics._0_modifier_can_only_appear_on_a_type_parameter_of_a_function_or_constructor, tokenToString(modifier.kind));
+                    if (node.kind === SyntaxKind.TypeParameter && !(isFunctionLikeDeclaration(node.parent) || isClassDeclaration(node.parent))) {
+                        return grammarErrorOnNode(modifier, Diagnostics._0_modifier_can_only_appear_on_a_type_parameter_of_a_function_method_or_class, tokenToString(modifier.kind));
                     }
                     break;
                 case SyntaxKind.OverrideKeyword:
