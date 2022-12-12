@@ -2814,7 +2814,7 @@ namespace Parser {
             case ParsingContext.ArrayBindingElements:
                 return token() === SyntaxKind.CommaToken || token() === SyntaxKind.DotDotDotToken || isBindingIdentifierOrPrivateIdentifierOrPattern();
             case ParsingContext.TypeParameters:
-                return token() === SyntaxKind.InKeyword || isIdentifier();
+                return token() === SyntaxKind.InKeyword || token() === SyntaxKind.ConstKeyword || isIdentifier();
             case ParsingContext.ArrayLiteralMembers:
                 switch (token()) {
                     case SyntaxKind.CommaToken:
@@ -3823,7 +3823,7 @@ namespace Parser {
 
     function parseTypeParameter(): TypeParameterDeclaration {
         const pos = getNodePos();
-        const modifiers = parseModifiers();
+        const modifiers = parseModifiers(/*permitConstAsModifier*/ true);
         const name = parseIdentifier();
         let constraint: TypeNode | undefined;
         let expression: Expression | undefined;
@@ -7742,10 +7742,10 @@ namespace Parser {
      *
      * In such situations, 'permitInvalidConstAsModifier' should be set to true.
      */
-    function parseModifiers(permitInvalidConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<Modifier> | undefined {
+    function parseModifiers(permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<Modifier> | undefined {
         const pos = getNodePos();
         let list, modifier, hasSeenStatic = false;
-        while (modifier = tryParseModifier(permitInvalidConstAsModifier, stopOnStartOfClassStaticBlock, hasSeenStatic)) {
+        while (modifier = tryParseModifier(permitConstAsModifier, stopOnStartOfClassStaticBlock, hasSeenStatic)) {
             if (modifier.kind === SyntaxKind.StaticKeyword) hasSeenStatic = true;
             list = append(list, modifier);
         }

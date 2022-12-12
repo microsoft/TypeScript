@@ -2044,6 +2044,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     let lastFlowNodeReachable: boolean;
     let flowTypeCache: Type[] | undefined;
 
+    const contextualTypeNodes: Node[] = [];
+    const contextualTypes: (Type | undefined)[] = [];
+    let contextualTypeCount = 0;
+
+    let currentInferenceNode: Node | undefined;
+    let currentInferenceContext: InferenceContext | undefined;
+
     const emptyStringType = getStringLiteralType("");
     const zeroType = getNumberLiteralType(0);
     const zeroBigIntType = getBigIntLiteralType({ negative: false, base10Value: "0" });
@@ -13205,6 +13212,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return hasNonCircularBaseConstraint(typeParameter) ? getConstraintFromTypeParameter(typeParameter) : undefined;
     }
 
+    function isConstTypeVariable(type: Type): boolean {
+        return !!(type.flags & TypeFlags.TypeParameter && some((type as TypeParameter).symbol?.declarations, d => hasSyntacticModifier(d, ModifierFlags.Const)) ||
+            type.flags & TypeFlags.IndexedAccess && isConstTypeVariable((type as IndexedAccessType).objectType));
+    }
+
     function getConstraintOfIndexedAccess(type: IndexedAccessType) {
         return hasNonCircularBaseConstraint(type) ? getConstraintFromIndexedAccess(type) : undefined;
     }
@@ -18971,13 +18983,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkExpressionForMutableLocationWithContextualType(next: Expression, sourcePropType: Type) {
-        next.contextualType = sourcePropType;
-        try {
-            return checkExpressionForMutableLocation(next, CheckMode.Contextual, sourcePropType);
-        }
-        finally {
-            next.contextualType = undefined;
-        }
+        pushContextualType(next, sourcePropType);
+        const result = checkExpressionForMutableLocation(next, CheckMode.Contextual);
+        popContextualType();
+        return result;
     }
 
     type ElaborationIterator = IterableIterator<{ errorNode: Node, innerExpression: Expression | undefined, nameType: Type, errorMessage?: DiagnosticMessage | undefined }>;
@@ -19219,19 +19228,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // recreate a tuple from the elements, if possible
         // Since we're re-doing the expression type, we need to reapply the contextual type
-        const oldContext = node.contextualType;
-        node.contextualType = target;
-        try {
-            const tupleizedType = checkArrayLiteral(node, CheckMode.Contextual, /*forceTuple*/ true);
-            node.contextualType = oldContext;
-            if (isTupleLikeType(tupleizedType)) {
-                return elaborateElementwise(generateLimitedTupleElements(node, target), tupleizedType, target, relation, containingMessageChain, errorOutputContainer);
-            }
-            return false;
+        pushContextualType(node, target);
+        const tupleizedType = checkArrayLiteral(node, CheckMode.Contextual, /*forceTuple*/ true);
+        popContextualType();
+        if (isTupleLikeType(tupleizedType)) {
+            return elaborateElementwise(generateLimitedTupleElements(node, target), tupleizedType, target, relation, containingMessageChain, errorOutputContainer);
         }
-        finally {
-            node.contextualType = oldContext;
-        }
+        return false;
     }
 
     function *generateObjectLiteralElements(node: ObjectLiteralExpression): ElaborationIterator {
@@ -24435,7 +24438,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // all inferences were made to top-level occurrences of the type parameter, and
         // the type parameter has no constraint or its constraint includes no primitive or literal types, and
         // the type parameter was fixed during inference or does not occur at top-level in the return type.
-        const primitiveConstraint = hasPrimitiveConstraint(inference.typeParameter);
+        const primitiveConstraint = hasPrimitiveConstraint(inference.typeParameter) || isConstTypeVariable(inference.typeParameter);
         const widenLiteralTypes = !primitiveConstraint && inference.topLevel &&
             (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
         const baseCandidates = primitiveConstraint ? sameMap(candidates, getRegularTypeOfLiteralType) :
@@ -28648,8 +28651,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // We cannot answer semantic questions within a with block, do not proceed any further
             return undefined;
         }
-        if (node.contextualType) {
-            return node.contextualType;
+        const cached = getCachedContextualType(node);
+        if (cached) {
+            return cached;
         }
         const { parent } = node;
         switch (parent.kind) {
@@ -28671,7 +28675,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getContextualTypeForArgument(parent as CallExpression | NewExpression, node);
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
-                return isConstTypeReference((parent as AssertionExpression).type) ? tryFindWhenConstTypeReference(parent as AssertionExpression) : getTypeFromTypeNode((parent as AssertionExpression).type);
+                return isConstTypeReference((parent as AssertionExpression).type) ? getContextualType(parent as AssertionExpression, contextFlags) : getTypeFromTypeNode((parent as AssertionExpression).type);
             case SyntaxKind.BinaryExpression:
                 return getContextualTypeForBinaryOperand(node, contextFlags);
             case SyntaxKind.PropertyAssignment:
@@ -28693,7 +28697,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Like in `checkParenthesizedExpression`, an `/** @type {xyz} */` comment before a parenthesized expression acts as a type cast.
                 const tag = isInJSFile(parent) ? getJSDocTypeTag(parent) : undefined;
                 return !tag ? getContextualType(parent as ParenthesizedExpression, contextFlags) :
-                    isJSDocTypeTag(tag) && isConstTypeReference(tag.typeExpression.type) ? tryFindWhenConstTypeReference(parent as ParenthesizedExpression) :
+                    isJSDocTypeTag(tag) && isConstTypeReference(tag.typeExpression.type) ? getContextualType(parent as ParenthesizedExpression, contextFlags) :
                     getTypeFromTypeNode(tag.typeExpression.type);
             }
             case SyntaxKind.NonNullExpression:
@@ -28712,23 +28716,40 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getContextualJsxElementAttributesType(parent as JsxOpeningLikeElement, contextFlags);
         }
         return undefined;
+    }
 
-        function tryFindWhenConstTypeReference(node: Expression) {
-            return getContextualType(node, contextFlags);
+    function pushContextualType(node: Node, type: Type | undefined) {
+        contextualTypeNodes[contextualTypeCount] = node;
+        contextualTypes[contextualTypeCount] = type;
+        contextualTypeCount++;
+    }
+
+    function popContextualType() {
+        contextualTypeCount--;
+    }
+
+    function getCachedContextualType(node: Node) {
+        for (let i = contextualTypeCount - 1; i >= 0; i--) {
+            if (node === contextualTypeNodes[i]) {
+                return contextualTypes[i];
+            }
         }
+        return undefined;
     }
 
     function getInferenceContext(node: Node) {
-        const ancestor = findAncestor(node, n => !!n.inferenceContext);
-        return ancestor && ancestor.inferenceContext!;
+        return isNodeDescendantOf(node, currentInferenceNode) ? currentInferenceContext : undefined;
     }
 
     function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement, contextFlags: ContextFlags | undefined) {
-        if (isJsxOpeningElement(node) && node.parent.contextualType && contextFlags !== ContextFlags.Completions) {
-            // Contextually applied type is moved from attributes up to the outer jsx attributes so when walking up from the children they get hit
-            // _However_ to hit them from the _attributes_ we must look for them here; otherwise we'll used the declared type
-            // (as below) instead!
-            return node.parent.contextualType;
+        if (isJsxOpeningElement(node) && contextFlags !== ContextFlags.Completions) {
+            const cached = getCachedContextualType(node.parent);
+            if (cached) {
+                // Contextually applied type is moved from attributes up to the outer jsx attributes so when walking up from the children they get hit
+                // _However_ to hit them from the _attributes_ we must look for them here; otherwise we'll used the declared type
+                // (as below) instead!
+                return cached;
+            }
         }
         return getContextualTypeForArgumentAtIndex(node, 0);
     }
@@ -29058,9 +29079,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const elementCount = elements.length;
         const elementTypes: Type[] = [];
         const elementFlags: ElementFlags[] = [];
-        const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
+        pushContextualType(node, getContextualType(node, /*contextFlags*/ undefined));
         const inDestructuringPattern = isAssignmentTarget(node);
         const inConstContext = isConstContext(node);
+        const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
+        const inTupleContext = !!contextualType && someType(contextualType, isTupleLikeType);
         let hasOmittedExpression = false;
         for (let i = 0; i < elementCount; i++) {
             const e = elements[i];
@@ -29103,21 +29126,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 elementFlags.push(ElementFlags.Optional);
             }
             else {
-                const elementContextualType = getContextualTypeForElementExpression(contextualType, elementTypes.length);
-                const type = checkExpressionForMutableLocation(e, checkMode, elementContextualType, forceTuple);
+                const type = checkExpressionForMutableLocation(e, checkMode, forceTuple);
                 elementTypes.push(addOptionality(type, /*isProperty*/ true, hasOmittedExpression));
                 elementFlags.push(hasOmittedExpression ? ElementFlags.Optional : ElementFlags.Required);
-                if (contextualType && someType(contextualType, isTupleLikeType) && checkMode && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && isContextSensitive(e)) {
+                if (inTupleContext && checkMode && checkMode & CheckMode.Inferential && !(checkMode & CheckMode.SkipContextSensitive) && isContextSensitive(e)) {
                     const inferenceContext = getInferenceContext(node);
                     Debug.assert(inferenceContext);  // In CheckMode.Inferential we should always have an inference context
                     addIntraExpressionInferenceSite(inferenceContext, e, type);
                 }
             }
         }
+        popContextualType();
         if (inDestructuringPattern) {
             return createTupleType(elementTypes, elementFlags);
         }
-        if (forceTuple || inConstContext || contextualType && someType(contextualType, isTupleLikeType)) {
+        if (forceTuple || inConstContext || inTupleContext) {
             return createArrayLiteralType(createTupleType(elementTypes, elementFlags, /*readonly*/ inConstContext));
         }
         return createArrayLiteralType(createArrayType(elementTypes.length ?
@@ -29239,6 +29262,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let propertiesArray: Symbol[] = [];
         let spread: Type = emptyObjectType;
 
+        pushContextualType(node, getContextualType(node, /*contextFlags*/ undefined));
         const contextualType = getApparentTypeOfContextualType(node, /*contextFlags*/ undefined);
         const contextualTypeHasPattern = contextualType && contextualType.pattern &&
             (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
@@ -29399,6 +29423,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             propertiesArray.push(member);
         }
+        popContextualType();
 
         // If object literal is contextually typed by the implied type of a binding pattern, augment the result
         // type with those properties for which the binding pattern specifies a default value.
@@ -31607,6 +31632,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const types = [];
         const flags = [];
         const names = [];
+        const inConstContext = isConstTypeVariable(restType);
         for (let i = index; i < argCount; i++) {
             const arg = args[i];
             if (isSpreadArgument(arg)) {
@@ -31623,7 +31649,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else {
                 const contextualType = getIndexedAccessType(restType, getNumberLiteralType(i - index), AccessFlags.Contextual);
                 const argType = checkExpressionWithContextualType(arg, contextualType, context, checkMode);
-                const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping);
+                const hasPrimitiveContextualType = inConstContext || maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping);
                 types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
                 flags.push(ElementFlags.Required);
             }
@@ -31631,7 +31657,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 names.push((arg as SyntheticExpression).tupleNameSource!);
             }
         }
-        return createTupleType(types, flags, /*readonly*/ false, length(names) === length(types) ? names : undefined);
+        return createTupleType(types, flags, inConstContext, length(names) === length(types) ? names : undefined);
     }
 
     function checkTypeArguments(signature: Signature, typeArgumentNodes: readonly TypeNode[], reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | undefined {
@@ -33087,7 +33113,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isJsxIntrinsicIdentifier(node.tagName)) {
             const result = getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node);
             const fakeSignature = createSignatureForJSXIntrinsic(node, result);
-            checkTypeAssignableToAndOptionallyElaborate(checkExpressionWithContextualType(node.attributes, getEffectiveFirstArgumentForJsxSignature(fakeSignature, node), /*mapper*/ undefined, CheckMode.Normal), result, node.tagName, node.attributes);
+            checkTypeAssignableToAndOptionallyElaborate(checkExpressionWithContextualType(node.attributes, getEffectiveFirstArgumentForJsxSignature(fakeSignature, node), /*inferenceContext*/ undefined, CheckMode.Normal), result, node.tagName, node.attributes);
             if (length(node.typeArguments)) {
                 forEach(node.typeArguments, checkSourceElement);
                 diagnostics.add(createDiagnosticForNodeArray(getSourceFileOfNode(node), node.typeArguments!, Diagnostics.Expected_0_type_arguments_but_got_1, 0, length(node.typeArguments)));
@@ -35971,32 +35997,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkExpressionWithContextualType(node: Expression, contextualType: Type, inferenceContext: InferenceContext | undefined, checkMode: CheckMode): Type {
-        const context = getContextNode(node);
-        const saveContextualType = context.contextualType;
-        const saveInferenceContext = context.inferenceContext;
-        try {
-            context.contextualType = contextualType;
-            context.inferenceContext = inferenceContext;
-            const type = checkExpression(node, checkMode | CheckMode.Contextual | (inferenceContext ? CheckMode.Inferential : 0));
-            // In CheckMode.Inferential we collect intra-expression inference sites to process before fixing any type
-            // parameters. This information is no longer needed after the call to checkExpression.
-            if (inferenceContext && inferenceContext.intraExpressionInferenceSites) {
-                inferenceContext.intraExpressionInferenceSites = undefined;
-            }
-            // We strip literal freshness when an appropriate contextual type is present such that contextually typed
-            // literals always preserve their literal types (otherwise they might widen during type inference). An alternative
-            // here would be to not mark contextually typed literals as fresh in the first place.
-            const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node, /*contextFlags*/ undefined)) ?
-                getRegularTypeOfLiteralType(type) : type;
-            return result;
+        const contextNode = getContextNode(node);
+        pushContextualType(contextNode, contextualType);
+        const saveInferenceNode = currentInferenceNode;
+        const saveInferenceContext = currentInferenceContext;
+        currentInferenceNode = contextNode;
+        currentInferenceContext = inferenceContext;
+        const type = checkExpression(node, checkMode | CheckMode.Contextual | (inferenceContext ? CheckMode.Inferential : 0));
+        // In CheckMode.Inferential we collect intra-expression inference sites to process before fixing any type
+        // parameters. This information is no longer needed after the call to checkExpression.
+        if (inferenceContext && inferenceContext.intraExpressionInferenceSites) {
+            inferenceContext.intraExpressionInferenceSites = undefined;
         }
-        finally {
-            // In the event our operation is canceled or some other exception occurs, reset the contextual type
-            // so that we do not accidentally hold onto an instance of the checker, as a Type created in the services layer
-            // may hold onto the checker that created it.
-            context.contextualType = saveContextualType;
-            context.inferenceContext = saveInferenceContext;
-        }
+        // We strip literal freshness when an appropriate contextual type is present such that contextually typed
+        // literals always preserve their literal types (otherwise they might widen during type inference). An alternative
+        // here would be to not mark contextually typed literals as fresh in the first place.
+        const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node, /*contextFlags*/ undefined)) ?
+            getRegularTypeOfLiteralType(type) : type;
+        currentInferenceNode = saveInferenceNode;
+        currentInferenceContext = saveInferenceContext;
+        popContextualType();
+        return result;
     }
 
     function checkExpressionCached(node: Expression | QualifiedName, checkMode?: CheckMode): Type {
@@ -36105,15 +36126,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const parent = node.parent;
         return isAssertionExpression(parent) && isConstTypeReference(parent.type) ||
             isJSDocTypeAssertion(parent) && isConstTypeReference(getJSDocTypeAssertionType(parent)) ||
+            !isSpreadElement(node) && isConstTypeParameterContext(node) ||
             (isParenthesizedExpression(parent) || isArrayLiteralExpression(parent) || isSpreadElement(parent)) && isConstContext(parent) ||
             (isPropertyAssignment(parent) || isShorthandPropertyAssignment(parent) || isTemplateSpan(parent)) && isConstContext(parent.parent);
     }
 
-    function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode | undefined, contextualType?: Type, forceTuple?: boolean): Type {
+    function isConstTypeParameterContext(node: Expression) {
+        const contextualType = getContextualType(node, ContextFlags.None);
+        return !!contextualType && someType(contextualType, isConstTypeVariable);
+    }
+
+    function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode | undefined, forceTuple?: boolean): Type {
         const type = checkExpression(node, checkMode, forceTuple);
         return isConstContext(node) || isCommonJsExportedExpression(node) ? getRegularTypeOfLiteralType(type) :
             isTypeAssertion(node) ? type :
-            getWidenedLiteralLikeTypeForContextualType(type, instantiateContextualType(arguments.length === 2 ? getContextualType(node, /*contextFlags*/ undefined) : contextualType, node, /*contextFlags*/ undefined));
+            getWidenedLiteralLikeTypeForContextualType(type, instantiateContextualType(getContextualType(node, /*contextFlags*/ undefined), node, /*contextFlags*/ undefined));
     }
 
     function checkPropertyAssignment(node: PropertyAssignment, checkMode?: CheckMode): Type {
@@ -36360,18 +36387,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (links.contextFreeType) {
             return links.contextFreeType;
         }
-        const saveContextualType = node.contextualType;
-        node.contextualType = anyType;
-        try {
-            const type = links.contextFreeType = checkExpression(node, CheckMode.SkipContextSensitive);
-            return type;
-        }
-        finally {
-            // In the event our operation is canceled or some other exception occurs, reset the contextual type
-            // so that we do not accidentally hold onto an instance of the checker, as a Type created in the services layer
-            // may hold onto the checker that created it.
-            node.contextualType = saveContextualType;
-        }
+        pushContextualType(node, anyType);
+        const type = links.contextFreeType = checkExpression(node, CheckMode.SkipContextSensitive);
+        popContextualType();
+        return type;
     }
 
     function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode, forceTuple?: boolean): Type {
@@ -45392,15 +45411,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_an_index_signature, tokenToString(modifier.kind));
                 }
             }
-            if (modifier.kind !== SyntaxKind.InKeyword && modifier.kind !== SyntaxKind.OutKeyword) {
+            if (modifier.kind !== SyntaxKind.InKeyword && modifier.kind !== SyntaxKind.OutKeyword && modifier.kind !== SyntaxKind.ConstKeyword) {
                 if (node.kind === SyntaxKind.TypeParameter) {
                     return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_type_parameter, tokenToString(modifier.kind));
                 }
             }
             switch (modifier.kind) {
                 case SyntaxKind.ConstKeyword:
-                    if (node.kind !== SyntaxKind.EnumDeclaration) {
+                    if (node.kind !== SyntaxKind.EnumDeclaration && node.kind !== SyntaxKind.TypeParameter) {
                         return grammarErrorOnNode(node, Diagnostics.A_class_member_cannot_have_the_0_keyword, tokenToString(SyntaxKind.ConstKeyword));
+                    }
+                    if (node.kind === SyntaxKind.TypeParameter && !isFunctionLikeDeclaration(node.parent)) {
+                        return grammarErrorOnNode(modifier, Diagnostics._0_modifier_can_only_appear_on_a_type_parameter_of_a_function_or_constructor, tokenToString(modifier.kind));
                     }
                     break;
                 case SyntaxKind.OverrideKeyword:

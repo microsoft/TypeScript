@@ -907,6 +907,10 @@
         "category": "Error",
         "code": 1276
     },
+    "'{0}' modifier can only appear on a type parameter of a function or constructor": {
+        "category": "Error",
+        "code": 1277
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
