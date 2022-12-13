@@ -23,6 +23,7 @@ import {
     CallSignatureDeclaration,
     CaseBlock,
     CaseClause,
+    CaseKeyword,
     CatchClause,
     ClassDeclaration,
     ClassExpression,
@@ -379,6 +380,11 @@ export function isSuperKeyword(node: Node): node is SuperExpression {
 /** @internal */
 export function isImportKeyword(node: Node): node is ImportExpression {
     return node.kind === SyntaxKind.ImportKeyword;
+}
+
+/** @internal */
+export function isCaseKeyword(node: Node): node is CaseKeyword {
+    return node.kind === SyntaxKind.CaseKeyword;
 }
 
 // Names
