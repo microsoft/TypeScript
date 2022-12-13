@@ -978,10 +978,10 @@ export function detectSortCaseSensitivity<T>(array: readonly T[], useEslintOrder
     for (let i = 1, len = array.length; i < len; i++) {
         const prevElement = array[i - 1];
         const element = array[i];
-        if (caseSensitiveComparer(prevElement, element) === Comparison.GreaterThan) {
+        if (kind & SortKind.CaseSensitive && caseSensitiveComparer(prevElement, element) === Comparison.GreaterThan) {
             kind &= ~SortKind.CaseSensitive;
         }
-        if (caseInsensitiveComparer(prevElement, element) === Comparison.GreaterThan) {
+        if (kind & SortKind.CaseInsensitive && caseInsensitiveComparer(prevElement, element) === Comparison.GreaterThan) {
             kind &= ~SortKind.CaseInsensitive;
         }
         if (kind === SortKind.None) {
@@ -990,7 +990,6 @@ export function detectSortCaseSensitivity<T>(array: readonly T[], useEslintOrder
     }
     return kind;
 }
-
 
 /** @internal */
 export function arrayIsEqualTo<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
