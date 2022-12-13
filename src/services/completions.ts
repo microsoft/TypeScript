@@ -128,6 +128,7 @@ import {
     isCallExpression,
     isCaseBlock,
     isCaseClause,
+    isCaseKeyword,
     isCheckJsEnabledForFile,
     isClassElement,
     isClassLike,
@@ -194,6 +195,7 @@ import {
     isNamedImports,
     isNamedImportsOrExports,
     isNamespaceImport,
+    isNodeDescendantOf,
     isObjectBindingPattern,
     isObjectLiteralExpression,
     isObjectTypeDeclaration,
@@ -435,6 +437,7 @@ export const enum SymbolOriginInfoKind {
     ResolvedExport      = 1 << 5,
     TypeOnlyAlias       = 1 << 6,
     ObjectLiteralMethod = 1 << 7,
+    Ignore              = 1 << 8,
 
     SymbolMemberNoExport = SymbolMember,
     SymbolMemberExport   = SymbolMember | Export,
@@ -511,6 +514,10 @@ function originIsTypeOnlyAlias(origin: SymbolOriginInfo | undefined): origin is 
 
 function originIsObjectLiteralMethod(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoObjectLiteralMethod {
     return !!(origin && origin.kind & SymbolOriginInfoKind.ObjectLiteralMethod);
+}
+
+function originIsIgnore(origin: SymbolOriginInfo | undefined): boolean {
+    return !!(origin && origin.kind & SymbolOriginInfoKind.Ignore);
 }
 
 /** @internal */
@@ -865,7 +872,6 @@ function completionInfoFromData(
         location,
         propertyAccessToConvert,
         keywordFilters,
-        literals,
         symbolToOriginInfoMap,
         recommendedCompletion,
         isJsxInitializer,
@@ -875,9 +881,12 @@ function completionInfoFromData(
         isRightOfDotOrQuestionDot,
         importStatementCompletion,
         insideJsDocTagTypeExpression,
-        symbolToSortTextMap: symbolToSortTextMap,
+        symbolToSortTextMap,
         hasUnresolvedAutoImports,
     } = completionData;
+    let literals = completionData.literals;
+
+    const checker = program.getTypeChecker();
 
     // Verify if the file is JSX language variant
     if (getLanguageVariant(sourceFile.scriptKind) === LanguageVariant.JSX) {
@@ -885,6 +894,25 @@ function completionInfoFromData(
         if (completionInfo) {
             return completionInfo;
         }
+    }
+
+    // When the completion is for the expression of a case clause (e.g. `case |`),
+    // filter literals & enum symbols whose values are already present in existing case clauses.
+    const caseClause = findAncestor(contextToken, isCaseClause);
+    if (caseClause && (isCaseKeyword(contextToken!) || isNodeDescendantOf(contextToken!, caseClause.expression))) {
+        const tracker = newCaseClauseTracker(checker, caseClause.parent.clauses);
+        literals = literals.filter(literal => !tracker.hasValue(literal));
+        // The `symbols` array cannot be filtered directly, because to each symbol at position i in `symbols`,
+        // there might be a corresponding origin at position i in `symbolToOriginInfoMap`.
+        // So instead of filtering the `symbols` array, we mark symbols to be ignored.
+        symbols.forEach((symbol, i) => {
+            if (symbol.valueDeclaration && isEnumMember(symbol.valueDeclaration)) {
+                const value = checker.getConstantValue(symbol.valueDeclaration);
+                if (value !== undefined && tracker.hasValue(value)) {
+                    symbolToOriginInfoMap[i] = { kind: SymbolOriginInfoKind.Ignore };
+                }
+            }
+        });
     }
 
     const entries = createSortedArray<CompletionEntry>();
@@ -4533,6 +4561,9 @@ function getCompletionEntryDisplayNameForSymbol(
     kind: CompletionKind,
     jsxIdentifierExpected: boolean,
 ): CompletionEntryDisplayNameForSymbol | undefined {
+    if (originIsIgnore(origin)) {
+        return undefined;
+    }
     const name = originIncludesSymbolName(origin) ? origin.symbolName : symbol.name;
     if (name === undefined
         // If the symbol is external module, don't show it in the completion list
