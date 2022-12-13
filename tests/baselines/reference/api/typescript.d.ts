@@ -5236,7 +5236,7 @@ declare namespace ts {
         /**
          * Note that the case of the config path has not yet been normalized, as no files have been imported into the project yet
          */
-        extendedConfigPath?: string;
+        extendedConfigPath?: string | string[];
     }
     interface ExtendedConfigCacheEntry {
         extendedResult: TsConfigSourceFile;
