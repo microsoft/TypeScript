@@ -895,6 +895,9 @@ function completionInfoFromData(
     if (caseClause && (isCaseKeyword(contextToken!) || isNodeDescendantOf(contextToken!, caseClause.expression))) {
         const tracker = newCaseClauseTracker(checker, caseClause.parent.clauses);
         literals = literals.filter(literal => !tracker.hasValue(literal));
+        // The `symbols` array cannot be filtered directly, because to each symbol at position i in `symbols`,
+        // there might be a corresponding origin at position i in `symbolToOriginInfoMap`.
+        // So instead of filtering the `symbols` array, we mark symbols to be ignored.
         symbols.forEach((symbol, i) => {
             if (symbol.valueDeclaration && isEnumMember(symbol.valueDeclaration)) {
                 const value = checker.getConstantValue(symbol.valueDeclaration);
