@@ -79,6 +79,5 @@ var eval = function () {
 
 var x = 009; // error
 >x : number
->00 : 0
->9 : 9
+>009 : 9
 

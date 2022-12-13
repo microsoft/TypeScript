@@ -1,7 +1,3 @@
-// @target: es3, es5
-
-"use strict";
-
 00;
 05;
 000;

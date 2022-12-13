@@ -248,7 +248,6 @@ import {
     nodeIsPresent,
     NonNullChain,
     NonNullExpression,
-    NumericLiteral,
     objectAllocator,
     ObjectLiteralExpression,
     OptionalChain,
@@ -293,7 +292,6 @@ import {
     TextRange,
     ThisExpression,
     ThrowStatement,
-    TokenFlags,
     tokenToString,
     tracing,
     TracingNode,
@@ -2565,19 +2563,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         }
     }
 
-    function checkStrictModeStringLiteral(node: StringLiteral) {
-        if (languageVersion >= ScriptTarget.ES5 && inStrictMode && node.rangesOfOctalSequences) {
-            file.bindDiagnostics.push(...node.rangesOfOctalSequences.map(
-                range => createFileDiagnostic(file, range.pos, range.end - range.pos, Diagnostics.Octal_escape_sequences_are_not_allowed_in_strict_mode)));
-        }
-    }
-
-    function checkStrictModeNumericLiteral(node: NumericLiteral) {
-        if (languageVersion >= ScriptTarget.ES5 && inStrictMode && node.numericLiteralFlags & TokenFlags.Octal) {
-            file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
-        }
-    }
-
     function checkStrictModePostfixUnaryExpression(node: PostfixUnaryExpression) {
         // Grammar checking
         // The identifier eval or arguments may not appear as the LeftHandSideExpression of an
@@ -2822,10 +2807,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 return checkStrictModeCatchClause(node as CatchClause);
             case SyntaxKind.DeleteExpression:
                 return checkStrictModeDeleteExpression(node as DeleteExpression);
-            case SyntaxKind.StringLiteral:
-                return checkStrictModeStringLiteral(node as StringLiteral);
-            case SyntaxKind.NumericLiteral:
-                return checkStrictModeNumericLiteral(node as NumericLiteral);
             case SyntaxKind.PostfixUnaryExpression:
                 return checkStrictModePostfixUnaryExpression(node as PostfixUnaryExpression);
             case SyntaxKind.PrefixUnaryExpression:

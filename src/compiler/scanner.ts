@@ -19,9 +19,9 @@ import {
     LanguageVariant,
     LineAndCharacter,
     MapLike,
+    padLeft,
     parsePseudoBigInt,
     positionIsSynthesized,
-    ReadonlyTextRange,
     ScriptTarget,
     SourceFileLike,
     SyntaxKind,
@@ -29,7 +29,7 @@ import {
     trimStringStart,
 } from "./_namespaces/ts";
 
-export type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
+export type ErrorCallback = (message: DiagnosticMessage, length: number, arg0?: any) => void;
 
 /** @internal */
 export function tokenIsIdentifierOrKeyword(token: SyntaxKind): boolean {
@@ -62,12 +62,11 @@ export interface Scanner {
     getCommentDirectives(): CommentDirective[] | undefined;
     /** @internal */
     getTokenFlags(): TokenFlags;
-    /** @internal */
-    getRangesOfOctalSequences(): ReadonlyTextRange[];
     reScanGreaterToken(): SyntaxKind;
     reScanSlashToken(): SyntaxKind;
     reScanAsteriskEqualsToken(): SyntaxKind;
     reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
+    reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
     scanJsxIdentifier(): SyntaxKind;
     scanJsxAttributeValue(): SyntaxKind;
     reScanJsxAttributeValue(): SyntaxKind;
@@ -986,7 +985,6 @@ export function createScanner(languageVersion: ScriptTarget,
     let token: SyntaxKind;
     let tokenValue!: string;
     let tokenFlags: TokenFlags;
-    let rangesOfOctalSequences: ReadonlyTextRange[];
 
     let commentDirectives: CommentDirective[] | undefined;
     let inJSDocType = 0;
@@ -1010,11 +1008,11 @@ export function createScanner(languageVersion: ScriptTarget,
         getCommentDirectives: () => commentDirectives,
         getNumericLiteralFlags: () => tokenFlags & TokenFlags.NumericLiteralFlags,
         getTokenFlags: () => tokenFlags,
-        getRangesOfOctalSequences: () => rangesOfOctalSequences,
         reScanGreaterToken,
         reScanAsteriskEqualsToken,
         reScanSlashToken,
         reScanTemplateToken,
+        reScanTemplateHeadOrNoSubstitutionTemplate,
         scanJsxIdentifier,
         scanJsxAttributeValue,
         reScanJsxAttributeValue,
@@ -1051,12 +1049,12 @@ export function createScanner(languageVersion: ScriptTarget,
     return scanner;
 
     function error(message: DiagnosticMessage): void;
-    function error(message: DiagnosticMessage, errPos: number, length: number): void;
-    function error(message: DiagnosticMessage, errPos: number = pos, length?: number): void {
+    function error(message: DiagnosticMessage, errPos: number, length: number, arg0?: any): void;
+    function error(message: DiagnosticMessage, errPos: number = pos, length?: number, arg0?: any): void {
         if (onError) {
             const oldPos = pos;
             pos = errPos;
-            onError(message, length || 0);
+            onError(message, length || 0, arg0);
             pos = oldPos;
         }
     }
@@ -1099,9 +1097,62 @@ export function createScanner(languageVersion: ScriptTarget,
         return result + text.substring(start, pos);
     }
 
+    // Extract from Section 12.9.3
+    // NumericLiteral ::=
+    //     | DecimalLiteral
+    //     | DecimalBigIntegerLiteral
+    //     | NonDecimalIntegerLiteral 'n'?
+    //     | LegacyOctalIntegerLiteral
+    // DecimalBigIntegerLiteral ::=
+    //     | '0n'
+    //     | [1-9] DecimalDigits? 'n'
+    //     | [1-9] '_' DecimalDigits 'n'
+    // DecimalLiteral ::=
+    //     | DecimalIntegerLiteral? '.' DecimalDigits? ExponentPart?
+    //     | '.' DecimalDigits ExponentPart?
+    //     | DecimalIntegerLiteral ExponentPart?
+    // DecimalIntegerLiteral ::=
+    //     | '0'
+    //     | [1-9] '_'? DecimalDigits
+    //     | NonOctalDecimalIntegerLiteral
+    // LegacyOctalIntegerLiteral ::= '0' [0-7]+
+    // NonOctalDecimalIntegerLiteral ::= '0' [0-7]* [89] [0-9]*
     function scanNumber(): { type: SyntaxKind, value: string } {
-        const start = pos;
-        const mainFragment = scanNumberFragment();
+        let start = pos;
+        let mainFragment: string;
+        let emitLeadingZeroError = false;
+        if (text.charCodeAt(pos) === CharacterCodes._0) {
+            pos++;
+            if (text.charCodeAt(pos) === CharacterCodes._) {
+                error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
+                // treat it as a normal number literal
+                pos--;
+                mainFragment = scanNumberFragment();
+            }
+            // Separators are not allowed in the below cases
+            else if (!scanDigits()) {
+                // NonOctalDecimalIntegerLiteral, emit error later
+                // Separators in decimal and exponent parts are still allowed according to the spec
+                emitLeadingZeroError = true;
+                mainFragment = tokenValue;
+            }
+            else if (!tokenValue) {
+                // a single zero
+                mainFragment = "0";
+            }
+            else {
+                // LegacyOctalIntegerLiteral
+                tokenValue = "0o" + tokenValue;
+                tokenFlags |= TokenFlags.Octal;
+                const withMinus = token === SyntaxKind.MinusToken;
+                start -= +withMinus;
+                error(Diagnostics.Octal_literals_are_not_allowed_Use_the_syntax_0, start, pos - start, (withMinus ? "-" : "") + tokenValue);
+                return { type: SyntaxKind.NumericLiteral, value: tokenValue };
+            }
+        }
+        else {
+            mainFragment = scanNumberFragment();
+        }
         let decimalFragment: string | undefined;
         let scientificFragment: string | undefined;
         if (text.charCodeAt(pos) === CharacterCodes.dot) {
@@ -1135,6 +1186,12 @@ export function createScanner(languageVersion: ScriptTarget,
         }
         else {
             result = text.substring(start, end); // No need to use all the fragments; no _ removal needed
+        }
+
+        if (emitLeadingZeroError) {
+            error(Diagnostics.Decimals_with_leading_zeros_are_not_allowed, start, end - start);
+            // if a literal has a leading zero, it must not be bigint
+            return { type: SyntaxKind.NumericLiteral, value: result };
         }
 
         if (decimalFragment !== undefined || tokenFlags & TokenFlags.Scientific) {
@@ -1174,12 +1231,17 @@ export function createScanner(languageVersion: ScriptTarget,
         }
     }
 
-    function scanOctalDigits(): number {
+    function scanDigits(): boolean {
         const start = pos;
-        while (isOctalDigit(text.charCodeAt(pos))) {
+        let isOctal = true;
+        while (isDigit(text.charCodeAt(pos))) {
+            if (!isOctalDigit(text.charCodeAt(pos))) {
+                isOctal = false;
+            }
             pos++;
         }
-        return +(text.substring(start, pos));
+        tokenValue = text.substring(start, pos);
+        return isOctal;
     }
 
     /**
@@ -1247,7 +1309,6 @@ export function createScanner(languageVersion: ScriptTarget,
         pos++;
         let result = "";
         let start = pos;
-        rangesOfOctalSequences = [];
         while (true) {
             if (pos >= end) {
                 result += text.substring(start, pos);
@@ -1289,7 +1350,6 @@ export function createScanner(languageVersion: ScriptTarget,
         let start = pos;
         let contents = "";
         let resultingToken: SyntaxKind;
-        rangesOfOctalSequences = [];
 
         while (true) {
             if (pos >= end) {
@@ -1345,11 +1405,6 @@ export function createScanner(languageVersion: ScriptTarget,
         }
 
         Debug.assert(resultingToken !== undefined);
-        if (shouldEmitInvalidEscapeError) {
-            rangesOfOctalSequences.forEach(range => {
-                error(Diagnostics.Octal_escape_sequences_are_not_allowed_in_template_strings, range.pos, range.end - range.pos);
-            });
-        }
 
         tokenValue = contents;
         return resultingToken;
@@ -1389,14 +1444,23 @@ export function createScanner(languageVersion: ScriptTarget,
                 if (pos < end && isOctalDigit(text.charCodeAt(pos))) {
                     pos++;
                 }
-            // '\47'
-            // falls through
+                // '\47'
+                tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                if (shouldEmitInvalidEscapeError) {
+                    const code = parseInt(text.substring(start + 1, pos), 8);
+                    error(Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0, start, pos - start, "\\x" + padLeft(code.toString(16), 2, "0"));
+                    return String.fromCharCode(code);
+                }
+                return text.substring(start, pos);
             case CharacterCodes._8:
             case CharacterCodes._9:
                 // the invalid '\8' and '\9'
-                tokenFlags |= TokenFlags.OctalEscape;
-                rangesOfOctalSequences.push({ pos: start, end: pos });
-                return String.fromCharCode(parseInt(text.substring(start + 1, pos), 8));
+                tokenFlags |= TokenFlags.ContainsInvalidEscape;
+                if (shouldEmitInvalidEscapeError) {
+                    error(Diagnostics._0_is_not_allowed, start, 2, text.substring(start, pos));
+                    return String.fromCharCode(ch);
+                }
+                return text.substring(start, pos);
             case CharacterCodes.b:
                 return "\b";
             case CharacterCodes.t:
@@ -1937,15 +2001,6 @@ export function createScanner(languageVersion: ScriptTarget,
                         tokenFlags |= TokenFlags.OctalSpecifier;
                         return token = checkBigIntSuffix();
                     }
-                    // Try to parse as an octal
-                    if (pos + 1 < end && isOctalDigit(text.charCodeAt(pos + 1))) {
-                        tokenValue = "" + scanOctalDigits();
-                        tokenFlags |= TokenFlags.Octal;
-                        return token = SyntaxKind.NumericLiteral;
-                    }
-                // This fall-through is a deviation from the EcmaScript grammar. The grammar says that a leading zero
-                // can only be followed by an octal digit, a dot, or the end of the number literal. However, we are being
-                // permissive and allowing decimal digits of the form 08* and 09* (which many browsers also do).
                 // falls through
                 case CharacterCodes._1:
                 case CharacterCodes._2:
@@ -2322,6 +2377,11 @@ export function createScanner(languageVersion: ScriptTarget,
         return token = scanTemplateAndSetTokenValue(!isTaggedTemplate);
     }
 
+    function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
+        pos = tokenPos;
+        return token = scanTemplateAndSetTokenValue(/*shouldEmitInvalidEscapeError*/ true);
+    }
+
     function reScanJsxToken(allowMultilineJsxText = true): JsxTokenSyntaxKind {
         pos = tokenPos = startPos;
         return token = scanJsxToken(allowMultilineJsxText);
@@ -2574,7 +2634,6 @@ export function createScanner(languageVersion: ScriptTarget,
         const saveToken = token;
         const saveTokenValue = tokenValue;
         const saveTokenFlags = tokenFlags;
-        const saveRangesOfOctalSequences = rangesOfOctalSequences;
         const result = callback();
 
         // If our callback returned something 'falsy' or we're just looking ahead,
@@ -2586,7 +2645,6 @@ export function createScanner(languageVersion: ScriptTarget,
             token = saveToken;
             tokenValue = saveTokenValue;
             tokenFlags = saveTokenFlags;
-            rangesOfOctalSequences = saveRangesOfOctalSequences;
         }
         return result;
     }
@@ -2599,7 +2657,6 @@ export function createScanner(languageVersion: ScriptTarget,
         const saveToken = token;
         const saveTokenValue = tokenValue;
         const saveTokenFlags = tokenFlags;
-        const saveRangesOfOctalSequences = rangesOfOctalSequences;
         const saveErrorExpectations = commentDirectives;
 
         setText(text, start, length);
@@ -2612,7 +2669,6 @@ export function createScanner(languageVersion: ScriptTarget,
         token = saveToken;
         tokenValue = saveTokenValue;
         tokenFlags = saveTokenFlags;
-        rangesOfOctalSequences = saveRangesOfOctalSequences;
         commentDirectives = saveErrorExpectations;
 
         return result;

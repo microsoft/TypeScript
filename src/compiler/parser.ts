@@ -2098,8 +2098,8 @@ namespace Parser {
         parseErrorAt(range.pos, range.end, message, arg0);
     }
 
-    function scanError(message: DiagnosticMessage, length: number): void {
-        parseErrorAtPosition(scanner.getTextPos(), length, message);
+    function scanError(message: DiagnosticMessage, length: number, arg0?: any): void {
+        parseErrorAtPosition(scanner.getTextPos(), length, message, arg0);
     }
 
     function getNodePos(): number {
@@ -2152,6 +2152,10 @@ namespace Parser {
 
     function reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind {
         return currentToken = scanner.reScanTemplateToken(isTaggedTemplate);
+    }
+
+    function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
+        return currentToken = scanner.reScanTemplateHeadOrNoSubstitutionTemplate();
     }
 
     function reScanLessThanToken(): SyntaxKind {
@@ -3603,7 +3607,9 @@ namespace Parser {
     }
 
     function parseTemplateHead(isTaggedTemplate: boolean): TemplateHead {
-        reScanTemplateToken(isTaggedTemplate);
+        if (!isTaggedTemplate && scanner.getTokenFlags() & TokenFlags.ContainsInvalidEscape) {
+            reScanTemplateHeadOrNoSubstitutionTemplate();
+        }
         const fragment = parseLiteralLikeNode(token());
         Debug.assert(fragment.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
         return fragment as TemplateHead;
@@ -3631,7 +3637,7 @@ namespace Parser {
             // We also do not need to check for negatives because any prefix operator would be part of a
             // parent unary expression.
             kind === SyntaxKind.NumericLiteral ? factory.createNumericLiteral(scanner.getTokenValue(), scanner.getNumericLiteralFlags()) :
-            kind === SyntaxKind.StringLiteral ? factory.createStringLiteral(scanner.getTokenValue(), /*isSingleQuote*/ undefined, scanner.hasExtendedUnicodeEscape(), scanner.getRangesOfOctalSequences()) :
+            kind === SyntaxKind.StringLiteral ? factory.createStringLiteral(scanner.getTokenValue(), /*isSingleQuote*/ undefined, scanner.hasExtendedUnicodeEscape()) :
             isLiteralKind(kind) ? factory.createLiteralLikeNode(kind, scanner.getTokenValue()) :
             Debug.fail();
 
@@ -6409,8 +6415,8 @@ namespace Parser {
     function parsePrimaryExpression(): PrimaryExpression {
         switch (token()) {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-                if (scanner.getTokenFlags() & TokenFlags.ContainsOctalOrInvalidEscape) {
-                    reScanTemplateToken(/* isTaggedTemplate */ false);
+                if (scanner.getTokenFlags() & TokenFlags.ContainsInvalidEscape) {
+                    reScanTemplateHeadOrNoSubstitutionTemplate();
                 }
             // falls through
             case SyntaxKind.NumericLiteral:

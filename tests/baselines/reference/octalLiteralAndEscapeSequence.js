@@ -1,6 +1,4 @@
 //// [octalLiteralAndEscapeSequence.ts]
-"use strict";
-
 00;
 05;
 000;
@@ -122,7 +120,6 @@
 
 
 //// [octalLiteralAndEscapeSequence.js]
-"use strict";
 00;
 05;
 000;

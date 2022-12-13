@@ -1,7 +1,5 @@
 === tests/cases/compiler/octalLiteralAndEscapeSequence.ts ===
 
-"use strict";
-
 00;
 05;
 000;

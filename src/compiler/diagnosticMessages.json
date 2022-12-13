@@ -227,10 +227,6 @@
         "category": "Error",
         "code": 1084
     },
-    "Octal literals are not available when targeting ECMAScript 5 and higher. Use the syntax '{0}'.": {
-        "category": "Error",
-        "code": 1085
-    },
     "'{0}' modifier cannot appear on a constructor declaration.": {
         "category": "Error",
         "code": 1089
@@ -351,7 +347,7 @@
         "category": "Error",
         "code": 1120
     },
-    "Octal literals are not allowed in strict mode.": {
+    "Octal literals are not allowed. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 1121
     },
@@ -1549,13 +1545,17 @@
         "category": "Message",
         "code": 1483
     },
-    "Octal escape sequences are not allowed in strict mode.": {
+    "Octal escape sequences are not allowed. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 1484
     },
-    "Octal escape sequences are not allowed in template strings.": {
+    "'{0}' is not allowed.": {
         "category": "Error",
         "code": 1485
+    },
+    "Decimals with leading zeros are not allowed.": {
+        "category": "Error",
+        "code": 1486
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -6371,14 +6371,6 @@
     "Type assertion expressions can only be used in TypeScript files.": {
         "category": "Error",
         "code": 8016
-    },
-    "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
-        "category": "Error",
-        "code": 8017
-    },
-    "Octal literals are not allowed in enums members initializer. Use the syntax '{0}'.": {
-        "category": "Error",
-        "code": 8018
     },
     "Report errors in .js files.": {
         "category": "Message",

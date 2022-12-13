@@ -114,7 +114,7 @@ var e14 = { 0: 0, 0x0: 0 };
 
 var e14 = { 0: 0, 000: 0 };
 >e14 : { 0: number; }
->{ 0: 0, 000: 0 } : { 0: number; }
+>{ 0: 0, 000: 0 } : { 0: number; "0o00": number; }
 >0 : number
 >0 : 0
 >000 : number
@@ -261,7 +261,7 @@ var f14 = { 0: 0, get 0x0() { return 0; } };
 
 var f14 = { 0: 0, get 000() { return 0; } };
 >f14 : { readonly 0: number; }
->{ 0: 0, get 000() { return 0; } } : { readonly 0: number; }
+>{ 0: 0, get 000() { return 0; } } : { 0: number; readonly "0o00": number; }
 >0 : number
 >0 : 0
 >000 : number

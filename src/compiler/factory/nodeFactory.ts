@@ -1112,11 +1112,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createStringLiteral(text: string, isSingleQuote?: boolean, hasExtendedUnicodeEscape?: boolean, rangesOfOctalSequences?: ReadonlyTextRange[]): StringLiteral {
+    function createStringLiteral(text: string, isSingleQuote?: boolean, hasExtendedUnicodeEscape?: boolean): StringLiteral {
         const node = createBaseStringLiteral(text, isSingleQuote);
         node.hasExtendedUnicodeEscape = hasExtendedUnicodeEscape;
         if (hasExtendedUnicodeEscape) node.transformFlags |= TransformFlags.ContainsES2015;
-        node.rangesOfOctalSequences = rangesOfOctalSequences;
         return node;
     }
 

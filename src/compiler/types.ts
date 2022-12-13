@@ -2344,7 +2344,6 @@ export interface StringLiteral extends LiteralExpression, Declaration {
      * @internal
      */
     readonly singleQuote?: boolean;
-    /** @internal */ readonly rangesOfOctalSequences?: ReadonlyTextRange[];
 }
 
 export type StringLiteralLike = StringLiteral | NoSubstitutionTemplateLiteral;
@@ -2803,23 +2802,19 @@ export const enum TokenFlags {
     /** @internal */
     ContainsSeparator = 1 << 9, // e.g. `0b1100_0101`
     /** @internal */
-    UnicodeEscape = 1 << 10,
+    UnicodeEscape = 1 << 10,    // e.g. `\u00a0`
     /** @internal */
     ContainsInvalidEscape = 1 << 11,    // e.g. `\uhello`
     /** @internal */
-    OctalEscape = 1 << 12,      // e.g. `\1`
-    /** @internal */
-    HexEscape = 1 << 13,        // e.g. `\xa0`
+    HexEscape = 1 << 12,        // e.g. `\xa0`
     /** @internal */
     BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
     /** @internal */
-    StringLiteralFlags = OctalEscape | HexEscape | UnicodeEscape | ExtendedUnicodeEscape | ContainsInvalidEscape,
+    StringLiteralFlags = HexEscape | UnicodeEscape | ExtendedUnicodeEscape | ContainsInvalidEscape,
     /** @internal */
     NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator,
     /** @internal */
-    TemplateLiteralLikeFlags = OctalEscape | HexEscape | UnicodeEscape | ExtendedUnicodeEscape | ContainsInvalidEscape,
-    /** @internal */
-    ContainsOctalOrInvalidEscape = OctalEscape | ContainsInvalidEscape,
+    TemplateLiteralLikeFlags = HexEscape | UnicodeEscape | ExtendedUnicodeEscape | ContainsInvalidEscape,
 }
 
 export interface NumericLiteral extends LiteralExpression, Declaration {
@@ -8106,7 +8101,7 @@ export interface NodeFactory {
     createNumericLiteral(value: string | number, numericLiteralFlags?: TokenFlags): NumericLiteral;
     createBigIntLiteral(value: string | PseudoBigInt): BigIntLiteral;
     createStringLiteral(text: string, isSingleQuote?: boolean): StringLiteral;
-    /** @internal */ createStringLiteral(text: string, isSingleQuote?: boolean, hasExtendedUnicodeEscape?: boolean, rangesOfOctalSequences?: ReadonlyTextRange[]): StringLiteral; // eslint-disable-line @typescript-eslint/unified-signatures
+    /** @internal */ createStringLiteral(text: string, isSingleQuote?: boolean, hasExtendedUnicodeEscape?: boolean): StringLiteral; // eslint-disable-line @typescript-eslint/unified-signatures
     createStringLiteralFromNode(sourceNode: PropertyNameLiteral | PrivateIdentifier, isSingleQuote?: boolean): StringLiteral;
     createRegularExpressionLiteral(text: string): RegularExpressionLiteral;
 

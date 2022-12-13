@@ -1,8 +1,4 @@
-// @target: es3, es5
-
 declare function tag(template: TemplateStringsArray, ...substitutions: any[]): string;
-
-"use strict";
 
 `\u`;
 `\u0`;

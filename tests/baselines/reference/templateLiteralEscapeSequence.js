@@ -1,8 +1,6 @@
 //// [templateLiteralEscapeSequence.ts]
 declare function tag(template: TemplateStringsArray, ...substitutions: any[]): string;
 
-"use strict";
-
 `\u`;
 `\u0`;
 `\u00`;
@@ -161,7 +159,6 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
 };
-"use strict";
 "\\u";
 "\\u0";
 "\\u00";

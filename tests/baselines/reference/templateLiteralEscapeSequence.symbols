@@ -5,8 +5,6 @@ declare function tag(template: TemplateStringsArray, ...substitutions: any[]): s
 >TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
 >substitutions : Symbol(substitutions, Decl(templateLiteralEscapeSequence.ts, 0, 52))
 
-"use strict";
-
 `\u`;
 `\u0`;
 `\u00`;

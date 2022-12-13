@@ -72,8 +72,8 @@ var e14 = { 0: 0, 0x0: 0 };
 
 var e14 = { 0: 0, 000: 0 };
 >e14 : Symbol(e14, Decl(objectLiteralErrors.ts, 14, 3), Decl(objectLiteralErrors.ts, 15, 3))
->0 : Symbol(0, Decl(objectLiteralErrors.ts, 15, 11), Decl(objectLiteralErrors.ts, 15, 17))
->000 : Symbol(0, Decl(objectLiteralErrors.ts, 15, 11), Decl(objectLiteralErrors.ts, 15, 17))
+>0 : Symbol(0, Decl(objectLiteralErrors.ts, 15, 11))
+>000 : Symbol(000, Decl(objectLiteralErrors.ts, 15, 17))
 
 var e15 = { "100": 0, 1e2: 0 };
 >e15 : Symbol(e15, Decl(objectLiteralErrors.ts, 16, 3))
