@@ -1678,7 +1678,6 @@ export function parseListTypeOption(opt: CommandLineOptionOfListType, value = ""
             return mapDefined(values, v => validateJsonOptionValue(opt.element, v || "", errors));
         case "boolean":
         case "object":
-        case "listOrElement":
             return Debug.fail(`List of ${opt.element.type} is not yet supported.`);
         default:
             return mapDefined(values, v => parseCustomTypeOption(opt.element as CommandLineOptionOfCustomType, v, errors));
