@@ -535,9 +535,11 @@ import {
     isJSDocNode,
     isJSDocNonNullableType,
     isJSDocNullableType,
+    isJSDocOptionalParameter,
     isJSDocOptionalType,
     isJSDocParameterTag,
     isJSDocPropertyLikeTag,
+    isJSDocPropertyTag,
     isJSDocReturnTag,
     isJSDocSignature,
     isJSDocTemplateTag,
@@ -599,6 +601,7 @@ import {
     isOmittedExpression,
     isOptionalChain,
     isOptionalChainRoot,
+    isOptionalDeclaration,
     isOptionalJSDocPropertyLikeTag,
     isOptionalTypeNode,
     isOutermostOptionalChain,
@@ -10164,11 +10167,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getTypeForBindingElement(declaration as BindingElement);
         }
 
-        const isProperty = isPropertyDeclaration(declaration) && !hasAccessorModifier(declaration) || isPropertySignature(declaration);
-        const isOptional = includeOptionality && (
-            isProperty && !!declaration.questionToken ||
-            isParameter(declaration) && (!!declaration.questionToken || isJSDocOptionalParameter(declaration)) ||
-            isOptionalJSDocPropertyLikeTag(declaration));
+        const isProperty = (isPropertyDeclaration(declaration) && !hasAccessorModifier(declaration)) || isPropertySignature(declaration) || isJSDocPropertyTag(declaration);
+        const isOptional = includeOptionality && isOptionalDeclaration(declaration);
 
         // Use type from type annotation if one is present
         const declaredType = tryGetTypeFromEffectiveTypeNode(declaration);
@@ -13989,14 +13989,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         });
         return result;
-    }
-
-    function isJSDocOptionalParameter(node: ParameterDeclaration) {
-        return isInJSFile(node) && (
-            // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
-            node.type && node.type.kind === SyntaxKind.JSDocOptionalType
-            || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) =>
-                isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
     }
 
     function tryFindAmbientModule(moduleName: string, withAugmentations: boolean) {

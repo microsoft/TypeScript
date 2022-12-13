@@ -413,14 +413,15 @@ declare namespace ts {
         JSDocTypedefTag = 348,
         JSDocSeeTag = 349,
         JSDocPropertyTag = 350,
-        SyntaxList = 351,
-        NotEmittedStatement = 352,
-        PartiallyEmittedExpression = 353,
-        CommaListExpression = 354,
-        MergeDeclarationMarker = 355,
-        EndOfDeclarationMarker = 356,
-        SyntheticReferenceExpression = 357,
-        Count = 358,
+        JSDocThrowsTag = 351,
+        SyntaxList = 352,
+        NotEmittedStatement = 353,
+        PartiallyEmittedExpression = 354,
+        CommaListExpression = 355,
+        MergeDeclarationMarker = 356,
+        EndOfDeclarationMarker = 357,
+        SyntheticReferenceExpression = 358,
+        Count = 359,
         FirstAssignment = 63,
         LastAssignment = 78,
         FirstCompoundAssignment = 64,
@@ -449,9 +450,9 @@ declare namespace ts {
         LastStatement = 256,
         FirstNode = 163,
         FirstJSDocNode = 312,
-        LastJSDocNode = 350,
+        LastJSDocNode = 351,
         FirstJSDocTagNode = 330,
-        LastJSDocTagNode = 350
+        LastJSDocTagNode = 351
     }
     type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -2003,6 +2004,10 @@ declare namespace ts {
         readonly fullName?: JSDocNamespaceDeclaration | Identifier;
         readonly name?: Identifier;
         readonly typeExpression: JSDocSignature;
+    }
+    interface JSDocThrowsTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocThrowsTag;
+        readonly typeExpression?: JSDocTypeExpression;
     }
     interface JSDocSignature extends JSDocType, Declaration {
         readonly kind: SyntaxKind.JSDocSignature;
@@ -3866,6 +3871,8 @@ declare namespace ts {
         updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
         createJSDocOverrideTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
         updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
+        createJSDocThrowsTag(tagName: Identifier, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag;
+        updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
         createJSDocText(text: string): JSDocText;
         updateJSDocText(node: JSDocText, text: string): JSDocText;
         createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;
@@ -4826,6 +4833,8 @@ declare namespace ts {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
+    function isJSDocOptionalParameter(node: ParameterDeclaration): boolean;
+    function isOptionalDeclaration(declaration: Declaration): boolean;
     function createUnparsedSourceFile(text: string): UnparsedSource;
     function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
     function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
@@ -5106,6 +5115,7 @@ declare namespace ts {
     function isJSDocUnknownTag(node: Node): node is JSDocUnknownTag;
     function isJSDocPropertyTag(node: Node): node is JSDocPropertyTag;
     function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag;
+    function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag;
     function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T;
     function canHaveModifiers(node: Node): node is HasModifiers;
     function canHaveDecorators(node: Node): node is HasDecorators;

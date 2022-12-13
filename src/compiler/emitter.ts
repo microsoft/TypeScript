@@ -2122,6 +2122,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 case SyntaxKind.JSDocReturnTag:
                 case SyntaxKind.JSDocThisTag:
                 case SyntaxKind.JSDocTypeTag:
+                case SyntaxKind.JSDocThrowsTag:
                     return emitJSDocSimpleTypedTag(node as JSDocTypeTag);
                 case SyntaxKind.JSDocTemplateTag:
                     return emitJSDocTemplateTag(node as JSDocTemplateTag);
