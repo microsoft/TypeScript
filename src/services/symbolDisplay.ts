@@ -48,7 +48,6 @@ import {
     isFunctionBlock,
     isFunctionExpression,
     isFunctionLike,
-    isFunctionLikeKind,
     isIdentifier,
     isInExpressionContext,
     isJsxOpeningLikeElement,
@@ -59,6 +58,7 @@ import {
     isObjectBindingPattern,
     isTaggedTemplateExpression,
     isThisInTypeQuery,
+    isTypeAliasDeclaration,
     isVarConst,
     JSDocTagInfo,
     JsxOpeningLikeElement,
@@ -493,19 +493,19 @@ export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: Typ
             const declaration = decl.parent;
 
             if (declaration) {
-                if (isFunctionLikeKind(declaration.kind)) {
+                if (isFunctionLike(declaration)) {
                     addInPrefix();
-                    const signature = typeChecker.getSignatureFromDeclaration(declaration as SignatureDeclaration)!; // TODO: GH#18217
+                    const signature = typeChecker.getSignatureFromDeclaration(declaration)!; // TODO: GH#18217
                     if (declaration.kind === SyntaxKind.ConstructSignature) {
                         displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                         displayParts.push(spacePart());
                     }
-                    else if (declaration.kind !== SyntaxKind.CallSignature && (declaration as SignatureDeclaration).name) {
+                    else if (declaration.kind !== SyntaxKind.CallSignature && declaration.name) {
                         addFullSymbolName(declaration.symbol);
                     }
                     addRange(displayParts, signatureToDisplayParts(typeChecker, signature, sourceFile, TypeFormatFlags.WriteTypeArgumentsOfSignature));
                 }
-                else if (declaration.kind === SyntaxKind.TypeAliasDeclaration) {
+                else if (isTypeAliasDeclaration(declaration)) {
                     // Type alias type parameter
                     // For example
                     //      type list<T> = T[]; // Both T will go through same code path

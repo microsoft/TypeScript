@@ -294,6 +294,7 @@ import {
     PropertyAccessExpression,
     PropertyDeclaration,
     PropertyName,
+    PropertySignature,
     PseudoBigInt,
     pseudoBigIntToString,
     QualifiedName,
@@ -334,6 +335,7 @@ import {
     textPart,
     TextRange,
     TextSpan,
+    ThisContainer,
     timestamp,
     Token,
     TokenSyntaxKind,
@@ -3308,7 +3310,7 @@ function getCompletionData(
 
         // Need to insert 'this.' before properties of `this` type, so only do that if `includeInsertTextCompletions`
         if (preferences.includeCompletionsWithInsertText && scopeNode.kind !== SyntaxKind.SourceFile) {
-            const thisType = typeChecker.tryGetThisTypeAt(scopeNode, /*includeGlobalThis*/ false, isClassLike(scopeNode.parent) ? scopeNode : undefined);
+            const thisType = typeChecker.tryGetThisTypeAt(scopeNode, /*includeGlobalThis*/ false, isClassLike(scopeNode.parent) ? scopeNode as ThisContainer : undefined);
             if (thisType && !isProbablyGlobalType(thisType, sourceFile, typeChecker)) {
                 for (const symbol of getPropertiesForCompletion(thisType, typeChecker)) {
                     symbolToOriginInfoMap[symbols.length] = { kind: SymbolOriginInfoKind.ThisType };
@@ -4877,7 +4879,7 @@ function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): 
 
     switch (node.kind) {
         case SyntaxKind.PropertySignature:
-            return checker.getTypeOfPropertyOfContextualType(t, node.symbol.escapedName);
+            return checker.getTypeOfPropertyOfContextualType(t, (node as PropertySignature).symbol.escapedName);
         case SyntaxKind.IntersectionType:
         case SyntaxKind.TypeLiteral:
         case SyntaxKind.UnionType:
