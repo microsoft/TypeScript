@@ -50,6 +50,11 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterCon
             ~~~~~
 !!! error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
     
+    type T2 = <const T>(x: T) => T;
+    type T3 = { <const T>(x: T): T };
+    type T4 = new <const T>(x: T) => T;
+    type T5 = { new <const T>(x: T): T };
+    
     // Corrected repro from #51745
     
     type Obj = { a: { b: { c: "123" } } };

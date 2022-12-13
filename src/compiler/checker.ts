@@ -1012,6 +1012,7 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    isConstructSignatureDeclaration,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
@@ -7181,7 +7182,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function typeParameterToDeclarationWithConstraint(type: TypeParameter, context: NodeBuilderContext, constraintNode: TypeNode | undefined): TypeParameterDeclaration {
             const savedContextFlags = context.flags;
             context.flags &= ~NodeBuilderFlags.WriteTypeParametersInQualifiedName; // Avoids potential infinite loop when building for a claimspace with a generic
-            const modifiers = factory.createModifiersFromModifierFlags(getVarianceModifiers(type));
+            const modifiers = factory.createModifiersFromModifierFlags(getTypeParameterModifiers(type));
             const name = typeParameterToName(type, context);
             const defaultParameter = getDefaultFromTypeParameter(type);
             const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
@@ -22117,7 +22118,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             links.variances = emptyArray;
             const variances = [];
             for (const tp of typeParameters) {
-                const modifiers = getVarianceModifiers(tp);
+                const modifiers = getTypeParameterModifiers(tp);
                 let variance = modifiers & ModifierFlags.Out ?
                     modifiers & ModifierFlags.In ? VarianceFlags.Invariant : VarianceFlags.Covariant :
                     modifiers & ModifierFlags.In ? VarianceFlags.Contravariant : undefined;
@@ -22175,9 +22176,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return markerTypes.has(getTypeId(type));
     }
 
-    function getVarianceModifiers(tp: TypeParameter): ModifierFlags {
-        return (some(tp.symbol?.declarations, d => hasSyntacticModifier(d, ModifierFlags.In)) ? ModifierFlags.In : 0) |
-            (some(tp.symbol?.declarations, d => hasSyntacticModifier(d, ModifierFlags.Out)) ? ModifierFlags.Out: 0);
+    function getTypeParameterModifiers(tp: TypeParameter): ModifierFlags {
+        return reduceLeft(tp.symbol?.declarations, (modifiers, d) => modifiers | getEffectiveModifierFlags(d), ModifierFlags.None) & (ModifierFlags.In | ModifierFlags.Out | ModifierFlags.Const);
     }
 
     // Return true if the given type reference has a 'void' type argument for a covariant type parameter.
@@ -36587,7 +36587,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkTypeParameterDeferred(node: TypeParameterDeclaration) {
         if (isInterfaceDeclaration(node.parent) || isClassLike(node.parent) || isTypeAliasDeclaration(node.parent)) {
             const typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node));
-            const modifiers = getVarianceModifiers(typeParameter);
+            const modifiers = getTypeParameterModifiers(typeParameter) & (ModifierFlags.In | ModifierFlags.Out);
             if (modifiers) {
                 const symbol = getSymbolOfNode(node.parent);
                 if (isTypeAliasDeclaration(node.parent) && !(getObjectFlags(getDeclaredTypeOfSymbol(symbol)) & (ObjectFlags.Anonymous | ObjectFlags.Mapped))) {
@@ -45418,7 +45418,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (node.kind !== SyntaxKind.EnumDeclaration && node.kind !== SyntaxKind.TypeParameter) {
                         return grammarErrorOnNode(node, Diagnostics.A_class_member_cannot_have_the_0_keyword, tokenToString(SyntaxKind.ConstKeyword));
                     }
-                    if (node.kind === SyntaxKind.TypeParameter && !(isFunctionLikeDeclaration(node.parent) || isClassDeclaration(node.parent))) {
+                    if (node.kind === SyntaxKind.TypeParameter && !(isFunctionLikeDeclaration(node.parent) || isClassDeclaration(node.parent) || isFunctionTypeNode(node.parent) ||
+                        isConstructorTypeNode(node.parent) || isCallSignatureDeclaration(node.parent) || isConstructSignatureDeclaration(node.parent))) {
                         return grammarErrorOnNode(modifier, Diagnostics._0_modifier_can_only_appear_on_a_type_parameter_of_a_function_method_or_class, tokenToString(modifier.kind));
                     }
                     break;

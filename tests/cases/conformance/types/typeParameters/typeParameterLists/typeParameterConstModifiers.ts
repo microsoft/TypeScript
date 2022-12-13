@@ -43,6 +43,11 @@ interface I1<const T> { x: T }  // Error
 
 type T1<const T> = T;  // Error
 
+type T2 = <const T>(x: T) => T;
+type T3 = { <const T>(x: T): T };
+type T4 = new <const T>(x: T) => T;
+type T5 = { new <const T>(x: T): T };
+
 // Corrected repro from #51745
 
 type Obj = { a: { b: { c: "123" } } };
