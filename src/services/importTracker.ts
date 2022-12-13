@@ -7,6 +7,7 @@ import {
     CallExpression,
     CancellationToken,
     canHaveModifiers,
+    canHaveSymbol,
     cast,
     Debug,
     ExportAssignment,
@@ -73,6 +74,7 @@ import {
     SymbolFlags,
     symbolName,
     SyntaxKind,
+    tryCast,
     TypeChecker,
     ValidImportTypeNode,
     VariableDeclaration,
@@ -683,10 +685,10 @@ function getExportEqualsLocalSymbol(importedSymbol: Symbol, checker: TypeChecker
 
     const decl = Debug.checkDefined(importedSymbol.valueDeclaration);
     if (isExportAssignment(decl)) { // `export = class {}`
-        return decl.expression.symbol;
+        return tryCast(decl.expression, canHaveSymbol)?.symbol;
     }
     else if (isBinaryExpression(decl)) { // `module.exports = class {}`
-        return decl.right.symbol;
+        return tryCast(decl.right, canHaveSymbol)?.symbol;
     }
     else if (isSourceFile(decl)) { // json module
         return decl.symbol;
