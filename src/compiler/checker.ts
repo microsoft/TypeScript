@@ -33592,12 +33592,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     op === SyntaxKind.PlusToken && arg.kind === SyntaxKind.NumericLiteral;
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
-                const expr = (node as PropertyAccessExpression | ElementAccessExpression).expression;
-                let symbol = getTypeOfNode(expr).symbol;
-                if (symbol && symbol.flags & SymbolFlags.Alias) {
-                    symbol = resolveAlias(symbol);
-                }
-                return !!(symbol && getAllSymbolFlags(symbol) & SymbolFlags.Enum);
+                const expr = skipParentheses((node as PropertyAccessExpression | ElementAccessExpression).expression);
+                const symbol = isEntityNameExpression(expr) ? resolveEntityName(expr, SymbolFlags.Value, /*ignoreErrors*/ true) : undefined;
+                return !!(symbol && symbol.flags & SymbolFlags.Enum);
         }
         return false;
     }
@@ -36126,7 +36123,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const parent = node.parent;
         return isAssertionExpression(parent) && isConstTypeReference(parent.type) ||
             isJSDocTypeAssertion(parent) && isConstTypeReference(getJSDocTypeAssertionType(parent)) ||
-            !isSpreadElement(node) && isConstTypeParameterContext(node) ||
+            isValidConstAssertionArgument(node) && isConstTypeParameterContext(node) ||
             (isParenthesizedExpression(parent) || isArrayLiteralExpression(parent) || isSpreadElement(parent)) && isConstContext(parent) ||
             (isPropertyAssignment(parent) || isShorthandPropertyAssignment(parent) || isTemplateSpan(parent)) && isConstContext(parent.parent);
     }
