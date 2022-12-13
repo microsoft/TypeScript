@@ -1,4 +1,4 @@
-// @moduleResolution: hybrid
+// @moduleResolution: bundler
 // @traceResolution: true
 
 // @Filename: /dir/index.ts

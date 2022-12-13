@@ -1,4 +1,4 @@
-// @moduleResolution: hybrid
+// @moduleResolution: bundler
 // @customConditions: webpack, browser
 // @resolvePackageJsonExports: true, false
 // @traceResolution: true

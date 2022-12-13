@@ -1,4 +1,4 @@
-// @moduleResolution: hybrid
+// @moduleResolution: bundler
 // @outDir: dist
 // @allowJs: true
 // @checkJs: true

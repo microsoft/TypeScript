@@ -965,7 +965,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             classic: ModuleResolutionKind.Classic,
             node16: ModuleResolutionKind.Node16,
             nodenext: ModuleResolutionKind.NodeNext,
-            hybrid: ModuleResolutionKind.Hybrid,
+            bundler: ModuleResolutionKind.Bundler,
         })),
         affectsModuleResolution: true,
         paramType: Diagnostics.STRATEGY,
@@ -1087,7 +1087,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         type: "boolean",
         affectsModuleResolution: true,
         category: Diagnostics.Modules,
-        description: Diagnostics.Allow_imports_to_include_TypeScript_file_extensions_Requires_moduleResolution_hybrid_and_either_noEmit_or_emitDeclarationOnly_to_be_set,
+        description: Diagnostics.Allow_imports_to_include_TypeScript_file_extensions_Requires_moduleResolution_bundler_and_either_noEmit_or_emitDeclarationOnly_to_be_set,
         defaultValueDescription: false,
     },
     {
@@ -1096,7 +1096,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsModuleResolution: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Use_the_package_json_exports_field_when_resolving_package_imports,
-        defaultValueDescription: Diagnostics.true_when_moduleResolution_is_node16_nodenext_or_hybrid_otherwise_false,
+        defaultValueDescription: Diagnostics.true_when_moduleResolution_is_node16_nodenext_or_bundler_otherwise_false,
     },
     {
         name: "resolvePackageJsonImports",
@@ -1104,7 +1104,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsModuleResolution: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Use_the_package_json_imports_field_when_resolving_imports,
-        defaultValueDescription: Diagnostics.true_when_moduleResolution_is_node16_nodenext_or_hybrid_otherwise_false,
+        defaultValueDescription: Diagnostics.true_when_moduleResolution_is_node16_nodenext_or_bundler_otherwise_false,
     },
     {
         name: "customConditions",

@@ -7780,13 +7780,13 @@ export function getAllowSyntheticDefaultImports(compilerOptions: CompilerOptions
     }
     return getESModuleInterop(compilerOptions)
         || getEmitModuleKind(compilerOptions) === ModuleKind.System
-        || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Hybrid;
+        || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler;
 }
 
 /** @internal */
 export function moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution: ModuleResolutionKind): boolean {
     return moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext
-        || moduleResolution === ModuleResolutionKind.Hybrid;
+        || moduleResolution === ModuleResolutionKind.Bundler;
 }
 
 /** @internal */
@@ -7801,7 +7801,7 @@ export function getResolvePackageJsonExports(compilerOptions: CompilerOptions) {
     switch (moduleResolution) {
         case ModuleResolutionKind.Node16:
         case ModuleResolutionKind.NodeNext:
-        case ModuleResolutionKind.Hybrid:
+        case ModuleResolutionKind.Bundler:
             return true;
     }
     return false;
@@ -7819,7 +7819,7 @@ export function getResolvePackageJsonImports(compilerOptions: CompilerOptions) {
     switch (moduleResolution) {
         case ModuleResolutionKind.Node16:
         case ModuleResolutionKind.NodeNext:
-        case ModuleResolutionKind.Hybrid:
+        case ModuleResolutionKind.Bundler:
             return true;
     }
     return false;
@@ -7830,7 +7830,7 @@ export function getResolveJsonModule(compilerOptions: CompilerOptions) {
     if (compilerOptions.resolveJsonModule !== undefined) {
         return compilerOptions.resolveJsonModule;
     }
-    return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Hybrid;
+    return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler;
 }
 
 /** @internal */

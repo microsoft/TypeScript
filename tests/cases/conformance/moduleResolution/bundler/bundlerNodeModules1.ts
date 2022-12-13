@@ -1,4 +1,4 @@
-// @moduleResolution: hybrid
+// @moduleResolution: bundler
 // @traceResolution: true
 
 // @Filename: /node_modules/dual/package.json

@@ -6886,7 +6886,7 @@ export enum ModuleResolutionKind {
     // In turn, we offer both a `NodeNext` moving resolution target, and a `Node16` version-anchored resolution target
     Node16   = 3,
     NodeNext = 99, // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
-    Hybrid   = 100,
+    Bundler   = 100,
 }
 
 export enum ModuleDetectionKind {

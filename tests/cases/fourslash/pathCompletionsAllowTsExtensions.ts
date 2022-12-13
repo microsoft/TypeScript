@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-// @moduleResolution: hybrid
+// @moduleResolution: bundler
 // @allowImportingTsExtensions: true
 // @noEmit: true
 

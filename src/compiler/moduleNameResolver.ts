@@ -638,8 +638,8 @@ function getNodeResolutionFeatures(options: CompilerOptions) {
         case ModuleResolutionKind.NodeNext:
             features = NodeResolutionFeatures.NodeNextDefault;
             break;
-        case ModuleResolutionKind.Hybrid:
-            features = NodeResolutionFeatures.HybridDefault;
+        case ModuleResolutionKind.Bundler:
+            features = NodeResolutionFeatures.BundlerDefault;
             break;
     }
     if (options.resolvePackageJsonExports) {
@@ -658,9 +658,9 @@ function getNodeResolutionFeatures(options: CompilerOptions) {
 }
 
 function getConditions(options: CompilerOptions, esmMode?: boolean) {
-    // conditions are only used by the node16/nodenext/hybrid resolvers - there's no priority order in the list,
+    // conditions are only used by the node16/nodenext/bundler resolvers - there's no priority order in the list,
     // it's essentially a set (priority is determined by object insertion order in the object we look at).
-    const conditions = esmMode || getEmitModuleResolutionKind(options) === ModuleResolutionKind.Hybrid
+    const conditions = esmMode || getEmitModuleResolutionKind(options) === ModuleResolutionKind.Bundler
         ? ["node", "import"]
         : ["node", "require"];
     if (!options.noDtsResolution) {
@@ -1284,8 +1284,8 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
             case ModuleResolutionKind.Classic:
                 result = classicNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
                 break;
-            case ModuleResolutionKind.Hybrid:
-                result = hybridModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
+            case ModuleResolutionKind.Bundler:
+                result = bundlerModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
                 break;
             default:
                 return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
@@ -1541,7 +1541,7 @@ export enum NodeResolutionFeatures {
 
     NodeNextDefault = AllFeatures,
 
-    HybridDefault = Imports | SelfName | Exports | ExportsPatternTrailers,
+    BundlerDefault = Imports | SelfName | Exports | ExportsPatternTrailers,
 
     EsmMode = 1 << 5,
 }
@@ -1601,7 +1601,7 @@ function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: 
         /*redirectedReferences*/ undefined);
 }
 
-export function hybridModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations {
+export function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations {
     const containingDirectory = getDirectoryPath(containingFile);
     let extensions = compilerOptions.noDtsResolution ? Extensions.ImplementationFiles : Extensions.TypeScript | Extensions.JavaScript | Extensions.Declaration;
     if (getResolveJsonModule(compilerOptions)) {
@@ -2969,7 +2969,7 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
 }
 
 export function moduleResolutionSupportsResolvingTsExtensions(compilerOptions: CompilerOptions) {
-    return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Hybrid;
+    return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler;
 }
 
 // Program errors validate that `noEmit` or `emitDeclarationOnly` is also set,

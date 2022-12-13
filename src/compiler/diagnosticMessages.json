@@ -4225,7 +4225,7 @@
         "category": "Error",
         "code": 5095
     },
-    "Option 'allowImportingTsExtensions' can only be used when 'moduleResolution' is set to 'hybrid' and either 'noEmit' or 'emitDeclarationOnly' is set.": {
+    "Option 'allowImportingTsExtensions' can only be used when 'moduleResolution' is set to 'bundler' and either 'noEmit' or 'emitDeclarationOnly' is set.": {
         "category": "Error",
         "code": 5096
     },
@@ -4233,15 +4233,15 @@
         "category": "Error",
         "code": 5097
     },
-    "Option '{0}' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'hybrid'.": {
+    "Option '{0}' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'bundler'.": {
         "category": "Error",
         "code": 5098
     },
-    "Import assignment is not allowed when 'moduleResolution' is set to 'hybrid'. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
+    "Import assignment is not allowed when 'moduleResolution' is set to 'bundler'. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
         "category": "Error",
         "code": 5099
     },
-    "Export assignment cannot be used when 'moduleResolution' is set to 'hybrid'. Consider using 'export default' or another module format instead.": {
+    "Export assignment cannot be used when 'moduleResolution' is set to 'bundler'. Consider using 'export default' or another module format instead.": {
         "category": "Error",
         "code": 5100
     },
@@ -5450,7 +5450,7 @@
         "category": "Message",
         "code": 6406
     },
-    "Allow imports to include TypeScript file extensions. Requires '--moduleResolution hybrid' and either '--noEmit' or '--emitDeclarationOnly' to be set.": {
+    "Allow imports to include TypeScript file extensions. Requires '--moduleResolution bundler' and either '--noEmit' or '--emitDeclarationOnly' to be set.": {
         "category": "Message",
         "code": 6407
     },
@@ -5466,7 +5466,7 @@
         "category": "Message",
         "code": 6410
     },
-    "`true` when 'moduleResolution' is 'node16', 'nodenext', or 'hybrid'; otherwise `false`.": {
+    "`true` when 'moduleResolution' is 'node16', 'nodenext', or 'bundler'; otherwise `false`.": {
         "category": "Message",
         "code": 6411
     },

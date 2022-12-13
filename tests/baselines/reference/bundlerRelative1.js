@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/moduleResolution/hybrid/hybridRelative1.ts] ////
+//// [tests/cases/conformance/moduleResolution/bundler/bundlerRelative1.ts] ////
 
 //// [index.ts]
 export const x = 0;

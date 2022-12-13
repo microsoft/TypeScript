@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/moduleResolution/hybrid/hybridSyntaxRestrictions.ts] ////
+//// [tests/cases/conformance/moduleResolution/bundler/bundlerSyntaxRestrictions.ts] ////
 
 //// [index.d.ts]
 declare var require: (...args: any[]) => any;

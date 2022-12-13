@@ -1,4 +1,4 @@
-// @moduleResolution: classic,node,node16,nodenext,hybrid
+// @moduleResolution: classic,node,node16,nodenext,bundler
 // @allowJs: true
 // @checkJs: true
 // @noEmit: true

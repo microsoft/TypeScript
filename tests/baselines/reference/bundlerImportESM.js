@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/moduleResolution/hybrid/hybridImportESM.ts] ////
+//// [tests/cases/conformance/moduleResolution/bundler/bundlerImportESM.ts] ////
 
 //// [esm.mts]
 export const esm = 0;

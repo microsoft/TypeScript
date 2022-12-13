@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/moduleResolution/hybrid/hybridImportTsExtensions.ts] ////
+//// [tests/cases/conformance/moduleResolution/bundler/bundlerImportTsExtensions.ts] ////
 
 //// [a.ts]
 export {};

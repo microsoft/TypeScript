@@ -1,6 +1,6 @@
 [
     "======== Resolving module 'lodash' from '/index.ts'. ========",
-    "Explicitly specified module resolution kind: 'Hybrid'.",
+    "Explicitly specified module resolution kind: 'Bundler'.",
     "File '/package.json' does not exist.",
     "Loading module 'lodash' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.",
     "Found 'package.json' at '/node_modules/lodash/package.json'.",

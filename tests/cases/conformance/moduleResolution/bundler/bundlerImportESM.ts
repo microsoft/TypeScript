@@ -1,4 +1,4 @@
-// @moduleResolution: hybrid
+// @moduleResolution: bundler
 
 // @Filename: /esm.mts
 export const esm = 0;

@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/moduleResolution/hybrid/hybridNodeModules1.ts] ////
+//// [tests/cases/conformance/moduleResolution/bundler/bundlerNodeModules1.ts] ////
 
 //// [package.json]
 {

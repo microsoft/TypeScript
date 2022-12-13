@@ -3162,8 +3162,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             collectModuleReferences(node, /*inAmbientModule*/ false);
         }
 
-        // `require` has no special meaning in `--moduleResolution hybrid`
-        const shouldProcessRequires = isJavaScriptFile && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Hybrid;
+        // `require` has no special meaning in `--moduleResolution bundler`
+        const shouldProcessRequires = isJavaScriptFile && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Bundler;
         if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || shouldProcessRequires) {
             collectDynamicImportOrRequireCalls(file);
         }
@@ -4121,7 +4121,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs &&
                 getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node16 &&
                 getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext &&
-                getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Hybrid) {
+                getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Bundler) {
                 createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy, "resolveJsonModule");
             }
             // Any emit other than common js, amd, es2015 or esnext is error
@@ -4213,18 +4213,18 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if (options.allowImportingTsExtensions && !(moduleResolutionSupportsResolvingTsExtensions(options) && (options.noEmit || options.emitDeclarationOnly))) {
-            createOptionValueDiagnostic("allowImportingTsExtensions", Diagnostics.Option_allowImportingTsExtensions_can_only_be_used_when_moduleResolution_is_set_to_hybrid_and_either_noEmit_or_emitDeclarationOnly_is_set);
+            createOptionValueDiagnostic("allowImportingTsExtensions", Diagnostics.Option_allowImportingTsExtensions_can_only_be_used_when_moduleResolution_is_set_to_bundler_and_either_noEmit_or_emitDeclarationOnly_is_set);
         }
 
         const moduleResolution = getEmitModuleResolutionKind(options);
         if (options.resolvePackageJsonExports && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
-            createOptionValueDiagnostic("resolvePackageJsonExports", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_hybrid, "resolvePackageJsonExports");
+            createOptionValueDiagnostic("resolvePackageJsonExports", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonExports");
         }
         if (options.resolvePackageJsonImports && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
-            createOptionValueDiagnostic("resolvePackageJsonImports", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_hybrid, "resolvePackageJsonImports");
+            createOptionValueDiagnostic("resolvePackageJsonImports", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonImports");
         }
         if (options.customConditions && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
-            createOptionValueDiagnostic("customConditions", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_hybrid, "customConditions");
+            createOptionValueDiagnostic("customConditions", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "customConditions");
         }
 
         // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
