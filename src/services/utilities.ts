@@ -2541,7 +2541,7 @@ export function insertImports(changes: textChanges.ChangeTracker, sourceFile: So
     if (!existingImportStatements.length) {
         changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
     }
-    else if (existingImportStatements && OrganizeImports.importsAreSorted(existingImportStatements)) {
+    else if (existingImportStatements && OrganizeImports.detectImportDeclarationSorting(existingImportStatements)) {
         for (const newImport of sortedNewImports) {
             const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport);
             if (insertionIndex === 0) {

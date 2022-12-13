@@ -2802,6 +2802,7 @@ declare namespace ts {
                 readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
                 readonly includeInlayEnumMemberValueHints?: boolean;
                 readonly autoImportFileExcludePatterns?: string[];
+                readonly organizeImportsIgnoreCase?: "auto" | boolean;
                 /**
                  * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
                  */
@@ -8393,6 +8394,7 @@ declare namespace ts {
         readonly includeInlayEnumMemberValueHints?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
+        readonly organizeImportsIgnoreCase?: "auto" | boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     interface PseudoBigInt {

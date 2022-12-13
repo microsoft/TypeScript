@@ -9740,6 +9740,7 @@ export interface UserPreferences {
     readonly includeInlayEnumMemberValueHints?: boolean;
     readonly allowRenameOfImportPath?: boolean;
     readonly autoImportFileExcludePatterns?: string[];
+    readonly organizeImportsIgnoreCase?: "auto" | boolean;
 }
 
 /** Represents a bigint literal value without requiring bigint support */
