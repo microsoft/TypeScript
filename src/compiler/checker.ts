@@ -29141,7 +29141,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // It's possible that zero contextual types are arraylike
             if (contextualElementTypes.length > 1) {
                 return createArrayType(getIntersectionType(contextualElementTypes));
-            } else if (contextualElementTypes.length === 1) {
+            }
+            else if (contextualElementTypes.length === 1) {
                 return createArrayType(contextualElementTypes[0]);
             }
         }
