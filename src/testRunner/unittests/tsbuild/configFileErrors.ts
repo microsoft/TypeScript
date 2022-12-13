@@ -5,7 +5,6 @@ import {
     noChangeRun,
     replaceText,
     verifyTsc,
-    verifyTscWithEdits,
 } from "../tsc/helpers";
 import { dedent } from "../../_namespaces/Utils";
 
@@ -19,7 +18,7 @@ describe("unittests:: tsbuild:: configFileErrors:: when tsconfig extends the mis
 });
 
 describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in config file", () => {
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "configFileErrors",
         subScenario: "reports syntax errors in config file",
         fs: () => loadProjectFromFiles({
@@ -39,28 +38,28 @@ describe("unittests:: tsbuild:: configFileErrors:: reports syntax errors in conf
         commandLineArgs: ["--b", "/src/tsconfig.json"],
         edits: [
             {
-                modifyFs: fs => replaceText(fs, "/src/tsconfig.json", ",", `,
+                edit: fs => replaceText(fs, "/src/tsconfig.json", ",", `,
         "declaration": true,`),
-                subScenario: "reports syntax errors after change to config file",
+                caption: "reports syntax errors after change to config file",
                 discrepancyExplanation: () => [
                     "During incremental build, tsbuildinfo is not emitted, so declaration option is not present",
                     "Clean build has declaration option in tsbuildinfo",
                 ],
             },
             {
-                modifyFs: fs => appendText(fs, "/src/a.ts", "export function fooBar() { }"),
-                subScenario: "reports syntax errors after change to ts file",
+                edit: fs => appendText(fs, "/src/a.ts", "export function fooBar() { }"),
+                caption: "reports syntax errors after change to ts file",
             },
             noChangeRun,
             {
-                modifyFs: fs => fs.writeFileSync(
+                edit: fs => fs.writeFileSync(
                     "/src/tsconfig.json",
                     JSON.stringify({
                         compilerOptions: { composite: true, declaration: true },
                         files: ["a.ts", "b.ts"]
                     })
                 ),
-                subScenario: "builds after fixing config file errors"
+                caption: "builds after fixing config file errors"
             },
         ]
     });

@@ -62,7 +62,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/moduleFile.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 function bar() { }
 exports.bar = bar;
@@ -71,7 +71,7 @@ exports.bar = bar;
 
 //// [/a/b/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var T = require("./moduleFile");
 T.bar();
 
@@ -177,7 +177,7 @@ exitCode:: ExitStatus.undefined
 //// [/a/b/file1.js] file written with same contents
 //// [/a/b/moduleFile.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 function bar() { }
 exports.bar = bar;

@@ -10,7 +10,7 @@ import {
     CallExpression,
     canHaveDecorators,
     canHaveModifiers,
-    cast,
+    canHaveSymbol, cast,
     ClassDeclaration,
     codefix,
     combinePaths,
@@ -192,12 +192,23 @@ function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes
 
     const currentDirectory = getDirectoryPath(oldFile.fileName);
     const extension = extensionFromPath(oldFile.fileName);
-    const newFileBasename = makeUniqueModuleName(getNewModuleName(usage.oldFileImportsFromNewFile, usage.movedSymbols), extension, currentDirectory, host);
+    const newFilename = combinePaths(
+        // new file is always placed in the same directory as the old file
+        currentDirectory,
+        // ensures the filename computed below isn't already taken
+        makeUniqueFilename(
+            // infers a name for the new file from the symbols being moved
+            inferNewFilename(usage.oldFileImportsFromNewFile, usage.movedSymbols),
+            extension,
+            currentDirectory,
+            host))
+        // new file has same extension as old file
+        + extension;
 
     // If previous file was global, this is easy.
-    changes.createNewFile(oldFile, combinePaths(currentDirectory, newFileBasename + extension), getNewStatementsAndRemoveFromOldFile(oldFile, usage, changes, toMove, program, host, newFileBasename, extension, preferences));
+    changes.createNewFile(oldFile, newFilename, getNewStatementsAndRemoveFromOldFile(oldFile, usage, changes, toMove, program, host, newFilename, preferences));
 
-    addNewFileToTsconfig(program, changes, oldFile.fileName, newFileBasename + extension, hostGetCanonicalFileName(host));
+    addNewFileToTsconfig(program, changes, oldFile.fileName, newFilename, hostGetCanonicalFileName(host));
 }
 
 interface StatementRange {
@@ -258,7 +269,7 @@ function addNewFileToTsconfig(program: Program, changes: textChanges.ChangeTrack
 }
 
 function getNewStatementsAndRemoveFromOldFile(
-    oldFile: SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, newModuleName: string, extension: string, preferences: UserPreferences,
+    oldFile: SourceFile, usage: UsageInfo, changes: textChanges.ChangeTracker, toMove: ToMove, program: Program, host: LanguageServiceHost, newFilename: string, preferences: UserPreferences,
 ) {
     const checker = program.getTypeChecker();
     const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
@@ -269,14 +280,14 @@ function getNewStatementsAndRemoveFromOldFile(
 
     const useEsModuleSyntax = !!oldFile.externalModuleIndicator;
     const quotePreference = getQuotePreference(oldFile, preferences);
-    const importsFromNewFile = createOldFileImportsFromNewFile(oldFile, usage.oldFileImportsFromNewFile, newModuleName + extension, program, host, useEsModuleSyntax, quotePreference);
+    const importsFromNewFile = createOldFileImportsFromNewFile(oldFile, usage.oldFileImportsFromNewFile, newFilename, program, host, useEsModuleSyntax, quotePreference);
     if (importsFromNewFile) {
         insertImports(changes, oldFile, importsFromNewFile, /*blankLineBetween*/ true);
     }
 
     deleteUnusedOldImports(oldFile, toMove.all, changes, usage.unusedImportsFromOldFile, checker);
     deleteMovedStatements(oldFile, toMove.ranges, changes);
-    updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, newModuleName, extension);
+    updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, newFilename);
 
     const imports = getNewFileImportsAndAddExportInOldFile(oldFile, usage.oldImportsNeededByNewFile, usage.newFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference);
     const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromNewFile, useEsModuleSyntax);
@@ -310,7 +321,7 @@ function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Statement[
 }
 
 function updateImportsInOtherFiles(
-    changes: textChanges.ChangeTracker, program: Program, host: LanguageServiceHost, oldFile: SourceFile, movedSymbols: ReadonlySymbolSet, newModuleName: string, extension: string
+    changes: textChanges.ChangeTracker, program: Program, host: LanguageServiceHost, oldFile: SourceFile, movedSymbols: ReadonlySymbolSet, newFilename: string,
 ): void {
     const checker = program.getTypeChecker();
     for (const sourceFile of program.getSourceFiles()) {
@@ -327,13 +338,13 @@ function updateImportsInOtherFiles(
                 };
                 deleteUnusedImports(sourceFile, importNode, changes, shouldMove); // These will be changed to imports from the new file
 
-                const pathToNewFileWithExtension = resolvePath(getDirectoryPath(oldFile.path), newModuleName + extension);
+                const pathToNewFileWithExtension = resolvePath(getDirectoryPath(oldFile.path), newFilename);
                 const newModuleSpecifier = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.path, pathToNewFileWithExtension, createModuleSpecifierResolutionHost(program, host));
                 const newImportDeclaration = filterImport(importNode, factory.createStringLiteral(newModuleSpecifier), shouldMove);
                 if (newImportDeclaration) changes.insertNodeAfter(sourceFile, statement, newImportDeclaration);
 
                 const ns = getNamespaceLikeImport(importNode);
-                if (ns) updateNamespaceLikeImport(changes, sourceFile, checker, movedSymbols, newModuleName, newModuleSpecifier, ns, importNode);
+                if (ns) updateNamespaceLikeImport(changes, sourceFile, checker, movedSymbols, newModuleSpecifier, ns, importNode);
             });
         }
     }
@@ -358,12 +369,11 @@ function updateNamespaceLikeImport(
     sourceFile: SourceFile,
     checker: TypeChecker,
     movedSymbols: ReadonlySymbolSet,
-    newModuleName: string,
     newModuleSpecifier: string,
     oldImportId: Identifier,
     oldImportNode: SupportedImport,
 ): void {
-    const preferredNewNamespaceName = codefix.moduleSpecifierToValidIdentifier(newModuleName, ScriptTarget.ESNext);
+    const preferredNewNamespaceName = codefix.moduleSpecifierToValidIdentifier(newModuleSpecifier, ScriptTarget.ESNext);
     let needUniqueName = false;
     const toChange: Identifier[] = [];
     FindAllReferences.Core.eachSymbolReferenceInFile(oldImportId, checker, sourceFile, ref => {
@@ -379,7 +389,7 @@ function updateNamespaceLikeImport(
         for (const ref of toChange) {
             changes.replaceNode(sourceFile, ref, factory.createIdentifier(newNamespaceName));
         }
-        changes.insertNodeAfter(sourceFile, oldImportNode, updateNamespaceLikeImportNode(oldImportNode, newModuleName, newModuleSpecifier));
+        changes.insertNodeAfter(sourceFile, oldImportNode, updateNamespaceLikeImportNode(oldImportNode, preferredNewNamespaceName, newModuleSpecifier));
     }
 }
 
@@ -495,7 +505,7 @@ function addExports(sourceFile: SourceFile, toMove: readonly Statement[], needEx
     return flatMap(toMove, statement => {
         if (isTopLevelDeclarationStatement(statement) &&
             !isExported(sourceFile, statement, useEs6Exports) &&
-            forEachTopLevelDeclaration(statement, d => needExport.has(Debug.checkDefined(d.symbol)))) {
+            forEachTopLevelDeclaration(statement, d => needExport.has(Debug.checkDefined(tryCast(d, canHaveSymbol)?.symbol)))) {
             const exports = addExport(statement, useEs6Exports);
             if (exports) return exports;
         }
@@ -629,16 +639,16 @@ function getNewFileImportsAndAddExportInOldFile(
     return copiedOldImports;
 }
 
-function makeUniqueModuleName(moduleName: string, extension: string, inDirectory: string, host: LanguageServiceHost): string {
-    let newModuleName = moduleName;
+function makeUniqueFilename(proposedFilename: string, extension: string, inDirectory: string, host: LanguageServiceHost): string {
+    let newFilename = proposedFilename;
     for (let i = 1; ; i++) {
-        const name = combinePaths(inDirectory, newModuleName + extension);
-        if (!host.fileExists(name)) return newModuleName;
-        newModuleName = `${moduleName}.${i}`;
+        const name = combinePaths(inDirectory, newFilename + extension);
+        if (!host.fileExists(name)) return newFilename;
+        newFilename = `${proposedFilename}.${i}`;
     }
 }
 
-function getNewModuleName(importsFromNewFile: ReadonlySymbolSet, movedSymbols: ReadonlySymbolSet): string {
+function inferNewFilename(importsFromNewFile: ReadonlySymbolSet, movedSymbols: ReadonlySymbolSet): string {
     return importsFromNewFile.forEachEntry(symbolNameNoDefault) || movedSymbols.forEachEntry(symbolNameNoDefault) || "newFile";
 }
 

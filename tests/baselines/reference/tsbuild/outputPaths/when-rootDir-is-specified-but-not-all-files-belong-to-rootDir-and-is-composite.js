@@ -146,7 +146,7 @@ export declare const x = 10;
 
 //// [/src/dist/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
@@ -208,6 +208,6 @@ export type t = string;
 
 //// [/src/types/type.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 

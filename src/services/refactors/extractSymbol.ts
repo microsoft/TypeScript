@@ -633,7 +633,7 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
         visit(nodeToCheck);
 
         if (rangeFacts & RangeFacts.UsesThis) {
-            const container = getThisContainer(nodeToCheck, /** includeArrowFunctions */ false);
+            const container = getThisContainer(nodeToCheck, /** includeArrowFunctions */ false, /*includeClassComputedPropertyName*/ false);
             if (
                 container.kind === SyntaxKind.FunctionDeclaration ||
                 (container.kind === SyntaxKind.MethodDeclaration && container.parent.kind === SyntaxKind.ObjectLiteralExpression) ||

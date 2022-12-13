@@ -37,18 +37,18 @@ function parrot(obj) {
     return obj;
 }
 parrot({
-    name: "TypeScript"
+    name: "TypeScript",
 });
 parrot({
     name: "TypeScript",
-    age: 5
+    age: 5,
 });
 parrot({
     name: "TypeScript",
-    age: function () { }
+    age: function () { },
 });
 parrot({
     name: "TypeScript",
     sayHello: function () {
-    }
+    },
 });

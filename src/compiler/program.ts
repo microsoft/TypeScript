@@ -239,6 +239,7 @@ import {
     ParsedCommandLine,
     parseIsolatedEntityName,
     parseJsonSourceFileConfigFileContent,
+    parseNodeFactory,
     Path,
     pathIsAbsolute,
     pathIsRelative,
@@ -1806,6 +1807,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getSymlinkCache,
         realpath: host.realpath?.bind(host),
         useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
+        getCanonicalFileName,
         getFileIncludeReasons: () => fileReasons,
         structureIsReused,
         writeFile,
@@ -1855,7 +1857,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // This may totally change if/when the issue of output paths not mapping to input files is fixed in a broader context
         // When it is, how we extract diagnostics from the module name resolver will have the be refined - the current cache
         // APIs wrapping the underlying resolver make it almost impossible to smuggle the diagnostics out in a generalized way
-        const fromCache = moduleResolutionCache.getOrCreateCacheForModuleName(name, mode, redirectedReference).get(containingDir);
+        const fromCache = moduleResolutionCache.getFromNonRelativeNameCache(name, mode, containingDir, redirectedReference);
         if (fromCache) addResolutionDiagnostics(fromCache);
     }
 
@@ -2638,7 +2640,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken | undefined) => readonly T[],
         cancellationToken: CancellationToken | undefined): readonly T[] {
         if (sourceFile) {
-            return getDiagnostics(sourceFile, cancellationToken);
+            return sortAndDeduplicateDiagnostics(getDiagnostics(sourceFile, cancellationToken));
         }
         return sortAndDeduplicateDiagnostics(flatMap(program.getSourceFiles(), sourceFile => {
             if (cancellationToken) {
@@ -3342,26 +3344,15 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
     }
 
-    function createRedirectSourceFile(redirectTarget: SourceFile, unredirected: SourceFile, fileName: string, path: Path, resolvedPath: Path, originalFileName: string, sourceFileOptions: CreateSourceFileOptions): SourceFile {
-        const redirect: SourceFile = Object.create(redirectTarget);
+    function createRedirectedSourceFile(redirectTarget: SourceFile, unredirected: SourceFile, fileName: string, path: Path, resolvedPath: Path, originalFileName: string, sourceFileOptions: CreateSourceFileOptions): SourceFile {
+        const redirect = parseNodeFactory.createRedirectedSourceFile({ redirectTarget, unredirected });
         redirect.fileName = fileName;
         redirect.path = path;
         redirect.resolvedPath = resolvedPath;
         redirect.originalFileName = originalFileName;
-        redirect.redirectInfo = { redirectTarget, unredirected };
         redirect.packageJsonLocations = sourceFileOptions.packageJsonLocations?.length ? sourceFileOptions.packageJsonLocations : undefined;
         redirect.packageJsonScope = sourceFileOptions.packageJsonScope;
         sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
-        Object.defineProperties(redirect, {
-            id: {
-                get(this: SourceFile) { return this.redirectInfo!.redirectTarget.id; },
-                set(this: SourceFile, value: SourceFile["id"]) { this.redirectInfo!.redirectTarget.id = value; },
-            },
-            symbol: {
-                get(this: SourceFile) { return this.redirectInfo!.redirectTarget.symbol; },
-                set(this: SourceFile, value: SourceFile["symbol"]) { this.redirectInfo!.redirectTarget.symbol = value; },
-            },
-        });
         return redirect;
     }
 
@@ -3493,7 +3484,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             if (fileFromPackageId) {
                 // Some other SourceFile already exists with this package name and version.
                 // Instead of creating a duplicate, just redirect to the existing one.
-                const dupFile = createRedirectSourceFile(fileFromPackageId, file!, fileName, path, toPath(fileName), originalFileName, sourceFileOptions);
+                const dupFile = createRedirectedSourceFile(fileFromPackageId, file!, fileName, path, toPath(fileName), originalFileName, sourceFileOptions);
                 redirectTargetsMap.add(fileFromPackageId.path, fileName);
                 addFileToFilesByName(dupFile, path, redirectedPath);
                 addFileIncludeReason(dupFile, reason);

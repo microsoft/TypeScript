@@ -74,7 +74,7 @@ Info 16   [00:00:49.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	app.ts
 	  Part of 'files' list in tsconfig.json
 	../core/core.ts
@@ -165,7 +165,7 @@ Info 32   [00:01:11.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	app.ts
 	  Part of 'files' list in tsconfig.json
 	../core/core.ts

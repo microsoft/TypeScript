@@ -121,6 +121,7 @@ export function assertInvariants(node: ts.Node | undefined, parent: ts.Node | un
                     childName === "nextContainer" ||
                     childName === "modifiers" ||
                     childName === "externalModuleIndicator" ||
+                    childName === "original" ||
                     // for now ignore jsdoc comments
                     childName === "jsDocComment" ||
                     childName === "checkJsDirective" ||
@@ -195,7 +196,14 @@ export function sourceFileToJSON(file: ts.Node): string {
                 case "symbolCount":
                 case "identifierCount":
                 case "scriptSnapshot":
+                case "autoGenerateFlags":
                     // Blocklist of items we never put in the baseline file.
+                    break;
+
+                case "hasExtendedUnicodeEscape":
+                    if ((n as any).hasExtendedUnicodeEscape) {
+                        o.hasExtendedUnicodeEscape = true;
+                    }
                     break;
 
                 case "originalKeywordKind":
@@ -217,8 +225,8 @@ export function sourceFileToJSON(file: ts.Node): string {
                     break;
 
                 case "nextContainer":
-                    if (n.nextContainer) {
-                        o[propertyName] = { kind: n.nextContainer.kind, pos: n.nextContainer.pos, end: n.nextContainer.end };
+                    if ((n as ts.HasLocals).nextContainer) {
+                        o[propertyName] = { kind: (n as ts.HasLocals).nextContainer!.kind, pos: (n as ts.HasLocals).nextContainer!.pos, end: (n as ts.HasLocals).nextContainer!.end };
                     }
                     break;
 

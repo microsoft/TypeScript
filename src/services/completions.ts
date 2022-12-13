@@ -56,6 +56,7 @@ import {
     every,
     ExportKind,
     Expression,
+    ExpressionWithTypeArguments,
     factory,
     filter,
     find,
@@ -167,6 +168,8 @@ import {
     isInString,
     isIntersectionTypeNode,
     isJSDoc,
+    isJSDocAugmentsTag,
+    isJSDocImplementsTag,
     isJSDocParameterTag,
     isJSDocTag,
     isJSDocTemplateTag,
@@ -234,6 +237,7 @@ import {
     JSDocTag,
     JSDocTagInfo,
     JSDocTemplateTag,
+    JSDocThrowsTag,
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeTag,
@@ -290,6 +294,7 @@ import {
     PropertyAccessExpression,
     PropertyDeclaration,
     PropertyName,
+    PropertySignature,
     PseudoBigInt,
     pseudoBigIntToString,
     QualifiedName,
@@ -330,6 +335,7 @@ import {
     textPart,
     TextRange,
     TextSpan,
+    ThisContainer,
     timestamp,
     Token,
     TokenSyntaxKind,
@@ -866,6 +872,7 @@ function completionInfoFromData(
         isTypeOnlyLocation,
         isJsxIdentifierExpected,
         isRightOfOpenTag,
+        isRightOfDotOrQuestionDot,
         importStatementCompletion,
         insideJsDocTagTypeExpression,
         symbolToSortTextMap: symbolToSortTextMap,
@@ -941,6 +948,8 @@ function completionInfoFromData(
     let caseBlock: CaseBlock | undefined;
     if (preferences.includeCompletionsWithInsertText
         && contextToken
+        && !isRightOfOpenTag
+        && !isRightOfDotOrQuestionDot
         && (caseBlock = findAncestor(contextToken, isCaseBlock))) {
         const cases = getExhaustiveCaseSnippets(caseBlock, sourceFile, preferences, compilerOptions, host, program, formatContext);
         if (cases) {
@@ -1386,7 +1395,9 @@ function createCompletionEntry(
         sortText = SortText.SortBelow(sortText);
     }
 
-    if (isJsxIdentifierExpected && !isRightOfOpenTag && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle && preferences.jsxAttributeCompletionStyle !== "none") {
+    if (isJsxIdentifierExpected && !isRightOfOpenTag
+        && preferences.includeCompletionsWithSnippetText && preferences.jsxAttributeCompletionStyle
+        && preferences.jsxAttributeCompletionStyle !== "none" && !(isJsxAttribute(location.parent) && location.parent.initializer)) {
         let useBraces = preferences.jsxAttributeCompletionStyle === "braces";
         const type = typeChecker.getTypeOfSymbolAtLocation(symbol, location);
 
@@ -2524,6 +2535,7 @@ interface CompletionData {
     /** In JSX tag name and attribute names, identifiers like "my-tag" or "aria-name" is valid identifier. */
     readonly isJsxIdentifierExpected: boolean;
     readonly isRightOfOpenTag: boolean;
+    readonly isRightOfDotOrQuestionDot: boolean;
     readonly importStatementCompletion?: ImportStatementCompletionInfo;
     readonly hasUnresolvedAutoImports?: boolean;
     readonly flags: CompletionInfoFlags;
@@ -2940,12 +2952,20 @@ function getCompletionData(
         isTypeOnlyLocation,
         isJsxIdentifierExpected,
         isRightOfOpenTag,
+        isRightOfDotOrQuestionDot: isRightOfDot || isRightOfQuestionDot,
         importStatementCompletion,
         hasUnresolvedAutoImports,
         flags,
     };
 
-    type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag | JSDocTemplateTag;
+    type JSDocTagWithTypeExpression =
+        | JSDocParameterTag
+        | JSDocPropertyTag
+        | JSDocReturnTag
+        | JSDocTypeTag
+        | JSDocTypedefTag
+        | JSDocTemplateTag
+        | JSDocThrowsTag;
 
     function isTagWithTypeExpression(tag: JSDocTag): tag is JSDocTagWithTypeExpression {
         switch (tag.kind) {
@@ -2954,6 +2974,7 @@ function getCompletionData(
             case SyntaxKind.JSDocReturnTag:
             case SyntaxKind.JSDocTypeTag:
             case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocThrowsTag:
                 return true;
             case SyntaxKind.JSDocTemplateTag:
                 return !!(tag as JSDocTemplateTag).constraint;
@@ -2962,10 +2983,13 @@ function getCompletionData(
         }
     }
 
-    function tryGetTypeExpressionFromTag(tag: JSDocTag): JSDocTypeExpression | undefined {
+    function tryGetTypeExpressionFromTag(tag: JSDocTag): JSDocTypeExpression | ExpressionWithTypeArguments | undefined {
         if (isTagWithTypeExpression(tag)) {
             const typeExpression = isJSDocTemplateTag(tag) ? tag.constraint : tag.typeExpression;
             return typeExpression && typeExpression.kind === SyntaxKind.JSDocTypeExpression ? typeExpression : undefined;
+        }
+        if (isJSDocAugmentsTag(tag) || isJSDocImplementsTag(tag)) {
+            return tag.class;
         }
         return undefined;
     }
@@ -3286,7 +3310,7 @@ function getCompletionData(
 
         // Need to insert 'this.' before properties of `this` type, so only do that if `includeInsertTextCompletions`
         if (preferences.includeCompletionsWithInsertText && scopeNode.kind !== SyntaxKind.SourceFile) {
-            const thisType = typeChecker.tryGetThisTypeAt(scopeNode, /*includeGlobalThis*/ false, isClassLike(scopeNode.parent) ? scopeNode : undefined);
+            const thisType = typeChecker.tryGetThisTypeAt(scopeNode, /*includeGlobalThis*/ false, isClassLike(scopeNode.parent) ? scopeNode as ThisContainer : undefined);
             if (thisType && !isProbablyGlobalType(thisType, sourceFile, typeChecker)) {
                 for (const symbol of getPropertiesForCompletion(thisType, typeChecker)) {
                     symbolToOriginInfoMap[symbols.length] = { kind: SymbolOriginInfoKind.ThisType };
@@ -4855,7 +4879,7 @@ function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): 
 
     switch (node.kind) {
         case SyntaxKind.PropertySignature:
-            return checker.getTypeOfPropertyOfContextualType(t, node.symbol.escapedName);
+            return checker.getTypeOfPropertyOfContextualType(t, (node as PropertySignature).symbol.escapedName);
         case SyntaxKind.IntersectionType:
         case SyntaxKind.TypeLiteral:
         case SyntaxKind.UnionType:

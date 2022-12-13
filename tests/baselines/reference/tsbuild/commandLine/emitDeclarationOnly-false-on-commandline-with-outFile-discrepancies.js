@@ -56,11 +56,11 @@ IncrementalBuild:
       "sections": [
         {
           "pos": 0,
-          "end": 764,
+          "end": 908,
           "kind": "text"
         }
       ],
-      "hash": "15340862075-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.a = void 0;\r\n    exports.a = 10;\r\n    var aLocal = 10;\r\n    var aa = 10;\r\n});\r\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.b = void 0;\r\n    exports.b = 10;\r\n    var bLocal = 10;\r\n});\r\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.c = void 0;\r\n    exports.c = a_1.a;\r\n});\r\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.d = void 0;\r\n    exports.d = b_1.b;\r\n});\r\n"
+      "hash": "49900617043-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.a = void 0;\r\n    exports.a = 10;\r\n    var aLocal = 10;\r\n    var aa = 10;\r\n});\r\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.b = void 0;\r\n    exports.b = 10;\r\n    var bLocal = 10;\r\n});\r\ndefine(\"c\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.c = void 0;\r\n    exports.c = a_1.a;\r\n});\r\ndefine(\"d\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.d = void 0;\r\n    exports.d = b_1.b;\r\n});\r\n"
     },
     "dts": {
       "sections": [
@@ -116,10 +116,10 @@ IncrementalBuild:
 ======================================================================
 File:: /src/project1/outFile.js
 ----------------------------------------------------------------------
-text: (0-764)
+text: (0-908)
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = void 0;
     exports.a = 10;
     var aLocal = 10;
@@ -127,20 +127,20 @@ define("a", ["require", "exports"], function (require, exports) {
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.b = void 0;
     exports.b = 10;
     var bLocal = 10;
 });
 define("c", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.c = void 0;
     exports.c = a_1.a;
 });
 define("d", ["require", "exports", "b"], function (require, exports, b_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.d = void 0;
     exports.d = b_1.b;
 });
@@ -217,11 +217,11 @@ IncrementalBuild:
       "sections": [
         {
           "pos": 0,
-          "end": 533,
+          "end": 641,
           "kind": "text"
         }
       ],
-      "hash": "-7709210320-define(\"e\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.e = void 0;\r\n    exports.e = 10;\r\n});\r\ndefine(\"f\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.f = void 0;\r\n    exports.f = a_1.a;\r\n});\r\ndefine(\"g\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\r\n    \"use strict\";\r\n    exports.__esModule = true;\r\n    exports.g = void 0;\r\n    exports.g = b_1.b;\r\n});\r\n"
+      "hash": "17415908450-define(\"e\", [\"require\", \"exports\"], function (require, exports) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.e = void 0;\r\n    exports.e = 10;\r\n});\r\ndefine(\"f\", [\"require\", \"exports\", \"a\"], function (require, exports, a_1) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.f = void 0;\r\n    exports.f = a_1.a;\r\n});\r\ndefine(\"g\", [\"require\", \"exports\", \"b\"], function (require, exports, b_1) {\r\n    \"use strict\";\r\n    Object.defineProperty(exports, \"__esModule\", { value: true });\r\n    exports.g = void 0;\r\n    exports.g = b_1.b;\r\n});\r\n"
     },
     "dts": {
       "sections": [
@@ -274,22 +274,22 @@ IncrementalBuild:
 ======================================================================
 File:: /src/project2/outFile.js
 ----------------------------------------------------------------------
-text: (0-533)
+text: (0-641)
 define("e", ["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.e = void 0;
     exports.e = 10;
 });
 define("f", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.f = void 0;
     exports.f = a_1.a;
 });
 define("g", ["require", "exports", "b"], function (require, exports, b_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.g = void 0;
     exports.g = b_1.b;
 });

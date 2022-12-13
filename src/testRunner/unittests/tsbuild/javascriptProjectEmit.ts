@@ -4,7 +4,6 @@ import {
     replaceText,
     symbolLibContent,
     verifyTsc,
-    verifyTscWithEdits,
 } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
@@ -96,7 +95,7 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
         commandLineArgs: ["-b", "/src"]
     });
 
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "javascriptProjectEmit",
         subScenario: `modifies outfile js projects and concatenates them correctly`,
         fs: () => loadProjectFromFiles({
@@ -185,8 +184,8 @@ describe("unittests:: tsbuild:: javascriptProjectEmit::", () => {
         }, symbolLibContent),
         commandLineArgs: ["-b", "/src"],
         edits: [{
-            subScenario: "incremental-declaration-doesnt-change",
-            modifyFs: fs => replaceText(fs, "/src/sub-project/index.js", "null", "undefined")
+            caption: "incremental-declaration-doesnt-change",
+            edit: fs => replaceText(fs, "/src/sub-project/index.js", "null", "undefined")
         }]
     });
 

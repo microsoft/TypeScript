@@ -38,5 +38,5 @@ function foo() {
     }());
 }
 var x = {
-    "class": C4
+    class: C4
 }, _a = void 0;

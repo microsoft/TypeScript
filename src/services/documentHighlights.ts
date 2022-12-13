@@ -5,6 +5,7 @@ import {
     Block,
     BreakOrContinueStatement,
     CancellationToken,
+    canHaveSymbol,
     CaseClause,
     cast,
     ClassElement,
@@ -79,6 +80,7 @@ import {
     ThrowStatement,
     toArray,
     toPath,
+    tryCast,
     TryStatement,
     TypeElement,
 } from "./_namespaces/ts";
@@ -186,7 +188,7 @@ export namespace DocumentHighlights {
         }
 
         function getFromAllDeclarations<T extends Node>(nodeTest: (node: Node) => node is T, keywords: readonly SyntaxKind[]): HighlightSpan[] | undefined {
-            return useParent(node.parent, nodeTest, decl => mapDefined(decl.symbol.declarations, d =>
+            return useParent(node.parent, nodeTest, decl => mapDefined(tryCast(decl, canHaveSymbol)?.symbol.declarations, d =>
                 nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined));
         }
 

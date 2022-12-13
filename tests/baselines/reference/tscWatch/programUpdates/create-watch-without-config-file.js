@@ -77,7 +77,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/c/app.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var module_1 = require("./module");
 console.log(module_1.f);
 
