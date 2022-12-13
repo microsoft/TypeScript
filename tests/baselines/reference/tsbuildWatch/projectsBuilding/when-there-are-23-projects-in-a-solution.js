@@ -776,7 +776,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/pkg0/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg0 = void 0;
 exports.pkg0 = 0;
 
@@ -831,7 +831,7 @@ export declare const pkg0 = 0;
 
 //// [/user/username/projects/myproject/pkg1/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg1 = void 0;
 exports.pkg1 = 1;
 
@@ -886,7 +886,7 @@ export declare const pkg1 = 1;
 
 //// [/user/username/projects/myproject/pkg2/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg2 = void 0;
 exports.pkg2 = 2;
 
@@ -941,7 +941,7 @@ export declare const pkg2 = 2;
 
 //// [/user/username/projects/myproject/pkg3/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg3 = void 0;
 exports.pkg3 = 3;
 
@@ -996,7 +996,7 @@ export declare const pkg3 = 3;
 
 //// [/user/username/projects/myproject/pkg4/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg4 = void 0;
 exports.pkg4 = 4;
 
@@ -1051,7 +1051,7 @@ export declare const pkg4 = 4;
 
 //// [/user/username/projects/myproject/pkg5/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg5 = void 0;
 exports.pkg5 = 5;
 
@@ -1106,7 +1106,7 @@ export declare const pkg5 = 5;
 
 //// [/user/username/projects/myproject/pkg6/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg6 = void 0;
 exports.pkg6 = 6;
 
@@ -1161,7 +1161,7 @@ export declare const pkg6 = 6;
 
 //// [/user/username/projects/myproject/pkg7/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg7 = void 0;
 exports.pkg7 = 7;
 
@@ -1216,7 +1216,7 @@ export declare const pkg7 = 7;
 
 //// [/user/username/projects/myproject/pkg8/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg8 = void 0;
 exports.pkg8 = 8;
 
@@ -1271,7 +1271,7 @@ export declare const pkg8 = 8;
 
 //// [/user/username/projects/myproject/pkg9/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg9 = void 0;
 exports.pkg9 = 9;
 
@@ -1326,7 +1326,7 @@ export declare const pkg9 = 9;
 
 //// [/user/username/projects/myproject/pkg10/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg10 = void 0;
 exports.pkg10 = 10;
 
@@ -1381,7 +1381,7 @@ export declare const pkg10 = 10;
 
 //// [/user/username/projects/myproject/pkg11/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg11 = void 0;
 exports.pkg11 = 11;
 
@@ -1436,7 +1436,7 @@ export declare const pkg11 = 11;
 
 //// [/user/username/projects/myproject/pkg12/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg12 = void 0;
 exports.pkg12 = 12;
 
@@ -1491,7 +1491,7 @@ export declare const pkg12 = 12;
 
 //// [/user/username/projects/myproject/pkg13/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg13 = void 0;
 exports.pkg13 = 13;
 
@@ -1546,7 +1546,7 @@ export declare const pkg13 = 13;
 
 //// [/user/username/projects/myproject/pkg14/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg14 = void 0;
 exports.pkg14 = 14;
 
@@ -1601,7 +1601,7 @@ export declare const pkg14 = 14;
 
 //// [/user/username/projects/myproject/pkg15/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg15 = void 0;
 exports.pkg15 = 15;
 
@@ -1656,7 +1656,7 @@ export declare const pkg15 = 15;
 
 //// [/user/username/projects/myproject/pkg16/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg16 = void 0;
 exports.pkg16 = 16;
 
@@ -1711,7 +1711,7 @@ export declare const pkg16 = 16;
 
 //// [/user/username/projects/myproject/pkg17/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg17 = void 0;
 exports.pkg17 = 17;
 
@@ -1766,7 +1766,7 @@ export declare const pkg17 = 17;
 
 //// [/user/username/projects/myproject/pkg18/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg18 = void 0;
 exports.pkg18 = 18;
 
@@ -1821,7 +1821,7 @@ export declare const pkg18 = 18;
 
 //// [/user/username/projects/myproject/pkg19/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg19 = void 0;
 exports.pkg19 = 19;
 
@@ -1876,7 +1876,7 @@ export declare const pkg19 = 19;
 
 //// [/user/username/projects/myproject/pkg20/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg20 = void 0;
 exports.pkg20 = 20;
 
@@ -1931,7 +1931,7 @@ export declare const pkg20 = 20;
 
 //// [/user/username/projects/myproject/pkg21/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg21 = void 0;
 exports.pkg21 = 21;
 
@@ -1986,7 +1986,7 @@ export declare const pkg21 = 21;
 
 //// [/user/username/projects/myproject/pkg22/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg22 = void 0;
 exports.pkg22 = 22;
 
@@ -2310,7 +2310,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/pkg0/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.pkg0 = void 0;
 exports.pkg0 = 0;
 var someConst2 = 10;
@@ -2718,7 +2718,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/pkg0/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.someConst = exports.pkg0 = void 0;
 exports.pkg0 = 0;
 var someConst2 = 10;
@@ -4288,7 +4288,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/pkg0/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.someConst3 = exports.someConst = exports.pkg0 = void 0;
 exports.pkg0 = 0;
 var someConst2 = 10;
@@ -5059,7 +5059,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/pkg0/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.someConst3 = exports.someConst = exports.pkg0 = void 0;
 exports.pkg0 = 0;
 var someConst2 = 10;
@@ -5549,7 +5549,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/pkg0/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.someConst5 = exports.someConst3 = exports.someConst = exports.pkg0 = void 0;
 exports.pkg0 = 0;
 var someConst2 = 10;

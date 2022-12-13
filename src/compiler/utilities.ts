@@ -124,7 +124,6 @@ import {
     FileExtensionInfo,
     fileExtensionIs,
     fileExtensionIsOneOf,
-    FileReference,
     FileWatcher,
     filter,
     find,
@@ -184,8 +183,6 @@ import {
     getPathComponents,
     getPathFromPathComponents,
     getRelativePathToDirectoryOrUrl,
-    getResolutionMode,
-    getResolutionName,
     getRootLength,
     getSnippetElement,
     getStringComparer,
@@ -263,6 +260,7 @@ import {
     isImportTypeNode,
     isInterfaceDeclaration,
     isJSDoc,
+    isJSDocAugmentsTag,
     isJSDocFunctionType,
     isJSDocLinkLike,
     isJSDocMemberName,
@@ -418,6 +416,7 @@ import {
     PropertyDeclaration,
     PropertyName,
     PropertyNameLiteral,
+    PropertySignature,
     PseudoBigInt,
     QualifiedName,
     ReadonlyCollection,
@@ -426,8 +425,11 @@ import {
     RequireOrImportCall,
     RequireVariableStatement,
     ResolutionMode,
+    ResolutionNameAndModeGetter,
     ResolvedModuleFull,
+    ResolvedModuleWithFailedLookupLocations,
     ResolvedTypeReferenceDirective,
+    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     ReturnStatement,
     SatisfiesExpression,
     ScriptKind,
@@ -706,11 +708,11 @@ export function getFullWidth(node: Node) {
 
 /** @internal */
 export function getResolvedModule(sourceFile: SourceFile | undefined, moduleNameText: string, mode: ResolutionMode): ResolvedModuleFull | undefined {
-    return sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText, mode);
+    return sourceFile?.resolvedModules?.get(moduleNameText, mode)?.resolvedModule;
 }
 
 /** @internal */
-export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull | undefined, mode: ResolutionMode): void {
+export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleWithFailedLookupLocations, mode: ResolutionMode): void {
     if (!sourceFile.resolvedModules) {
         sourceFile.resolvedModules = createModeAwareCache();
     }
@@ -719,7 +721,7 @@ export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string
 }
 
 /** @internal */
-export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined, mode: ResolutionMode): void {
+export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, mode: ResolutionMode): void {
     if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
         sourceFile.resolvedTypeReferenceDirectiveNames = createModeAwareCache();
     }
@@ -729,7 +731,7 @@ export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeRe
 
 /** @internal */
 export function getResolvedTypeReferenceDirective(sourceFile: SourceFile | undefined, typeReferenceDirectiveName: string, mode: ResolutionMode): ResolvedTypeReferenceDirective | undefined {
-    return sourceFile?.resolvedTypeReferenceDirectiveNames?.get(typeReferenceDirectiveName, mode);
+    return sourceFile?.resolvedTypeReferenceDirectiveNames?.get(typeReferenceDirectiveName, mode)?.resolvedTypeReferenceDirective;
 }
 
 /** @internal */
@@ -740,12 +742,16 @@ export function projectReferenceIsEqualTo(oldRef: ProjectReference, newRef: Proj
 }
 
 /** @internal */
-export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleFull, newResolution: ResolvedModuleFull): boolean {
-    return oldResolution.isExternalLibraryImport === newResolution.isExternalLibraryImport &&
-        oldResolution.extension === newResolution.extension &&
-        oldResolution.resolvedFileName === newResolution.resolvedFileName &&
-        oldResolution.originalPath === newResolution.originalPath &&
-        packageIdIsEqual(oldResolution.packageId, newResolution.packageId);
+export function moduleResolutionIsEqualTo(oldResolution: ResolvedModuleWithFailedLookupLocations, newResolution: ResolvedModuleWithFailedLookupLocations): boolean {
+    return oldResolution === newResolution ||
+        oldResolution.resolvedModule === newResolution.resolvedModule ||
+        !!oldResolution.resolvedModule &&
+        !!newResolution.resolvedModule &&
+        oldResolution.resolvedModule.isExternalLibraryImport === newResolution.resolvedModule.isExternalLibraryImport &&
+        oldResolution.resolvedModule.extension === newResolution.resolvedModule.extension &&
+        oldResolution.resolvedModule.resolvedFileName === newResolution.resolvedModule.resolvedFileName &&
+        oldResolution.resolvedModule.originalPath === newResolution.resolvedModule.originalPath &&
+        packageIdIsEqual(oldResolution.resolvedModule.packageId, newResolution.resolvedModule.packageId);
 }
 
 function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
@@ -763,26 +769,32 @@ export function packageIdToString(packageId: PackageId): string {
 }
 
 /** @internal */
-export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirective, newResolution: ResolvedTypeReferenceDirective): boolean {
-    return oldResolution.resolvedFileName === newResolution.resolvedFileName
-        && oldResolution.primary === newResolution.primary
-        && oldResolution.originalPath === newResolution.originalPath;
+export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, newResolution: ResolvedTypeReferenceDirectiveWithFailedLookupLocations): boolean {
+    return oldResolution === newResolution ||
+        oldResolution.resolvedTypeReferenceDirective === newResolution.resolvedTypeReferenceDirective ||
+        !!oldResolution.resolvedTypeReferenceDirective &&
+        !!newResolution.resolvedTypeReferenceDirective &&
+        oldResolution.resolvedTypeReferenceDirective.resolvedFileName === newResolution.resolvedTypeReferenceDirective.resolvedFileName &&
+        !!oldResolution.resolvedTypeReferenceDirective.primary === !!newResolution.resolvedTypeReferenceDirective.primary &&
+        oldResolution.resolvedTypeReferenceDirective.originalPath === newResolution.resolvedTypeReferenceDirective.originalPath;
 }
 
 /** @internal */
-export function hasChangesInResolutions<T>(
-    names: readonly StringLiteralLike[] | readonly FileReference[],
+export function hasChangesInResolutions<K, V>(
+    names: readonly K[],
     newSourceFile: SourceFile,
-    newResolutions: readonly T[],
-    oldResolutions: ModeAwareCache<T> | undefined,
-    comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
+    newResolutions: readonly V[],
+    oldResolutions: ModeAwareCache<V> | undefined,
+    comparer: (oldResolution: V, newResolution: V) => boolean,
+    nameAndModeGetter: ResolutionNameAndModeGetter<K, SourceFile>,
+): boolean {
     Debug.assert(names.length === newResolutions.length);
 
     for (let i = 0; i < names.length; i++) {
         const newResolution = newResolutions[i];
         const entry = names[i];
-        const name = getResolutionName(entry);
-        const mode = getResolutionMode(entry, newSourceFile);
+        const name = nameAndModeGetter.getName(entry);
+        const mode = nameAndModeGetter.getMode(entry, newSourceFile);
         const oldResolution = oldResolutions && oldResolutions.get(name, mode);
         const changed =
             oldResolution
@@ -2753,7 +2765,7 @@ export function isExpressionNode(node: Node): boolean {
         case SyntaxKind.MetaProperty:
             return true;
         case SyntaxKind.ExpressionWithTypeArguments:
-            return !isHeritageClause(node.parent);
+            return !isHeritageClause(node.parent) && !isJSDocAugmentsTag(node.parent);
         case SyntaxKind.QualifiedName:
             while (node.parent.kind === SyntaxKind.QualifiedName) {
                 node = node.parent;
@@ -6107,11 +6119,18 @@ export interface ClassImplementingOrExtendingExpressionWithTypeArguments {
 }
 /** @internal */
 export function tryGetClassImplementingOrExtendingExpressionWithTypeArguments(node: Node): ClassImplementingOrExtendingExpressionWithTypeArguments | undefined {
-    return isExpressionWithTypeArguments(node)
-        && isHeritageClause(node.parent)
-        && isClassLike(node.parent.parent)
-        ? { class: node.parent.parent, isImplements: node.parent.token === SyntaxKind.ImplementsKeyword }
-        : undefined;
+    if (isExpressionWithTypeArguments(node)) {
+        if (isHeritageClause(node.parent) && isClassLike(node.parent.parent)) {
+            return { class: node.parent.parent, isImplements: node.parent.token === SyntaxKind.ImplementsKeyword };
+        }
+        if (isJSDocAugmentsTag(node.parent)) {
+            const host = getEffectiveJSDocHost(node.parent);
+            if (host && isClassLike(host)) {
+                return { class: host, isImplements: false };
+            }
+        }
+    }
+    return undefined;
 }
 
 /** @internal */
@@ -7505,11 +7524,11 @@ export function getSetExternalModuleIndicator(options: CompilerOptions): (file: 
 }
 
 /** @internal */
-export function getEmitScriptTarget(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}) {
-    return compilerOptions.target ||
-        (compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
+export function getEmitScriptTarget(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}): ScriptTarget {
+    return compilerOptions.target ??
+        ((compilerOptions.module === ModuleKind.Node16 && ScriptTarget.ES2022) ||
         (compilerOptions.module === ModuleKind.NodeNext && ScriptTarget.ESNext) ||
-        ScriptTarget.ES3;
+        ScriptTarget.ES5);
 }
 
 /** @internal */
@@ -7727,7 +7746,7 @@ export interface SymlinkCache {
      * don't include automatic type reference directives. Must be called only when
      * `hasProcessedResolutions` returns false (once per cache instance).
      */
-    setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirective | undefined> | undefined): void;
+    setSymlinksFromResolutions(files: readonly SourceFile[], typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>): void;
     /**
      * @internal
      * Whether `setSymlinksFromResolutions` has already been called.
@@ -7763,9 +7782,10 @@ export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonic
             Debug.assert(!hasProcessedResolutions);
             hasProcessedResolutions = true;
             for (const file of files) {
-                file.resolvedModules?.forEach(resolution => processResolution(this, resolution));
+                file.resolvedModules?.forEach(resolution => processResolution(this, resolution.resolvedModule));
+                file.resolvedTypeReferenceDirectiveNames?.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
             }
-            typeReferenceDirectives?.forEach(resolution => processResolution(this, resolution));
+            typeReferenceDirectives.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
         },
         hasProcessedResolutions: () => hasProcessedResolutions,
     };
@@ -9128,4 +9148,27 @@ export function canUsePropertyAccess(name: string, languageVersion: ScriptTarget
 /** @internal */
 export function hasTabstop(node: Node): boolean {
     return getSnippetElement(node)?.kind === SnippetKind.TabStop;
+}
+
+export function isJSDocOptionalParameter(node: ParameterDeclaration) {
+    return isInJSFile(node) && (
+        // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
+        node.type && node.type.kind === SyntaxKind.JSDocOptionalType
+        || getJSDocParameterTags(node).some(({ isBracketed, typeExpression }) =>
+            isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
+}
+
+export function isOptionalDeclaration(declaration: Declaration): boolean {
+    switch (declaration.kind) {
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.PropertySignature:
+            return !!(declaration as PropertyDeclaration | PropertySignature).questionToken;
+        case SyntaxKind.Parameter:
+            return !!(declaration as ParameterDeclaration).questionToken || isJSDocOptionalParameter(declaration as ParameterDeclaration);
+        case SyntaxKind.JSDocPropertyTag:
+        case SyntaxKind.JSDocParameterTag:
+            return isOptionalJSDocPropertyLikeTag(declaration);
+        default:
+            return false;
+    }
 }

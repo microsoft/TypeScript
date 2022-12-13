@@ -71,7 +71,7 @@ export {};
 
 //// [/src/dist/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var b_1 = require("./b");
 var a = b_1.b;
 
@@ -82,7 +82,7 @@ export declare const b = 0;
 
 //// [/src/dist/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 0;
 
@@ -93,7 +93,7 @@ export declare const Other = 0;
 
 //// [/src/dist/other.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Other = void 0;
 exports.Other = 0;
 

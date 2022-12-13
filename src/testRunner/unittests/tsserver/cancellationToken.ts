@@ -39,22 +39,22 @@ describe("unittests:: tsserver:: cancellationToken", () => {
         const session = createSession(host, { cancellationToken });
 
         expectedRequestId = session.getNextSeq();
-        session.executeCommandSeq({
-            command: "open",
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+            command: ts.server.protocol.CommandTypes.Open,
             arguments: { file: f1.path }
-        } as ts.server.protocol.OpenRequest);
+        });
 
         expectedRequestId = session.getNextSeq();
-        session.executeCommandSeq({
-            command: "geterr",
-            arguments: { files: [f1.path] }
-        } as ts.server.protocol.GeterrRequest);
+        session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
+            command: ts.server.protocol.CommandTypes.Geterr,
+            arguments: { files: [f1.path], delay: 0 }
+        });
 
         expectedRequestId = session.getNextSeq();
-        session.executeCommandSeq({
-            command: "occurrences",
+        session.executeCommandSeq<ts.server.protocol.OccurrencesRequest>({
+            command: ts.server.protocol.CommandTypes.Occurrences,
             arguments: { file: f1.path, line: 1, offset: 6 }
-        } as ts.server.protocol.OccurrencesRequest);
+        });
 
         expectedRequestId = 2;
         host.runQueuedImmediateCallbacks();
@@ -82,15 +82,15 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             cancellationToken
         });
         {
-            session.executeCommandSeq({
-                command: "open",
+            session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+                command: ts.server.protocol.CommandTypes.Open,
                 arguments: { file: f1.path }
-            } as ts.server.protocol.OpenRequest);
+            });
             // send geterr for missing file
-            session.executeCommandSeq({
-                command: "geterr",
-                arguments: { files: ["/a/missing"] }
-            } as ts.server.protocol.GeterrRequest);
+            session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
+                command: ts.server.protocol.CommandTypes.Geterr,
+                arguments: { files: ["/a/missing"], delay: 0 }
+            });
             // Queued files
             assert.equal(host.getOutput().length, 0, "expected 0 message");
             host.checkTimeoutQueueLengthAndRun(1);
@@ -101,18 +101,18 @@ describe("unittests:: tsserver:: cancellationToken", () => {
         {
             const getErrId = session.getNextSeq();
             // send geterr for a valid file
-            session.executeCommandSeq({
-                command: "geterr",
-                arguments: { files: [f1.path] }
-            } as ts.server.protocol.GeterrRequest);
+            session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
+                command: ts.server.protocol.CommandTypes.Geterr,
+                arguments: { files: [f1.path], delay: 0 }
+            });
 
             assert.equal(host.getOutput().length, 0, "expect 0 messages");
 
             // run new request
-            session.executeCommandSeq({
-                command: "projectInfo",
-                arguments: { file: f1.path }
-            } as ts.server.protocol.ProjectInfoRequest);
+            session.executeCommandSeq<ts.server.protocol.ProjectInfoRequest>({
+                command: ts.server.protocol.CommandTypes.ProjectInfo,
+                arguments: { file: f1.path, needFileNameList: false }
+            });
             session.clearMessages();
 
             // cancel previously issued Geterr
@@ -126,10 +126,10 @@ describe("unittests:: tsserver:: cancellationToken", () => {
         }
         {
             const getErrId = session.getNextSeq();
-            session.executeCommandSeq({
-                command: "geterr",
-                arguments: { files: [f1.path] }
-            } as ts.server.protocol.GeterrRequest);
+            session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
+                command: ts.server.protocol.CommandTypes.Geterr,
+                arguments: { files: [f1.path], delay: 0 }
+            });
             assert.equal(host.getOutput().length, 0, "expect 0 messages");
 
             // run first step
@@ -148,10 +148,10 @@ describe("unittests:: tsserver:: cancellationToken", () => {
         }
         {
             const getErrId = session.getNextSeq();
-            session.executeCommandSeq({
-                command: "geterr",
-                arguments: { files: [f1.path] }
-            } as ts.server.protocol.GeterrRequest);
+            session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
+                command: ts.server.protocol.CommandTypes.Geterr,
+                arguments: { files: [f1.path], delay: 0 }
+            });
             assert.equal(host.getOutput().length, 0, "expect 0 messages");
 
             // run first step
@@ -178,10 +178,10 @@ describe("unittests:: tsserver:: cancellationToken", () => {
         }
         {
             const getErr1 = session.getNextSeq();
-            session.executeCommandSeq({
-                command: "geterr",
-                arguments: { files: [f1.path] }
-            } as ts.server.protocol.GeterrRequest);
+            session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
+                command: ts.server.protocol.CommandTypes.Geterr,
+                arguments: { files: [f1.path], delay: 0 }
+            });
             assert.equal(host.getOutput().length, 0, "expect 0 messages");
             // run first step
             host.runQueuedTimeoutCallbacks();
@@ -190,10 +190,10 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             assert.equal(e1.event, "syntaxDiag");
             session.clearMessages();
 
-            session.executeCommandSeq({
-                command: "geterr",
-                arguments: { files: [f1.path] }
-            } as ts.server.protocol.GeterrRequest);
+            session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
+                command: ts.server.protocol.CommandTypes.Geterr,
+                arguments: { files: [f1.path], delay: 0 }
+            });
             // make sure that getErr1 is completed
             verifyRequestCompleted(getErr1, 0);
         }
@@ -230,34 +230,34 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             throttleWaitMilliseconds: 0
         });
         {
-            session.executeCommandSeq({
-                command: "open",
+            session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+                command: ts.server.protocol.CommandTypes.Open,
                 arguments: { file: f1.path }
-            } as ts.server.protocol.OpenRequest);
+            });
 
             // send navbar request (normal priority)
-            session.executeCommandSeq({
-                command: "navbar",
+            session.executeCommandSeq<ts.server.protocol.NavBarRequest>({
+                command: ts.server.protocol.CommandTypes.NavBar,
                 arguments: { file: f1.path }
-            } as ts.server.protocol.NavBarRequest);
+            });
 
             // ensure the nav bar request can be canceled
-            verifyExecuteCommandSeqIsCancellable({
-                command: "navbar",
+            verifyExecuteCommandSeqIsCancellable<ts.server.protocol.NavBarRequest>({
+                command: ts.server.protocol.CommandTypes.NavBar,
                 arguments: { file: f1.path }
-            } as ts.server.protocol.NavBarRequest);
+            });
 
             // send outlining spans request (normal priority)
-            session.executeCommandSeq({
-                command: "outliningSpans",
+            session.executeCommandSeq<ts.server.protocol.OutliningSpansRequestFull>({
+                command: ts.server.protocol.CommandTypes.GetOutliningSpansFull,
                 arguments: { file: f1.path }
-            } as ts.server.protocol.OutliningSpansRequestFull);
+            });
 
             // ensure the outlining spans request can be canceled
-            verifyExecuteCommandSeqIsCancellable({
-                command: "outliningSpans",
+            verifyExecuteCommandSeqIsCancellable<ts.server.protocol.OutliningSpansRequestFull>({
+                command: ts.server.protocol.CommandTypes.GetOutliningSpansFull,
                 arguments: { file: f1.path }
-            } as ts.server.protocol.OutliningSpansRequestFull);
+            });
         }
 
         function verifyExecuteCommandSeqIsCancellable<T extends ts.server.protocol.Request>(request: TestSessionRequest<T>) {

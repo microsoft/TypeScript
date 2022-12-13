@@ -160,3 +160,72 @@ describe("unittests:: tsserver:: plugins loading", () => {
         baselineTsserverLogs("plugins", "gets external files with config file reload", session);
     });
 });
+
+describe("unittests:: tsserver:: plugins overriding getSupportedCodeFixes", () => {
+    it("getSupportedCodeFixes can be proxied", () => {
+        const aTs: File = {
+            path: "/a.ts",
+            content: `class c { prop = "hello"; foo() { const x = 0; } }`
+        };
+        const bTs: File = {
+            path: "/b.ts",
+            content: aTs.content
+        };
+        const cTs: File = {
+            path: "/c.ts",
+            content: aTs.content
+        };
+        const config: File = {
+            path: "/tsconfig.json",
+            content: JSON.stringify({
+                compilerOptions: { plugins: [{ name: "myplugin" }] }
+            })
+        };
+        const host = createServerHost([aTs, bTs, cTs, config, libFile]);
+        host.require = () => {
+            return {
+                module: () => ({
+                    create(info: ts.server.PluginCreateInfo) {
+                        const proxy = Harness.LanguageService.makeDefaultProxy(info);
+                        proxy.getSupportedCodeFixes = (fileName) => {
+                            switch (fileName) {
+                                case "/a.ts":
+                                    return ["a"];
+                                case "/b.ts":
+                                    return ["b"];
+                                default:
+                                    return info.languageService.getSupportedCodeFixes(fileName);
+                            }
+                        };
+                        return proxy;
+                    }
+                }),
+                error: undefined
+            };
+        };
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([aTs, bTs, cTs], session);
+        // Without arguments
+        session.executeCommandSeq<ts.server.protocol.GetSupportedCodeFixesRequest>({
+            command: ts.server.protocol.CommandTypes.GetSupportedCodeFixes,
+        });
+        session.executeCommandSeq<ts.server.protocol.GetSupportedCodeFixesRequest>({
+            command: ts.server.protocol.CommandTypes.GetSupportedCodeFixes,
+            arguments: { file: aTs.path }
+        });
+        session.executeCommandSeq<ts.server.protocol.GetSupportedCodeFixesRequest>({
+            command: ts.server.protocol.CommandTypes.GetSupportedCodeFixes,
+            arguments: { file: bTs.path }
+        });
+        session.executeCommandSeq<ts.server.protocol.GetSupportedCodeFixesRequest>({
+            command: ts.server.protocol.CommandTypes.GetSupportedCodeFixes,
+            arguments: { file: cTs.path }
+        });
+        session.executeCommandSeq<ts.server.protocol.GetSupportedCodeFixesRequest>({
+            command: ts.server.protocol.CommandTypes.GetSupportedCodeFixes,
+            arguments: { projectFileName: config.path }
+        });
+
+        baselineTsserverLogs("plugins", "getSupportedCodeFixes can be proxied", session);
+    });
+});

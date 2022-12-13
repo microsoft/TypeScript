@@ -100,7 +100,7 @@ Info 24   [00:00:53.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../dependency/fns.ts
 	  Imported via '../decls/fns' from file 'usage.ts'
 	usage.ts
@@ -196,7 +196,7 @@ Info 39   [00:01:14.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	fns.ts
 	  Matched by default include pattern '**/*'
 
@@ -545,7 +545,7 @@ Info 58   [00:02:08.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/u
 After request
 //// [/user/username/projects/myproject/usage/usage.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.fn3 = void 0;
 var fns_1 = require("../decls/fns");
 (0, fns_1.fn1)();
@@ -653,7 +653,7 @@ Info 61   [00:02:11.000] response:
           {
             "name": "/user/username/projects/myproject/usage/usage.js",
             "writeByteOrderMark": false,
-            "text": "\"use strict\";\nexports.__esModule = true;\nexports.fn3 = void 0;\nvar fns_1 = require(\"../decls/fns\");\n(0, fns_1.fn1)();\n(0, fns_1.fn2)();\nfunction fn3() { }\nexports.fn3 = fn3;\n"
+            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.fn3 = void 0;\nvar fns_1 = require(\"../decls/fns\");\n(0, fns_1.fn1)();\n(0, fns_1.fn2)();\nfunction fn3() { }\nexports.fn3 = fn3;\n"
           }
         ],
         "emitSkipped": false,

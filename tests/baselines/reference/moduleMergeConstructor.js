@@ -29,7 +29,7 @@ class Test {
 //// [index.js]
 define(["require", "exports", "foo"], function (require, exports, foo) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var Test = /** @class */ (function () {
         function Test() {
             this.bar = new foo.Foo();

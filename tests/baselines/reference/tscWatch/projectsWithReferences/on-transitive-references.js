@@ -65,7 +65,7 @@ export class A {}
 
 //// [/user/username/projects/transitiveReferences/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {
@@ -126,7 +126,7 @@ export declare class A {
 
 //// [/user/username/projects/transitiveReferences/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 var a_1 = require("@ref/a");
 exports.b = new a_1.A();
@@ -202,7 +202,7 @@ export declare const b: A;
 
 //// [/user/username/projects/transitiveReferences/c.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var b_1 = require("./b");
 var a_1 = require("@ref/a");
 b_1.b;
@@ -236,7 +236,7 @@ Using compiler options of project reference redirect '/user/username/projects/tr
 Module resolution kind is not specified, using 'NodeJs'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'
@@ -335,7 +335,7 @@ export function gfoo() { }
 
 //// [/user/username/projects/transitiveReferences/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.gfoo = exports.b = void 0;
 var a_1 = require("@ref/a");
 exports.b = new a_1.A();
@@ -419,7 +419,7 @@ Output::
 
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'
@@ -539,7 +539,7 @@ Using compiler options of project reference redirect '/user/username/projects/tr
 Module resolution kind is not specified, using 'NodeJs'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'
@@ -654,7 +654,7 @@ Using compiler options of project reference redirect '/user/username/projects/tr
 Module resolution kind is not specified, using 'NodeJs'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'
@@ -755,7 +755,7 @@ Using compiler options of project reference redirect '/user/username/projects/tr
 Module resolution kind is not specified, using 'NodeJs'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/nrefs/a.d.ts'. ========
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 nrefs/a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
 b.d.ts
@@ -856,7 +856,7 @@ Using compiler options of project reference redirect '/user/username/projects/tr
 Module resolution kind is not specified, using 'NodeJs'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 refs/a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   Imported via "@ref/a" from file 'c.ts'
@@ -955,7 +955,7 @@ File '/user/username/projects/transitiveReferences/refs/a.d.ts' exist - use it a
 [7m [0m [91m                                                                                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 refs/a.d.ts
   Imported via '@ref/a' from file 'b.ts'
   Imported via "@ref/a" from file 'c.ts'
@@ -1056,7 +1056,7 @@ Using compiler options of project reference redirect '/user/username/projects/tr
 Module resolution kind is not specified, using 'NodeJs'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'
@@ -1159,7 +1159,7 @@ Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveRe
 [7m  [0m [91m                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a.ts
   Imported via '@ref/a' from file 'b.d.ts'
 b.d.ts
@@ -1257,7 +1257,7 @@ Reusing resolution of module './b' from '/user/username/projects/transitiveRefer
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'

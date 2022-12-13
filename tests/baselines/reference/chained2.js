@@ -23,7 +23,7 @@ const b: types.B = {};
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var A = /** @class */ (function () {
     function A() {
     }
@@ -31,18 +31,18 @@ var A = /** @class */ (function () {
 }());
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [c.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = void 0;
 var types = require("./b");
-exports["default"] = types;
+exports.default = types;
 //// [d.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var c_1 = require("./c");
-new c_1["default"].A();
-new c_1["default"].B();
+new c_1.default.A();
+new c_1.default.B();
 var a = {};
 var b = {};

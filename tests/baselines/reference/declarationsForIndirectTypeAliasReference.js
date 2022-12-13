@@ -35,10 +35,10 @@ function doSome(arg1: string,
 
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.doSome = void 0;
 var MAP = {
     a: "a"

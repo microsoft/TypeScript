@@ -45,7 +45,6 @@ describe("unittests:: tsc-watch:: watchAPI:: with sourceOfProjectReferenceRedire
             baseline,
             oldSnap,
             getPrograms,
-            changes: ts.emptyArray,
             watchOrSolution: watch
         });
     }

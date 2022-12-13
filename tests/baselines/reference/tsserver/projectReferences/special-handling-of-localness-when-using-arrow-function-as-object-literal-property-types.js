@@ -107,7 +107,7 @@ Info 24   [00:01:08.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../shared/src/index.ts
 	  Imported via "../../shared/dist" from file 'src/server.ts'
 	src/server.ts
@@ -219,7 +219,7 @@ Info 45   [00:01:38.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/index.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
@@ -287,7 +287,7 @@ Info 72   [00:02:05.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../shared/src/index.ts
 	  Imported via "../../shared/dist" from file 'src/app.ts'
 	src/app.ts

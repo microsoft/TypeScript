@@ -100,7 +100,7 @@ Info 24   [00:00:53.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../dependency/fns.ts
 	  Imported via '../decls/fns' from file 'usage.ts'
 	usage.ts

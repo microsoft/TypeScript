@@ -2,7 +2,7 @@ import * as vfs from "../../_namespaces/vfs";
 import {
     loadProjectFromDisk,
     replaceText,
-    verifyTscWithEdits,
+    verifyTsc,
 } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true", () => {
@@ -15,7 +15,7 @@ describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true"
     });
 
     function verifyEmitDeclarationOnly(disableMap?: true) {
-        verifyTscWithEdits({
+        verifyTsc({
             subScenario: `only dts output in circular import project with emitDeclarationOnly${disableMap ? "" : " and declarationMap"}`,
             fs: () => projFs,
             scenario: "emitDeclarationOnly",
@@ -24,15 +24,15 @@ describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true"
                 (fs => replaceText(fs, "/src/tsconfig.json", `"declarationMap": true,`, "")) :
                 undefined,
             edits: [{
-                subScenario: "incremental-declaration-changes",
-                modifyFs: fs => replaceText(fs, "/src/src/a.ts", "b: B;", "b: B; foo: any;"),
+                caption: "incremental-declaration-changes",
+                edit: fs => replaceText(fs, "/src/src/a.ts", "b: B;", "b: B; foo: any;"),
             }],
         });
     }
     verifyEmitDeclarationOnly();
     verifyEmitDeclarationOnly(/*disableMap*/ true);
 
-    verifyTscWithEdits({
+    verifyTsc({
         subScenario: `only dts output in non circular imports project with emitDeclarationOnly`,
         fs: () => projFs,
         scenario: "emitDeclarationOnly",
@@ -43,14 +43,14 @@ describe("unittests:: tsbuild:: on project with emitDeclarationOnly set to true"
         },
         edits: [
             {
-                subScenario: "incremental-declaration-doesnt-change",
-                modifyFs: fs => replaceText(fs, "/src/src/a.ts", "export interface A {", `class C { }
+                caption: "incremental-declaration-doesnt-change",
+                edit: fs => replaceText(fs, "/src/src/a.ts", "export interface A {", `class C { }
 export interface A {`),
 
             },
             {
-                subScenario: "incremental-declaration-changes",
-                modifyFs: fs => replaceText(fs, "/src/src/a.ts", "b: B;", "b: B; foo: any;"),
+                caption: "incremental-declaration-changes",
+                edit: fs => replaceText(fs, "/src/src/a.ts", "b: B;", "b: B; foo: any;"),
             },
         ],
     });

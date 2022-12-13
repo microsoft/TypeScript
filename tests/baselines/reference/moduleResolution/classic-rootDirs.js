@@ -21,9 +21,7 @@ Resolution:: {
     "/root/folder1/file2.ts",
     "/root/folder1/file2.tsx",
     "/root/folder1/file2.d.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "../folder1/file1" from /root/generated/folder2/file3.ts with host that doesnt have directoryExists
@@ -37,9 +35,7 @@ Resolution:: {
     "/root/generated/folder1/file1.ts",
     "/root/generated/folder1/file1.tsx",
     "/root/generated/folder1/file1.d.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "folder1/file1_1" from /root/generated/folder2/file3.ts with host that doesnt have directoryExists
@@ -59,7 +55,5 @@ Resolution:: {
     "/root/folder1/file1_1.ts",
     "/root/folder1/file1_1.tsx",
     "/root/folder1/file1_1.d.ts"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }

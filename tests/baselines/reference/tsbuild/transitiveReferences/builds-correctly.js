@@ -89,7 +89,7 @@ export declare class A {
 
 //// [/src/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {
@@ -106,7 +106,7 @@ export declare const b: A;
 
 //// [/src/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 var a_1 = require("@ref/a");
 exports.b = new a_1.A();
@@ -114,7 +114,7 @@ exports.b = new a_1.A();
 
 //// [/src/c.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var b_1 = require("./b");
 var a_1 = require("@ref/a");
 b_1.b;

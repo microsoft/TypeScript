@@ -62,7 +62,7 @@ var example1 = {
      *   Creates Example1
      *   @param value [String]
      */
-    constructor: function Example1(value, options) { }
+    constructor: function Example1(value, options) { },
 };
 var example2 = {
     /**
@@ -83,7 +83,7 @@ var example2 = {
      *       value: '',
      *     });
      */
-    constructor: function Example2() { }
+    constructor: function Example2() { },
 };
 var example3 = {
     /**
@@ -99,7 +99,7 @@ var example3 = {
      *     @param result [String]
      *   @see callback
      */
-    evaluate: function evaluate(options, callback) { }
+    evaluate: function evaluate(options, callback) { },
 };
 
 
