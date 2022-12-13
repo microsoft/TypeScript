@@ -15,7 +15,7 @@ const decorator3 = function <T extends { x: number }, U extends { x: number } >(
 
 //// [file.jsx]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var decorator = function (Component) {
     return function (props) { return <Component {...props}></Component>; };

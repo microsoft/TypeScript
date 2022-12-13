@@ -372,10 +372,10 @@ export function start() {
                             }
                             worker.currentTasks = taskList;
                             if (taskList.length === 1) {
-                                worker.process.send({ type: "test", payload: taskList[0] } as ParallelHostMessage); // TODO: GH#18217
+                                worker.process.send({ type: "test", payload: taskList[0] } satisfies ParallelHostMessage); // TODO: GH#18217
                             }
                             else {
-                                worker.process.send({ type: "batch", payload: taskList } as ParallelHostMessage); // TODO: GH#18217
+                                worker.process.send({ type: "batch", payload: taskList } satisfies ParallelHostMessage); // TODO: GH#18217
                             }
                         }
                     }

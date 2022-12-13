@@ -75,7 +75,7 @@ Info 19   [00:00:44.000] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/blabla.json
 	  Imported via "./blabla.json" from file 'src/test.ts'
 	  Matched by include pattern './src/*.json' in 'tsconfig.json'

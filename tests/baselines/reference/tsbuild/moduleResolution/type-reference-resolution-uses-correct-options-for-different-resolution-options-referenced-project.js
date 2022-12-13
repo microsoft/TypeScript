@@ -125,7 +125,7 @@ export declare const theNum: TheNum;
 
 //// [/src/packages/pkg1_index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.theNum = void 0;
 exports.theNum = "type1";
 
@@ -192,7 +192,7 @@ export declare const theNum: TheNum2;
 
 //// [/src/packages/pkg2_index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.theNum = void 0;
 exports.theNum = "type2";
 

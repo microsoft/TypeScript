@@ -55,7 +55,7 @@ Info 9    [00:00:26.000] 	Files (2)
 
 
 	../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	Foo.ts
 	  Root file specified for compilation
 

@@ -198,6 +198,7 @@ import {
     JSDocTemplateTag,
     JSDocText,
     JSDocThisTag,
+    JSDocThrowsTag,
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeLiteral,
@@ -1107,7 +1108,7 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.JSDocThisTag]: forEachChildInJSDocTypeLikeTag,
     [SyntaxKind.JSDocEnumTag]: forEachChildInJSDocTypeLikeTag,
     [SyntaxKind.JSDocSatisfiesTag]: forEachChildInJSDocTypeLikeTag,
-
+    [SyntaxKind.JSDocThrowsTag]: forEachChildInJSDocTypeLikeTag,
     [SyntaxKind.JSDocSignature]: function forEachChildInJSDocSignature<T>(node: JSDocSignature, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return forEach(node.typeParameters, cbNode) ||
             forEach(node.parameters, cbNode) ||
@@ -1201,7 +1202,7 @@ function forEachChildInJSDocParameterOrPropertyTag<T>(node: JSDocParameterTag | 
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
 
-function forEachChildInJSDocTypeLikeTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocSatisfiesTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInJSDocTypeLikeTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocThrowsTag | JSDocSatisfiesTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
     return visitNode(cbNode, node.tagName) ||
         visitNode(cbNode, node.typeExpression) ||
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
@@ -8792,6 +8793,10 @@ namespace Parser {
                     case "see":
                         tag = parseSeeTag(start, tagName, margin, indentText);
                         break;
+                    case "exception":
+                    case "throws":
+                        tag = parseThrowsTag(start, tagName, margin, indentText);
+                        break;
                     default:
                         tag = parseUnknownTag(start, tagName, margin, indentText);
                         break;
@@ -9095,6 +9100,12 @@ namespace Parser {
                 const nameExpression = isMarkdownOrJSDocLink ? undefined : parseJSDocNameReference();
                 const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), indent, indentText) : undefined;
                 return finishNode(factory.createJSDocSeeTag(tagName, nameExpression, comments), start);
+            }
+
+            function parseThrowsTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocThrowsTag {
+                const typeExpression = tryParseTypeExpression();
+                const comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
+                return finishNode(factory.createJSDocThrowsTag(tagName, typeExpression, comment), start);
             }
 
             function parseAuthorTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocAuthorTag {

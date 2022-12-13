@@ -36,8 +36,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: ["a","b"] with host that doesnt have directoryExists
@@ -78,8 +77,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: {"a":"b"}
@@ -120,8 +118,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: {"a":"b"} with host that doesnt have directoryExists
@@ -162,8 +159,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: true
@@ -204,8 +200,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: true with host that doesnt have directoryExists
@@ -246,8 +241,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: null
@@ -288,8 +282,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: null with host that doesnt have directoryExists
@@ -330,8 +323,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: undefined
@@ -372,8 +364,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "b" from /a/b.ts with typings: undefined with host that doesnt have directoryExists
@@ -414,6 +405,5 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/node_modules/b/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
