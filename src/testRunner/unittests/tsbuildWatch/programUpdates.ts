@@ -730,7 +730,7 @@ export function someFn() { }`),
             },
             {
                 caption: "Modify extendsConfigFile2",
-                change: sys => sys.writeFile("/a/b/extendsConfig2.tsconfig.json", JSON.stringify({
+                edit: sys => sys.writeFile("/a/b/extendsConfig2.tsconfig.json", JSON.stringify({
                     compilerOptions: { strictNullChecks: true }
                 })),
                 timeouts: sys => { // Build project3
@@ -740,7 +740,7 @@ export function someFn() { }`),
             },
             {
                 caption: "Modify project 3",
-                change: sys => sys.writeFile("/a/b/project3.tsconfig.json", JSON.stringify({
+                edit: sys => sys.writeFile("/a/b/project3.tsconfig.json", JSON.stringify({
                     extends: ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json"],
                     compilerOptions: { composite: false },
                     files: ["/a/b/other2.ts"]
@@ -752,7 +752,7 @@ export function someFn() { }`),
             },
             {
                 caption: "Delete extendedConfigFile2 and report error",
-                change: sys => sys.deleteFile("./extendsConfig2.tsconfig.json"),
+                edit: sys => sys.deleteFile("./extendsConfig2.tsconfig.json"),
                 timeouts: sys => { // Build project3
                     sys.checkTimeoutQueueLengthAndRun(1);
                     sys.checkTimeoutQueueLength(0);
