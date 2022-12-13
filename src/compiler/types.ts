@@ -6973,6 +6973,8 @@ export interface CreateProgramOptions {
     host?: CompilerHost;
     oldProgram?: Program;
     configFileParsingDiagnostics?: readonly Diagnostic[];
+    /** @internal */
+    typeScriptVersion?: string;
 }
 
 /** @internal */

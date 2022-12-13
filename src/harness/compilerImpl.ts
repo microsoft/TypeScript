@@ -265,11 +265,10 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
     // pre-emit/post-emit error comparison requires declaration emit twice, which can be slow. If it's unlikely to flag any error consistency issues
     // and if the test is running `skipLibCheck` - an indicator that we want the tets to run quickly - skip the before/after error comparison, too
     const skipErrorComparison = ts.length(rootFiles) >= 100 || (!!compilerOptions.skipLibCheck && !!compilerOptions.declaration);
-
-    const preProgram = !skipErrorComparison ? ts.createProgram(rootFiles || [], { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host, /*oldProgram*/ undefined, /*configFileParsingDiagnostics*/ undefined, typeScriptVersion) : undefined;
+    const preProgram = !skipErrorComparison ? ts.createProgram({ rootNames: rootFiles || [], options: { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host, typeScriptVersion }) : undefined;
     const preErrors = preProgram && ts.getPreEmitDiagnostics(preProgram);
 
-    const program = ts.createProgram(rootFiles || [], compilerOptions, host, /*oldProgram*/ undefined, /*configFileParsingDiagnostics*/ undefined, typeScriptVersion);
+    const program = ts.createProgram({ rootNames: rootFiles || [], options: compilerOptions, host, typeScriptVersion });
     const emitResult = program.emit();
     const postErrors = ts.getPreEmitDiagnostics(program);
     const longerErrors = ts.length(preErrors) > postErrors.length ? preErrors : postErrors;
