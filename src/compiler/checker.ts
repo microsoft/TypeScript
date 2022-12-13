@@ -29142,7 +29142,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (contextualElementTypes.length > 1) {
                 return createArrayType(getIntersectionType(contextualElementTypes));
             } else if (contextualElementTypes.length === 1) {
-                return createArrayType(contextualElementTypes);
+                return createArrayType(contextualElementTypes[0]);
             }
         }
         return createArrayLiteralType(createArrayType(elementTypes.length ?

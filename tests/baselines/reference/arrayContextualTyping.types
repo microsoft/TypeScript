@@ -67,19 +67,19 @@ const m3t: number[] | string[] = m3;
 
 // Keep only the array parts
 const m4 = [] satisfies MyCustomArray | string[];
->m4 : (number & string)[]
->[] satisfies MyCustomArray | string[] : (number & string)[]
->[] : (number & string)[]
+>m4 : never[]
+>[] satisfies MyCustomArray | string[] : never[]
+>[] : never[]
 
 const m4t: string[] = m4;
 >m4t : string[]
->m4 : (number & string)[]
+>m4 : never[]
 
 // Should OK
 const m5: string[] | number[] = [] satisfies string[] | number[];
 >m5 : number[] | string[]
->[] satisfies string[] | number[] : (number & string)[]
->[] : (number & string)[]
+>[] satisfies string[] | number[] : never[]
+>[] : never[]
 
 // Should OK
 type Obj = { a: string[] } | { a: number[] };
@@ -89,10 +89,10 @@ type Obj = { a: string[] } | { a: number[] };
 
 const m6: Obj = { a: [] } satisfies Obj;
 >m6 : Obj
->{ a: [] } satisfies Obj : { a: (number & string)[]; }
->{ a: [] } : { a: (number & string)[]; }
->a : (number & string)[]
->[] : (number & string)[]
+>{ a: [] } satisfies Obj : { a: never[]; }
+>{ a: [] } : { a: never[]; }
+>a : never[]
+>[] : never[]
 
 // Should all OK
 type DiscrObj = { a: string[], kind: "strings" } | { a: number[], kind: "numbers" };

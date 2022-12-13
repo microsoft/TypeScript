@@ -2,6 +2,8 @@ tests/cases/compiler/mappedTypeGenericIndexedAccess.ts(18,13): error TS2322: Typ
   Type 'Types[T][]' is not assignable to type '{ a1: true; }[] & { a2: true; }[] & { a3: true; }[]'.
     Type 'Types[T][]' is not assignable to type '{ a1: true; }[]'.
       Type 'Types[T]' is not assignable to type '{ a1: true; }'.
+        Type '{ a1: true; } | { a2: true; } | { a3: true; }' is not assignable to type '{ a1: true; }'.
+          Property 'a1' is missing in type '{ a2: true; }' but required in type '{ a1: true; }'.
 
 
 ==== tests/cases/compiler/mappedTypeGenericIndexedAccess.ts (1 errors) ====
@@ -28,6 +30,9 @@ tests/cases/compiler/mappedTypeGenericIndexedAccess.ts(18,13): error TS2322: Typ
 !!! error TS2322:   Type 'Types[T][]' is not assignable to type '{ a1: true; }[] & { a2: true; }[] & { a3: true; }[]'.
 !!! error TS2322:     Type 'Types[T][]' is not assignable to type '{ a1: true; }[]'.
 !!! error TS2322:       Type 'Types[T]' is not assignable to type '{ a1: true; }'.
+!!! error TS2322:         Type '{ a1: true; } | { a2: true; } | { a3: true; }' is not assignable to type '{ a1: true; }'.
+!!! error TS2322:           Property 'a1' is missing in type '{ a2: true; }' but required in type '{ a1: true; }'.
+!!! related TS2728 tests/cases/compiler/mappedTypeGenericIndexedAccess.ts:4:14: 'a1' is declared here.
             }
             this.entries[name]?.push(entry);
         }

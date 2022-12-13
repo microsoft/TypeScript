@@ -38,7 +38,7 @@ switch (tmp.get('t')) {
 
 const arr: number[] | string[] = [];  // Works with Array<number | string>
 >arr : number[] | string[]
->[] : (number & string)[]
+>[] : never[]
 
 const arr1: number[]  = [];
 >arr1 : number[]
