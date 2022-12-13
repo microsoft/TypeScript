@@ -68,7 +68,7 @@ export interface IThings {
 
 //// [/src/packages/pkg1/lib/src/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/src/packages/pkg1/lib/tsconfig.tsbuildinfo]
@@ -122,7 +122,7 @@ export declare function fn4(): import("@fluentui/pkg1").IThing;
 
 //// [/src/packages/pkg2/lib/src/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.fn4 = void 0;
 function fn4() {
     var a = { thing1: { a: 'b' } };

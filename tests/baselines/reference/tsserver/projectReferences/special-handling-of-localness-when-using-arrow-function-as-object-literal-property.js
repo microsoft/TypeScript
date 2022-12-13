@@ -1,12 +1,12 @@
 Info 0    [00:00:44.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:45.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/solution/api/src/server.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/lib/lib.d.ts]
@@ -108,7 +108,7 @@ Info 24   [00:01:08.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../shared/src/index.ts
 	  Imported via "../../shared/dist" from file 'src/server.ts'
 	src/server.ts
@@ -172,7 +172,7 @@ Info 33   [00:01:26.000] request:
         "line": 2,
         "offset": 12
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request
@@ -220,7 +220,7 @@ Info 45   [00:01:38.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/index.ts
 	  Matched by include pattern 'src' in 'tsconfig.json'
 

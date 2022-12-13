@@ -144,7 +144,7 @@ Info 47   [00:01:27.000] 	Files (2)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	commonFile1.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -219,7 +219,7 @@ Info 60   [00:02:09.000] 	Files (2)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	commonFile1.ts
 	  Part of 'files' list in tsconfig.json
 

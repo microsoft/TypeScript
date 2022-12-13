@@ -249,7 +249,7 @@ function renderTextField(props) { }
 function renderSelectField(props) { }
 var renderFuncs = {
     text: renderTextField,
-    select: renderSelectField
+    select: renderSelectField,
 };
 function renderField(field) {
     var renderFn = renderFuncs[field.type];
@@ -293,11 +293,11 @@ function createEventListener(_a) {
 }
 var clickEvent = createEventListener({
     name: "click",
-    callback: function (ev) { return console.log(ev); }
+    callback: function (ev) { return console.log(ev); },
 });
 var scrollEvent = createEventListener({
     name: "scroll",
-    callback: function (ev) { return console.log(ev); }
+    callback: function (ev) { return console.log(ev); },
 });
 processEvents([clickEvent, scrollEvent]);
 processEvents([

@@ -2123,6 +2123,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 case SyntaxKind.JSDocReturnTag:
                 case SyntaxKind.JSDocThisTag:
                 case SyntaxKind.JSDocTypeTag:
+                case SyntaxKind.JSDocThrowsTag:
                     return emitJSDocSimpleTypedTag(node as JSDocTypeTag);
                 case SyntaxKind.JSDocTemplateTag:
                     return emitJSDocTemplateTag(node as JSDocTemplateTag);
@@ -4871,7 +4872,14 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitList(parentNode: Node | undefined, children: NodeArray<Node> | undefined, format: ListFormat, parenthesizerRule?: ParenthesizerRuleOrSelector<Node>, start?: number, count?: number) {
-        emitNodeList(emit, parentNode, children, format, parenthesizerRule, start, count);
+        emitNodeList(
+            emit,
+            parentNode,
+            children,
+            format | (parentNode && getEmitFlags(parentNode) & EmitFlags.MultiLine ? ListFormat.PreferNewLine : 0),
+            parenthesizerRule,
+            start,
+            count);
     }
 
     function emitExpressionList(parentNode: Node | undefined, children: NodeArray<Node> | undefined, format: ListFormat, parenthesizerRule?: ParenthesizerRuleOrSelector<Expression>, start?: number, count?: number) {

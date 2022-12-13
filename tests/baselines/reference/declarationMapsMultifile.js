@@ -21,7 +21,7 @@ export { c, Foo };
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 var Foo = /** @class */ (function () {
     function Foo() {
@@ -37,10 +37,10 @@ var Foo = /** @class */ (function () {
 exports.Foo = Foo;
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = exports.c = exports.x = void 0;
 var a_1 = require("./a");
-exports.Foo = a_1.Foo;
+Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return a_1.Foo; } });
 var c = new a_1.Foo();
 exports.c = c;
 c.doThing({ a: 42 });

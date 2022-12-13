@@ -18,7 +18,7 @@ function g<
 //// [contextualTypeOfIndexedAccessParameter.js]
 "use strict";
 f("a", {
-    cb: function (p) { return p; }
+    cb: function (p) { return p; },
 });
 function g(x, y) {
     x = y;

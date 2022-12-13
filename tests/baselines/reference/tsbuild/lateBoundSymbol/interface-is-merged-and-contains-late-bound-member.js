@@ -60,12 +60,12 @@ exitCode:: ExitStatus.Success
 
 //// [/src/src/hkt.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/src/src/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var sym = Symbol();
 var x = 10;
 
@@ -175,7 +175,7 @@ exitCode:: ExitStatus.Success
 
 //// [/src/src/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var sym = Symbol();
 
 
@@ -288,7 +288,7 @@ exitCode:: ExitStatus.Success
 
 //// [/src/src/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var sym = Symbol();
 var x = 10;
 
