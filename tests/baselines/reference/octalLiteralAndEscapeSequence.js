@@ -120,21 +120,21 @@
 
 
 //// [octalLiteralAndEscapeSequence.js]
-00;
-05;
-000;
-005;
-055;
-"0".concat(00);
-"0".concat(05);
-"0".concat(000);
-"0".concat(005);
-"0".concat(055);
-"".concat(00, "0");
-"".concat(05, "0");
-"".concat(000, "0");
-"".concat(005, "0");
-"".concat(055, "0");
+0;
+5;
+0;
+5;
+45;
+"0".concat(0);
+"0".concat(5);
+"0".concat(0);
+"0".concat(5);
+"0".concat(45);
+"".concat(0, "0");
+"".concat(5, "0");
+"".concat(0, "0");
+"".concat(5, "0");
+"".concat(45, "0");
 "\0";
 "\5";
 "\00";

@@ -67,9 +67,9 @@ class C {
     withOctal() {
 >withOctal : () => any
 
-        const redundant = 010
+        const redundant = 0o10
 >redundant : 8
->010 : 8
+>0o10 : 8
 
         with (redundant) {
 >redundant : 8

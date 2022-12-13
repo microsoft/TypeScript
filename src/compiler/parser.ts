@@ -3607,7 +3607,7 @@ namespace Parser {
     }
 
     function parseTemplateHead(isTaggedTemplate: boolean): TemplateHead {
-        if (!isTaggedTemplate && scanner.getTokenFlags() & TokenFlags.ContainsInvalidEscape) {
+        if (!isTaggedTemplate && scanner.getTokenFlags() & TokenFlags.IsInvalid) {
             reScanTemplateHeadOrNoSubstitutionTemplate();
         }
         const fragment = parseLiteralLikeNode(token());
@@ -6415,7 +6415,7 @@ namespace Parser {
     function parsePrimaryExpression(): PrimaryExpression {
         switch (token()) {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-                if (scanner.getTokenFlags() & TokenFlags.ContainsInvalidEscape) {
+                if (scanner.getTokenFlags() & TokenFlags.IsInvalid) {
                     reScanTemplateHeadOrNoSubstitutionTemplate();
                 }
             // falls through

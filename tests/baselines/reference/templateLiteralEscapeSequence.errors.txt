@@ -32,13 +32,13 @@ tests/cases/compiler/templateLiteralEscapeSequence.ts(40,8): error TS1125: Hexad
 tests/cases/compiler/templateLiteralEscapeSequence.ts(41,9): error TS1125: Hexadecimal digit expected.
 tests/cases/compiler/templateLiteralEscapeSequence.ts(85,8): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
 tests/cases/compiler/templateLiteralEscapeSequence.ts(86,8): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(87,8): error TS1121: Octal literals are not allowed. Use the syntax '0o00'.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(88,8): error TS1121: Octal literals are not allowed. Use the syntax '0o05'.
+tests/cases/compiler/templateLiteralEscapeSequence.ts(87,8): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+tests/cases/compiler/templateLiteralEscapeSequence.ts(88,8): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
 tests/cases/compiler/templateLiteralEscapeSequence.ts(89,8): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
 tests/cases/compiler/templateLiteralEscapeSequence.ts(90,7): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
 tests/cases/compiler/templateLiteralEscapeSequence.ts(91,7): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(92,7): error TS1121: Octal literals are not allowed. Use the syntax '0o00'.
-tests/cases/compiler/templateLiteralEscapeSequence.ts(93,7): error TS1121: Octal literals are not allowed. Use the syntax '0o05'.
+tests/cases/compiler/templateLiteralEscapeSequence.ts(92,7): error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
+tests/cases/compiler/templateLiteralEscapeSequence.ts(93,7): error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
 tests/cases/compiler/templateLiteralEscapeSequence.ts(94,7): error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
 
 
@@ -199,10 +199,10 @@ tests/cases/compiler/templateLiteralEscapeSequence.ts(94,7): error TS1121: Octal
 !!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
     tag`0${000}`;
            ~~~
-!!! error TS1121: Octal literals are not allowed. Use the syntax '0o00'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
     tag`0${005}`;
            ~~~
-!!! error TS1121: Octal literals are not allowed. Use the syntax '0o05'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
     tag`0${055}`;
            ~~~
 !!! error TS1121: Octal literals are not allowed. Use the syntax '0o55'.
@@ -214,10 +214,10 @@ tests/cases/compiler/templateLiteralEscapeSequence.ts(94,7): error TS1121: Octal
 !!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
     tag`${000}0`;
           ~~~
-!!! error TS1121: Octal literals are not allowed. Use the syntax '0o00'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o0'.
     tag`${005}0`;
           ~~~
-!!! error TS1121: Octal literals are not allowed. Use the syntax '0o05'.
+!!! error TS1121: Octal literals are not allowed. Use the syntax '0o5'.
     tag`${055}0`;
           ~~~
 !!! error TS1121: Octal literals are not allowed. Use the syntax '0o55'.

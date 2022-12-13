@@ -120,7 +120,7 @@ const unaryPlusHex = +0x123n;
 // Parsing errors
 // In separate blocks because they each declare an "n" variable
 {
-    const legacyOct = 0123, n;
+    const legacyOct = 83, n;
 }
 {
     const scientific = 1e2n;

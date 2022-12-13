@@ -1073,11 +1073,14 @@ export function createScanner(languageVersion: ScriptTarget,
                     isPreviousTokenSeparator = true;
                     result += text.substring(start, pos);
                 }
-                else if (isPreviousTokenSeparator) {
-                    error(Diagnostics.Multiple_consecutive_numeric_separators_are_not_permitted, pos, 1);
-                }
                 else {
-                    error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
+                    tokenFlags |= TokenFlags.ContainsInvalidSeparator;
+                    if (isPreviousTokenSeparator) {
+                        error(Diagnostics.Multiple_consecutive_numeric_separators_are_not_permitted, pos, 1);
+                    }
+                    else {
+                        error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
+                    }
                 }
                 pos++;
                 start = pos;
@@ -1092,6 +1095,7 @@ export function createScanner(languageVersion: ScriptTarget,
             break;
         }
         if (text.charCodeAt(pos - 1) === CharacterCodes._) {
+            tokenFlags |= TokenFlags.ContainsInvalidSeparator;
             error(Diagnostics.Numeric_separators_are_not_allowed_here, pos - 1, 1);
         }
         return result + text.substring(start, pos);
@@ -1120,10 +1124,10 @@ export function createScanner(languageVersion: ScriptTarget,
     function scanNumber(): { type: SyntaxKind, value: string } {
         let start = pos;
         let mainFragment: string;
-        let emitLeadingZeroError = false;
         if (text.charCodeAt(pos) === CharacterCodes._0) {
             pos++;
             if (text.charCodeAt(pos) === CharacterCodes._) {
+                tokenFlags |= TokenFlags.ContainsSeparator | TokenFlags.ContainsInvalidSeparator;
                 error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
                 // treat it as a normal number literal
                 pos--;
@@ -1133,8 +1137,8 @@ export function createScanner(languageVersion: ScriptTarget,
             else if (!scanDigits()) {
                 // NonOctalDecimalIntegerLiteral, emit error later
                 // Separators in decimal and exponent parts are still allowed according to the spec
-                emitLeadingZeroError = true;
-                mainFragment = tokenValue;
+                tokenFlags |= TokenFlags.ContainsLeadingZero;
+                mainFragment = "" + +tokenValue;
             }
             else if (!tokenValue) {
                 // a single zero
@@ -1142,11 +1146,12 @@ export function createScanner(languageVersion: ScriptTarget,
             }
             else {
                 // LegacyOctalIntegerLiteral
-                tokenValue = "0o" + tokenValue;
+                tokenValue = "" + parseInt(tokenValue, 8);
                 tokenFlags |= TokenFlags.Octal;
                 const withMinus = token === SyntaxKind.MinusToken;
+                const literal = (withMinus ? "-" : "") + "0o" + (+tokenValue).toString(8);
                 start -= +withMinus;
-                error(Diagnostics.Octal_literals_are_not_allowed_Use_the_syntax_0, start, pos - start, (withMinus ? "-" : "") + tokenValue);
+                error(Diagnostics.Octal_literals_are_not_allowed_Use_the_syntax_0, start, pos - start, literal);
                 return { type: SyntaxKind.NumericLiteral, value: tokenValue };
             }
         }
@@ -1188,10 +1193,10 @@ export function createScanner(languageVersion: ScriptTarget,
             result = text.substring(start, end); // No need to use all the fragments; no _ removal needed
         }
 
-        if (emitLeadingZeroError) {
+        if (tokenFlags & TokenFlags.ContainsLeadingZero) {
             error(Diagnostics.Decimals_with_leading_zeros_are_not_allowed, start, end - start);
             // if a literal has a leading zero, it must not be bigint
-            return { type: SyntaxKind.NumericLiteral, value: result };
+            return { type: SyntaxKind.NumericLiteral, value: "" + +result };
         }
 
         if (decimalFragment !== undefined || tokenFlags & TokenFlags.Scientific) {

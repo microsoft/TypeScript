@@ -115,6 +115,7 @@ var r11 = i[-0x1]
 var r12 = i[01]
 >r12 : Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
 >i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>01 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
 
 var r13 = i[-01]
 >r13 : Symbol(r13, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 64, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 94, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 124, 3))
@@ -232,6 +233,7 @@ var r11 = i[-0x1]
 var r12 = i[01]
 >r12 : Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
 >i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>01 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
 
 var r13 = i[-01]
 >r13 : Symbol(r13, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 64, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 94, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 124, 3))
@@ -345,6 +347,7 @@ var r11 = i[-0x1]
 var r12 = i[01]
 >r12 : Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
 >i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>01 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
 
 var r13 = i[-01]
 >r13 : Symbol(r13, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 64, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 94, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 124, 3))
@@ -458,6 +461,7 @@ var r11 = i[-0x1]
 var r12 = i[01]
 >r12 : Symbol(r12, Decl(objectTypeWithStringNamedNumericProperty.ts, 32, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 63, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 93, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 123, 3))
 >i : Symbol(i, Decl(objectTypeWithStringNamedNumericProperty.ts, 46, 3))
+>01 : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
 
 var r13 = i[-01]
 >r13 : Symbol(r13, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 64, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 94, 3), Decl(objectTypeWithStringNamedNumericProperty.ts, 124, 3))
