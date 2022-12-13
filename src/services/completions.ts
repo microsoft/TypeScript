@@ -271,7 +271,7 @@ import {
     modifierToFlag,
     ModuleDeclaration,
     ModuleReference,
-    moduleResolutionRespectsExports,
+    moduleResolutionSupportsPackageJsonExportsAndImports,
     NamedImportBindings,
     Node,
     NodeArray,
@@ -555,7 +555,7 @@ const enum KeywordCompletionFilters {
 
 const enum GlobalsSearch { Continue, Success, Fail }
 
-interface ModuleSpecifierResolutioContext {
+interface ModuleSpecifierResolutionContext {
     tryResolve: (exportInfo: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult;
     resolvedAny: () => boolean;
     skippedAny: () => boolean;
@@ -576,7 +576,7 @@ function resolvingModuleSpecifiers<TReturn>(
     preferences: UserPreferences,
     isForImportStatementCompletion: boolean,
     isValidTypeOnlyUseSite: boolean,
-    cb: (context: ModuleSpecifierResolutioContext) => TReturn,
+    cb: (context: ModuleSpecifierResolutionContext) => TReturn,
 ): TReturn {
     const start = timestamp();
     // Under `--moduleResolution nodenext`, we have to resolve module specifiers up front, because
@@ -584,7 +584,7 @@ function resolvingModuleSpecifiers<TReturn>(
     // relative path into node_modules), and we want to filter those completions out entirely.
     // Import statement completions always need specifier resolution because the module specifier is
     // part of their `insertText`, not the `codeActions` creating edits away from the cursor.
-    const needsFullResolution = isForImportStatementCompletion || moduleResolutionRespectsExports(getEmitModuleResolutionKind(program.getCompilerOptions()));
+    const needsFullResolution = isForImportStatementCompletion || moduleResolutionSupportsPackageJsonExportsAndImports(getEmitModuleResolutionKind(program.getCompilerOptions()));
     let skippedAny = false;
     let ambientCount = 0;
     let resolvedCount = 0;

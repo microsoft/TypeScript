@@ -139,6 +139,7 @@ import {
     ElementFlags,
     EmitFlags,
     EmitHint,
+    emitModuleKindIsNonNodeESM,
     EmitResolver,
     EmitTextWriter,
     emptyArray,
@@ -317,6 +318,7 @@ import {
     getResolutionModeOverrideForClause,
     getResolvedExternalModuleName,
     getResolvedModule,
+    getResolveJsonModule,
     getRestParameterElementType,
     getRootDeclaration,
     getScriptTargetFeatures,
@@ -346,8 +348,8 @@ import {
     hasAccessorModifier,
     hasAmbientModifier,
     hasContextSensitiveParameters,
-    HasDecorators,
     hasDecorators,
+    HasDecorators,
     hasDynamicName,
     hasEffectiveModifier,
     hasEffectiveModifiers,
@@ -356,8 +358,8 @@ import {
     hasExtension,
     HasIllegalDecorators,
     HasIllegalModifiers,
-    HasInitializer,
     hasInitializer,
+    HasInitializer,
     hasJSDocNodes,
     hasJSDocParameterTags,
     hasJsonModuleEmitEnabled,
@@ -458,6 +460,7 @@ import {
     isConstructorTypeNode,
     isConstTypeReference,
     isDeclaration,
+    isDeclarationFileName,
     isDeclarationName,
     isDeclarationReadonly,
     isDecorator,
@@ -897,6 +900,7 @@ import {
     setTextRangePosEnd,
     setValueDeclaration,
     ShorthandPropertyAssignment,
+    shouldAllowImportingTsExtension,
     shouldPreserveConstEnums,
     Signature,
     SignatureDeclaration,
@@ -4543,6 +4547,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (
                 namespace.valueDeclaration &&
                 isInJSFile(namespace.valueDeclaration) &&
+                getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Bundler &&
                 isVariableDeclaration(namespace.valueDeclaration) &&
                 namespace.valueDeclaration.initializer &&
                 isCommonJsRequire(namespace.valueDeclaration.initializer)
@@ -4727,6 +4732,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 (isModuleDeclaration(location) ? location : location.parent && isModuleDeclaration(location.parent) && location.parent.name === location ? location.parent : undefined)?.name ||
                 (isLiteralImportTypeNode(location) ? location : undefined)?.argument.literal;
         const mode = contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : currentSourceFile.impliedNodeFormat;
+        const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
         const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, mode);
         const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
         const sourceFile = resolvedModule
@@ -4737,11 +4743,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (resolutionDiagnostic) {
                 error(errorNode, resolutionDiagnostic, moduleReference, resolvedModule.resolvedFileName);
             }
+
+            if (resolvedModule.resolvedUsingTsExtension && isDeclarationFileName(moduleReference)) {
+                const importOrExport =
+                    findAncestor(location, isImportDeclaration)?.importClause ||
+                    findAncestor(location, or(isImportEqualsDeclaration, isExportDeclaration));
+                if (importOrExport && !importOrExport.isTypeOnly || findAncestor(location, isImportCall)) {
+                    error(
+                        errorNode,
+                        Diagnostics.A_declaration_file_cannot_be_imported_without_import_type_Did_you_mean_to_import_an_implementation_file_0_instead,
+                        getSuggestedImportSource(Debug.checkDefined(tryExtractTSExtension(moduleReference))));
+                }
+            }
+            else if (resolvedModule.resolvedUsingTsExtension && !shouldAllowImportingTsExtension(compilerOptions, currentSourceFile.fileName)) {
+                const tsExtension = Debug.checkDefined(tryExtractTSExtension(moduleReference));
+                error(errorNode, Diagnostics.An_import_path_can_only_end_with_a_0_extension_when_allowImportingTsExtensions_is_enabled, tsExtension);
+            }
+
             if (sourceFile.symbol) {
                 if (resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
                     errorOnImplicitAnyModule(/*isError*/ false, errorNode, resolvedModule, moduleReference);
                 }
-                if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node16 || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeNext) {
+                if (moduleResolutionKind === ModuleResolutionKind.Node16 || moduleResolutionKind === ModuleResolutionKind.NodeNext) {
                     const isSyncImport = (currentSourceFile.impliedNodeFormat === ModuleKind.CommonJS && !findAncestor(location, isImportCall)) || !!findAncestor(location, isImportEqualsDeclaration);
                     const overrideClauseHost = findAncestor(location, l => isImportTypeNode(l) || isExportDeclaration(l) || isImportDeclaration(l)) as ImportTypeNode | ImportDeclaration | ExportDeclaration | undefined;
                     const overrideClause = overrideClauseHost && isImportTypeNode(overrideClauseHost) ? overrideClauseHost.assertions?.assertClause : overrideClauseHost?.assertClause;
@@ -4849,25 +4872,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else {
                 const tsExtension = tryExtractTSExtension(moduleReference);
                 const isExtensionlessRelativePathImport = pathIsRelative(moduleReference) && !hasExtension(moduleReference);
-                const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
                 const resolutionIsNode16OrNext = moduleResolutionKind === ModuleResolutionKind.Node16 ||
                     moduleResolutionKind === ModuleResolutionKind.NodeNext;
                 if (tsExtension) {
-                    const diag = Diagnostics.An_import_path_cannot_end_with_a_0_extension_Consider_importing_1_instead;
-                    const importSourceWithoutExtension = removeExtension(moduleReference, tsExtension);
-                    let replacedImportSource = importSourceWithoutExtension;
-                    /**
-                     * Direct users to import source with .js extension if outputting an ES module.
-                     * @see https://github.com/microsoft/TypeScript/issues/42151
-                     */
-                    if (moduleKind >= ModuleKind.ES2015) {
-                        replacedImportSource += tsExtension === Extension.Mts ? ".mjs" : tsExtension === Extension.Cts ? ".cjs" : ".js";
-                    }
-                    error(errorNode, diag, tsExtension, replacedImportSource);
+                    errorOnTSExtensionImport(tsExtension);
                 }
-                else if (!compilerOptions.resolveJsonModule &&
+                else if (!getResolveJsonModule(compilerOptions) &&
                     fileExtensionIs(moduleReference, Extension.Json) &&
-                    getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Classic &&
+                    moduleResolutionKind !== ModuleResolutionKind.Classic &&
                     hasJsonModuleEmitEnabled(compilerOptions)) {
                     error(errorNode, Diagnostics.Cannot_find_module_0_Consider_using_resolveJsonModule_to_import_module_with_json_extension, moduleReference);
                 }
@@ -4889,6 +4901,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return undefined;
+
+        function errorOnTSExtensionImport(tsExtension: string) {
+            const diag = Diagnostics.An_import_path_cannot_end_with_a_0_extension_Consider_importing_1_instead;
+            error(errorNode, diag, tsExtension, getSuggestedImportSource(tsExtension));
+        }
+
+        function getSuggestedImportSource(tsExtension: string) {
+            const importSourceWithoutExtension = removeExtension(moduleReference, tsExtension);
+            /**
+             * Direct users to import source with .js extension if outputting an ES module.
+             * @see https://github.com/microsoft/TypeScript/issues/42151
+             */
+            if (emitModuleKindIsNonNodeESM(moduleKind) || mode === ModuleKind.ESNext) {
+                return importSourceWithoutExtension + (tsExtension === Extension.Mts ? ".mjs" : tsExtension === Extension.Cts ? ".cjs" : ".js");
+            }
+            return importSourceWithoutExtension;
+        }
     }
 
     function errorOnImplicitAnyModule(isError: boolean, errorNode: Node, { packageId, resolvedFileName }: ResolvedModuleFull, moduleReference: string): void {
@@ -33297,7 +33326,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         // In JavaScript files, calls to any identifier 'require' are treated as external module imports
-        if (isInJSFile(node) && isCommonJsRequire(node)) {
+        if (isInJSFile(node) && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Bundler && isCommonJsRequire(node)) {
             return resolveExternalModuleTypeByLiteral(node.arguments![0] as StringLiteral);
         }
 
@@ -42699,6 +42728,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Import equals declaration is deprecated in es6 or above
                     grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
                 }
+                else if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler) {
+                    grammarErrorOnNode(node, Diagnostics.Import_assignment_is_not_allowed_when_moduleResolution_is_set_to_bundler_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
+                }
             }
         }
     }
@@ -42920,6 +42952,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (moduleKind === ModuleKind.System) {
                 // system modules does not support export assignment
                 grammarErrorOnNode(node, Diagnostics.Export_assignment_is_not_supported_when_module_flag_is_system);
+            }
+            else if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler) {
+                grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_moduleResolution_is_set_to_bundler_Consider_using_export_default_or_another_module_format_instead);
             }
         }
     }
@@ -44015,7 +44050,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // 4). type A = import("./f/*gotToDefinitionHere*/oo")
                 if ((isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
                     ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) && (node.parent as ImportDeclaration).moduleSpecifier === node) ||
-                    ((isInJSFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteralLike*/ false)) || isImportCall(node.parent)) ||
+                    ((isInJSFile(node) && getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.Bundler && isRequireCall(node.parent, /*checkArgumentIsStringLiteralLike*/ false)) || isImportCall(node.parent)) ||
                     (isLiteralTypeNode(node.parent) && isLiteralImportTypeNode(node.parent.parent) && node.parent.parent.argument === node.parent)
                 ) {
                     return resolveExternalModuleName(node, node as LiteralExpression, ignoreErrors);

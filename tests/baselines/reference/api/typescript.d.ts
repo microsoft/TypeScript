@@ -3038,7 +3038,8 @@ declare namespace ts {
         Classic = 1,
         NodeJs = 2,
         Node16 = 3,
-        NodeNext = 99
+        NodeNext = 99,
+        Bundler = 100
     }
     enum ModuleDetectionKind {
         /**
@@ -3089,6 +3090,7 @@ declare namespace ts {
     }
     type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
     interface CompilerOptions {
+        allowImportingTsExtensions?: boolean;
         allowJs?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowUmdGlobalAccess?: boolean;
@@ -3098,6 +3100,7 @@ declare namespace ts {
         baseUrl?: string;
         charset?: string;
         checkJs?: boolean;
+        customConditions?: string[];
         declaration?: boolean;
         declarationMap?: boolean;
         emitDeclarationOnly?: boolean;
@@ -3162,6 +3165,8 @@ declare namespace ts {
         incremental?: boolean;
         tsBuildInfoFile?: string;
         removeComments?: boolean;
+        resolvePackageJsonExports?: boolean;
+        resolvePackageJsonImports?: boolean;
         rootDir?: string;
         rootDirs?: string[];
         skipLibCheck?: boolean;
@@ -3333,6 +3338,11 @@ declare namespace ts {
         resolvedFileName: string;
         /** True if `resolvedFileName` comes from `node_modules`. */
         isExternalLibraryImport?: boolean;
+        /**
+         * True if the original module reference used a .ts extension to refer directly to a .ts file,
+         * which should produce an error during checking if emit is enabled.
+         */
+        resolvedUsingTsExtension?: boolean;
     }
     /**
      * ResolvedModule with an explicitly provided `extension` property.
@@ -4839,6 +4849,7 @@ declare namespace ts {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
+    function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind): boolean;
     function isJSDocOptionalParameter(node: ParameterDeclaration): boolean;
     function isOptionalDeclaration(declaration: Declaration): boolean;
     function createUnparsedSourceFile(text: string): UnparsedSource;
@@ -5269,8 +5280,11 @@ declare namespace ts {
     function createTypeReferenceDirectiveResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string, options?: CompilerOptions, packageJsonInfoCache?: PackageJsonInfoCache): TypeReferenceDirectiveResolutionCache;
     function resolveModuleNameFromCache(moduleName: string, containingFile: string, cache: ModuleResolutionCache, mode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
     function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations;
+    function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: NonRelativeModuleNameResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
+    function moduleResolutionSupportsResolvingTsExtensions(compilerOptions: CompilerOptions): boolean;
+    function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions, fromFileName?: string): boolean | "" | undefined;
     interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, NonRelativeNameResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache {
     }
     interface ModeAwareCache<T> {

@@ -20,7 +20,8 @@ x: {
       "name": "x",
       "subModuleName": "index.d.ts",
       "version": "1.2.3"
-    }
+    },
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/node_modules/a/node_modules/x.ts",
@@ -56,7 +57,8 @@ x: {
       "name": "x",
       "subModuleName": "index.d.ts",
       "version": "1.2.4"
-    }
+    },
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/node_modules/b/node_modules/x.ts",
@@ -80,7 +82,8 @@ a: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/node_modules/a/package.json",
@@ -95,7 +98,8 @@ b: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/node_modules/b/package.json",
@@ -138,7 +142,8 @@ x: {
       "name": "x",
       "subModuleName": "index.d.ts",
       "version": "1.2.3"
-    }
+    },
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/node_modules/a/node_modules/x.ts",
@@ -174,7 +179,8 @@ x: {
       "name": "x",
       "subModuleName": "index.d.ts",
       "version": "1.2.3"
-    }
+    },
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/node_modules/b/node_modules/x.ts",
@@ -198,7 +204,8 @@ a: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/a/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/node_modules/a/package.json",
@@ -213,7 +220,8 @@ b: {
   "resolvedModule": {
     "resolvedFileName": "/node_modules/b/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/node_modules/b/package.json",

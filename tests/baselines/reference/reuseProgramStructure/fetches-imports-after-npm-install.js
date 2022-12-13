@@ -76,7 +76,8 @@ a: {
   "resolvedModule": {
     "resolvedFileName": "node_modules/a/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "node_modules/a/package.json",

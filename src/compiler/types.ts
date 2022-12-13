@@ -6887,6 +6887,7 @@ export enum ModuleResolutionKind {
     // In turn, we offer both a `NodeNext` moving resolution target, and a `Node16` version-anchored resolution target
     Node16   = 3,
     NodeNext = 99, // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
+    Bundler   = 100,
 }
 
 export enum ModuleDetectionKind {
@@ -6946,6 +6947,7 @@ export type CompilerOptionsValue = string | number | boolean | (string | number)
 
 export interface CompilerOptions {
     /** @internal */ all?: boolean;
+    allowImportingTsExtensions?: boolean;
     allowJs?: boolean;
     /** @internal */ allowNonTsExtensions?: boolean;
     allowSyntheticDefaultImports?: boolean;
@@ -6969,6 +6971,7 @@ export interface CompilerOptions {
      * @internal
      */
     readonly configFile?: TsConfigSourceFile;
+    customConditions?: string[];
     declaration?: boolean;
     declarationMap?: boolean;
     emitDeclarationOnly?: boolean;
@@ -7055,6 +7058,8 @@ export interface CompilerOptions {
     incremental?: boolean;
     tsBuildInfoFile?: string;
     removeComments?: boolean;
+    resolvePackageJsonExports?: boolean;
+    resolvePackageJsonImports?: boolean;
     rootDir?: string;
     rootDirs?: string[];
     skipLibCheck?: boolean;
@@ -7502,6 +7507,11 @@ export interface ResolvedModule {
     resolvedFileName: string;
     /** True if `resolvedFileName` comes from `node_modules`. */
     isExternalLibraryImport?: boolean;
+    /**
+     * True if the original module reference used a .ts extension to refer directly to a .ts file,
+     * which should produce an error during checking if emit is enabled.
+     */
+    resolvedUsingTsExtension?: boolean;
 }
 
 /**
