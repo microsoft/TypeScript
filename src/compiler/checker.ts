@@ -28651,9 +28651,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // We cannot answer semantic questions within a with block, do not proceed any further
             return undefined;
         }
-        const cached = getCachedContextualType(node);
-        if (cached) {
-            return cached;
+        const index = findContextualNode(node);
+        if (index >= 0) {
+            return contextualTypes[index];
         }
         const { parent } = node;
         switch (parent.kind) {
@@ -28728,13 +28728,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         contextualTypeCount--;
     }
 
-    function getCachedContextualType(node: Node) {
+    function findContextualNode(node: Node) {
         for (let i = contextualTypeCount - 1; i >= 0; i--) {
             if (node === contextualTypeNodes[i]) {
-                return contextualTypes[i];
+                return i;
             }
         }
-        return undefined;
+        return -1;
     }
 
     function getInferenceContext(node: Node) {
@@ -28743,12 +28743,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement, contextFlags: ContextFlags | undefined) {
         if (isJsxOpeningElement(node) && contextFlags !== ContextFlags.Completions) {
-            const cached = getCachedContextualType(node.parent);
-            if (cached) {
+            const index = findContextualNode(node.parent);
+            if (index >= 0) {
                 // Contextually applied type is moved from attributes up to the outer jsx attributes so when walking up from the children they get hit
                 // _However_ to hit them from the _attributes_ we must look for them here; otherwise we'll used the declared type
                 // (as below) instead!
-                return cached;
+                return contextualTypes[index];
             }
         }
         return getContextualTypeForArgumentAtIndex(node, 0);
