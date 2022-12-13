@@ -1,5 +1,5 @@
-tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts(40,14): error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
-tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts(46,9): error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
+tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts(43,14): error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
+tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts(49,9): error TS1277: 'const' modifier can only appear on a type parameter of a function, method or class
 
 
 ==== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts (2 errors) ====
@@ -41,6 +41,9 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterCon
     
     const c71 = new C1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
     const c72 = c71.foo(['a', ['b', 'c']]);
+    
+    const fx1 = <const T>(x: T) => x;
+    const fx2 = <const T,>(x: T) => x;
     
     interface I1<const T> { x: T }  // Error
                  ~~~~~

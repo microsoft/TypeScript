@@ -219,6 +219,18 @@ const c72 = c71.foo(['a', ['b', 'c']]);
 >'b' : "b"
 >'c' : "c"
 
+const fx1 = <const T>(x: T) => x;
+>fx1 : <const T>(x: T) => T
+><const T>(x: T) => x : <const T>(x: T) => T
+>x : T
+>x : T
+
+const fx2 = <const T,>(x: T) => x;
+>fx2 : <const T>(x: T) => T
+><const T,>(x: T) => x : <const T>(x: T) => T
+>x : T
+>x : T
+
 interface I1<const T> { x: T }  // Error
 >x : T
 
