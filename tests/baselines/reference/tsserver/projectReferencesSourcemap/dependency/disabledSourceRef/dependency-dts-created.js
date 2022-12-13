@@ -1,12 +1,12 @@
 Info 0    [00:01:04.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:01:05.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/FnS.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/dependency/FnS.ts]
@@ -60,7 +60,7 @@ let a = 10;
 
 //// [/user/username/projects/myproject/dependency/FnS.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.fn5 = exports.fn4 = exports.fn3 = exports.fn2 = exports.fn1 = void 0;
 function fn1() { }
 exports.fn1 = fn1;
@@ -125,7 +125,7 @@ exports.fn5 = fn5;
 
 //// [/user/username/projects/myproject/main/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var fns_1 = require("../decls/fns");
 (0, fns_1.fn1)();
 (0, fns_1.fn2)();
@@ -239,7 +239,7 @@ Info 17   [00:01:21.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	FnS.ts
 	  Matched by default include pattern '**/*'
 
@@ -277,12 +277,12 @@ Info 21   [00:01:31.000] response:
     }
 Info 22   [00:01:32.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/random/random.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -329,7 +329,7 @@ Info 37   [00:01:47.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	random.ts
 	  Matched by default include pattern '**/*'
 
@@ -383,7 +383,7 @@ Info 40   [00:02:01.000] request:
         "line": 1,
         "offset": 17
       },
-      "seq": 1,
+      "seq": 3,
       "type": "request"
     }
 Before request
@@ -501,7 +501,7 @@ Info 51   [00:02:14.000] request:
         "line": 1,
         "offset": 17
       },
-      "seq": 2,
+      "seq": 4,
       "type": "request"
     }
 Before request
@@ -626,7 +626,7 @@ Info 57   [00:02:20.000] request:
         "line": 2,
         "offset": 17
       },
-      "seq": 3,
+      "seq": 5,
       "type": "request"
     }
 Before request
@@ -741,7 +741,7 @@ Info 59   [00:02:22.000] request:
         "line": 3,
         "offset": 17
       },
-      "seq": 4,
+      "seq": 6,
       "type": "request"
     }
 Before request
@@ -856,7 +856,7 @@ Info 61   [00:02:24.000] request:
         "line": 4,
         "offset": 17
       },
-      "seq": 5,
+      "seq": 7,
       "type": "request"
     }
 Before request
@@ -971,7 +971,7 @@ Info 63   [00:02:26.000] request:
         "line": 5,
         "offset": 17
       },
-      "seq": 6,
+      "seq": 8,
       "type": "request"
     }
 Before request
@@ -1080,12 +1080,12 @@ Info 64   [00:02:27.000] response:
     }
 Info 65   [00:02:28.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/random/random.ts"
-      }
+      },
+      "seq": 9,
+      "type": "request"
     }
 Before request
 
@@ -1163,12 +1163,12 @@ Info 67   [00:02:39.000] response:
     }
 Info 68   [00:02:40.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/random/random.ts"
-      }
+      },
+      "seq": 10,
+      "type": "request"
     }
 Before request
 
@@ -1250,12 +1250,12 @@ Info 72   [00:02:55.000] response:
     }
 Info 73   [00:02:56.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/dependency/FnS.ts"
-      }
+      },
+      "seq": 11,
+      "type": "request"
     }
 Before request
 
@@ -1333,12 +1333,12 @@ Info 75   [00:03:07.000] response:
     }
 Info 76   [00:03:08.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/random/random.ts"
-      }
+      },
+      "seq": 12,
+      "type": "request"
     }
 Before request
 
@@ -1418,12 +1418,12 @@ Info 78   [00:03:17.000] response:
     }
 Info 79   [00:03:18.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/random/random.ts"
-      }
+      },
+      "seq": 13,
+      "type": "request"
     }
 Before request
 
@@ -1468,7 +1468,7 @@ Info 85   [00:03:24.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	FnS.ts
 	  Matched by default include pattern '**/*'
 

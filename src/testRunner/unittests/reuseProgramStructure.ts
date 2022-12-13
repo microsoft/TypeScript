@@ -21,7 +21,7 @@ import {
 describe("unittests:: Reuse program structure:: General", () => {
     function baselineCache<T>(baselines: string[], cacheType: string, cache: ts.ModeAwareCache<T> | undefined) {
         baselines.push(`${cacheType}: ${!cache ? cache : ""}`);
-        cache?.forEach((resolved, key, mode) => baselines.push(`${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${JSON.stringify(resolved)}`));
+        cache?.forEach((resolved, key, mode) => baselines.push(`${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${JSON.stringify(resolved, /*replacer*/ undefined, 2)}`));
     }
     function baselineProgram(baselines: string[], program: ts.Program, host?: TestCompilerHost) {
         baselines.push(`Program Reused:: ${(ts as any).StructureIsReused[program.structureIsReused]}`);
@@ -46,30 +46,27 @@ describe("unittests:: Reuse program structure:: General", () => {
     }
 
     function runBaseline(scenario: string, baselines: readonly string[]) {
-        Harness.Baseline.runBaseline(
-            `reuseProgramStructure/${scenario.split(" ").join("-")}.js`,
-            baselines.join("\n"),
-            { PrintDiff: true },
-        );
+        Harness.Baseline.runBaseline(`reuseProgramStructure/${scenario.split(" ").join("-")}.js`, baselines.join("\n"));
     }
 
     const target = ts.ScriptTarget.Latest;
-    const files: NamedSourceText[] = [
-        {
-            name: "a.ts", text: SourceText.New(
-                `
+    function getFiles(): NamedSourceText[] {
+        return [
+            {
+                name: "a.ts", text: SourceText.New(`
 /// <reference path='b.ts'/>
 /// <reference path='non-existing-file.ts'/>
 /// <reference types="typerefs" />
 `, "", `var x = 1`)
-        },
-        { name: "b.ts", text: SourceText.New(`/// <reference path='c.ts'/>`, "", `var y = 2`) },
-        { name: "c.ts", text: SourceText.New("", "", `var z = 1;`) },
-        { name: "types/typerefs/index.d.ts", text: SourceText.New("", "", `declare let z: number;`) },
-    ];
+            },
+            { name: "b.ts", text: SourceText.New(`/// <reference path='c.ts'/>`, "", `var y = 2`) },
+            { name: "c.ts", text: SourceText.New("", "", `var z = 1;`) },
+            { name: "types/typerefs/index.d.ts", text: SourceText.New("", "", `declare let z: number;`) },
+        ];
+    }
 
     it("successful if change does not affect imports or type refs", () => {
-        const program1 = newProgram(files, ["a.ts"], { target });
+        const program1 = newProgram(getFiles(), ["a.ts"], { target });
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
         const program2 = updateProgram(program1, ["a.ts"], { target }, files => {
@@ -99,7 +96,7 @@ describe("unittests:: Reuse program structure:: General", () => {
     });
 
     it("fails if change affects tripleslash references", () => {
-        const program1 = newProgram(files, ["a.ts"], { target });
+        const program1 = newProgram(getFiles(), ["a.ts"], { target });
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
         const program2 = updateProgram(program1, ["a.ts"], { target }, files => {
@@ -113,7 +110,7 @@ describe("unittests:: Reuse program structure:: General", () => {
     });
 
     it("fails if change affects type references", () => {
-        const program1 = newProgram(files, ["a.ts"], { types: ["a"] });
+        const program1 = newProgram(getFiles(), ["a.ts"], { types: ["a"] });
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
         const program2 = updateProgram(program1, ["a.ts"], { types: ["b"] }, ts.noop);
@@ -122,7 +119,7 @@ describe("unittests:: Reuse program structure:: General", () => {
     });
 
     it("succeeds if change doesn't affect type references", () => {
-        const program1 = newProgram(files, ["a.ts"], { types: ["a"] });
+        const program1 = newProgram(getFiles(), ["a.ts"], { types: ["a"] });
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
         const program2 = updateProgram(program1, ["a.ts"], { types: ["a"] }, ts.noop);
@@ -131,7 +128,7 @@ describe("unittests:: Reuse program structure:: General", () => {
     });
 
     it("fails if change affects imports", () => {
-        const program1 = newProgram(files, ["a.ts"], { target });
+        const program1 = newProgram(getFiles(), ["a.ts"], { target });
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
         const program2 = updateProgram(program1, ["a.ts"], { target }, files => {
@@ -142,7 +139,7 @@ describe("unittests:: Reuse program structure:: General", () => {
     });
 
     it("fails if change affects type directives", () => {
-        const program1 = newProgram(files, ["a.ts"], { target });
+        const program1 = newProgram(getFiles(), ["a.ts"], { target });
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
         const program2 = updateProgram(program1, ["a.ts"], { target }, files => {
@@ -157,7 +154,7 @@ describe("unittests:: Reuse program structure:: General", () => {
     });
 
     it("fails if module kind changes", () => {
-        const program1 = newProgram(files, ["a.ts"], { target, module: ts.ModuleKind.CommonJS });
+        const program1 = newProgram(getFiles(), ["a.ts"], { target, module: ts.ModuleKind.CommonJS });
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
         const program2 = updateProgram(program1, ["a.ts"], { target, module: ts.ModuleKind.AMD }, ts.noop);
@@ -166,7 +163,7 @@ describe("unittests:: Reuse program structure:: General", () => {
     });
 
     it("succeeds if rootdir changes", () => {
-        const program1 = newProgram(files, ["a.ts"], { target, module: ts.ModuleKind.CommonJS, rootDir: "/a/b" });
+        const program1 = newProgram(getFiles(), ["a.ts"], { target, module: ts.ModuleKind.CommonJS, rootDir: "/a/b" });
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
         const program2 = updateProgram(program1, ["a.ts"], { target, module: ts.ModuleKind.CommonJS, rootDir: "/a/c" }, ts.noop);
@@ -175,7 +172,7 @@ describe("unittests:: Reuse program structure:: General", () => {
     });
 
     it("fails if config path changes", () => {
-        const program1 = newProgram(files, ["a.ts"], { target, module: ts.ModuleKind.CommonJS, configFilePath: "/a/b/tsconfig.json" });
+        const program1 = newProgram(getFiles(), ["a.ts"], { target, module: ts.ModuleKind.CommonJS, configFilePath: "/a/b/tsconfig.json" });
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
         const program2 = updateProgram(program1, ["a.ts"], { target, module: ts.ModuleKind.CommonJS, configFilePath: "/a/c/tsconfig.json" }, ts.noop);
@@ -185,7 +182,7 @@ describe("unittests:: Reuse program structure:: General", () => {
 
     it("succeeds if missing files remain missing", () => {
         const options: ts.CompilerOptions = { target, noLib: true };
-        const program1 = newProgram(files, ["a.ts"], options);
+        const program1 = newProgram(getFiles(), ["a.ts"], options);
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
         const program2 = updateProgram(program1, ["a.ts"], options, ts.noop);
@@ -195,6 +192,7 @@ describe("unittests:: Reuse program structure:: General", () => {
 
     it("fails if missing file is created", () => {
         const options: ts.CompilerOptions = { target, noLib: true };
+        const files = getFiles();
         const program1 = newProgram(files, ["a.ts"], options);
         const baselines: string[] = [];
         baselineProgram(baselines, program1);

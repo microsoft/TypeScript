@@ -1,12 +1,12 @@
 Info 0    [00:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:32.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/a.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/a.ts]
@@ -81,7 +81,7 @@ Info 8    [00:00:45.000] request:
         "line": 3,
         "offset": 47
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request
@@ -101,7 +101,7 @@ Info 10   [00:00:47.000] request:
         "line": 1,
         "offset": 10
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Before request
@@ -115,12 +115,12 @@ FsWatchesRecursive::
 Info 11   [00:00:48.000] Request: definitionAndBoundSpan not allowed in LanguageServiceMode.Syntactic
 Info 12   [00:00:49.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/b.ts"
-      }
+      },
+      "seq": 4,
+      "type": "request"
     }
 Before request
 
@@ -165,7 +165,7 @@ Info 19   [00:01:04.000] request:
         "line": 3,
         "offset": 47
       },
-      "seq": 3,
+      "seq": 5,
       "type": "request"
     }
 Before request
@@ -185,7 +185,7 @@ Info 21   [00:01:06.000] request:
         "line": 1,
         "offset": 10
       },
-      "seq": 4,
+      "seq": 6,
       "type": "request"
     }
 Before request
@@ -205,7 +205,7 @@ Info 23   [00:01:08.000] request:
         "line": 1,
         "offset": 13
       },
-      "seq": 5,
+      "seq": 7,
       "type": "request"
     }
 Before request
@@ -219,12 +219,12 @@ FsWatchesRecursive::
 Info 24   [00:01:09.000] Request: definitionAndBoundSpan not allowed in LanguageServiceMode.Syntactic
 Info 25   [00:01:10.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/c.ts"
-      }
+      },
+      "seq": 8,
+      "type": "request"
     }
 Before request
 
@@ -265,12 +265,12 @@ Info 31   [00:01:26.000] response:
     }
 Info 32   [00:01:27.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/node_modules/something/index.d.ts"
-      }
+      },
+      "seq": 9,
+      "type": "request"
     }
 Before request
 
@@ -313,12 +313,12 @@ Info 38   [00:01:45.000] response:
     }
 Info 39   [00:01:46.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/c.ts"
-      }
+      },
+      "seq": 10,
+      "type": "request"
     }
 Before request
 
@@ -353,12 +353,12 @@ Info 40   [00:01:57.000] response:
     }
 Info 41   [00:01:58.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/b.ts"
-      }
+      },
+      "seq": 11,
+      "type": "request"
     }
 Before request
 

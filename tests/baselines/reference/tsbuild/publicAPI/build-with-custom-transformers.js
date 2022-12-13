@@ -97,7 +97,7 @@ export declare function f2(): void;
 
 //// [/src/shared/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.f2 = exports.e = exports.c = exports.f1 = void 0;
 /*@before/src/shared/tsconfig.json*/
 function f1() { }
@@ -176,7 +176,7 @@ export declare function f22(): void;
 
 //// [/src/webpack/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.f22 = exports.e2 = exports.c2 = exports.f2 = void 0;
 /*@before/src/webpack/tsconfig.json*/
 function f2() { }

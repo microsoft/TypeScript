@@ -840,6 +840,7 @@ export interface FileLocationRequest extends FileRequest {
  */
 export interface GetSupportedCodeFixesRequest extends Request {
     command: CommandTypes.GetSupportedCodeFixes;
+    arguments?: Partial<FileRequestArgs>;
 }
 
 /**

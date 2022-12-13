@@ -380,6 +380,7 @@ export namespace Compiler {
             }
             // If not a primitive, the possible types are specified in what is effectively a map of options.
             case "list":
+            case "listOrElement":
                 return ts.parseListTypeOption(option, value, errors);
             default:
                 return ts.parseCustomTypeOption(option as ts.CommandLineOptionOfCustomType, value, errors);

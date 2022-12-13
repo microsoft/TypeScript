@@ -1,12 +1,12 @@
 Info 0    [00:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:32.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/src/main.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/lib/lib.d.ts]
@@ -80,7 +80,7 @@ Info 21   [00:00:52.000] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	node_modules/bar/foo.d.ts
 	  Imported via "./foo" from file 'node_modules/bar/index.d.ts'
 	node_modules/bar/index.d.ts

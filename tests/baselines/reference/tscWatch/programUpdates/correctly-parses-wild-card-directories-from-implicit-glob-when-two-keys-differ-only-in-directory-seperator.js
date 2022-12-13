@@ -83,7 +83,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/f1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 1;
 
@@ -94,7 +94,7 @@ export declare const x = 1;
 
 //// [/user/username/projects/myproject/f2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 1;
 
@@ -290,7 +290,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/new-file.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.z = void 0;
 exports.z = 1;
 

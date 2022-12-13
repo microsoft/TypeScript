@@ -10,7 +10,6 @@ import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
-    executeSessionRequest,
     openFilesForSession,
     protocolLocationFromSubstring,
     verifyGetErrRequest,
@@ -65,7 +64,10 @@ describe("unittests:: tsserver:: symLinks", () => {
                 { file: bFc, projectRootPath: folderB },
             ],
             session);
-        executeSessionRequest<ts.server.protocol.RenameRequest, ts.server.protocol.RenameResponse>(session, ts.server.protocol.CommandTypes.Rename, { file: aFc, ...protocolLocationFromSubstring(cFile.content, "C") });
+        session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+            command: ts.server.protocol.CommandTypes.Rename,
+            arguments: { file: aFc, ...protocolLocationFromSubstring(cFile.content, "C") }
+        });
         baselineTsserverLogs("symLinks", "rename in common file renames all project", session);
     });
 

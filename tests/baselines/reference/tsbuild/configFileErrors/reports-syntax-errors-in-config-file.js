@@ -242,7 +242,7 @@ export declare function fooBar(): void;
 
 //// [/src/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.fooBar = exports.foo = void 0;
 function foo() { }
 exports.foo = foo;
@@ -256,7 +256,7 @@ export declare function bar(): void;
 
 //// [/src/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 function bar() { }
 exports.bar = bar;

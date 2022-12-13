@@ -105,7 +105,7 @@ Output::
 [[90m12:00:11 AM[0m] Building project '/src/tsconfig_withIncludeOfJson.json'...
 
 lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 src/src/index.json
   Imported via "./index.json" from file 'src/src/index.ts'
   Matched by include pattern 'src/**/*.json' in 'src/tsconfig_withIncludeOfJson.json'
@@ -124,9 +124,9 @@ export default _default;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var index_json_1 = __importDefault(require("./index.json"));
-exports["default"] = index_json_1["default"].hello;
+exports.default = index_json_1.default.hello;
 
 
 //// [/src/dist/src/index.json]

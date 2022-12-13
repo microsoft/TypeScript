@@ -153,7 +153,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/reexport/out/pure/session.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/reexport/out/pure/session.d.ts]
@@ -178,7 +178,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./session"), exports);
 
 
@@ -253,7 +253,7 @@ export * from "./session";
 
 //// [/user/username/projects/reexport/out/main/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.session = void 0;
 exports.session = {
     foo: 1

@@ -153,6 +153,7 @@ export function organizeImports(
             // Consider the first node to have trailingTrivia as we want to exclude the
             // "header" comment.
             changeTracker.deleteNodes(sourceFile, oldImportDecls, {
+                leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude,
                 trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
             }, /*hasTrailingComment*/ true);
         }

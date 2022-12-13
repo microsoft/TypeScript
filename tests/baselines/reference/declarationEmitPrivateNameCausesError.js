@@ -25,7 +25,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.ignoreExtraVariables = void 0;
 var IGNORE_EXTRA_VARIABLES = Symbol(); //Notice how this is unexported
 //This is exported

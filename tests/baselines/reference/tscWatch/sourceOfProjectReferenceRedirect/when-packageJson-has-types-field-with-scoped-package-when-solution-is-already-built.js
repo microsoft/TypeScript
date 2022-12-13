@@ -37,7 +37,7 @@ export function bar() { }
 //// [/user/username/projects/myproject/node_modules/@issue/b] symlink(/user/username/projects/myproject/packages/B)
 //// [/user/username/projects/myproject/packages/B/lib/bar.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = void 0;
 function bar() { }
 exports.bar = bar;
@@ -49,7 +49,7 @@ export declare function bar(): void;
 
 //// [/user/username/projects/myproject/packages/B/lib/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = void 0;
 function foo() { }
 exports.foo = foo;
@@ -117,7 +117,7 @@ export declare function foo(): void;
 
 //// [/user/username/projects/myproject/packages/A/lib/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var b_1 = require("@issue/b");
 var bar_1 = require("@issue/b/lib/bar");
 (0, b_1.foo)();

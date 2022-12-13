@@ -30,5 +30,5 @@ declare const Comp: (p: { className?: string }) => null
 
 //// [jsxLibraryManagedAttributesUnusedGeneric.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 jsx(Comp, { css: "color:hotpink;" });

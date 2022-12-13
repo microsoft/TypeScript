@@ -880,9 +880,9 @@ function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileNam
         return undefined;
     }
 
-    return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs
-        ? removeExtensionAndIndexPostFix(shortest, ending, compilerOptions)
-        : removeFileExtension(shortest);
+    return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Classic
+        ? removeFileExtension(shortest)
+        : removeExtensionAndIndexPostFix(shortest, ending, compilerOptions);
 }
 
 function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, sourceDirectory }: Info, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, options: CompilerOptions, userPreferences: UserPreferences, packageNameOnly?: boolean, overrideMode?: ResolutionMode): string | undefined {

@@ -47,4 +47,4 @@ import * as scopeBarSub from "@scope/bar/sub";
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

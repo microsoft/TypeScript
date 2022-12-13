@@ -31,7 +31,7 @@ class Y implements X {
 
 //// [identicalGenericConditionalsWithInferRelated.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function f(arg) {
     var x = null;
     var y = null;

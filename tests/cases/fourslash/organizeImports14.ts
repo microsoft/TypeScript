@@ -1,31 +1,33 @@
 /// <reference path="fourslash.ts" />
 
-//// import { a, A, b } from "foo";
-//// interface Use extends A {}
-//// console.log(a, b);
+// @filename: /a.ts
+////export const foo = 1;
 
-verify.organizeImports(
-`import { a, A, b } from "foo";
-interface Use extends A {}
-console.log(a, b);`);
+// @filename: /b.ts
+/////**
+//// * Module doc comment
+//// *
+//// * @module
+//// */
+////
+////// comment 1
+////
+////// comment 2
+////
+////import { foo } from "./a";
+////import { foo } from "./a";
+////import { foo } from "./a";
 
+goTo.file("/b.ts");
 verify.organizeImports(
-`import { a, A, b } from "foo";
-interface Use extends A {}
-console.log(a, b);`,
-/*mode*/ undefined,
-{ organizeImportsIgnoreCase: "auto" });
+`/**
+ * Module doc comment
+ *
+ * @module
+ */
 
-verify.organizeImports(
-`import { a, A, b } from "foo";
-interface Use extends A {}
-console.log(a, b);`,
-/*mode*/ undefined,
-{ organizeImportsIgnoreCase: true });
+// comment 1
 
-verify.organizeImports(
-`import { A, a, b } from "foo";
-interface Use extends A {}
-console.log(a, b);`,
-/*mode*/ undefined,
-{ organizeImportsIgnoreCase: false });
+// comment 2
+
+`);

@@ -61,7 +61,7 @@ export var eVar3 = 10, eVar4, eVar5;
 //// [withExportDecl.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.eVar5 = exports.eVar4 = exports.eVar3 = exports.eVar2 = exports.eVar1 = exports.m3 = exports.exportedFunction = exports.exportedArrayVar = exports.exportedWithComplicatedValue = exports.exportedVarWithInitialValue = exports.exportedSimpleVar = void 0;
     var simpleVar;
     var anotherVar;

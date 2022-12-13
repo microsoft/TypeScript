@@ -61,7 +61,7 @@ Output::
 [[90m12:00:39 AM[0m] Starting compilation in watch mode...
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 node_modules/react/jsx-runtime/index.d.ts
   Imported via "react/jsx-runtime" from file 'index.tsx' with packageId 'react/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 index.tsx
@@ -114,7 +114,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 var jsx_runtime_1 = require("react/jsx-runtime");
 var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
@@ -200,7 +200,7 @@ Output::
 [7m [0m [91m                              ~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 node_modules/preact/jsx-runtime/index.d.ts
   Imported via "preact/jsx-runtime" from file 'index.tsx' with packageId 'preact/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 index.tsx
@@ -252,7 +252,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 var jsx_runtime_1 = require("preact/jsx-runtime");
 var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };

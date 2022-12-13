@@ -11,7 +11,7 @@ export var bVal = b;
 //// [internalAliasVarInsideTopLevelModuleWithExport.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.bVal = exports.b = exports.a = void 0;
     var a;
     (function (a) {

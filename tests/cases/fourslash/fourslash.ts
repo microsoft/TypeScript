@@ -885,6 +885,7 @@ declare namespace completion {
         ClassMemberSnippet = "ClassMemberSnippet/",
         TypeOnlyAlias = "TypeOnlyAlias/",
         ObjectLiteralMethodSnippet = "ObjectLiteralMethodSnippet/",
+        SwitchCases = "SwitchCases/",
     }
     export const globalThisEntry: Entry;
     export const undefinedVarEntry: Entry;

@@ -187,7 +187,7 @@ sourceFile:anotherModule.ts
 
 //// [/src/core/anotherModule.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.World = void 0;
 exports.World = "hello";
 
@@ -319,7 +319,7 @@ sourceFile:index.ts
 
 //// [/src/core/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
@@ -404,7 +404,7 @@ export declare const m: typeof mod;
 
 //// [/src/logic/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = exports.getSecondsInDay = void 0;
 var c = require("../core/index");
 function getSecondsInDay() {
@@ -430,7 +430,7 @@ emittedFile:/src/logic/index.js
 sourceFile:index.ts
 -------------------------------------------------------------------
 >>>"use strict";
->>>exports.__esModule = true;
+>>>Object.defineProperty(exports, "__esModule", { value: true });
 >>>exports.m = exports.getSecondsInDay = void 0;
 >>>var c = require("../core/index");
 1 >
@@ -628,7 +628,7 @@ export declare const m: typeof mod;
 
 //// [/src/tests/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = void 0;
 var c = require("../core/index");
 var logic = require("../logic/index");

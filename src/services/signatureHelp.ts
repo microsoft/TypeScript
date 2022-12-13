@@ -3,6 +3,7 @@ import {
     BinaryExpression,
     CallLikeExpression,
     CancellationToken,
+    canHaveSymbol,
     CheckFlags,
     contains,
     countWhere,
@@ -77,6 +78,7 @@ import {
     TemplateExpression,
     TextSpan,
     TransientSymbol,
+    tryCast,
     Type,
     TypeChecker,
     TypeParameter,
@@ -431,7 +433,7 @@ function getContextualSignatureLocationInfo(startingToken: Node, sourceFile: Sou
 // The type of a function type node has a symbol at that node, but it's better to use the symbol for a parameter or type alias.
 function chooseBetterSymbol(s: Symbol): Symbol {
     return s.name === InternalSymbolName.Type
-        ? firstDefined(s.declarations, d => isFunctionTypeNode(d) ? d.parent.symbol : undefined) || s
+        ? firstDefined(s.declarations, d => isFunctionTypeNode(d) ? tryCast(d.parent, canHaveSymbol)?.symbol : undefined) || s
         : s;
 }
 
