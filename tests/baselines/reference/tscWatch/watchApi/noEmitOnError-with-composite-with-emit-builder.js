@@ -387,7 +387,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
@@ -398,7 +398,7 @@ export declare const x = 10;
 
 //// [/user/username/projects/myproject/other.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 10;
 

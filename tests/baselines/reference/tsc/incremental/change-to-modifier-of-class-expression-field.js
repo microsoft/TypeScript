@@ -43,7 +43,7 @@ exitCode:: ExitStatus.Success
 
 //// [/src/project/main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function logMessage(person) {
     console.log(person.message);
 }
@@ -51,7 +51,7 @@ function logMessage(person) {
 
 //// [/src/project/MessageablePerson.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var Messageable = function () {
     return /** @class */ (function () {
         function MessageableClass() {

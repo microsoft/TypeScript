@@ -11,7 +11,7 @@ import {
     libContent,
 } from "../tsc/helpers";
 import {
-    applyChange,
+    applyEdit,
     createBaseline,
     SystemSnap,
     verifyTscWatch,
@@ -55,7 +55,7 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         build(oldSnap);
 
         if (modifyFs) {
-            const oldSnap = applyChange(sys, baseline, modifyFs);
+            const oldSnap = applyEdit(sys, baseline, modifyFs);
             build(oldSnap);
         }
 
@@ -404,6 +404,5 @@ export const Fragment: unique symbol;
             [libFile.path]: libFile.content,
         }),
         commandLineArgs: ["--p", "src/project", "-i", "-w"],
-        changes: ts.emptyArray
     });
 });

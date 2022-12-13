@@ -2898,7 +2898,7 @@ export function buildLinkParts(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain,
             if (text) parts.push(linkTextPart(text));
         }
         else {
-            parts.push(linkTextPart(name + (suffix || text.indexOf("://") === 0 ? "" : " ") + text));
+            parts.push(linkTextPart(name + (suffix ? "" : " ") + text));
         }
     }
     parts.push(linkPart("}"));
@@ -2915,15 +2915,21 @@ function skipSeparatorFromLinkText(text: string) {
 }
 
 function findLinkNameEnd(text: string) {
+    let pos = text.indexOf("://");
+    if (pos === 0) {
+        while (pos < text.length && text.charCodeAt(pos) !== CharacterCodes.bar) pos++;
+        return pos;
+    }
     if (text.indexOf("()") === 0) return 2;
-    if (text[0] !== "<") return 0;
-    let brackets = 0;
-    let i = 0;
-    while (i < text.length) {
-        if (text[i] === "<") brackets++;
-        if (text[i] === ">") brackets--;
-        i++;
-        if (!brackets) return i;
+    if (text.charAt(0) === "<") {
+        let brackets = 0;
+        let i = 0;
+        while (i < text.length) {
+            if (text[i] === "<") brackets++;
+            if (text[i] === ">") brackets--;
+            i++;
+            if (!brackets) return i;
+        }
     }
     return 0;
 }

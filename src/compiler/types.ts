@@ -2,8 +2,10 @@ import {
     BaseNodeFactory,
     CreateSourceFileOptions,
     EmitHelperFactory,
+    GetCanonicalFileName,
     MapLike,
     ModeAwareCache,
+    ModeAwareCacheKey,
     ModuleResolutionCache,
     MultiMap,
     NodeFactoryFlags,
@@ -429,6 +431,7 @@ export const enum SyntaxKind {
     JSDocTypedefTag,
     JSDocSeeTag,
     JSDocPropertyTag,
+    JSDocThrowsTag,
 
     // Synthesized list
     SyntaxList,
@@ -473,9 +476,9 @@ export const enum SyntaxKind {
     LastStatement = DebuggerStatement,
     FirstNode = QualifiedName,
     FirstJSDocNode = JSDocTypeExpression,
-    LastJSDocNode = JSDocPropertyTag,
+    LastJSDocNode = JSDocThrowsTag,
     FirstJSDocTagNode = JSDocTag,
-    LastJSDocTagNode = JSDocPropertyTag,
+    LastJSDocTagNode = JSDocThrowsTag,
     /** @internal */ FirstContextualKeyword = AbstractKeyword,
     /** @internal */ LastContextualKeyword = OfKeyword,
 }
@@ -952,6 +955,7 @@ export type ForEachChildNodes =
     | JSDocProtectedTag
     | JSDocReadonlyTag
     | JSDocDeprecatedTag
+    | JSDocThrowsTag
     | JSDocOverrideTag
     ;
 
@@ -3825,6 +3829,11 @@ export interface JSDocCallbackTag extends JSDocTag, NamedDeclaration {
     readonly typeExpression: JSDocSignature;
 }
 
+export interface JSDocThrowsTag extends JSDocTag {
+    readonly kind: SyntaxKind.JSDocThrowsTag;
+    readonly typeExpression?: JSDocTypeExpression;
+}
+
 export interface JSDocSignature extends JSDocType, Declaration {
     readonly kind: SyntaxKind.JSDocSignature;
     readonly typeParameters?: readonly JSDocTemplateTag[];
@@ -4113,8 +4122,8 @@ export interface SourceFile extends Declaration {
     // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
     // It is used to resolve module names in the checker.
     // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-    /** @internal */ resolvedModules?: ModeAwareCache<ResolvedModuleFull | undefined>;
-    /** @internal */ resolvedTypeReferenceDirectiveNames: ModeAwareCache<ResolvedTypeReferenceDirective | undefined>;
+    /** @internal */ resolvedModules?: ModeAwareCache<ResolvedModuleWithFailedLookupLocations>;
+    /** @internal */ resolvedTypeReferenceDirectiveNames?: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     /** @internal */ imports: readonly StringLiteralLike[];
     // Identifier only if `declare global`
     /** @internal */ moduleAugmentations: readonly (StringLiteral | Identifier)[];
@@ -4385,7 +4394,8 @@ export type FileIncludeReason =
 /** @internal */
 export const enum FilePreprocessingDiagnosticsKind {
     FilePreprocessingReferencedDiagnostic,
-    FilePreprocessingFileExplainingDiagnostic
+    FilePreprocessingFileExplainingDiagnostic,
+    ResolutionDiagnostics,
 }
 
 /** @internal */
@@ -4406,7 +4416,13 @@ export interface FilePreprocessingFileExplainingDiagnostic {
 }
 
 /** @internal */
-export type FilePreprocessingDiagnostics = FilePreprocessingReferencedDiagnostic | FilePreprocessingFileExplainingDiagnostic;
+export interface ResolutionDiagnostics {
+    kind: FilePreprocessingDiagnosticsKind.ResolutionDiagnostics;
+    diagnostics: readonly Diagnostic[];
+}
+
+/** @internal */
+export type FilePreprocessingDiagnostics = FilePreprocessingReferencedDiagnostic | FilePreprocessingFileExplainingDiagnostic | ResolutionDiagnostics;
 
 /** @internal */
 export const enum EmitOnly{
@@ -4482,7 +4498,9 @@ export interface Program extends ScriptReferenceHost {
     getRelationCacheSizes(): { assignable: number, identity: number, subtype: number, strictSubtype: number };
 
     /** @internal */ getFileProcessingDiagnostics(): FilePreprocessingDiagnostics[] | undefined;
-    /** @internal */ getResolvedTypeReferenceDirectives(): ModeAwareCache<ResolvedTypeReferenceDirective | undefined>;
+    /** @internal */ getResolvedTypeReferenceDirectives(): ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
+    /** @internal */ getAutomaticTypeDirectiveNames(): string[];
+    /** @internal */ getAutomaticTypeDirectiveResolutions(): ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     isSourceFileFromExternalLibrary(file: SourceFile): boolean;
     isSourceFileDefaultLibrary(file: SourceFile): boolean;
 
@@ -4519,8 +4537,7 @@ export interface Program extends ScriptReferenceHost {
     isEmittedFile(file: string): boolean;
     /** @internal */ getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
     /** @internal */ useCaseSensitiveFileNames(): boolean;
-
-    /** @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, mode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
+    /** @internal */ getCanonicalFileName: GetCanonicalFileName;
 
     getProjectReferences(): readonly ProjectReference[] | undefined;
     getResolvedProjectReferences(): readonly (ResolvedProjectReference | undefined)[] | undefined;
@@ -4645,7 +4662,7 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
 
     getSourceFiles(): readonly SourceFile[];
     getSourceFile(fileName: string): SourceFile | undefined;
-    getResolvedTypeReferenceDirectives(): ModeAwareCache<ResolvedTypeReferenceDirective | undefined>;
+    getResolvedTypeReferenceDirectives(): ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     getProjectReferenceRedirect(fileName: string): string | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
 
@@ -5342,8 +5359,8 @@ export interface EmitResolver {
     moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean;
     isArgumentsLocalBinding(node: Identifier): boolean;
     getExternalModuleFileFromDeclaration(declaration: ImportEqualsDeclaration | ImportDeclaration | ExportDeclaration | ModuleDeclaration | ImportTypeNode | ImportCall): SourceFile | undefined;
-    getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): [specifier: string, mode: ResolutionMode | undefined][] | undefined;
-    getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: ResolutionMode | undefined][] | undefined;
+    getTypeReferenceDirectivesForEntityName(name: EntityNameOrEntityNameExpression): [specifier: string, mode: ResolutionMode][] | undefined;
+    getTypeReferenceDirectivesForSymbol(symbol: Symbol, meaning?: SymbolFlags): [specifier: string, mode: ResolutionMode][] | undefined;
     isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
     getJsxFactoryEntity(location?: Node): EntityName | undefined;
     getJsxFragmentFactoryEntity(location?: Node): EntityName | undefined;
@@ -5503,7 +5520,7 @@ export interface SymbolLinks {
     enumKind?: EnumKind;                        // Enum declaration classification
     originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
     lateSymbol?: Symbol;                        // Late-bound symbol for a computed property
-    specifierCache?: Map<string, string>;     // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
+    specifierCache?: Map<ModeAwareCacheKey, string>; // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
     extendedContainers?: Symbol[];              // Containers (other than the parent) which this symbol is aliased in
     extendedContainersByFile?: Map<NodeId, Symbol[]>; // Containers (other than the parent) which this symbol is aliased in
     variances?: VarianceFlags[];                // Alias symbol type argument variance cache
@@ -7274,11 +7291,11 @@ export const enum Extension {
 export interface ResolvedModuleWithFailedLookupLocations {
     readonly resolvedModule: ResolvedModuleFull | undefined;
     /** @internal */
-    readonly failedLookupLocations: string[];
+    failedLookupLocations?: string[];
     /** @internal */
-    readonly affectingLocations: string[];
+    affectingLocations?: string[];
     /** @internal */
-    readonly resolutionDiagnostics: Diagnostic[]
+    resolutionDiagnostics?: Diagnostic[]
 }
 
 export interface ResolvedTypeReferenceDirective {
@@ -7299,22 +7316,15 @@ export interface ResolvedTypeReferenceDirective {
 
 export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
     readonly resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
-    readonly failedLookupLocations: string[];
-    /** @internal */ readonly affectingLocations: string[];
-    /** @internal */ resolutionDiagnostics: Diagnostic[];
+    /** @internal */ failedLookupLocations?: string[];
+    /** @internal */ affectingLocations?: string[];
+    /** @internal */ resolutionDiagnostics?: Diagnostic[];
 }
 
 /** @internal */
 export type HasInvalidatedResolutions = (sourceFile: Path) => boolean;
 /** @internal */
 export type HasChangedAutomaticTypeDirectiveNames = () => boolean;
-
-export interface ResolutionInfo<T> {
-    names: readonly T[];
-    reusedNames: readonly T[] | undefined;
-}
-export type ModuleResolutionInfo = ResolutionInfo<StringLiteralLike>;
-export type TypeReferenceDirectiveResolutionInfo = ResolutionInfo<string | FileReference>;
 
 export interface CompilerHost extends ModuleResolutionHost {
     getSourceFile(fileName: string, languageVersionOrOptions: ScriptTarget | CreateSourceFileOptions, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined;
@@ -7336,15 +7346,34 @@ export interface CompilerHost extends ModuleResolutionHost {
      * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
      * 'throw new Error("NotImplemented")'
      */
-    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
+    /** @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolution modes like nodenext */
+    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
     /**
      * Returns the module resolution cache used by a provided `resolveModuleNames` implementation so that any non-name module resolution operations (eg, package.json lookup) can reuse it
      */
     getModuleResolutionCache?(): ModuleResolutionCache | undefined;
     /**
+     * @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext
+     *
      * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
      */
-    resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode | undefined, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveModuleNameLiterals?(
+        moduleLiterals: readonly StringLiteralLike[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile,
+        reusedNames: readonly StringLiteralLike[] | undefined,
+    ): readonly ResolvedModuleWithFailedLookupLocations[];
+    resolveTypeReferenceDirectiveReferences?<T extends FileReference | string>(
+        typeDirectiveReferences: readonly T[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile | undefined,
+        reusedNames: readonly T[] | undefined
+    ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
     getEnvironmentVariable?(name: string): string | undefined;
     /** @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
     /** @internal */ onReleaseParsedCommandLine?(configFileName: string, oldResolvedRef: ResolvedProjectReference | undefined, optionOptions: CompilerOptions): void;
@@ -7360,7 +7389,6 @@ export interface CompilerHost extends ModuleResolutionHost {
     /** @internal */getSymlinkCache?(): SymlinkCache;
 
     // For testing:
-    /** @internal */ disableUseFileVersionAsSignature?: boolean;
     /** @internal */ storeFilesChangingSignatureDuringEmit?: boolean;
     /** @internal */ getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
 }
@@ -7490,7 +7518,7 @@ export interface EmitNode {
     helpers?: EmitHelper[];                  // Emit helpers for the node
     startsOnNewLine?: boolean;               // If the node should begin on a new line
     snippetElement?: SnippetElement;         // Snippet element of the node
-    typeNode?: TypeNode;                         // VariableDeclaration type
+    typeNode?: TypeNode;                     // VariableDeclaration type
 }
 
 /** @internal */
@@ -7520,38 +7548,39 @@ export const enum SnippetKind {
 export const enum EmitFlags {
     None = 0,
     SingleLine = 1 << 0,                    // The contents of this node should be emitted on a single line.
-    AdviseOnEmitNode = 1 << 1,              // The printer should invoke the onEmitNode callback when printing this node.
-    NoSubstitution = 1 << 2,                // Disables further substitution of an expression.
-    CapturesThis = 1 << 3,                  // The function captures a lexical `this`
-    NoLeadingSourceMap = 1 << 4,            // Do not emit a leading source map location for this node.
-    NoTrailingSourceMap = 1 << 5,           // Do not emit a trailing source map location for this node.
+    MultiLine = 1 << 1,
+    AdviseOnEmitNode = 1 << 2,              // The printer should invoke the onEmitNode callback when printing this node.
+    NoSubstitution = 1 << 3,                // Disables further substitution of an expression.
+    CapturesThis = 1 << 4,                  // The function captures a lexical `this`
+    NoLeadingSourceMap = 1 << 5,            // Do not emit a leading source map location for this node.
+    NoTrailingSourceMap = 1 << 6,           // Do not emit a trailing source map location for this node.
     NoSourceMap = NoLeadingSourceMap | NoTrailingSourceMap, // Do not emit a source map location for this node.
-    NoNestedSourceMaps = 1 << 6,            // Do not emit source map locations for children of this node.
-    NoTokenLeadingSourceMaps = 1 << 7,      // Do not emit leading source map location for token nodes.
-    NoTokenTrailingSourceMaps = 1 << 8,     // Do not emit trailing source map location for token nodes.
+    NoNestedSourceMaps = 1 << 7,            // Do not emit source map locations for children of this node.
+    NoTokenLeadingSourceMaps = 1 << 8,      // Do not emit leading source map location for token nodes.
+    NoTokenTrailingSourceMaps = 1 << 9,     // Do not emit trailing source map location for token nodes.
     NoTokenSourceMaps = NoTokenLeadingSourceMaps | NoTokenTrailingSourceMaps, // Do not emit source map locations for tokens of this node.
-    NoLeadingComments = 1 << 9,             // Do not emit leading comments for this node.
-    NoTrailingComments = 1 << 10,           // Do not emit trailing comments for this node.
+    NoLeadingComments = 1 << 10,            // Do not emit leading comments for this node.
+    NoTrailingComments = 1 << 11,           // Do not emit trailing comments for this node.
     NoComments = NoLeadingComments | NoTrailingComments, // Do not emit comments for this node.
-    NoNestedComments = 1 << 11,
-    HelperName = 1 << 12,                   // The Identifier refers to an *unscoped* emit helper (one that is emitted at the top of the file)
-    ExportName = 1 << 13,                   // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
-    LocalName = 1 << 14,                    // Ensure an export prefix is not added for an identifier that points to an exported declaration.
-    InternalName = 1 << 15,                 // The name is internal to an ES5 class body function.
-    Indented = 1 << 16,                     // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
-    NoIndentation = 1 << 17,                // Do not indent the node.
-    AsyncFunctionBody = 1 << 18,
-    ReuseTempVariableScope = 1 << 19,       // Reuse the existing temp variable scope during emit.
-    CustomPrologue = 1 << 20,               // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
-    NoHoisting = 1 << 21,                   // Do not hoist this declaration in --module system
-    HasEndOfDeclarationMarker = 1 << 22,    // Declaration has an associated NotEmittedStatement to mark the end of the declaration
-    Iterator = 1 << 23,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
-    NoAsciiEscaping = 1 << 24,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
-    /** @internal */ TypeScriptClassWrapper = 1 << 25, // The node is an IIFE class wrapper created by the ts transform.
-    /** @internal */ NeverApplyImportHelper = 1 << 26, // Indicates the node should never be wrapped with an import star helper (because, for example, it imports tslib itself)
-    /** @internal */ IgnoreSourceNewlines = 1 << 27,   // Overrides `printerOptions.preserveSourceNewlines` to print this node (and all descendants) with default whitespace.
-    /** @internal */ Immutable = 1 << 28,      // Indicates a node is a singleton intended to be reused in multiple locations. Any attempt to make further changes to the node will result in an error.
-    /** @internal */ IndirectCall = 1 << 29,   // Emit CallExpression as an indirect call: `(0, f)()`
+    NoNestedComments = 1 << 12,
+    HelperName = 1 << 13,                   // The Identifier refers to an *unscoped* emit helper (one that is emitted at the top of the file)
+    ExportName = 1 << 14,                   // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
+    LocalName = 1 << 15,                    // Ensure an export prefix is not added for an identifier that points to an exported declaration.
+    InternalName = 1 << 16,                 // The name is internal to an ES5 class body function.
+    Indented = 1 << 17,                     // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+    NoIndentation = 1 << 18,                // Do not indent the node.
+    AsyncFunctionBody = 1 << 19,
+    ReuseTempVariableScope = 1 << 20,       // Reuse the existing temp variable scope during emit.
+    CustomPrologue = 1 << 21,               // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
+    NoHoisting = 1 << 22,                   // Do not hoist this declaration in --module system
+    HasEndOfDeclarationMarker = 1 << 23,    // Declaration has an associated NotEmittedStatement to mark the end of the declaration
+    Iterator = 1 << 24,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
+    NoAsciiEscaping = 1 << 25,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
+    /** @internal */ TypeScriptClassWrapper = 1 << 26, // The node is an IIFE class wrapper created by the ts transform.
+    /** @internal */ NeverApplyImportHelper = 1 << 27, // Indicates the node should never be wrapped with an import star helper (because, for example, it imports tslib itself)
+    /** @internal */ IgnoreSourceNewlines = 1 << 28,   // Overrides `printerOptions.preserveSourceNewlines` to print this node (and all descendants) with default whitespace.
+    /** @internal */ Immutable = 1 << 29,      // Indicates a node is a singleton intended to be reused in multiple locations. Any attempt to make further changes to the node will result in an error.
+    /** @internal */ IndirectCall = 1 << 30,   // Emit CallExpression as an indirect call: `(0, f)()`
 }
 
 export interface EmitHelperBase {
@@ -8235,6 +8264,8 @@ export interface NodeFactory {
     updateJSDocDeprecatedTag(node: JSDocDeprecatedTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocDeprecatedTag;
     createJSDocOverrideTag(tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
     updateJSDocOverrideTag(node: JSDocOverrideTag, tagName: Identifier, comment?: string | NodeArray<JSDocComment>): JSDocOverrideTag;
+    createJSDocThrowsTag(tagName: Identifier, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment>): JSDocThrowsTag;
+    updateJSDocThrowsTag(node: JSDocThrowsTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression | undefined, comment?: string | NodeArray<JSDocComment> | undefined): JSDocThrowsTag;
     createJSDocText(text: string): JSDocText;
     updateJSDocText(node: JSDocText, text: string): JSDocText;
     createJSDocComment(comment?: string | NodeArray<JSDocComment> | undefined, tags?: readonly JSDocTag[] | undefined): JSDoc;

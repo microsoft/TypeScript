@@ -93,7 +93,7 @@ Info 46   [00:01:21.000] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/node_modules/module1/index.ts
 	  Imported via "module1" from file 'src/file1.ts'
 	node_modules/module2/index.ts

@@ -7,4 +7,4 @@ import foo = require('./foo');
 //// [commentOnImportStatement3.js]
 "use strict";
 /* copyright */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

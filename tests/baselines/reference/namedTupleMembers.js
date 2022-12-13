@@ -80,7 +80,7 @@ export const argumentsOfG = f(...getArgsForInjection(g)); // captured arguments 
 
 //// [namedTupleMembers.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.argumentsOfG = exports.argumentsOfGAsFirstArgument = exports.val = exports.readSegment = exports.useState = exports.func = void 0;
 a = b;
 a = c;

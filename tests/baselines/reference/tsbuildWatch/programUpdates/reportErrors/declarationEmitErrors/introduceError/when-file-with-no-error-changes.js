@@ -70,7 +70,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/solution/app/fileWithError.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.myClassWithError = void 0;
 exports.myClassWithError = /** @class */ (function () {
     function myClassWithError() {
@@ -90,7 +90,7 @@ export declare var myClassWithError: {
 
 //// [/user/username/projects/solution/app/fileWithoutError.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.myClass = void 0;
 var myClass = /** @class */ (function () {
     function myClass() {

@@ -54,7 +54,6 @@ File '/Users/name/projects/web/node_modules/yargs.ts' does not exist.
 File '/Users/name/projects/web/node_modules/yargs.tsx' does not exist.
 File '/Users/name/projects/web/node_modules/yargs.d.ts' does not exist.
 Found 'package.json' at '/Users/name/projects/web/node_modules/@types/yargs/package.json'.
-'package.json' does not have a 'typesVersions' field.
 Matched 'exports' condition 'types'.
 Saw non-matching condition 'import'.
 Matched 'exports' condition 'default'.
@@ -66,6 +65,7 @@ File '/Users/name/projects/web/node_modules/@types/yargs/package.json' exists ac
 ======== Resolving type reference directive 'yargs', containing file '/Users/name/projects/web/__inferred type names__.ts', root directory '/Users/name/projects/web/node_modules/@types'. ========
 Resolving with primary search path '/Users/name/projects/web/node_modules/@types'.
 File '/Users/name/projects/web/node_modules/@types/yargs/package.json' exists according to earlier cached lookups.
+'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' does not have a 'main' field.
@@ -76,7 +76,7 @@ File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 node_modules/@types/yargs/index.d.ts
   Imported via "yargs" from file 'src/bin.ts' with packageId 'yargs/index.d.ts@17.0.12'
   Entry point for implicit type library 'yargs' with packageId 'yargs/index.d.ts@17.0.12'
@@ -142,6 +142,6 @@ exitCode:: ExitStatus.undefined
 
 //// [/Users/name/projects/web/src/bin.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
