@@ -13212,6 +13212,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return hasNonCircularBaseConstraint(typeParameter) ? getConstraintFromTypeParameter(typeParameter) : undefined;
     }
 
+    function isConstTypeVariable(type: Type): boolean {
+        return !!(type.flags & TypeFlags.TypeParameter && some((type as TypeParameter).symbol?.declarations, d => hasSyntacticModifier(d, ModifierFlags.Const)) ||
+            type.flags & TypeFlags.IndexedAccess && isConstTypeVariable((type as IndexedAccessType).objectType));
+    }
+
     function getConstraintOfIndexedAccess(type: IndexedAccessType) {
         return hasNonCircularBaseConstraint(type) ? getConstraintFromIndexedAccess(type) : undefined;
     }
@@ -17032,15 +17037,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !!(getGenericObjectFlags(type) & ObjectFlags.IsGenericIndexType);
     }
 
-    function isConstTypeVariable(type: Type): boolean {
-        return !!(getGenericObjectFlags(type) & ObjectFlags.IsConstTypeVariable);
-    }
-
-    function isConstTypeVariableWorker(type: Type): boolean {
-        return !!(type.flags & TypeFlags.TypeParameter && some((type as TypeParameter).symbol?.declarations, d => hasSyntacticModifier(d, ModifierFlags.Const)) ||
-            type.flags & TypeFlags.IndexedAccess && isConstTypeVariableWorker((type as IndexedAccessType).objectType));
-    }
-
     function getGenericObjectFlags(type: Type): ObjectFlags {
         if (type.flags & TypeFlags.UnionOrIntersection) {
             if (!((type as UnionOrIntersectionType).objectFlags & ObjectFlags.IsGenericTypeComputed)) {
@@ -17057,8 +17053,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return (type as SubstitutionType).objectFlags & ObjectFlags.IsGenericType;
         }
         return (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type) || isGenericTupleType(type) ? ObjectFlags.IsGenericObjectType : 0) |
-            (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0) |
-            (isConstTypeVariableWorker(type) ? ObjectFlags.IsConstTypeVariable : 0);
+            (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
     }
 
     function getSimplifiedType(type: Type, writing: boolean): Type {

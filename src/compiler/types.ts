@@ -5922,24 +5922,22 @@ export const enum ObjectFlags {
     /** @internal */
     IsGenericIndexType = 1 << 23, // Union or intersection contains generic index type
     /** @internal */
-    IsConstTypeVariable = 1 << 24, // Union or intersection contains const type parameter
-    /** @internal */
     IsGenericType = IsGenericObjectType | IsGenericIndexType,
 
     // Flags that require TypeFlags.Union
     /** @internal */
-    ContainsIntersections = 1 << 25, // Union contains intersections
+    ContainsIntersections = 1 << 24, // Union contains intersections
     /** @internal */
-    IsUnknownLikeUnionComputed = 1 << 26, // IsUnknownLikeUnion flag has been computed
+    IsUnknownLikeUnionComputed = 1 << 25, // IsUnknownLikeUnion flag has been computed
     /** @internal */
-    IsUnknownLikeUnion = 1 << 27, // Union of null, undefined, and empty object type
+    IsUnknownLikeUnion = 1 << 26, // Union of null, undefined, and empty object type
     /** @internal */
 
     // Flags that require TypeFlags.Intersection
     /** @internal */
-    IsNeverIntersectionComputed = 1 << 25, // IsNeverLike flag has been computed
+    IsNeverIntersectionComputed = 1 << 24, // IsNeverLike flag has been computed
     /** @internal */
-    IsNeverIntersection = 1 << 26, // Intersection reduces to never
+    IsNeverIntersection = 1 << 25, // Intersection reduces to never
 }
 
 /** @internal */
