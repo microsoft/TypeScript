@@ -1,5 +1,5 @@
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.n = exports.x = exports.d = void 0;
 // Do not emit unused import
 var m5 = require("m5");

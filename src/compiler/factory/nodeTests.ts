@@ -23,6 +23,7 @@ import {
     CallSignatureDeclaration,
     CaseBlock,
     CaseClause,
+    CaseKeyword,
     CatchClause,
     ClassDeclaration,
     ClassExpression,
@@ -109,6 +110,7 @@ import {
     JSDocSignature,
     JSDocTemplateTag,
     JSDocThisTag,
+    JSDocThrowsTag,
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeLiteral,
@@ -377,6 +379,11 @@ export function isSuperKeyword(node: Node): node is SuperExpression {
 /** @internal */
 export function isImportKeyword(node: Node): node is ImportExpression {
     return node.kind === SyntaxKind.ImportKeyword;
+}
+
+/** @internal */
+export function isCaseKeyword(node: Node): node is CaseKeyword {
+    return node.kind === SyntaxKind.CaseKeyword;
 }
 
 // Names
@@ -1174,6 +1181,10 @@ export function isJSDocPropertyTag(node: Node): node is JSDocPropertyTag {
 
 export function isJSDocImplementsTag(node: Node): node is JSDocImplementsTag {
     return node.kind === SyntaxKind.JSDocImplementsTag;
+}
+
+export function isJSDocThrowsTag(node: Node): node is JSDocThrowsTag {
+    return node.kind === SyntaxKind.JSDocThrowsTag;
 }
 
 // Synthesized list

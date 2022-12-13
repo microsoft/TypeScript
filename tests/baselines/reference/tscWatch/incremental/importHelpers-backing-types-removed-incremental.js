@@ -59,7 +59,7 @@ exitCode:: ExitStatus.Success
 
 //// [/users/username/projects/project/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 var tslib_1 = require("tslib");
 exports.x = tslib_1.__assign({});

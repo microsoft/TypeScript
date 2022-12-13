@@ -12,7 +12,8 @@ Resolution:: {
     "resolvedFileName": "/modules/a.ts",
     "originalPath": "/sub/node_modules/a/index.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/sub/dir/node_modules/a/package.json",
@@ -41,7 +42,8 @@ Resolution:: {
     "resolvedFileName": "/modules/a.ts",
     "originalPath": "/sub/node_modules/a/index.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/sub/dir/node_modules/a/package.json",

@@ -3,7 +3,6 @@ import {
     AccessorDeclaration,
     addRange,
     addRelatedInfo,
-    AmdDependency,
     append,
     ArrayBindingElement,
     ArrayBindingPattern,
@@ -29,13 +28,13 @@ import {
     BreakStatement,
     CallExpression,
     CallSignatureDeclaration,
+    canHaveJSDoc,
     canHaveModifiers,
     CaseBlock,
     CaseClause,
     CaseOrDefaultClause,
     CatchClause,
     CharacterCodes,
-    CheckJsDirective,
     ClassDeclaration,
     ClassElement,
     ClassExpression,
@@ -87,7 +86,6 @@ import {
     ExpressionWithTypeArguments,
     ExternalModuleReference,
     fileExtensionIsOneOf,
-    FileReference,
     findIndex,
     forEach,
     ForEachChildNodes,
@@ -166,7 +164,6 @@ import {
     JSDocCallbackTag,
     JSDocClassTag,
     JSDocComment,
-    JSDocContainer,
     JSDocDeprecatedTag,
     JSDocEnumTag,
     JSDocFunctionType,
@@ -196,6 +193,7 @@ import {
     JSDocTemplateTag,
     JSDocText,
     JSDocThisTag,
+    JSDocThrowsTag,
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeLiteral,
@@ -286,6 +284,7 @@ import {
     PlusToken,
     PostfixUnaryExpression,
     PostfixUnaryOperator,
+    PragmaContext,
     PragmaDefinition,
     PragmaKindFlags,
     PragmaMap,
@@ -1100,10 +1099,11 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.typeExpression) ||
             (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     },
-    [SyntaxKind.JSDocReturnTag]: forEachChildInJSDocReturnTag,
-    [SyntaxKind.JSDocTypeTag]: forEachChildInJSDocReturnTag,
-    [SyntaxKind.JSDocThisTag]: forEachChildInJSDocReturnTag,
-    [SyntaxKind.JSDocEnumTag]: forEachChildInJSDocReturnTag,
+    [SyntaxKind.JSDocReturnTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocTypeTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocThisTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocEnumTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocThrowsTag]: forEachChildInJSDocTypeLikeTag,
     [SyntaxKind.JSDocSignature]: function forEachChildInJSDocSignature<T>(node: JSDocSignature, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return forEach(node.typeParameters, cbNode) ||
             forEach(node.parameters, cbNode) ||
@@ -1197,7 +1197,7 @@ function forEachChildInJSDocParameterOrPropertyTag<T>(node: JSDocParameterTag | 
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
 
-function forEachChildInJSDocReturnTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInJSDocTypeLikeTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocThrowsTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
     return visitNode(cbNode, node.tagName) ||
         visitNode(cbNode, node.typeExpression) ||
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
@@ -1639,7 +1639,7 @@ namespace Parser {
             const statement = factory.createExpressionStatement(expression) as JsonObjectExpressionStatement;
             finishNode(statement, pos);
             statements = createNodeArray([statement], pos);
-            endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token);
+            endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token) as EndOfFileToken;
         }
 
         // Set source file so that errors will be reported with this file name
@@ -3066,9 +3066,9 @@ namespace Parser {
             return undefined;
         }
 
-        if ((node as JSDocContainer).jsDocCache) {
+        if (canHaveJSDoc(node) && node.jsDocCache) {
             // jsDocCache may include tags from parent nodes, which might have been modified.
-            (node as JSDocContainer).jsDocCache = undefined;
+            node.jsDocCache = undefined;
         }
 
         return node;
@@ -8786,6 +8786,10 @@ namespace Parser {
                     case "see":
                         tag = parseSeeTag(start, tagName, margin, indentText);
                         break;
+                    case "exception":
+                    case "throws":
+                        tag = parseThrowsTag(start, tagName, margin, indentText);
+                        break;
                     default:
                         tag = parseUnknownTag(start, tagName, margin, indentText);
                         break;
@@ -9089,6 +9093,12 @@ namespace Parser {
                 const nameExpression = isMarkdownOrJSDocLink ? undefined : parseJSDocNameReference();
                 const comments = indent !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), indent, indentText) : undefined;
                 return finishNode(factory.createJSDocSeeTag(tagName, nameExpression, comments), start);
+            }
+
+            function parseThrowsTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocThrowsTag {
+                const typeExpression = tryParseTypeExpression();
+                const comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
+                return finishNode(factory.createJSDocThrowsTag(tagName, typeExpression, comment), start);
             }
 
             function parseAuthorTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocAuthorTag {
@@ -10096,19 +10106,6 @@ namespace IncrementalParser {
 /** @internal */
 export function isDeclarationFileName(fileName: string): boolean {
     return fileExtensionIsOneOf(fileName, supportedDeclarationExtensions);
-}
-
-/** @internal */
-export interface PragmaContext {
-    languageVersion: ScriptTarget;
-    pragmas?: PragmaMap;
-    checkJsDirective?: CheckJsDirective;
-    referencedFiles: FileReference[];
-    typeReferenceDirectives: FileReference[];
-    libReferenceDirectives: FileReference[];
-    amdDependencies: AmdDependency[];
-    hasNoDefaultLib?: boolean;
-    moduleName?: string;
 }
 
 function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ResolutionMode {

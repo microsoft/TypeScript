@@ -65,7 +65,7 @@ Info 13   [00:00:30.000] 	Files (2)
 
 
 	lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	app.js
 	  Matched by default include pattern '**/*'
 

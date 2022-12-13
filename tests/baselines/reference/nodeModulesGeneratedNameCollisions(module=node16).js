@@ -32,19 +32,25 @@ exports.Object = exports.exports = exports.require = exports.__esModule = void 0
 // cjs format file
 function require() { }
 exports.require = require;
-const exports = {};
+var exports = {};
 exports.exports = exports;
-class Object {
-}
+var Object = /** @class */ (function () {
+    function Object() {
+    }
+    return Object;
+}());
 exports.Object = Object;
 exports.__esModule = false;
 //// [index.js]
 // esm format file
 function require() { }
-const exports = {};
-class Object {
-}
-export const __esModule = false;
+var exports = {};
+var Object = /** @class */ (function () {
+    function Object() {
+    }
+    return Object;
+}());
+export var __esModule = false;
 export { require, exports, Object };
 
 

@@ -12,7 +12,8 @@ Resolution:: {
     "resolvedFileName": "/linked/index.d.ts",
     "originalPath": "/app/node_modules/linked/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/app/node_modules/linked.ts",
@@ -40,7 +41,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/app/node_modules/linked/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/app/node_modules/linked.ts",

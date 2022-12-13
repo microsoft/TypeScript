@@ -88,7 +88,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/client/folder1/module1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Module1Class = void 0;
 var Module1Class = /** @class */ (function () {
     function Module1Class() {
@@ -100,7 +100,7 @@ exports.Module1Class = Module1Class;
 
 //// [/user/username/projects/myproject/folder2/module2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
@@ -171,6 +171,6 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/folder2/module3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 

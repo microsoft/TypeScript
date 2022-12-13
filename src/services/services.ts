@@ -594,7 +594,7 @@ class TokenOrIdentifierObject implements Node {
     }
 
     public getChildren(): Node[] {
-        return this.kind === SyntaxKind.EndOfFileToken ? (this as EndOfFileToken).jsDoc || emptyArray : emptyArray;
+        return this.kind === SyntaxKind.EndOfFileToken ? (this as Node as EndOfFileToken).jsDoc || emptyArray : emptyArray;
     }
 
     public getFirstToken(): Node | undefined {
@@ -733,13 +733,15 @@ class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
     public kind: SyntaxKind.Identifier = SyntaxKind.Identifier;
     public escapedText!: __String;
     public autoGenerateFlags!: GeneratedIdentifierFlags;
-    _primaryExpressionBrand: any;
-    _memberExpressionBrand: any;
-    _leftHandSideExpressionBrand: any;
-    _updateExpressionBrand: any;
-    _unaryExpressionBrand: any;
-    _expressionBrand: any;
-    _declarationBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
     /** @internal */typeArguments!: NodeArray<TypeNode>;
     constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
         super(pos, end);
@@ -754,12 +756,12 @@ class PrivateIdentifierObject extends TokenOrIdentifierObject implements Private
     public kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
     public escapedText!: __String;
     // public symbol!: Symbol;
-    _primaryExpressionBrand: any;
-    _memberExpressionBrand: any;
-    _leftHandSideExpressionBrand: any;
-    _updateExpressionBrand: any;
-    _unaryExpressionBrand: any;
-    _expressionBrand: any;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
     constructor(_kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
         super(pos, end);
     }
@@ -992,7 +994,8 @@ function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration
 
 class SourceFileObject extends NodeObject implements SourceFile {
     public kind: SyntaxKind.SourceFile = SyntaxKind.SourceFile;
-    public _declarationBrand: any;
+    declare _declarationBrand: any;
+    declare _localsContainerBrand: any;
     public fileName!: string;
     public path!: Path;
     public resolvedPath!: Path;

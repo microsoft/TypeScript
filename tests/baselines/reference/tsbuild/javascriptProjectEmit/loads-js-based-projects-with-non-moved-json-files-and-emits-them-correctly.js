@@ -129,10 +129,10 @@ export const m: {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = void 0;
 var common_1 = __importDefault(require("../common"));
-exports.m = common_1["default"];
+exports.m = common_1.default;
 
 
 //// [/out/sub-project/tsconfig.tsbuildinfo]
@@ -225,11 +225,11 @@ export function getVar(): {
 
 //// [/out/sub-project-2/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.getVar = void 0;
 var index_1 = require("../sub-project/index");
 var variable = {
-    key: index_1.m
+    key: index_1.m,
 };
 function getVar() {
     return variable;

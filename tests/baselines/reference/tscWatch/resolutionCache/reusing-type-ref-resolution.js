@@ -112,7 +112,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@t
 [7m [0m [91m                                          ~~~~~~~[0m
 
 ../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
 fileWithImports.ts
@@ -179,7 +179,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/src/project/outDir/fileWithImports.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/src/project/outDir/fileWithImports.d.ts]
@@ -188,7 +188,7 @@ export {};
 
 //// [/src/project/outDir/fileWithTypeRefs.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference types="pkg2"/>
 /// <reference types="pkg3"/>
 
@@ -364,7 +364,7 @@ Reusing resolution of type reference directive 'pkg3' from '/src/project/fileWit
 [7m [0m [91m                                          ~~~~~~~[0m
 
 ../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
 node_modules/pkg1/index.d.ts
@@ -581,7 +581,7 @@ FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg3/index.d.ts 250 u
 [7m [0m [91m                                          ~~~~~~~[0m
 
 ../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
 node_modules/pkg1/index.d.ts
