@@ -5203,13 +5203,14 @@ namespace Parser {
 
             // If we have "<" not followed by an identifier,
             // then this definitely is not an arrow function.
-            if (!isIdentifier()) {
+            if (!isIdentifier() && token() !== SyntaxKind.ConstKeyword) {
                 return Tristate.False;
             }
 
             // JSX overrides
             if (languageVariant === LanguageVariant.JSX) {
                 const isArrowFunctionInJsx = lookAhead(() => {
+                    parseOptional(SyntaxKind.ConstKeyword);
                     const third = nextToken();
                     if (third === SyntaxKind.ExtendsKeyword) {
                         const fourth = nextToken();

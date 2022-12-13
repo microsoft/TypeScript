@@ -447,6 +447,7 @@ import {
     isComputedPropertyName,
     isConstructorDeclaration,
     isConstructorTypeNode,
+    isConstructSignatureDeclaration,
     isConstTypeReference,
     isDeclaration,
     isDeclarationName,
@@ -1012,7 +1013,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    isConstructSignatureDeclaration,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";

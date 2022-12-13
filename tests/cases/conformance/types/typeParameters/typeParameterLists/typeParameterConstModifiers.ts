@@ -39,6 +39,9 @@ class C1<const T> {
 const c71 = new C1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
 const c72 = c71.foo(['a', ['b', 'c']]);
 
+const fx1 = <const T>(x: T) => x;
+const fx2 = <const T,>(x: T) => x;
+
 interface I1<const T> { x: T }  // Error
 
 interface I2 {
