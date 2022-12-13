@@ -156,90 +156,101 @@ interface I1<const T> { x: T }  // Error
 >x : Symbol(I1.x, Decl(typeParameterConstModifiers.ts, 39, 23))
 >T : Symbol(T, Decl(typeParameterConstModifiers.ts, 39, 13))
 
+interface I2 {
+>I2 : Symbol(I2, Decl(typeParameterConstModifiers.ts, 39, 30))
+
+    f<const T>(x: T): T;
+>f : Symbol(I2.f, Decl(typeParameterConstModifiers.ts, 41, 14))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 42, 6))
+>x : Symbol(x, Decl(typeParameterConstModifiers.ts, 42, 15))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 42, 6))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 42, 6))
+}
+
 type T1<const T> = T;  // Error
->T1 : Symbol(T1, Decl(typeParameterConstModifiers.ts, 39, 30))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 41, 8))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 41, 8))
+>T1 : Symbol(T1, Decl(typeParameterConstModifiers.ts, 43, 1))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 45, 8))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 45, 8))
 
 type T2 = <const T>(x: T) => T;
->T2 : Symbol(T2, Decl(typeParameterConstModifiers.ts, 41, 21))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 43, 11))
->x : Symbol(x, Decl(typeParameterConstModifiers.ts, 43, 20))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 43, 11))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 43, 11))
+>T2 : Symbol(T2, Decl(typeParameterConstModifiers.ts, 45, 21))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 47, 11))
+>x : Symbol(x, Decl(typeParameterConstModifiers.ts, 47, 20))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 47, 11))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 47, 11))
 
 type T3 = { <const T>(x: T): T };
->T3 : Symbol(T3, Decl(typeParameterConstModifiers.ts, 43, 31))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 44, 13))
->x : Symbol(x, Decl(typeParameterConstModifiers.ts, 44, 22))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 44, 13))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 44, 13))
+>T3 : Symbol(T3, Decl(typeParameterConstModifiers.ts, 47, 31))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 48, 13))
+>x : Symbol(x, Decl(typeParameterConstModifiers.ts, 48, 22))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 48, 13))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 48, 13))
 
 type T4 = new <const T>(x: T) => T;
->T4 : Symbol(T4, Decl(typeParameterConstModifiers.ts, 44, 33))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 45, 15))
->x : Symbol(x, Decl(typeParameterConstModifiers.ts, 45, 24))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 45, 15))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 45, 15))
+>T4 : Symbol(T4, Decl(typeParameterConstModifiers.ts, 48, 33))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 49, 15))
+>x : Symbol(x, Decl(typeParameterConstModifiers.ts, 49, 24))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 49, 15))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 49, 15))
 
 type T5 = { new <const T>(x: T): T };
->T5 : Symbol(T5, Decl(typeParameterConstModifiers.ts, 45, 35))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 46, 17))
->x : Symbol(x, Decl(typeParameterConstModifiers.ts, 46, 26))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 46, 17))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 46, 17))
+>T5 : Symbol(T5, Decl(typeParameterConstModifiers.ts, 49, 35))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 50, 17))
+>x : Symbol(x, Decl(typeParameterConstModifiers.ts, 50, 26))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 50, 17))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 50, 17))
 
 // Corrected repro from #51745
 
 type Obj = { a: { b: { c: "123" } } };
->Obj : Symbol(Obj, Decl(typeParameterConstModifiers.ts, 46, 37))
->a : Symbol(a, Decl(typeParameterConstModifiers.ts, 50, 12))
->b : Symbol(b, Decl(typeParameterConstModifiers.ts, 50, 17))
->c : Symbol(c, Decl(typeParameterConstModifiers.ts, 50, 22))
+>Obj : Symbol(Obj, Decl(typeParameterConstModifiers.ts, 50, 37))
+>a : Symbol(a, Decl(typeParameterConstModifiers.ts, 54, 12))
+>b : Symbol(b, Decl(typeParameterConstModifiers.ts, 54, 17))
+>c : Symbol(c, Decl(typeParameterConstModifiers.ts, 54, 22))
 
 type GetPath<T, P> =
->GetPath : Symbol(GetPath, Decl(typeParameterConstModifiers.ts, 50, 38))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 52, 13))
->P : Symbol(P, Decl(typeParameterConstModifiers.ts, 52, 15))
+>GetPath : Symbol(GetPath, Decl(typeParameterConstModifiers.ts, 54, 38))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 56, 13))
+>P : Symbol(P, Decl(typeParameterConstModifiers.ts, 56, 15))
 
     P extends readonly [] ? T :
->P : Symbol(P, Decl(typeParameterConstModifiers.ts, 52, 15))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 52, 13))
+>P : Symbol(P, Decl(typeParameterConstModifiers.ts, 56, 15))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 56, 13))
 
     P extends readonly [infer A extends keyof T, ...infer Rest] ? GetPath<T[A], Rest> :
->P : Symbol(P, Decl(typeParameterConstModifiers.ts, 52, 15))
->A : Symbol(A, Decl(typeParameterConstModifiers.ts, 54, 29))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 52, 13))
->Rest : Symbol(Rest, Decl(typeParameterConstModifiers.ts, 54, 57))
->GetPath : Symbol(GetPath, Decl(typeParameterConstModifiers.ts, 50, 38))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 52, 13))
->A : Symbol(A, Decl(typeParameterConstModifiers.ts, 54, 29))
->Rest : Symbol(Rest, Decl(typeParameterConstModifiers.ts, 54, 57))
+>P : Symbol(P, Decl(typeParameterConstModifiers.ts, 56, 15))
+>A : Symbol(A, Decl(typeParameterConstModifiers.ts, 58, 29))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 56, 13))
+>Rest : Symbol(Rest, Decl(typeParameterConstModifiers.ts, 58, 57))
+>GetPath : Symbol(GetPath, Decl(typeParameterConstModifiers.ts, 54, 38))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 56, 13))
+>A : Symbol(A, Decl(typeParameterConstModifiers.ts, 58, 29))
+>Rest : Symbol(Rest, Decl(typeParameterConstModifiers.ts, 58, 57))
 
     never;
 
 function set<T, const P extends readonly string[]>(obj: T, path: P, value: GetPath<T, P>) {}
->set : Symbol(set, Decl(typeParameterConstModifiers.ts, 55, 10))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 57, 13))
->P : Symbol(P, Decl(typeParameterConstModifiers.ts, 57, 15))
->obj : Symbol(obj, Decl(typeParameterConstModifiers.ts, 57, 51))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 57, 13))
->path : Symbol(path, Decl(typeParameterConstModifiers.ts, 57, 58))
->P : Symbol(P, Decl(typeParameterConstModifiers.ts, 57, 15))
->value : Symbol(value, Decl(typeParameterConstModifiers.ts, 57, 67))
->GetPath : Symbol(GetPath, Decl(typeParameterConstModifiers.ts, 50, 38))
->T : Symbol(T, Decl(typeParameterConstModifiers.ts, 57, 13))
->P : Symbol(P, Decl(typeParameterConstModifiers.ts, 57, 15))
+>set : Symbol(set, Decl(typeParameterConstModifiers.ts, 59, 10))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 61, 13))
+>P : Symbol(P, Decl(typeParameterConstModifiers.ts, 61, 15))
+>obj : Symbol(obj, Decl(typeParameterConstModifiers.ts, 61, 51))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 61, 13))
+>path : Symbol(path, Decl(typeParameterConstModifiers.ts, 61, 58))
+>P : Symbol(P, Decl(typeParameterConstModifiers.ts, 61, 15))
+>value : Symbol(value, Decl(typeParameterConstModifiers.ts, 61, 67))
+>GetPath : Symbol(GetPath, Decl(typeParameterConstModifiers.ts, 54, 38))
+>T : Symbol(T, Decl(typeParameterConstModifiers.ts, 61, 13))
+>P : Symbol(P, Decl(typeParameterConstModifiers.ts, 61, 15))
 
 declare let obj: Obj;
->obj : Symbol(obj, Decl(typeParameterConstModifiers.ts, 59, 11))
->Obj : Symbol(Obj, Decl(typeParameterConstModifiers.ts, 46, 37))
+>obj : Symbol(obj, Decl(typeParameterConstModifiers.ts, 63, 11))
+>Obj : Symbol(Obj, Decl(typeParameterConstModifiers.ts, 50, 37))
 
 declare let value: "123";
->value : Symbol(value, Decl(typeParameterConstModifiers.ts, 60, 11))
+>value : Symbol(value, Decl(typeParameterConstModifiers.ts, 64, 11))
 
 set(obj, ['a', 'b', 'c'], value);
->set : Symbol(set, Decl(typeParameterConstModifiers.ts, 55, 10))
->obj : Symbol(obj, Decl(typeParameterConstModifiers.ts, 59, 11))
->value : Symbol(value, Decl(typeParameterConstModifiers.ts, 60, 11))
+>set : Symbol(set, Decl(typeParameterConstModifiers.ts, 59, 10))
+>obj : Symbol(obj, Decl(typeParameterConstModifiers.ts, 63, 11))
+>value : Symbol(value, Decl(typeParameterConstModifiers.ts, 64, 11))
 

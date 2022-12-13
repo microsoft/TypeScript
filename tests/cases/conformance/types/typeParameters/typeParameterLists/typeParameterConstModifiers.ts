@@ -41,6 +41,10 @@ const c72 = c71.foo(['a', ['b', 'c']]);
 
 interface I1<const T> { x: T }  // Error
 
+interface I2 {
+    f<const T>(x: T): T;
+}
+
 type T1<const T> = T;  // Error
 
 type T2 = <const T>(x: T) => T;

@@ -222,6 +222,12 @@ const c72 = c71.foo(['a', ['b', 'c']]);
 interface I1<const T> { x: T }  // Error
 >x : T
 
+interface I2 {
+    f<const T>(x: T): T;
+>f : <const T>(x: T) => T
+>x : T
+}
+
 type T1<const T> = T;  // Error
 >T1 : T
 
