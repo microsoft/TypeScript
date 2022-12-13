@@ -261,6 +261,7 @@ import {
     JSDocNonNullableType,
     JSDocNullableType,
     JSDocOptionalType,
+    JSDocOverloadTag,
     JSDocPropertyLikeTag,
     JSDocReturnTag,
     JSDocSeeTag,
@@ -2117,6 +2118,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return;
                 case SyntaxKind.JSDocCallbackTag:
                     return emitJSDocCallbackTag(node as JSDocCallbackTag);
+                case SyntaxKind.JSDocOverloadTag:
+                    return emitJSDocOverloadTag(node as JSDocOverloadTag);
                 // SyntaxKind.JSDocEnumTag (see below)
                 case SyntaxKind.JSDocParameterTag:
                 case SyntaxKind.JSDocPropertyTag:
@@ -4371,6 +4374,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             writeSpace();
             emit(tag.name);
         }
+        emitJSDocComment(tag.comment);
+        emitJSDocSignature(tag.typeExpression);
+    }
+
+    function emitJSDocOverloadTag(tag: JSDocOverloadTag) {
         emitJSDocComment(tag.comment);
         emitJSDocSignature(tag.typeExpression);
     }

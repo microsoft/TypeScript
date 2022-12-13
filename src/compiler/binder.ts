@@ -220,6 +220,7 @@ import {
     JSDocClassTag,
     JSDocEnumTag,
     JSDocFunctionType,
+    JSDocOverloadTag,
     JSDocParameterTag,
     JSDocPropertyLikeTag,
     JSDocSignature,
@@ -2966,6 +2967,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocEnumTag:
                 return (delayedTypeAliases || (delayedTypeAliases = [])).push(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
+            case SyntaxKind.JSDocOverloadTag:
+                return bind((node as JSDocOverloadTag).typeExpression);
         }
     }
 
