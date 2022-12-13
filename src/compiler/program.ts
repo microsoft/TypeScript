@@ -242,6 +242,7 @@ import {
     ParsedCommandLine,
     parseIsolatedEntityName,
     parseJsonSourceFileConfigFileContent,
+    parseNodeFactory,
     Path,
     pathIsAbsolute,
     pathIsRelative,
@@ -3349,26 +3350,15 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
     }
 
-    function createRedirectSourceFile(redirectTarget: SourceFile, unredirected: SourceFile, fileName: string, path: Path, resolvedPath: Path, originalFileName: string, sourceFileOptions: CreateSourceFileOptions): SourceFile {
-        const redirect: SourceFile = Object.create(redirectTarget);
+    function createRedirectedSourceFile(redirectTarget: SourceFile, unredirected: SourceFile, fileName: string, path: Path, resolvedPath: Path, originalFileName: string, sourceFileOptions: CreateSourceFileOptions): SourceFile {
+        const redirect = parseNodeFactory.createRedirectedSourceFile({ redirectTarget, unredirected });
         redirect.fileName = fileName;
         redirect.path = path;
         redirect.resolvedPath = resolvedPath;
         redirect.originalFileName = originalFileName;
-        redirect.redirectInfo = { redirectTarget, unredirected };
         redirect.packageJsonLocations = sourceFileOptions.packageJsonLocations?.length ? sourceFileOptions.packageJsonLocations : undefined;
         redirect.packageJsonScope = sourceFileOptions.packageJsonScope;
         sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
-        Object.defineProperties(redirect, {
-            id: {
-                get(this: SourceFile) { return this.redirectInfo!.redirectTarget.id; },
-                set(this: SourceFile, value: SourceFile["id"]) { this.redirectInfo!.redirectTarget.id = value; },
-            },
-            symbol: {
-                get(this: SourceFile) { return this.redirectInfo!.redirectTarget.symbol; },
-                set(this: SourceFile, value: SourceFile["symbol"]) { this.redirectInfo!.redirectTarget.symbol = value; },
-            },
-        });
         return redirect;
     }
 
@@ -3500,7 +3490,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             if (fileFromPackageId) {
                 // Some other SourceFile already exists with this package name and version.
                 // Instead of creating a duplicate, just redirect to the existing one.
-                const dupFile = createRedirectSourceFile(fileFromPackageId, file!, fileName, path, toPath(fileName), originalFileName, sourceFileOptions);
+                const dupFile = createRedirectedSourceFile(fileFromPackageId, file!, fileName, path, toPath(fileName), originalFileName, sourceFileOptions);
                 redirectTargetsMap.add(fileFromPackageId.path, fileName);
                 addFileToFilesByName(dupFile, path, redirectedPath);
                 addFileIncludeReason(dupFile, reason);

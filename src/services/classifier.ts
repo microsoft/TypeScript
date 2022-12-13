@@ -47,6 +47,7 @@ import {
     JSDocSeeTag,
     JSDocTemplateTag,
     JSDocThisTag,
+    JSDocThrowsTag,
     JSDocTypedefTag,
     JSDocTypeTag,
     JsxAttribute,
@@ -846,6 +847,11 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
                     case SyntaxKind.JSDocAugmentsTag:
                     case SyntaxKind.JSDocImplementsTag:
                         commentStart = (tag as JSDocImplementsTag | JSDocAugmentsTag).class.end;
+                        break;
+                    case SyntaxKind.JSDocThrowsTag:
+                        processElement((tag as JSDocThrowsTag).typeExpression);
+                        pos = tag.end;
+                        commentStart = (tag as JSDocThrowsTag).typeExpression?.end || commentStart;
                         break;
                 }
                 if (typeof tag.comment === "object") {

@@ -237,6 +237,7 @@ import {
     JSDocTag,
     JSDocTagInfo,
     JSDocTemplateTag,
+    JSDocThrowsTag,
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeTag,
@@ -293,6 +294,7 @@ import {
     PropertyAccessExpression,
     PropertyDeclaration,
     PropertyName,
+    PropertySignature,
     PseudoBigInt,
     pseudoBigIntToString,
     QualifiedName,
@@ -333,6 +335,7 @@ import {
     textPart,
     TextRange,
     TextSpan,
+    ThisContainer,
     timestamp,
     Token,
     TokenSyntaxKind,
@@ -2955,7 +2958,14 @@ function getCompletionData(
         flags,
     };
 
-    type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag | JSDocTemplateTag;
+    type JSDocTagWithTypeExpression =
+        | JSDocParameterTag
+        | JSDocPropertyTag
+        | JSDocReturnTag
+        | JSDocTypeTag
+        | JSDocTypedefTag
+        | JSDocTemplateTag
+        | JSDocThrowsTag;
 
     function isTagWithTypeExpression(tag: JSDocTag): tag is JSDocTagWithTypeExpression {
         switch (tag.kind) {
@@ -2964,6 +2974,7 @@ function getCompletionData(
             case SyntaxKind.JSDocReturnTag:
             case SyntaxKind.JSDocTypeTag:
             case SyntaxKind.JSDocTypedefTag:
+            case SyntaxKind.JSDocThrowsTag:
                 return true;
             case SyntaxKind.JSDocTemplateTag:
                 return !!(tag as JSDocTemplateTag).constraint;
@@ -3299,7 +3310,7 @@ function getCompletionData(
 
         // Need to insert 'this.' before properties of `this` type, so only do that if `includeInsertTextCompletions`
         if (preferences.includeCompletionsWithInsertText && scopeNode.kind !== SyntaxKind.SourceFile) {
-            const thisType = typeChecker.tryGetThisTypeAt(scopeNode, /*includeGlobalThis*/ false, isClassLike(scopeNode.parent) ? scopeNode : undefined);
+            const thisType = typeChecker.tryGetThisTypeAt(scopeNode, /*includeGlobalThis*/ false, isClassLike(scopeNode.parent) ? scopeNode as ThisContainer : undefined);
             if (thisType && !isProbablyGlobalType(thisType, sourceFile, typeChecker)) {
                 for (const symbol of getPropertiesForCompletion(thisType, typeChecker)) {
                     symbolToOriginInfoMap[symbols.length] = { kind: SymbolOriginInfoKind.ThisType };
@@ -4868,7 +4879,7 @@ function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): 
 
     switch (node.kind) {
         case SyntaxKind.PropertySignature:
-            return checker.getTypeOfPropertyOfContextualType(t, node.symbol.escapedName);
+            return checker.getTypeOfPropertyOfContextualType(t, (node as PropertySignature).symbol.escapedName);
         case SyntaxKind.IntersectionType:
         case SyntaxKind.TypeLiteral:
         case SyntaxKind.UnionType:
