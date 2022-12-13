@@ -3,7 +3,7 @@ import {
     AssignmentExpression,
     AssignmentOperatorToken,
     CallLikeExpression,
-    concatenate,
+    canHaveSymbol, concatenate,
     createTextSpan,
     createTextSpanFromBounds,
     createTextSpanFromNode,
@@ -245,7 +245,7 @@ function symbolMatchesSignature(s: Symbol, calledDeclaration: SignatureDeclarati
     return s === calledDeclaration.symbol
         || s === calledDeclaration.symbol.parent
         || isAssignmentExpression(calledDeclaration.parent)
-        || (!isCallLikeExpression(calledDeclaration.parent) && s === calledDeclaration.parent.symbol);
+        || (!isCallLikeExpression(calledDeclaration.parent) && s === tryCast(calledDeclaration.parent, canHaveSymbol)?.symbol);
 }
 
 // If the current location we want to find its definition is in an object literal, try to get the contextual type for the

@@ -12,7 +12,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/folder2/file2.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -21,7 +22,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/folder2/file3.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -30,7 +32,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/folder1/file1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -39,7 +42,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/folder2/file2.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -48,7 +52,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/folder2/file3.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -57,7 +62,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/folder1/file1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -75,7 +81,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/folder2/file2.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -84,7 +91,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/folder2/file3.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -93,7 +101,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/folder1/file1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -102,7 +111,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/folder2/file2.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -111,7 +121,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/folder2/file3.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 
@@ -120,6 +131,7 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/folder1/file1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }

@@ -3,7 +3,6 @@ import {
     AccessorDeclaration,
     addRange,
     addRelatedInfo,
-    AmdDependency,
     append,
     ArrayBindingElement,
     ArrayBindingPattern,
@@ -29,13 +28,13 @@ import {
     BreakStatement,
     CallExpression,
     CallSignatureDeclaration,
+    canHaveJSDoc,
     canHaveModifiers,
     CaseBlock,
     CaseClause,
     CaseOrDefaultClause,
     CatchClause,
     CharacterCodes,
-    CheckJsDirective,
     ClassDeclaration,
     ClassElement,
     ClassExpression,
@@ -87,7 +86,6 @@ import {
     ExpressionWithTypeArguments,
     ExternalModuleReference,
     fileExtensionIsOneOf,
-    FileReference,
     findIndex,
     forEach,
     ForEachChildNodes,
@@ -166,7 +164,6 @@ import {
     JSDocCallbackTag,
     JSDocClassTag,
     JSDocComment,
-    JSDocContainer,
     JSDocDeprecatedTag,
     JSDocEnumTag,
     JSDocFunctionType,
@@ -287,6 +284,7 @@ import {
     PlusToken,
     PostfixUnaryExpression,
     PostfixUnaryOperator,
+    PragmaContext,
     PragmaDefinition,
     PragmaKindFlags,
     PragmaMap,
@@ -1641,7 +1639,7 @@ namespace Parser {
             const statement = factory.createExpressionStatement(expression) as JsonObjectExpressionStatement;
             finishNode(statement, pos);
             statements = createNodeArray([statement], pos);
-            endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token);
+            endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token) as EndOfFileToken;
         }
 
         // Set source file so that errors will be reported with this file name
@@ -3068,9 +3066,9 @@ namespace Parser {
             return undefined;
         }
 
-        if ((node as JSDocContainer).jsDocCache) {
+        if (canHaveJSDoc(node) && node.jsDocCache) {
             // jsDocCache may include tags from parent nodes, which might have been modified.
-            (node as JSDocContainer).jsDocCache = undefined;
+            node.jsDocCache = undefined;
         }
 
         return node;
@@ -10107,19 +10105,6 @@ namespace IncrementalParser {
 /** @internal */
 export function isDeclarationFileName(fileName: string): boolean {
     return fileExtensionIsOneOf(fileName, supportedDeclarationExtensions);
-}
-
-/** @internal */
-export interface PragmaContext {
-    languageVersion: ScriptTarget;
-    pragmas?: PragmaMap;
-    checkJsDirective?: CheckJsDirective;
-    referencedFiles: FileReference[];
-    typeReferenceDirectives: FileReference[];
-    libReferenceDirectives: FileReference[];
-    amdDependencies: AmdDependency[];
-    hasNoDefaultLib?: boolean;
-    moduleName?: string;
 }
 
 function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ResolutionMode {
