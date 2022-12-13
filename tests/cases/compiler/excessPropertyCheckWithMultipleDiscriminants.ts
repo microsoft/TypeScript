@@ -42,7 +42,7 @@ const a: DisjointDiscriminants = {
     p4: "hello"
 };
 
-// This has no excess error because variant one and three are both applicable.
+// This has excess error because variant two is not applicable.
 const b: DisjointDiscriminants = {
     p1: 'left',
     p2: true,
@@ -57,3 +57,38 @@ const c: DisjointDiscriminants = {
     p3: 42,
     p4: "hello"
 };
+
+// Repro from #51873
+
+interface Common {
+    type: "A" | "B" | "C" | "D";
+    n: number;
+}
+interface A {
+    type: "A";
+    a?: number;
+}
+interface B {
+    type: "B";
+    b?: number;
+}
+
+type CommonWithOverlappingOptionals = Common | (Common & A) | (Common & B);
+
+// Should reject { b } because reduced to Common | (Common & A)
+const c1: CommonWithOverlappingOptionals = {
+    type: "A",
+    n: 1,
+    a: 1,
+    b: 1  // excess property
+}
+
+type CommonWithDisjointOverlappingOptionals = Common | A | B;
+
+// Should still reject { b } because reduced to Common | A, even though these are now disjoint
+const c2: CommonWithDisjointOverlappingOptionals = {
+    type: "A",
+    n: 1,
+    a: 1,
+    b: 1  // excess property
+}

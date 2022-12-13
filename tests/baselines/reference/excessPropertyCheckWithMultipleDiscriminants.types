@@ -93,7 +93,7 @@ const a: DisjointDiscriminants = {
 
 };
 
-// This has no excess error because variant one and three are both applicable.
+// This has excess error because variant two is not applicable.
 const b: DisjointDiscriminants = {
 >b : DisjointDiscriminants
 >{    p1: 'left',    p2: true,    p3: 42,    p4: "hello"} : { p1: "left"; p2: true; p3: number; p4: string; }
@@ -138,4 +138,78 @@ const c: DisjointDiscriminants = {
 >"hello" : "hello"
 
 };
+
+// Repro from #51873
+
+interface Common {
+    type: "A" | "B" | "C" | "D";
+>type : "A" | "B" | "C" | "D"
+
+    n: number;
+>n : number
+}
+interface A {
+    type: "A";
+>type : "A"
+
+    a?: number;
+>a : number
+}
+interface B {
+    type: "B";
+>type : "B"
+
+    b?: number;
+>b : number
+}
+
+type CommonWithOverlappingOptionals = Common | (Common & A) | (Common & B);
+>CommonWithOverlappingOptionals : Common | (Common & A) | (Common & B)
+
+// Should reject { b } because reduced to Common | (Common & A)
+const c1: CommonWithOverlappingOptionals = {
+>c1 : CommonWithOverlappingOptionals
+>{    type: "A",    n: 1,    a: 1,    b: 1  // excess property} : { type: "A"; n: number; a: number; b: number; }
+
+    type: "A",
+>type : "A"
+>"A" : "A"
+
+    n: 1,
+>n : number
+>1 : 1
+
+    a: 1,
+>a : number
+>1 : 1
+
+    b: 1  // excess property
+>b : number
+>1 : 1
+}
+
+type CommonWithDisjointOverlappingOptionals = Common | A | B;
+>CommonWithDisjointOverlappingOptionals : Common | A | B
+
+// Should still reject { b } because reduced to Common | A, even though these are now disjoint
+const c2: CommonWithDisjointOverlappingOptionals = {
+>c2 : CommonWithDisjointOverlappingOptionals
+>{    type: "A",    n: 1,    a: 1,    b: 1  // excess property} : { type: "A"; n: number; a: number; b: number; }
+
+    type: "A",
+>type : "A"
+>"A" : "A"
+
+    n: 1,
+>n : number
+>1 : 1
+
+    a: 1,
+>a : number
+>1 : 1
+
+    b: 1  // excess property
+>b : number
+>1 : 1
+}
 
