@@ -20,7 +20,7 @@ class ApiItem {
 >members : readonly ApiItem[]
 
     return [];
->[] : never[]
+>[] : ApiItem[]
   }
 }
 
@@ -63,7 +63,7 @@ function ApiItemContainerMixin<TBaseClass extends IApiItemConstructor>(
 >members : readonly ApiItem[]
 
       return [];
->[] : never[]
+>[] : ApiItem[]
     }
   }
 
@@ -83,7 +83,7 @@ export class ApiEnum extends ApiItemContainerMixin(ApiItem) {
 >members : readonly ApiEnumMember[]
 
     return [];
->[] : never[]
+>[] : ApiEnumMember[]
   }
 }
 

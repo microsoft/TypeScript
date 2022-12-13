@@ -215,7 +215,7 @@ module TypeScript {
 
         private childrenWalkers: IAstWalkChildren[] = [];
 >childrenWalkers : IAstWalkChildren[]
->[] : undefined[]
+>[] : IAstWalkChildren[]
 
         constructor () {
             this.initChildrenWalkers();

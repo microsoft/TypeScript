@@ -49,13 +49,13 @@ class Test {
 >name : T
 
             this.entries[name] = [];
->this.entries[name] = [] : never[]
+>this.entries[name] = [] : Types[T][]
 >this.entries[name] : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }[T]
 >this.entries : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }
 >this : this
 >entries : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }
 >name : T
->[] : never[]
+>[] : Types[T][]
         }
         this.entries[name]?.push(entry);
 >this.entries[name]?.push(entry) : number | undefined

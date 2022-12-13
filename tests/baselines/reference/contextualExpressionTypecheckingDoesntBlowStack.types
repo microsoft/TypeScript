@@ -76,7 +76,7 @@ export default class Operation {
 >(result || []) : IValidationError[]
 >result || [] : IValidationError[]
 >result : IValidationError[] | null
->[] : never[]
+>[] : IValidationError[]
 >concat : { (...items: ConcatArray<IValidationError>[]): IValidationError[]; (...items: (IValidationError | ConcatArray<IValidationError>)[]): IValidationError[]; }
 >innerResult : any
             }

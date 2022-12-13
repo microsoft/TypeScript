@@ -38,7 +38,7 @@
 
 /** @type {array} */const i = [];
 >i : any[]
->[] : never[]
+>[] : any[]
 
 /** @type {promise} */const j = Promise.resolve(0);
 >j : Promise<any>

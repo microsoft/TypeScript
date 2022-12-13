@@ -2,9 +2,9 @@
 const obj: { arr: any[] } = { arr: [] };
 >obj : { arr: any[]; }
 >arr : any[]
->{ arr: [] } : { arr: never[]; }
->arr : never[]
->[] : never[]
+>{ arr: [] } : { arr: any[]; }
+>arr : any[]
+>[] : any[]
 
 for (const i of obj?.arr ?? []) { }
 >i : any
@@ -12,5 +12,5 @@ for (const i of obj?.arr ?? []) { }
 >obj?.arr : any[]
 >obj : { arr: any[]; }
 >arr : any[]
->[] : never[]
+>[] : any[]
 

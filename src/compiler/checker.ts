@@ -18675,7 +18675,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.ObjectLiteralExpression:
                 return some((node as ObjectLiteralExpression).properties, isContextSensitive);
             case SyntaxKind.ArrayLiteralExpression:
-                return some((node as ArrayLiteralExpression).elements, isContextSensitive);
+                if ((node as ArrayLiteralExpression).elements.length > 0) {
+                    return some((node as ArrayLiteralExpression).elements, isContextSensitive);
+                }
+                return true;
             case SyntaxKind.ConditionalExpression:
                 return isContextSensitive((node as ConditionalExpression).whenTrue) ||
                     isContextSensitive((node as ConditionalExpression).whenFalse);
@@ -29120,6 +29123,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         if (forceTuple || inConstContext || contextualType && someType(contextualType, isTupleLikeType)) {
             return createArrayLiteralType(createTupleType(elementTypes, elementFlags, /*readonly*/ inConstContext));
+        }
+        if (elementCount === 0 && contextualType && !checkMode) {
+            // For an empty array literal, produce the type (T1 & T2 & T3...)[] where Tn is the element type
+            // of each array-like union constituent of the contextual type
+            const contextualElementTypes: Type[] = [];
+            forEachType(contextualType, type => {
+                if (isArrayLikeType(type)) {
+                    // Note that if we're here, it's not a tuple contextual type, so the
+                    // numeric index signature must be present and sufficient
+                    const elementType = getIndexTypeOfType(type, numberType);
+                    if (elementType) {
+                        contextualElementTypes.push(elementType);
+                    }
+                }
+            });
+            // It's possible that zero contextual types are arraylike
+            if (contextualElementTypes.length > 1) {
+                return createArrayType(getIntersectionType(contextualElementTypes));
+            } else if (contextualElementTypes.length === 1) {
+                return createArrayType(contextualElementTypes);
+            }
         }
         return createArrayLiteralType(createArrayType(elementTypes.length ?
             getUnionType(sameMap(elementTypes, (t, i) => elementFlags[i] & ElementFlags.Variadic ? getIndexedAccessTypeOrUndefined(t, numberType) || anyType : t), UnionReduction.Subtype) :

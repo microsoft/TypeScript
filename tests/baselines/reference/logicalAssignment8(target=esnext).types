@@ -17,7 +17,7 @@ function foo1(results: number[] | undefined) {
 >bar?.value : number[] | undefined
 >bar : { value?: number[] | undefined; } | undefined
 >value : number[] | undefined
->[] : never[]
+>[] : number[]
 >push : (...items: number[]) => number
 >100 : 100
 }
@@ -36,7 +36,7 @@ function foo2(results: number[] | undefined) {
 >bar?.value : number[] | undefined
 >bar : { value?: number[] | undefined; } | undefined
 >value : number[] | undefined
->[] : never[]
+>[] : number[]
 >push : (...items: number[]) => number
 >100 : 100
 }
@@ -55,7 +55,7 @@ function foo3(results: number[] | undefined) {
 >bar?.value : number[] | undefined
 >bar : { value?: number[] | undefined; } | undefined
 >value : number[] | undefined
->[] : never[]
+>[] : number[]
 >push : (...items: number[]) => number
 >100 : 100
 }

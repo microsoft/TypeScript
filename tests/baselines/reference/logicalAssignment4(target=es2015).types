@@ -9,7 +9,7 @@ function foo1(results: number[] | undefined) {
 >(results ||= []) : number[]
 >results ||= [] : number[]
 >results : number[] | undefined
->[] : never[]
+>[] : number[]
 >push : (...items: number[]) => number
 >100 : 100
 }
@@ -24,7 +24,7 @@ function foo2(results: number[] | undefined) {
 >(results ??= []) : number[]
 >results ??= [] : number[]
 >results : number[] | undefined
->[] : never[]
+>[] : number[]
 >push : (...items: number[]) => number
 >100 : 100
 }
@@ -36,7 +36,7 @@ function foo3(results: number[] | undefined) {
     results ||= [];
 >results ||= [] : number[]
 >results : number[] | undefined
->[] : never[]
+>[] : number[]
 
     results.push(100);
 >results.push(100) : number
@@ -53,7 +53,7 @@ function foo4(results: number[] | undefined) {
     results ??= [];
 >results ??= [] : number[]
 >results : number[] | undefined
->[] : never[]
+>[] : number[]
 
     results.push(100);
 >results.push(100) : number

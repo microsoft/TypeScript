@@ -6,7 +6,7 @@ interface Array<T> {
 
 var arr: string[] = [];
 >arr : string[]
->[] : undefined[]
+>[] : string[]
 
 var x: number = arr.foo();
 >x : number

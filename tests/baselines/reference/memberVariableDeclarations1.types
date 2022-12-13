@@ -20,7 +20,7 @@ class Employee {
 
     public reports: Employee[] = [];
 >reports : Employee[]
->[] : undefined[]
+>[] : Employee[]
 }
 
 class Employee2 {
@@ -57,11 +57,11 @@ class Employee2 {
 >null : null
 
         this.reports = [];
->this.reports = [] : undefined[]
+>this.reports = [] : Employee[]
 >this.reports : Employee[]
 >this : this
 >reports : Employee[]
->[] : undefined[]
+>[] : Employee[]
     }
 }
 

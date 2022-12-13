@@ -58,5 +58,5 @@ const [oops2] = [1, 2, 3].reduce((acc: number[], e) => acc.concat(e), []);
 >acc : number[]
 >concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
 >e : number
->[] : never[]
+>[] : number[]
 

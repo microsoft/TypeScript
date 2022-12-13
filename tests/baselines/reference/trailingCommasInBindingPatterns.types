@@ -1,7 +1,7 @@
 === tests/cases/conformance/es7/trailingCommasInBindingPatterns.ts ===
 const [...a,] = [];
 >a : any[]
->[] : undefined[]
+>[] : any[]
 
 const {...b,} = {};
 >b : {}
@@ -12,12 +12,12 @@ let c, d;
 >d : any
 
 ([...c,] = []);
->([...c,] = []) : undefined[]
->[...c,] = [] : undefined[]
+>([...c,] = []) : any[]
+>[...c,] = [] : any[]
 >[...c,] : any[]
 >...c : any
 >c : any
->[] : undefined[]
+>[] : any[]
 
 ({...d,} = {});
 >({...d,} = {}) : {}

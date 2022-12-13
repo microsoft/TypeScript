@@ -392,7 +392,7 @@ var arr = someGenerics9 `${ [] }${ null }${ undefined }`;
 >someGenerics9 `${ [] }${ null }${ undefined }` : any[]
 >someGenerics9 : <T>(strs: TemplateStringsArray, a: T, b: T, c: T) => T
 >`${ [] }${ null }${ undefined }` : string
->[] : undefined[]
+>[] : any[]
 >null : null
 >undefined : undefined
 

@@ -29,7 +29,7 @@ module Bugs {
 
                                 var tokens:IToken[]= [];
 >tokens : IToken[]
->[] : undefined[]
+>[] : IToken[]
 
                                 tokens.push({ startIndex: 1, type: '', bracket: 3 });
 >tokens.push({ startIndex: 1, type: '', bracket: 3 }) : number

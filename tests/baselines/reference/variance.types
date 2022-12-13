@@ -37,7 +37,7 @@ class Bar<T extends string> {
 
   private static instance: Bar<string>[] = [];
 >instance : Bar<string>[]
->[] : never[]
+>[] : Bar<string>[]
 
   cast(_name: ([T] extends [string] ? string : string)) { }
 >cast : (_name: ([T] extends [string] ? string : string)) => void

@@ -4356,7 +4356,7 @@ module TypeScript {
 
         public freeVariables: Symbol[] = [];
 >freeVariables : Symbol[]
->[] : undefined[]
+>[] : Symbol[]
 
         public unitIndex = -1;
 >unitIndex : number
@@ -4377,7 +4377,7 @@ module TypeScript {
 
         public innerStaticFuncs: FuncDecl[] = [];
 >innerStaticFuncs : FuncDecl[]
->[] : undefined[]
+>[] : FuncDecl[]
 
         public isTargetTypedAsMethod = false;
 >isTargetTypedAsMethod : boolean
@@ -4401,7 +4401,7 @@ module TypeScript {
 
         public returnStatementsWithExpressions: ReturnStatement[] = [];
 >returnStatementsWithExpressions : ReturnStatement[]
->[] : undefined[]
+>[] : ReturnStatement[]
 
         public scopeType: Type = null; // Type of the FuncDecl, before target typing
 >scopeType : Type
@@ -5048,7 +5048,7 @@ module TypeScript {
 
         public referencedFiles: IFileReference[] = [];
 >referencedFiles : IFileReference[]
->[] : undefined[]
+>[] : IFileReference[]
 
         public requiresGlobal = false;
 >requiresGlobal : boolean
@@ -5437,7 +5437,7 @@ module TypeScript {
 
         public amdDependencies: string[] = [];
 >amdDependencies : string[]
->[] : undefined[]
+>[] : string[]
 
         public vars: ASTList;
 >vars : ASTList

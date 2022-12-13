@@ -7,7 +7,7 @@ function map<T, U>(xs: T[], f: (x: T) => U) {
 
     var ys: U[] = [];
 >ys : U[]
->[] : undefined[]
+>[] : U[]
 
     xs.forEach(x => ys.push(f(x)));
 >xs.forEach(x => ys.push(f(x))) : void

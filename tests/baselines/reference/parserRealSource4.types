@@ -115,7 +115,7 @@ module TypeScript {
 
             var result: string[] = [];
 >result : string[]
->[] : undefined[]
+>[] : string[]
 
             for (var k in this.table) {
 >k : string

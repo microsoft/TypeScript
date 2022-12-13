@@ -26,7 +26,7 @@ export class BrokenClass {
     let result: Array<MyModule.MyModel> = [];
 >result : MyModule.MyModel[]
 >MyModule : any
->[] : undefined[]
+>[] : MyModule.MyModel[]
 
     let populateItems = (order) => {
 >populateItems : (order: any) => Promise<unknown>

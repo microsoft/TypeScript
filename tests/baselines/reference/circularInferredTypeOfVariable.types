@@ -10,7 +10,7 @@
 >p : string[]
 
         return [];
->[] : undefined[]
+>[] : string[]
     }
 
     function bar(p: string[]): string[] {
@@ -18,12 +18,12 @@
 >p : string[]
 
         return [];
->[] : undefined[]
+>[] : string[]
     }
 
     let a1: string[] | undefined = [];
 >a1 : string[]
->[] : undefined[]
+>[] : string[]
 
     while (true) {
 >true : true

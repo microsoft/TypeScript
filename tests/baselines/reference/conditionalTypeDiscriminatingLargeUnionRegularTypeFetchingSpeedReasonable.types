@@ -16019,6 +16019,6 @@ export function makeThing<T extends BigUnion['name']>(
 
     children: ChildrenOf<WithName<T>>[] = [],
 >children : ChildrenOf<WithName<T>>[]
->[] : undefined[]
+>[] : ChildrenOf<WithName<T>>[]
 
 ) { }
