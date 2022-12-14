@@ -84,6 +84,7 @@ import {
     getContainingClass,
     getEffectiveContainerForJSDocTemplateTag,
     getElementOrPropertyAccessName,
+    getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getEnclosingBlockScopeContainer,
     getErrorSpanForNode,
@@ -219,6 +220,7 @@ import {
     JSDocClassTag,
     JSDocEnumTag,
     JSDocFunctionType,
+    JSDocOverloadTag,
     JSDocParameterTag,
     JSDocPropertyLikeTag,
     JSDocSignature,
@@ -235,6 +237,7 @@ import {
     ModifierFlags,
     ModuleBlock,
     ModuleDeclaration,
+    ModuleResolutionKind,
     Mutable,
     NamespaceExportDeclaration,
     Node,
@@ -2964,6 +2967,8 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             case SyntaxKind.JSDocCallbackTag:
             case SyntaxKind.JSDocEnumTag:
                 return (delayedTypeAliases || (delayedTypeAliases = [])).push(node as JSDocTypedefTag | JSDocCallbackTag | JSDocEnumTag);
+            case SyntaxKind.JSDocOverloadTag:
+                return bind((node as JSDocOverloadTag).typeExpression);
         }
     }
 
@@ -3520,6 +3525,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         if (!isBindingPattern(node.name)) {
             const possibleVariableDecl = node.kind === SyntaxKind.VariableDeclaration ? node : node.parent.parent;
             if (isInJSFile(node) &&
+                getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Bundler &&
                 isVariableDeclarationInitializedToBareOrAccessedRequire(possibleVariableDecl) &&
                 !getJSDocTypeTag(node) &&
                 !(getCombinedModifierFlags(node) & ModifierFlags.Export)

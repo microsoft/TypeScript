@@ -178,6 +178,7 @@ import {
     JSDocNonNullableType,
     JSDocNullableType,
     JSDocOptionalType,
+    JSDocOverloadTag,
     JSDocOverrideTag,
     JSDocParameterTag,
     JSDocPrivateTag,
@@ -8785,6 +8786,9 @@ namespace Parser {
                     case "callback":
                         tag = parseCallbackTag(start, tagName, margin, indentText);
                         break;
+                    case "overload":
+                        tag = parseOverloadTag(start, tagName, margin, indentText);
+                        break;
                     case "satisfies":
                         tag = parseSatisfiesTag(start, tagName, margin, indentText);
                         break;
@@ -9291,10 +9295,7 @@ namespace Parser {
                 return createNodeArray(parameters || [], pos);
             }
 
-            function parseCallbackTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocCallbackTag {
-                const fullName = parseJSDocTypeNameWithNamespace();
-                skipWhitespace();
-                let comment = parseTagComments(indent);
+            function parseJSDocSignature(start: number, indent: number): JSDocSignature {
                 const parameters = parseCallbackTagParameters(indent);
                 const returnTag = tryParse(() => {
                     if (parseOptionalJsdoc(SyntaxKind.AtToken)) {
@@ -9304,12 +9305,30 @@ namespace Parser {
                         }
                     }
                 });
-                const typeExpression = finishNode(factory.createJSDocSignature(/*typeParameters*/ undefined, parameters, returnTag), start);
+                return finishNode(factory.createJSDocSignature(/*typeParameters*/ undefined, parameters, returnTag), start);
+            }
+
+            function parseCallbackTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocCallbackTag {
+                const fullName = parseJSDocTypeNameWithNamespace();
+                skipWhitespace();
+                let comment = parseTagComments(indent);
+                const typeExpression = parseJSDocSignature(start, indent);
                 if (!comment) {
                     comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
                 }
                 const end = comment !== undefined ? getNodePos() : typeExpression.end;
                 return finishNode(factory.createJSDocCallbackTag(tagName, typeExpression, fullName, comment), start, end);
+            }
+
+            function parseOverloadTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocOverloadTag {
+                skipWhitespace();
+                let comment = parseTagComments(indent);
+                const typeExpression = parseJSDocSignature(start, indent);
+                if (!comment) {
+                    comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
+                }
+                const end = comment !== undefined ? getNodePos() : typeExpression.end;
+                return finishNode(factory.createJSDocOverloadTag(tagName, typeExpression, comment), start, end);
             }
 
             function escapedTextsEqual(a: EntityName, b: EntityName): boolean {

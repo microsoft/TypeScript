@@ -11,6 +11,7 @@ import {
     AnyImportOrReExport,
     AnyImportSyntax,
     AnyValidImportOrReExport,
+    append,
     arrayFrom,
     ArrayLiteralExpression,
     ArrayTypeNode,
@@ -271,6 +272,7 @@ import {
     isJSDocMemberName,
     isJSDocNameReference,
     isJSDocNode,
+    isJSDocOverloadTag,
     isJSDocParameterTag,
     isJSDocPropertyLikeTag,
     isJSDocSignature,
@@ -443,6 +445,7 @@ import {
     semanticDiagnosticsOptionDeclarations,
     SetAccessorDeclaration,
     ShorthandPropertyAssignment,
+    shouldAllowImportingTsExtension,
     Signature,
     SignatureDeclaration,
     SignatureFlags,
@@ -515,6 +518,7 @@ import {
     TypeReferenceNode,
     unescapeLeadingUnderscores,
     UnionOrIntersectionTypeNode,
+    UserPreferences,
     ValidImportTypeNode,
     VariableDeclaration,
     VariableDeclarationInitializedTo,
@@ -5800,7 +5804,7 @@ export function getJSDocTypeParameterDeclarations(node: DeclarationWithTypeParam
 
 /** template tags are only available when a typedef isn't already using them */
 function isNonTypeAliasTemplate(tag: JSDocTag): tag is JSDocTemplateTag {
-    return isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDoc && tag.parent.tags!.some(isJSDocTypeAlias));
+    return isJSDocTemplateTag(tag) && !(tag.parent.kind === SyntaxKind.JSDoc && (tag.parent.tags!.some(isJSDocTypeAlias) || tag.parent.tags!.some(isJSDocOverloadTag)));
 }
 
 /**
@@ -7695,6 +7699,10 @@ export function getEmitModuleKind(compilerOptions: {module?: CompilerOptions["mo
         getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
 }
 
+export function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind) {
+    return moduleKind >= ModuleKind.ES2015 && moduleKind <= ModuleKind.ESNext;
+}
+
 /** @internal */
 export function getEmitModuleResolutionKind(compilerOptions: CompilerOptions) {
     let moduleResolution = compilerOptions.moduleResolution;
@@ -7770,11 +7778,62 @@ export function getESModuleInterop(compilerOptions: CompilerOptions) {
 
 /** @internal */
 export function getAllowSyntheticDefaultImports(compilerOptions: CompilerOptions) {
-    const moduleKind = getEmitModuleKind(compilerOptions);
-    return compilerOptions.allowSyntheticDefaultImports !== undefined
-        ? compilerOptions.allowSyntheticDefaultImports
-        : getESModuleInterop(compilerOptions) ||
-        moduleKind === ModuleKind.System;
+    if (compilerOptions.allowSyntheticDefaultImports !== undefined) {
+        return compilerOptions.allowSyntheticDefaultImports;
+    }
+    return getESModuleInterop(compilerOptions)
+        || getEmitModuleKind(compilerOptions) === ModuleKind.System
+        || getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler;
+}
+
+/** @internal */
+export function moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution: ModuleResolutionKind): boolean {
+    return moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext
+        || moduleResolution === ModuleResolutionKind.Bundler;
+}
+
+/** @internal */
+export function getResolvePackageJsonExports(compilerOptions: CompilerOptions) {
+    const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
+    if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
+        return false;
+    }
+    if (compilerOptions.resolvePackageJsonExports !== undefined) {
+        return compilerOptions.resolvePackageJsonExports;
+    }
+    switch (moduleResolution) {
+        case ModuleResolutionKind.Node16:
+        case ModuleResolutionKind.NodeNext:
+        case ModuleResolutionKind.Bundler:
+            return true;
+    }
+    return false;
+}
+
+/** @internal */
+export function getResolvePackageJsonImports(compilerOptions: CompilerOptions) {
+    const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
+    if (!moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
+        return false;
+    }
+    if (compilerOptions.resolvePackageJsonExports !== undefined) {
+        return compilerOptions.resolvePackageJsonExports;
+    }
+    switch (moduleResolution) {
+        case ModuleResolutionKind.Node16:
+        case ModuleResolutionKind.NodeNext:
+        case ModuleResolutionKind.Bundler:
+            return true;
+    }
+    return false;
+}
+
+/** @internal */
+export function getResolveJsonModule(compilerOptions: CompilerOptions) {
+    if (compilerOptions.resolveJsonModule !== undefined) {
+        return compilerOptions.resolveJsonModule;
+    }
+    return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler;
 }
 
 /** @internal */
@@ -8412,7 +8471,7 @@ export function getSupportedExtensionsWithJsonIfResolveJsonModule(options: Compi
 export function getSupportedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: readonly string[][]): readonly string[][];
 /** @internal */
 export function getSupportedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: readonly string[][]): readonly string[][] {
-    if (!options || !options.resolveJsonModule) return supportedExtensions;
+    if (!options || !getResolveJsonModule(options)) return supportedExtensions;
     if (supportedExtensions === allSupportedExtensions) return allSupportedExtensionsWithJson;
     if (supportedExtensions === supportedTSExtensions) return supportedTSExtensionsWithJson;
     return [...supportedExtensions, [Extension.Json]];
@@ -8430,6 +8489,92 @@ export function hasJSFileExtension(fileName: string): boolean {
 /** @internal */
 export function hasTSFileExtension(fileName: string): boolean {
     return some(supportedTSExtensionsFlat, extension => fileExtensionIs(fileName, extension));
+}
+
+/**
+ * @internal
+ * Corresponds to UserPreferences#importPathEnding
+ */
+export const enum ModuleSpecifierEnding {
+    Minimal,
+    Index,
+    JsExtension,
+    TsExtension,
+}
+
+/** @internal */
+export function usesExtensionsOnImports({ imports }: SourceFile, hasExtension: (text: string) => boolean = or(hasJSFileExtension, hasTSFileExtension)): boolean {
+    return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasExtension(text) : undefined) || false;
+}
+
+/** @internal */
+export function getModuleSpecifierEndingPreference(preference: UserPreferences["importModuleSpecifierEnding"], resolutionMode: ResolutionMode, compilerOptions: CompilerOptions, sourceFile: SourceFile): ModuleSpecifierEnding {
+    if (preference === "js" || resolutionMode === ModuleKind.ESNext) {
+        // Extensions are explicitly requested or required. Now choose between .js and .ts.
+        if (!shouldAllowImportingTsExtension(compilerOptions)) {
+            return ModuleSpecifierEnding.JsExtension;
+        }
+        // `allowImportingTsExtensions` is a strong signal, so use .ts unless the file
+        // already uses .js extensions and no .ts extensions.
+        return inferPreference() !== ModuleSpecifierEnding.JsExtension
+            ? ModuleSpecifierEnding.TsExtension
+            : ModuleSpecifierEnding.JsExtension;
+    }
+    if (preference === "minimal") {
+        return ModuleSpecifierEnding.Minimal;
+    }
+    if (preference === "index") {
+        return ModuleSpecifierEnding.Index;
+    }
+
+    // No preference was specified.
+    // Look at imports and/or requires to guess whether .js, .ts, or extensionless imports are preferred.
+    // N.B. that `Index` detection is not supported since it would require file system probing to do
+    // accurately, and more importantly, literally nobody wants `Index` and its existence is a mystery.
+    if (!shouldAllowImportingTsExtension(compilerOptions)) {
+        // If .ts imports are not valid, we only need to see one .js import to go with that.
+        return usesExtensionsOnImports(sourceFile) ? ModuleSpecifierEnding.JsExtension : ModuleSpecifierEnding.Minimal;
+    }
+
+    return inferPreference();
+
+    function inferPreference() {
+        let usesJsExtensions = false;
+        const specifiers = sourceFile.imports.length ? sourceFile.imports.map(i => i.text) :
+            isSourceFileJS(sourceFile) ? getRequiresAtTopOfFile(sourceFile).map(r => r.arguments[0].text) :
+            emptyArray;
+        for (const specifier of specifiers) {
+            if (pathIsRelative(specifier)) {
+                if (hasTSFileExtension(specifier)) {
+                    return ModuleSpecifierEnding.TsExtension;
+                }
+                if (hasJSFileExtension(specifier)) {
+                    usesJsExtensions = true;
+                }
+            }
+        }
+        return usesJsExtensions ? ModuleSpecifierEnding.JsExtension : ModuleSpecifierEnding.Minimal;
+    }
+}
+
+function getRequiresAtTopOfFile(sourceFile: SourceFile): readonly RequireOrImportCall[] {
+    let nonRequireStatementCount = 0;
+    let requires: RequireOrImportCall[] | undefined;
+    for (const statement of sourceFile.statements) {
+        if (nonRequireStatementCount > 3) {
+            break;
+        }
+        if (isRequireVariableStatement(statement)) {
+            requires = concatenate(requires, statement.declarationList.declarations.map(d => d.initializer));
+        }
+        else if (isExpressionStatement(statement) && isRequireCall(statement.expression, /*requireStringLiteralLikeArgument*/ true)) {
+            requires = append(requires, statement.expression);
+        }
+        else {
+            nonRequireStatementCount++;
+        }
+    }
+    return requires || emptyArray;
 }
 
 /** @internal */

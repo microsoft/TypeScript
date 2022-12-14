@@ -12,7 +12,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/a/b/foo/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/b/foo.ts",
@@ -47,7 +48,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/a/b/foo/index.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/b/foo.ts",

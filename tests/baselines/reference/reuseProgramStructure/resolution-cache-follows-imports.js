@@ -15,7 +15,8 @@ b: {
   "resolvedModule": {
     "resolvedFileName": "b.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: undefined
@@ -44,7 +45,8 @@ b: {
   "resolvedModule": {
     "resolvedFileName": "b.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: undefined
@@ -89,7 +91,8 @@ b: {
   "resolvedModule": {
     "resolvedFileName": "b.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 c: {

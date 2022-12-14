@@ -423,6 +423,7 @@ export const enum SyntaxKind {
     JSDocReadonlyTag,
     JSDocOverrideTag,
     JSDocCallbackTag,
+    JSDocOverloadTag,
     JSDocEnumTag,
     JSDocParameterTag,
     JSDocReturnTag,
@@ -4067,6 +4068,13 @@ export interface JSDocCallbackTag extends JSDocTag, NamedDeclaration, LocalsCont
     readonly typeExpression: JSDocSignature;
 }
 
+
+export interface JSDocOverloadTag extends JSDocTag {
+    readonly kind: SyntaxKind.JSDocOverloadTag;
+    readonly parent: JSDoc;
+    readonly typeExpression: JSDocSignature;
+}
+
 export interface JSDocThrowsTag extends JSDocTag {
     readonly kind: SyntaxKind.JSDocThrowsTag;
     readonly typeExpression?: JSDocTypeExpression;
@@ -6899,6 +6907,7 @@ export enum ModuleResolutionKind {
     // In turn, we offer both a `NodeNext` moving resolution target, and a `Node16` version-anchored resolution target
     Node16   = 3,
     NodeNext = 99, // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
+    Bundler   = 100,
 }
 
 export enum ModuleDetectionKind {
@@ -6958,6 +6967,7 @@ export type CompilerOptionsValue = string | number | boolean | (string | number)
 
 export interface CompilerOptions {
     /** @internal */ all?: boolean;
+    allowImportingTsExtensions?: boolean;
     allowJs?: boolean;
     /** @internal */ allowNonTsExtensions?: boolean;
     allowSyntheticDefaultImports?: boolean;
@@ -6981,6 +6991,7 @@ export interface CompilerOptions {
      * @internal
      */
     readonly configFile?: TsConfigSourceFile;
+    customConditions?: string[];
     declaration?: boolean;
     declarationMap?: boolean;
     emitDeclarationOnly?: boolean;
@@ -7067,6 +7078,8 @@ export interface CompilerOptions {
     incremental?: boolean;
     tsBuildInfoFile?: string;
     removeComments?: boolean;
+    resolvePackageJsonExports?: boolean;
+    resolvePackageJsonImports?: boolean;
     rootDir?: string;
     rootDirs?: string[];
     skipLibCheck?: boolean;
@@ -7514,6 +7527,11 @@ export interface ResolvedModule {
     resolvedFileName: string;
     /** True if `resolvedFileName` comes from `node_modules`. */
     isExternalLibraryImport?: boolean;
+    /**
+     * True if the original module reference used a .ts extension to refer directly to a .ts file,
+     * which should produce an error during checking if emit is enabled.
+     */
+    resolvedUsingTsExtension?: boolean;
 }
 
 /**
@@ -8526,6 +8544,8 @@ export interface NodeFactory {
     updateJSDocEnumTag(node: JSDocEnumTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocEnumTag;
     createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | NodeArray<JSDocComment>): JSDocCallbackTag;
     updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocCallbackTag;
+    createJSDocOverloadTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, comment?: string | NodeArray<JSDocComment>): JSDocOverloadTag;
+    updateJSDocOverloadTag(node: JSDocOverloadTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, comment: string | NodeArray<JSDocComment> | undefined): JSDocOverloadTag;
     createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocAugmentsTag;
     updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment: string | NodeArray<JSDocComment> | undefined): JSDocAugmentsTag;
     createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocImplementsTag;
@@ -9744,6 +9764,7 @@ export interface UserPreferences {
     readonly includeInlayEnumMemberValueHints?: boolean;
     readonly allowRenameOfImportPath?: boolean;
     readonly autoImportFileExcludePatterns?: string[];
+    readonly organizeImportsIgnoreCase?: "auto" | boolean;
 }
 
 /** Represents a bigint literal value without requiring bigint support */
