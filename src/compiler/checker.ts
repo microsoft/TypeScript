@@ -17592,8 +17592,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getTypeOfSymbol(symbol); // intentionally doesn't use resolved symbol so type is cached as expected on the alias
         }
         else {
-            tryGetDeclaredTypeOfSymbol(resolvedSymbol); // call this first to ensure typeParameters is populated (if applicable)
-            const typeParameters = getSymbolLinks(resolvedSymbol).typeParameters;
+            const type = tryGetDeclaredTypeOfSymbol(resolvedSymbol); // call this first to ensure typeParameters is populated (if applicable)
+            const typeParameters = type && getTypeParametersForTypeAndSymbol(type, resolvedSymbol);
             if (node.typeArguments && typeParameters) {
                 addLazyDiagnostic(() => {
                     checkTypeArgumentConstraints(node, typeParameters);
@@ -37271,13 +37271,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
+    function getTypeParametersForTypeAndSymbol(type: Type, symbol: Symbol) {
+        if (!isErrorType(type)) {
+            return symbol.flags & SymbolFlags.TypeAlias && getSymbolLinks(symbol).typeParameters ||
+                (getObjectFlags(type) & ObjectFlags.Reference ? (type as TypeReference).target.localTypeParameters : undefined);
+        }
+        return undefined;
+    }
+
     function getTypeParametersForTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments) {
         const type = getTypeFromTypeReference(node);
         if (!isErrorType(type)) {
             const symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol) {
-                return symbol.flags & SymbolFlags.TypeAlias && getSymbolLinks(symbol).typeParameters ||
-                    (getObjectFlags(type) & ObjectFlags.Reference ? (type as TypeReference).target.localTypeParameters : undefined);
+                return getTypeParametersForTypeAndSymbol(type, symbol);
             }
         }
         return undefined;
