@@ -1,32 +1,168 @@
 import {
-    __String, ANONYMOUS, ApplicableRefactorInfo, arrayFrom, assertType, BindingElement, Block, BlockLike,
-    BreakStatement, CancellationToken, canHaveModifiers, CharacterCodes, ClassElement, ClassLikeDeclaration, codefix,
-    compareProperties, compareStringsCaseSensitive, compareValues, contains, ContinueStatement, createDiagnosticForNode,
-    createFileDiagnostic, Debug, Declaration, Diagnostic, DiagnosticCategory, DiagnosticMessage, Diagnostics, EmitFlags,
-    emptyArray, EntityName, ESMap, Expression, ExpressionStatement, factory, find, findAncestor,
-    findFirstNonJsxWhitespaceToken, findTokenOnLeftOfPosition, first, firstOrUndefined, forEachChild,
-    formatStringFromArgs, FunctionDeclaration, FunctionLikeDeclaration, getContainingClass, getContainingFunction,
-    getEffectiveTypeParameterDeclarations, getEmitScriptTarget, getEnclosingBlockScopeContainer,
-    getLocaleSpecificMessage, getModifiers, getNodeId, getParentNodeInSpan, getRefactorContextSpan, getRenameLocation,
-    getSymbolId, getSynthesizedDeepClone, getThisContainer, getUniqueName, hasEffectiveModifier, hasSyntacticModifier,
-    Identifier, isArray, isArrowFunction, isAssignmentExpression, isBinaryExpression, isBlock, isBlockScope,
-    isCaseClause, isClassLike, isConstructorDeclaration, isDeclaration, isDeclarationWithTypeParameters,
-    isElementAccessExpression, isExpression, isExpressionNode, isExpressionStatement, isFunctionBody,
-    isFunctionExpression, isFunctionLike, isFunctionLikeDeclaration, isIdentifier, isInJSFile, isIterationStatement,
-    isJsxAttribute, isJsxElement, isJsxFragment, isJsxSelfClosingElement, isKeyword, isModuleBlock,
-    isParenthesizedTypeNode, isPartOfTypeNode, isPrivateIdentifier, isPropertyAccessExpression, isPropertyDeclaration,
-    isQualifiedName, isReturnStatement, isShorthandPropertyAssignment, isSourceFile, isStatement, isStatic,
-    isStringLiteral, isSwitchStatement, isThis, isUnaryExpressionWithWrite, isUnionTypeNode, isVariableDeclaration,
-    isVariableDeclarationList, isVariableStatement, LabeledStatement, last, map, Map, MethodDeclaration, Modifier,
-    ModifierFlags, ModuleBlock, NamedDeclaration, Node, NodeBuilderFlags, NodeFlags, nullTransformationContext,
-    ObjectLiteralElementLike, ParameterDeclaration, positionIsSynthesized, PropertyAccessExpression,
-    rangeContainsStartEnd, ReadonlyESMap, RefactorActionInfo, RefactorContext, RefactorEditInfo, setEmitFlags,
-    ShorthandPropertyAssignment, SignatureKind, singleOrUndefined, skipParentheses, SourceFile, Statement,
-    StringLiteral, suppressLeadingAndTrailingTrivia, Symbol, SymbolFlags, SyntaxKind, textChanges, TextRange, TextSpan,
-    textSpanEnd, TryStatement, Type, TypeChecker, TypeElement, TypeFlags, TypeLiteralNode, TypeNode, TypeParameter,
-    TypeParameterDeclaration, VariableDeclaration, visitEachChild, visitNode, visitNodes, VisitResult,
+    __String,
+    ANONYMOUS,
+    ApplicableRefactorInfo,
+    arrayFrom,
+    assertType,
+    BindingElement,
+    Block,
+    BlockLike,
+    BreakStatement,
+    CancellationToken,
+    canHaveModifiers,
+    CharacterCodes,
+    ClassElement,
+    ClassLikeDeclaration,
+    codefix,
+    compareProperties,
+    compareStringsCaseSensitive,
+    compareValues,
+    contains,
+    ContinueStatement,
+    createDiagnosticForNode,
+    createFileDiagnostic,
+    Debug,
+    Declaration,
+    Diagnostic,
+    DiagnosticCategory,
+    DiagnosticMessage,
+    Diagnostics,
+    EmitFlags,
+    emptyArray,
+    EntityName,
+    Expression,
+    ExpressionStatement,
+    factory,
+    find,
+    findAncestor,
+    findFirstNonJsxWhitespaceToken,
+    findTokenOnLeftOfPosition,
+    first,
+    firstOrUndefined,
+    forEachChild,
+    formatStringFromArgs,
+    FunctionDeclaration,
+    FunctionLikeDeclaration,
+    getContainingClass,
+    getContainingFunction,
+    getEffectiveTypeParameterDeclarations,
+    getEmitScriptTarget,
+    getEnclosingBlockScopeContainer,
+    getLocaleSpecificMessage,
+    getModifiers,
+    getNodeId,
+    getParentNodeInSpan,
+    getRefactorContextSpan,
+    getRenameLocation,
+    getSymbolId,
+    getSynthesizedDeepClone,
+    getThisContainer,
+    getUniqueName,
+    hasEffectiveModifier,
+    hasSyntacticModifier,
+    Identifier,
+    isArray,
+    isArrowFunction,
+    isAssignmentExpression,
+    isBinaryExpression,
+    isBlock,
+    isBlockScope,
+    isCaseClause,
+    isClassLike,
+    isConstructorDeclaration,
+    isDeclaration,
+    isDeclarationWithTypeParameters,
+    isElementAccessExpression,
+    isExpression,
+    isExpressionNode,
+    isExpressionStatement,
+    isFunctionBody,
+    isFunctionExpression,
+    isFunctionLike,
+    isFunctionLikeDeclaration,
+    isIdentifier,
+    isInJSFile,
+    isIterationStatement,
+    isJsxAttribute,
+    isJsxElement,
+    isJsxFragment,
+    isJsxSelfClosingElement,
+    isKeyword,
+    isModuleBlock,
+    isParenthesizedTypeNode,
+    isPartOfTypeNode,
+    isPrivateIdentifier,
+    isPropertyAccessExpression,
+    isPropertyDeclaration,
+    isQualifiedName,
+    isReturnStatement,
+    isShorthandPropertyAssignment,
+    isSourceFile,
+    isStatement,
+    isStatic,
+    isStringLiteral,
+    isSwitchStatement,
+    isThis,
+    isUnaryExpressionWithWrite,
+    isUnionTypeNode,
+    isVariableDeclaration,
+    isVariableDeclarationList,
+    isVariableStatement,
+    LabeledStatement,
+    last,
+    map,
+    MethodDeclaration,
+    Modifier,
+    ModifierFlags,
+    ModuleBlock,
+    NamedDeclaration,
+    Node,
+    NodeBuilderFlags,
+    NodeFlags,
+    nullTransformationContext,
+    ObjectLiteralElementLike,
+    ParameterDeclaration,
+    positionIsSynthesized,
+    PropertyAccessExpression,
+    rangeContainsStartEnd,
+    RefactorActionInfo,
+    RefactorContext,
+    RefactorEditInfo,
+    setEmitFlags,
+    ShorthandPropertyAssignment,
+    SignatureKind,
+    singleOrUndefined,
+    skipParentheses,
+    SourceFile,
+    Statement,
+    StringLiteral,
+    suppressLeadingAndTrailingTrivia,
+    Symbol,
+    SymbolFlags,
+    SyntaxKind,
+    textChanges,
+    TextRange,
+    TextSpan,
+    textSpanEnd,
+    TryStatement,
+    Type,
+    TypeChecker,
+    TypeElement,
+    TypeFlags,
+    TypeLiteralNode,
+    TypeNode,
+    TypeParameter,
+    TypeParameterDeclaration,
+    VariableDeclaration,
+    visitEachChild,
+    visitNode,
+    visitNodes,
+    VisitResult,
 } from "../_namespaces/ts";
-import { refactorKindBeginsWith, registerRefactor } from "../_namespaces/ts.refactor";
+import {
+    refactorKindBeginsWith,
+    registerRefactor,
+} from "../_namespaces/ts.refactor";
 
 const refactorName = "Extract Symbol";
 
@@ -497,7 +633,7 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
         visit(nodeToCheck);
 
         if (rangeFacts & RangeFacts.UsesThis) {
-            const container = getThisContainer(nodeToCheck, /** includeArrowFunctions */ false);
+            const container = getThisContainer(nodeToCheck, /** includeArrowFunctions */ false, /*includeClassComputedPropertyName*/ false);
             if (
                 container.kind === SyntaxKind.FunctionDeclaration ||
                 (container.kind === SyntaxKind.MethodDeclaration && container.parent.kind === SyntaxKind.ObjectLiteralExpression) ||
@@ -1448,7 +1584,7 @@ function getCalledExpression(scope: Node, range: TargetRange, functionNameText: 
     }
 }
 
-function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly VariableDeclaration[], writes: readonly UsageEntry[] | undefined, substitutions: ReadonlyESMap<string, Node>, hasReturn: boolean): { body: Block, returnValueProperty: string | undefined } {
+function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly VariableDeclaration[], writes: readonly UsageEntry[] | undefined, substitutions: ReadonlyMap<string, Node>, hasReturn: boolean): { body: Block, returnValueProperty: string | undefined } {
     const hasWritesOrVariableDeclarations = writes !== undefined || exposedVariableDeclarations.length > 0;
     if (isBlock(body) && !hasWritesOrVariableDeclarations && substitutions.size === 0) {
         // already block, no declarations or writes to propagate back, no substitutions - can use node as is
@@ -1504,7 +1640,7 @@ function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly
     }
 }
 
-function transformConstantInitializer(initializer: Expression, substitutions: ReadonlyESMap<string, Node>): Expression {
+function transformConstantInitializer(initializer: Expression, substitutions: ReadonlyMap<string, Node>): Expression {
     return substitutions.size
         ? visitor(initializer) as Expression
         : initializer;
@@ -1652,9 +1788,9 @@ interface UsageEntry {
 }
 
 interface ScopeUsages {
-    readonly usages: ESMap<string, UsageEntry>;
-    readonly typeParameterUsages: ESMap<string, TypeParameter>; // Key is type ID
-    readonly substitutions: ESMap<string, Node>;
+    readonly usages: Map<string, UsageEntry>;
+    readonly typeParameterUsages: Map<string, TypeParameter>; // Key is type ID
+    readonly substitutions: Map<string, Node>;
 }
 
 interface ReadsAndWrites {
@@ -1674,7 +1810,7 @@ function collectReadsAndWrites(
 
     const allTypeParameterUsages = new Map<string, TypeParameter>(); // Key is type ID
     const usagesPerScope: ScopeUsages[] = [];
-    const substitutionsPerScope: ESMap<string, Node>[] = [];
+    const substitutionsPerScope: Map<string, Node>[] = [];
     const functionErrorsPerScope: Diagnostic[][] = [];
     const constantErrorsPerScope: Diagnostic[][] = [];
     const visibleDeclarationsInExtractedRange: NamedDeclaration[] = [];

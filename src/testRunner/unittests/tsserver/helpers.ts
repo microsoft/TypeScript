@@ -1,21 +1,16 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
 import * as Utils from "../../_namespaces/Utils";
-
-export import TI = ts.server.typingsInstaller;
-export import protocol = ts.server.protocol;
-export import CommandNames = ts.server.CommandNames;
-
-export import TestServerHost = ts.TestFSWithWatch.TestServerHost;
-export type File = ts.TestFSWithWatch.File;
-export type SymLink = ts.TestFSWithWatch.SymLink;
-export type Folder = ts.TestFSWithWatch.Folder;
-export import createServerHost = ts.TestFSWithWatch.createServerHost;
-export import checkArray = ts.TestFSWithWatch.checkArray;
-export import libFile = ts.TestFSWithWatch.libFile;
-
-export import commonFile1 = ts.tscWatch.commonFile1;
-export import commonFile2 = ts.tscWatch.commonFile2;
+import {
+    changeToHostTrackingWrittenFiles,
+    createServerHost,
+    File,
+    FileOrFolderOrSymLink,
+    libFile,
+    TestServerHost,
+    TestServerHostTrackingWrittenFiles,
+} from "../virtualFileSystemWithWatch";
+import { ensureErrorFreeBuild } from "../tscWatch/helpers";
 
 const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
 export function mapOutputToJson(s: string) {
@@ -51,7 +46,7 @@ export const customTypesMap = {
 
 export interface PostExecAction {
     readonly success: boolean;
-    readonly callback: TI.RequestCompletedAction;
+    readonly callback: ts.server.typingsInstaller.RequestCompletedAction;
 }
 
 export interface Logger extends ts.server.Logger {
@@ -174,14 +169,14 @@ export function appendProjectFileText(project: ts.server.Project, logs: string[]
     logs.push("");
 }
 
-export class TestTypingsInstaller extends TI.TypingsInstaller implements ts.server.ITypingsInstaller {
+export class TestTypingsInstaller extends ts.server.typingsInstaller.TypingsInstaller implements ts.server.ITypingsInstaller {
     protected projectService!: ts.server.ProjectService;
     constructor(
         readonly globalTypingsCacheLocation: string,
         throttleLimit: number,
         installTypingHost: ts.server.ServerHost,
-        readonly typesRegistry = new ts.Map<string, ts.MapLike<string>>(),
-        log?: TI.Log) {
+        readonly typesRegistry = new Map<string, ts.MapLike<string>>(),
+        log?: ts.server.typingsInstaller.Log) {
         super(installTypingHost, globalTypingsCacheLocation, "/safeList.json" as ts.Path, customTypesMap.path, throttleLimit, log);
     }
 
@@ -213,7 +208,7 @@ export class TestTypingsInstaller extends TI.TypingsInstaller implements ts.serv
         return this.installTypingHost;
     }
 
-    installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
+    installWorker(_requestId: number, _args: string[], _cwd: string, cb: ts.server.typingsInstaller.RequestCompletedAction): void {
         this.addPostExecAction("success", cb);
     }
 
@@ -226,7 +221,7 @@ export class TestTypingsInstaller extends TI.TypingsInstaller implements ts.serv
         this.install(request);
     }
 
-    addPostExecAction(stdout: string | string[], cb: TI.RequestCompletedAction) {
+    addPostExecAction(stdout: string | string[], cb: ts.server.typingsInstaller.RequestCompletedAction) {
         const out = ts.isString(stdout) ? stdout : createNpmPackageJsonString(stdout);
         const action: PostExecAction = {
             success: !!out,
@@ -244,7 +239,7 @@ function createNpmPackageJsonString(installedTypings: string[]): string {
     return JSON.stringify({ dependencies });
 }
 
-export function createTypesRegistry(...list: string[]): ts.ESMap<string, ts.MapLike<string>> {
+export function createTypesRegistry(...list: string[]): Map<string, ts.MapLike<string>> {
     const versionMap = {
         "latest": "1.3.0",
         "ts2.0": "1.0.0",
@@ -256,14 +251,14 @@ export function createTypesRegistry(...list: string[]): ts.ESMap<string, ts.MapL
         "ts2.6": "1.3.0",
         "ts2.7": "1.3.0"
     };
-    const map = new ts.Map<string, ts.MapLike<string>>();
+    const map = new Map<string, ts.MapLike<string>>();
     for (const l of list) {
         map.set(l, versionMap);
     }
     return map;
 }
 
-export function toExternalFile(fileName: string): protocol.ExternalFile {
+export function toExternalFile(fileName: string): ts.server.protocol.ExternalFile {
     return { fileName };
 }
 
@@ -333,7 +328,7 @@ export class TestServerEventManager {
             configFileName: "tsconfig.json",
             projectType: "configured",
             languageServiceEnabled: true,
-            version: ts.version, // eslint-disable-line @typescript-eslint/no-unnecessary-qualifier
+            version: ts.version,
             ...partial,
         });
     }
@@ -346,11 +341,11 @@ export class TestServerEventManager {
     }
 }
 
-export type TestSessionAndServiceHost = ts.TestFSWithWatch.TestServerHostTrackingWrittenFiles & {
+export type TestSessionAndServiceHost = TestServerHostTrackingWrittenFiles & {
     baselineHost(title: string): void;
 };
 function patchHostTimeouts(
-    inputHost: ts.TestFSWithWatch.TestServerHostTrackingWrittenFiles,
+    inputHost: TestServerHostTrackingWrittenFiles,
     session: TestSession | TestProjectService
 ) {
     const host = inputHost as TestSessionAndServiceHost;
@@ -404,9 +399,10 @@ export interface TestSessionOptions extends ts.server.SessionOptions {
     logger: Logger;
 }
 
+export type TestSessionRequest<T extends ts.server.protocol.Request> = Pick<T, "command" | "arguments">;
 export class TestSession extends ts.server.Session {
     private seq = 0;
-    public events: protocol.Event[] = [];
+    public events: ts.server.protocol.Event[] = [];
     public testhost: TestSessionAndServiceHost;
     public logger: Logger;
 
@@ -414,7 +410,7 @@ export class TestSession extends ts.server.Session {
         super(opts);
         this.logger = opts.logger;
         this.testhost = patchHostTimeouts(
-            ts.TestFSWithWatch.changeToHostTrackingWrittenFiles(this.host as TestServerHost),
+            changeToHostTrackingWrittenFiles(this.host as TestServerHost),
             this
         );
     }
@@ -431,15 +427,16 @@ export class TestSession extends ts.server.Session {
         return this.seq + 1;
     }
 
-    public executeCommand(request: protocol.Request) {
+    public executeCommand(request: ts.server.protocol.Request) {
         return this.baseline("response", super.executeCommand(this.baseline("request", request)));
     }
 
-    public executeCommandSeq<T extends ts.server.protocol.Request>(request: Partial<T>) {
+    public executeCommandSeq<T extends ts.server.protocol.Request>(inputRequest: TestSessionRequest<T>) {
         this.seq++;
+        const request: T = inputRequest as T;
         request.seq = this.seq;
         request.type = "request";
-        return this.executeCommand(request as T);
+        return this.executeCommand(request);
     }
 
     public event<T extends object>(body: T, eventName: string) {
@@ -452,7 +449,7 @@ export class TestSession extends ts.server.Session {
         this.testhost.clearOutput();
     }
 
-    private baseline<T extends protocol.Request | ts.server.HandlerResponse>(type: "request" | "response", requestOrResult: T): T {
+    private baseline<T extends ts.server.protocol.Request | ts.server.HandlerResponse>(type: "request" | "response", requestOrResult: T): T {
         if (!this.logger.hasLevel(ts.server.LogLevel.verbose)) return requestOrResult;
         if (type === "request") this.logger.info(`request:${ts.server.indent(JSON.stringify(requestOrResult, undefined, 2))}`);
         this.testhost.baselineHost(type === "request" ? "Before request" : "After request");
@@ -499,7 +496,7 @@ export function createSessionWithEventTracking<T extends ts.server.ProjectServic
     return { session, events };
 }
 
-export function createSessionWithDefaultEventHandler<T extends protocol.AnyEvent>(host: TestServerHost, eventNames: T["event"] | T["event"][], opts: Partial<TestSessionOptions> = {}) {
+export function createSessionWithDefaultEventHandler<T extends ts.server.protocol.AnyEvent>(host: TestServerHost, eventNames: T["event"] | T["event"][], opts: Partial<TestSessionOptions> = {}) {
     const session = createSession(host, { canUseEvents: true, ...opts });
 
     return {
@@ -540,7 +537,7 @@ export class TestProjectService extends ts.server.ProjectService {
             ...opts
         });
         this.testhost = patchHostTimeouts(
-            ts.TestFSWithWatch.changeToHostTrackingWrittenFiles(this.host as TestServerHost),
+            changeToHostTrackingWrittenFiles(this.host as TestServerHost),
             this
         );
         this.testhost.baselineHost("Creating project service");
@@ -588,6 +585,28 @@ export function configuredProjectAt(projectService: ts.server.ProjectService, in
     return iterResult.value;
 }
 
+function checkArray(caption: string, actual: readonly string[], expected: readonly string[]) {
+    const actualSet = new Set(actual);
+    let notInActual: string[] | undefined;
+    let duplicates: string[] | undefined;
+    const seen = new Set<string>();
+    expected.forEach(expectedKey => {
+        if (seen.has(expectedKey)) (duplicates ??= []).push(expectedKey);
+        else {
+            seen.add(expectedKey);
+            if (!actualSet.has(expectedKey)) (notInActual ??= []).push(expectedKey);
+        }
+    });
+    let inActualNotExpected: string[] | undefined;
+    actual.forEach(key => {
+        if (!seen.has(key)) (inActualNotExpected ??= []).push(key);
+        else seen.add(key);
+    });
+    if (notInActual || duplicates || inActualNotExpected) {
+        assert.fail(`${caption}\n\nNotInActual: ${notInActual}\nDuplicates: ${duplicates}\nInActualButNotInExpected: ${inActualNotExpected}`);
+    }
+}
+
 export function checkProjectActualFiles(project: ts.server.Project, expectedFiles: readonly string[]) {
     checkArray(`${ts.server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}:: actual files`, project.getFileNames(), expectedFiles);
 }
@@ -596,45 +615,13 @@ export function checkProjectRootFiles(project: ts.server.Project, expectedFiles:
     checkArray(`${ts.server.ProjectKind[project.projectKind]} project: ${project.getProjectName()}::, rootFileNames`, project.getRootFiles(), expectedFiles);
 }
 
-export function mapCombinedPathsInAncestor(dir: string, path2: string, mapAncestor: (ancestor: string) => boolean) {
-    dir = ts.normalizePath(dir);
-    const result: string[] = [];
-    ts.forEachAncestorDirectory(dir, ancestor => {
-        if (mapAncestor(ancestor)) {
-            result.push(ts.combinePaths(ancestor, path2));
-        }
-    });
-    return result;
-}
-
-export function getRootsToWatchWithAncestorDirectory(dir: string, path2: string) {
-    return mapCombinedPathsInAncestor(dir, path2, ancestor => ancestor.split(ts.directorySeparator).length > 4);
-}
-
-export const nodeModules = "node_modules";
-export function getNodeModuleDirectories(dir: string) {
-    return getRootsToWatchWithAncestorDirectory(dir, nodeModules);
-}
-
-export const nodeModulesAtTypes = "node_modules/@types";
-export function getTypeRootsFromLocation(currentDirectory: string) {
-    return getRootsToWatchWithAncestorDirectory(currentDirectory, nodeModulesAtTypes);
-}
-
-export function getConfigFilesToWatch(folder: string) {
-    return [
-        ...getRootsToWatchWithAncestorDirectory(folder, "tsconfig.json"),
-        ...getRootsToWatchWithAncestorDirectory(folder, "jsconfig.json")
-    ];
-}
-
-export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): protocol.Location {
+export function protocolLocationFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.Location {
     const start = nthIndexOf(str, substring, options ? options.index : 0);
     ts.Debug.assert(start !== -1);
     return protocolToLocation(str)(start);
 }
 
-export function protocolToLocation(text: string): (pos: number) => protocol.Location {
+export function protocolToLocation(text: string): (pos: number) => ts.server.protocol.Location {
     const lineStarts = ts.computeLineStarts(text);
     return pos => {
         const x = ts.computeLineAndCharacterOfPosition(lineStarts, pos);
@@ -642,7 +629,7 @@ export function protocolToLocation(text: string): (pos: number) => protocol.Loca
     };
 }
 
-export function protocolTextSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): protocol.TextSpan {
+export function protocolTextSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.TextSpan {
     const span = textSpanFromSubstring(str, substring, options);
     const toLocation = protocolToLocation(str);
     return { start: toLocation(span.start), end: toLocation(ts.textSpanEnd(span)) };
@@ -655,30 +642,6 @@ export interface DocumentSpanFromSubstring {
     contextText?: string;
     contextOptions?: SpanFromSubstringOptions;
 }
-export function protocolFileSpanFromSubstring({ file, text, options }: DocumentSpanFromSubstring): protocol.FileSpan {
-    return { file: file.path, ...protocolTextSpanFromSubstring(file.content, text, options) };
-}
-
-interface FileSpanWithContextFromSubString {
-    file: File;
-    text: string;
-    options?: SpanFromSubstringOptions;
-    contextText?: string;
-    contextOptions?: SpanFromSubstringOptions;
-}
-export function protocolFileSpanWithContextFromSubstring({ contextText, contextOptions, ...rest }: FileSpanWithContextFromSubString): protocol.FileSpanWithContext {
-    const result = protocolFileSpanFromSubstring(rest);
-    const contextSpan = contextText !== undefined ?
-        protocolFileSpanFromSubstring({ file: rest.file, text: contextText, options: contextOptions }) :
-        undefined;
-    return contextSpan ?
-        {
-            ...result,
-            contextStart: contextSpan.start,
-            contextEnd: contextSpan.end
-        } :
-        result;
-}
 
 export interface ProtocolTextSpanWithContextFromString {
     fileText: string;
@@ -687,7 +650,7 @@ export interface ProtocolTextSpanWithContextFromString {
     contextText?: string;
     contextOptions?: SpanFromSubstringOptions;
 }
-export function protocolTextSpanWithContextFromSubstring({ fileText, text, options, contextText, contextOptions }: ProtocolTextSpanWithContextFromString): protocol.TextSpanWithContext {
+export function protocolTextSpanWithContextFromSubstring({ fileText, text, options, contextText, contextOptions }: ProtocolTextSpanWithContextFromString): ts.server.protocol.TextSpanWithContext {
     const span = textSpanFromSubstring(fileText, text, options);
     const toLocation = protocolToLocation(fileText);
     const contextSpan = contextText !== undefined ? textSpanFromSubstring(fileText, contextText, contextOptions) : undefined;
@@ -707,12 +670,6 @@ export interface ProtocolRenameSpanFromSubstring extends ProtocolTextSpanWithCon
         readonly suffixText?: string;
     };
 }
-export function protocolRenameSpanFromSubstring({ prefixSuffixText, ...rest }: ProtocolRenameSpanFromSubstring): protocol.RenameTextSpan {
-    return {
-        ...protocolTextSpanWithContextFromSubstring(rest),
-        ...prefixSuffixText
-    };
-}
 
 export function textSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): ts.TextSpan {
     const start = nthIndexOf(str, substring, options ? options.index : 0);
@@ -720,7 +677,7 @@ export function textSpanFromSubstring(str: string, substring: string, options?: 
     return ts.createTextSpan(start, substring.length);
 }
 
-export function protocolFileLocationFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): protocol.FileLocationRequestArgs {
+export function protocolFileLocationFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): ts.server.protocol.FileLocationRequestArgs {
     return { file: file.path, ...protocolLocationFromSubstring(file.content, substring, options) };
 }
 
@@ -780,49 +737,29 @@ export class TestServerCancellationToken implements ts.server.ServerCancellation
     }
 }
 
-export function makeSessionRequest<T>(command: string, args: T): protocol.Request {
-    return {
-        seq: 0,
-        type: "request",
-        command,
-        arguments: args
-    };
-}
-
-export function executeSessionRequest<TRequest extends protocol.Request, TResponse extends protocol.Response>(session: ts.server.Session, command: TRequest["command"], args: TRequest["arguments"]): TResponse["body"] {
-    return session.executeCommand(makeSessionRequest(command, args)).response as TResponse["body"];
-}
-
-export function executeSessionRequestNoResponse<TRequest extends protocol.Request>(session: ts.server.Session, command: TRequest["command"], args: TRequest["arguments"]): void {
-    session.executeCommand(makeSessionRequest(command, args));
-}
-
-export function openFilesForSession(files: readonly (File | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: ts.server.Session): void {
+export function openFilesForSession(files: readonly (string | File | { readonly file: File | string, readonly projectRootPath: string, content?: string })[], session: TestSession): void {
     for (const file of files) {
-        session.executeCommand(makeSessionRequest<protocol.OpenRequestArgs>(CommandNames.Open,
-            "projectRootPath" in file ? { file: typeof file.file === "string" ? file.file : file.file.path, projectRootPath: file.projectRootPath } : { file: file.path })); // eslint-disable-line local/no-in-operator
+        session.executeCommandSeq<ts.server.protocol.OpenRequest>({
+            command: ts.server.CommandNames.Open,
+            arguments: ts.isString(file) ?
+                { file } :
+                "projectRootPath" in file ? // eslint-disable-line local/no-in-operator
+                    {
+                        file: typeof file.file === "string" ? file.file : file.file.path,
+                        projectRootPath: file.projectRootPath
+                    } :
+                    { file: file.path }
+        });
     }
 }
 
-export function closeFilesForSession(files: readonly File[], session: ts.server.Session): void {
+export function closeFilesForSession(files: readonly File[], session: TestSession): void {
     for (const file of files) {
-        session.executeCommand(makeSessionRequest<protocol.FileRequestArgs>(CommandNames.Close, { file: file.path }));
+        session.executeCommandSeq<ts.server.protocol.CloseRequest>({
+            command: ts.server.CommandNames.Close,
+            arguments: { file: file.path }
+        });
     }
-}
-
-export interface MakeReferenceItem extends DocumentSpanFromSubstring {
-    isDefinition?: boolean;
-    isWriteAccess?: boolean;
-    lineText?: string;
-}
-
-export function makeReferenceItem({ isDefinition, isWriteAccess, lineText, ...rest }: MakeReferenceItem): protocol.ReferencesResponseItem {
-    return {
-        ...protocolFileSpanWithContextFromSubstring(rest),
-        isDefinition,
-        isWriteAccess: isWriteAccess === undefined ? !!isDefinition : isWriteAccess,
-        lineText,
-    };
 }
 
 export interface VerifyGetErrRequestBase {
@@ -836,8 +773,8 @@ export interface VerifyGetErrRequest extends VerifyGetErrRequestBase {
 }
 export function verifyGetErrRequest(request: VerifyGetErrRequest) {
     const { session, files } = request;
-    session.executeCommandSeq<protocol.GeterrRequest>({
-        command: protocol.CommandTypes.Geterr,
+    session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
+        command: ts.server.protocol.CommandTypes.Geterr,
         arguments: { delay: 0, files: files.map(filePath) }
     });
     checkAllErrors(request);
@@ -885,8 +822,8 @@ function verifyErrorsUsingGeterrForProject({ scenario, subScenario, allFiles, op
         openFilesForSession(openFiles(), session);
 
         for (const expected of getErrForProjectRequest()) {
-            session.executeCommandSeq<protocol.GeterrForProjectRequest>({
-                command: protocol.CommandTypes.GeterrForProject,
+            session.executeCommandSeq<ts.server.protocol.GeterrForProjectRequest>({
+                command: ts.server.protocol.CommandTypes.GeterrForProject,
                 arguments: { delay: 0, file: filePath(expected.project) }
             });
             checkAllErrors({ session, host, files: expected.files });
@@ -902,16 +839,16 @@ function verifyErrorsUsingSyncMethods({ scenario, subScenario, allFiles, openFil
         openFilesForSession(openFiles(), session);
         for (const { file, project } of syncDiagnostics()) {
             const reqArgs = { file: filePath(file), projectFileName: project && filePath(project) };
-            session.executeCommandSeq<protocol.SyntacticDiagnosticsSyncRequest>({
-                command: protocol.CommandTypes.SyntacticDiagnosticsSync,
+            session.executeCommandSeq<ts.server.protocol.SyntacticDiagnosticsSyncRequest>({
+                command: ts.server.protocol.CommandTypes.SyntacticDiagnosticsSync,
                 arguments: reqArgs
             });
-            session.executeCommandSeq<protocol.SemanticDiagnosticsSyncRequest>({
-                command: protocol.CommandTypes.SemanticDiagnosticsSync,
+            session.executeCommandSeq<ts.server.protocol.SemanticDiagnosticsSyncRequest>({
+                command: ts.server.protocol.CommandTypes.SemanticDiagnosticsSync,
                 arguments: reqArgs
             });
-            session.executeCommandSeq<protocol.SuggestionDiagnosticsSyncRequest>({
-                command: protocol.CommandTypes.SuggestionDiagnosticsSync,
+            session.executeCommandSeq<ts.server.protocol.SuggestionDiagnosticsSyncRequest>({
+                command: ts.server.protocol.CommandTypes.SuggestionDiagnosticsSync,
                 arguments: reqArgs
             });
         }
@@ -948,9 +885,9 @@ export function verifyDynamic(service: ts.server.ProjectService, path: string) {
     assert.isTrue(info.isDynamic);
 }
 
-export function createHostWithSolutionBuild(files: readonly ts.TestFSWithWatch.FileOrFolderOrSymLink[], rootNames: readonly string[]) {
-    const host = ts.projectSystem.createServerHost(files);
+export function createHostWithSolutionBuild(files: readonly FileOrFolderOrSymLink[], rootNames: readonly string[]) {
+    const host = createServerHost(files);
     // ts build should succeed
-    ts.tscWatch.ensureErrorFreeBuild(host, rootNames);
+    ensureErrorFreeBuild(host, rootNames);
     return host;
 }

@@ -1,12 +1,12 @@
 Info 0    [00:00:13.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:14.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/a/b/commonFile1.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/b/commonFile1.ts]
@@ -80,12 +80,12 @@ Info 13   [00:00:32.000] response:
     }
 Info 14   [00:00:33.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "semanticDiagnosticsSync",
       "arguments": {
         "file": "/a/b/commonFile1.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -120,19 +120,6 @@ Info 15   [00:00:34.000] response:
       "response": [
         {
           "start": {
-            "line": 2,
-            "offset": 29
-          },
-          "end": {
-            "line": 2,
-            "offset": 30
-          },
-          "text": "Cannot find name 'y'.",
-          "code": 2304,
-          "category": "error"
-        },
-        {
-          "start": {
             "line": 1,
             "offset": 22
           },
@@ -142,6 +129,19 @@ Info 15   [00:00:34.000] response:
           },
           "text": "File '/a/b/commonFile2.ts' not found.",
           "code": 6053,
+          "category": "error"
+        },
+        {
+          "start": {
+            "line": 2,
+            "offset": 29
+          },
+          "end": {
+            "line": 2,
+            "offset": 30
+          },
+          "text": "Cannot find name 'y'.",
+          "code": 2304,
           "category": "error"
         }
       ],
@@ -219,12 +219,12 @@ FsWatchesRecursive::
 
 Info 31   [00:01:04.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "semanticDiagnosticsSync",
       "arguments": {
         "file": "/a/b/commonFile1.ts"
-      }
+      },
+      "seq": 3,
+      "type": "request"
     }
 Before request
 

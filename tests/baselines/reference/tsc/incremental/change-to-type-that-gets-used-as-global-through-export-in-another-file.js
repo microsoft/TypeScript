@@ -50,8 +50,8 @@ export default _default;
 
 //// [/src/project/constants.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = 1;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = 1;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
@@ -167,8 +167,8 @@ export default _default;
 
 //// [/src/project/constants.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = 2;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = 2;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]

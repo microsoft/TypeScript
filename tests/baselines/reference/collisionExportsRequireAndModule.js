@@ -94,7 +94,7 @@ module m4 {
 //// [collisionExportsRequireAndModule_externalmodule.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.foo2 = exports.exports = exports.foo = exports.require = void 0;
     var require;
     (function (require) {

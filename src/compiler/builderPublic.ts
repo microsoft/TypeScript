@@ -1,17 +1,26 @@
 import {
-    BuilderProgramKind, CancellationToken, CompilerHost, CompilerOptions, createBuilderProgram,
-    createRedirectedBuilderProgram, CustomTransformers, Diagnostic, DiagnosticWithLocation, EmitResult,
-    getBuilderCreationParameters, Program, ProjectReference, ReusableBuilderProgramState, SavedBuildProgramEmitState,
-    SourceFile, WriteFileCallback,
+    BuilderProgramKind,
+    CancellationToken,
+    CompilerHost,
+    CompilerOptions,
+    createBuilderProgram,
+    createRedirectedBuilderProgram,
+    CustomTransformers,
+    Diagnostic,
+    DiagnosticWithLocation,
+    EmitResult,
+    getBuilderCreationParameters,
+    Program,
+    ProjectReference,
+    ReusableBuilderProgramState,
+    SavedBuildProgramEmitState,
+    SourceFile,
+    WriteFileCallback,
 } from "./_namespaces/ts";
 
 export type AffectedFileResult<T> = { result: T; affected: SourceFile | Program; } | undefined;
 
 export interface BuilderProgramHost {
-    /**
-     * return true if file names are treated with case sensitivity
-     */
-    useCaseSensitiveFileNames(): boolean;
     /**
      * If provided this would be used this hash instead of actual file shape text for detecting changes
      */
@@ -22,24 +31,15 @@ export interface BuilderProgramHost {
      */
     writeFile?: WriteFileCallback;
     /**
-     * disable using source file version as signature for testing
-     *
-     * @internal
-     */
-    disableUseFileVersionAsSignature?: boolean;
-    /**
      * Store the list of files that update signature during the emit
      *
      * @internal
      */
     storeFilesChangingSignatureDuringEmit?: boolean;
-    /**
-     * Gets the current time
-     *
-     * @internal
-     */
-    now?(): Date;
 }
+
+/** @internal */
+export type HostForComputeHash = Pick<BuilderProgramHost, "createHash">;
 
 /**
  * Builder to manage the program state changes

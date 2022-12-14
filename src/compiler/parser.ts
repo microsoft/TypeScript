@@ -1,69 +1,388 @@
 import * as ts from "./_namespaces/ts";
 import {
-    AccessorDeclaration, addRange, addRelatedInfo, AmdDependency, append, ArrayBindingElement, ArrayBindingPattern,
-    ArrayLiteralExpression, ArrayTypeNode, ArrowFunction, AsExpression, AssertClause, AssertEntry, AssertionLevel,
-    AsteriskToken, attachFileToDiagnostics, AwaitExpression, BaseNodeFactory, BinaryExpression, BinaryOperatorToken,
-    BindingElement, BindingName, BindingPattern, Block, BooleanLiteral, BreakOrContinueStatement, BreakStatement,
-    CallExpression, CallSignatureDeclaration, canHaveModifiers, CaseBlock, CaseClause, CaseOrDefaultClause, CatchClause,
-    CharacterCodes, CheckJsDirective, ClassDeclaration, ClassElement, ClassExpression, ClassLikeDeclaration,
-    ClassStaticBlockDeclaration, CommaListExpression, CommentDirective, commentPragmas, CommentRange,
-    ComputedPropertyName, concatenate, ConditionalExpression, ConditionalTypeNode, ConstructorDeclaration,
-    ConstructorTypeNode, ConstructSignatureDeclaration, containsParseError, ContinueStatement, convertToObjectWorker,
-    createDetachedDiagnostic, createNodeFactory, createScanner, createTextChangeRange, createTextSpanFromBounds, Debug,
-    Decorator, DefaultClause, DeleteExpression, Diagnostic, DiagnosticMessage, Diagnostics,
-    DiagnosticWithDetachedLocation, DoStatement, DotDotDotToken, ElementAccessExpression, emptyArray, emptyMap,
-    EndOfFileToken, ensureScriptKind, EntityName, EnumDeclaration, EnumMember, ESMap, ExclamationToken,
-    ExportAssignment, ExportDeclaration, ExportSpecifier, Expression, ExpressionStatement, ExpressionWithTypeArguments,
-    ExternalModuleReference, fileExtensionIsOneOf, FileReference, findIndex, forEach, ForEachChildNodes,
-    ForInOrOfStatement, ForInStatement, ForOfStatement, ForStatement, FunctionDeclaration, FunctionExpression,
-    FunctionOrConstructorTypeNode, FunctionTypeNode, GetAccessorDeclaration, getBinaryOperatorPrecedence, getFullWidth,
-    getJSDocCommentRanges, getLanguageVariant, getLastChild, getLeadingCommentRanges, getSpellingSuggestion,
-    getTextOfNodeFromSourceText, HasJSDoc, hasJSDocNodes, HasModifiers, HeritageClause, Identifier, idText, IfStatement,
-    ImportClause, ImportDeclaration, ImportEqualsDeclaration, ImportOrExportSpecifier, ImportSpecifier,
-    ImportTypeAssertionContainer, ImportTypeNode, IndexedAccessTypeNode, IndexSignatureDeclaration, InferTypeNode,
-    InterfaceDeclaration, IntersectionTypeNode, isArray, isAssignmentOperator, isAsyncModifier, isClassMemberModifier,
-    isExportAssignment, isExportDeclaration, isExportModifier, isExpressionWithTypeArguments, isExternalModuleReference,
-    isFunctionTypeNode, isIdentifierText, isImportDeclaration, isImportEqualsDeclaration, isJSDocFunctionType,
-    isJSDocNullableType, isJSDocReturnTag, isJSDocTypeTag, isJsxOpeningElement, isJsxOpeningFragment, isKeyword,
-    isLeftHandSideExpression, isLiteralKind, isMetaProperty, isModifierKind, isNonNullExpression, isPrivateIdentifier,
-    isSetAccessorDeclaration, isStringOrNumericLiteralLike, isTaggedTemplateExpression, isTemplateLiteralKind,
-    isTypeReferenceNode, IterationStatement, JSDoc, JSDocAllType, JSDocAugmentsTag, JSDocAuthorTag, JSDocCallbackTag,
-    JSDocClassTag, JSDocComment, JSDocContainer, JSDocDeprecatedTag, JSDocEnumTag, JSDocFunctionType,
-    JSDocImplementsTag, JSDocLink, JSDocLinkCode, JSDocLinkPlain, JSDocMemberName, JSDocNameReference,
-    JSDocNamespaceDeclaration, JSDocNonNullableType, JSDocNullableType, JSDocOptionalType, JSDocOverrideTag,
-    JSDocParameterTag, JSDocPrivateTag, JSDocPropertyLikeTag, JSDocPropertyTag, JSDocProtectedTag, JSDocPublicTag,
-    JSDocReadonlyTag, JSDocReturnTag, JSDocSeeTag, JSDocSignature, JSDocSyntaxKind, JSDocTag, JSDocTemplateTag,
-    JSDocText, JSDocThisTag, JSDocTypedefTag, JSDocTypeExpression, JSDocTypeLiteral, JSDocTypeTag, JSDocUnknownTag,
-    JSDocUnknownType, JSDocVariadicType, JsonMinusNumericLiteral, JsonObjectExpressionStatement, JsonSourceFile,
-    JsxAttribute, JsxAttributes, JsxAttributeValue, JsxChild, JsxClosingElement, JsxClosingFragment, JsxElement,
-    JsxExpression, JsxFragment, JsxOpeningElement, JsxOpeningFragment, JsxOpeningLikeElement, JsxSelfClosingElement,
-    JsxSpreadAttribute, JsxTagNameExpression, JsxTagNamePropertyAccess, JsxText, JsxTokenSyntaxKind, LabeledStatement,
-    LanguageVariant, lastOrUndefined, LeftHandSideExpression, LiteralExpression, LiteralLikeNode, LiteralTypeNode, map,
-    Map, mapDefined, MappedTypeNode, MemberExpression, MetaProperty, MethodDeclaration, MethodSignature, MinusToken,
-    MissingDeclaration, Modifier, ModifierFlags, ModifierLike, ModifiersArray, modifiersToFlags, ModuleBlock,
-    ModuleDeclaration, ModuleKind, Mutable, NamedExportBindings, NamedExports, NamedImports, NamedImportsOrExports,
-    NamedTupleMember, NamespaceDeclaration, NamespaceExport, NamespaceExportDeclaration, NamespaceImport, NewExpression,
-    Node, NodeArray, NodeFactoryFlags, NodeFlags, nodeIsMissing, nodeIsPresent, NonNullExpression, noop, normalizePath,
-    NoSubstitutionTemplateLiteral, NullLiteral, NumericLiteral, objectAllocator, ObjectBindingPattern,
-    ObjectLiteralElementLike, ObjectLiteralExpression, OperatorPrecedence, OptionalTypeNode, PackageJsonInfo,
-    ParameterDeclaration, ParenthesizedExpression, ParenthesizedTypeNode, PartiallyEmittedExpression, perfLogger,
-    PlusToken, PostfixUnaryExpression, PostfixUnaryOperator, PragmaDefinition, PragmaKindFlags, PragmaMap,
-    PragmaPseudoMap, PragmaPseudoMapEntry, PrefixUnaryExpression, PrefixUnaryOperator, PrimaryExpression,
-    PrivateIdentifier, PropertyAccessEntityNameExpression, PropertyAccessExpression, PropertyAssignment,
-    PropertyDeclaration, PropertyName, PropertySignature, QualifiedName, QuestionDotToken, QuestionToken,
-    ReadonlyKeyword, ReadonlyPragmaMap, ReadonlyTextRange, RestTypeNode, ReturnStatement, SatisfiesExpression,
-    ScriptKind, ScriptTarget, Set, SetAccessorDeclaration, setParent, setParentRecursive, setTextRange, setTextRangePos,
-    setTextRangePosEnd, setTextRangePosWidth, ShorthandPropertyAssignment, skipTrivia, some, SourceFile,
-    SpreadAssignment, SpreadElement, startsWith, Statement, StringLiteral, supportedDeclarationExtensions,
-    SwitchStatement, SyntaxKind, TaggedTemplateExpression, TemplateExpression, TemplateHead, TemplateLiteralToken,
-    TemplateLiteralTypeNode, TemplateLiteralTypeSpan, TemplateMiddle, TemplateSpan, TemplateTail, TextChangeRange,
-    textChangeRangeIsUnchanged, textChangeRangeNewSpan, TextRange, textSpanEnd, textToKeywordObj, ThisExpression,
-    ThisTypeNode, ThrowStatement, toArray, Token, TokenFlags, tokenIsIdentifierOrKeyword,
-    tokenIsIdentifierOrKeywordOrGreaterThan, tokenToString, tracing, TransformFlags, trimString, TryStatement,
-    TupleTypeNode, TypeAliasDeclaration, TypeAssertion, TypeElement, TypeLiteralNode, TypeNode, TypeOfExpression,
-    TypeOperatorNode, TypeParameterDeclaration, TypePredicateNode, TypeQueryNode, TypeReferenceNode, UnaryExpression,
-    UnionOrIntersectionTypeNode, UnionTypeNode, UpdateExpression, VariableDeclaration, VariableDeclarationList,
-    VariableStatement, VoidExpression, WhileStatement, WithStatement, YieldExpression,
+    AccessorDeclaration,
+    addRange,
+    addRelatedInfo,
+    append,
+    ArrayBindingElement,
+    ArrayBindingPattern,
+    ArrayLiteralExpression,
+    ArrayTypeNode,
+    ArrowFunction,
+    AsExpression,
+    AssertClause,
+    AssertEntry,
+    AssertionLevel,
+    AsteriskToken,
+    attachFileToDiagnostics,
+    AwaitExpression,
+    BaseNodeFactory,
+    BinaryExpression,
+    BinaryOperatorToken,
+    BindingElement,
+    BindingName,
+    BindingPattern,
+    Block,
+    BooleanLiteral,
+    BreakOrContinueStatement,
+    BreakStatement,
+    CallExpression,
+    CallSignatureDeclaration,
+    canHaveJSDoc,
+    canHaveModifiers,
+    CaseBlock,
+    CaseClause,
+    CaseOrDefaultClause,
+    CatchClause,
+    CharacterCodes,
+    ClassDeclaration,
+    ClassElement,
+    ClassExpression,
+    ClassLikeDeclaration,
+    ClassStaticBlockDeclaration,
+    CommaListExpression,
+    CommentDirective,
+    commentPragmas,
+    CommentRange,
+    ComputedPropertyName,
+    concatenate,
+    ConditionalExpression,
+    ConditionalTypeNode,
+    ConstructorDeclaration,
+    ConstructorTypeNode,
+    ConstructSignatureDeclaration,
+    containsParseError,
+    ContinueStatement,
+    convertToObjectWorker,
+    createDetachedDiagnostic,
+    createNodeFactory,
+    createScanner,
+    createTextChangeRange,
+    createTextSpanFromBounds,
+    Debug,
+    Decorator,
+    DefaultClause,
+    DeleteExpression,
+    Diagnostic,
+    DiagnosticMessage,
+    Diagnostics,
+    DiagnosticWithDetachedLocation,
+    DoStatement,
+    DotDotDotToken,
+    ElementAccessExpression,
+    emptyArray,
+    emptyMap,
+    EndOfFileToken,
+    ensureScriptKind,
+    EntityName,
+    EnumDeclaration,
+    EnumMember,
+    ExclamationToken,
+    ExportAssignment,
+    ExportDeclaration,
+    ExportSpecifier,
+    Expression,
+    ExpressionStatement,
+    ExpressionWithTypeArguments,
+    ExternalModuleReference,
+    fileExtensionIsOneOf,
+    findIndex,
+    forEach,
+    ForEachChildNodes,
+    ForInOrOfStatement,
+    ForInStatement,
+    ForOfStatement,
+    ForStatement,
+    FunctionDeclaration,
+    FunctionExpression,
+    FunctionOrConstructorTypeNode,
+    FunctionTypeNode,
+    GetAccessorDeclaration,
+    getBinaryOperatorPrecedence,
+    getFullWidth,
+    getJSDocCommentRanges,
+    getLanguageVariant,
+    getLastChild,
+    getLeadingCommentRanges,
+    getSpellingSuggestion,
+    getTextOfNodeFromSourceText,
+    HasJSDoc,
+    hasJSDocNodes,
+    HasModifiers,
+    HeritageClause,
+    Identifier,
+    idText,
+    IfStatement,
+    ImportClause,
+    ImportDeclaration,
+    ImportEqualsDeclaration,
+    ImportOrExportSpecifier,
+    ImportSpecifier,
+    ImportTypeAssertionContainer,
+    ImportTypeNode,
+    IndexedAccessTypeNode,
+    IndexSignatureDeclaration,
+    InferTypeNode,
+    InterfaceDeclaration,
+    IntersectionTypeNode,
+    isArray,
+    isAssignmentOperator,
+    isAsyncModifier,
+    isClassMemberModifier,
+    isExportAssignment,
+    isExportDeclaration,
+    isExportModifier,
+    isExpressionWithTypeArguments,
+    isExternalModuleReference,
+    isFunctionTypeNode,
+    isIdentifierText,
+    isImportDeclaration,
+    isImportEqualsDeclaration,
+    isJSDocFunctionType,
+    isJSDocNullableType,
+    isJSDocReturnTag,
+    isJSDocTypeTag,
+    isJsxOpeningElement,
+    isJsxOpeningFragment,
+    isKeyword,
+    isLeftHandSideExpression,
+    isLiteralKind,
+    isMetaProperty,
+    isModifierKind,
+    isNonNullExpression,
+    isPrivateIdentifier,
+    isSetAccessorDeclaration,
+    isStringOrNumericLiteralLike,
+    isTaggedTemplateExpression,
+    isTemplateLiteralKind,
+    isTypeReferenceNode,
+    IterationStatement,
+    JSDoc,
+    JSDocAllType,
+    JSDocAugmentsTag,
+    JSDocAuthorTag,
+    JSDocCallbackTag,
+    JSDocClassTag,
+    JSDocComment,
+    JSDocDeprecatedTag,
+    JSDocEnumTag,
+    JSDocFunctionType,
+    JSDocImplementsTag,
+    JSDocLink,
+    JSDocLinkCode,
+    JSDocLinkPlain,
+    JSDocMemberName,
+    JSDocNameReference,
+    JSDocNamespaceDeclaration,
+    JSDocNonNullableType,
+    JSDocNullableType,
+    JSDocOptionalType,
+    JSDocOverloadTag,
+    JSDocOverrideTag,
+    JSDocParameterTag,
+    JSDocPrivateTag,
+    JSDocPropertyLikeTag,
+    JSDocPropertyTag,
+    JSDocProtectedTag,
+    JSDocPublicTag,
+    JSDocReadonlyTag,
+    JSDocReturnTag,
+    JSDocSeeTag,
+    JSDocSignature,
+    JSDocSyntaxKind,
+    JSDocTag,
+    JSDocTemplateTag,
+    JSDocText,
+    JSDocThisTag,
+    JSDocThrowsTag,
+    JSDocTypedefTag,
+    JSDocTypeExpression,
+    JSDocTypeLiteral,
+    JSDocTypeTag,
+    JSDocUnknownTag,
+    JSDocUnknownType,
+    JSDocVariadicType,
+    JsonMinusNumericLiteral,
+    JsonObjectExpressionStatement,
+    JsonSourceFile,
+    JsxAttribute,
+    JsxAttributes,
+    JsxAttributeValue,
+    JsxChild,
+    JsxClosingElement,
+    JsxClosingFragment,
+    JsxElement,
+    JsxExpression,
+    JsxFragment,
+    JsxOpeningElement,
+    JsxOpeningFragment,
+    JsxOpeningLikeElement,
+    JsxSelfClosingElement,
+    JsxSpreadAttribute,
+    JsxTagNameExpression,
+    JsxTagNamePropertyAccess,
+    JsxText,
+    JsxTokenSyntaxKind,
+    LabeledStatement,
+    LanguageVariant,
+    lastOrUndefined,
+    LeftHandSideExpression,
+    LiteralExpression,
+    LiteralLikeNode,
+    LiteralTypeNode,
+    map,
+    mapDefined,
+    MappedTypeNode,
+    MemberExpression,
+    MetaProperty,
+    MethodDeclaration,
+    MethodSignature,
+    MinusToken,
+    MissingDeclaration,
+    Modifier,
+    ModifierFlags,
+    ModifierLike,
+    ModifiersArray,
+    modifiersToFlags,
+    ModuleBlock,
+    ModuleDeclaration,
+    ModuleKind,
+    Mutable,
+    NamedExportBindings,
+    NamedExports,
+    NamedImports,
+    NamedImportsOrExports,
+    NamedTupleMember,
+    NamespaceDeclaration,
+    NamespaceExport,
+    NamespaceExportDeclaration,
+    NamespaceImport,
+    NewExpression,
+    Node,
+    NodeArray,
+    NodeFactoryFlags,
+    NodeFlags,
+    nodeIsMissing,
+    nodeIsPresent,
+    NonNullExpression,
+    noop,
+    normalizePath,
+    NoSubstitutionTemplateLiteral,
+    NullLiteral,
+    NumericLiteral,
+    objectAllocator,
+    ObjectBindingPattern,
+    ObjectLiteralElementLike,
+    ObjectLiteralExpression,
+    OperatorPrecedence,
+    OptionalTypeNode,
+    PackageJsonInfo,
+    ParameterDeclaration,
+    ParenthesizedExpression,
+    ParenthesizedTypeNode,
+    PartiallyEmittedExpression,
+    perfLogger,
+    PlusToken,
+    PostfixUnaryExpression,
+    PostfixUnaryOperator,
+    PragmaContext,
+    PragmaDefinition,
+    PragmaKindFlags,
+    PragmaMap,
+    PragmaPseudoMap,
+    PragmaPseudoMapEntry,
+    PrefixUnaryExpression,
+    PrefixUnaryOperator,
+    PrimaryExpression,
+    PrivateIdentifier,
+    PropertyAccessEntityNameExpression,
+    PropertyAccessExpression,
+    PropertyAssignment,
+    PropertyDeclaration,
+    PropertyName,
+    PropertySignature,
+    QualifiedName,
+    QuestionDotToken,
+    QuestionToken,
+    ReadonlyKeyword,
+    ReadonlyPragmaMap,
+    ReadonlyTextRange,
+    ResolutionMode,
+    RestTypeNode,
+    ReturnStatement,
+    SatisfiesExpression,
+    ScriptKind,
+    ScriptTarget,
+    SetAccessorDeclaration,
+    setParent,
+    setParentRecursive,
+    setTextRange,
+    setTextRangePos,
+    setTextRangePosEnd,
+    setTextRangePosWidth,
+    ShorthandPropertyAssignment,
+    skipTrivia,
+    some,
+    SourceFile,
+    SpreadAssignment,
+    SpreadElement,
+    startsWith,
+    Statement,
+    StringLiteral,
+    supportedDeclarationExtensions,
+    SwitchStatement,
+    SyntaxKind,
+    TaggedTemplateExpression,
+    TemplateExpression,
+    TemplateHead,
+    TemplateLiteralToken,
+    TemplateLiteralTypeNode,
+    TemplateLiteralTypeSpan,
+    TemplateMiddle,
+    TemplateSpan,
+    TemplateTail,
+    TextChangeRange,
+    textChangeRangeIsUnchanged,
+    textChangeRangeNewSpan,
+    TextRange,
+    textSpanEnd,
+    textToKeywordObj,
+    ThisExpression,
+    ThisTypeNode,
+    ThrowStatement,
+    toArray,
+    Token,
+    TokenFlags,
+    tokenIsIdentifierOrKeyword,
+    tokenIsIdentifierOrKeywordOrGreaterThan,
+    tokenToString,
+    tracing,
+    TransformFlags,
+    trimString,
+    TryStatement,
+    TupleTypeNode,
+    TypeAliasDeclaration,
+    TypeAssertion,
+    TypeElement,
+    TypeLiteralNode,
+    TypeNode,
+    TypeOfExpression,
+    TypeOperatorNode,
+    TypeParameterDeclaration,
+    TypePredicateNode,
+    TypeQueryNode,
+    TypeReferenceNode,
+    UnaryExpression,
+    UnionOrIntersectionTypeNode,
+    UnionTypeNode,
+    UpdateExpression,
+    VariableDeclaration,
+    VariableDeclarationList,
+    VariableStatement,
+    VoidExpression,
+    WhileStatement,
+    WithStatement,
+    YieldExpression,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 
@@ -781,10 +1100,11 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.typeExpression) ||
             (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     },
-    [SyntaxKind.JSDocReturnTag]: forEachChildInJSDocReturnTag,
-    [SyntaxKind.JSDocTypeTag]: forEachChildInJSDocReturnTag,
-    [SyntaxKind.JSDocThisTag]: forEachChildInJSDocReturnTag,
-    [SyntaxKind.JSDocEnumTag]: forEachChildInJSDocReturnTag,
+    [SyntaxKind.JSDocReturnTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocTypeTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocThisTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocEnumTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocThrowsTag]: forEachChildInJSDocTypeLikeTag,
     [SyntaxKind.JSDocSignature]: function forEachChildInJSDocSignature<T>(node: JSDocSignature, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return forEach(node.typeParameters, cbNode) ||
             forEach(node.parameters, cbNode) ||
@@ -878,7 +1198,7 @@ function forEachChildInJSDocParameterOrPropertyTag<T>(node: JSDocParameterTag | 
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
 
-function forEachChildInJSDocReturnTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInJSDocTypeLikeTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocThrowsTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
     return visitNode(cbNode, node.tagName) ||
         visitNode(cbNode, node.typeExpression) ||
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
@@ -989,7 +1309,7 @@ export interface CreateSourceFileOptions {
      * and files on disk, but needs to be done with a module resolution cache in scope to be performant.
      * This is usually `undefined` for compilations that do not have `moduleResolution` values of `node16` or `nodenext`.
      */
-    impliedNodeFormat?: ModuleKind.ESNext | ModuleKind.CommonJS;
+    impliedNodeFormat?: ResolutionMode;
     /**
      * Controls how module-y-ness is set for the given file. Usually the result of calling
      * `getSetExternalModuleIndicator` on a valid `CompilerOptions` object. If not present, the default
@@ -1132,8 +1452,8 @@ namespace Parser {
 
     let currentToken: SyntaxKind;
     let nodeCount: number;
-    let identifiers: ESMap<string, string>;
-    let privateIdentifiers: ESMap<string, string>;
+    let identifiers: Map<string, string>;
+    let privateIdentifiers: Map<string, string>;
     let identifierCount: number;
 
     let parsingContext: ParsingContext;
@@ -1320,7 +1640,7 @@ namespace Parser {
             const statement = factory.createExpressionStatement(expression) as JsonObjectExpressionStatement;
             finishNode(statement, pos);
             statements = createNodeArray([statement], pos);
-            endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token);
+            endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token) as EndOfFileToken;
         }
 
         // Set source file so that errors will be reported with this file name
@@ -2747,9 +3067,9 @@ namespace Parser {
             return undefined;
         }
 
-        if ((node as JSDocContainer).jsDocCache) {
+        if (canHaveJSDoc(node) && node.jsDocCache) {
             // jsDocCache may include tags from parent nodes, which might have been modified.
-            (node as JSDocContainer).jsDocCache = undefined;
+            node.jsDocCache = undefined;
         }
 
         return node;
@@ -8463,8 +8783,15 @@ namespace Parser {
                     case "callback":
                         tag = parseCallbackTag(start, tagName, margin, indentText);
                         break;
+                    case "overload":
+                        tag = parseOverloadTag(start, tagName, margin, indentText);
+                        break;
                     case "see":
                         tag = parseSeeTag(start, tagName, margin, indentText);
+                        break;
+                    case "exception":
+                    case "throws":
+                        tag = parseThrowsTag(start, tagName, margin, indentText);
                         break;
                     default:
                         tag = parseUnknownTag(start, tagName, margin, indentText);
@@ -8771,6 +9098,12 @@ namespace Parser {
                 return finishNode(factory.createJSDocSeeTag(tagName, nameExpression, comments), start);
             }
 
+            function parseThrowsTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocThrowsTag {
+                const typeExpression = tryParseTypeExpression();
+                const comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
+                return finishNode(factory.createJSDocThrowsTag(tagName, typeExpression, comment), start);
+            }
+
             function parseAuthorTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocAuthorTag {
                 const commentStart = getNodePos();
                 const textOnly = parseAuthorNameAndEmail();
@@ -8946,10 +9279,7 @@ namespace Parser {
                 return createNodeArray(parameters || [], pos);
             }
 
-            function parseCallbackTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocCallbackTag {
-                const fullName = parseJSDocTypeNameWithNamespace();
-                skipWhitespace();
-                let comment = parseTagComments(indent);
+            function parseJSDocSignature(start: number, indent: number): JSDocSignature {
                 const parameters = parseCallbackTagParameters(indent);
                 const returnTag = tryParse(() => {
                     if (parseOptionalJsdoc(SyntaxKind.AtToken)) {
@@ -8959,12 +9289,30 @@ namespace Parser {
                         }
                     }
                 });
-                const typeExpression = finishNode(factory.createJSDocSignature(/*typeParameters*/ undefined, parameters, returnTag), start);
+                return finishNode(factory.createJSDocSignature(/*typeParameters*/ undefined, parameters, returnTag), start);
+            }
+
+            function parseCallbackTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocCallbackTag {
+                const fullName = parseJSDocTypeNameWithNamespace();
+                skipWhitespace();
+                let comment = parseTagComments(indent);
+                const typeExpression = parseJSDocSignature(start, indent);
                 if (!comment) {
                     comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
                 }
                 const end = comment !== undefined ? getNodePos() : typeExpression.end;
                 return finishNode(factory.createJSDocCallbackTag(tagName, typeExpression, fullName, comment), start, end);
+            }
+
+            function parseOverloadTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocOverloadTag {
+                skipWhitespace();
+                let comment = parseTagComments(indent);
+                const typeExpression = parseJSDocSignature(start, indent);
+                if (!comment) {
+                    comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
+                }
+                const end = comment !== undefined ? getNodePos() : typeExpression.end;
+                return finishNode(factory.createJSDocOverloadTag(tagName, typeExpression, comment), start, end);
             }
 
             function escapedTextsEqual(a: EntityName, b: EntityName): boolean {
@@ -9778,20 +10126,7 @@ export function isDeclarationFileName(fileName: string): boolean {
     return fileExtensionIsOneOf(fileName, supportedDeclarationExtensions);
 }
 
-/** @internal */
-export interface PragmaContext {
-    languageVersion: ScriptTarget;
-    pragmas?: PragmaMap;
-    checkJsDirective?: CheckJsDirective;
-    referencedFiles: FileReference[];
-    typeReferenceDirectives: FileReference[];
-    libReferenceDirectives: FileReference[];
-    amdDependencies: AmdDependency[];
-    hasNoDefaultLib?: boolean;
-    moduleName?: string;
-}
-
-function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ModuleKind.ESNext | ModuleKind.CommonJS | undefined {
+function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ResolutionMode {
     if (!mode) {
         return undefined;
     }

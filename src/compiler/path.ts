@@ -1,7 +1,21 @@
 import {
-    CharacterCodes, compareStringsCaseInsensitive, compareStringsCaseSensitive, compareValues, Comparison, Debug,
-    endsWith, equateStringsCaseInsensitive, equateStringsCaseSensitive, GetCanonicalFileName, getStringComparer,
-    identity, lastOrUndefined, Path, some, startsWith, stringContains,
+    CharacterCodes,
+    compareStringsCaseInsensitive,
+    compareStringsCaseSensitive,
+    compareValues,
+    Comparison,
+    Debug,
+    endsWith,
+    equateStringsCaseInsensitive,
+    equateStringsCaseSensitive,
+    GetCanonicalFileName,
+    getStringComparer,
+    identity,
+    lastOrUndefined,
+    Path,
+    some,
+    startsWith,
+    stringContains,
 } from "./_namespaces/ts";
 
 /**

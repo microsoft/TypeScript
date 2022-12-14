@@ -49,7 +49,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.CKind = exports.BKind = exports.AKind = void 0;
 var kindCache = {};
 function register(kind) {

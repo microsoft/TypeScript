@@ -58,7 +58,7 @@ Info 15   [00:00:32.000] 	Files (3)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../file2.ts
 	  Imported via "file2" from file 'file1.ts'
 	file1.ts
@@ -149,7 +149,7 @@ Info 30   [00:00:55.000] 	Files (3)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	file2.ts
 	  Imported via "file2" from file 'file1.ts'
 	file1.ts

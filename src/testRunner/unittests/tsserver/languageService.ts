@@ -1,5 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
+import { createServerHost } from "../virtualFileSystemWithWatch";
+import { createProjectService } from "./helpers";
 
 describe("unittests:: tsserver:: languageService", () => {
     it("should work correctly on case-sensitive file systems", () => {
@@ -11,8 +13,8 @@ describe("unittests:: tsserver:: languageService", () => {
             path: "/a/b/app.ts",
             content: "let x = 1;"
         };
-        const host = ts.projectSystem.createServerHost([lib, f], { executingFilePath: "/a/Lib/tsc.js", useCaseSensitiveFileNames: true });
-        const projectService = ts.projectSystem.createProjectService(host);
+        const host = createServerHost([lib, f], { executingFilePath: "/a/Lib/tsc.js", useCaseSensitiveFileNames: true });
+        const projectService = createProjectService(host);
         projectService.openClientFile(f.path);
         projectService.checkNumberOfProjects({ inferredProjects: 1 });
         projectService.inferredProjects[0].getLanguageService().getProgram();
@@ -56,8 +58,8 @@ describe("unittests:: tsserver:: languageService", () => {
             }
         ];
 
-        const host = ts.projectSystem.createServerHost(files, { executingFilePath: "/project/tsc.js", useCaseSensitiveFileNames: true });
-        const projectService = ts.projectSystem.createProjectService(host);
+        const host = createServerHost(files, { executingFilePath: "/project/tsc.js", useCaseSensitiveFileNames: true });
+        const projectService = createProjectService(host);
         projectService.openClientFile(files[3].path);
         projectService.openClientFile(files[6].path);
         projectService.checkNumberOfProjects({ configuredProjects: 2 });

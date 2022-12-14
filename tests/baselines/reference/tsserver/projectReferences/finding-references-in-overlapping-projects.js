@@ -1,12 +1,12 @@
 Info 0    [00:00:44.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:45.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/solution/b/index.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/lib/lib.d.ts]
@@ -124,7 +124,7 @@ Info 22   [00:01:06.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../a/index.ts
 	  Source from referenced project '../a/tsconfig.json' included because '--module' is specified as 'none'
 	  Imported via "../a" from file 'index.ts'
@@ -187,7 +187,7 @@ Info 31   [00:01:24.000] request:
         "line": 4,
         "offset": 43
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Before request
@@ -233,7 +233,7 @@ Info 43   [00:01:36.000] 	Files (2)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	index.ts
 	  Part of 'files' list in tsconfig.json
 
@@ -326,7 +326,7 @@ Info 74   [00:02:07.000] 	Files (4)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../a/index.ts
 	  Imported via "../a" from file 'index.ts'
 	  Imported via "../a" from file '../b/index.ts'
@@ -362,7 +362,7 @@ Info 93   [00:02:26.000] 	Files (5)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../a/index.ts
 	  Imported via "../a" from file 'index.ts'
 	  Imported via "../a" from file '../c/index.ts'
@@ -589,7 +589,7 @@ Info 124  [00:02:57.000] request:
         "line": 4,
         "offset": 43
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Before request

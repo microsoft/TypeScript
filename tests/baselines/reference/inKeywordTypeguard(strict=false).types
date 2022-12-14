@@ -1056,3 +1056,34 @@ const checkIsTouchDevice = () =>
 >window : Window & typeof globalThis
 >navigator : Navigator
 
+// Repro from #51501
+
+function isHTMLTable<T extends object | null>(table: T): boolean {
+>isHTMLTable : <T extends object>(table: T) => boolean
+>null : null
+>table : T
+
+    return !!table && 'html' in table;
+>!!table && 'html' in table : boolean
+>!!table : boolean
+>!table : boolean
+>table : T
+>'html' in table : boolean
+>'html' : "html"
+>table : T
+}
+
+// Repro from #51549
+
+const f = <P extends object>(a: P & {}) => {
+>f : <P extends object>(a: P & {}) => void
+><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P & {}) => void
+>a : P & {}
+
+    "foo" in a;
+>"foo" in a : boolean
+>"foo" : "foo"
+>a : P & {}
+
+};
+

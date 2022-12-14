@@ -33,7 +33,7 @@ export class Test {
         return this.ranges().map(r => ts.createTextSpan(r.pos, r.end - r.pos));
     }
 
-    public rangesByText(): ts.ESMap<string, FourSlash.Range[]> {
+    public rangesByText(): Map<string, FourSlash.Range[]> {
         return this.state.rangesByText();
     }
 
@@ -488,6 +488,10 @@ export class Verify extends VerifyNegatable {
         this.state.verifyImportFixModuleSpecifiers(marker, moduleSpecifiers, preferences);
     }
 
+    public baselineAutoImports(marker: string, preferences?: ts.UserPreferences) {
+        this.state.baselineAutoImports(marker, preferences);
+    }
+
     public navigationBar(json: any, options?: { checkSpans?: boolean }) {
         this.state.verifyNavigationBar(json, options);
     }
@@ -626,8 +630,8 @@ export class Verify extends VerifyNegatable {
         this.state.noMoveToNewFile();
     }
 
-    public organizeImports(newContent: string, mode?: ts.OrganizeImportsMode): void {
-        this.state.verifyOrganizeImports(newContent, mode);
+    public organizeImports(newContent: string, mode?: ts.OrganizeImportsMode, preferences?: ts.UserPreferences): void {
+        this.state.verifyOrganizeImports(newContent, mode, preferences);
     }
 }
 

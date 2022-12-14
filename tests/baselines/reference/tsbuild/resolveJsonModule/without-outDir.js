@@ -119,9 +119,9 @@ export default _default;
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var hello_json_1 = __importDefault(require("./hello.json"));
-exports["default"] = hello_json_1["default"].hello;
+exports.default = hello_json_1.default.hello;
 
 
 //// [/src/tsconfig_withFiles.tsbuildinfo]
