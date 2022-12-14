@@ -23120,10 +23120,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const param = declaration as ParameterDeclaration;
                 let keywordKind: SyntaxKind | undefined;
                 if (isIdentifier(param.name) &&
-                        (isCallSignatureDeclaration(param.parent) || isMethodSignature(param.parent) || isFunctionTypeNode(param.parent)) &&
-                        param.parent.parameters.indexOf(param) > -1 &&
-                        (resolveName(param, param.name.escapedText, SymbolFlags.Type, undefined, param.name.escapedText, /*isUse*/ true) ||
-                        (keywordKind = stringToToken(param.name.escapedText as string)) && isTypeNodeKind(keywordKind))) {
+                    (isCallSignatureDeclaration(param.parent) || isMethodSignature(param.parent) || isFunctionTypeNode(param.parent)) &&
+                    param.parent.parameters.indexOf(param) > -1 &&
+                    (resolveName(param, param.name.escapedText, SymbolFlags.Type, undefined, param.name.escapedText, /*isUse*/ true) ||
+                    (keywordKind = stringToToken(param.name.escapedText as string)) && isTypeNodeKind(keywordKind))
+                    ) {
                     const newName = "arg" + param.parent.parameters.indexOf(param);
                     const typeName = declarationNameToString(param.name) + (param.dotDotDotToken ? "[]" : "");
                     errorOrSuggestion(noImplicitAny, declaration, Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1, newName, typeName);

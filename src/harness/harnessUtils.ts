@@ -206,7 +206,7 @@ export function sourceFileToJSON(file: ts.Node): string {
                     break;
 
                 case "hasExtendedUnicodeEscape":
-                    if ((n as ts.Identifier).hasExtendedUnicodeEscape) {
+                    if ((n as ts.Identifier | ts.LiteralLikeNode).hasExtendedUnicodeEscape) {
                         o.hasExtendedUnicodeEscape = true;
                     }
                     break;
