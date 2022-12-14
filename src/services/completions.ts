@@ -129,6 +129,7 @@ import {
     isCallExpression,
     isCaseBlock,
     isCaseClause,
+    isCaseKeyword,
     isCheckJsEnabledForFile,
     isClassElement,
     isClassLike,
@@ -195,6 +196,7 @@ import {
     isNamedImports,
     isNamedImportsOrExports,
     isNamespaceImport,
+    isNodeDescendantOf,
     isObjectBindingPattern,
     isObjectLiteralExpression,
     isObjectTypeDeclaration,
@@ -270,7 +272,7 @@ import {
     modifierToFlag,
     ModuleDeclaration,
     ModuleReference,
-    moduleResolutionRespectsExports,
+    moduleResolutionSupportsPackageJsonExportsAndImports,
     NamedImportBindings,
     Node,
     NodeArray,
@@ -295,6 +297,7 @@ import {
     PropertyAccessExpression,
     PropertyDeclaration,
     PropertyName,
+    PropertySignature,
     PseudoBigInt,
     pseudoBigIntToString,
     QualifiedName,
@@ -335,6 +338,7 @@ import {
     textPart,
     TextRange,
     TextSpan,
+    ThisContainer,
     timestamp,
     Token,
     TokenSyntaxKind,
@@ -434,6 +438,7 @@ export const enum SymbolOriginInfoKind {
     ResolvedExport      = 1 << 5,
     TypeOnlyAlias       = 1 << 6,
     ObjectLiteralMethod = 1 << 7,
+    Ignore              = 1 << 8,
 
     SymbolMemberNoExport = SymbolMember,
     SymbolMemberExport   = SymbolMember | Export,
@@ -512,6 +517,10 @@ function originIsObjectLiteralMethod(origin: SymbolOriginInfo | undefined): orig
     return !!(origin && origin.kind & SymbolOriginInfoKind.ObjectLiteralMethod);
 }
 
+function originIsIgnore(origin: SymbolOriginInfo | undefined): boolean {
+    return !!(origin && origin.kind & SymbolOriginInfoKind.Ignore);
+}
+
 /** @internal */
 export interface UniqueNameSet {
     add(name: string): void;
@@ -547,7 +556,7 @@ const enum KeywordCompletionFilters {
 
 const enum GlobalsSearch { Continue, Success, Fail }
 
-interface ModuleSpecifierResolutioContext {
+interface ModuleSpecifierResolutionContext {
     tryResolve: (exportInfo: readonly SymbolExportInfo[], symbolName: string, isFromAmbientModule: boolean) => ModuleSpecifierResolutionResult;
     resolvedAny: () => boolean;
     skippedAny: () => boolean;
@@ -568,7 +577,7 @@ function resolvingModuleSpecifiers<TReturn>(
     preferences: UserPreferences,
     isForImportStatementCompletion: boolean,
     isValidTypeOnlyUseSite: boolean,
-    cb: (context: ModuleSpecifierResolutioContext) => TReturn,
+    cb: (context: ModuleSpecifierResolutionContext) => TReturn,
 ): TReturn {
     const start = timestamp();
     // Under `--moduleResolution nodenext`, we have to resolve module specifiers up front, because
@@ -576,7 +585,7 @@ function resolvingModuleSpecifiers<TReturn>(
     // relative path into node_modules), and we want to filter those completions out entirely.
     // Import statement completions always need specifier resolution because the module specifier is
     // part of their `insertText`, not the `codeActions` creating edits away from the cursor.
-    const needsFullResolution = isForImportStatementCompletion || moduleResolutionRespectsExports(getEmitModuleResolutionKind(program.getCompilerOptions()));
+    const needsFullResolution = isForImportStatementCompletion || moduleResolutionSupportsPackageJsonExportsAndImports(getEmitModuleResolutionKind(program.getCompilerOptions()));
     let skippedAny = false;
     let ambientCount = 0;
     let resolvedCount = 0;
@@ -864,7 +873,6 @@ function completionInfoFromData(
         location,
         propertyAccessToConvert,
         keywordFilters,
-        literals,
         symbolToOriginInfoMap,
         recommendedCompletion,
         isJsxInitializer,
@@ -874,9 +882,12 @@ function completionInfoFromData(
         isRightOfDotOrQuestionDot,
         importStatementCompletion,
         insideJsDocTagTypeExpression,
-        symbolToSortTextMap: symbolToSortTextMap,
+        symbolToSortTextMap,
         hasUnresolvedAutoImports,
     } = completionData;
+    let literals = completionData.literals;
+
+    const checker = program.getTypeChecker();
 
     // Verify if the file is JSX language variant
     if (getLanguageVariant(sourceFile.scriptKind) === LanguageVariant.JSX) {
@@ -884,6 +895,25 @@ function completionInfoFromData(
         if (completionInfo) {
             return completionInfo;
         }
+    }
+
+    // When the completion is for the expression of a case clause (e.g. `case |`),
+    // filter literals & enum symbols whose values are already present in existing case clauses.
+    const caseClause = findAncestor(contextToken, isCaseClause);
+    if (caseClause && (isCaseKeyword(contextToken!) || isNodeDescendantOf(contextToken!, caseClause.expression))) {
+        const tracker = newCaseClauseTracker(checker, caseClause.parent.clauses);
+        literals = literals.filter(literal => !tracker.hasValue(literal));
+        // The `symbols` array cannot be filtered directly, because to each symbol at position i in `symbols`,
+        // there might be a corresponding origin at position i in `symbolToOriginInfoMap`.
+        // So instead of filtering the `symbols` array, we mark symbols to be ignored.
+        symbols.forEach((symbol, i) => {
+            if (symbol.valueDeclaration && isEnumMember(symbol.valueDeclaration)) {
+                const value = checker.getConstantValue(symbol.valueDeclaration);
+                if (value !== undefined && tracker.hasValue(value)) {
+                    symbolToOriginInfoMap[i] = { kind: SymbolOriginInfoKind.Ignore };
+                }
+            }
+        });
     }
 
     const entries = createSortedArray<CompletionEntry>();
@@ -3309,7 +3339,7 @@ function getCompletionData(
 
         // Need to insert 'this.' before properties of `this` type, so only do that if `includeInsertTextCompletions`
         if (preferences.includeCompletionsWithInsertText && scopeNode.kind !== SyntaxKind.SourceFile) {
-            const thisType = typeChecker.tryGetThisTypeAt(scopeNode, /*includeGlobalThis*/ false, isClassLike(scopeNode.parent) ? scopeNode : undefined);
+            const thisType = typeChecker.tryGetThisTypeAt(scopeNode, /*includeGlobalThis*/ false, isClassLike(scopeNode.parent) ? scopeNode as ThisContainer : undefined);
             if (thisType && !isProbablyGlobalType(thisType, sourceFile, typeChecker)) {
                 for (const symbol of getPropertiesForCompletion(thisType, typeChecker)) {
                     symbolToOriginInfoMap[symbols.length] = { kind: SymbolOriginInfoKind.ThisType };
@@ -4532,6 +4562,9 @@ function getCompletionEntryDisplayNameForSymbol(
     kind: CompletionKind,
     jsxIdentifierExpected: boolean,
 ): CompletionEntryDisplayNameForSymbol | undefined {
+    if (originIsIgnore(origin)) {
+        return undefined;
+    }
     const name = originIncludesSymbolName(origin) ? origin.symbolName : symbol.name;
     if (name === undefined
         // If the symbol is external module, don't show it in the completion list
@@ -4878,7 +4911,7 @@ function getConstraintOfTypeArgumentProperty(node: Node, checker: TypeChecker): 
 
     switch (node.kind) {
         case SyntaxKind.PropertySignature:
-            return checker.getTypeOfPropertyOfContextualType(t, node.symbol.escapedName);
+            return checker.getTypeOfPropertyOfContextualType(t, (node as PropertySignature).symbol.escapedName);
         case SyntaxKind.IntersectionType:
         case SyntaxKind.TypeLiteral:
         case SyntaxKind.UnionType:

@@ -28,6 +28,7 @@ import {
     BundleFileTextLikeKind,
     CallExpression,
     CallSignatureDeclaration,
+    canHaveLocals,
     CaseBlock,
     CaseClause,
     CaseOrDefaultClause,
@@ -181,6 +182,7 @@ import {
     getTransformers,
     getTypeNode,
     guessIndentation,
+    HasLocals,
     hasRecordedExternalHelpers,
     HeritageClause,
     Identifier,
@@ -259,6 +261,7 @@ import {
     JSDocNonNullableType,
     JSDocNullableType,
     JSDocOptionalType,
+    JSDocOverloadTag,
     JSDocPropertyLikeTag,
     JSDocReturnTag,
     JSDocSeeTag,
@@ -413,6 +416,7 @@ import {
     tracing,
     TransformationResult,
     transformNodes,
+    tryCast,
     tryParseRawSourceMap,
     TryStatement,
     TupleTypeNode,
@@ -2115,6 +2119,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     return;
                 case SyntaxKind.JSDocCallbackTag:
                     return emitJSDocCallbackTag(node as JSDocCallbackTag);
+                case SyntaxKind.JSDocOverloadTag:
+                    return emitJSDocOverloadTag(node as JSDocOverloadTag);
                 // SyntaxKind.JSDocEnumTag (see below)
                 case SyntaxKind.JSDocParameterTag:
                 case SyntaxKind.JSDocPropertyTag:
@@ -2478,8 +2484,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     //
 
     function emitPrivateIdentifier(node: PrivateIdentifier) {
-        const writeText = node.symbol ? writeSymbol : write;
-        writeText(getTextOfNode(node, /*includeTrivia*/ false), node.symbol);
+        write(getTextOfNode(node, /*includeTrivia*/ false));
     }
 
 
@@ -4382,6 +4387,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitJSDocSignature(tag.typeExpression);
     }
 
+    function emitJSDocOverloadTag(tag: JSDocOverloadTag) {
+        emitJSDocComment(tag.comment);
+        emitJSDocSignature(tag.typeExpression);
+    }
+
     function emitJSDocSimpleTag(tag: JSDocTag) {
         emitJSDocTagName(tag.tagName);
         emitJSDocComment(tag.comment);
@@ -5665,9 +5675,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     /**
      * Returns a value indicating whether a name is unique within a container.
      */
-    function isUniqueLocalName(name: string, container: Node): boolean {
-        for (let node = container; isNodeDescendantOf(node, container); node = node.nextContainer!) {
-            if (node.locals) {
+    function isUniqueLocalName(name: string, container: HasLocals | undefined): boolean {
+        for (let node = container; node && isNodeDescendantOf(node, container); node = node.nextContainer) {
+            if (canHaveLocals(node) && node.locals) {
                 const local = node.locals.get(escapeLeadingUnderscores(name));
                 // We conservatively include alias symbols to cover cases where they're emitted as locals
                 if (local && local.flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
@@ -5807,7 +5817,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
         const name = getTextOfNode(node.name);
         // Use module/enum name itself if it is unique, otherwise make a unique variation
-        return isUniqueLocalName(name, node) ? name : makeUniqueName(name, isUniqueName, /*optimistic*/ false, /*scoped*/ false, /*privateName*/ false, /*prefix*/ "", /*suffix*/ "");
+        return isUniqueLocalName(name, tryCast(node, canHaveLocals)) ? name : makeUniqueName(name, isUniqueName, /*optimistic*/ false, /*scoped*/ false, /*privateName*/ false, /*prefix*/ "", /*suffix*/ "");
     }
 
     /**

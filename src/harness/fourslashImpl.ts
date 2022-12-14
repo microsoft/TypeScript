@@ -535,8 +535,8 @@ export class TestState {
         }
     }
 
-    public verifyOrganizeImports(newContent: string, mode?: ts.OrganizeImportsMode) {
-        const changes = this.languageService.organizeImports({ fileName: this.activeFile.fileName, type: "file", mode }, this.formatCodeSettings, ts.emptyOptions);
+    public verifyOrganizeImports(newContent: string, mode?: ts.OrganizeImportsMode, preferences?: ts.UserPreferences) {
+        const changes = this.languageService.organizeImports({ fileName: this.activeFile.fileName, type: "file", mode }, this.formatCodeSettings, preferences);
         this.applyChanges(changes);
         this.verifyFileContent(this.activeFile.fileName, newContent);
     }
@@ -804,18 +804,6 @@ export class TestState {
         });
     }
 
-    private renderMarkers(markers: { text: string, fileName: string, position: number }[]) {
-        const filesToDisplay = ts.deduplicate(markers.map(m => m.fileName), ts.equateValues);
-        return filesToDisplay.map(fileName => {
-            const markersToRender = markers.filter(m => m.fileName === fileName).sort((a, b) => b.position - a.position);
-            let fileContent = this.tryGetFileContent(fileName) || "";
-            for (const marker of markersToRender) {
-                fileContent = fileContent.slice(0, marker.position) + `\x1b[1;4m/*${marker.text}*/\x1b[0;31m` + fileContent.slice(marker.position);
-            }
-            return `// @Filename: ${fileName}\n${fileContent}`;
-        }).join("\n\n");
-    }
-
     private verifyDefinitionTextSpan(defs: ts.DefinitionInfoAndBoundSpan, startMarkerName: string) {
         const range = this.testData.ranges.find(range => this.markerName(range.marker!) === startMarkerName);
 
@@ -836,6 +824,22 @@ export class TestState {
         }
         else {
             this.assertTextSpanEqualsRange(defs.textSpan, range, "goToDefinitionsAndBoundSpan failed");
+        }
+    }
+
+    private renderMarkers(markers: { text: string, fileName: string, position: number }[], useTerminalBoldSequence = true) {
+        const filesToDisplay = ts.deduplicate(markers.map(m => m.fileName), ts.equateValues);
+        return filesToDisplay.map(fileName => {
+            const markersToRender = markers.filter(m => m.fileName === fileName).sort((a, b) => b.position - a.position);
+            let fileContent = this.tryGetFileContent(fileName) || "";
+            for (const marker of markersToRender) {
+                fileContent = fileContent.slice(0, marker.position) + bold(`/*${marker.text}*/`) + fileContent.slice(marker.position);
+            }
+            return `// @Filename: ${fileName}\n${fileContent}`;
+        }).join("\n\n");
+
+        function bold(text: string) {
+            return useTerminalBoldSequence ? `\x1b[1;4m${text}\x1b[0;31m` : text;
         }
     }
 
@@ -3188,10 +3192,51 @@ export class TestState {
         if (!negative && !validBraceCompletion) {
             this.raiseError(`${position} is not a valid brace completion position for ${openingBrace}`);
         }
-
         if (negative && validBraceCompletion) {
             this.raiseError(`${position} is a valid brace completion position for ${openingBrace}`);
         }
+    }
+
+    public baselineAutoImports(markerName: string, preferences?: ts.UserPreferences) {
+        const marker = this.getMarkerByName(markerName);
+        const baselineFile = this.getBaselineFileNameForContainingTestFile(`.baseline.md`);
+        const completionPreferences = {
+            includeCompletionsForModuleExports: true,
+            includeCompletionsWithInsertText: true,
+            allowIncompleteCompletions: true,
+            includeCompletionsWithSnippetText: true,
+            ...preferences
+        };
+
+        const ext = ts.getAnyExtensionFromPath(this.activeFile.fileName).slice(1);
+        const lang = ["mts", "cts"].includes(ext) ? "ts" : ext;
+        let baselineText = codeFence(this.renderMarkers([{ text: "|", fileName: marker.fileName, position: marker.position }], /*useTerminalBoldSequence*/ false), lang) + "\n\n";
+        this.goToMarker(marker);
+
+        const completions = this.getCompletionListAtCaret(completionPreferences)!;
+
+        const autoImportCompletions = completions.entries.filter(c => c.hasAction && c.source && c.sortText === ts.Completions.SortText.AutoImportSuggestions);
+        if (autoImportCompletions.length) {
+            baselineText += `## From completions\n\n${autoImportCompletions.map(c => `- \`${c.name}\` from \`"${c.source}"\``).join("\n")}\n\n`;
+            autoImportCompletions.forEach(c => {
+                const details = this.getCompletionEntryDetails(c.name, c.source, c.data, completionPreferences);
+                assert(details?.codeActions, `Entry '${c.name}' from "${c.source}" returned no code actions from completion details request`);
+                assert(details.codeActions.length === 1, `Entry '${c.name}' from "${c.source}" returned more than one code action`);
+                assert(details.codeActions[0].changes.length === 1, `Entry '${c.name}' from "${c.source}" returned a code action changing more than one file`);
+                assert(details.codeActions[0].changes[0].fileName === this.activeFile.fileName, `Entry '${c.name}' from "${c.source}" returned a code action changing a different file`);
+                const changes = details.codeActions[0].changes[0].textChanges;
+                const completionChange: ts.TextChange = { newText: c.insertText || c.name, span: c.replacementSpan || completions.optionalReplacementSpan || { start: marker.position, length: 0 } };
+                const sortedChanges = [...changes, completionChange].sort((a, b) => a.span.start - b.span.start);
+                let newFileContent = this.activeFile.content;
+                for (let i = sortedChanges.length - 1; i >= 0; i--) {
+                    newFileContent = newFileContent.substring(0, sortedChanges[i].span.start) + sortedChanges[i].newText + newFileContent.substring(sortedChanges[i].span.start + sortedChanges[i].span.length);
+                }
+                baselineText += codeFence(newFileContent, lang) + "\n\n";
+            });
+        }
+
+        // TODO: do codefixes too
+        Harness.Baseline.runBaseline(baselineFile, baselineText);
     }
 
     public verifyJsxClosingTag(map: { [markerName: string]: ts.JsxClosingTagInfo | undefined }): void {
@@ -4605,10 +4650,10 @@ function rangesOfDiffBetweenTwoStrings(source: string, target: string) {
         else {
             ranges.push({ start: index - 1, length: 1 });
         }
-      }
-      else {
+        }
+        else {
             ranges.push({ start: index - 1, length: 1 });
-      }
+        }
     };
 
     for (let index = 0; index < Math.max(source.length, target.length); index++) {
@@ -4618,10 +4663,10 @@ function rangesOfDiffBetweenTwoStrings(source: string, target: string) {
     }
 
     return ranges;
-  }
+}
 
-  // Adds an _ when the source string and the target string have a whitespace difference
-  function highlightDifferenceBetweenStrings(source: string, target: string) {
+// Adds an _ when the source string and the target string have a whitespace difference
+function highlightDifferenceBetweenStrings(source: string, target: string) {
     const ranges = rangesOfDiffBetweenTwoStrings(source, target);
     let emTarget = target;
     ranges.forEach((range, index) => {
@@ -4633,8 +4678,12 @@ function rangesOfDiffBetweenTwoStrings(source: string, target: string) {
             range.start + 1 + additionalOffset,
             range.start + range.length + 1 + additionalOffset
         );
-         const after = emTarget.slice(range.start + range.length + 1 + additionalOffset, emTarget.length);
+        const after = emTarget.slice(range.start + range.length + 1 + additionalOffset, emTarget.length);
         emTarget = before + lhs + between + rhs + after;
     });
     return emTarget;
-  }
+}
+
+function codeFence(code: string, lang?: string) {
+    return `\`\`\`${lang || ""}\n${code}\n\`\`\``;
+}
