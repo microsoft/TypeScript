@@ -204,7 +204,7 @@ interface ObjectConstructor {
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
      * @param o Object on which to lock the attributes.
      */
-    freeze<T extends { [idx: string]: U | null | undefined | object }, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>;
+    freeze<T extends {[idx: string]: U | null | undefined | object}, U extends string | bigint | number | boolean | symbol>(o: T): Readonly<T>;
 
     /**
      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
@@ -1131,13 +1131,6 @@ interface JSON {
      * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
      */
     stringify(value: any, replacer?: (number | string)[] | null, space?: string | number): string;
-    /**
-     * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
-     * @param value A JavaScript value, usually an object or array, to be converted.
-     * @param replacer An array of strings and numbers that acts as an approved list for selecting the object properties that will be stringified.
-     * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
-     */
-    stringify(value: Function | Symbol | undefined, replacer?: (number | string)[] | null, space?: string | number): undefined;
 }
 
 /**
@@ -1532,11 +1525,11 @@ interface Promise<T> {
  */
 type Awaited<T> =
     T extends null | undefined ? T : // special case for `null | undefined` when not in `--strictNullChecks` mode
-    T extends object & { then(onfulfilled: infer F, ...args: infer _): any } ? // `await` only unwraps object types with a callable `then`. Non-object types are not unwrapped
-    F extends ((value: infer V, ...args: infer _) => any) ? // if the argument to `then` is callable, extracts the first argument
-    Awaited<V> : // recursively unwrap the value
-    never : // the argument to `then` was not callable
-    T; // non-object or non-thenable
+        T extends object & { then(onfulfilled: infer F, ...args: infer _): any } ? // `await` only unwraps object types with a callable `then`. Non-object types are not unwrapped
+            F extends ((value: infer V, ...args: infer _) => any) ? // if the argument to `then` is callable, extracts the first argument
+                Awaited<V> : // recursively unwrap the value
+                never : // the argument to `then` was not callable
+        T; // non-object or non-thenable
 
 interface ArrayLike<T> {
     readonly length: number;
