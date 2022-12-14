@@ -136,7 +136,8 @@ const errorCodes = [
     Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2.code,
     Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more.code,
     Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code,
-    Diagnostics.Cannot_find_name_0.code
+    Diagnostics.Cannot_find_name_0.code,
+    Diagnostics.Cannot_find_name_0_Did_you_mean_1.code,
 ];
 
 enum InfoKind {
