@@ -17606,6 +17606,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getTypeOfSymbol(symbol); // intentionally doesn't use resolved symbol so type is cached as expected on the alias
         }
         else {
+            const type = tryGetDeclaredTypeOfSymbol(resolvedSymbol); // call this first to ensure typeParameters is populated (if applicable)
+            const typeParameters = type && getTypeParametersForTypeAndSymbol(type, resolvedSymbol);
+            if (node.typeArguments && typeParameters) {
+                addLazyDiagnostic(() => {
+                    checkTypeArgumentConstraints(node, typeParameters);
+                });
+            }
             return getTypeReferenceType(node, resolvedSymbol); // getTypeReferenceType doesn't handle aliases - it must get the resolved symbol
         }
     }
@@ -37264,12 +37271,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getEffectiveTypeArguments(node, typeParameters)[index];
     }
 
-    function getEffectiveTypeArguments(node: TypeReferenceNode | ExpressionWithTypeArguments, typeParameters: readonly TypeParameter[]): Type[] {
+    function getEffectiveTypeArguments(node: TypeReferenceNode | ExpressionWithTypeArguments | NodeWithTypeArguments, typeParameters: readonly TypeParameter[]): Type[] {
         return fillMissingTypeArguments(map(node.typeArguments!, getTypeFromTypeNode), typeParameters,
             getMinTypeArgumentCount(typeParameters), isInJSFile(node));
     }
 
-    function checkTypeArgumentConstraints(node: TypeReferenceNode | ExpressionWithTypeArguments, typeParameters: readonly TypeParameter[]): boolean {
+    function checkTypeArgumentConstraints(node: TypeReferenceNode | ExpressionWithTypeArguments | NodeWithTypeArguments, typeParameters: readonly TypeParameter[]): boolean {
         let typeArguments: Type[] | undefined;
         let mapper: TypeMapper | undefined;
         let result = true;
@@ -37290,13 +37297,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return result;
     }
 
+    function getTypeParametersForTypeAndSymbol(type: Type, symbol: Symbol) {
+        if (!isErrorType(type)) {
+            return symbol.flags & SymbolFlags.TypeAlias && getSymbolLinks(symbol).typeParameters ||
+                (getObjectFlags(type) & ObjectFlags.Reference ? (type as TypeReference).target.localTypeParameters : undefined);
+        }
+        return undefined;
+    }
+
     function getTypeParametersForTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments) {
         const type = getTypeFromTypeReference(node);
         if (!isErrorType(type)) {
             const symbol = getNodeLinks(node).resolvedSymbol;
             if (symbol) {
-                return symbol.flags & SymbolFlags.TypeAlias && getSymbolLinks(symbol).typeParameters ||
-                    (getObjectFlags(type) & ObjectFlags.Reference ? (type as TypeReference).target.localTypeParameters : undefined);
+                return getTypeParametersForTypeAndSymbol(type, symbol);
             }
         }
         return undefined;
