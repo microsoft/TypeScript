@@ -562,9 +562,9 @@ class ListWrapper {
 >ListWrapper : Symbol(ListWrapper, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 38, 1))
 >l : Symbol(l, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 113, 43))
 >T : Symbol(T, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 113, 16))
->JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >l : Symbol(l, Decl(staticAnonymousTypeNotReferencingTypeParameter.ts, 113, 43))
 
   static maximum<T>(dit: typeof ListWrapper, list: T[], predicate: (t: T) => number): T {
