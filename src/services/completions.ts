@@ -217,6 +217,7 @@ import {
     isStatement,
     isStatic,
     isString,
+    isStringAKeyword,
     isStringANonContextualKeyword,
     isStringLiteralLike,
     isStringLiteralOrTemplate,
@@ -4827,8 +4828,7 @@ function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, 
             }
             break;
        case SyntaxKind.Identifier: {
-            const originalKeywordKind = stringToToken((location as Identifier).text);
-            if (originalKeywordKind && isKeyword(originalKeywordKind)) {
+            if (isStringAKeyword((location as Identifier).text)) {
                 return undefined;
             }
             // class c { public prop = c| }

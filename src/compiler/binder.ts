@@ -2420,7 +2420,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             !(node.flags & NodeFlags.JSDoc) &&
             !isIdentifierName(node)) {
 
-
             const originalKeywordKind = stringToToken(node.escapedText as string);
             if (originalKeywordKind === undefined) {
                 return;
