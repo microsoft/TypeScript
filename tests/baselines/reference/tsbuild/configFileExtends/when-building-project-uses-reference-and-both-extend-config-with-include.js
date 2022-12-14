@@ -66,7 +66,7 @@ export declare const a: Unrestricted;
 
 //// [/src/target-tsc-build/shared/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = void 0;
 exports.a = 1;
 
@@ -134,7 +134,7 @@ export declare const b: Unrestricted;
 
 //// [/src/target-tsc-build/webpack/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 1;
 

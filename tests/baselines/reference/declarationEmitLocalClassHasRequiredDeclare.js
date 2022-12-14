@@ -17,7 +17,7 @@ export class Y { }
 
 //// [declarationEmitLocalClassHasRequiredDeclare.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Y = exports.A = void 0;
 var X = /** @class */ (function () {
     function X() {

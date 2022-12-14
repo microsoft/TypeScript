@@ -51,7 +51,7 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 var _a;
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test = exports.WithTags = exports.FooItem = exports.noPrivates = void 0;
 exports.noPrivates = (_a = /** @class */ (function () {
         function class_1() {

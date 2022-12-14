@@ -136,7 +136,7 @@ export declare const World = "hello";
 
 //// [/src/core/anotherModule.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.World = void 0;
 exports.World = "hello";
 
@@ -152,7 +152,7 @@ export declare function multiply(a: number, b: number): number;
 
 //// [/src/core/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
@@ -237,7 +237,7 @@ export declare const m: typeof mod;
 
 //// [/src/logic/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = exports.getSecondsInDay = void 0;
 var c = require("../core/index");
 function getSecondsInDay() {
@@ -335,7 +335,7 @@ export declare const m: typeof mod;
 
 //// [/src/tests/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = void 0;
 var c = require("../core/index");
 var logic = require("../logic/index");
@@ -479,7 +479,7 @@ export declare class someClass {
 
 //// [/src/core/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.someClass = exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
@@ -758,7 +758,7 @@ exitCode:: ExitStatus.Success
 //// [/src/core/index.d.ts.map] file written with same contents
 //// [/src/core/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.someClass = exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }

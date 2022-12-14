@@ -600,6 +600,9 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): ts.TextSpan {
         return unwrapJSONCallResult(this.shim.getSpanOfEnclosingComment(fileName, position, onlyMultiLine));
     }
+    getSupportedCodeFixes(): never {
+        throw new Error("Not supported on the shim.");
+    }
     getCodeFixesAtPosition(): never {
         throw new Error("Not supported on the shim.");
     }

@@ -16,7 +16,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 var C = exports.C = /** @class */ (function () {
     function C() {
@@ -24,6 +24,6 @@ var C = exports.C = /** @class */ (function () {
     __decorate([
         Decorate,
         __metadata("design:type", Object)
-    ], C.prototype, "member");
+    ], C.prototype, "member", void 0);
     return C;
 }());

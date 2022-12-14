@@ -15,7 +15,7 @@ if(foo.C1.s1){
 
 //// [foo_0.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.C1 = void 0;
 var C1 = exports.C1 = /** @class */ (function () {
     function C1() {
@@ -26,7 +26,7 @@ var C1 = exports.C1 = /** @class */ (function () {
 }());
 //// [foo_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo = require("./foo_0");
 if (foo.C1.s1) {
     // Should cause runtime import

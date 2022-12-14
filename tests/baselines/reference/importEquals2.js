@@ -15,7 +15,7 @@ new a.A(); // Error
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var A = /** @class */ (function () {
     function A() {
     }
@@ -50,6 +50,6 @@ var a = __importStar(require("./a"));
 module.exports = a;
 //// [c.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a = require("./b");
 new a.A(); // Error

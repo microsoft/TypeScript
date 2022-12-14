@@ -12,7 +12,7 @@ function Test<T extends 'button' | 'a'>(el: T) {
 
 //// [jsxIntrinsicElementsCompatability.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="react16.d.ts" />
 var React = require("react");
 function SomeComponent(props) {

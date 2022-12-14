@@ -1,12 +1,12 @@
 Info 0    [00:00:31.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:32.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/a.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/myproject/a.ts]
@@ -83,12 +83,12 @@ Info 7    [00:00:44.000] response:
     }
 Info 8    [00:00:45.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "close",
       "arguments": {
         "file": "/user/username/projects/myproject/a.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -117,12 +117,12 @@ Info 9    [00:00:50.000] response:
     }
 Info 10   [00:00:51.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/c.ts"
-      }
+      },
+      "seq": 3,
+      "type": "request"
     }
 Before request
 
@@ -167,12 +167,12 @@ Info 16   [00:01:03.000] response:
     }
 Info 17   [00:01:04.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/b.ts"
-      }
+      },
+      "seq": 4,
+      "type": "request"
     }
 Before request
 

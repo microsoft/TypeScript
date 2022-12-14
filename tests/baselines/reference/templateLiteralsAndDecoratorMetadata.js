@@ -16,7 +16,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Greeter = void 0;
 var Greeter = exports.Greeter = /** @class */ (function () {
     function Greeter() {
@@ -25,6 +25,6 @@ var Greeter = exports.Greeter = /** @class */ (function () {
     __decorate([
         format("Hello, %s"),
         __metadata("design:type", String)
-    ], Greeter.prototype, "greeting");
+    ], Greeter.prototype, "greeting", void 0);
     return Greeter;
 }());

@@ -34,26 +34,26 @@ declare module "fs";
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 // cjs format file
-const fs = require("fs");
+var fs = require("fs");
 fs.readFile;
 exports.fs2 = require("fs");
 //// [index.js]
 import { createRequire as _createRequire } from "module";
-const __require = _createRequire(import.meta.url);
+var __require = _createRequire(import.meta.url);
 // esm format file
-const fs = __require("fs");
+var fs = __require("fs");
 fs.readFile;
-const fs2 = __require("fs");
+var fs2 = __require("fs");
 export { fs2 };
 //// [file.js]
 import { createRequire as _createRequire_1 } from "module";
-const __require_1 = _createRequire_1(import.meta.url);
+var __require_1 = _createRequire_1(import.meta.url);
 // esm format file
-const __require = null;
-const _createRequire = null;
-const fs = __require_1("fs");
+var __require = null;
+var _createRequire = null;
+var fs = __require_1("fs");
 fs.readFile;
-const fs2 = __require_1("fs");
+var fs2 = __require_1("fs");
 export { fs2 };
 
 

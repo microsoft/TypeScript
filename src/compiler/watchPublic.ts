@@ -48,6 +48,7 @@ import {
     getNewLineCharacter,
     getNormalizedAbsolutePath,
     getParsedCommandLineOfConfigFile,
+    getSourceFileVersionAsHashFromText,
     getTsBuildInfoEmitOutputFilePath,
     HasInvalidatedResolutions,
     isArray,
@@ -56,7 +57,6 @@ import {
     MapLike,
     maybeBind,
     ModuleResolutionCache,
-    ModuleResolutionInfo,
     noop,
     noopFileWatcher,
     parseConfigHostFromCompilerHostLike,
@@ -68,18 +68,20 @@ import {
     ResolutionCacheHost,
     ResolutionMode,
     ResolvedModule,
+    ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
     ResolvedTypeReferenceDirective,
+    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     returnFalse,
     returnTrue,
     ScriptTarget,
     setGetSourceFileAsHashVersioned,
     SharedExtendedConfigFileWatcher,
     SourceFile,
+    StringLiteralLike,
     sys,
     System,
     toPath,
-    TypeReferenceDirectiveResolutionInfo,
     updateErrorForNoInputFiles,
     updateMissingFilePathsWatch,
     updateSharedExtendedConfigFileWatcher,
@@ -119,9 +121,8 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
 export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
     const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
     host.createHash = maybeBind(system, system.createHash);
-    host.disableUseFileVersionAsSignature = system.disableUseFileVersionAsSignature;
     host.storeFilesChangingSignatureDuringEmit = system.storeFilesChangingSignatureDuringEmit;
-    setGetSourceFileAsHashVersioned(host, system);
+    setGetSourceFileAsHashVersioned(host);
     changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
     return host;
 }
@@ -201,10 +202,34 @@ export interface ProgramHost<T extends BuilderProgram> {
     /** If provided is used to get the environment variable */
     getEnvironmentVariable?(name: string): string | undefined;
 
-    /** If provided, used to resolve the module names, otherwise typescript's default module resolution */
-    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModule | undefined)[];
-    /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
-    resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[];
+    /**
+     * @deprecated supply resolveModuleNameLiterals instead for resolution that can handle newer resolution modes like nodenext
+     *
+     * If provided, used to resolve the module names, otherwise typescript's default module resolution
+     */
+    resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames: string[] | undefined, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile?: SourceFile): (ResolvedModule | undefined)[];
+    /**
+     * @deprecated supply resolveTypeReferenceDirectiveReferences instead for resolution that can handle newer resolution modes like nodenext
+     *
+     * If provided, used to resolve type reference directives, otherwise typescript's default resolution
+     */
+    resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[] | readonly FileReference[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingFileMode?: ResolutionMode): (ResolvedTypeReferenceDirective | undefined)[];
+    resolveModuleNameLiterals?(
+        moduleLiterals: readonly StringLiteralLike[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile,
+        reusedNames: readonly StringLiteralLike[] | undefined,
+    ): readonly ResolvedModuleWithFailedLookupLocations[];
+    resolveTypeReferenceDirectiveReferences?<T extends FileReference | string>(
+        typeDirectiveReferences: readonly T[],
+        containingFile: string,
+        redirectedReference: ResolvedProjectReference | undefined,
+        options: CompilerOptions,
+        containingSourceFile: SourceFile | undefined,
+        reusedNames: readonly T[] | undefined
+    ): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[];
     /** If provided along with custom resolveModuleNames or resolveTypeReferenceDirectives, used to determine if unchanged file path needs to re-resolve modules/type reference directives */
     hasInvalidatedResolutions?(filePath: Path): boolean;
     /**
@@ -222,7 +247,6 @@ export interface ProgramHost<T extends BuilderProgram> {
     createDirectory?(path: string): void;
     writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
     // For testing
-    disableUseFileVersionAsSignature?: boolean;
     storeFilesChangingSignatureDuringEmit?: boolean;
     now?(): Date;
 }
@@ -429,7 +453,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     }
 
     const compilerHost = createCompilerHostFromProgramHost(host, () => compilerOptions, directoryStructureHost) as CompilerHost & ResolutionCacheHost;
-    setGetSourceFileAsHashVersioned(compilerHost, host);
+    setGetSourceFileAsHashVersioned(compilerHost);
     // Members for CompilerHost
     const getNewSourceFile = compilerHost.getSourceFile;
     compilerHost.getSourceFile = (fileName, ...args) => getVersionedSourceFileByPath(fileName, toPath(fileName), ...args);
@@ -462,16 +486,21 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         /*logChangesWhenResolvingModule*/ false
     );
     // Resolve module using host module resolution strategy if provided otherwise use resolution cache to resolve module names
-    compilerHost.resolveModuleNames = host.resolveModuleNames ?
-        ((...args) => host.resolveModuleNames!(...args)) :
-        ((moduleNames, containingFile, reusedNames, redirectedReference, _options, sourceFile, resolutionInfo) => resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference, sourceFile, resolutionInfo));
-    compilerHost.resolveTypeReferenceDirectives = host.resolveTypeReferenceDirectives ?
-        ((...args) => host.resolveTypeReferenceDirectives!(...args)) :
-        ((typeDirectiveNames, containingFile, redirectedReference, _options, containingFileMode, resolutionInfo) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference, containingFileMode, resolutionInfo));
-    compilerHost.getModuleResolutionCache = host.resolveModuleNames ?
+    compilerHost.resolveModuleNameLiterals = maybeBind(host, host.resolveModuleNameLiterals);
+    compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
+    if (!compilerHost.resolveModuleNameLiterals && !compilerHost.resolveModuleNames) {
+        compilerHost.resolveModuleNameLiterals = resolutionCache.resolveModuleNameLiterals.bind(resolutionCache);
+    }
+    compilerHost.resolveTypeReferenceDirectiveReferences = maybeBind(host, host.resolveTypeReferenceDirectiveReferences);
+    compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
+    if (!compilerHost.resolveTypeReferenceDirectiveReferences && !compilerHost.resolveTypeReferenceDirectives) {
+       compilerHost.resolveTypeReferenceDirectiveReferences = resolutionCache.resolveTypeReferenceDirectiveReferences.bind(resolutionCache);
+    }
+    compilerHost.getModuleResolutionCache = host.resolveModuleNameLiterals || host.resolveModuleNames ?
         maybeBind(host, host.getModuleResolutionCache) :
         (() => resolutionCache.getModuleResolutionCache());
-    const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
+    const userProvidedResolution = !!host.resolveModuleNameLiterals || !!host.resolveTypeReferenceDirectiveReferences ||
+        !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
     // All resolutions are invalid if user provided resolutions and didnt supply hasInvalidatedResolutions
     const customHasInvalidatedResolutions = userProvidedResolution ?
         maybeBind(host, host.hasInvalidatedResolutions) || returnTrue :
@@ -551,9 +580,9 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         const hasInvalidatedResolutions = resolutionCache.createHasInvalidatedResolutions(customHasInvalidatedResolutions);
         const {
             originalReadFile, originalFileExists, originalDirectoryExists,
-            originalCreateDirectory, originalWriteFile,
+            originalCreateDirectory, originalWriteFile, readFileWithCache
         } = changeCompilerHostLikeToUseCache(compilerHost, toPath);
-        if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, getSourceVersion, fileName => compilerHost.fileExists(fileName), hasInvalidatedResolutions, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
+        if (isProgramUptoDate(getCurrentProgram(), rootFileNames, compilerOptions, path => getSourceVersion(path, readFileWithCache), fileName => compilerHost.fileExists(fileName), hasInvalidatedResolutions, hasChangedAutomaticTypeDirectiveNames, getParsedCommandLine, projectReferences)) {
             if (hasChangedConfigFileParsingErrors) {
                 if (reportFileChangeDetectedOnCreateProgram) {
                     reportWatchDiagnostic(Diagnostics.File_change_detected_Starting_incremental_compilation);
@@ -708,9 +737,13 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         }
     }
 
-    function getSourceVersion(path: Path): string | undefined {
+    function getSourceVersion(path: Path, readFileWithCache: (file: string) => string | undefined): string | undefined {
         const hostSourceFile = sourceFilesCache.get(path);
-        return !hostSourceFile || !hostSourceFile.version ? undefined : hostSourceFile.version;
+        if (!hostSourceFile) return undefined;
+        if (hostSourceFile.version) return hostSourceFile.version;
+        // Read file and get new version
+        const text = readFileWithCache(path);
+        return text !== undefined ? getSourceFileVersionAsHashFromText(compilerHost, text) : undefined;
     }
 
     function onReleaseOldSourceFile(oldSourceFile: SourceFile, _oldOptions: CompilerOptions, hasSourceFileByPath: boolean) {

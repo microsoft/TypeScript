@@ -4,8 +4,10 @@ import {
     File,
 } from "../virtualFileSystemWithWatch";
 import {
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
     createSession,
-    makeSessionRequest,
+    openFilesForSession,
 } from "./helpers";
 
 describe("unittests:: tsserver:: occurrence highlight on string", () => {
@@ -16,40 +18,22 @@ describe("unittests:: tsserver:: occurrence highlight on string", () => {
         };
 
         const host = createServerHost([file1]);
-        const session = createSession(host);
-        const projectService = session.getProjectService();
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession([file1], session);
+        session.executeCommandSeq<ts.server.protocol.FileLocationRequest>({
+            command: ts.server.CommandNames.Occurrences,
+            arguments: { file: file1.path, line: 1, offset: 11 }
+        });
 
-        projectService.openClientFile(file1.path);
-        {
-            const highlightRequest = makeSessionRequest<ts.server.protocol.FileLocationRequestArgs>(
-                ts.server.CommandNames.Occurrences,
-                { file: file1.path, line: 1, offset: 11 }
-            );
-            const highlightResponse = session.executeCommand(highlightRequest).response as ts.server.protocol.OccurrencesResponseItem[];
-            const firstOccurence = highlightResponse[0];
-            assert.isTrue(firstOccurence.isInString, "Highlights should be marked with isInString");
-        }
+        session.executeCommandSeq<ts.server.protocol.FileLocationRequest>({
+            command: ts.server.CommandNames.Occurrences,
+            arguments: { file: file1.path, line: 3, offset: 13 }
+        });
 
-        {
-            const highlightRequest = makeSessionRequest<ts.server.protocol.FileLocationRequestArgs>(
-                ts.server.CommandNames.Occurrences,
-                { file: file1.path, line: 3, offset: 13 }
-            );
-            const highlightResponse = session.executeCommand(highlightRequest).response as ts.server.protocol.OccurrencesResponseItem[];
-            assert.isTrue(highlightResponse.length === 2);
-            const firstOccurence = highlightResponse[0];
-            assert.isUndefined(firstOccurence.isInString, "Highlights should not be marked with isInString if on property name");
-        }
-
-        {
-            const highlightRequest = makeSessionRequest<ts.server.protocol.FileLocationRequestArgs>(
-                ts.server.CommandNames.Occurrences,
-                { file: file1.path, line: 4, offset: 14 }
-            );
-            const highlightResponse = session.executeCommand(highlightRequest).response as ts.server.protocol.OccurrencesResponseItem[];
-            assert.isTrue(highlightResponse.length === 2);
-            const firstOccurence = highlightResponse[0];
-            assert.isUndefined(firstOccurence.isInString, "Highlights should not be marked with isInString if on indexer");
-        }
+        session.executeCommandSeq<ts.server.protocol.FileLocationRequest>({
+            command: ts.server.CommandNames.Occurrences,
+            arguments: { file: file1.path, line: 4, offset: 14 }
+        });
+        baselineTsserverLogs("occurences", "should be marked if only on string values", session);
     });
 });
