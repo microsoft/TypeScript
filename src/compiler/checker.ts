@@ -1812,6 +1812,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     const stringMappingTypes = new Map<string, StringMappingType>();
     const substitutionTypes = new Map<string, SubstitutionType>();
     const subtypeReductionCache = new Map<string, Type[]>();
+    const decoratorContextOverrideTypeCache = new Map<string, Type>();
     const cachedTypes = new Map<string, Type>();
     const evolvingArrayTypes: EvolvingArrayType[] = [];
     const undefinedProperties: SymbolTable = new Map();
@@ -34221,26 +34222,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return tryCreateTypeReference(getGlobalClassFieldDecoratorContextType(/*reportErrors*/ true), [thisType, valueType]);
     }
 
-    function tryCreateClassMemberDecoratorContextOverrideType(nameType?: Type, isStatic?: boolean, isPrivate?: boolean) {
-        let members: SymbolTable | undefined;
-        if (nameType !== undefined) {
-            const symbol = createProperty("name" as __String, nameType);
-            members ??= createSymbolTable();
-            members.set(symbol.escapedName, symbol);
+    /**
+     * Gets a type like `{ name: "foo", private: false, static: true }` that is used to provided member-specific
+     * details that will be intersected with a decorator context type.
+     */
+    function getClassMemberDecoratorContextOverrideType(nameType: Type, isPrivate: boolean, isStatic: boolean) {
+        const key = `${isPrivate ? "p" : "P"}${isStatic ? "s" : "S"}${nameType.id}` as const;
+        let overrideType = decoratorContextOverrideTypeCache.get(key);
+        if (!overrideType) {
+            const members = createSymbolTable();
+            members.set("name" as __String, createProperty("name" as __String, nameType));
+            members.set("private" as __String, createProperty("private" as __String, isPrivate ? trueType : falseType));
+            members.set("static" as __String, createProperty("static" as __String, isStatic ? trueType : falseType));
+            overrideType = createAnonymousType(/*symbol*/ undefined, members, emptyArray, emptyArray, emptyArray);
+            decoratorContextOverrideTypeCache.set(key, overrideType);
         }
-        if (isPrivate !== undefined) {
-            const symbol = createProperty("private" as __String, isPrivate ? trueType : falseType);
-            members ??= createSymbolTable();
-            members.set(symbol.escapedName, symbol);
-        }
-        if (isStatic !== undefined) {
-            const symbol = createProperty("static" as __String, isStatic ? trueType : falseType);
-            members ??= createSymbolTable();
-            members.set(symbol.escapedName, symbol);
-        }
-        if (members) {
-            return createAnonymousType(/*symbol*/ undefined, members, emptyArray, emptyArray, emptyArray);
-        }
+        return overrideType;
     }
 
     function createClassMemberDecoratorContextTypeForNode(node: MethodDeclaration | AccessorDeclaration | PropertyDeclaration, thisType: Type, valueType: Type) {
@@ -34254,8 +34251,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isAutoAccessorPropertyDeclaration(node) ? createClassAccessorDecoratorContextType(thisType, valueType) :
             isPropertyDeclaration(node) ? createClassFieldDecoratorContextType(thisType, valueType) :
             Debug.failBadSyntaxKind(node);
-        const overrideType = tryCreateClassMemberDecoratorContextOverrideType(nameType, isStatic, isPrivate);
-        return overrideType ? getIntersectionType([contextType, overrideType]) : contextType;
+        const overrideType = getClassMemberDecoratorContextOverrideType(nameType, isPrivate, isStatic);
+        return getIntersectionType([contextType, overrideType]);
 
     }
 
