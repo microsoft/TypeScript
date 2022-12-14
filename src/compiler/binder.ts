@@ -2745,14 +2745,14 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                     bindBlockScopedDeclaration(parentNode as Declaration, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                     break;
                 }
+                checkContextualIdentifier(node as Identifier);
                 // falls through
             case SyntaxKind.ThisKeyword:
                 // TODO: Why use `isExpression` here? both Identifier and ThisKeyword are expressions.
                 if (currentFlow && (isExpression(node) || parent.kind === SyntaxKind.ShorthandPropertyAssignment)) {
                     (node as Identifier | ThisExpression).flowNode = currentFlow;
                 }
-                // TODO: a `ThisExpression` is not an Identifier, this cast is unsound
-                return checkContextualIdentifier(node as Identifier);
+                break;
             case SyntaxKind.QualifiedName:
                 if (currentFlow && isPartOfTypeQuery(node)) {
                     (node as QualifiedName).flowNode = currentFlow;
