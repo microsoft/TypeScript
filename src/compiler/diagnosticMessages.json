@@ -4249,7 +4249,7 @@
         "category": "Error",
         "code": 5101
     },
-    "Flag '{0}' is deprecated, please remove it from your configuration.": {
+    "Flag '{0}' is deprecated. Please remove it from your configuration.": {
         "category": "Error",
         "code": 5102
     },

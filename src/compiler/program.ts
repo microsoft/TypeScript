@@ -4310,7 +4310,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function createDeprecatedDiagnosticForOption(version: string, name: string, value?: string) {
         if (version === DeprecationVersion.v6_0) {
-            createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, Diagnostics.Flag_0_is_deprecated_please_remove_it_from_your_configuration, value || name);
+            createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, Diagnostics.Flag_0_is_deprecated_Please_remove_it_from_your_configuration, value || name);
         }
         else {
             createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined,
