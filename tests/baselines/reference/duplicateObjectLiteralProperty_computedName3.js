@@ -32,7 +32,7 @@ const t4 = {
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.E2 = exports.E1 = exports.s = exports.n = void 0;
 exports.n = 1;
 exports.s = "s";
@@ -47,7 +47,7 @@ var E2;
 //// [b.js]
 "use strict";
 var _a, _b, _c, _d;
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var keys = require("./a");
 var t1 = (_a = {},
     _a[keys.n] = 1,
