@@ -7,6 +7,7 @@ import {
     affectsEmitOptionDeclarations,
     AllAccessorDeclarations,
     AmbientModuleDeclaration,
+    AmdDependency,
     AnyImportOrBareOrAccessedRequire,
     AnyImportOrReExport,
     AnyImportSyntax,
@@ -22,6 +23,7 @@ import {
     AssignmentDeclarationKind,
     AssignmentExpression,
     AssignmentOperatorToken,
+    AutoGenerateInfo,
     BinaryExpression,
     binarySearch,
     BindableObjectDefinePropertyCall,
@@ -46,6 +48,7 @@ import {
     changeAnyExtension,
     CharacterCodes,
     CheckFlags,
+    CheckJsDirective,
     ClassDeclaration,
     ClassElement,
     ClassLikeDeclaration,
@@ -100,6 +103,7 @@ import {
     ElementAccessExpression,
     EmitFlags,
     EmitHost,
+    EmitNode,
     EmitResolver,
     EmitTextWriter,
     emptyArray,
@@ -117,6 +121,7 @@ import {
     every,
     ExportAssignment,
     ExportDeclaration,
+    ExportedModulesFromDeclarationEmit,
     ExportSpecifier,
     Expression,
     ExpressionStatement,
@@ -127,6 +132,7 @@ import {
     FileExtensionInfo,
     fileExtensionIs,
     fileExtensionIsOneOf,
+    FileReference,
     FileWatcher,
     filter,
     find,
@@ -139,6 +145,7 @@ import {
     flatMap,
     flatMapToMutable,
     flatten,
+    FlowNode,
     forEach,
     forEachAncestorDirectory,
     forEachChild,
@@ -194,10 +201,11 @@ import {
     HasExpressionInitializer,
     hasExtension,
     HasFlowNode,
-    HasInitializer,
     hasInitializer,
+    HasInitializer,
     HasJSDoc,
     hasJSDocNodes,
+    HasLocals,
     HasModifiers,
     hasProperty,
     HasType,
@@ -401,6 +409,7 @@ import {
     or,
     OuterExpressionKinds,
     PackageId,
+    PackageJsonInfo,
     ParameterDeclaration,
     ParenthesizedExpression,
     ParenthesizedTypeNode,
@@ -409,6 +418,7 @@ import {
     Path,
     pathIsRelative,
     Pattern,
+    PatternAmbientModule,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
     PrinterOptions,
@@ -426,7 +436,9 @@ import {
     PseudoBigInt,
     QualifiedName,
     ReadonlyCollection,
+    ReadonlyPragmaMap,
     ReadonlyTextRange,
+    RedirectInfo,
     removeTrailingDirectorySeparator,
     RequireOrImportCall,
     RequireVariableStatement,
@@ -7293,57 +7305,236 @@ function Signature(this: Signature, checker: TypeChecker, flags: SignatureFlags)
     }
 }
 
-function Node(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
-    this.pos = pos;
-    this.end = end;
-    this.kind = kind;
-    this.id = 0;
-    this.flags = NodeFlags.None;
-    this.modifierFlagsCache = ModifierFlags.None;
-    this.transformFlags = TransformFlags.None;
-    this.parent = undefined!;
-    this.original = undefined;
-    this.emitNode = undefined;
-}
-
-function Token(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
-    this.pos = pos;
-    this.end = end;
-    this.kind = kind;
-    this.id = 0;
-    this.flags = NodeFlags.None;
-    this.transformFlags = TransformFlags.None;
-    this.parent = undefined!;
-    this.emitNode = undefined;
-}
-
-function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: number) {
-    this.pos = pos;
-    this.end = end;
-    this.kind = kind;
-    this.id = 0;
-    this.flags = NodeFlags.None;
-    this.transformFlags = TransformFlags.None;
-    this.parent = undefined!;
-    this.original = undefined;
-    this.emitNode = undefined;
-    (this as Identifier).flowNode = undefined;
-}
-
 function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
     this.fileName = fileName;
     this.text = text;
     this.skipTrivia = skipTrivia || (pos => pos);
 }
 
+const Node = class implements Node {
+    declare kind: SyntaxKind;
+    declare flags: NodeFlags;
+    declare modifierFlagsCache: ModifierFlags;
+    declare transformFlags: TransformFlags;
+    declare id?: number | undefined;
+    declare parent: Node;
+    declare original?: Node | undefined;
+    declare emitNode?: EmitNode | undefined;
+    declare pos: number;
+    declare end: number;
+
+    constructor(kind: SyntaxKind, pos: number, end: number) {
+        this.pos = pos;
+        this.end = end;
+        this.kind = kind;
+        this.id = 0;
+        this.flags = NodeFlags.None;
+        this.modifierFlagsCache = ModifierFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.parent = undefined!;
+        this.original = undefined;
+        this.emitNode = undefined;
+    }
+};
+
+const Token = class <Kind extends SyntaxKind> implements Token<Kind> {
+    declare kind: Kind;
+    declare flags: NodeFlags;
+    declare modifierFlagsCache: ModifierFlags;
+    declare transformFlags: TransformFlags;
+    declare id?: number | undefined;
+    declare parent: Node;
+    declare original?: Node | undefined;
+    declare emitNode?: EmitNode | undefined;
+    declare pos: number;
+    declare end: number;
+
+    constructor(kind: Kind, pos: number, end: number) {
+        this.pos = pos;
+        this.end = end;
+        this.kind = kind;
+        this.id = 0;
+        this.flags = NodeFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.parent = undefined!;
+        this.emitNode = undefined;
+    }
+};
+
+const Identifier = class implements Identifier {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
+
+    declare kind: SyntaxKind.Identifier;
+    declare escapedText: __String;
+    declare originalKeywordKind?: SyntaxKind | undefined;
+    declare autoGenerate: AutoGenerateInfo | undefined;
+    declare generatedImportReference?: ImportSpecifier | undefined;
+    declare isInJSDocNamespace?: boolean | undefined;
+    declare typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration> | undefined;
+    declare jsdocDotPos?: number | undefined;
+    declare hasExtendedUnicodeEscape?: boolean | undefined;
+    declare flags: NodeFlags;
+    declare modifierFlagsCache: ModifierFlags;
+    declare transformFlags: TransformFlags;
+    declare id?: number | undefined;
+    declare parent: Node;
+    declare original?: Node | undefined;
+    declare emitNode?: EmitNode | undefined;
+    declare pos: number;
+    declare end: number;
+    declare symbol: Symbol;
+    declare localSymbol?: Symbol | undefined;
+    declare jsDoc?: JSDoc[] | undefined;
+    declare jsDocCache?: readonly JSDocTag[] | undefined;
+    declare flowNode?: FlowNode | undefined;
+
+    constructor(kind: SyntaxKind.Identifier, pos: number, end: number) {
+        this.pos = pos;
+        this.end = end;
+        this.kind = kind;
+        this.id = 0;
+        this.flags = NodeFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.parent = undefined!;
+        this.original = undefined;
+        this.emitNode = undefined;
+        this.flowNode = undefined;
+    }
+};
+
+const PrivateIdentifier = class implements PrivateIdentifier {
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare kind: SyntaxKind.PrivateIdentifier;
+    declare escapedText: __String;
+    declare autoGenerate: AutoGenerateInfo | undefined;
+    declare flags: NodeFlags;
+    declare modifierFlagsCache: ModifierFlags;
+    declare transformFlags: TransformFlags;
+    declare id?: number | undefined;
+    declare parent: Node;
+    declare original?: Node | undefined;
+    declare emitNode?: EmitNode | undefined;
+    declare pos: number;
+    declare end: number;
+
+    constructor(kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
+        this.pos = pos;
+        this.end = end;
+        this.kind = kind;
+        this.id = 0;
+        this.flags = NodeFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.parent = undefined!;
+        this.original = undefined;
+        this.emitNode = undefined;
+    }
+};
+
+const SourceFile = class implements SourceFile {
+    declare _declarationBrand: any;
+    declare _localsContainerBrand: any;
+    declare kind: SyntaxKind.SourceFile;
+    declare statements: NodeArray<Statement>;
+    declare endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
+    declare fileName: string;
+    declare path: Path;
+    declare text: string;
+    declare resolvedPath: Path;
+    declare originalFileName: string;
+    declare redirectInfo?: RedirectInfo | undefined;
+    declare amdDependencies: readonly AmdDependency[];
+    declare moduleName?: string | undefined;
+    declare referencedFiles: readonly FileReference[];
+    declare typeReferenceDirectives: readonly FileReference[];
+    declare libReferenceDirectives: readonly FileReference[];
+    declare languageVariant: LanguageVariant;
+    declare isDeclarationFile: boolean;
+    declare renamedDependencies?: ReadonlyMap<string, string> | undefined;
+    declare hasNoDefaultLib: boolean;
+    declare languageVersion: ScriptTarget;
+    declare impliedNodeFormat?: ResolutionMode;
+    declare packageJsonLocations?: readonly string[] | undefined;
+    declare packageJsonScope?: PackageJsonInfo | undefined;
+    declare scriptKind: ScriptKind;
+    declare externalModuleIndicator?: true | Node | undefined;
+    declare setExternalModuleIndicator?: ((file: SourceFile) => void) | undefined;
+    declare commonJsModuleIndicator?: Node | undefined;
+    declare jsGlobalAugmentations?: SymbolTable | undefined;
+    declare identifiers: ReadonlyMap<string, string>;
+    declare nodeCount: number;
+    declare identifierCount: number;
+    declare symbolCount: number;
+    declare parseDiagnostics: DiagnosticWithLocation[];
+    declare bindDiagnostics: DiagnosticWithLocation[];
+    declare bindSuggestionDiagnostics?: DiagnosticWithLocation[] | undefined;
+    declare jsDocDiagnostics?: DiagnosticWithLocation[] | undefined;
+    declare additionalSyntacticDiagnostics?: readonly DiagnosticWithLocation[] | undefined;
+    declare lineMap: readonly number[];
+    declare classifiableNames?: ReadonlySet<__String> | undefined;
+    declare commentDirectives?: CommentDirective[] | undefined;
+    declare resolvedModules?: ModeAwareCache<ResolvedModuleWithFailedLookupLocations> | undefined;
+    declare resolvedTypeReferenceDirectiveNames?: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations> | undefined;
+    declare imports: readonly StringLiteralLike[];
+    declare moduleAugmentations: readonly (Identifier | StringLiteral)[];
+    declare patternAmbientModules?: PatternAmbientModule[] | undefined;
+    declare ambientModuleNames: readonly string[];
+    declare checkJsDirective?: CheckJsDirective | undefined;
+    declare version: string;
+    declare pragmas: ReadonlyPragmaMap;
+    declare localJsxNamespace?: __String | undefined;
+    declare localJsxFragmentNamespace?: __String | undefined;
+    declare localJsxFactory?: EntityName | undefined;
+    declare localJsxFragmentFactory?: EntityName | undefined;
+    declare exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit | undefined;
+    declare endFlowNode?: FlowNode | undefined;
+    declare symbol: Symbol;
+    declare localSymbol?: Symbol | undefined;
+    declare flags: NodeFlags;
+    declare modifierFlagsCache: ModifierFlags;
+    declare transformFlags: TransformFlags;
+    declare id?: number | undefined;
+    declare parent: Node;
+    declare original?: Node | undefined;
+    declare emitNode?: EmitNode | undefined;
+    declare pos: number;
+    declare end: number;
+    declare locals?: SymbolTable | undefined;
+    declare nextContainer?: HasLocals | undefined;
+
+    constructor(kind: SyntaxKind.SourceFile, pos: number, end: number) {
+        this.pos = pos;
+        this.end = end;
+        this.kind = kind;
+        this.id = 0;
+        this.flags = NodeFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.parent = undefined!;
+        this.original = undefined;
+        this.emitNode = undefined;
+    }
+};
+
 // eslint-disable-next-line prefer-const
 /** @internal */
 export const objectAllocator: ObjectAllocator = {
-    getNodeConstructor: () => Node as any,
-    getTokenConstructor: () => Token as any,
-    getIdentifierConstructor: () => Identifier as any,
-    getPrivateIdentifierConstructor: () => Node as any,
-    getSourceFileConstructor: () => Node as any,
+    getNodeConstructor: () => Node,
+    getTokenConstructor: () => Token,
+    getIdentifierConstructor: () => Identifier,
+    getPrivateIdentifierConstructor: () => PrivateIdentifier,
+    getSourceFileConstructor: () => SourceFile,
     getSymbolConstructor: () => Symbol as any,
     getTypeConstructor: () => Type as any,
     getSignatureConstructor: () => Signature as any,
