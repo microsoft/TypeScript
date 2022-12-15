@@ -9458,6 +9458,7 @@ export function hasTabstop(node: Node): boolean {
     return getSnippetElement(node)?.kind === SnippetKind.TabStop;
 }
 
+/** @internal */
 export function isJSDocOptionalParameter(node: ParameterDeclaration) {
     return isInJSFile(node) && (
         // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
@@ -9466,6 +9467,7 @@ export function isJSDocOptionalParameter(node: ParameterDeclaration) {
             isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
 }
 
+/** @internal */
 export function isOptionalDeclaration(declaration: Declaration): boolean {
     switch (declaration.kind) {
         case SyntaxKind.PropertyDeclaration:
