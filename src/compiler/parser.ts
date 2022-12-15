@@ -7702,11 +7702,11 @@ namespace Parser {
         return list && createNodeArray(list, pos);
     }
 
-    function tryParseModifier(permitInvalidConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean, hasSeenStaticModifier?: boolean): Modifier | undefined {
+    function tryParseModifier(permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean, hasSeenStaticModifier?: boolean): Modifier | undefined {
         const pos = getNodePos();
         const kind = token();
 
-        if (token() === SyntaxKind.ConstKeyword && permitInvalidConstAsModifier) {
+        if (token() === SyntaxKind.ConstKeyword && permitConstAsModifier) {
             // We need to ensure that any subsequent modifiers appear on the same line
             // so that when 'const' is a standalone declaration, we don't issue an error.
             if (!tryParse(nextTokenIsOnSameLineAndCanFollowModifier)) {
@@ -7741,7 +7741,7 @@ namespace Parser {
      * In those situations, if we are entirely sure that 'const' is not valid on its own (such as when ASI takes effect
      * and turns it into a standalone declaration), then it is better to parse it and report an error later.
      *
-     * In such situations, 'permitInvalidConstAsModifier' should be set to true.
+     * In such situations, 'permitConstAsModifier' should be set to true.
      */
     function parseModifiers(permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<Modifier> | undefined {
         const pos = getNodePos();
@@ -7773,7 +7773,7 @@ namespace Parser {
 
         const hasJSDoc = hasPrecedingJSDocComment();
         const decorators = parseDecorators();
-        const modifiers = parseModifiers(/*permitInvalidConstAsModifier*/ true, /*stopOnStartOfClassStaticBlock*/ true);
+        const modifiers = parseModifiers(/*permitConstAsModifier*/ true, /*stopOnStartOfClassStaticBlock*/ true);
         if (token() === SyntaxKind.StaticKeyword && lookAhead(nextTokenIsOpenBrace)) {
             return parseClassStaticBlockDeclaration(pos, hasJSDoc, decorators, modifiers);
         }
