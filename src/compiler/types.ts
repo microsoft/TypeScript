@@ -1678,10 +1678,7 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
      */
     readonly escapedText: __String;
     readonly originalKeywordKind?: SyntaxKind;                // Original syntaxKind which get set so that we can report an error later
-    /** @internal */ readonly autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
-    /** @internal */ readonly autoGenerateId?: number;           // Ensures unique generated identifiers get unique names, but clones get the same name.
-    /** @internal */ readonly autoGeneratePrefix?: string | GeneratedNamePart;
-    /** @internal */ readonly autoGenerateSuffix?: string;
+    /** @internal */ readonly autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers.
     /** @internal */ generatedImportReference?: ImportSpecifier; // Reference to the generated import specifier this identifier refers to
     isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
     /** @internal */ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
@@ -1695,8 +1692,16 @@ export interface TransientIdentifier extends Identifier {
 }
 
 /** @internal */
+export interface AutoGenerateInfo {
+    flags: GeneratedIdentifierFlags;            // Specifies whether to auto-generate the text for an identifier.
+    readonly id: number;                        // Ensures unique generated identifiers get unique names, but clones get the same name.
+    readonly prefix?: string | GeneratedNamePart;
+    readonly suffix?: string;
+}
+
+/** @internal */
 export interface GeneratedIdentifier extends Identifier {
-    autoGenerateFlags: GeneratedIdentifierFlags;
+    readonly autoGenerate: AutoGenerateInfo;
 }
 
 export interface QualifiedName extends Node, FlowContainer {
@@ -1774,15 +1779,12 @@ export interface PrivateIdentifier extends PrimaryExpression {
     // escaping not strictly necessary
     // avoids gotchas in transforms and utils
     readonly escapedText: __String;
-    /** @internal */ readonly autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
-    /** @internal */ readonly autoGenerateId?: number;           // Ensures unique generated identifiers get unique names, but clones get the same name.
-    /** @internal */ readonly autoGeneratePrefix?: string | GeneratedNamePart;
-    /** @internal */ readonly autoGenerateSuffix?: string;
+    /** @internal */ readonly autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers.
 }
 
 /** @internal */
 export interface GeneratedPrivateIdentifier extends PrivateIdentifier {
-    autoGenerateFlags: GeneratedIdentifierFlags;
+    readonly autoGenerate: AutoGenerateInfo;
 }
 
 /** @internal */
