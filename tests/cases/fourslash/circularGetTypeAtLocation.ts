@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// Issue #48313
+
 // @strict: true
 // @target: esnext
 // @Filename: /file.tsx
