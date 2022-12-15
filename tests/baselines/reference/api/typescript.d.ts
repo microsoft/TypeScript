@@ -4860,8 +4860,6 @@ declare namespace ts {
         name: Identifier;
     };
     function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind): boolean;
-    function isJSDocOptionalParameter(node: ParameterDeclaration): boolean;
-    function isOptionalDeclaration(declaration: Declaration): boolean;
     function createUnparsedSourceFile(text: string): UnparsedSource;
     function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
     function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
