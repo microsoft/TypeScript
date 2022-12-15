@@ -350,6 +350,9 @@ export namespace Compiler {
                 if (value === undefined) {
                     throw new Error(`Cannot have undefined value for compiler option '${name}'.`);
                 }
+                if (name === "typeScriptVersion") {
+                    continue;
+                }
                 const option = getCommandLineOption(name);
                 if (option) {
                     const errors: ts.Diagnostic[] = [];
@@ -412,9 +415,14 @@ export namespace Compiler {
             currentDirectory = vfs.srcFolder;
         }
 
+        let typeScriptVersion: string | undefined;
+
         // Parse settings
         if (harnessSettings) {
             setCompilerOptionsFromHarnessSetting(harnessSettings, options);
+            if (ts.isString(harnessSettings.typeScriptVersion) && harnessSettings.typeScriptVersion) {
+                typeScriptVersion = harnessSettings.typeScriptVersion;
+            }
         }
         if (options.rootDirs) {
             options.rootDirs = ts.map(options.rootDirs, d => ts.getNormalizedAbsolutePath(d, currentDirectory));
@@ -442,7 +450,7 @@ export namespace Compiler {
             fs.apply(symlinks);
         }
         const host = new fakes.CompilerHost(fs, options);
-        const result = compiler.compileFiles(host, programFileNames, options);
+        const result = compiler.compileFiles(host, programFileNames, options, typeScriptVersion);
         result.symlinks = symlinks;
         return result;
     }
