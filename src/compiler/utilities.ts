@@ -7715,7 +7715,7 @@ export function getEmitModuleResolutionKind(compilerOptions: CompilerOptions) {
     if (moduleResolution === undefined) {
         switch (getEmitModuleKind(compilerOptions)) {
             case ModuleKind.CommonJS:
-                moduleResolution = ModuleResolutionKind.NodeJs;
+                moduleResolution = ModuleResolutionKind.Node10;
                 break;
             case ModuleKind.Node16:
                 moduleResolution = ModuleResolutionKind.Node16;

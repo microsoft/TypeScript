@@ -1566,7 +1566,7 @@ export class Session<TMessage = string> implements EventSender {
                 // resolved from the package root under --moduleResolution node
                 const entrypoints = getEntrypointsFromPackageJsonInfo(
                     packageJson,
-                    { moduleResolution: ModuleResolutionKind.NodeJs },
+                    { moduleResolution: ModuleResolutionKind.Node10 },
                     project,
                     project.getModuleResolutionCache());
                 // This substring is correct only because we checked for a single `/node_modules/` at the top.

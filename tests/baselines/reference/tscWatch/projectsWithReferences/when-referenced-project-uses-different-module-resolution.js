@@ -203,12 +203,12 @@ Output::
 [[90m12:00:53 AM[0m] Starting compilation in watch mode...
 
 ======== Resolving module './b' from '/user/username/projects/transitiveReferences/c.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, Declaration.
 File '/user/username/projects/transitiveReferences/b.ts' exist - use it as a name resolution result.
 ======== Module name './b' was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/user/username/projects/transitiveReferences', using this value to resolve non-relative module name '@ref/a'.
 'paths' option is specified, looking for a pattern to match module name '@ref/a'.
 Module name '@ref/a', matched pattern '@ref/*'.

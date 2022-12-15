@@ -4704,7 +4704,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression, ignoreErrors?: boolean): Symbol | undefined {
         const isClassic = getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Classic;
         const errorMessage = isClassic?
-                                Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_node_or_to_add_aliases_to_the_paths_option
+                                Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_nodenext_or_to_add_aliases_to_the_paths_option
                               : Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations;
         return resolveExternalModuleNameWorker(location, moduleReferenceExpression, ignoreErrors ? undefined : errorMessage);
     }
@@ -29807,7 +29807,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const isClassic = getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Classic;
         const errorMessage = isClassic
-                                ? Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_node_or_to_add_aliases_to_the_paths_option
+                                ? Diagnostics.Cannot_find_module_0_Did_you_mean_to_set_the_moduleResolution_option_to_nodenext_or_to_add_aliases_to_the_paths_option
                                 : Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations;
         const mod = resolveExternalModule(location!, runtimeImportSpecifier, errorMessage, location!);
         const result = mod && mod !== unknownSymbol ? getMergedSymbol(resolveSymbol(mod)) : undefined;

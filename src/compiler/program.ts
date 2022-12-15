@@ -3772,7 +3772,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             i++;
         }
         const resolveFrom = combinePaths(currentDirectory, `__lib_node_modules_lookup_${libFileName}__.ts`);
-        const localOverrideModuleResult = resolveModuleName("@typescript/lib-" + path, resolveFrom, { moduleResolution: ModuleResolutionKind.NodeJs }, host, moduleResolutionCache);
+        const localOverrideModuleResult = resolveModuleName("@typescript/lib-" + path, resolveFrom, { moduleResolution: ModuleResolutionKind.Node10 }, host, moduleResolutionCache);
         if (localOverrideModuleResult?.resolvedModule) {
             return localOverrideModuleResult.resolvedModule.resolvedFileName;
         }
@@ -4118,11 +4118,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if (getResolveJsonModule(options)) {
-            if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs &&
-                getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node16 &&
-                getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext &&
-                getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Bundler) {
-                createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy, "resolveJsonModule");
+            if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Classic) {
+                createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_when_moduleResolution_is_set_to_classic, "resolveJsonModule");
             }
             // Any emit other than common js, amd, es2015 or esnext is error
             else if (!hasJsonModuleEmitEnabled(options)) {

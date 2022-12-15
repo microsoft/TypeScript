@@ -6903,7 +6903,7 @@ export function diagnosticCategoryName(d: { category: DiagnosticCategory }, lowe
 
 export enum ModuleResolutionKind {
     Classic  = 1,
-    NodeJs   = 2,
+    Node10   = 2,
     // Starting with node12, node's module resolver has significant departures from traditional cjs resolution
     // to better support ecmascript modules and their use within node - however more features are still being added.
     // TypeScript's Node ESM support was introduced after Node 12 went end-of-life, and Node 14 is the earliest stable
@@ -7322,6 +7322,7 @@ export interface CommandLineOptionOfBooleanType extends CommandLineOptionBase {
 export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
     type: Map<string, number | string>;  // an object literal mapping named values to actual values
     defaultValueDescription: number | string | undefined | DiagnosticMessage;
+    deprecatedKeys?: Set<string>;
 }
 
 /** @internal */

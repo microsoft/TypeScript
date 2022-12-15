@@ -964,7 +964,7 @@ function compareModuleSpecifiers(
 function isFixPossiblyReExportingImportingFile(fix: ImportFixWithModuleSpecifier, importingFile: SourceFile, compilerOptions: CompilerOptions, toPath: (fileName: string) => Path): boolean {
     if (fix.isReExport &&
         fix.exportInfo?.moduleFileName &&
-        getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs &&
+        getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node10 &&
         isIndexFileName(fix.exportInfo.moduleFileName)
     ) {
         const reExportDir = toPath(getDirectoryPath(fix.exportInfo.moduleFileName));

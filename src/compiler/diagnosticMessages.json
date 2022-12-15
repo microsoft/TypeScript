@@ -3391,7 +3391,7 @@
         "category": "Error",
         "code": 2791
     },
-    "Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?": {
+    "Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?": {
         "category": "Error",
         "code": 2792
     },
@@ -4121,7 +4121,7 @@
         "category": "Error",
         "code": 5069
     },
-    "Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.": {
+    "Option '--resolveJsonModule' cannot be specified when 'moduleResolution' is set to 'classic'.": {
         "category": "Error",
         "code": 5070
     },
