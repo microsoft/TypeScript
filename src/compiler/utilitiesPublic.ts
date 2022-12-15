@@ -66,7 +66,6 @@ import {
     FunctionLikeDeclaration,
     FunctionTypeNode,
     GeneratedIdentifier,
-    GeneratedIdentifierFlags,
     GeneratedPrivateIdentifier,
     GetAccessorDeclaration,
     getAssignmentDeclarationKind,
@@ -1476,12 +1475,12 @@ export function isStringTextContainingNode(node: Node): node is StringLiteral | 
 
 /** @internal */
 export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
-    return isIdentifier(node) && (node.autoGenerateFlags! & GeneratedIdentifierFlags.KindMask) > GeneratedIdentifierFlags.None;
+    return isIdentifier(node) && node.autoGenerate !== undefined;
 }
 
 /** @internal */
 export function isGeneratedPrivateIdentifier(node: Node): node is GeneratedPrivateIdentifier {
-    return isPrivateIdentifier(node) && (node.autoGenerateFlags! & GeneratedIdentifierFlags.KindMask) > GeneratedIdentifierFlags.None;
+    return isPrivateIdentifier(node) && node.autoGenerate !== undefined;
 }
 
 // Private Identifiers
