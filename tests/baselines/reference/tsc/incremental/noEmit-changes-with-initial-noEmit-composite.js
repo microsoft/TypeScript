@@ -227,7 +227,7 @@ export declare class classC {
 
 //// [/src/project/src/class.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.classC = void 0;
 var classC = /** @class */ (function () {
     function classC() {
@@ -244,7 +244,7 @@ export {};
 
 //// [/src/project/src/directUse.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var indirectClass_1 = require("./indirectClass");
 new indirectClass_1.indirectClass().classC.prop;
 
@@ -258,7 +258,7 @@ export declare class indirectClass {
 
 //// [/src/project/src/indirectClass.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.indirectClass = void 0;
 var class_1 = require("./class");
 var indirectClass = /** @class */ (function () {
@@ -276,7 +276,7 @@ export {};
 
 //// [/src/project/src/indirectUse.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var indirectClass_1 = require("./indirectClass");
 new indirectClass_1.indirectClass().classC.prop;
 
@@ -287,7 +287,7 @@ export declare function writeLog(s: string): void;
 
 //// [/src/project/src/noChangeFile.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.writeLog = void 0;
 function writeLog(s) {
 }
@@ -494,7 +494,7 @@ export declare class classC {
 
 //// [/src/project/src/class.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.classC = void 0;
 var classC = /** @class */ (function () {
     function classC() {
@@ -889,7 +889,7 @@ export declare class classC {
 
 //// [/src/project/src/class.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.classC = void 0;
 var classC = /** @class */ (function () {
     function classC() {

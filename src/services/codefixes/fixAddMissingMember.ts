@@ -330,7 +330,7 @@ function getInfo(sourceFile: SourceFile, tokenPos: number, errorCode: number, ch
     }
 
     if (isIdentifier(token)) {
-        const type = checker.getContextualType(token);
+        const type = checker.getContextualType(token)?.getNonNullableType();
         if (type && getObjectFlags(type) & ObjectFlags.Anonymous) {
             const signature = firstOrUndefined(checker.getSignaturesOfType(type, SignatureKind.Call));
             if (signature === undefined) return undefined;

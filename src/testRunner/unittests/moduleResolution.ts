@@ -162,7 +162,7 @@ describe("unittests:: moduleResolution:: Node module resolution - relative paths
 describe("unittests:: moduleResolution:: Node module resolution - non-relative paths", () => {
     it("computes correct commonPrefix for moduleName cache", () => {
         const resolutionCache = ts.createModuleResolutionCache("/", (f) => f);
-        let cache = resolutionCache.getOrCreateCacheForModuleName("a", /*mode*/ undefined);
+        let cache = resolutionCache.getOrCreateCacheForNonRelativeName("a", /*mode*/ undefined);
         cache.set("/sub", {
             resolvedModule: {
                 originalPath: undefined,
@@ -177,7 +177,7 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
         assert.isDefined(cache.get("/sub"));
         assert.isUndefined(cache.get("/"));
 
-        cache = resolutionCache.getOrCreateCacheForModuleName("b", /*mode*/ undefined);
+        cache = resolutionCache.getOrCreateCacheForNonRelativeName("b", /*mode*/ undefined);
         cache.set("/sub/dir/foo", {
             resolvedModule: {
                 originalPath: undefined,
@@ -194,7 +194,7 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
         assert.isDefined(cache.get("/sub"));
         assert.isUndefined(cache.get("/"));
 
-        cache = resolutionCache.getOrCreateCacheForModuleName("c", /*mode*/ undefined);
+        cache = resolutionCache.getOrCreateCacheForNonRelativeName("c", /*mode*/ undefined);
         cache.set("/foo/bar", {
             resolvedModule: {
                 originalPath: undefined,
@@ -210,7 +210,7 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
         assert.isDefined(cache.get("/foo"));
         assert.isDefined(cache.get("/"));
 
-        cache = resolutionCache.getOrCreateCacheForModuleName("d", /*mode*/ undefined);
+        cache = resolutionCache.getOrCreateCacheForNonRelativeName("d", /*mode*/ undefined);
         cache.set("/foo", {
             resolvedModule: {
                 originalPath: undefined,
@@ -225,7 +225,7 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
         assert.isDefined(cache.get("/foo"));
         assert.isUndefined(cache.get("/"));
 
-        cache = resolutionCache.getOrCreateCacheForModuleName("e", /*mode*/ undefined);
+        cache = resolutionCache.getOrCreateCacheForNonRelativeName("e", /*mode*/ undefined);
         cache.set("c:/foo", {
             resolvedModule: {
                 originalPath: undefined,
@@ -241,7 +241,7 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
         assert.isDefined(cache.get("c:/"));
         assert.isUndefined(cache.get("d:/"));
 
-        cache = resolutionCache.getOrCreateCacheForModuleName("f", /*mode*/ undefined);
+        cache = resolutionCache.getOrCreateCacheForNonRelativeName("f", /*mode*/ undefined);
         cache.set("/foo/bar/baz", {
             resolvedModule: undefined,
             failedLookupLocations: [],

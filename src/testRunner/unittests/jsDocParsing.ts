@@ -295,6 +295,35 @@ describe("unittests:: JSDocParsing", () => {
                 `/**
   * @param foo
   */`);
+            parsesCorrectly("throwsTag1",
+                `/**
+  * @throws {Error}
+  */`);
+
+            parsesCorrectly("throwsTag2",
+                `/**
+  * @throws free-form description
+  */`);
+
+            parsesCorrectly("throwsTag3",
+                `/**
+  * @throws {Error} description
+  */`);
+
+            parsesCorrectly("exceptionTag1",
+                `/**
+  * @exception {Error}
+  */`);
+
+            parsesCorrectly("exceptionTag2",
+                `/**
+  * @exception free-form description
+  */`);
+
+            parsesCorrectly("exceptionTag3",
+                `/**
+  * @exception {Error} description
+  */`);
             parsesCorrectly("typedefTagWithChildrenTags",
                 `/**
   * @typedef People

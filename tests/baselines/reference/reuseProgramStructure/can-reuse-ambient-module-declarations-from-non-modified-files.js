@@ -4,7 +4,34 @@ File: /a/b/app.ts
 import * as fs from 'fs'
 
 resolvedModules: 
-fs: undefined
+fs: {
+  "failedLookupLocations": [
+    "/a/b/fs.ts",
+    "/a/b/fs.tsx",
+    "/a/b/fs.d.ts",
+    "/a/fs.ts",
+    "/a/fs.tsx",
+    "/a/fs.d.ts",
+    "/fs.ts",
+    "/fs.tsx",
+    "/fs.d.ts",
+    "/a/b/node_modules/@types/fs/package.json",
+    "/a/b/node_modules/@types/fs.d.ts",
+    "/a/b/node_modules/@types/fs/index.d.ts",
+    "/a/node_modules/@types/fs/package.json",
+    "/a/node_modules/@types/fs.d.ts",
+    "/a/node_modules/@types/fs/index.d.ts",
+    "/node_modules/@types/fs/package.json",
+    "/node_modules/@types/fs.d.ts",
+    "/node_modules/@types/fs/index.d.ts",
+    "/a/b/fs.js",
+    "/a/b/fs.jsx",
+    "/a/fs.js",
+    "/a/fs.jsx",
+    "/fs.js",
+    "/fs.jsx"
+  ]
+}
 resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a/b/node.d.ts
@@ -53,7 +80,34 @@ File: /a/b/app.ts
 import * as fs from 'fs'
 var x = 1;
 resolvedModules: 
-fs: undefined
+fs: {
+  "failedLookupLocations": [
+    "/a/b/fs.ts",
+    "/a/b/fs.tsx",
+    "/a/b/fs.d.ts",
+    "/a/fs.ts",
+    "/a/fs.tsx",
+    "/a/fs.d.ts",
+    "/fs.ts",
+    "/fs.tsx",
+    "/fs.d.ts",
+    "/a/b/node_modules/@types/fs/package.json",
+    "/a/b/node_modules/@types/fs.d.ts",
+    "/a/b/node_modules/@types/fs/index.d.ts",
+    "/a/node_modules/@types/fs/package.json",
+    "/a/node_modules/@types/fs.d.ts",
+    "/a/node_modules/@types/fs/index.d.ts",
+    "/node_modules/@types/fs/package.json",
+    "/node_modules/@types/fs.d.ts",
+    "/node_modules/@types/fs/index.d.ts",
+    "/a/b/fs.js",
+    "/a/b/fs.jsx",
+    "/a/fs.js",
+    "/a/fs.jsx",
+    "/fs.js",
+    "/fs.jsx"
+  ]
+}
 resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a/b/node.d.ts
@@ -76,7 +130,34 @@ File: /a/b/app.ts
 import * as fs from 'fs'
 var y = 1;
 resolvedModules: 
-fs: undefined
+fs: {
+  "failedLookupLocations": [
+    "/a/b/fs.ts",
+    "/a/b/fs.tsx",
+    "/a/b/fs.d.ts",
+    "/a/fs.ts",
+    "/a/fs.tsx",
+    "/a/fs.d.ts",
+    "/fs.ts",
+    "/fs.tsx",
+    "/fs.d.ts",
+    "/a/b/node_modules/@types/fs/package.json",
+    "/a/b/node_modules/@types/fs.d.ts",
+    "/a/b/node_modules/@types/fs/index.d.ts",
+    "/a/node_modules/@types/fs/package.json",
+    "/a/node_modules/@types/fs.d.ts",
+    "/a/node_modules/@types/fs/index.d.ts",
+    "/node_modules/@types/fs/package.json",
+    "/node_modules/@types/fs.d.ts",
+    "/node_modules/@types/fs/index.d.ts",
+    "/a/b/fs.js",
+    "/a/b/fs.jsx",
+    "/a/fs.js",
+    "/a/fs.jsx",
+    "/fs.js",
+    "/fs.jsx"
+  ]
+}
 resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a/b/node.d.ts

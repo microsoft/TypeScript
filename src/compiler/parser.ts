@@ -3,7 +3,6 @@ import {
     AccessorDeclaration,
     addRange,
     addRelatedInfo,
-    AmdDependency,
     append,
     ArrayBindingElement,
     ArrayBindingPattern,
@@ -28,13 +27,13 @@ import {
     BreakStatement,
     CallExpression,
     CallSignatureDeclaration,
+    canHaveJSDoc,
     canHaveModifiers,
     CaseBlock,
     CaseClause,
     CaseOrDefaultClause,
     CatchClause,
     CharacterCodes,
-    CheckJsDirective,
     ClassDeclaration,
     ClassElement,
     ClassExpression,
@@ -83,7 +82,6 @@ import {
     ExpressionWithTypeArguments,
     ExternalModuleReference,
     fileExtensionIsOneOf,
-    FileReference,
     findIndex,
     forEach,
     ForEachChildNodes,
@@ -160,7 +158,6 @@ import {
     JSDocCallbackTag,
     JSDocClassTag,
     JSDocComment,
-    JSDocContainer,
     JSDocDeprecatedTag,
     JSDocEnumTag,
     JSDocFunctionType,
@@ -174,6 +171,7 @@ import {
     JSDocNonNullableType,
     JSDocNullableType,
     JSDocOptionalType,
+    JSDocOverloadTag,
     JSDocOverrideTag,
     JSDocParameterTag,
     JSDocPrivateTag,
@@ -190,6 +188,7 @@ import {
     JSDocTemplateTag,
     JSDocText,
     JSDocThisTag,
+    JSDocThrowsTag,
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeLiteral,
@@ -280,6 +279,7 @@ import {
     PlusToken,
     PostfixUnaryExpression,
     PostfixUnaryOperator,
+    PragmaContext,
     PragmaDefinition,
     PragmaKindFlags,
     PragmaMap,
@@ -1092,10 +1092,11 @@ const forEachChildTable: ForEachChildTable = {
             visitNode(cbNode, node.typeExpression) ||
             (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
     },
-    [SyntaxKind.JSDocReturnTag]: forEachChildInJSDocReturnTag,
-    [SyntaxKind.JSDocTypeTag]: forEachChildInJSDocReturnTag,
-    [SyntaxKind.JSDocThisTag]: forEachChildInJSDocReturnTag,
-    [SyntaxKind.JSDocEnumTag]: forEachChildInJSDocReturnTag,
+    [SyntaxKind.JSDocReturnTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocTypeTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocThisTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocEnumTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocThrowsTag]: forEachChildInJSDocTypeLikeTag,
     [SyntaxKind.JSDocSignature]: function forEachChildInJSDocSignature<T>(node: JSDocSignature, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return forEach(node.typeParameters, cbNode) ||
             forEach(node.parameters, cbNode) ||
@@ -1188,7 +1189,7 @@ function forEachChildInJSDocParameterOrPropertyTag<T>(node: JSDocParameterTag | 
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
 
-function forEachChildInJSDocReturnTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInJSDocTypeLikeTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocThrowsTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
     return visitNode(cbNode, node.tagName) ||
         visitNode(cbNode, node.typeExpression) ||
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
@@ -1619,7 +1620,7 @@ function parseJsonTextWorker(fileName: string, sourceText: string, languageVersi
         const statement = factory.createExpressionStatement(expression) as JsonObjectExpressionStatement;
         finishNode(statement, pos);
         statements = createNodeArray([statement], pos);
-        endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token);
+        endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, Diagnostics.Unexpected_token) as EndOfFileToken;
     }
 
     // Set source file so that errors will be reported with this file name
@@ -3037,9 +3038,9 @@ function currentNode(parsingContext: ParsingContext, pos?: number): Node | undef
         return undefined;
     }
 
-    if ((node as JSDocContainer).jsDocCache) {
+    if (canHaveJSDoc(node) && node.jsDocCache) {
         // jsDocCache may include tags from parent nodes, which might have been modified.
-        (node as JSDocContainer).jsDocCache = undefined;
+        node.jsDocCache = undefined;
     }
 
     return node;
@@ -8752,8 +8753,15 @@ function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc |
             case "callback":
                 tag = parseCallbackTag(start, tagName, margin, indentText);
                 break;
+            case "overload":
+                tag = parseOverloadTag(start, tagName, margin, indentText);
+                break;
             case "see":
                 tag = parseSeeTag(start, tagName, margin, indentText);
+                break;
+            case "exception":
+            case "throws":
+                tag = parseThrowsTag(start, tagName, margin, indentText);
                 break;
             default:
                 tag = parseUnknownTag(start, tagName, margin, indentText);
@@ -9060,6 +9068,12 @@ function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc |
         return finishNode(factory.createJSDocSeeTag(tagName, nameExpression, comments), start);
     }
 
+    function parseThrowsTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocThrowsTag {
+        const typeExpression = tryParseTypeExpression();
+        const comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
+        return finishNode(factory.createJSDocThrowsTag(tagName, typeExpression, comment), start);
+    }
+
     function parseAuthorTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocAuthorTag {
         const commentStart = getNodePos();
         const textOnly = parseAuthorNameAndEmail();
@@ -9235,10 +9249,7 @@ function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc |
         return createNodeArray(parameters || [], pos);
     }
 
-    function parseCallbackTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocCallbackTag {
-        const fullName = parseJSDocTypeNameWithNamespace();
-        skipWhitespace();
-        let comment = parseTagComments(indent);
+    function parseJSDocSignature(start: number, indent: number): JSDocSignature {
         const parameters = parseCallbackTagParameters(indent);
         const returnTag = tryParse(() => {
             if (parseOptionalJsdoc(SyntaxKind.AtToken)) {
@@ -9248,12 +9259,30 @@ function parseJSDocCommentWorker(start = 0, length: number | undefined): JSDoc |
                 }
             }
         });
-        const typeExpression = finishNode(factory.createJSDocSignature(/*typeParameters*/ undefined, parameters, returnTag), start);
+        return finishNode(factory.createJSDocSignature(/*typeParameters*/ undefined, parameters, returnTag), start);
+    }
+
+    function parseCallbackTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocCallbackTag {
+        const fullName = parseJSDocTypeNameWithNamespace();
+        skipWhitespace();
+        let comment = parseTagComments(indent);
+        const typeExpression = parseJSDocSignature(start, indent);
         if (!comment) {
             comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
         }
         const end = comment !== undefined ? getNodePos() : typeExpression.end;
         return finishNode(factory.createJSDocCallbackTag(tagName, typeExpression, fullName, comment), start, end);
+    }
+
+    function parseOverloadTag(start: number, tagName: Identifier, indent: number, indentText: string): JSDocOverloadTag {
+        skipWhitespace();
+        let comment = parseTagComments(indent);
+        const typeExpression = parseJSDocSignature(start, indent);
+        if (!comment) {
+            comment = parseTrailingTagComments(start, getNodePos(), indent, indentText);
+        }
+        const end = comment !== undefined ? getNodePos() : typeExpression.end;
+        return finishNode(factory.createJSDocOverloadTag(tagName, typeExpression, comment), start, end);
     }
 
     function escapedTextsEqual(a: EntityName, b: EntityName): boolean {
@@ -9454,19 +9483,6 @@ export function isDeclarationFileName(fileName: string): boolean {
 
 /** @internal */
 export type PragmaDiagnosticReporter = (pos: number, length: number, message: DiagnosticMessage) => void;
-
-/** @internal */
-export interface PragmaContext {
-    languageVersion: ScriptTarget;
-    pragmas?: PragmaMap;
-    checkJsDirective?: CheckJsDirective;
-    referencedFiles: FileReference[];
-    typeReferenceDirectives: FileReference[];
-    libReferenceDirectives: FileReference[];
-    amdDependencies: AmdDependency[];
-    hasNoDefaultLib?: boolean;
-    moduleName?: string;
-}
 
 /** @internal */
 export function processCommentPragmas(context: PragmaContext, sourceText: string): void {

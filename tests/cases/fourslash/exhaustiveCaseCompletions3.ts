@@ -30,6 +30,9 @@
 //// switch (u) {
 ////     /*7*/
 ////
+//// switch (u) {
+////     case E./*8*/
+//// }
 
 const exhaustiveCaseCompletion = {
     name: "case E.A: ...",
@@ -104,6 +107,17 @@ verify.completions(
         marker: "7",
         includes: [
             exhaustiveCaseCompletion,
+        ],
+        preferences: {
+            includeCompletionsWithInsertText: true,
+        }
+    },
+    {
+        marker: "8",
+        exact: [
+            "A",
+            "B",
+            "C"
         ],
         preferences: {
             includeCompletionsWithInsertText: true,

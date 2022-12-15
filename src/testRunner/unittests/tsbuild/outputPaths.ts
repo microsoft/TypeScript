@@ -5,14 +5,14 @@ import {
     noChangeRun,
     TestTscEdit,
     TscCompileSystem,
-    verifyTscWithEdits,
+    verifyTsc,
     VerifyTscWithEditsInput,
 } from "../tsc/helpers";
 
 describe("unittests:: tsbuild - output file paths", () => {
     const noChangeProject: TestTscEdit = {
-        modifyFs: ts.noop,
-        subScenario: "Normal build without change, that does not block emit on error to show files that get emitted",
+        edit: ts.noop,
+        caption: "Normal build without change, that does not block emit on error to show files that get emitted",
         commandLineArgs: ["-p", "/src/tsconfig.json"],
     };
     const edits: TestTscEdit[] = [
@@ -21,7 +21,7 @@ describe("unittests:: tsbuild - output file paths", () => {
     ];
 
     function verify(input: Pick<VerifyTscWithEditsInput, "subScenario" | "fs" | "edits">, expectedOuptutNames: readonly string[]) {
-        verifyTscWithEdits({
+        verifyTsc({
             scenario: "outputPaths",
             commandLineArgs: ["--b", "/src/tsconfig.json", "-v"],
             ...input

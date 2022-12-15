@@ -110,7 +110,7 @@ Info 22   [00:00:41.000] 	Files (3)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	f1.ts
 	  Matched by default include pattern '**/*'
 	f2.html
@@ -301,7 +301,7 @@ Info 49   [00:00:41.000] 	Files (2)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	f1.ts
 	  Matched by default include pattern '**/*'
 
@@ -489,7 +489,7 @@ Info 76   [00:00:41.000] 	Files (2)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	f1.ts
 	  Matched by default include pattern '**/*'
 
@@ -678,7 +678,7 @@ Info 101  [00:00:39.000] 	Files (3)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	f1.ts
 	  Part of 'files' list in tsconfig.json
 	f2.html
@@ -863,7 +863,7 @@ Info 128  [00:00:41.000] 	Files (2)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	f1.ts
 	  Matched by default include pattern '**/*'
 

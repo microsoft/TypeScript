@@ -29,7 +29,6 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                 subScenario,
                 sys: () => createWatchedSystem(files, { currentDirectory: "/user/username/projects/myproject" }),
                 commandLineArgs: ["-p", rootProject, "--explainFiles"],
-                changes: ts.emptyArray
             });
         });
 
@@ -43,7 +42,6 @@ describe("unittests:: tsc:: declarationEmit::", () => {
                     { currentDirectory: "/user/username/projects/myproject" }
                 ),
                 commandLineArgs: ["-p", rootProject, "--explainFiles"],
-                changes: ts.emptyArray
             });
         });
     }
