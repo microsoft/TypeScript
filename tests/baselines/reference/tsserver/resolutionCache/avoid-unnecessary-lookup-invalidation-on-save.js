@@ -49,7 +49,7 @@ Info 6    [00:00:41.000] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info 7    [00:00:42.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Config: /user/username/projects/myproject/tsconfig.json WatchType: Wild card directory
 Info 8    [00:00:43.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info 9    [00:00:44.000] ======== Resolving module 'module1' from '/user/username/projects/myproject/src/file1.ts'. ========
-Info 10   [00:00:45.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 10   [00:00:45.000] Module resolution kind is not specified, using 'Node10'.
 Info 11   [00:00:46.000] Loading module 'module1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info 12   [00:00:47.000] File '/user/username/projects/myproject/src/node_modules/module1/package.json' does not exist.
 Info 13   [00:00:48.000] File '/user/username/projects/myproject/src/node_modules/module1.ts' does not exist.
@@ -59,7 +59,7 @@ Info 16   [00:00:51.000] File '/user/username/projects/myproject/src/node_module
 Info 17   [00:00:52.000] Resolving real path for '/user/username/projects/myproject/src/node_modules/module1/index.ts', result '/user/username/projects/myproject/src/node_modules/module1/index.ts'.
 Info 18   [00:00:53.000] ======== Module name 'module1' was successfully resolved to '/user/username/projects/myproject/src/node_modules/module1/index.ts'. ========
 Info 19   [00:00:54.000] ======== Resolving module 'module2' from '/user/username/projects/myproject/src/file1.ts'. ========
-Info 20   [00:00:55.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 20   [00:00:55.000] Module resolution kind is not specified, using 'Node10'.
 Info 21   [00:00:56.000] Loading module 'module2' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info 22   [00:00:57.000] File '/user/username/projects/myproject/src/node_modules/module2.ts' does not exist.
 Info 23   [00:00:58.000] File '/user/username/projects/myproject/src/node_modules/module2.tsx' does not exist.
