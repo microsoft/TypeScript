@@ -52,7 +52,7 @@ export class A {}
 
 //// [/user/username/projects/transitiveReferences/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {
@@ -113,7 +113,7 @@ export declare class A {
 
 //// [/user/username/projects/transitiveReferences/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 var a_1 = require("a");
 exports.b = new a_1.A();
@@ -189,7 +189,7 @@ export declare const b: A;
 
 //// [/user/username/projects/transitiveReferences/c.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var b_1 = require("./b");
 var a_1 = require("@ref/a");
 b_1.b;
@@ -203,12 +203,12 @@ Output::
 [[90m12:00:53 AM[0m] Starting compilation in watch mode...
 
 ======== Resolving module './b' from '/user/username/projects/transitiveReferences/c.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, Declaration.
 File '/user/username/projects/transitiveReferences/b.ts' exist - use it as a name resolution result.
 ======== Module name './b' was successfully resolved to '/user/username/projects/transitiveReferences/b.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/c.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/user/username/projects/transitiveReferences', using this value to resolve non-relative module name '@ref/a'.
 'paths' option is specified, looking for a pattern to match module name '@ref/a'.
 Module name '@ref/a', matched pattern '@ref/*'.
@@ -223,7 +223,7 @@ Using compiler options of project reference redirect '/user/username/projects/tr
 Explicitly specified module resolution kind: 'Classic'.
 ======== Module name 'a' was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'. ========
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a.d.ts
   Imported via "a" from file 'b.d.ts'
   File is output of project reference source 'a.ts'

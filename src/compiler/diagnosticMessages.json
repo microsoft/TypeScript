@@ -3419,7 +3419,7 @@
         "category": "Error",
         "code": 2791
     },
-    "Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?": {
+    "Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?": {
         "category": "Error",
         "code": 2792
     },
@@ -3590,6 +3590,10 @@
     "This condition will always return '{0}'.": {
         "category": "Error",
         "code": 2845
+    },
+    "A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file '{0}' instead?": {
+        "category": "Error",
+        "code": 2846
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -4145,7 +4149,7 @@
         "category": "Error",
         "code": 5069
     },
-    "Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.": {
+    "Option '--resolveJsonModule' cannot be specified when 'moduleResolution' is set to 'classic'.": {
         "category": "Error",
         "code": 5070
     },
@@ -4249,13 +4253,33 @@
         "category": "Error",
         "code": 5095
     },
-    "Option '{0}' is redundant and cannot be specified with option '{1}'.": {
+    "Option 'allowImportingTsExtensions' can only be used when 'moduleResolution' is set to 'bundler' and either 'noEmit' or 'emitDeclarationOnly' is set.": {
         "category": "Error",
         "code": 5096
     },
-    "Option 'verbatimModuleSyntax' cannot be used when 'module' is set to 'UMD', 'AMD', or 'System'.": {
+    "An import path can only end with a '{0}' extension when 'allowImportingTsExtensions' is enabled.": {
         "category": "Error",
         "code": 5097
+    },
+    "Option '{0}' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'bundler'.": {
+        "category": "Error",
+        "code": 5098
+    },
+    "Import assignment is not allowed when 'moduleResolution' is set to 'bundler'. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
+        "category": "Error",
+        "code": 5099
+    },
+    "Export assignment cannot be used when 'moduleResolution' is set to 'bundler'. Consider using 'export default' or another module format instead.": {
+        "category": "Error",
+        "code": 5100
+    },
+    "Option '{0}' is redundant and cannot be specified with option '{1}'.": {
+        "category": "Error",
+        "code": 5101
+    },
+    "Option 'verbatimModuleSyntax' cannot be used when 'module' is set to 'UMD', 'AMD', or 'System'.": {
+        "category": "Error",
+        "code": 5102
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -4478,10 +4502,6 @@
     "Enables experimental support for emitting type metadata for decorators.": {
         "category": "Message",
         "code": 6066
-    },
-    "Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).": {
-        "category": "Message",
-        "code": 6069
     },
     "Initializes a TypeScript project and creates a tsconfig.json file.": {
         "category": "Message",
@@ -5465,6 +5485,26 @@
     "Project '{0}' is out of date because buildinfo file '{1}' indicates there is change in compilerOptions": {
         "category": "Message",
         "code": 6406
+    },
+    "Allow imports to include TypeScript file extensions. Requires '--moduleResolution bundler' and either '--noEmit' or '--emitDeclarationOnly' to be set.": {
+        "category": "Message",
+        "code": 6407
+    },
+    "Use the package.json 'exports' field when resolving package imports.": {
+        "category": "Message",
+        "code": 6408
+    },
+    "Use the package.json 'imports' field when resolving imports.": {
+        "category": "Message",
+        "code": 6409
+    },
+    "Conditions to set in addition to the resolver-specific defaults when resolving imports.": {
+        "category": "Message",
+        "code": 6410
+    },
+    "`true` when 'moduleResolution' is 'node16', 'nodenext', or 'bundler'; otherwise `false`.": {
+        "category": "Message",
+        "code": 6411
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {

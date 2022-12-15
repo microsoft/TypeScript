@@ -105,7 +105,7 @@ export const power = <Num extends number, PowerOf extends number>(
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.power = void 0;
 var power = function (num, powerOf) { return (Math.pow(num, powerOf)); };
 exports.power = power;

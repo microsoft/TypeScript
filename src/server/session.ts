@@ -1566,7 +1566,7 @@ export class Session<TMessage = string> implements EventSender {
                 // resolved from the package root under --moduleResolution node
                 const entrypoints = getEntrypointsFromPackageJsonInfo(
                     packageJson,
-                    { moduleResolution: ModuleResolutionKind.NodeJs },
+                    { moduleResolution: ModuleResolutionKind.Node10 },
                     project,
                     project.getModuleResolutionCache());
                 // This substring is correct only because we checked for a single `/node_modules/` at the top.
@@ -2640,8 +2640,15 @@ export class Session<TMessage = string> implements EventSender {
         }
     }
 
-    private getSupportedCodeFixes(): string[] {
-        return getSupportedCodeFixes();
+    private getSupportedCodeFixes(args: Partial<protocol.FileRequestArgs> | undefined): readonly string[] {
+        if (!args) return getSupportedCodeFixes(); // Compatibility
+        if (args.file) {
+            const { file, project } = this.getFileAndProject(args as protocol.FileRequestArgs);
+            return project.getLanguageService().getSupportedCodeFixes(file);
+        }
+        const project = this.getProject(args.projectFileName);
+        if (!project) Errors.ThrowNoProject();
+        return project.getLanguageService().getSupportedCodeFixes();
     }
 
     private isLocation(locationOrSpan: protocol.FileLocationOrRangeRequestArgs): locationOrSpan is protocol.FileLocationRequestArgs {
@@ -3419,8 +3426,8 @@ export class Session<TMessage = string> implements EventSender {
         [CommandNames.ApplyCodeActionCommand]: (request: protocol.ApplyCodeActionCommandRequest) => {
             return this.requiredResponse(this.applyCodeActionCommand(request.arguments));
         },
-        [CommandNames.GetSupportedCodeFixes]: () => {
-            return this.requiredResponse(this.getSupportedCodeFixes());
+        [CommandNames.GetSupportedCodeFixes]: (request: protocol.GetSupportedCodeFixesRequest) => {
+            return this.requiredResponse(this.getSupportedCodeFixes(request.arguments));
         },
         [CommandNames.GetApplicableRefactors]: (request: protocol.GetApplicableRefactorsRequest) => {
             return this.requiredResponse(this.getApplicableRefactors(request.arguments));

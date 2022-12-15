@@ -102,7 +102,7 @@ export var publicUse_im_private_mu_public: im_private_mu_public.i;
 //// [privacyTopLevelInternalReferenceImportWithoutExport.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.publicUse_im_private_mu_public = exports.publicUse_im_private_mi_public = exports.publicUse_im_private_i_public = exports.publicUse_im_private_v_public = exports.publicUse_im_private_f_public = exports.publicUse_im_private_e_public = exports.publicUse_im_private_c_public = exports.publicUse_im_private_mu_private = exports.publicUse_im_private_mi_private = exports.publicUse_im_private_i_private = exports.publicUse_im_private_v_private = exports.publicUse_im_private_f_private = exports.publicUse_im_private_e_private = exports.publicUse_im_private_c_private = exports.m_public = void 0;
     // private elements
     var m_private;

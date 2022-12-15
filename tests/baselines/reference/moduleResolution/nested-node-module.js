@@ -12,7 +12,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/src/libs/guid/dist/guid.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/src/libs/guid.ts",
@@ -38,7 +39,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/root/src/libs/guid/dist/guid.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/root/src/libs/guid.ts",

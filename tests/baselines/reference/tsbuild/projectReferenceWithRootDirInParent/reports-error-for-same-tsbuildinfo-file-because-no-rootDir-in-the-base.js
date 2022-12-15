@@ -86,7 +86,7 @@ export declare const Other = 0;
 
 //// [/src/dist/other.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Other = void 0;
 exports.Other = 0;
 

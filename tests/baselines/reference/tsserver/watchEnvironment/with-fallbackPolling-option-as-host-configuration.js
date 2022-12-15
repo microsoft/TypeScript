@@ -102,7 +102,7 @@ Info 20   [00:00:37.000] 	Files (3)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	commonFile1.ts
 	  Matched by default include pattern '**/*'
 	commonFile2.ts

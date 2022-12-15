@@ -22,7 +22,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowe
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(31,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(32,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(33,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
-tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(33,25): error TS2792: Cannot find module 'x'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(33,25): error TS2792: Cannot find module 'x'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(34,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(35,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowedModifiers.ts(36,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
@@ -111,7 +111,7 @@ tests/cases/conformance/classes/propertyMemberDeclarations/autoAccessorDisallowe
     ~~~~~~~~
 !!! error TS1275: 'accessor' modifier can only appear on a property declaration.
                             ~~~
-!!! error TS2792: Cannot find module 'x'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'x'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     accessor export { V1 };
     ~~~~~~~~
 !!! error TS1275: 'accessor' modifier can only appear on a property declaration.

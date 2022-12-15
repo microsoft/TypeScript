@@ -14,6 +14,6 @@ function bar() {
         get _extraOccluded() {
             var occluded = 0;
             return occluded;
-        }
+        },
     };
 }

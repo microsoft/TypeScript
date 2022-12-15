@@ -88,7 +88,7 @@ export const m = mod;
 
 //// [/user/username/projects/sample1/core/anotherModule.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.World = void 0;
 exports.World = "hello";
 
@@ -102,7 +102,7 @@ export declare const World = "hello";
 
 //// [/user/username/projects/sample1/core/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
@@ -193,7 +193,7 @@ export declare function multiply(a: number, b: number): number;
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = exports.getSecondsInDay = void 0;
 var c = require("../core/index");
 function getSecondsInDay() {
@@ -289,7 +289,7 @@ export declare const m: typeof mod;
 
 //// [/user/username/projects/sample1/tests/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = void 0;
 var c = require("../core/index");
 var logic = require("../logic/index");
@@ -401,26 +401,26 @@ Output::
 [[90m12:01:16 AM[0m] Starting compilation in watch mode...
 
 ======== Resolving module '../core/index' from '/user/username/projects/sample1/tests/index.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/index', target file types: TypeScript, Declaration.
 File '/user/username/projects/sample1/core/index.ts' exist - use it as a name resolution result.
 ======== Module name '../core/index' was successfully resolved to '/user/username/projects/sample1/core/index.ts'. ========
 ======== Resolving module '../logic/index' from '/user/username/projects/sample1/tests/index.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/user/username/projects/sample1/logic/index', target file types: TypeScript, Declaration.
 File '/user/username/projects/sample1/logic/index.ts' exist - use it as a name resolution result.
 ======== Module name '../logic/index' was successfully resolved to '/user/username/projects/sample1/logic/index.ts'. ========
 ======== Resolving module '../core/anotherModule' from '/user/username/projects/sample1/tests/index.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/anotherModule', target file types: TypeScript, Declaration.
 File '/user/username/projects/sample1/core/anotherModule.ts' exist - use it as a name resolution result.
 ======== Module name '../core/anotherModule' was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'. ========
 ======== Resolving module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 ======== Module name '../core/anotherModule' was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'. ========
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 core/index.d.ts
   Imported via '../core/index' from file 'tests/index.ts'
   File is output of project reference source 'core/index.ts'
@@ -521,7 +521,7 @@ function foo() { }
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = exports.getSecondsInDay = void 0;
 var c = require("../core/index");
 function getSecondsInDay() {
@@ -663,7 +663,7 @@ function foo() { }export function gfoo() { }
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.gfoo = exports.m = exports.getSecondsInDay = void 0;
 var c = require("../core/index");
 function getSecondsInDay() {
@@ -768,7 +768,7 @@ Output::
 
 Reusing resolution of module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 core/index.d.ts
   Imported via '../core/index' from file 'tests/index.ts'
   File is output of project reference source 'core/index.ts'
@@ -955,7 +955,7 @@ Input::
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.gfoo = exports.m = exports.getSecondsInDay = void 0;
 var c = require("../core/index");
 function getSecondsInDay() {
@@ -1062,10 +1062,10 @@ Reusing resolution of module '../logic/index' from '/user/username/projects/samp
 Reusing resolution of module '../core/anotherModule' from '/user/username/projects/sample1/tests/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'.
 ======== Resolving module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/sample1/logic/tsconfig.json'.
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 ======== Module name '../core/anotherModule' was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'. ========
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 core/index.d.ts
   Imported via '../core/index' from file 'tests/index.ts'
   File is output of project reference source 'core/index.ts'

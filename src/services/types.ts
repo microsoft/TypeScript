@@ -657,6 +657,8 @@ export interface LanguageService {
     commentSelection(fileName: string, textRange: TextRange): TextChange[];
     uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
 
+    getSupportedCodeFixes(fileName?: string): readonly string[];
+
     dispose(): void;
 }
 
