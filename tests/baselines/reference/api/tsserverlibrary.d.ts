@@ -6977,7 +6977,7 @@ declare namespace ts {
     }
     enum ModuleResolutionKind {
         Classic = 1,
-        NodeJs = 2,
+        Node10 = 2,
         Node16 = 3,
         NodeNext = 99,
         Bundler = 100

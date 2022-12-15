@@ -7,7 +7,7 @@
         "lib": ["es2018"],
         "target": "es2018",
         "module": "CommonJS",
-        "moduleResolution": "node",
+        "moduleResolution": "node10",
 
         "declaration": true,
         "declarationMap": true,

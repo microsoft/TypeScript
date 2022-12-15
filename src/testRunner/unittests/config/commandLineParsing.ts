@@ -170,7 +170,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
         verifyNullNonIncludedOption({
             subScenario: "option of type custom map",
             type: () => new Map(ts.getEntries({
-                node: ts.ModuleResolutionKind.NodeJs,
+                node: ts.ModuleResolutionKind.Node10,
                 classic: ts.ModuleResolutionKind.Classic,
             })),
             nonNullValue: "node"

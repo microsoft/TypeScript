@@ -420,7 +420,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const projectService = createProjectService(host, { typingsInstaller: installer });
         projectService.openExternalProject({
             projectFileName,
-            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.NodeJs },
+            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
             rootFiles: [toExternalFile(lodashJs.path), toExternalFile(file2Jsx.path), toExternalFile(file3dts.path)],
             typeAcquisition: { }
         });
@@ -464,7 +464,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const projectService = createProjectService(host, { typingsInstaller: installer });
         projectService.openExternalProject({
             projectFileName,
-            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.NodeJs },
+            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
             rootFiles: [toExternalFile(jqueryJs.path)],
             typeAcquisition: { enable: false }
         });
@@ -504,7 +504,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const projectService = createProjectService(host, { typingsInstaller: installer });
         projectService.openExternalProject({
             projectFileName,
-            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.NodeJs },
+            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
             rootFiles: [toExternalFile(jqueryJs.path)],
             typeAcquisition: { enable: true, disableFilenameBasedTypeAcquisition: true }
         });
@@ -551,7 +551,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const projectService = createProjectService(host, { typingsInstaller: installer });
         projectService.openExternalProject({
             projectFileName,
-            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.NodeJs },
+            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
             rootFiles: [toExternalFile(jqueryJs.path), toExternalFile(file2Ts.path)],
             typeAcquisition: {}
         });
@@ -627,7 +627,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const projectService = createProjectService(host, { typingsInstaller: installer });
         projectService.openExternalProject({
             projectFileName,
-            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.NodeJs },
+            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
             rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3dts.path)],
             typeAcquisition: { enable: true, include: ["jquery", "moment"], exclude: ["lodash"] }
         });
@@ -709,7 +709,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const projectService = createProjectService(host, { typingsInstaller: installer });
         projectService.openExternalProject({
             projectFileName,
-            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.NodeJs },
+            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
             rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3.path)],
             typeAcquisition: { include: ["jquery", "moment"] }
         });
@@ -795,7 +795,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const projectFileName1 = "/a/app/test1.csproj";
         projectService.openExternalProject({
             projectFileName: projectFileName1,
-            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.NodeJs },
+            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
             rootFiles: [toExternalFile(lodashJs.path), toExternalFile(commanderJs.path), toExternalFile(file3.path)],
             typeAcquisition: { include: ["jquery", "cordova"] }
         });
@@ -807,7 +807,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
         const projectFileName2 = "/a/app/test2.csproj";
         projectService.openExternalProject({
             projectFileName: projectFileName2,
-            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.NodeJs },
+            options: { allowJS: true, moduleResolution: ts.ModuleResolutionKind.Node10 },
             rootFiles: [toExternalFile(file3.path)],
             typeAcquisition: { include: ["grunt", "gulp"] }
         });
