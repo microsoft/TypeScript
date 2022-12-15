@@ -4,8 +4,8 @@ import * as vfs from "../../_namespaces/vfs";
 import * as vpath from "../../_namespaces/vpath";
 import * as Harness from "../../_namespaces/Harness";
 import {
-    libFile,
     TestServerHost,
+    libFile,
 } from "../virtualFileSystemWithWatch";
 
 export interface DtsSignatureData {

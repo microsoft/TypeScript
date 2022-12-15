@@ -1,12 +1,12 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createWatchedSystem,
     File,
+    createWatchedSystem,
     libFile,
 } from "../virtualFileSystemWithWatch";
 import {
-    noopChange,
     TscWatchCompileChange,
+    noopChange,
     verifyTscWatch,
 } from "../tscWatch/helpers";
 

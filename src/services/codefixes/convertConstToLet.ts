@@ -1,17 +1,17 @@
 import {
-    addToSeen,
     Diagnostics,
+    Program,
+    SourceFile,
+    Symbol,
+    SyntaxKind,
+    Token,
+    addToSeen,
     factory,
     findChildOfKind,
     getSymbolId,
     getTokenAtPosition,
     isVariableDeclarationList,
-    Program,
-    SourceFile,
-    Symbol,
-    SyntaxKind,
     textChanges,
-    Token,
     tryCast,
 } from "../_namespaces/ts";
 import {

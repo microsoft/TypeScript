@@ -1,11 +1,11 @@
 import {
     Diagnostics,
+    SourceFile,
+    TextSpan,
     factory,
     getTokenAtPosition,
     isNumericLiteral,
-    SourceFile,
     textChanges,
-    TextSpan,
     tryCast,
 } from "../_namespaces/ts";
 import {

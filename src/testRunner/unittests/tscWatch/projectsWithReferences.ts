@@ -1,8 +1,8 @@
 import {
+    TestServerHost,
     getTsBuildProjectFile,
     getTsBuildProjectFilePath,
     libFile,
-    TestServerHost,
 } from "../virtualFileSystemWithWatch";
 import {
     createSolutionBuilder,

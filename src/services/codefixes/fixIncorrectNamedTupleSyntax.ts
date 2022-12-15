@@ -1,14 +1,14 @@
 import {
     Diagnostics,
-    factory,
-    findAncestor,
-    getTokenAtPosition,
     NamedTupleMember,
     OptionalTypeNode,
     ParenthesizedTypeNode,
     RestTypeNode,
     SourceFile,
     SyntaxKind,
+    factory,
+    findAncestor,
+    getTokenAtPosition,
     textChanges,
 } from "../_namespaces/ts";
 import {

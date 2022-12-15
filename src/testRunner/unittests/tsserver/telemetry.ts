@@ -1,9 +1,9 @@
 import * as ts from "../../_namespaces/ts";
 import { File } from "../virtualFileSystemWithWatch";
 import {
+    TestServerEventManager,
     checkNumberOfProjects,
     fileStats,
-    TestServerEventManager,
     toExternalFiles,
 } from "./helpers";
 

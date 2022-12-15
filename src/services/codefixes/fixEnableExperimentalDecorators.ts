@@ -1,8 +1,8 @@
 import {
     Diagnostics,
+    TsConfigSourceFile,
     factory,
     textChanges,
-    TsConfigSourceFile,
 } from "../_namespaces/ts";
 import {
     codeFixAll,

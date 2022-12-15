@@ -1,11 +1,11 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    TestTscEdit,
     appendText,
     compilerOptionsToConfigJson,
     loadProjectFromFiles,
     noChangeRun,
     replaceText,
-    TestTscEdit,
     verifyTsc,
 } from "../tsc/helpers";
 

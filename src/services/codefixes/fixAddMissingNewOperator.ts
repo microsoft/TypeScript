@@ -1,13 +1,13 @@
 import {
-    cast,
     Diagnostics,
+    Node,
+    SourceFile,
+    TextSpan,
+    cast,
     factory,
     getTokenAtPosition,
     isCallExpression,
-    Node,
-    SourceFile,
     textChanges,
-    TextSpan,
     textSpanEnd,
 } from "../_namespaces/ts";
 import {

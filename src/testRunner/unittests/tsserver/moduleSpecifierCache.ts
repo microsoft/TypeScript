@@ -1,8 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
     File,
     SymLink,
+    createServerHost,
 } from "../virtualFileSystemWithWatch";
 import {
     baselineTsserverLogs,

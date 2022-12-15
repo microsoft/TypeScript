@@ -1,10 +1,10 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
 import {
-    createWatchedSystem,
     File,
-    libFile,
     TestServerHostTrackingWrittenFiles,
+    createWatchedSystem,
+    libFile,
 } from "../virtualFileSystemWithWatch";
 import {
     applyEdit,

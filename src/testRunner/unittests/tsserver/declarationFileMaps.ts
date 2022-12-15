@@ -1,16 +1,16 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
     File,
+    createServerHost,
 } from "../virtualFileSystemWithWatch";
 import {
+    TestSession,
     baselineTsserverLogs,
     closeFilesForSession,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
-    TestSession,
 } from "./helpers";
 
 function checkDeclarationFiles(file: File, session: TestSession): void {

@@ -1,15 +1,16 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import {
-    createServerHost,
     File,
-    libFile,
     TestServerHost,
+    createServerHost,
+    libFile,
 } from "../virtualFileSystemWithWatch";
 import {
     compilerOptionsToConfigJson,
 } from "../tsc/helpers";
 import {
+    TestTypingsInstaller,
     baselineTsserverLogs,
     checkNumberOfProjects,
     checkProjectActualFiles,
@@ -18,7 +19,6 @@ import {
     createProjectService,
     createSession,
     openFilesForSession,
-    TestTypingsInstaller,
     toExternalFiles,
     verifyGetErrRequest,
 } from "./helpers";

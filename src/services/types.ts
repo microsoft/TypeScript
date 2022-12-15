@@ -35,10 +35,10 @@ import {
     Symbol,
     SymlinkCache,
     TextChangeRange,
-    textChanges,
     TextRange,
     TextSpan,
     UserPreferences,
+    textChanges,
 } from "./_namespaces/ts";
 
 declare module "../compiler/types" {

@@ -1,18 +1,18 @@
 import * as ts from "../../../_namespaces/ts";
 import {
-    createServerHost,
     File,
-    libFile,
     TestServerHost,
+    createServerHost,
+    libFile,
 } from "../../virtualFileSystemWithWatch";
 import {
+    Logger,
+    TestSession,
     baselineTsserverLogs,
     createHasErrorMessageLogger,
     createLoggerWithInMemoryLogs,
     createSessionWithDefaultEventHandler,
     createSessionWithEventTracking,
-    Logger,
-    TestSession,
 } from "../helpers";
 
 describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {

@@ -1,21 +1,21 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
     File,
-    libFile,
     SymLink,
     TestServerHost,
+    createServerHost,
+    libFile,
 } from "../virtualFileSystemWithWatch";
 import {
+    Logger,
+    TestProjectService,
     baselineTsserverLogs,
     checkNumberOfProjects,
     checkProjectActualFiles,
     createLoggerWithInMemoryLogs,
     createProjectService,
     createSession,
-    Logger,
     openFilesForSession,
-    TestProjectService,
 } from "./helpers";
 
 describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectSystem CachingFileSystemInformation", () => {

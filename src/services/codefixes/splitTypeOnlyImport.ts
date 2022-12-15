@@ -2,14 +2,14 @@ import {
     CodeFixContextBase,
     Debug,
     Diagnostics,
+    ImportDeclaration,
+    SourceFile,
+    TextSpan,
     factory,
     findAncestor,
     getTokenAtPosition,
-    ImportDeclaration,
     isImportDeclaration,
-    SourceFile,
     textChanges,
-    TextSpan,
 } from "../_namespaces/ts";
 import {
     codeFixAll,

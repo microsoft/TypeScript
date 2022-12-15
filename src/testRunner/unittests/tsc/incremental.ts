@@ -2,6 +2,7 @@ import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
 import * as vfs from "../../_namespaces/vfs";
 import {
+    TestTscEdit,
     appendText,
     compilerOptionsToConfigJson,
     libContent,
@@ -11,7 +12,6 @@ import {
     noChangeRun,
     prependText,
     replaceText,
-    TestTscEdit,
     verifyTsc,
 } from "./helpers";
 

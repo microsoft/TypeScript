@@ -2,6 +2,8 @@ import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 import * as fakes from "../../_namespaces/fakes";
 import {
+    TestTscEdit,
+    TscCompileSystem,
     addRest,
     addShebang,
     addSpread,
@@ -18,8 +20,6 @@ import {
     removeRest,
     replaceText,
     testTscCompileLike,
-    TestTscEdit,
-    TscCompileSystem,
     verifyTsc,
     verifyTscCompileLike,
 } from "../tsc/helpers";

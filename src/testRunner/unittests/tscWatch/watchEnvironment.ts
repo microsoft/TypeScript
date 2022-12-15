@@ -1,12 +1,12 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createWatchedSystem,
     File,
-    libFile,
     SymLink,
     TestServerHost,
     Tsc_WatchDirectory,
     Tsc_WatchFile,
+    createWatchedSystem,
+    libFile,
 } from "../virtualFileSystemWithWatch";
 import {
     commonFile1,

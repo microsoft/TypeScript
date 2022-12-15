@@ -1,17 +1,17 @@
 import {
     Debug,
     Diagnostics,
+    IfStatement,
+    SourceFile,
+    SyntaxKind,
     emptyArray,
     factory,
     findAncestor,
     first,
     getTokenAtPosition,
-    IfStatement,
     isBlock,
     isStatement,
     sliceAfter,
-    SourceFile,
-    SyntaxKind,
     textChanges,
 } from "../_namespaces/ts";
 import {

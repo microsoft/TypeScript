@@ -1,9 +1,9 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createWatchedSystem,
     File,
-    libFile,
     TestServerHost,
+    createWatchedSystem,
+    libFile,
 } from "../virtualFileSystemWithWatch";
 import {
     createBaseline,

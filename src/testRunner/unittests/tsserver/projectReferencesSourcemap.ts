@@ -1,19 +1,19 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
     File,
-    libFile,
     TestServerHost,
+    createServerHost,
+    libFile,
 } from "../virtualFileSystemWithWatch";
 import {
+    TestSession,
+    TestSessionRequest,
     baselineTsserverLogs,
     closeFilesForSession,
     createHostWithSolutionBuild,
     createLoggerWithInMemoryLogs,
     createSession,
     openFilesForSession,
-    TestSession,
-    TestSessionRequest,
 } from "./helpers";
 
 describe("unittests:: tsserver:: with project references and tsbuild source map", () => {

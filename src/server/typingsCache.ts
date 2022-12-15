@@ -1,21 +1,21 @@
 import {
     ApplyCodeActionCommandResult,
-    arrayIsEqualTo,
     CompilerOptions,
-    getAllowJSCompilerOption,
     InstallPackageOptions,
-    noop,
-    notImplemented,
     Path,
-    returnFalse,
-    sort,
     SortedReadonlyArray,
     TypeAcquisition,
+    arrayIsEqualTo,
+    getAllowJSCompilerOption,
+    noop,
+    notImplemented,
+    returnFalse,
+    sort,
 } from "./_namespaces/ts";
 import {
-    emptyArray,
     Project,
     ProjectService,
+    emptyArray,
 } from "./_namespaces/ts.server";
 
 export interface InstallPackageOptionsWithProject extends InstallPackageOptions {

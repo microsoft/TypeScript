@@ -1,7 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
     File,
+    createServerHost,
     libFile,
 } from "../virtualFileSystemWithWatch";
 import {
@@ -9,6 +9,7 @@ import {
     commonFile2,
 } from "../tscWatch/helpers";
 import {
+    TestSessionRequest,
     baselineTsserverLogs,
     checkNumberOfConfiguredProjects,
     checkNumberOfInferredProjects,
@@ -23,7 +24,6 @@ import {
     customTypesMap,
     openFilesForSession,
     protocolFileLocationFromSubstring,
-    TestSessionRequest,
     toExternalFile,
     toExternalFiles,
     verifyGetErrRequest,

@@ -1,12 +1,12 @@
 import {
-    cast,
     Diagnostics,
     Expression,
+    ShorthandPropertyAssignment,
+    SourceFile,
+    cast,
     factory,
     getTokenAtPosition,
     isShorthandPropertyAssignment,
-    ShorthandPropertyAssignment,
-    SourceFile,
     textChanges,
 } from "../_namespaces/ts";
 import {

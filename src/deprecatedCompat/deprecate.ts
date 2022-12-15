@@ -1,10 +1,10 @@
 import {
     Debug,
     DeprecationOptions,
+    Version,
     formatStringFromArgs,
     noop,
     version,
-    Version,
 } from "./_namespaces/ts";
 
 export let enableDeprecationWarnings = true;

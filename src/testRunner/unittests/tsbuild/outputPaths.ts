@@ -1,12 +1,12 @@
 import * as ts from "../../_namespaces/ts";
 import * as fakes from "../../_namespaces/fakes";
 import {
-    loadProjectFromFiles,
-    noChangeRun,
     TestTscEdit,
     TscCompileSystem,
-    verifyTsc,
     VerifyTscWithEditsInput,
+    loadProjectFromFiles,
+    noChangeRun,
+    verifyTsc,
 } from "../tsc/helpers";
 
 describe("unittests:: tsbuild - output file paths", () => {

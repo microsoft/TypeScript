@@ -1,10 +1,10 @@
 import { createServerHost } from "../virtualFileSystemWithWatch";
 import * as ts from "../../_namespaces/ts";
 import {
+    TestTypingsInstaller,
     checkProjectActualFiles,
     configuredProjectAt,
     createProjectService,
-    TestTypingsInstaller,
     toExternalFile,
 } from "./helpers";
 

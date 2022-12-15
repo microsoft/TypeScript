@@ -1,7 +1,7 @@
 import {
-    isMemberName,
     MemberName,
     Node,
+    isMemberName,
 } from "../_namespaces/ts";
 import { deprecate } from "../deprecate";
 

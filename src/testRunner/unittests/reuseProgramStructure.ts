@@ -2,19 +2,19 @@ import * as ts from "../_namespaces/ts";
 import * as Harness from "../_namespaces/Harness";
 import * as Utils from "../_namespaces/Utils";
 import {
-    createTestCompilerHost,
     NamedSourceText,
-    newLine,
-    newProgram,
     ProgramWithSourceTexts,
     SourceText,
     TestCompilerHost,
+    createTestCompilerHost,
+    newLine,
+    newProgram,
     updateProgram,
     updateProgramText,
 } from "./helpers";
 import {
-    createWatchedSystem,
     File,
+    createWatchedSystem,
     libFile,
 } from "./virtualFileSystemWithWatch";
 

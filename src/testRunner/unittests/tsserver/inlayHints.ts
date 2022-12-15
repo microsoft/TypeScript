@@ -1,7 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import {
-    createServerHost,
     File,
+    createServerHost,
     libFile,
 } from "../virtualFileSystemWithWatch";
 import {
@@ -9,8 +9,8 @@ import {
     commonFile2,
 } from "../tscWatch/helpers";
 import {
-    createSession,
     TestSession,
+    createSession,
 } from "./helpers";
 
 describe("unittests:: tsserver:: inlayHints", () => {
