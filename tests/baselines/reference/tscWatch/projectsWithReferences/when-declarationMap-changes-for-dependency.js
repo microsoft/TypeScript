@@ -169,12 +169,12 @@ Output::
 [[90m12:00:50 AM[0m] Starting compilation in watch mode...
 
 ======== Resolving module '../core/index' from '/user/username/projects/sample1/logic/index.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/index', target file types: TypeScript, Declaration.
 File '/user/username/projects/sample1/core/index.ts' exist - use it as a name resolution result.
 ======== Module name '../core/index' was successfully resolved to '/user/username/projects/sample1/core/index.ts'. ========
 ======== Resolving module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/user/username/projects/sample1/core/anotherModule', target file types: TypeScript, Declaration.
 File '/user/username/projects/sample1/core/anotherModule.ts' exist - use it as a name resolution result.
 ======== Module name '../core/anotherModule' was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'. ========

@@ -6,7 +6,7 @@
     "Resolving real path for '/types/lib/index.d.ts', result '/types/lib/index.d.ts'.",
     "======== Type reference directive 'lib' was successfully resolved to '/types/lib/index.d.ts', primary: true. ========",
     "======== Resolving module './ref' from '/app.ts'. ========",
-    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Module resolution kind is not specified, using 'Node10'.",
     "Loading module as file / folder, candidate module location '/ref', target file types: TypeScript, Declaration.",
     "File '/ref.ts' does not exist.",
     "File '/ref.tsx' does not exist.",
