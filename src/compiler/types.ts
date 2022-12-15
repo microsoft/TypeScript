@@ -7030,6 +7030,7 @@ export interface CompilerOptions {
     /** @internal */generateCpuProfile?: string;
     /** @internal */generateTrace?: string;
     /** @internal */help?: boolean;
+    ignoreDeprecations?: string;
     importHelpers?: boolean;
     importsNotUsedAsValues?: ImportsNotUsedAsValues;
     /** @internal */init?: boolean;
@@ -7288,6 +7289,8 @@ export interface CreateProgramOptions {
     host?: CompilerHost;
     oldProgram?: Program;
     configFileParsingDiagnostics?: readonly Diagnostic[];
+    /** @internal */
+    typeScriptVersion?: string;
 }
 
 /** @internal */
@@ -9797,4 +9800,13 @@ export interface Queue<T> {
     enqueue(...items: T[]): void;
     dequeue(): T;
     isEmpty(): boolean;
+}
+
+/** @internal */
+export const enum DeprecationVersion {
+    /* eslint-disable @typescript-eslint/naming-convention */
+    v5_0 = "5.0",
+    v5_5 = "5.5",
+    v6_0 = "6.0",
+    /* eslint-enable @typescript-eslint/naming-convention */
 }

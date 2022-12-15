@@ -7056,6 +7056,7 @@ declare namespace ts {
         exactOptionalPropertyTypes?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
+        ignoreDeprecations?: string;
         importHelpers?: boolean;
         importsNotUsedAsValues?: ImportsNotUsedAsValues;
         inlineSourceMap?: boolean;

@@ -1,14 +1,14 @@
 error TS5095: Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.
-error TS5101: Option 'importsNotUsedAsValues' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
-error TS5101: Option 'isolatedModules' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
-error TS5101: Option 'preserveValueImports' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
-error TS5102: Option 'verbatimModuleSyntax' cannot be used when 'module' is set to 'UMD', 'AMD', or 'System'.
+error TS5104: Option 'importsNotUsedAsValues' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
+error TS5104: Option 'isolatedModules' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
+error TS5104: Option 'preserveValueImports' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
+error TS5105: Option 'verbatimModuleSyntax' cannot be used when 'module' is set to 'UMD', 'AMD', or 'System'.
 
 
 !!! error TS5095: Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.
-!!! error TS5101: Option 'importsNotUsedAsValues' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
-!!! error TS5101: Option 'isolatedModules' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
-!!! error TS5101: Option 'preserveValueImports' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
-!!! error TS5102: Option 'verbatimModuleSyntax' cannot be used when 'module' is set to 'UMD', 'AMD', or 'System'.
+!!! error TS5104: Option 'importsNotUsedAsValues' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
+!!! error TS5104: Option 'isolatedModules' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
+!!! error TS5104: Option 'preserveValueImports' is redundant and cannot be specified with option 'verbatimModuleSyntax'.
+!!! error TS5105: Option 'verbatimModuleSyntax' cannot be used when 'module' is set to 'UMD', 'AMD', or 'System'.
 ==== tests/cases/conformance/externalModules/verbatimModuleSyntaxCompat.ts (0 errors) ====
     export {};
