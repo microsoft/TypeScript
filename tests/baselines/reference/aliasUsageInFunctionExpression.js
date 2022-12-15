@@ -22,7 +22,7 @@ f = (x) => moduleA;
 
 //// [aliasUsageInFunctionExpression_backbone.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Model = void 0;
 var Model = /** @class */ (function () {
     function Model() {
@@ -47,7 +47,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.VisualizationModel = void 0;
 var Backbone = require("./aliasUsageInFunctionExpression_backbone");
 var VisualizationModel = /** @class */ (function (_super) {
@@ -60,7 +60,7 @@ var VisualizationModel = /** @class */ (function (_super) {
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsageInFunctionExpression_main.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var moduleA = require("./aliasUsageInFunctionExpression_moduleA");
 var f = function (x) { return x; };
 f = function (x) { return moduleA; };

@@ -127,7 +127,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/lib1/tools/tools.interface.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/lib1/tools/public.js]
@@ -146,7 +146,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./tools.interface"), exports);
 
 
@@ -166,13 +166,13 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./tools/public"), exports);
 
 
 //// [/user/username/projects/myproject/lib2/data2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Data2 = void 0;
 var Data2 = /** @class */ (function () {
     function Data2() {
@@ -184,7 +184,7 @@ exports.Data2 = Data2;
 
 //// [/user/username/projects/myproject/lib2/data.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Data = void 0;
 var Data = /** @class */ (function () {
     function Data() {
@@ -216,13 +216,13 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./data"), exports);
 
 
 //// [/user/username/projects/myproject/app.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 var public_1 = require("lib2/public");
 var App = /** @class */ (function () {

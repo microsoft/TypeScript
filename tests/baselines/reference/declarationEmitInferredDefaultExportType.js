@@ -8,9 +8,9 @@ export default {
 
 //// [declarationEmitInferredDefaultExportType.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 // test.ts
-exports["default"] = {
+exports.default = {
     foo: [],
     bar: undefined,
     baz: null

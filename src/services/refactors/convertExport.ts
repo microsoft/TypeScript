@@ -26,6 +26,7 @@ import {
     InterfaceDeclaration,
     InternalSymbolName,
     ModifierFlags,
+    ModuleBlock,
     NamespaceDeclaration,
     Node,
     NodeFlags,
@@ -130,7 +131,7 @@ function getInfo(context: RefactorContext, considerPartialSpans = true): ExportI
     }
 
     const checker = program.getTypeChecker();
-    const exportingModuleSymbol = getExportingModuleSymbol(exportNode, checker);
+    const exportingModuleSymbol = getExportingModuleSymbol(exportNode.parent, checker);
     const flags = getSyntacticModifierFlags(exportNode) || ((isExportAssignment(exportNode) && !exportNode.isExportEquals) ? ModifierFlags.ExportDefault : ModifierFlags.None);
 
     const wasDefault = !!(flags & ModifierFlags.Default);
@@ -327,8 +328,7 @@ function makeExportSpecifier(propertyName: string, name: string): ExportSpecifie
     return factory.createExportSpecifier(/*isTypeOnly*/ false, propertyName === name ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(name));
 }
 
-function getExportingModuleSymbol(node: Node, checker: TypeChecker) {
-    const parent = node.parent;
+function getExportingModuleSymbol(parent: SourceFile | ModuleBlock, checker: TypeChecker) {
     if (isSourceFile(parent)) {
         return parent.symbol;
     }

@@ -41,7 +41,6 @@ import {
     JSDocTag,
     JSDocTemplateTag,
     Node,
-    Program,
     SourceFile,
     SymbolFlags,
     TextRange,
@@ -53,7 +52,6 @@ import {
 import {
     addToSeen,
     getLocaleSpecificMessage,
-    getNewLineCharacter,
     isSourceFileJS,
     isThisIdentifier,
 } from "../../compiler/utilities";
@@ -79,6 +77,7 @@ import {
 import {
     createTextRangeFromSpan,
     getNameFromPropertyName,
+    getNewLineOrDefaultFromHost,
     getPrecedingNonSpaceCharacterPosition,
     getRefactorContextSpan,
     getRenameLocation,
@@ -141,7 +140,7 @@ registerRefactor(refactorName, {
         return emptyArray;
     },
     getEditsForAction: function getRefactorEditsToExtractType(context, actionName): RefactorEditInfo {
-        const { file, program } = context;
+        const { file } = context;
         const info = getRangeToExtract(context);
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected to find a range to extract");
 
@@ -153,7 +152,7 @@ registerRefactor(refactorName, {
                     return doTypeAliasChange(changes, file, name, info);
                 case extractToTypeDefAction.name:
                     Debug.assert(info.isJS, "Invalid actionName/JS combo");
-                    return doTypedefChange(changes, program, file, name, info);
+                    return doTypedefChange(changes, context, file, name, info);
                 case extractToInterfaceAction.name:
                     Debug.assert(!info.isJS && !!info.typeElements, "Invalid actionName/JS combo");
                     return doInterfaceChange(changes, file, name, info as InterfaceInfo);
@@ -315,7 +314,7 @@ function doInterfaceChange(changes: ChangeTracker, file: SourceFile, name: strin
     changes.replaceNode(file, selection, factory.createTypeReferenceNode(name, typeParameters.map(id => factory.createTypeReferenceNode(id.name, /* typeArguments */ undefined))), { leadingTriviaOption: LeadingTriviaOption.Exclude, trailingTriviaOption: TrailingTriviaOption.ExcludeWhitespace });
 }
 
-function doTypedefChange(changes: ChangeTracker, program: Program, file: SourceFile, name: string, info: ExtractInfo) {
+function doTypedefChange(changes: ChangeTracker, context: RefactorContext, file: SourceFile, name: string, info: ExtractInfo) {
     const { enclosingNode, selection, typeParameters } = info;
 
     setEmitFlags(selection, EmitFlags.NoComments | EmitFlags.NoNestedComments);
@@ -340,7 +339,7 @@ function doTypedefChange(changes: ChangeTracker, program: Program, file: SourceF
     const jsDoc = factory.createJSDocComment(/* comment */ undefined, factory.createNodeArray(concatenate<JSDocTag>(templates, [node])));
     if (isJSDoc(enclosingNode)) {
         const pos = enclosingNode.getStart(file);
-        const newLineCharacter = getNewLineCharacter(program.getCompilerOptions());
+        const newLineCharacter = getNewLineOrDefaultFromHost(context.host, context.formatContext?.options);
         changes.insertNodeAt(file, enclosingNode.getStart(file), jsDoc, {
             suffix: newLineCharacter + newLineCharacter + file.text.slice(getPrecedingNonSpaceCharacterPosition(file.text, pos - 1), pos)
         });

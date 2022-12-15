@@ -31,7 +31,7 @@ console.log(JSON.stringify(result));
  *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-simple-transform-function
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var ts = require("typescript");
 var source = "let x: string  = 'string'";
 var result = ts.transpile(source, { module: ts.ModuleKind.CommonJS });

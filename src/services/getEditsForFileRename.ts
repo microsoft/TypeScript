@@ -130,7 +130,7 @@ function updateTsconfigFiles(program: Program, changeTracker: ChangeTracker, old
                 if (foundExactMatch || propertyName !== "include" || !isArrayLiteralExpression(property.initializer)) return;
                 const includes = mapDefined(property.initializer.elements, e => isStringLiteral(e) ? e.text : undefined);
                 if (includes.length === 0) return;
-                const matchers = getFileMatcherPatterns(configDir, /*excludes*/ [], includes, useCaseSensitiveFileNames, currentDirectory);
+                const matchers = getFileMatcherPatterns(configDir, /*excludes*/[], includes, useCaseSensitiveFileNames, currentDirectory);
                 // If there isn't some include for this, add a new one.
                 if (getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
                     !getRegexFromPattern(Debug.checkDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)) {
@@ -141,6 +141,7 @@ function updateTsconfigFiles(program: Program, changeTracker: ChangeTracker, old
             case "compilerOptions":
                 forEachProperty(property.initializer, (property, propertyName) => {
                     const option = getOptionFromName(propertyName);
+                    Debug.assert(option?.type !== "listOrElement");
                     if (option && (option.isFilePath || option.type === "list" && option.element.isFilePath)) {
                         updatePaths(property);
                     }
@@ -258,9 +259,9 @@ function getSourceFileToImport(
     }
     else {
         const mode = getModeForUsageLocation(importingSourceFile, importLiteral);
-        const resolved = host.resolveModuleNames
-            ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode)
-            : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);
+        const resolved = host.resolveModuleNameLiterals || !host.resolveModuleNames ?
+            importingSourceFile.resolvedModules?.get(importLiteral.text, mode) :
+            host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);
         return getSourceFileToImportFromResolved(importLiteral, resolved, oldToNew, program.getSourceFiles());
     }
 }

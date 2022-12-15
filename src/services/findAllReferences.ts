@@ -107,6 +107,7 @@ import {
     Node,
     NodeFlags,
     NumericLiteral,
+    ObjectLiteralExpression,
     ParameterDeclaration,
     ParenthesizedExpression,
     Path,
@@ -128,6 +129,7 @@ import {
     SyntaxKind,
     TextSpan,
     TypeChecker,
+    TypeLiteralNode,
     VariableDeclaration,
 } from "../compiler/types";
 import {
@@ -165,10 +167,12 @@ import {
     rangeIsOnSingleLine,
     skipAlias,
     stripQuotes,
+    SuperContainer,
     tryGetClassExtendingExpressionWithTypeArguments,
     tryGetImportFromModuleSpecifier,
 } from "../compiler/utilities";
 import {
+    canHaveSymbol,
     createTextSpan,
     escapeLeadingUnderscores,
     findAncestor,
@@ -876,7 +880,7 @@ export namespace Core {
             if (!options.implementations && isStringLiteralLike(node)) {
                 if (isModuleSpecifierLike(node)) {
                     const fileIncludeReasons = program.getFileIncludeReasons();
-                    const referencedFileName = node.getSourceFile().resolvedModules?.get(node.text, getModeForUsageLocation(node.getSourceFile(), node))?.resolvedFileName;
+                    const referencedFileName = node.getSourceFile().resolvedModules?.get(node.text, getModeForUsageLocation(node.getSourceFile(), node))?.resolvedModule?.resolvedFileName;
                     const referencedFile = referencedFileName ? program.getSourceFile(referencedFileName) : undefined;
                     if (referencedFile) {
                         return [{ definition: { type: DefinitionKind.String, node }, references: getReferencesForNonModule(referencedFile, fileIncludeReasons, program) || emptyArray }];
@@ -1799,7 +1803,7 @@ export namespace Core {
 
         // Use the parent symbol if the location is commonjs require syntax on javascript files only.
         if (isInJSFile(referenceLocation)
-            && referenceLocation.parent.kind === SyntaxKind.BindingElement
+            && isBindingElement(referenceLocation.parent)
             && isVariableDeclarationInitializedToBareOrAccessedRequire(referenceLocation.parent.parent.parent)) {
             referenceSymbol = referenceLocation.parent.symbol;
             // The parent will not have a symbol if it's an ObjectBindingPattern (when destructuring is used).  In
@@ -2170,7 +2174,7 @@ export namespace Core {
     }
 
     function getReferencesForSuperKeyword(superKeyword: Node): SymbolAndEntries[] | undefined {
-        let searchSpaceNode = getSuperContainer(superKeyword, /*stopOnFunctions*/ false);
+        let searchSpaceNode: SuperContainer | ClassLikeDeclaration | TypeLiteralNode | InterfaceDeclaration | ObjectLiteralExpression | undefined = getSuperContainer(superKeyword, /*stopOnFunctions*/ false);
         if (!searchSpaceNode) {
             return undefined;
         }
@@ -2203,7 +2207,7 @@ export namespace Core {
             // If we have a 'super' container, we must have an enclosing class.
             // Now make sure the owning class is the same as the search-space
             // and has the same static qualifier as the original 'super's owner.
-            return container && isStatic(container) === !!staticFlag && container.parent.symbol === searchSpaceNode.symbol ? nodeEntry(node) : undefined;
+            return container && isStatic(container) === !!staticFlag && container.parent.symbol === searchSpaceNode!.symbol ? nodeEntry(node) : undefined;
         });
 
         return [{ definition: { type: DefinitionKind.Symbol, symbol: searchSpaceNode.symbol }, references }];
@@ -2214,7 +2218,7 @@ export namespace Core {
     }
 
     function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: readonly SourceFile[], cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
-        let searchSpaceNode = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false);
+        let searchSpaceNode: Node = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false, /*includeClassComputedPropertyName*/ false);
 
         // Whether 'this' occurs in a static context within a class.
         let staticFlag = ModifierFlags.Static;
@@ -2256,11 +2260,12 @@ export namespace Core {
                 if (!isThis(node)) {
                     return false;
                 }
-                const container = getThisContainer(node, /* includeArrowFunctions */ false);
+                const container = getThisContainer(node, /* includeArrowFunctions */ false, /*includeClassComputedPropertyName*/ false);
+                if (!canHaveSymbol(container)) return false;
                 switch (searchSpaceNode.kind) {
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.FunctionDeclaration:
-                        return searchSpaceNode.symbol === container.symbol;
+                        return (searchSpaceNode as FunctionExpression | FunctionDeclaration).symbol === container.symbol;
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.MethodSignature:
                         return isObjectLiteralMethod(searchSpaceNode) && searchSpaceNode.symbol === container.symbol;
@@ -2269,9 +2274,9 @@ export namespace Core {
                     case SyntaxKind.ObjectLiteralExpression:
                         // Make sure the container belongs to the same class/object literals
                         // and has the appropriate static modifier from the original container.
-                        return container.parent && searchSpaceNode.symbol === container.parent.symbol && isStatic(container) === !!staticFlag;
+                        return container.parent && canHaveSymbol(container.parent) && (searchSpaceNode as ClassLikeDeclaration | ObjectLiteralExpression).symbol === container.parent.symbol && isStatic(container) === !!staticFlag;
                     case SyntaxKind.SourceFile:
-                        return container.kind === SyntaxKind.SourceFile && !isExternalModule(container as SourceFile) && !isParameterName(node);
+                        return container.kind === SyntaxKind.SourceFile && !isExternalModule(container) && !isParameterName(node);
                 }
             });
         }).map(n => nodeEntry(n));

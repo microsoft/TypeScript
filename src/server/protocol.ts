@@ -842,6 +842,7 @@ export interface FileLocationRequest extends FileRequest {
  */
 export interface GetSupportedCodeFixesRequest extends Request {
     command: CommandTypes.GetSupportedCodeFixes;
+    arguments?: Partial<FileRequestArgs>;
 }
 
 /**
@@ -3517,6 +3518,7 @@ export interface UserPreferences {
     readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
     readonly includeInlayEnumMemberValueHints?: boolean;
     readonly autoImportFileExcludePatterns?: string[];
+    readonly organizeImportsIgnoreCase?: "auto" | boolean;
 
     /**
      * Indicates whether {@link ReferencesResponseItem.lineText} is supported.

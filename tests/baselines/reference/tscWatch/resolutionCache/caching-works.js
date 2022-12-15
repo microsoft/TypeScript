@@ -79,7 +79,7 @@ foo();
 //// [/a/d/f0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 
 
@@ -148,7 +148,7 @@ exitCode:: ExitStatus.undefined
 //// [/a/d/f0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     var x = 1;
 });
 
@@ -208,7 +208,7 @@ exitCode:: ExitStatus.undefined
 //// [/a/d/f0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
 });
 
 

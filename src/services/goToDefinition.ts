@@ -72,6 +72,7 @@ import {
     tryGetModuleSpecifierFromDeclaration,
 } from "../compiler/utilities";
 import {
+    canHaveSymbol,
     createTextSpan,
     createTextSpanFromBounds,
     findAncestor,
@@ -178,7 +179,7 @@ export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile
     if (!symbol && isModuleSpecifierLike(fallbackNode)) {
         // We couldn't resolve the module specifier as an external module, but it could
         // be that module resolution succeeded but the target was not a module.
-        const ref = sourceFile.resolvedModules?.get(fallbackNode.text, getModeForUsageLocation(sourceFile, fallbackNode));
+        const ref = sourceFile.resolvedModules?.get(fallbackNode.text, getModeForUsageLocation(sourceFile, fallbackNode))?.resolvedModule;
         if (ref) {
             return [{
                 name: fallbackNode.text,
@@ -262,7 +263,7 @@ function symbolMatchesSignature(s: Symbol, calledDeclaration: SignatureDeclarati
     return s === calledDeclaration.symbol
         || s === calledDeclaration.symbol.parent
         || isAssignmentExpression(calledDeclaration.parent)
-        || (!isCallLikeExpression(calledDeclaration.parent) && s === calledDeclaration.parent.symbol);
+        || (!isCallLikeExpression(calledDeclaration.parent) && s === tryCast(calledDeclaration.parent, canHaveSymbol)?.symbol);
 }
 
 // If the current location we want to find its definition is in an object literal, try to get the contextual type for the
@@ -317,7 +318,7 @@ export function getReferenceAtPosition(sourceFile: SourceFile, position: number,
 
     const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
     if (typeReferenceDirective) {
-        const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName, typeReferenceDirective.resolutionMode || sourceFile.impliedNodeFormat);
+        const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName, typeReferenceDirective.resolutionMode || sourceFile.impliedNodeFormat)?.resolvedTypeReferenceDirective;
         const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
         return file && { reference: typeReferenceDirective, fileName: file.fileName, file, unverified: false };
     }
@@ -331,7 +332,7 @@ export function getReferenceAtPosition(sourceFile: SourceFile, position: number,
     if (sourceFile.resolvedModules?.size()) {
         const node = getTouchingToken(sourceFile, position);
         if (isModuleSpecifierLike(node) && isExternalModuleNameRelative(node.text) && sourceFile.resolvedModules.has(node.text, getModeForUsageLocation(sourceFile, node))) {
-            const verifiedFileName = sourceFile.resolvedModules.get(node.text, getModeForUsageLocation(sourceFile, node))?.resolvedFileName;
+            const verifiedFileName = sourceFile.resolvedModules.get(node.text, getModeForUsageLocation(sourceFile, node))?.resolvedModule?.resolvedFileName;
             const fileName = verifiedFileName || resolvePath(getDirectoryPath(sourceFile.fileName), node.text);
             return {
                 file: program.getSourceFile(fileName),

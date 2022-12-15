@@ -3,6 +3,7 @@ import {
     cast,
     forEach,
     some,
+    tryCast,
 } from "../compiler/core";
 import { Debug } from "../compiler/debug";
 import {
@@ -79,6 +80,7 @@ import {
     isVariableDeclarationInitializedToBareOrAccessedRequire,
 } from "../compiler/utilities";
 import {
+    canHaveSymbol,
     findAncestor,
     symbolName,
     walkUpBindingElementsAndPatterns,
@@ -471,7 +473,7 @@ export function findModuleReferences(program: Program, sourceFiles: readonly Sou
                 }
             }
             for (const ref of referencingFile.typeReferenceDirectives) {
-                const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName, ref.resolutionMode || referencingFile.impliedNodeFormat);
+                const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName, ref.resolutionMode || referencingFile.impliedNodeFormat)?.resolvedTypeReferenceDirective;
                 if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as SourceFile).fileName) {
                     refs.push({ kind: "reference", referencingFile, ref });
                 }
@@ -693,10 +695,10 @@ function getExportEqualsLocalSymbol(importedSymbol: Symbol, checker: TypeChecker
 
     const decl = Debug.checkDefined(importedSymbol.valueDeclaration);
     if (isExportAssignment(decl)) { // `export = class {}`
-        return decl.expression.symbol;
+        return tryCast(decl.expression, canHaveSymbol)?.symbol;
     }
     else if (isBinaryExpression(decl)) { // `module.exports = class {}`
-        return decl.right.symbol;
+        return tryCast(decl.right, canHaveSymbol)?.symbol;
     }
     else if (isSourceFile(decl)) { // json module
         return decl.symbol;

@@ -10,6 +10,7 @@ import {
     isWhiteSpaceSingleLine,
     mapDefined,
     toArray,
+    tryCast,
 } from "../compiler/core";
 import { Push } from "../compiler/corePublic";
 import { Debug } from "../compiler/debug";
@@ -70,6 +71,7 @@ import {
     modifierToFlag,
 } from "../compiler/utilities";
 import {
+    canHaveSymbol,
     createTextSpanFromBounds,
     findAncestor,
     isAccessor,
@@ -194,8 +196,8 @@ function getHighlightSpans(node: Node, sourceFile: SourceFile): HighlightSpan[] 
     }
 
     function getFromAllDeclarations<T extends Node>(nodeTest: (node: Node) => node is T, keywords: readonly SyntaxKind[]): HighlightSpan[] | undefined {
-        return useParent(node.parent, nodeTest, decl => mapDefined(decl.symbol.declarations, d =>
-            nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined));
+        return useParent(node.parent, nodeTest, decl => mapDefined(tryCast(decl, canHaveSymbol)?.symbol.declarations, d =>
+                nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined));
     }
 
     function useParent<T extends Node>(node: Node, nodeTest: (node: Node) => node is T, getNodes: (node: T, sourceFile: SourceFile) => readonly Node[] | undefined): HighlightSpan[] | undefined {

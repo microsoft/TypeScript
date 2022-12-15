@@ -98,7 +98,7 @@ Info 24   [00:00:57.000] 	Files (3)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../project1/class1.d.ts
 	  Output from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	class2.ts
@@ -277,7 +277,7 @@ Info 54   [00:01:49.000] 	Files (4)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../project1/class1.d.ts
 	  Output from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	../project1/class3.d.ts
@@ -443,7 +443,7 @@ Info 78   [00:02:30.000] 	Files (3)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../project1/class1.d.ts
 	  Output from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	class2.ts
@@ -545,7 +545,7 @@ Info 96   [00:03:02.000] 	Files (4)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../project1/class1.d.ts
 	  Output from referenced project '../project1/tsconfig.json' included because '--module' is specified as 'none'
 	../project1/class3.d.ts

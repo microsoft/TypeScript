@@ -45,6 +45,7 @@ import {
     JSDocSeeTag,
     JSDocTag,
     JSDocTemplateTag,
+    JSDocThrowsTag,
     JSDocTypedefTag,
     JSDocTypeTag,
     MethodDeclaration,
@@ -270,6 +271,10 @@ function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDis
     const { comment, kind } = tag;
     const namePart = getTagNameDisplayPart(kind);
     switch (kind) {
+        case SyntaxKind.JSDocThrowsTag:
+            const typeExpression = (tag as JSDocThrowsTag).typeExpression;
+            return typeExpression ? withNode(typeExpression) :
+                comment === undefined ? undefined : getDisplayPartsFromComment(comment, checker);
         case SyntaxKind.JSDocImplementsTag:
             return withNode((tag as JSDocImplementsTag).class);
         case SyntaxKind.JSDocAugmentsTag:

@@ -4,12 +4,12 @@ import {
     noop,
 } from "../compiler/core";
 import {
-    PragmaContext,
     processCommentPragmas,
     processPragmasIntoFields,
 } from "../compiler/parser";
 import {
     FileReference,
+    PragmaContext,
     ScriptTarget,
     SyntaxKind,
 } from "../compiler/types";

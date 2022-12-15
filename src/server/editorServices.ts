@@ -2702,7 +2702,7 @@ export class ProjectService {
         this.eventHandler({
             eventName: ConfigFileDiagEvent,
             data: { configFileName: project.getConfigFilePath(), diagnostics, triggerFile }
-        } as ConfigFileDiagEvent);
+        } satisfies ConfigFileDiagEvent);
     }
 
     private getOrCreateInferredProjectForProjectRootPathIfEnabled(info: ScriptInfo, projectRootPath: NormalizedPath | undefined): InferredProject | undefined {

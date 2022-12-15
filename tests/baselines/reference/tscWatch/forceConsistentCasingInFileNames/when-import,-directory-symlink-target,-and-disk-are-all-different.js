@@ -42,7 +42,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
@@ -158,7 +158,7 @@ Output::
 [7m [0m [91m                  ~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts

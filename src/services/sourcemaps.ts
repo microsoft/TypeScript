@@ -6,7 +6,7 @@ import { isDeclarationFileName } from "../compiler/parser";
 import {
     getDirectoryPath,
     getNormalizedAbsolutePath,
-    toPath as toPathHelper,
+    toPath,
 } from "../compiler/path";
 import {
     computeLineAndCharacterOfPosition,
@@ -67,12 +67,12 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
     const documentPositionMappers = new Map<string, DocumentPositionMapper>();
     return { tryGetSourcePosition, tryGetGeneratedPosition, toLineColumnOffset, clearCache };
 
-    function toPath(fileName: string) {
-        return toPathHelper(fileName, currentDirectory, getCanonicalFileName);
+    function toPathWorker(fileName: string) {
+        return toPath(fileName, currentDirectory, getCanonicalFileName);
     }
 
     function getDocumentPositionMapperWorker(generatedFileName: string, sourceFileName?: string) {
-        const path = toPath(generatedFileName);
+        const path = toPathWorker(generatedFileName);
         const value = documentPositionMappers.get(path);
         if (value) return value;
 
@@ -131,14 +131,14 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
         const program = host.getProgram();
         if (!program) return undefined;
 
-        const path = toPath(fileName);
+        const path = toPathWorker(fileName);
         // file returned here could be .d.ts when asked for .ts file if projectReferences and module resolution created this source file
         const file = program.getSourceFileByPath(path);
         return file && file.resolvedPath === path ? file : undefined;
     }
 
     function getOrCreateSourceFileLike(fileName: string): SourceFileLike | undefined {
-        const path = toPath(fileName);
+        const path = toPathWorker(fileName);
         const fileFromCache = sourceFileLike.get(path);
         if (fileFromCache !== undefined) return fileFromCache ? fileFromCache : undefined;
 

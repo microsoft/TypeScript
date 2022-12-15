@@ -81,7 +81,7 @@ Info 18   [00:00:39.000] 	Files (5)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	moduleFile1.ts
 	  Imported via "./moduleFile1" from file 'file1Consumer1.ts'
 	  Matched by default include pattern '**/*'

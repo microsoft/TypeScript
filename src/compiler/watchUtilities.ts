@@ -25,7 +25,6 @@ import {
 import { Debug } from "./debug";
 import { isDeclarationFileName } from "./parser";
 import {
-    toPath as _toPath,
     ensureTrailingDirectorySeparator,
     fileExtensionIsOneOf,
     getBaseFileName,
@@ -33,6 +32,7 @@ import {
     getNormalizedAbsolutePath,
     hasExtension,
     normalizePath,
+    toPath,
 } from "./path";
 import { timestamp } from "./performanceCore";
 import { removeIgnoredPath } from "./resolutionCache";
@@ -144,8 +144,8 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         realpath: host.realpath && realpath
     };
 
-    function toPath(fileName: string) {
-        return _toPath(fileName, currentDirectory, getCanonicalFileName);
+    function toPathWorker(fileName: string) {
+        return toPath(fileName, currentDirectory, getCanonicalFileName);
     }
 
     function getCachedFileSystemEntries(rootDirPath: Path) {
@@ -171,7 +171,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
     }
 
     function createCachedFileSystemEntries(rootDir: string, rootDirPath: Path) {
-        if (!host.realpath || ensureTrailingDirectorySeparator(toPath(host.realpath(rootDir))) === rootDirPath) {
+        if (!host.realpath || ensureTrailingDirectorySeparator(toPathWorker(host.realpath(rootDir))) === rootDirPath) {
             const resultFromHost: MutableFileSystemEntries = {
                 files: map(host.readDirectory!(rootDir, /*extensions*/ undefined, /*exclude*/ undefined, /*include*/["*.*"]), getBaseNameOfFileName) || [],
                 directories: host.getDirectories!(rootDir) || []
@@ -220,7 +220,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
     }
 
     function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
-        const path = toPath(fileName);
+        const path = toPathWorker(fileName);
         const result = getCachedFileSystemEntriesForBaseDir(path);
         if (result) {
             updateFilesOfFileSystemEntry(result, getBaseNameOfFileName(fileName), /*fileExists*/ true);
@@ -229,19 +229,19 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
     }
 
     function fileExists(fileName: string): boolean {
-        const path = toPath(fileName);
+        const path = toPathWorker(fileName);
         const result = getCachedFileSystemEntriesForBaseDir(path);
         return result && hasEntry(result.sortedAndCanonicalizedFiles, getCanonicalFileName(getBaseNameOfFileName(fileName))) ||
             host.fileExists(fileName);
     }
 
     function directoryExists(dirPath: string): boolean {
-        const path = toPath(dirPath);
+        const path = toPathWorker(dirPath);
         return cachedReadDirectoryResult.has(ensureTrailingDirectorySeparator(path)) || host.directoryExists!(dirPath);
     }
 
     function createDirectory(dirPath: string) {
-        const path = toPath(dirPath);
+        const path = toPathWorker(dirPath);
         const result = getCachedFileSystemEntriesForBaseDir(path);
         if (result) {
             const baseName = getBaseNameOfFileName(dirPath);
@@ -256,7 +256,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
     }
 
     function getDirectories(rootDir: string): string[] {
-        const rootDirPath = toPath(rootDir);
+        const rootDirPath = toPathWorker(rootDir);
         const result = tryReadDirectory(rootDir, rootDirPath);
         if (result) {
             return result.directories.slice();
@@ -265,7 +265,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
     }
 
     function readDirectory(rootDir: string, extensions?: readonly string[], excludes?: readonly string[], includes?: readonly string[], depth?: number): string[] {
-        const rootDirPath = toPath(rootDir);
+        const rootDirPath = toPathWorker(rootDir);
         const rootResult = tryReadDirectory(rootDir, rootDirPath);
         let rootSymLinkResult: FileSystemEntries | undefined;
         if (rootResult !== undefined) {
@@ -274,7 +274,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         return host.readDirectory!(rootDir, extensions, excludes, includes, depth);
 
         function getFileSystemEntries(dir: string): FileSystemEntries {
-            const path = toPath(dir);
+            const path = toPathWorker(dir);
             if (path === rootDirPath) {
                 return rootResult || getFileSystemEntriesFromHost(dir, path);
             }

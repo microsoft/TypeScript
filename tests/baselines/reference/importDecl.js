@@ -83,7 +83,7 @@ export var useMultiImport_m4_f4 = multiImport_m4.foo();
 
 //// [importDecl_require.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = exports.x = exports.d = void 0;
 var d = /** @class */ (function () {
     function d() {
@@ -95,7 +95,7 @@ function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = exports.d = void 0;
 var d = /** @class */ (function () {
     function d() {
@@ -108,7 +108,7 @@ function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = exports.x = exports.d = void 0;
 var d = /** @class */ (function () {
     function d() {
@@ -120,7 +120,7 @@ function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo = exports.x = exports.d = void 0;
 var d = /** @class */ (function () {
     function d() {
@@ -132,13 +132,13 @@ function foo() { return null; }
 exports.foo = foo;
 //// [importDecl_require4.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo2 = void 0;
 function foo2() { return null; }
 exports.foo2 = foo2;
 //// [importDecl_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.useMultiImport_m4_f4 = exports.useMultiImport_m4_d4 = exports.useMultiImport_m4_x4 = exports.d = exports.usePrivate_m4_m1 = exports.useFncOnly_m4_f4 = exports.useGlo_m4_f4 = exports.useGlo_m4_d4 = exports.m1 = exports.f4 = exports.d4 = exports.x4 = void 0;
 ///<reference path='importDecl_require.ts'/>
 ///<reference path='importDecl_require1.ts'/>

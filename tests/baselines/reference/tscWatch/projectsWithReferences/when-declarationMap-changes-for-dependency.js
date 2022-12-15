@@ -62,7 +62,7 @@ export const m = mod;
 
 //// [/user/username/projects/sample1/core/anotherModule.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.World = void 0;
 exports.World = "hello";
 
@@ -76,7 +76,7 @@ export declare const World = "hello";
 
 //// [/user/username/projects/sample1/core/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
@@ -179,7 +179,7 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File '/user/username/projects/sample1/core/anotherModule.ts' exist - use it as a name resolution result.
 ======== Module name '../core/anotherModule' was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'. ========
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 core/index.d.ts
   Imported via '../core/index' from file 'logic/index.ts'
   File is output of project reference source 'core/index.ts'
@@ -261,7 +261,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/logic/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = exports.getSecondsInDay = void 0;
 var c = require("../core/index");
 function getSecondsInDay() {
@@ -455,7 +455,7 @@ Output::
 Reusing resolution of module '../core/index' from '/user/username/projects/sample1/logic/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/index.ts'.
 Reusing resolution of module '../core/anotherModule' from '/user/username/projects/sample1/logic/index.ts' of old program, it was successfully resolved to '/user/username/projects/sample1/core/anotherModule.ts'.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 core/index.d.ts
   Imported via '../core/index' from file 'logic/index.ts'
   File is output of project reference source 'core/index.ts'

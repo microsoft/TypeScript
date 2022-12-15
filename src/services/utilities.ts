@@ -30,7 +30,6 @@ import {
     lastOrUndefined,
     map,
     maybeBind,
-    noop,
     notImplemented,
     or,
     singleOrUndefined,
@@ -371,8 +370,8 @@ import * as JsTyping from "../jsTyping/jsTyping";
 import { moduleSymbolToValidIdentifier } from "./codefixes/importAdder";
 import {
     compareImportsOrRequireStatements,
+    detectImportDeclarationSorting,
     getImportDeclarationInsertionIndex,
-    importsAreSorted,
 } from "./organizeImports";
 import { DisplayPartsSymbolWriter } from "./services";
 import { SourceMapper } from "./sourcemaps";
@@ -2427,6 +2426,7 @@ export function programContainsModules(program: Program): boolean {
 export function programContainsEsModules(program: Program): boolean {
     return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
 }
+// TODO: this function is, at best, poorly named. Use sites are pretty suspicious.
 /** @internal */
 export function compilerOptionsIndicateEsModules(compilerOptions: CompilerOptions): boolean {
     return !!compilerOptions.module || getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
@@ -2459,11 +2459,6 @@ export function getModuleSpecifierResolverHost(program: Program, host: LanguageS
         ...createModuleSpecifierResolutionHost(program, host),
         getCommonSourceDirectory: () => program.getCommonSourceDirectory(),
     };
-}
-
-/** @internal */
-export function moduleResolutionRespectsExports(moduleResolution: ModuleResolutionKind): boolean {
-    return moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
 }
 
 /** @internal */
@@ -2598,7 +2593,7 @@ export function insertImports(changes: ChangeTracker, sourceFile: SourceFile, im
     if (!existingImportStatements.length) {
         changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
     }
-    else if (existingImportStatements && importsAreSorted(existingImportStatements)) {
+    else if (existingImportStatements && detectImportDeclarationSorting(existingImportStatements)) {
         for (const newImport of sortedNewImports) {
             const insertionIndex = getImportDeclarationInsertionIndex(existingImportStatements, newImport);
             if (insertionIndex === 0) {
@@ -2773,10 +2768,6 @@ function getDisplayPartWriter(): DisplayPartsSymbolWriter {
         increaseIndent: () => { indent++; },
         decreaseIndent: () => { indent--; },
         clear: resetWriter,
-        trackSymbol: () => false,
-        reportInaccessibleThisError: noop,
-        reportInaccessibleUniqueSymbolError: noop,
-        reportPrivateInBaseOfClassExpression: noop,
     };
 
     function writeIndent() {
@@ -2950,7 +2941,7 @@ export function buildLinkParts(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain,
             if (text) parts.push(linkTextPart(text));
         }
         else {
-            parts.push(linkTextPart(name + (suffix || text.indexOf("://") === 0 ? "" : " ") + text));
+            parts.push(linkTextPart(name + (suffix ? "" : " ") + text));
         }
     }
     parts.push(linkPart("}"));
@@ -2967,15 +2958,21 @@ function skipSeparatorFromLinkText(text: string) {
 }
 
 function findLinkNameEnd(text: string) {
+    let pos = text.indexOf("://");
+    if (pos === 0) {
+        while (pos < text.length && text.charCodeAt(pos) !== CharacterCodes.bar) pos++;
+        return pos;
+    }
     if (text.indexOf("()") === 0) return 2;
-    if (text[0] !== "<") return 0;
-    let brackets = 0;
-    let i = 0;
-    while (i < text.length) {
-        if (text[i] === "<") brackets++;
-        if (text[i] === ">") brackets--;
-        i++;
-        if (!brackets) return i;
+    if (text.charAt(0) === "<") {
+        let brackets = 0;
+        let i = 0;
+        while (i < text.length) {
+            if (text[i] === "<") brackets++;
+            if (text[i] === ">") brackets--;
+            i++;
+            if (!brackets) return i;
+        }
     }
     return 0;
 }

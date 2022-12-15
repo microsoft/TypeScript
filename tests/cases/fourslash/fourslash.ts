@@ -375,6 +375,7 @@ declare namespace FourSlashInterface {
         getAndApplyCodeFix(errorCode?: number, index?: number): void;
         importFixAtPosition(expectedTextArray: string[], errorCode?: number, options?: UserPreferences): void;
         importFixModuleSpecifiers(marker: string, moduleSpecifiers: string[], options?: UserPreferences): void;
+        baselineAutoImports(marker: string, options?: UserPreferences): void;
 
         navigationBar(json: any, options?: { checkSpans?: boolean }): void;
         navigationTree(json: any, options?: { checkSpans?: boolean }): void;
@@ -447,7 +448,7 @@ declare namespace FourSlashInterface {
 
         generateTypes(...options: GenerateTypesOptions[]): void;
 
-        organizeImports(newContent: string, mode?: ts.OrganizeImportsMode): void;
+        organizeImports(newContent: string, mode?: ts.OrganizeImportsMode, preferences?: UserPreferences): void;
 
         toggleLineComment(newFileContent: string): void;
         toggleMultilineComment(newFileContent: string): void;
@@ -671,6 +672,7 @@ declare namespace FourSlashInterface {
         readonly providePrefixAndSuffixTextForRename?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: readonly string[];
+        readonly organizeImportsIgnoreCase?: "auto" | boolean;
     }
     interface InlayHintsOptions extends UserPreferences {
         readonly includeInlayParameterNameHints?: "none" | "literals" | "all";

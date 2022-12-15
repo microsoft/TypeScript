@@ -67,7 +67,7 @@ Info 16   [00:00:33.000] 	Files (3)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	f1.ts
 	  Matched by default include pattern '**/*'
 	  Imported via "./f1" from file 'f2.ts'
@@ -195,7 +195,7 @@ Info 27   [00:01:00.000] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/b/f1
 After request
 //// [/a/b/f1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 function Foo() { return 10; }
 exports.Foo = Foo;

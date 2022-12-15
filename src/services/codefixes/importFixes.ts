@@ -5,7 +5,6 @@ import {
     registerCodeFix,
 } from "../codeFixProvider";
 import { ChangeTracker } from "../textChanges";
-import { getQuotePreference } from "../utilities";
 import {
     codeActionForFix,
     createImportAdder,
@@ -35,9 +34,8 @@ registerCodeFix({
         const { errorCode, preferences, sourceFile, span, program } = context;
         const info = getFixInfos(context, errorCode, span.start, /*useAutoImportProvider*/ true);
         if (!info) return undefined;
-        const quotePreference = getQuotePreference(sourceFile, preferences);
         return info.map(({ fix, symbolName, errorIdentifierText }) =>
-            codeActionForFix(context, sourceFile, symbolName, fix, /*includeSymbolNameInDescription*/ symbolName !== errorIdentifierText, quotePreference, program.getCompilerOptions()));
+            codeActionForFix(context, sourceFile, symbolName, fix, /*includeSymbolNameInDescription*/ symbolName !== errorIdentifierText, program.getCompilerOptions(), preferences));
     },
     fixIds: [fixId],
     getAllCodeActions: context => {

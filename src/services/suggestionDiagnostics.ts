@@ -9,6 +9,8 @@ import {
     isBlock,
     isCallExpression,
     isExportAssignment,
+    isFunctionDeclaration,
+    isFunctionExpression,
     isIdentifier,
     isPropertyAccessExpression,
     isReturnStatement,
@@ -286,7 +288,7 @@ function getKeyFromNode(exp: FunctionLikeDeclaration) {
 }
 
 function canBeConvertedToClass(node: Node, checker: TypeChecker): boolean {
-    if (node.kind === SyntaxKind.FunctionExpression) {
+    if (isFunctionExpression(node)) {
         if (isVariableDeclaration(node.parent) && node.symbol.members?.size) {
             return true;
         }
@@ -295,7 +297,7 @@ function canBeConvertedToClass(node: Node, checker: TypeChecker): boolean {
         return !!(symbol && (symbol.exports?.size || symbol.members?.size));
     }
 
-    if (node.kind === SyntaxKind.FunctionDeclaration) {
+    if (isFunctionDeclaration(node)) {
         return !!node.symbol.members?.size;
     }
 

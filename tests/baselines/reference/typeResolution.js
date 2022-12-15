@@ -113,7 +113,7 @@ module TopLevelModule2 {
 //// [typeResolution.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.TopLevelModule1 = void 0;
     var TopLevelModule1;
     (function (TopLevelModule1) {

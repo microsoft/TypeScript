@@ -73,22 +73,19 @@ import {
     FileReference,
     HasInvalidatedResolutions,
     ModuleResolutionHost,
-    ModuleResolutionInfo,
     ParsedCommandLine,
     Path,
     PluginImport,
     Program,
     ProjectReference,
-    ResolutionMode,
-    ResolvedModuleFull,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
-    ResolvedTypeReferenceDirective,
+    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     ScriptKind,
     SourceFile,
+    StringLiteralLike,
     StructureIsReused,
     TypeAcquisition,
-    TypeReferenceDirectiveResolutionInfo,
     WatchDirectoryFlags,
     WatchOptions,
 } from "../compiler/types";
@@ -582,7 +579,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         if (this.program && !this.symlinks.hasProcessedResolutions()) {
             this.symlinks.setSymlinksFromResolutions(
                 this.program.getSourceFiles(),
-                this.program.getResolvedTypeReferenceDirectives());
+                this.program.getAutomaticTypeDirectiveResolutions());
         }
         return this.symlinks;
     }
@@ -694,20 +691,25 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return !this.isWatchedMissingFile(path) && this.directoryStructureHost.fileExists(file);
     }
 
-    resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingSourceFile?: SourceFile, resolutionInfo?: ModuleResolutionInfo): (ResolvedModuleFull | undefined)[] {
-        return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference, containingSourceFile, resolutionInfo);
+    /** @internal */
+    resolveModuleNameLiterals(moduleLiterals: readonly StringLiteralLike[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile: SourceFile, reusedNames: readonly StringLiteralLike[] | undefined): readonly ResolvedModuleWithFailedLookupLocations[] {
+        return this.resolutionCache.resolveModuleNameLiterals(moduleLiterals, containingFile, redirectedReference, options, containingSourceFile, reusedNames);
     }
 
     getModuleResolutionCache(): ModuleResolutionCache | undefined {
         return this.resolutionCache.getModuleResolutionCache();
     }
 
-    getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined {
-        return this.resolutionCache.getResolvedModuleWithFailedLookupLocationsFromCache(moduleName, containingFile, resolutionMode);
-    }
-
-    resolveTypeReferenceDirectives(typeDirectiveNames: string[] | FileReference[], containingFile: string, redirectedReference?: ResolvedProjectReference, _options?: CompilerOptions, containingFileMode?: ResolutionMode, resolutionInfo?: TypeReferenceDirectiveResolutionInfo): (ResolvedTypeReferenceDirective | undefined)[] {
-        return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference, containingFileMode, resolutionInfo);
+    /** @internal */
+    resolveTypeReferenceDirectiveReferences<T extends string | FileReference>(typeDirectiveReferences: readonly T[], containingFile: string, redirectedReference: ResolvedProjectReference | undefined, options: CompilerOptions, containingSourceFile: SourceFile | undefined, reusedNames: readonly T[] | undefined): readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[] {
+        return this.resolutionCache.resolveTypeReferenceDirectiveReferences(
+            typeDirectiveReferences,
+            containingFile,
+            redirectedReference,
+            options,
+            containingSourceFile,
+            reusedNames,
+        );
     }
 
     directoryExists(path: string): boolean {
@@ -2124,7 +2126,7 @@ function extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules
     return getOrUpdate(cachedUnresolvedImportsPerFile, file.path, () => {
         if (!file.resolvedModules) return emptyArray;
         let unresolvedImports: string[] | undefined;
-        file.resolvedModules.forEach((resolvedModule, name) => {
+        file.resolvedModules.forEach(({ resolvedModule }, name) => {
             // pick unresolved non-relative names
             if ((!resolvedModule || !resolutionExtensionIsTSOrJson(resolvedModule.extension)) &&
                 !isExternalModuleNameRelative(name) &&

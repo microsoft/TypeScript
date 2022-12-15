@@ -106,7 +106,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/packages/A/lib/test.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo_1 = require("b/lib/foo");
 var foo_2 = require("b/lib/bar/foo");
 (0, foo_1.foo)();

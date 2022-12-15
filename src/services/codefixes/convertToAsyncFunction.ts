@@ -70,6 +70,7 @@ import {
     moveRangePastModifiers,
 } from "../../compiler/utilities";
 import {
+    canHaveSymbol,
     getOriginalNode,
     idText,
     isExpression,
@@ -881,7 +882,7 @@ function getArgBindingName(funcNode: Expression, transformer: Transformer): Synt
     }
 
     function getSymbol(node: Node): Symbol | undefined {
-        return node.symbol ? node.symbol : transformer.checker.getSymbolAtLocation(node);
+        return tryCast(node, canHaveSymbol)?.symbol ?? transformer.checker.getSymbolAtLocation(node);
     }
 
     function getOriginalNode(node: Node): Node {

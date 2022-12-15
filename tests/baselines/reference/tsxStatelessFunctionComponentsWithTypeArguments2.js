@@ -35,7 +35,7 @@ let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) 
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     // Error
     function Bar(arg) {
         var a1 = <ComponentSpecific1 {...arg} ignore-prop={10}/>;
