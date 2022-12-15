@@ -5744,19 +5744,20 @@ export interface Symbol {
     members?: SymbolTable;                  // Class, interface or object literal instance members
     exports?: SymbolTable;                  // Module exports
     globalExports?: SymbolTable;            // Conditional global UMD exports
-    /** @internal */ id?: SymbolId;          // Unique id (used to look up SymbolLinks)
-    /** @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
-    /** @internal */ parent?: Symbol;        // Parent symbol
-    /** @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
-    /** @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
+    /** @internal */ id: SymbolId;          // Unique id (used to look up SymbolLinks)
+    /** @internal */ mergeId: number;       // Merge id (used to look up merged symbol)
+    /** @internal */ parent?: Symbol;       // Parent symbol
+    /** @internal */ exportSymbol?: Symbol; // Exported symbol associated with this symbol
+    /** @internal */ constEnumOnlyModule: boolean | undefined; // True if module contains only const enums or other modules with only const enums
     /** @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
     /** @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
-    /** @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
+    /** @internal */ isAssigned?: boolean;  // True if the symbol is a parameter with assignments
     /** @internal */ assignmentDeclarationMembers?: Map<number, Declaration>; // detected late-bound assignment declarations associated with the symbol
 }
 
 /** @internal */
 export interface SymbolLinks {
+    _symbolLinksBrand: any;
     immediateTarget?: Symbol;                   // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
     aliasTarget?: Symbol,                       // Resolved (non-alias) target of an alias
     target?: Symbol;                            // Original version of an instantiated symbol
@@ -5767,7 +5768,7 @@ export interface SymbolLinks {
     declaredType?: Type;                        // Type of class, interface, enum, type alias, or type parameter
     typeParameters?: TypeParameter[];           // Type parameters of type alias (undefined if non-generic)
     outerTypeParameters?: TypeParameter[];      // Outer type parameters of anonymous object type
-    instantiations?: Map<string, Type>;       // Instantiations of generic type alias (undefined if non-generic)
+    instantiations?: Map<string, Type>;         // Instantiations of generic type alias (undefined if non-generic)
     aliasSymbol?: Symbol;                       // Alias associated with generic type alias instantiation
     aliasTypeArguments?: readonly Type[]        // Alias type arguments (if any)
     inferredClassSymbol?: Map<SymbolId, TransientSymbol>; // Symbol of an inferred ES5 constructor function
@@ -5840,21 +5841,36 @@ export const enum CheckFlags {
 }
 
 /** @internal */
-export interface TransientSymbol extends Symbol, SymbolLinks {
+export interface TransientSymbolLinks extends SymbolLinks {
     checkFlags: CheckFlags;
 }
 
 /** @internal */
-export interface MappedSymbol extends TransientSymbol {
+export interface TransientSymbol extends Symbol {
+    links: TransientSymbolLinks;
+}
+
+/** @internal */
+export interface MappedSymbolLinks extends TransientSymbolLinks {
     mappedType: MappedType;
     keyType: Type;
 }
 
 /** @internal */
-export interface ReverseMappedSymbol extends TransientSymbol {
+export interface MappedSymbol extends TransientSymbol {
+    links: MappedSymbolLinks;
+}
+
+/** @internal */
+export interface ReverseMappedSymbolLinks extends TransientSymbolLinks {
     propertyType: Type;
     mappedType: MappedType;
     constraintType: IndexType;
+}
+
+/** @internal */
+export interface ReverseMappedSymbol extends TransientSymbol {
+    links: ReverseMappedSymbolLinks;
 }
 
 export const enum InternalSymbolName {
