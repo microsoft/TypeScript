@@ -55,7 +55,6 @@ import {
     TaggedTemplateExpression,
     TemplateExpression,
     TextSpan,
-    TransientSymbol,
     Type,
     TypeChecker,
     TypeParameter,
@@ -63,6 +62,7 @@ import {
 import {
     getInvokedExpression,
     isSourceFileJS,
+    isTransientSymbol,
 } from "../compiler/utilities";
 import {
     canHaveSymbol,
@@ -738,7 +738,7 @@ function itemInfoForParameters(candidateSignature: Signature, checker: TypeCheck
     const isVariadic: (parameterList: readonly Symbol[]) => boolean =
         !checker.hasEffectiveRestParameter(candidateSignature) ? _ => false
         : lists.length === 1 ? _ => true
-        : pList => !!(pList.length && (pList[pList.length - 1] as TransientSymbol).checkFlags & CheckFlags.RestParameter);
+        : pList => !!(pList.length && tryCast(pList[pList.length - 1], isTransientSymbol)?.links.checkFlags! & CheckFlags.RestParameter);
     return lists.map(parameterList => ({
         isVariadic: isVariadic(parameterList),
         parameters: parameterList.map(p => createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer)),
@@ -753,7 +753,7 @@ function createSignatureHelpParameterForParameter(parameter: Symbol, checker: Ty
         printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);
     });
     const isOptional = checker.isOptionalParameter(parameter.valueDeclaration as ParameterDeclaration);
-    const isRest = !!((parameter as TransientSymbol).checkFlags & CheckFlags.RestParameter);
+    const isRest = isTransientSymbol(parameter) && !!(parameter.links.checkFlags & CheckFlags.RestParameter);
     return { name: parameter.name, documentation: parameter.getDocumentationComment(checker), displayParts, isOptional, isRest };
 }
 

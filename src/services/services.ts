@@ -164,7 +164,6 @@ import {
     TextSpan,
     Token,
     TransformFlags,
-    TransientSymbol,
     Type,
     TypeChecker,
     TypeFlags,
@@ -200,6 +199,7 @@ import {
     isLiteralComputedPropertyDeclarationName,
     isStringOrNumericLiteralLike,
     isThisTypeParameter,
+    isTransientSymbol,
     maybeSetLocalizedDiagnosticMessages,
     ObjectAllocator,
     positionIsSynthesized,
@@ -660,6 +660,9 @@ class SymbolObject implements Symbol {
     escapedName: __String;
     declarations!: Declaration[];
     valueDeclaration!: Declaration;
+    id = 0;
+    mergeId = 0;
+    constEnumOnlyModule: boolean | undefined;
 
     // Undefined is used to indicate the value has not been computed. If, after computing, the
     // symbol has no doc comment, then the empty array will be returned.
@@ -701,8 +704,8 @@ class SymbolObject implements Symbol {
         if (!this.documentationComment) {
             this.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
 
-            if (!this.declarations && (this as Symbol as TransientSymbol).target && ((this as Symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration) {
-                const labelDecl = ((this as Symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration!;
+            if (!this.declarations && isTransientSymbol(this) && this.links.target && isTransientSymbol(this.links.target) && this.links.target.links.tupleLabelDeclaration) {
+                const labelDecl = this.links.target.links.tupleLabelDeclaration;
                 this.documentationComment = getDocumentationComment([labelDecl], checker);
             }
             else {

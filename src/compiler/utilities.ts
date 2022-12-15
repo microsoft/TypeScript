@@ -6848,7 +6848,7 @@ export function closeFileWatcher(watcher: FileWatcher) {
 
 /** @internal */
 export function getCheckFlags(symbol: Symbol): CheckFlags {
-    return symbol.flags & SymbolFlags.Transient ? (symbol as TransientSymbol).checkFlags : 0;
+    return symbol.flags & SymbolFlags.Transient ? (symbol as TransientSymbol).links.checkFlags : 0;
 }
 
 /** @internal */
@@ -6860,7 +6860,8 @@ export function getDeclarationModifierFlagsFromSymbol(s: Symbol, isWrite = false
         return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
     }
     if (getCheckFlags(s) & CheckFlags.Synthetic) {
-        const checkFlags = (s as TransientSymbol).checkFlags;
+        // NOTE: potentially unchecked cast to TransientSymbol
+        const checkFlags = (s as TransientSymbol).links.checkFlags;
         const accessModifier = checkFlags & CheckFlags.ContainsPrivate ? ModifierFlags.Private :
             checkFlags & CheckFlags.ContainsPublic ? ModifierFlags.Public :
             ModifierFlags.Protected;
@@ -7289,9 +7290,16 @@ function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
     this.escapedName = name;
     this.declarations = undefined;
     this.valueDeclaration = undefined;
-    this.id = undefined;
-    this.mergeId = undefined;
+    this.id = 0;
+    this.mergeId = 0;
     this.parent = undefined;
+    this.members = undefined;
+    this.exports = undefined;
+    this.exportSymbol = undefined;
+    this.constEnumOnlyModule = undefined;
+    this.isReferenced = undefined;
+    this.isAssigned = undefined;
+    (this as any).links = undefined; // used by TransientSymbol
 }
 
 function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
