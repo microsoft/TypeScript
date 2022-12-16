@@ -337,7 +337,7 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
                 content: '{"version": "0.0.0", "main": "./index"}'
             }
         );
-        const compilerOptions: ts.CompilerOptions = { moduleResolution: ts.ModuleResolutionKind.NodeJs };
+        const compilerOptions: ts.CompilerOptions = { moduleResolution: ts.ModuleResolutionKind.Node10 };
         const cache = ts.createModuleResolutionCache("/", (f) => f);
         baselines.push(`Resolving "a" from /sub/dir/foo.ts`);
         let resolution = ts.resolveModuleName("a", "/sub/dir/foo.ts", compilerOptions, host, cache);
@@ -365,7 +365,7 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
             { name: "/app/node_modules/linked/package.json", content: '{"version": "0.0.0", "main": "./index"}' },
         );
         const cache = ts.createModuleResolutionCache("/", (f) => f);
-        const compilerOptions: ts.CompilerOptions = { moduleResolution: ts.ModuleResolutionKind.NodeJs };
+        const compilerOptions: ts.CompilerOptions = { moduleResolution: ts.ModuleResolutionKind.Node10 };
         baselineResolution("/app/src/app.ts");
         baselineResolution("/app/lib/main.ts");
         runBaseline("non relative preserves originalPath on cache hit", baselines);
@@ -635,7 +635,7 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
             const file2: File = { name: "/root/folder2/file2.ts" };
             const file3: File = { name: "/root/folder2/file3.ts" };
             const host = createModuleResolutionHost(baselines, hasDirectoryExists, file1, file2, file3);
-            for (const moduleResolution of [ts.ModuleResolutionKind.NodeJs, ts.ModuleResolutionKind.Classic]) {
+            for (const moduleResolution of [ts.ModuleResolutionKind.Node10, ts.ModuleResolutionKind.Classic]) {
                 const options: ts.CompilerOptions = { moduleResolution, baseUrl: "/root" };
                 {
                     baselines.push(`Resolving "folder2/file2" from ${file1.name}${hasDirectoryExists ? "" : " with host that doesnt have directoryExists"}`);
@@ -674,7 +674,7 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
             const m3Typings: File = { name: "/root/m3/dist/typings.d.ts" };
             const m4: File = { name: "/root/node_modules/m4.ts" }; // fallback to node
 
-            const options: ts.CompilerOptions = { moduleResolution: ts.ModuleResolutionKind.NodeJs, baseUrl: "/root" };
+            const options: ts.CompilerOptions = { moduleResolution: ts.ModuleResolutionKind.Node10, baseUrl: "/root" };
             const host = createModuleResolutionHost(baselines, hasDirectoryExists, main, m1, m2, m3, m3Typings, m4);
 
             check("m1", main);
@@ -736,7 +736,7 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
             const host = createModuleResolutionHost(baselines, hasDirectoryExists, file1, file2, file3, file4, file4Typings, file5, file6);
 
             const options: ts.CompilerOptions = {
-                moduleResolution: ts.ModuleResolutionKind.NodeJs,
+                moduleResolution: ts.ModuleResolutionKind.Node10,
                 baseUrl: "/root",
                 jsx: ts.JsxEmit.React,
                 paths: {
@@ -827,7 +827,7 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
             const file3: File = { name: "/root/generated/folder2/file3.ts" };
             const host = createModuleResolutionHost(baselines, hasDirectoryExists, file1, file1_1, file2, file3);
             const options: ts.CompilerOptions = {
-                moduleResolution: ts.ModuleResolutionKind.NodeJs,
+                moduleResolution: ts.ModuleResolutionKind.Node10,
                 rootDirs: [
                     "/root",
                     "/root/generated/"
@@ -890,7 +890,7 @@ describe("unittests:: moduleResolution:: baseUrl augmented module resolution", (
             const libsTypings: File = { name: "/root/src/libs/guid/dist/guid.d.ts" };
             const host = createModuleResolutionHost(baselines, hasDirectoryExists, app, libsPackage, libsTypings);
             const options: ts.CompilerOptions = {
-                moduleResolution: ts.ModuleResolutionKind.NodeJs,
+                moduleResolution: ts.ModuleResolutionKind.Node10,
                 baseUrl: "/root",
                 paths: {
                     "libs/guid": [ "src/libs/guid" ]
@@ -912,7 +912,7 @@ describe("unittests:: moduleResolution:: ModuleResolutionHost.directoryExists", 
             directoryExists: _ => false
         };
 
-        const result = ts.resolveModuleName("someName", "/a/b/c/d", { moduleResolution: ts.ModuleResolutionKind.NodeJs }, host);
+        const result = ts.resolveModuleName("someName", "/a/b/c/d", { moduleResolution: ts.ModuleResolutionKind.Node10 }, host);
         assert(!result.resolvedModule);
     });
 });

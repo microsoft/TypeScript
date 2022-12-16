@@ -1108,6 +1108,7 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.JSDocEnumTag]: forEachChildInJSDocTypeLikeTag,
     [SyntaxKind.JSDocSatisfiesTag]: forEachChildInJSDocTypeLikeTag,
     [SyntaxKind.JSDocThrowsTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocOverloadTag]: forEachChildInJSDocTypeLikeTag,
     [SyntaxKind.JSDocSignature]: function forEachChildInJSDocSignature<T>(node: JSDocSignature, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return forEach(node.typeParameters, cbNode) ||
             forEach(node.parameters, cbNode) ||
@@ -1201,7 +1202,7 @@ function forEachChildInJSDocParameterOrPropertyTag<T>(node: JSDocParameterTag | 
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
 
-function forEachChildInJSDocTypeLikeTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocThrowsTag | JSDocSatisfiesTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInJSDocTypeLikeTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocThrowsTag | JSDocOverloadTag | JSDocSatisfiesTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
     return visitNode(cbNode, node.tagName) ||
         visitNode(cbNode, node.typeExpression) ||
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));

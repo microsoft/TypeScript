@@ -1,6 +1,6 @@
 [
     "======== Resolving module 'xyz' from '/src/a.ts'. ========",
-    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Module resolution kind is not specified, using 'Node10'.",
     "Loading module 'xyz' from 'node_modules' folder, target file types: TypeScript, Declaration.",
     "Directory '/src/node_modules' does not exist, skipping all lookups in it.",
     "File '/node_modules/xyz.ts' does not exist.",

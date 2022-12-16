@@ -176,7 +176,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
                     target: ts.ScriptTarget.ES5,
                     jsx: ts.JsxEmit.React,
                     newLine: ts.NewLineKind.LineFeed,
-                    moduleResolution: ts.ModuleResolutionKind.NodeJs,
+                    moduleResolution: ts.ModuleResolutionKind.Node10,
                     allowNonTsExtensions: true // injected by tsserver
                 } as ts.CompilerOptions);
         });

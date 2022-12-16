@@ -1248,7 +1248,7 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
         if (moduleResolution === undefined) {
             switch (getEmitModuleKind(compilerOptions)) {
                 case ModuleKind.CommonJS:
-                    moduleResolution = ModuleResolutionKind.NodeJs;
+                    moduleResolution = ModuleResolutionKind.Node10;
                     break;
                 case ModuleKind.Node16:
                     moduleResolution = ModuleResolutionKind.Node16;
@@ -1278,7 +1278,7 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
             case ModuleResolutionKind.NodeNext:
                 result = nodeNextModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode);
                 break;
-            case ModuleResolutionKind.NodeJs:
+            case ModuleResolutionKind.Node10:
                 result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
                 break;
             case ModuleResolutionKind.Classic:
@@ -1593,7 +1593,7 @@ function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: 
         NodeResolutionFeatures.None,
         moduleName,
         initialDir,
-        { moduleResolution: ModuleResolutionKind.NodeJs, allowJs: true },
+        { moduleResolution: ModuleResolutionKind.Node10, allowJs: true },
         host,
         /*cache*/ undefined,
         Extensions.JavaScript,
@@ -1656,7 +1656,7 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
     }
 
     let result;
-    if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs) {
+    if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node10) {
         const priorityExtensions = extensions & (Extensions.TypeScript | Extensions.Declaration);
         const secondaryExtensions = extensions & ~(Extensions.TypeScript | Extensions.Declaration);
         result =

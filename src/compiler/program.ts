@@ -53,6 +53,7 @@ import {
     CustomTransformers,
     Debug,
     DeclarationWithTypeParameterChildren,
+    DeprecationVersion,
     Diagnostic,
     DiagnosticCategory,
     diagnosticCategoryName,
@@ -308,6 +309,7 @@ import {
     UnparsedSource,
     VariableDeclaration,
     VariableStatement,
+    versionMajorMinor,
     walkUpParenthesizedExpressions,
     WriteFileCallback,
     WriteFileCallbackData,
@@ -1392,13 +1394,14 @@ function shouldProgramCreateNewSourceFiles(program: Program | undefined, newOpti
     return optionsHaveChanges(program.getCompilerOptions(), newOptions, sourceFileAffectingCompilerOptions);
 }
 
-function createCreateProgramOptions(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): CreateProgramOptions {
+function createCreateProgramOptions(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[], typeScriptVersion?: string): CreateProgramOptions {
     return {
         rootNames,
         options,
         host,
         oldProgram,
-        configFileParsingDiagnostics
+        configFileParsingDiagnostics,
+        typeScriptVersion,
     };
 }
 
@@ -1430,7 +1433,7 @@ export function createProgram(createProgramOptions: CreateProgramOptions): Progr
 export function createProgram(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): Program;
 export function createProgram(rootNamesOrOptions: readonly string[] | CreateProgramOptions, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: readonly Diagnostic[]): Program {
     const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
-    const { rootNames, options, configFileParsingDiagnostics, projectReferences } = createProgramOptions;
+    const { rootNames, options, configFileParsingDiagnostics, projectReferences, typeScriptVersion } = createProgramOptions;
     let { oldProgram } = createProgramOptions;
 
     let processingDefaultLibFiles: SourceFile[] | undefined;
@@ -3772,7 +3775,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             i++;
         }
         const resolveFrom = combinePaths(currentDirectory, `__lib_node_modules_lookup_${libFileName}__.ts`);
-        const localOverrideModuleResult = resolveModuleName("@typescript/lib-" + path, resolveFrom, { moduleResolution: ModuleResolutionKind.NodeJs }, host, moduleResolutionCache);
+        const localOverrideModuleResult = resolveModuleName("@typescript/lib-" + path, resolveFrom, { moduleResolution: ModuleResolutionKind.Node10 }, host, moduleResolutionCache);
         if (localOverrideModuleResult?.resolvedModule) {
             return localOverrideModuleResult.resolvedModule.resolvedFileName;
         }
@@ -3989,6 +3992,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified));
         }
 
+        verifyDeprecatedCompilerOptions();
         verifyProjectReferences();
 
         // List of collected files is complete; validate exhautiveness if this is a project with a file list
@@ -4118,11 +4122,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if (getResolveJsonModule(options)) {
-            if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs &&
-                getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node16 &&
-                getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext &&
-                getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Bundler) {
-                createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy, "resolveJsonModule");
+            if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Classic) {
+                createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_when_moduleResolution_is_set_to_classic, "resolveJsonModule");
             }
             // Any emit other than common js, amd, es2015 or esnext is error
             else if (!hasJsonModuleEmitEnabled(options)) {
@@ -4264,6 +4265,53 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     emitFilesSeen.add(emitFileKey);
                 }
             }
+        }
+    }
+
+    function verifyDeprecatedCompilerOptions() {
+        const version = typeScriptVersion || versionMajorMinor;
+        const ignoreDeprecations = options.ignoreDeprecations;
+        if (ignoreDeprecations) {
+            if (ignoreDeprecations === DeprecationVersion.v5_0 && (version === DeprecationVersion.v5_0 || version === DeprecationVersion.v5_5)) {
+                return;
+            }
+            else {
+                createOptionValueDiagnostic("ignoreDeprecations", Diagnostics.Invalid_value_for_ignoreDeprecations);
+            }
+        }
+        if (options.target === ScriptTarget.ES3) {
+            createDeprecatedDiagnosticForOption(version, "target", "ES3");
+        }
+        if (options.noImplicitUseStrict) {
+            createDeprecatedDiagnosticForOption(version, "noImplicitUseStrict");
+        }
+        if (options.keyofStringsOnly) {
+            createDeprecatedDiagnosticForOption(version, "keyofStringsOnly");
+        }
+        if (options.suppressExcessPropertyErrors) {
+            createDeprecatedDiagnosticForOption(version, "suppressExcessPropertyErrors");
+        }
+        if (options.suppressImplicitAnyIndexErrors) {
+            createDeprecatedDiagnosticForOption(version, "suppressImplicitAnyIndexErrors");
+        }
+        if (options.noStrictGenericChecks) {
+            createDeprecatedDiagnosticForOption(version, "noStrictGenericChecks");
+        }
+        if (options.charset) {
+            createDeprecatedDiagnosticForOption(version, "charset");
+        }
+        if (options.out) {
+            createDeprecatedDiagnosticForOption(version, "out");
+        }
+    }
+
+    function createDeprecatedDiagnosticForOption(version: string, name: string, value?: string) {
+        if (version === DeprecationVersion.v6_0) {
+            createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, Diagnostics.Flag_0_is_deprecated_Please_remove_it_from_your_configuration, value || name);
+        }
+        else {
+            createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined,
+                Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
         }
     }
 
