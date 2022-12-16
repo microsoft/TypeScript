@@ -1002,6 +1002,7 @@ export type ForEachChildNodes =
     | JSDocDeprecatedTag
     | JSDocThrowsTag
     | JSDocOverrideTag
+    | JSDocOverloadTag
     ;
 
 /** @internal */
