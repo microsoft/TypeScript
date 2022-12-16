@@ -400,7 +400,7 @@ export function createSignatureDeclarationFromSignature(
                 parameterDecl.modifiers,
                 parameterDecl.dotDotDotToken,
                 parameterDecl.name,
-                parameterDecl.questionToken,
+                isJs ? undefined : parameterDecl.questionToken,
                 type,
                 parameterDecl.initializer
             );
