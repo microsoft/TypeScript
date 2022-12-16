@@ -15820,6 +15820,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return types;
         }
 
+        // console.log(`>> subtypes to be reduced: ${types.length}`);
         const id = getTypeListId(types);
         const match = subtypeReductionCache.get(id);
         if (match) {
@@ -29100,7 +29101,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!todoPreserveTypes && !useMap) {
             useMap = true;
             const links = getNodeLinks(node);
-            links.objectLiteralTypeMap = new Map();
+            if (!links.objectLiteralTypeMap) {
+                links.objectLiteralTypeMap = new Map();
+            }
         }
         
         let hasOmittedExpression = false;
@@ -29179,11 +29182,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             strictNullChecks ? implicitNeverType : undefinedWideningType, inConstContext));
 
         function pushType(type: Type, flags: ElementFlags) {
-            if (!todoPreserveTypes) {
-                if (typeIds.has(type.id)) {
+            if (!todoPreserveTypes && (type.flags & TypeFlags.Object) && (type as ObjectType).canonicalType) {
+                if (typeIds.has((type as ObjectType).canonicalType!.id)) {
                     return;
                 }
-                typeIds.add(type.id);
+                typeIds.add((type as ObjectType).canonicalType!.id);
             }
             elementTypes.push(type);
             elementFlags.push(flags);
@@ -29566,20 +29569,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (hasComputedNumberProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, numberType));
             if (hasComputedSymbolProperty) indexInfos.push(getObjectLiteralIndexInfo(node, offset, propertiesArray, esSymbolType));
             let hasMethodsOrAccessors = some(propertiesArray, propSymbol => !!(propSymbol.flags & (SymbolFlags.Accessor | SymbolFlags.Method))); // >> TODO: maybe compute that above
+            const result = makeObjectLiteralType(indexInfos);
             if (objectLiteralMap
                 && indexInfos.length === 0
                 && !inDestructuringPattern
                 && !hasMethodsOrAccessors
                 && every(propertiesArray, propertyNameIsValidKey)) { // >> TODO: do we need those? why?
                 const key = getObjectLiteralTypeKey(propertiesArray);
-                if (objectLiteralMap.has(key)) {
-                    return objectLiteralMap.get(key) as ResolvedType;
+                if (!objectLiteralMap.has(key)) {
+                    objectLiteralMap.set(key, result);
                 }
-                const result = makeObjectLiteralType(indexInfos);
-                objectLiteralMap.set(key, result);
-                return result;
+                result.canonicalType = objectLiteralMap.get(key);
             }
-            return makeObjectLiteralType(indexInfos);
+            return result;
         }
 
         function makeObjectLiteralType(indexInfos: IndexInfo[]) {
@@ -29603,7 +29605,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getObjectLiteralTypeKey(properties: Symbol[]): string {
-        return map(properties, p => p.escapedName + (p.flags & SymbolFlags.Optional ? ":?" : ":") + getTypeOfSymbol(p).id).join(",");
+        return map(properties, p => {
+            const type = getTypeOfSymbol(p);
+            const typeId = (type.flags & TypeFlags.Object) && (type as ObjectType).canonicalType?.id || type.id; 
+            return p.escapedName + (p.flags & SymbolFlags.Optional ? ":?" : ":") + typeId;
+        }).join(",");
     }
 
     function isValidSpreadType(type: Type): boolean {

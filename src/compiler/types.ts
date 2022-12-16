@@ -5945,6 +5945,7 @@ export interface ObjectType extends Type {
     /** @internal */ constructSignatures?: readonly Signature[]; // Construct signatures of type
     /** @internal */ indexInfos?: readonly IndexInfo[];  // Index signatures
     /** @internal */ objectTypeWithoutAbstractConstructSignatures?: ObjectType;
+    /** @internal */ canonicalType?: ResolvedType; // >> TODO
 }
 
 /** Class and interface types (ObjectFlags.Class and ObjectFlags.Interface). */
