@@ -341,6 +341,7 @@ export function createSignatureDeclarationFromSignature(
     const program = context.program;
     const checker = program.getTypeChecker();
     const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
+    const isJs = isInJSFile(enclosingDeclaration);
     const flags =
         NodeBuilderFlags.NoTruncation
         | NodeBuilderFlags.SuppressAnyReturnType
@@ -351,9 +352,9 @@ export function createSignatureDeclarationFromSignature(
         return undefined;
     }
 
-    let typeParameters = signatureDeclaration.typeParameters;
+    let typeParameters = isJs ? undefined : signatureDeclaration.typeParameters;
     let parameters = signatureDeclaration.parameters;
-    let type = signatureDeclaration.type;
+    let type = isJs ? undefined : signatureDeclaration.type;
     if (importAdder) {
         if (typeParameters) {
             const newTypeParameters = sameMap(typeParameters, typeParameterDecl => {
@@ -386,11 +387,13 @@ export function createSignatureDeclarationFromSignature(
             }
         }
         const newParameters = sameMap(parameters, parameterDecl => {
-            const importableReference = tryGetAutoImportableReferenceFromTypeNode(parameterDecl.type, scriptTarget);
-            let type = parameterDecl.type;
-            if (importableReference) {
-                type = importableReference.typeNode;
-                importSymbols(importAdder, importableReference.symbols);
+            let type = isJs ? undefined : parameterDecl.type;
+            if (type) {
+                const importableReference = tryGetAutoImportableReferenceFromTypeNode(type, scriptTarget);
+                if (importableReference) {
+                    type = importableReference.typeNode;
+                    importSymbols(importAdder, importableReference.symbols);
+                }
             }
             return factory.updateParameterDeclaration(
                 parameterDecl,
