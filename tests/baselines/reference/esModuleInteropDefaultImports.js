@@ -38,8 +38,8 @@ self.def.default();
 
 //// [mod.js]
 "use strict";
-exports.__esModule = true;
-exports["default"] = fun;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = fun;
 //// [a.js]
 "use strict";
 var mod = require("./mod");
@@ -72,32 +72,32 @@ var __importStar = (this && this.__importStar) || function (mod) {
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.__esModule = true;
-exports.def = exports["default"] = void 0;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.def = exports.default = void 0;
 var a_1 = __importDefault(require("./a"));
 var a_2 = __importDefault(require("./a"));
 var a_3 = __importDefault(require("./a"));
 var self = __importStar(require("./b"));
 var a_4 = require("./a");
-__createBinding(exports, a_4, "default");
+Object.defineProperty(exports, "default", { enumerable: true, get: function () { return __importDefault(a_4).default; } });
 var a_5 = require("./a");
-__createBinding(exports, a_5, "default", "def");
-a_1["default"] === a_2["default"];
-a_2["default"] === a_3["default"];
-a_3["default"] === a_3["default"];
-a_3["default"] === self["default"];
-self["default"] === self.def;
+Object.defineProperty(exports, "def", { enumerable: true, get: function () { return __importDefault(a_5).default; } });
+a_1.default === a_2.default;
+a_2.default === a_3.default;
+a_3.default === a_3.default;
+a_3.default === self.default;
+self.default === self.def;
 // should all fail
-(0, a_1["default"])();
-(0, a_2["default"])();
-(0, a_3["default"])();
-(0, a_3["default"])();
-self["default"]();
+(0, a_1.default)();
+(0, a_2.default)();
+(0, a_3.default)();
+(0, a_3.default)();
+self.default();
 self.def();
 // should all work
-a_1["default"]["default"]();
-a_2["default"]["default"]();
-a_3["default"]["default"]();
-a_3["default"]["default"]();
-self["default"]["default"]();
-self.def["default"]();
+a_1.default.default();
+a_2.default.default();
+a_3.default.default();
+a_3.default.default();
+self.default.default();
+self.def.default();

@@ -108,7 +108,7 @@ Info 16   [00:00:45.000] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	node_modules/bar/foo.d.ts
 	  Imported via "./foo" from file 'node_modules/bar/index.d.ts'
 	  Imported via "./foo" from file 'node_modules/bar/index.d.ts'
@@ -141,12 +141,12 @@ Info 18   [00:00:47.000] response:
     }
 Info 19   [00:00:48.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/myproject/src/main.ts"
-      }
+      },
+      "seq": 3,
+      "type": "request"
     }
 Before request
 

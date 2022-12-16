@@ -136,15 +136,14 @@ interface AudioWorkletNodeOptions extends AudioNodeOptions {
 
 interface AuthenticationExtensionsClientInputs {
     appid?: string;
-    appidExclude?: string;
     credProps?: boolean;
-    uvm?: boolean;
+    hmacCreateSecret?: boolean;
 }
 
 interface AuthenticationExtensionsClientOutputs {
     appid?: boolean;
     credProps?: CredentialPropertiesOutput;
-    uvm?: UvmEntries;
+    hmacCreateSecret?: boolean;
 }
 
 interface AuthenticatorSelectionCriteria {
@@ -373,7 +372,7 @@ interface DeviceOrientationEventInit extends EventInit {
     gamma?: number | null;
 }
 
-interface DisplayMediaStreamConstraints {
+interface DisplayMediaStreamOptions {
     audio?: boolean | MediaTrackConstraints;
     video?: boolean | MediaTrackConstraints;
 }
@@ -806,10 +805,6 @@ interface MediaQueryListEventInit extends EventInit {
     media?: string;
 }
 
-interface MediaRecorderErrorEventInit extends EventInit {
-    error: DOMException;
-}
-
 interface MediaRecorderOptions {
     audioBitsPerSecond?: number;
     bitsPerSecond?: number;
@@ -819,9 +814,9 @@ interface MediaRecorderOptions {
 
 interface MediaSessionActionDetails {
     action: MediaSessionAction;
-    fastSeek?: boolean | null;
-    seekOffset?: number | null;
-    seekTime?: number | null;
+    fastSeek?: boolean;
+    seekOffset?: number;
+    seekTime?: number;
 }
 
 interface MediaStreamAudioSourceOptions {
@@ -1121,6 +1116,10 @@ interface PermissionDescriptor {
     name: PermissionName;
 }
 
+interface PictureInPictureEventInit extends EventInit {
+    pictureInPictureWindow: PictureInPictureWindow;
+}
+
 interface PointerEventInit extends MouseEventInit {
     coalescedEvents?: PointerEvent[];
     height?: number;
@@ -1314,6 +1313,8 @@ interface RTCIceCandidatePairStats extends RTCStats {
     bytesReceived?: number;
     bytesSent?: number;
     currentRoundTripTime?: number;
+    lastPacketReceivedTimestamp?: DOMHighResTimeStamp;
+    lastPacketSentTimestamp?: DOMHighResTimeStamp;
     localCandidateId: string;
     nominated?: boolean;
     remoteCandidateId: string;
@@ -1328,18 +1329,47 @@ interface RTCIceCandidatePairStats extends RTCStats {
 
 interface RTCIceServer {
     credential?: string;
-    credentialType?: RTCIceCredentialType;
     urls: string | string[];
     username?: string;
 }
 
 interface RTCInboundRtpStreamStats extends RTCReceivedRtpStreamStats {
+    audioLevel?: number;
+    bytesReceived?: number;
+    concealedSamples?: number;
+    concealmentEvents?: number;
+    decoderImplementation?: string;
+    estimatedPlayoutTimestamp?: DOMHighResTimeStamp;
+    fecPacketsDiscarded?: number;
+    fecPacketsReceived?: number;
     firCount?: number;
+    frameHeight?: number;
+    frameWidth?: number;
     framesDecoded?: number;
+    framesDropped?: number;
+    framesPerSecond?: number;
+    framesReceived?: number;
+    headerBytesReceived?: number;
+    insertedSamplesForDeceleration?: number;
+    jitterBufferDelay?: number;
+    jitterBufferEmittedCount?: number;
+    keyFramesDecoded?: number;
+    kind: string;
+    lastPacketReceivedTimestamp?: DOMHighResTimeStamp;
     nackCount?: number;
+    packetsDiscarded?: number;
     pliCount?: number;
     qpSum?: number;
     remoteId?: string;
+    removedSamplesForAcceleration?: number;
+    silentConcealedSamples?: number;
+    totalAudioEnergy?: number;
+    totalDecodeTime?: number;
+    totalInterFrameDelay?: number;
+    totalProcessingDelay?: number;
+    totalSamplesDuration?: number;
+    totalSamplesReceived?: number;
+    totalSquaredInterFrameDelay?: number;
 }
 
 interface RTCLocalSessionDescriptionInit {
@@ -1358,11 +1388,27 @@ interface RTCOfferOptions extends RTCOfferAnswerOptions {
 
 interface RTCOutboundRtpStreamStats extends RTCSentRtpStreamStats {
     firCount?: number;
+    frameHeight?: number;
+    frameWidth?: number;
     framesEncoded?: number;
+    framesPerSecond?: number;
+    framesSent?: number;
+    headerBytesSent?: number;
+    hugeFramesSent?: number;
+    keyFramesEncoded?: number;
+    mediaSourceId?: string;
     nackCount?: number;
     pliCount?: number;
     qpSum?: number;
+    qualityLimitationResolutionChanges?: number;
     remoteId?: string;
+    retransmittedBytesSent?: number;
+    retransmittedPacketsSent?: number;
+    rid?: string;
+    targetBitrate?: number;
+    totalEncodeTime?: number;
+    totalEncodedBytesTarget?: number;
+    totalPacketSendDelay?: number;
 }
 
 interface RTCPeerConnectionIceErrorEventInit extends EventInit {
@@ -1380,7 +1426,6 @@ interface RTCPeerConnectionIceEventInit extends EventInit {
 
 interface RTCReceivedRtpStreamStats extends RTCRtpStreamStats {
     jitter?: number;
-    packetsDiscarded?: number;
     packetsLost?: number;
     packetsReceived?: number;
 }
@@ -1424,6 +1469,8 @@ interface RTCRtpContributingSource {
 interface RTCRtpEncodingParameters extends RTCRtpCodingParameters {
     active?: boolean;
     maxBitrate?: number;
+    maxFramerate?: number;
+    networkPriority?: RTCPriorityType;
     priority?: RTCPriorityType;
     scaleResolutionDownBy?: number;
 }
@@ -1499,15 +1546,23 @@ interface RTCTransportStats extends RTCStats {
     dtlsState: RTCDtlsTransportState;
     localCertificateId?: string;
     remoteCertificateId?: string;
-    rtcpTransportStatsId?: string;
     selectedCandidatePairId?: string;
     srtpCipher?: string;
     tlsVersion?: string;
 }
 
-interface ReadableStreamReadDoneResult {
+interface ReadableStreamGetReaderOptions {
+    /**
+     * Creates a ReadableStreamBYOBReader and locks the stream to the new reader.
+     *
+     * This call behaves the same way as the no-argument variant, except that it only works on readable byte streams, i.e. streams which were constructed specifically with the ability to handle "bring your own buffer" reading. The returned BYOB reader provides the ability to directly read individual chunks from the stream via its read() method, into developer-supplied buffers, allowing more precise control over allocation.
+     */
+    mode?: ReadableStreamReaderMode;
+}
+
+interface ReadableStreamReadDoneResult<T> {
     done: true;
-    value?: undefined;
+    value?: T;
 }
 
 interface ReadableStreamReadValueResult<T> {
@@ -1791,6 +1846,21 @@ interface ULongRange {
     min?: number;
 }
 
+interface UnderlyingByteSource {
+    autoAllocateChunkSize?: number;
+    cancel?: UnderlyingSourceCancelCallback;
+    pull?: (controller: ReadableByteStreamController) => void | PromiseLike<void>;
+    start?: (controller: ReadableByteStreamController) => any;
+    type: "bytes";
+}
+
+interface UnderlyingDefaultSource<R = any> {
+    cancel?: UnderlyingSourceCancelCallback;
+    pull?: (controller: ReadableStreamDefaultController<R>) => void | PromiseLike<void>;
+    start?: (controller: ReadableStreamDefaultController<R>) => any;
+    type?: undefined;
+}
+
 interface UnderlyingSink<W = any> {
     abort?: UnderlyingSinkAbortCallback;
     close?: UnderlyingSinkCloseCallback;
@@ -1800,10 +1870,11 @@ interface UnderlyingSink<W = any> {
 }
 
 interface UnderlyingSource<R = any> {
+    autoAllocateChunkSize?: number;
     cancel?: UnderlyingSourceCancelCallback;
     pull?: UnderlyingSourcePullCallback<R>;
     start?: UnderlyingSourceStartCallback<R>;
-    type?: undefined;
+    type?: ReadableStreamType;
 }
 
 interface ValidityStateFlags {
@@ -1820,10 +1891,10 @@ interface ValidityStateFlags {
 }
 
 interface VideoColorSpaceInit {
-    fullRange?: boolean;
-    matrix?: VideoMatrixCoefficients;
-    primaries?: VideoColorPrimaries;
-    transfer?: VideoTransferCharacteristics;
+    fullRange?: boolean | null;
+    matrix?: VideoMatrixCoefficients | null;
+    primaries?: VideoColorPrimaries | null;
+    transfer?: VideoTransferCharacteristics | null;
 }
 
 interface VideoConfiguration {
@@ -1838,7 +1909,7 @@ interface VideoConfiguration {
     width: number;
 }
 
-interface VideoFrameMetadata {
+interface VideoFrameCallbackMetadata {
     captureTime?: DOMHighResTimeStamp;
     expectedDisplayTime: DOMHighResTimeStamp;
     height: number;
@@ -1931,12 +2002,14 @@ interface ARIAMixin {
     ariaChecked: string | null;
     ariaColCount: string | null;
     ariaColIndex: string | null;
+    ariaColIndexText: string | null;
     ariaColSpan: string | null;
     ariaCurrent: string | null;
     ariaDisabled: string | null;
     ariaExpanded: string | null;
     ariaHasPopup: string | null;
     ariaHidden: string | null;
+    ariaInvalid: string | null;
     ariaKeyShortcuts: string | null;
     ariaLabel: string | null;
     ariaLevel: string | null;
@@ -1953,6 +2026,7 @@ interface ARIAMixin {
     ariaRoleDescription: string | null;
     ariaRowCount: string | null;
     ariaRowIndex: string | null;
+    ariaRowIndexText: string | null;
     ariaRowSpan: string | null;
     ariaSelected: string | null;
     ariaSetSize: string | null;
@@ -1961,6 +2035,7 @@ interface ARIAMixin {
     ariaValueMin: string | null;
     ariaValueNow: string | null;
     ariaValueText: string | null;
+    role: string | null;
 }
 
 /** A controller object that allows you to abort one or more DOM requests as and when desired. */
@@ -1996,7 +2071,8 @@ interface AbortSignal extends EventTarget {
 declare var AbortSignal: {
     prototype: AbortSignal;
     new(): AbortSignal;
-    // abort(): AbortSignal; - To be re-added in the future
+    abort(reason?: any): AbortSignal;
+    timeout(milliseconds: number): AbortSignal;
 };
 
 interface AbstractRange {
@@ -2131,7 +2207,7 @@ declare var AnimationPlaybackEvent: {
 };
 
 interface AnimationTimeline {
-    readonly currentTime: number | null;
+    readonly currentTime: CSSNumberish | null;
 }
 
 declare var AnimationTimeline: {
@@ -2147,6 +2223,7 @@ interface Attr extends Node {
     readonly ownerDocument: Document;
     readonly ownerElement: Element | null;
     readonly prefix: string | null;
+    /** @deprecated */
     readonly specified: boolean;
     value: string;
 }
@@ -2382,6 +2459,10 @@ declare var AuthenticatorAssertionResponse: {
 /** Available only in secure contexts. */
 interface AuthenticatorAttestationResponse extends AuthenticatorResponse {
     readonly attestationObject: ArrayBuffer;
+    getAuthenticatorData(): ArrayBuffer;
+    getPublicKey(): ArrayBuffer | null;
+    getPublicKeyAlgorithm(): COSEAlgorithmIdentifier;
+    getTransports(): string[];
 }
 
 declare var AuthenticatorAttestationResponse: {
@@ -2580,6 +2661,14 @@ declare var CSSConditionRule: {
     new(): CSSConditionRule;
 };
 
+interface CSSContainerRule extends CSSConditionRule {
+}
+
+declare var CSSContainerRule: {
+    prototype: CSSContainerRule;
+    new(): CSSContainerRule;
+};
+
 interface CSSCounterStyleRule extends CSSRule {
     additiveSymbols: string;
     fallback: string;
@@ -2608,6 +2697,18 @@ declare var CSSFontFaceRule: {
     new(): CSSFontFaceRule;
 };
 
+interface CSSFontPaletteValuesRule extends CSSRule {
+    readonly basePalette: string;
+    readonly fontFamily: string;
+    readonly name: string;
+    readonly overrideColors: string;
+}
+
+declare var CSSFontPaletteValuesRule: {
+    prototype: CSSFontPaletteValuesRule;
+    new(): CSSFontPaletteValuesRule;
+};
+
 /** Any CSS at-rule that contains other rules nested within it. */
 interface CSSGroupingRule extends CSSRule {
     readonly cssRules: CSSRuleList;
@@ -2622,6 +2723,7 @@ declare var CSSGroupingRule: {
 
 interface CSSImportRule extends CSSRule {
     readonly href: string;
+    readonly layerName: string | null;
     readonly media: MediaList;
     readonly styleSheet: CSSStyleSheet;
 }
@@ -2654,6 +2756,24 @@ interface CSSKeyframesRule extends CSSRule {
 declare var CSSKeyframesRule: {
     prototype: CSSKeyframesRule;
     new(): CSSKeyframesRule;
+};
+
+interface CSSLayerBlockRule extends CSSGroupingRule {
+    readonly name: string;
+}
+
+declare var CSSLayerBlockRule: {
+    prototype: CSSLayerBlockRule;
+    new(): CSSLayerBlockRule;
+};
+
+interface CSSLayerStatementRule extends CSSRule {
+    readonly nameList: ReadonlyArray<string>;
+}
+
+declare var CSSLayerStatementRule: {
+    prototype: CSSLayerStatementRule;
+    new(): CSSLayerStatementRule;
 };
 
 /** A single CSS @media rule. It implements the CSSConditionRule interface, and therefore the CSSGroupingRule and the CSSRule interface with a type value of 4 (CSSRule.MEDIA_RULE). */
@@ -2753,6 +2873,7 @@ interface CSSStyleDeclaration {
     animationTimingFunction: string;
     appearance: string;
     aspectRatio: string;
+    backdropFilter: string;
     backfaceVisibility: string;
     background: string;
     backgroundAttachment: string;
@@ -2857,6 +2978,9 @@ interface CSSStyleDeclaration {
     columnWidth: string;
     columns: string;
     contain: string;
+    container: string;
+    containerName: string;
+    containerType: string;
     content: string;
     counterIncrement: string;
     counterReset: string;
@@ -2887,6 +3011,7 @@ interface CSSStyleDeclaration {
     fontFeatureSettings: string;
     fontKerning: string;
     fontOpticalSizing: string;
+    fontPalette: string;
     fontSize: string;
     fontSizeAdjust: string;
     fontStretch: string;
@@ -2924,6 +3049,7 @@ interface CSSStyleDeclaration {
     gridTemplateColumns: string;
     gridTemplateRows: string;
     height: string;
+    hyphenateCharacter: string;
     hyphens: string;
     /** @deprecated */
     imageOrientation: string;
@@ -3000,6 +3126,7 @@ interface CSSStyleDeclaration {
     outlineWidth: string;
     overflow: string;
     overflowAnchor: string;
+    overflowClipMargin: string;
     overflowWrap: string;
     overflowX: string;
     overflowY: string;
@@ -3457,6 +3584,7 @@ interface CanvasPath {
     moveTo(x: number, y: number): void;
     quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void;
     rect(x: number, y: number, w: number, h: number): void;
+    roundRect(x: number, y: number, w: number, h: number, radii?: number | DOMPointInit | (number | DOMPointInit)[]): void;
 }
 
 interface CanvasPathDrawingStyles {
@@ -3518,6 +3646,7 @@ interface CanvasText {
 interface CanvasTextDrawingStyles {
     direction: CanvasDirection;
     font: string;
+    fontKerning: CanvasFontKerning;
     textAlign: CanvasTextAlign;
     textBaseline: CanvasTextBaseline;
 }
@@ -4379,7 +4508,10 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     readonly documentElement: HTMLElement;
     /** Returns document's URL. */
     readonly documentURI: string;
-    /** Sets or gets the security domain of the document. */
+    /**
+     * Sets or gets the security domain of the document.
+     * @deprecated
+     */
     domain: string;
     /** Retrieves a collection of all embed objects in the document. */
     readonly embeds: HTMLCollectionOf<HTMLEmbedElement>;
@@ -4533,7 +4665,6 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     createEvent(eventInterface: "MediaEncryptedEvent"): MediaEncryptedEvent;
     createEvent(eventInterface: "MediaKeyMessageEvent"): MediaKeyMessageEvent;
     createEvent(eventInterface: "MediaQueryListEvent"): MediaQueryListEvent;
-    createEvent(eventInterface: "MediaRecorderErrorEvent"): MediaRecorderErrorEvent;
     createEvent(eventInterface: "MediaStreamTrackEvent"): MediaStreamTrackEvent;
     createEvent(eventInterface: "MessageEvent"): MessageEvent;
     createEvent(eventInterface: "MouseEvent"): MouseEvent;
@@ -4544,6 +4675,7 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     createEvent(eventInterface: "PageTransitionEvent"): PageTransitionEvent;
     createEvent(eventInterface: "PaymentMethodChangeEvent"): PaymentMethodChangeEvent;
     createEvent(eventInterface: "PaymentRequestUpdateEvent"): PaymentRequestUpdateEvent;
+    createEvent(eventInterface: "PictureInPictureEvent"): PictureInPictureEvent;
     createEvent(eventInterface: "PointerEvent"): PointerEvent;
     createEvent(eventInterface: "PopStateEvent"): PopStateEvent;
     createEvent(eventInterface: "ProgressEvent"): ProgressEvent;
@@ -4662,6 +4794,7 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     /**
      * Returns a Boolean value that indicates whether the specified command is in the indeterminate state.
      * @param commandId String that specifies a command identifier.
+     * @deprecated
      */
     queryCommandIndeterm(commandId: string): boolean;
     /**
@@ -4679,6 +4812,7 @@ interface Document extends Node, DocumentAndElementEventHandlers, DocumentOrShad
     /**
      * Returns the current value of the document, range, or current selection for the given command.
      * @param commandId String that specifies a command identifier.
+     * @deprecated
      */
     queryCommandValue(commandId: string): string;
     /** @deprecated */
@@ -4837,6 +4971,13 @@ interface EXT_sRGB {
 interface EXT_shader_texture_lod {
 }
 
+interface EXT_texture_compression_bptc {
+    readonly COMPRESSED_RGBA_BPTC_UNORM_EXT: GLenum;
+    readonly COMPRESSED_RGB_BPTC_SIGNED_FLOAT_EXT: GLenum;
+    readonly COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT: GLenum;
+    readonly COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT: GLenum;
+}
+
 interface EXT_texture_compression_rgtc {
     readonly COMPRESSED_RED_GREEN_RGTC2_EXT: GLenum;
     readonly COMPRESSED_RED_RGTC1_EXT: GLenum;
@@ -4848,6 +4989,17 @@ interface EXT_texture_compression_rgtc {
 interface EXT_texture_filter_anisotropic {
     readonly MAX_TEXTURE_MAX_ANISOTROPY_EXT: GLenum;
     readonly TEXTURE_MAX_ANISOTROPY_EXT: GLenum;
+}
+
+interface EXT_texture_norm16 {
+    readonly R16_EXT: GLenum;
+    readonly R16_SNORM_EXT: GLenum;
+    readonly RG16_EXT: GLenum;
+    readonly RG16_SNORM_EXT: GLenum;
+    readonly RGB16_EXT: GLenum;
+    readonly RGB16_SNORM_EXT: GLenum;
+    readonly RGBA16_EXT: GLenum;
+    readonly RGBA16_SNORM_EXT: GLenum;
 }
 
 interface ElementEventMap {
@@ -5032,6 +5184,7 @@ declare var ErrorEvent: {
 interface Event {
     /** Returns true or false depending on how event was initialized. True if event goes through its target's ancestors in reverse tree order, and false otherwise. */
     readonly bubbles: boolean;
+    /** @deprecated */
     cancelBubble: boolean;
     /** Returns true or false depending on how event was initialized. Its return value does not always carry meaning, but true can indicate that part of the operation during which event was dispatched, can be canceled by invoking the preventDefault() method. */
     readonly cancelable: boolean;
@@ -5568,6 +5721,7 @@ interface GlobalEventHandlersEventMap {
     "auxclick": MouseEvent;
     "beforeinput": InputEvent;
     "blur": FocusEvent;
+    "cancel": Event;
     "canplay": Event;
     "canplaythrough": Event;
     "change": Event;
@@ -5668,11 +5822,13 @@ interface GlobalEventHandlers {
     onanimationiteration: ((this: GlobalEventHandlers, ev: AnimationEvent) => any) | null;
     onanimationstart: ((this: GlobalEventHandlers, ev: AnimationEvent) => any) | null;
     onauxclick: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null;
+    onbeforeinput: ((this: GlobalEventHandlers, ev: InputEvent) => any) | null;
     /**
      * Fires when the object loses the input focus.
      * @param ev The focus event.
      */
     onblur: ((this: GlobalEventHandlers, ev: FocusEvent) => any) | null;
+    oncancel: ((this: GlobalEventHandlers, ev: Event) => any) | null;
     /**
      * Occurs when playback is possible, but would require further buffering.
      * @param ev The event.
@@ -6186,6 +6342,7 @@ interface HTMLCanvasElement extends HTMLElement {
      * @param type The standard MIME type for the image format to return. If you do not specify this parameter, the default value is a PNG format image.
      */
     toDataURL(type?: string, quality?: any): string;
+    transferControlToOffscreen(): OffscreenCanvas;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLCanvasElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLCanvasElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -8769,13 +8926,13 @@ declare var IDBObjectStore: {
 };
 
 interface IDBOpenDBRequestEventMap extends IDBRequestEventMap {
-    "blocked": Event;
+    "blocked": IDBVersionChangeEvent;
     "upgradeneeded": IDBVersionChangeEvent;
 }
 
 /** Also inherits methods from its parents IDBRequest and EventTarget. */
 interface IDBOpenDBRequest extends IDBRequest<IDBDatabase> {
-    onblocked: ((this: IDBOpenDBRequest, ev: Event) => any) | null;
+    onblocked: ((this: IDBOpenDBRequest, ev: IDBVersionChangeEvent) => any) | null;
     onupgradeneeded: ((this: IDBOpenDBRequest, ev: IDBVersionChangeEvent) => any) | null;
     addEventListener<K extends keyof IDBOpenDBRequestEventMap>(type: K, listener: (this: IDBOpenDBRequest, ev: IDBOpenDBRequestEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -8900,7 +9057,7 @@ declare var ImageBitmap: {
 
 interface ImageBitmapRenderingContext {
     /** Returns the canvas element that the context is bound to. */
-    readonly canvas: HTMLCanvasElement;
+    readonly canvas: HTMLCanvasElement | OffscreenCanvas;
     /** Transfers the underlying bitmap data from imageBitmap to context, and the bitmap becomes the contents of the canvas element to which context is bound. */
     transferFromImageBitmap(bitmap: ImageBitmap | null): void;
 }
@@ -8931,6 +9088,7 @@ interface InnerHTML {
     innerHTML: string;
 }
 
+/** Available only in secure contexts. */
 interface InputDeviceInfo extends MediaDeviceInfo {
 }
 
@@ -9184,7 +9342,7 @@ interface MediaDevicesEventMap {
 interface MediaDevices extends EventTarget {
     ondevicechange: ((this: MediaDevices, ev: Event) => any) | null;
     enumerateDevices(): Promise<MediaDeviceInfo[]>;
-    getDisplayMedia(constraints?: DisplayMediaStreamConstraints): Promise<MediaStream>;
+    getDisplayMedia(options?: DisplayMediaStreamOptions): Promise<MediaStream>;
     getSupportedConstraints(): MediaTrackSupportedConstraints;
     getUserMedia(constraints?: MediaStreamConstraints): Promise<MediaStream>;
     addEventListener<K extends keyof MediaDevicesEventMap>(type: K, listener: (this: MediaDevices, ev: MediaDevicesEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -9391,7 +9549,7 @@ declare var MediaQueryListEvent: {
 
 interface MediaRecorderEventMap {
     "dataavailable": BlobEvent;
-    "error": MediaRecorderErrorEvent;
+    "error": Event;
     "pause": Event;
     "resume": Event;
     "start": Event;
@@ -9402,7 +9560,7 @@ interface MediaRecorder extends EventTarget {
     readonly audioBitsPerSecond: number;
     readonly mimeType: string;
     ondataavailable: ((this: MediaRecorder, ev: BlobEvent) => any) | null;
-    onerror: ((this: MediaRecorder, ev: MediaRecorderErrorEvent) => any) | null;
+    onerror: ((this: MediaRecorder, ev: Event) => any) | null;
     onpause: ((this: MediaRecorder, ev: Event) => any) | null;
     onresume: ((this: MediaRecorder, ev: Event) => any) | null;
     onstart: ((this: MediaRecorder, ev: Event) => any) | null;
@@ -9425,15 +9583,6 @@ declare var MediaRecorder: {
     prototype: MediaRecorder;
     new(stream: MediaStream, options?: MediaRecorderOptions): MediaRecorder;
     isTypeSupported(type: string): boolean;
-};
-
-interface MediaRecorderErrorEvent extends Event {
-    readonly error: DOMException;
-}
-
-declare var MediaRecorderErrorEvent: {
-    prototype: MediaRecorderErrorEvent;
-    new(type: string, eventInitDict: MediaRecorderErrorEventInit): MediaRecorderErrorEvent;
 };
 
 interface MediaSession {
@@ -9888,12 +10037,14 @@ interface NavigatorID {
     readonly appName: string;
     /** @deprecated */
     readonly appVersion: string;
+    /** @deprecated */
     readonly platform: string;
     /** @deprecated */
     readonly product: string;
     /** @deprecated */
     readonly productSub: string;
     readonly userAgent: string;
+    /** @deprecated */
     readonly vendor: string;
     /** @deprecated */
     readonly vendorSub: string;
@@ -10142,6 +10293,16 @@ declare var Notification: {
     requestPermission(deprecatedCallback?: NotificationPermissionCallback): Promise<NotificationPermission>;
 };
 
+interface OES_draw_buffers_indexed {
+    blendEquationSeparateiOES(buf: GLuint, modeRGB: GLenum, modeAlpha: GLenum): void;
+    blendEquationiOES(buf: GLuint, mode: GLenum): void;
+    blendFuncSeparateiOES(buf: GLuint, srcRGB: GLenum, dstRGB: GLenum, srcAlpha: GLenum, dstAlpha: GLenum): void;
+    blendFunciOES(buf: GLuint, src: GLenum, dst: GLenum): void;
+    colorMaskiOES(buf: GLuint, r: GLboolean, g: GLboolean, b: GLboolean, a: GLboolean): void;
+    disableiOES(target: GLenum, index: GLuint): void;
+    enableiOES(target: GLenum, index: GLuint): void;
+}
+
 /** The OES_element_index_uint extension is part of the WebGL API and adds support for gl.UNSIGNED_INT types to WebGLRenderingContext.drawElements(). */
 interface OES_element_index_uint {
 }
@@ -10218,6 +10379,57 @@ declare var OfflineAudioContext: {
     prototype: OfflineAudioContext;
     new(contextOptions: OfflineAudioContextOptions): OfflineAudioContext;
     new(numberOfChannels: number, length: number, sampleRate: number): OfflineAudioContext;
+};
+
+interface OffscreenCanvasEventMap {
+    "contextlost": Event;
+    "contextrestored": Event;
+}
+
+interface OffscreenCanvas extends EventTarget {
+    /**
+     * These attributes return the dimensions of the OffscreenCanvas object's bitmap.
+     *
+     * They can be set, to replace the bitmap with a new, transparent black bitmap of the specified dimensions (effectively resizing it).
+     */
+    height: number;
+    oncontextlost: ((this: OffscreenCanvas, ev: Event) => any) | null;
+    oncontextrestored: ((this: OffscreenCanvas, ev: Event) => any) | null;
+    /**
+     * These attributes return the dimensions of the OffscreenCanvas object's bitmap.
+     *
+     * They can be set, to replace the bitmap with a new, transparent black bitmap of the specified dimensions (effectively resizing it).
+     */
+    width: number;
+    /**
+     * Returns an object that exposes an API for drawing on the OffscreenCanvas object. contextId specifies the desired API: "2d", "bitmaprenderer", "webgl", or "webgl2". options is handled by that API.
+     *
+     * This specification defines the "2d" context below, which is similar but distinct from the "2d" context that is created from a canvas element. The WebGL specifications define the "webgl" and "webgl2" contexts. [WEBGL]
+     *
+     * Returns null if the canvas has already been initialized with another context type (e.g., trying to get a "2d" context after getting a "webgl" context).
+     */
+    getContext(contextId: OffscreenRenderingContextId, options?: any): OffscreenRenderingContext | null;
+    /** Returns a newly created ImageBitmap object with the image in the OffscreenCanvas object. The image in the OffscreenCanvas object is replaced with a new blank image. */
+    transferToImageBitmap(): ImageBitmap;
+    addEventListener<K extends keyof OffscreenCanvasEventMap>(type: K, listener: (this: OffscreenCanvas, ev: OffscreenCanvasEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof OffscreenCanvasEventMap>(type: K, listener: (this: OffscreenCanvas, ev: OffscreenCanvasEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var OffscreenCanvas: {
+    prototype: OffscreenCanvas;
+    new(width: number, height: number): OffscreenCanvas;
+};
+
+interface OffscreenCanvasRenderingContext2D extends CanvasCompositing, CanvasDrawImage, CanvasDrawPath, CanvasFillStrokeStyles, CanvasFilters, CanvasImageData, CanvasImageSmoothing, CanvasPath, CanvasPathDrawingStyles, CanvasRect, CanvasShadowStyles, CanvasState, CanvasText, CanvasTextDrawingStyles, CanvasTransform {
+    readonly canvas: OffscreenCanvas;
+    commit(): void;
+}
+
+declare var OffscreenCanvasRenderingContext2D: {
+    prototype: OffscreenCanvasRenderingContext2D;
+    new(): OffscreenCanvasRenderingContext2D;
 };
 
 /** The OscillatorNode interface represents a periodic waveform, such as a sine wave. It is an AudioScheduledSourceNode audio-processing module that causes a specified frequency of a given wave to be created—in effect, a constant tone. */
@@ -10680,6 +10892,7 @@ interface PermissionStatusEventMap {
 }
 
 interface PermissionStatus extends EventTarget {
+    readonly name: string;
     onchange: ((this: PermissionStatus, ev: Event) => any) | null;
     readonly state: PermissionState;
     addEventListener<K extends keyof PermissionStatusEventMap>(type: K, listener: (this: PermissionStatus, ev: PermissionStatusEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -10700,6 +10913,15 @@ interface Permissions {
 declare var Permissions: {
     prototype: Permissions;
     new(): Permissions;
+};
+
+interface PictureInPictureEvent extends Event {
+    readonly pictureInPictureWindow: PictureInPictureWindow;
+}
+
+declare var PictureInPictureEvent: {
+    prototype: PictureInPictureEvent;
+    new(type: string, eventInitDict: PictureInPictureEventInit): PictureInPictureEvent;
 };
 
 interface PictureInPictureWindowEventMap {
@@ -10853,6 +11075,7 @@ declare var PromiseRejectionEvent: {
 
 /** Available only in secure contexts. */
 interface PublicKeyCredential extends Credential {
+    readonly authenticatorAttachment: string | null;
     readonly rawId: ArrayBuffer;
     readonly response: AuthenticatorResponse;
     getClientExtensionResults(): AuthenticationExtensionsClientOutputs;
@@ -10901,6 +11124,7 @@ declare var PushSubscription: {
 /** Available only in secure contexts. */
 interface PushSubscriptionOptions {
     readonly applicationServerKey: ArrayBuffer | null;
+    readonly userVisibleOnly: boolean;
 }
 
 declare var PushSubscriptionOptions: {
@@ -11385,7 +11609,9 @@ declare var ReadableByteStreamController: {
 interface ReadableStream<R = any> {
     readonly locked: boolean;
     cancel(reason?: any): Promise<void>;
+    getReader(options: { mode: "byob" }): ReadableStreamBYOBReader;
     getReader(): ReadableStreamDefaultReader<R>;
+    getReader(options?: ReadableStreamGetReaderOptions): ReadableStreamReader<R>;
     pipeThrough<T>(transform: ReadableWritablePair<T, R>, options?: StreamPipeOptions): ReadableStream<T>;
     pipeTo(destination: WritableStream<R>, options?: StreamPipeOptions): Promise<void>;
     tee(): [ReadableStream<R>, ReadableStream<R>];
@@ -11393,11 +11619,13 @@ interface ReadableStream<R = any> {
 
 declare var ReadableStream: {
     prototype: ReadableStream;
+    new(underlyingSource: UnderlyingByteSource, strategy?: { highWaterMark?: number }): ReadableStream<Uint8Array>;
+    new<R = any>(underlyingSource: UnderlyingDefaultSource<R>, strategy?: QueuingStrategy<R>): ReadableStream<R>;
     new<R = any>(underlyingSource?: UnderlyingSource<R>, strategy?: QueuingStrategy<R>): ReadableStream<R>;
 };
 
 interface ReadableStreamBYOBReader extends ReadableStreamGenericReader {
-    read(view: ArrayBufferView): Promise<ReadableStreamReadResult<ArrayBufferView>>;
+    read<T extends ArrayBufferView>(view: T): Promise<ReadableStreamReadResult<T>>;
     releaseLock(): void;
 }
 
@@ -13018,6 +13246,7 @@ interface SVGStyleElement extends SVGElement, LinkStyle {
     disabled: boolean;
     media: string;
     title: string;
+    /** @deprecated */
     type: string;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGStyleElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -13380,6 +13609,7 @@ interface Selection {
     empty(): void;
     extend(node: Node, offset?: number): void;
     getRangeAt(index: number): Range;
+    modify(alter?: string, direction?: string, granularity?: string): void;
     removeAllRanges(): void;
     removeRange(range: Range): void;
     selectAllChildren(node: Node): void;
@@ -13778,6 +14008,7 @@ interface StorageEvent extends Event {
     readonly storageArea: Storage | null;
     /** Returns the URL of the document whose storage item changed. */
     readonly url: string;
+    /** @deprecated */
     initStorageEvent(type: string, bubbles?: boolean, cancelable?: boolean, key?: string | null, oldValue?: string | null, newValue?: string | null, url?: string | URL, storageArea?: Storage | null): void;
 }
 
@@ -14560,8 +14791,8 @@ interface WEBGL_lose_context {
 interface WEBGL_multi_draw {
     multiDrawArraysInstancedWEBGL(mode: GLenum, firstsList: Int32Array | GLint[], firstsOffset: GLuint, countsList: Int32Array | GLsizei[], countsOffset: GLuint, instanceCountsList: Int32Array | GLsizei[], instanceCountsOffset: GLuint, drawcount: GLsizei): void;
     multiDrawArraysWEBGL(mode: GLenum, firstsList: Int32Array | GLint[], firstsOffset: GLuint, countsList: Int32Array | GLsizei[], countsOffset: GLuint, drawcount: GLsizei): void;
-    multiDrawElementsInstancedWEBGL(mode: GLenum, countsList: Int32Array | GLint[], countsOffset: GLuint, type: GLenum, offsetsList: Int32Array | GLsizei[], offsetsOffset: GLuint, instanceCountsList: Int32Array | GLsizei[], instanceCountsOffset: GLuint, drawcount: GLsizei): void;
-    multiDrawElementsWEBGL(mode: GLenum, countsList: Int32Array | GLint[], countsOffset: GLuint, type: GLenum, offsetsList: Int32Array | GLsizei[], offsetsOffset: GLuint, drawcount: GLsizei): void;
+    multiDrawElementsInstancedWEBGL(mode: GLenum, countsList: Int32Array | GLsizei[], countsOffset: GLuint, type: GLenum, offsetsList: Int32Array | GLsizei[], offsetsOffset: GLuint, instanceCountsList: Int32Array | GLsizei[], instanceCountsOffset: GLuint, drawcount: GLsizei): void;
+    multiDrawElementsWEBGL(mode: GLenum, countsList: Int32Array | GLsizei[], countsOffset: GLuint, type: GLenum, offsetsList: Int32Array | GLsizei[], offsetsOffset: GLuint, drawcount: GLsizei): void;
 }
 
 /** A WaveShaperNode always has exactly one input and one output. */
@@ -15911,7 +16142,7 @@ declare var WebGLRenderingContext: {
 };
 
 interface WebGLRenderingContextBase {
-    readonly canvas: HTMLCanvasElement;
+    readonly canvas: HTMLCanvasElement | OffscreenCanvas;
     readonly drawingBufferHeight: GLsizei;
     readonly drawingBufferWidth: GLsizei;
     activeTexture(texture: GLenum): void;
@@ -15971,35 +16202,39 @@ interface WebGLRenderingContextBase {
     getBufferParameter(target: GLenum, pname: GLenum): any;
     getContextAttributes(): WebGLContextAttributes | null;
     getError(): GLenum;
+    getExtension(extensionName: "ANGLE_instanced_arrays"): ANGLE_instanced_arrays | null;
     getExtension(extensionName: "EXT_blend_minmax"): EXT_blend_minmax | null;
     getExtension(extensionName: "EXT_color_buffer_float"): EXT_color_buffer_float | null;
     getExtension(extensionName: "EXT_color_buffer_half_float"): EXT_color_buffer_half_float | null;
     getExtension(extensionName: "EXT_float_blend"): EXT_float_blend | null;
-    getExtension(extensionName: "EXT_texture_filter_anisotropic"): EXT_texture_filter_anisotropic | null;
     getExtension(extensionName: "EXT_frag_depth"): EXT_frag_depth | null;
-    getExtension(extensionName: "EXT_shader_texture_lod"): EXT_shader_texture_lod | null;
     getExtension(extensionName: "EXT_sRGB"): EXT_sRGB | null;
+    getExtension(extensionName: "EXT_shader_texture_lod"): EXT_shader_texture_lod | null;
+    getExtension(extensionName: "EXT_texture_compression_bptc"): EXT_texture_compression_bptc | null;
+    getExtension(extensionName: "EXT_texture_compression_rgtc"): EXT_texture_compression_rgtc | null;
+    getExtension(extensionName: "EXT_texture_filter_anisotropic"): EXT_texture_filter_anisotropic | null;
     getExtension(extensionName: "KHR_parallel_shader_compile"): KHR_parallel_shader_compile | null;
+    getExtension(extensionName: "OES_element_index_uint"): OES_element_index_uint | null;
+    getExtension(extensionName: "OES_fbo_render_mipmap"): OES_fbo_render_mipmap | null;
+    getExtension(extensionName: "OES_standard_derivatives"): OES_standard_derivatives | null;
+    getExtension(extensionName: "OES_texture_float"): OES_texture_float | null;
+    getExtension(extensionName: "OES_texture_float_linear"): OES_texture_float_linear | null;
+    getExtension(extensionName: "OES_texture_half_float"): OES_texture_half_float | null;
+    getExtension(extensionName: "OES_texture_half_float_linear"): OES_texture_half_float_linear | null;
     getExtension(extensionName: "OES_vertex_array_object"): OES_vertex_array_object | null;
     getExtension(extensionName: "OVR_multiview2"): OVR_multiview2 | null;
     getExtension(extensionName: "WEBGL_color_buffer_float"): WEBGL_color_buffer_float | null;
     getExtension(extensionName: "WEBGL_compressed_texture_astc"): WEBGL_compressed_texture_astc | null;
     getExtension(extensionName: "WEBGL_compressed_texture_etc"): WEBGL_compressed_texture_etc | null;
     getExtension(extensionName: "WEBGL_compressed_texture_etc1"): WEBGL_compressed_texture_etc1 | null;
+    getExtension(extensionName: "WEBGL_compressed_texture_s3tc"): WEBGL_compressed_texture_s3tc | null;
     getExtension(extensionName: "WEBGL_compressed_texture_s3tc_srgb"): WEBGL_compressed_texture_s3tc_srgb | null;
+    getExtension(extensionName: "WEBGL_debug_renderer_info"): WEBGL_debug_renderer_info | null;
     getExtension(extensionName: "WEBGL_debug_shaders"): WEBGL_debug_shaders | null;
+    getExtension(extensionName: "WEBGL_depth_texture"): WEBGL_depth_texture | null;
     getExtension(extensionName: "WEBGL_draw_buffers"): WEBGL_draw_buffers | null;
     getExtension(extensionName: "WEBGL_lose_context"): WEBGL_lose_context | null;
-    getExtension(extensionName: "WEBGL_depth_texture"): WEBGL_depth_texture | null;
-    getExtension(extensionName: "WEBGL_debug_renderer_info"): WEBGL_debug_renderer_info | null;
-    getExtension(extensionName: "WEBGL_compressed_texture_s3tc"): WEBGL_compressed_texture_s3tc | null;
-    getExtension(extensionName: "OES_texture_half_float_linear"): OES_texture_half_float_linear | null;
-    getExtension(extensionName: "OES_texture_half_float"): OES_texture_half_float | null;
-    getExtension(extensionName: "OES_texture_float_linear"): OES_texture_float_linear | null;
-    getExtension(extensionName: "OES_texture_float"): OES_texture_float | null;
-    getExtension(extensionName: "OES_standard_derivatives"): OES_standard_derivatives | null;
-    getExtension(extensionName: "OES_element_index_uint"): OES_element_index_uint | null;
-    getExtension(extensionName: "ANGLE_instanced_arrays"): ANGLE_instanced_arrays | null;
+    getExtension(extensionName: "WEBGL_multi_draw"): WEBGL_multi_draw | null;
     getExtension(name: string): any;
     getFramebufferAttachmentParameter(target: GLenum, attachment: GLenum, pname: GLenum): any;
     getParameter(pname: GLenum): any;
@@ -17385,7 +17620,7 @@ interface UnderlyingSourceStartCallback<R> {
 }
 
 interface VideoFrameRequestCallback {
-    (now: DOMHighResTimeStamp, metadata: VideoFrameMetadata): void;
+    (now: DOMHighResTimeStamp, metadata: VideoFrameCallbackMetadata): void;
 }
 
 interface VoidFunction {
@@ -17744,11 +17979,13 @@ declare var onanimationend: ((this: Window, ev: AnimationEvent) => any) | null;
 declare var onanimationiteration: ((this: Window, ev: AnimationEvent) => any) | null;
 declare var onanimationstart: ((this: Window, ev: AnimationEvent) => any) | null;
 declare var onauxclick: ((this: Window, ev: MouseEvent) => any) | null;
+declare var onbeforeinput: ((this: Window, ev: InputEvent) => any) | null;
 /**
  * Fires when the object loses the input focus.
  * @param ev The focus event.
  */
 declare var onblur: ((this: Window, ev: FocusEvent) => any) | null;
+declare var oncancel: ((this: Window, ev: Event) => any) | null;
 /**
  * Occurs when playback is possible, but would require further buffering.
  * @param ev The event.
@@ -18060,7 +18297,7 @@ type BodyInit = ReadableStream | XMLHttpRequestBodyInit;
 type BufferSource = ArrayBufferView | ArrayBuffer;
 type COSEAlgorithmIdentifier = number;
 type CSSNumberish = number;
-type CanvasImageSource = HTMLOrSVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap;
+type CanvasImageSource = HTMLOrSVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap | OffscreenCanvas;
 type ClipboardItemData = Promise<string | Blob>;
 type ClipboardItems = ClipboardItem[];
 type ConstrainBoolean = boolean | ConstrainBooleanParameters;
@@ -18097,20 +18334,19 @@ type MediaProvider = MediaStream | MediaSource | Blob;
 type MessageEventSource = WindowProxy | MessagePort | ServiceWorker;
 type MutationRecordType = "attributes" | "characterData" | "childList";
 type NamedCurve = string;
+type OffscreenRenderingContext = OffscreenCanvasRenderingContext2D | ImageBitmapRenderingContext | WebGLRenderingContext | WebGL2RenderingContext;
 type OnBeforeUnloadEventHandler = OnBeforeUnloadEventHandlerNonNull | null;
 type OnErrorEventHandler = OnErrorEventHandlerNonNull | null;
 type PerformanceEntryList = PerformanceEntry[];
-type ReadableStreamController<T> = ReadableStreamDefaultController<T>;
-type ReadableStreamReadResult<T> = ReadableStreamReadValueResult<T> | ReadableStreamReadDoneResult;
-type ReadableStreamReader<T> = ReadableStreamDefaultReader<T>;
+type ReadableStreamController<T> = ReadableStreamDefaultController<T> | ReadableByteStreamController;
+type ReadableStreamReadResult<T> = ReadableStreamReadValueResult<T> | ReadableStreamReadDoneResult<T>;
+type ReadableStreamReader<T> = ReadableStreamDefaultReader<T> | ReadableStreamBYOBReader;
 type RenderingContext = CanvasRenderingContext2D | ImageBitmapRenderingContext | WebGLRenderingContext | WebGL2RenderingContext;
 type RequestInfo = Request | string;
-type TexImageSource = ImageBitmap | ImageData | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement;
+type TexImageSource = ImageBitmap | ImageData | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | OffscreenCanvas;
 type TimerHandler = string | Function;
-type Transferable = ArrayBuffer | MessagePort | ImageBitmap;
+type Transferable = OffscreenCanvas | ImageBitmap | MessagePort | ReadableStream | WritableStream | TransformStream | ArrayBuffer;
 type Uint32List = Uint32Array | GLuint[];
-type UvmEntries = UvmEntry[];
-type UvmEntry = number[];
 type VibratePattern = number | number[];
 type WindowProxy = Window;
 type XMLHttpRequestBodyInit = Blob | BufferSource | FormData | URLSearchParams | string;
@@ -18122,7 +18358,7 @@ type AttestationConveyancePreference = "direct" | "enterprise" | "indirect" | "n
 type AudioContextLatencyCategory = "balanced" | "interactive" | "playback";
 type AudioContextState = "closed" | "running" | "suspended";
 type AuthenticatorAttachment = "cross-platform" | "platform";
-type AuthenticatorTransport = "ble" | "internal" | "nfc" | "usb";
+type AuthenticatorTransport = "ble" | "hybrid" | "internal" | "nfc" | "usb";
 type AutoKeyword = "auto";
 type AutomationRate = "a-rate" | "k-rate";
 type BinaryType = "arraybuffer" | "blob";
@@ -18183,12 +18419,13 @@ type MediaKeySessionClosedReason = "closed-by-application" | "hardware-context-r
 type MediaKeySessionType = "persistent-license" | "temporary";
 type MediaKeyStatus = "expired" | "internal-error" | "output-downscaled" | "output-restricted" | "released" | "status-pending" | "usable" | "usable-in-future";
 type MediaKeysRequirement = "not-allowed" | "optional" | "required";
-type MediaSessionAction = "hangup" | "nexttrack" | "pause" | "play" | "previoustrack" | "seekbackward" | "seekforward" | "seekto" | "skipad" | "stop" | "togglecamera" | "togglemicrophone";
+type MediaSessionAction = "nexttrack" | "pause" | "play" | "previoustrack" | "seekbackward" | "seekforward" | "seekto" | "skipad" | "stop";
 type MediaSessionPlaybackState = "none" | "paused" | "playing";
 type MediaStreamTrackState = "ended" | "live";
 type NavigationTimingType = "back_forward" | "navigate" | "prerender" | "reload";
 type NotificationDirection = "auto" | "ltr" | "rtl";
 type NotificationPermission = "default" | "denied" | "granted";
+type OffscreenRenderingContextId = "2d" | "bitmaprenderer" | "webgl" | "webgl2" | "webgpu";
 type OrientationLockType = "any" | "landscape" | "landscape-primary" | "landscape-secondary" | "natural" | "portrait" | "portrait-primary" | "portrait-secondary";
 type OrientationType = "landscape-primary" | "landscape-secondary" | "portrait-primary" | "portrait-secondary";
 type OscillatorType = "custom" | "sawtooth" | "sine" | "square" | "triangle";
@@ -18213,7 +18450,6 @@ type RTCErrorDetailType = "data-channel-failure" | "dtls-failure" | "fingerprint
 type RTCIceCandidateType = "host" | "prflx" | "relay" | "srflx";
 type RTCIceComponent = "rtcp" | "rtp";
 type RTCIceConnectionState = "checking" | "closed" | "completed" | "connected" | "disconnected" | "failed" | "new";
-type RTCIceCredentialType = "password";
 type RTCIceGathererState = "complete" | "gathering" | "new";
 type RTCIceGatheringState = "complete" | "gathering" | "new";
 type RTCIceProtocol = "tcp" | "udp";
@@ -18228,7 +18464,9 @@ type RTCSctpTransportState = "closed" | "connected" | "connecting";
 type RTCSdpType = "answer" | "offer" | "pranswer" | "rollback";
 type RTCSignalingState = "closed" | "have-local-offer" | "have-local-pranswer" | "have-remote-offer" | "have-remote-pranswer" | "stable";
 type RTCStatsIceCandidatePairState = "failed" | "frozen" | "in-progress" | "inprogress" | "succeeded" | "waiting";
-type RTCStatsType = "candidate-pair" | "certificate" | "codec" | "csrc" | "data-channel" | "inbound-rtp" | "local-candidate" | "media-source" | "outbound-rtp" | "peer-connection" | "remote-candidate" | "remote-inbound-rtp" | "remote-outbound-rtp" | "track" | "transport";
+type RTCStatsType = "candidate-pair" | "certificate" | "codec" | "data-channel" | "inbound-rtp" | "local-candidate" | "media-source" | "outbound-rtp" | "peer-connection" | "remote-candidate" | "remote-inbound-rtp" | "remote-outbound-rtp" | "track" | "transport";
+type ReadableStreamReaderMode = "byob";
+type ReadableStreamType = "bytes";
 type ReadyState = "closed" | "ended" | "open";
 type RecordingState = "inactive" | "paused" | "recording";
 type ReferrerPolicy = "" | "no-referrer" | "no-referrer-when-downgrade" | "origin" | "origin-when-cross-origin" | "same-origin" | "strict-origin" | "strict-origin-when-cross-origin" | "unsafe-url";

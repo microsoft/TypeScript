@@ -61,7 +61,7 @@ export function registerCodeFix(reg: CodeFixRegistration) {
 }
 
 /** @internal */
-export function getSupportedErrorCodes(): string[] {
+export function getSupportedErrorCodes(): readonly string[] {
     return arrayFrom(errorCodeToFixes.keys());
 }
 

@@ -10,19 +10,19 @@ export default a.default;
 
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-exports["default"] = C;
+exports.default = C;
 ;
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a = require("./a");
-exports["default"] = a["default"];
+exports.default = a.default;
 
 
 //// [a.d.ts]

@@ -46,10 +46,10 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
             { currentDirectory: "/user/username/projects/myproject" }
         ),
         commandLineArgs: ["--b", "-w", "-v"],
-        changes: [
+        edits: [
             {
                 caption: "Append text",
-                change: sys => sys.appendFile(`/user/username/projects/myproject/project1/index.ts`, "const bar = 10;"),
+                edit: sys => sys.appendFile(`/user/username/projects/myproject/project1/index.ts`, "const bar = 10;"),
                 timeouts: sys => {
                     sys.checkTimeoutQueueLengthAndRun(1); // build project1 and solution
                     sys.checkTimeoutQueueLength(0);
@@ -121,25 +121,25 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
             { ...libFile, path: `/a/lib/lib.es2022.full.d.ts` }
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-b", "packages/pkg1", "-w", "--verbose", "--traceResolution"],
-        changes: [
+        edits: [
             {
                 caption: "reports import errors after change to package file",
-                change: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg1/package.json`, `"module"`, `"commonjs"`),
+                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg1/package.json`, `"module"`, `"commonjs"`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "removes those errors when a package file is changed back",
-                change: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg1/package.json`, `"commonjs"`, `"module"`),
+                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg1/package.json`, `"commonjs"`, `"module"`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "reports import errors after change to package file",
-                change: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg1/package.json`, `"module"`, `"commonjs"`),
+                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg1/package.json`, `"module"`, `"commonjs"`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks()
             },
             {
                 caption: "removes those errors when a package file is changed to cjs extensions",
-                change: sys => {
+                edit: sys => {
                     sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `"build/index.js"`, `"build/index.cjs"`);
                     sys.renameFile(`/user/username/projects/myproject/packages/pkg2/index.ts`, `/user/username/projects/myproject/packages/pkg2/index.cts`);
                 },
@@ -215,15 +215,15 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
             libFile
         ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-b", "packages/pkg1", "--verbose", "-w", "--traceResolution"],
-        changes: [
+        edits: [
             {
                 caption: "reports import errors after change to package file",
-                change: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `index.js`, `other.js`),
+                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `index.js`, `other.js`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
                 caption: "removes those errors when a package file is changed back",
-                change: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `other.js`, `index.js`),
+                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/packages/pkg2/package.json`, `other.js`, `index.js`),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ]

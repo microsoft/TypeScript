@@ -35,7 +35,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
                 files(),
                 { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
             ),
-            changes,
+            edits: changes,
             baselineIncremental: true
         });
 
@@ -47,7 +47,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
                 files(),
                 { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
             ),
-            changes,
+            edits: changes,
             baselineIncremental: true
         });
 
@@ -59,7 +59,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
                 files(),
                 { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
             ),
-            changes,
+            edits: changes,
             baselineIncremental: true
         });
 
@@ -71,7 +71,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
                 files(),
                 { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
             ),
-            changes,
+            edits: changes,
             baselineIncremental: true
         });
 
@@ -83,7 +83,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
                 files(),
                 { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
             ),
-            changes,
+            edits: changes,
             baselineIncremental: true
         });
 
@@ -95,7 +95,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
                 files(),
                 { currentDirectory: currentDirectory || "/user/username/projects/myproject" }
             ),
-            changes,
+            edits: changes,
             baselineIncremental: true
         });
     }
@@ -116,17 +116,17 @@ console.log(b.c.d);`
                 changes: [
                     {
                         caption: "Rename property d to d2 of class C to initialize signatures",
-                        change: sys => sys.writeFile(cFile.path, cFile.content.replace("d", "d2")),
+                        edit: sys => sys.writeFile(cFile.path, cFile.content.replace("d", "d2")),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                     {
                         caption: "Rename property d2 to d of class C to revert back to original text",
-                        change: sys => sys.writeFile(cFile.path, cFile.content.replace("d2", "d")),
+                        edit: sys => sys.writeFile(cFile.path, cFile.content.replace("d2", "d")),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                     {
                         caption: "Rename property d to d2 of class C",
-                        change: sys => sys.writeFile(cFile.path, cFile.content.replace("d", "d2")),
+                        edit: sys => sys.writeFile(cFile.path, cFile.content.replace("d", "d2")),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     }
                 ],
@@ -224,17 +224,17 @@ getPoint().c.x;`
             changes: [
                 {
                     caption: "Rename property x2 to x of interface Coords to initialize signatures",
-                    change: sys => sys.writeFile(aFile.path, aFile.content.replace("x2", "x")),
+                    edit: sys => sys.writeFile(aFile.path, aFile.content.replace("x2", "x")),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "Rename property x to x2 of interface Coords to revert back to original text",
-                    change: sys => sys.writeFile(aFile.path, aFile.content.replace("x: number", "x2: number")),
+                    edit: sys => sys.writeFile(aFile.path, aFile.content.replace("x: number", "x2: number")),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
                 {
                     caption: "Rename property x2 to x of interface Coords",
-                    change: sys => sys.writeFile(aFile.path, aFile.content.replace("x2", "x")),
+                    edit: sys => sys.writeFile(aFile.path, aFile.content.replace("x2", "x")),
                     timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                 },
             ]
@@ -295,17 +295,17 @@ export class Data {
                 changes: [
                     {
                         caption: "Rename property title to title2 of interface ITest to initialize signatures",
-                        change: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
+                        edit: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                     {
                         caption: "Rename property title2 to title of interface ITest to revert back to original text",
-                        change: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title2", "title")),
+                        edit: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title2", "title")),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     },
                     {
                         caption: "Rename property title to title2 of interface ITest",
-                        change: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
+                        edit: sys => sys.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
                         timeouts: sys => sys.runQueuedTimeoutCallbacks(),
                     }
                 ]
@@ -348,14 +348,14 @@ export class Data2 {
         function change(caption: string, content: string): TscWatchCompileChange {
             return {
                 caption,
-                change: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, content),
+                edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, content),
                 // build project
                 timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1)
             };
         }
         const noChange: TscWatchCompileChange = {
             caption: "No change",
-            change: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, sys.readFile(`/user/username/projects/noEmitOnError/src/main.ts`)!),
+            edit: sys => sys.writeFile(`/user/username/projects/noEmitOnError/src/main.ts`, sys.readFile(`/user/username/projects/noEmitOnError/src/main.ts`)!),
             // build project
             timeouts: sys => sys.checkTimeoutQueueLengthAndRun(1),
         };

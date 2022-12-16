@@ -633,7 +633,7 @@ export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan, invoke
         visit(nodeToCheck);
 
         if (rangeFacts & RangeFacts.UsesThis) {
-            const container = getThisContainer(nodeToCheck, /** includeArrowFunctions */ false);
+            const container = getThisContainer(nodeToCheck, /** includeArrowFunctions */ false, /*includeClassComputedPropertyName*/ false);
             if (
                 container.kind === SyntaxKind.FunctionDeclaration ||
                 (container.kind === SyntaxKind.MethodDeclaration && container.parent.kind === SyntaxKind.ObjectLiteralExpression) ||
@@ -2124,7 +2124,7 @@ function collectReadsAndWrites(
             const decl = find(visibleDeclarationsInExtractedRange, d => d.symbol === sym);
             if (decl) {
                 if (isVariableDeclaration(decl)) {
-                    const idString = decl.symbol.id!.toString();
+                    const idString = decl.symbol.id.toString();
                     if (!exposedVariableSymbolSet.has(idString)) {
                         exposedVariableDeclarations.push(decl);
                         exposedVariableSymbolSet.set(idString, true);

@@ -1,13 +1,13 @@
 Info 0    [00:00:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:00:18.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/a/b/commonFile1.ts",
         "projectRootPath": "/a/b"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/a/lib/lib.d.ts]
@@ -73,7 +73,7 @@ Info 18   [00:00:35.000] 	Files (3)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	commonFile1.ts
 	  Matched by default include pattern '**/*'
 	commonFile2.ts

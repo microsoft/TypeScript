@@ -21,7 +21,7 @@ export function baz3(func = class { x = foo }) {
 
 //// [functionLikeInParameterInitializer.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.baz3 = exports.baz2 = exports.baz1 = exports.bar = void 0;
 // error
 function bar(func) {

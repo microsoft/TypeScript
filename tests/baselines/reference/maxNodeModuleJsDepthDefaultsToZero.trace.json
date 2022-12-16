@@ -1,6 +1,6 @@
 [
     "======== Resolving module 'shortid' from '/index.ts'. ========",
-    "Explicitly specified module resolution kind: 'NodeJs'.",
+    "Explicitly specified module resolution kind: 'Node10'.",
     "Loading module 'shortid' from 'node_modules' folder, target file types: TypeScript, Declaration.",
     "File '/node_modules/shortid/package.json' does not exist.",
     "File '/node_modules/shortid.ts' does not exist.",
