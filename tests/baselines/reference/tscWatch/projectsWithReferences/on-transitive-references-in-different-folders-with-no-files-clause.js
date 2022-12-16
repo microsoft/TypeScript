@@ -41,7 +41,7 @@ export class A {}
 
 //// [/user/username/projects/transitiveReferences/a/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 var A = /** @class */ (function () {
     function A() {
@@ -102,7 +102,7 @@ export declare class A {
 
 //// [/user/username/projects/transitiveReferences/b/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 var a_1 = require("@ref/a");
 exports.b = new a_1.A();
@@ -178,7 +178,7 @@ export declare const b: A;
 
 //// [/user/username/projects/transitiveReferences/c/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var b_1 = require("../b");
 var a_1 = require("@ref/a");
 b_1.b;
@@ -192,7 +192,7 @@ Output::
 [[90m12:00:59 AM[0m] Starting compilation in watch mode...
 
 ======== Resolving module '../b' from '/user/username/projects/transitiveReferences/c/index.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, Declaration.
 File '/user/username/projects/transitiveReferences/b.ts' does not exist.
 File '/user/username/projects/transitiveReferences/b.tsx' does not exist.
@@ -201,7 +201,7 @@ File '/user/username/projects/transitiveReferences/b/package.json' does not exis
 File '/user/username/projects/transitiveReferences/b/index.ts' exist - use it as a name resolution result.
 ======== Module name '../b' was successfully resolved to '/user/username/projects/transitiveReferences/b/index.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/user/username/projects/transitiveReferences/c', using this value to resolve non-relative module name '@ref/a'.
 'paths' option is specified, looking for a pattern to match module name '@ref/a'.
 Module name '@ref/a', matched pattern '@ref/*'.
@@ -213,10 +213,10 @@ File '/user/username/projects/transitiveReferences/refs/a.d.ts' exist - use it a
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/b/tsconfig.json'.
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'. ========
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'
@@ -324,7 +324,7 @@ export const b = new A();export function gfoo() { }
 
 //// [/user/username/projects/transitiveReferences/b/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.gfoo = exports.b = void 0;
 var a_1 = require("@ref/a");
 exports.b = new a_1.A();
@@ -408,7 +408,7 @@ Output::
 
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'
@@ -518,7 +518,7 @@ Output::
 [[90m12:01:31 AM[0m] File change detected. Starting incremental compilation...
 
 ======== Resolving module '../b' from '/user/username/projects/transitiveReferences/c/index.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, Declaration.
 File '/user/username/projects/transitiveReferences/b.ts' does not exist.
 File '/user/username/projects/transitiveReferences/b.tsx' does not exist.
@@ -527,7 +527,7 @@ File '/user/username/projects/transitiveReferences/b/package.json' does not exis
 File '/user/username/projects/transitiveReferences/b/index.ts' exist - use it as a name resolution result.
 ======== Module name '../b' was successfully resolved to '/user/username/projects/transitiveReferences/b/index.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/user/username/projects/transitiveReferences/c', using this value to resolve non-relative module name '@ref/a'.
 'paths' option is specified, looking for a pattern to match module name '@ref/a'.
 Module name '@ref/a', matched pattern '@ref/*'.
@@ -539,10 +539,10 @@ File '/user/username/projects/transitiveReferences/nrefs/a.d.ts' exist - use it 
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/nrefs/a.d.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/b/tsconfig.json'.
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'. ========
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'
@@ -647,7 +647,7 @@ Output::
 [[90m12:01:39 AM[0m] File change detected. Starting incremental compilation...
 
 ======== Resolving module '../b' from '/user/username/projects/transitiveReferences/c/index.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/user/username/projects/transitiveReferences/b', target file types: TypeScript, Declaration.
 File '/user/username/projects/transitiveReferences/b.ts' does not exist.
 File '/user/username/projects/transitiveReferences/b.tsx' does not exist.
@@ -656,7 +656,7 @@ File '/user/username/projects/transitiveReferences/b/package.json' does not exis
 File '/user/username/projects/transitiveReferences/b/index.ts' exist - use it as a name resolution result.
 ======== Module name '../b' was successfully resolved to '/user/username/projects/transitiveReferences/b/index.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/user/username/projects/transitiveReferences/c', using this value to resolve non-relative module name '@ref/a'.
 'paths' option is specified, looking for a pattern to match module name '@ref/a'.
 Module name '@ref/a', matched pattern '@ref/*'.
@@ -668,10 +668,10 @@ File '/user/username/projects/transitiveReferences/refs/a.d.ts' exist - use it a
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/b/tsconfig.json'.
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'. ========
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'
@@ -779,10 +779,10 @@ Reusing resolution of module '../b' from '/user/username/projects/transitiveRefe
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/b/tsconfig.json'.
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/nrefs/a.d.ts'. ========
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 nrefs/a.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
 b/index.d.ts
@@ -890,10 +890,10 @@ Reusing resolution of module '../b' from '/user/username/projects/transitiveRefe
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/b/tsconfig.json'.
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'. ========
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 refs/a.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   Imported via "@ref/a" from file 'c/index.ts'
@@ -986,7 +986,7 @@ Output::
 Reusing resolution of module '../b' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/b/index.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/user/username/projects/transitiveReferences/c', using this value to resolve non-relative module name '@ref/a'.
 'paths' option is specified, looking for a pattern to match module name '@ref/a'.
 Module name '@ref/a', matched pattern '@ref/*'.
@@ -1002,7 +1002,7 @@ File '/user/username/projects/transitiveReferences/refs/a.d.ts' exist - use it a
 [7m [0m [91m                                                                                   ~~~~~~~~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 refs/a.d.ts
   Imported via '@ref/a' from file 'b/index.ts'
   Imported via "@ref/a" from file 'c/index.ts'
@@ -1097,10 +1097,10 @@ Reusing resolution of module '../b' from '/user/username/projects/transitiveRefe
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 ======== Resolving module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/transitiveReferences/b/tsconfig.json'.
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 ======== Module name '@ref/a' was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'. ========
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'
@@ -1213,7 +1213,7 @@ Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveRe
 [7m [0m [91m                                                                                               ~~~~~~~~~~~~~~~[0m
 
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a/index.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
 b/index.d.ts
@@ -1320,7 +1320,7 @@ Reusing resolution of module '../b' from '/user/username/projects/transitiveRefe
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/c/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/refs/a.d.ts'.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b/index.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a/index.ts'.
 ../../../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'

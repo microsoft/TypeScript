@@ -10,7 +10,7 @@ import {
     CallExpression,
     canHaveDecorators,
     canHaveModifiers,
-    cast,
+    canHaveSymbol, cast,
     ClassDeclaration,
     codefix,
     combinePaths,
@@ -505,7 +505,7 @@ function addExports(sourceFile: SourceFile, toMove: readonly Statement[], needEx
     return flatMap(toMove, statement => {
         if (isTopLevelDeclarationStatement(statement) &&
             !isExported(sourceFile, statement, useEs6Exports) &&
-            forEachTopLevelDeclaration(statement, d => needExport.has(Debug.checkDefined(d.symbol)))) {
+            forEachTopLevelDeclaration(statement, d => needExport.has(Debug.checkDefined(tryCast(d, canHaveSymbol)?.symbol)))) {
             const exports = addExport(statement, useEs6Exports);
             if (exports) return exports;
         }

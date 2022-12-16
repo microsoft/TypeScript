@@ -1,0 +1,37 @@
+=== /node_modules/@types/node/index.d.ts ===
+declare var require: (...args: any[]) => any;
+>require : (...args: any[]) => any
+>args : any[]
+
+=== /mainJs.js ===
+import {} from "./a";
+import("./a");
+>import("./a") : Promise<typeof import("/a")>
+>"./a" : "./a"
+
+const _ = require("./a"); // No resolution
+>_ : any
+>require("./a") : any
+>require : (...args: any[]) => any
+>"./a" : "./a"
+
+_.a; // any
+>_.a : any
+>_ : any
+>a : any
+
+=== /main.ts ===
+import {} from "./a";
+import _ = require("./a"); // Error
+>_ : typeof _
+
+export = {}; // Error
+>{} : {}
+
+export {};
+
+=== /a.ts ===
+export const a = "a";
+>a : "a"
+>"a" : "a"
+

@@ -597,7 +597,7 @@ export function someFn() { }`),
     verifyTscWatch({
         scenario: "programUpdates",
         subScenario: "works with extended source files",
-        commandLineArgs: ["-b", "-w", "-v", "project1.tsconfig.json", "project2.tsconfig.json"],
+        commandLineArgs: ["-b", "-w", "-v", "project1.tsconfig.json", "project2.tsconfig.json", "project3.tsconfig.json"],
         sys: () => {
             const alphaExtendedConfigFile: File = {
                 path: "/a/b/alpha.tsconfig.json",
@@ -633,10 +633,49 @@ export function someFn() { }`),
                     files: [otherFile.path]
                 })
             };
+            const otherFile2: File = {
+                path: "/a/b/other2.ts",
+                content: "let k = 0;",
+            };
+            const extendsConfigFile1: File = {
+                path: "/a/b/extendsConfig1.tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                    }
+                })
+            };
+            const extendsConfigFile2: File = {
+                path: "/a/b/extendsConfig2.tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        strictNullChecks: false,
+                    }
+                })
+            };
+            const extendsConfigFile3: File = {
+                path: "/a/b/extendsConfig3.tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        noImplicitAny: true,
+                    }
+                })
+            };
+            const project3Config: File = {
+                path: "/a/b/project3.tsconfig.json",
+                content: JSON.stringify({
+                    extends: ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json", "./extendsConfig3.tsconfig.json"],
+                    compilerOptions: {
+                        composite: false,
+                    },
+                    files: [otherFile2.path]
+                })
+            };
             return createWatchedSystem([
                 libFile,
                 alphaExtendedConfigFile, project1Config, commonFile1, commonFile2,
-                bravoExtendedConfigFile, project2Config, otherFile
+                bravoExtendedConfigFile, project2Config, otherFile, otherFile2,
+                    extendsConfigFile1, extendsConfigFile2, extendsConfigFile3, project3Config
             ], { currentDirectory: "/a/b" });
         },
         edits: [
@@ -689,7 +728,37 @@ export function someFn() { }`),
                     sys.checkTimeoutQueueLength(0);
                 },
             },
-        ]
+            {
+                caption: "Modify extendsConfigFile2",
+                edit: sys => sys.writeFile("/a/b/extendsConfig2.tsconfig.json", JSON.stringify({
+                    compilerOptions: { strictNullChecks: true }
+                })),
+                timeouts: sys => { // Build project3
+                    sys.checkTimeoutQueueLengthAndRun(1);
+                    sys.checkTimeoutQueueLength(0);
+                },
+            },
+            {
+                caption: "Modify project 3",
+                edit: sys => sys.writeFile("/a/b/project3.tsconfig.json", JSON.stringify({
+                    extends: ["./extendsConfig1.tsconfig.json", "./extendsConfig2.tsconfig.json"],
+                    compilerOptions: { composite: false },
+                    files: ["/a/b/other2.ts"]
+                })),
+                timeouts: sys => { // Build project3
+                    sys.checkTimeoutQueueLengthAndRun(1);
+                    sys.checkTimeoutQueueLength(0);
+                },
+            },
+            {
+                caption: "Delete extendedConfigFile2 and report error",
+                edit: sys => sys.deleteFile("./extendsConfig2.tsconfig.json"),
+                timeouts: sys => { // Build project3
+                    sys.checkTimeoutQueueLengthAndRun(1);
+                    sys.checkTimeoutQueueLength(0);
+                },
+            }
+        ],
     });
 
     verifyTscWatch({

@@ -92,7 +92,7 @@ Info 16   [00:00:50.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	types.ts
 	  Part of 'files' list in tsconfig.json
 	program.ts
@@ -324,7 +324,7 @@ Info 48   [00:01:31.000] 	Files (4)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../compiler/types.ts
 	  Source from referenced project '../compiler/tsconfig.json' included because '--module' is specified as 'none'
 	../compiler/program.ts

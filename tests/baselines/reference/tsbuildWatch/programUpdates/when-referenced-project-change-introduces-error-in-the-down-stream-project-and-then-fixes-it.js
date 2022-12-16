@@ -101,7 +101,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/Library/library.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.createSomeObject = void 0;
 function createSomeObject() {
     return {
@@ -165,7 +165,7 @@ export {};
 
 //// [/user/username/projects/sample1/App/app.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var library_1 = require("../Library/library");
 (0, library_1.createSomeObject)().message;
 
@@ -258,7 +258,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/Library/library.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.createSomeObject = void 0;
 function createSomeObject() {
     return {
@@ -398,7 +398,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/sample1/Library/library.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.createSomeObject = void 0;
 function createSomeObject() {
     return {

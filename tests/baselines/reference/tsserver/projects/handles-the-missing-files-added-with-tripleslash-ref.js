@@ -120,19 +120,6 @@ Info 15   [00:00:34.000] response:
       "response": [
         {
           "start": {
-            "line": 2,
-            "offset": 29
-          },
-          "end": {
-            "line": 2,
-            "offset": 30
-          },
-          "text": "Cannot find name 'y'.",
-          "code": 2304,
-          "category": "error"
-        },
-        {
-          "start": {
             "line": 1,
             "offset": 22
           },
@@ -142,6 +129,19 @@ Info 15   [00:00:34.000] response:
           },
           "text": "File '/a/b/commonFile2.ts' not found.",
           "code": 6053,
+          "category": "error"
+        },
+        {
+          "start": {
+            "line": 2,
+            "offset": 29
+          },
+          "end": {
+            "line": 2,
+            "offset": 30
+          },
+          "text": "Cannot find name 'y'.",
+          "code": 2304,
           "category": "error"
         }
       ],

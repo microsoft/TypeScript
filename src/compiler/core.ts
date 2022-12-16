@@ -944,14 +944,51 @@ export function sortAndDeduplicate<T>(array: readonly T[], comparer?: Comparer<T
 /** @internal */
 export function arrayIsSorted<T>(array: readonly T[], comparer: Comparer<T>) {
     if (array.length < 2) return true;
-    let prevElement = array[0];
-    for (const element of array.slice(1)) {
-        if (comparer(prevElement, element) === Comparison.GreaterThan) {
+    for (let i = 1, len = array.length; i < len; i++) {
+        if (comparer(array[i - 1], array[i]) === Comparison.GreaterThan) {
             return false;
         }
-        prevElement = element;
     }
     return true;
+}
+
+/** @internal */
+export const enum SortKind {
+    None = 0,
+    CaseSensitive = 1 << 0,
+    CaseInsensitive = 1 << 1,
+    Both = CaseSensitive | CaseInsensitive,
+}
+
+/** @internal */
+export function detectSortCaseSensitivity(array: readonly string[], useEslintOrdering?: boolean): SortKind;
+/** @internal */
+export function detectSortCaseSensitivity<T>(array: readonly T[], useEslintOrdering: boolean, getString: (element: T) => string): SortKind;
+/** @internal */
+export function detectSortCaseSensitivity<T>(array: readonly T[], useEslintOrdering: boolean, getString?: (element: T) => string): SortKind {
+    let kind = SortKind.Both;
+    if (array.length < 2) return kind;
+    const caseSensitiveComparer = getString
+        ? (a: T, b: T) => compareStringsCaseSensitive(getString(a), getString(b))
+        : compareStringsCaseSensitive as (a: T | undefined, b: T | undefined) => Comparison;
+    const compareCaseInsensitive = useEslintOrdering ? compareStringsCaseInsensitiveEslintCompatible : compareStringsCaseInsensitive;
+    const caseInsensitiveComparer = getString
+        ? (a: T, b: T) => compareCaseInsensitive(getString(a), getString(b))
+        : compareCaseInsensitive as (a: T | undefined, b: T | undefined) => Comparison;
+    for (let i = 1, len = array.length; i < len; i++) {
+        const prevElement = array[i - 1];
+        const element = array[i];
+        if (kind & SortKind.CaseSensitive && caseSensitiveComparer(prevElement, element) === Comparison.GreaterThan) {
+            kind &= ~SortKind.CaseSensitive;
+        }
+        if (kind & SortKind.CaseInsensitive && caseInsensitiveComparer(prevElement, element) === Comparison.GreaterThan) {
+            kind &= ~SortKind.CaseInsensitive;
+        }
+        if (kind === SortKind.None) {
+            return kind;
+        }
+    }
+    return kind;
 }
 
 /** @internal */
@@ -2145,6 +2182,23 @@ export function memoizeOne<A extends string | number | boolean | undefined, T>(c
 }
 
 /**
+ * A version of `memoize` that supports a single non-primitive argument, stored as keys of a WeakMap.
+ *
+ * @internal
+ */
+export function memoizeWeak<A extends object, T>(callback: (arg: A) => T): (arg: A) => T {
+    const map = new WeakMap<A, T>();
+    return (arg: A) => {
+        let value = map.get(arg);
+        if (value === undefined && !map.has(arg)) {
+            value = callback(arg);
+            map.set(arg, value);
+        }
+        return value!;
+    };
+}
+
+/**
  * High-order function, composes functions. Note that functions are composed inside-out;
  * for example, `compose(a, b)` is the equivalent of `x => b(a(x))`.
  *
@@ -2290,6 +2344,27 @@ export function compareStringsCaseInsensitive(a: string, b: string) {
     if (b === undefined) return Comparison.GreaterThan;
     a = a.toUpperCase();
     b = b.toUpperCase();
+    return a < b ? Comparison.LessThan : a > b ? Comparison.GreaterThan : Comparison.EqualTo;
+}
+
+/**
+ * `compareStringsCaseInsensitive` transforms letters to uppercase for unicode reasons,
+ * while eslint's `sort-imports` rule transforms letters to lowercase. Which one you choose
+ * affects the relative order of letters and ASCII characters 91-96, of which `_` is a
+ * valid character in an identifier. So if we used `compareStringsCaseInsensitive` for
+ * import sorting, TypeScript and eslint would disagree about the correct case-insensitive
+ * sort order for `__String` and `Foo`. Since eslint's whole job is to create consistency
+ * by enforcing nitpicky details like this, it makes way more sense for us to just adopt
+ * their convention so users can have auto-imports without making eslint angry.
+ *
+ * @internal
+ */
+export function compareStringsCaseInsensitiveEslintCompatible(a: string, b: string) {
+    if (a === b) return Comparison.EqualTo;
+    if (a === undefined) return Comparison.LessThan;
+    if (b === undefined) return Comparison.GreaterThan;
+    a = a.toLowerCase();
+    b = b.toLowerCase();
     return a < b ? Comparison.LessThan : a > b ? Comparison.GreaterThan : Comparison.EqualTo;
 }
 

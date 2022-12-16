@@ -1,6 +1,6 @@
 [
     "======== Resolving module 'a' from '/b/user.ts'. ========",
-    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Module resolution kind is not specified, using 'Node10'.",
     "'baseUrl' option is set to '/', using this value to resolve non-relative module name 'a'.",
     "Resolving module name 'a' relative to base url '/' - '/a'.",
     "Loading module as file / folder, candidate module location '/a', target file types: TypeScript, Declaration.",

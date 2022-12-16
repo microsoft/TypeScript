@@ -120,7 +120,7 @@ registerCodeFix({
 
 function createObjectTypeFromLabeledExpression(checker: TypeChecker, label: Identifier, expression: Expression) {
     const member = checker.createSymbol(SymbolFlags.Property, label.escapedText);
-    member.type = checker.getTypeAtLocation(expression);
+    member.links.type = checker.getTypeAtLocation(expression);
     const members = createSymbolTable([member]);
     return checker.createAnonymousType(/*symbol*/ undefined, members, [], [], []);
 }

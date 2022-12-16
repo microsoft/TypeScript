@@ -387,7 +387,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
         const printer = createPrinter(options);
 
         return usingSingleLineStringWriter(writer => {
-            const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags, writer);
+            const typeNode = checker.typeToTypeNode(type, /*enclosingDeclaration*/ undefined, flags);
             Debug.assertIsDefined(typeNode, "should always get typenode");
             printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ file, writer);
         });

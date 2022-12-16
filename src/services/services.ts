@@ -6,6 +6,7 @@ import {
     ApplicableRefactorInfo,
     ApplyCodeActionCommandResult,
     AssignmentDeclarationKind,
+    AutoGenerateInfo,
     BaseType,
     BinaryExpression,
     BreakpointResolver,
@@ -85,7 +86,6 @@ import {
     FormatCodeSettings,
     formatting,
     FunctionLikeDeclaration,
-    GeneratedIdentifierFlags,
     getAdjustedRenameLocation,
     getAllSuperTypeNodes,
     getAssignmentDeclarationKind,
@@ -183,8 +183,9 @@ import {
     isTagName,
     isTextWhiteSpaceLike,
     isThisTypeParameter,
-    JSDoc,
+    isTransientSymbol,
     JsDoc,
+    JSDoc,
     JSDocContainer,
     JSDocTagInfo,
     JsonSourceFile,
@@ -304,7 +305,6 @@ import {
     toPath,
     tracing,
     TransformFlags,
-    TransientSymbol,
     Type,
     TypeChecker,
     TypeFlags,
@@ -594,7 +594,7 @@ class TokenOrIdentifierObject implements Node {
     }
 
     public getChildren(): Node[] {
-        return this.kind === SyntaxKind.EndOfFileToken ? (this as EndOfFileToken).jsDoc || emptyArray : emptyArray;
+        return this.kind === SyntaxKind.EndOfFileToken ? (this as Node as EndOfFileToken).jsDoc || emptyArray : emptyArray;
     }
 
     public getFirstToken(): Node | undefined {
@@ -615,6 +615,9 @@ class SymbolObject implements Symbol {
     escapedName: __String;
     declarations!: Declaration[];
     valueDeclaration!: Declaration;
+    id = 0;
+    mergeId = 0;
+    constEnumOnlyModule: boolean | undefined;
 
     // Undefined is used to indicate the value has not been computed. If, after computing, the
     // symbol has no doc comment, then the empty array will be returned.
@@ -656,8 +659,8 @@ class SymbolObject implements Symbol {
         if (!this.documentationComment) {
             this.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
 
-            if (!this.declarations && (this as Symbol as TransientSymbol).target && ((this as Symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration) {
-                const labelDecl = ((this as Symbol as TransientSymbol).target as TransientSymbol).tupleLabelDeclaration!;
+            if (!this.declarations && isTransientSymbol(this) && this.links.target && isTransientSymbol(this.links.target) && this.links.target.links.tupleLabelDeclaration) {
+                const labelDecl = this.links.target.links.tupleLabelDeclaration;
                 this.documentationComment = getDocumentationComment([labelDecl], checker);
             }
             else {
@@ -732,14 +735,16 @@ class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject impl
 class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
     public kind: SyntaxKind.Identifier = SyntaxKind.Identifier;
     public escapedText!: __String;
-    public autoGenerateFlags!: GeneratedIdentifierFlags;
-    _primaryExpressionBrand: any;
-    _memberExpressionBrand: any;
-    _leftHandSideExpressionBrand: any;
-    _updateExpressionBrand: any;
-    _unaryExpressionBrand: any;
-    _expressionBrand: any;
-    _declarationBrand: any;
+    public autoGenerate: AutoGenerateInfo | undefined;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
+    declare _declarationBrand: any;
+    declare _jsdocContainerBrand: any;
+    declare _flowContainerBrand: any;
     /** @internal */typeArguments!: NodeArray<TypeNode>;
     constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
         super(pos, end);
@@ -753,13 +758,13 @@ IdentifierObject.prototype.kind = SyntaxKind.Identifier;
 class PrivateIdentifierObject extends TokenOrIdentifierObject implements PrivateIdentifier {
     public kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
     public escapedText!: __String;
-    // public symbol!: Symbol;
-    _primaryExpressionBrand: any;
-    _memberExpressionBrand: any;
-    _leftHandSideExpressionBrand: any;
-    _updateExpressionBrand: any;
-    _unaryExpressionBrand: any;
-    _expressionBrand: any;
+    public autoGenerate: AutoGenerateInfo | undefined;
+    declare _primaryExpressionBrand: any;
+    declare _memberExpressionBrand: any;
+    declare _leftHandSideExpressionBrand: any;
+    declare _updateExpressionBrand: any;
+    declare _unaryExpressionBrand: any;
+    declare _expressionBrand: any;
     constructor(_kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
         super(pos, end);
     }
@@ -992,7 +997,8 @@ function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration
 
 class SourceFileObject extends NodeObject implements SourceFile {
     public kind: SyntaxKind.SourceFile = SyntaxKind.SourceFile;
-    public _declarationBrand: any;
+    declare _declarationBrand: any;
+    declare _localsContainerBrand: any;
     public fileName!: string;
     public path!: Path;
     public resolvedPath!: Path;

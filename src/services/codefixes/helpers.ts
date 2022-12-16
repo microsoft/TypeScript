@@ -305,6 +305,9 @@ export function addNewNodeForMemberSymbol(
     }
 
     function createName(node: PropertyName) {
+        if (isIdentifier(node) && node.escapedText === "constructor") {
+            return factory.createComputedPropertyName(factory.createStringLiteral(idText(node), quotePreference === QuotePreference.Single));
+        }
         return getSynthesizedDeepClone(node, /*includeTrivia*/ false);
     }
 
