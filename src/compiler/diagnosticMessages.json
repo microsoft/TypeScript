@@ -6456,6 +6456,10 @@
         "category": "Error",
         "code": 8037
     },
+    "Decorators must come after 'export' or 'export default' in JavaScript files.": {
+        "category": "Error",
+        "code": 8038
+    },
 
     "Declaration emit for this file requires using private name '{0}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",

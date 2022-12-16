@@ -10,7 +10,8 @@ import {
     AssertClause,
     BuilderProgram,
     CancellationToken,
-    canHaveModifiers,
+    canHaveDecorators,
+    canHaveIllegalDecorators,
     chainDiagnosticMessages,
     changeExtension,
     changesAffectingProgramStructure,
@@ -88,6 +89,7 @@ import {
     FileReference,
     filter,
     find,
+    findIndex,
     firstDefined,
     firstDefinedIterator,
     flatMap,
@@ -170,9 +172,12 @@ import {
     isArrayLiteralExpression,
     isBuildInfoFile,
     isCheckJsEnabledForFile,
+    isClassDeclaration,
     isDeclarationFileName,
     isDecorator,
+    isDefaultModifier,
     isExportDeclaration,
+    isExportModifier,
     isExternalModule,
     isExternalModuleNameRelative,
     isIdentifierText,
@@ -187,6 +192,7 @@ import {
     isModifier,
     isModuleDeclaration,
     isObjectLiteralExpression,
+    isParameter,
     isPlainJsFile,
     isRequireCall,
     isRootedDiskPath,
@@ -2933,8 +2939,33 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
 
             function walkArray(nodes: NodeArray<Node>, parent: Node) {
-                if (canHaveModifiers(parent) && parent.modifiers === nodes && some(nodes, isDecorator) && !options.experimentalDecorators) {
-                    diagnostics.push(createDiagnosticForNode(parent, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_in_your_tsconfig_or_jsconfig_to_remove_this_warning));
+                if (canHaveIllegalDecorators(parent)) {
+                    const decorator = find(parent.decoratorsAndModifiers, isDecorator);
+                    if (decorator) {
+                        // report illegal decorator
+                        diagnostics.push(createDiagnosticForNode(decorator, Diagnostics.Decorators_are_not_valid_here));
+                    }
+                }
+                else if (canHaveDecorators(parent) && parent.modifiers) {
+                    const decoratorIndex = findIndex(parent.modifiers, isDecorator);
+                    if (decoratorIndex >= 0) {
+                        if (isParameter(parent) && !options.experimentalDecorators) {
+                            // report illegall decorator on parameter
+                            diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_are_not_valid_here));
+                        }
+                        else if (isClassDeclaration(parent)) {
+                            const exportIndex = findIndex(parent.modifiers, isExportModifier);
+                            const defaultIndex = findIndex(parent.modifiers, isDefaultModifier);
+                            if (exportIndex >= 0 && decoratorIndex < exportIndex) {
+                                // report illegal decorator before `export default`
+                                diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_must_come_after_export_or_export_default_in_JavaScript_files));
+                            }
+                            else if (defaultIndex >= 0 && decoratorIndex < defaultIndex) {
+                                // report illegal decorator before `export default`
+                                diagnostics.push(createDiagnosticForNode(parent.modifiers[decoratorIndex], Diagnostics.Decorators_are_not_valid_here));
+                            }
+                        }
+                    }
                 }
 
                 switch (parent.kind) {
