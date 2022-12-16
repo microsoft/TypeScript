@@ -8,6 +8,7 @@ import {
     CharacterCodes,
     ClassLikeDeclaration,
     CodeFixContextBase,
+    combine,
     Debug,
     Diagnostics,
     emptyArray,
@@ -31,6 +32,7 @@ import {
     getSynthesizedDeepClone,
     getTokenAtPosition,
     getTsConfigObjectLiteralExpression,
+    hasAbstractModifier,
     Identifier,
     idText,
     IntersectionType,
@@ -197,7 +199,7 @@ export function addNewNodeForMemberSymbol(
     if (declaration && isAutoAccessorPropertyDeclaration(declaration)) {
         modifierFlags |= ModifierFlags.Accessor;
     }
-    const modifiers = modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
+    const modifiers = createModifiers();
     const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
     const optional = !!(symbol.flags & SymbolFlags.Optional);
     const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient) || isAmbient;
@@ -302,6 +304,25 @@ export function addNewNodeForMemberSymbol(
     function outputMethod(quotePreference: QuotePreference, signature: Signature, modifiers: NodeArray<Modifier> | undefined, name: PropertyName, body?: Block): void {
         const method = createSignatureDeclarationFromSignature(SyntaxKind.MethodDeclaration, context, quotePreference, signature, body, name, modifiers, optional && !!(preserveOptional & PreserveOptionalFlags.Method), enclosingDeclaration, importAdder) as MethodDeclaration;
         if (method) addClassElement(method);
+    }
+
+
+    function createModifiers(): NodeArray<Modifier> | undefined {
+        let modifiers: Modifier[] | undefined;
+
+        if (modifierFlags) {
+            modifiers = combine(modifiers, factory.createModifiersFromModifierFlags(modifierFlags));
+        }
+
+        if (shouldAddOverrideKeyword()) {
+            modifiers = append(modifiers, factory.createToken(SyntaxKind.OverrideKeyword));
+        }
+
+        return modifiers && factory.createNodeArray(modifiers);
+    }
+
+    function shouldAddOverrideKeyword(): boolean {
+        return !!(context.program.getCompilerOptions().noImplicitOverride && declaration && hasAbstractModifier(declaration));
     }
 
     function createName(node: PropertyName) {
