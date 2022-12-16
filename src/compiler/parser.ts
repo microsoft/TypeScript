@@ -1,3 +1,4 @@
+import { IdentifierObject, NodeObject, PrivateIdentifierObject, SourceFileObject, TokenObject } from "./nodeConstructors";
 import * as ts from "./_namespaces/ts";
 import {
     AccessorDeclaration,
@@ -270,7 +271,6 @@ import {
     NoSubstitutionTemplateLiteral,
     NullLiteral,
     NumericLiteral,
-    objectAllocator,
     ObjectBindingPattern,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
@@ -401,23 +401,17 @@ const enum SpeculationKind {
     Reparse
 }
 
-let NodeConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-let TokenConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-let IdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-let PrivateIdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-let SourceFileConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-
 /**
  * NOTE: You should not use this, it is only exported to support `createNode` in `~/src/deprecatedCompat/deprecations.ts`.
  *
  * @internal
  */
 export const parseBaseNodeFactory: BaseNodeFactory = {
-    createBaseSourceFileNode: kind => new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, -1, -1),
-    createBaseIdentifierNode: kind => new (IdentifierConstructor || (IdentifierConstructor = objectAllocator.getIdentifierConstructor()))(kind, -1, -1),
-    createBasePrivateIdentifierNode: kind => new (PrivateIdentifierConstructor || (PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor()))(kind, -1, -1),
-    createBaseTokenNode: kind => new (TokenConstructor || (TokenConstructor = objectAllocator.getTokenConstructor()))(kind, -1, -1),
-    createBaseNode: kind => new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, -1, -1),
+    createBaseSourceFileNode: () => new SourceFileObject(),
+    createBaseIdentifierNode: () => new IdentifierObject(),
+    createBasePrivateIdentifierNode: () => new PrivateIdentifierObject(),
+    createBaseTokenNode: kind => new TokenObject(kind),
+    createBaseNode: kind => new NodeObject(kind),
 };
 
 /** @internal */
@@ -1416,13 +1410,6 @@ namespace Parser {
 
     const disallowInAndDecoratorContext = NodeFlags.DisallowInContext | NodeFlags.DecoratorContext;
 
-    // capture constructors in 'initializeState' to avoid null checks
-    let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-    let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-    let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-    let PrivateIdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-    let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
-
     function countNode(node: Node) {
         nodeCount++;
         return node;
@@ -1431,11 +1418,11 @@ namespace Parser {
     // Rather than using `createBaseNodeFactory` here, we establish a `BaseNodeFactory` that closes over the
     // constructors above, which are reset each time `initializeState` is called.
     const baseNodeFactory: BaseNodeFactory = {
-        createBaseSourceFileNode: kind => countNode(new SourceFileConstructor(kind, /*pos*/ 0, /*end*/ 0)),
-        createBaseIdentifierNode: kind => countNode(new IdentifierConstructor(kind, /*pos*/ 0, /*end*/ 0)),
-        createBasePrivateIdentifierNode: kind => countNode(new PrivateIdentifierConstructor(kind, /*pos*/ 0, /*end*/ 0)),
-        createBaseTokenNode: kind => countNode(new TokenConstructor(kind, /*pos*/ 0, /*end*/ 0)),
-        createBaseNode: kind => countNode(new NodeConstructor(kind, /*pos*/ 0, /*end*/ 0))
+        createBaseSourceFileNode: () => countNode(new SourceFileObject()),
+        createBaseIdentifierNode: () => countNode(new IdentifierObject()),
+        createBasePrivateIdentifierNode: () => countNode(new PrivateIdentifierObject()),
+        createBaseTokenNode: kind => countNode(new TokenObject(kind)),
+        createBaseNode: kind => countNode(new NodeObject(kind))
     };
 
     const factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, baseNodeFactory);
@@ -1664,12 +1651,6 @@ namespace Parser {
     }
 
     function initializeState(_fileName: string, _sourceText: string, _languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor | undefined, _scriptKind: ScriptKind) {
-        NodeConstructor = objectAllocator.getNodeConstructor();
-        TokenConstructor = objectAllocator.getTokenConstructor();
-        IdentifierConstructor = objectAllocator.getIdentifierConstructor();
-        PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor();
-        SourceFileConstructor = objectAllocator.getSourceFileConstructor();
-
         fileName = normalizePath(_fileName);
         sourceText = _sourceText;
         languageVersion = _languageVersion;

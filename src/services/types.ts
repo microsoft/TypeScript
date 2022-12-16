@@ -43,6 +43,63 @@ import {
 } from "./_namespaces/ts";
 
 declare module "../compiler/types" {
+    /**
+     * A registry of forward references declared in the 'services' project.
+     * @internal
+     */
+    export interface ServicesForwardRefs {
+        __services: true;
+
+        SymbolDisplayPart: SymbolDisplayPart;
+        JSDocTagInfo: JSDocTagInfo;
+    }
+}
+
+declare module "../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface Node {
+        getSourceFile(): SourceFile;
+        getChildCount(sourceFile?: SourceFile): number;
+        getChildAt(index: number, sourceFile?: SourceFile): Node;
+        getChildren(sourceFile?: SourceFile): Node[];
+        /** @internal */
+        getChildren(sourceFile?: SourceFileLike): Node[]; // eslint-disable-line @typescript-eslint/unified-signatures
+        getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
+        /** @internal */
+        getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number; // eslint-disable-line @typescript-eslint/unified-signatures
+        getFullStart(): number;
+        getEnd(): number;
+        getWidth(sourceFile?: SourceFileLike): number;
+        getFullWidth(): number;
+        getLeadingTriviaWidth(sourceFile?: SourceFile): number;
+        getFullText(sourceFile?: SourceFile): string;
+        getText(sourceFile?: SourceFile): string;
+        getFirstToken(sourceFile?: SourceFile): Node | undefined;
+        /** @internal */
+        getFirstToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+        getLastToken(sourceFile?: SourceFile): Node | undefined;
+        /** @internal */
+        getLastToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+        // See ts.forEachChild for documentation.
+        forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
+    }
+}
+
+declare module "../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface Identifier {
+        readonly text: string;
+    }
+}
+
+declare module "../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface PrivateIdentifier {
+        readonly text: string;
+    }
+}
+
+declare module "../compiler/types" {
     // Module transform: converted from interface augmentation
     export interface Symbol {
         readonly name: string;
@@ -101,13 +158,32 @@ declare module "../compiler/types" {
 declare module "../compiler/types" {
     // Module transform: converted from interface augmentation
     export interface Signature {
-        getDeclaration(): SignatureDeclaration;
-        getTypeParameters(): TypeParameter[] | undefined;
-        getParameters(): Symbol[];
+        getDeclaration(): JSDocSignature | SignatureDeclaration;
+        getTypeParameters(): readonly TypeParameter[] | undefined;
+        getParameters(): readonly Symbol[];
         getTypeParameterAtPosition(pos: number): Type;
         getReturnType(): Type;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
         getJsDocTags(): JSDocTagInfo[];
+    }
+}
+
+declare module "../compiler/types" {
+    // Module transform: converted from interface augmentation
+    export interface SourceFile {
+        /** @internal */ version: string;
+        /** @internal */ scriptSnapshot: IScriptSnapshot | undefined;
+        /** @internal */ nameTable: UnderscoreEscapedMap<number> | undefined;
+
+        /** @internal */ getNamedDeclarations(): Map<string, readonly Declaration[]>;
+
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+        getLineEndOfPosition(pos: number): number;
+        getLineStarts(): readonly number[];
+        getPositionOfLineAndCharacter(line: number, character: number): number;
+        update(newText: string, textChangeRange: TextChangeRange): SourceFile;
+
+        /** @internal */ sourceMapper?: DocumentPositionMapper;
     }
 }
 

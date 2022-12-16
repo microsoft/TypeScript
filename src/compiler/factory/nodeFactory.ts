@@ -337,7 +337,6 @@ import {
     nullNodeConverters,
     nullParenthesizerRules,
     NumericLiteral,
-    objectAllocator,
     ObjectBindingPattern,
     ObjectLiteralElementLike,
     ObjectLiteralExpression,
@@ -468,6 +467,16 @@ import {
     WithStatement,
     YieldExpression,
 } from "../_namespaces/ts";
+// import {
+//     Node as NodeObject,
+//     Identifier as IdentifierObject,
+//     PrivateIdentifier as PrivateIdentifierObject,
+//     Token as TokenObject,
+//     SourceFile as SourceFileObject,
+// } from "../nodeConstructors";
+import {
+    SourceMapSourceObject as SourceMapSourceObject,
+} from "../objectConstructors";
 
 let nextAutoGenerateId = 0;
 
@@ -1151,7 +1160,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     //
 
     function createBaseIdentifier(escapedText: __String, originalKeywordKind: SyntaxKind | undefined) {
-        const node = baseFactory.createBaseIdentifierNode(SyntaxKind.Identifier) as Mutable<Identifier>;
+        const node = baseFactory.createBaseIdentifierNode() as Mutable<Identifier>;
         node.originalKeywordKind = originalKeywordKind;
         node.escapedText = escapedText;
         node.autoGenerate = undefined;
@@ -1248,7 +1257,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     function createBasePrivateIdentifier(escapedText: __String) {
-        const node = baseFactory.createBasePrivateIdentifierNode(SyntaxKind.PrivateIdentifier) as Mutable<PrivateIdentifier>;
+        const node = baseFactory.createBasePrivateIdentifierNode() as Mutable<PrivateIdentifier>;
         node.escapedText = escapedText;
         node.autoGenerate = undefined;
         node.transformFlags |= TransformFlags.ContainsClassFields;
@@ -6024,7 +6033,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         endOfFileToken: EndOfFileToken,
         flags: NodeFlags
     ) {
-        const node = baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile) as Mutable<SourceFile>;
+        const node = baseFactory.createBaseSourceFileNode() as Mutable<SourceFile>;
         node.statements = createNodeArray(statements);
         node.endOfFileToken = endOfFileToken;
         node.flags |= flags;
@@ -6107,7 +6116,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function cloneSourceFileWorker(source: SourceFile) {
         // TODO: This mechanism for cloning results in megamorphic property reads and writes. In future perf-related
         //       work, we should consider switching explicit property assignments instead of using `for..in`.
-        const node = baseFactory.createBaseSourceFileNode(SyntaxKind.SourceFile) as Mutable<SourceFile>;
+        const node = baseFactory.createBaseSourceFileNode() as Mutable<SourceFile>;
         node.flags |= source.flags & ~NodeFlags.Synthesized;
         for (const p in source) {
             if (hasProperty(node, p) || !hasProperty(source, p)) {
@@ -7387,9 +7396,9 @@ function makeSynthetic(node: Node) {
 }
 
 const syntheticFactory: BaseNodeFactory = {
-    createBaseSourceFileNode: kind => makeSynthetic(baseFactory.createBaseSourceFileNode(kind)),
-    createBaseIdentifierNode: kind => makeSynthetic(baseFactory.createBaseIdentifierNode(kind)),
-    createBasePrivateIdentifierNode: kind => makeSynthetic(baseFactory.createBasePrivateIdentifierNode(kind)),
+    createBaseSourceFileNode: () => makeSynthetic(baseFactory.createBaseSourceFileNode()),
+    createBaseIdentifierNode: () => makeSynthetic(baseFactory.createBaseIdentifierNode()),
+    createBasePrivateIdentifierNode: () => makeSynthetic(baseFactory.createBasePrivateIdentifierNode()),
     createBaseTokenNode: kind => makeSynthetic(baseFactory.createBaseTokenNode(kind)),
     createBaseNode: kind => makeSynthetic(baseFactory.createBaseNode(kind)),
 };
@@ -7704,7 +7713,7 @@ let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: num
  * Create an external source map source file reference
  */
 export function createSourceMapSource(fileName: string, text: string, skipTrivia?: (pos: number) => number): SourceMapSource {
-    return new (SourceMapSource || (SourceMapSource = objectAllocator.getSourceMapSourceConstructor()))(fileName, text, skipTrivia);
+    return new SourceMapSourceObject(fileName, text, skipTrivia);
 }
 
 // Utilities

@@ -906,34 +906,6 @@ export interface Node extends ReadonlyTextRange {
     //       see: https://github.com/microsoft/TypeScript/pull/51682
 }
 
-/** @internal */
-export interface Node {
-    getSourceFile(): SourceFile;
-    getChildCount(sourceFile?: SourceFile): number;
-    getChildAt(index: number, sourceFile?: SourceFile): Node;
-    getChildren(sourceFile?: SourceFile): Node[];
-    /** @internal */
-    getChildren(sourceFile?: SourceFileLike): Node[]; // eslint-disable-line @typescript-eslint/unified-signatures
-    getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
-    /** @internal */
-    getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number; // eslint-disable-line @typescript-eslint/unified-signatures
-    getFullStart(): number;
-    getEnd(): number;
-    getWidth(sourceFile?: SourceFileLike): number;
-    getFullWidth(): number;
-    getLeadingTriviaWidth(sourceFile?: SourceFile): number;
-    getFullText(sourceFile?: SourceFile): string;
-    getText(sourceFile?: SourceFile): string;
-    getFirstToken(sourceFile?: SourceFile): Node | undefined;
-    /** @internal */
-    getFirstToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
-    getLastToken(sourceFile?: SourceFile): Node | undefined;
-    /** @internal */
-    getLastToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
-    // See ts.forEachChild for documentation.
-    forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
-}
-
 export interface JSDocContainer extends Node {
     _jsdocContainerBrand: any;
     /** @internal */ jsDoc?: JSDoc[];                      // JSDoc that directly precedes this node
@@ -1712,7 +1684,6 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
     /** @internal */ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
     /** @internal */ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
     /** @internal */ hasExtendedUnicodeEscape?: boolean;
-    /** @internal */ readonly text: string;
 }
 
 // Transient identifier node (marked by id === -1)
@@ -1809,7 +1780,6 @@ export interface PrivateIdentifier extends PrimaryExpression {
     // avoids gotchas in transforms and utils
     readonly escapedText: __String;
     /** @internal */ readonly autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers.
-    /** @internal */ readonly text: string;
 }
 
 /** @internal */
@@ -4417,23 +4387,6 @@ export interface SourceFile extends Declaration, LocalsContainer {
     /** @internal */ endFlowNode?: FlowNode;
 }
 
-/** @internal */
-export interface SourceFile {
-    /** @internal */ version: string;
-    /** @internal */ scriptSnapshot: IScriptSnapshot | undefined;
-    /** @internal */ nameTable: UnderscoreEscapedMap<number> | undefined;
-
-    /** @internal */ getNamedDeclarations(): Map<string, readonly Declaration[]>;
-
-    getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
-    getLineEndOfPosition(pos: number): number;
-    getLineStarts(): readonly number[];
-    getPositionOfLineAndCharacter(line: number, character: number): number;
-    update(newText: string, textChangeRange: TextChangeRange): SourceFile;
-
-    /** @internal */ sourceMapper?: DocumentPositionMapper;
-}
-
 /**
  * Represents an immutable snapshot of a script at a specified time.Once acquired, the
  * snapshot is observably immutable. i.e. the same calls with the same parameters will return
@@ -6186,6 +6139,7 @@ export interface Type {
     /** @internal */
     widened?: Type; // Cached widened form of the type
 }
+
 
 /** @internal */
 // Intrinsic types (TypeFlags.Intrinsic)
@@ -9868,4 +9822,31 @@ export const enum DeprecationVersion {
     v5_5 = "5.5",
     v6_0 = "6.0",
     /* eslint-enable @typescript-eslint/naming-convention */
+}
+
+/**
+ * Resolves to a type only when the 'services' project is loaded. Otherwise, results in `never`.
+ * @internal
+ */
+export type ServicesOnlyType<T, Fallback = never> = ServicesForwardRefs extends { __services: true } ? T : Fallback;
+
+/**
+ * Resolves a forward-reference to a type declared in the 'services' project.
+ * If 'services' is not present, results in `never`.
+ * @internal
+ */
+export type ServicesForwardRef<K extends string> = ServicesForwardRefs extends { [P in K]: infer T } ? T : never;
+
+/**
+ * Resolves a forward-reference to an array of a type declared in the 'services' project.
+ * If 'services' is not present, results in `never`.
+ * @internal
+ */
+ export type ServicesForwardRefArray<K extends string> = ServicesOnlyType<ServicesForwardRef<K>[]>;
+
+/**
+ * A registry of forward references declared in the 'services' project.
+ * @internal
+ */
+export interface ServicesForwardRefs {
 }

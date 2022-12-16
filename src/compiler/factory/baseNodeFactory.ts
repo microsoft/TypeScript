@@ -1,6 +1,6 @@
+import { IdentifierObject, NodeObject, PrivateIdentifierObject, SourceFileObject, TokenObject } from "../nodeConstructors";
 import {
     Node,
-    objectAllocator,
     SyntaxKind,
 } from "../_namespaces/ts";
 
@@ -11,9 +11,9 @@ import {
  * @internal
  */
 export interface BaseNodeFactory {
-    createBaseSourceFileNode(kind: SyntaxKind): Node;
-    createBaseIdentifierNode(kind: SyntaxKind): Node;
-    createBasePrivateIdentifierNode(kind: SyntaxKind): Node;
+    createBaseSourceFileNode(): Node;
+    createBaseIdentifierNode(): Node;
+    createBasePrivateIdentifierNode(): Node;
     createBaseTokenNode(kind: SyntaxKind): Node;
     createBaseNode(kind: SyntaxKind): Node;
 }
@@ -24,12 +24,6 @@ export interface BaseNodeFactory {
  * @internal
  */
 export function createBaseNodeFactory(): BaseNodeFactory {
-    let NodeConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-    let TokenConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-    let IdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-    let PrivateIdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-    let SourceFileConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-
     return {
         createBaseSourceFileNode,
         createBaseIdentifierNode,
@@ -38,23 +32,23 @@ export function createBaseNodeFactory(): BaseNodeFactory {
         createBaseNode
     };
 
-    function createBaseSourceFileNode(kind: SyntaxKind): Node {
-        return new (SourceFileConstructor || (SourceFileConstructor = objectAllocator.getSourceFileConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
+    function createBaseSourceFileNode(): Node {
+        return new SourceFileObject();
     }
 
-    function createBaseIdentifierNode(kind: SyntaxKind): Node {
-        return new (IdentifierConstructor || (IdentifierConstructor = objectAllocator.getIdentifierConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
+    function createBaseIdentifierNode(): Node {
+        return new IdentifierObject();
     }
 
-    function createBasePrivateIdentifierNode(kind: SyntaxKind): Node {
-        return new (PrivateIdentifierConstructor || (PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
+    function createBasePrivateIdentifierNode(): Node {
+        return new PrivateIdentifierObject();
     }
 
     function createBaseTokenNode(kind: SyntaxKind): Node {
-        return new (TokenConstructor || (TokenConstructor = objectAllocator.getTokenConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
+        return new TokenObject(kind);
     }
 
     function createBaseNode(kind: SyntaxKind): Node {
-        return new (NodeConstructor || (NodeConstructor = objectAllocator.getNodeConstructor()))(kind, /*pos*/ -1, /*end*/ -1);
+        return new NodeObject(kind);
     }
 }

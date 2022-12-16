@@ -18,7 +18,6 @@
                 "pos": 10,
                 "end": 16,
                 "flags": "JSDoc",
-                "modifierFlagsCache": 0,
                 "transformFlags": 1
             }
         },
@@ -34,7 +33,6 @@
                 "pos": 17,
                 "end": 25,
                 "flags": "JSDoc",
-                "modifierFlagsCache": 0,
                 "transformFlags": 1
             }
         },

@@ -2170,6 +2170,27 @@ declare namespace ts {
         getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
     }
+    /**
+     * Represents an immutable snapshot of a script at a specified time.Once acquired, the
+     * snapshot is observably immutable. i.e. the same calls with the same parameters will return
+     * the same values.
+     */
+    interface IScriptSnapshot {
+        /** Gets a portion of the script snapshot specified by [start, end). */
+        getText(start: number, end: number): string;
+        /** Gets the length of this script snapshot. */
+        getLength(): number;
+        /**
+         * Gets the TextChangeRange that describe how the text changed between this text and
+         * an older version.  This information is used by the incremental parser to determine
+         * what sections of the script need to be re-parsed.  'undefined' can be returned if the
+         * change range cannot be determined.  However, in that case, incremental parsing will
+         * not happen and the entire document will be re - parsed.
+         */
+        getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined;
+        /** Releases all resources held by this script snapshot */
+        dispose?(): void;
+    }
     interface Bundle extends Node {
         readonly kind: SyntaxKind.Bundle;
         readonly prepends: readonly (InputFiles | UnparsedSource)[];
@@ -2952,9 +2973,9 @@ declare namespace ts {
         parameters: readonly Symbol[];
     }
     interface Signature {
-        getDeclaration(): SignatureDeclaration;
-        getTypeParameters(): TypeParameter[] | undefined;
-        getParameters(): Symbol[];
+        getDeclaration(): JSDocSignature | SignatureDeclaration;
+        getTypeParameters(): readonly TypeParameter[] | undefined;
+        getParameters(): readonly Symbol[];
         getTypeParameterAtPosition(pos: number): Type;
         getReturnType(): Type;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
@@ -5974,27 +5995,6 @@ declare namespace ts {
         }
     }
     function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings;
-    /**
-     * Represents an immutable snapshot of a script at a specified time.Once acquired, the
-     * snapshot is observably immutable. i.e. the same calls with the same parameters will return
-     * the same values.
-     */
-    interface IScriptSnapshot {
-        /** Gets a portion of the script snapshot specified by [start, end). */
-        getText(start: number, end: number): string;
-        /** Gets the length of this script snapshot. */
-        getLength(): number;
-        /**
-         * Gets the TextChangeRange that describe how the text changed between this text and
-         * an older version.  This information is used by the incremental parser to determine
-         * what sections of the script need to be re-parsed.  'undefined' can be returned if the
-         * change range cannot be determined.  However, in that case, incremental parsing will
-         * not happen and the entire document will be re - parsed.
-         */
-        getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined;
-        /** Releases all resources held by this script snapshot */
-        dispose?(): void;
-    }
     namespace ScriptSnapshot {
         function fromString(text: string): IScriptSnapshot;
     }

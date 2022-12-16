@@ -823,7 +823,6 @@ import {
     nullTransformationContext,
     NumberLiteralType,
     NumericLiteral,
-    objectAllocator,
     ObjectBindingPattern,
     ObjectFlags,
     ObjectFlagsType,
@@ -1034,6 +1033,11 @@ import {
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
+import {
+    SignatureObject,
+    SymbolObject,
+    TypeObject,
+} from "./objectConstructors";
 
 const ambientModuleSymbolRegex = /^".+"$/;
 const anon = "(anonymous)" as __String & string;
@@ -1378,10 +1382,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     let cancellationToken: CancellationToken | undefined;
     let requestedExternalEmitHelpers: ExternalEmitHelpers;
     let externalHelpersModule: Symbol;
-
-    const Symbol = objectAllocator.getSymbolConstructor();
-    const Type = objectAllocator.getTypeConstructor();
-    const Signature = objectAllocator.getSignatureConstructor();
 
     let typeCount = 0;
     let symbolCount = 0;
@@ -2321,7 +2321,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function createSymbol(flags: SymbolFlags, name: __String, checkFlags?: CheckFlags) {
         symbolCount++;
-        const symbol = new Symbol(flags | SymbolFlags.Transient, name) as TransientSymbol;
+        const symbol = new SymbolObject(flags | SymbolFlags.Transient, name) as Symbol as TransientSymbol;
         symbol.links = new SymbolLinks() as TransientSymbolLinks;
         symbol.links.checkFlags = checkFlags || CheckFlags.None;
         return symbol;
@@ -5422,7 +5422,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createType(flags: TypeFlags): Type {
-        const result = new Type(checker, flags);
+        const result = new TypeObject(checker, flags);
         typeCount++;
         result.id = typeCount;
         tracing?.recordType(result);
@@ -5436,7 +5436,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createOriginType(flags: TypeFlags): Type {
-        return new Type(checker, flags);
+        return new TypeObject(checker, flags);
     }
 
     function createIntrinsicType(kind: TypeFlags, intrinsicName: string, objectFlags = ObjectFlags.None): IntrinsicType {
@@ -12269,7 +12269,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         minArgumentCount: number,
         flags: SignatureFlags
     ): Signature {
-        const sig = new Signature(checker, flags);
+        const sig = new SignatureObject(checker, flags);
         sig.declaration = declaration;
         sig.typeParameters = typeParameters;
         sig.parameters = parameters;

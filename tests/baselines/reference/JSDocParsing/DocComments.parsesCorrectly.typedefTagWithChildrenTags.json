@@ -16,7 +16,6 @@
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 16,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "typedef"
             },
@@ -37,7 +36,6 @@
                             "kind": "Identifier",
                             "pos": 48,
                             "end": 56,
-                            "modifierFlagsCache": 0,
                             "transformFlags": 0,
                             "escapedText": "property"
                         },
@@ -51,7 +49,6 @@
                                 "kind": "NumberKeyword",
                                 "pos": 58,
                                 "end": 64,
-                                "modifierFlagsCache": 0,
                                 "transformFlags": 1
                             }
                         },
@@ -59,7 +56,6 @@
                             "kind": "Identifier",
                             "pos": 66,
                             "end": 69,
-                            "modifierFlagsCache": 0,
                             "transformFlags": 0,
                             "escapedText": "age"
                         },
@@ -76,7 +72,6 @@
                             "kind": "Identifier",
                             "pos": 75,
                             "end": 83,
-                            "modifierFlagsCache": 0,
                             "transformFlags": 0,
                             "escapedText": "property"
                         },
@@ -90,7 +85,6 @@
                                 "kind": "StringKeyword",
                                 "pos": 85,
                                 "end": 91,
-                                "modifierFlagsCache": 0,
                                 "transformFlags": 1
                             }
                         },
@@ -98,7 +92,6 @@
                             "kind": "Identifier",
                             "pos": 93,
                             "end": 97,
-                            "modifierFlagsCache": 0,
                             "transformFlags": 0,
                             "escapedText": "name"
                         },
@@ -117,7 +110,6 @@
                 "kind": "Identifier",
                 "pos": 17,
                 "end": 23,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "People"
             },
@@ -125,7 +117,6 @@
                 "kind": "Identifier",
                 "pos": 17,
                 "end": 23,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "People"
             }

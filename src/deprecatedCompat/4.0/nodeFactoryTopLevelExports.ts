@@ -1345,9 +1345,9 @@ export const createLogicalNot = deprecate(function createLogicalNot(operand: Exp
 /** @deprecated Use an appropriate `factory` method instead. */
 export const createNode = deprecate(function createNode(kind: SyntaxKind, pos = 0, end = 0): Node {
     return setTextRangePosEnd(
-        kind === SyntaxKind.SourceFile ? parseBaseNodeFactory.createBaseSourceFileNode(kind) :
-        kind === SyntaxKind.Identifier ? parseBaseNodeFactory.createBaseIdentifierNode(kind) :
-        kind === SyntaxKind.PrivateIdentifier ? parseBaseNodeFactory.createBasePrivateIdentifierNode(kind) :
+        kind === SyntaxKind.SourceFile ? parseBaseNodeFactory.createBaseSourceFileNode() :
+        kind === SyntaxKind.Identifier ? parseBaseNodeFactory.createBaseIdentifierNode() :
+        kind === SyntaxKind.PrivateIdentifier ? parseBaseNodeFactory.createBasePrivateIdentifierNode() :
         !isNodeKind(kind) ? parseBaseNodeFactory.createBaseTokenNode(kind) :
         parseBaseNodeFactory.createBaseNode(kind),
         pos,

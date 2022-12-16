@@ -5,13 +5,13 @@ import {
     __String,
     ApplicableRefactorInfo,
     ApplyCodeActionCommandResult,
-    BaseType,
     BreakpointResolver,
     CallHierarchy,
     CallHierarchyIncomingCall,
     CallHierarchyItem,
     CallHierarchyOutgoingCall,
     CancellationToken,
+    canHaveJSDoc,
     changeCompilerHostLikeToUseCache,
     CharacterCodes,
     Classifications,
@@ -36,6 +36,7 @@ import {
     createGetCanonicalFileName,
     createProgram,
     CreateProgramOptions,
+    createScanner,
     createSourceFile,
     CreateSourceFileOptions,
     createTextSpanFromBounds,
@@ -59,9 +60,11 @@ import {
     EmitTextWriter,
     emptyArray,
     emptyOptions,
+    EndOfFileToken,
     equateValues,
     FileTextChanges,
     filter,
+    find,
     FindAllReferences,
     findChildOfKind,
     findPrecedingToken,
@@ -86,13 +89,11 @@ import {
     getFileEmitOutput,
     getImpliedNodeFormatForFile,
     getJSDocTags,
-    getLineAndCharacterOfPosition,
     getMappedDocumentSpan,
     getNameFromPropertyName,
     getNewLineCharacter,
     getNewLineOrDefaultFromHost,
     getNormalizedAbsolutePath,
-    getObjectFlags,
     getScriptKind,
     getSetExternalModuleIndicator,
     getSnapshotText,
@@ -104,20 +105,17 @@ import {
     hasJSDocNodes,
     hasProperty,
     hasStaticModifier,
+    hasTabstop,
     HighlightSpanKind,
     HostCancellationToken,
     hostGetCanonicalFileName,
     hostUsesCaseSensitiveFileNames,
     identity,
     ImplementationLocation,
-    IndexKind,
-    IndexType,
     InlayHint,
     InlayHints,
     InlayHintsContext,
     insertSorted,
-    InterfaceType,
-    IntersectionType,
     isArray,
     isConstTypeReference,
     IScriptSnapshot,
@@ -131,6 +129,7 @@ import {
     isInString,
     isInTemplateString,
     isIntrinsicJsxName,
+    isJSDocCommentContainingNode,
     isJsxAttributes,
     isJsxClosingElement,
     isJsxElement,
@@ -143,6 +142,7 @@ import {
     isNamedTupleMember,
     isNameOfModuleDeclaration,
     isNewExpression,
+    isNodeKind,
     isObjectLiteralElement,
     isObjectLiteralExpression,
     isPrivateIdentifier,
@@ -153,7 +153,7 @@ import {
     isStringOrNumericLiteralLike,
     isTagName,
     isTextWhiteSpaceLike,
-    isThisTypeParameter,
+    isTokenKind,
     isTransientSymbol,
     JsDoc,
     JSDocTagInfo,
@@ -166,10 +166,10 @@ import {
     LanguageService,
     LanguageServiceHost,
     LanguageServiceMode,
+    lastOrUndefined,
     length,
     LineAndCharacter,
     lineBreakPart,
-    LiteralType,
     map,
     mapDefined,
     MapLike,
@@ -177,18 +177,18 @@ import {
     maybeBind,
     maybeSetLocalizedDiagnosticMessages,
     ModuleDeclaration,
+    Mutable,
     NavigateToItem,
     NavigationBarItem,
     NavigationTree,
     Node,
+    NodeArray,
     NodeConstructors,
     NodeFlags,
     noop,
     normalizePath,
-    NumberLiteralType,
     NumericLiteral,
-    ObjectAllocator,
-    ObjectFlags,
+    ObjectConstructors,
     ObjectLiteralElement,
     ObjectLiteralExpression,
     OperationCanceledException,
@@ -204,6 +204,7 @@ import {
     PossibleProgramFileInfo,
     Program,
     PropertyName,
+    Push,
     QuickInfo,
     refactor,
     RefactorContext,
@@ -223,28 +224,22 @@ import {
     ScriptTarget,
     SelectionRange,
     SemanticClassificationFormat,
-    setObjectAllocator,
     Signature,
-    SignatureDeclaration,
-    SignatureFlags,
     SignatureHelp,
     SignatureHelpItems,
     SignatureHelpItemsOptions,
-    SignatureKind,
     singleElementArray,
     SmartSelectionRange,
     SortedArray,
     SourceFile,
-    SourceMapSource,
+    SourceFileLike,
     stringContains,
     StringLiteralLike,
-    StringLiteralType,
     Symbol,
     SymbolDisplay,
     SymbolDisplayPart,
-    SymbolFlags,
-    symbolName,
     SyntaxKind,
+    SyntaxList,
     tagNamesAreEquivalent,
     TextChange,
     TextChangeRange,
@@ -255,18 +250,14 @@ import {
     timestamp,
     TodoComment,
     TodoCommentDescriptor,
+    Token,
     toPath,
     tracing,
+    TransientSymbol,
     Type,
     TypeChecker,
-    TypeFlags,
-    TypeParameter,
-    TypePredicate,
-    TypeReference,
     typeToDisplayParts,
     UnderscoreEscapedMap,
-    UnionOrIntersectionType,
-    UnionType,
     updateSourceFile,
     UserPreferences,
 } from "./_namespaces/ts";
@@ -274,15 +265,167 @@ import {
 /** The version of the language service API */
 export const servicesVersion = "0.8";
 
-class SymbolObject implements Symbol {
-    flags: SymbolFlags;
-    escapedName: __String;
-    declarations!: Declaration[];
-    valueDeclaration!: Declaration;
-    id = 0;
-    mergeId = 0;
-    constEnumOnlyModule: boolean | undefined;
+const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
+function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Node[] {
+    if (!isNodeKind(node.kind)) {
+        return emptyArray;
+    }
+
+    const children: Node[] = [];
+
+    if (isJSDocCommentContainingNode(node)) {
+        /** Don't add trivia for "tokens" since this is in a comment. */
+        node.forEachChild(child => {
+            children.push(child);
+        });
+        return children;
+    }
+
+    scanner.setText((sourceFile || node.getSourceFile()).text);
+    let pos = node.pos;
+    const processNode = (child: Node) => {
+        addSyntheticNodes(children, pos, child.pos, node);
+        children.push(child);
+        pos = child.end;
+    };
+    const processNodes = (nodes: NodeArray<Node>) => {
+        addSyntheticNodes(children, pos, nodes.pos, node);
+        children.push(createSyntaxList(nodes, node));
+        pos = nodes.end;
+    };
+
+    // jsDocComments need to be the first children
+    if (canHaveJSDoc(node)) {
+        forEach(node.jsDoc, processNode);
+    }
+
+    // For syntactic classifications, all trivia are classified together, including jsdoc comments.
+    // For that to work, the jsdoc comments should still be the leading trivia of the first child.
+    // Restoring the scanner position ensures that.
+    pos = node.pos;
+    node.forEachChild(processNode, processNodes);
+    addSyntheticNodes(children, pos, node.end, node);
+    scanner.setText(undefined);
+    return children;
+}
+
+function addSyntheticNodes(nodes: Push<Node>, pos: number, end: number, parent: Node): void {
+    scanner.setTextPos(pos);
+    while (pos < end) {
+        const kind = scanner.scan();
+        const textPos = scanner.getTextPos();
+        if (textPos <= end) {
+            if (kind === SyntaxKind.Identifier) {
+                if (hasTabstop(parent)) {
+                    continue;
+                }
+                Debug.fail(`Did not expect ${Debug.formatSyntaxKind(parent.kind)} to have an Identifier in its trivia`);
+            }
+            Debug.assert(isTokenKind(kind));
+            const token = new NodeConstructors.TokenObject(kind) as any as Mutable<Token<SyntaxKind>>;
+            token.pos = pos;
+            token.end = textPos;
+            token.parent = parent;
+            token.flags = parent.flags & NodeFlags.ContextFlags;
+            nodes.push(token);
+        }
+        pos = textPos;
+        if (kind === SyntaxKind.EndOfFileToken) {
+            break;
+        }
+    }
+}
+
+function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
+    const list = new NodeConstructors.NodeObject(SyntaxKind.SyntaxList) as Node as Mutable<SyntaxList>;
+    list.pos = nodes.pos;
+    list.end = nodes.end;
+    list.parent = parent;
+    list.flags = parent.flags & NodeFlags.ContextFlags;
+
+    list._children = [];
+    let pos = nodes.pos;
+    for (const node of nodes) {
+        addSyntheticNodes(list._children, pos, node.pos, parent);
+        list._children.push(node);
+        pos = node.end;
+    }
+    addSyntheticNodes(list._children, pos, nodes.end, parent);
+    return list;
+}
+
+interface NodeInternals {
+    _children: Node[] | undefined;
+    assertHasRealPosition(message?: string): void;
+}
+
+NodeConstructors.NodeObject.prototype.getChildCount = function (this: Node & NodeInternals, sourceFile?: SourceFile) {
+    return this.getChildren(sourceFile).length;
+};
+
+NodeConstructors.NodeObject.prototype.getChildAt = function (this: Node & NodeInternals, index: number, sourceFile?: SourceFile) {
+    return this.getChildren(sourceFile)[index];
+};
+
+NodeConstructors.NodeObject.prototype.getChildren = function (this: Node & NodeInternals, sourceFile?: SourceFileLike) {
+    this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
+    return this._children || (this._children = createChildren(this, sourceFile));
+};
+
+NodeConstructors.NodeObject.prototype.getFirstToken = function (this: Node & NodeInternals, sourceFile?: SourceFileLike): Node | undefined {
+    this.assertHasRealPosition();
+    const children = this.getChildren(sourceFile);
+    if (!children.length) {
+        return undefined;
+    }
+
+    const child = find(children, kid => kid.kind < SyntaxKind.FirstJSDocNode || kid.kind > SyntaxKind.LastJSDocNode)!;
+    return child.kind < SyntaxKind.FirstNode ?
+        child :
+        child.getFirstToken(sourceFile);
+};
+
+NodeConstructors.NodeObject.prototype.getLastToken = function (this: Node & NodeInternals, sourceFile?: SourceFileLike): Node | undefined {
+    this.assertHasRealPosition();
+    const children = this.getChildren(sourceFile);
+
+    const child = lastOrUndefined(children);
+    if (!child) {
+        return undefined;
+    }
+
+    return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
+};
+
+for (const ctor of [
+    NodeConstructors.TokenObject,
+    NodeConstructors.IdentifierObject,
+    NodeConstructors.PrivateIdentifierObject,
+]) {
+    ctor.prototype.getChildCount = function (this: Node & NodeInternals, sourceFile?: SourceFile) {
+        return this.getChildren(sourceFile).length;
+    };
+
+    ctor.prototype.getChildAt = function (this: Node & NodeInternals, index: number, sourceFile?: SourceFile) {
+        return this.getChildren(sourceFile)[index];
+    };
+
+    ctor.prototype.getChildren = function (this: Node & NodeInternals, _sourceFile?: SourceFileLike) {
+        return this.kind === SyntaxKind.EndOfFileToken ? (this as Node as EndOfFileToken).jsDoc || emptyArray : emptyArray;
+    };
+
+    ctor.prototype.getFirstToken = function (this: Node & NodeInternals, _sourceFile?: SourceFileLike): Node | undefined {
+        return undefined;
+    };
+
+    ctor.prototype.getLastToken = function (this: Node & NodeInternals, _sourceFile?: SourceFileLike): Node | undefined {
+        return undefined;
+    };
+}
+
+// Patch Symbol for use with services.
+interface SymbolInternals {
     // Undefined is used to indicate the value has not been computed. If, after computing, the
     // symbol has no doc comment, then the empty array will be returned.
     documentationComment?: SymbolDisplayPart[];
@@ -293,250 +436,89 @@ class SymbolObject implements Symbol {
 
     contextualGetAccessorTags?: JSDocTagInfo[];
     contextualSetAccessorTags?: JSDocTagInfo[];
-
-    constructor(flags: SymbolFlags, name: __String) {
-        this.flags = flags;
-        this.escapedName = name;
-    }
-
-    getFlags(): SymbolFlags {
-        return this.flags;
-    }
-
-    get name(): string {
-        return symbolName(this);
-    }
-
-    getEscapedName(): __String {
-        return this.escapedName;
-    }
-
-    getName(): string {
-        return this.name;
-    }
-
-    getDeclarations(): Declaration[] | undefined {
-        return this.declarations;
-    }
-
-    getDocumentationComment(checker: TypeChecker | undefined): SymbolDisplayPart[] {
-        if (!this.documentationComment) {
-            this.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
-
-            if (!this.declarations && isTransientSymbol(this) && this.links.target && isTransientSymbol(this.links.target) && this.links.target.links.tupleLabelDeclaration) {
-                const labelDecl = this.links.target.links.tupleLabelDeclaration;
-                this.documentationComment = getDocumentationComment([labelDecl], checker);
-            }
-            else {
-                this.documentationComment = getDocumentationComment(this.declarations, checker);
-            }
-        }
-        return this.documentationComment;
-    }
-
-    getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
-        if (context) {
-            if (isGetAccessor(context)) {
-                if (!this.contextualGetAccessorDocumentationComment) {
-                    this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
-                }
-                if (length(this.contextualGetAccessorDocumentationComment)) {
-                    return this.contextualGetAccessorDocumentationComment;
-                }
-            }
-            if (isSetAccessor(context)) {
-                if (!this.contextualSetAccessorDocumentationComment) {
-                    this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
-                }
-                if (length(this.contextualSetAccessorDocumentationComment)) {
-                    return this.contextualSetAccessorDocumentationComment;
-                }
-            }
-        }
-        return this.getDocumentationComment(checker);
-    }
-
-    getJsDocTags(checker?: TypeChecker): JSDocTagInfo[] {
-        if (this.tags === undefined) {
-            this.tags = getJsDocTagsOfDeclarations(this.declarations, checker);
-        }
-
-        return this.tags;
-    }
-
-    getContextualJsDocTags(context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
-        if (context) {
-            if (isGetAccessor(context)) {
-                if (!this.contextualGetAccessorTags) {
-                    this.contextualGetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isGetAccessor), checker);
-                }
-                if (length(this.contextualGetAccessorTags)) {
-                    return this.contextualGetAccessorTags;
-                }
-            }
-            if (isSetAccessor(context)) {
-                if (!this.contextualSetAccessorTags) {
-                    this.contextualSetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isSetAccessor), checker);
-                }
-                if (length(this.contextualSetAccessorTags)) {
-                    return this.contextualSetAccessorTags;
-                }
-            }
-        }
-        return this.getJsDocTags(checker);
-    }
 }
 
-class TypeObject implements Type {
-    checker: TypeChecker;
-    flags: TypeFlags;
-    objectFlags?: ObjectFlags;
-    id!: number;
-    symbol!: Symbol;
-    constructor(checker: TypeChecker, flags: TypeFlags) {
-        this.checker = checker;
-        this.flags = flags;
-    }
-    getFlags(): TypeFlags {
-        return this.flags;
-    }
-    getSymbol(): Symbol | undefined {
-        return this.symbol;
-    }
-    getProperties(): Symbol[] {
-        return this.checker.getPropertiesOfType(this);
-    }
-    getProperty(propertyName: string): Symbol | undefined {
-        return this.checker.getPropertyOfType(this, propertyName);
-    }
-    getApparentProperties(): Symbol[] {
-        return this.checker.getAugmentedPropertiesOfType(this);
-    }
-    getCallSignatures(): readonly Signature[] {
-        return this.checker.getSignaturesOfType(this, SignatureKind.Call);
-    }
-    getConstructSignatures(): readonly Signature[] {
-        return this.checker.getSignaturesOfType(this, SignatureKind.Construct);
-    }
-    getStringIndexType(): Type | undefined {
-        return this.checker.getIndexTypeOfType(this, IndexKind.String);
-    }
-    getNumberIndexType(): Type | undefined {
-        return this.checker.getIndexTypeOfType(this, IndexKind.Number);
-    }
-    getBaseTypes(): BaseType[] | undefined {
-        return this.isClassOrInterface() ? this.checker.getBaseTypes(this) : undefined;
-    }
-    isNullableType(): boolean {
-        return this.checker.isNullableType(this);
-    }
-    getNonNullableType(): Type {
-        return this.checker.getNonNullableType(this);
-    }
-    getNonOptionalType(): Type {
-        return this.checker.getNonOptionalType(this);
-    }
-    getConstraint(): Type | undefined {
-        return this.checker.getBaseConstraintOfType(this);
-    }
-    getDefault(): Type | undefined {
-        return this.checker.getDefaultFromTypeParameter(this);
-    }
+ObjectConstructors.SymbolObject.prototype.getDocumentationComment = function (this: (Symbol | TransientSymbol) & SymbolInternals, checker: TypeChecker | undefined): SymbolDisplayPart[] {
+    if (!this.documentationComment) {
+        this.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
 
-    isUnion(): this is UnionType {
-        return !!(this.flags & TypeFlags.Union);
-    }
-    isIntersection(): this is IntersectionType {
-        return !!(this.flags & TypeFlags.Intersection);
-    }
-    isUnionOrIntersection(): this is UnionOrIntersectionType {
-        return !!(this.flags & TypeFlags.UnionOrIntersection);
-    }
-    isLiteral(): this is LiteralType {
-        return !!(this.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.BigIntLiteral));
-    }
-    isStringLiteral(): this is StringLiteralType {
-        return !!(this.flags & TypeFlags.StringLiteral);
-    }
-    isNumberLiteral(): this is NumberLiteralType {
-        return !!(this.flags & TypeFlags.NumberLiteral);
-    }
-    isTypeParameter(): this is TypeParameter {
-        return !!(this.flags & TypeFlags.TypeParameter);
-    }
-    isClassOrInterface(): this is InterfaceType {
-        return !!(getObjectFlags(this) & ObjectFlags.ClassOrInterface);
-    }
-    isClass(): this is InterfaceType {
-        return !!(getObjectFlags(this) & ObjectFlags.Class);
-    }
-    isIndexType(): this is IndexType {
-        return !!(this.flags & TypeFlags.Index);
-    }
-    /**
-     * This polyfills `referenceType.typeArguments` for API consumers
-     */
-    get typeArguments() {
-        if (getObjectFlags(this) & ObjectFlags.Reference) {
-            return this.checker.getTypeArguments(this as Type as TypeReference);
+        if (!this.declarations && isTransientSymbol(this) && this.links.target && isTransientSymbol(this.links.target) && this.links.target.links.tupleLabelDeclaration) {
+            const labelDecl = this.links.target.links.tupleLabelDeclaration;
+            this.documentationComment = getDocumentationComment([labelDecl], checker);
         }
-        return undefined;
+        else {
+            this.documentationComment = getDocumentationComment(this.declarations, checker);
+        }
     }
-}
+    return this.documentationComment;
+};
 
-class SignatureObject implements Signature {
-    flags: SignatureFlags;
-    checker: TypeChecker;
-    declaration!: SignatureDeclaration;
-    typeParameters?: TypeParameter[];
-    parameters!: Symbol[];
-    thisParameter!: Symbol;
-    resolvedReturnType!: Type;
-    resolvedTypePredicate: TypePredicate | undefined;
-    minTypeArgumentCount!: number;
-    minArgumentCount!: number;
+ObjectConstructors.SymbolObject.prototype.getContextualDocumentationComment = function (this: Symbol & SymbolInternals, context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
+    if (context) {
+        if (isGetAccessor(context)) {
+            if (!this.contextualGetAccessorDocumentationComment) {
+                this.contextualGetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
+            }
+            if (length(this.contextualGetAccessorDocumentationComment)) {
+                return this.contextualGetAccessorDocumentationComment;
+            }
+        }
+        if (isSetAccessor(context)) {
+            if (!this.contextualSetAccessorDocumentationComment) {
+                this.contextualSetAccessorDocumentationComment = getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
+            }
+            if (length(this.contextualSetAccessorDocumentationComment)) {
+                return this.contextualSetAccessorDocumentationComment;
+            }
+        }
+    }
+    return this.getDocumentationComment(checker);
+};
 
+ObjectConstructors.SymbolObject.prototype.getJsDocTags = function (this: Symbol & SymbolInternals, checker?: TypeChecker): JSDocTagInfo[] {
+    if (this.tags === undefined) {
+        this.tags = getJsDocTagsOfDeclarations(this.declarations, checker);
+    }
+
+    return this.tags;
+};
+
+ObjectConstructors.SymbolObject.prototype.getContextualJsDocTags = function (this: Symbol & SymbolInternals, context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
+    if (context) {
+        if (isGetAccessor(context)) {
+            if (!this.contextualGetAccessorTags) {
+                this.contextualGetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isGetAccessor), checker);
+            }
+            if (length(this.contextualGetAccessorTags)) {
+                return this.contextualGetAccessorTags;
+            }
+        }
+        if (isSetAccessor(context)) {
+            if (!this.contextualSetAccessorTags) {
+                this.contextualSetAccessorTags = getJsDocTagsOfDeclarations(filter(this.declarations, isSetAccessor), checker);
+            }
+            if (length(this.contextualSetAccessorTags)) {
+                return this.contextualSetAccessorTags;
+            }
+        }
+    }
+    return this.getJsDocTags(checker);
+};
+
+interface SignatureInternals {
     // Undefined is used to indicate the value has not been computed. If, after computing, the
     // symbol has no doc comment, then the empty array will be returned.
     documentationComment?: SymbolDisplayPart[];
     jsDocTags?: JSDocTagInfo[]; // same
-
-    constructor(checker: TypeChecker, flags: SignatureFlags) {
-        this.checker = checker;
-        this.flags = flags;
-    }
-
-    getDeclaration(): SignatureDeclaration {
-        return this.declaration;
-    }
-    getTypeParameters(): TypeParameter[] | undefined {
-        return this.typeParameters;
-    }
-    getParameters(): Symbol[] {
-        return this.parameters;
-    }
-    getReturnType(): Type {
-        return this.checker.getReturnTypeOfSignature(this);
-    }
-    getTypeParameterAtPosition(pos: number): Type {
-        const type = this.checker.getParameterType(this, pos);
-        if (type.isIndexType() && isThisTypeParameter(type.type)) {
-            const constraint = type.type.getConstraint();
-            if (constraint) {
-                return this.checker.getIndexType(constraint);
-            }
-        }
-        return type;
-    }
-
-    getDocumentationComment(): SymbolDisplayPart[] {
-        return this.documentationComment || (this.documentationComment = getDocumentationComment(singleElementArray(this.declaration), this.checker));
-    }
-
-    getJsDocTags(): JSDocTagInfo[] {
-        return this.jsDocTags || (this.jsDocTags = getJsDocTagsOfDeclarations(singleElementArray(this.declaration), this.checker));
-    }
 }
+
+ObjectConstructors.SignatureObject.prototype.getDocumentationComment = function (this: Signature & SignatureInternals): SymbolDisplayPart[] {
+    return this.documentationComment || (this.documentationComment = getDocumentationComment(singleElementArray(this.declaration), this.checker));
+};
+
+ObjectConstructors.SignatureObject.prototype.getJsDocTags = function (this: Signature & SignatureInternals): JSDocTagInfo[] {
+    return this.jsDocTags || (this.jsDocTags = getJsDocTagsOfDeclarations(singleElementArray(this.declaration), this.checker));
+};
 
 /**
  * Returns whether or not the given node has a JSDoc "inheritDoc" tag on it.
@@ -605,29 +587,6 @@ function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration
         const symbol = checker.getPropertyOfType(type, declaration.symbol.name);
         return symbol ? cb(symbol) : undefined;
     });
-}
-
-class SourceMapSourceObject implements SourceMapSource {
-    lineMap!: number[];
-    constructor(public fileName: string, public text: string, public skipTrivia?: (pos: number) => number) { }
-
-    public getLineAndCharacterOfPosition(pos: number): LineAndCharacter {
-        return getLineAndCharacterOfPosition(this, pos);
-    }
-}
-
-function getServicesObjectAllocator(): ObjectAllocator {
-    return {
-        getNodeConstructor: () => NodeConstructors.Node,
-        getTokenConstructor: () => NodeConstructors.Token,
-        getIdentifierConstructor: () => NodeConstructors.Identifier,
-        getPrivateIdentifierConstructor: () => NodeConstructors.PrivateIdentifier,
-        getSourceFileConstructor: () => NodeConstructors.SourceFile,
-        getSymbolConstructor: () => SymbolObject,
-        getTypeConstructor: () => TypeObject,
-        getSignatureConstructor: () => SignatureObject,
-        getSourceMapSourceConstructor: () => SourceMapSourceObject,
-    };
 }
 
 /// Language Service
@@ -2576,5 +2535,3 @@ export function getDefaultLibFilePath(options: CompilerOptions): string {
 
     throw new Error("getDefaultLibFilePath is only supported when consumed as a node module. ");
 }
-
-setObjectAllocator(getServicesObjectAllocator());
