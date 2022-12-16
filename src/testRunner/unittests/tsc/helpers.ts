@@ -438,12 +438,9 @@ function addLibAndMakeReadonly(fs: vfs.FileSystem, libContentToAppend?: string) 
     fs.makeReadonly();
 }
 
-export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: ts.ReadonlyCollection<ts.Path>; }) {
+export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: Map<ts.Path, unknown> | Set<ts.Path>; }) {
     const mapFileNames = ts.mapDefinedIterator(sys.writtenFiles.keys(), f => f.endsWith(".map") ? f : undefined);
-    while (true) {
-        const result = mapFileNames.next();
-        if (result.done) break;
-        const mapFile = result.value;
+    for (const mapFile of mapFileNames) {
         const text = Harness.SourceMapRecorder.getSourceMapRecordWithSystem(sys, mapFile);
         sys.writeFile(`${mapFile}.baseline.txt`, text);
     }

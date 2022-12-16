@@ -423,7 +423,6 @@ import {
     PropertySignature,
     PseudoBigInt,
     QualifiedName,
-    ReadonlyCollection,
     ReadonlyTextRange,
     removeTrailingDirectorySeparator,
     RequireOrImportCall,
@@ -653,8 +652,7 @@ export function forEachAncestor<T>(node: Node, callback: (n: Node) => T | undefi
  */
 export function forEachEntry<K, V, U>(map: ReadonlyMap<K, V>, callback: (value: V, key: K) => U | undefined): U | undefined {
     const iterator = map.entries();
-    for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-        const [key, value] = iterResult.value;
+    for (const [key, value] of iterator) {
         const result = callback(value, key);
         if (result) {
             return result;
@@ -668,10 +666,10 @@ export function forEachEntry<K, V, U>(map: ReadonlyMap<K, V>, callback: (value: 
  *
  * @internal
  */
-export function forEachKey<K, T>(map: ReadonlyCollection<K>, callback: (key: K) => T | undefined): T | undefined {
+export function forEachKey<K, T>(map: ReadonlyMap<K, unknown> | ReadonlySet<K>, callback: (key: K) => T | undefined): T | undefined {
     const iterator = map.keys();
-    for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-        const result = callback(iterResult.value);
+    for (const key of iterator) {
+        const result = callback(key);
         if (result) {
             return result;
         }

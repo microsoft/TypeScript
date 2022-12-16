@@ -3966,17 +3966,6 @@ declare namespace ts {
     interface SortedArray<T> extends Array<T> {
         " __sortedArrayBrand": any;
     }
-    /** Common read methods for ES6 Map/Set. */
-    interface ReadonlyCollection<K> {
-        readonly size: number;
-        has(key: K): boolean;
-        keys(): IterableIterator<K>;
-    }
-    /** Common write methods for ES6 Map/Set. */
-    interface Collection<K> extends ReadonlyCollection<K> {
-        delete(key: K): boolean;
-        clear(): void;
-    }
     /** Array that is only intended to be pushed to, never read. */
     interface Push<T> {
         push(...values: T[]): void;
