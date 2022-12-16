@@ -687,10 +687,6 @@
         "category": "Error",
         "code": 1218
     },
-    "Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.": {
-        "category": "Error",
-        "code": 1219
-    },
     "Generators are not allowed in an ambient context.": {
         "category": "Error",
         "code": 1221
