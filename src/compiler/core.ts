@@ -352,13 +352,10 @@ export function map<T, U>(array: readonly T[] | undefined, f: (x: T, i: number) 
 
 
 /** @internal */
-export function mapIterator<T, U>(iter: Iterator<T>, mapFn: (x: T) => U): Iterator<U> {
-    return {
-        next() {
-            const iterRes = iter.next();
-            return iterRes.done ? iterRes as { done: true, value: never } : { value: mapFn(iterRes.value), done: false };
-        }
-    };
+export function *mapIterator<T, U>(iter: Iterable<T>, mapFn: (x: T) => U) {
+    for (const x of iter) {
+        yield mapFn(x);
+    }
 }
 
 /**
@@ -460,31 +457,11 @@ export function flatMapToMutable<T, U>(array: readonly T[] | undefined, mapfn: (
 }
 
 /** @internal */
-export function flatMapIterator<T, U>(iter: Iterator<T>, mapfn: (x: T) => readonly U[] | Iterator<U> | undefined): Iterator<U> {
-    const first = iter.next();
-    if (first.done) {
-        return emptyIterator;
-    }
-    let currentIter = getIterator(first.value);
-    return {
-        next() {
-            while (true) {
-                const currentRes = currentIter.next();
-                if (!currentRes.done) {
-                    return currentRes;
-                }
-                const iterRes = iter.next();
-                if (iterRes.done) {
-                    return iterRes as { done: true, value: never };
-                }
-                currentIter = getIterator(iterRes.value);
-            }
-        },
-    };
-
-    function getIterator(x: T): Iterator<U> {
-        const res = mapfn(x);
-        return res === undefined ? emptyIterator : isArray(res) ? arrayIterator(res) : res;
+export function *flatMapIterator<T, U>(iter: Iterable<T>, mapfn: (x: T) => readonly U[] | Iterable<U> | undefined) {
+    for (const x of iter) {
+        const iter2 = mapfn(x);
+        if (!iter2) continue;
+        yield* iter2;
     }
 }
 
@@ -552,21 +529,13 @@ export function mapDefined<T, U>(array: readonly T[] | undefined, mapFn: (x: T, 
 }
 
 /** @internal */
-export function mapDefinedIterator<T, U>(iter: Iterator<T>, mapFn: (x: T) => U | undefined): Iterator<U> {
-    return {
-        next() {
-            while (true) {
-                const res = iter.next();
-                if (res.done) {
-                    return res as { done: true, value: never };
-                }
-                const value = mapFn(res.value);
-                if (value !== undefined) {
-                    return { value, done: false };
-                }
-            }
+export function *mapDefinedIterator<T, U>(iter: Iterable<T>, mapFn: (x: T) => U | undefined) {
+    for (const x of iter) {
+        const value = mapFn(x);
+        if (value !== undefined) {
+            yield value;
         }
-    };
+    }
 }
 
 /** @internal */
@@ -613,18 +582,11 @@ export function tryAddToSet<T>(set: Set<T>, value: T) {
 }
 
 /** @internal */
-export const emptyIterator: Iterator<never> = { next: () => ({ value: undefined as never, done: true }) };
+export const emptyIterator: IterableIterator<never> = (function*() {})(); // TODO(jakebailey): remove? empty array?
 
 /** @internal */
-export function singleIterator<T>(value: T): Iterator<T> {
-    let done = false;
-    return {
-        next() {
-            const wasDone = done;
-            done = true;
-            return wasDone ? { value: undefined as never, done: true } : { value, done: false };
-        }
-    };
+export function *singleIterator<T>(value: T) {
+    yield value;
 }
 
 /**
@@ -1164,33 +1126,16 @@ export function sort<T>(array: readonly T[], comparer?: Comparer<T>): SortedRead
 }
 
 /** @internal */
-export function arrayIterator<T>(array: readonly T[]): Iterator<T> {
-    let i = 0;
-    return { next: () => {
-        if (i === array.length) {
-            return { value: undefined as never, done: true };
-        }
-        else {
-            i++;
-            return { value: array[i - 1], done: false };
-        }
-    }};
+export function *arrayIterator<T>(array: readonly T[]) {
+    // TODO(jakebailey): remove?
+    yield* array;
 }
 
 /** @internal */
-export function arrayReverseIterator<T>(array: readonly T[]): Iterator<T> {
-    let i = array.length;
-    return {
-        next: () => {
-            if (i === 0) {
-                return { value: undefined as never, done: true };
-            }
-            else {
-                i--;
-                return { value: array[i], done: false };
-            }
-        }
-    };
+export function *arrayReverseIterator<T>(array: readonly T[]) {
+    for (let i = array.length - 1; i >= 0; i--) {
+        yield array[i];
+    }
 }
 
 /**
@@ -1466,24 +1411,6 @@ export function arrayOf<T>(count: number, f: (index: number) => T): T[] {
     return result;
 }
 
-/**
- * Shims `Array.from`.
- *
- * @internal
- */
-export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map: (t: T) => U): U[];
-/** @internal */
-export function arrayFrom<T>(iterator: Iterator<T> | IterableIterator<T>): T[];
-/** @internal */
-export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map?: (t: T) => U): (T | U)[] {
-    const result: (T | U)[] = [];
-    for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-        result.push(map ? map(iterResult.value) : iterResult.value);
-    }
-    return result;
-}
-
-
 /** @internal */
 export function assign<T extends object>(t: T, ...args: (T | undefined)[]) {
     for (const arg of args) {
@@ -1589,7 +1516,7 @@ export function group<T>(values: readonly T[], getGroupId: (value: T) => string)
 export function group<T, R>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => R): R[];
 /** @internal */
 export function group<T, K>(values: readonly T[], getGroupId: (value: T) => K, resultSelector: (values: readonly T[]) => readonly T[] = identity): readonly (readonly T[])[] {
-    return arrayFrom(arrayToMultiMap(values, getGroupId).values(), resultSelector);
+    return Array.from(arrayToMultiMap(values, getGroupId).values(), resultSelector);
 }
 
 /** @internal */
@@ -1876,7 +1803,7 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
             return size;
         },
         forEach(action: (value: TElement, key: TElement, set: Set<TElement>) => void): void {
-            for (const elements of arrayFrom(multiMap.values())) {
+            for (const elements of Array.from(multiMap.values())) {
                 if (isArray(elements)) {
                     for (const element of elements) {
                         action(element, element, set);

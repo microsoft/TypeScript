@@ -1,5 +1,4 @@
 import {
-    arrayFrom,
     arrayIterator,
     arrayReverseIterator,
     CallHierarchyIncomingCall,
@@ -1341,7 +1340,7 @@ export class Session<TMessage = string> implements EventSender {
 
     private cleanup() {
         this.cleanProjects("inferred projects", this.projectService.inferredProjects);
-        this.cleanProjects("configured projects", arrayFrom(this.projectService.configuredProjects.values()));
+        this.cleanProjects("configured projects", Array.from(this.projectService.configuredProjects.values()));
         this.cleanProjects("external projects", this.projectService.externalProjects);
         if (this.host.gc) {
             this.logger.info(`host.gc()`);
@@ -1545,7 +1544,7 @@ export class Session<TMessage = string> implements EventSender {
                     }
                 }
             }
-            definitions = arrayFrom(definitionSet.values());
+            definitions = Array.from(definitionSet.values());
         }
 
         definitions = definitions.filter(d => !d.isAmbient && !d.failedAliasResolution);
@@ -1969,7 +1968,7 @@ export class Session<TMessage = string> implements EventSender {
             const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(fileName));
             group.locs.push({ ...toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo), ...prefixSuffixText });
         }
-        return arrayFrom(map.values());
+        return Array.from(map.values());
     }
 
     private getReferences(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.ReferencesResponseBody | readonly ReferencedSymbol[] {
@@ -3142,13 +3141,13 @@ export class Session<TMessage = string> implements EventSender {
         [CommandNames.UpdateOpen]: (request: protocol.UpdateOpenRequest) => {
             this.changeSeq++;
             this.projectService.applyChangesInOpenFiles(
-                request.arguments.openFiles && mapIterator(arrayIterator(request.arguments.openFiles), file => ({
+                request.arguments.openFiles && mapIterator(request.arguments.openFiles, file => ({
                     fileName: file.file,
                     content: file.fileContent,
                     scriptKind: file.scriptKindName,
                     projectRootPath: file.projectRootPath
                 })),
-                request.arguments.changedFiles && mapIterator(arrayIterator(request.arguments.changedFiles), file => ({
+                request.arguments.changedFiles && mapIterator(request.arguments.changedFiles, file => ({
                     fileName: file.fileName,
                     changes: mapDefinedIterator(arrayReverseIterator(file.textChanges), change => {
                         const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(file.fileName));
@@ -3164,7 +3163,7 @@ export class Session<TMessage = string> implements EventSender {
         [CommandNames.ApplyChangedToOpenFiles]: (request: protocol.ApplyChangedToOpenFilesRequest) => {
             this.changeSeq++;
             this.projectService.applyChangesInOpenFiles(
-                request.arguments.openFiles && arrayIterator(request.arguments.openFiles),
+                request.arguments.openFiles,
                 request.arguments.changedFiles && mapIterator(arrayIterator(request.arguments.changedFiles), file => ({
                     fileName: file.fileName,
                     // apply changes in reverse order

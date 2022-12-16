@@ -1048,7 +1048,7 @@ function splitVaryBySettingValue(text: string, varyBy: string): string[] | undef
 
     if (star && values) {
         // add all entries
-        for (const [key, value] of ts.arrayFrom(values.entries())) {
+        for (const [key, value] of Array.from(values.entries())) {
             if (ts.findIndex(variations, v => v.key === key || v.value === value) === -1) {
                 variations.push({ key, value });
             }
@@ -1482,7 +1482,7 @@ export namespace Baseline {
                 errorMsg += "\n";
             }
             if (missing.length) {
-                const writtenFilesArray = ts.arrayFrom(writtenFiles.keys());
+                const writtenFilesArray = Array.from(writtenFiles.keys());
                 errorMsg += `Baseline missing ${missing.length} files:${"\n    " + missing.slice(0, 5).join("\n    ") + (missing.length > 5 ? "\n" + `    and ${missing.length - 5} more` : "") + "\n"}Written ${writtenFiles.size} files:${"\n    " + writtenFilesArray.slice(0, 5).join("\n    ") + (writtenFilesArray.length > 5 ? "\n" + `    and ${writtenFilesArray.length - 5} more` : "")}`;
             }
             throw new Error(errorMsg);

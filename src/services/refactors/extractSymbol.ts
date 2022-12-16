@@ -2,7 +2,6 @@ import {
     __String,
     ANONYMOUS,
     ApplicableRefactorInfo,
-    arrayFrom,
     assertType,
     BindingElement,
     Block,
@@ -1070,7 +1069,7 @@ function extractFunctionInScope(
         callArguments.push(factory.createIdentifier(name));
     });
 
-    const typeParametersAndDeclarations = arrayFrom(typeParameterUsages.values()).map(type => ({ type, declaration: getFirstDeclaration(type) }));
+    const typeParametersAndDeclarations = Array.from(typeParameterUsages.values(), type => ({ type, declaration: getFirstDeclaration(type) }));
     const sortedTypeParametersAndDeclarations = typeParametersAndDeclarations.sort(compareTypesByDeclarationOrder);
 
     const typeParameters: readonly TypeParameterDeclaration[] | undefined = sortedTypeParametersAndDeclarations.length === 0

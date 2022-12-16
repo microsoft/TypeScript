@@ -1954,7 +1954,7 @@ export class TestState {
 
     public baselineQuickInfo() {
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
-        const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
+        const result = Array.from(this.testData.markerPositions.entries(), ([name, marker]) => ({
             marker: { ...marker, name },
             quickInfo: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position)
         }));
@@ -1963,7 +1963,7 @@ export class TestState {
 
     public baselineSignatureHelp() {
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
-        const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
+        const result = Array.from(this.testData.markerPositions.entries(), ([name, marker]) => ({
             marker: { ...marker, name },
             signatureHelp: this.languageService.getSignatureHelpItems(marker.fileName, marker.position, /*options*/ undefined)
         }));
@@ -1972,7 +1972,7 @@ export class TestState {
 
     public baselineCompletions(preferences?: ts.UserPreferences) {
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
-        const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => {
+        const result = Array.from(this.testData.markerPositions.entries(), ([name, marker]) => {
             this.goToMarker(marker);
             const completions = this.getCompletionListAtCaret(preferences);
             return {
@@ -2515,7 +2515,7 @@ export class TestState {
     }
 
     public getMarkerNames(): string[] {
-        return ts.arrayFrom(this.testData.markerPositions.keys());
+        return Array.from(this.testData.markerPositions.keys());
     }
 
     public getRanges(): Range[] {
@@ -4587,7 +4587,7 @@ function unique<T>(inputs: readonly T[], getOutput: (t: T) => string): string[] 
         const out = getOutput(input);
         set.set(out, true);
     }
-    return ts.arrayFrom(set.keys());
+    return Array.from(set.keys());
 }
 
 function toArray<T>(x: ArrayOrSingle<T>): readonly T[] {

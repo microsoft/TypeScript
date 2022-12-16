@@ -1,6 +1,5 @@
 import * as ts from "./_namespaces/ts";
 import {
-    arrayFrom,
     BuilderProgram,
     BuildOptions,
     buildOpts,
@@ -303,7 +302,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
     ) {
         return defaultValue !== undefined && typeof type === "object"
             // e.g. ScriptTarget.ES2015 -> "es6/es2015"
-            ? arrayFrom(type.entries())
+            ? Array.from(type.entries())
                   .filter(([, value]) => value === defaultValue)
                   .map(([name]) => name)
                   .join("/")
@@ -1158,8 +1157,8 @@ function reportStatistics(sys: System, programOrConfig: Program | ParsedCommandL
 
             const lineCounts = countLines(program);
             if (compilerOptions.extendedDiagnostics) {
-                for (const key of arrayFrom(lineCounts.keys())) {
-                    reportCountStatistic("Lines of " + key, lineCounts.get(key)!);
+                for (const [key, value] of lineCounts.entries()) {
+                    reportCountStatistic("Lines of " + key, value);
                 }
             }
             else {

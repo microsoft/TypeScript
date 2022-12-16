@@ -1,5 +1,4 @@
 import {
-    arrayFrom,
     cast,
     CodeActionCommand,
     CodeFixAction,
@@ -62,7 +61,7 @@ export function registerCodeFix(reg: CodeFixRegistration) {
 
 /** @internal */
 export function getSupportedErrorCodes(): readonly string[] {
-    return arrayFrom(errorCodeToFixes.keys());
+    return Array.from(errorCodeToFixes.keys());
 }
 
 function removeFixIdIfFixAllUnavailable(registration: CodeFixRegistration, diagnostics: Diagnostic[]) {

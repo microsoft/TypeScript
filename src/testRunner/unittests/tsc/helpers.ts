@@ -235,7 +235,7 @@ function storeDtsSignatures(sys: TscCompileSystem, programs: readonly CommandLin
                 sys,
                 (signature, sourceFiles) => {
                     const exportedModules = ts.BuilderState.getExportedModules(state.exportedModulesMap && sourceFiles[0].exportedModulesFromDeclarationEmit);
-                    dtsSignatureData.set(relativeToBuildInfo(resolvedPath), { signature, exportedModules: exportedModules && ts.arrayFrom(exportedModules.keys(), relativeToBuildInfo) });
+                    dtsSignatureData.set(relativeToBuildInfo(resolvedPath), { signature, exportedModules: exportedModules && Array.from(exportedModules.keys(), relativeToBuildInfo) });
                 },
             );
         });
@@ -707,7 +707,8 @@ function verifyTscEditDiscrepancies({
         computeDtsSignatures: true,
     });
     let headerAdded = false;
-    for (const outputFile of ts.arrayFrom(sys.writtenFiles.keys())) {
+    // TODO(jakebailey): redundant?
+    for (const outputFile of Array.from(sys.writtenFiles.keys())) {
         const cleanBuildText = sys.readFile(outputFile);
         const incrementalBuildText = newSys.readFile(outputFile);
         if (ts.isBuildInfoFile(outputFile)) {

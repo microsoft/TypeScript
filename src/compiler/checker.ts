@@ -16,7 +16,6 @@ import {
     append,
     appendIfUnique,
     ArrayBindingPattern,
-    arrayFrom,
     arrayIsHomogeneous,
     ArrayLiteralExpression,
     arrayOf,
@@ -2538,7 +2537,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (mainModule.exports?.get(InternalSymbolName.ExportStar) && moduleAugmentation.symbol.exports?.size) {
                         // We may need to merge the module augmentation's exports into the target symbols of the resolved exports
                         const resolvedExports = getResolvedMembersOrExportsOfSymbol(mainModule, MembersOrExportsResolutionKind.resolvedExports);
-                        for (const [key, value] of arrayFrom(moduleAugmentation.symbol.exports.entries())) {
+                        for (const [key, value] of Array.from(moduleAugmentation.symbol.exports.entries())) {
                             if (resolvedExports.has(key) && !mainModule.exports.has(key)) {
                                 mergeSymbol(resolvedExports.get(key)!, value);
                             }
@@ -5457,7 +5456,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createTypeofType() {
-        return getUnionType(arrayFrom(typeofNEFacts.keys(), getStringLiteralType));
+        return getUnionType(Array.from(typeofNEFacts.keys(), getStringLiteralType));
     }
 
     function createTypeParameter(symbol?: Symbol) {
@@ -8617,7 +8616,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function getNamespaceMembersForSerialization(symbol: Symbol) {
-                return !symbol.exports ? [] : filter(arrayFrom(symbol.exports.values()), isNamespaceMember);
+                return !symbol.exports ? [] : filter(Array.from(symbol.exports.values()), isNamespaceMember);
             }
 
             function isTypeOnlyNamespace(symbol: Symbol) {
@@ -12136,7 +12135,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const assignments = symbol.assignmentDeclarationMembers;
             if (assignments) {
-                const decls = arrayFrom(assignments.values());
+                const decls = Array.from(assignments.values());
                 for (const member of decls) {
                     const assignmentKind = getAssignmentDeclarationKind(member as BinaryExpression | CallExpression);
                     const isInstanceMember = assignmentKind === AssignmentDeclarationKind.PrototypeProperty
@@ -13193,7 +13192,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        return arrayFrom(props.values());
+        return Array.from(props.values());
     }
 
     function getConstraintOfType(type: InstantiableType | UnionOrIntersectionType): Type | undefined {
@@ -13643,7 +13642,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isUnion &&
             (propSet || checkFlags & CheckFlags.Partial) &&
             checkFlags & (CheckFlags.ContainsPrivate | CheckFlags.ContainsProtected) &&
-            !(propSet && getCommonDeclarationsOfSymbols(arrayFrom(propSet.values())))
+            !(propSet && getCommonDeclarationsOfSymbols(propSet.values()))
         ) {
             // No property was found, or, in a union, a property has a private or protected declaration in one
             // constituent, but is missing or has a different declaration in another constituent.
@@ -13665,7 +13664,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return singleProp;
             }
         }
-        const props = propSet ? arrayFrom(propSet.values()) : [singleProp];
+        const props = propSet ? Array.from(propSet.values()) : [singleProp];
         let declarations: Declaration[] | undefined;
         let firstType: Type | undefined;
         let nameType: Type | undefined;
@@ -13751,7 +13750,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return property;
     }
 
-    function getCommonDeclarationsOfSymbols(symbols: readonly Symbol[]) {
+    function getCommonDeclarationsOfSymbols(symbols: Iterable<Symbol>) {
         let commonDeclarations: Set<Node> | undefined;
         for (const symbol of symbols) {
             if (!symbol.declarations) {
@@ -16277,7 +16276,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getIntersectionType(types: readonly Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], noSupertypeReduction?: boolean): Type {
         const typeMembershipMap: Map<string, Type> = new Map();
         const includes = addTypesToIntersection(typeMembershipMap, 0 as TypeFlags, types);
-        const typeSet: Type[] = arrayFrom(typeMembershipMap.values());
+        const typeSet: Type[] = Array.from(typeMembershipMap.values());
         // An intersection type is considered empty if it contains
         // the type never, or
         // more than one unit type or,
@@ -21524,7 +21523,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return;
                 }
             }
-            const props = arrayFrom(getUnmatchedProperties(source, target, requireOptionalProperties, /*matchDiscriminantProperties*/ false));
+            const props = Array.from(getUnmatchedProperties(source, target, requireOptionalProperties, /*matchDiscriminantProperties*/ false));
             if (!headMessage || (headMessage.code !== Diagnostics.Class_0_incorrectly_implements_interface_1.code &&
                 headMessage.code !== Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code)) {
                 shouldSkipElaboration = true; // Retain top-level error for interface implementing issues, otherwise omit it
@@ -22985,7 +22984,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
-            context.resolvedProperties = arrayFrom(names.values());
+            context.resolvedProperties = Array.from(names.values());
         }
         return context.resolvedProperties;
     }
@@ -30999,10 +30998,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     s => symbols.has((s.charAt(0).toUpperCase() + s.slice(1)) as __String)
                         ? createSymbol(SymbolFlags.TypeAlias, s as __String) as Symbol
                         : undefined);
-                candidates = primitives.concat(arrayFrom(symbols.values()));
+                candidates = primitives.concat(Array.from(symbols.values()));
             }
             else {
-                candidates = arrayFrom(symbols.values());
+                candidates = Array.from(symbols.values());
             }
             return getSpellingSuggestionForName(unescapeLeadingUnderscores(name), candidates, meaning);
         });
@@ -41872,7 +41871,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        return arrayFrom(seen.values());
+        return Array.from(seen.values());
     }
 
     function checkInheritedPropertiesAreIdentical(type: InterfaceType, typeNode: Node): boolean {
@@ -45063,7 +45062,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!importTarget) return false;
             if (importTarget === file) return false;
             const exports = getExportsOfModule(file.symbol);
-            for (const s of arrayFrom(exports.values())) {
+            for (const s of Array.from(exports.values())) {
                 if (s.mergeId) {
                     const merged = getMergedSymbol(s);
                     if (merged.declarations) {
@@ -45306,7 +45305,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else {
                 // Otherwise issue top-level error since the files appear very identical in terms of what they contain
-                const list = arrayFrom(conflictingSymbols.keys()).join(", ");
+                const list = Array.from(conflictingSymbols.keys()).join(", ");
                 diagnostics.add(addRelatedInfo(
                     createDiagnosticForNode(firstFile, Diagnostics.Definitions_of_the_following_identifiers_conflict_with_those_in_another_file_Colon_0, list),
                     createDiagnosticForNode(secondFile, Diagnostics.Conflicts_are_in_this_file)

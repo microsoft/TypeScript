@@ -1,7 +1,6 @@
 import {
     append,
     appendIfUnique,
-    arrayFrom,
     arrayIsEqualTo,
     changeAnyExtension,
     CharacterCodes,
@@ -923,7 +922,7 @@ function createPackageJsonInfoCache(currentDirectory: string, getCanonicalFileNa
     }
     function entries() {
         const iter = cache?.entries();
-        return iter ? arrayFrom(iter) : [];
+        return iter ? Array.from(iter) : [];
     }
     function getInternalMap() {
         return cache;

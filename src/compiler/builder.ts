@@ -2,7 +2,6 @@ import * as ts from "./_namespaces/ts";
 import {
     addRange,
     AffectedFileResult,
-    arrayFrom,
     arrayToMap,
     BuilderProgram,
     BuilderProgramHost,
@@ -968,7 +967,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
     if (outFile(state.compilerOptions)) {
         // Copy all fileInfo, version and impliedFormat
         // Affects global scope and signature doesnt matter because with --out they arent calculated or needed to determine upto date ness
-        const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): ProgramBundleEmitBuildInfoFileInfo => {
+        const fileInfos = Array.from(state.fileInfos.entries(), ([key, value]): ProgramBundleEmitBuildInfoFileInfo => {
             // Ensure fileId
             toFileId(key);
             return value.impliedFormat ?
@@ -1001,7 +1000,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
     let fileIdsList: (readonly ProgramBuildInfoFileId[])[] | undefined;
     let fileNamesToFileIdListId: Map<string, ProgramBuildInfoFileIdListId> | undefined;
     let emitSignatures: ProgramBuildInfoEmitSignature[] | undefined;
-    const fileInfos = arrayFrom(state.fileInfos.entries(), ([key, value]): ProgramMultiFileEmitBuildInfoFileInfo => {
+    const fileInfos = Array.from(state.fileInfos.entries(), ([key, value]): ProgramMultiFileEmitBuildInfoFileInfo => {
         // Ensure fileId
         const fileId = toFileId(key);
         Debug.assert(fileNames[fileId - 1] === relativeToBuildInfo(key));
@@ -1037,7 +1036,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
 
     let referencedMap: ProgramBuildInfoReferencedMap | undefined;
     if (state.referencedMap) {
-        referencedMap = arrayFrom(state.referencedMap.keys()).sort(compareStringsCaseSensitive).map(key => [
+        referencedMap = Array.from(state.referencedMap.keys()).sort(compareStringsCaseSensitive).map(key => [
             toFileId(key),
             toFileIdListId(state.referencedMap!.getValues(key)!)
         ]);
@@ -1045,7 +1044,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
 
     let exportedModulesMap: ProgramBuildInfoReferencedMap | undefined;
     if (state.exportedModulesMap) {
-        exportedModulesMap = mapDefined(arrayFrom(state.exportedModulesMap.keys()).sort(compareStringsCaseSensitive), key => {
+        exportedModulesMap = mapDefined(Array.from(state.exportedModulesMap.keys()).sort(compareStringsCaseSensitive), key => {
             const oldValue = state.oldExportedModulesMap?.get(key);
             // Not in temporary cache, use existing value
             if (oldValue === undefined) return [toFileId(key), toFileIdListId(state.exportedModulesMap!.getValues(key)!)];
@@ -1056,7 +1055,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
 
     let semanticDiagnosticsPerFile: ProgramBuildInfoDiagnostic[] | undefined;
     if (state.semanticDiagnosticsPerFile) {
-        for (const key of arrayFrom(state.semanticDiagnosticsPerFile.keys()).sort(compareStringsCaseSensitive)) {
+        for (const key of Array.from(state.semanticDiagnosticsPerFile.keys()).sort(compareStringsCaseSensitive)) {
             const value = state.semanticDiagnosticsPerFile.get(key)!;
             (semanticDiagnosticsPerFile ||= []).push(
                 value.length ?
@@ -1073,7 +1072,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
     if (state.affectedFilesPendingEmit?.size) {
         const fullEmitForOptions = getBuilderFileEmit(state.compilerOptions);
         const seenFiles = new Set<Path>();
-        for (const path of arrayFrom(state.affectedFilesPendingEmit.keys()).sort(compareStringsCaseSensitive)) {
+        for (const path of Array.from(state.affectedFilesPendingEmit.keys()).sort(compareStringsCaseSensitive)) {
             if (tryAddToSet(seenFiles, path)) {
                 const file = state.program!.getSourceFileByPath(path);
                 if (!file || !sourceFileMayBeEmitted(file, state.program!)) continue;
@@ -1091,7 +1090,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
 
     let changeFileSet: ProgramBuildInfoFileId[] | undefined;
     if (state.changedFilesSet.size) {
-        for (const path of arrayFrom(state.changedFilesSet.keys()).sort(compareStringsCaseSensitive)) {
+        for (const path of Array.from(state.changedFilesSet.keys()).sort(compareStringsCaseSensitive)) {
             (changeFileSet ||= []).push(toFileId(path));
         }
     }
@@ -1129,7 +1128,7 @@ function getBuildInfo(state: BuilderProgramState, bundle: BundleBuildInfo | unde
     }
 
     function toFileIdListId(set: ReadonlySet<Path>): ProgramBuildInfoFileIdListId {
-        const fileIds = arrayFrom(set.keys(), toFileId).sort(compareValues);
+        const fileIds = Array.from(set.keys(), toFileId).sort(compareValues);
         const key = fileIds.join();
         let fileIdListId = fileNamesToFileIdListId?.get(key);
         if (fileIdListId === undefined) {

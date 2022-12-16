@@ -1,5 +1,4 @@
 import {
-    arrayFrom,
     binarySearchKey,
     CharacterCodes,
     combinePaths,
@@ -428,7 +427,7 @@ export function tryParseRawSourceMap(text: string) {
 }
 
 /** @internal */
-export interface MappingsDecoder extends Iterator<Mapping> {
+export interface MappingsDecoder extends IterableIterator<Mapping> {
     readonly pos: number;
     readonly error: string | undefined;
     readonly state: Required<Mapping>;
@@ -522,6 +521,9 @@ export function decodeMappings(mappings: string): MappingsDecoder {
             }
 
             return stopIterating();
+        },
+        [Symbol.iterator]() {
+            return this;
         }
     };
 
@@ -721,7 +723,7 @@ export function createDocumentPositionMapper(host: DocumentPositionMapperHost, m
     function getDecodedMappings() {
         if (decodedMappings === undefined) {
             const decoder = decodeMappings(map.mappings);
-            const mappings = arrayFrom(decoder, processMapping);
+            const mappings = Array.from(decoder, processMapping);
             if (decoder.error !== undefined) {
                 if (host.log) {
                     host.log(`Encountered error while decoding sourcemap: ${decoder.error}`);

@@ -5,7 +5,6 @@ import {
     AnyImportSyntax,
     append,
     ArrayBindingElement,
-    arrayFrom,
     AssertClause,
     BindingElement,
     BindingName,
@@ -573,11 +572,11 @@ export function transformDeclarations(context: TransformationContext) {
         return updated;
 
         function getLibReferences() {
-            return map(arrayFrom(libs.keys()), lib => ({ fileName: lib, pos: -1, end: -1 }));
+            return map(Array.from(libs.keys()), lib => ({ fileName: lib, pos: -1, end: -1 }));
         }
 
         function getFileReferencesForUsedTypeReferences() {
-            return necessaryTypeReferences ? mapDefined(arrayFrom(necessaryTypeReferences.keys()), getFileReferenceForSpecifierModeTuple) : [];
+            return necessaryTypeReferences ? mapDefined(Array.from(necessaryTypeReferences.keys()), getFileReferenceForSpecifierModeTuple) : [];
         }
 
         function getFileReferenceForSpecifierModeTuple([typeName, mode]: [specifier: string, mode: ResolutionMode]): FileReference | undefined {

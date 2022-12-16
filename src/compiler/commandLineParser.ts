@@ -1,7 +1,6 @@
 import {
     AlternateModeDiagnostics,
     append,
-    arrayFrom,
     ArrayLiteralExpression,
     arrayToMap,
     assign,
@@ -136,7 +135,7 @@ const jsxOptionMap = new Map(Object.entries({
 }));
 
 /** @internal */
-export const inverseJsxOptionMap = new Map(arrayFrom(mapIterator(jsxOptionMap.entries(), ([key, value]: [string, JsxEmit]) => ["" + value, key] as const)));
+export const inverseJsxOptionMap = new Map(mapIterator(jsxOptionMap.entries(), ([key, value]: [string, JsxEmit]) => ["" + value, key] as const));
 
 // NOTE: The order here is important to default lib ordering as entries will have the same
 //       order in the generated program (see `getDefaultLibPriority` in program.ts). This
@@ -1692,7 +1691,7 @@ export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOpt
 }
 
 function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType, createDiagnostic: (message: DiagnosticMessage, arg0: string, arg1: string) => Diagnostic): Diagnostic {
-    const namesOfType = arrayFrom(opt.type.keys());
+    const namesOfType = Array.from(opt.type.keys());
     const stringNames = (opt.deprecatedKeys ? namesOfType.filter(k => !opt.deprecatedKeys!.has(k)) : namesOfType).map(key => `'${key}'`).join(", ");
     return createDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, stringNames);
 }
@@ -2598,7 +2597,7 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
 /** @internal */
 export function optionMapToObject(optionMap: Map<string, CompilerOptionsValue>): object {
     return {
-        ...arrayFrom(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
+        ...Array.from(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
     };
 }
 
@@ -3211,7 +3210,7 @@ function parseConfig(
         if (!ownConfig.raw.exclude && result.exclude) ownConfig.raw.exclude = result.exclude;
         if (!ownConfig.raw.files && result.files) ownConfig.raw.files = result.files;
         if (ownConfig.raw.compileOnSave === undefined && result.compileOnSave) ownConfig.raw.compileOnSave = result.compileOnSave;
-        if (sourceFile && result.extendedSourceFiles) sourceFile.extendedSourceFiles = arrayFrom(result.extendedSourceFiles.keys());
+        if (sourceFile && result.extendedSourceFiles) sourceFile.extendedSourceFiles = Array.from(result.extendedSourceFiles.keys());
 
         ownConfig.options = assign(result.options, ownConfig.options);
         ownConfig.watchOptions = ownConfig.watchOptions && result.watchOptions ?
@@ -3739,10 +3738,10 @@ export function getFileNamesFromConfigSpecs(
         }
     }
 
-    const literalFiles = arrayFrom(literalFileMap.values());
-    const wildcardFiles = arrayFrom(wildcardFileMap.values());
+    const literalFiles = Array.from(literalFileMap.values());
+    const wildcardFiles = Array.from(wildcardFileMap.values());
 
-    return literalFiles.concat(wildcardFiles, arrayFrom(wildCardJsonFileMap.values()));
+    return literalFiles.concat(wildcardFiles, Array.from(wildCardJsonFileMap.values()));
 }
 
 /** @internal */

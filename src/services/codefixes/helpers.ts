@@ -1,7 +1,6 @@
 import {
     AccessorDeclaration,
     append,
-    arrayFrom,
     ArrowFunction,
     Block,
     CallExpression,
@@ -522,8 +521,8 @@ function createTypeParametersForArguments(checker: TypeChecker, argumentTypePara
         }
     }
 
-    return map(
-        arrayFrom(usedNames.values()),
+    return Array.from(
+        usedNames.values(),
         usedName => factory.createTypeParameterDeclaration(/*modifiers*/ undefined, usedName, constraintsByName.get(usedName)?.constraint),
     );
 }
@@ -627,7 +626,7 @@ export function getArgumentTypesAndTypeParameters(checker: TypeChecker, importAd
         }
     }
 
-    return { argumentTypeNodes, argumentTypeParameters: arrayFrom(argumentTypeParameters.entries()) };
+    return { argumentTypeNodes, argumentTypeParameters: Array.from(argumentTypeParameters.entries()) };
 }
 
 function isAnonymousObjectConstraintType(type: Type) {

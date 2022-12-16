@@ -1,5 +1,4 @@
 import {
-    arrayFrom,
     CancellationToken,
     computeSignatureWithDiagnostics,
     CustomTransformers,
@@ -108,7 +107,7 @@ export namespace BuilderState {
     export interface ReadonlyManyToManyPathMap {
         getKeys(v: Path): ReadonlySet<Path> | undefined;
         getValues(k: Path): ReadonlySet<Path> | undefined;
-        keys(): Iterator<Path>;
+        keys(): IterableIterator<Path>;
     }
 
     export interface ManyToManyPathMap extends ReadonlyManyToManyPathMap {
@@ -529,7 +528,7 @@ export namespace BuilderState {
             }
         }
 
-        return arrayFrom(mapDefinedIterator(seenMap.keys(), path => programOfThisState.getSourceFileByPath(path)?.fileName ?? path));
+        return Array.from(mapDefinedIterator(seenMap.keys(), path => programOfThisState.getSourceFileByPath(path)?.fileName ?? path));
     }
 
     /**
@@ -548,7 +547,7 @@ export namespace BuilderState {
      */
     export function getReferencedByPaths(state: Readonly<BuilderState>, referencedFilePath: Path) {
         const keys = state.referencedMap!.getKeys(referencedFilePath);
-        return keys ? arrayFrom(keys.keys()) : [];
+        return keys ? Array.from(keys.keys()) : [];
     }
 
     /**
@@ -660,6 +659,6 @@ export namespace BuilderState {
         }
 
         // Return array of values that needs emit
-        return arrayFrom(mapDefinedIterator(seenFileNamesMap.values(), value => value));
+        return Array.from(mapDefinedIterator(seenFileNamesMap.values(), value => value));
     }
 }
