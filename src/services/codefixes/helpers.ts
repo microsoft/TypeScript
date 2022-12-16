@@ -322,13 +322,7 @@ export function addNewNodeForMemberSymbol(
     }
 
     function shouldAddOverrideKeyword(): boolean {
-        if (!context.program.getCompilerOptions().noImplicitOverride || !enclosingDeclaration.heritageClauses) {
-            return false;
-        }
-
-        const valueDeclaration = checker.getSymbolAtLocation(enclosingDeclaration.heritageClauses[0].types[0].expression)?.valueDeclaration;
-
-        return !!(valueDeclaration && hasAbstractModifier(valueDeclaration));
+        return !!(context.program.getCompilerOptions().noImplicitOverride && declaration && hasAbstractModifier(declaration));
     }
 
     function createName(node: PropertyName) {
