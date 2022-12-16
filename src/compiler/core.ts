@@ -2799,15 +2799,6 @@ export function enumerateInsertsAndDeletes<T, U>(newItems: readonly T[], oldItem
 }
 
 /** @internal */
-export function fill<T>(length: number, cb: (index: number) => T): T[] {
-    const result = Array<T>(length);
-    for (let i = 0; i < length; i++) {
-        result[i] = cb(i);
-    }
-    return result;
-}
-
-/** @internal */
 export function cartesianProduct<T>(arrays: readonly T[][]) {
     const result: T[][] = [];
     cartesianProductWorker(arrays, result, /*outer*/ undefined, 0);
