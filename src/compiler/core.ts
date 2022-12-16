@@ -981,15 +981,6 @@ export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | und
     return result;
 }
 
-/** @internal */
-export function sum<T extends Record<K, number>, K extends string>(array: readonly T[], prop: K): number {
-    let result = 0;
-    for (const v of array) {
-        result += v[prop];
-    }
-    return result;
-}
-
 /**
  * Appends a value to an array, returning the array.
  *
