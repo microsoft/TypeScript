@@ -141,7 +141,7 @@ export function loadSafeList(host: TypingResolutionHost, safeListPath: Path): Sa
 /** @internal */
 export function loadTypesMap(host: TypingResolutionHost, typesMapPath: Path): SafeList | undefined {
     const result = readConfigFile(typesMapPath, path => host.readFile(path));
-    if (result.config) {
+    if (result.config?.simpleMap) {
         return new Map(Object.entries<string>(result.config.simpleMap));
     }
     return undefined;
