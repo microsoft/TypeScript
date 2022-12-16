@@ -1,5 +1,4 @@
 import {
-    arrayIterator,
     arrayReverseIterator,
     CallHierarchyIncomingCall,
     CallHierarchyItem,
@@ -3163,7 +3162,7 @@ export class Session<TMessage = string> implements EventSender {
             this.changeSeq++;
             this.projectService.applyChangesInOpenFiles(
                 request.arguments.openFiles,
-                request.arguments.changedFiles && mapIterator(arrayIterator(request.arguments.changedFiles), file => ({
+                request.arguments.changedFiles && mapIterator(request.arguments.changedFiles, file => ({
                     fileName: file.fileName,
                     // apply changes in reverse order
                     changes: arrayReverseIterator(file.changes)

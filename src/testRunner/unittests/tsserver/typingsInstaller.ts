@@ -2001,13 +2001,13 @@ describe("unittests:: tsserver:: typingsInstaller:: recomputing resolutions of u
         checkProjectActualFiles(proj, typingFiles.map(f => f.path).concat(app.path, fooo.path));
         const foooResolution2 = verifyResolvedModuleOfFooo(proj);
         assert.strictEqual(foooResolution1, foooResolution2);
-        projectService.applyChangesInOpenFiles(/*openFiles*/ undefined, ts.arrayIterator([{
+        projectService.applyChangesInOpenFiles(/*openFiles*/ undefined, [{
             fileName: app.path,
-            changes: ts.arrayIterator([{
+            changes: [{
                 span: { start: 0, length: 0 },
                 newText: `import * as bar from "bar";`
-            }])
-        }]));
+            }]
+        }]);
         host.runQueuedTimeoutCallbacks(); // Update the graph
         // Update the typing
         host.checkTimeoutQueueLength(0);
@@ -2084,16 +2084,16 @@ declare module "stream" {
         checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
         projectService.applyChangesInOpenFiles(
             /*openFiles*/ undefined,
-            ts.arrayIterator([{
+            [{
                 fileName: file.path,
-                changes: ts.arrayIterator([{
+                changes: [{
                     span: {
                         start: file.content.indexOf(`"stream"`) + 2,
                         length: 0
                     },
                     newText: " "
-                }])
-            }]),
+                }]
+            }],
             /*closedFiles*/ undefined
         );
         // Below timeout Updates the typings to empty array because of "s tream" as unsresolved import
@@ -2104,13 +2104,13 @@ declare module "stream" {
         // Here, since typings dont change, there is no timeout scheduled
         host.checkTimeoutQueueLength(0);
         checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
-        projectService.applyChangesInOpenFiles(/*openFiles*/ undefined, ts.arrayIterator([{
+        projectService.applyChangesInOpenFiles(/*openFiles*/ undefined, [{
             fileName: file.path,
-            changes: ts.arrayIterator([{
+            changes: [{
                 span: { start: file.content.indexOf("const"), length: 0 },
                 newText: `const bar = require("bar");`
-            }])
-        }]));
+            }]
+        }]);
         proj.updateGraph(); // Update the graph
         checkProjectActualFiles(proj, [file.path, libFile.path, nodeTyping.path]);
         // Update the typing

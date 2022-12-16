@@ -1125,12 +1125,6 @@ export function sort<T>(array: readonly T[], comparer?: Comparer<T>): SortedRead
 }
 
 /** @internal */
-export function *arrayIterator<T>(array: readonly T[]) {
-    // TODO(jakebailey): remove?
-    yield* array;
-}
-
-/** @internal */
 export function *arrayReverseIterator<T>(array: readonly T[]) {
     for (let i = array.length - 1; i >= 0; i--) {
         yield array[i];
