@@ -821,7 +821,7 @@ export interface OpenFileArguments {
 /** @internal */
 export interface ChangeFileArguments {
     fileName: string;
-    changes: Iterator<TextChange>;
+    changes: Iterable<TextChange>;
 }
 
 export interface WatchOptionsAndErrors {
@@ -3954,11 +3954,8 @@ export class ProjectService {
     }
 
     /** @internal */
-    applyChangesToFile(scriptInfo: ScriptInfo, changes: Iterator<TextChange>) {
-        while (true) {
-            const iterResult = changes.next();
-            if (iterResult.done) break;
-            const change = iterResult.value;
+    applyChangesToFile(scriptInfo: ScriptInfo, changes: Iterable<TextChange>) {
+        for (const change of changes) {
             scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
         }
     }

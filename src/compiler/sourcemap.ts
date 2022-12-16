@@ -179,8 +179,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
         const sourceIndexToNewSourceIndexMap: number[] = [];
         let nameIndexToNewNameIndexMap: number[] | undefined;
         const mappingIterator = decodeMappings(map.mappings);
-        for (let iterResult = mappingIterator.next(); !iterResult.done; iterResult = mappingIterator.next()) {
-            const raw = iterResult.value;
+        for (const raw of mappingIterator) {
             if (end && (
                 raw.generatedLine > end.line ||
                 (raw.generatedLine === end.line && raw.generatedCharacter > end.character))) {
@@ -462,6 +461,7 @@ export function decodeMappings(mappings: string): MappingsDecoder {
     let nameIndex = 0;
     let error: string | undefined;
 
+    // TODO(jakebailey): can we implement this without writing next ourselves?
     return {
         get pos() { return pos; },
         get error() { return error; },

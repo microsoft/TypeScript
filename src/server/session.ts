@@ -42,6 +42,7 @@ import {
     find,
     FindAllReferences,
     first,
+    firstIterator,
     firstOrUndefined,
     flatMap,
     flatMapToMutable,
@@ -752,9 +753,7 @@ function getPerProjectReferences<TResult>(
     // In the common case where there's only one project, return a simpler result to make
     // it easier for the caller to skip post-processing.
     if (resultsMap.size === 1) {
-        const it = resultsMap.values().next();
-        Debug.assert(!it.done);
-        return it.value;
+        return firstIterator(resultsMap.values());
     }
 
     return resultsMap;

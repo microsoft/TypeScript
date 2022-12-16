@@ -84,25 +84,24 @@ export function firstDefined<T, U>(array: readonly T[] | undefined, callback: (e
 }
 
 /** @internal */
-export function firstDefinedIterator<T, U>(iter: Iterator<T>, callback: (element: T) => U | undefined): U | undefined {
-    while (true) {
-        const iterResult = iter.next();
-        if (iterResult.done) {
-            return undefined;
-        }
-        const result = callback(iterResult.value);
+export function firstDefinedIterator<T, U>(iter: Iterable<T>, callback: (element: T) => U | undefined): U | undefined {
+    for (const value of iter) {
+        const result = callback(value);
         if (result !== undefined) {
             return result;
         }
     }
+    return undefined;
 }
 
 /** @internal */
-export function reduceLeftIterator<T, U>(iterator: Iterator<T> | undefined, f: (memo: U, value: T, i: number) => U, initial: U): U {
+export function reduceLeftIterator<T, U>(iterator: Iterable<T> | undefined, f: (memo: U, value: T, i: number) => U, initial: U): U {
     let result = initial;
     if (iterator) {
-        for (let step = iterator.next(), pos = 0; !step.done; step = iterator.next(), pos++) {
-            result = f(result, step.value, pos);
+        let pos = 0;
+        for (const value of iterator) {
+            result = f(result, value, pos);
+            pos++;
         }
     }
     return result;
@@ -110,10 +109,10 @@ export function reduceLeftIterator<T, U>(iterator: Iterator<T> | undefined, f: (
 
 /** @internal */
 export function zipWith<T, U, V>(arrayA: readonly T[], arrayB: readonly U[], callback: (a: T, b: U, index: number) => V): V[] {
-    const result: V[] = [];
     Debug.assertEqual(arrayA.length, arrayB.length);
+    const result: V[] = new Array(arrayA.length);
     for (let i = 0; i < arrayA.length; i++) {
-        result.push(callback(arrayA[i], arrayB[i], i));
+        result[i] = callback(arrayA[i], arrayB[i], i);
     }
     return result;
 }
@@ -1186,9 +1185,27 @@ export function firstOrUndefined<T>(array: readonly T[] | undefined): T | undefi
 }
 
 /** @internal */
+export function firstOrUndefinedIterator<T>(iter: Iterable<T> | undefined): T | undefined {
+    if (iter) {
+        for (const value of iter) {
+            return value;
+        }
+    }
+    return undefined;
+}
+
+/** @internal */
 export function first<T>(array: readonly T[]): T {
     Debug.assert(array.length !== 0);
     return array[0];
+}
+
+/** @internal */
+export function firstIterator<T>(iter: Iterable<T>): T {
+    for (const value of iter) {
+        return value;
+    }
+    Debug.fail("iterator is empty");
 }
 
 /**
@@ -1692,36 +1709,15 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
     const multiMap = new Map<THash, TElement | TElement[]>();
     let size = 0;
 
-    function getElementIterator(): IterableIterator<TElement> {
-        const valueIt = multiMap.values();
-        let arrayIt: Iterator<TElement> | undefined;
-        const it: IterableIterator<TElement> = {
-            next: () => {
-                while (true) {
-                    if (arrayIt) {
-                        const n = arrayIt.next();
-                        if (!n.done) {
-                            return { value: n.value };
-                        }
-                        arrayIt = undefined;
-                    }
-                    else {
-                        const n = valueIt.next();
-                        if (n.done) {
-                            return { value: undefined, done: true };
-                        }
-                        if (!isArray(n.value)) {
-                            return { value: n.value };
-                        }
-                        arrayIt = arrayIterator(n.value);
-                    }
-                }
-            },
-            [Symbol.iterator]: () => {
-                return it;
+    function *getElementIterator(): IterableIterator<TElement> {
+        for (const value of multiMap.values()) {
+            if (isArray(value)) {
+                yield* value;
             }
-        };
-        return it;
+            else {
+                yield value;
+            }
+        }
     }
 
     const set: Set<TElement> = {
@@ -1821,16 +1817,10 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
         values(): IterableIterator<TElement> {
             return getElementIterator();
         },
-        entries(): IterableIterator<[TElement, TElement]> {
-            const it = getElementIterator();
-            const it2: IterableIterator<[TElement, TElement]> = {
-                next: () => {
-                    const n = it.next();
-                    return n.done ? n : { value: [ n.value, n.value ] };
-                },
-                [Symbol.iterator]: () => it2,
-            };
-            return it2;
+        *entries(): IterableIterator<[TElement, TElement]> {
+            for (const value of getElementIterator()) {
+                yield [value, value];
+            }
         },
         [Symbol.iterator]: () => {
             return getElementIterator();

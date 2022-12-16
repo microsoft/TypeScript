@@ -180,6 +180,7 @@ import {
     first,
     firstDefined,
     firstOrUndefined,
+    firstOrUndefinedIterator,
     flatMap,
     flatten,
     FlowArrayMutation,
@@ -19014,8 +19015,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     ) {
         // Assignability failure - check each prop individually, and if that fails, fall back on the bad error span
         let reportedError = false;
-        for (let status = iterator.next(); !status.done; status = iterator.next()) {
-            const { errorNode: prop, innerExpression: next, nameType, errorMessage } = status.value;
+        for (const value of iterator) {
+            const { errorNode: prop, innerExpression: next, nameType, errorMessage } = value;
             let targetPropType = getBestMatchIndexedAccessTypeOrUndefined(source, target, nameType);
             if (!targetPropType || targetPropType.flags & TypeFlags.IndexedAccess) continue; // Don't elaborate on indexes on generic variables
             let sourcePropType = getIndexedAccessTypeOrUndefined(source, nameType);
@@ -23501,8 +23502,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): Symbol | undefined {
-        const result = getUnmatchedProperties(source, target, requireOptionalProperties, matchDiscriminantProperties).next();
-        if (!result.done) return result.value;
+        return firstOrUndefinedIterator(getUnmatchedProperties(source, target, requireOptionalProperties, matchDiscriminantProperties));
     }
 
     function tupleTypesDefinitelyUnrelated(source: TupleTypeReference, target: TupleTypeReference) {

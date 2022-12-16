@@ -551,7 +551,7 @@ export namespace Compiler {
     export function getErrorBaseline(inputFiles: readonly TestFile[], diagnostics: readonly ts.Diagnostic[], pretty?: boolean) {
         let outputLines = "";
         const gen = iterateErrorBaseline(inputFiles, diagnostics, { pretty });
-        for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
+        for (const value of gen) {
             const [, content] = value;
             outputLines += content;
         }
@@ -791,7 +791,7 @@ export namespace Compiler {
         function generateBaseLine(isSymbolBaseline: boolean, skipBaseline?: boolean): string | null {
             let result = "";
             const gen = iterateBaseLine(isSymbolBaseline, skipBaseline);
-            for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
+            for (const value of gen) {
                 const [, content] = value;
                 result += content;
             }
@@ -810,7 +810,7 @@ export namespace Compiler {
                 const codeLines = ts.flatMap(file.content.split(/\r?\n/g), e => e.split(/[\r\u2028\u2029]/g));
                 const gen: IterableIterator<TypeWriterResult> = isSymbolBaseline ? fullWalker.getSymbols(unitName) : fullWalker.getTypes(unitName);
                 let lastIndexWritten: number | undefined;
-                for (let {done, value: result} = gen.next(); !done; { done, value: result } = gen.next()) {
+                for (const result of gen) {
                     if (isSymbolBaseline && !result.symbol) {
                         return;
                     }
@@ -950,7 +950,7 @@ export namespace Compiler {
         const gen = iterateOutputs(outputFiles);
         // Emit them
         let result = "";
-        for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
+        for (const value of gen) {
             // Some extra spacing if this isn't the first file
             if (result.length) {
                 result += "\r\n\r\n";
@@ -1438,7 +1438,7 @@ export namespace Baseline {
 
         // eslint-disable-next-line no-null/no-null
         if (gen !== null) {
-            for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
+            for (const value of gen) {
                 const [name, content, count] = value as [string, string, number | undefined];
                 if (count === 0) continue; // Allow error reporter to skip writing files without errors
                 const relativeFileName = relativeFileBase + "/" + name + extension;

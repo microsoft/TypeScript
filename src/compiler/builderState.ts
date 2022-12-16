@@ -520,10 +520,7 @@ export namespace BuilderState {
                 seenMap.add(path);
                 const references = state.referencedMap.getValues(path);
                 if (references) {
-                    const iterator = references.keys();
-                    for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-                        queue.push(iterResult.value);
-                    }
+                    queue.push(...references.keys());
                 }
             }
         }

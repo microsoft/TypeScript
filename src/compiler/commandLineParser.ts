@@ -40,6 +40,7 @@ import {
     find,
     findIndex,
     firstDefined,
+    firstOrUndefinedIterator,
     flatten,
     forEach,
     forEachEntry,
@@ -4030,8 +4031,8 @@ function getDefaultValueForOption(option: CommandLineOption): {} {
         case "object":
             return {};
         default:
-            const iterResult = option.type.keys().next();
-            if (!iterResult.done) return iterResult.value;
+            const value = firstOrUndefinedIterator(option.type.keys());
+            if (value !== undefined) return value;
             return Debug.fail("Expected 'option.type' to have entries.");
     }
 }
