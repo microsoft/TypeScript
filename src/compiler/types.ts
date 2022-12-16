@@ -906,6 +906,34 @@ export interface Node extends ReadonlyTextRange {
     //       see: https://github.com/microsoft/TypeScript/pull/51682
 }
 
+/** @internal */
+export interface Node {
+    getSourceFile(): SourceFile;
+    getChildCount(sourceFile?: SourceFile): number;
+    getChildAt(index: number, sourceFile?: SourceFile): Node;
+    getChildren(sourceFile?: SourceFile): Node[];
+    /** @internal */
+    getChildren(sourceFile?: SourceFileLike): Node[]; // eslint-disable-line @typescript-eslint/unified-signatures
+    getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
+    /** @internal */
+    getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number; // eslint-disable-line @typescript-eslint/unified-signatures
+    getFullStart(): number;
+    getEnd(): number;
+    getWidth(sourceFile?: SourceFileLike): number;
+    getFullWidth(): number;
+    getLeadingTriviaWidth(sourceFile?: SourceFile): number;
+    getFullText(sourceFile?: SourceFile): string;
+    getText(sourceFile?: SourceFile): string;
+    getFirstToken(sourceFile?: SourceFile): Node | undefined;
+    /** @internal */
+    getFirstToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+    getLastToken(sourceFile?: SourceFile): Node | undefined;
+    /** @internal */
+    getLastToken(sourceFile?: SourceFileLike): Node | undefined; // eslint-disable-line @typescript-eslint/unified-signatures
+    // See ts.forEachChild for documentation.
+    forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
+}
+
 export interface JSDocContainer extends Node {
     _jsdocContainerBrand: any;
     /** @internal */ jsDoc?: JSDoc[];                      // JSDoc that directly precedes this node
@@ -1683,7 +1711,8 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
     isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
     /** @internal */ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
     /** @internal */ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
-    /**@internal*/ hasExtendedUnicodeEscape?: boolean;
+    /** @internal */ hasExtendedUnicodeEscape?: boolean;
+    /** @internal */ readonly text: string;
 }
 
 // Transient identifier node (marked by id === -1)
@@ -1780,6 +1809,7 @@ export interface PrivateIdentifier extends PrimaryExpression {
     // avoids gotchas in transforms and utils
     readonly escapedText: __String;
     /** @internal */ readonly autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers.
+    /** @internal */ readonly text: string;
 }
 
 /** @internal */
@@ -4385,6 +4415,49 @@ export interface SourceFile extends Declaration, LocalsContainer {
 
     /** @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     /** @internal */ endFlowNode?: FlowNode;
+}
+
+/** @internal */
+export interface SourceFile {
+    /** @internal */ version: string;
+    /** @internal */ scriptSnapshot: IScriptSnapshot | undefined;
+    /** @internal */ nameTable: UnderscoreEscapedMap<number> | undefined;
+
+    /** @internal */ getNamedDeclarations(): Map<string, readonly Declaration[]>;
+
+    getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+    getLineEndOfPosition(pos: number): number;
+    getLineStarts(): readonly number[];
+    getPositionOfLineAndCharacter(line: number, character: number): number;
+    update(newText: string, textChangeRange: TextChangeRange): SourceFile;
+
+    /** @internal */ sourceMapper?: DocumentPositionMapper;
+}
+
+/**
+ * Represents an immutable snapshot of a script at a specified time.Once acquired, the
+ * snapshot is observably immutable. i.e. the same calls with the same parameters will return
+ * the same values.
+ */
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export interface IScriptSnapshot {
+    /** Gets a portion of the script snapshot specified by [start, end). */
+    getText(start: number, end: number): string;
+
+    /** Gets the length of this script snapshot. */
+    getLength(): number;
+
+    /**
+     * Gets the TextChangeRange that describe how the text changed between this text and
+     * an older version.  This information is used by the incremental parser to determine
+     * what sections of the script need to be re-parsed.  'undefined' can be returned if the
+     * change range cannot be determined.  However, in that case, incremental parsing will
+     * not happen and the entire document will be re - parsed.
+     */
+    getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined;
+
+    /** Releases all resources held by this script snapshot */
+    dispose?(): void;
 }
 
 /** @internal */

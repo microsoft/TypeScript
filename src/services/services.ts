@@ -5,10 +5,7 @@ import {
     __String,
     ApplicableRefactorInfo,
     ApplyCodeActionCommandResult,
-    AssignmentDeclarationKind,
-    AutoGenerateInfo,
     BaseType,
-    BinaryExpression,
     BreakpointResolver,
     CallHierarchy,
     CallHierarchyIncomingCall,
@@ -17,7 +14,6 @@ import {
     CancellationToken,
     changeCompilerHostLikeToUseCache,
     CharacterCodes,
-    CheckJsDirective,
     Classifications,
     ClassifiedSpan,
     ClassifiedSpan2020,
@@ -35,11 +31,9 @@ import {
     CompletionEntryDetails,
     CompletionInfo,
     Completions,
-    computePositionOfLineAndCharacter,
     computeSuggestionDiagnostics,
     createDocumentRegistry,
     createGetCanonicalFileName,
-    createMultiMap,
     createProgram,
     CreateProgramOptions,
     createSourceFile,
@@ -65,14 +59,9 @@ import {
     EmitTextWriter,
     emptyArray,
     emptyOptions,
-    EndOfFileToken,
-    EntityName,
     equateValues,
-    ExportDeclaration,
-    FileReference,
     FileTextChanges,
     filter,
-    find,
     FindAllReferences,
     findChildOfKind,
     findPrecedingToken,
@@ -85,10 +74,8 @@ import {
     FormatCodeOptions,
     FormatCodeSettings,
     formatting,
-    FunctionLikeDeclaration,
     getAdjustedRenameLocation,
     getAllSuperTypeNodes,
-    getAssignmentDeclarationKind,
     GetCompletionsAtPositionOptions,
     getContainerNode,
     getDefaultLibFileName,
@@ -100,20 +87,16 @@ import {
     getImpliedNodeFormatForFile,
     getJSDocTags,
     getLineAndCharacterOfPosition,
-    getLineStarts,
     getMappedDocumentSpan,
     getNameFromPropertyName,
     getNewLineCharacter,
     getNewLineOrDefaultFromHost,
-    getNonAssignedNameOfDeclaration,
     getNormalizedAbsolutePath,
     getObjectFlags,
     getScriptKind,
     getSetExternalModuleIndicator,
     getSnapshotText,
-    getSourceFileOfNode,
     getSourceMapper,
-    getTokenPosOfNode,
     getTouchingPropertyName,
     getTouchingToken,
     GoToDefinition,
@@ -121,17 +104,12 @@ import {
     hasJSDocNodes,
     hasProperty,
     hasStaticModifier,
-    hasSyntacticModifier,
-    hasTabstop,
     HighlightSpanKind,
     HostCancellationToken,
     hostGetCanonicalFileName,
     hostUsesCaseSensitiveFileNames,
-    Identifier,
     identity,
-    idText,
     ImplementationLocation,
-    ImportDeclaration,
     IndexKind,
     IndexType,
     InlayHint,
@@ -141,8 +119,6 @@ import {
     InterfaceType,
     IntersectionType,
     isArray,
-    isBindingPattern,
-    isComputedPropertyName,
     isConstTypeReference,
     IScriptSnapshot,
     isDeclarationName,
@@ -155,7 +131,6 @@ import {
     isInString,
     isInTemplateString,
     isIntrinsicJsxName,
-    isJSDocCommentContainingNode,
     isJsxAttributes,
     isJsxClosingElement,
     isJsxElement,
@@ -165,17 +140,13 @@ import {
     isJsxText,
     isLabelName,
     isLiteralComputedPropertyDeclarationName,
-    isNamedExports,
     isNamedTupleMember,
     isNameOfModuleDeclaration,
     isNewExpression,
-    isNodeKind,
     isObjectLiteralElement,
     isObjectLiteralExpression,
     isPrivateIdentifier,
     isProgramUptoDate,
-    isPropertyAccessExpression,
-    isPropertyName,
     isRightSideOfPropertyAccess,
     isRightSideOfQualifiedName,
     isSetAccessor,
@@ -185,8 +156,6 @@ import {
     isThisTypeParameter,
     isTransientSymbol,
     JsDoc,
-    JSDoc,
-    JSDocContainer,
     JSDocTagInfo,
     JsonSourceFile,
     JsxAttributes,
@@ -197,8 +166,6 @@ import {
     LanguageService,
     LanguageServiceHost,
     LanguageServiceMode,
-    LanguageVariant,
-    lastOrUndefined,
     length,
     LineAndCharacter,
     lineBreakPart,
@@ -209,14 +176,12 @@ import {
     mapOneOrMany,
     maybeBind,
     maybeSetLocalizedDiagnosticMessages,
-    ModeAwareCache,
-    ModifierFlags,
     ModuleDeclaration,
     NavigateToItem,
     NavigationBarItem,
     NavigationTree,
     Node,
-    NodeArray,
+    NodeConstructors,
     NodeFlags,
     noop,
     normalizePath,
@@ -236,13 +201,9 @@ import {
     ParsedCommandLine,
     parseJsonSourceFileConfigFileContent,
     Path,
-    positionIsSynthesized,
     PossibleProgramFileInfo,
-    PragmaMap,
-    PrivateIdentifier,
     Program,
     PropertyName,
-    Push,
     QuickInfo,
     refactor,
     RefactorContext,
@@ -254,11 +215,8 @@ import {
     RenameInfo,
     RenameInfoOptions,
     RenameLocation,
-    ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
-    ResolvedTypeReferenceDirectiveWithFailedLookupLocations,
     returnFalse,
-    scanner,
     ScriptElementKind,
     ScriptElementKindModifier,
     ScriptKind,
@@ -277,11 +235,8 @@ import {
     SmartSelectionRange,
     SortedArray,
     SourceFile,
-    SourceFileLike,
     SourceMapSource,
-    Statement,
     stringContains,
-    StringLiteral,
     StringLiteralLike,
     StringLiteralType,
     Symbol,
@@ -290,7 +245,6 @@ import {
     SymbolFlags,
     symbolName,
     SyntaxKind,
-    SyntaxList,
     tagNamesAreEquivalent,
     TextChange,
     TextChangeRange,
@@ -301,14 +255,11 @@ import {
     timestamp,
     TodoComment,
     TodoCommentDescriptor,
-    Token,
     toPath,
     tracing,
-    TransformFlags,
     Type,
     TypeChecker,
     TypeFlags,
-    TypeNode,
     TypeParameter,
     TypePredicate,
     TypeReference,
@@ -318,297 +269,10 @@ import {
     UnionType,
     updateSourceFile,
     UserPreferences,
-    VariableDeclaration,
 } from "./_namespaces/ts";
 
 /** The version of the language service API */
 export const servicesVersion = "0.8";
-
-function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent: Node): NodeObject | TokenObject<TKind> | IdentifierObject | PrivateIdentifierObject {
-    const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
-        kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
-            kind === SyntaxKind.PrivateIdentifier ? new PrivateIdentifierObject(SyntaxKind.PrivateIdentifier, pos, end) :
-                new TokenObject(kind, pos, end);
-    node.parent = parent;
-    node.flags = parent.flags & NodeFlags.ContextFlags;
-    return node;
-}
-
-class NodeObject implements Node {
-    public kind: SyntaxKind;
-    public pos: number;
-    public end: number;
-    public flags: NodeFlags;
-    public modifierFlagsCache: ModifierFlags;
-    public transformFlags: TransformFlags;
-    public parent: Node;
-    public symbol!: Symbol; // Actually optional, but it was too annoying to access `node.symbol!` everywhere since in many cases we know it must be defined
-    public jsDoc?: JSDoc[];
-    public original?: Node;
-    private _children: Node[] | undefined;
-
-    constructor(kind: SyntaxKind, pos: number, end: number) {
-        this.pos = pos;
-        this.end = end;
-        this.flags = NodeFlags.None;
-        this.modifierFlagsCache = ModifierFlags.None;
-        this.transformFlags = TransformFlags.None;
-        this.parent = undefined!;
-        this.kind = kind;
-    }
-
-    private assertHasRealPosition(message?: string) {
-        // eslint-disable-next-line local/debug-assert
-        Debug.assert(!positionIsSynthesized(this.pos) && !positionIsSynthesized(this.end), message || "Node must have a real position for this operation");
-    }
-
-    public getSourceFile(): SourceFile {
-        return getSourceFileOfNode(this);
-    }
-
-    public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
-        this.assertHasRealPosition();
-        return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
-    }
-
-    public getFullStart(): number {
-        this.assertHasRealPosition();
-        return this.pos;
-    }
-
-    public getEnd(): number {
-        this.assertHasRealPosition();
-        return this.end;
-    }
-
-    public getWidth(sourceFile?: SourceFile): number {
-        this.assertHasRealPosition();
-        return this.getEnd() - this.getStart(sourceFile);
-    }
-
-    public getFullWidth(): number {
-        this.assertHasRealPosition();
-        return this.end - this.pos;
-    }
-
-    public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
-        this.assertHasRealPosition();
-        return this.getStart(sourceFile) - this.pos;
-    }
-
-    public getFullText(sourceFile?: SourceFile): string {
-        this.assertHasRealPosition();
-        return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
-    }
-
-    public getText(sourceFile?: SourceFile): string {
-        this.assertHasRealPosition();
-        if (!sourceFile) {
-            sourceFile = this.getSourceFile();
-        }
-        return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
-    }
-
-    public getChildCount(sourceFile?: SourceFile): number {
-        return this.getChildren(sourceFile).length;
-    }
-
-    public getChildAt(index: number, sourceFile?: SourceFile): Node {
-        return this.getChildren(sourceFile)[index];
-    }
-
-    public getChildren(sourceFile?: SourceFileLike): Node[] {
-        this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
-        return this._children || (this._children = createChildren(this, sourceFile));
-    }
-
-    public getFirstToken(sourceFile?: SourceFileLike): Node | undefined {
-        this.assertHasRealPosition();
-        const children = this.getChildren(sourceFile);
-        if (!children.length) {
-            return undefined;
-        }
-
-        const child = find(children, kid => kid.kind < SyntaxKind.FirstJSDocNode || kid.kind > SyntaxKind.LastJSDocNode)!;
-        return child.kind < SyntaxKind.FirstNode ?
-            child :
-            child.getFirstToken(sourceFile);
-    }
-
-    public getLastToken(sourceFile?: SourceFileLike): Node | undefined {
-        this.assertHasRealPosition();
-        const children = this.getChildren(sourceFile);
-
-        const child = lastOrUndefined(children);
-        if (!child) {
-            return undefined;
-        }
-
-        return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
-    }
-
-    public forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: NodeArray<Node>) => T): T | undefined {
-        return forEachChild(this, cbNode, cbNodeArray);
-    }
-}
-
-function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Node[] {
-    if (!isNodeKind(node.kind)) {
-        return emptyArray;
-    }
-
-    const children: Node[] = [];
-
-    if (isJSDocCommentContainingNode(node)) {
-        /** Don't add trivia for "tokens" since this is in a comment. */
-        node.forEachChild(child => {
-            children.push(child);
-        });
-        return children;
-    }
-
-    scanner.setText((sourceFile || node.getSourceFile()).text);
-    let pos = node.pos;
-    const processNode = (child: Node) => {
-        addSyntheticNodes(children, pos, child.pos, node);
-        children.push(child);
-        pos = child.end;
-    };
-    const processNodes = (nodes: NodeArray<Node>) => {
-        addSyntheticNodes(children, pos, nodes.pos, node);
-        children.push(createSyntaxList(nodes, node));
-        pos = nodes.end;
-    };
-    // jsDocComments need to be the first children
-    forEach((node as JSDocContainer).jsDoc, processNode);
-    // For syntactic classifications, all trivia are classified together, including jsdoc comments.
-    // For that to work, the jsdoc comments should still be the leading trivia of the first child.
-    // Restoring the scanner position ensures that.
-    pos = node.pos;
-    node.forEachChild(processNode, processNodes);
-    addSyntheticNodes(children, pos, node.end, node);
-    scanner.setText(undefined);
-    return children;
-}
-
-function addSyntheticNodes(nodes: Push<Node>, pos: number, end: number, parent: Node): void {
-    scanner.setTextPos(pos);
-    while (pos < end) {
-        const token = scanner.scan();
-        const textPos = scanner.getTextPos();
-        if (textPos <= end) {
-            if (token === SyntaxKind.Identifier) {
-                if (hasTabstop(parent)) {
-                    continue;
-                }
-                Debug.fail(`Did not expect ${Debug.formatSyntaxKind(parent.kind)} to have an Identifier in its trivia`);
-            }
-            nodes.push(createNode(token, pos, textPos, parent));
-        }
-        pos = textPos;
-        if (token === SyntaxKind.EndOfFileToken) {
-            break;
-        }
-    }
-}
-
-function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
-    const list = createNode(SyntaxKind.SyntaxList, nodes.pos, nodes.end, parent) as any as SyntaxList;
-    list._children = [];
-    let pos = nodes.pos;
-    for (const node of nodes) {
-        addSyntheticNodes(list._children, pos, node.pos, parent);
-        list._children.push(node);
-        pos = node.end;
-    }
-    addSyntheticNodes(list._children, pos, nodes.end, parent);
-    return list;
-}
-
-class TokenOrIdentifierObject implements Node {
-    public kind!: SyntaxKind;
-    public pos: number;
-    public end: number;
-    public flags: NodeFlags;
-    public modifierFlagsCache: ModifierFlags;
-    public transformFlags: TransformFlags;
-    public parent: Node;
-    public symbol!: Symbol;
-    public jsDocComments?: JSDoc[];
-
-    constructor(pos: number, end: number) {
-        // Set properties in same order as NodeObject
-        this.pos = pos;
-        this.end = end;
-        this.flags = NodeFlags.None;
-        this.modifierFlagsCache = ModifierFlags.None;
-        this.transformFlags = TransformFlags.None;
-        this.parent = undefined!;
-    }
-
-    public getSourceFile(): SourceFile {
-        return getSourceFileOfNode(this);
-    }
-
-    public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
-        return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
-    }
-
-    public getFullStart(): number {
-        return this.pos;
-    }
-
-    public getEnd(): number {
-        return this.end;
-    }
-
-    public getWidth(sourceFile?: SourceFile): number {
-        return this.getEnd() - this.getStart(sourceFile);
-    }
-
-    public getFullWidth(): number {
-        return this.end - this.pos;
-    }
-
-    public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
-        return this.getStart(sourceFile) - this.pos;
-    }
-
-    public getFullText(sourceFile?: SourceFile): string {
-        return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
-    }
-
-    public getText(sourceFile?: SourceFile): string {
-        if (!sourceFile) {
-            sourceFile = this.getSourceFile();
-        }
-        return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
-    }
-
-    public getChildCount(): number {
-        return this.getChildren().length;
-    }
-
-    public getChildAt(index: number): Node {
-        return this.getChildren()[index];
-    }
-
-    public getChildren(): Node[] {
-        return this.kind === SyntaxKind.EndOfFileToken ? (this as Node as EndOfFileToken).jsDoc || emptyArray : emptyArray;
-    }
-
-    public getFirstToken(): Node | undefined {
-        return undefined;
-    }
-
-    public getLastToken(): Node | undefined {
-        return undefined;
-    }
-
-    public forEachChild<T>(): T | undefined {
-        return undefined;
-    }
-}
 
 class SymbolObject implements Symbol {
     flags: SymbolFlags;
@@ -722,58 +386,6 @@ class SymbolObject implements Symbol {
         return this.getJsDocTags(checker);
     }
 }
-
-class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject implements Token<TKind> {
-    public kind: TKind;
-
-    constructor(kind: TKind, pos: number, end: number) {
-        super(pos, end);
-        this.kind = kind;
-    }
-}
-
-class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
-    public kind: SyntaxKind.Identifier = SyntaxKind.Identifier;
-    public escapedText!: __String;
-    public autoGenerate: AutoGenerateInfo | undefined;
-    declare _primaryExpressionBrand: any;
-    declare _memberExpressionBrand: any;
-    declare _leftHandSideExpressionBrand: any;
-    declare _updateExpressionBrand: any;
-    declare _unaryExpressionBrand: any;
-    declare _expressionBrand: any;
-    declare _declarationBrand: any;
-    declare _jsdocContainerBrand: any;
-    declare _flowContainerBrand: any;
-    /** @internal */typeArguments!: NodeArray<TypeNode>;
-    constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
-        super(pos, end);
-    }
-
-    get text(): string {
-        return idText(this);
-    }
-}
-IdentifierObject.prototype.kind = SyntaxKind.Identifier;
-class PrivateIdentifierObject extends TokenOrIdentifierObject implements PrivateIdentifier {
-    public kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
-    public escapedText!: __String;
-    public autoGenerate: AutoGenerateInfo | undefined;
-    declare _primaryExpressionBrand: any;
-    declare _memberExpressionBrand: any;
-    declare _leftHandSideExpressionBrand: any;
-    declare _updateExpressionBrand: any;
-    declare _unaryExpressionBrand: any;
-    declare _expressionBrand: any;
-    constructor(_kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
-        super(pos, end);
-    }
-
-    get text(): string {
-        return idText(this);
-    }
-}
-PrivateIdentifierObject.prototype.kind = SyntaxKind.PrivateIdentifier;
 
 class TypeObject implements Type {
     checker: TypeChecker;
@@ -995,253 +607,6 @@ function findBaseOfDeclaration<T>(checker: TypeChecker, declaration: Declaration
     });
 }
 
-class SourceFileObject extends NodeObject implements SourceFile {
-    public kind: SyntaxKind.SourceFile = SyntaxKind.SourceFile;
-    declare _declarationBrand: any;
-    declare _localsContainerBrand: any;
-    public fileName!: string;
-    public path!: Path;
-    public resolvedPath!: Path;
-    public originalFileName!: string;
-    public text!: string;
-    public scriptSnapshot!: IScriptSnapshot;
-    public lineMap!: readonly number[];
-
-    public statements!: NodeArray<Statement>;
-    public endOfFileToken!: Token<SyntaxKind.EndOfFileToken>;
-
-    public amdDependencies!: { name: string; path: string }[];
-    public moduleName!: string;
-    public referencedFiles!: FileReference[];
-    public typeReferenceDirectives!: FileReference[];
-    public libReferenceDirectives!: FileReference[];
-
-    public syntacticDiagnostics!: DiagnosticWithLocation[];
-    public parseDiagnostics!: DiagnosticWithLocation[];
-    public bindDiagnostics!: DiagnosticWithLocation[];
-    public bindSuggestionDiagnostics?: DiagnosticWithLocation[];
-
-    public isDeclarationFile!: boolean;
-    public isDefaultLib!: boolean;
-    public hasNoDefaultLib!: boolean;
-    public externalModuleIndicator!: Node; // The first node that causes this file to be an external module
-    public commonJsModuleIndicator!: Node; // The first node that causes this file to be a CommonJS module
-    public nodeCount!: number;
-    public identifierCount!: number;
-    public symbolCount!: number;
-    public version!: string;
-    public scriptKind!: ScriptKind;
-    public languageVersion!: ScriptTarget;
-    public languageVariant!: LanguageVariant;
-    public identifiers!: Map<string, string>;
-    public nameTable: UnderscoreEscapedMap<number> | undefined;
-    public resolvedModules: ModeAwareCache<ResolvedModuleWithFailedLookupLocations> | undefined;
-    public resolvedTypeReferenceDirectiveNames!: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
-    public imports!: readonly StringLiteralLike[];
-    public moduleAugmentations!: StringLiteral[];
-    private namedDeclarations: Map<string, Declaration[]> | undefined;
-    public ambientModuleNames!: string[];
-    public checkJsDirective: CheckJsDirective | undefined;
-    public errorExpectations: TextRange[] | undefined;
-    public possiblyContainDynamicImport?: boolean;
-    public pragmas!: PragmaMap;
-    public localJsxFactory: EntityName | undefined;
-    public localJsxNamespace: __String | undefined;
-
-    constructor(kind: SyntaxKind, pos: number, end: number) {
-        super(kind, pos, end);
-    }
-
-    public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
-        return updateSourceFile(this, newText, textChangeRange);
-    }
-
-    public getLineAndCharacterOfPosition(position: number): LineAndCharacter {
-        return getLineAndCharacterOfPosition(this, position);
-    }
-
-    public getLineStarts(): readonly number[] {
-        return getLineStarts(this);
-    }
-
-    public getPositionOfLineAndCharacter(line: number, character: number, allowEdits?: true): number {
-        return computePositionOfLineAndCharacter(getLineStarts(this), line, character, this.text, allowEdits);
-    }
-
-    public getLineEndOfPosition(pos: number): number {
-        const { line } = this.getLineAndCharacterOfPosition(pos);
-        const lineStarts = this.getLineStarts();
-
-        let lastCharPos: number | undefined;
-        if (line + 1 >= lineStarts.length) {
-            lastCharPos = this.getEnd();
-        }
-        if (!lastCharPos) {
-            lastCharPos = lineStarts[line + 1] - 1;
-        }
-
-        const fullText = this.getFullText();
-        // if the new line is "\r\n", we should return the last non-new-line-character position
-        return fullText[lastCharPos] === "\n" && fullText[lastCharPos - 1] === "\r" ? lastCharPos - 1 : lastCharPos;
-    }
-
-    public getNamedDeclarations(): Map<string, Declaration[]> {
-        if (!this.namedDeclarations) {
-            this.namedDeclarations = this.computeNamedDeclarations();
-        }
-
-        return this.namedDeclarations;
-    }
-
-    private computeNamedDeclarations(): Map<string, Declaration[]> {
-        const result = createMultiMap<Declaration>();
-
-        this.forEachChild(visit);
-
-        return result;
-
-        function addDeclaration(declaration: Declaration) {
-            const name = getDeclarationName(declaration);
-            if (name) {
-                result.add(name, declaration);
-            }
-        }
-
-        function getDeclarations(name: string) {
-            let declarations = result.get(name);
-            if (!declarations) {
-                result.set(name, declarations = []);
-            }
-            return declarations;
-        }
-
-        function getDeclarationName(declaration: Declaration) {
-            const name = getNonAssignedNameOfDeclaration(declaration);
-            return name && (isComputedPropertyName(name) && isPropertyAccessExpression(name.expression) ? name.expression.name.text
-                : isPropertyName(name) ? getNameFromPropertyName(name) : undefined);
-        }
-
-        function visit(node: Node): void {
-            switch (node.kind) {
-                case SyntaxKind.FunctionDeclaration:
-                case SyntaxKind.FunctionExpression:
-                case SyntaxKind.MethodDeclaration:
-                case SyntaxKind.MethodSignature:
-                    const functionDeclaration = node as FunctionLikeDeclaration;
-                    const declarationName = getDeclarationName(functionDeclaration);
-
-                    if (declarationName) {
-                        const declarations = getDeclarations(declarationName);
-                        const lastDeclaration = lastOrUndefined(declarations);
-
-                        // Check whether this declaration belongs to an "overload group".
-                        if (lastDeclaration && functionDeclaration.parent === lastDeclaration.parent && functionDeclaration.symbol === lastDeclaration.symbol) {
-                            // Overwrite the last declaration if it was an overload
-                            // and this one is an implementation.
-                            if (functionDeclaration.body && !(lastDeclaration as FunctionLikeDeclaration).body) {
-                                declarations[declarations.length - 1] = functionDeclaration;
-                            }
-                        }
-                        else {
-                            declarations.push(functionDeclaration);
-                        }
-                    }
-                    forEachChild(node, visit);
-                    break;
-
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.TypeAliasDeclaration:
-                case SyntaxKind.EnumDeclaration:
-                case SyntaxKind.ModuleDeclaration:
-                case SyntaxKind.ImportEqualsDeclaration:
-                case SyntaxKind.ExportSpecifier:
-                case SyntaxKind.ImportSpecifier:
-                case SyntaxKind.ImportClause:
-                case SyntaxKind.NamespaceImport:
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                case SyntaxKind.TypeLiteral:
-                    addDeclaration(node as Declaration);
-                    forEachChild(node, visit);
-                    break;
-
-                case SyntaxKind.Parameter:
-                    // Only consider parameter properties
-                    if (!hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
-                        break;
-                    }
-                // falls through
-
-                case SyntaxKind.VariableDeclaration:
-                case SyntaxKind.BindingElement: {
-                    const decl = node as VariableDeclaration;
-                    if (isBindingPattern(decl.name)) {
-                        forEachChild(decl.name, visit);
-                        break;
-                    }
-                    if (decl.initializer) {
-                        visit(decl.initializer);
-                    }
-                }
-                // falls through
-                case SyntaxKind.EnumMember:
-                case SyntaxKind.PropertyDeclaration:
-                case SyntaxKind.PropertySignature:
-                    addDeclaration(node as Declaration);
-                    break;
-
-                case SyntaxKind.ExportDeclaration:
-                    // Handle named exports case e.g.:
-                    //    export {a, b as B} from "mod";
-                    const exportDeclaration = node as ExportDeclaration;
-                    if (exportDeclaration.exportClause) {
-                        if (isNamedExports(exportDeclaration.exportClause)) {
-                            forEach(exportDeclaration.exportClause.elements, visit);
-                        }
-                        else {
-                            visit(exportDeclaration.exportClause.name);
-                        }
-                    }
-                    break;
-
-                case SyntaxKind.ImportDeclaration:
-                    const importClause = (node as ImportDeclaration).importClause;
-                    if (importClause) {
-                        // Handle default import case e.g.:
-                        //    import d from "mod";
-                        if (importClause.name) {
-                            addDeclaration(importClause.name);
-                        }
-
-                        // Handle named bindings in imports e.g.:
-                        //    import * as NS from "mod";
-                        //    import {a, b as B} from "mod";
-                        if (importClause.namedBindings) {
-                            if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
-                                addDeclaration(importClause.namedBindings);
-                            }
-                            else {
-                                forEach(importClause.namedBindings.elements, visit);
-                            }
-                        }
-                    }
-                    break;
-
-                case SyntaxKind.BinaryExpression:
-                    if (getAssignmentDeclarationKind(node as BinaryExpression) !== AssignmentDeclarationKind.None) {
-                        addDeclaration(node as BinaryExpression);
-                    }
-                // falls through
-
-                default:
-                    forEachChild(node, visit);
-            }
-        }
-    }
-}
-
 class SourceMapSourceObject implements SourceMapSource {
     lineMap!: number[];
     constructor(public fileName: string, public text: string, public skipTrivia?: (pos: number) => number) { }
@@ -1253,12 +618,11 @@ class SourceMapSourceObject implements SourceMapSource {
 
 function getServicesObjectAllocator(): ObjectAllocator {
     return {
-        getNodeConstructor: () => NodeObject,
-        getTokenConstructor: () => TokenObject,
-
-        getIdentifierConstructor: () => IdentifierObject,
-        getPrivateIdentifierConstructor: () => PrivateIdentifierObject,
-        getSourceFileConstructor: () => SourceFileObject,
+        getNodeConstructor: () => NodeConstructors.Node,
+        getTokenConstructor: () => NodeConstructors.Token,
+        getIdentifierConstructor: () => NodeConstructors.Identifier,
+        getPrivateIdentifierConstructor: () => NodeConstructors.PrivateIdentifier,
+        getSourceFileConstructor: () => NodeConstructors.SourceFile,
         getSymbolConstructor: () => SymbolObject,
         getTypeConstructor: () => TypeObject,
         getSignatureConstructor: () => SignatureObject,

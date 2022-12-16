@@ -68,6 +68,7 @@ import {
     computeLineAndCharacterOfPosition,
     computeLineOfPosition,
     computeLineStarts,
+    computePositionOfLineAndCharacter,
     concatenate,
     ConditionalExpression,
     ConstructorDeclaration,
@@ -107,6 +108,7 @@ import {
     EmitResolver,
     EmitTextWriter,
     emptyArray,
+    EndOfFileToken,
     ensurePathIsNonModuleName,
     ensureTrailingDirectorySeparator,
     EntityName,
@@ -186,6 +188,7 @@ import {
     getLinesBetweenPositions,
     getLineStarts,
     getNameOfDeclaration,
+    getNonAssignedNameOfDeclaration,
     getNormalizedAbsolutePath,
     getNormalizedPathComponents,
     getOwnKeys,
@@ -247,6 +250,7 @@ import {
     isCommaListExpression,
     isComputedPropertyName,
     isConstructorDeclaration,
+    IScriptSnapshot,
     isDeclaration,
     isDecorator,
     isElementAccessExpression,
@@ -274,6 +278,7 @@ import {
     isInterfaceDeclaration,
     isJSDoc,
     isJSDocAugmentsTag,
+    isJSDocCommentContainingNode,
     isJSDocFunctionType,
     isJSDocLinkLike,
     isJSDocMemberName,
@@ -300,9 +305,11 @@ import {
     isMethodOrAccessor,
     isModuleDeclaration,
     isNamedDeclaration,
+    isNamedExports,
     isNamespaceExport,
     isNamespaceExportDeclaration,
     isNamespaceImport,
+    isNodeKind,
     isNoSubstitutionTemplateLiteral,
     isNumericLiteral,
     isObjectLiteralExpression,
@@ -326,6 +333,7 @@ import {
     isString,
     isStringLiteral,
     isStringLiteralLike,
+    isTokenKind,
     isTypeAliasDeclaration,
     isTypeElement,
     isTypeLiteralNode,
@@ -362,6 +370,7 @@ import {
     lastOrUndefined,
     LateVisibilityPaintedStatement,
     length,
+    LineAndCharacter,
     LiteralImportTypeNode,
     LiteralLikeElementAccessExpression,
     LiteralLikeNode,
@@ -434,6 +443,7 @@ import {
     PropertyNameLiteral,
     PropertySignature,
     PseudoBigInt,
+    Push,
     QualifiedName,
     ReadonlyCollection,
     ReadonlyPragmaMap,
@@ -494,6 +504,7 @@ import {
     TemplateLiteralLikeNode,
     TemplateLiteralTypeSpan,
     TemplateSpan,
+    TextChangeRange,
     TextRange,
     TextSpan,
     ThisTypePredicate,
@@ -526,8 +537,10 @@ import {
     TypePredicate,
     TypePredicateKind,
     TypeReferenceNode,
+    UnderscoreEscapedMap,
     unescapeLeadingUnderscores,
     UnionOrIntersectionTypeNode,
+    updateSourceFile,
     UserPreferences,
     ValidImportTypeNode,
     VariableDeclaration,
@@ -4533,6 +4546,15 @@ export function isPushOrUnshiftIdentifier(node: Identifier) {
 }
 
 /** @internal */
+export function getNameFromPropertyName(name: PropertyName): string | undefined {
+    return name.kind === SyntaxKind.ComputedPropertyName
+        // treat computed property names where expression is string/numeric literal as just string/numeric literal
+        ? isStringOrNumericLiteralLike(name.expression) ? name.expression.text : undefined
+        : isPrivateIdentifier(name) ? idText(name) : getTextOfIdentifierOrLiteral(name);
+}
+
+
+/** @internal */
 export function isParameterDeclaration(node: VariableLikeDeclaration): boolean {
     const root = getRootDeclaration(node);
     return root.kind === SyntaxKind.Parameter;
@@ -7311,230 +7333,799 @@ function SourceMapSource(this: SourceMapSource, fileName: string, text: string, 
     this.skipTrivia = skipTrivia || (pos => pos);
 }
 
-const Node = class implements Node {
-    declare kind: SyntaxKind;
-    declare flags: NodeFlags;
-    declare modifierFlagsCache: ModifierFlags;
-    declare transformFlags: TransformFlags;
-    declare id?: number | undefined;
-    declare parent: Node;
-    declare original?: Node | undefined;
-    declare emitNode?: EmitNode | undefined;
-    declare pos: number;
-    declare end: number;
+export namespace NodeConstructors {
+    const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
 
-    constructor(kind: SyntaxKind, pos: number, end: number) {
-        this.pos = pos;
-        this.end = end;
-        this.kind = kind;
-        this.id = 0;
-        this.flags = NodeFlags.None;
-        this.modifierFlagsCache = ModifierFlags.None;
-        this.transformFlags = TransformFlags.None;
-        this.parent = undefined!;
-        this.original = undefined;
-        this.emitNode = undefined;
+    function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Node[] {
+        if (!isNodeKind(node.kind)) {
+            return emptyArray;
+        }
+
+        const children: Node[] = [];
+
+        if (isJSDocCommentContainingNode(node)) {
+            /** Don't add trivia for "tokens" since this is in a comment. */
+            node.forEachChild(child => {
+                children.push(child);
+            });
+            return children;
+        }
+
+        scanner.setText((sourceFile || node.getSourceFile()).text);
+        let pos = node.pos;
+        const processNode = (child: Node) => {
+            addSyntheticNodes(children, pos, child.pos, node);
+            children.push(child);
+            pos = child.end;
+        };
+        const processNodes = (nodes: NodeArray<Node>) => {
+            addSyntheticNodes(children, pos, nodes.pos, node);
+            children.push(createSyntaxList(nodes, node));
+            pos = nodes.end;
+        };
+
+        // jsDocComments need to be the first children
+        if (canHaveJSDoc(node)) {
+            forEach(node.jsDoc, processNode);
+        }
+
+        // For syntactic classifications, all trivia are classified together, including jsdoc comments.
+        // For that to work, the jsdoc comments should still be the leading trivia of the first child.
+        // Restoring the scanner position ensures that.
+        pos = node.pos;
+        node.forEachChild(processNode, processNodes);
+        addSyntheticNodes(children, pos, node.end, node);
+        scanner.setText(undefined);
+        return children;
     }
-};
 
-const Token = class <Kind extends SyntaxKind> implements Token<Kind> {
-    declare kind: Kind;
-    declare flags: NodeFlags;
-    declare modifierFlagsCache: ModifierFlags;
-    declare transformFlags: TransformFlags;
-    declare id?: number | undefined;
-    declare parent: Node;
-    declare original?: Node | undefined;
-    declare emitNode?: EmitNode | undefined;
-    declare pos: number;
-    declare end: number;
-
-    constructor(kind: Kind, pos: number, end: number) {
-        this.pos = pos;
-        this.end = end;
-        this.kind = kind;
-        this.id = 0;
-        this.flags = NodeFlags.None;
-        this.transformFlags = TransformFlags.None;
-        this.parent = undefined!;
-        this.emitNode = undefined;
+    function addSyntheticNodes(nodes: Push<Node>, pos: number, end: number, parent: Node): void {
+        scanner.setTextPos(pos);
+        while (pos < end) {
+            const kind = scanner.scan();
+            const textPos = scanner.getTextPos();
+            if (textPos <= end) {
+                if (kind === SyntaxKind.Identifier) {
+                    if (hasTabstop(parent)) {
+                        continue;
+                    }
+                    Debug.fail(`Did not expect ${Debug.formatSyntaxKind(parent.kind)} to have an Identifier in its trivia`);
+                }
+                Debug.assert(isTokenKind(kind));
+                const token = new Token(kind, pos, textPos) as any as Mutable<Token<SyntaxKind>>;
+                token.parent = parent;
+                token.flags = parent.flags & NodeFlags.ContextFlags;
+                nodes.push(token);
+            }
+            pos = textPos;
+            if (kind === SyntaxKind.EndOfFileToken) {
+                break;
+            }
+        }
     }
-};
 
-const Identifier = class implements Identifier {
-    declare _primaryExpressionBrand: any;
-    declare _memberExpressionBrand: any;
-    declare _leftHandSideExpressionBrand: any;
-    declare _updateExpressionBrand: any;
-    declare _unaryExpressionBrand: any;
-    declare _expressionBrand: any;
-    declare _declarationBrand: any;
-    declare _jsdocContainerBrand: any;
-    declare _flowContainerBrand: any;
+    function createSyntaxList(nodes: NodeArray<Node>, parent: Node): Node {
+        const list = new Node(SyntaxKind.SyntaxList, nodes.pos, nodes.end) as any as Mutable<SyntaxList>;
+        list.parent = parent;
+        list.flags = parent.flags & NodeFlags.ContextFlags;
 
-    declare kind: SyntaxKind.Identifier;
-    declare escapedText: __String;
-    declare originalKeywordKind?: SyntaxKind | undefined;
-    declare autoGenerate: AutoGenerateInfo | undefined;
-    declare generatedImportReference?: ImportSpecifier | undefined;
-    declare isInJSDocNamespace?: boolean | undefined;
-    declare typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration> | undefined;
-    declare jsdocDotPos?: number | undefined;
-    declare hasExtendedUnicodeEscape?: boolean | undefined;
-    declare flags: NodeFlags;
-    declare modifierFlagsCache: ModifierFlags;
-    declare transformFlags: TransformFlags;
-    declare id?: number | undefined;
-    declare parent: Node;
-    declare original?: Node | undefined;
-    declare emitNode?: EmitNode | undefined;
-    declare pos: number;
-    declare end: number;
-    declare symbol: Symbol;
-    declare localSymbol?: Symbol | undefined;
-    declare jsDoc?: JSDoc[] | undefined;
-    declare jsDocCache?: readonly JSDocTag[] | undefined;
-    declare flowNode?: FlowNode | undefined;
-
-    constructor(kind: SyntaxKind.Identifier, pos: number, end: number) {
-        this.pos = pos;
-        this.end = end;
-        this.kind = kind;
-        this.id = 0;
-        this.flags = NodeFlags.None;
-        this.transformFlags = TransformFlags.None;
-        this.parent = undefined!;
-        this.original = undefined;
-        this.emitNode = undefined;
-        this.flowNode = undefined;
+        list._children = [];
+        let pos = nodes.pos;
+        for (const node of nodes) {
+            addSyntheticNodes(list._children, pos, node.pos, parent);
+            list._children.push(node);
+            pos = node.end;
+        }
+        addSyntheticNodes(list._children, pos, nodes.end, parent);
+        return list;
     }
-};
 
-const PrivateIdentifier = class implements PrivateIdentifier {
-    declare _primaryExpressionBrand: any;
-    declare _memberExpressionBrand: any;
-    declare _leftHandSideExpressionBrand: any;
-    declare _updateExpressionBrand: any;
-    declare _unaryExpressionBrand: any;
-    declare _expressionBrand: any;
-    declare kind: SyntaxKind.PrivateIdentifier;
-    declare escapedText: __String;
-    declare autoGenerate: AutoGenerateInfo | undefined;
-    declare flags: NodeFlags;
-    declare modifierFlagsCache: ModifierFlags;
-    declare transformFlags: TransformFlags;
-    declare id?: number | undefined;
-    declare parent: Node;
-    declare original?: Node | undefined;
-    declare emitNode?: EmitNode | undefined;
-    declare pos: number;
-    declare end: number;
+    // For internal tooling purposes its preferred that the name of the class be `Node`. Unfortunately,
+    // a `class Node` declaration would conflict with the import of the same name. To work around this,
+    // we give the class an "assigned name" by using `const Node = class ...`.
+    export const Node: new (kind: SyntaxKind, pos: number, end: number) => Node = class implements Node {
+        declare kind: SyntaxKind;
+        declare flags: NodeFlags;
+        declare modifierFlagsCache: ModifierFlags;
+        declare transformFlags: TransformFlags;
+        declare id?: number | undefined;
+        declare parent: Node;
+        declare original?: Node | undefined;
+        declare emitNode?: EmitNode | undefined;
+        declare pos: number;
+        declare end: number;
 
-    constructor(kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
-        this.pos = pos;
-        this.end = end;
-        this.kind = kind;
-        this.id = 0;
-        this.flags = NodeFlags.None;
-        this.transformFlags = TransformFlags.None;
-        this.parent = undefined!;
-        this.original = undefined;
-        this.emitNode = undefined;
-    }
-};
+        declare private _children: Node[] | undefined;
 
-const SourceFile = class implements SourceFile {
-    declare _declarationBrand: any;
-    declare _localsContainerBrand: any;
-    declare kind: SyntaxKind.SourceFile;
-    declare statements: NodeArray<Statement>;
-    declare endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
-    declare fileName: string;
-    declare path: Path;
-    declare text: string;
-    declare resolvedPath: Path;
-    declare originalFileName: string;
-    declare redirectInfo?: RedirectInfo | undefined;
-    declare amdDependencies: readonly AmdDependency[];
-    declare moduleName?: string | undefined;
-    declare referencedFiles: readonly FileReference[];
-    declare typeReferenceDirectives: readonly FileReference[];
-    declare libReferenceDirectives: readonly FileReference[];
-    declare languageVariant: LanguageVariant;
-    declare isDeclarationFile: boolean;
-    declare renamedDependencies?: ReadonlyMap<string, string> | undefined;
-    declare hasNoDefaultLib: boolean;
-    declare languageVersion: ScriptTarget;
-    declare impliedNodeFormat?: ResolutionMode;
-    declare packageJsonLocations?: readonly string[] | undefined;
-    declare packageJsonScope?: PackageJsonInfo | undefined;
-    declare scriptKind: ScriptKind;
-    declare externalModuleIndicator?: true | Node | undefined;
-    declare setExternalModuleIndicator?: ((file: SourceFile) => void) | undefined;
-    declare commonJsModuleIndicator?: Node | undefined;
-    declare jsGlobalAugmentations?: SymbolTable | undefined;
-    declare identifiers: ReadonlyMap<string, string>;
-    declare nodeCount: number;
-    declare identifierCount: number;
-    declare symbolCount: number;
-    declare parseDiagnostics: DiagnosticWithLocation[];
-    declare bindDiagnostics: DiagnosticWithLocation[];
-    declare bindSuggestionDiagnostics?: DiagnosticWithLocation[] | undefined;
-    declare jsDocDiagnostics?: DiagnosticWithLocation[] | undefined;
-    declare additionalSyntacticDiagnostics?: readonly DiagnosticWithLocation[] | undefined;
-    declare lineMap: readonly number[];
-    declare classifiableNames?: ReadonlySet<__String> | undefined;
-    declare commentDirectives?: CommentDirective[] | undefined;
-    declare resolvedModules?: ModeAwareCache<ResolvedModuleWithFailedLookupLocations> | undefined;
-    declare resolvedTypeReferenceDirectiveNames?: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations> | undefined;
-    declare imports: readonly StringLiteralLike[];
-    declare moduleAugmentations: readonly (Identifier | StringLiteral)[];
-    declare patternAmbientModules?: PatternAmbientModule[] | undefined;
-    declare ambientModuleNames: readonly string[];
-    declare checkJsDirective?: CheckJsDirective | undefined;
-    declare version: string;
-    declare pragmas: ReadonlyPragmaMap;
-    declare localJsxNamespace?: __String | undefined;
-    declare localJsxFragmentNamespace?: __String | undefined;
-    declare localJsxFactory?: EntityName | undefined;
-    declare localJsxFragmentFactory?: EntityName | undefined;
-    declare exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit | undefined;
-    declare endFlowNode?: FlowNode | undefined;
-    declare symbol: Symbol;
-    declare localSymbol?: Symbol | undefined;
-    declare flags: NodeFlags;
-    declare modifierFlagsCache: ModifierFlags;
-    declare transformFlags: TransformFlags;
-    declare id?: number | undefined;
-    declare parent: Node;
-    declare original?: Node | undefined;
-    declare emitNode?: EmitNode | undefined;
-    declare pos: number;
-    declare end: number;
-    declare locals?: SymbolTable | undefined;
-    declare nextContainer?: HasLocals | undefined;
+        constructor(kind: SyntaxKind, pos: number, end: number) {
+            this.pos = pos;
+            this.end = end;
+            this.kind = kind;
+            this.id = 0;
+            this.flags = NodeFlags.None;
+            this.modifierFlagsCache = ModifierFlags.None;
+            this.transformFlags = TransformFlags.None;
+            this.parent = undefined!;
+            this.original = undefined;
+            this.emitNode = undefined;
+        }
 
-    constructor(kind: SyntaxKind.SourceFile, pos: number, end: number) {
-        this.pos = pos;
-        this.end = end;
-        this.kind = kind;
-        this.id = 0;
-        this.flags = NodeFlags.None;
-        this.transformFlags = TransformFlags.None;
-        this.parent = undefined!;
-        this.original = undefined;
-        this.emitNode = undefined;
-    }
-};
+        private assertHasRealPosition(message?: string) {
+            // eslint-disable-next-line local/debug-assert
+            Debug.assert(!positionIsSynthesized(this.pos) && !positionIsSynthesized(this.end), message || "Node must have a real position for this operation");
+        }
+
+        public getSourceFile(): SourceFile {
+            return getSourceFileOfNode(this);
+        }
+
+        public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
+            this.assertHasRealPosition();
+            return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
+        }
+
+        public getFullStart(): number {
+            this.assertHasRealPosition();
+            return this.pos;
+        }
+
+        public getEnd(): number {
+            this.assertHasRealPosition();
+            return this.end;
+        }
+
+        public getWidth(sourceFile?: SourceFile): number {
+            this.assertHasRealPosition();
+            return this.getEnd() - this.getStart(sourceFile);
+        }
+
+        public getFullWidth(): number {
+            this.assertHasRealPosition();
+            return this.end - this.pos;
+        }
+
+        public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
+            this.assertHasRealPosition();
+            return this.getStart(sourceFile) - this.pos;
+        }
+
+        public getFullText(sourceFile?: SourceFile): string {
+            this.assertHasRealPosition();
+            return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
+        }
+
+        public getText(sourceFile?: SourceFile): string {
+            this.assertHasRealPosition();
+            if (!sourceFile) {
+                sourceFile = this.getSourceFile();
+            }
+            return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
+        }
+
+        public getChildCount(sourceFile?: SourceFile): number {
+            return this.getChildren(sourceFile).length;
+        }
+
+        public getChildAt(index: number, sourceFile?: SourceFile): Node {
+            return this.getChildren(sourceFile)[index];
+        }
+
+        public getChildren(sourceFile?: SourceFileLike): Node[] {
+            this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
+            return this._children || (this._children = createChildren(this, sourceFile));
+        }
+
+        public getFirstToken(sourceFile?: SourceFileLike): Node | undefined {
+            this.assertHasRealPosition();
+            const children = this.getChildren(sourceFile);
+            if (!children.length) {
+                return undefined;
+            }
+
+            const child = find(children, kid => kid.kind < SyntaxKind.FirstJSDocNode || kid.kind > SyntaxKind.LastJSDocNode)!;
+            return child.kind < SyntaxKind.FirstNode ?
+                child :
+                child.getFirstToken(sourceFile);
+        }
+
+        public getLastToken(sourceFile?: SourceFileLike): Node | undefined {
+            this.assertHasRealPosition();
+            const children = this.getChildren(sourceFile);
+
+            const child = lastOrUndefined(children);
+            if (!child) {
+                return undefined;
+            }
+
+            return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
+        }
+
+        public forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: NodeArray<Node>) => T): T | undefined {
+            return forEachChild(this, cbNode, cbNodeArray);
+        }
+    };
+
+    export const Token: new <Kind extends SyntaxKind>(kind: Kind, pos: number, end: number) => Token<Kind> = class <Kind extends SyntaxKind> implements Token<Kind> {
+        declare kind: Kind;
+        declare flags: NodeFlags;
+        declare modifierFlagsCache: ModifierFlags;
+        declare transformFlags: TransformFlags;
+        declare id?: number | undefined;
+        declare parent: Node;
+        declare original?: Node | undefined;
+        declare emitNode?: EmitNode | undefined;
+        declare pos: number;
+        declare end: number;
+
+        constructor(kind: Kind, pos: number, end: number) {
+            this.pos = pos;
+            this.end = end;
+            this.kind = kind;
+            this.id = 0;
+            this.flags = NodeFlags.None;
+            this.transformFlags = TransformFlags.None;
+            this.parent = undefined!;
+            this.emitNode = undefined;
+        }
+
+        public getSourceFile(): SourceFile {
+            return getSourceFileOfNode(this);
+        }
+
+        public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
+            return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
+        }
+
+        public getFullStart(): number {
+            return this.pos;
+        }
+
+        public getEnd(): number {
+            return this.end;
+        }
+
+        public getWidth(sourceFile?: SourceFile): number {
+            return this.getEnd() - this.getStart(sourceFile);
+        }
+
+        public getFullWidth(): number {
+            return this.end - this.pos;
+        }
+
+        public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
+            return this.getStart(sourceFile) - this.pos;
+        }
+
+        public getFullText(sourceFile?: SourceFile): string {
+            return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
+        }
+
+        public getText(sourceFile?: SourceFile): string {
+            if (!sourceFile) {
+                sourceFile = this.getSourceFile();
+            }
+            return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
+        }
+
+        public getChildCount(): number {
+            return this.getChildren().length;
+        }
+
+        public getChildAt(index: number): Node {
+            return this.getChildren()[index];
+        }
+
+        public getChildren(): Node[] {
+            return this.kind === SyntaxKind.EndOfFileToken ? (this as Node as EndOfFileToken).jsDoc || emptyArray : emptyArray;
+        }
+
+        public getFirstToken(): Node | undefined {
+            return undefined;
+        }
+
+        public getLastToken(): Node | undefined {
+            return undefined;
+        }
+
+        public forEachChild<T>(): T | undefined {
+            return undefined;
+        }
+    };
+
+    export const Identifier: new (kind: SyntaxKind.Identifier, pos: number, end: number) => Identifier = class implements Identifier {
+        declare _primaryExpressionBrand: any;
+        declare _memberExpressionBrand: any;
+        declare _leftHandSideExpressionBrand: any;
+        declare _updateExpressionBrand: any;
+        declare _unaryExpressionBrand: any;
+        declare _expressionBrand: any;
+        declare _declarationBrand: any;
+        declare _jsdocContainerBrand: any;
+        declare _flowContainerBrand: any;
+
+        declare kind: SyntaxKind.Identifier;
+        declare escapedText: __String;
+        declare originalKeywordKind?: SyntaxKind | undefined;
+        declare autoGenerate: AutoGenerateInfo | undefined;
+        declare generatedImportReference?: ImportSpecifier | undefined;
+        declare isInJSDocNamespace?: boolean | undefined;
+        declare typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration> | undefined;
+        declare jsdocDotPos?: number | undefined;
+        declare hasExtendedUnicodeEscape?: boolean | undefined;
+        declare flags: NodeFlags;
+        declare modifierFlagsCache: ModifierFlags;
+        declare transformFlags: TransformFlags;
+        declare id?: number | undefined;
+        declare parent: Node;
+        declare original?: Node | undefined;
+        declare emitNode?: EmitNode | undefined;
+        declare pos: number;
+        declare end: number;
+        declare symbol: Symbol;
+        declare localSymbol?: Symbol | undefined;
+        declare jsDoc?: JSDoc[] | undefined;
+        declare jsDocCache?: readonly JSDocTag[] | undefined;
+        declare flowNode?: FlowNode | undefined;
+
+        constructor(kind: SyntaxKind.Identifier, pos: number, end: number) {
+            this.pos = pos;
+            this.end = end;
+            this.kind = kind;
+            this.id = 0;
+            this.flags = NodeFlags.None;
+            this.transformFlags = TransformFlags.None;
+            this.parent = undefined!;
+            this.original = undefined;
+            this.emitNode = undefined;
+            this.flowNode = undefined;
+        }
+
+        get text(): string {
+            return idText(this);
+        }
+
+        public getSourceFile(): SourceFile {
+            return getSourceFileOfNode(this);
+        }
+
+        public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
+            return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
+        }
+
+        public getFullStart(): number {
+            return this.pos;
+        }
+
+        public getEnd(): number {
+            return this.end;
+        }
+
+        public getWidth(sourceFile?: SourceFile): number {
+            return this.getEnd() - this.getStart(sourceFile);
+        }
+
+        public getFullWidth(): number {
+            return this.end - this.pos;
+        }
+
+        public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
+            return this.getStart(sourceFile) - this.pos;
+        }
+
+        public getFullText(sourceFile?: SourceFile): string {
+            return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
+        }
+
+        public getText(sourceFile?: SourceFile): string {
+            if (!sourceFile) {
+                sourceFile = this.getSourceFile();
+            }
+            return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
+        }
+
+        public getChildCount(): number {
+            return this.getChildren().length;
+        }
+
+        public getChildAt(index: number): Node {
+            return this.getChildren()[index];
+        }
+
+        public getChildren(): Node[] {
+            return emptyArray;
+        }
+
+        public getFirstToken(): Node | undefined {
+            return undefined;
+        }
+
+        public getLastToken(): Node | undefined {
+            return undefined;
+        }
+
+        public forEachChild<T>(): T | undefined {
+            return undefined;
+        }
+
+        static { this.prototype.kind = SyntaxKind.Identifier; }
+    };
+
+    export const PrivateIdentifier: new (kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) => PrivateIdentifier = class implements PrivateIdentifier {
+        declare _primaryExpressionBrand: any;
+        declare _memberExpressionBrand: any;
+        declare _leftHandSideExpressionBrand: any;
+        declare _updateExpressionBrand: any;
+        declare _unaryExpressionBrand: any;
+        declare _expressionBrand: any;
+        declare kind: SyntaxKind.PrivateIdentifier;
+        declare escapedText: __String;
+        declare autoGenerate: AutoGenerateInfo | undefined;
+        declare flags: NodeFlags;
+        declare modifierFlagsCache: ModifierFlags;
+        declare transformFlags: TransformFlags;
+        declare id?: number | undefined;
+        declare parent: Node;
+        declare original?: Node | undefined;
+        declare emitNode?: EmitNode | undefined;
+        declare pos: number;
+        declare end: number;
+
+        constructor(kind: SyntaxKind.PrivateIdentifier, pos: number, end: number) {
+            this.pos = pos;
+            this.end = end;
+            this.kind = kind;
+            this.id = 0;
+            this.flags = NodeFlags.None;
+            this.transformFlags = TransformFlags.None;
+            this.parent = undefined!;
+            this.original = undefined;
+            this.emitNode = undefined;
+        }
+
+        get text(): string {
+            return idText(this);
+        }
+
+        public getSourceFile(): SourceFile {
+            return getSourceFileOfNode(this);
+        }
+
+        public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
+            return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
+        }
+
+        public getFullStart(): number {
+            return this.pos;
+        }
+
+        public getEnd(): number {
+            return this.end;
+        }
+
+        public getWidth(sourceFile?: SourceFile): number {
+            return this.getEnd() - this.getStart(sourceFile);
+        }
+
+        public getFullWidth(): number {
+            return this.end - this.pos;
+        }
+
+        public getLeadingTriviaWidth(sourceFile?: SourceFile): number {
+            return this.getStart(sourceFile) - this.pos;
+        }
+
+        public getFullText(sourceFile?: SourceFile): string {
+            return (sourceFile || this.getSourceFile()).text.substring(this.pos, this.end);
+        }
+
+        public getText(sourceFile?: SourceFile): string {
+            if (!sourceFile) {
+                sourceFile = this.getSourceFile();
+            }
+            return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
+        }
+
+        public getChildCount(): number {
+            return this.getChildren().length;
+        }
+
+        public getChildAt(index: number): Node {
+            return this.getChildren()[index];
+        }
+
+        public getChildren(): Node[] {
+            return emptyArray;
+        }
+
+        public getFirstToken(): Node | undefined {
+            return undefined;
+        }
+
+        public getLastToken(): Node | undefined {
+            return undefined;
+        }
+
+        public forEachChild<T>(): T | undefined {
+            return undefined;
+        }
+
+        static { this.prototype.kind = SyntaxKind.PrivateIdentifier; }
+    };
+
+    export const SourceFile: new (kind: SyntaxKind.SourceFile, pos: number, end: number) => SourceFile = class extends Node implements SourceFile {
+        declare _declarationBrand: any;
+        declare _localsContainerBrand: any;
+        declare kind: SyntaxKind.SourceFile;
+        declare statements: NodeArray<Statement>;
+        declare endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
+        declare fileName: string;
+        declare path: Path;
+        declare text: string;
+        declare resolvedPath: Path;
+        declare originalFileName: string;
+        declare redirectInfo?: RedirectInfo | undefined;
+        declare amdDependencies: readonly AmdDependency[];
+        declare moduleName?: string | undefined;
+        declare referencedFiles: readonly FileReference[];
+        declare typeReferenceDirectives: readonly FileReference[];
+        declare libReferenceDirectives: readonly FileReference[];
+        declare languageVariant: LanguageVariant;
+        declare isDeclarationFile: boolean;
+        declare renamedDependencies?: ReadonlyMap<string, string> | undefined;
+        declare hasNoDefaultLib: boolean;
+        declare languageVersion: ScriptTarget;
+        declare impliedNodeFormat?: ResolutionMode;
+        declare packageJsonLocations?: readonly string[] | undefined;
+        declare packageJsonScope?: PackageJsonInfo | undefined;
+        declare scriptKind: ScriptKind;
+        declare externalModuleIndicator?: true | Node | undefined;
+        declare setExternalModuleIndicator?: ((file: SourceFile) => void) | undefined;
+        declare commonJsModuleIndicator?: Node | undefined;
+        declare jsGlobalAugmentations?: SymbolTable | undefined;
+        declare identifiers: ReadonlyMap<string, string>;
+        declare nodeCount: number;
+        declare identifierCount: number;
+        declare symbolCount: number;
+        declare parseDiagnostics: DiagnosticWithLocation[];
+        declare bindDiagnostics: DiagnosticWithLocation[];
+        declare bindSuggestionDiagnostics?: DiagnosticWithLocation[] | undefined;
+        declare jsDocDiagnostics?: DiagnosticWithLocation[] | undefined;
+        declare additionalSyntacticDiagnostics?: readonly DiagnosticWithLocation[] | undefined;
+        declare lineMap: readonly number[];
+        declare classifiableNames?: ReadonlySet<__String> | undefined;
+        declare commentDirectives?: CommentDirective[] | undefined;
+        declare resolvedModules?: ModeAwareCache<ResolvedModuleWithFailedLookupLocations> | undefined;
+        declare resolvedTypeReferenceDirectiveNames?: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations> | undefined;
+        declare imports: readonly StringLiteralLike[];
+        declare moduleAugmentations: readonly (Identifier | StringLiteral)[];
+        declare patternAmbientModules?: PatternAmbientModule[] | undefined;
+        declare ambientModuleNames: readonly string[];
+        declare checkJsDirective?: CheckJsDirective | undefined;
+        declare version: string;
+        declare pragmas: ReadonlyPragmaMap;
+        declare localJsxNamespace?: __String | undefined;
+        declare localJsxFragmentNamespace?: __String | undefined;
+        declare localJsxFactory?: EntityName | undefined;
+        declare localJsxFragmentFactory?: EntityName | undefined;
+        declare exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit | undefined;
+        declare endFlowNode?: FlowNode | undefined;
+        declare symbol: Symbol;
+        declare localSymbol?: Symbol | undefined;
+        declare modifierFlagsCache: ModifierFlags;
+        declare transformFlags: TransformFlags;
+        declare locals?: SymbolTable | undefined;
+        declare nextContainer?: HasLocals | undefined;
+        declare scriptSnapshot: IScriptSnapshot;
+        declare nameTable: UnderscoreEscapedMap<number> | undefined;
+
+        private declare namedDeclarations: Map<string, Declaration[]> | undefined;
+
+        constructor(kind: SyntaxKind.SourceFile, pos: number, end: number) {
+            super(kind, pos, end);
+        }
+
+        public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
+            return updateSourceFile(this, newText, textChangeRange);
+        }
+
+        public getLineAndCharacterOfPosition(position: number): LineAndCharacter {
+            return getLineAndCharacterOfPosition(this, position);
+        }
+
+        public getLineStarts(): readonly number[] {
+            return getLineStarts(this);
+        }
+
+        public getPositionOfLineAndCharacter(line: number, character: number, allowEdits?: true): number {
+            return computePositionOfLineAndCharacter(getLineStarts(this), line, character, this.text, allowEdits);
+        }
+
+        public getLineEndOfPosition(pos: number): number {
+            const { line } = this.getLineAndCharacterOfPosition(pos);
+            const lineStarts = this.getLineStarts();
+
+            let lastCharPos: number | undefined;
+            if (line + 1 >= lineStarts.length) {
+                lastCharPos = this.getEnd();
+            }
+            if (!lastCharPos) {
+                lastCharPos = lineStarts[line + 1] - 1;
+            }
+
+            const fullText = this.getFullText();
+            // if the new line is "\r\n", we should return the last non-new-line-character position
+            return fullText[lastCharPos] === "\n" && fullText[lastCharPos - 1] === "\r" ? lastCharPos - 1 : lastCharPos;
+        }
+
+        public getNamedDeclarations(): Map<string, Declaration[]> {
+            if (!this.namedDeclarations) {
+                this.namedDeclarations = this.computeNamedDeclarations();
+            }
+
+            return this.namedDeclarations;
+        }
+
+        private computeNamedDeclarations(): Map<string, Declaration[]> {
+            const result = createMultiMap<Declaration>();
+
+            this.forEachChild(visit);
+
+            return result;
+
+            function addDeclaration(declaration: Declaration) {
+                const name = getDeclarationName(declaration);
+                if (name) {
+                    result.add(name, declaration);
+                }
+            }
+
+            function getDeclarations(name: string) {
+                let declarations = result.get(name);
+                if (!declarations) {
+                    result.set(name, declarations = []);
+                }
+                return declarations;
+            }
+
+            function getDeclarationName(declaration: Declaration) {
+                const name = getNonAssignedNameOfDeclaration(declaration);
+                return name && (isComputedPropertyName(name) && isPropertyAccessExpression(name.expression) ? name.expression.name.text
+                    : isPropertyName(name) ? getNameFromPropertyName(name) : undefined);
+            }
+
+            function visit(node: Node): void {
+                switch (node.kind) {
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
+                        const functionDeclaration = node as FunctionLikeDeclaration;
+                        const declarationName = getDeclarationName(functionDeclaration);
+
+                        if (declarationName) {
+                            const declarations = getDeclarations(declarationName);
+                            const lastDeclaration = lastOrUndefined(declarations);
+
+                            // Check whether this declaration belongs to an "overload group".
+                            if (lastDeclaration && functionDeclaration.parent === lastDeclaration.parent && functionDeclaration.symbol === lastDeclaration.symbol) {
+                                // Overwrite the last declaration if it was an overload
+                                // and this one is an implementation.
+                                if (functionDeclaration.body && !(lastDeclaration as FunctionLikeDeclaration).body) {
+                                    declarations[declarations.length - 1] = functionDeclaration;
+                                }
+                            }
+                            else {
+                                declarations.push(functionDeclaration);
+                            }
+                        }
+                        forEachChild(node, visit);
+                        break;
+
+                    case SyntaxKind.ClassDeclaration:
+                    case SyntaxKind.ClassExpression:
+                    case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
+                    case SyntaxKind.EnumDeclaration:
+                    case SyntaxKind.ModuleDeclaration:
+                    case SyntaxKind.ImportEqualsDeclaration:
+                    case SyntaxKind.ExportSpecifier:
+                    case SyntaxKind.ImportSpecifier:
+                    case SyntaxKind.ImportClause:
+                    case SyntaxKind.NamespaceImport:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.TypeLiteral:
+                        addDeclaration(node as Declaration);
+                        forEachChild(node, visit);
+                        break;
+
+                    case SyntaxKind.Parameter:
+                        // Only consider parameter properties
+                        if (!hasSyntacticModifier(node, ModifierFlags.ParameterPropertyModifier)) {
+                            break;
+                        }
+                    // falls through
+
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.BindingElement: {
+                        const decl = node as VariableDeclaration;
+                        if (isBindingPattern(decl.name)) {
+                            forEachChild(decl.name, visit);
+                            break;
+                        }
+                        if (decl.initializer) {
+                            visit(decl.initializer);
+                        }
+                    }
+                    // falls through
+                    case SyntaxKind.EnumMember:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
+                        addDeclaration(node as Declaration);
+                        break;
+
+                    case SyntaxKind.ExportDeclaration:
+                        // Handle named exports case e.g.:
+                        //    export {a, b as B} from "mod";
+                        const exportDeclaration = node as ExportDeclaration;
+                        if (exportDeclaration.exportClause) {
+                            if (isNamedExports(exportDeclaration.exportClause)) {
+                                forEach(exportDeclaration.exportClause.elements, visit);
+                            }
+                            else {
+                                visit(exportDeclaration.exportClause.name);
+                            }
+                        }
+                        break;
+
+                    case SyntaxKind.ImportDeclaration:
+                        const importClause = (node as ImportDeclaration).importClause;
+                        if (importClause) {
+                            // Handle default import case e.g.:
+                            //    import d from "mod";
+                            if (importClause.name) {
+                                addDeclaration(importClause.name);
+                            }
+
+                            // Handle named bindings in imports e.g.:
+                            //    import * as NS from "mod";
+                            //    import {a, b as B} from "mod";
+                            if (importClause.namedBindings) {
+                                if (importClause.namedBindings.kind === SyntaxKind.NamespaceImport) {
+                                    addDeclaration(importClause.namedBindings);
+                                }
+                                else {
+                                    forEach(importClause.namedBindings.elements, visit);
+                                }
+                            }
+                        }
+                        break;
+
+                    case SyntaxKind.BinaryExpression:
+                        if (getAssignmentDeclarationKind(node as BinaryExpression) !== AssignmentDeclarationKind.None) {
+                            addDeclaration(node as BinaryExpression);
+                        }
+                    // falls through
+
+                    default:
+                        forEachChild(node, visit);
+                }
+            }
+        }
+
+        static { this.prototype.kind = SyntaxKind.SourceFile; }
+    };
+}
+
 
 // eslint-disable-next-line prefer-const
 /** @internal */
 export const objectAllocator: ObjectAllocator = {
-    getNodeConstructor: () => Node,
-    getTokenConstructor: () => Token,
-    getIdentifierConstructor: () => Identifier,
-    getPrivateIdentifierConstructor: () => PrivateIdentifier,
-    getSourceFileConstructor: () => SourceFile,
+    getNodeConstructor: () => NodeConstructors.Node as any,
+    getTokenConstructor: () => NodeConstructors.Token as any,
+    getIdentifierConstructor: () => NodeConstructors.Identifier as any,
+    getPrivateIdentifierConstructor: () => NodeConstructors.PrivateIdentifier as any,
+    getSourceFileConstructor: () => NodeConstructors.SourceFile as any,
     getSymbolConstructor: () => Symbol as any,
     getTypeConstructor: () => Type as any,
     getSignatureConstructor: () => Signature as any,
