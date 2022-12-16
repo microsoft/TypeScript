@@ -1680,10 +1680,7 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
      */
     readonly escapedText: __String;
     readonly originalKeywordKind?: SyntaxKind;                // Original syntaxKind which get set so that we can report an error later
-    /** @internal */ readonly autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
-    /** @internal */ readonly autoGenerateId?: number;           // Ensures unique generated identifiers get unique names, but clones get the same name.
-    /** @internal */ readonly autoGeneratePrefix?: string | GeneratedNamePart;
-    /** @internal */ readonly autoGenerateSuffix?: string;
+    /** @internal */ readonly autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers.
     /** @internal */ generatedImportReference?: ImportSpecifier; // Reference to the generated import specifier this identifier refers to
     isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
     /** @internal */ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
@@ -1697,8 +1694,16 @@ export interface TransientIdentifier extends Identifier {
 }
 
 /** @internal */
+export interface AutoGenerateInfo {
+    flags: GeneratedIdentifierFlags;            // Specifies whether to auto-generate the text for an identifier.
+    readonly id: number;                        // Ensures unique generated identifiers get unique names, but clones get the same name.
+    readonly prefix?: string | GeneratedNamePart;
+    readonly suffix?: string;
+}
+
+/** @internal */
 export interface GeneratedIdentifier extends Identifier {
-    autoGenerateFlags: GeneratedIdentifierFlags;
+    readonly autoGenerate: AutoGenerateInfo;
 }
 
 export interface QualifiedName extends Node, FlowContainer {
@@ -1776,15 +1781,12 @@ export interface PrivateIdentifier extends PrimaryExpression {
     // escaping not strictly necessary
     // avoids gotchas in transforms and utils
     readonly escapedText: __String;
-    /** @internal */ readonly autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
-    /** @internal */ readonly autoGenerateId?: number;           // Ensures unique generated identifiers get unique names, but clones get the same name.
-    /** @internal */ readonly autoGeneratePrefix?: string | GeneratedNamePart;
-    /** @internal */ readonly autoGenerateSuffix?: string;
+    /** @internal */ readonly autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers.
 }
 
 /** @internal */
 export interface GeneratedPrivateIdentifier extends PrivateIdentifier {
-    autoGenerateFlags: GeneratedIdentifierFlags;
+    readonly autoGenerate: AutoGenerateInfo;
 }
 
 /** @internal */
@@ -6905,7 +6907,7 @@ export function diagnosticCategoryName(d: { category: DiagnosticCategory }, lowe
 
 export enum ModuleResolutionKind {
     Classic  = 1,
-    NodeJs   = 2,
+    Node10   = 2,
     // Starting with node12, node's module resolver has significant departures from traditional cjs resolution
     // to better support ecmascript modules and their use within node - however more features are still being added.
     // TypeScript's Node ESM support was introduced after Node 12 went end-of-life, and Node 14 is the earliest stable
@@ -7017,6 +7019,7 @@ export interface CompilerOptions {
     /** @internal */generateCpuProfile?: string;
     /** @internal */generateTrace?: string;
     /** @internal */help?: boolean;
+    ignoreDeprecations?: string;
     importHelpers?: boolean;
     importsNotUsedAsValues?: ImportsNotUsedAsValues;
     /** @internal */init?: boolean;
@@ -7274,6 +7277,8 @@ export interface CreateProgramOptions {
     host?: CompilerHost;
     oldProgram?: Program;
     configFileParsingDiagnostics?: readonly Diagnostic[];
+    /** @internal */
+    typeScriptVersion?: string;
 }
 
 /** @internal */
@@ -7324,6 +7329,7 @@ export interface CommandLineOptionOfBooleanType extends CommandLineOptionBase {
 export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
     type: Map<string, number | string>;  // an object literal mapping named values to actual values
     defaultValueDescription: number | string | undefined | DiagnosticMessage;
+    deprecatedKeys?: Set<string>;
 }
 
 /** @internal */
@@ -9827,4 +9833,13 @@ export const enum PrivateIdentifierKind {
     Field = "f",
     Method = "m",
     Accessor = "a"
+}
+
+/** @internal */
+export const enum DeprecationVersion {
+    /* eslint-disable @typescript-eslint/naming-convention */
+    v5_0 = "5.0",
+    v5_5 = "5.5",
+    v6_0 = "6.0",
+    /* eslint-enable @typescript-eslint/naming-convention */
 }

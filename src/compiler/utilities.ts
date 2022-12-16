@@ -1674,7 +1674,7 @@ export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemp
     switch (name.kind) {
         case SyntaxKind.Identifier:
         case SyntaxKind.PrivateIdentifier:
-            return name.autoGenerateFlags ? undefined : name.escapedText;
+            return name.autoGenerate ? undefined : name.escapedText;
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NumericLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -7738,7 +7738,7 @@ export function getEmitModuleResolutionKind(compilerOptions: CompilerOptions) {
     if (moduleResolution === undefined) {
         switch (getEmitModuleKind(compilerOptions)) {
             case ModuleKind.CommonJS:
-                moduleResolution = ModuleResolutionKind.NodeJs;
+                moduleResolution = ModuleResolutionKind.Node10;
                 break;
             case ModuleKind.Node16:
                 moduleResolution = ModuleResolutionKind.Node16;
@@ -9481,6 +9481,7 @@ export function hasTabstop(node: Node): boolean {
     return getSnippetElement(node)?.kind === SnippetKind.TabStop;
 }
 
+/** @internal */
 export function isJSDocOptionalParameter(node: ParameterDeclaration) {
     return isInJSFile(node) && (
         // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
@@ -9489,6 +9490,7 @@ export function isJSDocOptionalParameter(node: ParameterDeclaration) {
             isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
 }
 
+/** @internal */
 export function isOptionalDeclaration(declaration: Declaration): boolean {
     switch (declaration.kind) {
         case SyntaxKind.PropertyDeclaration:

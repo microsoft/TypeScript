@@ -54,7 +54,7 @@ Info 7    [00:00:44.000] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info 8    [00:00:45.000] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/file2.ts 500 undefined WatchType: Closed Script info
 Info 9    [00:00:46.000] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
 Info 10   [00:00:47.000] ======== Resolving module 'module1' from '/user/username/projects/myproject/src/file1.ts'. ========
-Info 11   [00:00:48.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 11   [00:00:48.000] Module resolution kind is not specified, using 'Node10'.
 Info 12   [00:00:49.000] Loading module 'module1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info 13   [00:00:50.000] File '/user/username/projects/myproject/src/node_modules/module1/package.json' does not exist.
 Info 14   [00:00:51.000] File '/user/username/projects/myproject/src/node_modules/module1.ts' does not exist.
@@ -64,7 +64,7 @@ Info 17   [00:00:54.000] File '/user/username/projects/myproject/src/node_module
 Info 18   [00:00:55.000] Resolving real path for '/user/username/projects/myproject/src/node_modules/module1/index.ts', result '/user/username/projects/myproject/src/node_modules/module1/index.ts'.
 Info 19   [00:00:56.000] ======== Module name 'module1' was successfully resolved to '/user/username/projects/myproject/src/node_modules/module1/index.ts'. ========
 Info 20   [00:00:57.000] ======== Resolving module 'module2' from '/user/username/projects/myproject/src/file1.ts'. ========
-Info 21   [00:00:58.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 21   [00:00:58.000] Module resolution kind is not specified, using 'Node10'.
 Info 22   [00:00:59.000] Loading module 'module2' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info 23   [00:01:00.000] File '/user/username/projects/myproject/src/node_modules/module2.ts' does not exist.
 Info 24   [00:01:01.000] File '/user/username/projects/myproject/src/node_modules/module2.tsx' does not exist.

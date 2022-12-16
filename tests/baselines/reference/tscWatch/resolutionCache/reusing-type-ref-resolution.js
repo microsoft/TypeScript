@@ -46,7 +46,7 @@ CreatingProgramWith::
   options: {"composite":true,"traceResolution":true,"outDir":"/src/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/src/project/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /src/project/fileWithImports.ts 250 undefined Source file
 ======== Resolving module 'pkg0' from '/src/project/fileWithImports.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/src/project/node_modules/pkg0/package.json' does not exist.
 File '/src/project/node_modules/pkg0.ts' does not exist.
@@ -58,7 +58,7 @@ File '/src/project/node_modules/pkg0/index.d.ts' exist - use it as a name resolu
 Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/src/project/node_modules/pkg1.ts' does not exist.
 File '/src/project/node_modules/pkg1.tsx' does not exist.
@@ -339,7 +339,7 @@ CreatingProgramWith::
   options: {"composite":true,"traceResolution":true,"outDir":"/src/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/src/project/tsconfig.json"}
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/src/project/node_modules/pkg1/package.json' does not exist.
 File '/src/project/node_modules/pkg1.ts' does not exist.

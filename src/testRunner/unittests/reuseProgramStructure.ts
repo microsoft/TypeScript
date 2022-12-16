@@ -84,7 +84,7 @@ describe("unittests:: Reuse program structure:: General", () => {
             { name: "/node_modules/b/package.json", text: SourceText.New("", "", JSON.stringify({ name: "b", version: "1.2.3" })) },
         ];
 
-        const options: ts.CompilerOptions = { target, moduleResolution: ts.ModuleResolutionKind.NodeJs };
+        const options: ts.CompilerOptions = { target, moduleResolution: ts.ModuleResolutionKind.Node10 };
         const program1 = newProgram(files, ["/a.ts"], options);
         const baselines: string[] = [];
         baselineProgram(baselines, program1);
@@ -313,7 +313,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         const file1Ts = { name: "file1.ts", text: SourceText.New("", `import * as a from "a";`, "const myX: number = a.x;") };
         const file2Ts = { name: "file2.ts", text: SourceText.New("", "", "") };
         const indexDTS = { name: "node_modules/a/index.d.ts", text: SourceText.New("", "export declare let x: number;", "") };
-        const options: ts.CompilerOptions = { target: ts.ScriptTarget.ES2015, traceResolution: true, moduleResolution: ts.ModuleResolutionKind.NodeJs };
+        const options: ts.CompilerOptions = { target: ts.ScriptTarget.ES2015, traceResolution: true, moduleResolution: ts.ModuleResolutionKind.Node10 };
         const rootFiles = [file1Ts, file2Ts];
         const filesAfterNpmInstall = [file1Ts, file2Ts, indexDTS];
         const initialProgram = newProgram(rootFiles, rootFiles.map(f => f.name), options);
@@ -425,7 +425,7 @@ describe("unittests:: Reuse program structure:: General", () => {
         const bxIndex = "/node_modules/b/node_modules/x/index.d.ts";
         const bxPackage = "/node_modules/b/node_modules/x/package.json";
         const root = "/a.ts";
-        const compilerOptions = { target, moduleResolution: ts.ModuleResolutionKind.NodeJs };
+        const compilerOptions = { target, moduleResolution: ts.ModuleResolutionKind.Node10 };
 
         function createRedirectProgram(useGetSourceFileByPath: boolean, options?: { bText: string, bVersion: string }): ProgramWithSourceTexts {
             const files: NamedSourceText[] = [
