@@ -15,30 +15,6 @@ import {
     UnderscoreEscapedMap,
 } from "./_namespaces/ts";
 
-/** @internal */
-export function getIterator<I extends readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined>(iterable: I): Iterator<
-    I extends ReadonlyMap<infer K, infer V> ? [K, V] :
-    I extends ReadonlySet<infer T> ? T :
-    I extends readonly (infer T)[] ? T :
-    I extends undefined ? undefined :
-    never>;
-/** @internal */
-export function getIterator<K, V>(iterable: ReadonlyMap<K, V>): Iterator<[K, V]>;
-/** @internal */
-export function getIterator<K, V>(iterable: ReadonlyMap<K, V> | undefined): Iterator<[K, V]> | undefined;
-/** @internal */
-export function getIterator<T>(iterable: readonly T[] | ReadonlySet<T>): Iterator<T>;
-/** @internal */
-export function getIterator<T>(iterable: readonly T[] | ReadonlySet<T> | undefined): Iterator<T> | undefined;
-/** @internal */
-export function getIterator(iterable: readonly any[] | ReadonlySet<any> | ReadonlyMap<any, any> | undefined): Iterator<any> | undefined {
-    if (iterable) {
-        if (isArray(iterable)) return arrayIterator(iterable);
-        if (iterable instanceof Map) return iterable.entries();
-        if (iterable instanceof Set) return iterable.values();
-        throw new Error("Iteration not supported.");
-    }
-}
 
 /** @internal */
 export const emptyArray: never[] = [] as never[];
@@ -140,31 +116,6 @@ export function zipWith<T, U, V>(arrayA: readonly T[], arrayB: readonly U[], cal
         result.push(callback(arrayA[i], arrayB[i], i));
     }
     return result;
-}
-
-/** @internal */
-export function zipToIterator<T, U>(arrayA: readonly T[], arrayB: readonly U[]): Iterator<[T, U]> {
-    Debug.assertEqual(arrayA.length, arrayB.length);
-    let i = 0;
-    return {
-        next() {
-            if (i === arrayA.length) {
-                return { value: undefined as never, done: true };
-            }
-            i++;
-            return { value: [arrayA[i - 1], arrayB[i - 1]] as [T, U], done: false };
-        }
-    };
-}
-
-/** @internal */
-export function zipToMap<K, V>(keys: readonly K[], values: readonly V[]): Map<K, V> {
-    Debug.assert(keys.length === values.length);
-    const map = new Map<K, V>();
-    for (let i = 0; i < keys.length; ++i) {
-        map.set(keys[i], values[i]);
-    }
-    return map;
 }
 
 /**
@@ -640,24 +591,6 @@ export function mapDefinedEntries<K1, V1, K2, V2>(map: ReadonlyMap<K1, V1> | und
     });
 
     return result;
-}
-
-/** @internal */
-export function mapDefinedValues<V1, V2>(set: ReadonlySet<V1>, f: (value: V1) => V2 | undefined): Set<V2>;
-/** @internal */
-export function mapDefinedValues<V1, V2>(set: ReadonlySet<V1> | undefined, f: (value: V1) => V2 | undefined): Set<V2> | undefined;
-/** @internal */
-export function mapDefinedValues<V1, V2>(set: ReadonlySet<V1> | undefined, f: (value: V1) => V2 | undefined): Set<V2> | undefined {
-    if (set) {
-        const result = new Set<V2>();
-        set.forEach(value => {
-            const newValue = f(value);
-            if (newValue !== undefined) {
-                result.add(newValue);
-            }
-        });
-        return result;
-    }
 }
 
 /** @internal */
@@ -2196,42 +2129,6 @@ export function memoizeWeak<A extends object, T>(callback: (arg: A) => T): (arg:
         }
         return value!;
     };
-}
-
-/**
- * High-order function, composes functions. Note that functions are composed inside-out;
- * for example, `compose(a, b)` is the equivalent of `x => b(a(x))`.
- *
- * @param args The functions to compose.
- *
- * @internal
- */
-export function compose<T>(...args: ((t: T) => T)[]): (t: T) => T;
-/** @internal */
-export function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t: T) => T, e: (t: T) => T): (t: T) => T {
-    if (!!e) {
-        const args: ((t: T) => T)[] = [];
-        for (let i = 0; i < arguments.length; i++) {
-            args[i] = arguments[i];
-        }
-
-        return t => reduceLeft(args, (u, f) => f(u), t);
-    }
-    else if (d) {
-        return t => d(c(b(a(t))));
-    }
-    else if (c) {
-        return t => c(b(a(t)));
-    }
-    else if (b) {
-        return t => b(a(t));
-    }
-    else if (a) {
-        return t => a(t);
-    }
-    else {
-        return t => t;
-    }
 }
 
 /** @internal */
