@@ -3395,7 +3395,7 @@
         "category": "Error",
         "code": 2791
     },
-    "Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?": {
+    "Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?": {
         "category": "Error",
         "code": 2792
     },
@@ -4125,7 +4125,7 @@
         "category": "Error",
         "code": 5069
     },
-    "Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.": {
+    "Option '--resolveJsonModule' cannot be specified when 'moduleResolution' is set to 'classic'.": {
         "category": "Error",
         "code": 5070
     },
@@ -4248,6 +4248,18 @@
     "Export assignment cannot be used when 'moduleResolution' is set to 'bundler'. Consider using 'export default' or another module format instead.": {
         "category": "Error",
         "code": 5100
+    },
+    "Flag '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify 'ignoreDeprecations: \"{2}\"' to silence this error.": {
+        "category": "Error",
+        "code": 5101
+    },
+    "Flag '{0}' is deprecated. Please remove it from your configuration.": {
+        "category": "Error",
+        "code": 5102
+    },
+    "Invalid value for '--ignoreDeprecations'.": {
+        "category": "Error",
+        "code": 5103
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {

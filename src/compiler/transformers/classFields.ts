@@ -1512,7 +1512,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
                     // record an alias as the class name is not in scope for statics.
                     enableSubstitutionForClassAliases();
                     const alias = factory.cloneNode(temp) as GeneratedIdentifier;
-                    alias.autoGenerateFlags &= ~GeneratedIdentifierFlags.ReservedInNestedScopes;
+                    alias.autoGenerate.flags &= ~GeneratedIdentifierFlags.ReservedInNestedScopes;
                     classAliases[getOriginalNodeId(node)] = alias;
                 }
 

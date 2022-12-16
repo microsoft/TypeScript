@@ -961,12 +961,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "moduleResolution",
         type: new Map(getEntries({
-            node: ModuleResolutionKind.NodeJs,
+            // N.B. The first entry specifies the value shown in `tsc --init`
+            node10: ModuleResolutionKind.Node10,
+            node: ModuleResolutionKind.Node10,
             classic: ModuleResolutionKind.Classic,
             node16: ModuleResolutionKind.Node16,
             nodenext: ModuleResolutionKind.NodeNext,
             bundler: ModuleResolutionKind.Bundler,
         })),
+        deprecatedKeys: new Set(["node"]),
         affectsModuleResolution: true,
         paramType: Diagnostics.STRATEGY,
         category: Diagnostics.Modules,
@@ -1507,7 +1510,12 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Control_what_method_is_used_to_detect_module_format_JS_files,
         category: Diagnostics.Language_and_Environment,
         defaultValueDescription: Diagnostics.auto_Colon_Treat_files_with_imports_exports_import_meta_jsx_with_jsx_Colon_react_jsx_or_esm_format_with_module_Colon_node16_as_modules,
-    }
+    },
+    {
+        name: "ignoreDeprecations",
+        type: "string",
+        defaultValueDescription: undefined,
+    },
 ];
 
 /** @internal */
@@ -1685,8 +1693,9 @@ export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOpt
 }
 
 function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType, createDiagnostic: (message: DiagnosticMessage, arg0: string, arg1: string) => Diagnostic): Diagnostic {
-    const namesOfType = arrayFrom(opt.type.keys()).map(key => `'${key}'`).join(", ");
-    return createDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, namesOfType);
+    const namesOfType = arrayFrom(opt.type.keys());
+    const stringNames = (opt.deprecatedKeys ? namesOfType.filter(k => !opt.deprecatedKeys!.has(k)) : namesOfType).map(key => `'${key}'`).join(", ");
+    return createDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, stringNames);
 }
 
 /** @internal */
@@ -3404,7 +3413,7 @@ function getExtendsConfigPath(
         return extendedConfigPath;
     }
     // If the path isn't a rooted or relative path, resolve like a module
-    const resolved = nodeModuleNameResolver(extendedConfig, combinePaths(basePath, "tsconfig.json"), { moduleResolution: ModuleResolutionKind.NodeJs }, host, /*cache*/ undefined, /*projectRefs*/ undefined, /*lookupConfig*/ true);
+    const resolved = nodeModuleNameResolver(extendedConfig, combinePaths(basePath, "tsconfig.json"), { moduleResolution: ModuleResolutionKind.Node10 }, host, /*cache*/ undefined, /*projectRefs*/ undefined, /*lookupConfig*/ true);
     if (resolved.resolvedModule) {
         return resolved.resolvedModule.resolvedFileName;
     }

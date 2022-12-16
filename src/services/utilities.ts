@@ -225,6 +225,7 @@ import {
     isTaggedTemplateExpression,
     isTemplateLiteralKind,
     isToken,
+    isTransientSymbol,
     isTypeAliasDeclaration,
     isTypeElement,
     isTypeNode,
@@ -336,7 +337,6 @@ import {
     textSpanEnd,
     Token,
     tokenToString,
-    TransientSymbol,
     tryCast,
     Type,
     TypeChecker,
@@ -2411,7 +2411,7 @@ export function getModuleSpecifierResolverHost(program: Program, host: LanguageS
 
 /** @internal */
 export function moduleResolutionUsesNodeModules(moduleResolution: ModuleResolutionKind): boolean {
-    return moduleResolution === ModuleResolutionKind.NodeJs || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
+    return moduleResolution === ModuleResolutionKind.Node10 || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
 }
 
 /** @internal */
@@ -2999,19 +2999,15 @@ export function getScriptKind(fileName: string, host: LanguageServiceHost): Scri
 /** @internal */
 export function getSymbolTarget(symbol: Symbol, checker: TypeChecker): Symbol {
     let next: Symbol = symbol;
-    while (isAliasSymbol(next) || (isTransientSymbol(next) && next.target)) {
-        if (isTransientSymbol(next) && next.target) {
-            next = next.target;
+    while (isAliasSymbol(next) || (isTransientSymbol(next) && next.links.target)) {
+        if (isTransientSymbol(next) && next.links.target) {
+            next = next.links.target;
         }
         else {
             next = skipAlias(next, checker);
         }
     }
     return next;
-}
-
-function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
-    return (symbol.flags & SymbolFlags.Transient) !== 0;
 }
 
 function isAliasSymbol(symbol: Symbol): boolean {
