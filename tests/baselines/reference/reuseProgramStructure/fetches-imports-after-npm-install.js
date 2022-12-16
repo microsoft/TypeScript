@@ -33,7 +33,7 @@ resolvedModules: undefined
 resolvedTypeReferenceDirectiveNames: undefined
 
 ======== Resolving module 'a' from 'file1.ts'. ========
-Explicitly specified module resolution kind: 'NodeJs'.
+Explicitly specified module resolution kind: 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File 'node_modules/a/package.json' does not exist.
 File 'node_modules/a.ts' does not exist.
@@ -98,7 +98,7 @@ resolvedModules: undefined
 resolvedTypeReferenceDirectiveNames: undefined
 
 ======== Resolving module 'a' from 'file1.ts'. ========
-Explicitly specified module resolution kind: 'NodeJs'.
+Explicitly specified module resolution kind: 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File 'node_modules/a/package.json' does not exist.
 File 'node_modules/a.ts' does not exist.

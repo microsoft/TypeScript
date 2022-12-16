@@ -1,6 +1,6 @@
 [
     "======== Resolving module './foo/' from '/a.ts'. ========",
-    "Explicitly specified module resolution kind: 'NodeJs'.",
+    "Explicitly specified module resolution kind: 'Node10'.",
     "Loading module as file / folder, candidate module location '/foo/', target file types: TypeScript, Declaration.",
     "Directory '/foo/' does not exist, skipping all lookups in it.",
     "Loading module as file / folder, candidate module location '/foo/', target file types: JavaScript.",
