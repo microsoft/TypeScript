@@ -260,7 +260,6 @@ import {
     getEmitScriptTarget,
     getEnclosingBlockScopeContainer,
     getEntityNameFromTypeNode,
-    getEntries,
     getErrorSpanForNode,
     getEscapedTextOfIdentifierOrLiteral,
     getESModuleInterop,
@@ -1180,7 +1179,7 @@ export const enum TypeFacts {
     AndFactsMask = All & ~OrFactsMask,
 }
 
-const typeofNEFacts: ReadonlyMap<string, TypeFacts> = new Map(getEntries({
+const typeofNEFacts: ReadonlyMap<string, TypeFacts> = new Map(Object.entries({
     string: TypeFacts.TypeofNEString,
     number: TypeFacts.TypeofNENumber,
     bigint: TypeFacts.TypeofNEBigInt,
@@ -1301,7 +1300,7 @@ const enum IntrinsicTypeKind {
     Uncapitalize
 }
 
-const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(getEntries({
+const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Object.entries({
     Uppercase: IntrinsicTypeKind.Uppercase,
     Lowercase: IntrinsicTypeKind.Lowercase,
     Capitalize: IntrinsicTypeKind.Capitalize,

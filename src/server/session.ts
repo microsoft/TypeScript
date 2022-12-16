@@ -53,7 +53,6 @@ import {
     getDeclarationFromName,
     getDeclarationOfKind,
     getEmitDeclarations,
-    getEntries,
     getEntrypointsFromPackageJsonInfo,
     getLineAndCharacterOfPosition,
     getMappedContextSpan,
@@ -3102,7 +3101,7 @@ export class Session<TMessage = string> implements EventSender {
         return { response, responseRequired: true };
     }
 
-    private handlers = new Map(getEntries<(request: protocol.Request) => HandlerResponse>({
+    private handlers = new Map(Object.entries<(request: protocol.Request) => HandlerResponse>({
         [CommandNames.Status]: () => {
             const response: protocol.StatusResponseBody = { version };
             return this.requiredResponse(response);

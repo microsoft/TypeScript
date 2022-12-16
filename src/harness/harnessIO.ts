@@ -269,7 +269,7 @@ export namespace Compiler {
         }
 
         if (!libFileNameSourceFileMap) {
-            libFileNameSourceFileMap = new Map(ts.getEntries({
+            libFileNameSourceFileMap = new Map(Object.entries({
                 [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts")!, /*languageVersion*/ ts.ScriptTarget.Latest)
             }));
         }
@@ -1095,7 +1095,7 @@ function getVaryByStarSettingValues(varyBy: string): ReadonlyMap<string, string 
             return option.type;
         }
         if (option.type === "boolean") {
-            return booleanVaryByStarSettingValues || (booleanVaryByStarSettingValues = new Map(ts.getEntries({
+            return booleanVaryByStarSettingValues || (booleanVaryByStarSettingValues = new Map(Object.entries({
                 true: 1,
                 false: 0
             })));

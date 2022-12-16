@@ -100,7 +100,6 @@ import {
     getDefaultFormatCodeSettings,
     getDirectoryPath,
     getDocumentPositionMapper,
-    getEntries,
     getFileNamesFromConfigSpecs,
     getFileWatcherEventKind,
     getNormalizedAbsolutePath,
@@ -356,7 +355,7 @@ function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: Command
 
 const compilerOptionConverters = prepareConvertersForEnumLikeCompilerOptions(optionDeclarations);
 const watchOptionsConverters = prepareConvertersForEnumLikeCompilerOptions(optionsForWatch);
-const indentStyle = new Map(getEntries({
+const indentStyle = new Map(Object.entries({
     none: IndentStyle.None,
     block: IndentStyle.Block,
     smart: IndentStyle.Smart
@@ -2472,7 +2471,7 @@ export class ProjectService {
             config!.watchedDirectoriesStale = false;
             updateWatchingWildcardDirectories(
                 config!.watchedDirectories ||= new Map(),
-                new Map(getEntries(config!.parsedCommandLine!.wildcardDirectories!)),
+                new Map(Object.entries(config!.parsedCommandLine!.wildcardDirectories!)),
                 // Create new directory watcher
                 (directory, flags) => this.watchWildcardDirectory(directory as Path, flags, configFileName, config!),
             );

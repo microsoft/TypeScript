@@ -1130,7 +1130,7 @@ export class TestState {
     }
 
     public setTypesRegistry(map: ts.MapLike<void>): void {
-        this.languageServiceAdapterHost.typesRegistry = new Map(ts.getEntries(map));
+        this.languageServiceAdapterHost.typesRegistry = new Map(Object.entries(map));
     }
 
     public verifyTypeOfSymbolAtLocation(range: Range, symbol: ts.Symbol, expected: string): void {
@@ -3169,7 +3169,7 @@ export class TestState {
 
     public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
 
-        const openBraceMap = new Map(ts.getEntries<ts.CharacterCodes>({
+        const openBraceMap = new Map(Object.entries<ts.CharacterCodes>({
             "(": ts.CharacterCodes.openParen,
             "{": ts.CharacterCodes.openBrace,
             "[": ts.CharacterCodes.openBracket,

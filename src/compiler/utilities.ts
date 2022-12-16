@@ -157,7 +157,6 @@ import {
     getCombinedModifierFlags,
     getCombinedNodeFlags,
     getDirectoryPath,
-    getEntries,
     getJSDocAugmentsTag,
     getJSDocDeprecatedTagNoCache,
     getJSDocImplementsTags,
@@ -5087,7 +5086,7 @@ const doubleQuoteEscapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u202
 const singleQuoteEscapedCharsRegExp = /[\\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
 // Template strings preserve simple LF newlines, still encode CRLF (or CR)
 const backtickQuoteEscapedCharsRegExp = /\r\n|[\\\`\u0000-\u001f\t\v\f\b\r\u2028\u2029\u0085]/g;
-const escapedCharsMap = new Map(getEntries({
+const escapedCharsMap = new Map(Object.entries({
     "\t": "\\t",
     "\v": "\\v",
     "\f": "\\f",
@@ -5155,7 +5154,7 @@ export function escapeNonAsciiString(s: string, quoteChar?: CharacterCodes.doubl
 // the map below must be updated.
 const jsxDoubleQuoteEscapedCharsRegExp = /[\"\u0000-\u001f\u2028\u2029\u0085]/g;
 const jsxSingleQuoteEscapedCharsRegExp = /[\'\u0000-\u001f\u2028\u2029\u0085]/g;
-const jsxEscapedCharsMap = new Map(getEntries({
+const jsxEscapedCharsMap = new Map(Object.entries({
     "\"": "&quot;",
     "\'": "&apos;"
 }));

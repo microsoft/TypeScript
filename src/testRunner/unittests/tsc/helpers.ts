@@ -807,8 +807,8 @@ function verifyTscEditDiscrepancies({
     ) {
         verifyPresenceAbsence(incremental, clean, `Incremental and clean do not match:: ${message}`);
         if (!incremental || !clean) return;
-        const incrementalMap = new Map(ts.getEntries(incremental));
-        const cleanMap = new Map(ts.getEntries(clean));
+        const incrementalMap = new Map(Object.entries(incremental));
+        const cleanMap = new Map(Object.entries(clean));
         cleanMap.forEach((cleanValue, key) => {
             const result = verifyValue(key, incrementalMap.get(key), cleanValue);
             if (result) addBaseline(...result);
