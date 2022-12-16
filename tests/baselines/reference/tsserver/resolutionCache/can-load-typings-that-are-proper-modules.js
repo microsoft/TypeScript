@@ -17,7 +17,7 @@ Info 1    [00:00:20.000] Search path: /a/b
 Info 2    [00:00:21.000] For info: /a/b/app.js :: No config files found.
 Info 3    [00:00:22.000] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info 4    [00:00:23.000] ======== Resolving module 'lib' from '/a/b/app.js'. ========
-Info 5    [00:00:24.000] Module resolution kind is not specified, using 'NodeJs'.
+Info 5    [00:00:24.000] Module resolution kind is not specified, using 'Node10'.
 Info 6    [00:00:25.000] Loading module 'lib' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Info 7    [00:00:26.000] Directory '/a/b/node_modules' does not exist, skipping all lookups in it.
 Info 8    [00:00:27.000] Directory '/a/node_modules' does not exist, skipping all lookups in it.

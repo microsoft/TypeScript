@@ -1651,7 +1651,7 @@ export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemp
     switch (name.kind) {
         case SyntaxKind.Identifier:
         case SyntaxKind.PrivateIdentifier:
-            return name.autoGenerateFlags ? undefined : name.escapedText;
+            return name.autoGenerate ? undefined : name.escapedText;
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NumericLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -6825,7 +6825,7 @@ export function closeFileWatcher(watcher: FileWatcher) {
 
 /** @internal */
 export function getCheckFlags(symbol: Symbol): CheckFlags {
-    return symbol.flags & SymbolFlags.Transient ? (symbol as TransientSymbol).checkFlags : 0;
+    return symbol.flags & SymbolFlags.Transient ? (symbol as TransientSymbol).links.checkFlags : 0;
 }
 
 /** @internal */
@@ -6837,7 +6837,8 @@ export function getDeclarationModifierFlagsFromSymbol(s: Symbol, isWrite = false
         return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
     }
     if (getCheckFlags(s) & CheckFlags.Synthetic) {
-        const checkFlags = (s as TransientSymbol).checkFlags;
+        // NOTE: potentially unchecked cast to TransientSymbol
+        const checkFlags = (s as TransientSymbol).links.checkFlags;
         const accessModifier = checkFlags & CheckFlags.ContainsPrivate ? ModifierFlags.Private :
             checkFlags & CheckFlags.ContainsPublic ? ModifierFlags.Public :
             ModifierFlags.Protected;
@@ -7266,9 +7267,16 @@ function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
     this.escapedName = name;
     this.declarations = undefined;
     this.valueDeclaration = undefined;
-    this.id = undefined;
-    this.mergeId = undefined;
+    this.id = 0;
+    this.mergeId = 0;
     this.parent = undefined;
+    this.members = undefined;
+    this.exports = undefined;
+    this.exportSymbol = undefined;
+    this.constEnumOnlyModule = undefined;
+    this.isReferenced = undefined;
+    this.isAssigned = undefined;
+    (this as any).links = undefined; // used by TransientSymbol
 }
 
 function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
@@ -7707,7 +7715,7 @@ export function getEmitModuleResolutionKind(compilerOptions: CompilerOptions) {
     if (moduleResolution === undefined) {
         switch (getEmitModuleKind(compilerOptions)) {
             case ModuleKind.CommonJS:
-                moduleResolution = ModuleResolutionKind.NodeJs;
+                moduleResolution = ModuleResolutionKind.Node10;
                 break;
             case ModuleKind.Node16:
                 moduleResolution = ModuleResolutionKind.Node16;
@@ -9450,6 +9458,7 @@ export function hasTabstop(node: Node): boolean {
     return getSnippetElement(node)?.kind === SnippetKind.TabStop;
 }
 
+/** @internal */
 export function isJSDocOptionalParameter(node: ParameterDeclaration) {
     return isInJSFile(node) && (
         // node.type should only be a JSDocOptionalType when node is a parameter of a JSDocFunctionType
@@ -9458,6 +9467,7 @@ export function isJSDocOptionalParameter(node: ParameterDeclaration) {
             isBracketed || !!typeExpression && typeExpression.type.kind === SyntaxKind.JSDocOptionalType));
 }
 
+/** @internal */
 export function isOptionalDeclaration(declaration: Declaration): boolean {
     switch (declaration.kind) {
         case SyntaxKind.PropertyDeclaration:

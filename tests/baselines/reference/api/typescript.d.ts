@@ -3042,7 +3042,7 @@ declare namespace ts {
     }
     enum ModuleResolutionKind {
         Classic = 1,
-        NodeJs = 2,
+        Node10 = 2,
         Node16 = 3,
         NodeNext = 99,
         Bundler = 100
@@ -3121,6 +3121,7 @@ declare namespace ts {
         exactOptionalPropertyTypes?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
+        ignoreDeprecations?: string;
         importHelpers?: boolean;
         importsNotUsedAsValues?: ImportsNotUsedAsValues;
         inlineSourceMap?: boolean;
@@ -4859,8 +4860,6 @@ declare namespace ts {
         name: Identifier;
     };
     function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind): boolean;
-    function isJSDocOptionalParameter(node: ParameterDeclaration): boolean;
-    function isOptionalDeclaration(declaration: Declaration): boolean;
     function createUnparsedSourceFile(text: string): UnparsedSource;
     function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
     function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
