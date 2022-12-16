@@ -23,6 +23,7 @@ import {
     findIndex,
     firstDefined,
     firstOrUndefined,
+    firstOrUndefinedIterator,
     FunctionExpression,
     getCheckFlags,
     getClassLikeDeclarationOfSymbol,
@@ -664,7 +665,7 @@ function tryGetValueFromType(context: CodeFixContextBase, checker: TypeChecker, 
         return factory.createFalse();
     }
     if (type.flags & TypeFlags.EnumLike) {
-        const enumMember = type.symbol.exports ? firstOrUndefined(Array.from(type.symbol.exports.values())) : type.symbol;
+        const enumMember = type.symbol.exports ? firstOrUndefinedIterator(type.symbol.exports.values()) : type.symbol;
         const name = checker.symbolToExpression(type.symbol.parent ? type.symbol.parent : type.symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, /*flags*/ undefined);
         return enumMember === undefined || name === undefined ? factory.createNumericLiteral(0) : factory.createPropertyAccessExpression(name, checker.symbolToString(enumMember));
     }
