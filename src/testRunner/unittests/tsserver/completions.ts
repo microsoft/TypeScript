@@ -5,10 +5,9 @@ import {
     libFile,
 } from "../virtualFileSystemWithWatch";
 import {
-    checkNumberOfProjects,
-    checkProjectActualFiles,
+    baselineTsserverLogs,
+    createLoggerWithInMemoryLogs,
     createSession,
-    executeSessionRequest,
     openFilesForSession,
     TestTypingsInstaller,
 } from "./helpers";
@@ -28,7 +27,8 @@ describe("unittests:: tsserver:: completions", () => {
             content: "{}",
         };
 
-        const session = createSession(createServerHost([aTs, bTs, tsconfig]));
+        const host = createServerHost([aTs, bTs, tsconfig]);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
         openFilesForSession([aTs, bTs], session);
 
         const requestLocation: ts.server.protocol.FileLocationRequestArgs = {
@@ -37,117 +37,35 @@ describe("unittests:: tsserver:: completions", () => {
             offset: 3,
         };
 
-        const response = executeSessionRequest<ts.server.protocol.CompletionsRequest, ts.server.protocol.CompletionInfoResponse>(session, ts.server.protocol.CommandTypes.CompletionInfo, {
-            ...requestLocation,
-            includeExternalModuleExports: true,
-            prefix: "foo",
-        });
-        const entry: ts.server.protocol.CompletionEntry = {
-            hasAction: true,
-            insertText: undefined,
-            isRecommended: undefined,
-            kind: ts.ScriptElementKind.constElement,
-            kindModifiers: ts.ScriptElementKindModifier.exportedModifier,
-            name: "foo",
-            replacementSpan: undefined,
-            isPackageJsonImport: undefined,
-            isImportStatementCompletion: undefined,
-            sortText: ts.Completions.SortText.AutoImportSuggestions,
-            source: "/a",
-            sourceDisplay: undefined,
-            isSnippet: undefined,
-            data: { exportName: "foo", fileName: "/a.ts", ambientModuleName: undefined, isPackageJsonImport: undefined },
-            labelDetails: undefined,
-        };
-
-        // `data.exportMapKey` contains a SymbolId so should not be mocked up with an expected value here.
-        // Just assert that it's a string and then delete it so we can compare everything else with `deepEqual`.
+        const response = session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+            command: ts.server.protocol.CommandTypes.CompletionInfo,
+            arguments: {
+                ...requestLocation,
+                includeExternalModuleExports: true,
+                prefix: "foo",
+            }
+        }).response as ts.server.protocol.CompletionInfo;
         const exportMapKey = (response?.entries[0].data as any)?.exportMapKey;
-        assert.isString(exportMapKey);
-        delete (response?.entries[0].data as any).exportMapKey;
-        assert.deepEqual<ts.server.protocol.CompletionInfo | undefined>(response, {
-            flags: ts.CompletionInfoFlags.MayIncludeAutoImports,
-            isGlobalCompletion: true,
-            isIncomplete: undefined,
-            isMemberCompletion: false,
-            isNewIdentifierLocation: false,
-            optionalReplacementSpan: { start: { line: 1, offset: 1 }, end: { line: 1, offset: 4 } },
-            entries: [entry],
+        session.executeCommandSeq<ts.server.protocol.CompletionDetailsRequest>({
+            command: ts.server.protocol.CommandTypes.CompletionDetails,
+            arguments: {
+                ...requestLocation,
+                entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
+            }
         });
-
-        const detailsRequestArgs: ts.server.protocol.CompletionDetailsRequestArgs = {
-            ...requestLocation,
-            entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
-        };
-
-        const detailsResponse = executeSessionRequest<ts.server.protocol.CompletionDetailsRequest, ts.server.protocol.CompletionDetailsResponse>(session, ts.server.protocol.CommandTypes.CompletionDetails, detailsRequestArgs);
-        const detailsCommon: ts.server.protocol.CompletionEntryDetails & ts.CompletionEntryDetails = {
-            displayParts: [
-                ts.keywordPart(ts.SyntaxKind.ConstKeyword),
-                ts.spacePart(),
-                ts.displayPart("foo", ts.SymbolDisplayPartKind.localName),
-                ts.punctuationPart(ts.SyntaxKind.ColonToken),
-                ts.spacePart(),
-                ts.displayPart("0", ts.SymbolDisplayPartKind.stringLiteral),
-            ],
-            documentation: ts.emptyArray,
-            kind: ts.ScriptElementKind.constElement,
-            kindModifiers: ts.ScriptElementKindModifier.exportedModifier,
-            name: "foo",
-            source: [{ text: "./a", kind: "text" }],
-            sourceDisplay: [{ text: "./a", kind: "text" }],
-        };
-        assert.deepEqual<readonly ts.server.protocol.CompletionEntryDetails[] | undefined>(detailsResponse, [
-            {
-                codeActions: [
-                    {
-                        description: `Add import from "./a"`,
-                        changes: [
-                            {
-                                fileName: "/b.ts",
-                                textChanges: [
-                                    {
-                                        start: { line: 1, offset: 1 },
-                                        end: { line: 1, offset: 1 },
-                                        newText: 'import { foo } from "./a";\n\n',
-                                    },
-                                ],
-                            },
-                        ],
-                        commands: undefined,
-                    },
-                ],
-                tags: [],
-                ...detailsCommon,
-            },
-        ]);
 
         interface CompletionDetailsFullRequest extends ts.server.protocol.FileLocationRequest {
             readonly command: ts.server.protocol.CommandTypes.CompletionDetailsFull;
             readonly arguments: ts.server.protocol.CompletionDetailsRequestArgs;
         }
-        interface CompletionDetailsFullResponse extends ts.server.protocol.Response {
-            readonly body?: readonly ts.CompletionEntryDetails[];
-        }
-        const detailsFullResponse = executeSessionRequest<CompletionDetailsFullRequest, CompletionDetailsFullResponse>(session, ts.server.protocol.CommandTypes.CompletionDetailsFull, detailsRequestArgs);
-        assert.deepEqual<readonly ts.CompletionEntryDetails[] | undefined>(detailsFullResponse, [
-            {
-                codeActions: [
-                    {
-                        description: `Add import from "./a"`,
-                        changes: [
-                            {
-                                fileName: "/b.ts",
-                                textChanges: [ts.createTextChange(ts.createTextSpan(0, 0), 'import { foo } from "./a";\n\n')],
-                            },
-                        ],
-                        commands: undefined,
-                    }
-                ],
-                tags: [],
-                ...detailsCommon,
+        session.executeCommandSeq<CompletionDetailsFullRequest>({
+            command: ts.server.protocol.CommandTypes.CompletionDetailsFull,
+            arguments: {
+                ...requestLocation,
+                entryNames: [{ name: "foo", source: "/a", data: { exportName: "foo", fileName: "/a.ts", exportMapKey } }],
             }
-        ]);
+        });
+        baselineTsserverLogs("completions", "works", session);
     });
 
     it("works when files are included from two different drives of windows", () => {
@@ -260,12 +178,9 @@ export interface BrowserRouterProps {
         const host = createServerHost(files, { windowsStyleRoot: "c:/" });
         const session = createSession(host, {
             typingsInstaller: new TestTypingsInstaller(globalCacheLocation, /*throttleLimit*/ 5, host),
+            logger: createLoggerWithInMemoryLogs(host),
         });
-        const service = session.getProjectService();
         openFilesForSession([appFile], session);
-        checkNumberOfProjects(service, { inferredProjects: 1 });
-        const windowsStyleLibFilePath = "c:/" + libFile.path.substring(1);
-        checkProjectActualFiles(service.inferredProjects[0], filesInProject.map(f => f.path).concat(windowsStyleLibFilePath));
         session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
             command: ts.server.protocol.CommandTypes.CompletionInfo,
             arguments: {
@@ -276,5 +191,6 @@ export interface BrowserRouterProps {
                 includeInsertTextCompletions: true
             }
         });
+        baselineTsserverLogs("completions", "works when files are included from two different drives of windows", session);
     });
 });

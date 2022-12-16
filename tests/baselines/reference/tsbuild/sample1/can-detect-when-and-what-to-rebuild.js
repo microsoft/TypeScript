@@ -23,7 +23,7 @@ export declare const World = "hello";
 
 //// [/src/core/anotherModule.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.World = void 0;
 exports.World = "hello";
 
@@ -43,7 +43,7 @@ export declare function multiply(a: number, b: number): number;
 
 //// [/src/core/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
@@ -148,7 +148,7 @@ export declare const m: typeof mod;
 
 //// [/src/logic/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = exports.getSecondsInDay = void 0;
 var c = require("../core/index");
 function getSecondsInDay() {
@@ -270,7 +270,7 @@ export declare const m: typeof mod;
 
 //// [/src/tests/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.m = void 0;
 var c = require("../core/index");
 var logic = require("../logic/index");
@@ -555,7 +555,7 @@ exitCode:: ExitStatus.Success
 
 //// [/src/core/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.multiply = exports.leftPad = exports.someString = void 0;
 exports.someString = "WELCOME PLANET";
 function leftPad(s, n) { return s + n; }
@@ -670,12 +670,19 @@ Output::
 
 [[90m12:01:03 AM[0m] Building project '/src/tests/tsconfig.json'...
 
-exitCode:: ExitStatus.Success
+[96msrc/tests/tsconfig.json[0m:[93m8[0m:[93m38[0m - [91merror[0m[90m TS5101: [0mFlag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+
+[7m8[0m         "composite": true, "target": "es3",
+[7m [0m [91m                                     ~~~~~[0m
 
 
-//// [/src/tests/index.js] file written with same contents
+Found 1 error.
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+
 //// [/src/tests/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"3708260210-const m = 10;","signature":"1073907769-declare const m = 10;\r\n","affectsGlobalScope":true}],"options":{"composite":true,"declaration":true,"skipDefaultLibCheck":true,"target":0},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../lib/lib.d.ts","./index.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"3708260210-const m = 10;","signature":"1073907769-declare const m = 10;\r\n","affectsGlobalScope":true}],"options":{"composite":true,"declaration":true,"skipDefaultLibCheck":true,"target":0},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"affectedFilesPendingEmit":[2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/tests/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -717,9 +724,15 @@ exitCode:: ExitStatus.Success
       "../../lib/lib.d.ts",
       "./index.ts"
     ],
+    "affectedFilesPendingEmit": [
+      [
+        "./index.ts",
+        "Js | Dts"
+      ]
+    ],
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 898
+  "size": 929
 }
 

@@ -13,14 +13,14 @@ export {
 //// [other.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
-    exports["default"] = 42;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = 42;
 });
 //// [index.js]
 define(["require", "exports", "./other.js"], function (require, exports, other_js_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = void 0;
-    var x = 10 + other_js_1["default"];
+    var x = 10 + other_js_1.default;
     exports.x = x;
 });

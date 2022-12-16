@@ -65,7 +65,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/Project/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
@@ -124,7 +124,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/Project/file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 10;
 

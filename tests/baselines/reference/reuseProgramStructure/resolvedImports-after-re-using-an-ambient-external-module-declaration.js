@@ -4,7 +4,14 @@ File: /a.ts
 
 import * as a from "a";
 resolvedModules: 
-a: {"resolvedFileName":"/a.ts","extension":".ts","isExternalLibraryImport":false}
+a: {
+  "resolvedModule": {
+    "resolvedFileName": "/a.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
+}
 resolvedTypeReferenceDirectiveNames: undefined
 
 
@@ -19,7 +26,14 @@ File: /a.ts
 
 import * as aa from "a";
 resolvedModules: 
-a: {"resolvedFileName":"/a.ts","extension":".ts","isExternalLibraryImport":false}
+a: {
+  "resolvedModule": {
+    "resolvedFileName": "/a.ts",
+    "extension": ".ts",
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
+  }
+}
 resolvedTypeReferenceDirectiveNames: undefined
 
 

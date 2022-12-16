@@ -31,6 +31,7 @@ import {
     FormatCodeOptions,
     FormatCodeSettings,
     getSnapshotText,
+    getSupportedCodeFixes,
     identity,
     ImplementationLocation,
     InlayHint,
@@ -948,6 +949,10 @@ export class SessionClient implements LanguageService {
         const request = this.processRequest<protocol.ProvideCallHierarchyOutgoingCallsRequest>(CommandNames.ProvideCallHierarchyOutgoingCalls, args);
         const response = this.processResponse<protocol.ProvideCallHierarchyOutgoingCallsResponse>(request);
         return response.body.map(item => this.convertCallHierarchyOutgoingCall(fileName, item));
+    }
+
+    getSupportedCodeFixes(): readonly string[] {
+        return getSupportedCodeFixes();
     }
 
     getProgram(): Program {

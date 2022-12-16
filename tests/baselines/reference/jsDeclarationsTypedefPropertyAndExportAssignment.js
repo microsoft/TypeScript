@@ -73,13 +73,13 @@ var taskGroups = {
     styleLayout: {
         id: 'styleLayout',
         label: 'Style & Layout'
-    }
+    },
 };
 /** @type {Object<string, TaskGroup>} */
 var taskNameToGroup = {};
 module.exports = {
     taskGroups: taskGroups,
-    taskNameToGroup: taskNameToGroup
+    taskNameToGroup: taskNameToGroup,
 };
 //// [index.js]
 var _a = require('./module.js'), taskGroups = _a.taskGroups, taskNameToGroup = _a.taskNameToGroup;

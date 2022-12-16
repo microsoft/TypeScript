@@ -41,7 +41,6 @@ CreatingProgramWith::
   options: {"target":3,"module":100,"outDir":"/user/username/projects/myproject/out","watch":true,"project":"/user/username/projects/myproject/src","extendedDiagnostics":true,"traceResolution":true,"explainFiles":true,"configFilePath":"/user/username/projects/myproject/src/tsconfig.json"}
 File '/user/username/projects/myproject/src/package.json' does not exist.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
-'package.json' does not have a 'typesVersions' field.
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileA.ts 250 undefined Source file
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
 Module resolution kind is not specified, using 'Node16'.
@@ -162,7 +161,6 @@ File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
-'package.json' does not have a 'typesVersions' field.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
@@ -262,7 +260,6 @@ File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
-'package.json' does not have a 'typesVersions' field.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
@@ -463,7 +460,6 @@ File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
-'package.json' does not have a 'typesVersions' field.
 File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 ======== Resolving module './fileB.mjs' from '/user/username/projects/myproject/src/fileA.ts'. ========
