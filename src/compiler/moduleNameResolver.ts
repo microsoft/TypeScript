@@ -1874,8 +1874,9 @@ function loadModuleFromFileNoImplicitExtensions(extensions: Extensions, candidat
 }
 
 /**
- * This function is it’s only ever called with paths written in package.json files - never
- * module specifiers written in source files - and so consequently it always allows the
+ * This function is only ever called with paths written in package.json files - never
+ * module specifiers written in source files - and so it always allows the
+
  * candidate to end with a TS extension (but will also try substituting a JS extension for a TS extension).
  */
 function loadFileNameFromPackageJsonField(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
