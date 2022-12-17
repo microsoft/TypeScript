@@ -19,6 +19,11 @@
 ////   type: "json"
 //// }|];
 //// ;
+//// [|import { a5, a6 } from "a";
+//// import [|{
+////   a7,
+////   a8,
+//// }|] from "a";|]
 //// export { a1, a2 };
 //// ;
 //// export { a3, a4 } from "a";
