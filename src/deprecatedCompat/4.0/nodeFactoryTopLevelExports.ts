@@ -37,10 +37,10 @@ import {
     NamedImportBindings,
     Node,
     NodeArray,
+    NodeConstructors,
     NoSubstitutionTemplateLiteral,
     NumericLiteral,
     ParameterDeclaration,
-    parseBaseNodeFactory,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
     PrimaryExpression,
@@ -1345,11 +1345,11 @@ export const createLogicalNot = deprecate(function createLogicalNot(operand: Exp
 /** @deprecated Use an appropriate `factory` method instead. */
 export const createNode = deprecate(function createNode(kind: SyntaxKind, pos = 0, end = 0): Node {
     return setTextRangePosEnd(
-        kind === SyntaxKind.SourceFile ? parseBaseNodeFactory.createBaseSourceFileNode() :
-        kind === SyntaxKind.Identifier ? parseBaseNodeFactory.createBaseIdentifierNode() :
-        kind === SyntaxKind.PrivateIdentifier ? parseBaseNodeFactory.createBasePrivateIdentifierNode() :
-        !isNodeKind(kind) ? parseBaseNodeFactory.createBaseTokenNode(kind) :
-        parseBaseNodeFactory.createBaseNode(kind),
+        kind === SyntaxKind.SourceFile ? new NodeConstructors.SourceFileObject() :
+        kind === SyntaxKind.Identifier ? new NodeConstructors.IdentifierObject() :
+        kind === SyntaxKind.PrivateIdentifier ? new NodeConstructors.PrivateIdentifierObject() :
+        !isNodeKind(kind) ? new NodeConstructors.TokenObject(kind) :
+        new NodeConstructors.NodeObject(kind),
         pos,
         end
     );

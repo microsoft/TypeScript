@@ -1,4 +1,3 @@
-import { IdentifierObject, NodeObject, PrivateIdentifierObject, SourceFileObject, TokenObject } from "./nodeConstructors";
 import * as ts from "./_namespaces/ts";
 import {
     AccessorDeclaration,
@@ -17,7 +16,6 @@ import {
     AsteriskToken,
     attachFileToDiagnostics,
     AwaitExpression,
-    BaseNodeFactory,
     BinaryExpression,
     BinaryOperatorToken,
     BindingElement,
@@ -401,21 +399,8 @@ const enum SpeculationKind {
     Reparse
 }
 
-/**
- * NOTE: You should not use this, it is only exported to support `createNode` in `~/src/deprecatedCompat/deprecations.ts`.
- *
- * @internal
- */
-export const parseBaseNodeFactory: BaseNodeFactory = {
-    createBaseSourceFileNode: () => new SourceFileObject(),
-    createBaseIdentifierNode: () => new IdentifierObject(),
-    createBasePrivateIdentifierNode: () => new PrivateIdentifierObject(),
-    createBaseTokenNode: kind => new TokenObject(kind),
-    createBaseNode: kind => new NodeObject(kind),
-};
-
 /** @internal */
-export const parseNodeFactory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules, parseBaseNodeFactory);
+export const parseNodeFactory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules);
 
 function visitNode<T>(cbNode: (node: Node) => T, node: Node | undefined): T | undefined {
     return node && cbNode(node);
@@ -1410,22 +1395,7 @@ namespace Parser {
 
     const disallowInAndDecoratorContext = NodeFlags.DisallowInContext | NodeFlags.DecoratorContext;
 
-    function countNode(node: Node) {
-        nodeCount++;
-        return node;
-    }
-
-    // Rather than using `createBaseNodeFactory` here, we establish a `BaseNodeFactory` that closes over the
-    // constructors above, which are reset each time `initializeState` is called.
-    const baseNodeFactory: BaseNodeFactory = {
-        createBaseSourceFileNode: () => countNode(new SourceFileObject()),
-        createBaseIdentifierNode: () => countNode(new IdentifierObject()),
-        createBasePrivateIdentifierNode: () => countNode(new PrivateIdentifierObject()),
-        createBaseTokenNode: kind => countNode(new TokenObject(kind)),
-        createBaseNode: kind => countNode(new NodeObject(kind))
-    };
-
-    const factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode, baseNodeFactory);
+    const factory = createNodeFactory(NodeFactoryFlags.NoParenthesizerRules | NodeFactoryFlags.NoNodeConverters | NodeFactoryFlags.NoOriginalNode);
 
     let fileName: string;
     let sourceFlags: NodeFlags;
@@ -1898,9 +1868,16 @@ namespace Parser {
         setTextRangePosWidth(sourceFile, 0, sourceText.length);
         setFields(sourceFile);
 
+        // include the file in the count
+        nodeCount++;
+
         // If we parsed this as an external module, it may contain top-level await
         if (!isDeclarationFile && isExternalModule(sourceFile) && sourceFile.transformFlags & TransformFlags.ContainsPossibleTopLevelAwait) {
-            sourceFile = reparseTopLevelAwait(sourceFile);
+            const updated = reparseTopLevelAwait(sourceFile);
+            if (sourceFile !== updated) {
+                nodeCount++;
+                sourceFile = updated;
+            }
             setFields(sourceFile);
         }
 
@@ -2514,6 +2491,7 @@ namespace Parser {
             (node as Mutable<T>).flags |= NodeFlags.ThisNodeHasError;
         }
 
+        nodeCount++;
         return node;
     }
 

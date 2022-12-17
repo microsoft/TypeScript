@@ -17,7 +17,6 @@ import {
     AsteriskToken,
     AwaitExpression,
     AwaitKeyword,
-    BaseNodeFactory,
     BigIntLiteral,
     BinaryExpression,
     BinaryOperator,
@@ -59,7 +58,6 @@ import {
     ConstructorTypeNode,
     ConstructSignatureDeclaration,
     ContinueStatement,
-    createBaseNodeFactory,
     createNodeConverters,
     createParenthesizerRules,
     createScanner,
@@ -467,15 +465,15 @@ import {
     WithStatement,
     YieldExpression,
 } from "../_namespaces/ts";
-// import {
-//     Node as NodeObject,
-//     Identifier as IdentifierObject,
-//     PrivateIdentifier as PrivateIdentifierObject,
-//     Token as TokenObject,
-//     SourceFile as SourceFileObject,
-// } from "../nodeConstructors";
 import {
-    SourceMapSourceObject as SourceMapSourceObject,
+    IdentifierObject,
+    NodeObject,
+    PrivateIdentifierObject,
+    SourceFileObject,
+    TokenObject,
+} from "../nodeConstructors";
+import {
+    SourceMapSourceObject,
 } from "../objectConstructors";
 
 let nextAutoGenerateId = 0;
@@ -491,6 +489,8 @@ export const enum NodeFactoryFlags {
     NoIndentationOnFreshPropertyAccess = 1 << 2,
     // Do not set an `original` pointer when updating a node.
     NoOriginalNode = 1 << 3,
+    // Mark nodes as synthetic
+    MarkSynthetic = 1 << 4,
 }
 
 const nodeFactoryPatchers: ((factory: NodeFactory) => void)[] = [];
@@ -507,7 +507,8 @@ export function addNodeFactoryPatcher(fn: (factory: NodeFactory) => void) {
  *
  * @internal
  */
-export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNodeFactory): NodeFactory {
+export function createNodeFactory(flags: NodeFactoryFlags): NodeFactory {
+    const markSynthetic = (flags & NodeFactoryFlags.MarkSynthetic) === NodeFactoryFlags.MarkSynthetic;
     const update = flags & NodeFactoryFlags.NoOriginalNode ? updateWithoutOriginal : updateWithOriginal;
 
     // Lazily load the parenthesizer, node converters, and some factory methods until they are used.
@@ -531,7 +532,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     const factory: NodeFactory = {
         get parenthesizer() { return parenthesizerRules(); },
         get converters() { return converters(); },
-        baseFactory,
         flags,
         createNodeArray,
         createNumericLiteral,
@@ -1074,7 +1074,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     function createBaseNode<T extends Node>(kind: T["kind"]) {
-        return baseFactory.createBaseNode(kind) as Mutable<T>;
+        const node = new NodeObject(kind) as Node as Mutable<T>;
+        if (markSynthetic) node.flags |= NodeFlags.Synthesized;
+        return node;
     }
 
     function createBaseDeclaration<T extends Declaration>(kind: T["kind"]) {
@@ -1160,7 +1162,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     //
 
     function createBaseIdentifier(escapedText: __String, originalKeywordKind: SyntaxKind | undefined) {
-        const node = baseFactory.createBaseIdentifierNode() as Mutable<Identifier>;
+        const node = new IdentifierObject() as Mutable<Identifier>;
+        if (markSynthetic) node.flags |= NodeFlags.Synthesized;
         node.originalKeywordKind = originalKeywordKind;
         node.escapedText = escapedText;
         node.autoGenerate = undefined;
@@ -1257,7 +1260,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     function createBasePrivateIdentifier(escapedText: __String) {
-        const node = baseFactory.createBasePrivateIdentifierNode() as Mutable<PrivateIdentifier>;
+        const node = new PrivateIdentifierObject() as Mutable<PrivateIdentifier>;
+        if (markSynthetic) node.flags |= NodeFlags.Synthesized;
         node.escapedText = escapedText;
         node.autoGenerate = undefined;
         node.transformFlags |= TransformFlags.ContainsClassFields;
@@ -1306,7 +1310,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     //
 
     function createBaseToken<T extends Node>(kind: T["kind"]) {
-        return baseFactory.createBaseTokenNode(kind) as Mutable<T>;
+        const node = new TokenObject(kind) as Node as Mutable<T>;
+        if (markSynthetic) node.flags |= NodeFlags.Synthesized;
+        return node;
     }
 
     // @api
@@ -6033,7 +6039,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         endOfFileToken: EndOfFileToken,
         flags: NodeFlags
     ) {
-        const node = baseFactory.createBaseSourceFileNode() as Mutable<SourceFile>;
+        const node = new SourceFileObject() as Mutable<SourceFile>;
+        if (markSynthetic) node.flags |= NodeFlags.Synthesized;
         node.statements = createNodeArray(statements);
         node.endOfFileToken = endOfFileToken;
         node.flags |= flags;
@@ -6116,7 +6123,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function cloneSourceFileWorker(source: SourceFile) {
         // TODO: This mechanism for cloning results in megamorphic property reads and writes. In future perf-related
         //       work, we should consider switching explicit property assignments instead of using `for..in`.
-        const node = baseFactory.createBaseSourceFileNode() as Mutable<SourceFile>;
+        const node = new SourceFileObject() as Mutable<SourceFile>;
+        if (markSynthetic) node.flags |= NodeFlags.Synthesized;
         node.flags |= source.flags & ~NodeFlags.Synthesized;
         for (const p in source) {
             if (hasProperty(node, p) || !hasProperty(source, p)) {
@@ -6452,11 +6460,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         }
 
         const clone =
-            !isNodeKind(node.kind) ? baseFactory.createBaseTokenNode(node.kind) as T :
-            baseFactory.createBaseNode(node.kind) as T;
+            !isNodeKind(node.kind) ? new TokenObject(node.kind) as Node as Mutable<T> :
+            new NodeObject(node.kind) as Node as Mutable<T>;
 
-        (clone as Mutable<T>).flags |= (node.flags & ~NodeFlags.Synthesized);
-        (clone as Mutable<T>).transformFlags = node.transformFlags;
+        if (markSynthetic) clone.flags |= NodeFlags.Synthesized;
+        clone.flags |= (node.flags & ~NodeFlags.Synthesized);
+        clone.transformFlags = node.transformFlags;
         setOriginalNode(clone, node);
 
         for (const key in node) {
@@ -7388,22 +7397,7 @@ export function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
     }
 }
 
-const baseFactory = createBaseNodeFactory();
-
-function makeSynthetic(node: Node) {
-    (node as Mutable<Node>).flags |= NodeFlags.Synthesized;
-    return node;
-}
-
-const syntheticFactory: BaseNodeFactory = {
-    createBaseSourceFileNode: () => makeSynthetic(baseFactory.createBaseSourceFileNode()),
-    createBaseIdentifierNode: () => makeSynthetic(baseFactory.createBaseIdentifierNode()),
-    createBasePrivateIdentifierNode: () => makeSynthetic(baseFactory.createBasePrivateIdentifierNode()),
-    createBaseTokenNode: kind => makeSynthetic(baseFactory.createBaseTokenNode(kind)),
-    createBaseNode: kind => makeSynthetic(baseFactory.createBaseNode(kind)),
-};
-
-export const factory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess, syntheticFactory);
+export const factory = createNodeFactory(NodeFactoryFlags.NoIndentationOnFreshPropertyAccess | NodeFactoryFlags.MarkSynthetic);
 
 export function createUnparsedSourceFile(text: string): UnparsedSource;
 export function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;

@@ -14,7 +14,6 @@ export * from "../diagnosticInformationMap.generated";
 export * from "../scanner";
 export * from "../utilitiesPublic";
 export * from "../utilities";
-export * from "../factory/baseNodeFactory";
 export * from "../factory/parenthesizerRules";
 export * from "../factory/nodeConverters";
 export * from "../factory/nodeFactory";
@@ -72,11 +71,7 @@ import * as moduleSpecifiers from "./ts.moduleSpecifiers";
 export { moduleSpecifiers };
 import * as performance from "./ts.performance";
 export { performance };
-/** @internal */
-import * as NodeConstructors from "./ts.NodeConstructors";
-/** @internal */
-export { NodeConstructors };
-/** @internal */
-import * as ObjectConstructors from "./ts.ObjectConstructors";
-/** @internal */
-export { ObjectConstructors };
+/** @internal */ import * as NodeConstructors from "../nodeConstructors";
+/** @internal */ export { NodeConstructors };
+/** @internal */ import * as ObjectConstructors from "../objectConstructors";
+/** @internal */ export { ObjectConstructors };
