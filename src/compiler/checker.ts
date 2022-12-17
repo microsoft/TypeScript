@@ -284,6 +284,7 @@ import {
     getJSDocParameterTags,
     getJSDocRoot,
     getJSDocSatisfiesExpressionType,
+    getJSDocSatisfiesTypeNode,
     getJSDocTags,
     getJSDocThisTag,
     getJSDocType,
@@ -10222,10 +10223,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Use the type of the initializer expression if one is present and the declaration is
         // not a parameter of a contextually typed function
         if (hasOnlyExpressionInitializer(declaration) && !!declaration.initializer) {
-            if (isInJSFile(declaration) && !isParameter(declaration)) {
-                const containerObjectType = getJSContainerObjectType(declaration, getSymbolOfDeclaration(declaration), getDeclaredExpandoInitializer(declaration));
-                if (containerObjectType) {
-                    return containerObjectType;
+            if (isInJSFile(declaration)) {
+                const initializer = declaration.initializer;
+                if (!isJSDocSatisfiesExpression(initializer)) {
+                    const typeNode = getJSDocSatisfiesTypeNode(declaration);
+                    if (typeNode) {
+                        return checkSatisfiesExpressionWorker(initializer, typeNode, checkMode);
+                    }
+                }
+                if (!isParameter(declaration)) {
+                    const containerObjectType = getJSContainerObjectType(declaration, getSymbolOfDeclaration(declaration), getDeclaredExpandoInitializer(declaration));
+                    if (containerObjectType) {
+                        return containerObjectType;
+                    }
                 }
             }
             const type = widenTypeInferredFromInitializer(declaration, checkDeclarationInitializer(declaration, checkMode));

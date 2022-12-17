@@ -9492,8 +9492,13 @@ export function isJSDocSatisfiesExpression(node: Node): node is JSDocSatisfiesEx
 
 /** @internal */
 export function getJSDocSatisfiesExpressionType(node: JSDocSatisfiesExpression) {
-    const tag = getJSDocSatisfiesTag(node);
-    const type = tag && tag.typeExpression && tag.typeExpression.type;
+    const type = getJSDocSatisfiesTypeNode(node);
     Debug.assertIsDefined(type);
     return type;
+}
+
+/** @internal */
+export function getJSDocSatisfiesTypeNode(node: Node) {
+    const tag = getJSDocSatisfiesTag(node);
+    return tag && tag.typeExpression && tag.typeExpression.type;
 }

@@ -1,0 +1,53 @@
+=== /a.js ===
+/**
+ * @typedef {Object} T1
+ * @property {number} a
+ */
+
+/**
+ * @typedef {Object} T2
+ * @property {string} a
+ */
+
+/**
+ * @satisfies {T1}
+ */
+const t1 = { a: 1 };
+>t1 : Symbol(t1, Decl(a.js, 13, 5))
+>a : Symbol(a, Decl(a.js, 13, 12))
+
+/**
+ * @satisfies {T1}
+ */
+const t2 = { a: 1, b: 1 };
+>t2 : Symbol(t2, Decl(a.js, 18, 5))
+>a : Symbol(a, Decl(a.js, 18, 12))
+>b : Symbol(b, Decl(a.js, 18, 18))
+
+/**
+ * @satisfies {T1}
+ */
+const t3 = {};
+>t3 : Symbol(t3, Decl(a.js, 23, 5))
+
+/**
+ * @satisfies {Array.<number, number>}
+ */
+const t4 = [1, 2];
+>t4 : Symbol(t4, Decl(a.js, 28, 5))
+
+/**
+ * @satisfies {T2}
+ */
+const t5 = { a: 'test' };
+>t5 : Symbol(t5, Decl(a.js, 33, 5))
+>a : Symbol(a, Decl(a.js, 33, 12))
+
+/**
+ * @satisfies {T2}
+ */
+const t6 = { a: 'test', b: 'test' };
+>t6 : Symbol(t6, Decl(a.js, 38, 5))
+>a : Symbol(a, Decl(a.js, 38, 12))
+>b : Symbol(b, Decl(a.js, 38, 23))
+
