@@ -38,6 +38,8 @@ class C1<const T> {
 const c71 = new C1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
 const c72 = c71.foo(['a', ['b', 'c']]);
 
+const C2 = class <const T> {}
+
 const fx1 = <const T>(x: T) => x;
 const fx2 = <const T,>(x: T) => x;
 
@@ -94,6 +96,11 @@ var C1 = /** @class */ (function () {
 }());
 var c71 = new C1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
 var c72 = c71.foo(['a', ['b', 'c']]);
+var C2 = /** @class */ (function () {
+    function class_1() {
+    }
+    return class_1;
+}());
 var fx1 = function (x) { return x; };
 var fx2 = function (x) { return x; };
 function set(obj, path, value) { }

@@ -219,6 +219,10 @@ const c72 = c71.foo(['a', ['b', 'c']]);
 >'b' : "b"
 >'c' : "c"
 
+const C2 = class <const T> {}
+>C2 : typeof C2
+>class <const T> {} : typeof C2
+
 const fx1 = <const T>(x: T) => x;
 >fx1 : <const T>(x: T) => T
 ><const T>(x: T) => x : <const T>(x: T) => T
