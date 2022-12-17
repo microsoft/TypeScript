@@ -1,5 +1,6 @@
 import {
     ArrowFunction,
+    AssertClause,
     Block,
     CallExpression,
     CancellationToken,
@@ -36,6 +37,8 @@ import {
     JsxElement,
     JsxFragment,
     JsxOpeningLikeElement,
+    NamedExports,
+    NamedImports,
     Node,
     NodeArray,
     NoSubstitutionTemplateLiteral,
@@ -71,13 +74,13 @@ function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: Cancel
     const n = statements.length;
     while (current < n) {
         while (current < n && !isAnyImportSyntax(statements[current])) {
-            visitNonImportNode(statements[current]);
+            visitNode(statements[current]);
             current++;
         }
         if (current === n) break;
         const firstImport = current;
         while (current < n && isAnyImportSyntax(statements[current])) {
-            addOutliningForLeadingCommentsForNode(statements[current], sourceFile, cancellationToken, out);
+            visitNode(statements[current]);
             current++;
         }
         const lastImport = current - 1;
@@ -86,7 +89,7 @@ function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: Cancel
         }
     }
 
-    function visitNonImportNode(n: Node) {
+    function visitNode(n: Node) {
         if (depthRemaining === 0) return;
         cancellationToken.throwIfCancellationRequested();
 
@@ -112,21 +115,21 @@ function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: Cancel
         depthRemaining--;
         if (isCallExpression(n)) {
             depthRemaining++;
-            visitNonImportNode(n.expression);
+            visitNode(n.expression);
             depthRemaining--;
-            n.arguments.forEach(visitNonImportNode);
-            n.typeArguments?.forEach(visitNonImportNode);
+            n.arguments.forEach(visitNode);
+            n.typeArguments?.forEach(visitNode);
         }
         else if (isIfStatement(n) && n.elseStatement && isIfStatement(n.elseStatement)) {
             // Consider an 'else if' to be on the same depth as the 'if'.
-            visitNonImportNode(n.expression);
-            visitNonImportNode(n.thenStatement);
+            visitNode(n.expression);
+            visitNode(n.thenStatement);
             depthRemaining++;
-            visitNonImportNode(n.elseStatement);
+            visitNode(n.elseStatement);
             depthRemaining--;
         }
         else {
-            n.forEachChild(visitNonImportNode);
+            n.forEachChild(visitNode);
         }
         depthRemaining++;
     }
@@ -298,6 +301,23 @@ function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan
             return spanForCallExpression(n as CallExpression);
         case SyntaxKind.ParenthesizedExpression:
             return spanForParenthesizedExpression(n as ParenthesizedExpression);
+        case SyntaxKind.NamedImports:
+        case SyntaxKind.NamedExports:
+        case SyntaxKind.AssertClause:
+            return spanForNamedImportsOrExportsOrAssertClause(n as NamedImports | NamedExports | AssertClause);
+    }
+
+    function spanForNamedImportsOrExportsOrAssertClause(node: NamedImports | NamedExports | AssertClause) {
+        if (!node.elements.length) {
+            return undefined;
+        }
+        const openToken = findChildOfKind(node, SyntaxKind.OpenBraceToken, sourceFile);
+        const closeToken = findChildOfKind(node, SyntaxKind.CloseBraceToken, sourceFile);
+        if (!openToken || !closeToken || positionsAreOnSameLine(openToken.pos, closeToken.pos, sourceFile)) {
+            return undefined;
+        }
+
+        return spanBetweenTokens(openToken, closeToken, node, sourceFile, /*autoCollapse*/ false, /*useFullStart*/ false);
     }
 
     function spanForCallExpression(node: CallExpression): OutliningSpan | undefined {
