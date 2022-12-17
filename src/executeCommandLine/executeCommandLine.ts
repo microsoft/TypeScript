@@ -1268,7 +1268,7 @@ function statisticValue(s: Statistic) {
         case StatisticType.count:
             return "" + s.value;
         case StatisticType.time:
-            return (s.value / 1000).toFixed(2) + "s";
+            return (s.value / 1000).toFixed(3) + "s";
         case StatisticType.memory:
             return Math.round(s.value / 1000) + "K";
         default:
