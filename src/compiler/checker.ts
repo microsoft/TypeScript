@@ -44994,7 +44994,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isTopLevelValueImportEqualsWithEntityName,
             isDeclarationVisible,
             isImplementationOfOverload,
-            isRequiredInitializedParameter,
             isExpandoFunctionDeclaration,
             getPropertiesOfContainerFunction,
             createTypeOfDeclaration,

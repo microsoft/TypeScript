@@ -1128,7 +1128,6 @@ export const notImplementedResolver: EmitResolver = {
     isLateBound: (_node): _node is LateBoundDeclaration => false,
     collectLinkedAliases: notImplemented,
     isImplementationOfOverload: notImplemented,
-    isRequiredInitializedParameter: notImplemented,
     isExpandoFunctionDeclaration: notImplemented,
     getPropertiesOfContainerFunction: notImplemented,
     createTypeOfDeclaration: notImplemented,
