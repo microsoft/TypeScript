@@ -3298,7 +3298,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             addLateBoundAssignmentDeclarationToSymbol(node, sym);
         }
         else {
-            bindStaticPropertyAssignment(cast(node.left, isBindableStaticNameExpression));
+            bindStaticPropertyAssignment(cast<BindableStaticNameExpression>(node.left, isBindableStaticNameExpression));
         }
     }
 

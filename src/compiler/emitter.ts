@@ -5801,7 +5801,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
         const name = getTextOfNode(node.name);
         // Use module/enum name itself if it is unique, otherwise make a unique variation
-        return isUniqueLocalName(name, tryCast(node, canHaveLocals)) ? name : makeUniqueName(name, isUniqueName, /*optimistic*/ false, /*scoped*/ false, /*privateName*/ false, /*prefix*/ "", /*suffix*/ "");
+        return isUniqueLocalName(name, tryCast<HasLocals>(node, canHaveLocals)) ? name : makeUniqueName(name, isUniqueName, /*optimistic*/ false, /*scoped*/ false, /*privateName*/ false, /*prefix*/ "", /*suffix*/ "");
     }
 
     /**

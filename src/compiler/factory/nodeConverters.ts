@@ -27,6 +27,7 @@ import {
     notImplemented,
     ObjectBindingOrAssignmentElement,
     ObjectBindingOrAssignmentPattern,
+    ObjectLiteralElementLike,
     setOriginalNode,
     setStartsOnNewLine,
     setTextRange,
@@ -91,7 +92,7 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
                 )
                 : expression;
         }
-        return cast(element, isExpression);
+        return cast<Expression>(element, isExpression);
     }
 
     function convertToObjectAssignmentElement(element: ObjectBindingOrAssignmentElement) {
@@ -108,7 +109,7 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
             return setOriginalNode(setTextRange(factory.createShorthandPropertyAssignment(element.name, element.initializer), element), element);
         }
 
-        return cast(element, isObjectLiteralElementLike);
+        return cast<ObjectLiteralElementLike>(element, isObjectLiteralElementLike);
     }
 
     function convertToAssignmentPattern(node: BindingOrAssignmentPattern): AssignmentPattern {
@@ -154,7 +155,7 @@ export function createNodeConverters(factory: NodeFactory): NodeConverters {
             return convertToAssignmentPattern(node);
         }
 
-        return cast(node, isExpression);
+        return cast<Expression>(node, isExpression);
     }
 }
 

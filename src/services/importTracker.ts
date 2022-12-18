@@ -10,6 +10,7 @@ import {
     canHaveSymbol,
     cast,
     Debug,
+    Declaration,
     ExportAssignment,
     ExportDeclaration,
     FileReference,
@@ -685,10 +686,10 @@ function getExportEqualsLocalSymbol(importedSymbol: Symbol, checker: TypeChecker
 
     const decl = Debug.checkDefined(importedSymbol.valueDeclaration);
     if (isExportAssignment(decl)) { // `export = class {}`
-        return tryCast(decl.expression, canHaveSymbol)?.symbol;
+        return tryCast<Declaration>(decl.expression, canHaveSymbol)?.symbol;
     }
     else if (isBinaryExpression(decl)) { // `module.exports = class {}`
-        return tryCast(decl.right, canHaveSymbol)?.symbol;
+        return tryCast<Declaration>(decl.right, canHaveSymbol)?.symbol;
     }
     else if (isSourceFile(decl)) { // json module
         return decl.symbol;

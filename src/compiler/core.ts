@@ -2004,16 +2004,12 @@ export function isNumber(x: unknown): x is number {
 }
 
 /** @internal */
-export function tryCast<TOut extends TParam, TIn extends TParam, TParam = any>(value: TIn | undefined, test: (value: TParam) => value is TOut): TOut | undefined;
-/** @internal */
-export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined;
-/** @internal */
-export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined {
+export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined {
     return value !== undefined && test(value) ? value : undefined;
 }
 
 /** @internal */
-export function cast<TOut extends TParam, TIn extends TParam, TParam = any>(value: TIn | undefined, test: (value: TParam) => value is TOut): TOut {
+export function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut {
     if (value !== undefined && test(value)) return value;
 
     return Debug.fail(`Invalid cast. The supplied value ${value} did not pass the test '${Debug.getFunctionName(test)}'.`);

@@ -11,6 +11,7 @@ import {
     firstOrUndefined,
     getResolvedModule,
     getTokenAtPosition,
+    HasLocals,
     Identifier,
     isExportDeclaration,
     isIdentifier,
@@ -126,7 +127,7 @@ function getInfo(sourceFile: SourceFile, pos: number, program: Program): Info | 
         if (moduleSourceFile === undefined || isSourceFileFromLibrary(program, moduleSourceFile)) return undefined;
 
         const moduleSymbol = moduleSourceFile.symbol;
-        const locals = tryCast(moduleSymbol.valueDeclaration, canHaveLocals)?.locals;
+        const locals = tryCast<HasLocals>(moduleSymbol.valueDeclaration, canHaveLocals)?.locals;
         if (locals === undefined) return undefined;
 
         const localSymbol = locals.get(token.escapedText);
