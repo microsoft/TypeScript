@@ -978,7 +978,7 @@ export function detectSortCaseSensitivity(array: readonly string[], useEslintOrd
 /** @internal */
 export function detectSortCaseSensitivity<T>(array: readonly T[], useEslintOrdering: boolean, getString: (element: T) => string): SortKind;
 /** @internal */
-export function detectSortCaseSensitivity<T>(array: readonly T[], useEslintOrdering: boolean, getString?: (element: T) => string): SortKind {
+export function detectSortCaseSensitivity<T>(array: readonly T[], useEslintOrdering?: boolean, getString?: (element: T) => string): SortKind {
     let kind = SortKind.Both;
     if (array.length < 2) return kind;
     const caseSensitiveComparer = getString
