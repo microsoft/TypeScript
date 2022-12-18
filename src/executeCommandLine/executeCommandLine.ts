@@ -253,9 +253,9 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
         typeof option.defaultValueDescription === "object"
             ? getDiagnosticText(option.defaultValueDescription)
             : formatDefaultValue(
-                  option.defaultValueDescription,
-                  option.type === "list" ? option.element.type : option.type
-              );
+                option.defaultValueDescription,
+                option.type === "list" || option.type === "listOrElement" ? option.element.type : option.type
+            );
     const terminalWidth = sys.getWidthOfTerminal?.() ?? 0;
 
     // Note: child_process might return `terminalWidth` as undefined.
@@ -365,6 +365,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
         };
 
         function getValueType(option: CommandLineOption) {
+            Debug.assert(option.type !== "listOrElement");
             switch (option.type) {
                 case "string":
                 case "number":
@@ -386,7 +387,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
                     possibleValues = option.type;
                     break;
                 case "list":
-                    // TODO: check infinite loop
+                case "listOrElement":
                     possibleValues = getPossibleValues(option.element);
                     break;
                 case "object":

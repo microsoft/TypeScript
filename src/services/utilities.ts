@@ -225,6 +225,7 @@ import {
     isTaggedTemplateExpression,
     isTemplateLiteralKind,
     isToken,
+    isTransientSymbol,
     isTypeAliasDeclaration,
     isTypeElement,
     isTypeNode,
@@ -271,7 +272,6 @@ import {
     nodeIsMissing,
     nodeIsPresent,
     nodeIsSynthesized,
-    noop,
     normalizePath,
     NoSubstitutionTemplateLiteral,
     notImplemented,
@@ -337,7 +337,6 @@ import {
     textSpanEnd,
     Token,
     tokenToString,
-    TransientSymbol,
     tryCast,
     Type,
     TypeChecker,
@@ -2375,6 +2374,7 @@ export function programContainsModules(program: Program): boolean {
 export function programContainsEsModules(program: Program): boolean {
     return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
 }
+// TODO: this function is, at best, poorly named. Use sites are pretty suspicious.
 /** @internal */
 export function compilerOptionsIndicateEsModules(compilerOptions: CompilerOptions): boolean {
     return !!compilerOptions.module || getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
@@ -2410,13 +2410,8 @@ export function getModuleSpecifierResolverHost(program: Program, host: LanguageS
 }
 
 /** @internal */
-export function moduleResolutionRespectsExports(moduleResolution: ModuleResolutionKind): boolean {
-    return moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
-}
-
-/** @internal */
 export function moduleResolutionUsesNodeModules(moduleResolution: ModuleResolutionKind): boolean {
-    return moduleResolution === ModuleResolutionKind.NodeJs || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
+    return moduleResolution === ModuleResolutionKind.Node10 || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
 }
 
 /** @internal */
@@ -2546,7 +2541,7 @@ export function insertImports(changes: textChanges.ChangeTracker, sourceFile: So
     if (!existingImportStatements.length) {
         changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
     }
-    else if (existingImportStatements && OrganizeImports.importsAreSorted(existingImportStatements)) {
+    else if (existingImportStatements && OrganizeImports.detectImportDeclarationSorting(existingImportStatements)) {
         for (const newImport of sortedNewImports) {
             const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport);
             if (insertionIndex === 0) {
@@ -2721,10 +2716,6 @@ function getDisplayPartWriter(): DisplayPartsSymbolWriter {
         increaseIndent: () => { indent++; },
         decreaseIndent: () => { indent--; },
         clear: resetWriter,
-        trackSymbol: () => false,
-        reportInaccessibleThisError: noop,
-        reportInaccessibleUniqueSymbolError: noop,
-        reportPrivateInBaseOfClassExpression: noop,
     };
 
     function writeIndent() {
@@ -3008,19 +2999,15 @@ export function getScriptKind(fileName: string, host: LanguageServiceHost): Scri
 /** @internal */
 export function getSymbolTarget(symbol: Symbol, checker: TypeChecker): Symbol {
     let next: Symbol = symbol;
-    while (isAliasSymbol(next) || (isTransientSymbol(next) && next.target)) {
-        if (isTransientSymbol(next) && next.target) {
-            next = next.target;
+    while (isAliasSymbol(next) || (isTransientSymbol(next) && next.links.target)) {
+        if (isTransientSymbol(next) && next.links.target) {
+            next = next.links.target;
         }
         else {
             next = skipAlias(next, checker);
         }
     }
     return next;
-}
-
-function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
-    return (symbol.flags & SymbolFlags.Transient) !== 0;
 }
 
 function isAliasSymbol(symbol: Symbol): boolean {

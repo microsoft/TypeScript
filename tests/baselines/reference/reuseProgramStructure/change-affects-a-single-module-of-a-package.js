@@ -20,7 +20,8 @@ resolvedModules:
       "name": "b",
       "subModuleName": "internal.d.ts",
       "version": "1.2.3"
-    }
+    },
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/node_modules/b/internal.ts",
@@ -46,7 +47,8 @@ b: {
       "name": "b",
       "subModuleName": "index.d.ts",
       "version": "1.2.3"
-    }
+    },
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/node_modules/b.ts",
@@ -89,7 +91,8 @@ resolvedModules:
       "name": "b",
       "subModuleName": "internal.d.ts",
       "version": "1.2.3"
-    }
+    },
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/node_modules/b/internal.ts",
@@ -115,7 +118,8 @@ b: {
       "name": "b",
       "subModuleName": "index.d.ts",
       "version": "1.2.3"
-    }
+    },
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/node_modules/b.ts",

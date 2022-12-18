@@ -1,6 +1,6 @@
 [
     "======== Resolving module '/foo' from '/root/a.ts'. ========",
-    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Module resolution kind is not specified, using 'Node10'.",
     "'baseUrl' option is set to '/root', using this value to resolve non-relative module name '/foo'.",
     "'paths' option is specified, looking for a pattern to match module name '/foo'.",
     "Module name '/foo', matched pattern '*'.",
@@ -9,7 +9,7 @@
     "File '/root/src/foo.ts' exist - use it as a name resolution result.",
     "======== Module name '/foo' was successfully resolved to '/root/src/foo.ts'. ========",
     "======== Resolving module '/bar' from '/root/a.ts'. ========",
-    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Module resolution kind is not specified, using 'Node10'.",
     "'baseUrl' option is set to '/root', using this value to resolve non-relative module name '/bar'.",
     "'paths' option is specified, looking for a pattern to match module name '/bar'.",
     "Module name '/bar', matched pattern '*'.",

@@ -23,6 +23,7 @@ import {
     CallSignatureDeclaration,
     CaseBlock,
     CaseClause,
+    CaseKeyword,
     CatchClause,
     ClassDeclaration,
     ClassExpression,
@@ -97,6 +98,7 @@ import {
     JSDocNonNullableType,
     JSDocNullableType,
     JSDocOptionalType,
+    JSDocOverloadTag,
     JSDocOverrideTag,
     JSDocParameterTag,
     JSDocPrivateTag,
@@ -378,6 +380,11 @@ export function isSuperKeyword(node: Node): node is SuperExpression {
 /** @internal */
 export function isImportKeyword(node: Node): node is ImportExpression {
     return node.kind === SyntaxKind.ImportKeyword;
+}
+
+/** @internal */
+export function isCaseKeyword(node: Node): node is CaseKeyword {
+    return node.kind === SyntaxKind.CaseKeyword;
 }
 
 // Names
@@ -1127,6 +1134,10 @@ export function isJSDocReadonlyTag(node: Node): node is JSDocReadonlyTag {
 
 export function isJSDocOverrideTag(node: Node): node is JSDocOverrideTag {
     return node.kind === SyntaxKind.JSDocOverrideTag;
+}
+
+export function isJSDocOverloadTag(node: Node): node is JSDocOverloadTag {
+    return node.kind === SyntaxKind.JSDocOverloadTag;
 }
 
 export function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag {
