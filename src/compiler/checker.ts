@@ -1400,7 +1400,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     const moduleKind = getEmitModuleKind(compilerOptions);
     const useDefineForClassFields = getUseDefineForClassFields(compilerOptions);
     const allowSyntheticDefaultImports = getAllowSyntheticDefaultImports(compilerOptions);
-    const strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
+    let strictNullChecks = getStrictOptionValue(compilerOptions, "strictNullChecks");
     const strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
     const strictBindCallApply = getStrictOptionValue(compilerOptions, "strictBindCallApply");
     const strictPropertyInitialization = getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
@@ -44823,7 +44823,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             flags |= NodeBuilderFlags.AllowUniqueESSymbolType;
         }
         if (addUndefined) {
+            const savedStrictNullChecks = strictNullChecks;
+            strictNullChecks = true;
             type = getOptionalType(type);
+            strictNullChecks = savedStrictNullChecks;
         }
         return nodeBuilder.typeToTypeNode(type, enclosingDeclaration, flags | NodeBuilderFlags.MultilineObjectLiterals, tracker);
     }

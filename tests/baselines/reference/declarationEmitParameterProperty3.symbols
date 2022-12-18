@@ -1,0 +1,8 @@
+=== tests/cases/compiler/declarationEmitParameterProperty3.ts ===
+class C {
+>C : Symbol(C, Decl(declarationEmitParameterProperty3.ts, 0, 0))
+
+  constructor(public a = 123, b: string) {}
+>a : Symbol(C.a, Decl(declarationEmitParameterProperty3.ts, 1, 14))
+>b : Symbol(b, Decl(declarationEmitParameterProperty3.ts, 1, 29))
+}

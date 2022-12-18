@@ -1,0 +1,9 @@
+=== tests/cases/compiler/declarationEmitParameterProperty2.ts ===
+class C {
+>C : C
+
+  constructor(public a = 123, b: string) {}
+>a : number
+>123 : 123
+>b : string
+}
