@@ -183,8 +183,9 @@ import {
     isTagName,
     isTextWhiteSpaceLike,
     isThisTypeParameter,
-    JSDoc,
+    isTupleTypeNode,
     JsDoc,
+    JSDoc,
     JSDocContainer,
     JSDocTagInfo,
     JsonSourceFile,
@@ -241,6 +242,7 @@ import {
     PrivateIdentifier,
     Program,
     PropertyName,
+    punctuationPart,
     Push,
     QuickInfo,
     refactor,
@@ -278,6 +280,7 @@ import {
     SourceFile,
     SourceFileLike,
     SourceMapSource,
+    spacePart,
     Statement,
     stringContains,
     StringLiteral,
@@ -294,6 +297,7 @@ import {
     TextChange,
     TextChangeRange,
     TextInsertion,
+    textPart,
     TextRange,
     TextSpan,
     textSpanEnd,
@@ -2031,7 +2035,10 @@ export function createLanguageService(
                 kind: ScriptElementKind.unknown,
                 kindModifiers: ScriptElementKindModifier.none,
                 textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
-                displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo))),
+                displayParts: parentInfluencedDisplayPartsAdditions(
+                    typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo))),
+                    nodeForQuickInfo
+                ),
                 documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
                 tags: type.symbol ? type.symbol.getJsDocTags(typeChecker) : undefined
             };
@@ -2048,6 +2055,16 @@ export function createLanguageService(
             documentation,
             tags,
         };
+    }
+
+    function parentInfluencedDisplayPartsAdditions(parts: SymbolDisplayPart[], node: Node): SymbolDisplayPart[] {
+        // Named tuple members don't have symbols, and do not get access to the additional parts usually added in symbolDisplays.ts
+        if (isNamedTupleMember(node)) {
+            const indexOfNode = isTupleTypeNode(node.parent) ? node.parent.elements.indexOf(node) : -1;
+            if (indexOfNode === -1) return parts;
+            return [punctuationPart(SyntaxKind.OpenParenToken), textPart("index") , punctuationPart(SyntaxKind.ColonToken), spacePart(), textPart(indexOfNode.toString()), punctuationPart(SyntaxKind.CloseParenToken), spacePart(), ...parts];
+        }
+        return parts;
     }
 
     function getNodeForQuickInfo(node: Node): Node {

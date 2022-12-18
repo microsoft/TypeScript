@@ -2,4 +2,4 @@
 
 ////type foo = [/**/x: string];
 
-verify.quickInfoAt("", "string");
+verify.quickInfoAt("", "(index: 0) string");
