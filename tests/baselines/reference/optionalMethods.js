@@ -136,7 +136,7 @@ interface Foo {
 }
 declare function test1(x: Foo): void;
 declare class Bar {
-    d?: number;
+    d?: number | undefined;
     e: number;
     a: number;
     b?: number;
