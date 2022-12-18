@@ -53,6 +53,7 @@ import {
     CustomTransformers,
     Debug,
     DeclarationWithTypeParameterChildren,
+    DeprecationVersion,
     Diagnostic,
     DiagnosticCategory,
     diagnosticCategoryName,
@@ -132,6 +133,7 @@ import {
     getPropertyArrayElementValue,
     getPropertyAssignment,
     getResolvedModule,
+    getResolveJsonModule,
     getRootLength,
     getSetExternalModuleIndicator,
     getSpellingSuggestion,
@@ -215,6 +217,8 @@ import {
     ModuleResolutionHost,
     moduleResolutionIsEqualTo,
     ModuleResolutionKind,
+    moduleResolutionSupportsPackageJsonExportsAndImports,
+    moduleResolutionSupportsResolvingTsExtensions,
     Mutable,
     Node,
     NodeArray,
@@ -305,6 +309,7 @@ import {
     UnparsedSource,
     VariableDeclaration,
     VariableStatement,
+    versionMajorMinor,
     walkUpParenthesizedExpressions,
     WriteFileCallback,
     WriteFileCallbackData,
@@ -1389,13 +1394,14 @@ function shouldProgramCreateNewSourceFiles(program: Program | undefined, newOpti
     return optionsHaveChanges(program.getCompilerOptions(), newOptions, sourceFileAffectingCompilerOptions);
 }
 
-function createCreateProgramOptions(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): CreateProgramOptions {
+function createCreateProgramOptions(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[], typeScriptVersion?: string): CreateProgramOptions {
     return {
         rootNames,
         options,
         host,
         oldProgram,
-        configFileParsingDiagnostics
+        configFileParsingDiagnostics,
+        typeScriptVersion,
     };
 }
 
@@ -1427,7 +1433,7 @@ export function createProgram(createProgramOptions: CreateProgramOptions): Progr
 export function createProgram(rootNames: readonly string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: readonly Diagnostic[]): Program;
 export function createProgram(rootNamesOrOptions: readonly string[] | CreateProgramOptions, _options?: CompilerOptions, _host?: CompilerHost, _oldProgram?: Program, _configFileParsingDiagnostics?: readonly Diagnostic[]): Program {
     const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
-    const { rootNames, options, configFileParsingDiagnostics, projectReferences } = createProgramOptions;
+    const { rootNames, options, configFileParsingDiagnostics, projectReferences, typeScriptVersion } = createProgramOptions;
     let { oldProgram } = createProgramOptions;
 
     let processingDefaultLibFiles: SourceFile[] | undefined;
@@ -3158,7 +3164,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         for (const node of file.statements) {
             collectModuleReferences(node, /*inAmbientModule*/ false);
         }
-        if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || isJavaScriptFile) {
+
+        // `require` has no special meaning in `--moduleResolution bundler`
+        const shouldProcessRequires = isJavaScriptFile && getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Bundler;
+        if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || shouldProcessRequires) {
             collectDynamicImportOrRequireCalls(file);
         }
 
@@ -3220,7 +3229,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const r = /import|require/g;
             while (r.exec(file.text) !== null) { // eslint-disable-line no-null/no-null
                 const node = getNodeAtPosition(file, r.lastIndex);
-                if (isJavaScriptFile && isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
+                if (shouldProcessRequires && isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
                     setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
                     imports = append(imports, node.arguments[0]);
                 }
@@ -3766,7 +3775,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             i++;
         }
         const resolveFrom = combinePaths(currentDirectory, `__lib_node_modules_lookup_${libFileName}__.ts`);
-        const localOverrideModuleResult = resolveModuleName("@typescript/lib-" + path, resolveFrom, { moduleResolution: ModuleResolutionKind.NodeJs }, host, moduleResolutionCache);
+        const localOverrideModuleResult = resolveModuleName("@typescript/lib-" + path, resolveFrom, { moduleResolution: ModuleResolutionKind.Node10 }, host, moduleResolutionCache);
         if (localOverrideModuleResult?.resolvedModule) {
             return localOverrideModuleResult.resolvedModule.resolvedFileName;
         }
@@ -3983,6 +3992,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified));
         }
 
+        verifyDeprecatedCompilerOptions();
         verifyProjectReferences();
 
         // List of collected files is complete; validate exhautiveness if this is a project with a file list
@@ -4111,11 +4121,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         }
 
-        if (options.resolveJsonModule) {
-            if (getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs &&
-                getEmitModuleResolutionKind(options) !== ModuleResolutionKind.Node16 &&
-                getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeNext) {
-                createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_without_node_module_resolution_strategy, "resolveJsonModule");
+        if (getResolveJsonModule(options)) {
+            if (getEmitModuleResolutionKind(options) === ModuleResolutionKind.Classic) {
+                createDiagnosticForOptionName(Diagnostics.Option_resolveJsonModule_cannot_be_specified_when_moduleResolution_is_set_to_classic, "resolveJsonModule");
             }
             // Any emit other than common js, amd, es2015 or esnext is error
             else if (!hasJsonModuleEmitEnabled(options)) {
@@ -4205,6 +4213,21 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             createOptionValueDiagnostic("importsNotUsedAsValues", Diagnostics.Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later);
         }
 
+        if (options.allowImportingTsExtensions && !(moduleResolutionSupportsResolvingTsExtensions(options) && (options.noEmit || options.emitDeclarationOnly))) {
+            createOptionValueDiagnostic("allowImportingTsExtensions", Diagnostics.Option_allowImportingTsExtensions_can_only_be_used_when_moduleResolution_is_set_to_bundler_and_either_noEmit_or_emitDeclarationOnly_is_set);
+        }
+
+        const moduleResolution = getEmitModuleResolutionKind(options);
+        if (options.resolvePackageJsonExports && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
+            createOptionValueDiagnostic("resolvePackageJsonExports", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonExports");
+        }
+        if (options.resolvePackageJsonImports && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
+            createOptionValueDiagnostic("resolvePackageJsonImports", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "resolvePackageJsonImports");
+        }
+        if (options.customConditions && !moduleResolutionSupportsPackageJsonExportsAndImports(moduleResolution)) {
+            createOptionValueDiagnostic("customConditions", Diagnostics.Option_0_can_only_be_used_when_moduleResolution_is_set_to_node16_nodenext_or_bundler, "customConditions");
+        }
+
         // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
         if (!options.noEmit && !options.suppressOutputPathCheck) {
             const emitHost = getEmitHost();
@@ -4242,6 +4265,53 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     emitFilesSeen.add(emitFileKey);
                 }
             }
+        }
+    }
+
+    function verifyDeprecatedCompilerOptions() {
+        const version = typeScriptVersion || versionMajorMinor;
+        const ignoreDeprecations = options.ignoreDeprecations;
+        if (ignoreDeprecations) {
+            if (ignoreDeprecations === DeprecationVersion.v5_0 && (version === DeprecationVersion.v5_0 || version === DeprecationVersion.v5_5)) {
+                return;
+            }
+            else {
+                createOptionValueDiagnostic("ignoreDeprecations", Diagnostics.Invalid_value_for_ignoreDeprecations);
+            }
+        }
+        if (options.target === ScriptTarget.ES3) {
+            createDeprecatedDiagnosticForOption(version, "target", "ES3");
+        }
+        if (options.noImplicitUseStrict) {
+            createDeprecatedDiagnosticForOption(version, "noImplicitUseStrict");
+        }
+        if (options.keyofStringsOnly) {
+            createDeprecatedDiagnosticForOption(version, "keyofStringsOnly");
+        }
+        if (options.suppressExcessPropertyErrors) {
+            createDeprecatedDiagnosticForOption(version, "suppressExcessPropertyErrors");
+        }
+        if (options.suppressImplicitAnyIndexErrors) {
+            createDeprecatedDiagnosticForOption(version, "suppressImplicitAnyIndexErrors");
+        }
+        if (options.noStrictGenericChecks) {
+            createDeprecatedDiagnosticForOption(version, "noStrictGenericChecks");
+        }
+        if (options.charset) {
+            createDeprecatedDiagnosticForOption(version, "charset");
+        }
+        if (options.out) {
+            createDeprecatedDiagnosticForOption(version, "out");
+        }
+    }
+
+    function createDeprecatedDiagnosticForOption(version: string, name: string, value?: string) {
+        if (version === DeprecationVersion.v6_0) {
+            createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, Diagnostics.Flag_0_is_deprecated_Please_remove_it_from_your_configuration, value || name);
+        }
+        else {
+            createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined,
+                Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
         }
     }
 
@@ -4900,7 +4970,7 @@ export function getResolutionDiagnostic(options: CompilerOptions, { extension }:
         return getAllowJSCompilerOption(options) || !getStrictOptionValue(options, "noImplicitAny") ? undefined : Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type;
     }
     function needResolveJsonModule() {
-        return options.resolveJsonModule ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_resolveJsonModule_is_not_used;
+        return getResolveJsonModule(options) ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_resolveJsonModule_is_not_used;
     }
 }
 

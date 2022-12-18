@@ -53,7 +53,8 @@ resolvedModules:
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: 
@@ -79,14 +80,16 @@ resolvedModules:
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 ./f1: {
   "resolvedModule": {
     "resolvedFileName": "f1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: 
@@ -187,7 +190,8 @@ resolvedModules:
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: 
@@ -213,14 +217,16 @@ resolvedModules:
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 ./f1: {
   "resolvedModule": {
     "resolvedFileName": "f1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: 
@@ -310,7 +316,8 @@ resolvedModules:
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: undefined
@@ -326,14 +333,16 @@ resolvedModules:
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 ./f1: {
   "resolvedModule": {
     "resolvedFileName": "f1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: 
@@ -418,7 +427,8 @@ resolvedModules:
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: undefined
@@ -434,14 +444,16 @@ resolvedModules:
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 ./f1: {
   "resolvedModule": {
     "resolvedFileName": "f1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: 
@@ -525,7 +537,8 @@ resolvedModules:
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: undefined
@@ -541,14 +554,16 @@ resolvedModules:
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 ./f1: {
   "resolvedModule": {
     "resolvedFileName": "f1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: 
@@ -630,7 +645,8 @@ resolvedModules:
   "resolvedModule": {
     "resolvedFileName": "b1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: undefined
@@ -646,14 +662,16 @@ resolvedModules:
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 ./f1: {
   "resolvedModule": {
     "resolvedFileName": "f1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: 
@@ -747,14 +765,16 @@ resolvedModules:
   "resolvedModule": {
     "resolvedFileName": "b2.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 ./f1: {
   "resolvedModule": {
     "resolvedFileName": "f1.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": false
+    "isExternalLibraryImport": false,
+    "resolvedUsingTsExtension": false
   }
 }
 resolvedTypeReferenceDirectiveNames: 

@@ -404,24 +404,25 @@ declare namespace ts {
         JSDocReadonlyTag = 339,
         JSDocOverrideTag = 340,
         JSDocCallbackTag = 341,
-        JSDocEnumTag = 342,
-        JSDocParameterTag = 343,
-        JSDocReturnTag = 344,
-        JSDocThisTag = 345,
-        JSDocTypeTag = 346,
-        JSDocTemplateTag = 347,
-        JSDocTypedefTag = 348,
-        JSDocSeeTag = 349,
-        JSDocPropertyTag = 350,
-        JSDocThrowsTag = 351,
-        SyntaxList = 352,
-        NotEmittedStatement = 353,
-        PartiallyEmittedExpression = 354,
-        CommaListExpression = 355,
-        MergeDeclarationMarker = 356,
-        EndOfDeclarationMarker = 357,
-        SyntheticReferenceExpression = 358,
-        Count = 359,
+        JSDocOverloadTag = 342,
+        JSDocEnumTag = 343,
+        JSDocParameterTag = 344,
+        JSDocReturnTag = 345,
+        JSDocThisTag = 346,
+        JSDocTypeTag = 347,
+        JSDocTemplateTag = 348,
+        JSDocTypedefTag = 349,
+        JSDocSeeTag = 350,
+        JSDocPropertyTag = 351,
+        JSDocThrowsTag = 352,
+        SyntaxList = 353,
+        NotEmittedStatement = 354,
+        PartiallyEmittedExpression = 355,
+        CommaListExpression = 356,
+        MergeDeclarationMarker = 357,
+        EndOfDeclarationMarker = 358,
+        SyntheticReferenceExpression = 359,
+        Count = 360,
         FirstAssignment = 63,
         LastAssignment = 78,
         FirstCompoundAssignment = 64,
@@ -450,9 +451,9 @@ declare namespace ts {
         LastStatement = 256,
         FirstNode = 163,
         FirstJSDocNode = 312,
-        LastJSDocNode = 351,
+        LastJSDocNode = 352,
         FirstJSDocTagNode = 330,
-        LastJSDocTagNode = 351
+        LastJSDocTagNode = 352
     }
     type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;
@@ -619,6 +620,7 @@ declare namespace ts {
     type AssertsKeyword = KeywordToken<SyntaxKind.AssertsKeyword>;
     type AssertKeyword = KeywordToken<SyntaxKind.AssertKeyword>;
     type AwaitKeyword = KeywordToken<SyntaxKind.AwaitKeyword>;
+    type CaseKeyword = KeywordToken<SyntaxKind.CaseKeyword>;
     /** @deprecated Use `AwaitKeyword` instead. */
     type AwaitKeywordToken = AwaitKeyword;
     /** @deprecated Use `AssertsKeyword` instead. */
@@ -2010,6 +2012,11 @@ declare namespace ts {
         readonly name?: Identifier;
         readonly typeExpression: JSDocSignature;
     }
+    interface JSDocOverloadTag extends JSDocTag {
+        readonly kind: SyntaxKind.JSDocOverloadTag;
+        readonly parent: JSDoc;
+        readonly typeExpression: JSDocSignature;
+    }
     interface JSDocThrowsTag extends JSDocTag {
         readonly kind: SyntaxKind.JSDocThrowsTag;
         readonly typeExpression?: JSDocTypeExpression;
@@ -3035,9 +3042,10 @@ declare namespace ts {
     }
     enum ModuleResolutionKind {
         Classic = 1,
-        NodeJs = 2,
+        Node10 = 2,
         Node16 = 3,
-        NodeNext = 99
+        NodeNext = 99,
+        Bundler = 100
     }
     enum ModuleDetectionKind {
         /**
@@ -3088,6 +3096,7 @@ declare namespace ts {
     }
     type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
     interface CompilerOptions {
+        allowImportingTsExtensions?: boolean;
         allowJs?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowUmdGlobalAccess?: boolean;
@@ -3097,6 +3106,7 @@ declare namespace ts {
         baseUrl?: string;
         charset?: string;
         checkJs?: boolean;
+        customConditions?: string[];
         declaration?: boolean;
         declarationMap?: boolean;
         emitDeclarationOnly?: boolean;
@@ -3111,6 +3121,7 @@ declare namespace ts {
         exactOptionalPropertyTypes?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
+        ignoreDeprecations?: string;
         importHelpers?: boolean;
         importsNotUsedAsValues?: ImportsNotUsedAsValues;
         inlineSourceMap?: boolean;
@@ -3161,6 +3172,8 @@ declare namespace ts {
         incremental?: boolean;
         tsBuildInfoFile?: string;
         removeComments?: boolean;
+        resolvePackageJsonExports?: boolean;
+        resolvePackageJsonImports?: boolean;
         rootDir?: string;
         rootDirs?: string[];
         skipLibCheck?: boolean;
@@ -3332,6 +3345,11 @@ declare namespace ts {
         resolvedFileName: string;
         /** True if `resolvedFileName` comes from `node_modules`. */
         isExternalLibraryImport?: boolean;
+        /**
+         * True if the original module reference used a .ts extension to refer directly to a .ts file,
+         * which should produce an error during checking if emit is enabled.
+         */
+        resolvedUsingTsExtension?: boolean;
     }
     /**
      * ResolvedModule with an explicitly provided `extension` property.
@@ -3854,6 +3872,8 @@ declare namespace ts {
         updateJSDocEnumTag(node: JSDocEnumTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocEnumTag;
         createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | NodeArray<JSDocComment>): JSDocCallbackTag;
         updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocCallbackTag;
+        createJSDocOverloadTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, comment?: string | NodeArray<JSDocComment>): JSDocOverloadTag;
+        updateJSDocOverloadTag(node: JSDocOverloadTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, comment: string | NodeArray<JSDocComment> | undefined): JSDocOverloadTag;
         createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocAugmentsTag;
         updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment: string | NodeArray<JSDocComment> | undefined): JSDocAugmentsTag;
         createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocImplementsTag;
@@ -4471,6 +4491,7 @@ declare namespace ts {
         readonly includeInlayEnumMemberValueHints?: boolean;
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
+        readonly organizeImportsIgnoreCase?: "auto" | boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     interface PseudoBigInt {
@@ -4862,8 +4883,7 @@ declare namespace ts {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
-    function isJSDocOptionalParameter(node: ParameterDeclaration): boolean;
-    function isOptionalDeclaration(declaration: Declaration): boolean;
+    function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind): boolean;
     function createUnparsedSourceFile(text: string): UnparsedSource;
     function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
     function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
@@ -5132,6 +5152,7 @@ declare namespace ts {
     function isJSDocProtectedTag(node: Node): node is JSDocProtectedTag;
     function isJSDocReadonlyTag(node: Node): node is JSDocReadonlyTag;
     function isJSDocOverrideTag(node: Node): node is JSDocOverrideTag;
+    function isJSDocOverloadTag(node: Node): node is JSDocOverloadTag;
     function isJSDocDeprecatedTag(node: Node): node is JSDocDeprecatedTag;
     function isJSDocSeeTag(node: Node): node is JSDocSeeTag;
     function isJSDocEnumTag(node: Node): node is JSDocEnumTag;
@@ -5292,8 +5313,11 @@ declare namespace ts {
     function createTypeReferenceDirectiveResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string, options?: CompilerOptions, packageJsonInfoCache?: PackageJsonInfoCache): TypeReferenceDirectiveResolutionCache;
     function resolveModuleNameFromCache(moduleName: string, containingFile: string, cache: ModuleResolutionCache, mode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
     function resolveModuleName(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, resolutionMode?: ResolutionMode): ResolvedModuleWithFailedLookupLocations;
+    function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: NonRelativeModuleNameResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
+    function moduleResolutionSupportsResolvingTsExtensions(compilerOptions: CompilerOptions): boolean;
+    function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions, fromFileName?: string): boolean | "" | undefined;
     interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, NonRelativeNameResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache {
     }
     interface ModeAwareCache<T> {

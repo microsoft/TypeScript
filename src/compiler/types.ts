@@ -423,6 +423,7 @@ export const enum SyntaxKind {
     JSDocReadonlyTag,
     JSDocOverrideTag,
     JSDocCallbackTag,
+    JSDocOverloadTag,
     JSDocEnumTag,
     JSDocParameterTag,
     JSDocReturnTag,
@@ -1001,6 +1002,7 @@ export type ForEachChildNodes =
     | JSDocDeprecatedTag
     | JSDocThrowsTag
     | JSDocOverrideTag
+    | JSDocOverloadTag
     ;
 
 /** @internal */
@@ -1583,6 +1585,7 @@ export interface KeywordToken<TKind extends KeywordSyntaxKind> extends Token<TKi
 export type AssertsKeyword = KeywordToken<SyntaxKind.AssertsKeyword>;
 export type AssertKeyword = KeywordToken<SyntaxKind.AssertKeyword>;
 export type AwaitKeyword = KeywordToken<SyntaxKind.AwaitKeyword>;
+export type CaseKeyword = KeywordToken<SyntaxKind.CaseKeyword>;
 
 /** @deprecated Use `AwaitKeyword` instead. */
 export type AwaitKeywordToken = AwaitKeyword;
@@ -1676,10 +1679,7 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
      */
     readonly escapedText: __String;
     readonly originalKeywordKind?: SyntaxKind;                // Original syntaxKind which get set so that we can report an error later
-    /** @internal */ readonly autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
-    /** @internal */ readonly autoGenerateId?: number;           // Ensures unique generated identifiers get unique names, but clones get the same name.
-    /** @internal */ readonly autoGeneratePrefix?: string | GeneratedNamePart;
-    /** @internal */ readonly autoGenerateSuffix?: string;
+    /** @internal */ readonly autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers.
     /** @internal */ generatedImportReference?: ImportSpecifier; // Reference to the generated import specifier this identifier refers to
     isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
     /** @internal */ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
@@ -1693,8 +1693,16 @@ export interface TransientIdentifier extends Identifier {
 }
 
 /** @internal */
+export interface AutoGenerateInfo {
+    flags: GeneratedIdentifierFlags;            // Specifies whether to auto-generate the text for an identifier.
+    readonly id: number;                        // Ensures unique generated identifiers get unique names, but clones get the same name.
+    readonly prefix?: string | GeneratedNamePart;
+    readonly suffix?: string;
+}
+
+/** @internal */
 export interface GeneratedIdentifier extends Identifier {
-    autoGenerateFlags: GeneratedIdentifierFlags;
+    readonly autoGenerate: AutoGenerateInfo;
 }
 
 export interface QualifiedName extends Node, FlowContainer {
@@ -1772,15 +1780,12 @@ export interface PrivateIdentifier extends PrimaryExpression {
     // escaping not strictly necessary
     // avoids gotchas in transforms and utils
     readonly escapedText: __String;
-    /** @internal */ readonly autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
-    /** @internal */ readonly autoGenerateId?: number;           // Ensures unique generated identifiers get unique names, but clones get the same name.
-    /** @internal */ readonly autoGeneratePrefix?: string | GeneratedNamePart;
-    /** @internal */ readonly autoGenerateSuffix?: string;
+    /** @internal */ readonly autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers.
 }
 
 /** @internal */
 export interface GeneratedPrivateIdentifier extends PrivateIdentifier {
-    autoGenerateFlags: GeneratedIdentifierFlags;
+    readonly autoGenerate: AutoGenerateInfo;
 }
 
 /** @internal */
@@ -4064,6 +4069,13 @@ export interface JSDocCallbackTag extends JSDocTag, NamedDeclaration, LocalsCont
     readonly typeExpression: JSDocSignature;
 }
 
+
+export interface JSDocOverloadTag extends JSDocTag {
+    readonly kind: SyntaxKind.JSDocOverloadTag;
+    readonly parent: JSDoc;
+    readonly typeExpression: JSDocSignature;
+}
+
 export interface JSDocThrowsTag extends JSDocTag {
     readonly kind: SyntaxKind.JSDocThrowsTag;
     readonly typeExpression?: JSDocTypeExpression;
@@ -5735,19 +5747,20 @@ export interface Symbol {
     members?: SymbolTable;                  // Class, interface or object literal instance members
     exports?: SymbolTable;                  // Module exports
     globalExports?: SymbolTable;            // Conditional global UMD exports
-    /** @internal */ id?: SymbolId;          // Unique id (used to look up SymbolLinks)
-    /** @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
-    /** @internal */ parent?: Symbol;        // Parent symbol
-    /** @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
-    /** @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
+    /** @internal */ id: SymbolId;          // Unique id (used to look up SymbolLinks)
+    /** @internal */ mergeId: number;       // Merge id (used to look up merged symbol)
+    /** @internal */ parent?: Symbol;       // Parent symbol
+    /** @internal */ exportSymbol?: Symbol; // Exported symbol associated with this symbol
+    /** @internal */ constEnumOnlyModule: boolean | undefined; // True if module contains only const enums or other modules with only const enums
     /** @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
     /** @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
-    /** @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
+    /** @internal */ isAssigned?: boolean;  // True if the symbol is a parameter with assignments
     /** @internal */ assignmentDeclarationMembers?: Map<number, Declaration>; // detected late-bound assignment declarations associated with the symbol
 }
 
 /** @internal */
 export interface SymbolLinks {
+    _symbolLinksBrand: any;
     immediateTarget?: Symbol;                   // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
     aliasTarget?: Symbol,                       // Resolved (non-alias) target of an alias
     target?: Symbol;                            // Original version of an instantiated symbol
@@ -5758,7 +5771,7 @@ export interface SymbolLinks {
     declaredType?: Type;                        // Type of class, interface, enum, type alias, or type parameter
     typeParameters?: TypeParameter[];           // Type parameters of type alias (undefined if non-generic)
     outerTypeParameters?: TypeParameter[];      // Outer type parameters of anonymous object type
-    instantiations?: Map<string, Type>;       // Instantiations of generic type alias (undefined if non-generic)
+    instantiations?: Map<string, Type>;         // Instantiations of generic type alias (undefined if non-generic)
     aliasSymbol?: Symbol;                       // Alias associated with generic type alias instantiation
     aliasTypeArguments?: readonly Type[]        // Alias type arguments (if any)
     inferredClassSymbol?: Map<SymbolId, TransientSymbol>; // Symbol of an inferred ES5 constructor function
@@ -5831,21 +5844,36 @@ export const enum CheckFlags {
 }
 
 /** @internal */
-export interface TransientSymbol extends Symbol, SymbolLinks {
+export interface TransientSymbolLinks extends SymbolLinks {
     checkFlags: CheckFlags;
 }
 
 /** @internal */
-export interface MappedSymbol extends TransientSymbol {
+export interface TransientSymbol extends Symbol {
+    links: TransientSymbolLinks;
+}
+
+/** @internal */
+export interface MappedSymbolLinks extends TransientSymbolLinks {
     mappedType: MappedType;
     keyType: Type;
 }
 
 /** @internal */
-export interface ReverseMappedSymbol extends TransientSymbol {
+export interface MappedSymbol extends TransientSymbol {
+    links: MappedSymbolLinks;
+}
+
+/** @internal */
+export interface ReverseMappedSymbolLinks extends TransientSymbolLinks {
     propertyType: Type;
     mappedType: MappedType;
     constraintType: IndexType;
+}
+
+/** @internal */
+export interface ReverseMappedSymbol extends TransientSymbol {
+    links: ReverseMappedSymbolLinks;
 }
 
 export const enum InternalSymbolName {
@@ -5957,9 +5985,6 @@ export interface NodeLinks {
     skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
     declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
     serializedTypes?: Map<string, SerializedTypeEntry>; // Collection of types serialized at this location
-
-    contextualType?: Type;              // Used to temporarily assign a contextual type during overload resolution
-    inferenceContext?: InferenceContext; // Inference context for contextual type
 }
 
 /** @internal */
@@ -6878,7 +6903,7 @@ export function diagnosticCategoryName(d: { category: DiagnosticCategory }, lowe
 
 export enum ModuleResolutionKind {
     Classic  = 1,
-    NodeJs   = 2,
+    Node10   = 2,
     // Starting with node12, node's module resolver has significant departures from traditional cjs resolution
     // to better support ecmascript modules and their use within node - however more features are still being added.
     // TypeScript's Node ESM support was introduced after Node 12 went end-of-life, and Node 14 is the earliest stable
@@ -6886,6 +6911,7 @@ export enum ModuleResolutionKind {
     // In turn, we offer both a `NodeNext` moving resolution target, and a `Node16` version-anchored resolution target
     Node16   = 3,
     NodeNext = 99, // Not simply `Node16` so that compiled code linked against TS can use the `Next` value reliably (same as with `ModuleKind`)
+    Bundler   = 100,
 }
 
 export enum ModuleDetectionKind {
@@ -6945,6 +6971,7 @@ export type CompilerOptionsValue = string | number | boolean | (string | number)
 
 export interface CompilerOptions {
     /** @internal */ all?: boolean;
+    allowImportingTsExtensions?: boolean;
     allowJs?: boolean;
     /** @internal */ allowNonTsExtensions?: boolean;
     allowSyntheticDefaultImports?: boolean;
@@ -6968,6 +6995,7 @@ export interface CompilerOptions {
      * @internal
      */
     readonly configFile?: TsConfigSourceFile;
+    customConditions?: string[];
     declaration?: boolean;
     declarationMap?: boolean;
     emitDeclarationOnly?: boolean;
@@ -6987,6 +7015,7 @@ export interface CompilerOptions {
     /** @internal */generateCpuProfile?: string;
     /** @internal */generateTrace?: string;
     /** @internal */help?: boolean;
+    ignoreDeprecations?: string;
     importHelpers?: boolean;
     importsNotUsedAsValues?: ImportsNotUsedAsValues;
     /** @internal */init?: boolean;
@@ -7054,6 +7083,8 @@ export interface CompilerOptions {
     incremental?: boolean;
     tsBuildInfoFile?: string;
     removeComments?: boolean;
+    resolvePackageJsonExports?: boolean;
+    resolvePackageJsonImports?: boolean;
     rootDir?: string;
     rootDirs?: string[];
     skipLibCheck?: boolean;
@@ -7242,6 +7273,8 @@ export interface CreateProgramOptions {
     host?: CompilerHost;
     oldProgram?: Program;
     configFileParsingDiagnostics?: readonly Diagnostic[];
+    /** @internal */
+    typeScriptVersion?: string;
 }
 
 /** @internal */
@@ -7292,6 +7325,7 @@ export interface CommandLineOptionOfBooleanType extends CommandLineOptionBase {
 export interface CommandLineOptionOfCustomType extends CommandLineOptionBase {
     type: Map<string, number | string>;  // an object literal mapping named values to actual values
     defaultValueDescription: number | string | undefined | DiagnosticMessage;
+    deprecatedKeys?: Set<string>;
 }
 
 /** @internal */
@@ -7501,6 +7535,11 @@ export interface ResolvedModule {
     resolvedFileName: string;
     /** True if `resolvedFileName` comes from `node_modules`. */
     isExternalLibraryImport?: boolean;
+    /**
+     * True if the original module reference used a .ts extension to refer directly to a .ts file,
+     * which should produce an error during checking if emit is enabled.
+     */
+    resolvedUsingTsExtension?: boolean;
 }
 
 /**
@@ -8513,6 +8552,8 @@ export interface NodeFactory {
     updateJSDocEnumTag(node: JSDocEnumTag, tagName: Identifier | undefined, typeExpression: JSDocTypeExpression, comment: string | NodeArray<JSDocComment> | undefined): JSDocEnumTag;
     createJSDocCallbackTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName?: Identifier | JSDocNamespaceDeclaration, comment?: string | NodeArray<JSDocComment>): JSDocCallbackTag;
     updateJSDocCallbackTag(node: JSDocCallbackTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, fullName: Identifier | JSDocNamespaceDeclaration | undefined, comment: string | NodeArray<JSDocComment> | undefined): JSDocCallbackTag;
+    createJSDocOverloadTag(tagName: Identifier | undefined, typeExpression: JSDocSignature, comment?: string | NodeArray<JSDocComment>): JSDocOverloadTag;
+    updateJSDocOverloadTag(node: JSDocOverloadTag, tagName: Identifier | undefined, typeExpression: JSDocSignature, comment: string | NodeArray<JSDocComment> | undefined): JSDocOverloadTag;
     createJSDocAugmentsTag(tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocAugmentsTag;
     updateJSDocAugmentsTag(node: JSDocAugmentsTag, tagName: Identifier | undefined, className: JSDocAugmentsTag["class"], comment: string | NodeArray<JSDocComment> | undefined): JSDocAugmentsTag;
     createJSDocImplementsTag(tagName: Identifier | undefined, className: JSDocImplementsTag["class"], comment?: string | NodeArray<JSDocComment>): JSDocImplementsTag;
@@ -9774,6 +9815,7 @@ export interface UserPreferences {
     readonly includeInlayEnumMemberValueHints?: boolean;
     readonly allowRenameOfImportPath?: boolean;
     readonly autoImportFileExcludePatterns?: string[];
+    readonly organizeImportsIgnoreCase?: "auto" | boolean;
 }
 
 /** Represents a bigint literal value without requiring bigint support */
@@ -9787,4 +9829,13 @@ export interface Queue<T> {
     enqueue(...items: T[]): void;
     dequeue(): T;
     isEmpty(): boolean;
+}
+
+/** @internal */
+export const enum DeprecationVersion {
+    /* eslint-disable @typescript-eslint/naming-convention */
+    v5_0 = "5.0",
+    v5_5 = "5.5",
+    v6_0 = "6.0",
+    /* eslint-enable @typescript-eslint/naming-convention */
 }
