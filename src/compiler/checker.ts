@@ -44661,13 +44661,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             !hasSyntacticModifier(parameter, ModifierFlags.ParameterPropertyModifier);
     }
 
-    function isOptionalUninitializedParameterProperty(parameter: ParameterDeclaration) {
-        return strictNullChecks &&
-            isOptionalParameter(parameter) &&
-            !parameter.initializer &&
-            hasSyntacticModifier(parameter, ModifierFlags.ParameterPropertyModifier);
-    }
-
     function isExpandoFunctionDeclaration(node: Declaration): boolean {
         const declaration = getParseTreeNode(node, isFunctionDeclaration);
         if (!declaration) {
@@ -45002,7 +44995,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isDeclarationVisible,
             isImplementationOfOverload,
             isRequiredInitializedParameter,
-            isOptionalUninitializedParameterProperty,
             isExpandoFunctionDeclaration,
             getPropertiesOfContainerFunction,
             createTypeOfDeclaration,

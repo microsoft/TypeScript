@@ -1129,7 +1129,6 @@ export const notImplementedResolver: EmitResolver = {
     collectLinkedAliases: notImplemented,
     isImplementationOfOverload: notImplemented,
     isRequiredInitializedParameter: notImplemented,
-    isOptionalUninitializedParameterProperty: notImplemented,
     isExpandoFunctionDeclaration: notImplemented,
     getPropertiesOfContainerFunction: notImplemented,
     createTypeOfDeclaration: notImplemented,
