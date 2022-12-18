@@ -20,7 +20,7 @@ export function consoleTestResultHandler(testResult: any): boolean {
 
 //// [forLoopEndingMultilineComments.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.consoleTestResultHandler = void 0;
 function consoleTestResultHandler(testResult) {
     // needed to get colors to show up when passing through Grunt

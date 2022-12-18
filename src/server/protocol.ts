@@ -1,11 +1,23 @@
 import * as ts from "./_namespaces/ts";
 import {
-    CompilerOptionsValue, EndOfLineState, FileExtensionInfo, HighlightSpanKind, MapLike, OutliningSpanKind, OutputFile,
-    PluginImport, ProjectReference, RenameLocation, ScriptElementKind, ScriptKind, TextChange, TextInsertion,
-    TodoComment, TodoCommentDescriptor, TypeAcquisition,
+    CompilerOptionsValue,
+    EndOfLineState,
+    FileExtensionInfo,
+    HighlightSpanKind,
+    MapLike,
+    OutliningSpanKind,
+    OutputFile,
+    PluginImport,
+    ProjectReference,
+    RenameLocation,
+    ScriptElementKind,
+    ScriptKind,
+    TextChange,
+    TextInsertion,
+    TodoComment,
+    TodoCommentDescriptor,
+    TypeAcquisition,
 } from "./_namespaces/ts";
-
-/* eslint-disable @typescript-eslint/no-unnecessary-qualifier */
 
 /**
  * Declaration module describing the TypeScript Server protocol
@@ -828,6 +840,7 @@ export interface FileLocationRequest extends FileRequest {
  */
 export interface GetSupportedCodeFixesRequest extends Request {
     command: CommandTypes.GetSupportedCodeFixes;
+    arguments?: Partial<FileRequestArgs>;
 }
 
 /**
@@ -3503,6 +3516,7 @@ export interface UserPreferences {
     readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
     readonly includeInlayEnumMemberValueHints?: boolean;
     readonly autoImportFileExcludePatterns?: string[];
+    readonly organizeImportsIgnoreCase?: "auto" | boolean;
 
     /**
      * Indicates whether {@link ReferencesResponseItem.lineText} is supported.

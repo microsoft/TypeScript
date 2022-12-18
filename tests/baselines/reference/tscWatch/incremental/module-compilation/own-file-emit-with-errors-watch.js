@@ -77,7 +77,7 @@ exitCode:: ExitStatus.undefined
 //// [/users/username/projects/project/file1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = void 0;
     exports.x = 10;
 });
@@ -86,7 +86,7 @@ define(["require", "exports"], function (require, exports) {
 //// [/users/username/projects/project/file2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.y = void 0;
     exports.y = 20;
 });
@@ -207,7 +207,7 @@ exitCode:: ExitStatus.undefined
 //// [/users/username/projects/project/file1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.z = void 0;
     exports.z = 10;
 });

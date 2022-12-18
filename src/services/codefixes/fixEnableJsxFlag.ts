@@ -1,6 +1,14 @@
-import { Diagnostics, factory, textChanges, TsConfigSourceFile } from "../_namespaces/ts";
 import {
-    codeFixAll, createCodeFixActionWithoutFixAll, registerCodeFix, setJsonCompilerOptionValue,
+    Diagnostics,
+    factory,
+    textChanges,
+    TsConfigSourceFile,
+} from "../_namespaces/ts";
+import {
+    codeFixAll,
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+    setJsonCompilerOptionValue,
 } from "../_namespaces/ts.codefix";
 
 const fixID = "fixEnableJsxFlag";

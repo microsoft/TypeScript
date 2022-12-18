@@ -71,7 +71,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/logger.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.logger = void 0;
 var logger = /** @class */ (function () {
     function logger() {
@@ -83,7 +83,7 @@ exports.logger = logger;
 
 //// [/user/username/projects/myproject/another.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var logger_1 = require("./logger");
 new logger_1.logger();
 

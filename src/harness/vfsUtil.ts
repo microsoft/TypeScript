@@ -42,6 +42,8 @@ export interface DiffOptions {
     baseIsNotShadowRoot?: boolean;
 }
 
+export const timeIncrements = 1000;
+
 /**
  * Represents a virtual POSIX-like file system.
  */
@@ -65,7 +67,7 @@ export class FileSystem {
     private _dirStack: string[] | undefined;
 
     constructor(ignoreCase: boolean, options: FileSystemOptions = {}) {
-        const { time = ts.TestFSWithWatch.timeIncrements, files, meta } = options;
+        const { time = timeIncrements, files, meta } = options;
         this.ignoreCase = ignoreCase;
         this.stringComparer = this.ignoreCase ? vpath.compareCaseInsensitive : vpath.compareCaseSensitive;
         this._time = time;
@@ -178,7 +180,7 @@ export class FileSystem {
             this._time = value;
         }
         else if (!this.isReadonly) {
-            this._time += ts.TestFSWithWatch.timeIncrements;
+            this._time += timeIncrements;
         }
         return this._time;
     }
@@ -874,7 +876,7 @@ export class FileSystem {
     private _mknod(dev: number, type: typeof S_IFREG, mode: number, time?: number): FileInode;
     private _mknod(dev: number, type: typeof S_IFDIR, mode: number, time?: number): DirectoryInode;
     private _mknod(dev: number, type: typeof S_IFLNK, mode: number, time?: number): SymlinkInode;
-    private _mknod(dev: number, type: number, mode: number, time = this.time()) {
+    private _mknod(dev: number, type: number, mode: number, time = this.time()): Inode {
         return {
             dev,
             ino: ++inoCount,
@@ -884,7 +886,7 @@ export class FileSystem {
             ctimeMs: time,
             birthtimeMs: time,
             nlink: 0
-        } as Inode;
+        };
     }
 
     private _addLink(parent: DirectoryInode | undefined, links: collections.SortedMap<string, Inode>, name: string, node: Inode, time = this.time()) {
@@ -977,7 +979,7 @@ export class FileSystem {
                 birthtimeMs: root.birthtimeMs,
                 nlink: root.nlink,
                 shadowRoot: root
-            } as Inode;
+            };
 
             if (isSymlink(root)) (shadow as SymlinkInode).symlink = root.symlink;
             shadows.set(shadow.ino, shadow);

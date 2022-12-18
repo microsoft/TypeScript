@@ -1,37 +1,183 @@
 import {
-    arrayFrom, arrayIterator, arrayReverseIterator, CallHierarchyIncomingCall, CallHierarchyItem,
-    CallHierarchyOutgoingCall, cast, CodeAction, CodeActionCommand, CodeFixAction, CombinedCodeActions, CompilerOptions,
-    CompletionEntry, CompletionEntryData, CompletionEntryDetails, CompletionInfo, CompletionTriggerKind,
-    computeLineAndCharacterOfPosition, computeLineStarts, concatenate, createQueue, createSet, createTextSpan,
-    createTextSpanFromBounds, Debug, decodedTextSpanIntersectsWith, deduplicate, DefinitionInfo,
-    DefinitionInfoAndBoundSpan, Diagnostic, diagnosticCategoryName, DiagnosticRelatedInformation, displayPartsToString,
-    DocumentHighlights, DocumentPosition, DocumentSpan, documentSpansEqual, EmitOutput, equateValues, ESMap,
-    FileTextChanges, filter, find, FindAllReferences, first, firstOrUndefined, flatMap, flatMapToMutable,
-    flattenDiagnosticMessageText, forEachNameInAccessChainWalkingLeft, FormatCodeSettings, formatting,
-    getDeclarationFromName, getDeclarationOfKind, getEmitDeclarations, getEntries, getEntrypointsFromPackageJsonInfo,
-    getLineAndCharacterOfPosition, getMappedContextSpan, getMappedDocumentSpan, getMappedLocation,
-    getNodeModulePathParts, getNormalizedAbsolutePath, getPackageNameFromTypesPackageName, getPackageScopeForPath,
-    getSnapshotText, getSupportedCodeFixes, getTemporaryModuleResolutionState, getTextOfIdentifierOrLiteral,
-    getTouchingPropertyName, GoToDefinition, HostCancellationToken, identity, ImplementationLocation, ImportSpecifier,
-    isAccessExpression, isArray, isDeclarationFileName, isIdentifier, isString, isStringLiteralLike,
-    JSDocLinkDisplayPart, JSDocTagInfo, LanguageServiceMode, LineAndCharacter, map, Map, mapDefined, mapDefinedIterator,
-    mapIterator, mapOneOrMany, memoize, ModuleResolutionKind, MultiMap, NavigateToItem, NavigationBarItem,
-    NavigationTree, nodeModulesPathPart, normalizePath, OperationCanceledException, OrganizeImportsMode, outFile,
-    OutliningSpan, Path, perfLogger, PerformanceEvent, PossibleProgramFileInfo, Program, QuickInfo, RefactorEditInfo,
-    ReferencedSymbol, ReferencedSymbolDefinitionInfo, ReferencedSymbolEntry, ReferenceEntry, removeFileExtension,
-    RenameInfo, RenameLocation, ScriptKind, SelectionRange, SemanticClassificationFormat, Set, SignatureHelpItem,
-    SignatureHelpItems, singleIterator, some, SourceFile, startsWith, stringContains, SymbolDisplayPart, SyntaxKind,
-    TextChange, TextInsertion, TextRange, TextSpan, textSpanEnd, toArray, toFileNameLowerCase, tracing,
-    unmangleScopedPackageName, UserPreferences, version, WithMetadata,
+    arrayFrom,
+    arrayIterator,
+    arrayReverseIterator,
+    CallHierarchyIncomingCall,
+    CallHierarchyItem,
+    CallHierarchyOutgoingCall,
+    cast,
+    CodeAction,
+    CodeActionCommand,
+    CodeFixAction,
+    CombinedCodeActions,
+    CompilerOptions,
+    CompletionEntry,
+    CompletionEntryData,
+    CompletionEntryDetails,
+    CompletionInfo,
+    CompletionTriggerKind,
+    computeLineAndCharacterOfPosition,
+    computeLineStarts,
+    concatenate,
+    createQueue,
+    createSet,
+    createTextSpan,
+    createTextSpanFromBounds,
+    Debug,
+    decodedTextSpanIntersectsWith,
+    deduplicate,
+    DefinitionInfo,
+    DefinitionInfoAndBoundSpan,
+    Diagnostic,
+    diagnosticCategoryName,
+    DiagnosticRelatedInformation,
+    displayPartsToString,
+    DocumentHighlights,
+    DocumentPosition,
+    DocumentSpan,
+    documentSpansEqual,
+    EmitOutput,
+    equateValues,
+    FileTextChanges,
+    filter,
+    find,
+    FindAllReferences,
+    first,
+    firstOrUndefined,
+    flatMap,
+    flatMapToMutable,
+    flattenDiagnosticMessageText,
+    forEachNameInAccessChainWalkingLeft,
+    FormatCodeSettings,
+    formatting,
+    getDeclarationFromName,
+    getDeclarationOfKind,
+    getEmitDeclarations,
+    getEntries,
+    getEntrypointsFromPackageJsonInfo,
+    getLineAndCharacterOfPosition,
+    getMappedContextSpan,
+    getMappedDocumentSpan,
+    getMappedLocation,
+    getNodeModulePathParts,
+    getNormalizedAbsolutePath,
+    getPackageNameFromTypesPackageName,
+    getPackageScopeForPath,
+    getSnapshotText,
+    getSupportedCodeFixes,
+    getTemporaryModuleResolutionState,
+    getTextOfIdentifierOrLiteral,
+    getTouchingPropertyName,
+    GoToDefinition,
+    HostCancellationToken,
+    identity,
+    ImplementationLocation,
+    ImportSpecifier,
+    isAccessExpression,
+    isArray,
+    isDeclarationFileName,
+    isIdentifier,
+    isString,
+    isStringLiteralLike,
+    JSDocLinkDisplayPart,
+    JSDocTagInfo,
+    LanguageServiceMode,
+    LineAndCharacter,
+    map,
+    mapDefined,
+    mapDefinedIterator,
+    mapIterator,
+    mapOneOrMany,
+    memoize,
+    ModuleResolutionKind,
+    MultiMap,
+    NavigateToItem,
+    NavigationBarItem,
+    NavigationTree,
+    nodeModulesPathPart,
+    normalizePath,
+    OperationCanceledException,
+    OrganizeImportsMode,
+    outFile,
+    OutliningSpan,
+    Path,
+    perfLogger,
+    PerformanceEvent,
+    PossibleProgramFileInfo,
+    Program,
+    QuickInfo,
+    RefactorEditInfo,
+    ReferencedSymbol,
+    ReferencedSymbolDefinitionInfo,
+    ReferencedSymbolEntry,
+    ReferenceEntry,
+    removeFileExtension,
+    RenameInfo,
+    RenameLocation,
+    ScriptKind,
+    SelectionRange,
+    SemanticClassificationFormat,
+    SignatureHelpItem,
+    SignatureHelpItems,
+    singleIterator,
+    some,
+    SourceFile,
+    startsWith,
+    stringContains,
+    SymbolDisplayPart,
+    SyntaxKind,
+    TextChange,
+    TextInsertion,
+    TextRange,
+    TextSpan,
+    textSpanEnd,
+    toArray,
+    toFileNameLowerCase,
+    tracing,
+    unmangleScopedPackageName,
+    UserPreferences,
+    version,
+    WithMetadata,
 } from "./_namespaces/ts";
 import {
-    ConfigFileDiagEvent, ConfiguredProject, convertFormatOptions, convertScriptKindName, convertUserPreferences,
-    EmitResult, emptyArray, Errors, GcTimer, indent, isConfigFile, isConfiguredProject, isExternalProject,
-    isInferredProject, ITypingsInstaller, LargeFileReferencedEvent, Logger, LogLevel, Msg, NormalizedPath, Project,
-    ProjectInfoTelemetryEvent, ProjectKind, ProjectLanguageServiceStateEvent, ProjectLoadingFinishEvent,
-    ProjectLoadingStartEvent, ProjectService, ProjectServiceEvent, ProjectServiceEventHandler, ProjectServiceOptions,
-    ProjectsUpdatedInBackgroundEvent, protocol, ScriptInfo, ScriptInfoOrConfig, ServerHost, stringifyIndented,
-    toNormalizedPath, updateProjectIfDirty,
+    ConfigFileDiagEvent,
+    ConfiguredProject,
+    convertFormatOptions,
+    convertScriptKindName,
+    convertUserPreferences,
+    EmitResult,
+    emptyArray,
+    Errors,
+    GcTimer,
+    indent,
+    isConfigFile,
+    isConfiguredProject,
+    isExternalProject,
+    isInferredProject,
+    ITypingsInstaller,
+    LargeFileReferencedEvent,
+    Logger,
+    LogLevel,
+    Msg,
+    NormalizedPath,
+    Project,
+    ProjectInfoTelemetryEvent,
+    ProjectKind,
+    ProjectLanguageServiceStateEvent,
+    ProjectLoadingFinishEvent,
+    ProjectLoadingStartEvent,
+    ProjectService,
+    ProjectServiceEvent,
+    ProjectServiceEventHandler,
+    ProjectServiceOptions,
+    ProjectsUpdatedInBackgroundEvent,
+    protocol,
+    ScriptInfo,
+    ScriptInfoOrConfig,
+    ServerHost,
+    stringifyIndented,
+    toNormalizedPath,
+    updateProjectIfDirty,
 } from "./_namespaces/ts.server";
 
 interface StackTraceError extends Error {
@@ -537,7 +683,7 @@ function getPerProjectReferences<TResult>(
     isForRename: boolean,
     getResultsForPosition: (project: Project, location: DocumentPosition) => readonly TResult[] | undefined,
     forPositionInResult: (result: TResult, cb: (location: DocumentPosition) => void) => void,
-): readonly TResult[] | ESMap<Project, readonly TResult[]> {
+): readonly TResult[] | Map<Project, readonly TResult[]> {
     // If `getResultsForPosition` returns results for a project, they go in here
     const resultsMap = new Map<Project, readonly TResult[]>();
 
@@ -1420,7 +1566,7 @@ export class Session<TMessage = string> implements EventSender {
                 // resolved from the package root under --moduleResolution node
                 const entrypoints = getEntrypointsFromPackageJsonInfo(
                     packageJson,
-                    { moduleResolution: ModuleResolutionKind.NodeJs },
+                    { moduleResolution: ModuleResolutionKind.Node10 },
                     project,
                     project.getModuleResolutionCache());
                 // This substring is correct only because we checked for a single `/node_modules/` at the top.
@@ -1432,15 +1578,13 @@ export class Session<TMessage = string> implements EventSender {
                 if (entrypoints && some(entrypoints, e => project.toPath(e) === path)) {
                     // This file was the main entrypoint of a package. Try to resolve that same package name with
                     // the auxiliary project that only resolves to implementation files.
-                    const [implementationResolution] = auxiliaryProject.resolveModuleNames([packageName], resolveFromFile);
-                    return implementationResolution?.resolvedFileName;
+                    return auxiliaryProject.resolutionCache.resolveSingleModuleNameWithoutWatching(packageName, resolveFromFile).resolvedModule?.resolvedFileName;
                 }
                 else {
                     // It wasn't the main entrypoint but we are in node_modules. Try a subpath into the package.
                     const pathToFileInPackage = fileName.substring(nodeModulesPathParts.packageRootIndex + 1);
                     const specifier = `${packageName}/${removeFileExtension(pathToFileInPackage)}`;
-                    const [implementationResolution] = auxiliaryProject.resolveModuleNames([specifier], resolveFromFile);
-                    return implementationResolution?.resolvedFileName;
+                    return auxiliaryProject.resolutionCache.resolveSingleModuleNameWithoutWatching(specifier, resolveFromFile).resolvedModule?.resolvedFileName;
                 }
             }
             // We're not in node_modules, and we only get to this function if non-dts module resolution failed.
@@ -2496,8 +2640,15 @@ export class Session<TMessage = string> implements EventSender {
         }
     }
 
-    private getSupportedCodeFixes(): string[] {
-        return getSupportedCodeFixes();
+    private getSupportedCodeFixes(args: Partial<protocol.FileRequestArgs> | undefined): readonly string[] {
+        if (!args) return getSupportedCodeFixes(); // Compatibility
+        if (args.file) {
+            const { file, project } = this.getFileAndProject(args as protocol.FileRequestArgs);
+            return project.getLanguageService().getSupportedCodeFixes(file);
+        }
+        const project = this.getProject(args.projectFileName);
+        if (!project) Errors.ThrowNoProject();
+        return project.getLanguageService().getSupportedCodeFixes();
     }
 
     private isLocation(locationOrSpan: protocol.FileLocationOrRangeRequestArgs): locationOrSpan is protocol.FileLocationRequestArgs {
@@ -3275,8 +3426,8 @@ export class Session<TMessage = string> implements EventSender {
         [CommandNames.ApplyCodeActionCommand]: (request: protocol.ApplyCodeActionCommandRequest) => {
             return this.requiredResponse(this.applyCodeActionCommand(request.arguments));
         },
-        [CommandNames.GetSupportedCodeFixes]: () => {
-            return this.requiredResponse(this.getSupportedCodeFixes());
+        [CommandNames.GetSupportedCodeFixes]: (request: protocol.GetSupportedCodeFixesRequest) => {
+            return this.requiredResponse(this.getSupportedCodeFixes(request.arguments));
         },
         [CommandNames.GetApplicableRefactors]: (request: protocol.GetApplicableRefactorsRequest) => {
             return this.requiredResponse(this.getApplicableRefactors(request.arguments));

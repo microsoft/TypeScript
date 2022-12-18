@@ -1,20 +1,105 @@
 import {
-    AccessorDeclaration, append, arrayFrom, ArrowFunction, Block, CallExpression, CharacterCodes, ClassLikeDeclaration,
-    CodeFixContextBase, Debug, Diagnostics, emptyArray, EntityName, Expression, factory, find, flatMap,
-    FunctionDeclaration, FunctionExpression, GetAccessorDeclaration, getAllAccessorDeclarations,
-    getEffectiveModifierFlags, getEmitScriptTarget, getFirstIdentifier, getModuleSpecifierResolverHost,
-    getNameForExportedSymbol, getNameOfDeclaration, getQuotePreference, getSetAccessorValueParameter,
-    getSynthesizedDeepClone, getTokenAtPosition, getTsConfigObjectLiteralExpression, Identifier, idText,
-    IntersectionType, isArrowFunction, isAutoAccessorPropertyDeclaration, isFunctionDeclaration, isFunctionExpression,
-    isGetAccessorDeclaration, isIdentifier, isImportTypeNode, isInJSFile, isLiteralImportTypeNode, isMethodDeclaration,
-    isObjectLiteralExpression, isPropertyAccessExpression, isPropertyAssignment, isSetAccessorDeclaration,
-    isStringLiteral, isYieldExpression, LanguageServiceHost, length, map, Map, MethodDeclaration, MethodSignature, Modifier,
-    ModifierFlags, Node, NodeArray, NodeBuilderFlags, NodeFlags, nullTransformationContext, ObjectFlags,
-    ObjectLiteralExpression, ObjectType, ParameterDeclaration, Program, PropertyAssignment, PropertyDeclaration,
-    PropertyName, QuotePreference, sameMap, ScriptTarget, Set, SetAccessorDeclaration, setTextRange, Signature,
-    SignatureDeclaration, signatureHasRestParameter, some, SourceFile, Symbol, SymbolFlags, SymbolTracker, SyntaxKind,
-    textChanges, TextSpan, textSpanEnd, tryCast, TsConfigSourceFile, Type, TypeChecker, TypeFlags, TypeNode,
-    TypeParameterDeclaration, UnionType, UserPreferences, visitEachChild, visitNode,
+    AccessorDeclaration,
+    append,
+    arrayFrom,
+    ArrowFunction,
+    Block,
+    CallExpression,
+    CharacterCodes,
+    ClassLikeDeclaration,
+    CodeFixContextBase,
+    combine,
+    Debug,
+    Diagnostics,
+    emptyArray,
+    EntityName,
+    Expression,
+    factory,
+    find,
+    flatMap,
+    FunctionDeclaration,
+    FunctionExpression,
+    GetAccessorDeclaration,
+    getAllAccessorDeclarations,
+    getEffectiveModifierFlags,
+    getEmitScriptTarget,
+    getFirstIdentifier,
+    getModuleSpecifierResolverHost,
+    getNameForExportedSymbol,
+    getNameOfDeclaration,
+    getQuotePreference,
+    getSetAccessorValueParameter,
+    getSynthesizedDeepClone,
+    getTokenAtPosition,
+    getTsConfigObjectLiteralExpression,
+    hasAbstractModifier,
+    Identifier,
+    idText,
+    IntersectionType,
+    isArrowFunction,
+    isAutoAccessorPropertyDeclaration,
+    isFunctionDeclaration,
+    isFunctionExpression,
+    isGetAccessorDeclaration,
+    isIdentifier,
+    isImportTypeNode,
+    isInJSFile,
+    isLiteralImportTypeNode,
+    isMethodDeclaration,
+    isObjectLiteralExpression,
+    isPropertyAccessExpression,
+    isPropertyAssignment,
+    isSetAccessorDeclaration,
+    isStringLiteral,
+    isYieldExpression,
+    LanguageServiceHost,
+    length,
+    map,
+    MethodDeclaration,
+    MethodSignature,
+    Modifier,
+    ModifierFlags,
+    Node,
+    NodeArray,
+    NodeBuilderFlags,
+    NodeFlags,
+    nullTransformationContext,
+    ObjectFlags,
+    ObjectLiteralExpression,
+    ObjectType,
+    ParameterDeclaration,
+    Program,
+    PropertyAssignment,
+    PropertyDeclaration,
+    PropertyName,
+    QuotePreference,
+    sameMap,
+    ScriptTarget,
+    SetAccessorDeclaration,
+    setTextRange,
+    Signature,
+    SignatureDeclaration,
+    signatureHasRestParameter,
+    some,
+    SourceFile,
+    Symbol,
+    SymbolFlags,
+    SymbolTracker,
+    SyntaxKind,
+    textChanges,
+    TextSpan,
+    textSpanEnd,
+    tryCast,
+    TsConfigSourceFile,
+    Type,
+    TypeChecker,
+    TypeFlags,
+    TypeNode,
+    TypeParameterDeclaration,
+    UnionType,
+    UserPreferences,
+    visitEachChild,
+    visitNode,
 } from "../_namespaces/ts";
 import { ImportAdder } from "../_namespaces/ts.codefix";
 
@@ -114,7 +199,7 @@ export function addNewNodeForMemberSymbol(
     if (declaration && isAutoAccessorPropertyDeclaration(declaration)) {
         modifierFlags |= ModifierFlags.Accessor;
     }
-    const modifiers = modifierFlags ? factory.createNodeArray(factory.createModifiersFromModifierFlags(modifierFlags)) : undefined;
+    const modifiers = createModifiers();
     const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
     const optional = !!(symbol.flags & SymbolFlags.Optional);
     const ambient = !!(enclosingDeclaration.flags & NodeFlags.Ambient) || isAmbient;
@@ -221,7 +306,29 @@ export function addNewNodeForMemberSymbol(
         if (method) addClassElement(method);
     }
 
+
+    function createModifiers(): NodeArray<Modifier> | undefined {
+        let modifiers: Modifier[] | undefined;
+
+        if (modifierFlags) {
+            modifiers = combine(modifiers, factory.createModifiersFromModifierFlags(modifierFlags));
+        }
+
+        if (shouldAddOverrideKeyword()) {
+            modifiers = append(modifiers, factory.createToken(SyntaxKind.OverrideKeyword));
+        }
+
+        return modifiers && factory.createNodeArray(modifiers);
+    }
+
+    function shouldAddOverrideKeyword(): boolean {
+        return !!(context.program.getCompilerOptions().noImplicitOverride && declaration && hasAbstractModifier(declaration));
+    }
+
     function createName(node: PropertyName) {
+        if (isIdentifier(node) && node.escapedText === "constructor") {
+            return factory.createComputedPropertyName(factory.createStringLiteral(idText(node), quotePreference === QuotePreference.Single));
+        }
         return getSynthesizedDeepClone(node, /*includeTrivia*/ false);
     }
 
@@ -255,6 +362,7 @@ export function createSignatureDeclarationFromSignature(
     const program = context.program;
     const checker = program.getTypeChecker();
     const scriptTarget = getEmitScriptTarget(program.getCompilerOptions());
+    const isJs = isInJSFile(enclosingDeclaration);
     const flags =
         NodeBuilderFlags.NoTruncation
         | NodeBuilderFlags.SuppressAnyReturnType
@@ -265,9 +373,9 @@ export function createSignatureDeclarationFromSignature(
         return undefined;
     }
 
-    let typeParameters = signatureDeclaration.typeParameters;
+    let typeParameters = isJs ? undefined : signatureDeclaration.typeParameters;
     let parameters = signatureDeclaration.parameters;
-    let type = signatureDeclaration.type;
+    let type = isJs ? undefined : signatureDeclaration.type;
     if (importAdder) {
         if (typeParameters) {
             const newTypeParameters = sameMap(typeParameters, typeParameterDecl => {
@@ -300,18 +408,20 @@ export function createSignatureDeclarationFromSignature(
             }
         }
         const newParameters = sameMap(parameters, parameterDecl => {
-            const importableReference = tryGetAutoImportableReferenceFromTypeNode(parameterDecl.type, scriptTarget);
-            let type = parameterDecl.type;
-            if (importableReference) {
-                type = importableReference.typeNode;
-                importSymbols(importAdder, importableReference.symbols);
+            let type = isJs ? undefined : parameterDecl.type;
+            if (type) {
+                const importableReference = tryGetAutoImportableReferenceFromTypeNode(type, scriptTarget);
+                if (importableReference) {
+                    type = importableReference.typeNode;
+                    importSymbols(importAdder, importableReference.symbols);
+                }
             }
             return factory.updateParameterDeclaration(
                 parameterDecl,
                 parameterDecl.modifiers,
                 parameterDecl.dotDotDotToken,
                 parameterDecl.name,
-                parameterDecl.questionToken,
+                isJs ? undefined : parameterDecl.questionToken,
                 type,
                 parameterDecl.initializer
             );

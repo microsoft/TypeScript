@@ -1,30 +1,147 @@
 import {
-    AnyImportOrRequire, AnyImportOrRequireStatement, AnyImportSyntax, arrayFrom, CancellationToken, cast, CodeAction,
-    CodeFixAction, CodeFixContextBase, combine, compareBooleans, compareNumberOfDirectorySeparators, compareValues,
-    Comparison, CompilerOptions, createModuleSpecifierResolutionHost, createMultiMap, createPackageJsonImportFilter,
-    Debug, DiagnosticAndArguments, Diagnostics, DiagnosticWithLocation, emptyArray, escapeLeadingUnderscores, ESMap,
-    every, ExportKind, factory, first, firstDefined, flatMap, flatMapIterator, forEachExternalModuleToImportFrom,
-    formatting, getAllowSyntheticDefaultImports, getBaseFileName, getDefaultLikeExportInfo, getDirectoryPath,
-    getEmitModuleKind, getEmitModuleResolutionKind, getEmitScriptTarget, getExportInfoMap, getMeaningFromDeclaration,
-    getMeaningFromLocation, getNameForExportedSymbol, getNodeId, getQuoteFromPreference, getQuotePreference,
-    getSourceFileOfNode, getSymbolId, getTokenAtPosition, getTypeKeywordOfTypeOnlyImport, getUniqueSymbolId,
-    hostGetCanonicalFileName, Identifier, ImportClause, ImportEqualsDeclaration, importFromModuleSpecifier, ImportKind,
-    ImportsNotUsedAsValues, insertImports, InternalSymbolName, isExternalModule, isExternalModuleReference,
-    isIdentifier, isIdentifierPart, isIdentifierStart, isImportableFile, isImportEqualsDeclaration, isInJSFile,
-    isIntrinsicJsxName, isJsxClosingElement, isJsxOpeningFragment, isJsxOpeningLikeElement, isJSXTagName,
-    isNamedImports, isNamespaceImport, isSourceFileJS, isStringANonContextualKeyword, isStringLiteral,
-    isStringLiteralLike, isTypeOnlyImportOrExportDeclaration, isUMDExportSymbol, isValidTypeOnlyAliasUseSite,
-    isVariableDeclarationInitializedToRequire, jsxModeNeedsExplicitImport, LanguageServiceHost, last, makeImport,
-    makeStringLiteral, Map, mapDefined, memoizeOne, ModuleKind, ModuleResolutionKind, moduleResolutionUsesNodeModules,
-    moduleSpecifiers, MultiMap, Mutable, NamedImports, Node, NodeFlags, nodeIsMissing, ObjectBindingPattern,
-    OrganizeImports, PackageJsonImportFilter, Path, pathContainsNodeModules, pathIsBareSpecifier, Program,
-    QuotePreference, ReadonlyESMap, removeFileExtension, removeSuffix, RequireVariableStatement, ScriptTarget,
-    SemanticMeaning, shouldUseUriStyleNodeCoreModules, single, skipAlias, some, sort, SourceFile, stableSort,
-    startsWith, StringLiteral, stripQuotes, Symbol, SymbolExportInfo, SymbolFlags, SymbolId, SyntaxKind, textChanges,
-    toPath, tryCast, tryGetModuleSpecifierFromDeclaration, TypeChecker, TypeOnlyAliasDeclaration, UserPreferences,
+    AnyImportOrRequire,
+    AnyImportOrRequireStatement,
+    AnyImportSyntax,
+    arrayFrom,
+    CancellationToken,
+    cast,
+    CodeAction,
+    CodeFixAction,
+    CodeFixContextBase,
+    combine,
+    compareBooleans,
+    compareNumberOfDirectorySeparators,
+    compareValues,
+    Comparison,
+    CompilerOptions,
+    createModuleSpecifierResolutionHost,
+    createMultiMap,
+    createPackageJsonImportFilter,
+    Debug,
+    DiagnosticAndArguments,
+    Diagnostics,
+    DiagnosticWithLocation,
+    emptyArray,
+    escapeLeadingUnderscores,
+    every,
+    ExportKind,
+    factory,
+    first,
+    firstDefined,
+    flatMap,
+    flatMapIterator,
+    forEachExternalModuleToImportFrom,
+    formatting,
+    getAllowSyntheticDefaultImports,
+    getBaseFileName,
+    getDefaultLikeExportInfo,
+    getDirectoryPath,
+    getEmitModuleKind,
+    getEmitModuleResolutionKind,
+    getEmitScriptTarget,
+    getExportInfoMap,
+    getMeaningFromDeclaration,
+    getMeaningFromLocation,
+    getNameForExportedSymbol,
+    getNodeId,
+    getQuoteFromPreference,
+    getQuotePreference,
+    getSourceFileOfNode,
+    getSymbolId,
+    getTokenAtPosition,
+    getTypeKeywordOfTypeOnlyImport,
+    getUniqueSymbolId,
+    hostGetCanonicalFileName,
+    Identifier,
+    ImportClause,
+    ImportEqualsDeclaration,
+    importFromModuleSpecifier,
+    ImportKind,
+    ImportsNotUsedAsValues,
+    insertImports,
+    InternalSymbolName,
+    isExternalModule,
+    isExternalModuleReference,
+    isIdentifier,
+    isIdentifierPart,
+    isIdentifierStart,
+    isImportableFile,
+    isImportEqualsDeclaration,
+    isInJSFile,
+    isIntrinsicJsxName,
+    isJsxClosingElement,
+    isJsxOpeningFragment,
+    isJsxOpeningLikeElement,
+    isJSXTagName,
+    isNamedImports,
+    isNamespaceImport,
+    isSourceFileJS,
+    isStringANonContextualKeyword,
+    isStringLiteral,
+    isStringLiteralLike,
+    isTypeOnlyImportOrExportDeclaration,
+    isUMDExportSymbol,
+    isValidTypeOnlyAliasUseSite,
+    isVariableDeclarationInitializedToRequire,
+    jsxModeNeedsExplicitImport,
+    LanguageServiceHost,
+    last,
+    makeImport,
+    makeStringLiteral,
+    mapDefined,
+    memoizeOne,
+    ModuleKind,
+    ModuleResolutionKind,
+    moduleResolutionUsesNodeModules,
+    moduleSpecifiers,
+    MultiMap,
+    Mutable,
+    NamedImports,
+    Node,
+    NodeFlags,
+    nodeIsMissing,
+    ObjectBindingPattern,
+    OrganizeImports,
+    PackageJsonImportFilter,
+    Path,
+    pathContainsNodeModules,
+    pathIsBareSpecifier,
+    Program,
+    QuotePreference,
+    removeFileExtension,
+    removeSuffix,
+    RequireVariableStatement,
+    ScriptTarget,
+    SemanticMeaning,
+    shouldUseUriStyleNodeCoreModules,
+    single,
+    skipAlias,
+    some,
+    sort,
+    SortKind,
+    SourceFile,
+    stableSort,
+    startsWith,
+    StringLiteral,
+    stripQuotes,
+    Symbol,
+    SymbolExportInfo,
+    SymbolFlags,
+    SymbolId,
+    SyntaxKind,
+    textChanges,
+    toPath,
+    tryCast,
+    tryGetModuleSpecifierFromDeclaration,
+    TypeChecker,
+    TypeOnlyAliasDeclaration,
+    UserPreferences,
 } from "../_namespaces/ts";
 import {
-    createCodeFixAction, createCombinedCodeActions, eachDiagnostic, registerCodeFix,
+    createCodeFixAction,
+    createCombinedCodeActions,
+    eachDiagnostic,
+    registerCodeFix,
 } from "../_namespaces/ts.codefix";
 
 /** @internal */
@@ -48,15 +165,14 @@ registerCodeFix({
         const { errorCode, preferences, sourceFile, span, program } = context;
         const info = getFixInfos(context, errorCode, span.start, /*useAutoImportProvider*/ true);
         if (!info) return undefined;
-        const quotePreference = getQuotePreference(sourceFile, preferences);
         return info.map(({ fix, symbolName, errorIdentifierText }) => codeActionForFix(
             context,
             sourceFile,
             symbolName,
             fix,
             /*includeSymbolNameInDescription*/ symbolName !== errorIdentifierText,
-            quotePreference,
-            program.getCompilerOptions()));
+            program.getCompilerOptions(),
+            preferences));
     },
     fixIds: [importFixId],
     getAllCodeActions: context => {
@@ -87,7 +203,7 @@ export function createImportAdder(sourceFile: SourceFile, program: Program, pref
 interface AddToExistingState {
     readonly importClauseOrBindingPattern: ImportClause | ObjectBindingPattern;
     defaultImport: Import | undefined;
-    readonly namedImports: ESMap<string, AddAsTypeOnly>;
+    readonly namedImports: Map<string, AddAsTypeOnly>;
 }
 
 function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAutoImportProvider: boolean, preferences: UserPreferences, host: LanguageServiceHost, cancellationToken: CancellationToken | undefined): ImportAdder {
@@ -242,7 +358,8 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
                 importClauseOrBindingPattern,
                 defaultImport,
                 arrayFrom(namedImports.entries(), ([name, addAsTypeOnly]) => ({ addAsTypeOnly, name })),
-                compilerOptions);
+                compilerOptions,
+                preferences);
         });
 
         let newDeclarations: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[] | undefined;
@@ -400,7 +517,8 @@ export function getImportCompletionAction(
             symbolName,
             fix,
             /*includeSymbolNameInDescription*/ false,
-            getQuotePreference(sourceFile, preferences), compilerOptions))
+            compilerOptions,
+            preferences))
     };
 }
 
@@ -410,7 +528,7 @@ export function getPromoteTypeOnlyCompletionAction(sourceFile: SourceFile, symbo
     const symbolName = single(getSymbolNamesToImport(sourceFile, program.getTypeChecker(), symbolToken, compilerOptions));
     const fix = getTypeOnlyPromotionFix(sourceFile, symbolToken, symbolName, program);
     const includeSymbolNameInDescription = symbolName !== symbolToken.text;
-    return fix && codeFixActionToCodeAction(codeActionForFix({ host, formatContext, preferences }, sourceFile, symbolName, fix, includeSymbolNameInDescription, QuotePreference.Double, compilerOptions));
+    return fix && codeFixActionToCodeAction(codeActionForFix({ host, formatContext, preferences }, sourceFile, symbolName, fix, includeSymbolNameInDescription, compilerOptions, preferences));
 }
 
 function getImportFixForSymbol(sourceFile: SourceFile, exportInfos: readonly SymbolExportInfo[], moduleSymbol: Symbol, program: Program, useNamespaceInfo: { position: number, symbolName: string } | undefined, isValidTypeOnlyUseSite: boolean, useRequire: boolean, host: LanguageServiceHost, preferences: UserPreferences) {
@@ -698,7 +816,8 @@ function getNewImportFixes(
     const compilerOptions = program.getCompilerOptions();
     const moduleSpecifierResolutionHost = createModuleSpecifierResolutionHost(program, host);
     const getChecker = createGetChecker(program, host);
-    const rejectNodeModulesRelativePaths = moduleResolutionUsesNodeModules(getEmitModuleResolutionKind(compilerOptions));
+    const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
+    const rejectNodeModulesRelativePaths = moduleResolutionUsesNodeModules(moduleResolution);
     const getModuleSpecifiers = fromCacheOnly
         ? (moduleSymbol: Symbol) => ({ moduleSpecifiers: moduleSpecifiers.tryGetModuleSpecifiersFromCache(moduleSymbol, sourceFile, moduleSpecifierResolutionHost, preferences), computedWithoutCache: false })
         : (moduleSymbol: Symbol, checker: TypeChecker) => moduleSpecifiers.getModuleSpecifiersWithCacheInfo(moduleSymbol, checker, compilerOptions, sourceFile, moduleSpecifierResolutionHost, preferences);
@@ -845,7 +964,7 @@ function compareModuleSpecifiers(
 function isFixPossiblyReExportingImportingFile(fix: ImportFixWithModuleSpecifier, importingFile: SourceFile, compilerOptions: CompilerOptions, toPath: (fileName: string) => Path): boolean {
     if (fix.isReExport &&
         fix.exportInfo?.moduleFileName &&
-        getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs &&
+        getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Node10 &&
         isIndexFileName(fix.exportInfo.moduleFileName)
     ) {
         const reExportDir = toPath(getDirectoryPath(fix.exportInfo.moduleFileName));
@@ -993,7 +1112,7 @@ function getExportInfos(
     useAutoImportProvider: boolean,
     host: LanguageServiceHost,
     preferences: UserPreferences,
-): ReadonlyESMap<string, readonly SymbolExportInfo[]> {
+): ReadonlyMap<string, readonly SymbolExportInfo[]> {
     // For each original symbol, keep all re-exports of that symbol together so we can call `getCodeActionsForImport` on the whole group at once.
     // Maps symbol id to info for modules providing that symbol (original export + re-exports).
     const originalSymbolToExportInfos = createMultiMap<SymbolExportInfo>();
@@ -1059,14 +1178,15 @@ function getExportEqualsImportKind(importingFile: SourceFile, compilerOptions: C
     return allowSyntheticDefaults ? ImportKind.Default : ImportKind.CommonJS;
 }
 
-function codeActionForFix(context: textChanges.TextChangesContext, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, quotePreference: QuotePreference, compilerOptions: CompilerOptions): CodeFixAction {
+function codeActionForFix(context: textChanges.TextChangesContext, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, compilerOptions: CompilerOptions, preferences: UserPreferences): CodeFixAction {
     let diag!: DiagnosticAndArguments;
     const changes = textChanges.ChangeTracker.with(context, tracker => {
-        diag = codeActionForFixWorker(tracker, sourceFile, symbolName, fix, includeSymbolNameInDescription, quotePreference, compilerOptions);
+        diag = codeActionForFixWorker(tracker, sourceFile, symbolName, fix, includeSymbolNameInDescription, compilerOptions, preferences);
     });
     return createCodeFixAction(importFixName, changes, diag, importFixId, Diagnostics.Add_all_missing_imports);
 }
-function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, quotePreference: QuotePreference, compilerOptions: CompilerOptions): DiagnosticAndArguments {
+function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: SourceFile, symbolName: string, fix: ImportFix, includeSymbolNameInDescription: boolean, compilerOptions: CompilerOptions, preferences: UserPreferences): DiagnosticAndArguments {
+    const quotePreference = getQuotePreference(sourceFile, preferences);
     switch (fix.kind) {
         case ImportFixKind.UseNamespace:
             addNamespaceQualifier(changes, sourceFile, fix);
@@ -1082,7 +1202,8 @@ function codeActionForFixWorker(changes: textChanges.ChangeTracker, sourceFile: 
                 importClauseOrBindingPattern,
                 importKind === ImportKind.Default ? { name: symbolName, addAsTypeOnly } : undefined,
                 importKind === ImportKind.Named ? [{ name: symbolName, addAsTypeOnly }] : emptyArray,
-                compilerOptions);
+                compilerOptions,
+                preferences);
             const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier);
             return includeSymbolNameInDescription
                 ? [Diagnostics.Import_0_from_1, symbolName, moduleSpecifierWithoutQuotes]
@@ -1123,10 +1244,11 @@ function promoteFromTypeOnly(changes: textChanges.ChangeTracker, aliasDeclaratio
     switch (aliasDeclaration.kind) {
         case SyntaxKind.ImportSpecifier:
             if (aliasDeclaration.isTypeOnly) {
-                if (aliasDeclaration.parent.elements.length > 1 && OrganizeImports.importSpecifiersAreSorted(aliasDeclaration.parent.elements)) {
+                const sortKind = OrganizeImports.detectImportSpecifierSorting(aliasDeclaration.parent.elements);
+                if (aliasDeclaration.parent.elements.length > 1 && sortKind) {
                     changes.delete(sourceFile, aliasDeclaration);
                     const newSpecifier = factory.updateImportSpecifier(aliasDeclaration, /*isTypeOnly*/ false, aliasDeclaration.propertyName, aliasDeclaration.name);
-                    const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(aliasDeclaration.parent.elements, newSpecifier);
+                    const insertionIndex = OrganizeImports.getImportSpecifierInsertionIndex(aliasDeclaration.parent.elements, newSpecifier, sortKind === SortKind.CaseInsensitive);
                     changes.insertImportSpecifierAtIndex(sourceFile, newSpecifier, aliasDeclaration.parent, insertionIndex);
                 }
                 else {
@@ -1157,7 +1279,7 @@ function promoteFromTypeOnly(changes: textChanges.ChangeTracker, aliasDeclaratio
         if (convertExistingToTypeOnly) {
             const namedImports = tryCast(importClause.namedBindings, isNamedImports);
             if (namedImports && namedImports.elements.length > 1) {
-                if (OrganizeImports.importSpecifiersAreSorted(namedImports.elements) &&
+                if (OrganizeImports.detectImportSpecifierSorting(namedImports.elements) &&
                     aliasDeclaration.kind === SyntaxKind.ImportSpecifier &&
                     namedImports.elements.indexOf(aliasDeclaration) !== 0
                 ) {
@@ -1183,6 +1305,7 @@ function doAddExistingFix(
     defaultImport: Import | undefined,
     namedImports: readonly Import[],
     compilerOptions: CompilerOptions,
+    preferences: UserPreferences,
 ): void {
     if (clause.kind === SyntaxKind.ObjectBindingPattern) {
         if (defaultImport) {
@@ -1210,21 +1333,45 @@ function doAddExistingFix(
     }
 
     if (namedImports.length) {
+        // sort case sensitivity:
+        // - if the user preference is explicit, use that
+        // - otherwise, if there are enough existing import specifiers in this import to detect unambiguously, use that
+        // - otherwise, detect from other imports in the file
+        let ignoreCaseForSorting: boolean | undefined;
+        if (typeof preferences.organizeImportsIgnoreCase === "boolean") {
+            ignoreCaseForSorting = preferences.organizeImportsIgnoreCase;
+        }
+        else if (existingSpecifiers) {
+            const targetImportSorting = OrganizeImports.detectImportSpecifierSorting(existingSpecifiers);
+            if (targetImportSorting !== SortKind.Both) {
+                ignoreCaseForSorting = targetImportSorting === SortKind.CaseInsensitive;
+            }
+        }
+        if (ignoreCaseForSorting === undefined) {
+            ignoreCaseForSorting = OrganizeImports.detectSorting(sourceFile) === SortKind.CaseInsensitive;
+        }
+
         const newSpecifiers = stableSort(
             namedImports.map(namedImport => factory.createImportSpecifier(
                 (!clause.isTypeOnly || promoteFromTypeOnly) && needsTypeOnly(namedImport),
                 /*propertyName*/ undefined,
                 factory.createIdentifier(namedImport.name))),
-            OrganizeImports.compareImportOrExportSpecifiers);
+            (s1, s2) => OrganizeImports.compareImportOrExportSpecifiers(s1, s2, ignoreCaseForSorting));
 
-        if (existingSpecifiers?.length && OrganizeImports.importSpecifiersAreSorted(existingSpecifiers)) {
+        // The sorting preference computed earlier may or may not have validated that these particular
+        // import specifiers are sorted. If they aren't, `getImportSpecifierInsertionIndex` will return
+        // nonsense. So if there are existing specifiers, even if we know the sorting preference, we
+        // need to ensure that the existing specifiers are sorted according to the preference in order
+        // to do a sorted insertion.
+        const specifierSort = existingSpecifiers?.length && OrganizeImports.detectImportSpecifierSorting(existingSpecifiers);
+        if (specifierSort && !(ignoreCaseForSorting && specifierSort === SortKind.CaseSensitive)) {
             for (const spec of newSpecifiers) {
                 // Organize imports puts type-only import specifiers last, so if we're
                 // adding a non-type-only specifier and converting all the other ones to
                 // type-only, there's no need to ask for the insertion index - it's 0.
                 const insertionIndex = convertExistingToTypeOnly && !spec.isTypeOnly
                     ? 0
-                    : OrganizeImports.getImportSpecifierInsertionIndex(existingSpecifiers, spec);
+                    : OrganizeImports.getImportSpecifierInsertionIndex(existingSpecifiers, spec, ignoreCaseForSorting);
                 changes.insertImportSpecifierAtIndex(sourceFile, spec, clause.namedBindings as NamedImports, insertionIndex);
             }
         }
@@ -1286,7 +1433,7 @@ interface Import {
 
 interface ImportsCollection {
     readonly defaultImport?: Import;
-    readonly namedImports?: ESMap<string, AddAsTypeOnly>;
+    readonly namedImports?: Map<string, AddAsTypeOnly>;
     readonly namespaceLikeImport?: {
         readonly importKind: ImportKind.CommonJS | ImportKind.Namespace;
         readonly name: string;

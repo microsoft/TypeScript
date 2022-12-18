@@ -36,7 +36,7 @@ interface FourSlashData {
     symlinks: vfs.FileSet | undefined;
 
     // A mapping from marker names to name/position pairs
-    markerPositions: ts.ESMap<string, Marker>;
+    markerPositions: Map<string, Marker>;
 
     markers: Marker[];
 
@@ -184,7 +184,7 @@ export class TestState {
 
     public formatCodeSettings: ts.FormatCodeSettings;
 
-    private inputFiles = new ts.Map<string, string>();  // Map between inputFile's fileName and its content for easily looking up when resolving references
+    private inputFiles = new Map<string, string>();  // Map between inputFile's fileName and its content for easily looking up when resolving references
 
     private static getDisplayPartsJson(displayParts: ts.SymbolDisplayPart[] | undefined) {
         let result = "";
@@ -535,8 +535,8 @@ export class TestState {
         }
     }
 
-    public verifyOrganizeImports(newContent: string, mode?: ts.OrganizeImportsMode) {
-        const changes = this.languageService.organizeImports({ fileName: this.activeFile.fileName, type: "file", mode }, this.formatCodeSettings, ts.emptyOptions);
+    public verifyOrganizeImports(newContent: string, mode?: ts.OrganizeImportsMode, preferences?: ts.UserPreferences) {
+        const changes = this.languageService.organizeImports({ fileName: this.activeFile.fileName, type: "file", mode }, this.formatCodeSettings, preferences);
         this.applyChanges(changes);
         this.verifyFileContent(this.activeFile.fileName, newContent);
     }
@@ -804,18 +804,6 @@ export class TestState {
         });
     }
 
-    private renderMarkers(markers: { text: string, fileName: string, position: number }[]) {
-        const filesToDisplay = ts.deduplicate(markers.map(m => m.fileName), ts.equateValues);
-        return filesToDisplay.map(fileName => {
-            const markersToRender = markers.filter(m => m.fileName === fileName).sort((a, b) => b.position - a.position);
-            let fileContent = this.tryGetFileContent(fileName) || "";
-            for (const marker of markersToRender) {
-                fileContent = fileContent.slice(0, marker.position) + `\x1b[1;4m/*${marker.text}*/\x1b[0;31m` + fileContent.slice(marker.position);
-            }
-            return `// @Filename: ${fileName}\n${fileContent}`;
-        }).join("\n\n");
-    }
-
     private verifyDefinitionTextSpan(defs: ts.DefinitionInfoAndBoundSpan, startMarkerName: string) {
         const range = this.testData.ranges.find(range => this.markerName(range.marker!) === startMarkerName);
 
@@ -836,6 +824,22 @@ export class TestState {
         }
         else {
             this.assertTextSpanEqualsRange(defs.textSpan, range, "goToDefinitionsAndBoundSpan failed");
+        }
+    }
+
+    private renderMarkers(markers: { text: string, fileName: string, position: number }[], useTerminalBoldSequence = true) {
+        const filesToDisplay = ts.deduplicate(markers.map(m => m.fileName), ts.equateValues);
+        return filesToDisplay.map(fileName => {
+            const markersToRender = markers.filter(m => m.fileName === fileName).sort((a, b) => b.position - a.position);
+            let fileContent = this.tryGetFileContent(fileName) || "";
+            for (const marker of markersToRender) {
+                fileContent = fileContent.slice(0, marker.position) + bold(`/*${marker.text}*/`) + fileContent.slice(marker.position);
+            }
+            return `// @Filename: ${fileName}\n${fileContent}`;
+        }).join("\n\n");
+
+        function bold(text: string) {
+            return useTerminalBoldSequence ? `\x1b[1;4m${text}\x1b[0;31m` : text;
         }
     }
 
@@ -911,7 +915,7 @@ export class TestState {
                 "Expected 'optionalReplacementSpan' properties to match");
         }
 
-        const nameToEntries = new ts.Map<string, ts.CompletionEntry[]>();
+        const nameToEntries = new Map<string, ts.CompletionEntry[]>();
         for (const entry of actualCompletions.entries) {
             const entries = nameToEntries.get(entry.name);
             if (!entries) {
@@ -1126,7 +1130,7 @@ export class TestState {
     }
 
     public setTypesRegistry(map: ts.MapLike<void>): void {
-        this.languageServiceAdapterHost.typesRegistry = new ts.Map(ts.getEntries(map));
+        this.languageServiceAdapterHost.typesRegistry = new Map(ts.getEntries(map));
     }
 
     public verifyTypeOfSymbolAtLocation(range: Range, symbol: ts.Symbol, expected: string): void {
@@ -2522,7 +2526,7 @@ export class TestState {
         return this.getRanges().filter(r => r.fileName === fileName);
     }
 
-    public rangesByText(): ts.ESMap<string, Range[]> {
+    public rangesByText(): Map<string, Range[]> {
         if (this.testData.rangesByText) return this.testData.rangesByText;
         const result = ts.createMultiMap<Range>();
         this.testData.rangesByText = result;
@@ -3041,6 +3045,10 @@ export class TestState {
      * @param fileName Path to file where error should be retrieved from.
      */
     private getCodeFixes(fileName: string, errorCode?: number, preferences: ts.UserPreferences = ts.emptyOptions, position?: number): readonly ts.CodeFixAction[] {
+        if (this.testType === FourSlashTestType.Server) {
+            this.configure(preferences);
+        }
+
         const diagnosticsForCodeFix = this.getDiagnostics(fileName, /*includeSuggestions*/ true).map(diagnostic => ({
             start: diagnostic.start,
             length: diagnostic.length,
@@ -3161,7 +3169,7 @@ export class TestState {
 
     public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
 
-        const openBraceMap = new ts.Map(ts.getEntries<ts.CharacterCodes>({
+        const openBraceMap = new Map(ts.getEntries<ts.CharacterCodes>({
             "(": ts.CharacterCodes.openParen,
             "{": ts.CharacterCodes.openBrace,
             "[": ts.CharacterCodes.openBracket,
@@ -3184,10 +3192,51 @@ export class TestState {
         if (!negative && !validBraceCompletion) {
             this.raiseError(`${position} is not a valid brace completion position for ${openingBrace}`);
         }
-
         if (negative && validBraceCompletion) {
             this.raiseError(`${position} is a valid brace completion position for ${openingBrace}`);
         }
+    }
+
+    public baselineAutoImports(markerName: string, preferences?: ts.UserPreferences) {
+        const marker = this.getMarkerByName(markerName);
+        const baselineFile = this.getBaselineFileNameForContainingTestFile(`.baseline.md`);
+        const completionPreferences = {
+            includeCompletionsForModuleExports: true,
+            includeCompletionsWithInsertText: true,
+            allowIncompleteCompletions: true,
+            includeCompletionsWithSnippetText: true,
+            ...preferences
+        };
+
+        const ext = ts.getAnyExtensionFromPath(this.activeFile.fileName).slice(1);
+        const lang = ["mts", "cts"].includes(ext) ? "ts" : ext;
+        let baselineText = codeFence(this.renderMarkers([{ text: "|", fileName: marker.fileName, position: marker.position }], /*useTerminalBoldSequence*/ false), lang) + "\n\n";
+        this.goToMarker(marker);
+
+        const completions = this.getCompletionListAtCaret(completionPreferences)!;
+
+        const autoImportCompletions = completions.entries.filter(c => c.hasAction && c.source && c.sortText === ts.Completions.SortText.AutoImportSuggestions);
+        if (autoImportCompletions.length) {
+            baselineText += `## From completions\n\n${autoImportCompletions.map(c => `- \`${c.name}\` from \`"${c.source}"\``).join("\n")}\n\n`;
+            autoImportCompletions.forEach(c => {
+                const details = this.getCompletionEntryDetails(c.name, c.source, c.data, completionPreferences);
+                assert(details?.codeActions, `Entry '${c.name}' from "${c.source}" returned no code actions from completion details request`);
+                assert(details.codeActions.length === 1, `Entry '${c.name}' from "${c.source}" returned more than one code action`);
+                assert(details.codeActions[0].changes.length === 1, `Entry '${c.name}' from "${c.source}" returned a code action changing more than one file`);
+                assert(details.codeActions[0].changes[0].fileName === this.activeFile.fileName, `Entry '${c.name}' from "${c.source}" returned a code action changing a different file`);
+                const changes = details.codeActions[0].changes[0].textChanges;
+                const completionChange: ts.TextChange = { newText: c.insertText || c.name, span: c.replacementSpan || completions.optionalReplacementSpan || { start: marker.position, length: 0 } };
+                const sortedChanges = [...changes, completionChange].sort((a, b) => a.span.start - b.span.start);
+                let newFileContent = this.activeFile.content;
+                for (let i = sortedChanges.length - 1; i >= 0; i--) {
+                    newFileContent = newFileContent.substring(0, sortedChanges[i].span.start) + sortedChanges[i].newText + newFileContent.substring(sortedChanges[i].span.start + sortedChanges[i].span.length);
+                }
+                baselineText += codeFence(newFileContent, lang) + "\n\n";
+            });
+        }
+
+        // TODO: do codefixes too
+        Harness.Baseline.runBaseline(baselineFile, baselineText);
     }
 
     public verifyJsxClosingTag(map: { [markerName: string]: ts.JsxClosingTagInfo | undefined }): void {
@@ -3710,7 +3759,7 @@ export class TestState {
         return text;
     }
 
-    private formatCallHierarchyItem(file: FourSlashFile, callHierarchyItem: ts.CallHierarchyItem, direction: CallHierarchyItemDirection, seen: ts.ESMap<string, boolean>, prefix: string, trailingPrefix: string = prefix) {
+    private formatCallHierarchyItem(file: FourSlashFile, callHierarchyItem: ts.CallHierarchyItem, direction: CallHierarchyItemDirection, seen: Map<string, boolean>, prefix: string, trailingPrefix: string = prefix) {
         const key = `${callHierarchyItem.file}|${JSON.stringify(callHierarchyItem.span)}|${direction}`;
         const alreadySeen = seen.has(key);
         seen.set(key, true);
@@ -3799,7 +3848,7 @@ export class TestState {
         let text = "";
         if (callHierarchyItem) {
             const file = this.findFile(callHierarchyItem.file);
-            text += this.formatCallHierarchyItem(file, callHierarchyItem, CallHierarchyItemDirection.Root, new ts.Map(), "");
+            text += this.formatCallHierarchyItem(file, callHierarchyItem, CallHierarchyItemDirection.Root, new Map(), "");
         }
         return text;
     }
@@ -4144,7 +4193,7 @@ function parseTestData(basePath: string, contents: string, fileName: string): Fo
     const lines = contents.split("\n");
     let i = 0;
 
-    const markerPositions = new ts.Map<string, Marker>();
+    const markerPositions = new Map<string, Marker>();
     const markers: Marker[] = [];
     const ranges: Range[] = [];
 
@@ -4283,7 +4332,7 @@ function reportError(fileName: string, line: number, col: number, message: strin
     throw new Error(errorMessage);
 }
 
-function recordObjectMarker(fileName: string, location: LocationInformation, text: string, markerMap: ts.ESMap<string, Marker>, markers: Marker[]): Marker | undefined {
+function recordObjectMarker(fileName: string, location: LocationInformation, text: string, markerMap: Map<string, Marker>, markers: Marker[]): Marker | undefined {
     let markerValue: any;
     try {
         // Attempt to parse the marker value as JSON
@@ -4314,7 +4363,7 @@ function recordObjectMarker(fileName: string, location: LocationInformation, tex
     return marker;
 }
 
-function recordMarker(fileName: string, location: LocationInformation, name: string, markerMap: ts.ESMap<string, Marker>, markers: Marker[]): Marker | undefined {
+function recordMarker(fileName: string, location: LocationInformation, name: string, markerMap: Map<string, Marker>, markers: Marker[]): Marker | undefined {
     const marker: Marker = {
         fileName,
         position: location.position
@@ -4333,7 +4382,7 @@ function recordMarker(fileName: string, location: LocationInformation, name: str
     }
 }
 
-function parseFileContent(content: string, fileName: string, markerMap: ts.ESMap<string, Marker>, markers: Marker[], ranges: Range[]): FourSlashFile {
+function parseFileContent(content: string, fileName: string, markerMap: Map<string, Marker>, markers: Marker[], ranges: Range[]): FourSlashFile {
     content = chompLeadingSpace(content);
 
     // Any slash-star comment with a character not in this string is not a marker.
@@ -4533,7 +4582,7 @@ function stringify(data: any, replacer?: (key: string, value: any) => any): stri
 
 /** Collects an array of unique outputs. */
 function unique<T>(inputs: readonly T[], getOutput: (t: T) => string): string[] {
-    const set = new ts.Map<string, true>();
+    const set = new Map<string, true>();
     for (const input of inputs) {
         const out = getOutput(input);
         set.set(out, true);
@@ -4601,10 +4650,10 @@ function rangesOfDiffBetweenTwoStrings(source: string, target: string) {
         else {
             ranges.push({ start: index - 1, length: 1 });
         }
-      }
-      else {
+        }
+        else {
             ranges.push({ start: index - 1, length: 1 });
-      }
+        }
     };
 
     for (let index = 0; index < Math.max(source.length, target.length); index++) {
@@ -4614,10 +4663,10 @@ function rangesOfDiffBetweenTwoStrings(source: string, target: string) {
     }
 
     return ranges;
-  }
+}
 
-  // Adds an _ when the source string and the target string have a whitespace difference
-  function highlightDifferenceBetweenStrings(source: string, target: string) {
+// Adds an _ when the source string and the target string have a whitespace difference
+function highlightDifferenceBetweenStrings(source: string, target: string) {
     const ranges = rangesOfDiffBetweenTwoStrings(source, target);
     let emTarget = target;
     ranges.forEach((range, index) => {
@@ -4629,8 +4678,12 @@ function rangesOfDiffBetweenTwoStrings(source: string, target: string) {
             range.start + 1 + additionalOffset,
             range.start + range.length + 1 + additionalOffset
         );
-         const after = emTarget.slice(range.start + range.length + 1 + additionalOffset, emTarget.length);
+        const after = emTarget.slice(range.start + range.length + 1 + additionalOffset, emTarget.length);
         emTarget = before + lhs + between + rhs + after;
     });
     return emTarget;
-  }
+}
+
+function codeFence(code: string, lang?: string) {
+    return `\`\`\`${lang || ""}\n${code}\n\`\`\``;
+}

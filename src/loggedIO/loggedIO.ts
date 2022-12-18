@@ -85,7 +85,7 @@ interface PlaybackControl {
 
 let recordLog: IoLog | undefined;
 let replayLog: IoLog | undefined;
-let replayFilesRead: ts.ESMap<string, IoLogFile> | undefined;
+let replayFilesRead: Map<string, IoLogFile> | undefined;
 let recordLogFileNameBase = "";
 
 interface Memoized<T> {
@@ -219,7 +219,7 @@ export function initWrapper(...[wrapper, underlying]: [PlaybackSystem, ts.System
         replayLog = log;
         // Remove non-found files from the log (shouldn't really need them, but we still record them for diagnostic purposes)
         replayLog.filesRead = replayLog.filesRead.filter(f => f.result!.contents !== undefined);
-        replayFilesRead = new ts.Map();
+        replayFilesRead = new Map();
         for (const file of replayLog.filesRead) {
             replayFilesRead.set(ts.normalizeSlashes(file.path).toLowerCase(), file);
         }

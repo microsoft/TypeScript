@@ -4,7 +4,12 @@ import * as vfs from "./_namespaces/vfs";
 import * as collections from "./_namespaces/collections";
 import * as vpath from "./_namespaces/vpath";
 import * as Utils from "./_namespaces/Utils";
-import { Compiler, harnessNewLine, mockHash, virtualFileSystemRoot } from "./_namespaces/Harness";
+import {
+    Compiler,
+    harnessNewLine,
+    mockHash,
+    virtualFileSystemRoot,
+} from "./_namespaces/Harness";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
     const proxy = Object.create(/*prototype*/ null); // eslint-disable-line no-null/no-null
@@ -132,7 +137,7 @@ export interface LanguageServiceAdapter {
 
 export abstract class LanguageServiceAdapterHost {
     public readonly sys = new fakes.System(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot }));
-    public typesRegistry: ts.ESMap<string, void> | undefined;
+    public typesRegistry: Map<string, void> | undefined;
     private scriptInfos: collections.SortedMap<string, ScriptInfo>;
 
     constructor(protected cancellationToken = DefaultHostCancellationToken.instance,
@@ -595,6 +600,9 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): ts.TextSpan {
         return unwrapJSONCallResult(this.shim.getSpanOfEnclosingComment(fileName, position, onlyMultiLine));
     }
+    getSupportedCodeFixes(): never {
+        throw new Error("Not supported on the shim.");
+    }
     getCodeFixesAtPosition(): never {
         throw new Error("Not supported on the shim.");
     }
@@ -639,7 +647,7 @@ class LanguageServiceShimProxy implements ts.LanguageService {
     getAutoImportProvider(): ts.Program | undefined {
         throw new Error("Program can not be marshaled across the shim layer.");
     }
-    updateIsDefinitionOfReferencedSymbols(_referencedSymbols: readonly ts.ReferencedSymbol[], _knownSymbolSpans: ts.Set<ts.DocumentSpan>): boolean {
+    updateIsDefinitionOfReferencedSymbols(_referencedSymbols: readonly ts.ReferencedSymbol[], _knownSymbolSpans: Set<ts.DocumentSpan>): boolean {
         return ts.notImplemented();
     }
     getNonBoundSourceFile(): ts.SourceFile {

@@ -1,8 +1,22 @@
 import {
-    cast, Diagnostics, factory, getQuotePreference, getTokenAtPosition, isPropertyAccessChain,
-    isPropertyAccessExpression, PropertyAccessExpression, QuotePreference, SourceFile, textChanges, UserPreferences,
+    cast,
+    Diagnostics,
+    factory,
+    getQuotePreference,
+    getTokenAtPosition,
+    isPropertyAccessChain,
+    isPropertyAccessExpression,
+    PropertyAccessExpression,
+    QuotePreference,
+    SourceFile,
+    textChanges,
+    UserPreferences,
 } from "../_namespaces/ts";
-import { codeFixAll, createCodeFixAction, registerCodeFix } from "../_namespaces/ts.codefix";
+import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 const fixId = "fixNoPropertyAccessFromIndexSignature";
 const errorCodes = [
