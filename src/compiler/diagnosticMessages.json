@@ -7548,5 +7548,9 @@
     "The value '{0}' cannot be used here.": {
         "category": "Error",
         "code": 18050
+    },
+    "{0}": {
+        "category": "Error",
+        "code": 18051
     }
 }

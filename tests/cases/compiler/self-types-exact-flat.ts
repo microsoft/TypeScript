@@ -22,7 +22,10 @@ type Exact<T> =
     ? ExactError<T, self> extends infer E
         ? [E] extends [never]
             ? self
-            : `Excess properties found at ${Join<E & string>}`
+            : Never<[
+                `Type '${Print<self>}' is not assignable to type 'Exact<${Print<T>}>`,
+                `Excess properties found at ${Join<E & string>}`
+              ]>
         : never
     : T
 
@@ -55,7 +58,7 @@ type Prefix<A, B> =
     : `${A & string}${B & string}`
 
 type PrintKey<K> = 
-  K extends symbol ? "[unprintabe-symbol]" : K
+  K extends symbol ? Print<K> : K
 
 type UShift<U> =
   UToIntersection<U extends unknown ? (x: U) => void : never> extends (_: infer H) => void

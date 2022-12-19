@@ -20,7 +20,7 @@ type Exact<T, A = self> =
             ? T extends object
                 ? { [K in keyof A]:
                       K extends keyof T ? Exact<T[K], A[K]> :
-                      `Excess property '${K & string}' not allowed as the target is an exact type`
+                      Never<`Excess property '${K & string}' not allowed as the target is an exact type`>
                   }
                 : T :
           T

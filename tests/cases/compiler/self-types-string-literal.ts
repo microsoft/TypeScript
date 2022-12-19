@@ -1,7 +1,7 @@
 type StringLiteral =
   self extends string
     ? string extends self
-        ? "Error: Not a string literal"
+        ? Never<`Type '${Print<self>}' is not assignable to type 'StringLiteral'`>
         : self
     : string
 

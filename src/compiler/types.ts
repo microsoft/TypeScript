@@ -5719,6 +5719,9 @@ export const TypeFlags = new class TypeFlags {
     StringMapping   = 1n << 28n  // Uppercase/Lowercase type
     Self            = 1n << 29n
     ContainsSelf    = 1n << 30n
+    NeverWithError  = 1n << 31n
+    Print           = 1n << 32n
+    
     /** @internal */
     AnyOrUnknown = this.Any | this.Unknown
     /** @internal */
@@ -6285,7 +6288,6 @@ export interface StringMappingType extends InstantiableType {
     symbol: Symbol;
     type: Type;
 }
-
 // Type parameter substitution (TypeFlags.Substitution)
 // Substitution types are created for type parameters or indexed access types that occur in the
 // true branch of a conditional type. For example, in 'T extends string ? Foo<T> : Bar<T>', the
@@ -6297,6 +6299,17 @@ export interface SubstitutionType extends InstantiableType {
     baseType: Type;    // Target type
     constraint: Type;  // Constraint that target type is known to satisfy
 }
+
+export interface NeverWithErrorType extends InstantiableType, IntrinsicType {
+    errorType: Type
+}
+
+export interface PrintType extends InstantiableType {
+    type: Type
+    flagType: Type
+    resolvedStringLiteralType: StringLiteralType
+}
+
 
 /** @internal */
 export const enum JsxReferenceKind {

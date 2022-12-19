@@ -22,7 +22,7 @@ type Json<Flags extends "AllowPossiblyCircular" | "AllowUndefined" = never> =
   JsonError<Flags, self> extends infer E
     ? [E] extends [never]
         ? self
-        : `Error: ${E & string}`
+        : Never<`Type '${Print<self>}' is not assignable to type 'Json', as ${E & string}`>
     : never
 
 type JsonError<Flags, T, IsTopLevel = true, TCopy = T> =
@@ -39,7 +39,7 @@ type JsonError<Flags, T, IsTopLevel = true, TCopy = T> =
         JsonError<Flags, T[K], false> extends infer E
           ? [E] extends [never]
               ? never
-              : `value at .${K extends symbol ? "[unprintabe-symbol]" : K} ${E & string}`
+              : `value at .${K extends symbol ? `(${Print<K>})` : K} ${E & string}`
           : never
       }[T extends unknown[] ? number & keyof T : keyof T]> : 
   T extends undefined ? "AllowUndefined" extends Flags ? never : `${IsTopLevel extends true ? "it " : ""}${UIsUnit<TCopy> extends true ? "is" : "could be"} undefined` :

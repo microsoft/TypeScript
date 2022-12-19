@@ -2,7 +2,11 @@ type CaseInsensitive<T extends string> =
   self extends string
     ? Lowercase<self> extends Lowercase<T>
         ? self
-        : never
+        : Never<[
+          `Type '${Print<self>}' is not assignable to type 'CaseInsensitive<${Print<T>}>'`,
+          `Type 'Lowercase<${Print<self>}>' is not assignable to 'Lowercase<${Print<T>}>'`,
+          `Type '${Print<Lowercase<self>>}' is not assignable to '${Print<Lowercase<T>>}'`
+        ]>
     : T
 
 declare const setHeader: 

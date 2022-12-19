@@ -2,7 +2,7 @@ type Color =
   self extends string
     ? ParseColor<self> extends infer R
       ? R extends { error: infer E extends string }
-          ? `Error: ${E}`
+          ? Never<[`Type '${Print<self>}' is not assignable to type 'Color'`, E]>
           : R
       : never
     : string

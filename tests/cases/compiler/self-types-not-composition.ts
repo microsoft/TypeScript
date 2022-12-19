@@ -1,6 +1,6 @@
 type Not<T> =
   self extends T
-    ? never
+    ? Never<`Type '${Print<self>}' is not assignable to type 'Not<${Print<T>}>'`>
     : self
 
 const divide = (a: number, b: number & Not<0>) => a / b

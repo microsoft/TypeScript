@@ -1632,6 +1632,17 @@ type Capitalize<S extends string> = intrinsic;
 type Uncapitalize<S extends string> = intrinsic;
 
 /**
+ * Create a never type with a custom assignability error message via a string type,
+ * or via a tuple of string types to create a stack of error messages
+ */
+type Never<E extends string | string[]> = intrinsic;
+
+/**
+ * Print a type to a string literal type.
+ */
+type Print<T, F extends "InTypeAlias" = never> = intrinsic;
+
+/**
  * Marker for contextual 'this' type
  */
 interface ThisType<T> { }

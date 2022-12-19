@@ -1010,6 +1010,8 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    NeverWithErrorType,
+    PrintType,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
@@ -1277,14 +1279,18 @@ const enum IntrinsicTypeKind {
     Uppercase,
     Lowercase,
     Capitalize,
-    Uncapitalize
+    Uncapitalize,
+    Never,
+    Print
 }
 
 const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(getEntries({
     Uppercase: IntrinsicTypeKind.Uppercase,
     Lowercase: IntrinsicTypeKind.Lowercase,
     Capitalize: IntrinsicTypeKind.Capitalize,
-    Uncapitalize: IntrinsicTypeKind.Uncapitalize
+    Uncapitalize: IntrinsicTypeKind.Uncapitalize,
+    Never: IntrinsicTypeKind.Never,
+    Print: IntrinsicTypeKind.Print
 }));
 
 function SymbolLinks(this: SymbolLinks) {
@@ -1805,6 +1811,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     const evolvingArrayTypes: EvolvingArrayType[] = [];
     const undefinedProperties: SymbolTable = new Map();
     const markerTypes = new Set<number>();
+    const neverWithErrorTypes = new Map<string, NeverWithErrorType>()
+    const printTypes = new Map<string, PrintType>()
 
     const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as __String);
     const resolvingSymbol = createSymbol(0, InternalSymbolName.Resolving);
@@ -6338,8 +6346,43 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return factory.createTypeOperatorNode(SyntaxKind.KeyOfKeyword, indexTypeNode);
             }
             if (type.flags & TypeFlags.TemplateLiteral) {
-                const texts = (type as TemplateLiteralType).texts;
-                const types = (type as TemplateLiteralType).types;
+                let texts = [...(type as TemplateLiteralType).texts];
+                let types = [...(type as TemplateLiteralType).types];
+                console.log("template before")
+                console.log(JSON.stringify(texts))
+                console.log(JSON.stringify(types.map(t => typeToString(t))))
+                
+                const textOrTypes = flatMap(texts, (text, i) => [
+                    { kind: "text" as const, value: text },
+                    ...(types[i] ? [{ kind: "type" as const, value: types[i] }] : [])
+                ])
+
+                texts = []
+                types = []
+                for (let i = 0; i < textOrTypes.length;) {
+                    let element = textOrTypes[i]
+                    if (element.kind === "type" && element.value.flags & TypeFlags.Print) {
+                        element.value = getStringLiteralTypeFromPrintType(element.value as PrintType)
+                    }
+
+                    if (element.kind === "type" && element.value.flags & TypeFlags.StringLiteral) {
+                        texts[texts.length - 1] += (element.value as StringLiteralType).value + (textOrTypes[i+1].value as string)
+                        i += 2
+                        continue;
+                    }
+
+                    if (element.kind === "text") texts.push(element.value)
+                    if (element.kind === "type") types.push(element.value)
+                    i++;
+                }
+                console.log("template after")
+                console.log(JSON.stringify(texts))
+                console.log(JSON.stringify(types.map(t => typeToString(t))))
+
+                if (types.length === 0) {
+                    return typeToTypeNodeHelper(getStringLiteralType(texts.join("")), context)
+                }
+
                 const templateHead = factory.createTemplateHead(texts[0]);
                 const templateSpans = factory.createNodeArray(
                     map(types, (t, i) => factory.createTemplateLiteralTypeSpan(
@@ -6351,6 +6394,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (type.flags & TypeFlags.StringMapping) {
                 const typeNode = typeToTypeNodeHelper((type as StringMappingType).type, context);
                 return symbolToTypeNode((type as StringMappingType).symbol, context, SymbolFlags.Type, [typeNode]);
+            }
+            if (type.flags & TypeFlags.Print) {
+                return typeToTypeNodeHelper(getStringLiteralTypeFromPrintType(type as PrintType), context)
             }
             if (type.flags & TypeFlags.IndexedAccess) {
                 const objectTypeNode = typeToTypeNodeHelper((type as IndexedAccessType).objectType, context);
@@ -13340,7 +13386,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getBaseConstraintOfType(type: Type): Type | undefined {
-        if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral | TypeFlags.StringMapping)) {
+        if (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.UnionOrIntersection | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Print)) {
             const constraint = getResolvedBaseConstraint(type as InstantiableType | UnionOrIntersectionType);
             return constraint !== noConstraintType && constraint !== circularConstraintType ? constraint : undefined;
         }
@@ -13452,6 +13498,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (t.flags & TypeFlags.StringMapping) {
                 const constraint = getBaseConstraint((t as StringMappingType).type);
                 return constraint && constraint !== (t as StringMappingType).type ? getStringMappingType((t as StringMappingType).symbol, constraint) : stringType;
+            }
+            if (t.flags & TypeFlags.Print) {
+                return stringType
             }
             if (t.flags & TypeFlags.IndexedAccess) {
                 if (isMappedTypeGenericIndexedAccess(t)) {
@@ -14860,9 +14909,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getTypeAliasInstantiation(symbol: Symbol, typeArguments: readonly Type[] | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
         const type = getDeclaredTypeOfSymbol(symbol);
-        if (type === intrinsicMarkerType && intrinsicTypeKinds.has(symbol.escapedName as string) && typeArguments && typeArguments.length === 1) {
-            return getStringMappingType(symbol, typeArguments[0]);
+        if (type === intrinsicMarkerType && intrinsicTypeKinds.has(symbol.escapedName as string) && typeArguments && typeArguments.length >= 1) {
+            switch(intrinsicTypeKinds.get(symbol.escapedName as string)) {
+                case IntrinsicTypeKind.Lowercase:
+                case IntrinsicTypeKind.Uppercase:
+                case IntrinsicTypeKind.Capitalize:
+                case IntrinsicTypeKind.Uncapitalize:
+                    return getStringMappingType(symbol, typeArguments[0]);
+
+                case IntrinsicTypeKind.Never:
+                    return createNeverWithErrorType(typeArguments[0]);
+
+                case IntrinsicTypeKind.Print:
+                    return createPrintType(typeArguments[0], typeArguments[1])
+            }
         }
+
         const links = getSymbolLinks(symbol);
         const typeParameters = links.typeParameters;
         const id = getTypeListId(typeArguments) + getAliasId(aliasSymbol, aliasTypeArguments);
@@ -15913,7 +15975,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const t = types[i];
             const flags = t.flags;
             const remove =
-                flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && includes & TypeFlags.String ||
+                flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Print) && includes & TypeFlags.String ||
                 flags & TypeFlags.NumberLiteral && includes & TypeFlags.Number ||
                 flags & TypeFlags.BigIntLiteral && includes & TypeFlags.BigInt ||
                 flags & TypeFlags.UniqueESSymbol && includes & TypeFlags.ESSymbol ||
@@ -15991,7 +16053,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     orderedRemoveItemAt(typeSet, missingIndex);
                 }
             }
-            if (includes & (TypeFlags.Literal | TypeFlags.UniqueESSymbol | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) || includes & TypeFlags.Void && includes & TypeFlags.Undefined) {
+            if (includes & (TypeFlags.Literal | TypeFlags.UniqueESSymbol | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Print) || includes & TypeFlags.Void && includes & TypeFlags.Undefined) {
                 removeRedundantLiteralTypes(typeSet, includes, !!(unionReduction & UnionReduction.Subtype));
             }
             if (includes & TypeFlags.StringLiteral && includes & TypeFlags.TemplateLiteral) {
@@ -16162,7 +16224,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             i--;
             const t = types[i];
             const remove =
-                t.flags & TypeFlags.String && includes & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ||
+                t.flags & TypeFlags.String && includes & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Print) ||
                 t.flags & TypeFlags.Number && includes & TypeFlags.NumberLiteral ||
                 t.flags & TypeFlags.BigInt && includes & TypeFlags.BigIntLiteral ||
                 t.flags & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol ||
@@ -16325,7 +16387,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!strictNullChecks && includes & TypeFlags.Nullable) {
             return includes & TypeFlags.IncludesEmptyObject ? neverType : includes & TypeFlags.Undefined ? undefinedType : nullType;
         }
-        if (includes & TypeFlags.String && includes & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ||
+        if (includes & TypeFlags.String && includes & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Print) ||
             includes & TypeFlags.Number && includes & TypeFlags.NumberLiteral ||
             includes & TypeFlags.BigInt && includes & TypeFlags.BigIntLiteral ||
             includes & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol ||
@@ -16785,6 +16847,46 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type;
     }
 
+    function createNeverWithErrorType(errorType: Type) {
+        const id = `${getTypeId(errorType)}`
+        if (neverWithErrorTypes.has(id)) return neverWithErrorTypes.get(id)!
+
+        const type = createType(TypeFlags.Never | TypeFlags.NeverWithError) as NeverWithErrorType
+        type.intrinsicName = "NeverWithError"
+        type.errorType = errorType
+
+        neverWithErrorTypes.set(id, type)
+        return type
+    }
+
+    function createPrintType(type: Type, flagType: Type | undefined = neverType) {
+        const id = `${getTypeId(type)},${getTypeId(flagType)}`
+        if (printTypes.has(id)) return printTypes.get(id)!
+
+        const printType = createType(TypeFlags.Print) as PrintType;
+        printType.type = type
+        printType.flagType = flagType
+
+        printTypes.set(id, printType)
+        return printType
+    }
+
+    function getStringLiteralTypeFromPrintType(printType: PrintType) {
+        if (printType.resolvedStringLiteralType) {
+            return printType.resolvedStringLiteralType
+        }
+
+        const type = getStringLiteralType(typeToString(
+            printType.type, undefined,
+            isTypeSubtypeOf(getStringLiteralType("InTypeAlias"), printType.flagType)
+                ? TypeFormatFlags.InTypeAlias
+                : TypeFormatFlags.None
+        ))
+        
+        printType.resolvedStringLiteralType = type
+        return type
+    }
+
     /**
      * Returns if a type is or consists of a JSLiteral object type
      * In addition to objects which are directly literals,
@@ -17038,7 +17140,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isPatternLiteralType(type: Type) {
         return !!(type.flags & TypeFlags.TemplateLiteral) && every((type as TemplateLiteralType).types, isPatternLiteralPlaceholderType) ||
-            !!(type.flags & TypeFlags.StringMapping) && isPatternLiteralPlaceholderType((type as StringMappingType).type);
+            !!(type.flags & TypeFlags.StringMapping) && isPatternLiteralPlaceholderType((type as StringMappingType).type) ||
+            !!(type.flags & TypeFlags.Print);
     }
 
     function isGenericType(type: Type): boolean {
@@ -17069,7 +17172,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return (type as SubstitutionType).objectFlags & ObjectFlags.IsGenericType;
         }
         return (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type) || isGenericTupleType(type) ? ObjectFlags.IsGenericObjectType : 0) |
-            (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
+            (type.flags & (TypeFlags.InstantiableNonPrimitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Print) && !isPatternLiteralType(type) ? ObjectFlags.IsGenericIndexType : 0);
     }
 
     function getSimplifiedType(type: Type, writing: boolean): Type {
@@ -18636,6 +18739,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (flags & TypeFlags.StringMapping) {
             return getStringMappingType((type as StringMappingType).symbol, instantiateType((type as StringMappingType).type, mapper));
         }
+        if (flags & TypeFlags.Print) {
+            return createPrintType(
+                instantiateType((type as PrintType).type, mapper),
+                instantiateType((type as PrintType).flagType, mapper)
+            )
+        }
         if (flags & TypeFlags.IndexedAccess) {
             const newAliasSymbol = aliasSymbol || type.aliasSymbol;
             const newAliasTypeArguments = aliasSymbol ? aliasTypeArguments : instantiateTypes(type.aliasTypeArguments, mapper);
@@ -18657,6 +18766,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return newBaseType;
             }
             return newBaseType.flags & TypeFlags.TypeVariable ? getSubstitutionType(newBaseType, newConstraint) : getIntersectionType([newConstraint, newBaseType]);
+        }
+        if (flags & TypeFlags.NeverWithError) {
+            return createNeverWithErrorType(instantiateType((type as NeverWithErrorType).errorType, mapper))
         }
         return type;
     }
@@ -19987,62 +20099,86 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const [sourceType, targetType] = getTypeNamesForErrorDisplay(source, target);
             let generalizedSource = source;
             let generalizedSourceType = sourceType;
-
-            if (isLiteralType(source) && !typeCouldHaveTopLevelSingletonTypes(target)) {
-                generalizedSource = getBaseTypeOfLiteralType(source);
-                Debug.assert(!isTypeAssignableTo(generalizedSource, target), "generalized source shouldn't be assignable");
-                generalizedSourceType = getTypeNameForErrorDisplay(generalizedSource);
+            
+            if (target.flags & TypeFlags.NeverWithError) {
+                const errorType = (target as NeverWithErrorType).errorType
+                const errorsType = (isTypeSubtypeOf(errorType, stringType) ? createTupleType([errorType]) : errorType)
+                if (!isTupleType(errorsType)) return reportNonCustom()
+                
+                const errorTypes: Type[] = Array.from({ length: errorsType.target.fixedLength }, (_, i) => getTupleElementType(errorsType, i)!)
+                if (!every(errorTypes, t => !!(t.flags & TypeFlags.StringLike))) return reportNonCustom()
+                
+                while (errorTypes.length > 0) {
+                    reportError(Diagnostics._0,
+                        typeToString(errorTypes.pop()!)
+                        .slice(1,-1)
+                        .replace(/\\"/g, '"')
+                        .replace(/\\'/g, "'")
+                        .replace(/\\\\/g, "\\")
+                        .replace(/\\n/g, "\n")
+                    )
+                }
+                return
             }
+            return reportNonCustom()
 
-            if (target.flags & TypeFlags.TypeParameter && target !== markerSuperTypeForCheck && target !== markerSubTypeForCheck) {
-                const constraint = getBaseConstraintOfType(target);
-                let needsOriginalSource;
-                if (constraint && (isTypeAssignableTo(generalizedSource, constraint) || (needsOriginalSource = isTypeAssignableTo(source, constraint)))) {
-                    reportError(
-                        Diagnostics._0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2,
-                        needsOriginalSource ? sourceType : generalizedSourceType,
-                        targetType,
-                        typeToString(constraint),
-                    );
+            function reportNonCustom() {
+                if (isLiteralType(source) && !typeCouldHaveTopLevelSingletonTypes(target)) {
+                    generalizedSource = getBaseTypeOfLiteralType(source);
+                    Debug.assert(!isTypeAssignableTo(generalizedSource, target), "generalized source shouldn't be assignable");
+                    generalizedSourceType = getTypeNameForErrorDisplay(generalizedSource);
                 }
-                else {
-                    errorInfo = undefined;
-                    reportError(
-                        Diagnostics._0_could_be_instantiated_with_an_arbitrary_type_which_could_be_unrelated_to_1,
-                        targetType,
-                        generalizedSourceType
-                    );
-                }
-            }
 
-            if (!message) {
-                if (relation === comparableRelation) {
-                    message = Diagnostics.Type_0_is_not_comparable_to_type_1;
-                }
-                else if (sourceType === targetType) {
-                    message = Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated;
-                }
-                else if (exactOptionalPropertyTypes && getExactOptionalUnassignableProperties(source, target).length) {
-                    message = Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties;
-                }
-                else {
-                    if (source.flags & TypeFlags.StringLiteral && target.flags & TypeFlags.Union) {
-                        const suggestedType = getSuggestedTypeForNonexistentStringLiteralType(source as StringLiteralType, target as UnionType);
-                        if (suggestedType) {
-                            reportError(Diagnostics.Type_0_is_not_assignable_to_type_1_Did_you_mean_2, generalizedSourceType, targetType, typeToString(suggestedType));
-                            return;
-                        }
+                if (target.flags & TypeFlags.TypeParameter && target !== markerSuperTypeForCheck && target !== markerSubTypeForCheck) {
+                    const constraint = getBaseConstraintOfType(target);
+                    let needsOriginalSource;
+                    if (constraint && (isTypeAssignableTo(generalizedSource, constraint) || (needsOriginalSource = isTypeAssignableTo(source, constraint)))) {
+                        reportError(
+                            Diagnostics._0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2,
+                            needsOriginalSource ? sourceType : generalizedSourceType,
+                            targetType,
+                            typeToString(constraint),
+                        );
                     }
-                    message = Diagnostics.Type_0_is_not_assignable_to_type_1;
+                    else {
+                        errorInfo = undefined;
+                        reportError(
+                            Diagnostics._0_could_be_instantiated_with_an_arbitrary_type_which_could_be_unrelated_to_1,
+                            targetType,
+                            generalizedSourceType
+                        );
+                    }
                 }
-            }
-            else if (message === Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1
-                && exactOptionalPropertyTypes
-                && getExactOptionalUnassignableProperties(source, target).length) {
-                message = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties;
-            }
 
-            reportError(message, generalizedSourceType, targetType);
+                if (!message) {
+                    if (relation === comparableRelation) {
+                        message = Diagnostics.Type_0_is_not_comparable_to_type_1;
+                    }
+                    else if (sourceType === targetType) {
+                        message = Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated;
+                    }
+                    else if (exactOptionalPropertyTypes && getExactOptionalUnassignableProperties(source, target).length) {
+                        message = Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties;
+                    }
+                    else {
+                        if (source.flags & TypeFlags.StringLiteral && target.flags & TypeFlags.Union) {
+                            const suggestedType = getSuggestedTypeForNonexistentStringLiteralType(source as StringLiteralType, target as UnionType);
+                            if (suggestedType) {
+                                reportError(Diagnostics.Type_0_is_not_assignable_to_type_1_Did_you_mean_2, generalizedSourceType, targetType, typeToString(suggestedType));
+                                return;
+                            }
+                        }
+                        message = Diagnostics.Type_0_is_not_assignable_to_type_1;
+                    }
+                }
+                else if (message === Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1
+                    && exactOptionalPropertyTypes
+                    && getExactOptionalUnassignableProperties(source, target).length) {
+                    message = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_types_of_the_target_s_properties;
+                }
+
+                reportError(message, generalizedSourceType, targetType);
+            }
         }
 
         function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
@@ -22734,7 +22870,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getBaseTypeOfLiteralType(type: Type): Type {
         return type.flags & TypeFlags.EnumLiteral ? getBaseTypeOfEnumLiteralType(type as LiteralType) :
-            type.flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ? stringType :
+            type.flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Print) ? stringType :
             type.flags & TypeFlags.NumberLiteral ? numberType :
             type.flags & TypeFlags.BigIntLiteral ? bigintType :
             type.flags & TypeFlags.BooleanLiteral ? booleanType :
@@ -23421,7 +23557,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
                 objectFlags & (ObjectFlags.Mapped | ObjectFlags.ReverseMapped | ObjectFlags.ObjectRestType | ObjectFlags.InstantiationExpressionType)) ||
             type.flags & TypeFlags.UnionOrIntersection && !(type.flags & TypeFlags.EnumLiteral) && !isNonGenericTopLevelType(type) && some((type as UnionOrIntersectionType).types, couldContainTypeVariables) ||
-            type.flags & TypeFlags.ContainsSelf;
+            type.flags & TypeFlags.ContainsSelf ||
+            type.flags & TypeFlags.NeverWithError && couldContainTypeVariables((type as NeverWithErrorType).errorType));
         if (type.flags & TypeFlags.ObjectFlagsType) {
             (type as ObjectFlagsType).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed | (result ? ObjectFlags.CouldContainTypeVariables : 0);
         }
@@ -23678,7 +23815,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isValidTypeForTemplateLiteralPlaceholder(source: Type, target: Type): boolean {
-        if (source === target || target.flags & (TypeFlags.Any | TypeFlags.String)) {
+        if (source === target || target.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Print)) {
             return true;
         }
         if (source.flags & TypeFlags.StringLiteral) {
@@ -23965,6 +24102,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if ((source as StringMappingType).symbol === (target as StringMappingType).symbol) {
                     inferFromTypes((source as StringMappingType).type, (target as StringMappingType).type);
                 }
+            }
+            else if (source.flags & TypeFlags.Print && target.flags & TypeFlags.Print) {
+                inferFromTypes((source as PrintType).type, (target as PrintType).type);
+                inferFromTypes((source as PrintType).flagType, (target as PrintType).flagType);
             }
             else if (source.flags & TypeFlags.Substitution) {
                 inferFromTypes((source as SubstitutionType).baseType, target);
@@ -24511,7 +24652,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function hasPrimitiveConstraint(type: TypeParameter): boolean {
         const constraint = getConstraintOfTypeParameter(type);
-        return !!constraint && maybeTypeOfKind(constraint.flags & TypeFlags.Conditional ? getDefaultConstraintOfConditionalType(constraint as ConditionalType) : constraint, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping);
+        return !!constraint && maybeTypeOfKind(constraint.flags & TypeFlags.Conditional ? getDefaultConstraintOfConditionalType(constraint as ConditionalType) : constraint, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Print);
     }
 
     function isObjectLiteralType(type: Type) {
@@ -25048,7 +25189,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type = getBaseConstraintOfType(type) || unknownType;
         }
         const flags = type.flags;
-        if (flags & (TypeFlags.String | TypeFlags.StringMapping)) {
+        if (flags & (TypeFlags.String | TypeFlags.StringMapping | TypeFlags.Print)) {
             return strictNullChecks ? TypeFacts.StringStrictFacts : TypeFacts.StringFacts;
         }
         if (flags & (TypeFlags.StringLiteral | TypeFlags.TemplateLiteral)) {
@@ -25472,10 +25613,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // types we don't actually care about.
     function replacePrimitivesWithLiterals(typeWithPrimitives: Type, typeWithLiterals: Type) {
         if (maybeTypeOfKind(typeWithPrimitives, TypeFlags.String | TypeFlags.TemplateLiteral | TypeFlags.Number | TypeFlags.BigInt) &&
-            maybeTypeOfKind(typeWithLiterals, TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.NumberLiteral | TypeFlags.BigIntLiteral)) {
+            maybeTypeOfKind(typeWithLiterals, TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Print | TypeFlags.NumberLiteral | TypeFlags.BigIntLiteral)) {
             return mapType(typeWithPrimitives, t =>
-                t.flags & TypeFlags.String ? extractTypesOfKind(typeWithLiterals, TypeFlags.String | TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) :
-                isPatternLiteralType(t) && !maybeTypeOfKind(typeWithLiterals, TypeFlags.String | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) ? extractTypesOfKind(typeWithLiterals, TypeFlags.StringLiteral) :
+                t.flags & TypeFlags.String ? extractTypesOfKind(typeWithLiterals, TypeFlags.String | TypeFlags.StringLiteral | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Print) :
+                isPatternLiteralType(t) && !maybeTypeOfKind(typeWithLiterals, TypeFlags.String | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Print) ? extractTypesOfKind(typeWithLiterals, TypeFlags.StringLiteral) :
                 t.flags & TypeFlags.Number ? extractTypesOfKind(typeWithLiterals, TypeFlags.Number | TypeFlags.NumberLiteral) :
                 t.flags & TypeFlags.BigInt ? extractTypesOfKind(typeWithLiterals, TypeFlags.BigInt | TypeFlags.BigIntLiteral) : t);
         }
@@ -31732,7 +31873,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else {
                 const contextualType = getIndexedAccessType(restType, getNumberLiteralType(i - index), AccessFlags.Contextual);
                 const argType = checkExpressionWithContextualType(arg, contextualType, context, checkMode);
-                const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping);
+                const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Print);
                 types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
                 flags.push(ElementFlags.Required);
             }
@@ -36200,7 +36341,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             // If the contextual type is a literal of a particular primitive type, we consider this a
             // literal context for all literals of that primitive type.
-            return !!(contextualType.flags & (TypeFlags.StringLiteral | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
+            return !!(contextualType.flags & (TypeFlags.StringLiteral | TypeFlags.Index | TypeFlags.TemplateLiteral | TypeFlags.StringMapping | TypeFlags.Print) && maybeTypeOfKind(candidateType, TypeFlags.StringLiteral) ||
                 contextualType.flags & TypeFlags.NumberLiteral && maybeTypeOfKind(candidateType, TypeFlags.NumberLiteral) ||
                 contextualType.flags & TypeFlags.BigIntLiteral && maybeTypeOfKind(candidateType, TypeFlags.BigIntLiteral) ||
                 contextualType.flags & TypeFlags.BooleanLiteral && maybeTypeOfKind(candidateType, TypeFlags.BooleanLiteral) ||

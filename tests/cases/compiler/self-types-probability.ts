@@ -21,7 +21,7 @@ type Probability =
   self extends number
     ? IsProbability<self> extends true
       ? self
-      : never
+      : Never<`Type '${Print<self>}' is not assignable to type 'Probability'`>
     : number
 
 type IsProbability<T extends number> =

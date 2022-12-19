@@ -5,6 +5,7 @@ type Json =
   | null
   | { toJSON: () => string }
   | (self extends unknown[] ? Json[] : self extends (...a: never[]) => unknown ? never : { [_ in keyof self]: Json })
+  | (self extends (...a: never[]) => unknown ? Never<`Type '${Print<self>}' is not assignable to type 'Json'`> : never)
 
 interface Node {
   children: Node[]

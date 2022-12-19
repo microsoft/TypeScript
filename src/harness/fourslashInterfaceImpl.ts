@@ -1188,6 +1188,8 @@ export namespace Completion {
         typeEntry("Lowercase"),
         typeEntry("Capitalize"),
         typeEntry("Uncapitalize"),
+        typeEntry("Never"),
+        typeEntry("Print"),
         interfaceEntry("ThisType"),
         varEntry("ArrayBuffer"),
         interfaceEntry("ArrayBufferTypes"),
@@ -1215,6 +1217,7 @@ export namespace Completion {
         varEntry("Float64Array"),
         interfaceEntry("Float64ArrayConstructor"),
         moduleEntry("Intl"),
+        varEntry("Map")
     ];
 
     export const globalThisEntry: ExpectedCompletionEntry = {
