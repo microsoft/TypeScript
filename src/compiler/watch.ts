@@ -172,9 +172,8 @@ function getPlainDiagnosticFollowingNewLines(diagnostic: Diagnostic, newLine: st
 export function getLocaleTimeString(system: System) {
     return !system.now ?
         new Date().toLocaleTimeString() :
-        // In Node 19+, there's a non-breaking space between the time and AM/PM.
-        // This branch is solely for testing, so just switch it to a normal space for
-        // baseline stability.
+        // On some systems / builds of Node, there's a non-breaking space between the time and AM/PM.
+        // This branch is solely for testing, so just switch it to a normal space for baseline stability.
         // See:
         //     - https://github.com/nodejs/node/issues/45171
         //     - https://github.com/nodejs/node/issues/45753
