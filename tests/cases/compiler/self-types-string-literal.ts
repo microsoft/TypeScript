@@ -1,0 +1,15 @@
+type StringLiteral =
+  self extends string
+    ? string extends self
+        ? "Error: Not a string literal"
+        : self
+    : string
+
+let x: StringLiteral = "x" as "x"
+let y: StringLiteral = "y" as string
+let xx: { x: StringLiteral } = { x: "x" as "x" }
+let yy: { y: StringLiteral } = { y: "y" as string }
+let zs: StringLiteral[] = ["z0" as "z0", "z1" as string, "z2" as "z2"]
+let a: StringLiteral = "a" as StringLiteral
+let b: StringLiteral = "b"
+let cs: StringLiteral[] = ["c0", "c1", "c2"]

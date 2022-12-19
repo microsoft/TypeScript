@@ -201,6 +201,7 @@ export const enum SyntaxKind {
     ObjectKeyword,
     SatisfiesKeyword,
     SetKeyword,
+    SelfKeyword,
     StringKeyword,
     SymbolKeyword,
     TypeKeyword,
@@ -630,6 +631,7 @@ export type KeywordSyntaxKind =
     | SyntaxKind.ReturnKeyword
     | SyntaxKind.SatisfiesKeyword
     | SyntaxKind.SetKeyword
+    | SyntaxKind.SelfKeyword
     | SyntaxKind.StaticKeyword
     | SyntaxKind.StringKeyword
     | SyntaxKind.SuperKeyword
@@ -681,6 +683,7 @@ export type KeywordTypeSyntaxKind =
     | SyntaxKind.SymbolKeyword
     | SyntaxKind.UndefinedKeyword
     | SyntaxKind.UnknownKeyword
+    | SyntaxKind.SelfKeyword
     | SyntaxKind.VoidKeyword
     ;
 
@@ -5480,6 +5483,7 @@ export interface SymbolLinks {
     uniqueESSymbolType?: Type;                  // UniqueESSymbol type for a symbol
     declaredType?: Type;                        // Type of class, interface, enum, type alias, or type parameter
     typeParameters?: TypeParameter[];           // Type parameters of type alias (undefined if non-generic)
+    selfType?: Type                             // Self type parameter of type alias (undefined if not used in declaration)
     outerTypeParameters?: TypeParameter[];      // Outer type parameters of anonymous object type
     instantiations?: Map<string, Type>;       // Instantiations of generic type alias (undefined if non-generic)
     aliasSymbol?: Symbol;                       // Alias associated with generic type alias instantiation
@@ -5713,7 +5717,8 @@ export const TypeFlags = new class TypeFlags {
     NonPrimitive    = 1n << 26n  // intrinsic object type
     TemplateLiteral = 1n << 27n  // Template literal type
     StringMapping   = 1n << 28n  // Uppercase/Lowercase type
-
+    Self            = 1n << 29n
+    ContainsSelf    = 1n << 30n
     /** @internal */
     AnyOrUnknown = this.Any | this.Unknown
     /** @internal */

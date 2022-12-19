@@ -2299,6 +2299,7 @@ export const typeKeywords: readonly SyntaxKind[] = [
     SyntaxKind.UndefinedKeyword,
     SyntaxKind.UniqueKeyword,
     SyntaxKind.UnknownKeyword,
+    SyntaxKind.SelfKeyword,
 ];
 
 /** @internal */

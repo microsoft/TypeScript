@@ -619,6 +619,7 @@ export function transformTypeScript(context: TransformationContext) {
             case SyntaxKind.NeverKeyword:
             case SyntaxKind.VoidKeyword:
             case SyntaxKind.SymbolKeyword:
+            case SyntaxKind.SelfKeyword:
             case SyntaxKind.ConstructorType:
             case SyntaxKind.FunctionType:
             case SyntaxKind.TypeQuery:

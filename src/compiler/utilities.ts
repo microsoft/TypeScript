@@ -1975,6 +1975,7 @@ export function isPartOfTypeNode(node: Node): boolean {
         case SyntaxKind.ObjectKeyword:
         case SyntaxKind.UndefinedKeyword:
         case SyntaxKind.NeverKeyword:
+        case SyntaxKind.SelfKeyword:
             return true;
         case SyntaxKind.VoidKeyword:
             return node.parent.kind !== SyntaxKind.VoidExpression;
@@ -6942,6 +6943,7 @@ export function isTypeNodeKind(kind: SyntaxKind): kind is TypeNodeSyntaxKind {
         || kind === SyntaxKind.VoidKeyword
         || kind === SyntaxKind.UndefinedKeyword
         || kind === SyntaxKind.NeverKeyword
+        || kind === SyntaxKind.SelfKeyword
         || kind === SyntaxKind.ExpressionWithTypeArguments
         || kind === SyntaxKind.JSDocAllType
         || kind === SyntaxKind.JSDocUnknownType

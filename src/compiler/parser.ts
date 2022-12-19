@@ -4465,6 +4465,7 @@ namespace Parser {
             case SyntaxKind.UndefinedKeyword:
             case SyntaxKind.NeverKeyword:
             case SyntaxKind.ObjectKeyword:
+            case SyntaxKind.SelfKeyword:
                 // If these are followed by a dot, then parse these out as a dotted type reference instead.
                 return tryParse(parseKeywordAndNoDot) || parseTypeReference();
             case SyntaxKind.AsteriskEqualsToken:
@@ -4540,6 +4541,7 @@ namespace Parser {
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.TypeOfKeyword:
             case SyntaxKind.NeverKeyword:
+            case SyntaxKind.SelfKeyword:
             case SyntaxKind.OpenBraceToken:
             case SyntaxKind.OpenBracketToken:
             case SyntaxKind.LessThanToken:

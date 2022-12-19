@@ -1513,6 +1513,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             case SyntaxKind.SymbolKeyword:
             case SyntaxKind.VoidKeyword:
             case SyntaxKind.UnknownKeyword:
+            case SyntaxKind.SelfKeyword:
             case SyntaxKind.UndefinedKeyword: // `undefined` is an Identifier in the expression case.
                 transformFlags = TransformFlags.ContainsTypeScript;
                 break;

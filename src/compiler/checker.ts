@@ -6146,6 +6146,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (type.flags & TypeFlags.Unknown) {
                 return factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword);
             }
+            if (type.flags & TypeFlags.Self) {
+                return factory.createKeywordTypeNode(SyntaxKind.SelfKeyword);
+            }
             if (type.flags & TypeFlags.String) {
                 context.approximateLength += 6;
                 return factory.createKeywordTypeNode(SyntaxKind.StringKeyword);
@@ -11259,6 +11262,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Return the outer type parameters of a node or undefined if the node has no outer type parameters.
     function getOuterTypeParameters(node: Node, includeThisTypes?: boolean): TypeParameter[] | undefined {
         while (true) {
+            if (!node) {
+                return undefined;
+            }
             node = node.parent; // TODO: GH#18217 Use SourceFile kind check instead
             if (node && isBinaryExpression(node)) {
                 // prototype assignments get the outer type parameters of their constructor function
@@ -11301,11 +11307,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     else if (node.kind === SyntaxKind.ConditionalType) {
                         return concatenate(outerTypeParameters, getInferTypeParameters(node as ConditionalTypeNode));
                     }
-                    const outerAndOwnTypeParameters = appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(node as DeclarationWithTypeParameters));
+                    const outerAndOwnTypeParameters =
+                        appendTypeParameters(outerTypeParameters, getEffectiveTypeParameterDeclarations(node as DeclarationWithTypeParameters));
+
                     const thisType = includeThisTypes &&
                         (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression || node.kind === SyntaxKind.InterfaceDeclaration || isJSConstructor(node)) &&
                         getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node as ClassLikeDeclaration | InterfaceDeclaration)).thisType;
-                    return thisType ? append(outerAndOwnTypeParameters, thisType) : outerAndOwnTypeParameters;
+
+                    const selfType =
+                        node.kind === SyntaxKind.TypeAliasDeclaration ? getSymbolLinks(node.symbol).selfType : undefined;
+
+                    const implicitTypeParameters = [
+                        ...(thisType ? [thisType] : []),
+                        ...(selfType ? [selfType] : [])
+                    ];
+
+                    return concatenate(outerAndOwnTypeParameters, implicitTypeParameters);
                 }
                 case SyntaxKind.JSDocParameterTag:
                     const paramSymbol = getParameterSymbolFromJSDoc(node as JSDocParameterTag);
@@ -11710,9 +11727,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // If typeNode is missing, we will error in checkJSDocTypedefTag.
             let type = typeNode ? getTypeFromTypeNode(typeNode) : errorType;
 
+            const containsSelfType = !!forEachChildRecursively(declaration, node => {
+                if (node.kind === SyntaxKind.SelfKeyword) return true
+            });
+            if (containsSelfType) {   
+                type.flags |= TypeFlags.ContainsSelf
+            }
+
             if (popTypeResolution()) {
                 const typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
-                if (typeParameters) {
+                if (typeParameters || containsSelfType) {
                     // Initialize the instantiation cache for generic type aliases. The declared type corresponds to
                     // an instantiation of the type alias with the type parameters supplied as type arguments.
                     links.typeParameters = typeParameters;
@@ -11837,6 +11861,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.UndefinedKeyword:
             case SyntaxKind.NeverKeyword:
             case SyntaxKind.LiteralType:
+            case SyntaxKind.SelfKeyword:
                 return true;
             case SyntaxKind.ArrayType:
                 return isThislessType((node as ArrayTypeNode).elementType);
@@ -14839,13 +14864,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getStringMappingType(symbol, typeArguments[0]);
         }
         const links = getSymbolLinks(symbol);
-        const typeParameters = links.typeParameters!;
+        const typeParameters = links.typeParameters;
         const id = getTypeListId(typeArguments) + getAliasId(aliasSymbol, aliasTypeArguments);
         let instantiation = links.instantiations!.get(id);
         if (!instantiation) {
-            links.instantiations!.set(id, instantiation = instantiateTypeWithAlias(type,
-                createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters), isInJSFile(symbol.valueDeclaration))),
-                aliasSymbol, aliasTypeArguments));
+            const filledTypeArguments = fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters), isInJSFile(symbol.valueDeclaration))
+            const mapper = typeParameters ? createTypeMapper(typeParameters, filledTypeArguments) : createTypeMapper([], []);
+            instantiation = instantiateTypeWithAlias(type, mapper, aliasSymbol, aliasTypeArguments)
+            if (type.flags & TypeFlags.ContainsSelf) {
+                instantiation.flags |= TypeFlags.ContainsSelf
+            }
+            links.instantiations!.set(id, instantiation);
         }
         return instantiation;
     }
@@ -14869,19 +14898,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return errorType;
         }
         const type = getDeclaredTypeOfSymbol(symbol);
-        const typeParameters = getSymbolLinks(symbol).typeParameters;
-        if (typeParameters) {
-            const numTypeArguments = length(node.typeArguments);
-            const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
-            if (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length) {
-                error(node,
-                    minTypeArgumentCount === typeParameters.length ?
-                        Diagnostics.Generic_type_0_requires_1_type_argument_s :
-                        Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments,
-                    symbolToString(symbol),
-                    minTypeArgumentCount,
-                    typeParameters.length);
-                return errorType;
+        const links = getSymbolLinks(symbol)
+        const typeParameters = links.typeParameters;
+        const selfType = links.selfType
+        if (typeParameters || selfType) {
+            if (typeParameters) {
+                const numTypeArguments = length(node.typeArguments);
+                const minTypeArgumentCount = getMinTypeArgumentCount(typeParameters);
+                if (numTypeArguments < minTypeArgumentCount || numTypeArguments > typeParameters.length) {
+                    error(node,
+                        minTypeArgumentCount === typeParameters.length ?
+                            Diagnostics.Generic_type_0_requires_1_type_argument_s :
+                            Diagnostics.Generic_type_0_requires_between_1_and_2_type_arguments,
+                        symbolToString(symbol),
+                        minTypeArgumentCount,
+                        typeParameters.length);
+                    return errorType;
+                }
             }
             // We refrain from associating a local type alias with an instantiation of a top-level type alias
             // because the local alias may end up being referenced in an inferred return type where it is not
@@ -17921,6 +17954,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return links.resolvedType;
     }
 
+    function getTypeFromSelfTypeNode(node: Node): Type {
+        const links = getNodeLinks(node)
+        if (links.resolvedType) return links.resolvedType;
+
+        const typeAliasDeclaration = findAncestor(node, n => n.kind === SyntaxKind.TypeAliasDeclaration)
+        if (!typeAliasDeclaration) return errorType
+        const typeAliasLinks = getSymbolLinks(getSymbolOfNode(typeAliasDeclaration)!)
+        if (typeAliasLinks.selfType) {
+            links.resolvedType = typeAliasLinks.selfType
+            return links.resolvedType
+        }
+
+        const localSelfType = createTypeParameter() as TypeParameter & IntrinsicType
+        localSelfType.intrinsicName = "self"
+        localSelfType.flags |= TypeFlags.Self
+        typeAliasLinks.selfType = localSelfType
+
+        links.resolvedType = localSelfType
+        return links.resolvedType
+    }
+
     function getTypeFromRestTypeNode(node: RestTypeNode | NamedTupleMember) {
         return getTypeFromTypeNode(getArrayElementTypeNode(node.type) || node.type);
     }
@@ -17983,6 +18037,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return neverType;
             case SyntaxKind.ObjectKeyword:
                 return node.flags & NodeFlags.JavaScriptFile && !noImplicitAny ? anyType : nonPrimitiveType;
+            case SyntaxKind.SelfKeyword:
+                return getTypeFromSelfTypeNode(node);
             case SyntaxKind.IntrinsicKeyword:
                 return intrinsicMarkerType;
             case SyntaxKind.ThisType:
@@ -19562,7 +19618,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return true;
     }
 
-    function isSimpleTypeRelatedTo(source: Type, target: Type, relation: Map<string, RelationComparisonResult>, errorReporter?: ErrorReporter) {
+    function isSimpleTypeRelatedTo(source: Type, target: Type, relation: Map<string, RelationComparisonResult>, errorReporter?: ErrorReporter): boolean {
+        if (!(target.flags & TypeFlags.ContainsSelf && source.flags & TypeFlags.ContainsSelf)) {
+            if (target.flags & TypeFlags.ContainsSelf) {
+                let targetSelfType = getSymbolLinks(target.aliasSymbol!).selfType!
+                target = instantiateType(target, makeUnaryTypeMapper(targetSelfType, source));
+            }
+            if (source.flags & TypeFlags.ContainsSelf) {
+                let sourceSelfType = getSymbolLinks(source.aliasSymbol!).selfType!
+                source = instantiateType(source, makeUnaryTypeMapper(sourceSelfType, target));
+            }
+        }
         const s = source.flags;
         const t = target.flags;
         if (t & TypeFlags.AnyOrUnknown || s & TypeFlags.Never || source === wildcardType) return true;
@@ -19606,6 +19672,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isTypeRelatedTo(source: Type, target: Type, relation: Map<string, RelationComparisonResult>) {
+        if (!(target.flags & TypeFlags.ContainsSelf && source.flags & TypeFlags.ContainsSelf)) {
+            if (target.flags & TypeFlags.ContainsSelf) {
+                let targetSelfType = getSymbolLinks(target.aliasSymbol!).selfType!
+                target = instantiateType(target, makeUnaryTypeMapper(targetSelfType, source));
+            }
+            if (source.flags & TypeFlags.ContainsSelf) {
+                let sourceSelfType = getSymbolLinks(source.aliasSymbol!).selfType!
+                source = instantiateType(source, makeUnaryTypeMapper(sourceSelfType, target));
+            }
+        }
         if (isFreshLiteralType(source)) {
             source = (source as FreshableType).regularType;
         }
@@ -20027,6 +20103,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * * Ternary.False if they are not related.
          */
         function isRelatedTo(originalSource: Type, originalTarget: Type, recursionFlags: RecursionFlags = RecursionFlags.Both, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
+            if (!(originalTarget.flags & TypeFlags.ContainsSelf && originalSource.flags & TypeFlags.ContainsSelf)) {
+                if (originalTarget.flags & TypeFlags.ContainsSelf) {
+                    let targetSelfType = getSymbolLinks(originalTarget.aliasSymbol!).selfType!
+                    originalTarget = instantiateType(originalTarget, makeUnaryTypeMapper(targetSelfType, originalSource));
+                }
+                if (originalSource.flags & TypeFlags.ContainsSelf) {
+                    let sourceSelfType = getSymbolLinks(originalSource.aliasSymbol!).selfType!
+                    originalSource = instantiateType(originalSource, makeUnaryTypeMapper(sourceSelfType, originalTarget));
+                }
+            }
             // Before normalization: if `source` is type an object type, and `target` is primitive,
             // skip all the checks we don't need and just return `isSimpleTypeRelatedTo` result
             if (originalSource.flags & TypeFlags.Object && originalTarget.flags & TypeFlags.Primitive) {
@@ -23334,7 +23420,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 objectFlags & ObjectFlags.Reference && ((type as TypeReference).node || forEach(getTypeArguments(type as TypeReference), couldContainTypeVariables)) ||
                 objectFlags & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral) && type.symbol.declarations ||
                 objectFlags & (ObjectFlags.Mapped | ObjectFlags.ReverseMapped | ObjectFlags.ObjectRestType | ObjectFlags.InstantiationExpressionType)) ||
-            type.flags & TypeFlags.UnionOrIntersection && !(type.flags & TypeFlags.EnumLiteral) && !isNonGenericTopLevelType(type) && some((type as UnionOrIntersectionType).types, couldContainTypeVariables));
+            type.flags & TypeFlags.UnionOrIntersection && !(type.flags & TypeFlags.EnumLiteral) && !isNonGenericTopLevelType(type) && some((type as UnionOrIntersectionType).types, couldContainTypeVariables) ||
+            type.flags & TypeFlags.ContainsSelf;
         if (type.flags & TypeFlags.ObjectFlagsType) {
             (type as ObjectFlagsType).objectFlags |= ObjectFlags.CouldContainTypeVariablesComputed | (result ? ObjectFlags.CouldContainTypeVariables : 0);
         }
@@ -23342,7 +23429,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isNonGenericTopLevelType(type: Type) {
-        if (type.aliasSymbol && !type.aliasTypeArguments) {
+        if (type.aliasSymbol && !type.aliasTypeArguments && !getSymbolLinks(type.aliasSymbol).selfType) {
             const declaration = getDeclarationOfKind(type.aliasSymbol, SyntaxKind.TypeAliasDeclaration);
             return !!(declaration && findAncestor(declaration.parent, n => n.kind === SyntaxKind.SourceFile ? true : n.kind === SyntaxKind.ModuleDeclaration ? false : "quit"));
         }
