@@ -9474,7 +9474,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function formatUnionTypes(types: readonly Type[]): Type[] {
         const result: Type[] = [];
-        let flags = 0 as TypeFlags;
+        let flags = 0n as TypeFlags;
         for (let i = 0; i < types.length; i++) {
             const t = types[i];
             flags |= t.flags;
@@ -9883,7 +9883,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isTypeAny(type: Type | undefined) {
-        return type && (type.flags & TypeFlags.Any) !== 0;
+        return type && (type.flags & TypeFlags.Any) !== 0n;
     }
 
     function isErrorType(type: Type) {
@@ -15777,7 +15777,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
         const flags = type.flags;
         if (flags & TypeFlags.Union) {
-            return addTypesToUnion(typeSet, includes | (isNamedUnionType(type) ? TypeFlags.Union : 0), (type as UnionType).types);
+            return addTypesToUnion(typeSet, includes | (isNamedUnionType(type) ? TypeFlags.Union : 0n), (type as UnionType).types);
         }
         // We ignore 'never' types in unions
         if (!(flags & TypeFlags.Never)) {
@@ -15945,7 +15945,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return types[0];
         }
         let typeSet: Type[] | undefined = [];
-        const includes = addTypesToUnion(typeSet, 0 as TypeFlags, types);
+        const includes = addTypesToUnion(typeSet, 0n as TypeFlags, types);
         if (unionReduction !== UnionReduction.None) {
             if (includes & TypeFlags.AnyOrUnknown) {
                 return includes & TypeFlags.Any ?
@@ -16260,7 +16260,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // for intersections of types with signatures can be deterministic.
     function getIntersectionType(types: readonly Type[], aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[], noSupertypeReduction?: boolean): Type {
         const typeMembershipMap: Map<string, Type> = new Map();
-        const includes = addTypesToIntersection(typeMembershipMap, 0 as TypeFlags, types);
+        const includes = addTypesToIntersection(typeMembershipMap, 0n as TypeFlags, types);
         const typeSet: Type[] = arrayFrom(typeMembershipMap.values());
         // An intersection type is considered empty if it contains
         // the type never, or
@@ -16562,7 +16562,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type === wildcardType ? wildcardType :
             type.flags & TypeFlags.Unknown ? neverType :
             type.flags & (TypeFlags.Any | TypeFlags.Never) ? keyofConstraintType :
-            getLiteralTypeFromProperties(type, (noIndexSignatures ? TypeFlags.StringLiteral : TypeFlags.StringLike) | (stringsOnly ? 0 : TypeFlags.NumberLike | TypeFlags.ESSymbolLike),
+            getLiteralTypeFromProperties(type, (noIndexSignatures ? TypeFlags.StringLiteral : TypeFlags.StringLike) | (stringsOnly ? 0n : TypeFlags.NumberLike | TypeFlags.ESSymbolLike),
                 stringsOnly === keyofStringsOnly && !noIndexSignatures);
     }
 
@@ -22514,7 +22514,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getCombinedTypeFlags(types: Type[]): TypeFlags {
-        return reduceLeft(types, (flags, t) => flags | (t.flags & TypeFlags.Union ? getCombinedTypeFlags((t as UnionType).types) : t.flags), 0);
+        return reduceLeft(types, (flags, t) => flags | (t.flags & TypeFlags.Union ? getCombinedTypeFlags((t as UnionType).types) : t.flags), 0n);
     }
 
     function getCommonSupertype(types: Type[]): Type {
@@ -22779,7 +22779,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function getNullableType(type: Type, flags: TypeFlags): Type {
         const missing = (flags & ~type.flags) & (TypeFlags.Undefined | TypeFlags.Null);
-        return missing === 0 ? type :
+        return missing === 0n ? type :
             missing === TypeFlags.Undefined ? getUnionType([type, undefinedType]) :
             missing === TypeFlags.Null ? getUnionType([type, nullType]) :
             getUnionType([type, undefinedType, nullType]);
@@ -22855,8 +22855,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * @param target
      */
     function isCoercibleUnderDoubleEquals(source: Type, target: Type): boolean {
-        return ((source.flags & (TypeFlags.Number | TypeFlags.String | TypeFlags.BooleanLiteral)) !== 0)
-            && ((target.flags & (TypeFlags.Number | TypeFlags.String | TypeFlags.Boolean)) !== 0);
+        return ((source.flags & (TypeFlags.Number | TypeFlags.String | TypeFlags.BooleanLiteral)) !== 0n)
+            && ((target.flags & (TypeFlags.Number | TypeFlags.String | TypeFlags.Boolean)) !== 0n);
     }
 
     /**
@@ -24205,7 +24205,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const constraint = inferenceContext ? getBaseConstraintOfType(inferenceContext.typeParameter) : undefined;
                         if (constraint && !isTypeAny(constraint)) {
                             const constraintTypes = constraint.flags & TypeFlags.Union ? (constraint as UnionType).types : [constraint];
-                            let allTypeFlags: TypeFlags = reduceLeft(constraintTypes, (flags, t) => flags | t.flags, 0 as TypeFlags);
+                            let allTypeFlags: TypeFlags = reduceLeft(constraintTypes, (flags, t) => flags | t.flags, 0n as TypeFlags);
 
                             // If the constraint contains `string`, we don't need to look for a more preferred type
                             if (!(allTypeFlags & TypeFlags.String)) {
@@ -25375,7 +25375,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function extractTypesOfKind(type: Type, kind: TypeFlags) {
-        return filterType(type, t => (t.flags & kind) !== 0);
+        return filterType(type, t => (t.flags & kind) !== 0n);
     }
 
     // Return a new type in which occurrences of the string, number and bigint primitives and placeholder template
@@ -27291,7 +27291,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // the entire control flow graph from the variable's declaration (i.e. when the flow container and
         // declaration container are the same).
         const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
-            type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
+            type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0n ||
             isInTypeQuery(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
             node.parent.kind === SyntaxKind.NonNullExpression ||
             declaration.kind === SyntaxKind.VariableDeclaration && (declaration as VariableDeclaration).exclamationToken ||
@@ -33982,7 +33982,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getNonArrayRestType(signature: Signature) {
         const restType = getEffectiveRestType(signature);
-        return restType && !isArrayType(restType) && !isTypeAny(restType) && (getReducedType(restType).flags & TypeFlags.Never) === 0 ? restType : undefined;
+        return restType && !isArrayType(restType) && !isTypeAny(restType) && (getReducedType(restType).flags & TypeFlags.Never) === 0n ? restType : undefined;
     }
 
     function getTypeOfFirstParameterOfSignature(signature: Signature) {
@@ -35273,7 +35273,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isTypeEqualityComparableTo(source: Type, target: Type) {
-        return (target.flags & TypeFlags.Nullable) !== 0 || isTypeComparableTo(source, target);
+        return (target.flags & TypeFlags.Nullable) !== 0n || isTypeComparableTo(source, target);
     }
 
     function createCheckBinaryExpression() {

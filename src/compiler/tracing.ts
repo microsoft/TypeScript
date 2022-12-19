@@ -236,7 +236,7 @@ export namespace tracingEnabled {
 
             // It's slow to compute the display text, so skip it unless it's really valuable (or cheap)
             let display: string | undefined;
-            if ((objectFlags & ObjectFlags.Anonymous) | (type.flags & TypeFlags.Literal)) {
+            if ((objectFlags & ObjectFlags.Anonymous) || (type.flags & TypeFlags.Literal)) {
                 try {
                     display = type.checker?.typeToString(type);
                 }

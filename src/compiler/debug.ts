@@ -460,6 +460,7 @@ export namespace Debug {
     }
 
     export function formatTypeFlags(flags: TypeFlags | undefined): string {
+        // @ts-ignore TODO
         return formatEnum(flags, (ts as any).TypeFlags, /*isFlags*/ true);
     }
 
