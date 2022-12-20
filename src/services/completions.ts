@@ -1053,7 +1053,7 @@ function getExhaustiveCaseSnippets(
                         elements.push(factory.createNumericLiteral(type.value));
                         break;
                     case "string":
-                        elements.push(factory.createStringLiteral(type.value));
+                        elements.push(factory.createStringLiteral(type.value, quotePreference === QuotePreference.Single));
                         break;
                 }
             }

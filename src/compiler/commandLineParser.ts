@@ -21,11 +21,18 @@ import {
     JsonSourceFile,
     JsxEmit,
     MapLike,
+    MapLike,
+    ModuleDetectionKind,
     ModuleDetectionKind,
     ModuleKind,
+    ModuleKind,
+    ModuleResolutionKind,
     ModuleResolutionKind,
     NewLineKind,
+    NewLineKind,
     Node,
+    Node,
+    NodeArray,
     NodeArray,
     NumericLiteral,
     ObjectLiteralExpression,
@@ -105,7 +112,7 @@ import {
     map,
     mapDefined,
     mapIterator,
-    nodeModuleNameResolver,
+    nodeNextJsonConfigResolver,
     normalizePath,
     normalizeSlashes,
     parseJsonText,
@@ -115,7 +122,6 @@ import {
     stringContains,
     sys,
     toFileNameLowerCase,
-    toPath,
     tracing,
     trimString,
     unescapeLeadingUnderscores,
@@ -3413,7 +3419,7 @@ function getExtendsConfigPath(
         return extendedConfigPath;
     }
     // If the path isn't a rooted or relative path, resolve like a module
-    const resolved = nodeModuleNameResolver(extendedConfig, combinePaths(basePath, "tsconfig.json"), { moduleResolution: ModuleResolutionKind.Node10 }, host, /*cache*/ undefined, /*projectRefs*/ undefined, /*lookupConfig*/ true);
+    const resolved = nodeNextJsonConfigResolver(extendedConfig, combinePaths(basePath, "tsconfig.json"), host);
     if (resolved.resolvedModule) {
         return resolved.resolvedModule.resolvedFileName;
     }
