@@ -45580,6 +45580,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // If node.kind === SyntaxKind.Parameter, checkParameter reports an error if it's not a parameter property.
                         return grammarErrorOnNode(modifier, Diagnostics.readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature);
                     }
+                    else if (flags & ModifierFlags.Accessor) {
+                        return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "readonly", "accessor");
+                    }
                     flags |= ModifierFlags.Readonly;
                     break;
 
@@ -45636,6 +45639,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     else if (isPrivateIdentifierClassElementDeclaration(node)) {
                         return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_a_private_identifier, "declare");
+                    }
+                    else if (flags & ModifierFlags.Accessor) {
+                        return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "declare", "accessor");
                     }
                     flags |= ModifierFlags.Ambient;
                     lastDeclare = modifier;
