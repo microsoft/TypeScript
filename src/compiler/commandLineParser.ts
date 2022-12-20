@@ -963,7 +963,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         type: new Map(getEntries({
             // N.B. The first entry specifies the value shown in `tsc --init`
             node10: ModuleResolutionKind.Node10,
-            node: ModuleResolutionKind.Node10,
+            node: ModuleResolutionKind.Bundler,
             classic: ModuleResolutionKind.Classic,
             node16: ModuleResolutionKind.Node16,
             nodenext: ModuleResolutionKind.NodeNext,
