@@ -1,0 +1,302 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterLists/typeParameterConstModifiers.ts ===
+declare function f1<const T>(x: T): T;
+>f1 : <const T>(x: T) => T
+>x : T
+
+const x11 = f1('a');
+>x11 : "a"
+>f1('a') : "a"
+>f1 : <const T>(x: T) => T
+>'a' : "a"
+
+const x12 = f1(['a', ['b', 'c']]);
+>x12 : readonly ["a", readonly ["b", "c"]]
+>f1(['a', ['b', 'c']]) : readonly ["a", readonly ["b", "c"]]
+>f1 : <const T>(x: T) => T
+>['a', ['b', 'c']] : ["a", ["b", "c"]]
+>'a' : "a"
+>['b', 'c'] : ["b", "c"]
+>'b' : "b"
+>'c' : "c"
+
+const x13 = f1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
+>x13 : { readonly a: 1; readonly b: "c"; readonly d: readonly ["e", 2, true, { readonly f: "g"; }]; }
+>f1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] }) : { readonly a: 1; readonly b: "c"; readonly d: readonly ["e", 2, true, { readonly f: "g"; }]; }
+>f1 : <const T>(x: T) => T
+>{ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] } : { a: 1; b: "c"; d: ["e", 2, true, { f: "g"; }]; }
+>a : 1
+>1 : 1
+>b : "c"
+>"c" : "c"
+>d : ["e", 2, true, { f: "g"; }]
+>["e", 2, true, { f: "g" }] : ["e", 2, true, { f: "g"; }]
+>"e" : "e"
+>2 : 2
+>true : true
+>{ f: "g" } : { f: "g"; }
+>f : "g"
+>"g" : "g"
+
+declare function f2<const T, U>(x: T | undefined): T;
+>f2 : <const T, U>(x: T | undefined) => T
+>x : T | undefined
+
+const x21 = f2('a');
+>x21 : "a"
+>f2('a') : "a"
+>f2 : <const T, U>(x: T | undefined) => T
+>'a' : "a"
+
+const x22 = f2(['a', ['b', 'c']]);
+>x22 : readonly ["a", readonly ["b", "c"]]
+>f2(['a', ['b', 'c']]) : readonly ["a", readonly ["b", "c"]]
+>f2 : <const T, U>(x: T | undefined) => T
+>['a', ['b', 'c']] : ["a", ["b", "c"]]
+>'a' : "a"
+>['b', 'c'] : ["b", "c"]
+>'b' : "b"
+>'c' : "c"
+
+const x23 = f2({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
+>x23 : { readonly a: 1; readonly b: "c"; readonly d: readonly ["e", 2, true, { readonly f: "g"; }]; }
+>f2({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] }) : { readonly a: 1; readonly b: "c"; readonly d: readonly ["e", 2, true, { readonly f: "g"; }]; }
+>f2 : <const T, U>(x: T | undefined) => T
+>{ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] } : { a: 1; b: "c"; d: ["e", 2, true, { f: "g"; }]; }
+>a : 1
+>1 : 1
+>b : "c"
+>"c" : "c"
+>d : ["e", 2, true, { f: "g"; }]
+>["e", 2, true, { f: "g" }] : ["e", 2, true, { f: "g"; }]
+>"e" : "e"
+>2 : 2
+>true : true
+>{ f: "g" } : { f: "g"; }
+>f : "g"
+>"g" : "g"
+
+declare function f3<const T>(x: T): T[];
+>f3 : <const T>(x: T) => T[]
+>x : T
+
+const x31 = f3("hello");
+>x31 : "hello"[]
+>f3("hello") : "hello"[]
+>f3 : <const T>(x: T) => T[]
+>"hello" : "hello"
+
+const x32 = f3("hello");
+>x32 : "hello"[]
+>f3("hello") : "hello"[]
+>f3 : <const T>(x: T) => T[]
+>"hello" : "hello"
+
+declare function f4<const T>(obj: [T, T]): T;
+>f4 : <const T>(obj: [T, T]) => T
+>obj : [T, T]
+
+const x41 = f4([[1, 'x'], [2, 'y']]);
+>x41 : readonly [1, "x"] | readonly [2, "y"]
+>f4([[1, 'x'], [2, 'y']]) : readonly [1, "x"] | readonly [2, "y"]
+>f4 : <const T>(obj: [T, T]) => T
+>[[1, 'x'], [2, 'y']] : [[1, "x"], [2, "y"]]
+>[1, 'x'] : [1, "x"]
+>1 : 1
+>'x' : "x"
+>[2, 'y'] : [2, "y"]
+>2 : 2
+>'y' : "y"
+
+const x42 = f4([{ a: 1, b: 'x' }, { a: 2, b: 'y' }]);
+>x42 : { readonly a: 1; readonly b: "x"; } | { readonly a: 2; readonly b: "y"; }
+>f4([{ a: 1, b: 'x' }, { a: 2, b: 'y' }]) : { readonly a: 1; readonly b: "x"; } | { readonly a: 2; readonly b: "y"; }
+>f4 : <const T>(obj: [T, T]) => T
+>[{ a: 1, b: 'x' }, { a: 2, b: 'y' }] : [{ a: 1; b: "x"; }, { a: 2; b: "y"; }]
+>{ a: 1, b: 'x' } : { a: 1; b: "x"; }
+>a : 1
+>1 : 1
+>b : "x"
+>'x' : "x"
+>{ a: 2, b: 'y' } : { a: 2; b: "y"; }
+>a : 2
+>2 : 2
+>b : "y"
+>'y' : "y"
+
+declare function f5<const T>(obj: { x: T, y: T }): T;
+>f5 : <const T>(obj: {    x: T;    y: T;}) => T
+>obj : { x: T; y: T; }
+>x : T
+>y : T
+
+const x51 = f5({ x: [1, 'x'], y: [2, 'y'] });
+>x51 : readonly [1, "x"] | readonly [2, "y"]
+>f5({ x: [1, 'x'], y: [2, 'y'] }) : readonly [1, "x"] | readonly [2, "y"]
+>f5 : <const T>(obj: { x: T; y: T; }) => T
+>{ x: [1, 'x'], y: [2, 'y'] } : { x: [1, "x"]; y: [2, "y"]; }
+>x : [1, "x"]
+>[1, 'x'] : [1, "x"]
+>1 : 1
+>'x' : "x"
+>y : [2, "y"]
+>[2, 'y'] : [2, "y"]
+>2 : 2
+>'y' : "y"
+
+const x52 = f5({ x: { a: 1, b: 'x' }, y: { a: 2, b: 'y' } });
+>x52 : { readonly a: 1; readonly b: "x"; } | { readonly a: 2; readonly b: "y"; }
+>f5({ x: { a: 1, b: 'x' }, y: { a: 2, b: 'y' } }) : { readonly a: 1; readonly b: "x"; } | { readonly a: 2; readonly b: "y"; }
+>f5 : <const T>(obj: { x: T; y: T; }) => T
+>{ x: { a: 1, b: 'x' }, y: { a: 2, b: 'y' } } : { x: { a: 1; b: "x"; }; y: { a: 2; b: "y"; }; }
+>x : { a: 1; b: "x"; }
+>{ a: 1, b: 'x' } : { a: 1; b: "x"; }
+>a : 1
+>1 : 1
+>b : "x"
+>'x' : "x"
+>y : { a: 2; b: "y"; }
+>{ a: 2, b: 'y' } : { a: 2; b: "y"; }
+>a : 2
+>2 : 2
+>b : "y"
+>'y' : "y"
+
+declare function f6<const T extends readonly unknown[]>(...args: T): T;
+>f6 : <const T extends readonly unknown[]>(...args: T) => T
+>args : T
+
+const x61 = f6(1, 'b', { a: 1, b: 'x' });
+>x61 : readonly [1, "b", { readonly a: 1; readonly b: "x"; }]
+>f6(1, 'b', { a: 1, b: 'x' }) : readonly [1, "b", { readonly a: 1; readonly b: "x"; }]
+>f6 : <const T extends readonly unknown[]>(...args: T) => T
+>1 : 1
+>'b' : "b"
+>{ a: 1, b: 'x' } : { a: 1; b: "x"; }
+>a : 1
+>1 : 1
+>b : "x"
+>'x' : "x"
+
+class C1<const T> {
+>C1 : C1<T>
+
+    constructor(x: T) {}
+>x : T
+
+    foo<const U>(x: U) { return x; }
+>foo : <const U>(x: U) => U
+>x : U
+>x : U
+}
+
+const c71 = new C1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
+>c71 : C1<{ readonly a: 1; readonly b: "c"; readonly d: readonly ["e", 2, true, { readonly f: "g"; }]; }>
+>new C1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] }) : C1<{ readonly a: 1; readonly b: "c"; readonly d: readonly ["e", 2, true, { readonly f: "g"; }]; }>
+>C1 : typeof C1
+>{ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] } : { a: 1; b: "c"; d: ["e", 2, true, { f: "g"; }]; }
+>a : 1
+>1 : 1
+>b : "c"
+>"c" : "c"
+>d : ["e", 2, true, { f: "g"; }]
+>["e", 2, true, { f: "g" }] : ["e", 2, true, { f: "g"; }]
+>"e" : "e"
+>2 : 2
+>true : true
+>{ f: "g" } : { f: "g"; }
+>f : "g"
+>"g" : "g"
+
+const c72 = c71.foo(['a', ['b', 'c']]);
+>c72 : readonly ["a", readonly ["b", "c"]]
+>c71.foo(['a', ['b', 'c']]) : readonly ["a", readonly ["b", "c"]]
+>c71.foo : <const U>(x: U) => U
+>c71 : C1<{ readonly a: 1; readonly b: "c"; readonly d: readonly ["e", 2, true, { readonly f: "g"; }]; }>
+>foo : <const U>(x: U) => U
+>['a', ['b', 'c']] : ["a", ["b", "c"]]
+>'a' : "a"
+>['b', 'c'] : ["b", "c"]
+>'b' : "b"
+>'c' : "c"
+
+const C2 = class <const T> {}
+>C2 : typeof C2
+>class <const T> {} : typeof C2
+
+const fx1 = <const T>(x: T) => x;
+>fx1 : <const T>(x: T) => T
+><const T>(x: T) => x : <const T>(x: T) => T
+>x : T
+>x : T
+
+const fx2 = <const T,>(x: T) => x;
+>fx2 : <const T>(x: T) => T
+><const T,>(x: T) => x : <const T>(x: T) => T
+>x : T
+>x : T
+
+interface I1<const T> { x: T }  // Error
+>x : T
+
+interface I2 {
+    f<const T>(x: T): T;
+>f : <const T>(x: T) => T
+>x : T
+}
+
+type T1<const T> = T;  // Error
+>T1 : T
+
+type T2 = <const T>(x: T) => T;
+>T2 : <const T>(x: T) => T
+>x : T
+
+type T3 = { <const T>(x: T): T };
+>T3 : <const T>(x: T) => T
+>x : T
+
+type T4 = new <const T>(x: T) => T;
+>T4 : new <const T>(x: T) => T
+>x : T
+
+type T5 = { new <const T>(x: T): T };
+>T5 : new <const T>(x: T) => T
+>x : T
+
+// Corrected repro from #51745
+
+type Obj = { a: { b: { c: "123" } } };
+>Obj : { a: {    b: {        c: "123";    };}; }
+>a : { b: {    c: "123";}; }
+>b : { c: "123"; }
+>c : "123"
+
+type GetPath<T, P> =
+>GetPath : GetPath<T, P>
+
+    P extends readonly [] ? T :
+    P extends readonly [infer A extends keyof T, ...infer Rest] ? GetPath<T[A], Rest> :
+    never;
+
+function set<T, const P extends readonly string[]>(obj: T, path: P, value: GetPath<T, P>) {}
+>set : <T, const P extends readonly string[]>(obj: T, path: P, value: GetPath<T, P>) => void
+>obj : T
+>path : P
+>value : GetPath<T, P>
+
+declare let obj: Obj;
+>obj : Obj
+
+declare let value: "123";
+>value : "123"
+
+set(obj, ['a', 'b', 'c'], value);
+>set(obj, ['a', 'b', 'c'], value) : void
+>set : <T, const P extends readonly string[]>(obj: T, path: P, value: GetPath<T, P>) => void
+>obj : Obj
+>['a', 'b', 'c'] : ["a", "b", "c"]
+>'a' : "a"
+>'b' : "b"
+>'c' : "c"
+>value : "123"
+
