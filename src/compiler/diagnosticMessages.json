@@ -7604,5 +7604,9 @@
     "The value '{0}' cannot be used here.": {
         "category": "Error",
         "code": 18050
+    },
+    "Compiler option '{0}' cannot have an empty string.": {
+        "category": "Error",
+        "code": 18051
     }
 }

@@ -3268,6 +3268,9 @@ function parseOwnConfigOfJson(
     json.compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
     let extendedConfigPath: string | string[] | undefined;
 
+    if (json.extends === "") {
+        errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_cannot_have_an_empty_string, "extends"));
+    }
     if (json.extends) {
         if (!isCompilerOptionsValue(extendsOptionDeclaration, json.extends)) {
             errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", getCompilerOptionValueTypeString(extendsOptionDeclaration)));
@@ -3417,7 +3420,12 @@ function getExtendsConfigPath(
     if (resolved.resolvedModule) {
         return resolved.resolvedModule.resolvedFileName;
     }
-    errors.push(createDiagnostic(Diagnostics.File_0_not_found, extendedConfig));
+    if (extendedConfig === "") {
+        errors.push(createDiagnostic(Diagnostics.Compiler_option_0_cannot_have_an_empty_string, "extends"));
+    }
+    else {
+        errors.push(createDiagnostic(Diagnostics.File_0_not_found, extendedConfig));
+    }
     return undefined;
 }
 
