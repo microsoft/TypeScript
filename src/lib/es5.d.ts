@@ -380,14 +380,16 @@ interface String {
     /**
      * Returns the character at the specified index.
      * @param pos The zero-based index of the desired character.
+     * @default 0
      */
-    charAt(pos: number): string;
+    charAt(pos?: number): string;
 
     /**
      * Returns the Unicode value of the character at the specified location.
      * @param index The zero-based index of the desired character. If there is no character at the specified index, NaN is returned.
+     * @default 0
      */
-    charCodeAt(index: number): number;
+    charCodeAt(index?: number): number;
 
     /**
      * Returns a string that contains the concatenation of two or more strings.
