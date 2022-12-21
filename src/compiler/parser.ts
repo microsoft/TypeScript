@@ -4778,12 +4778,7 @@ namespace Parser {
     function parseTypeOrTypePredicate(): TypeNode {
         const pos = getNodePos();
         const typePredicateVariable = isIdentifier() && tryParse(parseTypePredicatePrefix);
-        const typePos = typePredicateVariable ? getNodePos() : pos;
-        let type = parseType();
-        if (isInvalidConditionalType()) {
-            nextToken();
-            type = finishNode(factory.createJSDocNullableType(type, /*postfix*/ true), typePos);
-        }
+        const type = parseType();
         if (typePredicateVariable) {
             return finishNode(factory.createTypePredicateNode(/*assertsModifier*/ undefined, typePredicateVariable, type), pos);
         }
@@ -4812,7 +4807,6 @@ namespace Parser {
         if (contextFlags & NodeFlags.TypeExcludesFlags) {
             return doOutsideOfContext(NodeFlags.TypeExcludesFlags, parseType);
         }
-
         if (isStartOfFunctionTypeOrConstructorType()) {
             return parseFunctionOrConstructorType();
         }
@@ -8057,14 +8051,6 @@ namespace Parser {
 
     function nextTokenIsSlash() {
         return nextToken() === SyntaxKind.SlashToken;
-    }
-
-    function isInvalidConditionalType() {
-        if (token() === SyntaxKind.QuestionToken && !(contextFlags & NodeFlags.JavaScriptFile)) {
-            return !lookAhead(() =>
-                nextTokenIsStartOfType() && allowConditionalTypesAnd(parseType) && token() === SyntaxKind.ColonToken && nextTokenIsStartOfType());
-        }
-        return false;
     }
 
     function parseNamespaceExportDeclaration(pos: number, hasJSDoc: boolean, decorators: NodeArray<Decorator> | undefined, modifiers: NodeArray<Modifier> | undefined): NamespaceExportDeclaration {

@@ -1,23 +1,15 @@
 //// [parseInvalidNullableTypes.ts]
-function f1(a: string): a is string? {
+function f1(a: string): a is ?string {
     return true;
 }
 
-function f2(a: string): a is ?string {
-    return true;
-}
+function f2(a: string?) {}
+function f3(a: number?) {}
 
-function f3(a: string?) {}
-function f4(a: number?) {}
+function f4(a: ?string) {}
+function f5(a: ?number) {}
 
-function f5(a: ?string) {}
-function f6(a: ?number) {}
-
-function f7(a: string): string? {
-    return true;
-}
-
-function f8(a: string): ?string {
+function f6(a: string): ?string {
     return true;
 }
 
@@ -38,17 +30,11 @@ let h: undefined?;
 function f1(a) {
     return true;
 }
-function f2(a) {
-    return true;
-}
+function f2(a) { }
 function f3(a) { }
 function f4(a) { }
 function f5(a) { }
-function f6(a) { }
-function f7(a) {
-    return true;
-}
-function f8(a) {
+function f6(a) {
     return true;
 }
 var a = 1;

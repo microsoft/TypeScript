@@ -1,24 +1,16 @@
 // @strict: true
 
-function f1(a: string): a is string? {
+function f1(a: string): a is ?string {
     return true;
 }
 
-function f2(a: string): a is ?string {
-    return true;
-}
+function f2(a: string?) {}
+function f3(a: number?) {}
 
-function f3(a: string?) {}
-function f4(a: number?) {}
+function f4(a: ?string) {}
+function f5(a: ?number) {}
 
-function f5(a: ?string) {}
-function f6(a: ?number) {}
-
-function f7(a: string): string? {
-    return true;
-}
-
-function f8(a: string): ?string {
+function f6(a: string): ?string {
     return true;
 }
 
