@@ -1,4 +1,4 @@
-tests/cases/compiler/memberOverride.ts(5,5): error TS2300: Duplicate identifier 'a'.
+tests/cases/compiler/memberOverride.ts(5,5): error TS1117: An object literal cannot have multiple properties with the same name.
 
 
 ==== tests/cases/compiler/memberOverride.ts (1 errors) ====
@@ -8,7 +8,7 @@ tests/cases/compiler/memberOverride.ts(5,5): error TS2300: Duplicate identifier 
         a: "", 
         a: 5
         ~
-!!! error TS2300: Duplicate identifier 'a'.
+!!! error TS1117: An object literal cannot have multiple properties with the same name.
     }
     
     var n: number = x.a;

@@ -1,0 +1,92 @@
+=== tests/cases/compiler/valueOfTypedArray.ts ===
+// All declarations should pass, as valueOf has been specialized for all TypedArrays
+const typedArray0: Int8Array = (new Int8Array()).valueOf();
+>typedArray0 : Int8Array
+>(new Int8Array()).valueOf() : Int8Array
+>(new Int8Array()).valueOf : () => Int8Array
+>(new Int8Array()) : Int8Array
+>new Int8Array() : Int8Array
+>Int8Array : Int8ArrayConstructor
+>valueOf : () => Int8Array
+
+const typedArray1: Uint8Array = (new Uint8Array()).valueOf();
+>typedArray1 : Uint8Array
+>(new Uint8Array()).valueOf() : Uint8Array
+>(new Uint8Array()).valueOf : () => Uint8Array
+>(new Uint8Array()) : Uint8Array
+>new Uint8Array() : Uint8Array
+>Uint8Array : Uint8ArrayConstructor
+>valueOf : () => Uint8Array
+
+const typedArray2: Int16Array = (new Int16Array()).valueOf();
+>typedArray2 : Int16Array
+>(new Int16Array()).valueOf() : Int16Array
+>(new Int16Array()).valueOf : () => Int16Array
+>(new Int16Array()) : Int16Array
+>new Int16Array() : Int16Array
+>Int16Array : Int16ArrayConstructor
+>valueOf : () => Int16Array
+
+const typedArray3: Uint16Array = (new Uint16Array()).valueOf();
+>typedArray3 : Uint16Array
+>(new Uint16Array()).valueOf() : Uint16Array
+>(new Uint16Array()).valueOf : () => Uint16Array
+>(new Uint16Array()) : Uint16Array
+>new Uint16Array() : Uint16Array
+>Uint16Array : Uint16ArrayConstructor
+>valueOf : () => Uint16Array
+
+const typedArray4: Int32Array = (new Int32Array()).valueOf();
+>typedArray4 : Int32Array
+>(new Int32Array()).valueOf() : Int32Array
+>(new Int32Array()).valueOf : () => Int32Array
+>(new Int32Array()) : Int32Array
+>new Int32Array() : Int32Array
+>Int32Array : Int32ArrayConstructor
+>valueOf : () => Int32Array
+
+const typedArray5: Uint32Array = (new Uint32Array()).valueOf();
+>typedArray5 : Uint32Array
+>(new Uint32Array()).valueOf() : Uint32Array
+>(new Uint32Array()).valueOf : () => Uint32Array
+>(new Uint32Array()) : Uint32Array
+>new Uint32Array() : Uint32Array
+>Uint32Array : Uint32ArrayConstructor
+>valueOf : () => Uint32Array
+
+const typedArray6: Float32Array = (new Float32Array()).valueOf();
+>typedArray6 : Float32Array
+>(new Float32Array()).valueOf() : Float32Array
+>(new Float32Array()).valueOf : () => Float32Array
+>(new Float32Array()) : Float32Array
+>new Float32Array() : Float32Array
+>Float32Array : Float32ArrayConstructor
+>valueOf : () => Float32Array
+
+const typedArray7: Float64Array = (new Float64Array()).valueOf();
+>typedArray7 : Float64Array
+>(new Float64Array()).valueOf() : Float64Array
+>(new Float64Array()).valueOf : () => Float64Array
+>(new Float64Array()) : Float64Array
+>new Float64Array() : Float64Array
+>Float64Array : Float64ArrayConstructor
+>valueOf : () => Float64Array
+
+const typedArray8: BigInt64Array = (new BigInt64Array()).valueOf();
+>typedArray8 : BigInt64Array
+>(new BigInt64Array()).valueOf() : BigInt64Array
+>(new BigInt64Array()).valueOf : () => BigInt64Array
+>(new BigInt64Array()) : BigInt64Array
+>new BigInt64Array() : BigInt64Array
+>BigInt64Array : BigInt64ArrayConstructor
+>valueOf : () => BigInt64Array
+
+const typedArray9: BigUint64Array = (new BigUint64Array()).valueOf();
+>typedArray9 : BigUint64Array
+>(new BigUint64Array()).valueOf() : BigUint64Array
+>(new BigUint64Array()).valueOf : () => BigUint64Array
+>(new BigUint64Array()) : BigUint64Array
+>new BigUint64Array() : BigUint64Array
+>BigUint64Array : BigUint64ArrayConstructor
+>valueOf : () => BigUint64Array
+

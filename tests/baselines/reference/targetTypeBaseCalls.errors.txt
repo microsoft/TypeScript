@@ -1,6 +1,6 @@
-tests/cases/compiler/targetTypeBaseCalls.ts(9,19): error TS2322: Type '5' is not assignable to type 'string'.
-tests/cases/compiler/targetTypeBaseCalls.ts(13,23): error TS2322: Type '5' is not assignable to type 'string'.
-tests/cases/compiler/targetTypeBaseCalls.ts(17,61): error TS2322: Type '5' is not assignable to type 'string'.
+tests/cases/compiler/targetTypeBaseCalls.ts(9,19): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/targetTypeBaseCalls.ts(13,23): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/targetTypeBaseCalls.ts(17,61): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
 ==== tests/cases/compiler/targetTypeBaseCalls.ts (3 errors) ====
@@ -14,17 +14,17 @@ tests/cases/compiler/targetTypeBaseCalls.ts(17,61): error TS2322: Type '5' is no
      
     foo(function(s) { s = 5 });  // Error, can’t assign number to string
                       ~
-!!! error TS2322: Type '5' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
      
      
      
     new Foo(function(s) { s = 5 });  // error, if types are applied correctly
                           ~
-!!! error TS2322: Type '5' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
      
      
      
     class Bar extends Foo { constructor() { super(function(s) { s = 5 }) } }  // error, if types are applied correctly
                                                                 ~
-!!! error TS2322: Type '5' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     

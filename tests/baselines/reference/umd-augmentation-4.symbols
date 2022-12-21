@@ -39,7 +39,7 @@ export as namespace Math2d;
 >Math2d : Symbol(Math2d, Decl(index.d.ts, 0, 0))
 
 export = M2D;
->M2D : Symbol(M2D, Decl(index.d.ts, 2, 13))
+>M2D : Symbol(M2D, Decl(index.d.ts, 2, 13), Decl(math2d-augment.d.ts, 0, 33))
 
 declare namespace M2D {
 >M2D : Symbol(M2D, Decl(index.d.ts, 2, 13), Decl(math2d-augment.d.ts, 0, 33))

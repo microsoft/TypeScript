@@ -1,9 +1,8 @@
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5.ts(26,4): error TS2345: Argument of type '[number, number, [[string]], boolean, boolean]' is not assignable to parameter of type '[any, any, [[any]]]'.
-  Types of property 'length' are incompatible.
-    Type '5' is not assignable to type '3'.
+  Source has 5 element(s) but target allows only 3.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5.ts(29,12): error TS2322: Type 'number' is not assignable to type '[[any]]'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5.ts(30,5): error TS2345: Argument of type '[number, number]' is not assignable to parameter of type '[any, any, [[any]], ...any[]]'.
-  Property '2' is missing in type '[number, number]' but required in type '[any, any, [[any]], ...any[]]'.
+  Source has 2 element(s) but target requires 3.
 
 
 ==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5.ts (3 errors) ====
@@ -35,8 +34,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5.
     a9([1, 2, [["string"]], false, true]);   // Parameter type is [any, any, [[any]]]
        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[number, number, [[string]], boolean, boolean]' is not assignable to parameter of type '[any, any, [[any]]]'.
-!!! error TS2345:   Types of property 'length' are incompatible.
-!!! error TS2345:     Type '5' is not assignable to type '3'.
+!!! error TS2345:   Source has 5 element(s) but target allows only 3.
     
     a10([1, 2, [["string"]], false, true]);   // Parameter type is any[]
     a10([1, 2, 3, false, true]);              // Parameter type is any[]
@@ -45,7 +43,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5.
     a10([1, 2]);                              // Parameter type is any[]
         ~~~~~~
 !!! error TS2345: Argument of type '[number, number]' is not assignable to parameter of type '[any, any, [[any]], ...any[]]'.
-!!! error TS2345:   Property '2' is missing in type '[number, number]' but required in type '[any, any, [[any]], ...any[]]'.
+!!! error TS2345:   Source has 2 element(s) but target requires 3.
     a11([1, 2]);                              // Parameter type is number[]
     
     // Rest parameter with generic

@@ -2,7 +2,7 @@
 declare namespace JSX {
     interface Element {
         render(): Element | string | false;
->render : () => string | false | Element
+>render : () => Element | string | false
 >false : false
     }
 }

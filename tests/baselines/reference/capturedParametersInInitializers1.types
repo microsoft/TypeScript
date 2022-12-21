@@ -18,9 +18,9 @@ function foo1(y = class {c = x}, x = 1) {
 
 // ok - used in file
 function foo2(y = function(x: typeof z) {}, z = 1) {
->foo2 : (y?: (x: number) => void, z?: number) => void
->y : (x: number) => void
->function(x: typeof z) {} : (x: number) => void
+>foo2 : (y?: (x: typeof z) => void, z?: number) => void
+>y : (x: typeof z) => void
+>function(x: typeof z) {} : (x: typeof z) => void
 >x : number
 >z : number
 >z : number

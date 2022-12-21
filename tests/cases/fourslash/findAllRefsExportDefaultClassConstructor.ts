@@ -1,5 +1,5 @@
 ////export default class {
-////    [|[|{| "contextRangeIndex": 0 |}constructor|]() {}|]
+////    /*1*/constructor() {}
 ////}
 
-verify.singleReferenceGroup("class default", "constructor");
+verify.baselineFindAllReferences('1');

@@ -16,10 +16,10 @@ verify.completions(
     {
         marker: "1",
         exact: [
-            { name: "n", text: "(property) C1.n: number" },
-            { name: "m", text: "(property) C1.m: number" },
             { name: "f", text: "(method) C1.f(this: this): void" },
             { name: "g", text: "(method) C1.g(this: Restricted): void" },
+            { name: "m", text: "(property) C1.m: number" },
+            { name: "n", text: "(property) C1.n: number" },
         ],
     },
     {

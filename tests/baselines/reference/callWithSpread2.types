@@ -5,7 +5,7 @@ declare function all(a?: number, b?: number): void;
 >b : number
 
 declare function weird(a?: number | string, b?: number | string): void;
->weird : (a?: string | number, b?: string | number) => void
+>weird : (a?: number | string, b?: number | string) => void
 >a : string | number
 >b : string | number
 

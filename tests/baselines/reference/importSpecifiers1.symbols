@@ -1,0 +1,93 @@
+=== /mod.ts ===
+export const as = 0;
+>as : Symbol(as, Decl(mod.ts, 0, 12))
+
+export const type = 0;
+>type : Symbol(type, Decl(mod.ts, 1, 12))
+
+export const something = 0;
+>something : Symbol(something, Decl(mod.ts, 2, 12))
+
+=== /a.ts ===
+import { type } from "./mod.js";
+>type : Symbol(type, Decl(a.ts, 0, 8))
+
+import { type as } from "./mod.js";
+>as : Symbol(as, Decl(a.ts, 1, 8))
+
+type;
+>type : Symbol(type, Decl(a.ts, 0, 8))
+
+as; // Error (used in emitting position)
+>as : Symbol(as, Decl(a.ts, 1, 8))
+
+=== /b.ts ===
+import { type as as } from "./mod.js";
+>type : Symbol(as, Decl(mod.ts, 1, 12))
+>as : Symbol(as, Decl(b.ts, 0, 8))
+
+type; // Error (cannot resolve name)
+as;
+>as : Symbol(as, Decl(b.ts, 0, 8))
+
+=== /c.ts ===
+import { type as as as } from "./mod.js";
+>as : Symbol(as, Decl(mod.ts, 0, 12))
+>as : Symbol(as, Decl(c.ts, 0, 8))
+
+type; // Error (cannot resolve name)
+as; // Error (used in emitting position)
+>as : Symbol(as, Decl(c.ts, 0, 8))
+
+=== /d.ts ===
+import { type as as as as } from "./mod.js"; // Error
+>as : Symbol(as, Decl(mod.ts, 0, 12))
+>as : Symbol(as, Decl(d.ts, 0, 8))
+>as : Symbol(as, Decl(d.ts, 0, 22))
+
+=== /e.ts ===
+import { type type as as } from "./mod.js";
+>type : Symbol(as, Decl(mod.ts, 1, 12))
+>as : Symbol(as, Decl(e.ts, 0, 8))
+
+import { type as type } from "./mod.js";
+>type : Symbol(as, Decl(mod.ts, 1, 12))
+>type : Symbol(type, Decl(e.ts, 1, 8))
+
+type;
+>type : Symbol(type, Decl(e.ts, 1, 8))
+
+as; // Error (used in emitting position)
+>as : Symbol(as, Decl(e.ts, 0, 8))
+
+=== /f.ts ===
+import { type import } from "./mod.js"; // Error
+>import : Symbol(import, Decl(f.ts, 0, 8))
+
+import { type as export } from "./mod.js"; // Error
+>type : Symbol(export, Decl(mod.ts, 1, 12))
+>export : Symbol(export, Decl(f.ts, 1, 8))
+
+import { type as as export } from "./mod.js"; // Error
+>as : Symbol(as, Decl(mod.ts, 0, 12))
+>export : Symbol(export, Decl(f.ts, 2, 8))
+
+import { type something } from "./mod.js";
+>something : Symbol(something, Decl(f.ts, 3, 8))
+
+import { type something as s } from "./mod.js";
+>something : Symbol(something, Decl(mod.ts, 2, 12))
+>s : Symbol(s, Decl(f.ts, 4, 8))
+
+type; // Error (cannot resolve name)
+as; // Error (cannot resolve name)
+something; // Error (used in emitting position)
+>something : Symbol(something, Decl(f.ts, 3, 8))
+
+s; // Error (used in emitting position)
+>s : Symbol(s, Decl(f.ts, 4, 8))
+
+=== /g.ts ===
+import type { type something } from "./mod.js"; // Error
+>something : Symbol(something, Decl(g.ts, 0, 13))
+

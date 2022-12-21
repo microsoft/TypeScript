@@ -5,7 +5,7 @@ interface Base {
 >x : string
 
     addEventListener(x: 'foo'): string;
->addEventListener : { (x: string): any; (x: "foo"): string; }
+>addEventListener : { (x: string): any; (x: 'foo'): string; }
 >x : "foo"
 }
 interface Deriver extends Base {
@@ -14,7 +14,7 @@ interface Deriver extends Base {
 >x : string
 
     addEventListener(x: 'bar'): string;
->addEventListener : { (x: string): any; (x: "bar"): string; }
+>addEventListener : { (x: string): any; (x: 'bar'): string; }
 >x : "bar"
 }
 

@@ -1,0 +1,56 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/constructorParameterShadowsOuterScopes2.ts ===
+// With useDefineForClassFields: true and ESNext target, initializer
+// expressions for property declarations are evaluated in the scope of
+// the class body and are permitted to reference parameters or local
+// variables of the constructor. This is different from classic
+// Typescript behaviour, with useDefineForClassFields: false. There,
+// initialisers of property declarations are evaluated in the scope of
+// the constructor body.
+
+// Note that when class fields are accepted in the ECMAScript
+// standard, the target will become that year's ES20xx
+
+var x = 1;
+>x : Symbol(x, Decl(constructorParameterShadowsOuterScopes2.ts, 11, 3))
+
+class C {
+>C : Symbol(C, Decl(constructorParameterShadowsOuterScopes2.ts, 11, 10))
+
+    b = x; // ok
+>b : Symbol(C.b, Decl(constructorParameterShadowsOuterScopes2.ts, 12, 9))
+>x : Symbol(x, Decl(constructorParameterShadowsOuterScopes2.ts, 11, 3))
+
+    constructor(x: string) {
+>x : Symbol(x, Decl(constructorParameterShadowsOuterScopes2.ts, 14, 16))
+    }
+}
+
+var y = 1;
+>y : Symbol(y, Decl(constructorParameterShadowsOuterScopes2.ts, 18, 3))
+
+class D {
+>D : Symbol(D, Decl(constructorParameterShadowsOuterScopes2.ts, 18, 10))
+
+    b = y; // ok
+>b : Symbol(D.b, Decl(constructorParameterShadowsOuterScopes2.ts, 19, 9))
+>y : Symbol(y, Decl(constructorParameterShadowsOuterScopes2.ts, 18, 3))
+
+    constructor(x: string) {
+>x : Symbol(x, Decl(constructorParameterShadowsOuterScopes2.ts, 21, 16))
+
+        var y = "";
+>y : Symbol(y, Decl(constructorParameterShadowsOuterScopes2.ts, 22, 11))
+    }
+}
+
+class E {
+>E : Symbol(E, Decl(constructorParameterShadowsOuterScopes2.ts, 24, 1))
+
+    b = z; // not ok
+>b : Symbol(E.b, Decl(constructorParameterShadowsOuterScopes2.ts, 26, 9))
+
+    constructor(z: string) {
+>z : Symbol(z, Decl(constructorParameterShadowsOuterScopes2.ts, 28, 16))
+    }
+}
+

@@ -1,0 +1,9 @@
+error TS18035: Invalid value for 'jsxFragmentFactory'. '234' is not a valid identifier or qualified-name.
+
+
+!!! error TS18035: Invalid value for 'jsxFragmentFactory'. '234' is not a valid identifier or qualified-name.
+==== tests/cases/compiler/jsxFactoryAndJsxFragmentFactoryErrorNotIdentifier.tsx (0 errors) ====
+    declare var h: any;
+    
+    <></>;
+    <><span>1</span><><span>2.1</span><span>2.2</span></></>;

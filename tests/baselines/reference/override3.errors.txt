@@ -1,0 +1,31 @@
+tests/cases/conformance/override/override3.ts(22,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'D'.
+
+
+==== tests/cases/conformance/override/override3.ts (1 errors) ====
+    declare class B {
+        foo(): void
+        bar(): void
+    }
+    
+    declare class D extends B {
+        foo (): void;
+        override bar (): void;
+    }
+    
+    class DB extends B {
+        override foo(): void {}
+        override bar(): void {}
+    }
+    
+    class DD extends D {
+        override foo(): void {}
+        override bar(): void {}
+    }
+    
+    class EB extends D {
+        foo(): void {}
+        ~~~
+!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'D'.
+        override bar(): void {}
+    }
+    

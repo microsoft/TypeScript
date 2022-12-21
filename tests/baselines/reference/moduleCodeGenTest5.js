@@ -23,7 +23,8 @@ var v = E2.B;
 
 //// [moduleCodeGenTest5.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.E1 = exports.C1 = exports.f1 = exports.x = void 0;
 exports.x = 0;
 var y = 0;
 function f1() { }

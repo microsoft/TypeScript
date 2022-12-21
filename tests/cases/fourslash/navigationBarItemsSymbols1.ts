@@ -15,16 +15,16 @@ verify.navigationTree({
             "kind": "class",
             "childItems": [
                 {
-                    "text": "[Symbol.isConcatSpreadable]",
-                    "kind": "getter"
-                },
-                {
                     "text": "[Symbol.isRegExp]",
                     "kind": "property"
                 },
                 {
                     "text": "[Symbol.iterator]",
                     "kind": "method"
+                },
+                {
+                    "text": "[Symbol.isConcatSpreadable]",
+                    "kind": "getter"
                 }
             ]
         }
@@ -47,16 +47,16 @@ verify.navigationBar([
         "kind": "class",
         "childItems": [
             {
-                "text": "[Symbol.isConcatSpreadable]",
-                "kind": "getter"
-            },
-            {
                 "text": "[Symbol.isRegExp]",
                 "kind": "property"
             },
             {
                 "text": "[Symbol.iterator]",
                 "kind": "method"
+            },
+            {
+                "text": "[Symbol.isConcatSpreadable]",
+                "kind": "getter"
             }
         ],
         "indent": 1

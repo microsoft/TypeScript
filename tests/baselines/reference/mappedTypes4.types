@@ -27,17 +27,17 @@ function boxify<T>(obj: T): Boxified<T> {
 
         for (let k in obj) {
 >k : Extract<keyof T, string>
->obj : T
+>obj : (T & object) | (T & null)
 
             result[k] = { value: obj[k] };
->result[k] = { value: obj[k] } : { value: T[Extract<keyof T, string>]; }
+>result[k] = { value: obj[k] } : { value: (T & object)[Extract<keyof T, string>]; }
 >result[k] : Boxified<T>[Extract<keyof T, string>]
 >result : Boxified<T>
 >k : Extract<keyof T, string>
->{ value: obj[k] } : { value: T[Extract<keyof T, string>]; }
->value : T[Extract<keyof T, string>]
->obj[k] : T[Extract<keyof T, string>]
->obj : T
+>{ value: obj[k] } : { value: (T & object)[Extract<keyof T, string>]; }
+>value : (T & object)[Extract<keyof T, string>]
+>obj[k] : (T & object)[Extract<keyof T, string>]
+>obj : T & object
 >k : Extract<keyof T, string>
         }
         return result;
@@ -49,23 +49,23 @@ function boxify<T>(obj: T): Boxified<T> {
 }
 
 type A = { a: string };
->A : A
+>A : { a: string; }
 >a : string
 
 type B = { b: string };
->B : B
+>B : { b: string; }
 >b : string
 
 type C = { c: string };
->C : C
+>C : { c: string; }
 >c : string
 
 function f1(x: A | B | C | undefined) {
->f1 : (x: A | B | C | undefined) => Boxified<A> | Boxified<B> | Boxified<C> | undefined
+>f1 : (x: A | B | C | undefined) => Boxified<A | B | C | undefined>
 >x : A | B | C | undefined
 
     return boxify(x);
->boxify(x) : Boxified<A> | Boxified<B> | Boxified<C> | undefined
+>boxify(x) : Boxified<A | B | C | undefined>
 >boxify : <T>(obj: T) => Boxified<T>
 >x : A | B | C | undefined
 }
@@ -114,7 +114,7 @@ type DeepReadonly<T> = {
 };
 
 type Foo = {
->Foo : Foo
+>Foo : { x: number; y: {    a: string;    b: number;}; z: boolean; }
 
     x: number;
 >x : number
@@ -130,7 +130,7 @@ type Foo = {
 };
 
 type DeepReadonlyFoo = {
->DeepReadonlyFoo : DeepReadonlyFoo
+>DeepReadonlyFoo : { readonly x: number; readonly y: {    readonly a: string;    readonly b: number;}; readonly z: boolean; }
 
     readonly x: number;
 >x : number
@@ -154,16 +154,16 @@ var x1: DeepReadonlyFoo;
 // Repro from #13232
 
 type Z = { a: number };
->Z : Z
+>Z : { a: number; }
 >a : number
 
 type Clone<T> = {
 >Clone : Clone<T>
 
-  [P in keyof (T & {})]: T[P];
+  [P in keyof (T & {})]: (T & {})[P];
 };
 type M = Clone<Z>; // M should be { a: number }
->M : Clone<Z>
+>M : { a: number; }
 
 var z1: Z;
 >z1 : Z

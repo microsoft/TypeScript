@@ -86,8 +86,8 @@ declare module m {
     };
     export var x3: {
         (): m2.public1[];
-        [s: string]: m2.public1;
         [n: number]: private1;
+        [s: string]: m2.public1;
         x: private1;
         y: m2.public1;
         method(): private1;

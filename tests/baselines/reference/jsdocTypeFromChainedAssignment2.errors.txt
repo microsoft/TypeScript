@@ -1,23 +1,23 @@
-tests/cases/conformance/jsdoc/use.js(2,7): error TS2345: Argument of type '"no"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/jsdoc/use.js(3,7): error TS2345: Argument of type '"also no"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/jsdoc/use.js(4,7): error TS2345: Argument of type '0' is not assignable to parameter of type 'string'.
-tests/cases/conformance/jsdoc/use.js(5,7): error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
+tests/cases/conformance/jsdoc/use.js(2,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/jsdoc/use.js(3,7): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/jsdoc/use.js(4,7): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/conformance/jsdoc/use.js(5,7): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 
 
 ==== tests/cases/conformance/jsdoc/use.js (4 errors) ====
     var mod = require('./mod');
     mod.f('no')
           ~~~~
-!!! error TS2345: Argument of type '"no"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     mod.g('also no')
           ~~~~~~~~~
-!!! error TS2345: Argument of type '"also no"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     mod.h(0)
           ~
-!!! error TS2345: Argument of type '0' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     mod.i(1)
           ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     
 ==== tests/cases/conformance/jsdoc/mod.js (0 errors) ====
     /** @param {number} n */

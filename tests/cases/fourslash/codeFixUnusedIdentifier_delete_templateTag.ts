@@ -13,7 +13,7 @@
 goTo.file("/first.js");
 verify.codeFix({
     index: 0,
-    description: "Remove declaration for: 'T'",
+    description: "Remove unused declaration for: 'T'",
     newFileContent:
 `/**
  * Doc
@@ -33,7 +33,7 @@ function first(p) { return p; }`,
 
 goTo.file("/second.js");
 verify.codeFix({
-    description: "Remove declaration for: 'U'",
+    description: "Remove unused declaration for: 'U'",
     index: 0,
     newFileContent:
 `/**
@@ -53,9 +53,9 @@ function second(p) { return p; }`,
 goTo.file("/both.js");
 verify.codeFix({
     description: "Remove template tag",
+    index: 0,
     newFileContent:
 `/**
- * Comment
- */
+ * */
 function both() {}`,
 });

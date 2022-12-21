@@ -78,16 +78,19 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CC = exports.BB = exports.AA = exports.Z = exports.Y = exports.X = exports.W = exports.V = exports.U = exports.T = exports.S = exports.R = exports.Q = exports.P = exports.O = exports.N = exports.M = void 0;
 var M = /** @class */ (function () {
     function M() {
     }
@@ -219,11 +222,11 @@ exports.CC = CC;
 
 
 //// [index.d.ts]
-export class M<T_1> {
-    field: T_1;
+export class M<T> {
+    field: T;
 }
-export class N<U_1> extends M<U_1> {
-    other: U_1;
+export class N<U> extends M<U> {
+    other: U;
 }
 export class O {
     [idx: string]: string;

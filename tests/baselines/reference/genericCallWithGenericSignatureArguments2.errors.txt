@@ -3,17 +3,21 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
     Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(15,21): error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(16,22): error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(16,22): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(25,23): error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
   Types of parameters 'a' and 'x' are incompatible.
     Type 'Date' is not assignable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'Date'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(37,43): error TS2322: Type 'F' is not assignable to type 'E'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(50,21): error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(51,22): error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(51,22): error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(60,23): error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
   Types of parameters 'a' and 'x' are incompatible.
     Type 'Date' is not assignable to type 'T'.
+      'T' could be instantiated with an arbitrary type which could be unrelated to 'Date'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(67,51): error TS2304: Cannot find name 'U'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(67,57): error TS2304: Cannot find name 'U'.
 
@@ -43,7 +47,8 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
 !!! error TS2345:   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
             var r10 = r7(1); // error
                          ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+!!! error TS2345:   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
         }
     
         function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
@@ -57,6 +62,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
 !!! error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
 !!! error TS2345:   Types of parameters 'a' and 'x' are incompatible.
 !!! error TS2345:     Type 'Date' is not assignable to type 'T'.
+!!! error TS2345:       'T' could be instantiated with an arbitrary type which could be unrelated to 'Date'.
             var r7b = foo2((a) => a, (b) => b); // valid, T is inferred to be Date
         }
     
@@ -90,7 +96,8 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
 !!! error TS2345:   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
             var r10 = r7(1); 
                          ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'T'.
+!!! error TS2345:   'T' could be instantiated with an arbitrary type which could be unrelated to 'number'.
         }
     
         function foo2<T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) {
@@ -104,6 +111,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
 !!! error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
 !!! error TS2345:   Types of parameters 'a' and 'x' are incompatible.
 !!! error TS2345:     Type 'Date' is not assignable to type 'T'.
+!!! error TS2345:       'T' could be instantiated with an arbitrary type which could be unrelated to 'Date'.
             var r7b = foo2((a) => a, (b) => b); 
         }
     

@@ -15,9 +15,9 @@ function f(p: Foo<number>) {
 
     console.log(p);
 >console.log(p) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >p : Foo<number>
 }
 

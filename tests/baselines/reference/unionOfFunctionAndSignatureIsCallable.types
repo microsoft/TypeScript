@@ -1,6 +1,6 @@
 === tests/cases/compiler/unionOfFunctionAndSignatureIsCallable.ts ===
 function f1(c1: Function, c2: () => object,  callable: typeof c1 | typeof c2) {
->f1 : (c1: Function, c2: () => object, callable: Function | (() => object)) => void
+>f1 : (c1: Function, c2: () => object, callable: typeof c1 | typeof c2) => void
 >c1 : Function
 >c2 : () => object
 >callable : Function | (() => object)

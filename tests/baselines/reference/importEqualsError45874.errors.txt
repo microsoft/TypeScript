@@ -1,0 +1,15 @@
+/globals.ts(5,22): error TS2694: Namespace 'globals' has no exported member 'toString'.
+
+
+==== /globals.ts (1 errors) ====
+    namespace globals {
+      export type Foo = {};
+      export const Bar = {};
+    }
+    import Foo = globals.toString.Blah;
+                         ~~~~~~~~
+!!! error TS2694: Namespace 'globals' has no exported member 'toString'.
+    
+==== /index.ts (0 errors) ====
+    const Foo = {};
+    

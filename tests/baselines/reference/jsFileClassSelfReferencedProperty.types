@@ -4,15 +4,15 @@ export class StackOverflowTest {
 
   constructor () {
     this.testStackOverflow = this.testStackOverflow.bind(this)
->this.testStackOverflow = this.testStackOverflow.bind(this) : any
+>this.testStackOverflow = this.testStackOverflow.bind(this) : error
 >this.testStackOverflow : any
 >this : this
 >testStackOverflow : any
->this.testStackOverflow.bind(this) : any
->this.testStackOverflow.bind : any
->this.testStackOverflow : any
+>this.testStackOverflow.bind(this) : error
+>this.testStackOverflow.bind : error
+>this.testStackOverflow : undefined
 >this : this
->testStackOverflow : any
+>testStackOverflow : undefined
 >bind : any
 >this : this
   }

@@ -75,11 +75,11 @@ xyz.x.c = "hello";
 >"hello" : "hello"
 
 type F1 = (x: string) => string;
->F1 : F1
+>F1 : (x: string) => string
 >x : string
 
 type F2 = (x: number) => number;
->F2 : F2
+>F2 : (x: number) => number
 >x : number
 
 var f: F1 & F2;
@@ -99,7 +99,7 @@ var n = f(42);
 
 interface D {
     nested: { doublyNested: { d: string; }, different: { e: number } };
->nested : { doublyNested: { d: string; }; different: { e: number; }; }
+>nested : { doublyNested: {    d: string;}; different: {    e: number;}; }
 >doublyNested : { d: string; }
 >d : string
 >different : { e: number; }
@@ -107,7 +107,7 @@ interface D {
 }
 interface E {
     nested: { doublyNested: { f: string; }, other: {g: number } };
->nested : { doublyNested: { f: string; }; other: { g: number; }; }
+>nested : { doublyNested: {    f: string;}; other: {    g: number;}; }
 >doublyNested : { f: string; }
 >f : string
 >other : { g: number; }
@@ -151,14 +151,14 @@ const de: D & E = {
 // Additional test case with >2 doubly nested members so fix for #31441 is tested w/ excess props
 interface F {
     nested: { doublyNested: { g: string; } }
->nested : { doublyNested: { g: string; }; }
+>nested : { doublyNested: {    g: string;}; }
 >doublyNested : { g: string; }
 >g : string
 }
 
 interface G {
     nested: { doublyNested: { h: string; } }
->nested : { doublyNested: { h: string; }; }
+>nested : { doublyNested: {    h: string;}; }
 >doublyNested : { h: string; }
 >h : string
 }

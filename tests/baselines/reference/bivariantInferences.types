@@ -3,7 +3,7 @@
 
 interface Array<T> {
     equalsShallow<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>): boolean;
->equalsShallow : <T>(this: readonly T[], other: readonly T[]) => boolean
+>equalsShallow : <T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean
 >this : readonly T[]
 >other : readonly T[]
 }

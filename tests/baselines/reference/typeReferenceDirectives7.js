@@ -17,9 +17,11 @@ export let y = () => x
 //// [app.js]
 "use strict";
 /// <reference types="lib"/>
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.y = exports.x = exports.$ = void 0;
 exports.$ = 1;
-exports.y = function () { return exports.x; };
+var y = function () { return exports.x; };
+exports.y = y;
 
 
 //// [app.d.ts]

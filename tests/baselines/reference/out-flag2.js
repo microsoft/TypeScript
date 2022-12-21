@@ -6,6 +6,7 @@ class A { }
 //// [b.ts]
 class B { }
 
+
 //// [c.js]
 var A = /** @class */ (function () {
     function A() {

@@ -6,6 +6,5 @@
 
 verify.completions({
   marker: "",
-  includes: ['hello', 'world']
+  includes: ["hello", "world"]
 });
-

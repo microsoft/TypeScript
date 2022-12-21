@@ -11,8 +11,8 @@ let [, skillA = ["noSkill", "noSkill"]] = multiRobotA;
 let [nameMB = "noName" ] = multiRobotB;
 let [nameMA = "noName", [primarySkillA = "noSkill", secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]] = multiRobotA;
 
-let [nameMC = "noName" ] = ["roomba", ["vaccum", "mopping"]];
-let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]];
+let [nameMC = "noName" ] = ["roomba", ["vacuum", "mopping"]];
+let [nameMC2 = "noName", [primarySkillC = "noSkill", secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vacuum", "mopping"]];
 
 if (nameMB == nameMA) {
     console.log(skillA[0] + skillA[1]);

@@ -12,4 +12,4 @@
 ////    return x.y.z
 ////}
 
-verify.rangeAfterCodeFix("a: { b: { c: void; }; }, m: { n: () => number; }, x: { y: { z: number[]; }; }", /*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, /*index*/0);
+verify.rangeAfterCodeFix("a: { b: { c: any; }; }, m: { n: () => number; }, x: { y: { z: number[]; }; }", /*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, /*index*/0);

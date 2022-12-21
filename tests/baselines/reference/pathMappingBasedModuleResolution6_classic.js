@@ -14,12 +14,13 @@ export {x} from "../file2";
 //// [file3.js]
 define(["require", "exports", "../file2"], function (require, exports, file2_1) {
     "use strict";
-    exports.__esModule = true;
-    exports.x = file2_1.x;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.x = void 0;
+    Object.defineProperty(exports, "x", { enumerable: true, get: function () { return file2_1.x; } });
 });
 //// [file1.js]
 define(["require", "exports", "./project/file3"], function (require, exports, file3_1) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     use(file3_1.x.toExponential());
 });

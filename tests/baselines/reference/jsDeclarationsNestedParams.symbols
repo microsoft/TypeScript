@@ -1,0 +1,35 @@
+=== tests/cases/conformance/jsdoc/declarations/file.js ===
+class X {
+>X : Symbol(X, Decl(file.js, 0, 0))
+
+    /**
+      * Cancels the request, sending a cancellation to the other party
+      * @param {Object} error __auto_generated__
+      * @param {string?} error.reason the error reason to send the cancellation with
+      * @param {string?} error.code the error code to send the cancellation with
+      * @returns {Promise.<*>} resolves when the event has been sent.
+      */ 
+    async cancel({reason, code}) {}
+>cancel : Symbol(X.cancel, Decl(file.js, 0, 9))
+>reason : Symbol(reason, Decl(file.js, 8, 18))
+>code : Symbol(code, Decl(file.js, 8, 25))
+}
+
+class Y {
+>Y : Symbol(Y, Decl(file.js, 9, 1))
+
+    /**
+      * Cancels the request, sending a cancellation to the other party
+      * @param {Object} error __auto_generated__
+      * @param {string?} error.reason the error reason to send the cancellation with
+      * @param {Object} error.suberr
+      * @param {string?} error.suberr.reason the error reason to send the cancellation with
+      * @param {string?} error.suberr.code the error code to send the cancellation with
+      * @returns {Promise.<*>} resolves when the event has been sent.
+      */ 
+    async cancel({reason, suberr}) {}
+>cancel : Symbol(Y.cancel, Decl(file.js, 11, 9))
+>reason : Symbol(reason, Decl(file.js, 21, 18))
+>suberr : Symbol(suberr, Decl(file.js, 21, 25))
+}
+

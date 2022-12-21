@@ -3,10 +3,13 @@ function C1() {
 >C1 : Symbol(C1, Decl(index.js, 0, 0))
 
     if (!(this instanceof C1)) return new C1();
+>this : Symbol(C1, Decl(index.js, 0, 0))
 >C1 : Symbol(C1, Decl(index.js, 0, 0))
 >C1 : Symbol(C1, Decl(index.js, 0, 0))
 
     this.x = 1;
+>this.x : Symbol(C1.x, Decl(index.js, 1, 47))
+>this : Symbol(C1, Decl(index.js, 0, 0))
 >x : Symbol(C1.x, Decl(index.js, 1, 47))
 }
 
@@ -22,10 +25,13 @@ var C2 = function () {
 >C2 : Symbol(C2, Decl(index.js, 8, 3))
 
     if (!(this instanceof C2)) return new C2();
+>this : Symbol(C2, Decl(index.js, 8, 8))
 >C2 : Symbol(C2, Decl(index.js, 8, 3))
 >C2 : Symbol(C2, Decl(index.js, 8, 3))
 
     this.x = 1;
+>this.x : Symbol(C2.x, Decl(index.js, 9, 47))
+>this : Symbol(C2, Decl(index.js, 8, 8))
 >x : Symbol(C2.x, Decl(index.js, 9, 47))
 
 };

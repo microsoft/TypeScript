@@ -15,7 +15,7 @@ var C = /** @class */ (function () {
                 v[_i] = arguments[_i];
             }
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C, "X", {
@@ -25,7 +25,7 @@ var C = /** @class */ (function () {
                 v2[_i] = arguments[_i];
             }
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;

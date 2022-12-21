@@ -7,8 +7,16 @@
         "noEmit": true,
         "allowJs": true,
         "checkJs": true,
-        "types": ["node"],
-        "lib": ["esnext", "dom"],
+        "types": [
+            "node"
+        ],
+        "lib": [
+            "esnext",
+            "dom"
+        ]
     },
-    "include": ["node_modules/url-search-params/build/url-search-params.node.js"]
+    "include": [
+        "node_modules/url-search-params/build/url-search-params.node.js",
+        "index.ts"
+    ]
 }

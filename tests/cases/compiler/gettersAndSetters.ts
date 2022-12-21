@@ -1,3 +1,4 @@
+// @target: es2020
 // classes
 class C {
     public fooBack = "";
@@ -37,3 +38,13 @@ interface I1 {
 }
 
 var i:I1 = function (n) {return n;}
+
+// Repro from #45006
+const x: string | number = Math.random() < 0.5 ? "str" : 123;
+if (typeof x === "string") {
+  let obj = {
+    set prop(_: any) { x.toUpperCase(); },
+    get prop() { return x.toUpperCase() },
+    method() { return x.toUpperCase() }
+  }
+}

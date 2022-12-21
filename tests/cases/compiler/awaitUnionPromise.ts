@@ -1,4 +1,4 @@
-/// @target: es2015
+// @target: es2015
 // https://github.com/Microsoft/TypeScript/issues/18186
 
 class AsyncEnumeratorDone { };

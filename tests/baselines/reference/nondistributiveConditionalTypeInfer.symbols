@@ -1,0 +1,61 @@
+=== tests/cases/compiler/nondistributiveConditionalTypeInfer.ts ===
+type _R<T> = [T] extends [{ _R: (_: infer R) => void }] ? R : never;
+>_R : Symbol(_R, Decl(nondistributiveConditionalTypeInfer.ts, 0, 0))
+>T : Symbol(T, Decl(nondistributiveConditionalTypeInfer.ts, 0, 8))
+>T : Symbol(T, Decl(nondistributiveConditionalTypeInfer.ts, 0, 8))
+>_R : Symbol(_R, Decl(nondistributiveConditionalTypeInfer.ts, 0, 27))
+>_ : Symbol(_, Decl(nondistributiveConditionalTypeInfer.ts, 0, 33))
+>R : Symbol(R, Decl(nondistributiveConditionalTypeInfer.ts, 0, 41))
+>R : Symbol(R, Decl(nondistributiveConditionalTypeInfer.ts, 0, 41))
+
+type _E<T> = [T] extends [{ _E: () => infer E }] ? E : never;
+>_E : Symbol(_E, Decl(nondistributiveConditionalTypeInfer.ts, 0, 68))
+>T : Symbol(T, Decl(nondistributiveConditionalTypeInfer.ts, 1, 8))
+>T : Symbol(T, Decl(nondistributiveConditionalTypeInfer.ts, 1, 8))
+>_E : Symbol(_E, Decl(nondistributiveConditionalTypeInfer.ts, 1, 27))
+>E : Symbol(E, Decl(nondistributiveConditionalTypeInfer.ts, 1, 43))
+>E : Symbol(E, Decl(nondistributiveConditionalTypeInfer.ts, 1, 43))
+
+type _A<T> = [T] extends [{ _A: () => infer A }] ? A : never;
+>_A : Symbol(_A, Decl(nondistributiveConditionalTypeInfer.ts, 1, 61))
+>T : Symbol(T, Decl(nondistributiveConditionalTypeInfer.ts, 2, 8))
+>T : Symbol(T, Decl(nondistributiveConditionalTypeInfer.ts, 2, 8))
+>_A : Symbol(_A, Decl(nondistributiveConditionalTypeInfer.ts, 2, 27))
+>A : Symbol(A, Decl(nondistributiveConditionalTypeInfer.ts, 2, 43))
+>A : Symbol(A, Decl(nondistributiveConditionalTypeInfer.ts, 2, 43))
+
+interface Sync<R, E, A> {
+>Sync : Symbol(Sync, Decl(nondistributiveConditionalTypeInfer.ts, 2, 61))
+>R : Symbol(R, Decl(nondistributiveConditionalTypeInfer.ts, 4, 15))
+>E : Symbol(E, Decl(nondistributiveConditionalTypeInfer.ts, 4, 17))
+>A : Symbol(A, Decl(nondistributiveConditionalTypeInfer.ts, 4, 20))
+
+  _R: (_: R) => void;
+>_R : Symbol(Sync._R, Decl(nondistributiveConditionalTypeInfer.ts, 4, 25))
+>_ : Symbol(_, Decl(nondistributiveConditionalTypeInfer.ts, 5, 7))
+>R : Symbol(R, Decl(nondistributiveConditionalTypeInfer.ts, 4, 15))
+
+  _E: () => E;
+>_E : Symbol(Sync._E, Decl(nondistributiveConditionalTypeInfer.ts, 5, 21))
+>E : Symbol(E, Decl(nondistributiveConditionalTypeInfer.ts, 4, 17))
+
+  _A: () => A;
+>_A : Symbol(Sync._A, Decl(nondistributiveConditionalTypeInfer.ts, 6, 14))
+>A : Symbol(A, Decl(nondistributiveConditionalTypeInfer.ts, 4, 20))
+}
+
+type R = _R<Sync<number, string, void>>;
+>R : Symbol(R, Decl(nondistributiveConditionalTypeInfer.ts, 8, 1))
+>_R : Symbol(_R, Decl(nondistributiveConditionalTypeInfer.ts, 0, 0))
+>Sync : Symbol(Sync, Decl(nondistributiveConditionalTypeInfer.ts, 2, 61))
+
+type E = _E<Sync<number, string, void>>;
+>E : Symbol(E, Decl(nondistributiveConditionalTypeInfer.ts, 10, 40))
+>_E : Symbol(_E, Decl(nondistributiveConditionalTypeInfer.ts, 0, 68))
+>Sync : Symbol(Sync, Decl(nondistributiveConditionalTypeInfer.ts, 2, 61))
+
+type A = _A<Sync<number, string, void>>;
+>A : Symbol(A, Decl(nondistributiveConditionalTypeInfer.ts, 11, 40))
+>_A : Symbol(_A, Decl(nondistributiveConditionalTypeInfer.ts, 1, 61))
+>Sync : Symbol(Sync, Decl(nondistributiveConditionalTypeInfer.ts, 2, 61))
+

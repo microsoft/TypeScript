@@ -1,0 +1,44 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameNestedClassAccessorsShadowing.ts ===
+class Base {
+>Base : Base
+
+    get #x() { return 1; };
+>#x : number
+>1 : 1
+
+    constructor() {
+        class Derived {
+>Derived : Derived
+
+            get #x() { return 1; };
+>#x : number
+>1 : 1
+
+            testBase(x: Base) {
+>testBase : (x: Base) => void
+>x : Base
+
+                console.log(x.#x);
+>console.log(x.#x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x.#x : any
+>x : Base
+            }
+            testDerived(x: Derived) {
+>testDerived : (x: Derived) => void
+>x : Derived
+
+                console.log(x.#x);
+>console.log(x.#x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x.#x : number
+>x : Derived
+            }
+        }
+    }
+}
+

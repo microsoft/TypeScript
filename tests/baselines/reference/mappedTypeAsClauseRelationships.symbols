@@ -1,0 +1,142 @@
+=== tests/cases/conformance/types/mapped/mappedTypeAsClauseRelationships.ts ===
+// From original issue #45212:
+type Methods<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
+>Methods : Symbol(Methods, Decl(mappedTypeAsClauseRelationships.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 1, 13))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 1, 21))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 1, 13))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 1, 13))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 1, 21))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 1, 21))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 1, 13))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 1, 21))
+
+type H<T> = T[keyof Methods<T>]; // Ok
+>H : Symbol(H, Decl(mappedTypeAsClauseRelationships.ts, 1, 80))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 2, 7))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 2, 7))
+>Methods : Symbol(Methods, Decl(mappedTypeAsClauseRelationships.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 2, 7))
+
+// `Filter<T>` only filters out some keys of `T`.
+type Filter<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
+>Filter : Symbol(Filter, Decl(mappedTypeAsClauseRelationships.ts, 2, 32))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 5, 12))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 5, 20))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 5, 12))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 5, 12))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 5, 20))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 5, 20))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 5, 12))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 5, 20))
+
+// `Modify<T>` might modify some keys of `T`.
+type Modify<T> = { [P in keyof T as P extends string? `bool${P}`: P]: T[P] };
+>Modify : Symbol(Modify, Decl(mappedTypeAsClauseRelationships.ts, 5, 79))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 7, 12))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 7, 20))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 7, 12))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 7, 20))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 7, 20))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 7, 20))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 7, 12))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 7, 20))
+
+function fun<T>(val: T) {
+>fun : Symbol(fun, Decl(mappedTypeAsClauseRelationships.ts, 7, 77))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 9, 13))
+>val : Symbol(val, Decl(mappedTypeAsClauseRelationships.ts, 9, 16))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 9, 13))
+
+    let x: Filter<T> = val; // Ok
+>x : Symbol(x, Decl(mappedTypeAsClauseRelationships.ts, 10, 7))
+>Filter : Symbol(Filter, Decl(mappedTypeAsClauseRelationships.ts, 2, 32))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 9, 13))
+>val : Symbol(val, Decl(mappedTypeAsClauseRelationships.ts, 9, 16))
+
+    let y: Modify<T> = val; // Error
+>y : Symbol(y, Decl(mappedTypeAsClauseRelationships.ts, 11, 7))
+>Modify : Symbol(Modify, Decl(mappedTypeAsClauseRelationships.ts, 5, 79))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 9, 13))
+>val : Symbol(val, Decl(mappedTypeAsClauseRelationships.ts, 9, 16))
+}
+
+type FilterInclOpt<T> = { [P in keyof T as T[P] extends Function ? P : never]+?: T[P] };
+>FilterInclOpt : Symbol(FilterInclOpt, Decl(mappedTypeAsClauseRelationships.ts, 12, 1))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 14, 19))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 14, 27))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 14, 19))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 14, 19))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 14, 27))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 14, 27))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 14, 19))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 14, 27))
+
+type ModifyInclOpt<T> = { [P in keyof T as P extends string? `bool${P}`: never ]+?: T[P] };
+>ModifyInclOpt : Symbol(ModifyInclOpt, Decl(mappedTypeAsClauseRelationships.ts, 14, 88))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 15, 19))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 15, 27))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 15, 19))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 15, 27))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 15, 27))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 15, 19))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 15, 27))
+
+type FilterExclOpt<T> = { [P in keyof T as T[P] extends Function ? P : never]-?: T[P] };
+>FilterExclOpt : Symbol(FilterExclOpt, Decl(mappedTypeAsClauseRelationships.ts, 15, 91))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 16, 19))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 16, 27))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 16, 19))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 16, 19))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 16, 27))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 16, 27))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 16, 19))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 16, 27))
+
+type ModifyExclOpt<T> = { [P in keyof T as P extends string? `bool${P}`: never ]-?: T[P] };
+>ModifyExclOpt : Symbol(ModifyExclOpt, Decl(mappedTypeAsClauseRelationships.ts, 16, 88))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 17, 19))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 17, 27))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 17, 19))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 17, 27))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 17, 27))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 17, 19))
+>P : Symbol(P, Decl(mappedTypeAsClauseRelationships.ts, 17, 27))
+
+function fun2<T>(val: T) {
+>fun2 : Symbol(fun2, Decl(mappedTypeAsClauseRelationships.ts, 17, 91))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 19, 14))
+>val : Symbol(val, Decl(mappedTypeAsClauseRelationships.ts, 19, 17))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 19, 14))
+
+    let x: FilterInclOpt<T> = val; // Ok
+>x : Symbol(x, Decl(mappedTypeAsClauseRelationships.ts, 20, 7))
+>FilterInclOpt : Symbol(FilterInclOpt, Decl(mappedTypeAsClauseRelationships.ts, 12, 1))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 19, 14))
+>val : Symbol(val, Decl(mappedTypeAsClauseRelationships.ts, 19, 17))
+
+    let y: ModifyInclOpt<T> = val; // Ok
+>y : Symbol(y, Decl(mappedTypeAsClauseRelationships.ts, 21, 7))
+>ModifyInclOpt : Symbol(ModifyInclOpt, Decl(mappedTypeAsClauseRelationships.ts, 14, 88))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 19, 14))
+>val : Symbol(val, Decl(mappedTypeAsClauseRelationships.ts, 19, 17))
+
+    let z: FilterExclOpt<T> = val; // Error
+>z : Symbol(z, Decl(mappedTypeAsClauseRelationships.ts, 22, 7))
+>FilterExclOpt : Symbol(FilterExclOpt, Decl(mappedTypeAsClauseRelationships.ts, 15, 91))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 19, 14))
+>val : Symbol(val, Decl(mappedTypeAsClauseRelationships.ts, 19, 17))
+
+    let w: ModifyExclOpt<T> = val; // Error
+>w : Symbol(w, Decl(mappedTypeAsClauseRelationships.ts, 23, 7))
+>ModifyExclOpt : Symbol(ModifyExclOpt, Decl(mappedTypeAsClauseRelationships.ts, 16, 88))
+>T : Symbol(T, Decl(mappedTypeAsClauseRelationships.ts, 19, 14))
+>val : Symbol(val, Decl(mappedTypeAsClauseRelationships.ts, 19, 17))
+}
+
+
+

@@ -25,26 +25,26 @@ class MyClass {
 >MyClass : MyClass
 
     db: db.db;
->db : any
+>db : db.db
 >db : any
 
     constructor(db: db.db) {
->db : any
+>db : db.db
 >db : any
 
         this.db = db;
->this.db = db : any
->this.db : any
+>this.db = db : db.db
+>this.db : db.db
 >this : this
->db : any
->db : any
+>db : db.db
+>db : db.db
 
         this.db.doSomething();
 >this.db.doSomething() : any
 >this.db.doSomething : any
->this.db : any
+>this.db : db.db
 >this : this
->db : any
+>db : db.db
 >doSomething : any
     }
 }

@@ -11,4 +11,4 @@
 ////     }
 //// }
 
-verify.completions({ marker: "", exact: ["publicMethod", "privateMethod", "protectedMethod", "test"] });
+verify.completions({ marker: "", exact: ["privateMethod", "protectedMethod", "publicMethod", "test"] });

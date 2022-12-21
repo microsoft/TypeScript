@@ -1,0 +1,71 @@
+=== tests/cases/compiler/unparenthesizedConstructorTypeInUnionOrIntersection.ts ===
+type U1 = string | new () => void;
+>U1 : string | (new () => void)
+
+type U2 = string | new (foo: number) => void
+>U2 : string | (new (foo: number) => void)
+>foo : number
+
+type U3 = | new () => number
+>U3 : new () => number
+
+type U4 = | new (foo?: number) => void;
+>U4 : new (foo?: number) => void
+>foo : number
+
+type U5 = string | new (number: number, foo?: string) => void | number;
+>U5 : string | (new (number: number, foo?: string) => void | number)
+>number : number
+>foo : string
+
+type U6 =
+>U6 : string | (new (...args: any[]) => void | number)
+
+  | string
+  | new (...args: any[]) => void
+>args : any[]
+
+  | number;
+
+type I1 = string & new () => void;
+>I1 : string & (new () => void)
+
+type I2 = string & new (...foo: number[]) => void;
+>I2 : string & (new (...foo: number[]) => void)
+>foo : number[]
+
+type I3 = & new () => boolean
+>I3 : new () => boolean
+
+type I4 = & new () => boolean & null;
+>I4 : new () => boolean & null
+>null : null
+
+type I5 = string & new (any: any, any2: any) => any & any;
+>I5 : string & (new (any: any, any2: any) => any & any)
+>any : any
+>any2 : any
+
+type I6 =
+>I6 : string & (new (foo: any) => void)
+
+  & string
+  & new (foo: any) => void;
+>foo : any
+
+type M1 = string | number & string | new () => number;
+>M1 : string | (new () => number)
+
+type M2 = any & string | any & new () => void;
+>M2 : any
+
+type M3 = any & new (foo: any) => void | new () => void & any;
+>M3 : any
+>foo : any
+
+type OK1 = string | (new ()=> void);
+>OK1 : string | (new () => void)
+
+type OK2 = string | (new ()=> string | number);
+>OK2 : string | (new () => string | number)
+

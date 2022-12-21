@@ -4,6 +4,8 @@ var Validator = function VFunc() {
 >VFunc : Symbol(VFunc, Decl(jsdocConstructorFunctionTypeReference.js, 0, 15))
 
     this.flags = "gim"
+>this.flags : Symbol(VFunc.flags, Decl(jsdocConstructorFunctionTypeReference.js, 0, 34))
+>this : Symbol(VFunc, Decl(jsdocConstructorFunctionTypeReference.js, 0, 15))
 >flags : Symbol(VFunc.flags, Decl(jsdocConstructorFunctionTypeReference.js, 0, 34))
 
 };

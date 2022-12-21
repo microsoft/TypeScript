@@ -1,9 +1,9 @@
 tests/cases/compiler/interfaceImplementation8.ts(12,7): error TS2420: Class 'C2' incorrectly implements interface 'i1'.
   Property 'name' is private in type 'C2' but not in type 'i1'.
 tests/cases/compiler/interfaceImplementation8.ts(21,7): error TS2420: Class 'C5' incorrectly implements interface 'i1'.
-  Property 'name' is private in type 'C5' but not in type 'i1'.
+  Property 'name' is private in type 'C2' but not in type 'i1'.
 tests/cases/compiler/interfaceImplementation8.ts(22,7): error TS2420: Class 'C6' incorrectly implements interface 'i1'.
-  Property 'name' is private in type 'C6' but not in type 'i1'.
+  Property 'name' is private in type 'C3' but not in type 'i1'.
 
 
 ==== tests/cases/compiler/interfaceImplementation8.ts (3 errors) ====
@@ -33,11 +33,11 @@ tests/cases/compiler/interfaceImplementation8.ts(22,7): error TS2420: Class 'C6'
     class C5 extends C2 implements i1{ }
           ~~
 !!! error TS2420: Class 'C5' incorrectly implements interface 'i1'.
-!!! error TS2420:   Property 'name' is private in type 'C5' but not in type 'i1'.
+!!! error TS2420:   Property 'name' is private in type 'C2' but not in type 'i1'.
     class C6 extends C3 implements i1{ }
           ~~
 !!! error TS2420: Class 'C6' incorrectly implements interface 'i1'.
-!!! error TS2420:   Property 'name' is private in type 'C6' but not in type 'i1'.
+!!! error TS2420:   Property 'name' is private in type 'C3' but not in type 'i1'.
     
     /*
         2

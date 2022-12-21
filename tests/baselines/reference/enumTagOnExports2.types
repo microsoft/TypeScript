@@ -1,9 +1,9 @@
 === tests/cases/conformance/jsdoc/enumTagOnExports.js ===
 /** @enum {string} */
 module.exports = {};
->module.exports = {} : typeof import("tests/cases/conformance/jsdoc/enumTagOnExports")
->module.exports : typeof import("tests/cases/conformance/jsdoc/enumTagOnExports")
->module : { "\"tests/cases/conformance/jsdoc/enumTagOnExports\"": typeof import("tests/cases/conformance/jsdoc/enumTagOnExports"); }
->exports : typeof import("tests/cases/conformance/jsdoc/enumTagOnExports")
+>module.exports = {} : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >{} : {}
 

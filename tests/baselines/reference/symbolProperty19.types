@@ -5,18 +5,18 @@ var i = {
 
     [Symbol.iterator]: { p: null },
 >[Symbol.iterator] : { p: null; }
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >{ p: null } : { p: null; }
 >p : null
 >null : null
 
     [Symbol.toStringTag]() { return { p: undefined }; }
 >[Symbol.toStringTag] : () => { p: any; }
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 >{ p: undefined } : { p: undefined; }
 >p : undefined
 >undefined : undefined
@@ -26,16 +26,16 @@ var it = i[Symbol.iterator];
 >it : { p: any; }
 >i[Symbol.iterator] : { p: any; }
 >i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag](): { p: any; }; }
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 
 var str = i[Symbol.toStringTag]();
 >str : { p: any; }
 >i[Symbol.toStringTag]() : { p: any; }
 >i[Symbol.toStringTag] : () => { p: any; }
 >i : { [Symbol.iterator]: { p: any; }; [Symbol.toStringTag](): { p: any; }; }
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 

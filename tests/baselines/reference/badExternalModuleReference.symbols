@@ -8,11 +8,11 @@ export declare var a: {
     test1: a1.connectModule;
 >test1 : Symbol(test1, Decl(badExternalModuleReference.ts, 1, 23))
 >a1 : Symbol(a1, Decl(badExternalModuleReference.ts, 0, 0))
->connectModule : Symbol(a1)
+>connectModule : Symbol(a1.connectModule)
 
     (): a1.connectExport;
 >a1 : Symbol(a1, Decl(badExternalModuleReference.ts, 0, 0))
->connectExport : Symbol(a1)
+>connectExport : Symbol(a1.connectExport)
 
 };
 

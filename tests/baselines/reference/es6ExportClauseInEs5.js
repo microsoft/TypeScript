@@ -18,6 +18,7 @@ export { x };
 //// [server.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = exports.instantiatedModule = exports.c2 = exports.c = void 0;
 var c = /** @class */ (function () {
     function c() {
     }

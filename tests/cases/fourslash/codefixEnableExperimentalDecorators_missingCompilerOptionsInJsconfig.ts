@@ -16,7 +16,9 @@ verify.codeFix({
     newFileContent: {
         "/dir/jsconfig.json":
 `{
-    "compilerOptions": { "experimentalDecorators": true },
+    "compilerOptions": {
+        "experimentalDecorators": true
+    }
 }`,
     },
 });

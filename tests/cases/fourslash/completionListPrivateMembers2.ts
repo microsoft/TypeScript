@@ -9,6 +9,6 @@
 ////f./*2*/
 
 verify.completions(
-    { marker: "1", exact: ["y", "x", "method"] },
+    { marker: "1", exact: ["method", "x", "y"] },
     { marker: "2", exact: "method" },
 );

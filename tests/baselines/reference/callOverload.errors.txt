@@ -1,7 +1,7 @@
 tests/cases/conformance/expressions/functionCalls/callOverload.ts(7,7): error TS2554: Expected 1 arguments, but got 4.
 tests/cases/conformance/expressions/functionCalls/callOverload.ts(8,15): error TS2554: Expected 2 arguments, but got 4.
 tests/cases/conformance/expressions/functionCalls/callOverload.ts(10,1): error TS2555: Expected at least 1 arguments, but got 0.
-tests/cases/conformance/expressions/functionCalls/callOverload.ts(11,10): error TS2557: Expected at least 1 arguments, but got 0 or more.
+tests/cases/conformance/expressions/functionCalls/callOverload.ts(11,10): error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.
 
 
 ==== tests/cases/conformance/expressions/functionCalls/callOverload.ts (4 errors) ====
@@ -24,5 +24,4 @@ tests/cases/conformance/expressions/functionCalls/callOverload.ts(11,10): error 
 !!! related TS6210 tests/cases/conformance/expressions/functionCalls/callOverload.ts:3:27: An argument for 'a' was not provided.
     withRest(...n); 
              ~~~~
-!!! error TS2557: Expected at least 1 arguments, but got 0 or more.
-!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callOverload.ts:3:27: An argument for 'a' was not provided.
+!!! error TS2556: A spread argument must either have a tuple type or be passed to a rest parameter.

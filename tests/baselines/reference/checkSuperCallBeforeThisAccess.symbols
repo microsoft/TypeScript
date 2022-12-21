@@ -1,0 +1,231 @@
+=== tests/cases/compiler/checkSuperCallBeforeThisAccess.ts ===
+class A {
+>A : Symbol(A, Decl(checkSuperCallBeforeThisAccess.ts, 0, 0))
+
+    x = 1;
+>x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+}
+
+class C1 extends A {
+>C1 : Symbol(C1, Decl(checkSuperCallBeforeThisAccess.ts, 2, 1))
+>A : Symbol(A, Decl(checkSuperCallBeforeThisAccess.ts, 0, 0))
+
+    constructor(n: number) {
+>n : Symbol(n, Decl(checkSuperCallBeforeThisAccess.ts, 5, 16))
+
+        let a1 = this;  // Error
+>a1 : Symbol(a1, Decl(checkSuperCallBeforeThisAccess.ts, 6, 11))
+>this : Symbol(C1, Decl(checkSuperCallBeforeThisAccess.ts, 2, 1))
+
+        let a2 = this.x;  // Error
+>a2 : Symbol(a2, Decl(checkSuperCallBeforeThisAccess.ts, 7, 11))
+>this.x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+>this : Symbol(C1, Decl(checkSuperCallBeforeThisAccess.ts, 2, 1))
+>x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+
+        let a3 = super.x;  // Error
+>a3 : Symbol(a3, Decl(checkSuperCallBeforeThisAccess.ts, 8, 11))
+>super.x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+>super : Symbol(A, Decl(checkSuperCallBeforeThisAccess.ts, 0, 0))
+>x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+
+        let a4 = () => this;
+>a4 : Symbol(a4, Decl(checkSuperCallBeforeThisAccess.ts, 9, 11))
+>this : Symbol(C1, Decl(checkSuperCallBeforeThisAccess.ts, 2, 1))
+
+        let a5 = () => this.x;
+>a5 : Symbol(a5, Decl(checkSuperCallBeforeThisAccess.ts, 10, 11))
+>this.x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+>this : Symbol(C1, Decl(checkSuperCallBeforeThisAccess.ts, 2, 1))
+>x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+
+        let a6 = () => super.x;
+>a6 : Symbol(a6, Decl(checkSuperCallBeforeThisAccess.ts, 11, 11))
+>super.x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+>super : Symbol(A, Decl(checkSuperCallBeforeThisAccess.ts, 0, 0))
+>x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+
+        if (!!true) {
+            super();
+>super : Symbol(A, Decl(checkSuperCallBeforeThisAccess.ts, 0, 0))
+
+            let b1 = this;
+>b1 : Symbol(b1, Decl(checkSuperCallBeforeThisAccess.ts, 14, 15))
+>this : Symbol(C1, Decl(checkSuperCallBeforeThisAccess.ts, 2, 1))
+
+            let b2 = this.x;
+>b2 : Symbol(b2, Decl(checkSuperCallBeforeThisAccess.ts, 15, 15))
+>this.x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+>this : Symbol(C1, Decl(checkSuperCallBeforeThisAccess.ts, 2, 1))
+>x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+
+            let b3 = super.x;
+>b3 : Symbol(b3, Decl(checkSuperCallBeforeThisAccess.ts, 16, 15))
+>super.x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+>super : Symbol(A, Decl(checkSuperCallBeforeThisAccess.ts, 0, 0))
+>x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+        }
+        else {
+            let c1 = this;  // Error
+>c1 : Symbol(c1, Decl(checkSuperCallBeforeThisAccess.ts, 19, 15))
+>this : Symbol(C1, Decl(checkSuperCallBeforeThisAccess.ts, 2, 1))
+
+            let c2 = this.x;  // Error
+>c2 : Symbol(c2, Decl(checkSuperCallBeforeThisAccess.ts, 20, 15))
+>this.x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+>this : Symbol(C1, Decl(checkSuperCallBeforeThisAccess.ts, 2, 1))
+>x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+
+            let c3 = super.x;  // Error
+>c3 : Symbol(c3, Decl(checkSuperCallBeforeThisAccess.ts, 21, 15))
+>super.x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+>super : Symbol(A, Decl(checkSuperCallBeforeThisAccess.ts, 0, 0))
+>x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+        }
+        if (!!true) {
+            switch (n) {
+>n : Symbol(n, Decl(checkSuperCallBeforeThisAccess.ts, 5, 16))
+
+                case 1:
+                    super();
+>super : Symbol(A, Decl(checkSuperCallBeforeThisAccess.ts, 0, 0))
+
+                    let d1 = this.x;
+>d1 : Symbol(d1, Decl(checkSuperCallBeforeThisAccess.ts, 27, 23))
+>this.x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+>this : Symbol(C1, Decl(checkSuperCallBeforeThisAccess.ts, 2, 1))
+>x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+
+                case 2:
+                    let d2 = this.x;  // Error
+>d2 : Symbol(d2, Decl(checkSuperCallBeforeThisAccess.ts, 29, 23))
+>this.x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+>this : Symbol(C1, Decl(checkSuperCallBeforeThisAccess.ts, 2, 1))
+>x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+
+                default:
+                    super();
+>super : Symbol(A, Decl(checkSuperCallBeforeThisAccess.ts, 0, 0))
+
+                    let d3 = this.x;
+>d3 : Symbol(d3, Decl(checkSuperCallBeforeThisAccess.ts, 32, 23))
+>this.x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+>this : Symbol(C1, Decl(checkSuperCallBeforeThisAccess.ts, 2, 1))
+>x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+            }
+            let d4 = this.x;
+>d4 : Symbol(d4, Decl(checkSuperCallBeforeThisAccess.ts, 34, 15))
+>this.x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+>this : Symbol(C1, Decl(checkSuperCallBeforeThisAccess.ts, 2, 1))
+>x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+        }
+        if (!!true) {
+            let e1 = { w: !!true ? super() : 0 };
+>e1 : Symbol(e1, Decl(checkSuperCallBeforeThisAccess.ts, 37, 15))
+>w : Symbol(w, Decl(checkSuperCallBeforeThisAccess.ts, 37, 22))
+>super : Symbol(A, Decl(checkSuperCallBeforeThisAccess.ts, 0, 0))
+
+            let e2 = this.x;  // Error
+>e2 : Symbol(e2, Decl(checkSuperCallBeforeThisAccess.ts, 38, 15))
+>this.x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+>this : Symbol(C1, Decl(checkSuperCallBeforeThisAccess.ts, 2, 1))
+>x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+
+            let e3 = { w: !!true ? super() : super() };
+>e3 : Symbol(e3, Decl(checkSuperCallBeforeThisAccess.ts, 39, 15))
+>w : Symbol(w, Decl(checkSuperCallBeforeThisAccess.ts, 39, 22))
+>super : Symbol(A, Decl(checkSuperCallBeforeThisAccess.ts, 0, 0))
+>super : Symbol(A, Decl(checkSuperCallBeforeThisAccess.ts, 0, 0))
+
+            let e4 = this.x;
+>e4 : Symbol(e4, Decl(checkSuperCallBeforeThisAccess.ts, 40, 15))
+>this.x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+>this : Symbol(C1, Decl(checkSuperCallBeforeThisAccess.ts, 2, 1))
+>x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+        }
+        let f1 = this;  // Error
+>f1 : Symbol(f1, Decl(checkSuperCallBeforeThisAccess.ts, 42, 11))
+>this : Symbol(C1, Decl(checkSuperCallBeforeThisAccess.ts, 2, 1))
+
+        let f2 = this.x;  // Error
+>f2 : Symbol(f2, Decl(checkSuperCallBeforeThisAccess.ts, 43, 11))
+>this.x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+>this : Symbol(C1, Decl(checkSuperCallBeforeThisAccess.ts, 2, 1))
+>x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+
+        let f3 = super.x;  // Error
+>f3 : Symbol(f3, Decl(checkSuperCallBeforeThisAccess.ts, 44, 11))
+>super.x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+>super : Symbol(A, Decl(checkSuperCallBeforeThisAccess.ts, 0, 0))
+>x : Symbol(A.x, Decl(checkSuperCallBeforeThisAccess.ts, 0, 9))
+    }
+}
+
+// Repro from #38512
+
+export class Foo {
+>Foo : Symbol(Foo, Decl(checkSuperCallBeforeThisAccess.ts, 46, 1))
+
+    constructor(value: number) {
+>value : Symbol(value, Decl(checkSuperCallBeforeThisAccess.ts, 51, 16))
+    }
+}
+
+export class BarCorrectlyFails extends Foo {
+>BarCorrectlyFails : Symbol(BarCorrectlyFails, Decl(checkSuperCallBeforeThisAccess.ts, 53, 1))
+>Foo : Symbol(Foo, Decl(checkSuperCallBeforeThisAccess.ts, 46, 1))
+
+    constructor(something: boolean) {
+>something : Symbol(something, Decl(checkSuperCallBeforeThisAccess.ts, 56, 16))
+
+        if (!something) {
+>something : Symbol(something, Decl(checkSuperCallBeforeThisAccess.ts, 56, 16))
+
+            const value = this.bar();  // Error
+>value : Symbol(value, Decl(checkSuperCallBeforeThisAccess.ts, 58, 17))
+>this.bar : Symbol(BarCorrectlyFails.bar, Decl(checkSuperCallBeforeThisAccess.ts, 64, 5))
+>this : Symbol(BarCorrectlyFails, Decl(checkSuperCallBeforeThisAccess.ts, 53, 1))
+>bar : Symbol(BarCorrectlyFails.bar, Decl(checkSuperCallBeforeThisAccess.ts, 64, 5))
+
+            super(value);
+>super : Symbol(Foo, Decl(checkSuperCallBeforeThisAccess.ts, 46, 1))
+>value : Symbol(value, Decl(checkSuperCallBeforeThisAccess.ts, 58, 17))
+        }
+        else {
+            super(1337);
+>super : Symbol(Foo, Decl(checkSuperCallBeforeThisAccess.ts, 46, 1))
+        }
+    }
+    bar(): number { return 4; }
+>bar : Symbol(BarCorrectlyFails.bar, Decl(checkSuperCallBeforeThisAccess.ts, 64, 5))
+}
+
+export class BarIncorrectlyWorks extends Foo {
+>BarIncorrectlyWorks : Symbol(BarIncorrectlyWorks, Decl(checkSuperCallBeforeThisAccess.ts, 66, 1))
+>Foo : Symbol(Foo, Decl(checkSuperCallBeforeThisAccess.ts, 46, 1))
+
+    constructor(something: boolean) {
+>something : Symbol(something, Decl(checkSuperCallBeforeThisAccess.ts, 69, 16))
+
+        if (something) {
+>something : Symbol(something, Decl(checkSuperCallBeforeThisAccess.ts, 69, 16))
+
+            super(1337);
+>super : Symbol(Foo, Decl(checkSuperCallBeforeThisAccess.ts, 46, 1))
+        }
+        else {
+            const value = this.bar();  // Error
+>value : Symbol(value, Decl(checkSuperCallBeforeThisAccess.ts, 74, 17))
+>this.bar : Symbol(BarIncorrectlyWorks.bar, Decl(checkSuperCallBeforeThisAccess.ts, 77, 5))
+>this : Symbol(BarIncorrectlyWorks, Decl(checkSuperCallBeforeThisAccess.ts, 66, 1))
+>bar : Symbol(BarIncorrectlyWorks.bar, Decl(checkSuperCallBeforeThisAccess.ts, 77, 5))
+
+            super(value);
+>super : Symbol(Foo, Decl(checkSuperCallBeforeThisAccess.ts, 46, 1))
+>value : Symbol(value, Decl(checkSuperCallBeforeThisAccess.ts, 74, 17))
+        }
+    }
+    bar(): number { return 4; }
+>bar : Symbol(BarIncorrectlyWorks.bar, Decl(checkSuperCallBeforeThisAccess.ts, 77, 5))
+}
+

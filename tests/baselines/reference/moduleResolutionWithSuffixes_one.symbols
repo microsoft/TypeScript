@@ -1,0 +1,12 @@
+=== /index.ts ===
+import { ios } from "./foo";
+>ios : Symbol(ios, Decl(index.ts, 0, 8))
+
+=== /foo.ios.ts ===
+export function ios() {}
+>ios : Symbol(ios, Decl(foo.ios.ts, 0, 0))
+
+=== /foo.ts ===
+export function base() {}
+>base : Symbol(base, Decl(foo.ts, 0, 0))
+

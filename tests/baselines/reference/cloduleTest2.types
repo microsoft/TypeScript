@@ -14,8 +14,8 @@ module T1 {
 >bar : () => any
 
     var r = new m3d(); // error
->r : any
->new m3d() : any
+>r : m3d
+>new m3d() : m3d
 >m3d : typeof m3d
 }
 
@@ -34,8 +34,8 @@ module T2 {
 >2 : 2
 
     var r = new m3d(); // error
->r : any
->new m3d() : any
+>r : m3d
+>new m3d() : m3d
 >m3d : typeof m3d
 }
 
@@ -123,8 +123,8 @@ declare class m3d { constructor(foo); foo(): void; static bar(); }
 >bar : () => any
 
 var r = new m3d(); // error
->r : any
->new m3d() : any
+>r : m3d
+>new m3d() : m3d
 >m3d : typeof m3d
 
 declare class m4d extends m3d { }
@@ -132,7 +132,7 @@ declare class m4d extends m3d { }
 >m3d : m3d
 
 var r2 = new m4d(); // error
->r2 : any
->new m4d() : any
+>r2 : m4d
+>new m4d() : m4d
 >m4d : typeof m4d
 

@@ -11,8 +11,8 @@
 //// export var v2 = 6;
 
 verify.importFixAtPosition([
-`import m2 = require('./module2');
-import { f1 } from './module1';
+`import { f1 } from './module1';
+import m2 = require('./module2');
 
 f1();`
 ]);

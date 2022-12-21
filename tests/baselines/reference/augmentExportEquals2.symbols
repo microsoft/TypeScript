@@ -5,6 +5,8 @@ import x = require("./file1");
 import "./file2";
 let a: x.A; // should not work
 >a : Symbol(a, Decl(file3.ts, 2, 3))
+>x : Symbol(x)
+>A : Symbol(x.A)
 
 === tests/cases/compiler/file1.ts ===
 function foo() {}

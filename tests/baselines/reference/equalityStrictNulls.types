@@ -111,7 +111,7 @@ function f2() {
 }
 
 function f3(a: number, b: boolean, c: { x: number }, d: number | string) {
->f3 : (a: number, b: boolean, c: { x: number; }, d: string | number) => void
+>f3 : (a: number, b: boolean, c: {    x: number;}, d: number | string) => void
 >a : number
 >b : boolean
 >c : { x: number; }

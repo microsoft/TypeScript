@@ -67,7 +67,7 @@ var class1 = /** @class */ (function () {
                 }; }
             };
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return class1;
@@ -95,7 +95,7 @@ var class2 = /** @class */ (function () {
                 }; }
             };
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return class2;

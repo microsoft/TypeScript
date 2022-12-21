@@ -1,0 +1,14 @@
+tests/cases/conformance/override/override15.ts(6,14): error TS4117: This member cannot have an 'override' modifier because it is not declared in the base class 'A'. Did you mean 'doSomething'?
+
+
+==== tests/cases/conformance/override/override15.ts (1 errors) ====
+    class A {
+        doSomething() {}
+    }
+    
+    class B extends A {
+        override doSomethang() {}
+                 ~~~~~~~~~~~
+!!! error TS4117: This member cannot have an 'override' modifier because it is not declared in the base class 'A'. Did you mean 'doSomething'?
+    }
+    

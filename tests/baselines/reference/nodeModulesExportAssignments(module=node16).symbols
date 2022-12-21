@@ -1,0 +1,16 @@
+=== tests/cases/conformance/node/subfolder/index.ts ===
+// cjs format file
+const a = {};
+>a : Symbol(a, Decl(index.ts, 1, 5))
+
+export = a;
+>a : Symbol(a, Decl(index.ts, 1, 5))
+
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+const a = {};
+>a : Symbol(a, Decl(index.ts, 1, 5))
+
+export = a;
+>a : Symbol(a, Decl(index.ts, 1, 5))
+

@@ -103,6 +103,7 @@ class c2 {
 //// [declFileAccessors_0.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.c1 = void 0;
 /** This is comment for c1*/
 var c1 = /** @class */ (function () {
     function c1() {
@@ -115,7 +116,7 @@ var c1 = /** @class */ (function () {
         /** setter property*/
         set: function (/** this is value*/ value) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(c1.prototype, "pp3", {
@@ -126,7 +127,7 @@ var c1 = /** @class */ (function () {
         /** private setter property*/
         set: function (/** this is value*/ value) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(c1, "s3", {
@@ -137,7 +138,7 @@ var c1 = /** @class */ (function () {
         /** setter property*/
         set: function (/** this is value*/ value) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(c1.prototype, "nc_p3", {
@@ -146,7 +147,7 @@ var c1 = /** @class */ (function () {
         },
         set: function (value) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(c1.prototype, "nc_pp3", {
@@ -155,7 +156,7 @@ var c1 = /** @class */ (function () {
         },
         set: function (value) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(c1, "nc_s3", {
@@ -164,7 +165,7 @@ var c1 = /** @class */ (function () {
         },
         set: function (value) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(c1.prototype, "onlyGetter", {
@@ -172,14 +173,14 @@ var c1 = /** @class */ (function () {
         get: function () {
             return 10;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(c1.prototype, "onlySetter", {
         // Only setter property
         set: function (value) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return c1;
@@ -198,7 +199,7 @@ var c2 = /** @class */ (function () {
         /** setter property*/
         set: function (/** this is value*/ value) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(c2.prototype, "pp3", {
@@ -209,7 +210,7 @@ var c2 = /** @class */ (function () {
         /** private setter property*/
         set: function (/** this is value*/ value) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(c2, "s3", {
@@ -220,7 +221,7 @@ var c2 = /** @class */ (function () {
         /** setter property*/
         set: function (/** this is value*/ value) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(c2.prototype, "nc_p3", {
@@ -229,7 +230,7 @@ var c2 = /** @class */ (function () {
         },
         set: function (value) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(c2.prototype, "nc_pp3", {
@@ -238,7 +239,7 @@ var c2 = /** @class */ (function () {
         },
         set: function (value) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(c2, "nc_s3", {
@@ -247,7 +248,7 @@ var c2 = /** @class */ (function () {
         },
         set: function (value) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(c2.prototype, "onlyGetter", {
@@ -255,14 +256,14 @@ var c2 = /** @class */ (function () {
         get: function () {
             return 10;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(c2.prototype, "onlySetter", {
         // Only setter property
         set: function (value) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return c2;

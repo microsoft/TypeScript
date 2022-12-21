@@ -1,0 +1,15 @@
+=== tests/cases/compiler/strictOptionalProperties2.ts ===
+// Repro from #44567
+
+type T1 = { 0?: string | undefined } extends { 0?: string } ? true : false;  // false
+>T1 : false
+>0 : string | undefined
+>0 : string | undefined
+>true : true
+>false : false
+
+type T2 = [(string | undefined)?] extends [string?] ? true : false;  // false
+>T2 : false
+>true : true
+>false : false
+

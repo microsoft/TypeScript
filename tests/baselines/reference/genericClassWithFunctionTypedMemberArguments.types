@@ -220,8 +220,8 @@ module WithCandidates {
 >u : U
 
         var r10 = c.foo2(1, (x: T) => ''); // error
->r10 : any
->c.foo2(1, (x: T) => '') : any
+>r10 : string
+>c.foo2(1, (x: T) => '') : string
 >c.foo2 : <T, U>(x: T, cb: (a: T) => U) => U
 >c : C<number>
 >foo2 : <T, U>(x: T, cb: (a: T) => U) => U
@@ -231,7 +231,7 @@ module WithCandidates {
 >'' : ""
 
         var r10 = c.foo2(1, (x) => ''); // string
->r10 : any
+>r10 : string
 >c.foo2(1, (x) => '') : string
 >c.foo2 : <T, U>(x: T, cb: (a: T) => U) => U
 >c : C<number>
@@ -242,8 +242,8 @@ module WithCandidates {
 >'' : ""
 
         var r11 = c3.foo3(1, (x: T) => '', ''); // error
->r11 : any
->c3.foo3(1, (x: T) => '', '') : any
+>r11 : string
+>c3.foo3(1, (x: T) => '', '') : string
 >c3.foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
 >c3 : C3<number, string>
 >foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
@@ -254,8 +254,8 @@ module WithCandidates {
 >'' : ""
 
         var r11b = c3.foo3(1, (x: T) => '', 1); // error
->r11b : any
->c3.foo3(1, (x: T) => '', 1) : any
+>r11b : string
+>c3.foo3(1, (x: T) => '', 1) : string
 >c3.foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
 >c3 : C3<number, string>
 >foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
@@ -266,8 +266,8 @@ module WithCandidates {
 >1 : 1
 
         var r12 = c3.foo3(1, function (a) { return '' }, 1); // error
->r12 : any
->c3.foo3(1, function (a) { return '' }, 1) : any
+>r12 : number
+>c3.foo3(1, function (a) { return '' }, 1) : 1
 >c3.foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U
 >c3 : C3<number, string>
 >foo3 : <T, U>(x: T, cb: (a: T) => U, y: U) => U

@@ -1,0 +1,16 @@
+=== tests/cases/conformance/salsa/foo.ts ===
+/// <reference path="types.d.ts" />
+declare function foo(): any;
+>foo : typeof import("tests/cases/conformance/salsa/types")
+
+=== tests/cases/conformance/salsa/types.d.ts ===
+declare function foo(props: any): any;
+>foo : (props: any) => any
+>props : any
+
+export default foo;
+>foo : (props: any) => any
+
+export as namespace foo;
+>foo : typeof import("tests/cases/conformance/salsa/types")
+

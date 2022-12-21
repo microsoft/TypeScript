@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/spread/iteratorSpreadInCall6.ts ===
 function foo(...s: (symbol | number)[]) { }
->foo : (...s: (number | symbol)[]) => void
+>foo : (...s: (symbol | number)[]) => void
 >s : (number | symbol)[]
 
 class SymbolIterator {
@@ -26,9 +26,9 @@ class SymbolIterator {
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 
         return this;
 >this : this
@@ -57,9 +57,9 @@ class _StringIterator {
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 
         return this;
 >this : this

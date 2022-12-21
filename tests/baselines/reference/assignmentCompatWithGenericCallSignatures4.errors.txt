@@ -3,6 +3,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     Type 'T' is not assignable to type 'I2<T>'.
       Type 'I2<I2<T>>' is not assignable to type 'I2<T>'.
         Type 'I2<T>' is not assignable to type 'T'.
+          'T' could be instantiated with an arbitrary type which could be unrelated to 'I2<T>'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts (1 errors) ====
@@ -24,4 +25,5 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:     Type 'T' is not assignable to type 'I2<T>'.
 !!! error TS2322:       Type 'I2<I2<T>>' is not assignable to type 'I2<T>'.
 !!! error TS2322:         Type 'I2<T>' is not assignable to type 'T'.
+!!! error TS2322:           'T' could be instantiated with an arbitrary type which could be unrelated to 'I2<T>'.
     

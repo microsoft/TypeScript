@@ -4,11 +4,13 @@ class C {
 }
 
 //// [symbolDeclarationEmit2.js]
+var _a;
 class C {
     constructor() {
-        this[Symbol.toPrimitive] = "";
+        this[_a] = "";
     }
 }
+_a = Symbol.toPrimitive;
 
 
 //// [symbolDeclarationEmit2.d.ts]

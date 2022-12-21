@@ -17,7 +17,7 @@
             this._trampolineEnabled = true;
 >this._trampolineEnabled = true : true
 >this._trampolineEnabled : any
->this : any
+>this : this
 >_trampolineEnabled : any
 >true : true
         }

@@ -1,0 +1,212 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameStaticFieldAssignment.ts ===
+class A {
+>A : A
+
+    static #field = 0;
+>#field : number
+>0 : 0
+
+    constructor() {
+        A.#field = 1;
+>A.#field = 1 : 1
+>A.#field : number
+>A : typeof A
+>1 : 1
+
+        A.#field += 2;
+>A.#field += 2 : number
+>A.#field : number
+>A : typeof A
+>2 : 2
+
+        A.#field -= 3;
+>A.#field -= 3 : number
+>A.#field : number
+>A : typeof A
+>3 : 3
+
+        A.#field /= 4;
+>A.#field /= 4 : number
+>A.#field : number
+>A : typeof A
+>4 : 4
+
+        A.#field *= 5;
+>A.#field *= 5 : number
+>A.#field : number
+>A : typeof A
+>5 : 5
+
+        A.#field **= 6;
+>A.#field **= 6 : number
+>A.#field : number
+>A : typeof A
+>6 : 6
+
+        A.#field %= 7;
+>A.#field %= 7 : number
+>A.#field : number
+>A : typeof A
+>7 : 7
+
+        A.#field <<= 8;
+>A.#field <<= 8 : number
+>A.#field : number
+>A : typeof A
+>8 : 8
+
+        A.#field >>= 9;
+>A.#field >>= 9 : number
+>A.#field : number
+>A : typeof A
+>9 : 9
+
+        A.#field >>>= 10;
+>A.#field >>>= 10 : number
+>A.#field : number
+>A : typeof A
+>10 : 10
+
+        A.#field &= 11;
+>A.#field &= 11 : number
+>A.#field : number
+>A : typeof A
+>11 : 11
+
+        A.#field |= 12;
+>A.#field |= 12 : number
+>A.#field : number
+>A : typeof A
+>12 : 12
+
+        A.#field ^= 13;
+>A.#field ^= 13 : number
+>A.#field : number
+>A : typeof A
+>13 : 13
+
+        A.getClass().#field = 1;
+>A.getClass().#field = 1 : 1
+>A.getClass().#field : number
+>A.getClass() : typeof A
+>A.getClass : () => typeof A
+>A : typeof A
+>getClass : () => typeof A
+>1 : 1
+
+        A.getClass().#field += 2;
+>A.getClass().#field += 2 : number
+>A.getClass().#field : number
+>A.getClass() : typeof A
+>A.getClass : () => typeof A
+>A : typeof A
+>getClass : () => typeof A
+>2 : 2
+
+        A.getClass().#field -= 3;
+>A.getClass().#field -= 3 : number
+>A.getClass().#field : number
+>A.getClass() : typeof A
+>A.getClass : () => typeof A
+>A : typeof A
+>getClass : () => typeof A
+>3 : 3
+
+        A.getClass().#field /= 4;
+>A.getClass().#field /= 4 : number
+>A.getClass().#field : number
+>A.getClass() : typeof A
+>A.getClass : () => typeof A
+>A : typeof A
+>getClass : () => typeof A
+>4 : 4
+
+        A.getClass().#field *= 5;
+>A.getClass().#field *= 5 : number
+>A.getClass().#field : number
+>A.getClass() : typeof A
+>A.getClass : () => typeof A
+>A : typeof A
+>getClass : () => typeof A
+>5 : 5
+
+        A.getClass().#field **= 6;
+>A.getClass().#field **= 6 : number
+>A.getClass().#field : number
+>A.getClass() : typeof A
+>A.getClass : () => typeof A
+>A : typeof A
+>getClass : () => typeof A
+>6 : 6
+
+        A.getClass().#field %= 7;
+>A.getClass().#field %= 7 : number
+>A.getClass().#field : number
+>A.getClass() : typeof A
+>A.getClass : () => typeof A
+>A : typeof A
+>getClass : () => typeof A
+>7 : 7
+
+        A.getClass().#field <<= 8;
+>A.getClass().#field <<= 8 : number
+>A.getClass().#field : number
+>A.getClass() : typeof A
+>A.getClass : () => typeof A
+>A : typeof A
+>getClass : () => typeof A
+>8 : 8
+
+        A.getClass().#field >>= 9;
+>A.getClass().#field >>= 9 : number
+>A.getClass().#field : number
+>A.getClass() : typeof A
+>A.getClass : () => typeof A
+>A : typeof A
+>getClass : () => typeof A
+>9 : 9
+
+        A.getClass().#field >>>= 10;
+>A.getClass().#field >>>= 10 : number
+>A.getClass().#field : number
+>A.getClass() : typeof A
+>A.getClass : () => typeof A
+>A : typeof A
+>getClass : () => typeof A
+>10 : 10
+
+        A.getClass().#field &= 11;
+>A.getClass().#field &= 11 : number
+>A.getClass().#field : number
+>A.getClass() : typeof A
+>A.getClass : () => typeof A
+>A : typeof A
+>getClass : () => typeof A
+>11 : 11
+
+        A.getClass().#field |= 12;
+>A.getClass().#field |= 12 : number
+>A.getClass().#field : number
+>A.getClass() : typeof A
+>A.getClass : () => typeof A
+>A : typeof A
+>getClass : () => typeof A
+>12 : 12
+
+        A.getClass().#field ^= 13;
+>A.getClass().#field ^= 13 : number
+>A.getClass().#field : number
+>A.getClass() : typeof A
+>A.getClass : () => typeof A
+>A : typeof A
+>getClass : () => typeof A
+>13 : 13
+    }
+    static getClass() {
+>getClass : () => typeof A
+
+        return A;
+>A : typeof A
+    }
+}
+

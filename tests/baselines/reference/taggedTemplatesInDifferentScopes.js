@@ -22,7 +22,8 @@ var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cook
     if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
     return cooked;
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.tag = void 0;
 function tag(parts) {
     var values = [];
     for (var _i = 1; _i < arguments.length; _i++) {

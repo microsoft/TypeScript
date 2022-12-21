@@ -1,0 +1,64 @@
+=== tests/cases/compiler/unusedVariablesWithUnderscoreInForOfLoop.ts ===
+function t1() {
+>t1 : Symbol(t1, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 0, 0))
+
+    for (const [_a, b] of [['key', 1]]) {
+>_a : Symbol(_a, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 1, 16))
+>b : Symbol(b, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 1, 19))
+
+        console.log(b);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>b : Symbol(b, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 1, 19))
+    }
+
+    for (const [a, _b] of [['key', 1]]) {
+>a : Symbol(a, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 5, 16))
+>_b : Symbol(_b, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 5, 18))
+
+        console.log(a);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 5, 16))
+    }
+
+    for (const [_a, _b] of [['key', 1]]) {}
+>_a : Symbol(_a, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 9, 16))
+>_b : Symbol(_b, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 9, 19))
+}
+
+
+function t2() {
+>t2 : Symbol(t2, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 10, 1))
+
+    for (const [_a, b] of [['key', 1]]) {}
+>_a : Symbol(_a, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 14, 16))
+>b : Symbol(b, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 14, 19))
+
+    for (const [a, _b] of [['key', 1]]) {}
+>a : Symbol(a, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 16, 16))
+>_b : Symbol(_b, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 16, 18))
+
+    for (const [a, b] of [['key', 1]]) {}
+>a : Symbol(a, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 18, 16))
+>b : Symbol(b, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 18, 18))
+}
+
+function t3() {
+>t3 : Symbol(t3, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 19, 1))
+
+    for (const [[[_a, b]]] of [[[['key', 1]]]]) {}
+>_a : Symbol(_a, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 22, 18))
+>b : Symbol(b, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 22, 21))
+
+    for (const [[[a, _b]]] of [[[['key', 1]]]]) {}
+>a : Symbol(a, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 24, 18))
+>_b : Symbol(_b, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 24, 20))
+
+    for (const [[[a, b]]] of [[[['key', 1]]]]) {}
+>a : Symbol(a, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 26, 18))
+>b : Symbol(b, Decl(unusedVariablesWithUnderscoreInForOfLoop.ts, 26, 20))
+}
+

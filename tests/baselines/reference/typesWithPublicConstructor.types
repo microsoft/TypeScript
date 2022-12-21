@@ -29,14 +29,14 @@ class C2 {
 }
 
 var c2 = new C2();
->c2 : any
->new C2() : any
+>c2 : C2
+>new C2() : C2
 >C2 : typeof C2
 
 var r2: (x: number) => void = c2.constructor;
 >r2 : (x: number) => void
 >x : number
->c2.constructor : any
->c2 : any
->constructor : any
+>c2.constructor : Function
+>c2 : C2
+>constructor : Function
 

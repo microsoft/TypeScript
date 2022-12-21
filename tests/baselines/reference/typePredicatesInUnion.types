@@ -11,7 +11,7 @@ interface B {
 }
 
 type Or = A | B;
->Or : Or
+>Or : A | B
 
 function f(o: Or, x: {}) {
 >f : (o: Or, x: {}) => void

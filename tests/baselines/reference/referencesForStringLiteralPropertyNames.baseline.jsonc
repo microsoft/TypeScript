@@ -1,0 +1,135 @@
+// === /tests/cases/fourslash/referencesForStringLiteralPropertyNames.ts ===
+// class Foo {
+//     public "/*FIND ALL REFS*/[|ss|]": any;
+// }
+// 
+// var x: Foo;
+// x.[|ss|];
+// x["[|ss|]"];
+// x = { "[|ss|]": 0 };
+// x = { [|ss|]: 0 };
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames.ts",
+      "kind": "property",
+      "name": "(property) Foo[\"ss\"]: any",
+      "textSpan": {
+        "start": 24,
+        "length": 2
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "property",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "Foo",
+          "kind": "className"
+        },
+        {
+          "text": "[",
+          "kind": "punctuation"
+        },
+        {
+          "text": "\"ss\"",
+          "kind": "stringLiteral"
+        },
+        {
+          "text": "]",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        }
+      ],
+      "contextSpan": {
+        "start": 16,
+        "length": 17
+      }
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 24,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames.ts",
+        "contextSpan": {
+          "start": 16,
+          "length": 17
+        },
+        "isWriteAccess": false,
+        "isDefinition": true
+      },
+      {
+        "textSpan": {
+          "start": 51,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 58,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames.ts",
+        "isWriteAccess": false,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 71,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames.ts",
+        "contextSpan": {
+          "start": 70,
+          "length": 7
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      },
+      {
+        "textSpan": {
+          "start": 87,
+          "length": 2
+        },
+        "fileName": "/tests/cases/fourslash/referencesForStringLiteralPropertyNames.ts",
+        "contextSpan": {
+          "start": 87,
+          "length": 5
+        },
+        "isWriteAccess": true,
+        "isDefinition": false
+      }
+    ]
+  }
+]

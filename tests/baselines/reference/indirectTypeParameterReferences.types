@@ -2,7 +2,7 @@
 // Repro from #19043
 
 type B = {b: string}
->B : B
+>B : { b: string; }
 >b : string
 
 const flowtypes = <A>(b: B) => {
@@ -82,7 +82,7 @@ combined(comb => {
 // Repro from #19091
 
 declare function f<T>(a: T): { a: typeof a };
->f : <T>(a: T) => { a: T; }
+>f : <T>(a: T) => {    a: typeof a;}
 >a : T
 >a : T
 >a : T

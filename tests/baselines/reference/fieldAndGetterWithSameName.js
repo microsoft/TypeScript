@@ -7,13 +7,14 @@ export class C {
 //// [fieldAndGetterWithSameName.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.C = void 0;
     var C = /** @class */ (function () {
         function C() {
         }
         Object.defineProperty(C.prototype, "x", {
             get: function () { return 1; },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return C;

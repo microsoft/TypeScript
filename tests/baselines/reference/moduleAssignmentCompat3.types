@@ -15,19 +15,19 @@ module B {
 }
 
 var a: A;
->a : any
+>a : A
 
 var b: B;
->b : any
+>b : B
 
 // both errors
 a = b;
->a = b : any
->a : any
->b : any
+>a = b : B
+>a : A
+>b : B
 
 b = a;
->b = a : any
->b : any
->a : any
+>b = a : A
+>b : B
+>a : A
 

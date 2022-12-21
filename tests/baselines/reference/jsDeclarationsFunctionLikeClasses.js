@@ -27,6 +27,7 @@ export function magnitude(p) {
 //// [source.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Point = void 0;
 /**
  * @param {number} x
  * @param {number} y
@@ -42,6 +43,8 @@ exports.Point = Point;
 //// [referencer.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.magnitude = void 0;
+var source_1 = require("./source");
 /**
  * @param {Point} p
  */

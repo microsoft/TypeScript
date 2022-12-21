@@ -18,5 +18,5 @@
 // Test that plugin adds an error message which is able to be configured
 goTo.marker();
 verify.getSemanticDiagnostics([{ message: "configured error", code: 9999, range: { pos: 0, end: 3, fileName: "a.ts" } }]);
-plugins.configurePlugin("configurable-diagnostic-adder", { message: "new error" });
+config.configurePlugin("configurable-diagnostic-adder", { message: "new error" });
 verify.getSemanticDiagnostics([{ message: "new error", code: 9999, range: { pos: 0, end: 3, fileName: "a.ts" } }]);

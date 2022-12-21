@@ -4,9 +4,9 @@ class StringIterator {
 
     [Symbol.iterator]: any;
 >[Symbol.iterator] : any
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 }
 
 for (var v of new StringIterator) { }

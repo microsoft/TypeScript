@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts ===
 type Kind = "A" | "B"
->Kind : Kind
+>Kind : "A" | "B"
 
 function kindIs(kind: Kind, is: "A"): kind is "A";
 >kindIs : { (kind: Kind, is: "A"): kind is "A"; (kind: Kind, is: "B"): kind is "B"; }

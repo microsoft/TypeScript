@@ -29,18 +29,18 @@ interface I {
 >x : "hi"
 
     foo(x: 'a', y: 'a');
->foo : { (x: "a", y: "a"): any; (x: "hi", y: "hi"): any; }
+>foo : { (x: 'a', y: 'a'): any; (x: "hi", y: "hi"): any; }
 >x : "a"
 >y : "a"
 
     foo(x: 'hi', y: 'hi');
->foo : { (x: "a", y: "a"): any; (x: "hi", y: "hi"): any; }
+>foo : { (x: "a", y: "a"): any; (x: 'hi', y: 'hi'): any; }
 >x : "hi"
 >y : "hi"
 }
 
 var a: {
->a : { (x: "hi"): any; (x: "a"): any; foo(x: "hi"): any; foo(x: "a"): any; }
+>a : { (x: 'hi'): any; (x: 'a'): any; foo(x: 'hi'): any; foo(x: 'a'): any; }
 
     (x: 'hi');
 >x : "hi"
@@ -49,24 +49,24 @@ var a: {
 >x : "a"
 
     foo(x: 'hi');
->foo : { (x: "hi"): any; (x: "a"): any; }
+>foo : { (x: 'hi'): any; (x: "a"): any; }
 >x : "hi"
 
     foo(x: 'a');
->foo : { (x: "hi"): any; (x: "a"): any; }
+>foo : { (x: "hi"): any; (x: 'a'): any; }
 >x : "a"
 }
 
 var b = {
->b : { foo(x: "hi"): void; foo(x: "a"): void; }
->{    foo(x: 'hi') { },    foo(x: 'a') { },} : { foo(x: "hi"): void; foo(x: "a"): void; }
+>b : { foo(x: 'hi'): void; foo(x: 'a'): void; }
+>{    foo(x: 'hi') { },    foo(x: 'a') { },} : { foo(x: 'hi'): void; foo(x: 'a'): void; }
 
     foo(x: 'hi') { },
->foo : { (x: "hi"): void; (x: "a"): void; }
+>foo : { (x: 'hi'): void; (x: "a"): void; }
 >x : "hi"
 
     foo(x: 'a') { },
->foo : { (x: "hi"): void; (x: "a"): void; }
+>foo : { (x: "hi"): void; (x: 'a'): void; }
 >x : "a"
 }
 

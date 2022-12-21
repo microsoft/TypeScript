@@ -17,7 +17,7 @@ class C {
 >y : any
 
     private bar(x: 'hi');
->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
 >x : "hi"
 
     public bar(x: string); // error
@@ -63,7 +63,7 @@ class C {
 >y : any
 
     private static bar(x: 'hi');
->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
 >x : "hi"
 
     public static bar(x: string); // error
@@ -81,7 +81,7 @@ class C {
 >y : any
 
     protected static baz(x: 'hi');
->baz : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>baz : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
 >x : "hi"
 
     public static baz(x: string); // error
@@ -117,7 +117,7 @@ class D<T> {
 >y : any
 
     private bar(x: 'hi');
->bar : { (x: "hi"): any; (x: string): any; (x: T, y: T): any; }
+>bar : { (x: 'hi'): any; (x: string): any; (x: T, y: T): any; }
 >x : "hi"
 
     public bar(x: string); // error
@@ -163,7 +163,7 @@ class D<T> {
 >y : any
 
     private static bar(x: 'hi');
->bar : { (x: "hi"): any; (x: string): any; (x: number, y: string): any; }
+>bar : { (x: 'hi'): any; (x: string): any; (x: number, y: string): any; }
 >x : "hi"
 
     public static bar(x: string); // error

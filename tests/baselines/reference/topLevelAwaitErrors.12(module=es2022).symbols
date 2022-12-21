@@ -1,0 +1,12 @@
+=== tests/cases/conformance/externalModules/topLevelAwaitErrors.12.ts ===
+export {};
+declare namespace foo { const await: any; }
+>foo : Symbol(foo, Decl(topLevelAwaitErrors.12.ts, 0, 10))
+>await : Symbol(await, Decl(topLevelAwaitErrors.12.ts, 1, 29))
+
+// await disallowed in import=namespace when in a module
+import await = foo.await;
+>await : Symbol(await, Decl(topLevelAwaitErrors.12.ts, 1, 43))
+>foo : Symbol(foo, Decl(topLevelAwaitErrors.12.ts, 0, 10))
+>await : Symbol(await, Decl(topLevelAwaitErrors.12.ts, 1, 29))
+

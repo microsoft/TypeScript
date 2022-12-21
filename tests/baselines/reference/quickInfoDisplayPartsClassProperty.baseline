@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassProperty.ts",
-      "position": 21
+      "position": 21,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "property",
@@ -59,7 +60,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassProperty.ts",
-      "position": 57
+      "position": 57,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "property",
@@ -116,7 +118,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassProperty.ts",
-      "position": 96
+      "position": 96,
+      "name": "21"
     },
     "quickInfo": {
       "kind": "property",
@@ -173,7 +176,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassProperty.ts",
-      "position": 134
+      "position": 134,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "property",
@@ -230,7 +234,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassProperty.ts",
-      "position": 177
+      "position": 177,
+      "name": "4"
     },
     "quickInfo": {
       "kind": "property",
@@ -287,7 +292,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassProperty.ts",
-      "position": 229
+      "position": 229,
+      "name": "41"
     },
     "quickInfo": {
       "kind": "property",
@@ -344,7 +350,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassProperty.ts",
-      "position": 290
+      "position": 290,
+      "name": "5"
     },
     "quickInfo": {
       "kind": "property",
@@ -401,7 +408,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassProperty.ts",
-      "position": 319
+      "position": 319,
+      "name": "6"
     },
     "quickInfo": {
       "kind": "property",
@@ -458,7 +466,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassProperty.ts",
-      "position": 349
+      "position": 349,
+      "name": "61"
     },
     "quickInfo": {
       "kind": "property",
@@ -515,7 +524,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassProperty.ts",
-      "position": 378
+      "position": 378,
+      "name": "7"
     },
     "quickInfo": {
       "kind": "property",
@@ -572,7 +582,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassProperty.ts",
-      "position": 404
+      "position": 404,
+      "name": "8"
     },
     "quickInfo": {
       "kind": "property",
@@ -629,7 +640,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassProperty.ts",
-      "position": 437
+      "position": 437,
+      "name": "81"
     },
     "quickInfo": {
       "kind": "property",
@@ -686,7 +698,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassProperty.ts",
-      "position": 495
+      "position": 495,
+      "name": "9"
     },
     "quickInfo": {
       "kind": "var",
@@ -727,7 +740,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassProperty.ts",
-      "position": 505
+      "position": 505,
+      "name": "10"
     },
     "quickInfo": {
       "kind": "property",
@@ -784,7 +798,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassProperty.ts",
-      "position": 521
+      "position": 521,
+      "name": "11"
     },
     "quickInfo": {
       "kind": "class",
@@ -813,7 +828,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsClassProperty.ts",
-      "position": 523
+      "position": 523,
+      "name": "12"
     },
     "quickInfo": {
       "kind": "property",

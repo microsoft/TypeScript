@@ -1,0 +1,236 @@
+=== tests/cases/conformance/controlFlow/controlFlowAssignmentPatternOrder.ts ===
+// https://github.com/microsoft/TypeScript/pull/41094#issuecomment-716044363
+declare function f(): void;
+>f : Symbol(f, Decl(controlFlowAssignmentPatternOrder.ts, 0, 0))
+{
+    let a: 0 | 1 = 0;
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 3, 7))
+
+    let b: 0 | 1 | 9;
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 4, 7))
+
+    [{ [(a = 1)]: b } = [9, a] as const] = [];
+>[(a = 1)] : Symbol([(a = 1)], Decl(controlFlowAssignmentPatternOrder.ts, 5, 6))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 3, 7))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 4, 7))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 3, 7))
+>const : Symbol(const)
+
+    const bb: 0 = b;
+>bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 6, 9))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 4, 7))
+}
+{
+    let a: 0 | 1 = 1;
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 9, 7))
+
+    let b: 0 | 1 | 9;
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 10, 7))
+
+    [{ [a]: b } = [9, a = 0] as const] = [];
+>[a] : Symbol([a], Decl(controlFlowAssignmentPatternOrder.ts, 11, 6))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 9, 7))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 10, 7))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 9, 7))
+>const : Symbol(const)
+
+    const bb: 9 = b;
+>bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 12, 9))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 10, 7))
+}
+{
+    let a: 0 | 1 = 0;
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 15, 7))
+
+    let b: 0 | 1 | 8 | 9;
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 16, 7))
+
+    [{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const];
+>[(a = 1)] : Symbol([(a = 1)], Decl(controlFlowAssignmentPatternOrder.ts, 17, 6))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 15, 7))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 16, 7))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 15, 7))
+>const : Symbol(const)
+>const : Symbol(const)
+
+    const bb: 0 | 8 = b;
+>bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 18, 9))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 16, 7))
+}
+{
+    let a: 0 | 1 = 1;
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 21, 7))
+
+    let b: 0 | 1 | 8 | 9;
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 22, 7))
+
+    [{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const];
+>[a] : Symbol([a], Decl(controlFlowAssignmentPatternOrder.ts, 23, 6))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 21, 7))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 22, 7))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 21, 7))
+>const : Symbol(const)
+>const : Symbol(const)
+
+    const bb: 0 | 8 = b;
+>bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 24, 9))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 22, 7))
+}
+// same as above but on left of a binary expression
+{
+    let a: 0 | 1 = 0;
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 28, 7))
+
+    let b: 0 | 1 | 9;
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 29, 7))
+
+    [{ [(a = 1)]: b } = [9, a] as const] = [], f();
+>[(a = 1)] : Symbol([(a = 1)], Decl(controlFlowAssignmentPatternOrder.ts, 30, 6))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 28, 7))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 29, 7))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 28, 7))
+>const : Symbol(const)
+>f : Symbol(f, Decl(controlFlowAssignmentPatternOrder.ts, 0, 0))
+
+    const bb: 0 = b;
+>bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 31, 9))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 29, 7))
+}
+{
+    let a: 0 | 1 = 1;
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 34, 7))
+
+    let b: 0 | 1 | 9;
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 35, 7))
+
+    [{ [a]: b } = [9, a = 0] as const] = [], f();
+>[a] : Symbol([a], Decl(controlFlowAssignmentPatternOrder.ts, 36, 6))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 34, 7))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 35, 7))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 34, 7))
+>const : Symbol(const)
+>f : Symbol(f, Decl(controlFlowAssignmentPatternOrder.ts, 0, 0))
+
+    const bb: 9 = b;
+>bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 37, 9))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 35, 7))
+}
+{
+    let a: 0 | 1 = 0;
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 40, 7))
+
+    let b: 0 | 1 | 8 | 9;
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 41, 7))
+
+    [{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const], f();
+>[(a = 1)] : Symbol([(a = 1)], Decl(controlFlowAssignmentPatternOrder.ts, 42, 6))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 40, 7))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 41, 7))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 40, 7))
+>const : Symbol(const)
+>const : Symbol(const)
+>f : Symbol(f, Decl(controlFlowAssignmentPatternOrder.ts, 0, 0))
+
+    const bb: 0 | 8 = b;
+>bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 43, 9))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 41, 7))
+}
+{
+    let a: 0 | 1 = 1;
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 46, 7))
+
+    let b: 0 | 1 | 8 | 9;
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 47, 7))
+
+    [{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const], f();
+>[a] : Symbol([a], Decl(controlFlowAssignmentPatternOrder.ts, 48, 6))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 46, 7))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 47, 7))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 46, 7))
+>const : Symbol(const)
+>const : Symbol(const)
+>f : Symbol(f, Decl(controlFlowAssignmentPatternOrder.ts, 0, 0))
+
+    const bb: 0 | 8 = b;
+>bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 49, 9))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 47, 7))
+}
+// same as above but on right of a binary expression
+{
+    let a: 0 | 1 = 0;
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 53, 7))
+
+    let b: 0 | 1 | 9;
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 54, 7))
+
+    f(), [{ [(a = 1)]: b } = [9, a] as const] = [];
+>f : Symbol(f, Decl(controlFlowAssignmentPatternOrder.ts, 0, 0))
+>[(a = 1)] : Symbol([(a = 1)], Decl(controlFlowAssignmentPatternOrder.ts, 55, 11))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 53, 7))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 54, 7))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 53, 7))
+>const : Symbol(const)
+
+    const bb: 0 = b;
+>bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 56, 9))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 54, 7))
+}
+{
+    let a: 0 | 1 = 1;
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 59, 7))
+
+    let b: 0 | 1 | 9;
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 60, 7))
+
+    f(), [{ [a]: b } = [9, a = 0] as const] = [];
+>f : Symbol(f, Decl(controlFlowAssignmentPatternOrder.ts, 0, 0))
+>[a] : Symbol([a], Decl(controlFlowAssignmentPatternOrder.ts, 61, 11))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 59, 7))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 60, 7))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 59, 7))
+>const : Symbol(const)
+
+    const bb: 9 = b;
+>bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 62, 9))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 60, 7))
+}
+{
+    let a: 0 | 1 = 0;
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 65, 7))
+
+    let b: 0 | 1 | 8 | 9;
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 66, 7))
+
+    f(), [{ [(a = 1)]: b } = [9, a] as const] = [[9, 8] as const];
+>f : Symbol(f, Decl(controlFlowAssignmentPatternOrder.ts, 0, 0))
+>[(a = 1)] : Symbol([(a = 1)], Decl(controlFlowAssignmentPatternOrder.ts, 67, 11))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 65, 7))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 66, 7))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 65, 7))
+>const : Symbol(const)
+>const : Symbol(const)
+
+    const bb: 0 | 8 = b;
+>bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 68, 9))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 66, 7))
+}
+{
+    let a: 0 | 1 = 1;
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 71, 7))
+
+    let b: 0 | 1 | 8 | 9;
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 72, 7))
+
+    f(), [{ [a]: b } = [a = 0, 9] as const] = [[8, 9] as const];
+>f : Symbol(f, Decl(controlFlowAssignmentPatternOrder.ts, 0, 0))
+>[a] : Symbol([a], Decl(controlFlowAssignmentPatternOrder.ts, 73, 11))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 71, 7))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 72, 7))
+>a : Symbol(a, Decl(controlFlowAssignmentPatternOrder.ts, 71, 7))
+>const : Symbol(const)
+>const : Symbol(const)
+
+    const bb: 0 | 8 = b;
+>bb : Symbol(bb, Decl(controlFlowAssignmentPatternOrder.ts, 74, 9))
+>b : Symbol(b, Decl(controlFlowAssignmentPatternOrder.ts, 72, 7))
+}

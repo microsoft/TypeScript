@@ -15,9 +15,10 @@ export const thing = makeThing();
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.thing = void 0;
 var umd_1 = require("umd");
-exports.thing = umd_1.makeThing();
+exports.thing = (0, umd_1.makeThing)();
 
 
 //// [index.d.ts]

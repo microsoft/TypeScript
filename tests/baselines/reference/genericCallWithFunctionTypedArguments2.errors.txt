@@ -1,9 +1,9 @@
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments2.ts(29,18): error TS2345: Argument of type 'I2<string>' is not assignable to parameter of type 'new (a: 1) => string'.
   Types of parameters 'x' and 'a' are incompatible.
-    Type '1' is not assignable to type 'string'.
+    Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments2.ts(40,18): error TS2345: Argument of type 'I2<string>' is not assignable to parameter of type 'new (a: 1) => string'.
   Types of parameters 'x' and 'a' are incompatible.
-    Type '1' is not assignable to type 'string'.
+    Type 'number' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments2.ts (2 errors) ====
@@ -39,7 +39,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFun
                      ~~
 !!! error TS2345: Argument of type 'I2<string>' is not assignable to parameter of type 'new (a: 1) => string'.
 !!! error TS2345:   Types of parameters 'x' and 'a' are incompatible.
-!!! error TS2345:     Type '1' is not assignable to type 'string'.
+!!! error TS2345:     Type 'number' is not assignable to type 'string'.
     var r4b = foo2(1, a); // any
     var r5 = foo2(1, i); // any
     var r6 = foo2<string, string>('', i2); // string
@@ -54,5 +54,5 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFun
                      ~~
 !!! error TS2345: Argument of type 'I2<string>' is not assignable to parameter of type 'new (a: 1) => string'.
 !!! error TS2345:   Types of parameters 'x' and 'a' are incompatible.
-!!! error TS2345:     Type '1' is not assignable to type 'string'.
+!!! error TS2345:     Type 'number' is not assignable to type 'string'.
     var r9 = foo3<string, string>('', i2, ''); // string

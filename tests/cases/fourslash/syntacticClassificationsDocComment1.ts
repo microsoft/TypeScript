@@ -3,7 +3,7 @@
 //// /** @type {number} */
 //// var v;
 
-var c = classification;
+const c = classification("original");
 verify.syntacticClassificationsAre(
     c.comment("/** "),
     c.punctuation("@"),
@@ -11,7 +11,13 @@ verify.syntacticClassificationsAre(
     c.punctuation("{"),
     c.keyword("number"),
     c.punctuation("}"),
-    c.comment(" */"),
+    c.comment("*/"),
     c.keyword("var"),
     c.identifier("v"),
     c.punctuation(";"));
+
+
+const c2 = classification("2020");
+verify.semanticClassificationsAre("2020",
+    c2.semanticToken("variable.declaration", "v"), 
+);

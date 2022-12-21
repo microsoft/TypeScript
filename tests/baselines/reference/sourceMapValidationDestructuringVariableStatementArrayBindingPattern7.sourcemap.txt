@@ -11,34 +11,61 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern7
 >>>var _a = [1, 2], _b = _a[0], x = _b === void 0 ? 20 : _b, j = _a[1];
 1 >
 2 >^^^^
-3 >    ^^^^^^^^^^^
-4 >               ^^
-5 >                 ^^^^^^^^^^
-6 >                           ^^
-7 >                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-8 >                                                        ^^
-9 >                                                          ^^^^^^^^^
-10>                                                                   ^
-11>                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >    ^^^^^
+4 >         ^
+5 >          ^
+6 >           ^^
+7 >             ^
+8 >              ^
+9 >               ^^
+10>                 ^^^^^^^^^^
+11>                           ^^
+12>                             ^
+13>                              ^^^^^^^^^^^^^^^^^^^
+14>                                                 ^^
+15>                                                   ^^^^^
+16>                                                        ^^
+17>                                                          ^
+18>                                                           ^^^^^^^^
+19>                                                                   ^
+20>                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >var 
 2 >
-3 >    [x = 20, j] = [1, 2]
-4 >               
-5 >                 x = 20
-6 >                           
-7 >                             x = 20
-8 >                                                        , 
-9 >                                                          j] = [1, 2]
-10>                                                                   ;
+3 >    [x = 20, j] = 
+4 >         [
+5 >          1
+6 >           , 
+7 >             2
+8 >              ]
+9 >               
+10>                 x = 20
+11>                           
+12>                             x
+13>                               = 
+14>                                                 20
+15>                                                   
+16>                                                        , 
+17>                                                          j
+18>                                                           ] = [1, 2]
+19>                                                                   ;
 1 >Emitted(1, 1) Source(1, 5) + SourceIndex(0)
 2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
-3 >Emitted(1, 16) Source(1, 25) + SourceIndex(0)
-4 >Emitted(1, 18) Source(1, 6) + SourceIndex(0)
-5 >Emitted(1, 28) Source(1, 12) + SourceIndex(0)
-6 >Emitted(1, 30) Source(1, 6) + SourceIndex(0)
-7 >Emitted(1, 57) Source(1, 12) + SourceIndex(0)
-8 >Emitted(1, 59) Source(1, 14) + SourceIndex(0)
-9 >Emitted(1, 68) Source(1, 25) + SourceIndex(0)
-10>Emitted(1, 69) Source(1, 26) + SourceIndex(0)
+3 >Emitted(1, 10) Source(1, 19) + SourceIndex(0)
+4 >Emitted(1, 11) Source(1, 20) + SourceIndex(0)
+5 >Emitted(1, 12) Source(1, 21) + SourceIndex(0)
+6 >Emitted(1, 14) Source(1, 23) + SourceIndex(0)
+7 >Emitted(1, 15) Source(1, 24) + SourceIndex(0)
+8 >Emitted(1, 16) Source(1, 25) + SourceIndex(0)
+9 >Emitted(1, 18) Source(1, 6) + SourceIndex(0)
+10>Emitted(1, 28) Source(1, 12) + SourceIndex(0)
+11>Emitted(1, 30) Source(1, 6) + SourceIndex(0)
+12>Emitted(1, 31) Source(1, 7) + SourceIndex(0)
+13>Emitted(1, 50) Source(1, 10) + SourceIndex(0)
+14>Emitted(1, 52) Source(1, 12) + SourceIndex(0)
+15>Emitted(1, 57) Source(1, 12) + SourceIndex(0)
+16>Emitted(1, 59) Source(1, 14) + SourceIndex(0)
+17>Emitted(1, 60) Source(1, 15) + SourceIndex(0)
+18>Emitted(1, 68) Source(1, 25) + SourceIndex(0)
+19>Emitted(1, 69) Source(1, 26) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPattern7.js.map

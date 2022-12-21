@@ -22,7 +22,7 @@ edit.applyRefactor({
     actionName: "Generate 'get' and 'set' accessors",
     actionDescription: "Generate 'get' and 'set' accessors",
     newContent: `class A {
-    private /*RENAME*/_a: number;
+    private readonly /*RENAME*/_a: number;
     public get a(): number {
         return this._a;
     }

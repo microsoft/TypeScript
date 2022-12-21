@@ -21,15 +21,15 @@ import { dom } from "./renderer";
 
 //// [reacty.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @jsx React.createElement */
 var React = require("./renderer");
 React.createElement(React.Fragment, null,
     React.createElement("h", null));
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @jsx dom */
 var renderer_1 = require("./renderer");
-renderer_1.dom(React.Fragment, null,
-    renderer_1.dom("h", null));
+(0, renderer_1.dom)(React.Fragment, null,
+    (0, renderer_1.dom)("h", null));

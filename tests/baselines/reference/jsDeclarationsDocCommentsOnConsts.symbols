@@ -1,0 +1,27 @@
+=== tests/cases/conformance/jsdoc/declarations/index1.js ===
+/**
+ * const doc comment
+ */
+const x = (a) => {
+>x : Symbol(x, Decl(index1.js, 3, 5))
+>a : Symbol(a, Decl(index1.js, 3, 11))
+
+    return '';
+};
+
+/**
+ * function doc comment
+ */
+function b() {
+>b : Symbol(b, Decl(index1.js, 5, 2))
+
+    return 0;
+}
+
+module.exports = {x, b}
+>module.exports : Symbol(module.exports, Decl(index1.js, 0, 0))
+>module : Symbol(module, Decl(index1.js, 12, 1))
+>exports : Symbol(module.exports, Decl(index1.js, 0, 0))
+>x : Symbol(x, Decl(index1.js, 14, 18))
+>b : Symbol(b, Decl(index1.js, 14, 20))
+

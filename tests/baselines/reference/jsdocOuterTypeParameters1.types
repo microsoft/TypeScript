@@ -1,0 +1,29 @@
+=== tests/cases/conformance/jsdoc/jsdocOuterTypeParameters1.js ===
+/** @return {T} */
+const dedupingMixin = function(mixin) {};
+>dedupingMixin : (mixin: any) => T
+>function(mixin) {} : (mixin: any) => T
+>mixin : any
+
+ /** @template {T} */
+const PropertyAccessors = dedupingMixin(() => {
+>PropertyAccessors : T
+>dedupingMixin(() => {  class Bar {    static bar() { this.prototype.foo(); }  }}) : T
+>dedupingMixin : (mixin: any) => T
+>() => {  class Bar {    static bar() { this.prototype.foo(); }  }} : () => void
+
+  class Bar {
+>Bar : Bar
+
+    static bar() { this.prototype.foo(); }
+>bar : () => void
+>this.prototype.foo() : any
+>this.prototype.foo : any
+>this.prototype : Bar
+>this : typeof Bar
+>prototype : Bar
+>foo : any
+  }
+});
+
+

@@ -22,7 +22,8 @@ export module Database {
 //// [requireEmitSemicolon_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Models = void 0;
     var Models;
     (function (Models) {
         var Person = /** @class */ (function () {
@@ -36,7 +37,8 @@ define(["require", "exports"], function (require, exports) {
 //// [requireEmitSemicolon_1.js]
 define(["require", "exports", "requireEmitSemicolon_0"], function (require, exports, P) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Database = void 0;
     var Database;
     (function (Database) {
         var DB = /** @class */ (function () {

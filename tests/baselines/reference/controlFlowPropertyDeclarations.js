@@ -151,7 +151,8 @@ export class StyleParser {
 //// [controlFlowPropertyDeclarations.js]
 "use strict";
 // Repro from ##8913
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StyleParser = exports.HTMLtoJSX = void 0;
 var HTMLDOMPropertyConfig = require('react/lib/HTMLDOMPropertyConfig');
 // Populate property map with ReactJS's attribute and property mappings
 // TODO handle/use .Properties value eg: MUST_USE_PROPERTY is not HTML attr

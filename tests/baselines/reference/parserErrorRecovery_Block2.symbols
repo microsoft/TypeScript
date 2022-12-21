@@ -2,6 +2,6 @@
 function f() {
 >f : Symbol(f, Decl(parserErrorRecovery_Block2.ts, 0, 0))
 
-    #
+    ¬
     return;
 }

@@ -71,8 +71,8 @@ function foo2<T, U>(x: T, cb: new(a: T) => U) {
 }
 
 var r4 = foo2(1, i2); // error
->r4 : any
->foo2(1, i2) : any
+>r4 : string
+>foo2(1, i2) : string
 >foo2 : <T, U>(x: T, cb: new (a: T) => U) => U
 >1 : 1
 >i2 : I2<string>
@@ -128,8 +128,8 @@ var r7b = foo3(null, a, ''); // any
 >'' : ""
 
 var r8 = foo3(1, i2, 1); // error
->r8 : any
->foo3(1, i2, 1) : any
+>r8 : string
+>foo3(1, i2, 1) : string
 >foo3 : <T, U>(x: T, cb: new (a: T) => U, y: U) => U
 >1 : 1
 >i2 : I2<string>

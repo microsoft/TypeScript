@@ -133,35 +133,35 @@ namespace n1 {
     
     // Passing these as arguments should cause an error.
     a = takeReturnHello(a);
->a = takeReturnHello(a) : any
+>a = takeReturnHello(a) : "Hello"
 >a : string
 >takeReturnHello(a) : "Hello"
 >takeReturnHello : (str: "Hello") => "Hello"
 >a : string
 
     b = takeReturnHello(b);
->b = takeReturnHello(b) : any
+>b = takeReturnHello(b) : "Hello"
 >b : string
 >takeReturnHello(b) : "Hello"
 >takeReturnHello : (str: "Hello") => "Hello"
 >b : string
 
     c = takeReturnHello(c);
->c = takeReturnHello(c) : any
+>c = takeReturnHello(c) : "Hello"
 >c : string
 >takeReturnHello(c) : "Hello"
 >takeReturnHello : (str: "Hello") => "Hello"
 >c : string
 
     d = takeReturnHello(d);
->d = takeReturnHello(d) : any
+>d = takeReturnHello(d) : "Hello"
 >d : string
 >takeReturnHello(d) : "Hello"
 >takeReturnHello : (str: "Hello") => "Hello"
 >d : string
 
     e = takeReturnHello(e);
->e = takeReturnHello(e) : any
+>e = takeReturnHello(e) : "Hello"
 >e : string
 >takeReturnHello(e) : "Hello"
 >takeReturnHello : (str: "Hello") => "Hello"
@@ -169,35 +169,35 @@ namespace n1 {
 
     // Passing these as arguments should cause an error.
     a = takeReturnHelloWorld(a);
->a = takeReturnHelloWorld(a) : any
+>a = takeReturnHelloWorld(a) : "Hello" | "World"
 >a : string
 >takeReturnHelloWorld(a) : "Hello" | "World"
 >takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
 >a : string
 
     b = takeReturnHelloWorld(b);
->b = takeReturnHelloWorld(b) : any
+>b = takeReturnHelloWorld(b) : "Hello" | "World"
 >b : string
 >takeReturnHelloWorld(b) : "Hello" | "World"
 >takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
 >b : string
 
     c = takeReturnHelloWorld(c);
->c = takeReturnHelloWorld(c) : any
+>c = takeReturnHelloWorld(c) : "Hello" | "World"
 >c : string
 >takeReturnHelloWorld(c) : "Hello" | "World"
 >takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
 >c : string
 
     d = takeReturnHelloWorld(d);
->d = takeReturnHelloWorld(d) : any
+>d = takeReturnHelloWorld(d) : "Hello" | "World"
 >d : string
 >takeReturnHelloWorld(d) : "Hello" | "World"
 >takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
 >d : string
 
     e = takeReturnHelloWorld(e);
->e = takeReturnHelloWorld(e) : any
+>e = takeReturnHelloWorld(e) : "Hello" | "World"
 >e : string
 >takeReturnHelloWorld(e) : "Hello" | "World"
 >takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
@@ -217,8 +217,8 @@ namespace n2 {
 >"Hello" : "Hello"
 
     export let b = fun1<"Hello">("Hello", "World");
->b : any
->fun1<"Hello">("Hello", "World") : any
+>b : "Hello"
+>fun1<"Hello">("Hello", "World") : "Hello"
 >fun1 : <T>(x: T, y: T) => T
 >"Hello" : "Hello"
 >"World" : "World"
@@ -231,15 +231,15 @@ namespace n2 {
 >"Hello" : "Hello"
 
     export let d = fun2<"Hello", "Hello">("Hello", "World");
->d : any
->fun2<"Hello", "Hello">("Hello", "World") : any
+>d : "Hello"
+>fun2<"Hello", "Hello">("Hello", "World") : "Hello"
 >fun2 : <T, U>(x: T, y: U) => T | U
 >"Hello" : "Hello"
 >"World" : "World"
 
     export let e = fun3<"Hello">("Hello", "World");
->e : any
->fun3<"Hello">("Hello", "World") : any
+>e : "Hello"
+>fun3<"Hello">("Hello", "World") : "Hello"
 >fun3 : <T>(...args: T[]) => T
 >"Hello" : "Hello"
 >"World" : "World"
@@ -254,10 +254,10 @@ namespace n2 {
 
     b = takeReturnString(b);
 >b = takeReturnString(b) : string
->b : any
+>b : "Hello"
 >takeReturnString(b) : string
 >takeReturnString : (str: string) => string
->b : any
+>b : "Hello"
 
     c = takeReturnString(c);
 >c = takeReturnString(c) : string
@@ -268,17 +268,17 @@ namespace n2 {
 
     d = takeReturnString(d);
 >d = takeReturnString(d) : string
->d : any
+>d : "Hello"
 >takeReturnString(d) : string
 >takeReturnString : (str: string) => string
->d : any
+>d : "Hello"
 
     e = takeReturnString(e);
 >e = takeReturnString(e) : string
->e : any
+>e : "Hello"
 >takeReturnString(e) : string
 >takeReturnString : (str: string) => string
->e : any
+>e : "Hello"
 
     // Should be valid
     a = takeReturnHello(a);
@@ -290,10 +290,10 @@ namespace n2 {
 
     b = takeReturnHello(b);
 >b = takeReturnHello(b) : "Hello"
->b : any
+>b : "Hello"
 >takeReturnHello(b) : "Hello"
 >takeReturnHello : (str: "Hello") => "Hello"
->b : any
+>b : "Hello"
 
     c = takeReturnHello(c);
 >c = takeReturnHello(c) : "Hello"
@@ -304,17 +304,17 @@ namespace n2 {
 
     d = takeReturnHello(d);
 >d = takeReturnHello(d) : "Hello"
->d : any
+>d : "Hello"
 >takeReturnHello(d) : "Hello"
 >takeReturnHello : (str: "Hello") => "Hello"
->d : any
+>d : "Hello"
 
     e = takeReturnHello(e);
 >e = takeReturnHello(e) : "Hello"
->e : any
+>e : "Hello"
 >takeReturnHello(e) : "Hello"
 >takeReturnHello : (str: "Hello") => "Hello"
->e : any
+>e : "Hello"
 
     // Assignment from the returned value should cause an error.
     a = takeReturnHelloWorld(a);
@@ -326,10 +326,10 @@ namespace n2 {
 
     b = takeReturnHelloWorld(b);
 >b = takeReturnHelloWorld(b) : "Hello" | "World"
->b : any
+>b : "Hello"
 >takeReturnHelloWorld(b) : "Hello" | "World"
 >takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
->b : any
+>b : "Hello"
 
     c = takeReturnHelloWorld(c);
 >c = takeReturnHelloWorld(c) : "Hello" | "World"
@@ -340,17 +340,17 @@ namespace n2 {
 
     d = takeReturnHelloWorld(d);
 >d = takeReturnHelloWorld(d) : "Hello" | "World"
->d : any
+>d : "Hello"
 >takeReturnHelloWorld(d) : "Hello" | "World"
 >takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
->d : any
+>d : "Hello"
 
     e = takeReturnHelloWorld(e);
 >e = takeReturnHelloWorld(e) : "Hello" | "World"
->e : any
+>e : "Hello"
 >takeReturnHelloWorld(e) : "Hello" | "World"
 >takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
->e : any
+>e : "Hello"
 }
 
 
@@ -367,22 +367,22 @@ namespace n3 {
 >"World" : "World"
 
     export let b = fun2<"Hello", "World">("World", "Hello");
->b : any
->fun2<"Hello", "World">("World", "Hello") : any
+>b : "Hello" | "World"
+>fun2<"Hello", "World">("World", "Hello") : "Hello" | "World"
 >fun2 : <T, U>(x: T, y: U) => T | U
 >"World" : "World"
 >"Hello" : "Hello"
 
     export let c = fun2<"World", "Hello">("Hello", "Hello");
->c : any
->fun2<"World", "Hello">("Hello", "Hello") : any
+>c : "Hello" | "World"
+>fun2<"World", "Hello">("Hello", "Hello") : "Hello" | "World"
 >fun2 : <T, U>(x: T, y: U) => T | U
 >"Hello" : "Hello"
 >"Hello" : "Hello"
 
     export let d = fun2<"World", "Hello">("World", "World");
->d : any
->fun2<"World", "Hello">("World", "World") : any
+>d : "Hello" | "World"
+>fun2<"World", "Hello">("World", "World") : "Hello" | "World"
 >fun2 : <T, U>(x: T, y: U) => T | U
 >"World" : "World"
 >"World" : "World"
@@ -404,24 +404,24 @@ namespace n3 {
 
     b = takeReturnString(b);
 >b = takeReturnString(b) : string
->b : any
+>b : "Hello" | "World"
 >takeReturnString(b) : string
 >takeReturnString : (str: string) => string
->b : any
+>b : "Hello" | "World"
 
     c = takeReturnString(c);
 >c = takeReturnString(c) : string
->c : any
+>c : "Hello" | "World"
 >takeReturnString(c) : string
 >takeReturnString : (str: string) => string
->c : any
+>c : "Hello" | "World"
 
     d = takeReturnString(d);
 >d = takeReturnString(d) : string
->d : any
+>d : "Hello" | "World"
 >takeReturnString(d) : string
 >takeReturnString : (str: string) => string
->d : any
+>d : "Hello" | "World"
 
     e = takeReturnString(e);
 >e = takeReturnString(e) : string
@@ -432,7 +432,7 @@ namespace n3 {
 
     // Passing these as arguments should cause an error.
     a = takeReturnHello(a);
->a = takeReturnHello(a) : any
+>a = takeReturnHello(a) : "Hello"
 >a : "Hello" | "World"
 >takeReturnHello(a) : "Hello"
 >takeReturnHello : (str: "Hello") => "Hello"
@@ -440,27 +440,27 @@ namespace n3 {
 
     b = takeReturnHello(b);
 >b = takeReturnHello(b) : "Hello"
->b : any
+>b : "Hello" | "World"
 >takeReturnHello(b) : "Hello"
 >takeReturnHello : (str: "Hello") => "Hello"
->b : any
+>b : "Hello" | "World"
 
     c = takeReturnHello(c);
 >c = takeReturnHello(c) : "Hello"
->c : any
+>c : "Hello" | "World"
 >takeReturnHello(c) : "Hello"
 >takeReturnHello : (str: "Hello") => "Hello"
->c : any
+>c : "Hello" | "World"
 
     d = takeReturnHello(d);
 >d = takeReturnHello(d) : "Hello"
->d : any
+>d : "Hello" | "World"
 >takeReturnHello(d) : "Hello"
 >takeReturnHello : (str: "Hello") => "Hello"
->d : any
+>d : "Hello" | "World"
 
     e = takeReturnHello(e);
->e = takeReturnHello(e) : any
+>e = takeReturnHello(e) : "Hello"
 >e : "Hello" | "World"
 >takeReturnHello(e) : "Hello"
 >takeReturnHello : (str: "Hello") => "Hello"
@@ -476,24 +476,24 @@ namespace n3 {
 
     b = takeReturnHelloWorld(b);
 >b = takeReturnHelloWorld(b) : "Hello" | "World"
->b : any
+>b : "Hello" | "World"
 >takeReturnHelloWorld(b) : "Hello" | "World"
 >takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
->b : any
+>b : "Hello"
 
     c = takeReturnHelloWorld(c);
 >c = takeReturnHelloWorld(c) : "Hello" | "World"
->c : any
+>c : "Hello" | "World"
 >takeReturnHelloWorld(c) : "Hello" | "World"
 >takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
->c : any
+>c : "Hello"
 
     d = takeReturnHelloWorld(d);
 >d = takeReturnHelloWorld(d) : "Hello" | "World"
->d : any
+>d : "Hello" | "World"
 >takeReturnHelloWorld(d) : "Hello" | "World"
 >takeReturnHelloWorld : (str: "Hello" | "World") => "Hello" | "World"
->d : any
+>d : "Hello"
 
     e = takeReturnHelloWorld(e);
 >e = takeReturnHelloWorld(e) : "Hello" | "World"

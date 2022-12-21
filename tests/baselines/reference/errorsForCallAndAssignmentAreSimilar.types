@@ -1,0 +1,51 @@
+=== tests/cases/compiler/errorsForCallAndAssignmentAreSimilar.ts ===
+function minimalExample1() {
+>minimalExample1 : () => void
+
+    type Disc =
+>Disc : { kind: "hddvd"; } | { kind: "bluray"; }
+
+        | { kind: "hddvd" }
+>kind : "hddvd"
+
+        | { kind: "bluray" }
+>kind : "bluray"
+
+    function foo(x: Disc[]) {
+>foo : (x: ({ kind: "hddvd"; } | { kind: "bluray"; })[]) => void
+>x : ({ kind: "hddvd"; } | { kind: "bluray"; })[]
+    }
+
+    foo([
+>foo([        { kind: "bluray", },        { kind: "hdpvd", }    ]) : void
+>foo : (x: ({ kind: "hddvd"; } | { kind: "bluray"; })[]) => void
+>[        { kind: "bluray", },        { kind: "hdpvd", }    ] : ({ kind: "bluray"; } | { kind: "hdpvd"; })[]
+
+        { kind: "bluray", },
+>{ kind: "bluray", } : { kind: "bluray"; }
+>kind : "bluray"
+>"bluray" : "bluray"
+
+        { kind: "hdpvd", }
+>{ kind: "hdpvd", } : { kind: "hdpvd"; }
+>kind : "hdpvd"
+>"hdpvd" : "hdpvd"
+
+    ]);
+
+    const ds: Disc[] = [
+>ds : ({ kind: "hddvd"; } | { kind: "bluray"; })[]
+>[        { kind: "bluray", },        { kind: "hdpvd", }    ] : ({ kind: "bluray"; } | { kind: "hdpvd"; })[]
+
+        { kind: "bluray", },
+>{ kind: "bluray", } : { kind: "bluray"; }
+>kind : "bluray"
+>"bluray" : "bluray"
+
+        { kind: "hdpvd", }
+>{ kind: "hdpvd", } : { kind: "hdpvd"; }
+>kind : "hdpvd"
+>"hdpvd" : "hdpvd"
+
+    ];
+}

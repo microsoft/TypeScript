@@ -44,4 +44,4 @@ label: let b = 1;
 label: const c = 1;
 label: ;
 label: ;
-label: 
+label: ;

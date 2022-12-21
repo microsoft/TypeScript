@@ -1,3 +1,5 @@
+// @isolatedModules: true, false
+
 // @filename: foo.ts
 export const enum ConstFooEnum {
     Some,

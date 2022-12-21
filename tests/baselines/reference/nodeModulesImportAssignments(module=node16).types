@@ -1,0 +1,51 @@
+=== tests/cases/conformance/node/subfolder/index.ts ===
+// cjs format file
+import fs = require("fs");
+>fs : any
+
+fs.readFile;
+>fs.readFile : any
+>fs : any
+>readFile : any
+
+export import fs2 = require("fs");
+>fs2 : any
+
+=== tests/cases/conformance/node/index.ts ===
+// esm format file
+import fs = require("fs");
+>fs : any
+
+fs.readFile;
+>fs.readFile : any
+>fs : any
+>readFile : any
+
+export import fs2 = require("fs");
+>fs2 : any
+
+=== tests/cases/conformance/node/file.ts ===
+// esm format file
+const __require = null;
+>__require : any
+>null : null
+
+const _createRequire = null;
+>_createRequire : any
+>null : null
+
+import fs = require("fs");
+>fs : any
+
+fs.readFile;
+>fs.readFile : any
+>fs : any
+>readFile : any
+
+export import fs2 = require("fs");
+>fs2 : any
+
+=== tests/cases/conformance/node/types.d.ts ===
+declare module "fs";
+>"fs" : any
+

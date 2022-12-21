@@ -13,7 +13,7 @@ var C99 = /** @class */ (function () {
         get: function () { return 0; },
         set: function (n) { } // error - accessors do not agree in visibility
         ,
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C99;

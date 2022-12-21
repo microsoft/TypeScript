@@ -9,7 +9,7 @@ function doSomething(cb: () => void) {
 }
 
 function fn(x: number | string) {
->fn : (x: string | number) => void
+>fn : (x: number | string) => void
 >x : string | number
 
   if (typeof x === 'number') {

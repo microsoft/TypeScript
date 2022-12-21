@@ -5,4 +5,5 @@ interface Foo<T> {
 
     var x: T<>;
 >x : Symbol(x, Decl(instantiateTypeParameter.ts, 1, 7))
+>T : Symbol(T)
 }

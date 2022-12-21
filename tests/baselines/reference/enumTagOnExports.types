@@ -11,9 +11,9 @@ exports.a = {};
 module.exports.b = {};
 >module.exports.b = {} : {}
 >module.exports.b : typeof b
->module.exports : typeof import("tests/cases/conformance/jsdoc/enumTagOnExports")
->module : { "\"tests/cases/conformance/jsdoc/enumTagOnExports\"": typeof import("tests/cases/conformance/jsdoc/enumTagOnExports"); }
->exports : typeof import("tests/cases/conformance/jsdoc/enumTagOnExports")
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
 >b : typeof b
 >{} : {}
 

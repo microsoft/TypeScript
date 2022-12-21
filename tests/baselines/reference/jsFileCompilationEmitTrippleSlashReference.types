@@ -13,3 +13,4 @@ function foo() {
 function bar() {
 >bar : () => void
 }
+

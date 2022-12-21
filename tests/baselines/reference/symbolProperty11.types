@@ -5,9 +5,9 @@ class C { }
 interface I {
     [Symbol.iterator]?: { x };
 >[Symbol.iterator] : { x: any; }
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >x : any
 }
 

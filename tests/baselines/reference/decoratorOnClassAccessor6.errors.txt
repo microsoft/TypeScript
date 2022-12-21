@@ -1,4 +1,4 @@
-tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts(4,12): error TS1005: ';' expected.
+tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts(4,12): error TS1436: Decorators must precede the name and all keywords of property declarations.
 
 
 ==== tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts (1 errors) ====
@@ -7,5 +7,5 @@ tests/cases/conformance/decorators/class/accessor/decoratorOnClassAccessor6.ts(4
     class C {
         public @dec set accessor(value: number) { }
                ~
-!!! error TS1005: ';' expected.
+!!! error TS1436: Decorators must precede the name and all keywords of property declarations.
     }

@@ -1,0 +1,14 @@
+tests/cases/conformance/jsdoc/jsdocPrivateName1.js(6,23): error TS1003: Identifier expected.
+
+
+==== tests/cases/conformance/jsdoc/jsdocPrivateName1.js (1 errors) ====
+    // Expecting parse error for private field
+    
+    /**
+     * @typedef A
+     * @type {object}
+     * @property {string} #id
+                          
+!!! error TS1003: Identifier expected.
+     */
+    

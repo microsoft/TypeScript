@@ -15,7 +15,7 @@ class Example {
 >1 : 1
     }
     doSomething(a = this.getNumber()): typeof a {
->doSomething : (a?: number) => number
+>doSomething : (a?: number) => typeof a
 >a : number
 >this.getNumber() : number
 >this.getNumber : () => number

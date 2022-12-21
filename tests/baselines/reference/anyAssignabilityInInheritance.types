@@ -83,7 +83,7 @@ var r3 = foo3(a); // any
 >a : any
 
 declare function foo7(x: { bar: number }): { bar: number };
->foo7 : { (x: { bar: number; }): { bar: number; }; (x: any): any; }
+>foo7 : { (x: {    bar: number;}): {    bar: number;}; (x: any): any; }
 >x : { bar: number; }
 >bar : number
 >bar : number

@@ -1,11 +1,10 @@
 tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts(17,6): error TS2540: Cannot assign to 'value' because it is a read-only property.
 tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts(19,11): error TS2540: Cannot assign to 'value' because it is a read-only property.
-tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts(21,9): error TS2540: Cannot assign to 'value' because it is a read-only property.
 tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts(23,15): error TS2540: Cannot assign to 'value' because it is a read-only property.
 tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts(25,15): error TS2540: Cannot assign to 'value' because it is a read-only property.
 
 
-==== tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts (5 errors) ====
+==== tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts (4 errors) ====
     interface Base {
         readonly value: number;
     }
@@ -30,9 +29,7 @@ tests/cases/conformance/types/intersection/intersectionTypeReadonly.ts(25,15): e
               ~~~~~
 !!! error TS2540: Cannot assign to 'value' because it is a read-only property.
     let mutable: Base & Mutable;
-    mutable.value = 12; // error, lhs can't be a readonly property
-            ~~~~~
-!!! error TS2540: Cannot assign to 'value' because it is a read-only property.
+    mutable.value = 12;
     let differentType: Base & DifferentType;
     differentType.value = 12; // error, lhs can't be a readonly property
                   ~~~~~

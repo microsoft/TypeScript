@@ -1,11 +1,11 @@
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts(46,12): error TS1345: An expression of type 'void' cannot be tested for truthiness
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts(47,12): error TS1345: An expression of type 'void' cannot be tested for truthiness
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts(48,12): error TS1345: An expression of type 'void' cannot be tested for truthiness
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts(49,12): error TS1345: An expression of type 'void' cannot be tested for truthiness
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts(50,12): error TS1345: An expression of type 'void' cannot be tested for truthiness
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts(51,12): error TS1345: An expression of type 'void' cannot be tested for truthiness
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts(52,12): error TS1345: An expression of type 'void' cannot be tested for truthiness
-tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts(53,12): error TS1345: An expression of type 'void' cannot be tested for truthiness
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts(46,12): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts(47,12): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts(48,12): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts(49,12): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts(50,12): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts(51,12): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts(52,12): error TS1345: An expression of type 'void' cannot be tested for truthiness.
+tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts(53,12): error TS1345: An expression of type 'void' cannot be tested for truthiness.
 
 
 ==== tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAndOperatorStrictMode.ts (8 errors) ====
@@ -56,28 +56,28 @@ tests/cases/conformance/expressions/binaryOperators/logicalAndOperator/logicalAn
     
     const v1 = v && a;
                ~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     const v2 = v && s;
                ~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     const v3 = v && x;
                ~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     const v4 = v && b;
                ~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     const v5 = v && v;
                ~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     const v6 = v && u;
                ~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     const v7 = v && n;
                ~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     const v8 = v && z;
                ~
-!!! error TS1345: An expression of type 'void' cannot be tested for truthiness
+!!! error TS1345: An expression of type 'void' cannot be tested for truthiness.
     
     const u1 = u && a;
     const u2 = u && s;

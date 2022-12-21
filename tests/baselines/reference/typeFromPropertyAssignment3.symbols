@@ -4,6 +4,8 @@ var Outer = function O() {
 >O : Symbol(O, Decl(a.js, 0, 11))
 
     this.y = 2
+>this.y : Symbol(O.y, Decl(a.js, 0, 26))
+>this : Symbol(O, Decl(a.js, 0, 11))
 >y : Symbol(O.y, Decl(a.js, 0, 26))
 }
 Outer.Inner = class I {

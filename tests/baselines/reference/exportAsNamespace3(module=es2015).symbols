@@ -7,7 +7,7 @@ export const b = 2;
 
 === tests/cases/conformance/es2020/modules/1.ts ===
 export * as ns from './0';
->ns : Symbol(ns, Decl(1.ts, 0, 11))
+>ns : Symbol(ns, Decl(1.ts, 0, 6))
 
 ns.a;
 >ns.a : Symbol(a, Decl(1.ts, 3, 10))
@@ -40,15 +40,15 @@ import * as foo from './1'
 
 foo.ns.a;
 >foo.ns.a : Symbol(foo.ns.a, Decl(0.ts, 0, 12))
->foo.ns : Symbol(foo.ns, Decl(1.ts, 0, 11))
+>foo.ns : Symbol(foo.ns, Decl(1.ts, 0, 6))
 >foo : Symbol(foo, Decl(2.ts, 0, 6))
->ns : Symbol(foo.ns, Decl(1.ts, 0, 11))
+>ns : Symbol(foo.ns, Decl(1.ts, 0, 6))
 >a : Symbol(foo.ns.a, Decl(0.ts, 0, 12))
 
 foo.ns.b;
 >foo.ns.b : Symbol(foo.ns.b, Decl(0.ts, 1, 12))
->foo.ns : Symbol(foo.ns, Decl(1.ts, 0, 11))
+>foo.ns : Symbol(foo.ns, Decl(1.ts, 0, 6))
 >foo : Symbol(foo, Decl(2.ts, 0, 6))
->ns : Symbol(foo.ns, Decl(1.ts, 0, 11))
+>ns : Symbol(foo.ns, Decl(1.ts, 0, 6))
 >b : Symbol(foo.ns.b, Decl(0.ts, 1, 12))
 

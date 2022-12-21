@@ -1,0 +1,396 @@
+=== tests/cases/conformance/declarationEmit/nullPropertyName.ts ===
+function foo() {}
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+
+// properties
+foo.x = 1;
+>foo.x : Symbol(foo.x, Decl(nullPropertyName.ts, 0, 17))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>x : Symbol(foo.x, Decl(nullPropertyName.ts, 0, 17))
+
+foo.y = 1;
+>foo.y : Symbol(foo.y, Decl(nullPropertyName.ts, 2, 10))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>y : Symbol(foo.y, Decl(nullPropertyName.ts, 2, 10))
+
+// keywords
+foo.break = 1;
+>foo.break : Symbol(foo.break, Decl(nullPropertyName.ts, 3, 10))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>break : Symbol(foo.break, Decl(nullPropertyName.ts, 3, 10))
+
+foo.case = 1;
+>foo.case : Symbol(foo.case, Decl(nullPropertyName.ts, 6, 14))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>case : Symbol(foo.case, Decl(nullPropertyName.ts, 6, 14))
+
+foo.catch = 1;
+>foo.catch : Symbol(foo.catch, Decl(nullPropertyName.ts, 7, 13))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>catch : Symbol(foo.catch, Decl(nullPropertyName.ts, 7, 13))
+
+foo.class = 1;
+>foo.class : Symbol(foo.class, Decl(nullPropertyName.ts, 8, 14))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>class : Symbol(foo.class, Decl(nullPropertyName.ts, 8, 14))
+
+foo.const = 1;
+>foo.const : Symbol(foo.const, Decl(nullPropertyName.ts, 9, 14))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>const : Symbol(foo.const, Decl(nullPropertyName.ts, 9, 14))
+
+foo.continue = 1;
+>foo.continue : Symbol(foo.continue, Decl(nullPropertyName.ts, 10, 14))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>continue : Symbol(foo.continue, Decl(nullPropertyName.ts, 10, 14))
+
+foo.debugger = 1;
+>foo.debugger : Symbol(foo.debugger, Decl(nullPropertyName.ts, 11, 17))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>debugger : Symbol(foo.debugger, Decl(nullPropertyName.ts, 11, 17))
+
+foo.default = 1;
+>foo.default : Symbol(foo.default, Decl(nullPropertyName.ts, 12, 17))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>default : Symbol(foo.default, Decl(nullPropertyName.ts, 12, 17))
+
+foo.delete = 1;
+>foo.delete : Symbol(foo.delete, Decl(nullPropertyName.ts, 13, 16))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>delete : Symbol(foo.delete, Decl(nullPropertyName.ts, 13, 16))
+
+foo.do = 1;
+>foo.do : Symbol(foo.do, Decl(nullPropertyName.ts, 14, 15))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>do : Symbol(foo.do, Decl(nullPropertyName.ts, 14, 15))
+
+foo.else = 1;
+>foo.else : Symbol(foo.else, Decl(nullPropertyName.ts, 15, 11))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>else : Symbol(foo.else, Decl(nullPropertyName.ts, 15, 11))
+
+foo.enum = 1;
+>foo.enum : Symbol(foo.enum, Decl(nullPropertyName.ts, 16, 13))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>enum : Symbol(foo.enum, Decl(nullPropertyName.ts, 16, 13))
+
+foo.export = 1;
+>foo.export : Symbol(foo.export, Decl(nullPropertyName.ts, 17, 13))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>export : Symbol(foo.export, Decl(nullPropertyName.ts, 17, 13))
+
+foo.extends = 1;
+>foo.extends : Symbol(foo.extends, Decl(nullPropertyName.ts, 18, 15))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>extends : Symbol(foo.extends, Decl(nullPropertyName.ts, 18, 15))
+
+foo.false = 1;
+>foo.false : Symbol(foo.false, Decl(nullPropertyName.ts, 19, 16))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>false : Symbol(foo.false, Decl(nullPropertyName.ts, 19, 16))
+
+foo.finally = 1;
+>foo.finally : Symbol(foo.finally, Decl(nullPropertyName.ts, 20, 14))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>finally : Symbol(foo.finally, Decl(nullPropertyName.ts, 20, 14))
+
+foo.for = 1;
+>foo.for : Symbol(foo.for, Decl(nullPropertyName.ts, 21, 16))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>for : Symbol(foo.for, Decl(nullPropertyName.ts, 21, 16))
+
+foo.function = 1;
+>foo.function : Symbol(foo.function, Decl(nullPropertyName.ts, 22, 12))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>function : Symbol(foo.function, Decl(nullPropertyName.ts, 22, 12))
+
+foo.if = 1;
+>foo.if : Symbol(foo.if, Decl(nullPropertyName.ts, 23, 17))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>if : Symbol(foo.if, Decl(nullPropertyName.ts, 23, 17))
+
+foo.import = 1;
+>foo.import : Symbol(foo.import, Decl(nullPropertyName.ts, 24, 11))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>import : Symbol(foo.import, Decl(nullPropertyName.ts, 24, 11))
+
+foo.in = 1;
+>foo.in : Symbol(foo.in, Decl(nullPropertyName.ts, 25, 15))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>in : Symbol(foo.in, Decl(nullPropertyName.ts, 25, 15))
+
+foo.instanceof = 1;
+>foo.instanceof : Symbol(foo.instanceof, Decl(nullPropertyName.ts, 26, 11))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>instanceof : Symbol(foo.instanceof, Decl(nullPropertyName.ts, 26, 11))
+
+foo.new = 1;
+>foo.new : Symbol(foo.new, Decl(nullPropertyName.ts, 27, 19))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>new : Symbol(foo.new, Decl(nullPropertyName.ts, 27, 19))
+
+foo.null = 1;
+>foo.null : Symbol(foo.null, Decl(nullPropertyName.ts, 28, 12))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>null : Symbol(foo.null, Decl(nullPropertyName.ts, 28, 12))
+
+foo.return = 1;
+>foo.return : Symbol(foo.return, Decl(nullPropertyName.ts, 29, 13))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>return : Symbol(foo.return, Decl(nullPropertyName.ts, 29, 13))
+
+foo.super = 1;
+>foo.super : Symbol(foo.super, Decl(nullPropertyName.ts, 30, 15))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>super : Symbol(foo.super, Decl(nullPropertyName.ts, 30, 15))
+
+foo.switch = 1;
+>foo.switch : Symbol(foo.switch, Decl(nullPropertyName.ts, 31, 14))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>switch : Symbol(foo.switch, Decl(nullPropertyName.ts, 31, 14))
+
+foo.this = 1;
+>foo.this : Symbol(foo.this, Decl(nullPropertyName.ts, 32, 15))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>this : Symbol(foo.this, Decl(nullPropertyName.ts, 32, 15))
+
+foo.throw = 1;
+>foo.throw : Symbol(foo.throw, Decl(nullPropertyName.ts, 33, 13))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>throw : Symbol(foo.throw, Decl(nullPropertyName.ts, 33, 13))
+
+foo.true = 1;
+>foo.true : Symbol(foo.true, Decl(nullPropertyName.ts, 34, 14))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>true : Symbol(foo.true, Decl(nullPropertyName.ts, 34, 14))
+
+foo.try = 1;
+>foo.try : Symbol(foo.try, Decl(nullPropertyName.ts, 35, 13))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>try : Symbol(foo.try, Decl(nullPropertyName.ts, 35, 13))
+
+foo.typeof = 1;
+>foo.typeof : Symbol(foo.typeof, Decl(nullPropertyName.ts, 36, 12))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>typeof : Symbol(foo.typeof, Decl(nullPropertyName.ts, 36, 12))
+
+foo.var = 1;
+>foo.var : Symbol(foo.var, Decl(nullPropertyName.ts, 37, 15))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>var : Symbol(foo.var, Decl(nullPropertyName.ts, 37, 15))
+
+foo.void = 1;
+>foo.void : Symbol(foo.void, Decl(nullPropertyName.ts, 38, 12))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>void : Symbol(foo.void, Decl(nullPropertyName.ts, 38, 12))
+
+foo.while = 1;
+>foo.while : Symbol(foo.while, Decl(nullPropertyName.ts, 39, 13))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>while : Symbol(foo.while, Decl(nullPropertyName.ts, 39, 13))
+
+foo.with = 1;
+>foo.with : Symbol(foo.with, Decl(nullPropertyName.ts, 40, 14))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>with : Symbol(foo.with, Decl(nullPropertyName.ts, 40, 14))
+
+foo.implements = 1;
+>foo.implements : Symbol(foo.implements, Decl(nullPropertyName.ts, 41, 13))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>implements : Symbol(foo.implements, Decl(nullPropertyName.ts, 41, 13))
+
+foo.interface = 1;
+>foo.interface : Symbol(foo.interface, Decl(nullPropertyName.ts, 42, 19))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>interface : Symbol(foo.interface, Decl(nullPropertyName.ts, 42, 19))
+
+foo.let = 1;
+>foo.let : Symbol(foo.let, Decl(nullPropertyName.ts, 43, 18))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>let : Symbol(foo.let, Decl(nullPropertyName.ts, 43, 18))
+
+foo.package = 1;
+>foo.package : Symbol(foo.package, Decl(nullPropertyName.ts, 44, 12))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>package : Symbol(foo.package, Decl(nullPropertyName.ts, 44, 12))
+
+foo.private = 1;
+>foo.private : Symbol(foo.private, Decl(nullPropertyName.ts, 45, 16))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>private : Symbol(foo.private, Decl(nullPropertyName.ts, 45, 16))
+
+foo.protected = 1;
+>foo.protected : Symbol(foo.protected, Decl(nullPropertyName.ts, 46, 16))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>protected : Symbol(foo.protected, Decl(nullPropertyName.ts, 46, 16))
+
+foo.public = 1;
+>foo.public : Symbol(foo.public, Decl(nullPropertyName.ts, 47, 18))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>public : Symbol(foo.public, Decl(nullPropertyName.ts, 47, 18))
+
+foo.static = 1;
+>foo.static : Symbol(foo.static, Decl(nullPropertyName.ts, 48, 15))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>static : Symbol(foo.static, Decl(nullPropertyName.ts, 48, 15))
+
+foo.yield = 1;
+>foo.yield : Symbol(foo.yield, Decl(nullPropertyName.ts, 49, 15))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>yield : Symbol(foo.yield, Decl(nullPropertyName.ts, 49, 15))
+
+foo.abstract = 1;
+>foo.abstract : Symbol(foo.abstract, Decl(nullPropertyName.ts, 50, 14))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>abstract : Symbol(foo.abstract, Decl(nullPropertyName.ts, 50, 14))
+
+foo.as = 1;
+>foo.as : Symbol(foo.as, Decl(nullPropertyName.ts, 51, 17))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>as : Symbol(foo.as, Decl(nullPropertyName.ts, 51, 17))
+
+foo.asserts = 1;
+>foo.asserts : Symbol(foo.asserts, Decl(nullPropertyName.ts, 52, 11))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>asserts : Symbol(foo.asserts, Decl(nullPropertyName.ts, 52, 11))
+
+foo.any = 1;
+>foo.any : Symbol(foo.any, Decl(nullPropertyName.ts, 53, 16))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>any : Symbol(foo.any, Decl(nullPropertyName.ts, 53, 16))
+
+foo.async = 1;
+>foo.async : Symbol(foo.async, Decl(nullPropertyName.ts, 54, 12))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>async : Symbol(foo.async, Decl(nullPropertyName.ts, 54, 12))
+
+foo.await = 1;
+>foo.await : Symbol(foo.await, Decl(nullPropertyName.ts, 55, 14))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>await : Symbol(foo.await, Decl(nullPropertyName.ts, 55, 14))
+
+foo.boolean = 1;
+>foo.boolean : Symbol(foo.boolean, Decl(nullPropertyName.ts, 56, 14))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>boolean : Symbol(foo.boolean, Decl(nullPropertyName.ts, 56, 14))
+
+foo.constructor = 1;
+>foo.constructor : Symbol(foo.constructor, Decl(nullPropertyName.ts, 57, 16))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>constructor : Symbol(foo.constructor, Decl(nullPropertyName.ts, 57, 16))
+
+foo.declare = 1;
+>foo.declare : Symbol(foo.declare, Decl(nullPropertyName.ts, 58, 20))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>declare : Symbol(foo.declare, Decl(nullPropertyName.ts, 58, 20))
+
+foo.get = 1;
+>foo.get : Symbol(foo.get, Decl(nullPropertyName.ts, 59, 16))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>get : Symbol(foo.get, Decl(nullPropertyName.ts, 59, 16))
+
+foo.infer = 1;
+>foo.infer : Symbol(foo.infer, Decl(nullPropertyName.ts, 60, 12))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>infer : Symbol(foo.infer, Decl(nullPropertyName.ts, 60, 12))
+
+foo.is = 1;
+>foo.is : Symbol(foo.is, Decl(nullPropertyName.ts, 61, 14))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>is : Symbol(foo.is, Decl(nullPropertyName.ts, 61, 14))
+
+foo.keyof = 1;
+>foo.keyof : Symbol(foo.keyof, Decl(nullPropertyName.ts, 62, 11))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>keyof : Symbol(foo.keyof, Decl(nullPropertyName.ts, 62, 11))
+
+foo.module = 1;
+>foo.module : Symbol(foo.module, Decl(nullPropertyName.ts, 63, 14))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>module : Symbol(foo.module, Decl(nullPropertyName.ts, 63, 14))
+
+foo.namespace = 1;
+>foo.namespace : Symbol(foo.namespace, Decl(nullPropertyName.ts, 64, 15))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>namespace : Symbol(foo.namespace, Decl(nullPropertyName.ts, 64, 15))
+
+foo.never = 1;
+>foo.never : Symbol(foo.never, Decl(nullPropertyName.ts, 65, 18))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>never : Symbol(foo.never, Decl(nullPropertyName.ts, 65, 18))
+
+foo.readonly = 1;
+>foo.readonly : Symbol(foo.readonly, Decl(nullPropertyName.ts, 66, 14))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>readonly : Symbol(foo.readonly, Decl(nullPropertyName.ts, 66, 14))
+
+foo.require = 1;
+>foo.require : Symbol(foo.require, Decl(nullPropertyName.ts, 67, 17))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>require : Symbol(foo.require, Decl(nullPropertyName.ts, 67, 17))
+
+foo.number = 1;
+>foo.number : Symbol(foo.number, Decl(nullPropertyName.ts, 68, 16))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>number : Symbol(foo.number, Decl(nullPropertyName.ts, 68, 16))
+
+foo.object = 1;
+>foo.object : Symbol(foo.object, Decl(nullPropertyName.ts, 69, 15))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>object : Symbol(foo.object, Decl(nullPropertyName.ts, 69, 15))
+
+foo.set = 1;
+>foo.set : Symbol(foo.set, Decl(nullPropertyName.ts, 70, 15))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>set : Symbol(foo.set, Decl(nullPropertyName.ts, 70, 15))
+
+foo.string = 1;
+>foo.string : Symbol(foo.string, Decl(nullPropertyName.ts, 71, 12))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>string : Symbol(foo.string, Decl(nullPropertyName.ts, 71, 12))
+
+foo.symbol = 1;
+>foo.symbol : Symbol(foo.symbol, Decl(nullPropertyName.ts, 72, 15))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>symbol : Symbol(foo.symbol, Decl(nullPropertyName.ts, 72, 15))
+
+foo.type = 1;
+>foo.type : Symbol(foo.type, Decl(nullPropertyName.ts, 73, 15))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>type : Symbol(foo.type, Decl(nullPropertyName.ts, 73, 15))
+
+foo.undefined = 1;
+>foo.undefined : Symbol(foo.undefined, Decl(nullPropertyName.ts, 74, 13))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>undefined : Symbol(foo.undefined, Decl(nullPropertyName.ts, 74, 13))
+
+foo.unique = 1;
+>foo.unique : Symbol(foo.unique, Decl(nullPropertyName.ts, 75, 18))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>unique : Symbol(foo.unique, Decl(nullPropertyName.ts, 75, 18))
+
+foo.unknown = 1;
+>foo.unknown : Symbol(foo.unknown, Decl(nullPropertyName.ts, 76, 15))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>unknown : Symbol(foo.unknown, Decl(nullPropertyName.ts, 76, 15))
+
+foo.from = 1;
+>foo.from : Symbol(foo.from, Decl(nullPropertyName.ts, 77, 16))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>from : Symbol(foo.from, Decl(nullPropertyName.ts, 77, 16))
+
+foo.global = 1;
+>foo.global : Symbol(foo.global, Decl(nullPropertyName.ts, 78, 13))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>global : Symbol(foo.global, Decl(nullPropertyName.ts, 78, 13))
+
+foo.bigint = 1;
+>foo.bigint : Symbol(foo.bigint, Decl(nullPropertyName.ts, 79, 15))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>bigint : Symbol(foo.bigint, Decl(nullPropertyName.ts, 79, 15))
+
+foo.of = 1;
+>foo.of : Symbol(foo.of, Decl(nullPropertyName.ts, 80, 15))
+>foo : Symbol(foo, Decl(nullPropertyName.ts, 0, 0), Decl(nullPropertyName.ts, 0, 17), Decl(nullPropertyName.ts, 2, 10), Decl(nullPropertyName.ts, 3, 10), Decl(nullPropertyName.ts, 6, 14) ... and 74 more)
+>of : Symbol(foo.of, Decl(nullPropertyName.ts, 80, 15))
+

@@ -3,14 +3,14 @@ import React = require('react')
 >React : typeof React
 
 declare function ComponentSpecific1<U>(l: {prop: U, "ignore-prop": string}): JSX.Element;
->ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": string; }) => JSX.Element
+>ComponentSpecific1 : <U>(l: {    prop: U;    "ignore-prop": string;}) => JSX.Element
 >l : { prop: U; "ignore-prop": string; }
 >prop : U
 >"ignore-prop" : string
 >JSX : any
 
 declare function ComponentSpecific2<U>(l: {prop: U}): JSX.Element;
->ComponentSpecific2 : <U>(l: { prop: U; }) => JSX.Element
+>ComponentSpecific2 : <U>(l: {    prop: U;}) => JSX.Element
 >l : { prop: U; }
 >prop : U
 >JSX : any

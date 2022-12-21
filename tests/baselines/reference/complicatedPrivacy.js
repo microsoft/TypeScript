@@ -124,7 +124,7 @@ var m1;
                 },
                 set: function (arg1) {
                 },
-                enumerable: true,
+                enumerable: false,
                 configurable: true
             });
             C2.prototype.f55 = function () {

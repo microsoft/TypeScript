@@ -4,11 +4,14 @@ tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(11,12): error TS1
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(12,12): error TS1354: 'readonly' type modifier is only permitted on array and tuple literal types.
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(15,5): error TS4104: The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(17,5): error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type 'string[]'.
-tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(21,5): error TS2739: Type 'string[]' is missing the following properties from type '[string, string]': 0, 1
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(21,5): error TS2322: Type 'string[]' is not assignable to type '[string, string]'.
+  Target requires 2 element(s) but source may have fewer.
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(22,5): error TS4104: The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(23,5): error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
-tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(24,5): error TS2739: Type 'string[]' is missing the following properties from type 'readonly [string, string]': 0, 1
-tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(25,5): error TS2739: Type 'readonly string[]' is missing the following properties from type 'readonly [string, string]': 0, 1
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(24,5): error TS2322: Type 'string[]' is not assignable to type 'readonly [string, string]'.
+  Target requires 2 element(s) but source may have fewer.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(25,5): error TS2322: Type 'readonly string[]' is not assignable to type 'readonly [string, string]'.
+  Target requires 2 element(s) but source may have fewer.
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(30,3): error TS2540: Cannot assign to '0' because it is a read-only property.
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(31,3): error TS2540: Cannot assign to '1' because it is a read-only property.
 tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(32,1): error TS2542: Index signature in type 'readonly [number, number, ...number[]]' only permits reading.
@@ -53,7 +56,8 @@ tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(36,8): error TS25
         ra = rt;
         mt = ma;  // Error
         ~~
-!!! error TS2739: Type 'string[]' is missing the following properties from type '[string, string]': 0, 1
+!!! error TS2322: Type 'string[]' is not assignable to type '[string, string]'.
+!!! error TS2322:   Target requires 2 element(s) but source may have fewer.
         mt = ra;  // Error
         ~~
 !!! error TS4104: The type 'readonly string[]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
@@ -62,10 +66,12 @@ tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(36,8): error TS25
 !!! error TS4104: The type 'readonly [string, string]' is 'readonly' and cannot be assigned to the mutable type '[string, string]'.
         rt = ma;  // Error
         ~~
-!!! error TS2739: Type 'string[]' is missing the following properties from type 'readonly [string, string]': 0, 1
+!!! error TS2322: Type 'string[]' is not assignable to type 'readonly [string, string]'.
+!!! error TS2322:   Target requires 2 element(s) but source may have fewer.
         rt = ra;  // Error
         ~~
-!!! error TS2739: Type 'readonly string[]' is missing the following properties from type 'readonly [string, string]': 0, 1
+!!! error TS2322: Type 'readonly string[]' is not assignable to type 'readonly [string, string]'.
+!!! error TS2322:   Target requires 2 element(s) but source may have fewer.
         rt = mt;
     }
     

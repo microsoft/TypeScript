@@ -1,0 +1,21 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesUnique-4.ts ===
+class A1 { }
+>A1 : Symbol(A1, Decl(privateNamesUnique-4.ts, 0, 0))
+
+interface A2 extends A1 { }
+>A2 : Symbol(A2, Decl(privateNamesUnique-4.ts, 0, 12))
+>A1 : Symbol(A1, Decl(privateNamesUnique-4.ts, 0, 0))
+
+declare const a: A2;
+>a : Symbol(a, Decl(privateNamesUnique-4.ts, 2, 13))
+>A2 : Symbol(A2, Decl(privateNamesUnique-4.ts, 0, 12))
+
+class C { #something: number }
+>C : Symbol(C, Decl(privateNamesUnique-4.ts, 2, 20))
+>#something : Symbol(C.#something, Decl(privateNamesUnique-4.ts, 4, 9))
+
+const c: C = a;
+>c : Symbol(c, Decl(privateNamesUnique-4.ts, 5, 5))
+>C : Symbol(C, Decl(privateNamesUnique-4.ts, 2, 20))
+>a : Symbol(a, Decl(privateNamesUnique-4.ts, 2, 13))
+

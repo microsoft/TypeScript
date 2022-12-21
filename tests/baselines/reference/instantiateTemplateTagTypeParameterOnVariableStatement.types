@@ -1,0 +1,31 @@
+=== tests/cases/conformance/jsdoc/instantiateTemplateTagTypeParameterOnVariableStatement.js ===
+/**
+ * @template T
+ * @param {T} a
+ * @returns {(b: T) => T}
+ */
+const seq = a => b => b;
+>seq : <T>(a: T) => (b: T) => T
+>a => b => b : <T>(a: T) => (b: T) => T
+>a : T
+>b => b : (b: T) => T
+>b : T
+>b : T
+
+const text1 = "hello";
+>text1 : "hello"
+>"hello" : "hello"
+
+const text2 = "world";
+>text2 : "world"
+>"world" : "world"
+
+/** @type {string} */
+var text3 = seq(text1)(text2);
+>text3 : string
+>seq(text1)(text2) : string
+>seq(text1) : (b: string) => string
+>seq : <T>(a: T) => (b: T) => T
+>text1 : "hello"
+>text2 : "world"
+

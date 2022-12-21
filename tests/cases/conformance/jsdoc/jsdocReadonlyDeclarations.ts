@@ -4,6 +4,7 @@
 // @out: foo.js
 // @declaration: true
 // @Filename: jsdocReadonlyDeclarations.js
+// @useDefineForClassFields: false
 class C {
     /** @readonly */
     x = 6
@@ -22,4 +23,9 @@ new C().x
 function F() {
     /** @readonly */
     this.z = 1
+}
+
+// https://github.com/microsoft/TypeScript/issues/38401
+class D {
+    constructor(/** @readonly */ x) {}
 }

@@ -110,3 +110,29 @@ function d<T extends string>(data: string | T): never {
     }
 }
 
+interface I<T> {
+>I : Symbol(I, Decl(controlFlowIfStatement.ts, 51, 1))
+>T : Symbol(T, Decl(controlFlowIfStatement.ts, 53, 12))
+
+  p: T;
+>p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
+>T : Symbol(T, Decl(controlFlowIfStatement.ts, 53, 12))
+}
+function e(x: I<"A" | "B">) {
+>e : Symbol(e, Decl(controlFlowIfStatement.ts, 55, 1))
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 56, 11))
+>I : Symbol(I, Decl(controlFlowIfStatement.ts, 51, 1))
+
+    if (x.p === "A") {
+>x.p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 56, 11))
+>p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
+
+        let a: "A" = (null as unknown as typeof x.p)
+>a : Symbol(a, Decl(controlFlowIfStatement.ts, 58, 11))
+>x.p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
+>x : Symbol(x, Decl(controlFlowIfStatement.ts, 56, 11))
+>p : Symbol(I.p, Decl(controlFlowIfStatement.ts, 53, 16))
+    }
+}
+

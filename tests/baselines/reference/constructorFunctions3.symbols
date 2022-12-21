@@ -3,6 +3,8 @@ function Instance() {
 >Instance : Symbol(Instance, Decl(a.js, 0, 0))
 
     this.i = 'simple'
+>this.i : Symbol(Instance.i, Decl(a.js, 0, 21))
+>this : Symbol(Instance, Decl(a.js, 0, 0))
 >i : Symbol(Instance.i, Decl(a.js, 0, 21))
 }
 var i = new Instance();
@@ -19,6 +21,8 @@ function StaticToo() {
 >StaticToo : Symbol(StaticToo, Decl(a.js, 5, 2), Decl(a.js, 9, 1))
 
     this.i = 'more complex'
+>this.i : Symbol(StaticToo.i, Decl(a.js, 7, 22))
+>this : Symbol(StaticToo, Decl(a.js, 5, 2), Decl(a.js, 9, 1))
 >i : Symbol(StaticToo.i, Decl(a.js, 7, 22))
 }
 StaticToo.property = 'yep'
@@ -41,10 +45,14 @@ function A () {
 >A : Symbol(A, Decl(a.js, 13, 10), Decl(a.js, 24, 1))
 
     this.x = 1
+>this.x : Symbol(A.x, Decl(a.js, 16, 15))
+>this : Symbol(A, Decl(a.js, 13, 10), Decl(a.js, 24, 1))
 >x : Symbol(A.x, Decl(a.js, 16, 15))
 
     /** @type {1} */
     this.second = 1
+>this.second : Symbol(A.second, Decl(a.js, 17, 14))
+>this : Symbol(A, Decl(a.js, 13, 10), Decl(a.js, 24, 1))
 >second : Symbol(A.second, Decl(a.js, 17, 14))
 }
 /** @param {number} n */

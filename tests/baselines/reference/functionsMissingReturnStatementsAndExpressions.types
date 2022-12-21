@@ -142,19 +142,19 @@ function f18() {
 }
 
 function f19(): void | number {
->f19 : () => number | void
+>f19 : () => void | number
 
     // Okay; function return type is union containing void
 }
 
 function f20(): any | number {
->f20 : () => any
+>f20 : () => any | number
 
     // Okay; function return type is union containing any
 }
 
 function f21(): number | string {
->f21 : () => string | number
+>f21 : () => number | string
 
     // Not okay; union does not contain void or any
 }

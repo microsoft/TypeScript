@@ -47,6 +47,7 @@ module.exports = (_a = {},
 //// [index2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.MyClass = void 0;
 var TopLevelSym = Symbol();
 var InnerSym = Symbol();
 var MyClass = /** @class */ (function () {

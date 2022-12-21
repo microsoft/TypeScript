@@ -17,4 +17,4 @@ verify.completions({ includes: { name: "toFixed", kind: "method", kindModifiers:
 
 goTo.marker('b');
 edit.insert('.');
-verify.completions({ includes: { name: "substr", kind: "method", kindModifiers: "declare" } });
+verify.completions({ includes: { name: "substring", kind: "method", kindModifiers: "declare" } });

@@ -12,7 +12,7 @@ declare var whatToLoad: boolean;
 declare const directory: string;
 declare const moduleFile: number;
 
-import(`${directory}\${moduleFile}`);
+import(`${directory}\\${moduleFile}`);
 import(getSpecifier());
 
 var p1 = import(ValidSomeCondition() ? "./0" : "externalModule");
@@ -28,7 +28,7 @@ var p3: Promise<typeof defaultModule> = import(j=getSpecifier());
 
 function * loadModule(directories: string[]) {
     for (const directory of directories) {
-        const path = `${directory}\moduleFile`;
+        const path = `${directory}\\moduleFile`;
         import(yield path);
     }
 }

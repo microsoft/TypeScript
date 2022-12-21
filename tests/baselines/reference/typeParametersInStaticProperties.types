@@ -3,5 +3,5 @@ class foo<T> {
 >foo : foo<T>
 
     static P: T;
->P : any
+>P : T
 } 

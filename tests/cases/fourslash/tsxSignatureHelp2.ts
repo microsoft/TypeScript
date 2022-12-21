@@ -33,6 +33,6 @@
 verify.signatureHelp({
     marker: ["1", "2"],
     overloadsCount: 2,
-    text: "MainButton(buttonProps: ButtonProps): any",
+    text: "MainButton(buttonProps: ButtonProps): JSX.Element",
     parameterSpan: "buttonProps: ButtonProps",
 });

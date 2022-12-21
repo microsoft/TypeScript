@@ -1,0 +1,40 @@
+=== tests/cases/conformance/jsdoc/declarations/source.js ===
+module.exports = MyClass;
+>module.exports = MyClass : typeof MyClass
+>module.exports : typeof MyClass
+>module : { exports: typeof MyClass; }
+>exports : typeof MyClass
+>MyClass : typeof MyClass
+
+function MyClass() {}
+>MyClass : typeof MyClass
+
+MyClass.staticMethod = function() {}
+>MyClass.staticMethod = function() {} : () => void
+>MyClass.staticMethod : () => void
+>MyClass : typeof MyClass
+>staticMethod : () => void
+>function() {} : () => void
+
+MyClass.prototype.method = function() {}
+>MyClass.prototype.method = function() {} : () => void
+>MyClass.prototype.method : any
+>MyClass.prototype : any
+>MyClass : typeof MyClass
+>prototype : any
+>method : any
+>function() {} : () => void
+
+MyClass.staticProperty = 123;
+>MyClass.staticProperty = 123 : 123
+>MyClass.staticProperty : number
+>MyClass : typeof MyClass
+>staticProperty : number
+>123 : 123
+
+/**
+ * Callback to be invoked when test execution is complete.
+ *
+ * @callback DoneCB
+ * @param {number} failures - Number of failures that occurred.
+ */

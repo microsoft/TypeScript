@@ -1,0 +1,90 @@
+=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment5.ts ===
+function foo1 (f?: (a: number) => void) {
+>foo1 : Symbol(foo1, Decl(logicalAssignment5.ts, 0, 0))
+>f : Symbol(f, Decl(logicalAssignment5.ts, 0, 15))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 0, 20))
+
+    f ??= (a => a)
+>f : Symbol(f, Decl(logicalAssignment5.ts, 0, 15))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 1, 11))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 1, 11))
+
+    f(42)
+>f : Symbol(f, Decl(logicalAssignment5.ts, 0, 15))
+}
+
+function foo2 (f?: (a: number) => void) {
+>foo2 : Symbol(foo2, Decl(logicalAssignment5.ts, 3, 1))
+>f : Symbol(f, Decl(logicalAssignment5.ts, 5, 15))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 5, 20))
+
+    f ||= (a => a)
+>f : Symbol(f, Decl(logicalAssignment5.ts, 5, 15))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 6, 11))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 6, 11))
+
+    f(42)
+>f : Symbol(f, Decl(logicalAssignment5.ts, 5, 15))
+}
+
+function foo3 (f?: (a: number) => void) {
+>foo3 : Symbol(foo3, Decl(logicalAssignment5.ts, 8, 1))
+>f : Symbol(f, Decl(logicalAssignment5.ts, 10, 15))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 10, 20))
+
+    f &&= (a => a)
+>f : Symbol(f, Decl(logicalAssignment5.ts, 10, 15))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 11, 11))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 11, 11))
+
+    f(42)
+>f : Symbol(f, Decl(logicalAssignment5.ts, 10, 15))
+}
+
+function bar1 (f?: (a: number) => void) {
+>bar1 : Symbol(bar1, Decl(logicalAssignment5.ts, 13, 1))
+>f : Symbol(f, Decl(logicalAssignment5.ts, 15, 15))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 15, 20))
+
+    f ??= (f.toString(), (a => a))
+>f : Symbol(f, Decl(logicalAssignment5.ts, 15, 15))
+>f : Symbol(f, Decl(logicalAssignment5.ts, 15, 15))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 16, 26))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 16, 26))
+
+    f(42)
+>f : Symbol(f, Decl(logicalAssignment5.ts, 15, 15))
+}
+
+function bar2 (f?: (a: number) => void) {
+>bar2 : Symbol(bar2, Decl(logicalAssignment5.ts, 18, 1))
+>f : Symbol(f, Decl(logicalAssignment5.ts, 20, 15))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 20, 20))
+
+    f ||= (f.toString(), (a => a))
+>f : Symbol(f, Decl(logicalAssignment5.ts, 20, 15))
+>f : Symbol(f, Decl(logicalAssignment5.ts, 20, 15))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 21, 26))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 21, 26))
+
+    f(42)
+>f : Symbol(f, Decl(logicalAssignment5.ts, 20, 15))
+}
+
+function bar3 (f?: (a: number) => void) {
+>bar3 : Symbol(bar3, Decl(logicalAssignment5.ts, 23, 1))
+>f : Symbol(f, Decl(logicalAssignment5.ts, 25, 15))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 25, 20))
+
+    f &&= (f.toString(), (a => a))
+>f : Symbol(f, Decl(logicalAssignment5.ts, 25, 15))
+>f.toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(logicalAssignment5.ts, 25, 15))
+>toString : Symbol(Function.toString, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 26, 26))
+>a : Symbol(a, Decl(logicalAssignment5.ts, 26, 26))
+
+    f(42)
+>f : Symbol(f, Decl(logicalAssignment5.ts, 25, 15))
+}
+

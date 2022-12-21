@@ -9,14 +9,14 @@ function Zet(t) {
 
     /** @type {T} */
     this.u
->this.u : any
->this : any
->u : any
+>this.u : T
+>this : this
+>u : T
 
     this.t = t
 >this.t = t : T
 >this.t : any
->this : any
+>this : this
 >t : any
 >t : T
 }

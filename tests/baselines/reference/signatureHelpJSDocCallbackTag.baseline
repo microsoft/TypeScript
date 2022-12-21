@@ -1,0 +1,548 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/server/jsdocCallbackTag.js",
+      "position": 480,
+      "name": "4"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "t",
+              "kind": "localName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "eventName",
+              "documentation": [
+                {
+                  "text": "- So many words",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "eventName",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "eventName2",
+              "documentation": [
+                {
+                  "text": "- Silence is golden",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "eventName2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "|",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "eventName3",
+              "documentation": [
+                {
+                  "text": "- Osterreich mos def",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "eventName3",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": [
+            {
+              "name": "type",
+              "text": [
+                {
+                  "text": "{FooHandler} callback",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": {
+          "line": 22,
+          "offset": 3
+        },
+        "end": {
+          "line": 22,
+          "offset": 17
+        }
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/server/jsdocCallbackTag.js",
+      "position": 485,
+      "name": "5"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "t",
+              "kind": "localName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "eventName",
+              "documentation": [
+                {
+                  "text": "- So many words",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "eventName",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "eventName2",
+              "documentation": [
+                {
+                  "text": "- Silence is golden",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "eventName2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "|",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "eventName3",
+              "documentation": [
+                {
+                  "text": "- Osterreich mos def",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "eventName3",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": [
+            {
+              "name": "type",
+              "text": [
+                {
+                  "text": "{FooHandler} callback",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": {
+          "line": 22,
+          "offset": 3
+        },
+        "end": {
+          "line": 22,
+          "offset": 17
+        }
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/server/jsdocCallbackTag.js",
+      "position": 489,
+      "name": "6"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "t",
+              "kind": "localName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "eventName",
+              "documentation": [
+                {
+                  "text": "- So many words",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "eventName",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "eventName2",
+              "documentation": [
+                {
+                  "text": "- Silence is golden",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "eventName2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "|",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "eventName3",
+              "documentation": [
+                {
+                  "text": "- Osterreich mos def",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "eventName3",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "any",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": [
+            {
+              "name": "type",
+              "text": [
+                {
+                  "text": "{FooHandler} callback",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": {
+          "line": 22,
+          "offset": 3
+        },
+        "end": {
+          "line": 22,
+          "offset": 17
+        }
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 2,
+      "argumentCount": 3
+    }
+  }
+]

@@ -16,12 +16,12 @@ class A<P extends Partial<Foo>> {
 >doSomething : () => void
 
         this.props.foo && this.props.foo()
->this.props.foo && this.props.foo() : void
->this.props.foo : P["foo"]
+>this.props.foo && this.props.foo() : void | undefined
+>this.props.foo : P["foo"] | undefined
 >this.props : Readonly<P>
 >this : this
 >props : Readonly<P>
->foo : P["foo"]
+>foo : P["foo"] | undefined
 >this.props.foo() : void
 >this.props.foo : () => void
 >this.props : Readonly<P>
@@ -90,7 +90,7 @@ class BigMonkey extends Monkey<BigBanana> {
 // Another repro
 
 type Item = {
->Item : Item
+>Item : { (): string; x: string; }
 
     (): string;
     x: string;
@@ -193,8 +193,8 @@ function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
 >obj : T | undefined
 
         obj[key];
->obj[key] : T[K]
->obj : T
+>obj[key] : NonNullable<T>[K]
+>obj : NonNullable<T>
 >key : K
     }
 }

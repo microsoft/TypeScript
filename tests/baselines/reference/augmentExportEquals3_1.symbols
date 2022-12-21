@@ -12,7 +12,7 @@ declare module "file1" {
 >v : Symbol(v, Decl(file1.d.ts, 3, 18))
     }
     export = foo;
->foo : Symbol(foo, Decl(file1.d.ts, 0, 24), Decl(file1.d.ts, 1, 25))
+>foo : Symbol(foo, Decl(file1.d.ts, 0, 24), Decl(file1.d.ts, 1, 25), Decl(file2.ts, 2, 8))
 }
 
 

@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/Symbols/symbolType3.ts(2,8): error TS2704: The operand of a delete operator cannot be a read-only property.
+tests/cases/conformance/es6/Symbols/symbolType3.ts(2,8): error TS2704: The operand of a 'delete' operator cannot be a read-only property.
 tests/cases/conformance/es6/Symbols/symbolType3.ts(5,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es6/Symbols/symbolType3.ts(6,3): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/es6/Symbols/symbolType3.ts(7,3): error TS2469: The '+' operator cannot be applied to type 'symbol'.
@@ -11,7 +11,7 @@ tests/cases/conformance/es6/Symbols/symbolType3.ts(12,2): error TS2469: The '+' 
     var s = Symbol();
     delete Symbol.iterator;
            ~~~~~~~~~~~~~~~
-!!! error TS2704: The operand of a delete operator cannot be a read-only property.
+!!! error TS2704: The operand of a 'delete' operator cannot be a read-only property.
     void Symbol.toPrimitive;
     typeof Symbol.toStringTag;
     ++s;

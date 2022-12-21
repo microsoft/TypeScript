@@ -19,4 +19,5 @@ var r = f.clone<Uhhhh>()
 >f.clone : Symbol(Foo.clone, Decl(unknownTypeArgOnCall.ts, 0, 14))
 >f : Symbol(f, Decl(unknownTypeArgOnCall.ts, 5, 3))
 >clone : Symbol(Foo.clone, Decl(unknownTypeArgOnCall.ts, 0, 14))
+>Uhhhh : Symbol(Uhhhh)
 

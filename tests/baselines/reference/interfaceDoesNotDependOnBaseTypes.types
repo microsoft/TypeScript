@@ -25,6 +25,6 @@ if (typeof x !== "string") {
 }
 
 type StringTree = string | StringTreeArray;
->StringTree : StringTree
+>StringTree : string | StringTreeArray
 
 interface StringTreeArray extends Array<StringTree> { }

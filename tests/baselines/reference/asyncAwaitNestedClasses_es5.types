@@ -14,10 +14,10 @@ class A {
             return new Promise((resolve) => { resolve(null); });
 >new Promise((resolve) => { resolve(null); }) : Promise<void>
 >Promise : PromiseConstructor
->(resolve) => { resolve(null); } : (resolve: (value?: void | PromiseLike<void>) => void) => void
->resolve : (value?: void | PromiseLike<void>) => void
+>(resolve) => { resolve(null); } : (resolve: (value: void | PromiseLike<void>) => void) => void
+>resolve : (value: void | PromiseLike<void>) => void
 >resolve(null) : void
->resolve : (value?: void | PromiseLike<void>) => void
+>resolve : (value: void | PromiseLike<void>) => void
 >null : null
         }
         static C = class C {

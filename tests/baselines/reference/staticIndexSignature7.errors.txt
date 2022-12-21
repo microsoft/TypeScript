@@ -1,0 +1,18 @@
+tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature7.ts(3,12): error TS2411: Property 'x' of type 'number' is not assignable to 'string' index type 'string'.
+tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature7.ts(7,12): error TS2411: Property 'foo' of type '() => void' is not assignable to 'string' index type 'string'.
+
+
+==== tests/cases/conformance/classes/staticIndexSignature/staticIndexSignature7.ts (2 errors) ====
+    class X {
+        static [index: string]: string;
+        static x = 12; // Should error, incompatible with index signature
+               ~
+!!! error TS2411: Property 'x' of type 'number' is not assignable to 'string' index type 'string'.
+    }
+    class Y {
+        static [index: string]: string;
+        static foo() {} // should error, incompatible with index signature
+               ~~~
+!!! error TS2411: Property 'foo' of type '() => void' is not assignable to 'string' index type 'string'.
+    }
+    

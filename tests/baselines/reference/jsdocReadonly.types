@@ -35,9 +35,9 @@ class LOL {
         /** @readonly ok */
         this.ka = 2
 >this.ka = 2 : 2
->this.ka : number
+>this.ka : any
 >this : this
->ka : number
+>ka : any
 >2 : 2
     }
 }

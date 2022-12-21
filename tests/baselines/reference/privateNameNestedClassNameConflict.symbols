@@ -1,0 +1,17 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameNestedClassNameConflict.ts ===
+class A {
+>A : Symbol(A, Decl(privateNameNestedClassNameConflict.ts, 0, 0))
+
+    #foo: string;
+>#foo : Symbol(A.#foo, Decl(privateNameNestedClassNameConflict.ts, 0, 9))
+
+    constructor() {
+        class A {
+>A : Symbol(A, Decl(privateNameNestedClassNameConflict.ts, 2, 19))
+
+            #foo: string;
+>#foo : Symbol(A.#foo, Decl(privateNameNestedClassNameConflict.ts, 3, 17))
+        }
+    }
+}
+

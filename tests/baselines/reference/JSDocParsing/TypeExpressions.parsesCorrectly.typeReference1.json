@@ -4,7 +4,7 @@
     "end": 11,
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
-    "transformFlags": 0,
+    "transformFlags": 1,
     "typeName": {
         "kind": "Identifier",
         "pos": 1,
@@ -22,10 +22,12 @@
             "end": 10,
             "flags": "JSDoc",
             "modifierFlagsCache": 0,
-            "transformFlags": 0
+            "transformFlags": 1
         },
         "length": 1,
         "pos": 4,
-        "end": 10
+        "end": 10,
+        "hasTrailingComma": false,
+        "transformFlags": 1
     }
 }

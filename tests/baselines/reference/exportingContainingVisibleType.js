@@ -13,7 +13,8 @@ export var x = 5;
 //// [exportingContainingVisibleType.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.x = void 0;
     var Foo = /** @class */ (function () {
         function Foo() {
         }
@@ -22,7 +23,7 @@ define(["require", "exports"], function (require, exports) {
                 var i;
                 return i; // Should be fine (previous bug report visibility error).
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         return Foo;

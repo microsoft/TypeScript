@@ -10,110 +10,126 @@ var a1: string;
 var a2: number;
 >a2 : Symbol(a2, Decl(inOperatorWithValidOperands.ts, 5, 3))
 
+var a3: string | number | symbol;
+>a3 : Symbol(a3, Decl(inOperatorWithValidOperands.ts, 6, 3))
+
+var a4: any;
+>a4 : Symbol(a4, Decl(inOperatorWithValidOperands.ts, 7, 3))
+
 var ra1 = x in x;
->ra1 : Symbol(ra1, Decl(inOperatorWithValidOperands.ts, 7, 3))
+>ra1 : Symbol(ra1, Decl(inOperatorWithValidOperands.ts, 9, 3))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
 
 var ra2 = a1 in x;
->ra2 : Symbol(ra2, Decl(inOperatorWithValidOperands.ts, 8, 3))
+>ra2 : Symbol(ra2, Decl(inOperatorWithValidOperands.ts, 10, 3))
 >a1 : Symbol(a1, Decl(inOperatorWithValidOperands.ts, 4, 3))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
 
 var ra3 = a2 in x;
->ra3 : Symbol(ra3, Decl(inOperatorWithValidOperands.ts, 9, 3))
+>ra3 : Symbol(ra3, Decl(inOperatorWithValidOperands.ts, 11, 3))
 >a2 : Symbol(a2, Decl(inOperatorWithValidOperands.ts, 5, 3))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
 
 var ra4 = '' in x;
->ra4 : Symbol(ra4, Decl(inOperatorWithValidOperands.ts, 10, 3))
+>ra4 : Symbol(ra4, Decl(inOperatorWithValidOperands.ts, 12, 3))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
 
 var ra5 = 0 in x;
->ra5 : Symbol(ra5, Decl(inOperatorWithValidOperands.ts, 11, 3))
+>ra5 : Symbol(ra5, Decl(inOperatorWithValidOperands.ts, 13, 3))
+>x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
+
+var ra6 = a3 in x;
+>ra6 : Symbol(ra6, Decl(inOperatorWithValidOperands.ts, 14, 3))
+>a3 : Symbol(a3, Decl(inOperatorWithValidOperands.ts, 6, 3))
+>x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
+
+var ra7 = a4 in x;
+>ra7 : Symbol(ra7, Decl(inOperatorWithValidOperands.ts, 15, 3))
+>a4 : Symbol(a4, Decl(inOperatorWithValidOperands.ts, 7, 3))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
 
 // valid right operands
 // the right operand is required to be of type Any, an object type, or a type parameter type
 var b1: {};
->b1 : Symbol(b1, Decl(inOperatorWithValidOperands.ts, 15, 3))
+>b1 : Symbol(b1, Decl(inOperatorWithValidOperands.ts, 19, 3))
 
 var rb1 = x in b1;
->rb1 : Symbol(rb1, Decl(inOperatorWithValidOperands.ts, 17, 3))
+>rb1 : Symbol(rb1, Decl(inOperatorWithValidOperands.ts, 21, 3))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
->b1 : Symbol(b1, Decl(inOperatorWithValidOperands.ts, 15, 3))
+>b1 : Symbol(b1, Decl(inOperatorWithValidOperands.ts, 19, 3))
 
 var rb2 = x in {};
->rb2 : Symbol(rb2, Decl(inOperatorWithValidOperands.ts, 18, 3))
+>rb2 : Symbol(rb2, Decl(inOperatorWithValidOperands.ts, 22, 3))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
 
 function foo<T>(t: T) {
->foo : Symbol(foo, Decl(inOperatorWithValidOperands.ts, 18, 18))
->T : Symbol(T, Decl(inOperatorWithValidOperands.ts, 20, 13))
->t : Symbol(t, Decl(inOperatorWithValidOperands.ts, 20, 16))
->T : Symbol(T, Decl(inOperatorWithValidOperands.ts, 20, 13))
+>foo : Symbol(foo, Decl(inOperatorWithValidOperands.ts, 22, 18))
+>T : Symbol(T, Decl(inOperatorWithValidOperands.ts, 24, 13))
+>t : Symbol(t, Decl(inOperatorWithValidOperands.ts, 24, 16))
+>T : Symbol(T, Decl(inOperatorWithValidOperands.ts, 24, 13))
 
     var rb3 = x in t;
->rb3 : Symbol(rb3, Decl(inOperatorWithValidOperands.ts, 21, 7))
+>rb3 : Symbol(rb3, Decl(inOperatorWithValidOperands.ts, 25, 7))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
->t : Symbol(t, Decl(inOperatorWithValidOperands.ts, 20, 16))
+>t : Symbol(t, Decl(inOperatorWithValidOperands.ts, 24, 16))
 }
 
 function unionCase<T, U>(t: T | U) {
->unionCase : Symbol(unionCase, Decl(inOperatorWithValidOperands.ts, 22, 1))
->T : Symbol(T, Decl(inOperatorWithValidOperands.ts, 24, 19))
->U : Symbol(U, Decl(inOperatorWithValidOperands.ts, 24, 21))
->t : Symbol(t, Decl(inOperatorWithValidOperands.ts, 24, 25))
->T : Symbol(T, Decl(inOperatorWithValidOperands.ts, 24, 19))
->U : Symbol(U, Decl(inOperatorWithValidOperands.ts, 24, 21))
+>unionCase : Symbol(unionCase, Decl(inOperatorWithValidOperands.ts, 26, 1))
+>T : Symbol(T, Decl(inOperatorWithValidOperands.ts, 28, 19))
+>U : Symbol(U, Decl(inOperatorWithValidOperands.ts, 28, 21))
+>t : Symbol(t, Decl(inOperatorWithValidOperands.ts, 28, 25))
+>T : Symbol(T, Decl(inOperatorWithValidOperands.ts, 28, 19))
+>U : Symbol(U, Decl(inOperatorWithValidOperands.ts, 28, 21))
 
     var rb4 = x in t;
->rb4 : Symbol(rb4, Decl(inOperatorWithValidOperands.ts, 25, 7))
+>rb4 : Symbol(rb4, Decl(inOperatorWithValidOperands.ts, 29, 7))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
->t : Symbol(t, Decl(inOperatorWithValidOperands.ts, 24, 25))
+>t : Symbol(t, Decl(inOperatorWithValidOperands.ts, 28, 25))
 }
 
 function unionCase2<T>(t: T | object) {
->unionCase2 : Symbol(unionCase2, Decl(inOperatorWithValidOperands.ts, 26, 1))
->T : Symbol(T, Decl(inOperatorWithValidOperands.ts, 28, 20))
->t : Symbol(t, Decl(inOperatorWithValidOperands.ts, 28, 23))
->T : Symbol(T, Decl(inOperatorWithValidOperands.ts, 28, 20))
+>unionCase2 : Symbol(unionCase2, Decl(inOperatorWithValidOperands.ts, 30, 1))
+>T : Symbol(T, Decl(inOperatorWithValidOperands.ts, 32, 20))
+>t : Symbol(t, Decl(inOperatorWithValidOperands.ts, 32, 23))
+>T : Symbol(T, Decl(inOperatorWithValidOperands.ts, 32, 20))
 
     var rb5 = x in t;
->rb5 : Symbol(rb5, Decl(inOperatorWithValidOperands.ts, 29, 7))
+>rb5 : Symbol(rb5, Decl(inOperatorWithValidOperands.ts, 33, 7))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
->t : Symbol(t, Decl(inOperatorWithValidOperands.ts, 28, 23))
+>t : Symbol(t, Decl(inOperatorWithValidOperands.ts, 32, 23))
 }
 
 interface X { x: number }
->X : Symbol(X, Decl(inOperatorWithValidOperands.ts, 30, 1))
->x : Symbol(X.x, Decl(inOperatorWithValidOperands.ts, 32, 13))
+>X : Symbol(X, Decl(inOperatorWithValidOperands.ts, 34, 1))
+>x : Symbol(X.x, Decl(inOperatorWithValidOperands.ts, 36, 13))
 
 interface Y { y: number }
->Y : Symbol(Y, Decl(inOperatorWithValidOperands.ts, 32, 25))
->y : Symbol(Y.y, Decl(inOperatorWithValidOperands.ts, 33, 13))
+>Y : Symbol(Y, Decl(inOperatorWithValidOperands.ts, 36, 25))
+>y : Symbol(Y.y, Decl(inOperatorWithValidOperands.ts, 37, 13))
 
 var c1: X | Y;
->c1 : Symbol(c1, Decl(inOperatorWithValidOperands.ts, 35, 3))
->X : Symbol(X, Decl(inOperatorWithValidOperands.ts, 30, 1))
->Y : Symbol(Y, Decl(inOperatorWithValidOperands.ts, 32, 25))
+>c1 : Symbol(c1, Decl(inOperatorWithValidOperands.ts, 39, 3))
+>X : Symbol(X, Decl(inOperatorWithValidOperands.ts, 34, 1))
+>Y : Symbol(Y, Decl(inOperatorWithValidOperands.ts, 36, 25))
 
 var c2: X;
->c2 : Symbol(c2, Decl(inOperatorWithValidOperands.ts, 36, 3))
->X : Symbol(X, Decl(inOperatorWithValidOperands.ts, 30, 1))
+>c2 : Symbol(c2, Decl(inOperatorWithValidOperands.ts, 40, 3))
+>X : Symbol(X, Decl(inOperatorWithValidOperands.ts, 34, 1))
 
 var c3: Y;
->c3 : Symbol(c3, Decl(inOperatorWithValidOperands.ts, 37, 3))
->Y : Symbol(Y, Decl(inOperatorWithValidOperands.ts, 32, 25))
+>c3 : Symbol(c3, Decl(inOperatorWithValidOperands.ts, 41, 3))
+>Y : Symbol(Y, Decl(inOperatorWithValidOperands.ts, 36, 25))
 
 var rc1 = x in c1;
->rc1 : Symbol(rc1, Decl(inOperatorWithValidOperands.ts, 39, 3))
+>rc1 : Symbol(rc1, Decl(inOperatorWithValidOperands.ts, 43, 3))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
->c1 : Symbol(c1, Decl(inOperatorWithValidOperands.ts, 35, 3))
+>c1 : Symbol(c1, Decl(inOperatorWithValidOperands.ts, 39, 3))
 
 var rc2 = x in (c2 || c3);
->rc2 : Symbol(rc2, Decl(inOperatorWithValidOperands.ts, 40, 3))
+>rc2 : Symbol(rc2, Decl(inOperatorWithValidOperands.ts, 44, 3))
 >x : Symbol(x, Decl(inOperatorWithValidOperands.ts, 0, 3))
->c2 : Symbol(c2, Decl(inOperatorWithValidOperands.ts, 36, 3))
->c3 : Symbol(c3, Decl(inOperatorWithValidOperands.ts, 37, 3))
+>c2 : Symbol(c2, Decl(inOperatorWithValidOperands.ts, 40, 3))
+>c3 : Symbol(c3, Decl(inOperatorWithValidOperands.ts, 41, 3))
 

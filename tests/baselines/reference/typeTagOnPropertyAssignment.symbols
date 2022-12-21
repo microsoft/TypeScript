@@ -1,0 +1,25 @@
+=== tests/cases/conformance/jsdoc/typeTagOnPropertyAssignment.js ===
+const o = {
+>o : Symbol(o, Decl(typeTagOnPropertyAssignment.js, 0, 5))
+
+    /**
+     * @type {"a"}
+     */
+    a: "a",
+>a : Symbol(a, Decl(typeTagOnPropertyAssignment.js, 0, 11))
+
+    /** @type {() => 'b'} */
+    n: () => 'b'
+>n : Symbol(n, Decl(typeTagOnPropertyAssignment.js, 4, 11))
+
+};
+o.a
+>o.a : Symbol(a, Decl(typeTagOnPropertyAssignment.js, 0, 11))
+>o : Symbol(o, Decl(typeTagOnPropertyAssignment.js, 0, 5))
+>a : Symbol(a, Decl(typeTagOnPropertyAssignment.js, 0, 11))
+
+o.n
+>o.n : Symbol(n, Decl(typeTagOnPropertyAssignment.js, 4, 11))
+>o : Symbol(o, Decl(typeTagOnPropertyAssignment.js, 0, 5))
+>n : Symbol(n, Decl(typeTagOnPropertyAssignment.js, 4, 11))
+

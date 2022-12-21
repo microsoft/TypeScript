@@ -15,7 +15,7 @@ module m {
 
 // Object literal with everything
 var x: {
->x : { (a: number): c; (a: string): g<string>; new (a: number): c; new (a: string): m.c; [n: string]: c; [n: number]: c; a: c; b: g<string>; m1(): g<number>; m2(a: string, b?: number, ...c: c[]): string; }
+>x : { (a: number): c; (a: string): g<string>; new (a: number): c; new (a: string): m.c; [n: number]: c; [n: string]: c; a: c; b: g<string>; m1(): g<number>; m2(a: string, b?: number, ...c: c[]): string; }
 
     // Call signatures
     (a: number): c;

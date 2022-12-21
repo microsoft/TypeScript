@@ -1,0 +1,15 @@
+=== tests/cases/conformance/jsdoc/declarations/file.js ===
+/**
+ * @param {Array} x
+ */
+function x(x) {}
+>x : (x: any[]) => void
+>x : any[]
+
+/**
+ * @param {Promise} x
+ */
+function y(x) {}
+>y : (x: Promise<any>) => void
+>x : Promise<any>
+

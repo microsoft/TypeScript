@@ -94,7 +94,7 @@ var C = /** @class */ (function () {
         get: function () {
             return 0; // this should not be an error
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     C.prototype.returnBarWithCase = function () {
@@ -113,14 +113,14 @@ var C1 = /** @class */ (function () {
         get: function () {
             return this.getValue; // this should not be an error
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(C1.prototype, "notCastedGet", {
         get: function () {
             return this.getValue; // this should not be an error
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C1;

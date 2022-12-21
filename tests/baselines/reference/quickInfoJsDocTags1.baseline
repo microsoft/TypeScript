@@ -1,0 +1,196 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoJsDocTags1.ts",
+      "position": 298,
+      "name": ""
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 298,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "x",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Doc",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "author",
+          "text": [
+            {
+              "text": "Me <me@domain.tld>",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "augments",
+          "text": [
+            {
+              "text": "C<T>",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Augments it",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "template",
+          "text": [
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "A template",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "text": [
+            {
+              "text": "{number | string}",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "A type",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "typedef",
+          "text": [
+            {
+              "text": "NumOrStr",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "property",
+          "text": [
+            {
+              "text": "{number} x The prop",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "x",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "The param",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "returns",
+          "text": [
+            {
+              "text": "The result",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "see",
+          "text": [
+            {
+              "text": "x",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "(the parameter)",
+              "kind": "text"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

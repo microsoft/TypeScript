@@ -1,5 +1,5 @@
 === tests/cases/compiler/commentOnArrayElement1.ts ===
-var array = [
+const array = [
 >array : number[]
 >[    /* element 1*/    1    /* end of element 1 */,    2    /* end of element 2 */] : number[]
 

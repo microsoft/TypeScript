@@ -1,0 +1,71 @@
+=== tests/cases/compiler/spreadIdenticalTypesRemoved.ts ===
+interface Animal {
+>Animal : Symbol(Animal, Decl(spreadIdenticalTypesRemoved.ts, 0, 0))
+
+    name: string;
+>name : Symbol(Animal.name, Decl(spreadIdenticalTypesRemoved.ts, 0, 18))
+
+    kind: string;
+>kind : Symbol(Animal.kind, Decl(spreadIdenticalTypesRemoved.ts, 1, 17))
+
+    age: number;
+>age : Symbol(Animal.age, Decl(spreadIdenticalTypesRemoved.ts, 2, 17))
+
+    location: string;
+>location : Symbol(Animal.location, Decl(spreadIdenticalTypesRemoved.ts, 3, 16))
+
+    owner: object;
+>owner : Symbol(Animal.owner, Decl(spreadIdenticalTypesRemoved.ts, 4, 21))
+}
+
+function clonePet(pet: Animal, fullCopy?: boolean) {
+>clonePet : Symbol(clonePet, Decl(spreadIdenticalTypesRemoved.ts, 6, 1))
+>pet : Symbol(pet, Decl(spreadIdenticalTypesRemoved.ts, 8, 18))
+>Animal : Symbol(Animal, Decl(spreadIdenticalTypesRemoved.ts, 0, 0))
+>fullCopy : Symbol(fullCopy, Decl(spreadIdenticalTypesRemoved.ts, 8, 30))
+
+    return {
+        name: pet.name,
+>name : Symbol(name, Decl(spreadIdenticalTypesRemoved.ts, 9, 12))
+>pet.name : Symbol(Animal.name, Decl(spreadIdenticalTypesRemoved.ts, 0, 18))
+>pet : Symbol(pet, Decl(spreadIdenticalTypesRemoved.ts, 8, 18))
+>name : Symbol(Animal.name, Decl(spreadIdenticalTypesRemoved.ts, 0, 18))
+
+        kind: pet.kind,
+>kind : Symbol(kind, Decl(spreadIdenticalTypesRemoved.ts, 10, 23))
+>pet.kind : Symbol(Animal.kind, Decl(spreadIdenticalTypesRemoved.ts, 1, 17))
+>pet : Symbol(pet, Decl(spreadIdenticalTypesRemoved.ts, 8, 18))
+>kind : Symbol(Animal.kind, Decl(spreadIdenticalTypesRemoved.ts, 1, 17))
+
+        ...(fullCopy && pet),
+>fullCopy : Symbol(fullCopy, Decl(spreadIdenticalTypesRemoved.ts, 8, 30))
+>pet : Symbol(pet, Decl(spreadIdenticalTypesRemoved.ts, 8, 18))
+    }
+}
+
+interface Animal2 {
+>Animal2 : Symbol(Animal2, Decl(spreadIdenticalTypesRemoved.ts, 14, 1))
+
+    name: string;
+>name : Symbol(Animal2.name, Decl(spreadIdenticalTypesRemoved.ts, 16, 19))
+
+    owner?: string;
+>owner : Symbol(Animal2.owner, Decl(spreadIdenticalTypesRemoved.ts, 17, 17))
+}
+function billOwner(pet: Animal2) {
+>billOwner : Symbol(billOwner, Decl(spreadIdenticalTypesRemoved.ts, 19, 1))
+>pet : Symbol(pet, Decl(spreadIdenticalTypesRemoved.ts, 20, 19))
+>Animal2 : Symbol(Animal2, Decl(spreadIdenticalTypesRemoved.ts, 14, 1))
+
+    return {
+        ...(pet.owner && pet),
+>pet.owner : Symbol(Animal2.owner, Decl(spreadIdenticalTypesRemoved.ts, 17, 17))
+>pet : Symbol(pet, Decl(spreadIdenticalTypesRemoved.ts, 20, 19))
+>owner : Symbol(Animal2.owner, Decl(spreadIdenticalTypesRemoved.ts, 17, 17))
+>pet : Symbol(pet, Decl(spreadIdenticalTypesRemoved.ts, 20, 19))
+
+        paid: false
+>paid : Symbol(paid, Decl(spreadIdenticalTypesRemoved.ts, 22, 30))
+    }
+}
+

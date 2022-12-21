@@ -1,5 +1,6 @@
 ╭ name: bar
 ├ kind: getter
+├ containerName: C
 ├ file: /tests/cases/fourslash/callHierarchyAccessor.ts
 ├ span:
 │ ╭ /tests/cases/fourslash/callHierarchyAccessor.ts:6:5-8:6

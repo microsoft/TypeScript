@@ -1,4 +1,5 @@
 // @declaration: true
+
 // @out: tests/cases/compiler/out.js
 
 // @Filename: out.d.ts

@@ -5,9 +5,9 @@ class C {
     "constructor"() {
         console.log(this);
 >console.log(this) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >this : this
     }
 }
@@ -18,9 +18,9 @@ class D {
     'constructor'() {
         console.log(this);
 >console.log(this) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >this : this
     }
 }
@@ -34,9 +34,9 @@ class E {
 
         console.log(this);
 >console.log(this) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >this : this
     }
 }
@@ -48,9 +48,9 @@ new class {
     "constructor"() {
         console.log(this);
 >console.log(this) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >this : this
     }
 };
@@ -66,9 +66,9 @@ class F {
     "\x63onstructor"() {
         console.log(this);
 >console.log(this) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >this : this
     }
 }

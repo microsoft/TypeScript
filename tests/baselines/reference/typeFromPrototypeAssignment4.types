@@ -5,7 +5,7 @@ function Multimap4() {
   this._map = {};
 >this._map = {} : {}
 >this._map : any
->this : any
+>this : this
 >_map : any
 >{} : {}
 

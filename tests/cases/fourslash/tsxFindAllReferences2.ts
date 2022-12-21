@@ -5,12 +5,12 @@
 ////     interface Element { }
 ////     interface IntrinsicElements {
 ////         div: {
-////             [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}name|]?: string;|]
+////             /*1*/name?: string;
 ////             isOpen?: boolean;
 ////         };
 ////         span: { n: string; };
 ////     }
 //// }
-//// var x = <div [|[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}name|]="hello"|] />;
+//// var x = <div name="hello" />;
 
-verify.singleReferenceGroup("(property) name?: string", "name");
+verify.baselineFindAllReferences('1')

@@ -1,0 +1,56 @@
+=== tests/cases/compiler/narrowCommaOperatorNestedWithinLHS.ts ===
+const otherValue = () => true;
+>otherValue : Symbol(otherValue, Decl(narrowCommaOperatorNestedWithinLHS.ts, 0, 5))
+
+const value: { inner: number | string } = null as any;
+>value : Symbol(value, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 5))
+>inner : Symbol(inner, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 14))
+
+function isNumber(obj: any): obj is number {
+>isNumber : Symbol(isNumber, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 54))
+>obj : Symbol(obj, Decl(narrowCommaOperatorNestedWithinLHS.ts, 3, 18))
+>obj : Symbol(obj, Decl(narrowCommaOperatorNestedWithinLHS.ts, 3, 18))
+
+    return true; // method implementation irrelevant
+}
+
+if (typeof (otherValue(), value).inner === 'number') {
+>(otherValue(), value).inner : Symbol(inner, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 14))
+>otherValue : Symbol(otherValue, Decl(narrowCommaOperatorNestedWithinLHS.ts, 0, 5))
+>value : Symbol(value, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 5))
+>inner : Symbol(inner, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 14))
+
+    const a = value.inner; // number
+>a : Symbol(a, Decl(narrowCommaOperatorNestedWithinLHS.ts, 8, 9))
+>value.inner : Symbol(inner, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 14))
+>value : Symbol(value, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 5))
+>inner : Symbol(inner, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 14))
+
+    const b: number = (otherValue(), value).inner; // string | number , but should be number
+>b : Symbol(b, Decl(narrowCommaOperatorNestedWithinLHS.ts, 9, 9))
+>(otherValue(), value).inner : Symbol(inner, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 14))
+>otherValue : Symbol(otherValue, Decl(narrowCommaOperatorNestedWithinLHS.ts, 0, 5))
+>value : Symbol(value, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 5))
+>inner : Symbol(inner, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 14))
+}
+
+if (isNumber((otherValue(), value).inner)) {
+>isNumber : Symbol(isNumber, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 54))
+>(otherValue(), value).inner : Symbol(inner, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 14))
+>otherValue : Symbol(otherValue, Decl(narrowCommaOperatorNestedWithinLHS.ts, 0, 5))
+>value : Symbol(value, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 5))
+>inner : Symbol(inner, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 14))
+
+    const a = value.inner; // number
+>a : Symbol(a, Decl(narrowCommaOperatorNestedWithinLHS.ts, 13, 9))
+>value.inner : Symbol(inner, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 14))
+>value : Symbol(value, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 5))
+>inner : Symbol(inner, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 14))
+
+    const b: number = (otherValue(), value).inner; // string | number , but should be number
+>b : Symbol(b, Decl(narrowCommaOperatorNestedWithinLHS.ts, 14, 9))
+>(otherValue(), value).inner : Symbol(inner, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 14))
+>otherValue : Symbol(otherValue, Decl(narrowCommaOperatorNestedWithinLHS.ts, 0, 5))
+>value : Symbol(value, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 5))
+>inner : Symbol(inner, Decl(narrowCommaOperatorNestedWithinLHS.ts, 1, 14))
+}

@@ -1,0 +1,23 @@
+=== tests/cases/compiler/webworkerIterable.ts ===
+// This API is only in webworker
+importScripts("")
+>importScripts("") : void
+>importScripts : (...urls: (string | URL)[]) => void
+>"" : ""
+
+// This should not raise a compiler error
+const f = new FormData()
+>f : FormData
+>new FormData() : FormData
+>FormData : { new (): FormData; prototype: FormData; }
+
+for (const element of f) {
+>element : [string, FormDataEntryValue]
+>f : FormData
+
+  element.length
+>element.length : 2
+>element : [string, FormDataEntryValue]
+>length : 2
+}
+

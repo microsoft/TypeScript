@@ -1,5 +1,5 @@
 tests/cases/compiler/functionCall13.ts(4,1): error TS2555: Expected at least 1 arguments, but got 0.
-tests/cases/compiler/functionCall13.ts(5,5): error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
+tests/cases/compiler/functionCall13.ts(5,5): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 
 
 ==== tests/cases/compiler/functionCall13.ts (2 errors) ====
@@ -12,6 +12,6 @@ tests/cases/compiler/functionCall13.ts(5,5): error TS2345: Argument of type '1' 
 !!! related TS6210 tests/cases/compiler/functionCall13.ts:1:14: An argument for 'a' was not provided.
     foo(1, 'bar');
         ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     foo('foo', 1, 3);
     

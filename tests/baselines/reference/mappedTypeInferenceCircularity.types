@@ -2,7 +2,7 @@
 // Repro from #12511
 
 type HTML = { [K in 'div']: Block<HTML> };
->HTML : HTML
+>HTML : { div: Block<HTML>; }
 
 type Block<P> = <T>(func: HTML) => {};
 >Block : Block<P>

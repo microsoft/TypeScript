@@ -2,16 +2,16 @@
 interface I {
     [Symbol.iterator]: (s: string) => string;
 >[Symbol.iterator] : (s: string) => string
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >s : string
 
     [Symbol.toStringTag](s: number): number;
 >[Symbol.toStringTag] : (s: number) => number
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 >s : number
 }
 
@@ -21,18 +21,18 @@ var i: I = {
 
     [Symbol.iterator]: s => s,
 >[Symbol.iterator] : (s: string) => string
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >s => s : (s: string) => string
 >s : string
 >s : string
 
     [Symbol.toStringTag](n) { return n; }
 >[Symbol.toStringTag] : (n: number) => number
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 >n : number
 >n : number
 }

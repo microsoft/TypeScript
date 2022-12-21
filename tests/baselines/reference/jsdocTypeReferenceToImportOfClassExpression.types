@@ -1,0 +1,55 @@
+=== tests/cases/conformance/jsdoc/MC.js ===
+const MW = require("./MW");
+>MW : typeof MW
+>require("./MW") : typeof MW
+>require : any
+>"./MW" : "./MW"
+
+/** @typedef {number} Cictema */
+
+module.exports = class MC {
+>module.exports = class MC {  watch() {    return new MW(this);  }} : typeof import("tests/cases/conformance/jsdoc/MC")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/MC")
+>module : { exports: typeof import("tests/cases/conformance/jsdoc/MC"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/MC")
+>class MC {  watch() {    return new MW(this);  }} : typeof import("tests/cases/conformance/jsdoc/MC")
+>MC : typeof import("tests/cases/conformance/jsdoc/MC")
+
+  watch() {
+>watch : () => MW
+
+    return new MW(this);
+>new MW(this) : MW
+>MW : typeof MW
+>this : this
+  }
+};
+
+=== tests/cases/conformance/jsdoc/MW.js ===
+/** @typedef {import("./MC")} MC */
+
+class MW {
+>MW : MW
+
+  /**
+   * @param {MC} compiler the compiler
+   */
+  constructor(compiler) {
+>compiler : import("tests/cases/conformance/jsdoc/MC")
+
+    this.compiler = compiler;
+>this.compiler = compiler : import("tests/cases/conformance/jsdoc/MC")
+>this.compiler : any
+>this : this
+>compiler : any
+>compiler : import("tests/cases/conformance/jsdoc/MC")
+  }
+}
+
+module.exports = MW;
+>module.exports = MW : typeof MW
+>module.exports : typeof MW
+>module : { exports: typeof MW; }
+>exports : typeof MW
+>MW : typeof MW
+

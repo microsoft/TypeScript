@@ -81,7 +81,7 @@ var x8: T8;
 >x8 : string | boolean
 
 type T9 = () => string;
->T9 : T9
+>T9 : () => string
 
 var x9: () => string;
 >x9 : () => string
@@ -90,7 +90,7 @@ var x9: T9;
 >x9 : () => string
 
 type T10 = { x: number };
->T10 : T10
+>T10 : { x: number; }
 >x : number
 
 var x10: { x: number };
@@ -101,7 +101,7 @@ var x10: T10;
 >x10 : { x: number; }
 
 type T11 = { new(): boolean };
->T11 : T11
+>T11 : new () => boolean
 
 var x11: { new(): boolean };
 >x11 : new () => boolean
@@ -122,7 +122,7 @@ var x13_2: T13
 >x13_2 : I13
 
 declare function foo13<T1 extends I13, T2 extends T13>(t1: T1, t2: T13): void;
->foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: I13) => void
+>foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: T13) => void
 >t1 : T1
 >t2 : I13
 
@@ -145,7 +145,7 @@ var x14: T14;
 >x14 : string
 
 declare function foo14_1(x: T14): void;
->foo14_1 : (x: string) => void
+>foo14_1 : (x: T14) => void
 >x : string
 
 declare function foo14_2(x: "click"): void;
@@ -153,7 +153,7 @@ declare function foo14_2(x: "click"): void;
 >x : "click"
 
 declare function foo14_2(x: T14): void;
->foo14_2 : { (x: "click"): void; (x: string): void; }
+>foo14_2 : { (x: "click"): void; (x: T14): void; }
 >x : string
 
 type Meters = number
@@ -169,7 +169,7 @@ declare function f15(a: string): boolean;
 >a : string
 
 declare function f15(a: Meters): string;
->f15 : { (a: string): boolean; (a: number): string; }
+>f15 : { (a: string): boolean; (a: Meters): string; }
 >a : number
 
 f15(E.x).toLowerCase();
@@ -183,7 +183,7 @@ f15(E.x).toLowerCase();
 >toLowerCase : () => string
 
 type StringAndBoolean = [string, boolean]
->StringAndBoolean : StringAndBoolean
+>StringAndBoolean : [string, boolean]
 
 declare function f16(s: StringAndBoolean): string;
 >f16 : (s: StringAndBoolean) => string

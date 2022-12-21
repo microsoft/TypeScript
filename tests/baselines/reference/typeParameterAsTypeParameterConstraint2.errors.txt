@@ -1,4 +1,4 @@
-tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(6,8): error TS2345: Argument of type '""' is not assignable to parameter of type 'number'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(6,8): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(7,8): error TS2345: Argument of type '{}' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(13,17): error TS2345: Argument of type 'NumberVariant' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(16,11): error TS2322: Type 'string' is not assignable to type 'number'.
@@ -16,7 +16,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTy
     
     foo(1, '');
            ~~
-!!! error TS2345: Argument of type '""' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     foo(1, {});
            ~~
 !!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'number'.

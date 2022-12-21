@@ -61,13 +61,13 @@ var b: number | string;
 
 var b = foo(g);            // Error, number and string are disjoint types
 >b : string | number
->foo(g) : any
+>foo(g) : unknown
 >foo : <T>(cb: (x: number, y: string) => T) => T
 >g : <T>(x: T, y: T) => T
 
 var b = bar(1, "one", g);  // Error, number and string are disjoint types
 >b : string | number
->bar(1, "one", g) : any
+>bar(1, "one", g) : unknown
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >1 : 1
 >"one" : "one"
@@ -75,7 +75,7 @@ var b = bar(1, "one", g);  // Error, number and string are disjoint types
 
 var b = bar("one", 1, g);  // Error, number and string are disjoint types
 >b : string | number
->bar("one", 1, g) : any
+>bar("one", 1, g) : unknown
 >bar : <T, U, V>(x: T, y: U, cb: (x: T, y: U) => V) => V
 >"one" : "one"
 >1 : 1

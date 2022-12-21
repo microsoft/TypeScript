@@ -5,7 +5,7 @@ import {$} from "./ref";
 
 export interface A {
     x: () => typeof $
->x : () => { x: number; }
+>x : () => typeof $
 >$ : { x: number; }
 }
 

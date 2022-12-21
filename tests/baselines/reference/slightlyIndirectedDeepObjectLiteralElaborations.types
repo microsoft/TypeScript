@@ -1,10 +1,10 @@
 === tests/cases/compiler/slightlyIndirectedDeepObjectLiteralElaborations.ts ===
 interface Foo {
     a: {
->a : { b: { c: { d: string; }; }; }
+>a : { b: {    c: {        d: string;    };}; }
 
         b: {
->b : { c: { d: string; }; }
+>b : { c: {    d: string;}; }
 
             c: {
 >c : { d: string; }

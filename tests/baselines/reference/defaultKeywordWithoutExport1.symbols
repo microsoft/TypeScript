@@ -1,0 +1,9 @@
+=== tests/cases/compiler/defaultKeywordWithoutExport1.ts ===
+declare function decorator(constructor: any): any;
+>decorator : Symbol(decorator, Decl(defaultKeywordWithoutExport1.ts, 0, 0))
+>constructor : Symbol(constructor, Decl(defaultKeywordWithoutExport1.ts, 0, 27))
+
+@decorator
+>decorator : Symbol(decorator, Decl(defaultKeywordWithoutExport1.ts, 0, 0))
+
+default class {}

@@ -1,0 +1,33 @@
+=== /defs.d.ts ===
+interface A {
+>A : Symbol(A, Decl(defs.d.ts, 0, 0))
+
+    mNumber(): number;
+>mNumber : Symbol(A.mNumber, Decl(defs.d.ts, 0, 13))
+}
+=== /a.js ===
+/** @implements A */
+class B {
+>B : Symbol(B, Decl(a.js, 0, 0))
+
+    mNumber() {
+>mNumber : Symbol(B.mNumber, Decl(a.js, 1, 9))
+
+        return 0;
+    }
+}
+/** @implements {A} */
+class B2 {
+>B2 : Symbol(B2, Decl(a.js, 5, 1))
+
+    mNumber() {
+>mNumber : Symbol(B2.mNumber, Decl(a.js, 7, 10))
+
+        return "";
+    }
+}
+/** @implements A */
+class B3 {
+>B3 : Symbol(B3, Decl(a.js, 11, 1))
+}
+

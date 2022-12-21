@@ -14,9 +14,9 @@
         "FolderA/FolderB/fileB.ts"
     ],
     "emittedFiles": [
-        "outdir/simple/FolderC/fileC.js",
-        "outdir/simple/FolderC/fileC.d.ts",
-        "outdir/simple/fileB.js",
-        "outdir/simple/fileB.d.ts"
+        "outdir/simple/fileC.js",
+        "outdir/simple/fileC.d.ts",
+        "FolderA/FolderB/fileB.js",
+        "FolderA/FolderB/fileB.d.ts"
     ]
 }

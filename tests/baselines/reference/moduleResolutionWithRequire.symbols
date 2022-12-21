@@ -1,0 +1,17 @@
+=== /index.ts ===
+declare const require: any;
+>require : Symbol(require, Decl(index.ts, 0, 13))
+
+function foo() {
+>foo : Symbol(foo, Decl(index.ts, 0, 27))
+
+    const a = require('../outside-of-rootdir/foo');
+>a : Symbol(a, Decl(index.ts, 2, 9))
+>require : Symbol(require, Decl(index.ts, 0, 13))
+
+    const { other }: { other: string } = require('./other');
+>other : Symbol(other, Decl(index.ts, 3, 11))
+>other : Symbol(other, Decl(index.ts, 3, 22))
+>require : Symbol(require, Decl(index.ts, 0, 13))
+}
+

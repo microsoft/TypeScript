@@ -13,7 +13,6 @@
 goTo.file("/c.ts");
 verify.importFixAtPosition([
 `foo;
-import { bar } from "./b";
 import { foo } from "./a";
-`,
+import { bar } from "./b";`,
 ]);

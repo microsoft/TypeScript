@@ -2,4 +2,5 @@
 function f(p: A) => p;
 >f : Symbol(f, Decl(parserErrantEqualsGreaterThanAfterFunction2.ts, 0, 0))
 >p : Symbol(p, Decl(parserErrantEqualsGreaterThanAfterFunction2.ts, 0, 11))
+>A : Symbol(A)
 

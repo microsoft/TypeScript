@@ -1,4 +1,4 @@
 === tests/cases/conformance/types/primitives/null/directReferenceToNull.ts ===
 var x: Null;
->x : any
+>x : Null
 

@@ -1,0 +1,23 @@
+=== tests/cases/compiler/recursiveConditionalEvaluationNonInfinite.ts ===
+type Test<T> = [T] extends [any[]] ? { array: Test<T[0]> } : { notArray: T };
+>Test : Test<T>
+>array : Test<T[0]>
+>notArray : T
+
+declare const x: Test<number[]>;
+>x : { array: { notArray: number; }; }
+
+const y: { array: { notArray: number } } = x; // Error
+>y : { array: {    notArray: number;}; }
+>array : { notArray: number; }
+>notArray : number
+>x : { array: { notArray: number; }; }
+
+declare const a: Test<number>;
+>a : { notArray: number; }
+
+const b: { notArray: number } = a; // Works
+>b : { notArray: number; }
+>notArray : number
+>a : { notArray: number; }
+

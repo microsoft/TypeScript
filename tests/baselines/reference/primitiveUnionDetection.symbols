@@ -1,0 +1,22 @@
+=== tests/cases/compiler/primitiveUnionDetection.ts ===
+// Repro from #46624
+
+type Kind = "one" | "two" | "three";
+>Kind : Symbol(Kind, Decl(primitiveUnionDetection.ts, 0, 0))
+
+declare function getInterfaceFromString<T extends Kind>(options?: { type?: T } & { type?: Kind }): T;
+>getInterfaceFromString : Symbol(getInterfaceFromString, Decl(primitiveUnionDetection.ts, 2, 36))
+>T : Symbol(T, Decl(primitiveUnionDetection.ts, 4, 40))
+>Kind : Symbol(Kind, Decl(primitiveUnionDetection.ts, 0, 0))
+>options : Symbol(options, Decl(primitiveUnionDetection.ts, 4, 56))
+>type : Symbol(type, Decl(primitiveUnionDetection.ts, 4, 67))
+>T : Symbol(T, Decl(primitiveUnionDetection.ts, 4, 40))
+>type : Symbol(type, Decl(primitiveUnionDetection.ts, 4, 82))
+>Kind : Symbol(Kind, Decl(primitiveUnionDetection.ts, 0, 0))
+>T : Symbol(T, Decl(primitiveUnionDetection.ts, 4, 40))
+
+const result = getInterfaceFromString({ type: 'two' });
+>result : Symbol(result, Decl(primitiveUnionDetection.ts, 6, 5))
+>getInterfaceFromString : Symbol(getInterfaceFromString, Decl(primitiveUnionDetection.ts, 2, 36))
+>type : Symbol(type, Decl(primitiveUnionDetection.ts, 6, 39))
+

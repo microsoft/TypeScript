@@ -43,9 +43,9 @@ class SomeBase {
     constructor() {
         this.p = 42;
 >this.p = 42 : 42
->this.p : number
+>this.p : any
 >this : this
->p : number
+>p : any
 >42 : 42
     }
 }
@@ -60,9 +60,9 @@ class SomeDerived extends SomeBase {
 
         this.x = 42;
 >this.x = 42 : 42
->this.x : number
+>this.x : any
 >this : this
->x : number
+>x : any
 >42 : 42
     }
 }
@@ -72,9 +72,9 @@ class SomeOther {
     constructor() {
         this.q = 42;
 >this.q = 42 : 42
->this.q : number
+>this.q : any
 >this : this
->q : number
+>q : any
 >42 : 42
     }
 }
@@ -85,9 +85,9 @@ function SomeFakeClass() {
     /** @type {string|number} */
     this.p = "bar";
 >this.p = "bar" : "bar"
->this.p : any
->this : any
->p : any
+>this.p : string | number
+>this : this
+>p : string | number
 >"bar" : "bar"
 }
 
@@ -209,4 +209,18 @@ if(/** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
 }
 
 
+var asConst1 = /** @type {const} */(1);
+>asConst1 : 1
+>(1) : 1
+>1 : 1
 
+var asConst2 = /** @type {const} */({
+>asConst2 : { readonly x: 1; }
+>({    x: 1}) : { readonly x: 1; }
+>{    x: 1} : { readonly x: 1; }
+
+    x: 1
+>x : 1
+>1 : 1
+
+});

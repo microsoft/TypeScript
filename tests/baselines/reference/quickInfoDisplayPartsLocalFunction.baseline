@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts",
-      "position": 9
+      "position": 9,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "function",
@@ -51,7 +52,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts",
-      "position": 35
+      "position": 35,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "local function",
@@ -216,7 +218,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts",
-      "position": 155
+      "position": 155,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "local function",
@@ -317,7 +320,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts",
-      "position": 204
+      "position": 204,
+      "name": "4"
     },
     "quickInfo": {
       "kind": "local function",
@@ -418,7 +422,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts",
-      "position": 253
+      "position": 253,
+      "name": "5"
     },
     "quickInfo": {
       "kind": "local function",
@@ -519,7 +524,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts",
-      "position": 321
+      "position": 321,
+      "name": "6"
     },
     "quickInfo": {
       "kind": "local function",
@@ -620,7 +626,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts",
-      "position": 371
+      "position": 371,
+      "name": "7"
     },
     "quickInfo": {
       "kind": "local function",
@@ -721,7 +728,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts",
-      "position": 421
+      "position": 421,
+      "name": "8"
     },
     "quickInfo": {
       "kind": "local function",
@@ -822,7 +830,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts",
-      "position": 473
+      "position": 473,
+      "name": "9"
     },
     "quickInfo": {
       "kind": "local function",
@@ -923,7 +932,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts",
-      "position": 533
+      "position": 533,
+      "name": "10"
     },
     "quickInfo": {
       "kind": "local function",
@@ -1088,7 +1098,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts",
-      "position": 551
+      "position": 551,
+      "name": "11"
     },
     "quickInfo": {
       "kind": "local function",
@@ -1189,7 +1200,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts",
-      "position": 581
+      "position": 581,
+      "name": "12"
     },
     "quickInfo": {
       "kind": "local function",
@@ -1290,7 +1302,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts",
-      "position": 606
+      "position": 606,
+      "name": "13"
     },
     "quickInfo": {
       "kind": "local function",
@@ -1391,7 +1404,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts",
-      "position": 637
+      "position": 637,
+      "name": "14"
     },
     "quickInfo": {
       "kind": "local function",
@@ -1492,7 +1506,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts",
-      "position": 663
+      "position": 663,
+      "name": "15"
     },
     "quickInfo": {
       "kind": "local function",
@@ -1593,7 +1608,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsLocalFunction.ts",
-      "position": 689
+      "position": 689,
+      "name": "16"
     },
     "quickInfo": {
       "kind": "function",

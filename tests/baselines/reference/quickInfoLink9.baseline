@@ -1,0 +1,52 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoLink9.ts",
+      "position": 47,
+      "name": ""
+    },
+    "quickInfo": {
+      "kind": "parameter",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 47,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "parameter",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "a",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  }
+]

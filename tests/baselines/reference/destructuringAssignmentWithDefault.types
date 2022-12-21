@@ -61,7 +61,7 @@ function f1(options?: { color?: string, width?: number }) {
 }
 
 function f2(options?: [string?, number?]) {
->f2 : (options?: [(string | undefined)?, (number | undefined)?] | undefined) => void
+>f2 : (options?: [string?, number?]) => void
 >options : [(string | undefined)?, (number | undefined)?] | undefined
 
     let [str, num] = options || [];
@@ -133,7 +133,7 @@ function f3(options?: { color: string, width: number }) {
 }
 
 function f4(options?: [string, number]) {
->f4 : (options?: [string, number] | undefined) => void
+>f4 : (options?: [string, number]) => void
 >options : [string, number] | undefined
 
     let [str, num] = options || [];

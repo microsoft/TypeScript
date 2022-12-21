@@ -2,7 +2,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeAlias.ts",
-      "position": 6
+      "position": 6,
+      "name": "1"
     },
     "quickInfo": {
       "kind": "class",
@@ -31,7 +32,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeAlias.ts",
-      "position": 17
+      "position": 17,
+      "name": "2"
     },
     "quickInfo": {
       "kind": "type",
@@ -76,7 +78,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeAlias.ts",
-      "position": 22
+      "position": 22,
+      "name": "3"
     },
     "quickInfo": {
       "kind": "class",
@@ -105,7 +108,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeAlias.ts",
-      "position": 29
+      "position": 29,
+      "name": "4"
     },
     "quickInfo": {
       "kind": "var",
@@ -146,7 +150,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeAlias.ts",
-      "position": 40
+      "position": 40,
+      "name": "5"
     },
     "quickInfo": {
       "kind": "type",
@@ -191,7 +196,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsTypeAlias.ts",
-      "position": 49
+      "position": 49,
+      "name": "6"
     },
     "quickInfo": {
       "kind": "constructor",

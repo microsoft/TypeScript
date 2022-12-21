@@ -539,8 +539,8 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >titleRotation = (taTitleOrientation && taTitleOrientation == "away") ? 180 : 0 : 0 | 180
 >titleRotation : number
 >(taTitleOrientation && taTitleOrientation == "away") ? 180 : 0 : 0 | 180
->(taTitleOrientation && taTitleOrientation == "away") : boolean
->taTitleOrientation && taTitleOrientation == "away" : boolean
+>(taTitleOrientation && taTitleOrientation == "away") : any
+>taTitleOrientation && taTitleOrientation == "away" : any
 >taTitleOrientation : any
 >taTitleOrientation == "away" : boolean
 >taTitleOrientation : any

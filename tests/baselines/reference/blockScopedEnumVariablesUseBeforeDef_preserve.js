@@ -18,7 +18,7 @@ function foo1() {
     })(E || (E = {}));
 }
 function foo2() {
-    return 0 /* A */;
+    return 0 /* E.A */;
     var E;
     (function (E) {
         E[E["A"] = 0] = "A";

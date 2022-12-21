@@ -1,5 +1,5 @@
 //// [commentOnArrayElement3.ts]
-var array = [
+const array = [
     /* element 1*/
     1
     /* end of element 1 */,
@@ -16,4 +16,5 @@ var array = [
     2
     /* end of element 2 */ ,
     ,
+    /* extra comment */
 ];

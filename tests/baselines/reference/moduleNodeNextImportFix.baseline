@@ -1,0 +1,24 @@
+Syntactic Diagnostics for file '/tests/cases/fourslash/moduleNodeNextImportFix.ts':
+
+
+==== /tests/cases/fourslash/src/index.mts (0 errors) ====
+    import { util } from './deps.mts'
+    export function main() {
+        util()
+    }
+==== /tests/cases/fourslash/src/deps.mts (0 errors) ====
+    export function util() {}
+
+Semantic Diagnostics for file '/tests/cases/fourslash/moduleNodeNextImportFix.ts':
+/tests/cases/fourslash/src/index.mts(1,22): error TS2691: An import path cannot end with a '.mts' extension. Consider importing './deps.mjs' instead.
+
+
+==== /tests/cases/fourslash/src/index.mts (1 errors) ====
+    import { util } from './deps.mts'
+                         ~~~~~~~~~~~~
+!!! error TS2691: An import path cannot end with a '.mts' extension. Consider importing './deps.mjs' instead.
+    export function main() {
+        util()
+    }
+==== /tests/cases/fourslash/src/deps.mts (0 errors) ====
+    export function util() {}

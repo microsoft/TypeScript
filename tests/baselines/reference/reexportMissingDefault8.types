@@ -1,0 +1,12 @@
+=== tests/cases/compiler/b.ts ===
+const b = null;
+>b : any
+>null : null
+
+export = b;
+>b : any
+
+=== tests/cases/compiler/a.ts ===
+export { default } from "./b";
+>default : any
+

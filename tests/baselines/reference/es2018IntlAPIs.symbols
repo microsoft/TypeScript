@@ -1,0 +1,25 @@
+=== tests/cases/conformance/es2018/es2018IntlAPIs.ts ===
+// Sample from
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/PluralRules/supportedLocalesOf
+const locales = ['ban', 'id-u-co-pinyin', 'de-ID'];
+>locales : Symbol(locales, Decl(es2018IntlAPIs.ts, 2, 5))
+
+const options = { localeMatcher: 'lookup' } as const;
+>options : Symbol(options, Decl(es2018IntlAPIs.ts, 3, 5))
+>localeMatcher : Symbol(localeMatcher, Decl(es2018IntlAPIs.ts, 3, 17))
+>const : Symbol(const)
+
+console.log(Intl.PluralRules.supportedLocalesOf(locales, options).join(', '));
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>Intl.PluralRules.supportedLocalesOf(locales, options).join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>Intl.PluralRules.supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2018.intl.d.ts, --, --))
+>Intl.PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
+>PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
+>supportedLocalesOf : Symbol(supportedLocalesOf, Decl(lib.es2018.intl.d.ts, --, --))
+>locales : Symbol(locales, Decl(es2018IntlAPIs.ts, 2, 5))
+>options : Symbol(options, Decl(es2018IntlAPIs.ts, 3, 5))
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+

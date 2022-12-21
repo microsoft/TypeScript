@@ -1,7 +1,7 @@
 class C {
-    static foo = this; // error
+    static foo = this; // ok
 }
 
 class C2<T> {
-    static foo = this; // error
+    static foo = this; // ok
 }

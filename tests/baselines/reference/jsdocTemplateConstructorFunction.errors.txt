@@ -1,4 +1,4 @@
-tests/cases/conformance/jsdoc/templateTagOnConstructorFunctions.js(24,1): error TS2322: Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/jsdoc/templateTagOnConstructorFunctions.js(24,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/jsdoc/templateTagOnConstructorFunctions.js (1 errors) ====
@@ -27,5 +27,5 @@ tests/cases/conformance/jsdoc/templateTagOnConstructorFunctions.js(24,1): error 
     z.t = 2
     z.u = false
     ~~~
-!!! error TS2322: Type 'false' is not assignable to type 'number'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
     

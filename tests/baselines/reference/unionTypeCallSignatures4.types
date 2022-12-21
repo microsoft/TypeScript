@@ -1,28 +1,28 @@
 === tests/cases/conformance/types/union/unionTypeCallSignatures4.ts ===
 type F1 = (a: string, b?: string) => void;
->F1 : F1
+>F1 : (a: string, b?: string) => void
 >a : string
 >b : string
 
 type F2 = (a: string, b?: string, c?: string) => void;
->F2 : F2
+>F2 : (a: string, b?: string, c?: string) => void
 >a : string
 >b : string
 >c : string
 
 type F3 = (a: string, ...rest: string[]) => void;
->F3 : F3
+>F3 : (a: string, ...rest: string[]) => void
 >a : string
 >rest : string[]
 
 type F4 = (a: string, b?: string, ...rest: string[]) => void;
->F4 : F4
+>F4 : (a: string, b?: string, ...rest: string[]) => void
 >a : string
 >b : string
 >rest : string[]
 
 type F5 = (a: string, b: string) => void;
->F5 : F5
+>F5 : (a: string, b: string) => void
 >a : string
 >b : string
 
@@ -93,7 +93,7 @@ var f12345: F1 | F2 | F3 | F4 | F5;
 >f12345 : F1 | F2 | F3 | F4 | F5
 
 f12345("a");  // error
->f12345("a") : any
+>f12345("a") : void
 >f12345 : F1 | F2 | F3 | F4 | F5
 >"a" : "a"
 
@@ -104,7 +104,7 @@ f12345("a", "b");
 >"b" : "b"
 
 f12345("a", "b", "c");  // error
->f12345("a", "b", "c") : any
+>f12345("a", "b", "c") : void
 >f12345 : F1 | F2 | F3 | F4 | F5
 >"a" : "a"
 >"b" : "b"

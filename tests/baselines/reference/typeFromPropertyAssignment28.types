@@ -3,9 +3,9 @@
 class C { constructor() { this.p = 1; } }
 >C : C
 >this.p = 1 : 1
->this.p : number
+>this.p : any
 >this : this
->p : number
+>p : any
 >1 : 1
 
 // Property assignment does nothing.

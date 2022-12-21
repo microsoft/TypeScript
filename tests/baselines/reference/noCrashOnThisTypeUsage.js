@@ -26,7 +26,8 @@ export class ObservableValue<T> {
 
 //// [noCrashOnThisTypeUsage.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ObservableValue = void 0;
 function notifyListeners(listenable, change) {
 }
 var ObservableValue = /** @class */ (function () {

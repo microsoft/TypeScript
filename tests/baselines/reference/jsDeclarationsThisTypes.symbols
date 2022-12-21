@@ -1,0 +1,20 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+export class A {
+>A : Symbol(A, Decl(index.js, 0, 0))
+
+    /** @returns {this} */
+    method() {
+>method : Symbol(A.method, Decl(index.js, 0, 16))
+
+        return this;
+>this : Symbol(A, Decl(index.js, 0, 0))
+    }
+}
+export default class Base extends A {
+>Base : Symbol(Base, Decl(index.js, 5, 1))
+>A : Symbol(A, Decl(index.js, 0, 0))
+
+    // This method is required to reproduce #35932
+    verify() { }
+>verify : Symbol(Base.verify, Decl(index.js, 6, 37))
+}

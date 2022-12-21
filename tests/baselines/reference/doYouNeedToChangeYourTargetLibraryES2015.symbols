@@ -1,0 +1,314 @@
+=== tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2015.ts ===
+// es2015
+const noOp = () => {};
+>noOp : Symbol(noOp, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 1, 5))
+
+const testReflectApply = Reflect.apply(noOp, this, []);
+>testReflectApply : Symbol(testReflectApply, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 2, 5))
+>noOp : Symbol(noOp, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 1, 5))
+>this : Symbol(globalThis)
+
+const testReflectConstruct = Reflect.construct(noOp, []);
+>testReflectConstruct : Symbol(testReflectConstruct, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 3, 5))
+>noOp : Symbol(noOp, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 1, 5))
+
+const testReflectDefineProperty = Reflect.defineProperty({}, "", {});
+>testReflectDefineProperty : Symbol(testReflectDefineProperty, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 4, 5))
+
+const testReflectDeleteProperty = Reflect.deleteProperty({}, "");
+>testReflectDeleteProperty : Symbol(testReflectDeleteProperty, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 5, 5))
+
+const testReflectGet = Reflect.get({}, "");
+>testReflectGet : Symbol(testReflectGet, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 6, 5))
+
+const testReflectGetOwnPropertyDescriptor = Reflect.getOwnPropertyDescriptor({}, "");
+>testReflectGetOwnPropertyDescriptor : Symbol(testReflectGetOwnPropertyDescriptor, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 7, 5))
+
+const testReflectGetPrototypeOf = Reflect.getPrototypeOf({});
+>testReflectGetPrototypeOf : Symbol(testReflectGetPrototypeOf, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 8, 5))
+
+const testReflectIsExtensible = Reflect.isExtensible({});
+>testReflectIsExtensible : Symbol(testReflectIsExtensible, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 9, 5))
+
+const testReflectOwnKeys = Reflect.ownKeys({});
+>testReflectOwnKeys : Symbol(testReflectOwnKeys, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 10, 5))
+
+const testReflectPreventExtensions = Reflect.preventExtensions({});
+>testReflectPreventExtensions : Symbol(testReflectPreventExtensions, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 11, 5))
+
+const testReflectSet = Reflect.set({}, "", 0);
+>testReflectSet : Symbol(testReflectSet, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 12, 5))
+
+const testReflectSetPrototypeOf = Reflect.setPrototypeOf({}, {}); 
+>testReflectSetPrototypeOf : Symbol(testReflectSetPrototypeOf, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 13, 5))
+
+const testArrayFind = [""].find((val, idx, obj) => {
+>testArrayFind : Symbol(testArrayFind, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 14, 5))
+>val : Symbol(val, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 14, 33))
+>idx : Symbol(idx, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 14, 37))
+>obj : Symbol(obj, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 14, 42))
+
+    return true;
+});
+const testArrayFindIndex = [""].findIndex((val, idx, obj) => {
+>testArrayFindIndex : Symbol(testArrayFindIndex, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 17, 5))
+>val : Symbol(val, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 17, 43))
+>idx : Symbol(idx, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 17, 47))
+>obj : Symbol(obj, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 17, 52))
+
+    return true;
+});
+const testArrayFill = [""].fill("fill");
+>testArrayFill : Symbol(testArrayFill, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 20, 5))
+
+const testArrayCopyWithin = [""].copyWithin(0, 0);
+>testArrayCopyWithin : Symbol(testArrayCopyWithin, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 21, 5))
+
+const testArrayEntries = [""].entries();
+>testArrayEntries : Symbol(testArrayEntries, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 22, 5))
+
+const testArrayKeys = [""].keys();
+>testArrayKeys : Symbol(testArrayKeys, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 23, 5))
+
+const testArrayValues = [""].values();
+>testArrayValues : Symbol(testArrayValues, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 24, 5))
+
+const testArrayConstructorFrom = Array.from([]);
+>testArrayConstructorFrom : Symbol(testArrayConstructorFrom, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 25, 5))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testArrayConstructorOf = Array.of([]);
+>testArrayConstructorOf : Symbol(testArrayConstructorOf, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 26, 5))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testObjectConstructorAssign = Object.assign({}, {});
+>testObjectConstructorAssign : Symbol(testObjectConstructorAssign, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 27, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testObjectConstructorGetOwnPropertySymbols = Object.getOwnPropertySymbols({});
+>testObjectConstructorGetOwnPropertySymbols : Symbol(testObjectConstructorGetOwnPropertySymbols, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 28, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testObjectConstructorKeys = Object.keys({});
+>testObjectConstructorKeys : Symbol(testObjectConstructorKeys, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 29, 5))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+
+const testObjectConstructorIs = Object.is({}, {});
+>testObjectConstructorIs : Symbol(testObjectConstructorIs, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 30, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testObjectConstructorSetPrototypeOf = Object.setPrototypeOf({}, {});
+>testObjectConstructorSetPrototypeOf : Symbol(testObjectConstructorSetPrototypeOf, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 31, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testNumberConstructorIsFinite = Number.isFinite(0);
+>testNumberConstructorIsFinite : Symbol(testNumberConstructorIsFinite, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 32, 5))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testNumberConstructorIsInteger = Number.isInteger(0);
+>testNumberConstructorIsInteger : Symbol(testNumberConstructorIsInteger, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 33, 5))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testNumberConstructorIsNan = Number.isNaN(0);
+>testNumberConstructorIsNan : Symbol(testNumberConstructorIsNan, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 34, 5))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testNumberConstructorIsSafeInteger = Number.isSafeInteger(0);
+>testNumberConstructorIsSafeInteger : Symbol(testNumberConstructorIsSafeInteger, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 35, 5))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testNumberConstructorParseFloat = Number.parseFloat("0");
+>testNumberConstructorParseFloat : Symbol(testNumberConstructorParseFloat, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 36, 5))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testNumberConstructorParseInt = Number.parseInt("0");
+>testNumberConstructorParseInt : Symbol(testNumberConstructorParseInt, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 37, 5))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMathClz32 = Math.clz32(0);
+>testMathClz32 : Symbol(testMathClz32, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 38, 5))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMathImul = Math.imul(0,0);
+>testMathImul : Symbol(testMathImul, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 39, 5))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMathSign = Math.sign(0);
+>testMathSign : Symbol(testMathSign, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 40, 5))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMathLog10 = Math.log10(0);
+>testMathLog10 : Symbol(testMathLog10, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 41, 5))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMathLog2 = Math.log2(0);
+>testMathLog2 : Symbol(testMathLog2, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 42, 5))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMathLog1p = Math.log1p(0);
+>testMathLog1p : Symbol(testMathLog1p, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 43, 5))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMathExpm1 = Math.expm1(0);
+>testMathExpm1 : Symbol(testMathExpm1, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 44, 5))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMathCosh = Math.cosh(0);
+>testMathCosh : Symbol(testMathCosh, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 45, 5))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMathSinh = Math.sinh(0);
+>testMathSinh : Symbol(testMathSinh, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 46, 5))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMathTanh = Math.tanh(0);
+>testMathTanh : Symbol(testMathTanh, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 47, 5))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMathAcosh = Math.acosh(0);
+>testMathAcosh : Symbol(testMathAcosh, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 48, 5))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMathAsinh = Math.asinh(0);
+>testMathAsinh : Symbol(testMathAsinh, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 49, 5))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMathAtanh = Math.atanh(0);
+>testMathAtanh : Symbol(testMathAtanh, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 50, 5))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMathHypot = Math.hypot(0,0);
+>testMathHypot : Symbol(testMathHypot, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 51, 5))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMathTrunc = Math.trunc(0);
+>testMathTrunc : Symbol(testMathTrunc, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 52, 5))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMathFround = Math.fround(0);
+>testMathFround : Symbol(testMathFround, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 53, 5))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMathCbrt = Math.cbrt(0);
+>testMathCbrt : Symbol(testMathCbrt, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 54, 5))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testMap: Map<any, any> = null as any;
+>testMap : Symbol(testMap, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 55, 5))
+>Map : Symbol(Map)
+
+const testSet: Set<any> = null as any;
+>testSet : Symbol(testSet, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 56, 5))
+>Set : Symbol(Set)
+
+const testPromiseAll = Promise.all([]);
+>testPromiseAll : Symbol(testPromiseAll, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 57, 5))
+
+const testPromiseRace = Promise.race([]);
+>testPromiseRace : Symbol(testPromiseRace, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 58, 5))
+
+const testPromiseResolve = Promise.resolve();
+>testPromiseResolve : Symbol(testPromiseResolve, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 59, 5))
+
+const testPromiseReject = Promise.reject();
+>testPromiseReject : Symbol(testPromiseReject, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 60, 5))
+
+const testSymbolFor = Symbol.for('a');
+>testSymbolFor : Symbol(testSymbolFor, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 61, 5))
+
+const testSymbolKeyFor = Symbol.keyFor(testSymbolFor);
+>testSymbolKeyFor : Symbol(testSymbolKeyFor, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 62, 5))
+>testSymbolFor : Symbol(testSymbolFor, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 61, 5))
+
+const testWeakMap: WeakMap<any, any> = null as any;
+>testWeakMap : Symbol(testWeakMap, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 63, 5))
+>WeakMap : Symbol(WeakMap)
+
+const testWeakSet: WeakMap<any, any> = null as any;
+>testWeakSet : Symbol(testWeakSet, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 64, 5))
+>WeakMap : Symbol(WeakMap)
+
+const testIterator: Iterator<any, any, any> = null as any;
+>testIterator : Symbol(testIterator, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 65, 5))
+>Iterator : Symbol(Iterator)
+
+const testAsyncIterator: AsyncIterator<any, any, any> = null as any;
+>testAsyncIterator : Symbol(testAsyncIterator, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 66, 5))
+>AsyncIterator : Symbol(AsyncIterator)
+
+const testStringCodePointAt = "".codePointAt(0);
+>testStringCodePointAt : Symbol(testStringCodePointAt, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 67, 5))
+
+const testStringIncludes = "".includes("");
+>testStringIncludes : Symbol(testStringIncludes, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 68, 5))
+
+const testStringEndsWith = "".endsWith("");
+>testStringEndsWith : Symbol(testStringEndsWith, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 69, 5))
+
+const testStringNormalize = "".normalize();
+>testStringNormalize : Symbol(testStringNormalize, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 70, 5))
+
+const testStringRepeat = "".repeat(0);
+>testStringRepeat : Symbol(testStringRepeat, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 71, 5))
+
+const testStringStartsWith = "".startsWith("");
+>testStringStartsWith : Symbol(testStringStartsWith, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 72, 5))
+
+const testStringAnchor = "".anchor("");
+>testStringAnchor : Symbol(testStringAnchor, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 73, 5))
+
+const testStringBig = "".big();
+>testStringBig : Symbol(testStringBig, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 74, 5))
+
+const testStringBlink = "".blink();
+>testStringBlink : Symbol(testStringBlink, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 75, 5))
+
+const testStringBold = "".bold();
+>testStringBold : Symbol(testStringBold, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 76, 5))
+
+const testStringFixed = "".fixed();
+>testStringFixed : Symbol(testStringFixed, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 77, 5))
+
+const testStringFontColor = "".fontcolor("blue");
+>testStringFontColor : Symbol(testStringFontColor, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 78, 5))
+
+const testStringFontSize = "".fontsize(0);
+>testStringFontSize : Symbol(testStringFontSize, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 79, 5))
+
+const testStringItalics = "".italics();
+>testStringItalics : Symbol(testStringItalics, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 80, 5))
+
+const testStringLink = "".link("");
+>testStringLink : Symbol(testStringLink, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 81, 5))
+
+const testStringSmall = "".small();
+>testStringSmall : Symbol(testStringSmall, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 82, 5))
+
+const testStringStrike = "".strike();
+>testStringStrike : Symbol(testStringStrike, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 83, 5))
+
+const testStringSub = "".sub();
+>testStringSub : Symbol(testStringSub, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 84, 5))
+
+const testStringSup = "".sup();
+>testStringSup : Symbol(testStringSup, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 85, 5))
+
+const testStringConstructorFromCodePoint = String.fromCodePoint();
+>testStringConstructorFromCodePoint : Symbol(testStringConstructorFromCodePoint, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 86, 5))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testStringConstructorRaw = String.raw``;
+>testStringConstructorRaw : Symbol(testStringConstructorRaw, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 87, 5))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const testRegExpFlags = /abc/g.flags;
+>testRegExpFlags : Symbol(testRegExpFlags, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 88, 5))
+
+const testRegExpSticky = /abc/g.sticky;
+>testRegExpSticky : Symbol(testRegExpSticky, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 89, 5))
+
+const testRegExpUnicode = /abc/g.unicode;
+>testRegExpUnicode : Symbol(testRegExpUnicode, Decl(doYouNeedToChangeYourTargetLibraryES2015.ts, 90, 5))
+

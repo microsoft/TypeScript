@@ -1,4 +1,4 @@
-tests/cases/compiler/functionCall9.ts(4,11): error TS2345: Argument of type '"bar"' is not assignable to parameter of type 'number'.
+tests/cases/compiler/functionCall9.ts(4,11): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 tests/cases/compiler/functionCall9.ts(5,15): error TS2554: Expected 0-2 arguments, but got 3.
 
 
@@ -8,7 +8,7 @@ tests/cases/compiler/functionCall9.ts(5,15): error TS2554: Expected 0-2 argument
     foo('foo'); 
     foo('foo','bar');
               ~~~~~
-!!! error TS2345: Argument of type '"bar"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     foo('foo', 1, 'bar');
                   ~~~~~
 !!! error TS2554: Expected 0-2 arguments, but got 3.

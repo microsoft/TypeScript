@@ -4,10 +4,10 @@ function f() {}
 
 f[Symbol.iterator] = function() {}
 >f[Symbol.iterator] = function() {} : () => void
->f[Symbol.iterator] : () => void
+>f[Symbol.iterator] : any
 >f : typeof f
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >function() {} : () => void
 

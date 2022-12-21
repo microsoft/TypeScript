@@ -1,11 +1,15 @@
-tests/cases/conformance/jsdoc/test.js(1,5): error TS8030: The type of a function declaration must match the function's signature.
-tests/cases/conformance/jsdoc/test.js(7,5): error TS2741: Property 'prop' is missing in type '(prop: any) => void' but required in type '{ prop: string; }'.
-tests/cases/conformance/jsdoc/test.js(10,5): error TS8030: The type of a function declaration must match the function's signature.
+tests/cases/conformance/jsdoc/test.js(1,12): error TS8030: The type of a function declaration must match the function's signature.
+tests/cases/conformance/jsdoc/test.js(7,5): error TS2322: Type '(prop: any) => void' is not assignable to type '{ prop: string; }'.
+tests/cases/conformance/jsdoc/test.js(10,12): error TS8030: The type of a function declaration must match the function's signature.
+tests/cases/conformance/jsdoc/test.js(23,12): error TS8030: The type of a function declaration must match the function's signature.
+tests/cases/conformance/jsdoc/test.js(27,7): error TS2322: Type '(more: any) => void' is not assignable to type '() => void'.
+tests/cases/conformance/jsdoc/test.js(30,7): error TS2322: Type '(more: any) => void' is not assignable to type '() => void'.
+tests/cases/conformance/jsdoc/test.js(34,3): error TS2322: Type '(more: any) => void' is not assignable to type '() => void'.
 
 
-==== tests/cases/conformance/jsdoc/test.js (3 errors) ====
+==== tests/cases/conformance/jsdoc/test.js (7 errors) ====
     /** @type {number} */
-        ~~~~~~~~~~~~~~
+               ~~~~~~
 !!! error TS8030: The type of a function declaration must match the function's signature.
     function f() {
         return 1
@@ -14,12 +18,11 @@ tests/cases/conformance/jsdoc/test.js(10,5): error TS8030: The type of a functio
     /** @type {{ prop: string }} */
     var g = function (prop) {
         ~
-!!! error TS2741: Property 'prop' is missing in type '(prop: any) => void' but required in type '{ prop: string; }'.
-!!! related TS2728 tests/cases/conformance/jsdoc/test.js:6:14: 'prop' is declared here.
+!!! error TS2322: Type '(prop: any) => void' is not assignable to type '{ prop: string; }'.
     }
     
     /** @type {(a: number) => number} */
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS8030: The type of a function declaration must match the function's signature.
     function add1(a, b) { return a + b; }
     
@@ -29,4 +32,29 @@ tests/cases/conformance/jsdoc/test.js(10,5): error TS8030: The type of a functio
     // TODO: Should be an error since signature doesn't match.
     /** @type {(a: number, b: number, c: number) => number} */
     function add3(a, b) { return a + b; }
+    
+    // Confirm initializers are compatible.
+    // They can't have more parameters than the type/context.
+    
+    /** @type {() => void} */
+               ~~~~~~~~~~
+!!! error TS8030: The type of a function declaration must match the function's signature.
+    function funcWithMoreParameters(more) {} // error
+    
+    /** @type {() => void} */
+    const variableWithMoreParameters = function (more) {}; // error
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(more: any) => void' is not assignable to type '() => void'.
+    
+    /** @type {() => void} */
+    const arrowWithMoreParameters = (more) => {}; // error
+          ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(more: any) => void' is not assignable to type '() => void'.
+    
+    ({
+      /** @type {() => void} */
+      methodWithMoreParameters(more) {}, // error
+      ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(more: any) => void' is not assignable to type '() => void'.
+    });
     

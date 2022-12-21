@@ -209,10 +209,22 @@ export * from "class-module";
 //// [main.js]
 "use strict";
 /// <reference path="modules.d.ts"/>
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-exports.__esModule = true;
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.a0 = exports.a9 = exports.a8 = exports.a7 = exports.a6 = exports.a5 = exports.a4 = exports.a3 = exports.a2 = exports.a1 = void 0;
 var z2 = require("variable");
 var z3 = require("interface-variable");
 var z4 = require("module");
@@ -274,31 +286,33 @@ class_1.a;
 class_module_1.a;
 // named export
 var interface_2 = require("interface");
-exports.a1 = interface_2.a;
+Object.defineProperty(exports, "a1", { enumerable: true, get: function () { return interface_2.a; } });
 var variable_2 = require("variable");
-exports.a2 = variable_2.a;
+Object.defineProperty(exports, "a2", { enumerable: true, get: function () { return variable_2.a; } });
 var interface_variable_2 = require("interface-variable");
-exports.a3 = interface_variable_2.a;
+Object.defineProperty(exports, "a3", { enumerable: true, get: function () { return interface_variable_2.a; } });
 var module_2 = require("module");
-exports.a4 = module_2.a;
+Object.defineProperty(exports, "a4", { enumerable: true, get: function () { return module_2.a; } });
 var interface_module_2 = require("interface-module");
-exports.a5 = interface_module_2.a;
+Object.defineProperty(exports, "a5", { enumerable: true, get: function () { return interface_module_2.a; } });
 var variable_module_2 = require("variable-module");
-exports.a6 = variable_module_2.a;
+Object.defineProperty(exports, "a6", { enumerable: true, get: function () { return variable_module_2.a; } });
 var function_2 = require("function");
-exports.a7 = function_2.a;
+Object.defineProperty(exports, "a7", { enumerable: true, get: function () { return function_2.a; } });
 var function_module_2 = require("function-module");
-exports.a8 = function_module_2.a;
+Object.defineProperty(exports, "a8", { enumerable: true, get: function () { return function_module_2.a; } });
 var class_2 = require("class");
-exports.a9 = class_2.a;
+Object.defineProperty(exports, "a9", { enumerable: true, get: function () { return class_2.a; } });
 var class_module_2 = require("class-module");
-exports.a0 = class_module_2.a;
-__export(require("variable"));
-__export(require("interface-variable"));
-__export(require("module"));
-__export(require("interface-module"));
-__export(require("variable-module"));
-__export(require("function"));
-__export(require("function-module"));
-__export(require("class"));
-__export(require("class-module"));
+Object.defineProperty(exports, "a0", { enumerable: true, get: function () { return class_module_2.a; } });
+// export-star
+__exportStar(require("interface"), exports);
+__exportStar(require("variable"), exports);
+__exportStar(require("interface-variable"), exports);
+__exportStar(require("module"), exports);
+__exportStar(require("interface-module"), exports);
+__exportStar(require("variable-module"), exports);
+__exportStar(require("function"), exports);
+__exportStar(require("function-module"), exports);
+__exportStar(require("class"), exports);
+__exportStar(require("class-module"), exports);

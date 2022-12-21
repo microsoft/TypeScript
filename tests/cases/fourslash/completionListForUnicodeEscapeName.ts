@@ -6,7 +6,7 @@
 /////*3*/
 
 verify.completions(
-    { marker: "0", includes: ["B", "\u0042"] },
-    { marker: "2", excludes: ["C", "\u0043", "A", "\u0041"], isNewIdentifierLocation: true },
-    { marker: "3", includes: ["B", "\u0042", "A", "\u0041", "C", "\u0043"] },
+    { marker: "0", includes: ["B"] },
+    { marker: "2", excludes: ["C", "A"], isNewIdentifierLocation: true },
+    { marker: "3", includes: ["B", "A", "C"] },
 );

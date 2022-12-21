@@ -1,0 +1,8 @@
+name : CodeQL Configuration
+
+paths:
+  - src
+  - scripts
+  - Herebyfile.mjs
+paths-ignore:
+  - src/lib

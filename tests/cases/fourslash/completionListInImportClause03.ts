@@ -10,4 +10,4 @@
 ////}
 
 // Ensure we don't filter out the current item.
-verify.completions({ marker: "", exact: ["abc", "def"] });
+verify.completions({ marker: "", exact: ["abc", "def", { name: "type", sortText: completion.SortText.GlobalsOrKeywords }] });

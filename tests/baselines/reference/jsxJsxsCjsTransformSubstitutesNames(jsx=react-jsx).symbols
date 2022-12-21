@@ -1,0 +1,8 @@
+=== tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformSubstitutesNames.tsx ===
+/// <reference path="react16.d.ts" />
+const a = <div></div>
+>a : Symbol(a, Decl(jsxJsxsCjsTransformSubstitutesNames.tsx, 1, 5))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+export {};

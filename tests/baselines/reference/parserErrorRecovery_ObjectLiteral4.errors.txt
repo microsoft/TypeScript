@@ -12,3 +12,4 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserEr
 !!! error TS1005: ':' expected.
            
 !!! error TS1005: '}' expected.
+!!! related TS1007 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral4.ts:1:9: The parser expected to find a '}' to match the '{' token here.

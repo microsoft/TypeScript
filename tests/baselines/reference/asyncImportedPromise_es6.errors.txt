@@ -1,4 +1,4 @@
-tests/cases/conformance/async/es6/test.ts(3,25): error TS1064: The return type of an async function or method must be the global Promise<T> type.
+tests/cases/conformance/async/es6/test.ts(3,25): error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<T>'?
 
 
 ==== tests/cases/conformance/async/es6/task.ts (0 errors) ====
@@ -9,5 +9,5 @@ tests/cases/conformance/async/es6/test.ts(3,25): error TS1064: The return type o
     class Test {
         async example<T>(): Task<T> { return; }
                             ~~~~~~~
-!!! error TS1064: The return type of an async function or method must be the global Promise<T> type.
+!!! error TS1064: The return type of an async function or method must be the global Promise<T> type. Did you mean to write 'Promise<T>'?
     }

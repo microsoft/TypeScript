@@ -193,6 +193,8 @@ function Soup(flavour) {
 >flavour : Symbol(flavour, Decl(generic.js, 4, 14))
 
     this.flavour = flavour
+>this.flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
+>this : Symbol(Soup, Decl(generic.js, 0, 0))
 >flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
 >flavour : Symbol(flavour, Decl(generic.js, 4, 14))
 }

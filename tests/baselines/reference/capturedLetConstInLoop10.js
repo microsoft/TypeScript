@@ -69,8 +69,8 @@ var A = /** @class */ (function () {
                 var b = function () { return y; };
                 this_2.bar(b());
             };
-            for (var _i = 0, _a = [1]; _i < _a.length; _i++) {
-                var y = _a[_i];
+            for (var _b = 0, _c = [1]; _b < _c.length; _b++) {
+                var y = _c[_b];
                 _loop_3(y);
             }
             this_2.bar(a());
@@ -89,8 +89,8 @@ var A = /** @class */ (function () {
                 var b = function () { return y; };
                 this_3.bar(b());
             };
-            for (var _i = 0, _a = [1]; _i < _a.length; _i++) {
-                var y = _a[_i];
+            for (var _b = 0, _c = [1]; _b < _c.length; _b++) {
+                var y = _c[_b];
                 _loop_5(y);
             }
         };

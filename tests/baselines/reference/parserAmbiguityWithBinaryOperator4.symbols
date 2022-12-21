@@ -9,5 +9,7 @@ function g() {
 
     if (a<b, b>(c + 1)) { }
 >a : Symbol(a, Decl(parserAmbiguityWithBinaryOperator4.ts, 1, 7))
+>b : Symbol(b)
+>b : Symbol(b)
 >c : Symbol(c, Decl(parserAmbiguityWithBinaryOperator4.ts, 1, 13))
 }

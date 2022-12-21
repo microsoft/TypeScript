@@ -15,7 +15,8 @@ export function bar() {
 
 //// [file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Foo = void 0;
 var Foo = /** @class */ (function () {
     function Foo() {
     }
@@ -24,17 +25,19 @@ var Foo = /** @class */ (function () {
 exports.Foo = Foo;
 //// [file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.foo = void 0;
 function foo() {
     return null;
 }
 exports.foo = foo;
 //// [file3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.bar = void 0;
 var file2_1 = require("./file2");
 function bar() {
-    return file2_1.foo();
+    return (0, file2_1.foo)();
 }
 exports.bar = bar;
 

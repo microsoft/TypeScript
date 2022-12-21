@@ -1,0 +1,68 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameFieldCallExpression.ts ===
+class A {
+>A : Symbol(A, Decl(privateNameFieldCallExpression.ts, 0, 0))
+
+    #fieldFunc = function() { this.x = 10; };
+>#fieldFunc : Symbol(A.#fieldFunc, Decl(privateNameFieldCallExpression.ts, 0, 9))
+
+    #fieldFunc2 = function(a, ...b) {};
+>#fieldFunc2 : Symbol(A.#fieldFunc2, Decl(privateNameFieldCallExpression.ts, 1, 45))
+>a : Symbol(a, Decl(privateNameFieldCallExpression.ts, 2, 27))
+>b : Symbol(b, Decl(privateNameFieldCallExpression.ts, 2, 29))
+
+    x = 1;
+>x : Symbol(A.x, Decl(privateNameFieldCallExpression.ts, 2, 39))
+
+    test() {
+>test : Symbol(A.test, Decl(privateNameFieldCallExpression.ts, 3, 10))
+
+        this.#fieldFunc();
+>this.#fieldFunc : Symbol(A.#fieldFunc, Decl(privateNameFieldCallExpression.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldCallExpression.ts, 0, 0))
+
+        this.#fieldFunc?.();
+>this.#fieldFunc : Symbol(A.#fieldFunc, Decl(privateNameFieldCallExpression.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldCallExpression.ts, 0, 0))
+
+        const func = this.#fieldFunc;
+>func : Symbol(func, Decl(privateNameFieldCallExpression.ts, 7, 13))
+>this.#fieldFunc : Symbol(A.#fieldFunc, Decl(privateNameFieldCallExpression.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldCallExpression.ts, 0, 0))
+
+        func();
+>func : Symbol(func, Decl(privateNameFieldCallExpression.ts, 7, 13))
+
+        new this.#fieldFunc();
+>this.#fieldFunc : Symbol(A.#fieldFunc, Decl(privateNameFieldCallExpression.ts, 0, 9))
+>this : Symbol(A, Decl(privateNameFieldCallExpression.ts, 0, 0))
+
+        const arr = [ 1, 2 ];
+>arr : Symbol(arr, Decl(privateNameFieldCallExpression.ts, 11, 13))
+
+        this.#fieldFunc2(0, ...arr, 3);
+>this.#fieldFunc2 : Symbol(A.#fieldFunc2, Decl(privateNameFieldCallExpression.ts, 1, 45))
+>this : Symbol(A, Decl(privateNameFieldCallExpression.ts, 0, 0))
+>arr : Symbol(arr, Decl(privateNameFieldCallExpression.ts, 11, 13))
+
+        const b = new this.#fieldFunc2(0, ...arr, 3);
+>b : Symbol(b, Decl(privateNameFieldCallExpression.ts, 13, 13))
+>this.#fieldFunc2 : Symbol(A.#fieldFunc2, Decl(privateNameFieldCallExpression.ts, 1, 45))
+>this : Symbol(A, Decl(privateNameFieldCallExpression.ts, 0, 0))
+>arr : Symbol(arr, Decl(privateNameFieldCallExpression.ts, 11, 13))
+
+        const str = this.#fieldFunc2`head${1}middle${2}tail`;
+>str : Symbol(str, Decl(privateNameFieldCallExpression.ts, 14, 13))
+>this.#fieldFunc2 : Symbol(A.#fieldFunc2, Decl(privateNameFieldCallExpression.ts, 1, 45))
+>this : Symbol(A, Decl(privateNameFieldCallExpression.ts, 0, 0))
+
+        this.getInstance().#fieldFunc2`test${1}and${2}`;
+>this.getInstance().#fieldFunc2 : Symbol(A.#fieldFunc2, Decl(privateNameFieldCallExpression.ts, 1, 45))
+>this.getInstance : Symbol(A.getInstance, Decl(privateNameFieldCallExpression.ts, 16, 5))
+>this : Symbol(A, Decl(privateNameFieldCallExpression.ts, 0, 0))
+>getInstance : Symbol(A.getInstance, Decl(privateNameFieldCallExpression.ts, 16, 5))
+    }
+    getInstance() { return new A(); }
+>getInstance : Symbol(A.getInstance, Decl(privateNameFieldCallExpression.ts, 16, 5))
+>A : Symbol(A, Decl(privateNameFieldCallExpression.ts, 0, 0))
+}
+

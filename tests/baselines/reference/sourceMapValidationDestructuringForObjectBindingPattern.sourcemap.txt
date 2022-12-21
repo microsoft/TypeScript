@@ -218,53 +218,62 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 1->
 2 >^^^^^
 3 >     ^^^^
-4 >         ^^^^^^^^^^^^^^^^^^
-5 >                           ^^
-6 >                             ^
-7 >                              ^^^
-8 >                                 ^
-9 >                                  ^^
-10>                                    ^
-11>                                     ^^^
-12>                                        ^
-13>                                         ^^
-14>                                           ^
-15>                                            ^^
-16>                                              ^^
+4 >         ^^^^^
+5 >              ^^^
+6 >                 ^^^^^
+7 >                      ^^^^^
+8 >                           ^^
+9 >                             ^
+10>                              ^^^
+11>                                 ^
+12>                                  ^^
+13>                                    ^
+14>                                     ^^^
+15>                                        ^
+16>                                         ^^
+17>                                           ^
+18>                                            ^^
+19>                                              ^^
 1->
   >
   >
 2 >for (let {
-3 >     
-4 >         name: nameA
-5 >                            } = robot, 
-6 >                             i
-7 >                               = 
-8 >                                 0
-9 >                                  ; 
-10>                                    i
-11>                                      < 
-12>                                        1
-13>                                         ; 
-14>                                           i
-15>                                            ++
-16>                                              ) 
+3 >     name: 
+4 >         nameA
+5 >               } = 
+6 >                 robot
+7 >                      
+8 >                            } = robot, 
+9 >                             i
+10>                               = 
+11>                                 0
+12>                                  ; 
+13>                                    i
+14>                                      < 
+15>                                        1
+16>                                         ; 
+17>                                           i
+18>                                            ++
+19>                                              ) 
 1->Emitted(9, 1) Source(26, 1) + SourceIndex(0)
 2 >Emitted(9, 6) Source(26, 11) + SourceIndex(0)
-3 >Emitted(9, 10) Source(26, 11) + SourceIndex(0)
-4 >Emitted(9, 28) Source(26, 22) + SourceIndex(0)
-5 >Emitted(9, 30) Source(26, 34) + SourceIndex(0)
-6 >Emitted(9, 31) Source(26, 35) + SourceIndex(0)
-7 >Emitted(9, 34) Source(26, 38) + SourceIndex(0)
-8 >Emitted(9, 35) Source(26, 39) + SourceIndex(0)
-9 >Emitted(9, 37) Source(26, 41) + SourceIndex(0)
-10>Emitted(9, 38) Source(26, 42) + SourceIndex(0)
-11>Emitted(9, 41) Source(26, 45) + SourceIndex(0)
-12>Emitted(9, 42) Source(26, 46) + SourceIndex(0)
-13>Emitted(9, 44) Source(26, 48) + SourceIndex(0)
-14>Emitted(9, 45) Source(26, 49) + SourceIndex(0)
-15>Emitted(9, 47) Source(26, 51) + SourceIndex(0)
-16>Emitted(9, 49) Source(26, 53) + SourceIndex(0)
+3 >Emitted(9, 10) Source(26, 17) + SourceIndex(0)
+4 >Emitted(9, 15) Source(26, 22) + SourceIndex(0)
+5 >Emitted(9, 18) Source(26, 27) + SourceIndex(0)
+6 >Emitted(9, 23) Source(26, 32) + SourceIndex(0)
+7 >Emitted(9, 28) Source(26, 22) + SourceIndex(0)
+8 >Emitted(9, 30) Source(26, 34) + SourceIndex(0)
+9 >Emitted(9, 31) Source(26, 35) + SourceIndex(0)
+10>Emitted(9, 34) Source(26, 38) + SourceIndex(0)
+11>Emitted(9, 35) Source(26, 39) + SourceIndex(0)
+12>Emitted(9, 37) Source(26, 41) + SourceIndex(0)
+13>Emitted(9, 38) Source(26, 42) + SourceIndex(0)
+14>Emitted(9, 41) Source(26, 45) + SourceIndex(0)
+15>Emitted(9, 42) Source(26, 46) + SourceIndex(0)
+16>Emitted(9, 44) Source(26, 48) + SourceIndex(0)
+17>Emitted(9, 45) Source(26, 49) + SourceIndex(0)
+18>Emitted(9, 47) Source(26, 51) + SourceIndex(0)
+19>Emitted(9, 49) Source(26, 53) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -304,52 +313,64 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 1->
 2 >^^^^^
 3 >     ^^^^
-4 >         ^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                ^^
-6 >                                  ^
-7 >                                   ^^^
-8 >                                      ^
-9 >                                       ^^
-10>                                         ^
-11>                                          ^^^
-12>                                             ^
-13>                                              ^^
-14>                                                ^
-15>                                                 ^^
-16>                                                   ^^
+4 >         ^^^^^
+5 >              ^^^
+6 >                 ^^^^^^^^
+7 >                         ^^
+8 >                           ^^^^^
+9 >                                ^^
+10>                                  ^
+11>                                   ^^^
+12>                                      ^
+13>                                       ^^
+14>                                         ^
+15>                                          ^^^
+16>                                             ^
+17>                                              ^^
+18>                                                ^
+19>                                                 ^^
+20>                                                   ^^
 1->
   >
 2 >for (let {
-3 >     
-4 >         name: nameA
-5 >                                 } = getRobot(), 
-6 >                                  i
-7 >                                    = 
-8 >                                      0
-9 >                                       ; 
-10>                                         i
-11>                                           < 
-12>                                             1
-13>                                              ; 
-14>                                                i
-15>                                                 ++
-16>                                                   ) 
+3 >     name: 
+4 >         nameA
+5 >               } = 
+6 >                 getRobot
+7 >                         ()
+8 >                           
+9 >                                 } = getRobot(), 
+10>                                  i
+11>                                    = 
+12>                                      0
+13>                                       ; 
+14>                                         i
+15>                                           < 
+16>                                             1
+17>                                              ; 
+18>                                                i
+19>                                                 ++
+20>                                                   ) 
 1->Emitted(12, 1) Source(29, 1) + SourceIndex(0)
 2 >Emitted(12, 6) Source(29, 11) + SourceIndex(0)
-3 >Emitted(12, 10) Source(29, 11) + SourceIndex(0)
-4 >Emitted(12, 33) Source(29, 22) + SourceIndex(0)
-5 >Emitted(12, 35) Source(29, 39) + SourceIndex(0)
-6 >Emitted(12, 36) Source(29, 40) + SourceIndex(0)
-7 >Emitted(12, 39) Source(29, 43) + SourceIndex(0)
-8 >Emitted(12, 40) Source(29, 44) + SourceIndex(0)
-9 >Emitted(12, 42) Source(29, 46) + SourceIndex(0)
-10>Emitted(12, 43) Source(29, 47) + SourceIndex(0)
-11>Emitted(12, 46) Source(29, 50) + SourceIndex(0)
-12>Emitted(12, 47) Source(29, 51) + SourceIndex(0)
-13>Emitted(12, 49) Source(29, 53) + SourceIndex(0)
-14>Emitted(12, 50) Source(29, 54) + SourceIndex(0)
-15>Emitted(12, 52) Source(29, 56) + SourceIndex(0)
-16>Emitted(12, 54) Source(29, 58) + SourceIndex(0)
+3 >Emitted(12, 10) Source(29, 17) + SourceIndex(0)
+4 >Emitted(12, 15) Source(29, 22) + SourceIndex(0)
+5 >Emitted(12, 18) Source(29, 27) + SourceIndex(0)
+6 >Emitted(12, 26) Source(29, 35) + SourceIndex(0)
+7 >Emitted(12, 28) Source(29, 37) + SourceIndex(0)
+8 >Emitted(12, 33) Source(29, 22) + SourceIndex(0)
+9 >Emitted(12, 35) Source(29, 39) + SourceIndex(0)
+10>Emitted(12, 36) Source(29, 40) + SourceIndex(0)
+11>Emitted(12, 39) Source(29, 43) + SourceIndex(0)
+12>Emitted(12, 40) Source(29, 44) + SourceIndex(0)
+13>Emitted(12, 42) Source(29, 46) + SourceIndex(0)
+14>Emitted(12, 43) Source(29, 47) + SourceIndex(0)
+15>Emitted(12, 46) Source(29, 50) + SourceIndex(0)
+16>Emitted(12, 47) Source(29, 51) + SourceIndex(0)
+17>Emitted(12, 49) Source(29, 53) + SourceIndex(0)
+18>Emitted(12, 50) Source(29, 54) + SourceIndex(0)
+19>Emitted(12, 52) Source(29, 56) + SourceIndex(0)
+20>Emitted(12, 54) Source(29, 58) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -389,52 +410,85 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 1->
 2 >^^^^^
 3 >     ^^^^
-4 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                            ^^
-6 >                                                              ^
-7 >                                                               ^^^
-8 >                                                                  ^
-9 >                                                                   ^^
-10>                                                                     ^
-11>                                                                      ^^^
-12>                                                                         ^
-13>                                                                          ^^
-14>                                                                            ^
-15>                                                                             ^^
-16>                                                                               ^^
+4 >         ^^^^^
+5 >              ^^^
+6 >                 ^^
+7 >                   ^^^^
+8 >                       ^^
+9 >                         ^^^^^^^^^
+10>                                  ^^
+11>                                    ^^^^^
+12>                                         ^^
+13>                                           ^^^^^^^^^^
+14>                                                     ^^
+15>                                                       ^^^^^
+16>                                                            ^^
+17>                                                              ^
+18>                                                               ^^^
+19>                                                                  ^
+20>                                                                   ^^
+21>                                                                     ^
+22>                                                                      ^^^
+23>                                                                         ^
+24>                                                                          ^^
+25>                                                                            ^
+26>                                                                             ^^
+27>                                                                               ^^
 1->
   >
 2 >for (let {
-3 >     
-4 >         name: nameA
-5 >                                                             } = <Robot>{ name: "trimmer", skill: "trimming" }, 
-6 >                                                              i
-7 >                                                                = 
-8 >                                                                  0
-9 >                                                                   ; 
-10>                                                                     i
-11>                                                                       < 
-12>                                                                         1
-13>                                                                          ; 
-14>                                                                            i
-15>                                                                             ++
-16>                                                                               ) 
+3 >     name: 
+4 >         nameA
+5 >               } = <Robot>
+6 >                 { 
+7 >                   name
+8 >                       : 
+9 >                         "trimmer"
+10>                                  , 
+11>                                    skill
+12>                                         : 
+13>                                           "trimming"
+14>                                                      }
+15>                                                       
+16>                                                             } = <Robot>{ name: "trimmer", skill: "trimming" }, 
+17>                                                              i
+18>                                                                = 
+19>                                                                  0
+20>                                                                   ; 
+21>                                                                     i
+22>                                                                       < 
+23>                                                                         1
+24>                                                                          ; 
+25>                                                                            i
+26>                                                                             ++
+27>                                                                               ) 
 1->Emitted(15, 1) Source(32, 1) + SourceIndex(0)
 2 >Emitted(15, 6) Source(32, 11) + SourceIndex(0)
-3 >Emitted(15, 10) Source(32, 11) + SourceIndex(0)
-4 >Emitted(15, 61) Source(32, 22) + SourceIndex(0)
-5 >Emitted(15, 63) Source(32, 74) + SourceIndex(0)
-6 >Emitted(15, 64) Source(32, 75) + SourceIndex(0)
-7 >Emitted(15, 67) Source(32, 78) + SourceIndex(0)
-8 >Emitted(15, 68) Source(32, 79) + SourceIndex(0)
-9 >Emitted(15, 70) Source(32, 81) + SourceIndex(0)
-10>Emitted(15, 71) Source(32, 82) + SourceIndex(0)
-11>Emitted(15, 74) Source(32, 85) + SourceIndex(0)
-12>Emitted(15, 75) Source(32, 86) + SourceIndex(0)
-13>Emitted(15, 77) Source(32, 88) + SourceIndex(0)
-14>Emitted(15, 78) Source(32, 89) + SourceIndex(0)
-15>Emitted(15, 80) Source(32, 91) + SourceIndex(0)
-16>Emitted(15, 82) Source(32, 93) + SourceIndex(0)
+3 >Emitted(15, 10) Source(32, 17) + SourceIndex(0)
+4 >Emitted(15, 15) Source(32, 22) + SourceIndex(0)
+5 >Emitted(15, 18) Source(32, 34) + SourceIndex(0)
+6 >Emitted(15, 20) Source(32, 36) + SourceIndex(0)
+7 >Emitted(15, 24) Source(32, 40) + SourceIndex(0)
+8 >Emitted(15, 26) Source(32, 42) + SourceIndex(0)
+9 >Emitted(15, 35) Source(32, 51) + SourceIndex(0)
+10>Emitted(15, 37) Source(32, 53) + SourceIndex(0)
+11>Emitted(15, 42) Source(32, 58) + SourceIndex(0)
+12>Emitted(15, 44) Source(32, 60) + SourceIndex(0)
+13>Emitted(15, 54) Source(32, 70) + SourceIndex(0)
+14>Emitted(15, 56) Source(32, 72) + SourceIndex(0)
+15>Emitted(15, 61) Source(32, 22) + SourceIndex(0)
+16>Emitted(15, 63) Source(32, 74) + SourceIndex(0)
+17>Emitted(15, 64) Source(32, 75) + SourceIndex(0)
+18>Emitted(15, 67) Source(32, 78) + SourceIndex(0)
+19>Emitted(15, 68) Source(32, 79) + SourceIndex(0)
+20>Emitted(15, 70) Source(32, 81) + SourceIndex(0)
+21>Emitted(15, 71) Source(32, 82) + SourceIndex(0)
+22>Emitted(15, 74) Source(32, 85) + SourceIndex(0)
+23>Emitted(15, 75) Source(32, 86) + SourceIndex(0)
+24>Emitted(15, 77) Source(32, 88) + SourceIndex(0)
+25>Emitted(15, 78) Source(32, 89) + SourceIndex(0)
+26>Emitted(15, 80) Source(32, 91) + SourceIndex(0)
+27>Emitted(15, 82) Source(32, 93) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -474,64 +528,76 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 1->
 2 >^^^^^
 3 >     ^^^^
-4 >         ^^^^^^^^^^^^^^^^^^^^^^
-5 >                               ^^
-6 >                                 ^^^^^^^^^^^^^^^^^^^^^
-7 >                                                      ^^
-8 >                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^
-9 >                                                                                 ^^
-10>                                                                                   ^
-11>                                                                                    ^^^
-12>                                                                                       ^
-13>                                                                                        ^^
-14>                                                                                          ^
-15>                                                                                           ^^^
-16>                                                                                              ^
-17>                                                                                               ^^
-18>                                                                                                 ^
-19>                                                                                                  ^^
-20>                                                                                                    ^^
+4 >         ^^^^^
+5 >              ^^^^^^^^^^
+6 >                        ^^^^^^^
+7 >                               ^^
+8 >                                 ^^^^^^^^
+9 >                                         ^^^^^^^^^^^^^
+10>                                                      ^^
+11>                                                        ^^^^^^^^^^
+12>                                                                  ^^^^^^^^^^^^^^^
+13>                                                                                 ^^
+14>                                                                                   ^
+15>                                                                                    ^^^
+16>                                                                                       ^
+17>                                                                                        ^^
+18>                                                                                          ^
+19>                                                                                           ^^^
+20>                                                                                              ^
+21>                                                                                               ^^
+22>                                                                                                 ^
+23>                                                                                                  ^^
+24>                                                                                                    ^^
 1->
   >
 2 >for (let { 
 3 >     
-4 >         skills: { primary: primaryA, secondary: secondaryA }
-5 >                               
-6 >                                 primary: primaryA
-7 >                                                      , 
-8 >                                                        secondary: secondaryA
-9 >                                                                                  } } = multiRobot, 
-10>                                                                                   i
-11>                                                                                     = 
-12>                                                                                       0
-13>                                                                                        ; 
-14>                                                                                          i
-15>                                                                                            < 
-16>                                                                                              1
-17>                                                                                               ; 
-18>                                                                                                 i
-19>                                                                                                  ++
-20>                                                                                                    ) 
+4 >         skills: { primary: primaryA, secondary: secondaryA } } = 
+5 >              multiRobot
+6 >                        
+7 >                               
+8 >                                 primaryA
+9 >                                         
+10>                                                      , secondary: 
+11>                                                        secondaryA
+12>                                                                  
+13>                                                                                  } } = multiRobot, 
+14>                                                                                   i
+15>                                                                                     = 
+16>                                                                                       0
+17>                                                                                        ; 
+18>                                                                                          i
+19>                                                                                            < 
+20>                                                                                              1
+21>                                                                                               ; 
+22>                                                                                                 i
+23>                                                                                                  ++
+24>                                                                                                    ) 
 1->Emitted(18, 1) Source(35, 1) + SourceIndex(0)
 2 >Emitted(18, 6) Source(35, 12) + SourceIndex(0)
 3 >Emitted(18, 10) Source(35, 12) + SourceIndex(0)
-4 >Emitted(18, 32) Source(35, 64) + SourceIndex(0)
-5 >Emitted(18, 34) Source(35, 22) + SourceIndex(0)
-6 >Emitted(18, 55) Source(35, 39) + SourceIndex(0)
-7 >Emitted(18, 57) Source(35, 41) + SourceIndex(0)
-8 >Emitted(18, 82) Source(35, 62) + SourceIndex(0)
-9 >Emitted(18, 84) Source(35, 81) + SourceIndex(0)
-10>Emitted(18, 85) Source(35, 82) + SourceIndex(0)
-11>Emitted(18, 88) Source(35, 85) + SourceIndex(0)
-12>Emitted(18, 89) Source(35, 86) + SourceIndex(0)
-13>Emitted(18, 91) Source(35, 88) + SourceIndex(0)
-14>Emitted(18, 92) Source(35, 89) + SourceIndex(0)
-15>Emitted(18, 95) Source(35, 92) + SourceIndex(0)
-16>Emitted(18, 96) Source(35, 93) + SourceIndex(0)
-17>Emitted(18, 98) Source(35, 95) + SourceIndex(0)
-18>Emitted(18, 99) Source(35, 96) + SourceIndex(0)
-19>Emitted(18, 101) Source(35, 98) + SourceIndex(0)
-20>Emitted(18, 103) Source(35, 100) + SourceIndex(0)
+4 >Emitted(18, 15) Source(35, 69) + SourceIndex(0)
+5 >Emitted(18, 25) Source(35, 79) + SourceIndex(0)
+6 >Emitted(18, 32) Source(35, 64) + SourceIndex(0)
+7 >Emitted(18, 34) Source(35, 31) + SourceIndex(0)
+8 >Emitted(18, 42) Source(35, 39) + SourceIndex(0)
+9 >Emitted(18, 55) Source(35, 39) + SourceIndex(0)
+10>Emitted(18, 57) Source(35, 52) + SourceIndex(0)
+11>Emitted(18, 67) Source(35, 62) + SourceIndex(0)
+12>Emitted(18, 82) Source(35, 62) + SourceIndex(0)
+13>Emitted(18, 84) Source(35, 81) + SourceIndex(0)
+14>Emitted(18, 85) Source(35, 82) + SourceIndex(0)
+15>Emitted(18, 88) Source(35, 85) + SourceIndex(0)
+16>Emitted(18, 89) Source(35, 86) + SourceIndex(0)
+17>Emitted(18, 91) Source(35, 88) + SourceIndex(0)
+18>Emitted(18, 92) Source(35, 89) + SourceIndex(0)
+19>Emitted(18, 95) Source(35, 92) + SourceIndex(0)
+20>Emitted(18, 96) Source(35, 93) + SourceIndex(0)
+21>Emitted(18, 98) Source(35, 95) + SourceIndex(0)
+22>Emitted(18, 99) Source(35, 96) + SourceIndex(0)
+23>Emitted(18, 101) Source(35, 98) + SourceIndex(0)
+24>Emitted(18, 103) Source(35, 100) + SourceIndex(0)
 ---
 >>>    console.log(primaryA);
 1 >^^^^
@@ -571,64 +637,79 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 1->
 2 >^^^^^
 3 >     ^^^^
-4 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                    ^^
-6 >                                      ^^^^^^^^^^^^^^^^^^^^^
-7 >                                                           ^^
-8 >                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
-9 >                                                                                      ^^
-10>                                                                                        ^
-11>                                                                                         ^^^
-12>                                                                                            ^
-13>                                                                                             ^^
-14>                                                                                               ^
-15>                                                                                                ^^^
-16>                                                                                                   ^
-17>                                                                                                    ^^
-18>                                                                                                      ^
-19>                                                                                                       ^^
-20>                                                                                                         ^^
+4 >         ^^^^^
+5 >              ^^^^^^^^^^^^^
+6 >                           ^^
+7 >                             ^^^^^^^
+8 >                                    ^^
+9 >                                      ^^^^^^^^
+10>                                              ^^^^^^^^^^^^^
+11>                                                           ^^
+12>                                                             ^^^^^^^^^^
+13>                                                                       ^^^^^^^^^^^^^^^
+14>                                                                                      ^^
+15>                                                                                        ^
+16>                                                                                         ^^^
+17>                                                                                            ^
+18>                                                                                             ^^
+19>                                                                                               ^
+20>                                                                                                ^^^
+21>                                                                                                   ^
+22>                                                                                                    ^^
+23>                                                                                                      ^
+24>                                                                                                       ^^
+25>                                                                                                         ^^
 1->
   >
 2 >for (let { 
 3 >     
-4 >         skills: { primary: primaryA, secondary: secondaryA }
-5 >                                    
-6 >                                      primary: primaryA
-7 >                                                           , 
-8 >                                                             secondary: secondaryA
-9 >                                                                                       } } = getMultiRobot(), 
-10>                                                                                        i
-11>                                                                                          = 
-12>                                                                                            0
-13>                                                                                             ; 
-14>                                                                                               i
-15>                                                                                                 < 
-16>                                                                                                   1
-17>                                                                                                    ; 
-18>                                                                                                      i
-19>                                                                                                       ++
-20>                                                                                                         ) 
+4 >         skills: { primary: primaryA, secondary: secondaryA } } = 
+5 >              getMultiRobot
+6 >                           ()
+7 >                             
+8 >                                    
+9 >                                      primaryA
+10>                                              
+11>                                                           , secondary: 
+12>                                                             secondaryA
+13>                                                                       
+14>                                                                                       } } = getMultiRobot(), 
+15>                                                                                        i
+16>                                                                                          = 
+17>                                                                                            0
+18>                                                                                             ; 
+19>                                                                                               i
+20>                                                                                                 < 
+21>                                                                                                   1
+22>                                                                                                    ; 
+23>                                                                                                      i
+24>                                                                                                       ++
+25>                                                                                                         ) 
 1->Emitted(21, 1) Source(38, 1) + SourceIndex(0)
 2 >Emitted(21, 6) Source(38, 12) + SourceIndex(0)
 3 >Emitted(21, 10) Source(38, 12) + SourceIndex(0)
-4 >Emitted(21, 37) Source(38, 64) + SourceIndex(0)
-5 >Emitted(21, 39) Source(38, 22) + SourceIndex(0)
-6 >Emitted(21, 60) Source(38, 39) + SourceIndex(0)
-7 >Emitted(21, 62) Source(38, 41) + SourceIndex(0)
-8 >Emitted(21, 87) Source(38, 62) + SourceIndex(0)
-9 >Emitted(21, 89) Source(38, 86) + SourceIndex(0)
-10>Emitted(21, 90) Source(38, 87) + SourceIndex(0)
-11>Emitted(21, 93) Source(38, 90) + SourceIndex(0)
-12>Emitted(21, 94) Source(38, 91) + SourceIndex(0)
-13>Emitted(21, 96) Source(38, 93) + SourceIndex(0)
-14>Emitted(21, 97) Source(38, 94) + SourceIndex(0)
-15>Emitted(21, 100) Source(38, 97) + SourceIndex(0)
-16>Emitted(21, 101) Source(38, 98) + SourceIndex(0)
-17>Emitted(21, 103) Source(38, 100) + SourceIndex(0)
-18>Emitted(21, 104) Source(38, 101) + SourceIndex(0)
-19>Emitted(21, 106) Source(38, 103) + SourceIndex(0)
-20>Emitted(21, 108) Source(38, 105) + SourceIndex(0)
+4 >Emitted(21, 15) Source(38, 69) + SourceIndex(0)
+5 >Emitted(21, 28) Source(38, 82) + SourceIndex(0)
+6 >Emitted(21, 30) Source(38, 84) + SourceIndex(0)
+7 >Emitted(21, 37) Source(38, 64) + SourceIndex(0)
+8 >Emitted(21, 39) Source(38, 31) + SourceIndex(0)
+9 >Emitted(21, 47) Source(38, 39) + SourceIndex(0)
+10>Emitted(21, 60) Source(38, 39) + SourceIndex(0)
+11>Emitted(21, 62) Source(38, 52) + SourceIndex(0)
+12>Emitted(21, 72) Source(38, 62) + SourceIndex(0)
+13>Emitted(21, 87) Source(38, 62) + SourceIndex(0)
+14>Emitted(21, 89) Source(38, 86) + SourceIndex(0)
+15>Emitted(21, 90) Source(38, 87) + SourceIndex(0)
+16>Emitted(21, 93) Source(38, 90) + SourceIndex(0)
+17>Emitted(21, 94) Source(38, 91) + SourceIndex(0)
+18>Emitted(21, 96) Source(38, 93) + SourceIndex(0)
+19>Emitted(21, 97) Source(38, 94) + SourceIndex(0)
+20>Emitted(21, 100) Source(38, 97) + SourceIndex(0)
+21>Emitted(21, 101) Source(38, 98) + SourceIndex(0)
+22>Emitted(21, 103) Source(38, 100) + SourceIndex(0)
+23>Emitted(21, 104) Source(38, 101) + SourceIndex(0)
+24>Emitted(21, 106) Source(38, 103) + SourceIndex(0)
+25>Emitted(21, 108) Source(38, 105) + SourceIndex(0)
 ---
 >>>    console.log(primaryA);
 1 >^^^^
@@ -668,66 +749,127 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 1->
 2 >^^^^^
 3 >     ^^^^
-4 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                                              ^^
-6 >                                                                                                ^^^^^^^^^^^^^^^^^^^^^
-7 >                                                                                                                     ^^
-8 >                                                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^
-9 >                                                                                                                                                ^^
-10>                                                                                                                                                  ^
-11>                                                                                                                                                   ^^^
-12>                                                                                                                                                      ^
-13>                                                                                                                                                       ^^
-14>                                                                                                                                                         ^
-15>                                                                                                                                                          ^^^
-16>                                                                                                                                                             ^
-17>                                                                                                                                                              ^^
-18>                                                                                                                                                                ^
-19>                                                                                                                                                                 ^^
-20>                                                                                                                                                                   ^^
+4 >         ^^^^^
+5 >              ^^
+6 >                ^^^^
+7 >                    ^^
+8 >                      ^^^^^^^^^
+9 >                               ^^
+10>                                 ^^^^^^
+11>                                       ^^
+12>                                         ^^
+13>                                           ^^^^^^^
+14>                                                  ^^
+15>                                                    ^^^^^^^^^^
+16>                                                              ^^
+17>                                                                ^^^^^^^^^
+18>                                                                         ^^
+19>                                                                           ^^^^^^^^
+20>                                                                                   ^^
+21>                                                                                     ^^
+22>                                                                                       ^^^^^^^
+23>                                                                                              ^^
+24>                                                                                                ^^^^^^^^
+25>                                                                                                        ^^^^^^^^^^^^^
+26>                                                                                                                     ^^
+27>                                                                                                                       ^^^^^^^^^^
+28>                                                                                                                                 ^^^^^^^^^^^^^^^
+29>                                                                                                                                                ^^
+30>                                                                                                                                                  ^
+31>                                                                                                                                                   ^^^
+32>                                                                                                                                                      ^
+33>                                                                                                                                                       ^^
+34>                                                                                                                                                         ^
+35>                                                                                                                                                          ^^^
+36>                                                                                                                                                             ^
+37>                                                                                                                                                              ^^
+38>                                                                                                                                                                ^
+39>                                                                                                                                                                 ^^
+40>                                                                                                                                                                   ^^
 1->
   >
 2 >for (let { 
 3 >     
-4 >         skills: { primary: primaryA, secondary: secondaryA }
-5 >                                                                                              
-6 >                                                                                                primary: primaryA
-7 >                                                                                                                     , 
-8 >                                                                                                                       secondary: secondaryA
-9 >                                                                                                                                                 } } =
+4 >         skills: { primary: primaryA, secondary: secondaryA } } =
+  >             <MultiRobot>
+5 >              { 
+6 >                name
+7 >                    : 
+8 >                      "trimmer"
+9 >                               , 
+10>                                 skills
+11>                                       : 
+12>                                         { 
+13>                                           primary
+14>                                                  : 
+15>                                                    "trimming"
+16>                                                              , 
+17>                                                                secondary
+18>                                                                         : 
+19>                                                                           "edging"
+20>                                                                                    }
+21>                                                                                      }
+22>                                                                                       
+23>                                                                                              
+24>                                                                                                primaryA
+25>                                                                                                        
+26>                                                                                                                     , secondary: 
+27>                                                                                                                       secondaryA
+28>                                                                                                                                 
+29>                                                                                                                                                 } } =
   >                                                                                                                                                    <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } },
   >                                                                                                                                                    
-10>                                                                                                                                                  i
-11>                                                                                                                                                    = 
-12>                                                                                                                                                      0
-13>                                                                                                                                                       ; 
-14>                                                                                                                                                         i
-15>                                                                                                                                                           < 
-16>                                                                                                                                                             1
-17>                                                                                                                                                              ; 
-18>                                                                                                                                                                i
-19>                                                                                                                                                                 ++
-20>                                                                                                                                                                   ) 
+30>                                                                                                                                                  i
+31>                                                                                                                                                    = 
+32>                                                                                                                                                      0
+33>                                                                                                                                                       ; 
+34>                                                                                                                                                         i
+35>                                                                                                                                                           < 
+36>                                                                                                                                                             1
+37>                                                                                                                                                              ; 
+38>                                                                                                                                                                i
+39>                                                                                                                                                                 ++
+40>                                                                                                                                                                   ) 
 1->Emitted(24, 1) Source(41, 1) + SourceIndex(0)
 2 >Emitted(24, 6) Source(41, 12) + SourceIndex(0)
 3 >Emitted(24, 10) Source(41, 12) + SourceIndex(0)
-4 >Emitted(24, 95) Source(41, 64) + SourceIndex(0)
-5 >Emitted(24, 97) Source(41, 22) + SourceIndex(0)
-6 >Emitted(24, 118) Source(41, 39) + SourceIndex(0)
-7 >Emitted(24, 120) Source(41, 41) + SourceIndex(0)
-8 >Emitted(24, 145) Source(41, 62) + SourceIndex(0)
-9 >Emitted(24, 147) Source(43, 5) + SourceIndex(0)
-10>Emitted(24, 148) Source(43, 6) + SourceIndex(0)
-11>Emitted(24, 151) Source(43, 9) + SourceIndex(0)
-12>Emitted(24, 152) Source(43, 10) + SourceIndex(0)
-13>Emitted(24, 154) Source(43, 12) + SourceIndex(0)
-14>Emitted(24, 155) Source(43, 13) + SourceIndex(0)
-15>Emitted(24, 158) Source(43, 16) + SourceIndex(0)
-16>Emitted(24, 159) Source(43, 17) + SourceIndex(0)
-17>Emitted(24, 161) Source(43, 19) + SourceIndex(0)
-18>Emitted(24, 162) Source(43, 20) + SourceIndex(0)
-19>Emitted(24, 164) Source(43, 22) + SourceIndex(0)
-20>Emitted(24, 166) Source(43, 24) + SourceIndex(0)
+4 >Emitted(24, 15) Source(42, 17) + SourceIndex(0)
+5 >Emitted(24, 17) Source(42, 19) + SourceIndex(0)
+6 >Emitted(24, 21) Source(42, 23) + SourceIndex(0)
+7 >Emitted(24, 23) Source(42, 25) + SourceIndex(0)
+8 >Emitted(24, 32) Source(42, 34) + SourceIndex(0)
+9 >Emitted(24, 34) Source(42, 36) + SourceIndex(0)
+10>Emitted(24, 40) Source(42, 42) + SourceIndex(0)
+11>Emitted(24, 42) Source(42, 44) + SourceIndex(0)
+12>Emitted(24, 44) Source(42, 46) + SourceIndex(0)
+13>Emitted(24, 51) Source(42, 53) + SourceIndex(0)
+14>Emitted(24, 53) Source(42, 55) + SourceIndex(0)
+15>Emitted(24, 63) Source(42, 65) + SourceIndex(0)
+16>Emitted(24, 65) Source(42, 67) + SourceIndex(0)
+17>Emitted(24, 74) Source(42, 76) + SourceIndex(0)
+18>Emitted(24, 76) Source(42, 78) + SourceIndex(0)
+19>Emitted(24, 84) Source(42, 86) + SourceIndex(0)
+20>Emitted(24, 86) Source(42, 88) + SourceIndex(0)
+21>Emitted(24, 88) Source(42, 90) + SourceIndex(0)
+22>Emitted(24, 95) Source(41, 64) + SourceIndex(0)
+23>Emitted(24, 97) Source(41, 31) + SourceIndex(0)
+24>Emitted(24, 105) Source(41, 39) + SourceIndex(0)
+25>Emitted(24, 118) Source(41, 39) + SourceIndex(0)
+26>Emitted(24, 120) Source(41, 52) + SourceIndex(0)
+27>Emitted(24, 130) Source(41, 62) + SourceIndex(0)
+28>Emitted(24, 145) Source(41, 62) + SourceIndex(0)
+29>Emitted(24, 147) Source(43, 5) + SourceIndex(0)
+30>Emitted(24, 148) Source(43, 6) + SourceIndex(0)
+31>Emitted(24, 151) Source(43, 9) + SourceIndex(0)
+32>Emitted(24, 152) Source(43, 10) + SourceIndex(0)
+33>Emitted(24, 154) Source(43, 12) + SourceIndex(0)
+34>Emitted(24, 155) Source(43, 13) + SourceIndex(0)
+35>Emitted(24, 158) Source(43, 16) + SourceIndex(0)
+36>Emitted(24, 159) Source(43, 17) + SourceIndex(0)
+37>Emitted(24, 161) Source(43, 19) + SourceIndex(0)
+38>Emitted(24, 162) Source(43, 20) + SourceIndex(0)
+39>Emitted(24, 164) Source(43, 22) + SourceIndex(0)
+40>Emitted(24, 166) Source(43, 24) + SourceIndex(0)
 ---
 >>>    console.log(primaryA);
 1 >^^^^
@@ -767,59 +909,77 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 1->
 2 >^^^^^
 3 >     ^^^^
-4 >         ^^^^^^^^^^^^^^^^^^
-5 >                           ^^
-6 >                             ^^^^^^^^^^^^^^^^^^^^
-7 >                                                 ^^
-8 >                                                   ^
-9 >                                                    ^^^
-10>                                                       ^
-11>                                                        ^^
-12>                                                          ^
-13>                                                           ^^^
-14>                                                              ^
-15>                                                               ^^
-16>                                                                 ^
-17>                                                                  ^^
-18>                                                                    ^^
+4 >         ^^^^^
+5 >              ^^^
+6 >                 ^^^^^
+7 >                      ^^^^^
+8 >                           ^^
+9 >                             ^^^^^^
+10>                                   ^^^
+11>                                      ^^^^^
+12>                                           ^^^^^^
+13>                                                 ^^
+14>                                                   ^
+15>                                                    ^^^
+16>                                                       ^
+17>                                                        ^^
+18>                                                          ^
+19>                                                           ^^^
+20>                                                              ^
+21>                                                               ^^
+22>                                                                 ^
+23>                                                                  ^^
+24>                                                                    ^^
 1->
   >
   >
 2 >for (let {
-3 >     
-4 >         name: nameA
-5 >                           , 
-6 >                             skill: skillA
-7 >                                                  } = robot, 
-8 >                                                   i
-9 >                                                     = 
-10>                                                       0
-11>                                                        ; 
-12>                                                          i
-13>                                                            < 
-14>                                                              1
-15>                                                               ; 
-16>                                                                 i
-17>                                                                  ++
-18>                                                                    ) 
+3 >     name: 
+4 >         nameA
+5 >              , skill: skillA } = 
+6 >                 robot
+7 >                      
+8 >                           , skill: 
+9 >                             skillA
+10>                                    } = 
+11>                                      robot
+12>                                           
+13>                                                  } = robot, 
+14>                                                   i
+15>                                                     = 
+16>                                                       0
+17>                                                        ; 
+18>                                                          i
+19>                                                            < 
+20>                                                              1
+21>                                                               ; 
+22>                                                                 i
+23>                                                                  ++
+24>                                                                    ) 
 1->Emitted(27, 1) Source(47, 1) + SourceIndex(0)
 2 >Emitted(27, 6) Source(47, 11) + SourceIndex(0)
-3 >Emitted(27, 10) Source(47, 11) + SourceIndex(0)
-4 >Emitted(27, 28) Source(47, 22) + SourceIndex(0)
-5 >Emitted(27, 30) Source(47, 24) + SourceIndex(0)
-6 >Emitted(27, 50) Source(47, 37) + SourceIndex(0)
-7 >Emitted(27, 52) Source(47, 49) + SourceIndex(0)
-8 >Emitted(27, 53) Source(47, 50) + SourceIndex(0)
-9 >Emitted(27, 56) Source(47, 53) + SourceIndex(0)
-10>Emitted(27, 57) Source(47, 54) + SourceIndex(0)
-11>Emitted(27, 59) Source(47, 56) + SourceIndex(0)
-12>Emitted(27, 60) Source(47, 57) + SourceIndex(0)
-13>Emitted(27, 63) Source(47, 60) + SourceIndex(0)
-14>Emitted(27, 64) Source(47, 61) + SourceIndex(0)
-15>Emitted(27, 66) Source(47, 63) + SourceIndex(0)
-16>Emitted(27, 67) Source(47, 64) + SourceIndex(0)
-17>Emitted(27, 69) Source(47, 66) + SourceIndex(0)
-18>Emitted(27, 71) Source(47, 68) + SourceIndex(0)
+3 >Emitted(27, 10) Source(47, 17) + SourceIndex(0)
+4 >Emitted(27, 15) Source(47, 22) + SourceIndex(0)
+5 >Emitted(27, 18) Source(47, 42) + SourceIndex(0)
+6 >Emitted(27, 23) Source(47, 47) + SourceIndex(0)
+7 >Emitted(27, 28) Source(47, 22) + SourceIndex(0)
+8 >Emitted(27, 30) Source(47, 31) + SourceIndex(0)
+9 >Emitted(27, 36) Source(47, 37) + SourceIndex(0)
+10>Emitted(27, 39) Source(47, 42) + SourceIndex(0)
+11>Emitted(27, 44) Source(47, 47) + SourceIndex(0)
+12>Emitted(27, 50) Source(47, 37) + SourceIndex(0)
+13>Emitted(27, 52) Source(47, 49) + SourceIndex(0)
+14>Emitted(27, 53) Source(47, 50) + SourceIndex(0)
+15>Emitted(27, 56) Source(47, 53) + SourceIndex(0)
+16>Emitted(27, 57) Source(47, 54) + SourceIndex(0)
+17>Emitted(27, 59) Source(47, 56) + SourceIndex(0)
+18>Emitted(27, 60) Source(47, 57) + SourceIndex(0)
+19>Emitted(27, 63) Source(47, 60) + SourceIndex(0)
+20>Emitted(27, 64) Source(47, 61) + SourceIndex(0)
+21>Emitted(27, 66) Source(47, 63) + SourceIndex(0)
+22>Emitted(27, 67) Source(47, 64) + SourceIndex(0)
+23>Emitted(27, 69) Source(47, 66) + SourceIndex(0)
+24>Emitted(27, 71) Source(47, 68) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -859,64 +1019,76 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 1->
 2 >^^^^^
 3 >     ^^^^
-4 >         ^^^^^^^^^^^^^^^
-5 >                        ^^
-6 >                          ^^^^^^^^^^^^^^^
-7 >                                         ^^
-8 >                                           ^^^^^^^^^^^^^^^^^
-9 >                                                            ^^
-10>                                                              ^
-11>                                                               ^^^
-12>                                                                  ^
-13>                                                                   ^^
-14>                                                                     ^
-15>                                                                      ^^^
-16>                                                                         ^
-17>                                                                          ^^
-18>                                                                            ^
-19>                                                                             ^^
-20>                                                                               ^^
+4 >         ^^^^^
+5 >              ^^^^^^^^
+6 >                      ^^
+7 >                        ^^
+8 >                          ^^^^^
+9 >                               ^^^^^^^^^^
+10>                                         ^^
+11>                                           ^^^^^^
+12>                                                 ^^^^^^^^^^^
+13>                                                            ^^
+14>                                                              ^
+15>                                                               ^^^
+16>                                                                  ^
+17>                                                                   ^^
+18>                                                                     ^
+19>                                                                      ^^^
+20>                                                                         ^
+21>                                                                          ^^
+22>                                                                            ^
+23>                                                                             ^^
+24>                                                                               ^^
 1->
   >
 2 >for (let 
 3 >     
-4 >         {name: nameA, skill: skillA } = getRobot()
-5 >                        
-6 >                          name: nameA
-7 >                                         , 
-8 >                                           skill: skillA
-9 >                                                             } = getRobot(), 
-10>                                                              i
-11>                                                                = 
-12>                                                                  0
-13>                                                                   ; 
-14>                                                                     i
-15>                                                                       < 
-16>                                                                         1
-17>                                                                          ; 
-18>                                                                            i
-19>                                                                             ++
-20>                                                                               ) 
+4 >         {name: nameA, skill: skillA } = 
+5 >              getRobot
+6 >                      ()
+7 >                        
+8 >                          nameA
+9 >                               
+10>                                         , skill: 
+11>                                           skillA
+12>                                                 
+13>                                                             } = getRobot(), 
+14>                                                              i
+15>                                                                = 
+16>                                                                  0
+17>                                                                   ; 
+18>                                                                     i
+19>                                                                       < 
+20>                                                                         1
+21>                                                                          ; 
+22>                                                                            i
+23>                                                                             ++
+24>                                                                               ) 
 1->Emitted(30, 1) Source(50, 1) + SourceIndex(0)
 2 >Emitted(30, 6) Source(50, 10) + SourceIndex(0)
 3 >Emitted(30, 10) Source(50, 10) + SourceIndex(0)
-4 >Emitted(30, 25) Source(50, 52) + SourceIndex(0)
-5 >Emitted(30, 27) Source(50, 11) + SourceIndex(0)
-6 >Emitted(30, 42) Source(50, 22) + SourceIndex(0)
-7 >Emitted(30, 44) Source(50, 24) + SourceIndex(0)
-8 >Emitted(30, 61) Source(50, 37) + SourceIndex(0)
-9 >Emitted(30, 63) Source(50, 54) + SourceIndex(0)
-10>Emitted(30, 64) Source(50, 55) + SourceIndex(0)
-11>Emitted(30, 67) Source(50, 58) + SourceIndex(0)
-12>Emitted(30, 68) Source(50, 59) + SourceIndex(0)
-13>Emitted(30, 70) Source(50, 61) + SourceIndex(0)
-14>Emitted(30, 71) Source(50, 62) + SourceIndex(0)
-15>Emitted(30, 74) Source(50, 65) + SourceIndex(0)
-16>Emitted(30, 75) Source(50, 66) + SourceIndex(0)
-17>Emitted(30, 77) Source(50, 68) + SourceIndex(0)
-18>Emitted(30, 78) Source(50, 69) + SourceIndex(0)
-19>Emitted(30, 80) Source(50, 71) + SourceIndex(0)
-20>Emitted(30, 82) Source(50, 73) + SourceIndex(0)
+4 >Emitted(30, 15) Source(50, 42) + SourceIndex(0)
+5 >Emitted(30, 23) Source(50, 50) + SourceIndex(0)
+6 >Emitted(30, 25) Source(50, 52) + SourceIndex(0)
+7 >Emitted(30, 27) Source(50, 17) + SourceIndex(0)
+8 >Emitted(30, 32) Source(50, 22) + SourceIndex(0)
+9 >Emitted(30, 42) Source(50, 22) + SourceIndex(0)
+10>Emitted(30, 44) Source(50, 31) + SourceIndex(0)
+11>Emitted(30, 50) Source(50, 37) + SourceIndex(0)
+12>Emitted(30, 61) Source(50, 37) + SourceIndex(0)
+13>Emitted(30, 63) Source(50, 54) + SourceIndex(0)
+14>Emitted(30, 64) Source(50, 55) + SourceIndex(0)
+15>Emitted(30, 67) Source(50, 58) + SourceIndex(0)
+16>Emitted(30, 68) Source(50, 59) + SourceIndex(0)
+17>Emitted(30, 70) Source(50, 61) + SourceIndex(0)
+18>Emitted(30, 71) Source(50, 62) + SourceIndex(0)
+19>Emitted(30, 74) Source(50, 65) + SourceIndex(0)
+20>Emitted(30, 75) Source(50, 66) + SourceIndex(0)
+21>Emitted(30, 77) Source(50, 68) + SourceIndex(0)
+22>Emitted(30, 78) Source(50, 69) + SourceIndex(0)
+23>Emitted(30, 80) Source(50, 71) + SourceIndex(0)
+24>Emitted(30, 82) Source(50, 73) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -956,64 +1128,97 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 1->
 2 >^^^^^
 3 >     ^^^^
-4 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                    ^^
-6 >                                                      ^^^^^^^^^^^^^^^
-7 >                                                                     ^^
-8 >                                                                       ^^^^^^^^^^^^^^^^^
-9 >                                                                                        ^^
-10>                                                                                          ^
-11>                                                                                           ^^^
-12>                                                                                              ^
-13>                                                                                               ^^
-14>                                                                                                 ^
-15>                                                                                                  ^^^
-16>                                                                                                     ^
-17>                                                                                                      ^^
-18>                                                                                                        ^
-19>                                                                                                         ^^
-20>                                                                                                           ^^
+4 >         ^^^^^
+5 >              ^^
+6 >                ^^^^
+7 >                    ^^
+8 >                      ^^^^^^^^^
+9 >                               ^^
+10>                                 ^^^^^
+11>                                      ^^
+12>                                        ^^^^^^^^^^
+13>                                                  ^^
+14>                                                    ^^
+15>                                                      ^^^^^
+16>                                                           ^^^^^^^^^^
+17>                                                                     ^^
+18>                                                                       ^^^^^^
+19>                                                                             ^^^^^^^^^^^
+20>                                                                                        ^^
+21>                                                                                          ^
+22>                                                                                           ^^^
+23>                                                                                              ^
+24>                                                                                               ^^
+25>                                                                                                 ^
+26>                                                                                                  ^^^
+27>                                                                                                     ^
+28>                                                                                                      ^^
+29>                                                                                                        ^
+30>                                                                                                         ^^
+31>                                                                                                           ^^
 1->
   >
 2 >for (let 
 3 >     
-4 >         {name: nameA, skill: skillA } = <Robot>{ name: "trimmer", skill: "trimming" }
-5 >                                                    
-6 >                                                      name: nameA
-7 >                                                                     , 
-8 >                                                                       skill: skillA
-9 >                                                                                         } = <Robot>{ name: "trimmer", skill: "trimming" }, 
-10>                                                                                          i
-11>                                                                                            = 
-12>                                                                                              0
-13>                                                                                               ; 
-14>                                                                                                 i
-15>                                                                                                   < 
-16>                                                                                                     1
-17>                                                                                                      ; 
-18>                                                                                                        i
-19>                                                                                                         ++
-20>                                                                                                           ) 
+4 >         {name: nameA, skill: skillA } = <Robot>
+5 >              { 
+6 >                name
+7 >                    : 
+8 >                      "trimmer"
+9 >                               , 
+10>                                 skill
+11>                                      : 
+12>                                        "trimming"
+13>                                                   }
+14>                                                    
+15>                                                      nameA
+16>                                                           
+17>                                                                     , skill: 
+18>                                                                       skillA
+19>                                                                             
+20>                                                                                         } = <Robot>{ name: "trimmer", skill: "trimming" }, 
+21>                                                                                          i
+22>                                                                                            = 
+23>                                                                                              0
+24>                                                                                               ; 
+25>                                                                                                 i
+26>                                                                                                   < 
+27>                                                                                                     1
+28>                                                                                                      ; 
+29>                                                                                                        i
+30>                                                                                                         ++
+31>                                                                                                           ) 
 1->Emitted(33, 1) Source(53, 1) + SourceIndex(0)
 2 >Emitted(33, 6) Source(53, 10) + SourceIndex(0)
 3 >Emitted(33, 10) Source(53, 10) + SourceIndex(0)
-4 >Emitted(33, 53) Source(53, 87) + SourceIndex(0)
-5 >Emitted(33, 55) Source(53, 11) + SourceIndex(0)
-6 >Emitted(33, 70) Source(53, 22) + SourceIndex(0)
-7 >Emitted(33, 72) Source(53, 24) + SourceIndex(0)
-8 >Emitted(33, 89) Source(53, 37) + SourceIndex(0)
-9 >Emitted(33, 91) Source(53, 89) + SourceIndex(0)
-10>Emitted(33, 92) Source(53, 90) + SourceIndex(0)
-11>Emitted(33, 95) Source(53, 93) + SourceIndex(0)
-12>Emitted(33, 96) Source(53, 94) + SourceIndex(0)
-13>Emitted(33, 98) Source(53, 96) + SourceIndex(0)
-14>Emitted(33, 99) Source(53, 97) + SourceIndex(0)
-15>Emitted(33, 102) Source(53, 100) + SourceIndex(0)
-16>Emitted(33, 103) Source(53, 101) + SourceIndex(0)
-17>Emitted(33, 105) Source(53, 103) + SourceIndex(0)
-18>Emitted(33, 106) Source(53, 104) + SourceIndex(0)
-19>Emitted(33, 108) Source(53, 106) + SourceIndex(0)
-20>Emitted(33, 110) Source(53, 108) + SourceIndex(0)
+4 >Emitted(33, 15) Source(53, 49) + SourceIndex(0)
+5 >Emitted(33, 17) Source(53, 51) + SourceIndex(0)
+6 >Emitted(33, 21) Source(53, 55) + SourceIndex(0)
+7 >Emitted(33, 23) Source(53, 57) + SourceIndex(0)
+8 >Emitted(33, 32) Source(53, 66) + SourceIndex(0)
+9 >Emitted(33, 34) Source(53, 68) + SourceIndex(0)
+10>Emitted(33, 39) Source(53, 73) + SourceIndex(0)
+11>Emitted(33, 41) Source(53, 75) + SourceIndex(0)
+12>Emitted(33, 51) Source(53, 85) + SourceIndex(0)
+13>Emitted(33, 53) Source(53, 87) + SourceIndex(0)
+14>Emitted(33, 55) Source(53, 17) + SourceIndex(0)
+15>Emitted(33, 60) Source(53, 22) + SourceIndex(0)
+16>Emitted(33, 70) Source(53, 22) + SourceIndex(0)
+17>Emitted(33, 72) Source(53, 31) + SourceIndex(0)
+18>Emitted(33, 78) Source(53, 37) + SourceIndex(0)
+19>Emitted(33, 89) Source(53, 37) + SourceIndex(0)
+20>Emitted(33, 91) Source(53, 89) + SourceIndex(0)
+21>Emitted(33, 92) Source(53, 90) + SourceIndex(0)
+22>Emitted(33, 95) Source(53, 93) + SourceIndex(0)
+23>Emitted(33, 96) Source(53, 94) + SourceIndex(0)
+24>Emitted(33, 98) Source(53, 96) + SourceIndex(0)
+25>Emitted(33, 99) Source(53, 97) + SourceIndex(0)
+26>Emitted(33, 102) Source(53, 100) + SourceIndex(0)
+27>Emitted(33, 103) Source(53, 101) + SourceIndex(0)
+28>Emitted(33, 105) Source(53, 103) + SourceIndex(0)
+29>Emitted(33, 106) Source(53, 104) + SourceIndex(0)
+30>Emitted(33, 108) Source(53, 106) + SourceIndex(0)
+31>Emitted(33, 110) Source(53, 108) + SourceIndex(0)
 ---
 >>>    console.log(nameA);
 1 >^^^^
@@ -1053,70 +1258,91 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 1->
 2 >^^^^^
 3 >     ^^^^
-4 >         ^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                ^^
-6 >                                  ^^^^^^^^^^^^^^^^^^^^^^
-7 >                                                        ^^
-8 >                                                          ^^^^^^^^^^^^^^^^^^^^^
-9 >                                                                               ^^
-10>                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^
-11>                                                                                                          ^^
-12>                                                                                                            ^
-13>                                                                                                             ^^^
-14>                                                                                                                ^
-15>                                                                                                                 ^^
-16>                                                                                                                   ^
-17>                                                                                                                    ^^^
-18>                                                                                                                       ^
-19>                                                                                                                        ^^
-20>                                                                                                                          ^
-21>                                                                                                                           ^^
-22>                                                                                                                             ^^
+4 >         ^^^^^
+5 >              ^^^
+6 >                 ^^^^^^^^^^
+7 >                           ^^^^^
+8 >                                ^^
+9 >                                  ^^^^^
+10>                                       ^^^^^^^^^^
+11>                                                 ^^^^^^^
+12>                                                        ^^
+13>                                                          ^^^^^^^^
+14>                                                                  ^^^^^^^^^^^^^
+15>                                                                               ^^
+16>                                                                                 ^^^^^^^^^^
+17>                                                                                           ^^^^^^^^^^^^^^^
+18>                                                                                                          ^^
+19>                                                                                                            ^
+20>                                                                                                             ^^^
+21>                                                                                                                ^
+22>                                                                                                                 ^^
+23>                                                                                                                   ^
+24>                                                                                                                    ^^^
+25>                                                                                                                       ^
+26>                                                                                                                        ^^
+27>                                                                                                                          ^
+28>                                                                                                                           ^^
+29>                                                                                                                             ^^
 1->
   >
 2 >for (let {
-3 >     
-4 >         name: nameA
-5 >                                , 
-6 >                                  skills: { primary: primaryA, secondary: secondaryA }
-7 >                                                        
-8 >                                                          primary: primaryA
-9 >                                                                               , 
-10>                                                                                 secondary: secondaryA
-11>                                                                                                           } } = multiRobot, 
-12>                                                                                                            i
-13>                                                                                                              = 
-14>                                                                                                                0
-15>                                                                                                                 ; 
-16>                                                                                                                   i
-17>                                                                                                                     < 
-18>                                                                                                                       1
-19>                                                                                                                        ; 
-20>                                                                                                                          i
-21>                                                                                                                           ++
-22>                                                                                                                             ) 
+3 >     name: 
+4 >         nameA
+5 >              , skills: { primary: primaryA, secondary: secondaryA } } = 
+6 >                 multiRobot
+7 >                           
+8 >                                , 
+9 >                                  skills: { primary: primaryA, secondary: secondaryA } } = 
+10>                                       multiRobot
+11>                                                 
+12>                                                        
+13>                                                          primaryA
+14>                                                                  
+15>                                                                               , secondary: 
+16>                                                                                 secondaryA
+17>                                                                                           
+18>                                                                                                           } } = multiRobot, 
+19>                                                                                                            i
+20>                                                                                                              = 
+21>                                                                                                                0
+22>                                                                                                                 ; 
+23>                                                                                                                   i
+24>                                                                                                                     < 
+25>                                                                                                                       1
+26>                                                                                                                        ; 
+27>                                                                                                                          i
+28>                                                                                                                           ++
+29>                                                                                                                             ) 
 1->Emitted(36, 1) Source(56, 1) + SourceIndex(0)
 2 >Emitted(36, 6) Source(56, 11) + SourceIndex(0)
-3 >Emitted(36, 10) Source(56, 11) + SourceIndex(0)
-4 >Emitted(36, 33) Source(56, 22) + SourceIndex(0)
-5 >Emitted(36, 35) Source(56, 24) + SourceIndex(0)
-6 >Emitted(36, 57) Source(56, 76) + SourceIndex(0)
-7 >Emitted(36, 59) Source(56, 34) + SourceIndex(0)
-8 >Emitted(36, 80) Source(56, 51) + SourceIndex(0)
-9 >Emitted(36, 82) Source(56, 53) + SourceIndex(0)
-10>Emitted(36, 107) Source(56, 74) + SourceIndex(0)
-11>Emitted(36, 109) Source(56, 93) + SourceIndex(0)
-12>Emitted(36, 110) Source(56, 94) + SourceIndex(0)
-13>Emitted(36, 113) Source(56, 97) + SourceIndex(0)
-14>Emitted(36, 114) Source(56, 98) + SourceIndex(0)
-15>Emitted(36, 116) Source(56, 100) + SourceIndex(0)
-16>Emitted(36, 117) Source(56, 101) + SourceIndex(0)
-17>Emitted(36, 120) Source(56, 104) + SourceIndex(0)
-18>Emitted(36, 121) Source(56, 105) + SourceIndex(0)
-19>Emitted(36, 123) Source(56, 107) + SourceIndex(0)
-20>Emitted(36, 124) Source(56, 108) + SourceIndex(0)
-21>Emitted(36, 126) Source(56, 110) + SourceIndex(0)
-22>Emitted(36, 128) Source(56, 112) + SourceIndex(0)
+3 >Emitted(36, 10) Source(56, 17) + SourceIndex(0)
+4 >Emitted(36, 15) Source(56, 22) + SourceIndex(0)
+5 >Emitted(36, 18) Source(56, 81) + SourceIndex(0)
+6 >Emitted(36, 28) Source(56, 91) + SourceIndex(0)
+7 >Emitted(36, 33) Source(56, 22) + SourceIndex(0)
+8 >Emitted(36, 35) Source(56, 24) + SourceIndex(0)
+9 >Emitted(36, 40) Source(56, 81) + SourceIndex(0)
+10>Emitted(36, 50) Source(56, 91) + SourceIndex(0)
+11>Emitted(36, 57) Source(56, 76) + SourceIndex(0)
+12>Emitted(36, 59) Source(56, 43) + SourceIndex(0)
+13>Emitted(36, 67) Source(56, 51) + SourceIndex(0)
+14>Emitted(36, 80) Source(56, 51) + SourceIndex(0)
+15>Emitted(36, 82) Source(56, 64) + SourceIndex(0)
+16>Emitted(36, 92) Source(56, 74) + SourceIndex(0)
+17>Emitted(36, 107) Source(56, 74) + SourceIndex(0)
+18>Emitted(36, 109) Source(56, 93) + SourceIndex(0)
+19>Emitted(36, 110) Source(56, 94) + SourceIndex(0)
+20>Emitted(36, 113) Source(56, 97) + SourceIndex(0)
+21>Emitted(36, 114) Source(56, 98) + SourceIndex(0)
+22>Emitted(36, 116) Source(56, 100) + SourceIndex(0)
+23>Emitted(36, 117) Source(56, 101) + SourceIndex(0)
+24>Emitted(36, 120) Source(56, 104) + SourceIndex(0)
+25>Emitted(36, 121) Source(56, 105) + SourceIndex(0)
+26>Emitted(36, 123) Source(56, 107) + SourceIndex(0)
+27>Emitted(36, 124) Source(56, 108) + SourceIndex(0)
+28>Emitted(36, 126) Source(56, 110) + SourceIndex(0)
+29>Emitted(36, 128) Source(56, 112) + SourceIndex(0)
 ---
 >>>    console.log(primaryA);
 1 >^^^^
@@ -1156,76 +1382,91 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 1->
 2 >^^^^^
 3 >     ^^^^
-4 >         ^^^^^^^^^^^^^^^^^^^^
-5 >                             ^^
-6 >                               ^^^^^^^^^^^^^^^
-7 >                                              ^^
-8 >                                                ^^^^^^^^^^^^^^
-9 >                                                              ^^
-10>                                                                ^^^^^^^^^^^^^^^^^^^^^
-11>                                                                                     ^^
-12>                                                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^
-13>                                                                                                                ^^
-14>                                                                                                                  ^
-15>                                                                                                                   ^^^
-16>                                                                                                                      ^
-17>                                                                                                                       ^^
-18>                                                                                                                         ^
-19>                                                                                                                          ^^^
-20>                                                                                                                             ^
-21>                                                                                                                              ^^
-22>                                                                                                                                ^
-23>                                                                                                                                 ^^
-24>                                                                                                                                   ^^
+4 >         ^^^^^
+5 >              ^^^^^^^^^^^^^
+6 >                           ^^
+7 >                             ^^
+8 >                               ^^^^^
+9 >                                    ^^^^^^^^^^
+10>                                              ^^
+11>                                                ^^^^^^^^^^^^^^
+12>                                                              ^^
+13>                                                                ^^^^^^^^
+14>                                                                        ^^^^^^^^^^^^^
+15>                                                                                     ^^
+16>                                                                                       ^^^^^^^^^^
+17>                                                                                                 ^^^^^^^^^^^^^^^
+18>                                                                                                                ^^
+19>                                                                                                                  ^
+20>                                                                                                                   ^^^
+21>                                                                                                                      ^
+22>                                                                                                                       ^^
+23>                                                                                                                         ^
+24>                                                                                                                          ^^^
+25>                                                                                                                             ^
+26>                                                                                                                              ^^
+27>                                                                                                                                ^
+28>                                                                                                                                 ^^
+29>                                                                                                                                   ^^
 1->
   >
 2 >for (let 
 3 >     
-4 >         {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } = getMultiRobot()
-5 >                             
-6 >                               name: nameA
-7 >                                              , 
-8 >                                                skills: { primary: primaryA, secondary: secondaryA }
-9 >                                                              
-10>                                                                primary: primaryA
-11>                                                                                     , 
-12>                                                                                       secondary: secondaryA
-13>                                                                                                                 } } = getMultiRobot(), 
-14>                                                                                                                  i
-15>                                                                                                                    = 
-16>                                                                                                                      0
-17>                                                                                                                       ; 
-18>                                                                                                                         i
-19>                                                                                                                           < 
-20>                                                                                                                             1
-21>                                                                                                                              ; 
-22>                                                                                                                                i
-23>                                                                                                                                 ++
-24>                                                                                                                                   ) 
+4 >         {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } = 
+5 >              getMultiRobot
+6 >                           ()
+7 >                             
+8 >                               nameA
+9 >                                    
+10>                                              , 
+11>                                                skills: { primary: primaryA, secondary: secondaryA }
+12>                                                              
+13>                                                                primaryA
+14>                                                                        
+15>                                                                                     , secondary: 
+16>                                                                                       secondaryA
+17>                                                                                                 
+18>                                                                                                                 } } = getMultiRobot(), 
+19>                                                                                                                  i
+20>                                                                                                                    = 
+21>                                                                                                                      0
+22>                                                                                                                       ; 
+23>                                                                                                                         i
+24>                                                                                                                           < 
+25>                                                                                                                             1
+26>                                                                                                                              ; 
+27>                                                                                                                                i
+28>                                                                                                                                 ++
+29>                                                                                                                                   ) 
 1->Emitted(39, 1) Source(59, 1) + SourceIndex(0)
 2 >Emitted(39, 6) Source(59, 10) + SourceIndex(0)
 3 >Emitted(39, 10) Source(59, 10) + SourceIndex(0)
-4 >Emitted(39, 30) Source(59, 96) + SourceIndex(0)
-5 >Emitted(39, 32) Source(59, 11) + SourceIndex(0)
-6 >Emitted(39, 47) Source(59, 22) + SourceIndex(0)
-7 >Emitted(39, 49) Source(59, 24) + SourceIndex(0)
-8 >Emitted(39, 63) Source(59, 76) + SourceIndex(0)
-9 >Emitted(39, 65) Source(59, 34) + SourceIndex(0)
-10>Emitted(39, 86) Source(59, 51) + SourceIndex(0)
-11>Emitted(39, 88) Source(59, 53) + SourceIndex(0)
-12>Emitted(39, 113) Source(59, 74) + SourceIndex(0)
-13>Emitted(39, 115) Source(59, 98) + SourceIndex(0)
-14>Emitted(39, 116) Source(59, 99) + SourceIndex(0)
-15>Emitted(39, 119) Source(59, 102) + SourceIndex(0)
-16>Emitted(39, 120) Source(59, 103) + SourceIndex(0)
-17>Emitted(39, 122) Source(59, 105) + SourceIndex(0)
-18>Emitted(39, 123) Source(59, 106) + SourceIndex(0)
-19>Emitted(39, 126) Source(59, 109) + SourceIndex(0)
-20>Emitted(39, 127) Source(59, 110) + SourceIndex(0)
-21>Emitted(39, 129) Source(59, 112) + SourceIndex(0)
-22>Emitted(39, 130) Source(59, 113) + SourceIndex(0)
-23>Emitted(39, 132) Source(59, 115) + SourceIndex(0)
-24>Emitted(39, 134) Source(59, 117) + SourceIndex(0)
+4 >Emitted(39, 15) Source(59, 81) + SourceIndex(0)
+5 >Emitted(39, 28) Source(59, 94) + SourceIndex(0)
+6 >Emitted(39, 30) Source(59, 96) + SourceIndex(0)
+7 >Emitted(39, 32) Source(59, 17) + SourceIndex(0)
+8 >Emitted(39, 37) Source(59, 22) + SourceIndex(0)
+9 >Emitted(39, 47) Source(59, 22) + SourceIndex(0)
+10>Emitted(39, 49) Source(59, 24) + SourceIndex(0)
+11>Emitted(39, 63) Source(59, 76) + SourceIndex(0)
+12>Emitted(39, 65) Source(59, 43) + SourceIndex(0)
+13>Emitted(39, 73) Source(59, 51) + SourceIndex(0)
+14>Emitted(39, 86) Source(59, 51) + SourceIndex(0)
+15>Emitted(39, 88) Source(59, 64) + SourceIndex(0)
+16>Emitted(39, 98) Source(59, 74) + SourceIndex(0)
+17>Emitted(39, 113) Source(59, 74) + SourceIndex(0)
+18>Emitted(39, 115) Source(59, 98) + SourceIndex(0)
+19>Emitted(39, 116) Source(59, 99) + SourceIndex(0)
+20>Emitted(39, 119) Source(59, 102) + SourceIndex(0)
+21>Emitted(39, 120) Source(59, 103) + SourceIndex(0)
+22>Emitted(39, 122) Source(59, 105) + SourceIndex(0)
+23>Emitted(39, 123) Source(59, 106) + SourceIndex(0)
+24>Emitted(39, 126) Source(59, 109) + SourceIndex(0)
+25>Emitted(39, 127) Source(59, 110) + SourceIndex(0)
+26>Emitted(39, 129) Source(59, 112) + SourceIndex(0)
+27>Emitted(39, 130) Source(59, 113) + SourceIndex(0)
+28>Emitted(39, 132) Source(59, 115) + SourceIndex(0)
+29>Emitted(39, 134) Source(59, 117) + SourceIndex(0)
 ---
 >>>    console.log(primaryA);
 1 >^^^^
@@ -1265,79 +1506,139 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 1->
 2 >^^^^^
 3 >     ^^^^
-4 >         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                                       ^^
-6 >                                                                                         ^^^^^^^^^^^^^^^
-7 >                                                                                                        ^^
-8 >                                                                                                          ^^^^^^^^^^^^^^
-9 >                                                                                                                        ^^
-10>                                                                                                                          ^^^^^^^^^^^^^^^^^^^^^
-11>                                                                                                                                               ^^
-12>                                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^
-13>                                                                                                                                                                          ^^
-14>                                                                                                                                                                            ^
-15>                                                                                                                                                                             ^^^
-16>                                                                                                                                                                                ^
-17>                                                                                                                                                                                 ^^
-18>                                                                                                                                                                                   ^
-19>                                                                                                                                                                                    ^^^
-20>                                                                                                                                                                                       ^
-21>                                                                                                                                                                                        ^^
-22>                                                                                                                                                                                          ^
-23>                                                                                                                                                                                           ^^
-24>                                                                                                                                                                                             ^^
+4 >         ^^^^^
+5 >              ^^
+6 >                ^^^^
+7 >                    ^^
+8 >                      ^^^^^^^^^
+9 >                               ^^
+10>                                 ^^^^^^
+11>                                       ^^
+12>                                         ^^
+13>                                           ^^^^^^^
+14>                                                  ^^
+15>                                                    ^^^^^^^^^^
+16>                                                              ^^
+17>                                                                ^^^^^^^^^
+18>                                                                         ^^
+19>                                                                           ^^^^^^^^
+20>                                                                                   ^^
+21>                                                                                     ^^
+22>                                                                                       ^^
+23>                                                                                         ^^^^^
+24>                                                                                              ^^^^^^^^^^
+25>                                                                                                        ^^
+26>                                                                                                          ^^^^^^^^^^^^^^
+27>                                                                                                                        ^^
+28>                                                                                                                          ^^^^^^^^
+29>                                                                                                                                  ^^^^^^^^^^^^^
+30>                                                                                                                                               ^^
+31>                                                                                                                                                 ^^^^^^^^^^
+32>                                                                                                                                                           ^^^^^^^^^^^^^^^
+33>                                                                                                                                                                          ^^
+34>                                                                                                                                                                            ^
+35>                                                                                                                                                                             ^^^
+36>                                                                                                                                                                                ^
+37>                                                                                                                                                                                 ^^
+38>                                                                                                                                                                                   ^
+39>                                                                                                                                                                                    ^^^
+40>                                                                                                                                                                                       ^
+41>                                                                                                                                                                                        ^^
+42>                                                                                                                                                                                          ^
+43>                                                                                                                                                                                           ^^
+44>                                                                                                                                                                                             ^^
 1->
   >
 2 >for (let 
 3 >     
 4 >         {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } =
-  >             <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }
-5 >                                                                                       
-6 >                                                                                         name: nameA
-7 >                                                                                                        , 
-8 >                                                                                                          skills: { primary: primaryA, secondary: secondaryA }
-9 >                                                                                                                        
-10>                                                                                                                          primary: primaryA
-11>                                                                                                                                               , 
-12>                                                                                                                                                 secondary: secondaryA
-13>                                                                                                                                                                           } } =
+  >             <MultiRobot>
+5 >              { 
+6 >                name
+7 >                    : 
+8 >                      "trimmer"
+9 >                               , 
+10>                                 skills
+11>                                       : 
+12>                                         { 
+13>                                           primary
+14>                                                  : 
+15>                                                    "trimming"
+16>                                                              , 
+17>                                                                secondary
+18>                                                                         : 
+19>                                                                           "edging"
+20>                                                                                    }
+21>                                                                                      }
+22>                                                                                       
+23>                                                                                         nameA
+24>                                                                                              
+25>                                                                                                        , 
+26>                                                                                                          skills: { primary: primaryA, secondary: secondaryA }
+27>                                                                                                                        
+28>                                                                                                                          primaryA
+29>                                                                                                                                  
+30>                                                                                                                                               , secondary: 
+31>                                                                                                                                                 secondaryA
+32>                                                                                                                                                           
+33>                                                                                                                                                                           } } =
   >                                                                                                                                                                              <MultiRobot>{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } },
   >                                                                                                                                                                              
-14>                                                                                                                                                                            i
-15>                                                                                                                                                                              = 
-16>                                                                                                                                                                                0
-17>                                                                                                                                                                                 ; 
-18>                                                                                                                                                                                   i
-19>                                                                                                                                                                                     < 
-20>                                                                                                                                                                                       1
-21>                                                                                                                                                                                        ; 
-22>                                                                                                                                                                                          i
-23>                                                                                                                                                                                           ++
-24>                                                                                                                                                                                             ) 
+34>                                                                                                                                                                            i
+35>                                                                                                                                                                              = 
+36>                                                                                                                                                                                0
+37>                                                                                                                                                                                 ; 
+38>                                                                                                                                                                                   i
+39>                                                                                                                                                                                     < 
+40>                                                                                                                                                                                       1
+41>                                                                                                                                                                                        ; 
+42>                                                                                                                                                                                          i
+43>                                                                                                                                                                                           ++
+44>                                                                                                                                                                                             ) 
 1->Emitted(42, 1) Source(62, 1) + SourceIndex(0)
 2 >Emitted(42, 6) Source(62, 10) + SourceIndex(0)
 3 >Emitted(42, 10) Source(62, 10) + SourceIndex(0)
-4 >Emitted(42, 88) Source(63, 90) + SourceIndex(0)
-5 >Emitted(42, 90) Source(62, 11) + SourceIndex(0)
-6 >Emitted(42, 105) Source(62, 22) + SourceIndex(0)
-7 >Emitted(42, 107) Source(62, 24) + SourceIndex(0)
-8 >Emitted(42, 121) Source(62, 76) + SourceIndex(0)
-9 >Emitted(42, 123) Source(62, 34) + SourceIndex(0)
-10>Emitted(42, 144) Source(62, 51) + SourceIndex(0)
-11>Emitted(42, 146) Source(62, 53) + SourceIndex(0)
-12>Emitted(42, 171) Source(62, 74) + SourceIndex(0)
-13>Emitted(42, 173) Source(64, 5) + SourceIndex(0)
-14>Emitted(42, 174) Source(64, 6) + SourceIndex(0)
-15>Emitted(42, 177) Source(64, 9) + SourceIndex(0)
-16>Emitted(42, 178) Source(64, 10) + SourceIndex(0)
-17>Emitted(42, 180) Source(64, 12) + SourceIndex(0)
-18>Emitted(42, 181) Source(64, 13) + SourceIndex(0)
-19>Emitted(42, 184) Source(64, 16) + SourceIndex(0)
-20>Emitted(42, 185) Source(64, 17) + SourceIndex(0)
-21>Emitted(42, 187) Source(64, 19) + SourceIndex(0)
-22>Emitted(42, 188) Source(64, 20) + SourceIndex(0)
-23>Emitted(42, 190) Source(64, 22) + SourceIndex(0)
-24>Emitted(42, 192) Source(64, 24) + SourceIndex(0)
+4 >Emitted(42, 15) Source(63, 17) + SourceIndex(0)
+5 >Emitted(42, 17) Source(63, 19) + SourceIndex(0)
+6 >Emitted(42, 21) Source(63, 23) + SourceIndex(0)
+7 >Emitted(42, 23) Source(63, 25) + SourceIndex(0)
+8 >Emitted(42, 32) Source(63, 34) + SourceIndex(0)
+9 >Emitted(42, 34) Source(63, 36) + SourceIndex(0)
+10>Emitted(42, 40) Source(63, 42) + SourceIndex(0)
+11>Emitted(42, 42) Source(63, 44) + SourceIndex(0)
+12>Emitted(42, 44) Source(63, 46) + SourceIndex(0)
+13>Emitted(42, 51) Source(63, 53) + SourceIndex(0)
+14>Emitted(42, 53) Source(63, 55) + SourceIndex(0)
+15>Emitted(42, 63) Source(63, 65) + SourceIndex(0)
+16>Emitted(42, 65) Source(63, 67) + SourceIndex(0)
+17>Emitted(42, 74) Source(63, 76) + SourceIndex(0)
+18>Emitted(42, 76) Source(63, 78) + SourceIndex(0)
+19>Emitted(42, 84) Source(63, 86) + SourceIndex(0)
+20>Emitted(42, 86) Source(63, 88) + SourceIndex(0)
+21>Emitted(42, 88) Source(63, 90) + SourceIndex(0)
+22>Emitted(42, 90) Source(62, 17) + SourceIndex(0)
+23>Emitted(42, 95) Source(62, 22) + SourceIndex(0)
+24>Emitted(42, 105) Source(62, 22) + SourceIndex(0)
+25>Emitted(42, 107) Source(62, 24) + SourceIndex(0)
+26>Emitted(42, 121) Source(62, 76) + SourceIndex(0)
+27>Emitted(42, 123) Source(62, 43) + SourceIndex(0)
+28>Emitted(42, 131) Source(62, 51) + SourceIndex(0)
+29>Emitted(42, 144) Source(62, 51) + SourceIndex(0)
+30>Emitted(42, 146) Source(62, 64) + SourceIndex(0)
+31>Emitted(42, 156) Source(62, 74) + SourceIndex(0)
+32>Emitted(42, 171) Source(62, 74) + SourceIndex(0)
+33>Emitted(42, 173) Source(64, 5) + SourceIndex(0)
+34>Emitted(42, 174) Source(64, 6) + SourceIndex(0)
+35>Emitted(42, 177) Source(64, 9) + SourceIndex(0)
+36>Emitted(42, 178) Source(64, 10) + SourceIndex(0)
+37>Emitted(42, 180) Source(64, 12) + SourceIndex(0)
+38>Emitted(42, 181) Source(64, 13) + SourceIndex(0)
+39>Emitted(42, 184) Source(64, 16) + SourceIndex(0)
+40>Emitted(42, 185) Source(64, 17) + SourceIndex(0)
+41>Emitted(42, 187) Source(64, 19) + SourceIndex(0)
+42>Emitted(42, 188) Source(64, 20) + SourceIndex(0)
+43>Emitted(42, 190) Source(64, 22) + SourceIndex(0)
+44>Emitted(42, 192) Source(64, 24) + SourceIndex(0)
 ---
 >>>    console.log(primaryA);
 1 >^^^^

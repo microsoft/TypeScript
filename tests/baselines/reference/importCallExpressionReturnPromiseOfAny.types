@@ -21,10 +21,11 @@ declare const directory: string;
 declare const moduleFile: number;
 >moduleFile : number
 
-import(`${directory}\${moduleFile}`);
->import(`${directory}\${moduleFile}`) : Promise<any>
->`${directory}\${moduleFile}` : string
+import(`${directory}\\${moduleFile}`);
+>import(`${directory}\\${moduleFile}`) : Promise<any>
+>`${directory}\\${moduleFile}` : string
 >directory : string
+>moduleFile : number
 
 import(getSpecifier());
 >import(getSpecifier()) : Promise<any>
@@ -100,9 +101,9 @@ function * loadModule(directories: string[]) {
 >directory : string
 >directories : string[]
 
-        const path = `${directory}\moduleFile`;
+        const path = `${directory}\\moduleFile`;
 >path : string
->`${directory}\moduleFile` : string
+>`${directory}\\moduleFile` : string
 >directory : string
 
         import(yield path);

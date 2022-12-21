@@ -1,0 +1,28 @@
+=== tests/cases/conformance/externalModules/typeOnly/a.ts ===
+export class A {}
+>A : A
+
+=== tests/cases/conformance/externalModules/typeOnly/b.ts ===
+
+export type * from './a'; // Grammar error
+
+=== tests/cases/conformance/externalModules/typeOnly/c.ts ===
+export type * as ns from './a'; // Grammar error
+>ns : typeof import("tests/cases/conformance/externalModules/typeOnly/a")
+
+=== tests/cases/conformance/externalModules/typeOnly/d.ts ===
+import { A } from './b';
+>A : typeof A
+
+A;
+>A : typeof A
+
+=== tests/cases/conformance/externalModules/typeOnly/e.ts ===
+import { ns } from './c';
+>ns : typeof ns
+
+ns.A;
+>ns.A : typeof ns.A
+>ns : typeof ns
+>A : typeof ns.A
+

@@ -4,9 +4,9 @@ class C {
 
   *[Symbol.iterator]() {
 >[Symbol.iterator] : () => Generator<number, void, unknown>
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 
     let a = yield 1;
 >a : any

@@ -1,0 +1,18 @@
+=== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod18.ts ===
+declare var decorator: any;
+>decorator : any
+
+class Foo {
+>Foo : Foo
+
+    p1
+>p1 : any
+
+    @decorator()
+>decorator() : any
+>decorator : any
+
+    p2;
+>p2 : any
+}
+

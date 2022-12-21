@@ -1,18 +1,15 @@
-tests/cases/compiler/indexerConstraints2.ts(9,5): error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
-tests/cases/compiler/indexerConstraints2.ts(17,5): error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
-tests/cases/compiler/indexerConstraints2.ts(26,5): error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
-tests/cases/compiler/indexerConstraints2.ts(34,6): error TS1336: An index signature parameter type cannot be a type alias. Consider writing '[n: number]: A' instead.
-tests/cases/compiler/indexerConstraints2.ts(40,6): error TS1336: An index signature parameter type cannot be a type alias. Consider writing '[s: string]: A' instead.
-tests/cases/compiler/indexerConstraints2.ts(46,6): error TS1023: An index signature parameter type must be either 'string' or 'number'.
-tests/cases/compiler/indexerConstraints2.ts(52,6): error TS1337: An index signature parameter type cannot be a union type. Consider using a mapped object type instead.
-tests/cases/compiler/indexerConstraints2.ts(58,6): error TS1023: An index signature parameter type must be either 'string' or 'number'.
-tests/cases/compiler/indexerConstraints2.ts(64,6): error TS1337: An index signature parameter type cannot be a union type. Consider using a mapped object type instead.
-tests/cases/compiler/indexerConstraints2.ts(70,6): error TS1337: An index signature parameter type cannot be a union type. Consider using a mapped object type instead.
-tests/cases/compiler/indexerConstraints2.ts(74,6): error TS1337: An index signature parameter type cannot be a union type. Consider using a mapped object type instead.
-tests/cases/compiler/indexerConstraints2.ts(79,6): error TS1336: An index signature parameter type cannot be a type alias. Consider writing '[key: string]: any' instead.
+tests/cases/compiler/indexerConstraints2.ts(9,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+tests/cases/compiler/indexerConstraints2.ts(17,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+tests/cases/compiler/indexerConstraints2.ts(26,5): error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
+tests/cases/compiler/indexerConstraints2.ts(46,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+tests/cases/compiler/indexerConstraints2.ts(52,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
+tests/cases/compiler/indexerConstraints2.ts(58,6): error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
+tests/cases/compiler/indexerConstraints2.ts(70,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
+tests/cases/compiler/indexerConstraints2.ts(74,6): error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
+tests/cases/compiler/indexerConstraints2.ts(79,5): error TS1021: An index signature must have a type annotation.
 
 
-==== tests/cases/compiler/indexerConstraints2.ts (12 errors) ====
+==== tests/cases/compiler/indexerConstraints2.ts (9 errors) ====
     class A { a: number; }
     class B extends A { b: number; }
     
@@ -23,7 +20,7 @@ tests/cases/compiler/indexerConstraints2.ts(79,6): error TS1336: An index signat
     class G extends F {
         [n: number]: A
         ~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
+!!! error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
     }
     
     // Other way
@@ -33,7 +30,7 @@ tests/cases/compiler/indexerConstraints2.ts(79,6): error TS1336: An index signat
     class I extends H {
         [s: string]: B
         ~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
+!!! error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
     }
     
     // With hidden indexer
@@ -44,7 +41,7 @@ tests/cases/compiler/indexerConstraints2.ts(79,6): error TS1336: An index signat
     class K extends J {
         [n: number]: A;
         ~~~~~~~~~~~~~~~
-!!! error TS2413: Numeric index type 'A' is not assignable to string index type 'B'.
+!!! error TS2413: 'number' index type 'A' is not assignable to 'string' index type 'B'.
         [s: string]: B;
     }
     
@@ -53,16 +50,12 @@ tests/cases/compiler/indexerConstraints2.ts(79,6): error TS1336: An index signat
     
     interface L {
         [n: AliasedNumber]: A;
-         ~
-!!! error TS1336: An index signature parameter type cannot be a type alias. Consider writing '[n: number]: A' instead.
     }
     
     type AliasedString = string;
     
     interface M {
         [s: AliasedString]: A;
-         ~
-!!! error TS1336: An index signature parameter type cannot be a type alias. Consider writing '[s: string]: A' instead.
     }
     
     type AliasedBoolean = boolean;
@@ -70,7 +63,7 @@ tests/cases/compiler/indexerConstraints2.ts(79,6): error TS1336: An index signat
     interface N {
         [b: AliasedBoolean]: A;
          ~
-!!! error TS1023: An index signature parameter type must be either 'string' or 'number'.
+!!! error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
     }
     
     type IndexableUnion = "foo" | "bar";
@@ -78,7 +71,7 @@ tests/cases/compiler/indexerConstraints2.ts(79,6): error TS1336: An index signat
     interface O {
         [u: IndexableUnion]: A;
          ~
-!!! error TS1337: An index signature parameter type cannot be a union type. Consider using a mapped object type instead.
+!!! error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
     }
     
     type NonIndexableUnion = boolean | {};
@@ -86,15 +79,13 @@ tests/cases/compiler/indexerConstraints2.ts(79,6): error TS1336: An index signat
     interface P {
         [u: NonIndexableUnion]: A;
          ~
-!!! error TS1023: An index signature parameter type must be either 'string' or 'number'.
+!!! error TS1268: An index signature parameter type must be 'string', 'number', 'symbol', or a template literal type.
     }
     
     type NonIndexableUnion2 = string | number;
     
     interface Q {
         [u: NonIndexableUnion2]: A;
-         ~
-!!! error TS1337: An index signature parameter type cannot be a union type. Consider using a mapped object type instead.
     }
     
     type NonIndexableUnion3 = "foo" | 42;
@@ -102,19 +93,19 @@ tests/cases/compiler/indexerConstraints2.ts(79,6): error TS1336: An index signat
     interface R {
         [u: NonIndexableUnion3]: A;
          ~
-!!! error TS1337: An index signature parameter type cannot be a union type. Consider using a mapped object type instead.
+!!! error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
     }
     
     interface S {
         [u: "foo" | "bar"]: A;
          ~
-!!! error TS1337: An index signature parameter type cannot be a union type. Consider using a mapped object type instead.
+!!! error TS1337: An index signature parameter type cannot be a literal type or generic type. Consider using a mapped object type instead.
     }
     
     type Key = string;
     interface T {
         [key: Key]
-         ~~~
-!!! error TS1336: An index signature parameter type cannot be a type alias. Consider writing '[key: string]: any' instead.
+        ~~~~~~~~~~
+!!! error TS1021: An index signature must have a type annotation.
     }
     

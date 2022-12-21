@@ -1,0 +1,16 @@
+tests/cases/compiler/jsxFactoryButNoJsxFragmentFactory.tsx(3,1): error TS17016: The 'jsxFragmentFactory' compiler option must be provided to use JSX fragments with the 'jsxFactory' compiler option.
+tests/cases/compiler/jsxFactoryButNoJsxFragmentFactory.tsx(4,1): error TS17016: The 'jsxFragmentFactory' compiler option must be provided to use JSX fragments with the 'jsxFactory' compiler option.
+tests/cases/compiler/jsxFactoryButNoJsxFragmentFactory.tsx(4,17): error TS17016: The 'jsxFragmentFactory' compiler option must be provided to use JSX fragments with the 'jsxFactory' compiler option.
+
+
+==== tests/cases/compiler/jsxFactoryButNoJsxFragmentFactory.tsx (3 errors) ====
+    declare var h: any;
+    
+    <></>;
+    ~~~~~
+!!! error TS17016: The 'jsxFragmentFactory' compiler option must be provided to use JSX fragments with the 'jsxFactory' compiler option.
+    <><span>1</span><><span>2.1</span><span>2.2</span></></>;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17016: The 'jsxFragmentFactory' compiler option must be provided to use JSX fragments with the 'jsxFactory' compiler option.
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17016: The 'jsxFragmentFactory' compiler option must be provided to use JSX fragments with the 'jsxFactory' compiler option.

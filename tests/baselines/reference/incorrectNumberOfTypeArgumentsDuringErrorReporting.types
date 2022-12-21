@@ -27,7 +27,7 @@ interface MyObjA {
 }
 
 fn<MyObjA>({
->fn<MyObjA>({  a: {x: 'X', y: 'Y'},  b: {},}) : any
+>fn<MyObjA>({  a: {x: 'X', y: 'Y'},  b: {},}) : string
 >fn : <A extends ObjA, B extends ObjB = ObjB>(opts: Opts<A, B>) => string
 >{  a: {x: 'X', y: 'Y'},  b: {},} : { a: { x: string; y: string; }; b: {}; }
 

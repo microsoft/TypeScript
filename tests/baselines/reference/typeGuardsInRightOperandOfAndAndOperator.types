@@ -2,7 +2,7 @@
 // In the right operand of a && operation, 
 // the type of a variable or parameter is narrowed by any type guard in the left operand when true.
 function foo(x: number | string) {
->foo : (x: string | number) => boolean
+>foo : (x: number | string) => boolean
 >x : string | number
 
     return typeof x === "string" && x.length === 10; // string
@@ -18,7 +18,7 @@ function foo(x: number | string) {
 >10 : 10
 }
 function foo2(x: number | string) {
->foo2 : (x: string | number) => number
+>foo2 : (x: number | string) => number
 >x : string | number
 
     // modify x in right hand operand
@@ -37,7 +37,7 @@ function foo2(x: number | string) {
 >x : number
 }
 function foo3(x: number | string) {
->foo3 : (x: string | number) => string
+>foo3 : (x: number | string) => string
 >x : string | number
 
     // modify x in right hand operand with string type itself
@@ -56,7 +56,7 @@ function foo3(x: number | string) {
 >x : string
 }
 function foo4(x: number | string | boolean) {
->foo4 : (x: string | number | boolean) => boolean
+>foo4 : (x: number | string | boolean) => boolean
 >x : string | number | boolean
 
     return typeof x !== "string" // string | number | boolean
@@ -77,7 +77,7 @@ function foo4(x: number | string | boolean) {
 >x : boolean
 }
 function foo5(x: number | string | boolean) {
->foo5 : (x: string | number | boolean) => boolean
+>foo5 : (x: number | string | boolean) => boolean
 >x : string | number | boolean
 
     // usage of x or assignment to separate variable shouldn't cause narrowing of type to stop
@@ -109,7 +109,7 @@ function foo5(x: number | string | boolean) {
 >x : true
 }
 function foo6(x: number | string | boolean) {
->foo6 : (x: string | number | boolean) => boolean
+>foo6 : (x: number | string | boolean) => boolean
 >x : string | number | boolean
 
     // Mixing typeguard narrowing in if statement with conditional expression typeguard
@@ -137,7 +137,7 @@ function foo6(x: number | string | boolean) {
 >10 : 10
 }
 function foo7(x: number | string | boolean) {
->foo7 : (x: string | number | boolean) => string
+>foo7 : (x: number | string | boolean) => string
 >x : string | number | boolean
 
     var y: number| boolean | string;

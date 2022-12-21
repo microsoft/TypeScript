@@ -79,6 +79,7 @@ function globalfooWithOverloads(a: any): any {
 //// [declFileFunctions_0.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.fooWithTypeTypePredicateAndRestParam = exports.fooWithTypeTypePredicateAndGeneric = exports.fooWithTypePredicateAndMulitpleParams = exports.fooWithTypePredicate = exports.fooWithSingleOverload = exports.fooWithOverloads = exports.fooWithRestParameters = exports.fooWithParameters = exports.foo = void 0;
 /** This comment should appear for foo*/
 function foo() {
 }

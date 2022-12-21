@@ -1,0 +1,5 @@
+=== tests/cases/compiler/declarationEmitInvalidReferenceAllowJs.ts ===
+/// <reference path="invalid" />
+var x = 0; 
+>x : Symbol(x, Decl(declarationEmitInvalidReferenceAllowJs.ts, 1, 3))
+

@@ -40,7 +40,7 @@ f(1)
 
 /** @param {???!?number?=} a */
 function g(a) {
->g : (a?: number | null | undefined) => void
+>g : (a?: (((((number | null) | null) | null) | null) | null) | undefined) => void
 >a : number | null | undefined
 
     a = 1

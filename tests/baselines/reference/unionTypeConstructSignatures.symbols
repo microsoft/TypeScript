@@ -9,7 +9,7 @@ var strOrBoolean: string | boolean;
 var strOrNum: string | number;
 >strOrNum : Symbol(strOrNum, Decl(unionTypeConstructSignatures.ts, 2, 3))
 
-// If each type in U has construct signatures and the sets of construct signatures are identical ignoring return types, 
+// If each type in U has construct signatures and the sets of construct signatures are identical ignoring return types,
 // U has the same set of construct signatures, but with return types that are unions of the return types of the respective construct signatures from each type in U.
 var unionOfDifferentReturnType: { new (a: number): number; } | { new (a: number): Date; };
 >unionOfDifferentReturnType : Symbol(unionOfDifferentReturnType, Decl(unionTypeConstructSignatures.ts, 6, 3))
@@ -21,7 +21,7 @@ numOrDate = new unionOfDifferentReturnType(10);
 >numOrDate : Symbol(numOrDate, Decl(unionTypeConstructSignatures.ts, 0, 3))
 >unionOfDifferentReturnType : Symbol(unionOfDifferentReturnType, Decl(unionTypeConstructSignatures.ts, 6, 3))
 
-strOrBoolean = new unionOfDifferentReturnType("hello"); // error 
+strOrBoolean = new unionOfDifferentReturnType("hello"); // error
 >strOrBoolean : Symbol(strOrBoolean, Decl(unionTypeConstructSignatures.ts, 1, 3))
 >unionOfDifferentReturnType : Symbol(unionOfDifferentReturnType, Decl(unionTypeConstructSignatures.ts, 6, 3))
 
@@ -243,4 +243,12 @@ strOrNum = new unionWithRestParameter3('hello', "hello"); // wrong type
 strOrNum = new unionWithRestParameter3(); // error no call signature
 >strOrNum : Symbol(strOrNum, Decl(unionTypeConstructSignatures.ts, 2, 3))
 >unionWithRestParameter3 : Symbol(unionWithRestParameter3, Decl(unionTypeConstructSignatures.ts, 64, 3))
+
+var unionWithAbstractSignature: (abstract new (a: string) => string) | (new (a: string) => string);
+>unionWithAbstractSignature : Symbol(unionWithAbstractSignature, Decl(unionTypeConstructSignatures.ts, 71, 3))
+>a : Symbol(a, Decl(unionTypeConstructSignatures.ts, 71, 47))
+>a : Symbol(a, Decl(unionTypeConstructSignatures.ts, 71, 77))
+
+new unionWithAbstractSignature('hello');
+>unionWithAbstractSignature : Symbol(unionWithAbstractSignature, Decl(unionTypeConstructSignatures.ts, 71, 3))
 

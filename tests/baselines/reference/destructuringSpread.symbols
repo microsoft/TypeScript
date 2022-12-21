@@ -1,0 +1,60 @@
+=== tests/cases/conformance/es6/destructuring/destructuringSpread.ts ===
+const { x } = {
+>x : Symbol(x, Decl(destructuringSpread.ts, 0, 7))
+
+  ...{},
+  x: 0
+>x : Symbol(x, Decl(destructuringSpread.ts, 1, 8))
+
+};
+
+const { y } = {
+>y : Symbol(y, Decl(destructuringSpread.ts, 5, 7))
+
+  y: 0,
+>y : Symbol(y, Decl(destructuringSpread.ts, 5, 15))
+
+  ...{}
+};
+
+const { z, a, b } = {
+>z : Symbol(z, Decl(destructuringSpread.ts, 10, 7))
+>a : Symbol(a, Decl(destructuringSpread.ts, 10, 10))
+>b : Symbol(b, Decl(destructuringSpread.ts, 10, 13))
+
+  z: 0,
+>z : Symbol(z, Decl(destructuringSpread.ts, 10, 21))
+
+  ...{ a: 0, b: 0 }
+>a : Symbol(a, Decl(destructuringSpread.ts, 12, 6))
+>b : Symbol(b, Decl(destructuringSpread.ts, 12, 12))
+
+};
+
+const { c, d, e, f, g } = {
+>c : Symbol(c, Decl(destructuringSpread.ts, 15, 7))
+>d : Symbol(d, Decl(destructuringSpread.ts, 15, 10))
+>e : Symbol(e, Decl(destructuringSpread.ts, 15, 13))
+>f : Symbol(f, Decl(destructuringSpread.ts, 15, 16))
+>g : Symbol(g, Decl(destructuringSpread.ts, 15, 19))
+
+  ...{
+    ...{
+      ...{
+        c: 0,
+>c : Symbol(c, Decl(destructuringSpread.ts, 18, 10))
+
+      },
+      d: 0
+>d : Symbol(d, Decl(destructuringSpread.ts, 20, 8))
+
+    },
+    e: 0
+>e : Symbol(e, Decl(destructuringSpread.ts, 22, 6))
+
+  },
+  f: 0
+>f : Symbol(f, Decl(destructuringSpread.ts, 24, 4))
+
+};
+

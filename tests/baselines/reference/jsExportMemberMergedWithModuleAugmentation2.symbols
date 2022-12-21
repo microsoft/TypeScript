@@ -1,0 +1,25 @@
+=== /test.js ===
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(test.js, 0, 0))
+>module : Symbol("/test.js", Decl(test.js, 0, 0), Decl(index.ts, 0, 27))
+>exports : Symbol("/test.js", Decl(test.js, 0, 0), Decl(index.ts, 0, 27))
+
+  a: "ok"
+>a : Symbol(a, Decl(test.js, 0, 18))
+
+};
+
+=== /index.ts ===
+import { a } from "./test";
+>a : Symbol(a, Decl(index.ts, 0, 8))
+
+declare module "./test" {
+>"./test" : Symbol("/test.js", Decl(test.js, 0, 0), Decl(index.ts, 0, 27))
+
+  export const a: number;
+>a : Symbol(a, Decl(index.ts, 3, 14))
+}
+
+a.toFixed();
+>a : Symbol(a, Decl(index.ts, 0, 8))
+

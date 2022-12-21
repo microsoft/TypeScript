@@ -1,12 +1,10 @@
 declare namespace Intl {
-    type NumberFormatPartTypes = "currency" | "decimal" | "fraction" | "group" | "infinity" | "integer" | "literal" | "minusSign" | "nan" | "plusSign" | "percentSign";
+  interface NumberRangeFormatPart extends NumberFormatPart {
+    source: "startRange" | "endRange" | "shared"
+  }
 
-    interface NumberFormatPart {
-        type: NumberFormatPartTypes;
-        value: string;
-    }
-
-    interface NumberFormat {
-        formatToParts(number?: number): NumberFormatPart[];
-    }
+  interface NumberFormat {
+    formatRange(start: number | bigint, end: number | bigint): string;
+    formatRangeToParts(start: number | bigint, end: number | bigint): NumberRangeFormatPart[];
+  }
 }

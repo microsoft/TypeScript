@@ -1,0 +1,16 @@
+/a.ts(2,13): error TS2456: Type alias 'A' circularly references itself.
+/b.ts(2,13): error TS2456: Type alias 'B' circularly references itself.
+
+
+==== /a.ts (1 errors) ====
+    import type { B } from './b';
+    export type A = B;
+                ~
+!!! error TS2456: Type alias 'A' circularly references itself.
+    
+==== /b.ts (1 errors) ====
+    import type { A } from './a';
+    export type B = A;
+                ~
+!!! error TS2456: Type alias 'B' circularly references itself.
+    

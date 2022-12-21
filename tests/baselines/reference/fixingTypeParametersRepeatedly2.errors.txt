@@ -1,7 +1,8 @@
 tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(11,32): error TS2741: Property 'toBase' is missing in type 'Base' but required in type 'Derived'.
+tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(17,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'result' must be of type 'Derived', but here has type 'Base'.
 
 
-==== tests/cases/compiler/fixingTypeParametersRepeatedly2.ts (1 errors) ====
+==== tests/cases/compiler/fixingTypeParametersRepeatedly2.ts (2 errors) ====
     interface Base {
         baseProp;
     }
@@ -23,3 +24,6 @@ tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(11,32): error TS2741: Pr
     declare function bar<T>(x: T, func: (p: T) => T): T;
     declare function bar<T>(x: T, func: (p: T) => T): T;
     var result = bar(derived, d => d.toBase());
+        ~~~~~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'result' must be of type 'Derived', but here has type 'Base'.
+!!! related TS6203 tests/cases/compiler/fixingTypeParametersRepeatedly2.ts:11:5: 'result' was also declared here.

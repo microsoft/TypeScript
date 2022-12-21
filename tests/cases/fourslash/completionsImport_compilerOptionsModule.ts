@@ -34,12 +34,7 @@
 ////fo/*dts*/
 
 verify.completions({
-    marker: ["b"],
-    excludes: "foo",
-    preferences: { includeCompletionsForModuleExports: true }
-});
-verify.completions({
-    marker: ["c", "ccheck", "cts", "d", "dcheck", "dts"],
+    marker: ["b", "c", "ccheck", "cts", "d", "dcheck", "dts"],
     includes: [{
         name: "foo",
         source: "/node_modules/a/index",

@@ -106,9 +106,9 @@ module MsPortalFx.ViewModels {
 
             console.log(value1);
 >console.log(value1) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >value1 : ReExportedEnum.Cancel
 
             const value2 = DialogButtons.OKCancel;
@@ -119,9 +119,9 @@ module MsPortalFx.ViewModels {
 
             console.log(value2);
 >console.log(value2) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >value2 : DialogButtons.OKCancel
         }
     }

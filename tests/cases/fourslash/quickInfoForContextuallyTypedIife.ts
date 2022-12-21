@@ -9,13 +9,13 @@
 ////((a/*9*/, b/*10*/, c/*11*/) => [a/*12*/,b/*13*/,c/*14*/])("foo", 101, false);
 
 verify.quickInfos({
-    1: "var q: number",
-    2: "var qq: number",
+    1: "(parameter) q: number",
+    2: "(parameter) qq: number",
     3: "(parameter) x: number",
-    4: "var p: number",
-    5: "var q: number",
-    6: "var qq: number",
-    7: "var p: number",
+    4: "(parameter) p: number",
+    5: "(parameter) q: number",
+    6: "(parameter) qq: number",
+    7: "(parameter) p: number",
     8: "(parameter) x: number",
     9: "(parameter) a: string",
     10: "(parameter) b: number",

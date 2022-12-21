@@ -45,43 +45,43 @@ my.predicate = my.predicate ?? {};
 >{} : {}
 
 my.predicate.query = function () {
->my.predicate.query = function () {    var me = this;    me.property = false;} : { (): void; another(): number; result: string; }
->my.predicate.query : { (): void; another(): number; result: string; }
+>my.predicate.query = function () {    var me = this;    me.property = false;} : typeof query
+>my.predicate.query : typeof query
 >my.predicate : typeof my.predicate
 >my : typeof my
 >predicate : typeof my.predicate
->query : { (): void; another(): number; result: string; }
->function () {    var me = this;    me.property = false;} : { (): void; another(): number; result: string; }
+>query : typeof query
+>function () {    var me = this;    me.property = false;} : typeof query
 
     var me = this;
->me : typeof my.predicate
->this : typeof my.predicate
+>me : this
+>this : this
 
     me.property = false;
 >me.property = false : false
 >me.property : any
->me : typeof my.predicate
+>me : this
 >property : any
 >false : false
 
 };
 var q = new my.predicate.query();
->q : any
->new my.predicate.query() : any
->my.predicate.query : { (): void; another(): number; result: string; }
+>q : query
+>new my.predicate.query() : query
+>my.predicate.query : typeof query
 >my.predicate : typeof my.predicate
 >my : typeof my
 >predicate : typeof my.predicate
->query : { (): void; another(): number; result: string; }
+>query : typeof query
 
 my.predicate.query.another = function () {
 >my.predicate.query.another = function () {    return 1;} : () => number
 >my.predicate.query.another : () => number
->my.predicate.query : { (): void; another(): number; result: string; }
+>my.predicate.query : typeof query
 >my.predicate : typeof my.predicate
 >my : typeof my
 >predicate : typeof my.predicate
->query : { (): void; another(): number; result: string; }
+>query : typeof query
 >another : () => number
 >function () {    return 1;} : () => number
 
@@ -91,11 +91,11 @@ my.predicate.query.another = function () {
 my.predicate.query.result = 'none'
 >my.predicate.query.result = 'none' : "none"
 >my.predicate.query.result : string
->my.predicate.query : { (): void; another(): number; result: string; }
+>my.predicate.query : typeof query
 >my.predicate : typeof my.predicate
 >my : typeof my
 >predicate : typeof my.predicate
->query : { (): void; another(): number; result: string; }
+>query : typeof query
 >result : string
 >'none' : "none"
 

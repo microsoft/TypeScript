@@ -15,6 +15,9 @@ verify.completions(
     { marker: "1", exact: [{ name: "bar", text: "(method) IFoo.bar(): IFoo" }] },
     {
         marker: "2",
-        exact: [{ name: "bar2", text: "(method) IFoo2.bar2(): IFoo2" }, { name: "bar", text: "(method) IFoo.bar(): IFoo" }]
+        exact: [
+            { name: "bar", text: "(method) IFoo.bar(): IFoo" },
+            { name: "bar2", text: "(method) IFoo2.bar2(): IFoo2" },
+        ]
     },
 );

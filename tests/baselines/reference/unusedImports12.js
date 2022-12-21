@@ -14,14 +14,15 @@ import r = require("./b");
 
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Member = void 0;
 var Member = /** @class */ (function () {
     function Member() {
     }
     return Member;
 }());
 exports.Member = Member;
-exports["default"] = Member;
+exports.default = Member;
 //// [a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

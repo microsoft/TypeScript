@@ -113,7 +113,7 @@ export type Matching<InjectedProps, DecorationTargetProps> = {
 };
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
->Omit : Pick<T, Exclude<keyof T, K>>
+>Omit : Omit<T, K>
 
 export type InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> =
 >InferableComponentEnhancerWithProps : InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps>

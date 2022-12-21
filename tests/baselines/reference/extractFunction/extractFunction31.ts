@@ -10,6 +10,22 @@ namespace N {
         }/*|]*/
     }
 }
+// ==SCOPE::Extract to inner function in arrow function==
+namespace N {
+
+    export const value = 1;
+
+    () => {
+        var f: () => number;
+        /*RENAME*/newFunction();
+
+        function newFunction() {
+            f = function(): number {
+                return value;
+            };
+        }
+    }
+}
 // ==SCOPE::Extract to function in namespace 'N'==
 namespace N {
 

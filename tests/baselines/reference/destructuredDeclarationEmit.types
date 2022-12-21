@@ -16,7 +16,7 @@ const foo = { bar: 'hello', bat: 'world', bam: { bork: { bar: 'a', baz: 'b' } } 
 >'b' : "b"
 
 const arr: [0, 1, 2, ['a', 'b', 'c', [{def: 'def'}, {sec: 'sec'}]]] = [0, 1, 2, ['a', 'b', 'c', [{def: 'def'}, {sec: 'sec'}]]];
->arr : [0, 1, 2, ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]]
+>arr : [0, 1, 2, ["a", "b", "c", [{ def: 'def'; }, { sec: 'sec'; }]]]
 >def : "def"
 >sec : "sec"
 >[0, 1, 2, ['a', 'b', 'c', [{def: 'def'}, {sec: 'sec'}]]] : [0, 1, 2, ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]]

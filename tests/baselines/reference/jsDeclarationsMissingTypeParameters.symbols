@@ -1,0 +1,28 @@
+=== tests/cases/conformance/jsdoc/declarations/file.js ===
+/**
+  * @param {Array=} y desc
+  */
+function x(y) { }
+>x : Symbol(x, Decl(file.js, 0, 0))
+>y : Symbol(y, Decl(file.js, 3, 11))
+
+// @ts-ignore
+/** @param {function (Array)} func Invoked
+ */
+function y(func) { return; }
+>y : Symbol(y, Decl(file.js, 3, 17))
+>func : Symbol(func, Decl(file.js, 8, 11))
+
+/**
+ * @return {(Array.<> | null)} list of devices
+ */
+function z() { return null ;}
+>z : Symbol(z, Decl(file.js, 8, 28))
+
+/**
+ * 
+ * @return {?Promise} A promise
+ */
+function w() { return null; }
+>w : Symbol(w, Decl(file.js, 13, 29))
+

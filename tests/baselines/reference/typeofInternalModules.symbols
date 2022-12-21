@@ -46,6 +46,7 @@ var x3: typeof importUninst.P; // Error again
 
 var x4: Outer = Outer;
 >x4 : Symbol(x4, Decl(typeofInternalModules.ts, 16, 3))
+>Outer : Symbol(Outer)
 >Outer : Symbol(Outer, Decl(typeofInternalModules.ts, 0, 0))
 
 var x5: typeof importInst;

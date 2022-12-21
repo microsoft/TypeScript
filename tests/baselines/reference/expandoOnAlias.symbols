@@ -1,0 +1,39 @@
+=== tests/cases/conformance/salsa/vue.js ===
+export class Vue {}
+>Vue : Symbol(Vue, Decl(vue.js, 0, 0))
+
+export const config = { x: 0 };
+>config : Symbol(config, Decl(vue.js, 1, 12))
+>x : Symbol(x, Decl(vue.js, 1, 23))
+
+=== tests/cases/conformance/salsa/test.js ===
+import { Vue, config } from "./vue";
+>Vue : Symbol(Vue, Decl(test.js, 0, 8))
+>config : Symbol(config, Decl(test.js, 0, 13))
+
+// Expando declarations aren't allowed on aliases.
+Vue.config = {};
+>Vue : Symbol(Vue, Decl(test.js, 0, 8))
+
+new Vue();
+>Vue : Symbol(Vue, Decl(test.js, 0, 8))
+
+// This is not an expando declaration; it's just a plain property assignment.
+config.x = 1;
+>config.x : Symbol(x, Decl(vue.js, 1, 23))
+>config : Symbol(config, Decl(test.js, 0, 13))
+>x : Symbol(x, Decl(vue.js, 1, 23))
+
+// This is not an expando declaration; it works because non-strict JS allows
+// loosey goosey assignment on objects.
+config.y = {};
+>config : Symbol(config, Decl(test.js, 0, 13))
+
+config.x;
+>config.x : Symbol(x, Decl(vue.js, 1, 23))
+>config : Symbol(config, Decl(test.js, 0, 13))
+>x : Symbol(x, Decl(vue.js, 1, 23))
+
+config.y;
+>config : Symbol(config, Decl(test.js, 0, 13))
+

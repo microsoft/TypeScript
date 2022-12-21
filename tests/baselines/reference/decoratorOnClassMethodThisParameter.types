@@ -9,8 +9,18 @@ class C {
 >C : C
 
     method(@dec this: C) {}
->method : (: any, this: C) => void
+>method : (this: C) => void
 >dec : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
-> : any
 >this : C
+}
+
+class C2 {
+>C2 : C2
+
+    method(@dec allowed: C2, @dec this: C2) {}
+>method : (allowed: C2, this: C2) => void
+>dec : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
+>allowed : C2
+>dec : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
+>this : C2
 }

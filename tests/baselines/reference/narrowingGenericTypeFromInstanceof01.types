@@ -28,7 +28,7 @@ function test<T>(x: A<T> | B<T>) {
 >B : typeof B
 
         acceptA(x);
->acceptA(x) : any
+>acceptA(x) : void
 >acceptA : <T>(a: A<T>) => void
 >x : B<T>
     }

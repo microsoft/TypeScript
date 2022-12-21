@@ -1,4 +1,4 @@
-tests/cases/compiler/typeAssertionToGenericFunctionType.ts(5,13): error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
+tests/cases/compiler/typeAssertionToGenericFunctionType.ts(5,13): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/compiler/typeAssertionToGenericFunctionType.ts(6,3): error TS2554: Expected 1 arguments, but got 0.
 
 
@@ -9,7 +9,7 @@ tests/cases/compiler/typeAssertionToGenericFunctionType.ts(6,3): error TS2554: E
     }
     x.a<string>(1); // bug was that this caused 'Could not find symbol T' on return type T in the type assertion on x.a's definition
                 ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     x.b<string>(); // error
       ~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.

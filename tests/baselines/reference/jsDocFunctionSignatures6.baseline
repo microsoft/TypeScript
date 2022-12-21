@@ -1,0 +1,1026 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/Foo.js",
+      "position": 244,
+      "name": "1"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "f1",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "p1",
+              "documentation": [
+                {
+                  "text": "- A string param",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "p1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "p2",
+              "documentation": [
+                {
+                  "text": "- An optional param",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "p2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "p3",
+              "documentation": [
+                {
+                  "text": "- Another optional param",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "p3",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": "?",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": true,
+              "isRest": false
+            },
+            {
+              "name": "p4",
+              "documentation": [
+                {
+                  "text": "- An optional param with a default value",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "p4",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": "?",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": true,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "p1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "- A string param",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "p2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "- An optional param",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "p3",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "- Another optional param",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "p4",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "- An optional param with a default value",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": 244,
+        "length": 26
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 4
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/Foo.js",
+      "position": 251,
+      "name": "2"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "f1",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "p1",
+              "documentation": [
+                {
+                  "text": "- A string param",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "p1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "p2",
+              "documentation": [
+                {
+                  "text": "- An optional param",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "p2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "p3",
+              "documentation": [
+                {
+                  "text": "- Another optional param",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "p3",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": "?",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": true,
+              "isRest": false
+            },
+            {
+              "name": "p4",
+              "documentation": [
+                {
+                  "text": "- An optional param with a default value",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "p4",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": "?",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": true,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "p1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "- A string param",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "p2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "- An optional param",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "p3",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "- Another optional param",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "p4",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "- An optional param with a default value",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": 244,
+        "length": 26
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 4
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/Foo.js",
+      "position": 258,
+      "name": "3"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "f1",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "p1",
+              "documentation": [
+                {
+                  "text": "- A string param",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "p1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "p2",
+              "documentation": [
+                {
+                  "text": "- An optional param",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "p2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "p3",
+              "documentation": [
+                {
+                  "text": "- Another optional param",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "p3",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": "?",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": true,
+              "isRest": false
+            },
+            {
+              "name": "p4",
+              "documentation": [
+                {
+                  "text": "- An optional param with a default value",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "p4",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": "?",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": true,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "p1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "- A string param",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "p2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "- An optional param",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "p3",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "- Another optional param",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "p4",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "- An optional param with a default value",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": 244,
+        "length": 26
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 2,
+      "argumentCount": 4
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/Foo.js",
+      "position": 265,
+      "name": "4"
+    },
+    "signatureHelp": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "f1",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "p1",
+              "documentation": [
+                {
+                  "text": "- A string param",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "p1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "p2",
+              "documentation": [
+                {
+                  "text": "- An optional param",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "p2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "p3",
+              "documentation": [
+                {
+                  "text": "- Another optional param",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "p3",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": "?",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": true,
+              "isRest": false
+            },
+            {
+              "name": "p4",
+              "documentation": [
+                {
+                  "text": "- An optional param with a default value",
+                  "kind": "text"
+                }
+              ],
+              "displayParts": [
+                {
+                  "text": "p4",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": "?",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": true,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": [
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "p1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "- A string param",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "p2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "- An optional param",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "p3",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "- Another optional param",
+                  "kind": "text"
+                }
+              ]
+            },
+            {
+              "name": "param",
+              "text": [
+                {
+                  "text": "p4",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "- An optional param with a default value",
+                  "kind": "text"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "applicableSpan": {
+        "start": 244,
+        "length": 26
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 3,
+      "argumentCount": 4
+    }
+  }
+]

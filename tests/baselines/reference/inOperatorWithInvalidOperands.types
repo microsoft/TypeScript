@@ -1,4 +1,7 @@
 === tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts ===
+class Foo {}
+>Foo : Foo
+
 enum E { a }
 >E : E
 >a : E.a
@@ -17,8 +20,14 @@ var a2: void;
 var a3: {};
 >a3 : {}
 
-var a4: E
+var a4: E;
 >a4 : E
+
+var a5: Foo | string;
+>a5 : string | Foo
+
+var a6: Foo;
+>a6 : Foo
 
 var ra1 = a1 in x;
 >ra1 : boolean
@@ -74,6 +83,18 @@ var ra9 = {} in x;
 >ra9 : boolean
 >{} in x : boolean
 >{} : {}
+>x : any
+
+var ra10 = a5 in x;
+>ra10 : boolean
+>a5 in x : boolean
+>a5 : string | Foo
+>x : any
+
+var ra11 = a6 in x;
+>ra11 : boolean
+>a6 in x : boolean
+>a6 : Foo
 >x : any
 
 // invalid right operands
@@ -152,7 +173,6 @@ var rb10 = x in undefined;
 >x in undefined : boolean
 >x : any
 >undefined : undefined
-
 
 // both operands are invalid
 var rc1 = {} in '';

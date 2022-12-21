@@ -12,7 +12,7 @@ function far([a, [b], [[c]]]: [number, boolean[], string[][]]): void { }
 >c : string
 
 function bar({a1, b1, c1}: { a1: number, b1: boolean, c1: string }): void { }
->bar : ({ a1, b1, c1 }: { a1: number; b1: boolean; c1: string; }) => void
+>bar : ({ a1, b1, c1 }: {    a1: number;    b1: boolean;    c1: string;}) => void
 >a1 : number
 >b1 : boolean
 >c1 : string
@@ -21,7 +21,7 @@ function bar({a1, b1, c1}: { a1: number, b1: boolean, c1: string }): void { }
 >c1 : string
 
 function baz({a2, b2: {b1, c1}}: { a2: number, b2: { b1: boolean, c1: string } }): void { } 
->baz : ({ a2, b2: { b1, c1 } }: { a2: number; b2: { b1: boolean; c1: string; }; }) => void
+>baz : ({ a2, b2: { b1, c1 } }: {    a2: number;    b2: {        b1: boolean;        c1: string;    };}) => void
 >a2 : number
 >b2 : any
 >b1 : boolean

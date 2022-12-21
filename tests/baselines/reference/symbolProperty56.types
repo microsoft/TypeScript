@@ -5,9 +5,9 @@ var obj = {
 
     [Symbol.iterator]: 0
 >[Symbol.iterator] : number
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >0 : 0
 
 };

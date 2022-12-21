@@ -7,3 +7,4 @@ module m {
 export default m;
 
 //// [exportDefaultForNonInstantiatedModule.js]
+export {};

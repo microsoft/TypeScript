@@ -1,0 +1,16 @@
+tests/cases/compiler/index.ts(6,1): error TS2304: Cannot find name 'window'.
+
+
+==== /node_modules/@typescript/lib-dom/index.d.ts (0 errors) ====
+    // NOOP
+==== /node_modules/@typescript/lib-dom/iterable.d.ts (0 errors) ====
+    interface DOMIterable { abc: string }
+==== tests/cases/compiler/index.ts (1 errors) ====
+    /// <reference lib="dom.iterable" />
+    const a: DOMIterable = { abc: "Hello" }
+    
+    // This should fail because libdom has been replaced
+    // by the module above ^
+    window.localStorage
+    ~~~~~~
+!!! error TS2304: Cannot find name 'window'.

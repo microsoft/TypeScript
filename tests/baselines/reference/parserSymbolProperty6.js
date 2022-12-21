@@ -4,8 +4,10 @@ class C {
 }
 
 //// [parserSymbolProperty6.js]
+var _a;
 class C {
     constructor() {
-        this[Symbol.toStringTag] = "";
+        this[_a] = "";
     }
 }
+_a = Symbol.toStringTag;

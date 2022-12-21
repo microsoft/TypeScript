@@ -3,4 +3,6 @@
 // @noImplicitAny: true
 //// function ...q) {}} f(10);
 
-verify.not.codeFixAvailable();
+verify.codeFixAvailable([
+    { description: "Add missing function declaration 'f'" }
+]);

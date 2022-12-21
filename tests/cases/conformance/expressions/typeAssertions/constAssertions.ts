@@ -65,3 +65,48 @@ declare function id<T>(x: T): T;
 let e1 = v1 as const;  // Error
 let e2 = (true ? 1 : 0) as const;  // Error
 let e3 = id(1) as const;  // Error
+
+let t1 = 'foo' as const;
+let t2 = 'bar' as const;
+let t3 = `${t1}-${t2}` as const;
+let t4 = `${`(${t1})`}-${`(${t2})`}` as const;
+
+function ff1(x: 'foo' | 'bar', y: 1 | 2) {
+    return `${x}-${y}` as const;
+}
+
+function ff2<T extends string, U extends string>(x: T, y: U) {
+    return `${x}-${y}` as const;
+}
+
+const ts1 = ff2('foo', 'bar');
+const ts2 = ff2('foo', !!true ? '0' : '1');
+const ts3 = ff2(!!true ? 'top' : 'bottom', !!true ? 'left' : 'right');
+
+function ff3(x: 'foo' | 'bar', y: object) {
+    return `${x}${y}` as const;
+}
+
+type Action = "verify" | "write";
+type ContentMatch = "match" | "nonMatch";
+type Outcome = `${Action}_${ContentMatch}`;
+
+function ff4(verify: boolean, contentMatches: boolean) {
+    const action : Action = verify ? `verify` : `write`;
+    const contentMatch: ContentMatch = contentMatches ? `match` : `nonMatch`;
+    const outcome: Outcome = `${action}_${contentMatch}` as const;
+    return outcome;
+}
+
+function ff5(verify: boolean, contentMatches: boolean) {
+    const action = verify ? `verify` : `write`;
+    const contentMatch = contentMatches ? `match` : `nonMatch`;
+    const outcome = `${action}_${contentMatch}` as const;
+    return outcome;
+}
+
+function accessorNames<S extends string>(propName: S) {
+    return [`get-${propName}`, `set-${propName}`] as const;
+}
+
+const ns1 = accessorNames('foo');

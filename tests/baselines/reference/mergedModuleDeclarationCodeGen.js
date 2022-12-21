@@ -17,7 +17,8 @@ export module X {
 
 //// [mergedModuleDeclarationCodeGen.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.X = void 0;
 var X;
 (function (X) {
     var Y;

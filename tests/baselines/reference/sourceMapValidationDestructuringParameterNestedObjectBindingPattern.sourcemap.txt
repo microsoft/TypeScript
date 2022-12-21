@@ -110,21 +110,27 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPattern.t
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^
 3 >                      ^^
-4 >                        ^^^^^^^^^^^^^^^^^^^^^
-5 >                                             ^^
-6 >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                        ^^^^^^^^
+5 >                                ^^^^^^^^^^^^^
+6 >                                             ^^
+7 >                                               ^^^^^^^^^^
+8 >                                                         ^^^^^^^^^^^^^^^
 1->
 2 >        skills: { primary: primaryA, secondary: secondaryA }
 3 >                      
-4 >                        primary: primaryA
-5 >                                             , 
-6 >                                               secondary: secondaryA
+4 >                        primaryA
+5 >                                
+6 >                                             , secondary: 
+7 >                                               secondaryA
+8 >                                                         
 1->Emitted(3, 9) Source(13, 17) + SourceIndex(0)
 2 >Emitted(3, 23) Source(13, 69) + SourceIndex(0)
-3 >Emitted(3, 25) Source(13, 27) + SourceIndex(0)
-4 >Emitted(3, 46) Source(13, 44) + SourceIndex(0)
-5 >Emitted(3, 48) Source(13, 46) + SourceIndex(0)
-6 >Emitted(3, 73) Source(13, 67) + SourceIndex(0)
+3 >Emitted(3, 25) Source(13, 36) + SourceIndex(0)
+4 >Emitted(3, 33) Source(13, 44) + SourceIndex(0)
+5 >Emitted(3, 46) Source(13, 44) + SourceIndex(0)
+6 >Emitted(3, 48) Source(13, 57) + SourceIndex(0)
+7 >Emitted(3, 58) Source(13, 67) + SourceIndex(0)
+8 >Emitted(3, 73) Source(13, 67) + SourceIndex(0)
 ---
 >>>    console.log(primaryA);
 1 >^^^^
@@ -184,29 +190,38 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPattern.t
 ---
 >>>    var nameC = _a.name, _b = _a.skills, primaryB = _b.primary, secondaryB = _b.secondary;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^
-3 >                       ^^
-4 >                         ^^^^^^^^^^^^^^
-5 >                                       ^^
-6 >                                         ^^^^^^^^^^^^^^^^^^^^^
-7 >                                                              ^^
-8 >                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >        ^^^^^
+3 >             ^^^^^^^^^^
+4 >                       ^^
+5 >                         ^^^^^^^^^^^^^^
+6 >                                       ^^
+7 >                                         ^^^^^^^^
+8 >                                                 ^^^^^^^^^^^^^
+9 >                                                              ^^
+10>                                                                ^^^^^^^^^^
+11>                                                                          ^^^^^^^^^^^^^^^
 1->
-2 >        name: nameC
-3 >                       , 
-4 >                         skills: { primary: primaryB, secondary: secondaryB }
-5 >                                       
-6 >                                         primary: primaryB
-7 >                                                              , 
-8 >                                                                secondary: secondaryB
-1->Emitted(7, 9) Source(16, 17) + SourceIndex(0)
-2 >Emitted(7, 24) Source(16, 28) + SourceIndex(0)
-3 >Emitted(7, 26) Source(16, 30) + SourceIndex(0)
-4 >Emitted(7, 40) Source(16, 82) + SourceIndex(0)
-5 >Emitted(7, 42) Source(16, 40) + SourceIndex(0)
-6 >Emitted(7, 63) Source(16, 57) + SourceIndex(0)
-7 >Emitted(7, 65) Source(16, 59) + SourceIndex(0)
-8 >Emitted(7, 90) Source(16, 80) + SourceIndex(0)
+2 >        nameC
+3 >             
+4 >                       , 
+5 >                         skills: { primary: primaryB, secondary: secondaryB }
+6 >                                       
+7 >                                         primaryB
+8 >                                                 
+9 >                                                              , secondary: 
+10>                                                                secondaryB
+11>                                                                          
+1->Emitted(7, 9) Source(16, 23) + SourceIndex(0)
+2 >Emitted(7, 14) Source(16, 28) + SourceIndex(0)
+3 >Emitted(7, 24) Source(16, 28) + SourceIndex(0)
+4 >Emitted(7, 26) Source(16, 30) + SourceIndex(0)
+5 >Emitted(7, 40) Source(16, 82) + SourceIndex(0)
+6 >Emitted(7, 42) Source(16, 49) + SourceIndex(0)
+7 >Emitted(7, 50) Source(16, 57) + SourceIndex(0)
+8 >Emitted(7, 63) Source(16, 57) + SourceIndex(0)
+9 >Emitted(7, 65) Source(16, 70) + SourceIndex(0)
+10>Emitted(7, 75) Source(16, 80) + SourceIndex(0)
+11>Emitted(7, 90) Source(16, 80) + SourceIndex(0)
 ---
 >>>    console.log(secondaryB);
 1 >^^^^
@@ -266,12 +281,15 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPattern.t
 ---
 >>>    var skills = _a.skills;
 1->^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^
-3 >                          ^^^^^^^->
+2 >        ^^^^^^
+3 >              ^^^^^^^^^^^^
+4 >                          ^^^^^^^->
 1->
 2 >        skills
+3 >              
 1->Emitted(11, 9) Source(19, 17) + SourceIndex(0)
-2 >Emitted(11, 27) Source(19, 23) + SourceIndex(0)
+2 >Emitted(11, 15) Source(19, 23) + SourceIndex(0)
+3 >Emitted(11, 27) Source(19, 23) + SourceIndex(0)
 ---
 >>>    console.log(skills.primary);
 1->^^^^

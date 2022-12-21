@@ -144,7 +144,7 @@ for (let {
 >"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
->{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }
+>{ primary: "none", secondary: "none" } : { primary: string; secondary: string; }
 >primary : string
 >"none" : "none"
 >secondary : string
@@ -182,7 +182,7 @@ for (let {
 >"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
->{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }
+>{ primary: "none", secondary: "none" } : { primary: string; secondary: string; }
 >primary : string
 >"none" : "none"
 >secondary : string
@@ -221,7 +221,7 @@ for (let {
 >"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
->{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }
+>{ primary: "none", secondary: "none" } : { primary: string; secondary: string; }
 >primary : string
 >"none" : "none"
 >secondary : string
@@ -351,7 +351,7 @@ for (let {
 >"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
->{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }
+>{ primary: "none", secondary: "none" } : { primary: string; secondary: string; }
 >primary : string
 >"none" : "none"
 >secondary : string
@@ -394,7 +394,7 @@ for (let {
 >"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
->{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }
+>{ primary: "none", secondary: "none" } : { primary: string; secondary: string; }
 >primary : string
 >"none" : "none"
 >secondary : string
@@ -438,7 +438,7 @@ for (let {
 >"secondary" : "secondary"
 
     } = { primary: "none", secondary: "none" }
->{ primary: "none", secondary: "none" } : { primary?: string; secondary?: string; }
+>{ primary: "none", secondary: "none" } : { primary: string; secondary: string; }
 >primary : string
 >"none" : "none"
 >secondary : string

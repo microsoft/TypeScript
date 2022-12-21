@@ -1,0 +1,298 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/jsdocLink4.ts",
+      "position": 42,
+      "name": "1"
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "declare",
+      "textSpan": {
+        "start": 39,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "I",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "bar",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "",
+          "kind": "text"
+        },
+        {
+          "text": "{@link ",
+          "kind": "link"
+        },
+        {
+          "text": "I",
+          "kind": "linkName",
+          "target": {
+            "fileName": "/tests/cases/fourslash/jsdocLink4.ts",
+            "textSpan": {
+              "start": 0,
+              "length": 52
+            }
+          }
+        },
+        {
+          "text": "}",
+          "kind": "link"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/jsdocLink4.ts",
+      "position": 75,
+      "name": "2"
+    },
+    "quickInfo": {
+      "kind": "var",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 74,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "var",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "n",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "",
+          "kind": "text"
+        },
+        {
+          "text": "{@link ",
+          "kind": "link"
+        },
+        {
+          "text": "I",
+          "kind": "linkName",
+          "target": {
+            "fileName": "/tests/cases/fourslash/jsdocLink4.ts",
+            "textSpan": {
+              "start": 0,
+              "length": 52
+            }
+          }
+        },
+        {
+          "text": "}",
+          "kind": "link"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/jsdocLink4.ts",
+      "position": 208,
+      "name": "3"
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 207,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "x",
+          "kind": "parameterName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "any",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "A real, very serious ",
+          "kind": "text"
+        },
+        {
+          "text": "{@link ",
+          "kind": "link"
+        },
+        {
+          "text": "I",
+          "kind": "linkName",
+          "target": {
+            "fileName": "/tests/cases/fourslash/jsdocLink4.ts",
+            "textSpan": {
+              "start": 0,
+              "length": 52
+            }
+          }
+        },
+        {
+          "text": "to an interface",
+          "kind": "linkText"
+        },
+        {
+          "text": "}",
+          "kind": "link"
+        },
+        {
+          "text": ". Right there.",
+          "kind": "text"
+        }
+      ],
+      "tags": [
+        {
+          "name": "param",
+          "text": [
+            {
+              "text": "x",
+              "kind": "parameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "one ",
+              "kind": "text"
+            },
+            {
+              "text": "{@link ",
+              "kind": "link"
+            },
+            {
+              "text": "Pos",
+              "kind": "linkName",
+              "target": {
+                "fileName": "/tests/cases/fourslash/jsdocLink4.ts",
+                "textSpan": {
+                  "start": 211,
+                  "length": 27
+                }
+              }
+            },
+            {
+              "text": "here too",
+              "kind": "linkText"
+            },
+            {
+              "text": "}",
+              "kind": "link"
+            }
+          ]
+        }
+      ]
+    }
+  }
+]

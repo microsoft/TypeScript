@@ -467,3 +467,25 @@ function f18() {
     return x;  // (string | number | boolean)[]
 >x : Symbol(x, Decl(controlFlowArrays.ts, 172, 7))
 }
+
+// Repro from #39470
+
+declare function foo(arg: { val: number }[]): void;
+>foo : Symbol(foo, Decl(controlFlowArrays.ts, 177, 1))
+>arg : Symbol(arg, Decl(controlFlowArrays.ts, 181, 21))
+>val : Symbol(val, Decl(controlFlowArrays.ts, 181, 27))
+
+let arr = []
+>arr : Symbol(arr, Decl(controlFlowArrays.ts, 183, 3))
+
+arr.push({ val: 1, bar: 2 });
+>arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(controlFlowArrays.ts, 183, 3))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>val : Symbol(val, Decl(controlFlowArrays.ts, 184, 10))
+>bar : Symbol(bar, Decl(controlFlowArrays.ts, 184, 18))
+
+foo(arr);
+>foo : Symbol(foo, Decl(controlFlowArrays.ts, 177, 1))
+>arr : Symbol(arr, Decl(controlFlowArrays.ts, 183, 3))
+

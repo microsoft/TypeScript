@@ -1,0 +1,7 @@
+Two objects(1,4): error TS1012: Unexpected token.
+
+
+==== Two objects (1 errors) ====
+    {} {}
+       ~
+!!! error TS1012: Unexpected token.

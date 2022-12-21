@@ -30,7 +30,7 @@ interface Derived3 extends Base {
 
 interface Derived4 extends Base {
     foo(): { x: number } // error
->foo : () => { x: number; }
+>foo : () => {    x: number;}
 >x : number
 }
 

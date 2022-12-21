@@ -147,3 +147,44 @@ class K extends J {
 >r : Symbol(K.r, Decl(derivedUninitializedPropertyDeclaration.ts, 63, 17))
 }
 
+// #35327
+class L {
+>L : Symbol(L, Decl(derivedUninitializedPropertyDeclaration.ts, 65, 1))
+
+    a: any;
+>a : Symbol(L.a, Decl(derivedUninitializedPropertyDeclaration.ts, 68, 9))
+
+    constructor(arg: any) {
+>arg : Symbol(arg, Decl(derivedUninitializedPropertyDeclaration.ts, 70, 16))
+
+        this.a = arg;
+>this.a : Symbol(L.a, Decl(derivedUninitializedPropertyDeclaration.ts, 68, 9))
+>this : Symbol(L, Decl(derivedUninitializedPropertyDeclaration.ts, 65, 1))
+>a : Symbol(L.a, Decl(derivedUninitializedPropertyDeclaration.ts, 68, 9))
+>arg : Symbol(arg, Decl(derivedUninitializedPropertyDeclaration.ts, 70, 16))
+    }
+}
+class M extends L {
+>M : Symbol(M, Decl(derivedUninitializedPropertyDeclaration.ts, 73, 1))
+>L : Symbol(L, Decl(derivedUninitializedPropertyDeclaration.ts, 65, 1))
+
+    declare a: number;
+>a : Symbol(M.a, Decl(derivedUninitializedPropertyDeclaration.ts, 74, 19))
+
+    constructor(arg: number) {
+>arg : Symbol(arg, Decl(derivedUninitializedPropertyDeclaration.ts, 76, 16))
+
+        super(arg);
+>super : Symbol(L, Decl(derivedUninitializedPropertyDeclaration.ts, 65, 1))
+>arg : Symbol(arg, Decl(derivedUninitializedPropertyDeclaration.ts, 76, 16))
+
+        console.log(this.a);  // should be OK, M.a is ambient
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.a : Symbol(M.a, Decl(derivedUninitializedPropertyDeclaration.ts, 74, 19))
+>this : Symbol(M, Decl(derivedUninitializedPropertyDeclaration.ts, 73, 1))
+>a : Symbol(M.a, Decl(derivedUninitializedPropertyDeclaration.ts, 74, 19))
+    }
+}
+

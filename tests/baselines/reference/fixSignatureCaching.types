@@ -1068,12 +1068,12 @@ define(function () {
     };
 
     var hasOwnProp = Object.prototype.hasOwnProperty,
->hasOwnProp : (v: string | number | symbol) => boolean
->Object.prototype.hasOwnProperty : (v: string | number | symbol) => boolean
+>hasOwnProp : (v: PropertyKey) => boolean
+>Object.prototype.hasOwnProperty : (v: PropertyKey) => boolean
 >Object.prototype : Object
 >Object : ObjectConstructor
 >prototype : Object
->hasOwnProperty : (v: string | number | symbol) => boolean
+>hasOwnProperty : (v: PropertyKey) => boolean
 
         isArray;
 >isArray : any
@@ -1249,7 +1249,7 @@ define(function () {
             if (hasOwnProp.call(object, key)) {
 >hasOwnProp.call(object, key) : any
 >hasOwnProp.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->hasOwnProp : (v: string | number | symbol) => boolean
+>hasOwnProp : (v: PropertyKey) => boolean
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >object : any
 >key : string
@@ -1296,7 +1296,7 @@ define(function () {
             if (hasOwnProp.call(mobileDetectRules.props, key)) {
 >hasOwnProp.call(mobileDetectRules.props, key) : any
 >hasOwnProp.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->hasOwnProp : (v: string | number | symbol) => boolean
+>hasOwnProp : (v: PropertyKey) => boolean
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >mobileDetectRules.props : any
 >mobileDetectRules : any
@@ -1487,7 +1487,7 @@ define(function () {
             if (hasOwnProp.call(rules, key)) {
 >hasOwnProp.call(rules, key) : any
 >hasOwnProp.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->hasOwnProp : (v: string | number | symbol) => boolean
+>hasOwnProp : (v: PropertyKey) => boolean
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >rules : any
 >key : string
@@ -1538,7 +1538,7 @@ define(function () {
             if (hasOwnProp.call(rules, key)) {
 >hasOwnProp.call(rules, key) : any
 >hasOwnProp.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->hasOwnProp : (v: string | number | symbol) => boolean
+>hasOwnProp : (v: PropertyKey) => boolean
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >rules : any
 >key : string
@@ -1598,7 +1598,7 @@ define(function () {
         if (hasOwnProp.call(props, propertyName)) {
 >hasOwnProp.call(props, propertyName) : any
 >hasOwnProp.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->hasOwnProp : (v: string | number | symbol) => boolean
+>hasOwnProp : (v: PropertyKey) => boolean
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
 >props : any
 >propertyName : any

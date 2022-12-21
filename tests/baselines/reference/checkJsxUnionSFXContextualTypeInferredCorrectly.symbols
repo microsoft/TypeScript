@@ -39,8 +39,8 @@ export function ComponentWithUnion(props: PM | PS) {
 >PS : Symbol(PS, Decl(checkJsxUnionSFXContextualTypeInferredCorrectly.tsx, 2, 26))
 
     return <h1></h1>;
->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2430, 106))
->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2430, 106))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2556, 106))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2556, 106))
 }
 
 // Usage with React tsx

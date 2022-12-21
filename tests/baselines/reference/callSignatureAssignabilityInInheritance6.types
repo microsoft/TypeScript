@@ -107,7 +107,7 @@ interface I5<T> extends A {
 
 interface I7<T> extends A {
     a11: <U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
->a11 : <U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
+>a11 : <U>(x: {    foo: T;}, y: { foo: U; bar: U; }) => Base
 >x : { foo: T; }
 >foo : T
 >y : { foo: U; bar: U; }
@@ -117,7 +117,7 @@ interface I7<T> extends A {
 
 interface I9<T> extends A {
     a16: (x: { a: T; b: T }) => T[]; 
->a16 : (x: { a: T; b: T; }) => T[]
+>a16 : (x: {    a: T;    b: T;}) => T[]
 >x : { a: T; b: T; }
 >a : T
 >b : T

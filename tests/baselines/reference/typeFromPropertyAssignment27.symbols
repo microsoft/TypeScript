@@ -2,6 +2,8 @@
 // mixed prototype-assignment+function declaration
 function C() { this.p = 1; }
 >C : Symbol(C, Decl(a.js, 0, 0), Decl(a.js, 1, 28))
+>this.p : Symbol(C.p, Decl(a.js, 1, 14))
+>this : Symbol(C, Decl(a.js, 0, 0), Decl(a.js, 1, 28))
 >p : Symbol(C.p, Decl(a.js, 1, 14))
 
 C.prototype = { q: 2 };

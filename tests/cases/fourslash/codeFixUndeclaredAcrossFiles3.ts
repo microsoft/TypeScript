@@ -20,7 +20,7 @@
 verify.getAndApplyCodeFix(/*errorCode*/ undefined, 0);
 
 verify.rangeIs(`
-    m0(arg0: import("./f2").D) {
+    m0(arg0: D) {
         throw new Error("Method not implemented.");
     }
 `);

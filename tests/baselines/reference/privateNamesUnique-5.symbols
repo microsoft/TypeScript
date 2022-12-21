@@ -1,0 +1,25 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesUnique-5.ts ===
+// same as privateNamesUnique-1, but with an interface
+
+class A {
+>A : Symbol(A, Decl(privateNamesUnique-5.ts, 0, 0))
+
+    #foo: number;
+>#foo : Symbol(A.#foo, Decl(privateNamesUnique-5.ts, 2, 9))
+}
+interface A2 extends A { }
+>A2 : Symbol(A2, Decl(privateNamesUnique-5.ts, 4, 1))
+>A : Symbol(A, Decl(privateNamesUnique-5.ts, 0, 0))
+
+class B {
+>B : Symbol(B, Decl(privateNamesUnique-5.ts, 5, 26))
+
+    #foo: number;
+>#foo : Symbol(B.#foo, Decl(privateNamesUnique-5.ts, 7, 9))
+}
+
+const b: A2 = new B();
+>b : Symbol(b, Decl(privateNamesUnique-5.ts, 11, 5))
+>A2 : Symbol(A2, Decl(privateNamesUnique-5.ts, 4, 1))
+>B : Symbol(B, Decl(privateNamesUnique-5.ts, 5, 26))
+

@@ -28,10 +28,19 @@
 ////d./*1*/
 ////D./*2*/
 
-verify.completions({ marker: "1", exact: ["foo2", "foo"] });
+verify.completions({ marker: "1", exact: ["foo", "foo2"] });
 edit.insert('foo()');
 
-verify.completions({ marker: "2", includes: ["bar", "bar2", "baz", "x"], excludes: ["foo", "foo2"] });
+verify.completions({
+    marker: "2",
+    includes: [
+        { name: "bar", sortText: completion.SortText.LocalDeclarationPriority },
+        { name: "bar2", sortText: completion.SortText.LocalDeclarationPriority },
+        { name: "baz", sortText: completion.SortText.LocationPriority },
+        { name: "x", sortText: completion.SortText.LocationPriority }
+    ],
+    excludes: ["foo", "foo2"]
+});
 edit.insert('bar()');
 
 verify.noErrors();

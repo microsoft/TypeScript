@@ -21,13 +21,14 @@ import { z1 as z } from "./es6ImportNamedImportMergeErrors_0"; // should be erro
 
 //// [es6ImportNamedImportMergeErrors_0.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.z1 = exports.z = exports.x = exports.a = void 0;
 exports.a = 10;
 exports.x = exports.a;
 exports.z = exports.a;
 exports.z1 = exports.a;
 //// [es6ImportNamedImportMergeErrors_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var x = 10;
 var x44 = 10;

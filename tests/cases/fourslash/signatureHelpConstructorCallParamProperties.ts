@@ -10,12 +10,4 @@
 ////}
 ////var a = new Circle(/**/
 
-verify.signatureHelp({
-    marker: "",
-    text: "Circle(radius: number): Circle",
-    parameterName: "radius",
-    parameterSpan: "radius: number",
-    docComment: "Initialize a circle.",
-    parameterDocComment: "The radius of the circle.",
-    tags: [{ name: "param", text: "radius The radius of the circle." }],
-});
+verify.baselineSignatureHelp()

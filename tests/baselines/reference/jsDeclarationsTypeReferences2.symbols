@@ -1,0 +1,35 @@
+=== tests/cases/conformance/jsdoc/declarations/index.js ===
+const{ a, m } = require("./something").o;
+>a : Symbol(a, Decl(index.js, 0, 6))
+>m : Symbol(m, Decl(index.js, 0, 9))
+>require("./something").o : Symbol(o, Decl(something.ts, 0, 12))
+>require : Symbol(require)
+>"./something" : Symbol("tests/cases/conformance/jsdoc/declarations/something", Decl(something.ts, 0, 0))
+>o : Symbol(o, Decl(something.ts, 0, 12))
+
+const thing = a + m
+>thing : Symbol(thing, Decl(index.js, 2, 5))
+>a : Symbol(a, Decl(index.js, 0, 6))
+>m : Symbol(m, Decl(index.js, 0, 9))
+
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
+>module : Symbol(module, Decl(index.js, 2, 19))
+>exports : Symbol(module.exports, Decl(index.js, 0, 0))
+
+    thing
+>thing : Symbol(thing, Decl(index.js, 4, 18))
+
+};
+
+=== tests/cases/conformance/jsdoc/declarations/something.ts ===
+export const o = {
+>o : Symbol(o, Decl(something.ts, 0, 12))
+
+    a: 1,
+>a : Symbol(a, Decl(something.ts, 0, 18))
+
+    m: 1
+>m : Symbol(m, Decl(something.ts, 1, 9))
+}
+

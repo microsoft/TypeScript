@@ -1,5 +1,21 @@
 {
     "extends": "../.eslintrc.json",
+    "parserOptions": {
+        "tsconfigRootDir": "src",
+        "project": "./tsconfig-base.json"
+    },
+    "rules": {
+        "@typescript-eslint/no-unnecessary-type-assertion": "error",
+        "no-restricted-globals": ["error",
+            { "name": "setTimeout" },
+            { "name": "clearTimeout" },
+            { "name": "setInterval" },
+            { "name": "clearInterval" },
+            { "name": "setImmediate" },
+            { "name": "clearImmediate" },
+            { "name": "performance" }
+        ]
+    },
     "overrides": [
         {
             "files": ["lib/*.d.ts"],
@@ -9,16 +25,23 @@
                 "@typescript-eslint/unified-signatures": "off",
 
                 // scripts/eslint/rules
-                "no-keywords": "off",
+                "local/no-keywords": "off",
 
                 // eslint
-                "no-var": "off"
+                "no-var": "off",
+                "no-restricted-globals": "off"
             }
         },
         {
             "files": ["lib/es2019.array.d.ts"],
             "rules": {
                 "@typescript-eslint/array-type": "off"
+            }
+        },
+        {
+            "files": ["debug/**", "harness/**", "testRunner/**"],
+            "rules": {
+                "no-restricted-globals": "off"
             }
         }
     ]

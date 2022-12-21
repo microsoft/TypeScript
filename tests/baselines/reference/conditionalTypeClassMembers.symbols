@@ -1,0 +1,32 @@
+=== tests/cases/compiler/conditionalTypeClassMembers.ts ===
+declare class MyRecord {
+>MyRecord : Symbol(MyRecord, Decl(conditionalTypeClassMembers.ts, 0, 0))
+
+    private a();
+>a : Symbol(MyRecord.a, Decl(conditionalTypeClassMembers.ts, 0, 24))
+
+    b(): unknown;
+>b : Symbol(MyRecord.b, Decl(conditionalTypeClassMembers.ts, 1, 16))
+}
+
+declare class MySet<TSet extends MyRecord> {
+>MySet : Symbol(MySet, Decl(conditionalTypeClassMembers.ts, 3, 1))
+>TSet : Symbol(TSet, Decl(conditionalTypeClassMembers.ts, 5, 20))
+>MyRecord : Symbol(MyRecord, Decl(conditionalTypeClassMembers.ts, 0, 0))
+
+    public item(): TSet;
+>item : Symbol(MySet.item, Decl(conditionalTypeClassMembers.ts, 5, 44))
+>TSet : Symbol(TSet, Decl(conditionalTypeClassMembers.ts, 5, 20))
+}
+
+type DS<TRec extends MyRecord | { [key: string]: unknown }> = TRec extends MyRecord ? MySet<TRec> : TRec[];
+>DS : Symbol(DS, Decl(conditionalTypeClassMembers.ts, 7, 1))
+>TRec : Symbol(TRec, Decl(conditionalTypeClassMembers.ts, 9, 8))
+>MyRecord : Symbol(MyRecord, Decl(conditionalTypeClassMembers.ts, 0, 0))
+>key : Symbol(key, Decl(conditionalTypeClassMembers.ts, 9, 35))
+>TRec : Symbol(TRec, Decl(conditionalTypeClassMembers.ts, 9, 8))
+>MyRecord : Symbol(MyRecord, Decl(conditionalTypeClassMembers.ts, 0, 0))
+>MySet : Symbol(MySet, Decl(conditionalTypeClassMembers.ts, 3, 1))
+>TRec : Symbol(TRec, Decl(conditionalTypeClassMembers.ts, 9, 8))
+>TRec : Symbol(TRec, Decl(conditionalTypeClassMembers.ts, 9, 8))
+

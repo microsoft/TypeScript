@@ -1,0 +1,10 @@
+tests/cases/conformance/salsa/x.js(2,9): error TS2339: Property 'fn1' does not exist on type 'typeof import("tests/cases/conformance/salsa/x")'.
+
+
+==== tests/cases/conformance/salsa/x.js (1 errors) ====
+    const Foo = { min: 3 };
+    exports.fn1();
+            ~~~
+!!! error TS2339: Property 'fn1' does not exist on type 'typeof import("tests/cases/conformance/salsa/x")'.
+    exports.fn2 = Foo.min;
+    

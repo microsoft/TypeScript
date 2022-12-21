@@ -7,8 +7,16 @@
         "noEmit": true,
         "allowJs": true,
         "checkJs": true,
-        "types": ["node"],
-        "lib": ["esnext", "dom"],
+        "types": [
+            "node"
+        ],
+        "lib": [
+            "esnext",
+            "dom"
+        ]
     },
-    "include": ["node_modules/util"]
+    "include": [
+        "node_modules/util",
+        "index.ts"
+    ]
 }

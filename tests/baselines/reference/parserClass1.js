@@ -11,7 +11,8 @@
 
 //// [parserClass1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.NullLogger = void 0;
 var NullLogger = /** @class */ (function () {
     function NullLogger() {
     }

@@ -33,7 +33,7 @@ declare function require(name: string): any;
 module.exports = 1
 >module.exports = 1 : number
 >module.exports : number
->module : { "\"tests/cases/conformance/salsa/mod1\"": number; }
+>module : { exports: number; }
 >exports : number
 >1 : 1
 
@@ -41,7 +41,7 @@ module.exports.f = function () { }
 >module.exports.f = function () { } : () => void
 >module.exports.f : any
 >module.exports : number
->module : { "\"tests/cases/conformance/salsa/mod1\"": number; }
+>module : { exports: number; }
 >exports : number
 >f : any
 >function () { } : () => void

@@ -8,7 +8,8 @@
 
 //// [parserEnum2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SignatureFlags = void 0;
 var SignatureFlags;
 (function (SignatureFlags) {
     SignatureFlags[SignatureFlags["None"] = 0] = "None";

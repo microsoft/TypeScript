@@ -1,0 +1,118 @@
+=== tests/cases/conformance/jsdoc/declarations/jsDeclarationsClassMethod.js ===
+function C1() {
+>C1 : Symbol(C1, Decl(jsDeclarationsClassMethod.js, 0, 0), Decl(jsDeclarationsClassMethod.js, 20, 1))
+
+    /**
+     * A comment prop
+     * @param {number} x
+     * @param {number} y
+     * @returns {number}
+     */
+    this.prop = function (x, y) {
+>this.prop : Symbol(C1.prop, Decl(jsDeclarationsClassMethod.js, 0, 15))
+>this : Symbol(C1, Decl(jsDeclarationsClassMethod.js, 0, 0), Decl(jsDeclarationsClassMethod.js, 20, 1))
+>prop : Symbol(C1.prop, Decl(jsDeclarationsClassMethod.js, 0, 15))
+>x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 7, 26))
+>y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 7, 28))
+
+        return x + y;
+>x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 7, 26))
+>y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 7, 28))
+    }
+}
+
+/**
+ * A comment method
+ * @param {number} x
+ * @param {number} y
+ * @returns {number}
+ */
+C1.prototype.method = function (x, y) {
+>C1.prototype : Symbol(C1.method, Decl(jsDeclarationsClassMethod.js, 10, 1))
+>C1 : Symbol(C1, Decl(jsDeclarationsClassMethod.js, 0, 0), Decl(jsDeclarationsClassMethod.js, 20, 1))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>method : Symbol(C1.method, Decl(jsDeclarationsClassMethod.js, 10, 1))
+>x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 18, 32))
+>y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 18, 34))
+
+    return x + y;
+>x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 18, 32))
+>y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 18, 34))
+}
+
+/**
+ * A comment staticProp
+ * @param {number} x
+ * @param {number} y
+ * @returns {number}
+ */
+C1.staticProp = function (x, y) {
+>C1.staticProp : Symbol(C1.staticProp, Decl(jsDeclarationsClassMethod.js, 20, 1))
+>C1 : Symbol(C1, Decl(jsDeclarationsClassMethod.js, 0, 0), Decl(jsDeclarationsClassMethod.js, 20, 1))
+>staticProp : Symbol(C1.staticProp, Decl(jsDeclarationsClassMethod.js, 20, 1))
+>x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 28, 26))
+>y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 28, 28))
+
+    return x + y;
+>x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 28, 26))
+>y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 28, 28))
+}
+
+class C2 {
+>C2 : Symbol(C2, Decl(jsDeclarationsClassMethod.js, 30, 1), Decl(jsDeclarationsClassMethod.js, 52, 1))
+
+    /**
+     * A comment method1
+     * @param {number} x
+     * @param {number} y
+     * @returns {number}
+     */
+    method1(x, y) {
+>method1 : Symbol(C2.method1, Decl(jsDeclarationsClassMethod.js, 32, 10))
+>x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 39, 12))
+>y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 39, 14))
+
+        return x + y;
+>x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 39, 12))
+>y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 39, 14))
+    }
+}
+
+/**
+ * A comment method2
+ * @param {number} x
+ * @param {number} y
+ * @returns {number}
+ */
+C2.prototype.method2 = function (x, y) {
+>C2.prototype.method2 : Symbol(C2.method2, Decl(jsDeclarationsClassMethod.js, 42, 1))
+>C2.prototype : Symbol(C2.method2, Decl(jsDeclarationsClassMethod.js, 42, 1))
+>C2 : Symbol(C2, Decl(jsDeclarationsClassMethod.js, 30, 1), Decl(jsDeclarationsClassMethod.js, 52, 1))
+>prototype : Symbol(C2.prototype)
+>method2 : Symbol(C2.method2, Decl(jsDeclarationsClassMethod.js, 42, 1))
+>x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 50, 33))
+>y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 50, 35))
+
+    return x + y;
+>x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 50, 33))
+>y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 50, 35))
+}
+
+/**
+ * A comment staticProp
+ * @param {number} x
+ * @param {number} y
+ * @returns {number}
+ */
+C2.staticProp = function (x, y) {
+>C2.staticProp : Symbol(C2.staticProp, Decl(jsDeclarationsClassMethod.js, 52, 1))
+>C2 : Symbol(C2, Decl(jsDeclarationsClassMethod.js, 30, 1), Decl(jsDeclarationsClassMethod.js, 52, 1))
+>staticProp : Symbol(C2.staticProp, Decl(jsDeclarationsClassMethod.js, 52, 1))
+>x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 60, 26))
+>y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 60, 28))
+
+    return x + y;
+>x : Symbol(x, Decl(jsDeclarationsClassMethod.js, 60, 26))
+>y : Symbol(y, Decl(jsDeclarationsClassMethod.js, 60, 28))
+}
+

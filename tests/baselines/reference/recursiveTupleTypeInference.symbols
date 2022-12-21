@@ -1,0 +1,61 @@
+=== tests/cases/compiler/recursiveTupleTypeInference.ts ===
+// Repro from #37475
+
+export type A = "number" | "null" | A[];
+>A : Symbol(A, Decl(recursiveTupleTypeInference.ts, 0, 0))
+>A : Symbol(A, Decl(recursiveTupleTypeInference.ts, 0, 0))
+
+export type F<T> = null extends T
+>F : Symbol(F, Decl(recursiveTupleTypeInference.ts, 2, 40))
+>T : Symbol(T, Decl(recursiveTupleTypeInference.ts, 4, 14))
+>T : Symbol(T, Decl(recursiveTupleTypeInference.ts, 4, 14))
+
+    ? [F<NonNullable<T>>, "null"]
+>F : Symbol(F, Decl(recursiveTupleTypeInference.ts, 2, 40))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(recursiveTupleTypeInference.ts, 4, 14))
+
+    : T extends number
+>T : Symbol(T, Decl(recursiveTupleTypeInference.ts, 4, 14))
+
+    ? "number"
+    : never;
+
+export type G<T> = { [k in keyof T]: F<T[k]> };
+>G : Symbol(G, Decl(recursiveTupleTypeInference.ts, 8, 12))
+>T : Symbol(T, Decl(recursiveTupleTypeInference.ts, 10, 14))
+>k : Symbol(k, Decl(recursiveTupleTypeInference.ts, 10, 22))
+>T : Symbol(T, Decl(recursiveTupleTypeInference.ts, 10, 14))
+>F : Symbol(F, Decl(recursiveTupleTypeInference.ts, 2, 40))
+>T : Symbol(T, Decl(recursiveTupleTypeInference.ts, 10, 14))
+>k : Symbol(k, Decl(recursiveTupleTypeInference.ts, 10, 22))
+
+interface K {
+>K : Symbol(K, Decl(recursiveTupleTypeInference.ts, 10, 47))
+
+    b: number | null;
+>b : Symbol(K.b, Decl(recursiveTupleTypeInference.ts, 12, 13))
+}
+
+const gK: { [key in keyof K]: A } = { b: ["number", "null"] };
+>gK : Symbol(gK, Decl(recursiveTupleTypeInference.ts, 16, 5))
+>key : Symbol(key, Decl(recursiveTupleTypeInference.ts, 16, 13))
+>K : Symbol(K, Decl(recursiveTupleTypeInference.ts, 10, 47))
+>A : Symbol(A, Decl(recursiveTupleTypeInference.ts, 0, 0))
+>b : Symbol(b, Decl(recursiveTupleTypeInference.ts, 16, 37))
+
+function foo<T>(g: G<T>): T {
+>foo : Symbol(foo, Decl(recursiveTupleTypeInference.ts, 16, 62))
+>T : Symbol(T, Decl(recursiveTupleTypeInference.ts, 18, 13))
+>g : Symbol(g, Decl(recursiveTupleTypeInference.ts, 18, 16))
+>G : Symbol(G, Decl(recursiveTupleTypeInference.ts, 8, 12))
+>T : Symbol(T, Decl(recursiveTupleTypeInference.ts, 18, 13))
+>T : Symbol(T, Decl(recursiveTupleTypeInference.ts, 18, 13))
+
+    return {} as any;
+}
+
+foo(gK);
+>foo : Symbol(foo, Decl(recursiveTupleTypeInference.ts, 16, 62))
+>gK : Symbol(gK, Decl(recursiveTupleTypeInference.ts, 16, 5))
+

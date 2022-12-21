@@ -1,6 +1,6 @@
 tests/cases/conformance/es6/modules/m1.ts(1,22): error TS2652: Merged declaration 'Decl' cannot include a default export declaration. Consider adding a separate 'export default Decl' declaration instead.
 tests/cases/conformance/es6/modules/m1.ts(4,18): error TS2652: Merged declaration 'Decl' cannot include a default export declaration. Consider adding a separate 'export default Decl' declaration instead.
-tests/cases/conformance/es6/modules/m2.ts(1,20): error TS2307: Cannot find module 'm1'.
+tests/cases/conformance/es6/modules/m2.ts(1,20): error TS2307: Cannot find module 'm1' or its corresponding type declarations.
 
 
 ==== tests/cases/conformance/es6/modules/m1.ts (2 errors) ====
@@ -24,7 +24,7 @@ tests/cases/conformance/es6/modules/m2.ts(1,20): error TS2307: Cannot find modul
 ==== tests/cases/conformance/es6/modules/m2.ts (1 errors) ====
     import Entity from "m1"
                        ~~~~
-!!! error TS2307: Cannot find module 'm1'.
+!!! error TS2307: Cannot find module 'm1' or its corresponding type declarations.
     
     Entity();
     

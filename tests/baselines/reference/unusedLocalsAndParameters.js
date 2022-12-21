@@ -88,7 +88,7 @@ for (let x: y) {
 
 //// [unusedLocalsAndParameters.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 // function declaration paramter
 function f(a) {
 }
@@ -110,7 +110,7 @@ var C = /** @class */ (function () {
         // Accessor declaration paramter
         set: function (v) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return C;
@@ -125,7 +125,7 @@ var E = /** @class */ (function () {
         // Accessor declaration paramter
         set: function (v) {
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return class_1;

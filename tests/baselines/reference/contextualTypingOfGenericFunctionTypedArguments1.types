@@ -37,8 +37,8 @@ var f = (x: number) => { return x.toFixed() };
 >toFixed : (fractionDigits?: number) => string
 
 var r5 = _.forEach<number>(c2, f); 
->r5 : any
->_.forEach<number>(c2, f) : any
+>r5 : void
+>_.forEach<number>(c2, f) : void
 >_.forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
 >_ : Combinators
 >forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
@@ -46,8 +46,8 @@ var r5 = _.forEach<number>(c2, f);
 >f : (x: number) => string
 
 var r6 = _.forEach<number>(c2, (x) => { return x.toFixed() }); 
->r6 : any
->_.forEach<number>(c2, (x) => { return x.toFixed() }) : any
+>r6 : void
+>_.forEach<number>(c2, (x) => { return x.toFixed() }) : void
 >_.forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void
 >_ : Combinators
 >forEach : <T>(c: Collection<T>, f: (x: T) => Date) => void

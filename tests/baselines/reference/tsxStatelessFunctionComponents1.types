@@ -9,7 +9,7 @@ function EmptyPropSFC() {
 }
 
 function Greet(x: {name: string}) {
->Greet : (x: { name: string; }) => JSX.Element
+>Greet : (x: {    name: string;}) => JSX.Element
 >x : { name: string; }
 >name : string
 
@@ -31,7 +31,7 @@ function Meet({name = 'world'}) {
 >div : any
 }
 function MeetAndGreet(k: {"prop-name": string}) {
->MeetAndGreet : (k: { "prop-name": string; }) => JSX.Element
+>MeetAndGreet : (k: {    "prop-name": string;}) => JSX.Element
 >k : { "prop-name": string; }
 >"prop-name" : string
 

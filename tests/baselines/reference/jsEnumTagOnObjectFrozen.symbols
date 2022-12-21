@@ -55,9 +55,9 @@ const Thing = Object.freeze({
 });
 
 exports.Thing = Thing;
->exports.Thing : Symbol(Thing, Decl(index.js, 4, 3), Decl(index.js, 0, 4))
->exports : Symbol(Thing, Decl(index.js, 4, 3), Decl(index.js, 0, 4))
->Thing : Symbol(Thing, Decl(index.js, 4, 3), Decl(index.js, 0, 4))
+>exports.Thing : Symbol(Thing, Decl(index.js, 4, 3))
+>exports : Symbol(Thing, Decl(index.js, 4, 3))
+>Thing : Symbol(Thing, Decl(index.js, 4, 3))
 >Thing : Symbol(Thing, Decl(index.js, 1, 5), Decl(index.js, 0, 4))
 
 /**

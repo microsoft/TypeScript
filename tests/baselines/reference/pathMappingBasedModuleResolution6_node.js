@@ -13,11 +13,12 @@ export {x} from "../file2";
 
 //// [file3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
 var file2_1 = require("../file2");
-exports.x = file2_1.x;
+Object.defineProperty(exports, "x", { enumerable: true, get: function () { return file2_1.x; } });
 //// [file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var file3_1 = require("./project/file3");
 use(file3_1.x.toFixed());

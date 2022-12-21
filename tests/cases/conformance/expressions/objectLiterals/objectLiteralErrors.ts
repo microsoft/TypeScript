@@ -44,3 +44,10 @@ var f17 = { a: 0, get b() { return 1; }, get a() { return 0; } };
 var g1 = { get a(): number { return 4; }, set a(n: string) { } };
 var g2 = { get a() { return 4; }, set a(n: string) { } };
 var g3 = { get a(): number { return undefined; }, set a(n: string) { } };
+
+// did you mean colon errors
+var h1 = {
+    x = 1,
+    y = 2,
+    #z: 3
+}

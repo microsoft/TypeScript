@@ -8,6 +8,8 @@
 >C : Symbol(C, Decl(privateConstructorFunction.js, 0, 1))
 
         this.x = 1
+>this.x : Symbol(C.x, Decl(privateConstructorFunction.js, 5, 18))
+>this : Symbol(C, Decl(privateConstructorFunction.js, 0, 1))
 >x : Symbol(C.x, Decl(privateConstructorFunction.js, 5, 18))
     }
     new C()

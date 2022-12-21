@@ -12,7 +12,7 @@ class PrivateOptionalX {
 >PrivateOptionalX : PrivateOptionalX
 
     private x?: number;
->x : number
+>x : number | undefined
 }
 class PublicX {
 >PublicX : PublicX
@@ -20,10 +20,10 @@ class PublicX {
     public x: number;
 >x : number
 }
-let publicX: PublicX;
+declare let publicX: PublicX;
 >publicX : PublicX
 
-let privateOptionalX: PrivateOptionalX;
+declare let privateOptionalX: PrivateOptionalX;
 >privateOptionalX : PrivateOptionalX
 
 let o2 = { ...publicX, ...privateOptionalX };
@@ -38,20 +38,20 @@ let sn: number = o2.x; // error, x is private
 >o2 : {}
 >x : any
 
-let optionalString: { sn?: string };
->optionalString : { sn?: string; }
->sn : string
+declare let optionalString: { sn?: string };
+>optionalString : { sn?: string | undefined; }
+>sn : string | undefined
 
-let optionalNumber: { sn?: number };
->optionalNumber : { sn?: number; }
->sn : number
+declare let optionalNumber: { sn?: number };
+>optionalNumber : { sn?: number | undefined; }
+>sn : number | undefined
 
 let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumber };
 >allOptional : { sn: string | number; }
 >sn : string | number
->{ ...optionalString, ...optionalNumber } : { sn?: string | number; }
->optionalString : { sn?: string; }
->optionalNumber : { sn?: number; }
+>{ ...optionalString, ...optionalNumber } : { sn?: string | number | undefined; }
+>optionalString : { sn?: string | undefined; }
+>optionalNumber : { sn?: number | undefined; }
 
 // error, 'sn' is optional in source, required in target
 
@@ -108,6 +108,113 @@ let duplicatedSpread = { ...o, ...o }
 >{ ...o, ...o } : { a: number; b: string; }
 >o : { a: number; b: string; }
 >o : { a: number; b: string; }
+
+// Note: ignore changes the order that properties are printed
+let ignore: { a: number, b: string } =
+>ignore : { a: number; b: string; }
+>a : number
+>b : string
+
+    { b: 'ignored', ...o }
+>{ b: 'ignored', ...o } : { a: number; b: string; }
+>b : string
+>'ignored' : "ignored"
+>o : { a: number; b: string; }
+
+let o3 = { a: 1, b: 'no' }
+>o3 : { a: number; b: string; }
+>{ a: 1, b: 'no' } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>'no' : "no"
+
+let o4 = { b: 'yes', c: true }
+>o4 : { b: string; c: boolean; }
+>{ b: 'yes', c: true } : { b: string; c: boolean; }
+>b : string
+>'yes' : "yes"
+>c : boolean
+>true : true
+
+let combinedBefore: { a: number, b: string, c: boolean } =
+>combinedBefore : { a: number; b: string; c: boolean; }
+>a : number
+>b : string
+>c : boolean
+
+    { b: 'ok', ...o3, ...o4 }
+>{ b: 'ok', ...o3, ...o4 } : { b: string; c: boolean; a: number; }
+>b : string
+>'ok' : "ok"
+>o3 : { a: number; b: string; }
+>o4 : { b: string; c: boolean; }
+
+let combinedMid: { a: number, b: string, c: boolean } =
+>combinedMid : { a: number; b: string; c: boolean; }
+>a : number
+>b : string
+>c : boolean
+
+    { ...o3, b: 'ok', ...o4 }
+>{ ...o3, b: 'ok', ...o4 } : { b: string; c: boolean; a: number; }
+>o3 : { a: number; b: string; }
+>b : string
+>'ok' : "ok"
+>o4 : { b: string; c: boolean; }
+
+let combinedNested: { a: number, b: boolean, c: string, d: string } =
+>combinedNested : { a: number; b: boolean; c: string; d: string; }
+>a : number
+>b : boolean
+>c : string
+>d : string
+
+    { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
+>{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { a: number; d: string; b: false; c: string; }
+>{ a: 4, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
+>a : number
+>4 : 4
+>{ b: false, c: 'overriden' } : { b: false; c: string; }
+>b : false
+>false : false
+>c : string
+>'overriden' : "overriden"
+>d : string
+>'actually new' : "actually new"
+>{ a: 5, d: 'maybe new' } : { a: number; d: string; }
+>a : number
+>5 : 5
+>d : string
+>'maybe new' : "maybe new"
+
+let changeTypeBefore: { a: number, b: string } =
+>changeTypeBefore : { a: number; b: string; }
+>a : number
+>b : string
+
+    { a: 'wrong type?', ...o3 };
+>{ a: 'wrong type?', ...o3 } : { a: number; b: string; }
+>a : string
+>'wrong type?' : "wrong type?"
+>o3 : { a: number; b: string; }
+
+let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
+>computedMiddle : { a: number; b: string; c: boolean; "in the middle": number; }
+>a : number
+>b : string
+>c : boolean
+>"in the middle" : number
+
+    { ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 }
+>{ ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 } : { b: string; c: boolean; "in the middle": number; a: number; }
+>o3 : { a: number; b: string; }
+>['in the middle'] : number
+>'in the middle' : "in the middle"
+>13 : 13
+>b : string
+>'maybe?' : "maybe?"
+>o4 : { b: string; c: boolean; }
 
 // primitives are not allowed, except for falsy ones
 let spreadNum = { ...12 };

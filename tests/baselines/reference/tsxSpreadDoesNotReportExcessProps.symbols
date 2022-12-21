@@ -16,12 +16,12 @@ class MyComponent extends React.Component<{dataSource: number[], onClick?: any},
 >render : Symbol(MyComponent.render, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 4, 86))
 
         return (<div {...this.props} className="ok"></div>);
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 >this.props : Symbol(React.Component.props, Decl(react16.d.ts, 367, 32))
 >this : Symbol(MyComponent, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 2, 26))
 >props : Symbol(React.Component.props, Decl(react16.d.ts, 367, 32))
 >className : Symbol(className, Decl(tsxSpreadDoesNotReportExcessProps.tsx, 6, 36))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
     }
 }
 

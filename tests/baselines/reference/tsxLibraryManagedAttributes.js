@@ -131,10 +131,12 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -148,10 +150,10 @@ var Component = /** @class */ (function (_super) {
     Component.propTypes = {
         foo: PropTypes.number,
         bar: PropTypes.node,
-        baz: PropTypes.string.isRequired
+        baz: PropTypes.string.isRequired,
     };
     Component.defaultProps = {
-        foo: 42
+        foo: 42,
     };
     return Component;
 }(ReactComponent));
@@ -168,7 +170,7 @@ var JustPropTypes = /** @class */ (function (_super) {
     }
     JustPropTypes.propTypes = {
         foo: PropTypes.number,
-        bar: PropTypes.node.isRequired
+        bar: PropTypes.node.isRequired,
     };
     return JustPropTypes;
 }(ReactComponent));
@@ -182,7 +184,7 @@ var JustDefaultProps = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     JustDefaultProps.defaultProps = {
-        foo: 42
+        foo: 42,
     };
     return JustDefaultProps;
 }(ReactComponent));
@@ -197,10 +199,10 @@ var BothWithSpecifiedGeneric = /** @class */ (function (_super) {
     BothWithSpecifiedGeneric.propTypes = {
         foo: PropTypes.string,
         bar: PropTypes.node,
-        baz: PropTypes.number.isRequired
+        baz: PropTypes.number.isRequired,
     };
     BothWithSpecifiedGeneric.defaultProps = {
-        foo: "yo"
+        foo: "yo",
     };
     return BothWithSpecifiedGeneric;
 }(ReactComponent));
@@ -217,7 +219,7 @@ var JustPropTypesWithSpecifiedGeneric = /** @class */ (function (_super) {
     }
     JustPropTypesWithSpecifiedGeneric.propTypes = {
         foo: PropTypes.string,
-        bar: PropTypes.node.isRequired
+        bar: PropTypes.node.isRequired,
     };
     return JustPropTypesWithSpecifiedGeneric;
 }(ReactComponent));
@@ -231,7 +233,7 @@ var JustDefaultPropsWithSpecifiedGeneric = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     JustDefaultPropsWithSpecifiedGeneric.defaultProps = {
-        foo: "no"
+        foo: "no",
     };
     return JustDefaultPropsWithSpecifiedGeneric;
 }(ReactComponent));

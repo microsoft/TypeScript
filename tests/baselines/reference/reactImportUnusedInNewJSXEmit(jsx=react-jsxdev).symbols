@@ -1,0 +1,19 @@
+=== tests/cases/compiler/index.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from "react";
+>React : Symbol(React, Decl(index.tsx, 2, 6))
+
+function Bar() {
+>Bar : Symbol(Bar, Decl(index.tsx, 2, 26))
+
+  return <div />;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+}
+
+export function Foo() {
+>Foo : Symbol(Foo, Decl(index.tsx, 6, 1))
+
+  return <Bar />;
+>Bar : Symbol(Bar, Decl(index.tsx, 2, 26))
+}

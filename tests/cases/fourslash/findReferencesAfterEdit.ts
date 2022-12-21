@@ -2,19 +2,19 @@
 
 // @Filename: a.ts
 ////interface A {
-////    [|[|{| "isDefinition": true, "contextRangeIndex": 0 |}foo|]: string;|]
+////    /*1*/foo: string;
 ////}
 
 // @Filename: b.ts
 ///////<reference path='a.ts'/>
 /////**/
 ////function foo(x: A) {
-////    x.[|foo|]
+////    x./*2*/foo
 ////}
 
-verify.singleReferenceGroup("(property) A.foo: string", "foo");
+verify.baselineFindAllReferencesMulti(1, '1', '2');
 
 goTo.marker("");
 edit.insert("\n");
 
-verify.singleReferenceGroup("(property) A.foo: string", "foo");
+verify.baselineFindAllReferencesMulti(2, '1', '2');

@@ -23,6 +23,7 @@ class C3 {
     a! = 1;
     b!: number = 1;
     static c!: number;
+    d!;
 }
 
 // Definite assignment assertion not permitted in ambient context
@@ -77,3 +78,7 @@ function f4() {
 
 declare let v1!: number;
 declare var v2!: number;
+
+declare namespace foo {
+	var v!: number;
+}

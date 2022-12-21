@@ -12,19 +12,19 @@ export { v }
 
 //// [0.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var obj = true;
 //// [1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.v = void 0;
 //let v2: Z.Data;
 var v = "str" || true;
 exports.v = v;
 
 
 //// [0.d.ts]
-export declare type Data = string | boolean;
+export type Data = string | boolean;
 //// [1.d.ts]
-import * as Z from "./0";
-declare let v: Z.Data;
+declare let v: string | boolean;
 export { v };

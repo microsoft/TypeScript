@@ -4,9 +4,9 @@ class StringIterator {
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 
         return this;
 >this : this
@@ -17,6 +17,11 @@ var v: string;
 >v : string
 
 for (v of new StringIterator) { } // Should fail
+>v : string
+>new StringIterator : StringIterator
+>StringIterator : typeof StringIterator
+
+for (v of new StringIterator) { } // Should still fail (related errors should still be shown even though type is cached).
 >v : string
 >new StringIterator : StringIterator
 >StringIterator : typeof StringIterator

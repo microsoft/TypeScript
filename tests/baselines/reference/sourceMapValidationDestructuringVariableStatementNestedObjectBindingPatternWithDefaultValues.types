@@ -60,7 +60,7 @@ var {
 >"noSkill" : "noSkill"
 
     } = { primary: "noSkill", secondary: "noSkill" }
->{ primary: "noSkill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
+>{ primary: "noSkill", secondary: "noSkill" } : { primary: string; secondary: string; }
 >primary : string
 >"noSkill" : "noSkill"
 >secondary : string
@@ -89,7 +89,7 @@ var {
 >"noSkill" : "noSkill"
 
     } = { primary: "noSkill", secondary: "noSkill" }
->{ primary: "noSkill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
+>{ primary: "noSkill", secondary: "noSkill" } : { primary: string; secondary: string; }
 >primary : string
 >"noSkill" : "noSkill"
 >secondary : string
@@ -118,7 +118,7 @@ var {
 >"noSkill" : "noSkill"
 
     } = { primary: "noSkill", secondary: "noSkill" }
->{ primary: "noSkill", secondary: "noSkill" } : { primary?: string; secondary?: string; }
+>{ primary: "noSkill", secondary: "noSkill" } : { primary: string; secondary: string; }
 >primary : string
 >"noSkill" : "noSkill"
 >secondary : string

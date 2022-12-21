@@ -53,7 +53,7 @@ class LocalThing {
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @typedef {string | number | symbol} PropName
  */
@@ -95,7 +95,7 @@ var ExportedThing = /** @class */ (function () {
 }());
 module.exports = {
     doTheThing: doTheThing,
-    ExportedThing: ExportedThing
+    ExportedThing: ExportedThing,
 };
 var LocalThing = /** @class */ (function () {
     function LocalThing() {
@@ -119,9 +119,9 @@ export type MixinName<T> = T & {
  */
 export type Identity<T> = (x: T) => T;
 //// [mixed.d.ts]
-export type SomeType = number | {
+export type SomeType = {
     x: string;
-} | LocalThing | ExportedThing;
+} | number | LocalThing | ExportedThing;
 /**
  * @typedef {{x: string} | number | LocalThing | ExportedThing} SomeType
  */
@@ -129,9 +129,7 @@ export type SomeType = number | {
  * @param {number} x
  * @returns {SomeType}
  */
-export function doTheThing(x: number): number | {
-    x: string;
-} | LocalThing | ExportedThing;
+export function doTheThing(x: number): SomeType;
 export class ExportedThing {
     z: string;
 }

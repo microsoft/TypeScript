@@ -7,7 +7,7 @@
 // provided the false expression contains no assignments to the variable or parameter.
 
 function foo(x: number | string) {
->foo : (x: string | number) => number
+>foo : (x: number | string) => number
 >x : string | number
 
     return typeof x === "string"
@@ -27,7 +27,7 @@ function foo(x: number | string) {
 >x : number
 }
 function foo2(x: number | string) {
->foo2 : (x: string | number) => string | number
+>foo2 : (x: number | string) => string | number
 >x : string | number
 
     return typeof x === "string"
@@ -50,7 +50,7 @@ function foo2(x: number | string) {
 >x : number
 }
 function foo3(x: number | string) {
->foo3 : (x: string | number) => number
+>foo3 : (x: number | string) => number
 >x : string | number
 
     return typeof x === "string"
@@ -73,7 +73,7 @@ function foo3(x: number | string) {
 >x : number
 }
 function foo4(x: number | string) {
->foo4 : (x: string | number) => string | number
+>foo4 : (x: number | string) => string | number
 >x : string | number
 
     return typeof x === "string"
@@ -96,7 +96,7 @@ function foo4(x: number | string) {
 >x : number
 }
 function foo5(x: number | string) {
->foo5 : (x: string | number) => string
+>foo5 : (x: number | string) => string
 >x : string | number
 
     return typeof x === "string"
@@ -119,7 +119,7 @@ function foo5(x: number | string) {
 >x : string
 }
 function foo6(x: number | string) {
->foo6 : (x: string | number) => string | number
+>foo6 : (x: number | string) => string | number
 >x : string | number
 
     // Modify in both branches
@@ -149,7 +149,7 @@ function foo6(x: number | string) {
 >x : string
 }
 function foo7(x: number | string | boolean) {
->foo7 : (x: string | number | boolean) => boolean
+>foo7 : (x: number | string | boolean) => boolean
 >x : string | number | boolean
 
     return typeof x === "string"
@@ -180,7 +180,7 @@ function foo7(x: number | string | boolean) {
 >10 : 10
 }
 function foo8(x: number | string | boolean) {
->foo8 : (x: string | number | boolean) => boolean
+>foo8 : (x: number | string | boolean) => boolean
 >x : string | number | boolean
 
     var b: number | boolean;
@@ -223,7 +223,7 @@ function foo8(x: number | string | boolean) {
 >10 : 10
 }
 function foo9(x: number | string) {
->foo9 : (x: string | number) => boolean
+>foo9 : (x: number | string) => boolean
 >x : string | number
 
     var y = 10;
@@ -257,7 +257,7 @@ function foo9(x: number | string) {
 >10 : 10
 }
 function foo10(x: number | string | boolean) {
->foo10 : (x: string | number | boolean) => string
+>foo10 : (x: number | string | boolean) => string
 >x : string | number | boolean
 
     // Mixing typeguards
@@ -296,7 +296,7 @@ function foo10(x: number | string | boolean) {
 >toString : (radix?: number) => string
 }
 function foo11(x: number | string | boolean) {
->foo11 : (x: string | number | boolean) => string | number
+>foo11 : (x: number | string | boolean) => string | number
 >x : string | number | boolean
 
     // Mixing typeguards
@@ -339,7 +339,7 @@ function foo11(x: number | string | boolean) {
 >x : number
 }
 function foo12(x: number | string | boolean) {
->foo12 : (x: string | number | boolean) => number
+>foo12 : (x: number | string | boolean) => number
 >x : string | number | boolean
 
     // Mixing typeguards

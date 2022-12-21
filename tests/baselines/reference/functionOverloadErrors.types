@@ -24,7 +24,7 @@ function fn2b(n: number[]);
 >n : number[]
 
 function fn2b(n: Array<number>);
->fn2b : { (n: number[]): any; (n: number[]): any; }
+>fn2b : { (n: number[]): any; (n: Array<number>): any; }
 >n : number[]
 
 function fn2b() {

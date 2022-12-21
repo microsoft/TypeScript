@@ -10,5 +10,9 @@
 
 verify.completions({
   marker: "",
-  exact: []
+  isNewIdentifierLocation: true,
+  includes: [{
+    name: "Object",
+    sortText: completion.SortText.GlobalsOrKeywords
+  }]
 });

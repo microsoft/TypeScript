@@ -14,7 +14,7 @@ if(typeof x === "undefined") {
 >"undefined" : "undefined"
 
     x // no error: assume x2 is initialised
->x : void
+>x : undefined
 }
 
 if(typeof y !== "undefined") {
@@ -24,6 +24,6 @@ if(typeof y !== "undefined") {
 >"undefined" : "undefined"
 
     y // no error: do not narrow void
->y : void
+>y : never
 }
 

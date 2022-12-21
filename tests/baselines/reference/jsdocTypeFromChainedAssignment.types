@@ -5,20 +5,20 @@ function A () {
     this.x = 1
 >this.x = 1 : 1
 >this.x : any
->this : any
+>this : this
 >x : any
 >1 : 1
 
     /** @type {1} */
     this.first = this.second = 1
 >this.first = this.second = 1 : 1
->this.first : any
->this : any
->first : any
+>this.first : 1
+>this : this
+>first : 1
 >this.second = 1 : 1
->this.second : any
->this : any
->second : any
+>this.second : 1
+>this : this
+>second : 1
 >1 : 1
 }
 /** @param {number} n */

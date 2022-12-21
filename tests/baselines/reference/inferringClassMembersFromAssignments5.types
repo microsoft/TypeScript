@@ -25,9 +25,9 @@ class Derived extends Base {
         // should be OK, and p should have type number from this assignment
         this.p = 1
 >this.p = 1 : 1
->this.p : number
+>this.p : any
 >this : this
->p : number
+>p : any
 >1 : 1
     }
     test() {

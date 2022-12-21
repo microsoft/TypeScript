@@ -1,0 +1,52 @@
+=== /a.ts ===
+export class A { a!: string }
+>A : A
+>a : string
+
+export class B { b!: number }
+>B : B
+>b : number
+
+export type C<T> = T;
+>C : T
+
+export const Value = {};
+>Value : {}
+>{} : {}
+
+=== /b.ts ===
+import type * as types from './a';
+>types : typeof types
+
+types;
+>types : typeof types
+
+types.Value;
+>types.Value : {}
+>types : typeof types
+>Value : {}
+
+let v: types.Value;
+>v : types.Value
+>types : any
+
+const a: types.A = {};
+>a : types.A
+>types : any
+>{} : {}
+
+const b: types.B = {};
+>b : types.B
+>types : any
+>{} : {}
+
+const c: types.C<string> = "";
+>c : string
+>types : any
+>"" : ""
+
+const d = { types };
+>d : { types: typeof types; }
+>{ types } : { types: typeof types; }
+>types : typeof types
+

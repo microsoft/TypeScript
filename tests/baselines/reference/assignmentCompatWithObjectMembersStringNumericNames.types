@@ -50,8 +50,8 @@ module JustStrings {
 >'' : ""
 
     var b2 = { '1': '' };
->b2 : { 1: string; }
->{ '1': '' } : { 1: string; }
+>b2 : { '1': string; }
+>{ '1': '' } : { '1': string; }
 >'1' : string
 >'' : ""
 
@@ -126,13 +126,13 @@ module JustStrings {
 >a2 : { '1.0': string; }
 
     a2 = b2;
->a2 = b2 : { 1: string; }
+>a2 = b2 : { '1': string; }
 >a2 : { '1.0': string; }
->b2 : { 1: string; }
+>b2 : { '1': string; }
 
     b2 = a2;
 >b2 = a2 : { '1.0': string; }
->b2 : { 1: string; }
+>b2 : { '1': string; }
 >a2 : { '1.0': string; }
 
     a2 = b; // ok

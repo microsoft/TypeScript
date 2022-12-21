@@ -1,0 +1,75 @@
+=== tests/cases/conformance/jsdoc/declarations/file2.js ===
+const {myTypes} = require('./file.js');
+>myTypes : Symbol(myTypes, Decl(file2.js, 0, 7))
+>require : Symbol(require)
+>'./file.js' : Symbol("tests/cases/conformance/jsdoc/declarations/file", Decl(file.js, 0, 0))
+
+/**
+ * @namespace testFnTypes
+ * @global
+ * @type {Object<string,*>}
+ */
+const testFnTypes = {
+>testFnTypes : Symbol(testFnTypes, Decl(file2.js, 7, 5), Decl(file2.js, 11, 37))
+
+    // SOME PROPS HERE
+};
+
+/** @typedef {boolean|myTypes.typeC} testFnTypes.input */
+
+/**
+ * @function testFn
+ * @description A test function.
+ * @param {testFnTypes.input} input - Input.
+ * @returns {number|null} Result.
+ */
+function testFn(input) {
+>testFn : Symbol(testFn, Decl(file2.js, 9, 2))
+>input : Symbol(input, Decl(file2.js, 19, 16))
+
+    if (typeof input === 'number') {
+>input : Symbol(input, Decl(file2.js, 19, 16))
+
+        return 2 * input;
+>input : Symbol(input, Decl(file2.js, 19, 16))
+
+    } else {
+        return null;
+    }
+}
+
+module.exports = {testFn, testFnTypes};
+>module.exports : Symbol(module.exports, Decl(file2.js, 0, 0))
+>module : Symbol(module, Decl(file2.js, 25, 1))
+>exports : Symbol(module.exports, Decl(file2.js, 0, 0))
+>testFn : Symbol(testFn, Decl(file2.js, 27, 18))
+>testFnTypes : Symbol(testFnTypes, Decl(file2.js, 27, 25))
+
+=== tests/cases/conformance/jsdoc/declarations/file.js ===
+/**
+ * @namespace myTypes
+ * @global
+ * @type {Object<string,*>}
+ */
+const myTypes = {
+>myTypes : Symbol(myTypes, Decl(file.js, 5, 5), Decl(file.js, 9, 50), Decl(file.js, 12, 12), Decl(file.js, 17, 38))
+
+    // SOME PROPS HERE
+};
+
+/** @typedef {string|RegExp|Array<string|RegExp>} myTypes.typeA */
+
+/**
+ * @typedef myTypes.typeB
+ * @property {myTypes.typeA}    prop1 - Prop 1.
+ * @property {string}           prop2 - Prop 2.
+ */
+
+/** @typedef {myTypes.typeB|Function} myTypes.typeC */
+
+exports.myTypes = myTypes;
+>exports.myTypes : Symbol(myTypes, Decl(file.js, 7, 2))
+>exports : Symbol(myTypes, Decl(file.js, 7, 2))
+>myTypes : Symbol(myTypes, Decl(file.js, 7, 2))
+>myTypes : Symbol(myTypes, Decl(file.js, 5, 5), Decl(file.js, 9, 50), Decl(file.js, 12, 12), Decl(file.js, 17, 38))
+

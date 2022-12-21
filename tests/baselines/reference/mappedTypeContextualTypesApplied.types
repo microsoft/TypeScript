@@ -1,6 +1,6 @@
 === tests/cases/compiler/mappedTypeContextualTypesApplied.ts ===
 type TakeString = (s: string) => any;
->TakeString : TakeString
+>TakeString : (s: string) => any
 >s : string
 
 // Various functions accepting an object whose properties are TakeString functions.

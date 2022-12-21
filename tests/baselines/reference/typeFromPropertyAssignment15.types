@@ -13,9 +13,9 @@ Outer.Inner = class {
     constructor() {
         this.x = 1
 >this.x = 1 : 1
->this.x : number
+>this.x : any
 >this : this
->x : number
+>x : any
 >1 : 1
     }
     m() { }

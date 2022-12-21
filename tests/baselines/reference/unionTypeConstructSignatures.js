@@ -3,11 +3,11 @@ var numOrDate: number | Date;
 var strOrBoolean: string | boolean;
 var strOrNum: string | number;
 
-// If each type in U has construct signatures and the sets of construct signatures are identical ignoring return types, 
+// If each type in U has construct signatures and the sets of construct signatures are identical ignoring return types,
 // U has the same set of construct signatures, but with return types that are unions of the return types of the respective construct signatures from each type in U.
 var unionOfDifferentReturnType: { new (a: number): number; } | { new (a: number): Date; };
 numOrDate = new unionOfDifferentReturnType(10);
-strOrBoolean = new unionOfDifferentReturnType("hello"); // error 
+strOrBoolean = new unionOfDifferentReturnType("hello"); // error
 new unionOfDifferentReturnType1(true); // error in type of parameter
 
 var unionOfDifferentReturnType1: { new (a: number): number; new (a: string): string; } | { new (a: number): Date; new (a: string): boolean; };
@@ -70,15 +70,19 @@ strOrNum = new unionWithRestParameter3('hello', 10, 11); // ok
 strOrNum = new unionWithRestParameter3('hello', "hello"); // wrong type
 strOrNum = new unionWithRestParameter3(); // error no call signature
 
+var unionWithAbstractSignature: (abstract new (a: string) => string) | (new (a: string) => string);
+new unionWithAbstractSignature('hello');
+
+
 //// [unionTypeConstructSignatures.js]
 var numOrDate;
 var strOrBoolean;
 var strOrNum;
-// If each type in U has construct signatures and the sets of construct signatures are identical ignoring return types, 
+// If each type in U has construct signatures and the sets of construct signatures are identical ignoring return types,
 // U has the same set of construct signatures, but with return types that are unions of the return types of the respective construct signatures from each type in U.
 var unionOfDifferentReturnType;
 numOrDate = new unionOfDifferentReturnType(10);
-strOrBoolean = new unionOfDifferentReturnType("hello"); // error 
+strOrBoolean = new unionOfDifferentReturnType("hello"); // error
 new unionOfDifferentReturnType1(true); // error in type of parameter
 var unionOfDifferentReturnType1;
 numOrDate = new unionOfDifferentReturnType1(10);
@@ -130,3 +134,5 @@ strOrNum = new unionWithRestParameter3('hello', 10); // ok
 strOrNum = new unionWithRestParameter3('hello', 10, 11); // ok
 strOrNum = new unionWithRestParameter3('hello', "hello"); // wrong type
 strOrNum = new unionWithRestParameter3(); // error no call signature
+var unionWithAbstractSignature;
+new unionWithAbstractSignature('hello');

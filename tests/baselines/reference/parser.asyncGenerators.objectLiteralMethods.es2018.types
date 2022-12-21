@@ -27,21 +27,21 @@ const o3 = {
 };
 === tests/cases/conformance/parser/ecmascript2018/asyncGenerators/awaitParameterIsError.ts ===
 const o4 = {
->o4 : { f(): any; await: any; }
->{    async * f(await) : { f(): any; await: any; }
+>o4 : { f(await: any): AsyncGenerator<never, void, unknown>; }
+>{    async * f(await) {    }} : { f(await: any): AsyncGenerator<never, void, unknown>; }
 
     async * f(await) {
->f : () => any
+>f : (await: any) => AsyncGenerator<never, void, unknown>
 >await : any
     }
 };
 === tests/cases/conformance/parser/ecmascript2018/asyncGenerators/yieldParameterIsError.ts ===
 const o5 = {
->o5 : { f(): any; yield: any; }
->{    async * f(yield) : { f(): any; yield: any; }
+>o5 : { f(yield: any): AsyncGenerator<never, void, unknown>; }
+>{    async * f(yield) {    }} : { f(yield: any): AsyncGenerator<never, void, unknown>; }
 
     async * f(yield) {
->f : () => any
+>f : (yield: any) => AsyncGenerator<never, void, unknown>
 >yield : any
     }
 };
@@ -83,32 +83,29 @@ const o8 = {
 };
 === tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionDeclarationNamedYieldIsError.ts ===
 const o9 = {
->o9 : { f(): AsyncGenerator<() => void, void, unknown>; }
->{    async * f() {        function yield() {        }    }} : { f(): AsyncGenerator<() => void, void, unknown>; }
+>o9 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        function yield() {        }    }} : { f(): AsyncGenerator<never, void, unknown>; }
 
     async * f() {
->f : () => AsyncGenerator<() => void, void, unknown>
+>f : () => AsyncGenerator<never, void, unknown>
 
         function yield() {
-> : () => any
->yield() {        } : any
->() {        } : () => void
+>yield : () => void
         }
     }
 };
 === tests/cases/conformance/parser/ecmascript2018/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts ===
 const o10 = {
->o10 : { f(): AsyncGenerator<() => void, void, unknown>; }
->{    async * f() {        const x = function yield() {        };    }} : { f(): AsyncGenerator<() => void, void, unknown>; }
+>o10 : { f(): AsyncGenerator<never, void, unknown>; }
+>{    async * f() {        const x = function yield() {        };    }} : { f(): AsyncGenerator<never, void, unknown>; }
 
     async * f() {
->f : () => AsyncGenerator<() => void, void, unknown>
+>f : () => AsyncGenerator<never, void, unknown>
 
         const x = function yield() {
->x : () => any
->function : () => any
->yield() {        } : any
->() {        } : () => void
+>x : () => void
+>function yield() {        } : () => void
+>yield : () => void
 
         };
     }
@@ -122,10 +119,7 @@ const o11 = {
 >f : () => AsyncGenerator<never, void, unknown>
 
         function await() {
-> : () => any
->await() : any
->() : any
-> : any
+>await : () => void
         }
     }
 };
@@ -138,11 +132,9 @@ const o12 = {
 >f : () => AsyncGenerator<never, void, unknown>
 
         const x = function await() {
->x : () => any
->function : () => any
->await() : any
->() : any
-> : any
+>x : () => void
+>function await() {        } : () => void
+>await : () => void
 
         };
     }

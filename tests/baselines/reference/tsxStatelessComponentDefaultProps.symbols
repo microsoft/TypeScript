@@ -17,7 +17,7 @@ function BackButton(_props: Props) {
 >Props : Symbol(Props, Decl(tsxStatelessComponentDefaultProps.tsx, 2, 26))
 
     return <div />
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2420, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
 }
 BackButton.defaultProps = {
 >BackButton.defaultProps : Symbol(BackButton.defaultProps, Decl(tsxStatelessComponentDefaultProps.tsx, 9, 1))

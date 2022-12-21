@@ -37,6 +37,15 @@ const enum Enum1 {
     W5 = Enum1[`V`],
 }
 
+const enum Comments {
+    "//",
+    "/*",
+    "*/",
+    "///",
+    "#",
+    "<!--",
+    "-->",
+}
 
 module A {
     export module B {
@@ -151,5 +160,18 @@ function bar(e: A.B.C.E): number {
         case A.B.C.E.V1: return 1;
         case A.B.C.E.V2: return 1;
         case A.B.C.E.V3: return 1;
+    }
+}
+
+function baz(c: Comments) {
+    switch (c) {
+        case Comments["//"]:
+        case Comments["/*"]:
+        case Comments["*/"]:
+        case Comments["///"]:
+        case Comments["#"]:
+        case Comments["<!--"]:
+        case Comments["-->"]:
+        break;
     }
 }

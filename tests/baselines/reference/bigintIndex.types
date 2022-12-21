@@ -18,9 +18,9 @@ let num: number = arr[1];
 >1 : 1
 
 num = arr["1"];
->num = arr["1"] : any
+>num = arr["1"] : number
 >num : number
->arr["1"] : any
+>arr["1"] : number
 >arr : number[]
 >"1" : "1"
 
@@ -84,7 +84,7 @@ typedArray[String(bigNum)] = 0xAA;
 
 typedArray["1"] = 0xBB;
 >typedArray["1"] = 0xBB : 187
->typedArray["1"] : any
+>typedArray["1"] : number
 >typedArray : Uint8Array
 >"1" : "1"
 >0xBB : 187

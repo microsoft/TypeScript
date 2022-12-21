@@ -1,4 +1,4 @@
-tests/cases/compiler/maxConstraints.ts(8,22): error TS2345: Argument of type '1' is not assignable to parameter of type 'Comparable<1 | 2>'.
+tests/cases/compiler/maxConstraints.ts(8,22): error TS2345: Argument of type 'number' is not assignable to parameter of type 'Comparable<1 | 2>'.
 
 
 ==== tests/cases/compiler/maxConstraints.ts (1 errors) ====
@@ -11,4 +11,4 @@ tests/cases/compiler/maxConstraints.ts(8,22): error TS2345: Argument of type '1'
     var max2: Comparer = (x, y) => { return (x.compareTo(y) > 0) ? x : y };
     var maxResult = max2(1, 2);
                          ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'Comparable<1 | 2>'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'Comparable<1 | 2>'.

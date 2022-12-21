@@ -1,0 +1,20 @@
+=== tests/cases/conformance/jsdoc/jsdocOuterTypeParameters3.js ===
+/** @template {T} */
+class Baz {
+>Baz : Symbol(Baz, Decl(jsdocOuterTypeParameters3.js, 0, 0))
+
+    m() {
+>m : Symbol(Baz.m, Decl(jsdocOuterTypeParameters3.js, 1, 11))
+
+        class Bar {
+>Bar : Symbol(Bar, Decl(jsdocOuterTypeParameters3.js, 2, 9))
+
+            static bar() { this.prototype.foo(); }
+>bar : Symbol(Bar.bar, Decl(jsdocOuterTypeParameters3.js, 3, 19))
+>this.prototype : Symbol(Bar.prototype)
+>this : Symbol(Bar, Decl(jsdocOuterTypeParameters3.js, 2, 9))
+>prototype : Symbol(Bar.prototype)
+        }
+    }
+}
+

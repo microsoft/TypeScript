@@ -38,7 +38,7 @@ module P { }
 
 import p = P;
 >p : Symbol(p, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 0, 12))
->P : Symbol(P, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 0, 0))
+>P : Symbol(P, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 0, 0), Decl(duplicateVarsAcrossFileBoundaries_5.ts, 2, 3))
 
 var q;
 >q : Symbol(q, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 2, 3), Decl(duplicateVarsAcrossFileBoundaries_5.ts, 0, 12))

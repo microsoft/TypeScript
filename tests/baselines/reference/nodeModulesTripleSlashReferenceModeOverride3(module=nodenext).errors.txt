@@ -1,0 +1,34 @@
+/index.ts(2,1): error TS2304: Cannot find name 'foo'.
+
+
+==== /index.ts (1 errors) ====
+    /// <reference types="pkg" resolution-mode="require" />
+    foo;
+    ~~~
+!!! error TS2304: Cannot find name 'foo'.
+    bar; // bar should resolve while foo should not, since even though index.js is esm, the reference is cjs
+    export {};
+==== /node_modules/pkg/package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "version": "0.0.1",
+        "exports": {
+            "import": "./import.js",
+            "require": "./require.js"
+        }
+    }
+==== /node_modules/pkg/import.d.ts (0 errors) ====
+    export {};
+    declare global {
+        var foo: number;
+    }
+==== /node_modules/pkg/require.d.ts (0 errors) ====
+    export {};
+    declare global {
+        var bar: number;
+    }
+==== /package.json (0 errors) ====
+    {
+        "private": true,
+        "type": "module"
+    }

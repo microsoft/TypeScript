@@ -1,5 +1,5 @@
-tests/cases/compiler/omitTypeTestErrors01.ts(11,16): error TS2339: Property 'c' does not exist on type 'Pick<Foo, "a" | "b">'.
-tests/cases/compiler/omitTypeTestErrors01.ts(15,16): error TS2339: Property 'b' does not exist on type 'Pick<Foo, "a">'.
+tests/cases/compiler/omitTypeTestErrors01.ts(11,16): error TS2339: Property 'c' does not exist on type 'Bar'.
+tests/cases/compiler/omitTypeTestErrors01.ts(15,16): error TS2339: Property 'b' does not exist on type 'Baz'.
 
 
 ==== tests/cases/compiler/omitTypeTestErrors01.ts (2 errors) ====
@@ -15,13 +15,13 @@ tests/cases/compiler/omitTypeTestErrors01.ts(15,16): error TS2339: Property 'b' 
     export function getBarC(bar: Bar) {
         return bar.c;
                    ~
-!!! error TS2339: Property 'c' does not exist on type 'Pick<Foo, "a" | "b">'.
+!!! error TS2339: Property 'c' does not exist on type 'Bar'.
     }
     
     export function getBazB(baz: Baz) {
         return baz.b;
                    ~
-!!! error TS2339: Property 'b' does not exist on type 'Pick<Foo, "a">'.
+!!! error TS2339: Property 'b' does not exist on type 'Baz'.
     }
     
     

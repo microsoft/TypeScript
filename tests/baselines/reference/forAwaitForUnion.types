@@ -4,7 +4,7 @@ async function f<T>(source: Iterable<T> | AsyncIterable<T>) {
 >source : Iterable<T> | AsyncIterable<T>
 
     for await (const x of source) {
->x : T
+>x : Awaited<T>
 >source : Iterable<T> | AsyncIterable<T>
     }
 }

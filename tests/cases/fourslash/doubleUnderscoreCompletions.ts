@@ -12,7 +12,7 @@ verify.completions({
     marker: "1",
     exact: [
         { name: "__property", text: "(property) MyObject.__property: number" },
-        { name: "MyObject", sortText: completion.SortText.JavascriptIdentifiers },
         { name: "instance", sortText: completion.SortText.JavascriptIdentifiers },
+        { name: "MyObject", sortText: completion.SortText.JavascriptIdentifiers },
     ],
 });

@@ -19,6 +19,10 @@ function F() {
     this.z = 1
 }
 
+// https://github.com/microsoft/TypeScript/issues/38401
+class D {
+    constructor(/** @readonly */ x) {}
+}
 
 //// [foo.js]
 class C {
@@ -39,6 +43,10 @@ function F() {
     /** @readonly */
     this.z = 1;
 }
+// https://github.com/microsoft/TypeScript/issues/38401
+class D {
+    constructor(/** @readonly */ x) { }
+}
 
 
 //// [foo.d.ts]
@@ -57,4 +65,7 @@ declare class C {
      * @type {number}
      */
     readonly y: number;
+}
+declare class D {
+    constructor(x: any);
 }

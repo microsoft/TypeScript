@@ -1,0 +1,95 @@
+=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts ===
+// #31995
+type State = {
+>State : Symbol(State, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 0, 0))
+
+    type: "numberVariant";
+>type : Symbol(type, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 1, 14))
+
+    data: number;
+>data : Symbol(data, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 2, 26))
+
+} | {
+    type: "stringVariant";
+>type : Symbol(type, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 4, 5))
+
+    data: string;
+>data : Symbol(data, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 5, 26))
+
+};
+
+class SomeClass {
+>SomeClass : Symbol(SomeClass, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 7, 2))
+
+    state!: State;
+>state : Symbol(SomeClass.state, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 9, 17))
+>State : Symbol(State, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 0, 0))
+
+    method() {
+>method : Symbol(SomeClass.method, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 10, 18))
+
+        while (0) { }
+        this.state.data;
+>this.state.data : Symbol(data, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 2, 26), Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 5, 26))
+>this.state : Symbol(SomeClass.state, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 9, 17))
+>this : Symbol(SomeClass, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 7, 2))
+>state : Symbol(SomeClass.state, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 9, 17))
+>data : Symbol(data, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 2, 26), Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 5, 26))
+
+        if (this.state.type === "stringVariant") {
+>this.state.type : Symbol(type, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 1, 14), Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 4, 5))
+>this.state : Symbol(SomeClass.state, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 9, 17))
+>this : Symbol(SomeClass, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 7, 2))
+>state : Symbol(SomeClass.state, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 9, 17))
+>type : Symbol(type, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 1, 14), Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 4, 5))
+
+            const s: string = this.state.data;
+>s : Symbol(s, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 15, 17))
+>this.state.data : Symbol(data, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 5, 26))
+>this.state : Symbol(SomeClass.state, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 9, 17))
+>this : Symbol(SomeClass, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 7, 2))
+>state : Symbol(SomeClass.state, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 9, 17))
+>data : Symbol(data, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 5, 26))
+        }
+    }
+}
+
+class SomeClass2 {
+>SomeClass2 : Symbol(SomeClass2, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 18, 1))
+
+    state!: State;
+>state : Symbol(SomeClass2.state, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 20, 18))
+>State : Symbol(State, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 0, 0))
+
+    method() {
+>method : Symbol(SomeClass2.method, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 21, 18))
+
+        const c = false;
+>c : Symbol(c, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 23, 13))
+
+        while (c) { }
+>c : Symbol(c, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 23, 13))
+
+        if (this.state.type === "numberVariant") {
+>this.state.type : Symbol(type, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 1, 14), Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 4, 5))
+>this.state : Symbol(SomeClass2.state, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 20, 18))
+>this : Symbol(SomeClass2, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 18, 1))
+>state : Symbol(SomeClass2.state, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 20, 18))
+>type : Symbol(type, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 1, 14), Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 4, 5))
+
+            this.state.data;
+>this.state.data : Symbol(data, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 2, 26))
+>this.state : Symbol(SomeClass2.state, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 20, 18))
+>this : Symbol(SomeClass2, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 18, 1))
+>state : Symbol(SomeClass2.state, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 20, 18))
+>data : Symbol(data, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 2, 26))
+        }
+        let n: number = this.state?.data; // This should be an error
+>n : Symbol(n, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 28, 11))
+>this.state?.data : Symbol(data, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 2, 26), Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 5, 26))
+>this.state : Symbol(SomeClass2.state, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 20, 18))
+>this : Symbol(SomeClass2, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 18, 1))
+>state : Symbol(SomeClass2.state, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 20, 18))
+>data : Symbol(data, Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 2, 26), Decl(typeOfThisInstanceMemberNarrowedWithLoopAntecedent.ts, 5, 26))
+    }
+}

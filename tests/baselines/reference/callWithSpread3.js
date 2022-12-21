@@ -1,26 +1,70 @@
 //// [callWithSpread3.ts]
-declare function takeTwo(a: string, b: string): void;
-declare const t2: [string, string];
-declare const t3: [string, string, string];
+declare const s2: [string, string];
+declare const s3: [string, string, string];
+declare const s2_: [string, string, ...string[]];
+declare const s_: string[];
+declare const n_: number[];
+declare const s2n_: [string, string, ...number[]];
 
-takeTwo('a', ...t2); // error on ...t2
-takeTwo('a', 'b', 'c', ...t2); // error on 'c' and ...t2
-takeTwo('a', 'b', ...t2, 'c'); // error on ...t2 and 'c'
-takeTwo('a', 'b', 'c', ...t2, 'd'); // error on 'c', ...t2 and 'd'
-takeTwo(...t2, 'a'); // error on 'a'
-takeTwo(...t3); // error on ...t3
+declare function fs2(a: string, b: string): void;
+declare function fs2_(a: string, b: string, ...c: string[]): void;
+declare function fs2n_(a: string, b: string, ...c: number[]): void;
+declare function fs5(a: string, b: string, c: string, d: string, e: string): void;
+
+// error
+fs2('a', ...s2); // error on ...s2
+fs2('a', 'b', 'c', ...s2); // error on 'c' and ...s2
+fs2('a', 'b', ...s2, 'c'); // error on ...s2 and 'c'
+fs2('a', 'b', 'c', ...s2, 'd'); // error on 'c', ...s2 and 'd'
+fs2(...s2, 'a'); // error on 'a'
+fs2(...s3); // error on ...s3
+fs2_(...s_); // error on ...s_
+fs2_(...s2n_); // error on ...s2n_
+fs2_(...s_, ...s_); // error on ...s_
+fs2_(...s_, ...s_, ...s_); // error on ...s_
+// fs2n_(...s2, ...s_); //           FIXME: should be a type error
+fs2n_(...s2_); // error on ...s2_
+
+// ok
+fs2_(...s2_);
+fs2_(...s2_, ...s_);
+fs2_(...s2_, ...s2_);
+fs2_(...s_, ...s2_);
+fs2n_(...s2n_);
+fs2n_(...s2);
+// fs2n_(...s2, ...n_); // FIXME: should compile
+fs5(...s2, "foo", ...s2);
+
 
 //// [callWithSpread3.js]
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
-takeTwo.apply(void 0, __spreadArrays(['a'], t2)); // error on ...t2
-takeTwo.apply(void 0, __spreadArrays(['a', 'b', 'c'], t2)); // error on 'c' and ...t2
-takeTwo.apply(void 0, __spreadArrays(['a', 'b'], t2, ['c'])); // error on ...t2 and 'c'
-takeTwo.apply(void 0, __spreadArrays(['a', 'b', 'c'], t2, ['d'])); // error on 'c', ...t2 and 'd'
-takeTwo.apply(void 0, __spreadArrays(t2, ['a'])); // error on 'a'
-takeTwo.apply(void 0, t3); // error on ...t3
+// error
+fs2.apply(void 0, __spreadArray(['a'], s2, false)); // error on ...s2
+fs2.apply(void 0, __spreadArray(['a', 'b', 'c'], s2, false)); // error on 'c' and ...s2
+fs2.apply(void 0, __spreadArray(__spreadArray(['a', 'b'], s2, false), ['c'], false)); // error on ...s2 and 'c'
+fs2.apply(void 0, __spreadArray(__spreadArray(['a', 'b', 'c'], s2, false), ['d'], false)); // error on 'c', ...s2 and 'd'
+fs2.apply(void 0, __spreadArray(__spreadArray([], s2, false), ['a'], false)); // error on 'a'
+fs2.apply(void 0, s3); // error on ...s3
+fs2_.apply(void 0, s_); // error on ...s_
+fs2_.apply(void 0, s2n_); // error on ...s2n_
+fs2_.apply(void 0, __spreadArray(__spreadArray([], s_, false), s_, false)); // error on ...s_
+fs2_.apply(void 0, __spreadArray(__spreadArray(__spreadArray([], s_, false), s_, false), s_, false)); // error on ...s_
+// fs2n_(...s2, ...s_); //           FIXME: should be a type error
+fs2n_.apply(void 0, s2_); // error on ...s2_
+// ok
+fs2_.apply(void 0, s2_);
+fs2_.apply(void 0, __spreadArray(__spreadArray([], s2_, false), s_, false));
+fs2_.apply(void 0, __spreadArray(__spreadArray([], s2_, false), s2_, false));
+fs2_.apply(void 0, __spreadArray(__spreadArray([], s_, false), s2_, false));
+fs2n_.apply(void 0, s2n_);
+fs2n_.apply(void 0, s2);
+// fs2n_(...s2, ...n_); // FIXME: should compile
+fs5.apply(void 0, __spreadArray(__spreadArray(__spreadArray([], s2, false), ["foo"], false), s2, false));

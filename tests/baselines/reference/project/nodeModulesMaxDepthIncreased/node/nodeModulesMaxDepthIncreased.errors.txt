@@ -1,4 +1,4 @@
-maxDepthIncreased/root.ts(7,1): error TS2322: Type '"10"' is not assignable to type 'number'.
+maxDepthIncreased/root.ts(7,1): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
 ==== maxDepthIncreased/tsconfig.json (0 errors) ====
@@ -48,7 +48,7 @@ maxDepthIncreased/root.ts(7,1): error TS2322: Type '"10"' is not assignable to t
     
     m1.f2.person.age = "10";    // Should error if loaded the .js files correctly
     ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '"10"' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
     
     let r2 = 3 + m4.foo; // Should be OK if correctly using the @types .d.ts file
     

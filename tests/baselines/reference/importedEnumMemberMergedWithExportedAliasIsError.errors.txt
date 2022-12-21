@@ -1,0 +1,23 @@
+tests/cases/compiler/alias.ts(3,1): error TS2440: Import declaration conflicts with local declaration of 'EnumA'.
+tests/cases/compiler/alias.ts(3,8): error TS2395: Individual declarations in merged declaration 'EnumA' must be all exported or all local.
+tests/cases/compiler/alias.ts(5,13): error TS2395: Individual declarations in merged declaration 'EnumA' must be all exported or all local.
+
+
+==== tests/cases/compiler/enum.ts (0 errors) ====
+    export enum Enum {
+        A,
+        B
+    }
+==== tests/cases/compiler/alias.ts (3 errors) ====
+    import {Enum} from "./enum";
+    
+    import EnumA = Enum.A;
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2440: Import declaration conflicts with local declaration of 'EnumA'.
+           ~~~~~
+!!! error TS2395: Individual declarations in merged declaration 'EnumA' must be all exported or all local.
+    
+    export type EnumA = [string] | [string, number];
+                ~~~~~
+!!! error TS2395: Individual declarations in merged declaration 'EnumA' must be all exported or all local.
+    

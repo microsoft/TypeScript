@@ -31,6 +31,7 @@ declare module Sample.Thing {
   
   		getDomNode(): Element;
 >getDomNode : Symbol(ICodeThing.getDomNode, Decl(recursiveClassReferenceTest.ts, 13, 30))
+>Element : Symbol(Element)
 		
 		addWidget(widgetId:string, widget:IWidget);
 >addWidget : Symbol(ICodeThing.addWidget, Decl(recursiveClassReferenceTest.ts, 15, 26))

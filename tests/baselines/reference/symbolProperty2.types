@@ -5,8 +5,8 @@ var s = Symbol();
 >Symbol : SymbolConstructor
 
 var x = {
->x : { [x: string]: number | (() => void); }
->{    [s]: 0,    [s]() { },    get [s]() {        return 0;    }} : { [x: string]: number | (() => void); }
+>x : { [x: symbol]: number | (() => void); }
+>{    [s]: 0,    [s]() { },    get [s]() {        return 0;    }} : { [x: symbol]: number | (() => void); }
 
     [s]: 0,
 >[s] : number

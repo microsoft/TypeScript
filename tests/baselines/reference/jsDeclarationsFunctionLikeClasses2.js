@@ -79,6 +79,7 @@ export const origin = new Point2D(0, 0);
 //// [source.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Point2D = exports.Vec = void 0;
 /**
  * @param {number} len
  */
@@ -148,6 +149,7 @@ Point2D.prototype = {
 //// [referencer.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.origin = void 0;
 var source_1 = require("./source");
 exports.origin = new source_1.Point2D(0, 0);
 // export const res = Point2D(2, 3).dot(origin); // TODO: when __proto__ works, validate this

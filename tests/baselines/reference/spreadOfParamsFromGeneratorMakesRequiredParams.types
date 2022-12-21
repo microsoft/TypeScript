@@ -14,6 +14,6 @@ declare function call<Fn extends (...args: any[]) => any>(
 call(function* (a: 'a') { }); // error, 2nd argument required
 >call(function* (a: 'a') { }) : any
 >call : <Fn extends (...args: any[]) => any>(fn: Fn, ...args: Parameters<Fn>) => any
->function* (a: 'a') { } : (a: "a") => {}
+>function* (a: 'a') { } : (a: 'a') => {}
 >a : "a"
 

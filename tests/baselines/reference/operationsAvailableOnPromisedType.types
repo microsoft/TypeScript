@@ -1,6 +1,6 @@
 === tests/cases/compiler/operationsAvailableOnPromisedType.ts ===
 async function fn(
->fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{ prop: string; }>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<new () => any>) => Promise<void>
+>fn : (a: number, b: Promise<number>, c: Promise<string[]>, d: Promise<{    prop: string;}>, e: Promise<() => void>, f: Promise<() => void> | (() => void), g: Promise<{    new (): any;}>) => Promise<void>
 
     a: number,
 >a : number

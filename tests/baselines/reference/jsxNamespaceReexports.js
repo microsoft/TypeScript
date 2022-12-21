@@ -17,7 +17,8 @@ const content = <my-element/>;
 
 //// [library.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createElement = void 0;
 function createElement(element, props) {
     var children = [];
     for (var _i = 2; _i < arguments.length; _i++) {
@@ -27,6 +28,6 @@ function createElement(element, props) {
 exports.createElement = createElement;
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var MyLib = require("./library");
 var content = MyLib.createElement("my-element", null);

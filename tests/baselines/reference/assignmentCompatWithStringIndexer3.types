@@ -11,7 +11,7 @@ interface Derived2 extends Derived { baz: string; }
 >baz : string
 
 var a: A;
->a : any
+>a : A
 
 var b1: { [x: string]: string; }
 >b1 : { [x: string]: string; }
@@ -19,13 +19,13 @@ var b1: { [x: string]: string; }
 
 a = b1; // error
 >a = b1 : { [x: string]: string; }
->a : any
+>a : A
 >b1 : { [x: string]: string; }
 
 b1 = a; // error
->b1 = a : any
+>b1 = a : A
 >b1 : { [x: string]: string; }
->a : any
+>a : A
 
 module Generics {
 >Generics : typeof Generics

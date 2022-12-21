@@ -10,6 +10,6 @@ module.exports.b = {};
 >module.exports.b : Symbol(b, Decl(enumTagOnExports.js, 1, 15), Decl(enumTagOnExports.js, 4, 15), Decl(enumTagOnExports.js, 3, 4))
 >module.exports : Symbol(b, Decl(enumTagOnExports.js, 1, 15), Decl(enumTagOnExports.js, 4, 15), Decl(enumTagOnExports.js, 3, 4))
 >module : Symbol(module, Decl(enumTagOnExports.js, 1, 15))
->exports : Symbol("tests/cases/conformance/jsdoc/enumTagOnExports", Decl(enumTagOnExports.js, 0, 0))
+>exports : Symbol(module.exports, Decl(enumTagOnExports.js, 0, 0))
 >b : Symbol(b, Decl(enumTagOnExports.js, 1, 15), Decl(enumTagOnExports.js, 4, 15), Decl(enumTagOnExports.js, 3, 4))
 

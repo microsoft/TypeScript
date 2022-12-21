@@ -17,7 +17,7 @@ var C = /** @class */ (function () {
     }
     Object.defineProperty(C.prototype, "accessor", {
         set: function (value) { },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     __decorate([

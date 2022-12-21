@@ -1,0 +1,19 @@
+tests/cases/compiler/circularBaseTypes.ts(4,11): error TS2310: Type 'M2' recursively references itself as a base type.
+tests/cases/compiler/circularBaseTypes.ts(5,6): error TS2456: Type alias 'M3' circularly references itself.
+
+
+==== tests/cases/compiler/circularBaseTypes.ts (2 errors) ====
+    // Repro from #38098
+    
+    type M<T> = { value: T };
+    interface M2 extends M<M3> {};  // Error
+              ~~
+!!! error TS2310: Type 'M2' recursively references itself as a base type.
+    type M3 = M2[keyof M2];  // Error
+         ~~
+!!! error TS2456: Type alias 'M3' circularly references itself.
+    
+    function f(m: M3) {
+      return m.value;
+    }
+    

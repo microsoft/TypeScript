@@ -1,5 +1,0 @@
-=== tests/cases/conformance/externalModules/topLevelAwaitNonModule.ts ===
-await x;
->await x : any
->x : any
-

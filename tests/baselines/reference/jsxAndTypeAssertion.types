@@ -33,7 +33,7 @@ x = <foo>hello {<foo>{}} </foo>;
 >foo : typeof foo
 
 x = <foo test={<foo>{}}>hello</foo>;
-><foo test={<foo>{}}>hello</foo>; : any
+><foo test={<foo>{}}>hello</foo> : any
 >foo : typeof foo
 >test : any
 ><foo>{}}>hello</foo> : any

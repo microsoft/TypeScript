@@ -1,0 +1,9 @@
+=== tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformSubstitutesNames.tsx ===
+/// <reference path="react16.d.ts" />
+const a = <div></div>
+>a : JSX.Element
+><div></div> : JSX.Element
+>div : any
+>div : any
+
+export {};

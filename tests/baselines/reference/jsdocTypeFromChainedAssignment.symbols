@@ -3,11 +3,17 @@ function A () {
 >A : Symbol(A, Decl(a.js, 0, 0), Decl(a.js, 8, 1), Decl(a.js, 10, 5))
 
     this.x = 1
+>this.x : Symbol(A.x, Decl(a.js, 0, 15))
+>this : Symbol(A, Decl(a.js, 0, 0), Decl(a.js, 8, 1), Decl(a.js, 10, 5))
 >x : Symbol(A.x, Decl(a.js, 0, 15))
 
     /** @type {1} */
     this.first = this.second = 1
+>this.first : Symbol(A.first, Decl(a.js, 1, 14))
+>this : Symbol(A, Decl(a.js, 0, 0), Decl(a.js, 8, 1), Decl(a.js, 10, 5))
 >first : Symbol(A.first, Decl(a.js, 1, 14))
+>this.second : Symbol(A.second, Decl(a.js, 3, 16))
+>this : Symbol(A, Decl(a.js, 0, 0), Decl(a.js, 8, 1), Decl(a.js, 10, 5))
 >second : Symbol(A.second, Decl(a.js, 3, 16))
 }
 /** @param {number} n */

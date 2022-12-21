@@ -1,0 +1,353 @@
+=== tests/cases/compiler/typeGuardConstructorClassAndNumber.ts ===
+// Typical case
+class C1 {
+>C1 : C1
+
+    property1: string;
+>property1 : string
+}
+
+let var1: C1 | number;
+>var1 : number | C1
+
+if (var1.constructor == C1) {
+>var1.constructor == C1 : boolean
+>var1.constructor : Function
+>var1 : number | C1
+>constructor : Function
+>C1 : typeof C1
+
+    var1; // C1
+>var1 : C1
+
+    var1.property1; // string
+>var1.property1 : string
+>var1 : C1
+>property1 : string
+}
+else {
+    var1; // number | C1
+>var1 : number | C1
+}
+if (var1["constructor"] == C1) {
+>var1["constructor"] == C1 : boolean
+>var1["constructor"] : Function
+>var1 : number | C1
+>"constructor" : "constructor"
+>C1 : typeof C1
+
+    var1; // C1
+>var1 : C1
+
+    var1.property1; // string
+>var1.property1 : string
+>var1 : C1
+>property1 : string
+}
+else {
+    var1; // number | C1
+>var1 : number | C1
+}
+if (var1.constructor === C1) {
+>var1.constructor === C1 : boolean
+>var1.constructor : Function
+>var1 : number | C1
+>constructor : Function
+>C1 : typeof C1
+
+    var1; // C1
+>var1 : C1
+
+    var1.property1; // string
+>var1.property1 : string
+>var1 : C1
+>property1 : string
+}
+else {
+    var1; // number | C1
+>var1 : number | C1
+}
+if (var1["constructor"] === C1) {
+>var1["constructor"] === C1 : boolean
+>var1["constructor"] : Function
+>var1 : number | C1
+>"constructor" : "constructor"
+>C1 : typeof C1
+
+    var1; // C1
+>var1 : C1
+
+    var1.property1; // string
+>var1.property1 : string
+>var1 : C1
+>property1 : string
+}
+else {
+    var1; // number | C1
+>var1 : number | C1
+}
+if (C1 == var1.constructor) {
+>C1 == var1.constructor : boolean
+>C1 : typeof C1
+>var1.constructor : Function
+>var1 : number | C1
+>constructor : Function
+
+    var1; // C1
+>var1 : C1
+
+    var1.property1; // string
+>var1.property1 : string
+>var1 : C1
+>property1 : string
+}
+else {
+    var1; // number | C1
+>var1 : number | C1
+}
+if (C1 == var1["constructor"]) {
+>C1 == var1["constructor"] : boolean
+>C1 : typeof C1
+>var1["constructor"] : Function
+>var1 : number | C1
+>"constructor" : "constructor"
+
+    var1; // C1
+>var1 : C1
+
+    var1.property1; // string
+>var1.property1 : string
+>var1 : C1
+>property1 : string
+}
+else {
+    var1; // number | C1
+>var1 : number | C1
+}
+if (C1 === var1.constructor) {
+>C1 === var1.constructor : boolean
+>C1 : typeof C1
+>var1.constructor : Function
+>var1 : number | C1
+>constructor : Function
+
+    var1; // C1
+>var1 : C1
+
+    var1.property1; // string
+>var1.property1 : string
+>var1 : C1
+>property1 : string
+}
+else {
+    var1; // number | C1
+>var1 : number | C1
+}
+if (C1 === var1["constructor"]) {
+>C1 === var1["constructor"] : boolean
+>C1 : typeof C1
+>var1["constructor"] : Function
+>var1 : number | C1
+>"constructor" : "constructor"
+
+    var1; // C1
+>var1 : C1
+
+    var1.property1; // string
+>var1.property1 : string
+>var1 : C1
+>property1 : string
+}
+else {
+    var1; // number | C1
+>var1 : number | C1
+}
+
+if (var1.constructor != C1) {
+>var1.constructor != C1 : boolean
+>var1.constructor : Function
+>var1 : number | C1
+>constructor : Function
+>C1 : typeof C1
+
+    var1; // C1 | number
+>var1 : number | C1
+
+    var1.property1; // error
+>var1.property1 : any
+>var1 : number | C1
+>property1 : any
+}
+else {
+    var1; // C1
+>var1 : C1
+}
+if (var1["constructor"] != C1) {
+>var1["constructor"] != C1 : boolean
+>var1["constructor"] : Function
+>var1 : number | C1
+>"constructor" : "constructor"
+>C1 : typeof C1
+
+    var1; // C1 | number
+>var1 : number | C1
+
+    var1.property1; // error
+>var1.property1 : any
+>var1 : number | C1
+>property1 : any
+}
+else {
+    var1; // C1
+>var1 : C1
+}
+if (var1.constructor !== C1) {
+>var1.constructor !== C1 : boolean
+>var1.constructor : Function
+>var1 : number | C1
+>constructor : Function
+>C1 : typeof C1
+
+    var1; // C1 | number
+>var1 : number | C1
+
+    var1.property1; // error
+>var1.property1 : any
+>var1 : number | C1
+>property1 : any
+}
+else {
+    var1; // C1
+>var1 : C1
+}
+if (var1["constructor"] !== C1) {
+>var1["constructor"] !== C1 : boolean
+>var1["constructor"] : Function
+>var1 : number | C1
+>"constructor" : "constructor"
+>C1 : typeof C1
+
+    var1; // C1 | number
+>var1 : number | C1
+
+    var1.property1; // error
+>var1.property1 : any
+>var1 : number | C1
+>property1 : any
+}
+else {
+    var1; // C1
+>var1 : C1
+}
+if (C1 != var1.constructor) {
+>C1 != var1.constructor : boolean
+>C1 : typeof C1
+>var1.constructor : Function
+>var1 : number | C1
+>constructor : Function
+
+    var1; // C1 | number
+>var1 : number | C1
+
+    var1.property1; // error
+>var1.property1 : any
+>var1 : number | C1
+>property1 : any
+}
+else {
+    var1; // C1
+>var1 : C1
+}
+if (C1 != var1["constructor"]) {
+>C1 != var1["constructor"] : boolean
+>C1 : typeof C1
+>var1["constructor"] : Function
+>var1 : number | C1
+>"constructor" : "constructor"
+
+    var1; // C1 | number
+>var1 : number | C1
+
+    var1.property1; // error
+>var1.property1 : any
+>var1 : number | C1
+>property1 : any
+}
+else {
+    var1; // C1
+>var1 : C1
+}
+if (C1 !== var1.constructor) {
+>C1 !== var1.constructor : boolean
+>C1 : typeof C1
+>var1.constructor : Function
+>var1 : number | C1
+>constructor : Function
+
+    var1; // C1 | number
+>var1 : number | C1
+
+    var1.property1; // error
+>var1.property1 : any
+>var1 : number | C1
+>property1 : any
+}
+else {
+    var1; // C1
+>var1 : C1
+}
+if (C1 !== var1["constructor"]) {
+>C1 !== var1["constructor"] : boolean
+>C1 : typeof C1
+>var1["constructor"] : Function
+>var1 : number | C1
+>"constructor" : "constructor"
+
+    var1; // C1 | number
+>var1 : number | C1
+
+    var1.property1; // error
+>var1.property1 : any
+>var1 : number | C1
+>property1 : any
+}
+else {
+    var1; // C1
+>var1 : C1
+}
+
+// Repro from #37660
+
+function foo(instance: Function | object) {
+>foo : (instance: Function | object) => number
+>instance : object | Function
+
+    if (typeof instance === 'function') {
+>typeof instance === 'function' : boolean
+>typeof instance : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>instance : object | Function
+>'function' : "function"
+
+        if (instance.prototype == null || instance.prototype.constructor == null) {
+>instance.prototype == null || instance.prototype.constructor == null : boolean
+>instance.prototype == null : boolean
+>instance.prototype : any
+>instance : Function
+>prototype : any
+>null : null
+>instance.prototype.constructor == null : boolean
+>instance.prototype.constructor : any
+>instance.prototype : any
+>instance : Function
+>prototype : any
+>constructor : any
+>null : null
+
+            return instance.length;
+>instance.length : number
+>instance : Function
+>length : number
+        }
+    }
+}
+

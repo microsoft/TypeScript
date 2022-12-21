@@ -1,0 +1,21 @@
+tests/cases/compiler/contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts(13,20): error TS7006: Parameter 'match' implicitly has an 'any' type.
+
+
+==== tests/cases/compiler/contextualOverloadListFromUnionWithPrimitiveNoImplicitAny.ts (1 errors) ====
+    // must target esnext for `String.normalize` to exist
+    type Validate = (text: string, pos: number, self: Rule) => number | boolean;
+    interface FullRule {
+        validate: string | RegExp | Validate;
+        normalize?: (match: {x: string}) => void;
+    }
+    
+    type Rule = string | FullRule;
+    
+    const obj: {field: Rule} = {
+        field: {
+            validate: (_t, _p, _s) => false,
+            normalize: match => match.x,
+                       ~~~~~
+!!! error TS7006: Parameter 'match' implicitly has an 'any' type.
+        }
+    };

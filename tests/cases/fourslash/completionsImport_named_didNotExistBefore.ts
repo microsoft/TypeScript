@@ -12,14 +12,13 @@
 
 verify.completions({
     marker: "",
-    exact: [
+    exact: completion.globalsPlus([
         {
             name: "Test2",
             text: "(alias) function Test2(): void\nimport Test2",
-            kind: "alias"
+            kind: "alias",
+            kindModifiers: "export"
         },
-        completion.globalThisEntry,
-        completion.undefinedVarEntry,
         {
             name: "Test1",
             source: "/a",
@@ -30,15 +29,14 @@ verify.completions({
             hasAction: true,
             sortText: completion.SortText.AutoImportSuggestions
         },
-        ...completion.statementKeywordsWithTypes,
-    ],
+    ], { noLib: true }),
     preferences: { includeCompletionsForModuleExports: true },
 });
 
 verify.applyCodeActionFromCompletion("", {
     name: "Test1",
     source: "/a",
-    description: `Add 'Test1' to existing import declaration from "./a"`,
-    newFileContent: `import { Test2, Test1 } from "./a";
+    description: `Update import from "./a"`,
+    newFileContent: `import { Test1, Test2 } from "./a";
 t`,
 });

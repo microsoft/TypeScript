@@ -1,0 +1,60 @@
+=== tests/cases/conformance/classes/propertyMemberDeclarations/constructorParameterShadowsOuterScopes2.ts ===
+// With useDefineForClassFields: true and ESNext target, initializer
+// expressions for property declarations are evaluated in the scope of
+// the class body and are permitted to reference parameters or local
+// variables of the constructor. This is different from classic
+// Typescript behaviour, with useDefineForClassFields: false. There,
+// initialisers of property declarations are evaluated in the scope of
+// the constructor body.
+
+// Note that when class fields are accepted in the ECMAScript
+// standard, the target will become that year's ES20xx
+
+var x = 1;
+>x : number
+>1 : 1
+
+class C {
+>C : C
+
+    b = x; // ok
+>b : number
+>x : number
+
+    constructor(x: string) {
+>x : string
+    }
+}
+
+var y = 1;
+>y : number
+>1 : 1
+
+class D {
+>D : D
+
+    b = y; // ok
+>b : number
+>y : number
+
+    constructor(x: string) {
+>x : string
+
+        var y = "";
+>y : string
+>"" : ""
+    }
+}
+
+class E {
+>E : E
+
+    b = z; // not ok
+>b : any
+>z : any
+
+    constructor(z: string) {
+>z : string
+    }
+}
+

@@ -23,12 +23,12 @@ declare var _: Underscore.Static;
 >Underscore : any
 
 var r = _.all([true, 1, null, 'yes'], _.identity);
->r : any
->_.all([true, 1, null, 'yes'], _.identity) : any
+>r : string | number | boolean
+>_.all([true, 1, null, 'yes'], _.identity) : string | number | boolean
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
 >_ : Underscore.Static
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
->[true, 1, null, 'yes'] : (string | number | boolean)[]
+>[true, 1, null, 'yes'] : (string | number | true)[]
 >true : true
 >1 : 1
 >null : null

@@ -1,0 +1,79 @@
+tests/cases/compiler/spellingSuggestionJSXAttribute.tsx(8,4): error TS2322: Type '{ class: string; }' is not assignable to type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'.
+  Property 'class' does not exist on type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'. Did you mean 'className'?
+tests/cases/compiler/spellingSuggestionJSXAttribute.tsx(9,4): error TS2322: Type '{ for: string; }' is not assignable to type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'.
+  Property 'for' does not exist on type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'.
+tests/cases/compiler/spellingSuggestionJSXAttribute.tsx(10,8): error TS2322: Type '{ for: string; }' is not assignable to type 'DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>'.
+  Property 'for' does not exist on type 'DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>'. Did you mean 'htmlFor'?
+tests/cases/compiler/spellingSuggestionJSXAttribute.tsx(11,8): error TS2322: Type '{ for: string; class: string; }' is not assignable to type 'DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>'.
+  Property 'for' does not exist on type 'DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>'. Did you mean 'htmlFor'?
+tests/cases/compiler/spellingSuggestionJSXAttribute.tsx(12,9): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: Readonly<{ className?: string; htmlFor?: string; }>): MyComp', gave the following error.
+    Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'.
+      Property 'class' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'. Did you mean 'className'?
+  Overload 2 of 2, '(props: { className?: string; htmlFor?: string; }, context?: any): MyComp', gave the following error.
+    Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'.
+      Property 'class' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'. Did you mean 'className'?
+tests/cases/compiler/spellingSuggestionJSXAttribute.tsx(13,10): error TS2322: Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'.
+  Property 'class' does not exist on type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'. Did you mean 'className'?
+tests/cases/compiler/spellingSuggestionJSXAttribute.tsx(14,9): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: Readonly<{ className?: string; htmlFor?: string; }>): MyComp', gave the following error.
+    Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'.
+      Property 'for' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'. Did you mean 'htmlFor'?
+  Overload 2 of 2, '(props: { className?: string; htmlFor?: string; }, context?: any): MyComp', gave the following error.
+    Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'.
+      Property 'for' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'. Did you mean 'htmlFor'?
+tests/cases/compiler/spellingSuggestionJSXAttribute.tsx(15,10): error TS2322: Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'.
+  Property 'for' does not exist on type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'. Did you mean 'htmlFor'?
+
+
+==== tests/cases/compiler/spellingSuggestionJSXAttribute.tsx (8 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import * as React from "react";
+    
+    function MyComp2(props: { className?: string, htmlFor?: string }) {
+        return null!;
+    }
+    class MyComp extends React.Component<{ className?: string, htmlFor?: string }> { }
+    <a class="" />;
+       ~~~~~
+!!! error TS2322: Type '{ class: string; }' is not assignable to type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'.
+!!! error TS2322:   Property 'class' does not exist on type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'. Did you mean 'className'?
+    <a for="" />; // should have no fix
+       ~~~
+!!! error TS2322: Type '{ for: string; }' is not assignable to type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'.
+!!! error TS2322:   Property 'for' does not exist on type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'.
+    <label for="" />;
+           ~~~
+!!! error TS2322: Type '{ for: string; }' is not assignable to type 'DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>'.
+!!! error TS2322:   Property 'for' does not exist on type 'DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>'. Did you mean 'htmlFor'?
+    <label for="" class="" />;
+           ~~~
+!!! error TS2322: Type '{ for: string; class: string; }' is not assignable to type 'DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>'.
+!!! error TS2322:   Property 'for' does not exist on type 'DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement>'. Did you mean 'htmlFor'?
+    <MyComp class="" />;
+            ~~~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(props: Readonly<{ className?: string; htmlFor?: string; }>): MyComp', gave the following error.
+!!! error TS2769:     Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'.
+!!! error TS2769:       Property 'class' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'. Did you mean 'className'?
+!!! error TS2769:   Overload 2 of 2, '(props: { className?: string; htmlFor?: string; }, context?: any): MyComp', gave the following error.
+!!! error TS2769:     Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'.
+!!! error TS2769:       Property 'class' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'. Did you mean 'className'?
+    <MyComp2 class="" />;
+             ~~~~~
+!!! error TS2322: Type '{ class: string; }' is not assignable to type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'.
+!!! error TS2322:   Property 'class' does not exist on type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'. Did you mean 'className'?
+    <MyComp for="" />;
+            ~~~
+!!! error TS2769: No overload matches this call.
+!!! error TS2769:   Overload 1 of 2, '(props: Readonly<{ className?: string; htmlFor?: string; }>): MyComp', gave the following error.
+!!! error TS2769:     Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'.
+!!! error TS2769:       Property 'for' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'. Did you mean 'htmlFor'?
+!!! error TS2769:   Overload 2 of 2, '(props: { className?: string; htmlFor?: string; }, context?: any): MyComp', gave the following error.
+!!! error TS2769:     Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'.
+!!! error TS2769:       Property 'for' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp> & Readonly<{ children?: ReactNode; }> & Readonly<{ className?: string; htmlFor?: string; }>'. Did you mean 'htmlFor'?
+    <MyComp2 for="" />;
+             ~~~
+!!! error TS2322: Type '{ for: string; }' is not assignable to type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'.
+!!! error TS2322:   Property 'for' does not exist on type 'IntrinsicAttributes & { className?: string; htmlFor?: string; }'. Did you mean 'htmlFor'?
+    

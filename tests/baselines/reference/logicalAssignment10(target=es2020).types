@@ -1,0 +1,45 @@
+=== tests/cases/conformance/es2021/logicalAssignment/logicalAssignment10.ts ===
+var count = 0;
+>count : number
+>0 : 0
+
+var obj = {};
+>obj : {}
+>{} : {}
+
+function incr() {
+>incr : () => number
+
+    return ++count;
+>++count : number
+>count : number
+}
+
+const oobj = {
+>oobj : { obj: {}; }
+>{    obj} : { obj: {}; }
+
+    obj
+>obj : {}
+}
+
+obj[incr()] ??= incr();
+>obj[incr()] ??= incr() : any
+>obj[incr()] : error
+>obj : {}
+>incr() : number
+>incr : () => number
+>incr() : number
+>incr : () => number
+
+oobj["obj"][incr()] ??= incr();
+>oobj["obj"][incr()] ??= incr() : any
+>oobj["obj"][incr()] : error
+>oobj["obj"] : {}
+>oobj : { obj: {}; }
+>"obj" : "obj"
+>incr() : number
+>incr : () => number
+>incr() : number
+>incr : () => number
+

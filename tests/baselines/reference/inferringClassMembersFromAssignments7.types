@@ -1,0 +1,69 @@
+=== tests/cases/conformance/salsa/inferringClassMembersFromAssignments7.js ===
+class C {
+>C : C
+
+    constructor() {
+        var self = this
+>self : this
+>this : this
+
+        self.x = 1
+>self.x = 1 : 1
+>self.x : any
+>self : this
+>x : any
+>1 : 1
+
+        self.m = function() {
+>self.m = function() {            console.log(self.x)        } : () => void
+>self.m : any
+>self : this
+>m : any
+>function() {            console.log(self.x)        } : () => void
+
+            console.log(self.x)
+>console.log(self.x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>self.x : number
+>self : this
+>x : number
+        }
+    }
+    mreal() {
+>mreal : () => void
+
+        var self = this
+>self : this
+>this : this
+
+        self.y = 2
+>self.y = 2 : 2
+>self.y : number | undefined
+>self : this
+>y : number | undefined
+>2 : 2
+    }
+}
+const c = new C()
+>c : C
+>new C() : C
+>C : typeof C
+
+c.x
+>c.x : number
+>c : C
+>x : number
+
+c.y
+>c.y : number | undefined
+>c : C
+>y : number | undefined
+
+c.m()
+>c.m() : void
+>c.m : () => void
+>c : C
+>m : () => void
+

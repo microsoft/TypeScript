@@ -17,7 +17,7 @@ declare module "express" {
 
     function e(): e.Express;
 >e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
->e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28))
+>e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
 >Express : Symbol(e.Express, Decl(express.d.ts, 52, 9))
 
     namespace e {
@@ -160,7 +160,7 @@ declare module "express" {
     }
 
     export = e;
->e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28))
+>e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
 }
 
 === tests/cases/compiler/augmentation.ts ===

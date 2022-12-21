@@ -1,0 +1,23 @@
+/c.ts(4,1): error TS1361: 'A' cannot be used as a value because it was imported using 'import type'.
+
+
+==== /c.ts (1 errors) ====
+    import type A = require('./a'); // Ok
+    import type = require('./b');   // Ok
+    
+    A.prototype; // Error
+    ~
+!!! error TS1361: 'A' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /c.ts:1:1: 'A' was imported here.
+    const a: A = { a: 'a' }; // Ok
+    void type; // Ok
+    export declare const AConstructor: typeof A; // Ok
+    
+==== /a.ts (0 errors) ====
+    class A { a!: string }
+    export = A;
+    
+==== /b.ts (0 errors) ====
+    class SomeClass {}
+    export = SomeClass;
+    

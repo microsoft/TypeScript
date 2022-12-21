@@ -78,7 +78,7 @@ const o9 = {
 >f : Symbol(f, Decl(nestedFunctionDeclarationNamedYieldIsError.ts, 0, 12))
 
         function yield() {
-> : Symbol((Missing), Decl(nestedFunctionDeclarationNamedYieldIsError.ts, 1, 17))
+>yield : Symbol(yield, Decl(nestedFunctionDeclarationNamedYieldIsError.ts, 1, 17))
         }
     }
 };
@@ -91,6 +91,7 @@ const o10 = {
 
         const x = function yield() {
 >x : Symbol(x, Decl(nestedFunctionExpressionNamedYieldIsError.ts, 2, 13))
+>yield : Symbol(yield, Decl(nestedFunctionExpressionNamedYieldIsError.ts, 2, 17))
 
         };
     }
@@ -103,7 +104,7 @@ const o11 = {
 >f : Symbol(f, Decl(nestedFunctionDeclarationNamedAwaitIsError.ts, 0, 13))
 
         function await() {
-> : Symbol((Missing), Decl(nestedFunctionDeclarationNamedAwaitIsError.ts, 1, 17))
+>await : Symbol(await, Decl(nestedFunctionDeclarationNamedAwaitIsError.ts, 1, 17))
         }
     }
 };
@@ -116,6 +117,7 @@ const o12 = {
 
         const x = function await() {
 >x : Symbol(x, Decl(nestedFunctionExpressionNamedAwaitIsError.ts, 2, 13))
+>await : Symbol(await, Decl(nestedFunctionExpressionNamedAwaitIsError.ts, 2, 17))
 
         };
     }

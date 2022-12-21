@@ -1000,7 +1000,7 @@ module ruatanica {
 >x : julianae.steerii
 
     eurycerus() : panamensis.linulus<ruatanica.Praseodymium<Lanthanum.jugularis, dammermani.melanops>, lavali.wilsoni> { var x : panamensis.linulus<ruatanica.Praseodymium<Lanthanum.jugularis, dammermani.melanops>, lavali.wilsoni>; () => { var y = this; }; return x; }
->eurycerus : () => panamensis.linulus<Praseodymium<Lanthanum.jugularis, dammermani.melanops>, lavali.wilsoni>
+>eurycerus : () => panamensis.linulus<ruatanica.Praseodymium<Lanthanum.jugularis, dammermani.melanops>, lavali.wilsoni>
 >panamensis : any
 >ruatanica : any
 >Lanthanum : any
@@ -2426,7 +2426,7 @@ module quasiater {
 >x : rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>
 
     Copper() : argurus.netscheri<quasiater.carolinensis, dogramacii.kaiseri> { var x : argurus.netscheri<quasiater.carolinensis, dogramacii.kaiseri>; () => { var y = this; }; return x; }
->Copper : () => argurus.netscheri<carolinensis, dogramacii.kaiseri>
+>Copper : () => argurus.netscheri<quasiater.carolinensis, dogramacii.kaiseri>
 >argurus : any
 >quasiater : any
 >dogramacii : any
@@ -3647,7 +3647,7 @@ module lutreolus {
 >x : quasiater.carolinensis
 
     Tin() : sagitta.leptoceros<lutreolus.punicus, daubentonii.arboreus<quasiater.carolinensis, rionegrensis.caniventer>> { var x : sagitta.leptoceros<lutreolus.punicus, daubentonii.arboreus<quasiater.carolinensis, rionegrensis.caniventer>>; () => { var y = this; }; return x; }
->Tin : () => sagitta.leptoceros<punicus, daubentonii.arboreus<quasiater.carolinensis, rionegrensis.caniventer>>
+>Tin : () => sagitta.leptoceros<lutreolus.punicus, daubentonii.arboreus<quasiater.carolinensis, rionegrensis.caniventer>>
 >sagitta : any
 >lutreolus : any
 >daubentonii : any
@@ -3665,7 +3665,7 @@ module lutreolus {
 >x : sagitta.leptoceros<punicus, daubentonii.arboreus<quasiater.carolinensis, rionegrensis.caniventer>>
 
     marmorata() : panamensis.setulosus<quasiater.carolinensis, daubentonii.arboreus<dogramacii.kaiseri, lutreolus.punicus>> { var x : panamensis.setulosus<quasiater.carolinensis, daubentonii.arboreus<dogramacii.kaiseri, lutreolus.punicus>>; () => { var y = this; }; return x; }
->marmorata : () => panamensis.setulosus<quasiater.carolinensis, daubentonii.arboreus<dogramacii.kaiseri, punicus>>
+>marmorata : () => panamensis.setulosus<quasiater.carolinensis, daubentonii.arboreus<dogramacii.kaiseri, lutreolus.punicus>>
 >panamensis : any
 >quasiater : any
 >daubentonii : any
@@ -3697,7 +3697,7 @@ module lutreolus {
 >x : Lanthanum.nitidus<howi.marcanoi, macrorhinos.daphaenodon>
 
     peregrina() : daubentonii.nesiotes<macrorhinos.konganensis, lutreolus.punicus> { var x : daubentonii.nesiotes<macrorhinos.konganensis, lutreolus.punicus>; () => { var y = this; }; return x; }
->peregrina : () => daubentonii.nesiotes<macrorhinos.konganensis, punicus>
+>peregrina : () => daubentonii.nesiotes<macrorhinos.konganensis, lutreolus.punicus>
 >daubentonii : any
 >macrorhinos : any
 >lutreolus : any
@@ -3886,7 +3886,7 @@ module argurus {
 >x : rionegrensis.veraecrucis<lavali.lepturus, julianae.durangae>
 
     jacobitus() : caurinus.johorensis<macrorhinos.konganensis, caurinus.johorensis<argurus.peninsulae, daubentonii.arboreus<argurus.germaini, sagitta.stolzmanni>>> { var x : caurinus.johorensis<macrorhinos.konganensis, caurinus.johorensis<argurus.peninsulae, daubentonii.arboreus<argurus.germaini, sagitta.stolzmanni>>>; () => { var y = this; }; return x; }
->jacobitus : () => caurinus.johorensis<macrorhinos.konganensis, caurinus.johorensis<peninsulae, daubentonii.arboreus<germaini, sagitta.stolzmanni>>>
+>jacobitus : () => caurinus.johorensis<macrorhinos.konganensis, caurinus.johorensis<argurus.peninsulae, daubentonii.arboreus<argurus.germaini, sagitta.stolzmanni>>>
 >caurinus : any
 >macrorhinos : any
 >caurinus : any
@@ -3908,7 +3908,7 @@ module argurus {
 >x : caurinus.johorensis<macrorhinos.konganensis, caurinus.johorensis<peninsulae, daubentonii.arboreus<germaini, sagitta.stolzmanni>>>
 
     guentheri() : rendalli.moojeni<lutreolus.foina, argurus.oreas> { var x : rendalli.moojeni<lutreolus.foina, argurus.oreas>; () => { var y = this; }; return x; }
->guentheri : () => rendalli.moojeni<lutreolus.foina, oreas>
+>guentheri : () => rendalli.moojeni<lutreolus.foina, argurus.oreas>
 >rendalli : any
 >lutreolus : any
 >argurus : any
@@ -3922,7 +3922,7 @@ module argurus {
 >x : rendalli.moojeni<lutreolus.foina, oreas>
 
     mahomet() : imperfecta.ciliolabrum<argurus.germaini, lutreolus.foina> { var x : imperfecta.ciliolabrum<argurus.germaini, lutreolus.foina>; () => { var y = this; }; return x; }
->mahomet : () => imperfecta.ciliolabrum<germaini, lutreolus.foina>
+>mahomet : () => imperfecta.ciliolabrum<argurus.germaini, lutreolus.foina>
 >imperfecta : any
 >argurus : any
 >lutreolus : any
@@ -4005,7 +4005,7 @@ module nigra {
 >x : caurinus.psilurus
 
     morrisi() : ruatanica.hector<trivirgatus.oconnelli, sagitta.cinereus<nigra.caucasica<julianae.sumatrana, trivirgatus.oconnelli>, quasiater.wattsi<julianae.galapagoensis, panamensis.linulus<lavali.xanthognathus, macrorhinos.konganensis>>>> { var x : ruatanica.hector<trivirgatus.oconnelli, sagitta.cinereus<nigra.caucasica<julianae.sumatrana, trivirgatus.oconnelli>, quasiater.wattsi<julianae.galapagoensis, panamensis.linulus<lavali.xanthognathus, macrorhinos.konganensis>>>>; () => { var y = this; }; return x; }
->morrisi : () => ruatanica.hector<trivirgatus.oconnelli, sagitta.cinereus<caucasica<julianae.sumatrana, trivirgatus.oconnelli>, quasiater.wattsi<julianae.galapagoensis, panamensis.linulus<lavali.xanthognathus, macrorhinos.konganensis>>>>
+>morrisi : () => ruatanica.hector<trivirgatus.oconnelli, sagitta.cinereus<nigra.caucasica<julianae.sumatrana, trivirgatus.oconnelli>, quasiater.wattsi<julianae.galapagoensis, panamensis.linulus<lavali.xanthognathus, macrorhinos.konganensis>>>>
 >ruatanica : any
 >trivirgatus : any
 >sagitta : any
@@ -4482,7 +4482,7 @@ module minutus {
 >x : patas.uralensis
 
         flaviceps(): minutus.inez<argurus.oreas, panglima.fundatus<gabriellae.amicus, lutreolus.foina>> { var x: minutus.inez<argurus.oreas, panglima.fundatus<gabriellae.amicus, lutreolus.foina>>; () => { var y = this; }; return x; }
->flaviceps : () => inez<argurus.oreas, panglima.fundatus<gabriellae.amicus, lutreolus.foina>>
+>flaviceps : () => minutus.inez<argurus.oreas, panglima.fundatus<gabriellae.amicus, lutreolus.foina>>
 >minutus : any
 >argurus : any
 >panglima : any
@@ -4596,7 +4596,7 @@ module caurinus {
 >macrorhinos : any
 
         martiniquensis(): ruatanica.hector<julianae.sumatrana, macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<julianae.nudicaudus, lavali.otion>>> { var x: ruatanica.hector<julianae.sumatrana, macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<julianae.nudicaudus, lavali.otion>>>; () => { var y = this; }; return x; }
->martiniquensis : () => ruatanica.hector<julianae.sumatrana, macrorhinos.marmosurus<dammermani.melanops, mahaganus<julianae.nudicaudus, lavali.otion>>>
+>martiniquensis : () => ruatanica.hector<julianae.sumatrana, macrorhinos.marmosurus<dammermani.melanops, caurinus.mahaganus<julianae.nudicaudus, lavali.otion>>>
 >ruatanica : any
 >julianae : any
 >macrorhinos : any
@@ -4650,7 +4650,7 @@ module caurinus {
 >x : argurus.oreas
 
         kathleenae(): nigra.dolichurus<patas.uralensis, caurinus.psilurus> { var x: nigra.dolichurus<patas.uralensis, caurinus.psilurus>; () => { var y = this; }; return x; }
->kathleenae : () => nigra.dolichurus<patas.uralensis, psilurus>
+>kathleenae : () => nigra.dolichurus<patas.uralensis, caurinus.psilurus>
 >nigra : any
 >patas : any
 >caurinus : any
@@ -4674,7 +4674,7 @@ module caurinus {
 >x : gabriellae.echinatus
 
         nigrovittatus(): caurinus.mahaganus<gabriellae.echinatus, petrophilus.rosalia<Lanthanum.megalonyx, panglima.abidi<dogramacii.kaiseri, lavali.wilsoni>>> { var x: caurinus.mahaganus<gabriellae.echinatus, petrophilus.rosalia<Lanthanum.megalonyx, panglima.abidi<dogramacii.kaiseri, lavali.wilsoni>>>; () => { var y = this; }; return x; }
->nigrovittatus : () => mahaganus<gabriellae.echinatus, petrophilus.rosalia<Lanthanum.megalonyx, panglima.abidi<dogramacii.kaiseri, lavali.wilsoni>>>
+>nigrovittatus : () => caurinus.mahaganus<gabriellae.echinatus, petrophilus.rosalia<Lanthanum.megalonyx, panglima.abidi<dogramacii.kaiseri, lavali.wilsoni>>>
 >caurinus : any
 >gabriellae : any
 >petrophilus : any
@@ -4751,7 +4751,7 @@ module howi {
 >stolzmanni : typeof sagitta.stolzmanni
 
         pennatus(): howi.marcanoi { var x: howi.marcanoi; () => { var y = this; }; return x; }
->pennatus : () => marcanoi
+>pennatus : () => howi.marcanoi
 >howi : any
 >x : marcanoi
 >howi : any
@@ -5096,7 +5096,7 @@ module nigra {
 >gracilis : gracilis<T0, T1>
 
         weddellii(): nigra.dolichurus<dogramacii.aurata, julianae.steerii> { var x: nigra.dolichurus<dogramacii.aurata, julianae.steerii>; () => { var y = this; }; return x; }
->weddellii : () => dolichurus<dogramacii.aurata, julianae.steerii>
+>weddellii : () => nigra.dolichurus<dogramacii.aurata, julianae.steerii>
 >nigra : any
 >dogramacii : any
 >julianae : any
@@ -5138,7 +5138,7 @@ module nigra {
 >x : dogramacii.koepckeae
 
         rouxii(): nigra.gracilis<argurus.dauricus<macrorhinos.konganensis, patas.uralensis>, nigra.thalia<patas.uralensis, julianae.galapagoensis>> { var x: nigra.gracilis<argurus.dauricus<macrorhinos.konganensis, patas.uralensis>, nigra.thalia<patas.uralensis, julianae.galapagoensis>>; () => { var y = this; }; return x; }
->rouxii : () => gracilis<argurus.dauricus<macrorhinos.konganensis, patas.uralensis>, thalia<patas.uralensis, julianae.galapagoensis>>
+>rouxii : () => nigra.gracilis<argurus.dauricus<macrorhinos.konganensis, patas.uralensis>, nigra.thalia<patas.uralensis, julianae.galapagoensis>>
 >nigra : any
 >argurus : any
 >macrorhinos : any
@@ -5180,7 +5180,7 @@ module nigra {
 >x : rionegrensis.caniventer
 
         theresa(): macrorhinos.marmosurus<argurus.netscheri<dammermani.siberu<lutreolus.foina, samarensis.pallidus>, argurus.luctuosa>, nigra.dolichurus<lavali.lepturus, samarensis.pallidus>> { var x: macrorhinos.marmosurus<argurus.netscheri<dammermani.siberu<lutreolus.foina, samarensis.pallidus>, argurus.luctuosa>, nigra.dolichurus<lavali.lepturus, samarensis.pallidus>>; () => { var y = this; }; return x; }
->theresa : () => macrorhinos.marmosurus<argurus.netscheri<dammermani.siberu<lutreolus.foina, samarensis.pallidus>, argurus.luctuosa>, dolichurus<lavali.lepturus, samarensis.pallidus>>
+>theresa : () => macrorhinos.marmosurus<argurus.netscheri<dammermani.siberu<lutreolus.foina, samarensis.pallidus>, argurus.luctuosa>, nigra.dolichurus<lavali.lepturus, samarensis.pallidus>>
 >macrorhinos : any
 >argurus : any
 >dammermani : any
@@ -6078,7 +6078,7 @@ module argurus {
 >x : Lanthanum.jugularis
 
         cracens(): argurus.gilbertii<lavali.thaeleri, lutreolus.punicus> { var x: argurus.gilbertii<lavali.thaeleri, lutreolus.punicus>; () => { var y = this; }; return x; }
->cracens : () => gilbertii<lavali.thaeleri, lutreolus.punicus>
+>cracens : () => argurus.gilbertii<lavali.thaeleri, lutreolus.punicus>
 >argurus : any
 >lavali : any
 >lutreolus : any
@@ -6198,7 +6198,7 @@ module argurus {
 >x : dammermani.melanops
 
         nghetinhensis(): gabriellae.klossii<argurus.luctuosa, julianae.steerii> { var x: gabriellae.klossii<argurus.luctuosa, julianae.steerii>; () => { var y = this; }; return x; }
->nghetinhensis : () => gabriellae.klossii<luctuosa, julianae.steerii>
+>nghetinhensis : () => gabriellae.klossii<argurus.luctuosa, julianae.steerii>
 >gabriellae : any
 >argurus : any
 >julianae : any
@@ -6226,7 +6226,7 @@ module argurus {
 >x : samarensis.cahirinus<lavali.lepturus, quasiater.carolinensis>
 
         univittatus(): argurus.peninsulae { var x: argurus.peninsulae; () => { var y = this; }; return x; }
->univittatus : () => peninsulae
+>univittatus : () => argurus.peninsulae
 >argurus : any
 >x : peninsulae
 >argurus : any
@@ -6655,7 +6655,7 @@ module sagitta {
 >x : samarensis.cahirinus<nigra.gracilis<argurus.luctuosa, imperfecta.subspinosus>, dogramacii.robustulus>
 
         simulator(): macrorhinos.marmosurus<Lanthanum.nitidus<dammermani.melanops, lavali.lepturus>, macrorhinos.marmosurus<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, sagitta.stolzmanni>> { var x: macrorhinos.marmosurus<Lanthanum.nitidus<dammermani.melanops, lavali.lepturus>, macrorhinos.marmosurus<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, sagitta.stolzmanni>>; () => { var y = this; }; return x; }
->simulator : () => macrorhinos.marmosurus<Lanthanum.nitidus<dammermani.melanops, lavali.lepturus>, macrorhinos.marmosurus<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, stolzmanni>>
+>simulator : () => macrorhinos.marmosurus<Lanthanum.nitidus<dammermani.melanops, lavali.lepturus>, macrorhinos.marmosurus<rendalli.moojeni<panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>, gabriellae.echinatus>, sagitta.stolzmanni>>
 >macrorhinos : any
 >Lanthanum : any
 >dammermani : any
@@ -6783,7 +6783,7 @@ module howi {
 >x : argurus.oreas
 
         zerda(): quasiater.wattsi<julianae.oralis<julianae.steerii, lavali.lepturus>, howi.coludo<julianae.steerii, julianae.gerbillus<lavali.thaeleri, quasiater.carolinensis>>> { var x: quasiater.wattsi<julianae.oralis<julianae.steerii, lavali.lepturus>, howi.coludo<julianae.steerii, julianae.gerbillus<lavali.thaeleri, quasiater.carolinensis>>>; () => { var y = this; }; return x; }
->zerda : () => quasiater.wattsi<julianae.oralis<julianae.steerii, lavali.lepturus>, coludo<julianae.steerii, julianae.gerbillus<lavali.thaeleri, quasiater.carolinensis>>>
+>zerda : () => quasiater.wattsi<julianae.oralis<julianae.steerii, lavali.lepturus>, howi.coludo<julianae.steerii, julianae.gerbillus<lavali.thaeleri, quasiater.carolinensis>>>
 >quasiater : any
 >julianae : any
 >julianae : any
@@ -6914,7 +6914,7 @@ module argurus {
 >x : julianae.steerii
 
         sondaicus(): samarensis.fuscus<argurus.peninsulae, lavali.lepturus> { var x: samarensis.fuscus<argurus.peninsulae, lavali.lepturus>; () => { var y = this; }; return x; }
->sondaicus : () => samarensis.fuscus<peninsulae, lavali.lepturus>
+>sondaicus : () => samarensis.fuscus<argurus.peninsulae, lavali.lepturus>
 >samarensis : any
 >argurus : any
 >lavali : any
@@ -6942,7 +6942,7 @@ module argurus {
 >x : petrophilus.rosalia<lavali.xanthognathus, trivirgatus.oconnelli>
 
         cherriei(): ruatanica.Praseodymium<Lanthanum.jugularis, argurus.oreas> { var x: ruatanica.Praseodymium<Lanthanum.jugularis, argurus.oreas>; () => { var y = this; }; return x; }
->cherriei : () => ruatanica.Praseodymium<Lanthanum.jugularis, oreas>
+>cherriei : () => ruatanica.Praseodymium<Lanthanum.jugularis, argurus.oreas>
 >ruatanica : any
 >Lanthanum : any
 >argurus : any
@@ -7104,7 +7104,7 @@ module lutreolus {
 >x : macrorhinos.konganensis
 
         lemniscatus(): panglima.fundatus<gabriellae.amicus, lutreolus.foina> { var x: panglima.fundatus<gabriellae.amicus, lutreolus.foina>; () => { var y = this; }; return x; }
->lemniscatus : () => panglima.fundatus<gabriellae.amicus, foina>
+>lemniscatus : () => panglima.fundatus<gabriellae.amicus, lutreolus.foina>
 >panglima : any
 >gabriellae : any
 >lutreolus : any
@@ -7152,7 +7152,7 @@ module lutreolus {
 >x : julianae.galapagoensis
 
         monochromos(): howi.coludo<lavali.lepturus, lutreolus.punicus> { var x: howi.coludo<lavali.lepturus, lutreolus.punicus>; () => { var y = this; }; return x; }
->monochromos : () => howi.coludo<lavali.lepturus, punicus>
+>monochromos : () => howi.coludo<lavali.lepturus, lutreolus.punicus>
 >howi : any
 >lavali : any
 >lutreolus : any
@@ -7166,7 +7166,7 @@ module lutreolus {
 >x : howi.coludo<lavali.lepturus, punicus>
 
         purinus(): ruatanica.hector<lutreolus.schlegeli, provocax.melanoleuca> { var x: ruatanica.hector<lutreolus.schlegeli, provocax.melanoleuca>; () => { var y = this; }; return x; }
->purinus : () => ruatanica.hector<schlegeli, provocax.melanoleuca>
+>purinus : () => ruatanica.hector<lutreolus.schlegeli, provocax.melanoleuca>
 >ruatanica : any
 >lutreolus : any
 >provocax : any
@@ -7448,7 +7448,7 @@ module sagitta {
 >x : nigra.gracilis<argurus.luctuosa, imperfecta.subspinosus>
 
         epimelas(): sagitta.stolzmanni { var x: sagitta.stolzmanni; () => { var y = this; }; return x; }
->epimelas : () => stolzmanni
+>epimelas : () => sagitta.stolzmanni
 >sagitta : any
 >x : stolzmanni
 >sagitta : any
@@ -7458,7 +7458,7 @@ module sagitta {
 >x : stolzmanni
 
         pittieri(): samarensis.fuscus<quasiater.carolinensis, sagitta.stolzmanni> { var x: samarensis.fuscus<quasiater.carolinensis, sagitta.stolzmanni>; () => { var y = this; }; return x; }
->pittieri : () => samarensis.fuscus<quasiater.carolinensis, stolzmanni>
+>pittieri : () => samarensis.fuscus<quasiater.carolinensis, sagitta.stolzmanni>
 >samarensis : any
 >quasiater : any
 >sagitta : any
@@ -8238,7 +8238,7 @@ module lutreolus {
 >foina : foina
 
         tarfayensis(): lutreolus.punicus { var x: lutreolus.punicus; () => { var y = this; }; return x; }
->tarfayensis : () => punicus
+>tarfayensis : () => lutreolus.punicus
 >lutreolus : any
 >x : punicus
 >lutreolus : any
@@ -8390,7 +8390,7 @@ module lutreolus {
 >x : caurinus.psilurus
 
         argentiventer(): trivirgatus.mixtus<gabriellae.amicus, lutreolus.punicus> { var x: trivirgatus.mixtus<gabriellae.amicus, lutreolus.punicus>; () => { var y = this; }; return x; }
->argentiventer : () => trivirgatus.mixtus<gabriellae.amicus, punicus>
+>argentiventer : () => trivirgatus.mixtus<gabriellae.amicus, lutreolus.punicus>
 >trivirgatus : any
 >gabriellae : any
 >lutreolus : any
@@ -8458,7 +8458,7 @@ module lutreolus {
 >x : quasiater.carolinensis
 
         truncatus(): trivirgatus.lotor<sagitta.stolzmanni, lutreolus.foina> { var x: trivirgatus.lotor<sagitta.stolzmanni, lutreolus.foina>; () => { var y = this; }; return x; }
->truncatus : () => trivirgatus.lotor<sagitta.stolzmanni, foina>
+>truncatus : () => trivirgatus.lotor<sagitta.stolzmanni, lutreolus.foina>
 >trivirgatus : any
 >sagitta : any
 >lutreolus : any
@@ -8762,7 +8762,7 @@ module dammermani {
 >dammermani : any
 
         blarina(): dammermani.melanops { var x: dammermani.melanops; () => { var y = this; }; return x; }
->blarina : () => melanops
+>blarina : () => dammermani.melanops
 >dammermani : any
 >x : melanops
 >dammermani : any
@@ -8942,7 +8942,7 @@ module argurus {
 >uralensis : typeof patas.uralensis
 
         aitkeni(): trivirgatus.mixtus<argurus.dauricus<dogramacii.aurata, dammermani.melanops>, panglima.amphibius<lavali.lepturus, quasiater.carolinensis>> { var x: trivirgatus.mixtus<argurus.dauricus<dogramacii.aurata, dammermani.melanops>, panglima.amphibius<lavali.lepturus, quasiater.carolinensis>>; () => { var y = this; }; return x; }
->aitkeni : () => trivirgatus.mixtus<dauricus<dogramacii.aurata, dammermani.melanops>, panglima.amphibius<lavali.lepturus, quasiater.carolinensis>>
+>aitkeni : () => trivirgatus.mixtus<argurus.dauricus<dogramacii.aurata, dammermani.melanops>, panglima.amphibius<lavali.lepturus, quasiater.carolinensis>>
 >trivirgatus : any
 >argurus : any
 >dogramacii : any
@@ -9028,7 +9028,7 @@ module argurus {
 >x : trivirgatus.oconnelli
 
         cavernarum(): minutus.inez<gabriellae.echinatus, argurus.luctuosa> { var x: minutus.inez<gabriellae.echinatus, argurus.luctuosa>; () => { var y = this; }; return x; }
->cavernarum : () => minutus.inez<gabriellae.echinatus, luctuosa>
+>cavernarum : () => minutus.inez<gabriellae.echinatus, argurus.luctuosa>
 >minutus : any
 >gabriellae : any
 >argurus : any
@@ -9095,7 +9095,7 @@ module argurus {
 >x : lavali.wilsoni
 
         fernandezi(): dammermani.siberu<nigra.thalia<lutreolus.schlegeli, julianae.sumatrana>, panglima.abidi<lutreolus.foina, argurus.peninsulae>> { var x: dammermani.siberu<nigra.thalia<lutreolus.schlegeli, julianae.sumatrana>, panglima.abidi<lutreolus.foina, argurus.peninsulae>>; () => { var y = this; }; return x; }
->fernandezi : () => dammermani.siberu<nigra.thalia<lutreolus.schlegeli, julianae.sumatrana>, panglima.abidi<lutreolus.foina, peninsulae>>
+>fernandezi : () => dammermani.siberu<nigra.thalia<lutreolus.schlegeli, julianae.sumatrana>, panglima.abidi<lutreolus.foina, argurus.peninsulae>>
 >dammermani : any
 >nigra : any
 >lutreolus : any
@@ -9151,7 +9151,7 @@ module argurus {
 >x : chrysaeolus.sarasinorum<macrorhinos.konganensis, julianae.acariensis>
 
         tatei(): argurus.pygmaea<argurus.oreas, panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon>> { var x: argurus.pygmaea<argurus.oreas, panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon>>; () => { var y = this; }; return x; }
->tatei : () => pygmaea<oreas, panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon>>
+>tatei : () => argurus.pygmaea<argurus.oreas, panglima.fundatus<quasiater.carolinensis, macrorhinos.daphaenodon>>
 >argurus : any
 >argurus : any
 >panglima : any
@@ -9189,7 +9189,7 @@ module argurus {
 >x : trivirgatus.falconeri
 
         delator(): argurus.netscheri<dogramacii.kaiseri, lavali.lepturus> { var x: argurus.netscheri<dogramacii.kaiseri, lavali.lepturus>; () => { var y = this; }; return x; }
->delator : () => netscheri<dogramacii.kaiseri, lavali.lepturus>
+>delator : () => argurus.netscheri<dogramacii.kaiseri, lavali.lepturus>
 >argurus : any
 >dogramacii : any
 >lavali : any
@@ -9267,7 +9267,7 @@ module ruatanica {
 >gabriellae : any
 
         clara(): panglima.amphibius<imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>, argurus.dauricus<ruatanica.americanus, rionegrensis.caniventer>> { var x: panglima.amphibius<imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>, argurus.dauricus<ruatanica.americanus, rionegrensis.caniventer>>; () => { var y = this; }; return x; }
->clara : () => panglima.amphibius<imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>, argurus.dauricus<americanus, rionegrensis.caniventer>>
+>clara : () => panglima.amphibius<imperfecta.ciliolabrum<quasiater.carolinensis, lavali.beisa>, argurus.dauricus<ruatanica.americanus, rionegrensis.caniventer>>
 >panglima : any
 >imperfecta : any
 >quasiater : any
@@ -9792,7 +9792,7 @@ module caurinus {
 >punicus : typeof lutreolus.punicus
 
         socialis(): panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus> { var x: panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>; () => { var y = this; }; return x; }
->socialis : () => panglima.amphibius<trivirgatus.falconeri, psilurus>
+>socialis : () => panglima.amphibius<trivirgatus.falconeri, caurinus.psilurus>
 >panglima : any
 >trivirgatus : any
 >caurinus : any

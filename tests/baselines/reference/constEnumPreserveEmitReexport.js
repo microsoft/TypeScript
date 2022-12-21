@@ -13,7 +13,8 @@ export { MyConstEnum as default } from './ConstEnum';
 
 //// [ConstEnum.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MyConstEnum = void 0;
 var MyConstEnum;
 (function (MyConstEnum) {
     MyConstEnum[MyConstEnum["Foo"] = 0] = "Foo";
@@ -22,11 +23,12 @@ var MyConstEnum;
 ;
 //// [ImportExport.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var ConstEnum_1 = require("./ConstEnum");
-exports["default"] = ConstEnum_1.MyConstEnum;
+exports.default = ConstEnum_1.MyConstEnum;
 //// [ReExport.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = void 0;
 var ConstEnum_1 = require("./ConstEnum");
-exports["default"] = ConstEnum_1.MyConstEnum;
+Object.defineProperty(exports, "default", { enumerable: true, get: function () { return ConstEnum_1.MyConstEnum; } });

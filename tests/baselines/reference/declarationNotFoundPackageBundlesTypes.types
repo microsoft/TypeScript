@@ -1,0 +1,14 @@
+=== tests/cases/conformance/moduleResolution/index.ts ===
+import * as Foo from "foo";
+>Foo : any
+
+import * as Other from "foo/other"/*1*/;
+>Other : any
+
+=== tests/cases/conformance/moduleResolution/node_modules/foo/index.d.ts ===
+declare const foo: any;
+>foo : any
+
+export = foo;
+>foo : any
+

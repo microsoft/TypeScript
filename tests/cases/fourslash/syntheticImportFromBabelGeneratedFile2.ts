@@ -18,5 +18,5 @@
 ////import f from "./a"
 /////**/f
 
-verify.quickInfoAt("", `(alias) (property) f: (t: string) => void
+verify.quickInfoAt("", `(alias) function f(t: string): void
 import f`, "Run this function"); // Passes

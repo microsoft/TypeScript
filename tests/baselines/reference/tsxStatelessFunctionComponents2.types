@@ -3,7 +3,7 @@ import React = require('react');
 >React : typeof React
 
 function Greet(x: {name?: string}) {
->Greet : (x: { name?: string; }) => JSX.Element
+>Greet : (x: {    name?: string;}) => JSX.Element
 >x : { name?: string; }
 >name : string
 

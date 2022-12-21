@@ -1,6 +1,6 @@
 //// [parserErrorRecovery_Block2.ts]
 function f() {
-    #
+    ¬
     return;
 }
 

@@ -1,0 +1,40 @@
+=== tests/cases/compiler/inferConditionalConstraintMappedMember.ts ===
+// Return keyof type without string index signature
+type KeysWithoutStringIndex<T> =
+>KeysWithoutStringIndex : Symbol(KeysWithoutStringIndex, Decl(inferConditionalConstraintMappedMember.ts, 0, 0))
+>T : Symbol(T, Decl(inferConditionalConstraintMappedMember.ts, 1, 28))
+
+    { [K in keyof T]: string extends K ? never : K } extends { [_ in keyof T]: infer U }
+>K : Symbol(K, Decl(inferConditionalConstraintMappedMember.ts, 2, 7))
+>T : Symbol(T, Decl(inferConditionalConstraintMappedMember.ts, 1, 28))
+>K : Symbol(K, Decl(inferConditionalConstraintMappedMember.ts, 2, 7))
+>K : Symbol(K, Decl(inferConditionalConstraintMappedMember.ts, 2, 7))
+>_ : Symbol(_, Decl(inferConditionalConstraintMappedMember.ts, 2, 64))
+>T : Symbol(T, Decl(inferConditionalConstraintMappedMember.ts, 1, 28))
+>U : Symbol(U, Decl(inferConditionalConstraintMappedMember.ts, 2, 84))
+
+    ? U
+>U : Symbol(U, Decl(inferConditionalConstraintMappedMember.ts, 2, 84))
+
+    : never
+
+// Only "foo" | "bar" as expected, [string] index signature removed
+type test = KeysWithoutStringIndex<{ [index: string]: string; foo: string; bar: 'baz' }>
+>test : Symbol(test, Decl(inferConditionalConstraintMappedMember.ts, 4, 11))
+>KeysWithoutStringIndex : Symbol(KeysWithoutStringIndex, Decl(inferConditionalConstraintMappedMember.ts, 0, 0))
+>index : Symbol(index, Decl(inferConditionalConstraintMappedMember.ts, 7, 38))
+>foo : Symbol(foo, Decl(inferConditionalConstraintMappedMember.ts, 7, 61))
+>bar : Symbol(bar, Decl(inferConditionalConstraintMappedMember.ts, 7, 74))
+
+// KeysWithoutStringIndex<T> will always be a subset of keyof T, but is reported as unassignable
+export type RemoveIdxSgn<T> = Pick<T, KeysWithoutStringIndex<T>>
+>RemoveIdxSgn : Symbol(RemoveIdxSgn, Decl(inferConditionalConstraintMappedMember.ts, 7, 88))
+>T : Symbol(T, Decl(inferConditionalConstraintMappedMember.ts, 9, 25))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(inferConditionalConstraintMappedMember.ts, 9, 25))
+>KeysWithoutStringIndex : Symbol(KeysWithoutStringIndex, Decl(inferConditionalConstraintMappedMember.ts, 0, 0))
+>T : Symbol(T, Decl(inferConditionalConstraintMappedMember.ts, 9, 25))
+
+  // ERROR:
+  // Type 'KeysWithoutStringIndex<T>' does not satisfy the constraint 'keyof T'.
+  //  Type 'unknown' is not assignable to type 'keyof T'.(2344)

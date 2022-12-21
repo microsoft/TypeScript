@@ -1,6 +1,6 @@
 === tests/cases/compiler/optionalPropertiesTest.ts ===
 var x: {p1:number; p2?:string; p3?:{():number;};};
->x : { p1: number; p2?: string; p3?: () => number; }
+>x : { p1: number; p2?: string; p3?: {    (): number;}; }
 >p1 : number
 >p2 : string
 >p3 : () => number

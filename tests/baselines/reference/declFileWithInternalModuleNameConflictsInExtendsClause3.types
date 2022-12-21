@@ -9,7 +9,7 @@ module X.A.B.C {
 >B : typeof B
 >C : typeof C
 
-    export class W implements X.A.C.Z { // This needs to be refered as X.A.C.Z as A has conflict
+    export class W implements X.A.C.Z { // This needs to be referred as X.A.C.Z as A has conflict
 >W : W
 >X.A.C : any
 >X.A : typeof A

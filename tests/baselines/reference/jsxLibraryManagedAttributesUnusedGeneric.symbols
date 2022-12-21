@@ -1,0 +1,70 @@
+=== tests/cases/compiler/jsxLibraryManagedAttributesUnusedGeneric.tsx ===
+// @ts-ignore
+import React from 'react'
+>React : Symbol(React, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 1, 6))
+
+declare const jsx: typeof React.createElement
+>jsx : Symbol(jsx, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 3, 13), Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 3, 45))
+>React : Symbol(React, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 1, 6))
+
+namespace jsx {
+>jsx : Symbol(jsx, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 3, 13), Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 3, 45))
+
+    export namespace JSX {
+>JSX : Symbol(JSX, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 4, 15))
+
+        export interface Element {}
+>Element : Symbol(Element, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 5, 26))
+
+        export interface ElementClass {}
+>ElementClass : Symbol(ElementClass, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 6, 35))
+
+        export interface ElementAttributesProperty {}
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 7, 40))
+
+        export interface ElementChildrenAttribute {}
+>ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 8, 53))
+
+        export interface IntrinsicAttributes {}
+>IntrinsicAttributes : Symbol(IntrinsicAttributes, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 9, 52))
+
+        export interface IntrinsicClassAttributes<T> {}
+>IntrinsicClassAttributes : Symbol(IntrinsicClassAttributes, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 10, 47))
+>T : Symbol(T, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 11, 50))
+
+        export type IntrinsicElements = {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 11, 55))
+
+            div: { className: string }
+>div : Symbol(div, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 12, 41))
+>className : Symbol(className, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 13, 18))
+        }
+        // Works
+        // export type LibraryManagedAttributes<C, P> = P & { css: string };
+
+        // Equivalent to above, but fails
+        export type WithCSSProp<P> = P & { css: string }
+>WithCSSProp : Symbol(WithCSSProp, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 14, 9))
+>P : Symbol(P, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 19, 32))
+>P : Symbol(P, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 19, 32))
+>css : Symbol(css, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 19, 42))
+
+        export type LibraryManagedAttributes<C, P> = WithCSSProp<P>
+>LibraryManagedAttributes : Symbol(LibraryManagedAttributes, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 19, 56))
+>C : Symbol(C, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 20, 45))
+>P : Symbol(P, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 20, 47))
+>WithCSSProp : Symbol(WithCSSProp, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 14, 9))
+>P : Symbol(P, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 20, 47))
+
+    }
+}
+
+declare const Comp: (p: { className?: string }) => null
+>Comp : Symbol(Comp, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 25, 13))
+>p : Symbol(p, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 25, 21))
+>className : Symbol(className, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 25, 25))
+
+;<Comp css="color:hotpink;" />
+>Comp : Symbol(Comp, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 25, 13))
+>css : Symbol(css, Decl(jsxLibraryManagedAttributesUnusedGeneric.tsx, 27, 6))
+

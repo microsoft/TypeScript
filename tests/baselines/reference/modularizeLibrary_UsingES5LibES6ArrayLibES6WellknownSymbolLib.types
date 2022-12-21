@@ -30,8 +30,8 @@ a[Symbol.isConcatSpreadable] = false;
 >a[Symbol.isConcatSpreadable] = false : false
 >a[Symbol.isConcatSpreadable] : error
 >a : string[]
->Symbol.isConcatSpreadable : symbol
+>Symbol.isConcatSpreadable : unique symbol
 >Symbol : SymbolConstructor
->isConcatSpreadable : symbol
+>isConcatSpreadable : unique symbol
 >false : false
 

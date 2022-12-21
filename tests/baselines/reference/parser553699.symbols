@@ -6,6 +6,7 @@ class Foo {
   public banana (x: public) { }
 >banana : Symbol(Foo.banana, Decl(parser553699.ts, 1, 19))
 >x : Symbol(x, Decl(parser553699.ts, 2, 17))
+>public : Symbol(public)
 }
 
 class Bar {

@@ -24,9 +24,9 @@ globalThis.tests = "a-b";
 
 console.log(globalThis.test.split("-"));
 >console.log(globalThis.test.split("-")) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
+>console.log : (...data: any[]) => void
 >console : Console
->log : (message?: any, ...optionalParams: any[]) => void
+>log : (...data: any[]) => void
 >globalThis.test.split("-") : string[]
 >globalThis.test.split : (separator: string | RegExp, limit?: number) => string[]
 >globalThis.test : string

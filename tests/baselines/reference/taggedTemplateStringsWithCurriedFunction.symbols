@@ -1,0 +1,31 @@
+=== tests/cases/compiler/taggedTemplateStringsWithCurriedFunction.ts ===
+// Originated from #38558
+
+const f = _ => (..._) => "";
+>f : Symbol(f, Decl(taggedTemplateStringsWithCurriedFunction.ts, 2, 5))
+>_ : Symbol(_, Decl(taggedTemplateStringsWithCurriedFunction.ts, 2, 9))
+>_ : Symbol(_, Decl(taggedTemplateStringsWithCurriedFunction.ts, 2, 16))
+
+f({ ...{ x: 0 } })``;
+>f : Symbol(f, Decl(taggedTemplateStringsWithCurriedFunction.ts, 2, 5))
+>x : Symbol(x, Decl(taggedTemplateStringsWithCurriedFunction.ts, 4, 8))
+
+f({ ...{ x: 0 } })`x`;
+>f : Symbol(f, Decl(taggedTemplateStringsWithCurriedFunction.ts, 2, 5))
+>x : Symbol(x, Decl(taggedTemplateStringsWithCurriedFunction.ts, 5, 8))
+
+f({ ...{ x: 0 } })`x${f}x`;
+>f : Symbol(f, Decl(taggedTemplateStringsWithCurriedFunction.ts, 2, 5))
+>x : Symbol(x, Decl(taggedTemplateStringsWithCurriedFunction.ts, 6, 8))
+>f : Symbol(f, Decl(taggedTemplateStringsWithCurriedFunction.ts, 2, 5))
+
+f({ ...{ x: 0 }, y: (() => 1)() })``;
+>f : Symbol(f, Decl(taggedTemplateStringsWithCurriedFunction.ts, 2, 5))
+>x : Symbol(x, Decl(taggedTemplateStringsWithCurriedFunction.ts, 7, 8))
+>y : Symbol(y, Decl(taggedTemplateStringsWithCurriedFunction.ts, 7, 16))
+
+f({ x: (() => 1)(), ...{ y: 1 } })``;
+>f : Symbol(f, Decl(taggedTemplateStringsWithCurriedFunction.ts, 2, 5))
+>x : Symbol(x, Decl(taggedTemplateStringsWithCurriedFunction.ts, 8, 3))
+>y : Symbol(y, Decl(taggedTemplateStringsWithCurriedFunction.ts, 8, 24))
+

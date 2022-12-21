@@ -60,7 +60,8 @@ export function j() {}
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.j = exports.jj = exports.ii = exports.i = exports.h = exports.g = exports.f = exports.e = exports.d = exports.c = exports.b = exports.a = void 0;
 function a() { }
 exports.a = a;
 function b() { }
@@ -125,7 +126,7 @@ exports.jj = j;
 export function a(): void;
 export function b(): void;
 export namespace b {
-    export const cat: string;
+    const cat: string;
 }
 export function c(): void;
 export namespace c {

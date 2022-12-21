@@ -15,12 +15,11 @@ function rej(reject){
 // ==ASYNC FUNCTION::Convert to async function==
 
 async function f(){
-    let result: number | Promise<number>;
+    let result: number;
     try {
         const result_1 = await fetch("https://typescriptlang.org");
         result = await res(result_1);
-    }
-    catch (reject) {
+    } catch (reject) {
         result = await rej(reject);
     }
     return res(result);

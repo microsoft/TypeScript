@@ -32,7 +32,7 @@ typeof itemWithTSError // :(
 
 //// [crashInGetTextOfComputedPropertyName.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var itemId = 'some-id';
 // --- test on first level ---
 var items = {};
@@ -41,7 +41,7 @@ typeof itemOk1; // pass
 var objWithItems = { items: {} };
 var itemOk2 = objWithItems.items[itemId];
 typeof itemOk2; // pass
-var _c = objWithItems, _d = _c.items /*happens when default value is provided*/, _e = itemId, itemWithTSError = (_d === void 0 ? {} /*happens when default value is provided*/ : _d)[_e];
+var _c = objWithItems, _d = _c.items /*happens when default value is provided*/, _e = _d === void 0 ? {} : _d /*happens when default value is provided*/, _f = itemId, itemWithTSError = _e[_f];
 // in order to re-produce the error, uncomment next line:
 typeof itemWithTSError; // :(
 // will result in:

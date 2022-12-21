@@ -11,7 +11,7 @@ function foo(...rest: any[]) {
 }
 
 function foo2( { x, y, z }?: { x: string; y: number; z: boolean });
->foo2 : ({ x, y, z }?: { x: string; y: number; z: boolean; }) => any
+>foo2 : ({ x, y, z }?: {    x: string;    y: number;    z: boolean;}) => any
 >x : string
 >y : number
 >z : boolean

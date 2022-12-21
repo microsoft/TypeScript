@@ -1,0 +1,25 @@
+=== tests/cases/conformance/salsa/a.js ===
+/** @type {() => undefined} */
+function f1() {
+>f1 : () => undefined
+
+    return undefined;
+>undefined : undefined
+}
+const a = f1()
+>a : undefined
+>f1() : undefined
+>f1 : () => undefined
+
+/** @type {() => null} */
+function f2() {
+>f2 : () => null
+
+    return null;
+>null : null
+}
+const b = f2()
+>b : null
+>f2() : null
+>f2 : () => null
+

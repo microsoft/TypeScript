@@ -13,6 +13,7 @@ var c: C = i;
 //// [symbolProperty9.js]
 class C {
 }
+Symbol.iterator;
 var i;
 i = new C;
 var c = i;

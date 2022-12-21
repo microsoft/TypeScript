@@ -3,7 +3,7 @@
 
 /** @type {AssertFunc} */
 const assert = check => {
->assert : (check: boolean) => asserts check
+>assert : AssertFunc
 >check => {    if (!check) throw new Error();} : (check: boolean) => asserts check
 >check : boolean
 
@@ -70,7 +70,7 @@ function f1(x) {
 
         assert(typeof x === "string");
 >assert(typeof x === "string") : void
->assert : (check: boolean) => asserts check
+>assert : AssertFunc
 >typeof x === "string" : boolean
 >typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : any

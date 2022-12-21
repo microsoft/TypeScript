@@ -30,6 +30,7 @@ tests/cases/conformance/es6/modules/t4.ts(3,1): error TS2308: Module "./t1" has 
     import hello, { x, y, z, foo } from "./t4";
            ~~~~~
 !!! error TS1192: Module '"tests/cases/conformance/es6/modules/t4"' has no default export.
+!!! related TS1195 tests/cases/conformance/es6/modules/t4.ts:2:1: 'export *' does not re-export a default.
     hello;
     x;
     y;

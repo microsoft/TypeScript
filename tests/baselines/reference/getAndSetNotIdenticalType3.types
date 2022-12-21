@@ -43,8 +43,8 @@ var r = x.x;
 
 x.x = r;
 >x.x = r : A<number>
->x.x : A<number>
+>x.x : A<string>
 >x : C<unknown>
->x : A<number>
+>x : A<string>
 >r : A<number>
 

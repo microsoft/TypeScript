@@ -1,0 +1,48 @@
+=== tests/cases/conformance/classes/mixinAbstractClassesReturnTypeInference.ts ===
+interface Mixin1 {
+>Mixin1 : Symbol(Mixin1, Decl(mixinAbstractClassesReturnTypeInference.ts, 0, 0))
+
+    mixinMethod(): void;
+>mixinMethod : Symbol(Mixin1.mixinMethod, Decl(mixinAbstractClassesReturnTypeInference.ts, 0, 18))
+}
+
+abstract class AbstractBase {
+>AbstractBase : Symbol(AbstractBase, Decl(mixinAbstractClassesReturnTypeInference.ts, 2, 1))
+
+    abstract abstractBaseMethod(): void;
+>abstractBaseMethod : Symbol(AbstractBase.abstractBaseMethod, Decl(mixinAbstractClassesReturnTypeInference.ts, 4, 29))
+}
+
+function Mixin2<TBase extends abstract new (...args: any[]) => any>(baseClass: TBase) {
+>Mixin2 : Symbol(Mixin2, Decl(mixinAbstractClassesReturnTypeInference.ts, 6, 1))
+>TBase : Symbol(TBase, Decl(mixinAbstractClassesReturnTypeInference.ts, 8, 16))
+>args : Symbol(args, Decl(mixinAbstractClassesReturnTypeInference.ts, 8, 44))
+>baseClass : Symbol(baseClass, Decl(mixinAbstractClassesReturnTypeInference.ts, 8, 68))
+>TBase : Symbol(TBase, Decl(mixinAbstractClassesReturnTypeInference.ts, 8, 16))
+
+    // must be `abstract` because we cannot know *all* of the possible abstract members that need to be
+    // implemented for this to be concrete.
+    abstract class MixinClass extends baseClass implements Mixin1 {
+>MixinClass : Symbol(MixinClass, Decl(mixinAbstractClassesReturnTypeInference.ts, 8, 87))
+>baseClass : Symbol(baseClass, Decl(mixinAbstractClassesReturnTypeInference.ts, 8, 68))
+>Mixin1 : Symbol(Mixin1, Decl(mixinAbstractClassesReturnTypeInference.ts, 0, 0))
+
+        mixinMethod(): void {}
+>mixinMethod : Symbol(MixinClass.mixinMethod, Decl(mixinAbstractClassesReturnTypeInference.ts, 11, 67))
+
+        static staticMixinMethod(): void {}
+>staticMixinMethod : Symbol(MixinClass.staticMixinMethod, Decl(mixinAbstractClassesReturnTypeInference.ts, 12, 30))
+    }
+    return MixinClass;
+>MixinClass : Symbol(MixinClass, Decl(mixinAbstractClassesReturnTypeInference.ts, 8, 87))
+}
+
+class DerivedFromAbstract2 extends Mixin2(AbstractBase) {
+>DerivedFromAbstract2 : Symbol(DerivedFromAbstract2, Decl(mixinAbstractClassesReturnTypeInference.ts, 16, 1))
+>Mixin2 : Symbol(Mixin2, Decl(mixinAbstractClassesReturnTypeInference.ts, 6, 1))
+>AbstractBase : Symbol(AbstractBase, Decl(mixinAbstractClassesReturnTypeInference.ts, 2, 1))
+
+    abstractBaseMethod() {}
+>abstractBaseMethod : Symbol(DerivedFromAbstract2.abstractBaseMethod, Decl(mixinAbstractClassesReturnTypeInference.ts, 18, 57))
+}
+

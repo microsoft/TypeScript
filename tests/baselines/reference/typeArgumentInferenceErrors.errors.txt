@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts(3,31): error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts(3,31): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts(7,35): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'number' is not assignable to type 'string'.
@@ -15,7 +15,7 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts
     function someGenerics1<T, U>(n: T, m: number) { }
     someGenerics1<string, number>(3, 4); // Error
                                   ~
-!!! error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     
     // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
     function someGenerics4<T, U>(n: T, f: (x: U) => void) { }

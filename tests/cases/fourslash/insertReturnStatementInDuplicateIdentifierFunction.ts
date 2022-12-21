@@ -5,7 +5,8 @@
 
 goTo.marker();
 
-// One error: duplicate identifier 'foo'
+// Function with bodies can only merge with classes
+// Class declaration cannot implement overload list
 verify.numberOfErrorsInCurrentFile(2);
 
 // Shouldn't change the number of errors

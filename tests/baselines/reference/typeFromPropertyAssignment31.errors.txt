@@ -1,5 +1,5 @@
-tests/cases/conformance/salsa/typeFromPropertyAssignment31.ts(13,1): error TS2322: Type 'false' is not assignable to type 'number'.
-tests/cases/conformance/salsa/typeFromPropertyAssignment31.ts(25,1): error TS2322: Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment31.ts(13,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment31.ts(25,1): error TS2322: Type 'boolean' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/salsa/typeFromPropertyAssignment31.ts (2 errors) ====
@@ -17,7 +17,7 @@ tests/cases/conformance/salsa/typeFromPropertyAssignment31.ts(25,1): error TS232
     ExpandoMerge.p6 = 66666; // ok
     ExpandoMerge.p8 = false; // type error
     ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'false' is not assignable to type 'number'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
     namespace ExpandoMerge {
         export var p3 = 333;
         export var p4 = 4;
@@ -31,6 +31,6 @@ tests/cases/conformance/salsa/typeFromPropertyAssignment31.ts(25,1): error TS232
     ExpandoMerge.p7 = 777777; // ok
     ExpandoMerge.p9 = false; // type error
     ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'false' is not assignable to type 'number'.
+!!! error TS2322: Type 'boolean' is not assignable to type 'number'.
     var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + ExpandoMerge.p5 + ExpandoMerge.p6 + ExpandoMerge.p7 + ExpandoMerge.p8 + ExpandoMerge.p9 + ExpandoMerge.m(12) + ExpandoMerge(1001);
     

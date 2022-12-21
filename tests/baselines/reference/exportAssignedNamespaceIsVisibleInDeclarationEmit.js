@@ -12,9 +12,10 @@ export const thing = f();
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.thing = void 0;
 var thing_1 = require("./thing");
-exports.thing = thing_1.f();
+exports.thing = (0, thing_1.f)();
 
 
 //// [index.d.ts]

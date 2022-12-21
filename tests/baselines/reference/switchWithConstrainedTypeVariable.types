@@ -14,7 +14,7 @@ function function1<T extends 'a' | 'b'>(key: T) {
       key.toLowerCase();
 >key.toLowerCase() : string
 >key.toLowerCase : () => string
->key : T
+>key : "a"
 >toLowerCase : () => string
 
       break;
@@ -22,7 +22,7 @@ function function1<T extends 'a' | 'b'>(key: T) {
       key.toLowerCase();
 >key.toLowerCase() : string
 >key.toLowerCase : () => string
->key : T
+>key : "b"
 >toLowerCase : () => string
 
       break;

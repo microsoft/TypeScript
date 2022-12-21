@@ -9,9 +9,9 @@ interface INumberDictionary<V> {
 }
 
 declare function forEach<T>(from: IStringDictionary<T> | INumberDictionary<T>, callback: (entry: { key: any; value: T; }, remove: () => void) => any);
->forEach : <T>(from: IStringDictionary<T> | INumberDictionary<T>, callback: (entry: { key: any; value: T; }, remove: () => void) => any) => any
+>forEach : <T>(from: IStringDictionary<T> | INumberDictionary<T>, callback: (entry: {    key: any;    value: T;}, remove: () => void) => any) => any
 >from : IStringDictionary<T> | INumberDictionary<T>
->callback : (entry: { key: any; value: T; }, remove: () => void) => any
+>callback : (entry: {    key: any;    value: T;}, remove: () => void) => any
 >entry : { key: any; value: T; }
 >key : any
 >value : T

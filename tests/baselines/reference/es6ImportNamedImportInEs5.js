@@ -43,6 +43,7 @@ import { aaaa as bbbb } from "./es6ImportNamedImportInEs5_0";
 //// [es6ImportNamedImportInEs5_0.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.aaaa = exports.z2 = exports.z1 = exports.x1 = exports.a1 = exports.m = exports.x = exports.a = void 0;
 exports.a = 10;
 exports.x = exports.a;
 exports.m = exports.a;

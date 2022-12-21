@@ -28,6 +28,6 @@ var C = /** @class */ (function () {
 module.exports = C.B;
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var B = require("./a");
 var x = { c: B };

@@ -327,6 +327,33 @@ function f15(o: Thing | undefined, value: number) {
     }
 }
 
+function f15a(o: Thing | undefined, value: unknown) {
+    if (o?.foo === value) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (o?.foo !== value) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (o?.foo == value) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;  // Error
+    }
+    if (o?.foo != value) {
+        o.foo;  // Error
+    }
+    else {
+        o.foo;  // Error
+    }
+}
+
 function f16(o: Thing | undefined) {
     if (o?.foo === undefined) {
         o.foo;  // Error
@@ -527,10 +554,45 @@ function extractCoordinates(f: Feature): number[] {
     return f.geometry.coordinates;
 }
 
+// Repro from #35842
+
+interface SomeObject {
+    someProperty: unknown;
+}
+
+let lastSomeProperty: unknown | undefined;
+
+function someFunction(someOptionalObject: SomeObject | undefined): void {
+    if (someOptionalObject?.someProperty !== lastSomeProperty) {
+        console.log(someOptionalObject);
+        console.log(someOptionalObject.someProperty);  // Error
+        lastSomeProperty = someOptionalObject?.someProperty;
+    }
+}
+
+const someObject: SomeObject = {
+    someProperty: 42
+};
+
+someFunction(someObject);
+someFunction(undefined);
+
+// Repro from #35970
+
+let i = 0;
+declare const arr: { tag: ("left" | "right") }[];
+
+while (arr[i]?.tag === "left") {
+    i += 1;
+    if (arr[i]?.tag === "right") {
+        console.log("I should ALSO be reachable");
+    }
+}
+
 
 //// [controlFlowOptionalChain.js]
 "use strict";
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
 var a;
 o === null || o === void 0 ? void 0 : o[a = 1];
 a.toString();
@@ -809,6 +871,32 @@ function f15(o, value) {
         o.foo;
     }
 }
+function f15a(o, value) {
+    if ((o === null || o === void 0 ? void 0 : o.foo) === value) {
+        o.foo; // Error
+    }
+    else {
+        o.foo; // Error
+    }
+    if ((o === null || o === void 0 ? void 0 : o.foo) !== value) {
+        o.foo; // Error
+    }
+    else {
+        o.foo; // Error
+    }
+    if ((o === null || o === void 0 ? void 0 : o.foo) == value) {
+        o.foo; // Error
+    }
+    else {
+        o.foo; // Error
+    }
+    if ((o === null || o === void 0 ? void 0 : o.foo) != value) {
+        o.foo; // Error
+    }
+    else {
+        o.foo; // Error
+    }
+}
 function f16(o) {
     if ((o === null || o === void 0 ? void 0 : o.foo) === undefined) {
         o.foo; // Error
@@ -981,4 +1069,25 @@ function extractCoordinates(f) {
         return [];
     }
     return f.geometry.coordinates;
+}
+var lastSomeProperty;
+function someFunction(someOptionalObject) {
+    if ((someOptionalObject === null || someOptionalObject === void 0 ? void 0 : someOptionalObject.someProperty) !== lastSomeProperty) {
+        console.log(someOptionalObject);
+        console.log(someOptionalObject.someProperty); // Error
+        lastSomeProperty = someOptionalObject === null || someOptionalObject === void 0 ? void 0 : someOptionalObject.someProperty;
+    }
+}
+var someObject = {
+    someProperty: 42
+};
+someFunction(someObject);
+someFunction(undefined);
+// Repro from #35970
+var i = 0;
+while (((_u = arr[i]) === null || _u === void 0 ? void 0 : _u.tag) === "left") {
+    i += 1;
+    if (((_v = arr[i]) === null || _v === void 0 ? void 0 : _v.tag) === "right") {
+        console.log("I should ALSO be reachable");
+    }
 }

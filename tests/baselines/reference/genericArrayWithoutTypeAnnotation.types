@@ -5,7 +5,7 @@ class Bar {
 >Bar : Bar
 
     public getBar(foo: IFoo[]) {
->getBar : (foo: any[]) => void
+>getBar : (foo: IFoo[]) => void
 >foo : any[]
     }
 }

@@ -9,11 +9,11 @@
 
 /** @type {Everything<{ a: number, b: 'hi', c: never }, undefined, { c: true, d: 1 }, number, string>} */
 var tuvwx;
->tuvwx : { t: { a: number; b: "hi"; c: never; }; u: undefined; v: { c: true; d: 1; }; w: number; x: string; }
+>tuvwx : Everything<{ a: number; b: "hi"; c: never; }, undefined, { c: true; d: 1; }, number, string>
 
 /** @type {Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>} */
 var wrong;
->wrong : { t: { a: number; }; u: undefined; v: { c: 1; d: 1; }; w: number; x: string; }
+>wrong : Everything<{ a: number; }, undefined, { c: 1; d: 1; }, number, string>
 
 /** @type {Everything<{ a: number  }>} */
 var insufficient;
@@ -21,7 +21,7 @@ var insufficient;
 
 === tests/cases/conformance/jsdoc/test.ts ===
 declare var actually: Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>;
->actually : { t: { a: number; }; u: undefined; v: { c: 1; d: 1; }; w: number; x: string; }
+>actually : Everything<{ a: number; }, undefined, { c: 1; d: 1; }, number, string>
 >a : number
 >c : 1
 >d : 1

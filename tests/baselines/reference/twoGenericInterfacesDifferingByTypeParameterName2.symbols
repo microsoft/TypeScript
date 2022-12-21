@@ -18,6 +18,7 @@ interface B<U, T> { // error
 
     y: V;
 >y : Symbol(B.y, Decl(twoGenericInterfacesDifferingByTypeParameterName2.ts, 6, 19))
+>V : Symbol(V)
 }
 
 module M {

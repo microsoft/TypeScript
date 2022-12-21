@@ -24,7 +24,7 @@ let x, y, z, a1, a2, a3;
 ([] = [ a1, a2, a3] = a);
 >([] = [ a1, a2, a3] = a) : any
 >[] = [ a1, a2, a3] = a : any
->[] : undefined[]
+>[] : []
 >[ a1, a2, a3] = a : any
 >[ a1, a2, a3] : [any, any, any]
 >a1 : any

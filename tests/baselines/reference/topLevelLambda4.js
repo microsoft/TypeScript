@@ -5,6 +5,8 @@ export var x = () => this.window;
 define(["require", "exports"], function (require, exports) {
     "use strict";
     var _this = this;
-    exports.__esModule = true;
-    exports.x = function () { return _this.window; };
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.x = void 0;
+    var x = function () { return _this.window; };
+    exports.x = x;
 });

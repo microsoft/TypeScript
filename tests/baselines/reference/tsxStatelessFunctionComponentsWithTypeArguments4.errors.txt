@@ -9,9 +9,9 @@ tests/cases/conformance/jsx/file.tsx(9,14): error TS2769: No overload matches th
 tests/cases/conformance/jsx/file.tsx(10,15): error TS2769: No overload matches this call.
   Overload 1 of 3, '(): Element', gave the following error.
     Type 'T & { "ignore-prop": true; }' has no properties in common with type 'IntrinsicAttributes'.
-  Overload 2 of 3, '(attr: { b: unknown; a: string; "ignore-prop": boolean; }): Element', gave the following error.
-    Type 'T & { "ignore-prop": true; }' is not assignable to type 'IntrinsicAttributes & { b: unknown; a: string; "ignore-prop": boolean; }'.
-      Property 'a' is missing in type '{ b: number; } & { "ignore-prop": true; }' but required in type '{ b: unknown; a: string; "ignore-prop": boolean; }'.
+  Overload 2 of 3, '(attr: { b: number; a: string; "ignore-prop": boolean; }): Element', gave the following error.
+    Type 'T & { "ignore-prop": true; }' is not assignable to type 'IntrinsicAttributes & { b: number; a: string; "ignore-prop": boolean; }'.
+      Property 'a' is missing in type '{ b: number; } & { "ignore-prop": true; }' but required in type '{ b: number; a: string; "ignore-prop": boolean; }'.
   Overload 3 of 3, '(attr: { b: unknown; a: unknown; }): Element', gave the following error.
     Type 'T & { "ignore-prop": true; }' is not assignable to type 'IntrinsicAttributes & { b: unknown; a: unknown; }'.
       Property 'a' is missing in type '{ b: number; } & { "ignore-prop": true; }' but required in type '{ b: unknown; a: unknown; }'.
@@ -43,9 +43,9 @@ tests/cases/conformance/jsx/file.tsx(10,15): error TS2769: No overload matches t
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 3, '(): Element', gave the following error.
 !!! error TS2769:     Type 'T & { "ignore-prop": true; }' has no properties in common with type 'IntrinsicAttributes'.
-!!! error TS2769:   Overload 2 of 3, '(attr: { b: unknown; a: string; "ignore-prop": boolean; }): Element', gave the following error.
-!!! error TS2769:     Type 'T & { "ignore-prop": true; }' is not assignable to type 'IntrinsicAttributes & { b: unknown; a: string; "ignore-prop": boolean; }'.
-!!! error TS2769:       Property 'a' is missing in type '{ b: number; } & { "ignore-prop": true; }' but required in type '{ b: unknown; a: string; "ignore-prop": boolean; }'.
+!!! error TS2769:   Overload 2 of 3, '(attr: { b: number; a: string; "ignore-prop": boolean; }): Element', gave the following error.
+!!! error TS2769:     Type 'T & { "ignore-prop": true; }' is not assignable to type 'IntrinsicAttributes & { b: number; a: string; "ignore-prop": boolean; }'.
+!!! error TS2769:       Property 'a' is missing in type '{ b: number; } & { "ignore-prop": true; }' but required in type '{ b: number; a: string; "ignore-prop": boolean; }'.
 !!! error TS2769:   Overload 3 of 3, '(attr: { b: unknown; a: unknown; }): Element', gave the following error.
 !!! error TS2769:     Type 'T & { "ignore-prop": true; }' is not assignable to type 'IntrinsicAttributes & { b: unknown; a: unknown; }'.
 !!! error TS2769:       Property 'a' is missing in type '{ b: number; } & { "ignore-prop": true; }' but required in type '{ b: unknown; a: unknown; }'.

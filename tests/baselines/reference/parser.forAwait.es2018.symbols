@@ -3,16 +3,18 @@ for await (const x of y) {
 >x : Symbol(x, Decl(topLevelWithDeclIsError.ts, 0, 16))
 }
 === tests/cases/conformance/parser/ecmascript2018/forAwait/topLevelWithExprIsError.ts ===
+
 for await (x of y) {
-No type information for this code.}
-No type information for this code.=== tests/cases/conformance/parser/ecmascript2018/forAwait/forAwaitInWithDeclIsError.ts ===
+}
+=== tests/cases/conformance/parser/ecmascript2018/forAwait/forAwaitInWithDeclIsError.ts ===
 for await (const x in y) {
 >x : Symbol(x, Decl(forAwaitInWithDeclIsError.ts, 0, 16))
 }
 === tests/cases/conformance/parser/ecmascript2018/forAwait/forAwaitInWithExprIsError.ts ===
+
 for await (x in y) {
-No type information for this code.}
-No type information for this code.=== tests/cases/conformance/parser/ecmascript2018/forAwait/inFunctionDeclWithDeclIsError.ts ===
+}
+=== tests/cases/conformance/parser/ecmascript2018/forAwait/inFunctionDeclWithDeclIsError.ts ===
 function f5() {
 >f5 : Symbol(f5, Decl(inFunctionDeclWithDeclIsError.ts, 0, 0))
 

@@ -18,7 +18,7 @@
 ////
 ////const f6 = (i: I, j: J, b: boolean) => b ? i : j;
 ////
-////const f7 = /*f7Def*/(i: I) => {};
+////const /*f7Def*/f7 = (i: I) => {};
 ////
 ////function f8(i: I): I;
 ////function f8(j: J): J;

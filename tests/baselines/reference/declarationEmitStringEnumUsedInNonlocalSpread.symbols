@@ -1,0 +1,73 @@
+=== tests/cases/compiler/class.ts ===
+export const enum TestEnum {
+>TestEnum : Symbol(TestEnum, Decl(class.ts, 0, 0))
+
+    Test1 = '123123',
+>Test1 : Symbol(TestEnum.Test1, Decl(class.ts, 0, 28))
+
+    Test2 = '12312312312',
+>Test2 : Symbol(TestEnum.Test2, Decl(class.ts, 1, 21))
+}
+
+export interface ITest {
+>ITest : Symbol(ITest, Decl(class.ts, 3, 1))
+
+    [TestEnum.Test1]: string;
+>[TestEnum.Test1] : Symbol(ITest[TestEnum.Test1], Decl(class.ts, 5, 24))
+>TestEnum.Test1 : Symbol(TestEnum.Test1, Decl(class.ts, 0, 28))
+>TestEnum : Symbol(TestEnum, Decl(class.ts, 0, 0))
+>Test1 : Symbol(TestEnum.Test1, Decl(class.ts, 0, 28))
+
+    [TestEnum.Test2]: string;
+>[TestEnum.Test2] : Symbol(ITest[TestEnum.Test2], Decl(class.ts, 6, 29))
+>TestEnum.Test2 : Symbol(TestEnum.Test2, Decl(class.ts, 1, 21))
+>TestEnum : Symbol(TestEnum, Decl(class.ts, 0, 0))
+>Test2 : Symbol(TestEnum.Test2, Decl(class.ts, 1, 21))
+}
+
+export class A {
+>A : Symbol(A, Decl(class.ts, 8, 1))
+
+    getA(): ITest {
+>getA : Symbol(A.getA, Decl(class.ts, 10, 16))
+>ITest : Symbol(ITest, Decl(class.ts, 3, 1))
+
+        return {
+            [TestEnum.Test1]: '123',
+>[TestEnum.Test1] : Symbol([TestEnum.Test1], Decl(class.ts, 12, 16))
+>TestEnum.Test1 : Symbol(TestEnum.Test1, Decl(class.ts, 0, 28))
+>TestEnum : Symbol(TestEnum, Decl(class.ts, 0, 0))
+>Test1 : Symbol(TestEnum.Test1, Decl(class.ts, 0, 28))
+
+            [TestEnum.Test2]: '123',
+>[TestEnum.Test2] : Symbol([TestEnum.Test2], Decl(class.ts, 13, 36))
+>TestEnum.Test2 : Symbol(TestEnum.Test2, Decl(class.ts, 1, 21))
+>TestEnum : Symbol(TestEnum, Decl(class.ts, 0, 0))
+>Test2 : Symbol(TestEnum.Test2, Decl(class.ts, 1, 21))
+
+        };
+    }
+}
+=== tests/cases/compiler/index.ts ===
+import { A } from './class';
+>A : Symbol(A, Decl(index.ts, 0, 8))
+
+export class B extends A {
+>B : Symbol(B, Decl(index.ts, 0, 28))
+>A : Symbol(A, Decl(index.ts, 0, 8))
+
+    getA() { // TS4053 error
+>getA : Symbol(B.getA, Decl(index.ts, 2, 26))
+
+        return {
+            ...super.getA(),
+>super.getA : Symbol(A.getA, Decl(class.ts, 10, 16))
+>super : Symbol(A, Decl(class.ts, 8, 1))
+>getA : Symbol(A.getA, Decl(class.ts, 10, 16))
+
+            a: '123',
+>a : Symbol(a, Decl(index.ts, 5, 28))
+
+        };
+    }
+}

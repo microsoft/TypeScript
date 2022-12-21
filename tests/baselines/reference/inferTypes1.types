@@ -54,6 +54,18 @@ class C {
 >0 : 0
 }
 
+abstract class Abstract {
+>Abstract : Abstract
+
+    x = 0;
+>x : number
+>0 : 0
+
+    y = 0;
+>y : number
+>0 : 0
+}
+
 type T10 = ReturnType<() => string>;  // string
 >T10 : string
 
@@ -103,6 +115,20 @@ type U13 = InstanceType<string>;  // Error
 
 type U14 = InstanceType<Function>;  // Error
 >U14 : any
+
+type U15 = InstanceType<typeof Abstract>;  // Abstract
+>U15 : Abstract
+>Abstract : typeof Abstract
+
+type U16<T extends any[]> = InstanceType<new (x: string, ...args: T) => T[]>;  // T[]
+>U16 : T[]
+>x : string
+>args : T
+
+type U17<T extends any[]> = InstanceType<abstract new (x: string, ...args: T) => T[]>;  // T[]
+>U17 : T[]
+>x : string
+>args : T
 
 type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A : any;
 >ArgumentType : ArgumentType<T>
@@ -191,9 +217,9 @@ type T44 = X2<{ a: number, b: string, c: boolean }>;  // string | number
 
 type X3<T> = T extends { a: (x: infer U) => void, b: (x: infer U) => void } ? U : never;
 >X3 : X3<T>
->a : (x: U) => void
+>a : (x: infer U) => void
 >x : U
->b : (x: U) => void
+>b : (x: infer U) => void
 >x : U
 
 type T50 = X3<{}>;  // never
@@ -227,13 +253,13 @@ type T54 = X3<{ a: (x: number) => void, b: () => void }>;  // number
 type T60 = infer U;  // Error
 >T60 : U
 
-type T61<T> = infer A extends infer B ? infer C : infer D;  // Error
+type T61<T> = (infer A) extends infer B ? infer C : infer D;  // Error
 >T61 : T61<T>
 
 type T62<T> = U extends (infer U)[] ? U : U;  // Error
 >T62 : any
 
-type T63<T> = T extends (infer A extends infer B ? infer C : infer D) ? string : number;
+type T63<T> = T extends ((infer A) extends infer B ? infer C : infer D) ? string : number;
 >T63 : T63<T>
 
 type T70<T extends string> = { x: T };
@@ -303,13 +329,13 @@ type Jsonified<T> =
 
     : T extends undefined | Function ? never // undefined and functions are removed
     : T extends { toJSON(): infer R } ? R // toJSON is called if it exists (e.g. Date)
->toJSON : () => R
+>toJSON : () => infer R
 
     : T extends object ? JsonifiedObject<T>
     : "what is this";
 
 type Example = {
->Example : Example
+>Example : { str: "literalstring"; fn: () => void; date: Date; customClass: MyClass; obj: {    prop: "property";    clz: MyClass;    nested: {        attr: Date;    };}; }
 
     str: "literalstring",
 >str : "literalstring"
@@ -324,7 +350,7 @@ type Example = {
 >customClass : MyClass
 
     obj: {
->obj : { prop: "property"; clz: MyClass; nested: { attr: Date; }; }
+>obj : { prop: "property"; clz: MyClass; nested: {    attr: Date;}; }
 
         prop: "property",
 >prop : "property"
@@ -401,7 +427,7 @@ type MatchingKeys<T, U, K extends keyof T = keyof T> =
     K extends keyof T ? T[K] extends U ? K : never : never;
 
 type VoidKeys<T> = MatchingKeys<T, void>;
->VoidKeys : MatchingKeys<T, void, keyof T>
+>VoidKeys : VoidKeys<T>
 
 interface test {
     a: 1,

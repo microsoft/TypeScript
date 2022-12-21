@@ -5,22 +5,22 @@ var x = {
 
     [Symbol.iterator]: 0,
 >[Symbol.iterator] : number
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >0 : 0
 
     [Symbol.toPrimitive]() { },
 >[Symbol.toPrimitive] : () => void
->Symbol.toPrimitive : symbol
+>Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
->toPrimitive : symbol
+>toPrimitive : unique symbol
 
     get [Symbol.toStringTag]() {
 >[Symbol.toStringTag] : number
->Symbol.toStringTag : symbol
+>Symbol.toStringTag : unique symbol
 >Symbol : SymbolConstructor
->toStringTag : symbol
+>toStringTag : unique symbol
 
         return 0;
 >0 : 0

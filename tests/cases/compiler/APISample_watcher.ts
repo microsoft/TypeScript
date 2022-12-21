@@ -1,12 +1,12 @@
 ﻿// @module: commonjs
 // @skipLibCheck: true
-// @includebuiltfile: typescriptServices.d.ts
 // @noImplicitAny:true
 // @strictNullChecks:true
 
-// @filename: node_modules/typescript/index.d.ts
-declare module "typescript" {
-    export = ts;
+// @filename: node_modules/typescript/package.json
+{
+    "name": "typescript",
+    "types": "/.ts/typescript.d.ts"
 }
 
 // @filename: APISample_watcher.ts
@@ -51,6 +51,8 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
         getCurrentDirectory: () => process.cwd(),
         getCompilationSettings: () => options,
         getDefaultLibFileName: (options) => ts.getDefaultLibFilePath(options),
+        fileExists: fileName => fs.existsSync(fileName),
+        readFile: fileName => fs.readFileSync(fileName),
     };
 
     // Create the language service files

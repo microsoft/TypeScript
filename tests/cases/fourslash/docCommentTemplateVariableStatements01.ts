@@ -39,6 +39,7 @@ verify.docCommentTemplateAt("e", /*newTextOffset*/ 8,
  * @param x
  * @param y
  * @param z
+ * @returns
  */`);
 
 verify.docCommentTemplateAt("f", /*newTextOffset*/ 8,

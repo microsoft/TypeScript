@@ -1,0 +1,21 @@
+tests/cases/conformance/classes/members/privateNames/privateNameDeclarationMerging.ts(9,11): error TS2339: Property '#x' does not exist on type 'D'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameDeclarationMerging.ts (1 errors) ====
+    class D {};
+    
+    class C {
+        #x;
+        foo () {
+            const c = new C();
+            c.#x;     // OK
+            const d: D = new C();
+            d.#x;    // Error
+              ~~
+!!! error TS2339: Property '#x' does not exist on type 'D'.
+        }
+    }
+    interface C {
+        new (): D;
+    }
+    

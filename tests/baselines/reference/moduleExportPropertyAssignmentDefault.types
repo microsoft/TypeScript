@@ -6,7 +6,7 @@ var axios = {}
 module.exports = axios // both assignments should be ok
 >module.exports = axios : typeof axios
 >module.exports : typeof axios
->module : { "\"tests/cases/conformance/salsa/axios\"": typeof axios; }
+>module : { exports: typeof axios; }
 >exports : typeof axios
 >axios : typeof axios
 
@@ -14,7 +14,7 @@ module.exports.default = axios
 >module.exports.default = axios : typeof axios
 >module.exports.default : typeof axios
 >module.exports : typeof axios
->module : { "\"tests/cases/conformance/salsa/axios\"": typeof axios; }
+>module : { exports: typeof axios; }
 >exports : typeof axios
 >default : typeof axios
 >axios : typeof axios

@@ -1,0 +1,63 @@
+=== tests/cases/compiler/typeParameterLeak.ts ===
+// Repro from #35655
+
+interface Box<T> { data: T }
+>Box : Symbol(Box, Decl(typeParameterLeak.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterLeak.ts, 2, 14))
+>data : Symbol(Box.data, Decl(typeParameterLeak.ts, 2, 18))
+>T : Symbol(T, Decl(typeParameterLeak.ts, 2, 14))
+
+type BoxTypes = Box<{ x: string }> | Box<{ y: string }>;
+>BoxTypes : Symbol(BoxTypes, Decl(typeParameterLeak.ts, 2, 28))
+>Box : Symbol(Box, Decl(typeParameterLeak.ts, 0, 0))
+>x : Symbol(x, Decl(typeParameterLeak.ts, 3, 21))
+>Box : Symbol(Box, Decl(typeParameterLeak.ts, 0, 0))
+>y : Symbol(y, Decl(typeParameterLeak.ts, 3, 42))
+
+type BoxFactoryFactory<TBox> = TBox extends Box<infer T> ? {
+>BoxFactoryFactory : Symbol(BoxFactoryFactory, Decl(typeParameterLeak.ts, 3, 56))
+>TBox : Symbol(TBox, Decl(typeParameterLeak.ts, 5, 23))
+>TBox : Symbol(TBox, Decl(typeParameterLeak.ts, 5, 23))
+>Box : Symbol(Box, Decl(typeParameterLeak.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterLeak.ts, 5, 53))
+
+  (arg: T): BoxFactory<TBox> | undefined
+>arg : Symbol(arg, Decl(typeParameterLeak.ts, 6, 3))
+>T : Symbol(T, Decl(typeParameterLeak.ts, 5, 53))
+>BoxFactory : Symbol(BoxFactory, Decl(typeParameterLeak.ts, 7, 10))
+>TBox : Symbol(TBox, Decl(typeParameterLeak.ts, 5, 23))
+
+} : never;
+
+interface BoxFactory<A> {
+>BoxFactory : Symbol(BoxFactory, Decl(typeParameterLeak.ts, 7, 10))
+>A : Symbol(A, Decl(typeParameterLeak.ts, 9, 21))
+
+  getBox(): A,
+>getBox : Symbol(BoxFactory.getBox, Decl(typeParameterLeak.ts, 9, 25))
+>A : Symbol(A, Decl(typeParameterLeak.ts, 9, 21))
+}
+
+declare const f: BoxFactoryFactory<BoxTypes>;
+>f : Symbol(f, Decl(typeParameterLeak.ts, 13, 13))
+>BoxFactoryFactory : Symbol(BoxFactoryFactory, Decl(typeParameterLeak.ts, 3, 56))
+>BoxTypes : Symbol(BoxTypes, Decl(typeParameterLeak.ts, 2, 28))
+
+const b = f({ x: "", y: "" })?.getBox();
+>b : Symbol(b, Decl(typeParameterLeak.ts, 14, 5))
+>f({ x: "", y: "" })?.getBox : Symbol(BoxFactory.getBox, Decl(typeParameterLeak.ts, 9, 25), Decl(typeParameterLeak.ts, 9, 25))
+>f : Symbol(f, Decl(typeParameterLeak.ts, 13, 13))
+>x : Symbol(x, Decl(typeParameterLeak.ts, 14, 13))
+>y : Symbol(y, Decl(typeParameterLeak.ts, 14, 20))
+>getBox : Symbol(BoxFactory.getBox, Decl(typeParameterLeak.ts, 9, 25), Decl(typeParameterLeak.ts, 9, 25))
+
+if (b) {
+>b : Symbol(b, Decl(typeParameterLeak.ts, 14, 5))
+
+  const x = b.data;
+>x : Symbol(x, Decl(typeParameterLeak.ts, 16, 7))
+>b.data : Symbol(Box.data, Decl(typeParameterLeak.ts, 2, 18), Decl(typeParameterLeak.ts, 2, 18))
+>b : Symbol(b, Decl(typeParameterLeak.ts, 14, 5))
+>data : Symbol(Box.data, Decl(typeParameterLeak.ts, 2, 18), Decl(typeParameterLeak.ts, 2, 18))
+}
+

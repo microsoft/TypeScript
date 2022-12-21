@@ -9,16 +9,16 @@
 >response : Response
 >await fetch(new URL("../hamsters.jpg", import.meta.url).toString()) : Response
 >fetch(new URL("../hamsters.jpg", import.meta.url).toString()) : Promise<Response>
->fetch : (input: RequestInfo, init?: RequestInit) => Promise<Response>
+>fetch : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
 >new URL("../hamsters.jpg", import.meta.url).toString() : string
 >new URL("../hamsters.jpg", import.meta.url).toString : () => string
 >new URL("../hamsters.jpg", import.meta.url) : URL
->URL : { new (url: string, base?: string | URL): URL; prototype: URL; createObjectURL(object: any): string; revokeObjectURL(url: string): void; }
+>URL : { new (url: string | URL, base?: string | URL): URL; prototype: URL; createObjectURL(obj: Blob | MediaSource): string; revokeObjectURL(url: string): void; }
 >"../hamsters.jpg" : "../hamsters.jpg"
->import.meta.url : any
+>import.meta.url : string
 >import.meta : ImportMeta
 >meta : any
->url : any
+>url : string
 >toString : () => string
 
   const blob = await response.blob();
@@ -53,9 +53,9 @@
 >image : HTMLImageElement
 >src : string
 >URL.createObjectURL(blob) : string
->URL.createObjectURL : (object: any) => string
->URL : { new (url: string, base?: string | URL): URL; prototype: URL; createObjectURL(object: any): string; revokeObjectURL(url: string): void; }
->createObjectURL : (object: any) => string
+>URL.createObjectURL : (obj: Blob | MediaSource) => string
+>URL : { new (url: string | URL, base?: string | URL): URL; prototype: URL; createObjectURL(obj: Blob | MediaSource): string; revokeObjectURL(url: string): void; }
+>createObjectURL : (obj: Blob | MediaSource) => string
 >blob : Blob
 
   image.width = image.height = size;
@@ -71,11 +71,11 @@
 
   document.body.appendChild(image);
 >document.body.appendChild(image) : HTMLImageElement
->document.body.appendChild : <T extends Node>(newChild: T) => T
+>document.body.appendChild : <T extends Node>(node: T) => T
 >document.body : HTMLElement
 >document : Document
 >body : HTMLElement
->appendChild : <T extends Node>(newChild: T) => T
+>appendChild : <T extends Node>(node: T) => T
 >image : HTMLImageElement
 
 })();

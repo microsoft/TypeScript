@@ -1,0 +1,60 @@
+=== tests/cases/conformance/jsdoc/declarations/main.js ===
+const { SomeClass, SomeClass: Another } = require('./lib');
+>SomeClass : typeof SomeClass
+>SomeClass : any
+>Another : typeof SomeClass
+>require('./lib') : typeof import("tests/cases/conformance/jsdoc/declarations/lib")
+>require : any
+>'./lib' : "./lib"
+
+module.exports = {
+>module.exports = {    SomeClass,    Another} : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>{    SomeClass,    Another} : { SomeClass: typeof SomeClass; Another: typeof SomeClass; }
+
+    SomeClass,
+>SomeClass : typeof SomeClass
+
+    Another
+>Another : typeof SomeClass
+}
+=== tests/cases/conformance/jsdoc/declarations/lib.js ===
+/**
+ * @param {string} a
+ */
+function bar(a) {
+>bar : (a: string) => string
+>a : string
+
+    return a + a;
+>a + a : string
+>a : string
+>a : string
+}
+
+class SomeClass {
+>SomeClass : SomeClass
+
+    a() {
+>a : () => number
+
+        return 1;
+>1 : 1
+    }
+}
+
+module.exports = {
+>module.exports = {    bar,    SomeClass} : typeof module.exports
+>module.exports : typeof module.exports
+>module : { exports: typeof module.exports; }
+>exports : typeof module.exports
+>{    bar,    SomeClass} : { bar: (a: string) => string; SomeClass: typeof SomeClass; }
+
+    bar,
+>bar : (a: string) => string
+
+    SomeClass
+>SomeClass : typeof SomeClass
+}

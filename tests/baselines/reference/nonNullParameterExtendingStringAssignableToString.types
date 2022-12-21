@@ -19,18 +19,18 @@ function fn<T extends string | undefined, U extends string>(one: T, two: U) {
     foo(one!);
 >foo(one!) : void
 >foo : (p: string) => void
->one! : NonNullable<T>
->one : T
+>one! : string
+>one : string | undefined
 
     foo(two!);
 >foo(two!) : void
 >foo : (p: string) => void
->two! : NonNullable<U>
+>two! : U
 >two : U
 
     foo(three!); // this line is the important one
 >foo(three!) : void
 >foo : (p: string) => void
->three! : NonNullable<T> | NonNullable<U>
->three : T | U
+>three! : string
+>three : string | undefined
 }

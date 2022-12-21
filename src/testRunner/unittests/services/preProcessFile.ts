@@ -1,3 +1,5 @@
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: services:: PreProcessFile:", () => {
     function test(sourceText: string, readImportFile: boolean, detectJavaScriptImports: boolean, expectedPreProcess: ts.PreProcessedFileInfo): void {
         const resultPreProcess = ts.preProcessFile(sourceText, readImportFile, detectJavaScriptImports);
@@ -16,18 +18,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
         if (expected === actual) {
             return;
         }
-        if (!expected) {
-            assert.isTrue(false, `Expected ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
-        }
-        assert.equal(actual.length, expected.length, `[${kind}] Actual array's length does not match expected length. Expected files: ${JSON.stringify(expected)}, actual files: ${JSON.stringify(actual)}`);
-
-        for (let i = 0; i < expected.length; i++) {
-            const actualReference = actual[i];
-            const expectedReference = expected[i];
-            assert.equal(actualReference.fileName, expectedReference.fileName, `[${kind}] actual file path does not match expected. Expected: "${expectedReference.fileName}". Actual: "${actualReference.fileName}".`);
-            assert.equal(actualReference.pos, expectedReference.pos, `[${kind}] actual file start position does not match expected. Expected: "${expectedReference.pos}". Actual: "${actualReference.pos}".`);
-            assert.equal(actualReference.end, expectedReference.end, `[${kind}] actual file end pos does not match expected. Expected: "${expectedReference.end}". Actual: "${actualReference.end}".`);
-        }
+        assert.deepEqual(actual, expected, `Expected [${kind}] ${JSON.stringify(expected)}, got ${JSON.stringify(actual)}`);
     }
 
     describe("Test preProcessFiles,", () => {
@@ -38,7 +29,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 22, end: 33 }, { fileName: "refFile2.ts", pos: 59, end: 70 },
                         { fileName: "refFile3.ts", pos: 94, end: 105 }, { fileName: "..\\refFile4d.ts", pos: 131, end: 146 }],
-                    importedFiles: <ts.FileReference[]>[],
+                    importedFiles: [] as ts.FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     ambientExternalModules: undefined,
@@ -51,8 +42,8 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
-                    referencedFiles: <ts.FileReference[]>[],
-                    importedFiles: <ts.FileReference[]>[],
+                    referencedFiles: [] as ts.FileReference[],
+                    importedFiles: [] as ts.FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     ambientExternalModules: undefined,
@@ -65,8 +56,8 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
-                    referencedFiles: <ts.FileReference[]>[],
-                    importedFiles: <ts.FileReference[]>[],
+                    referencedFiles: [] as ts.FileReference[],
+                    importedFiles: [] as ts.FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     ambientExternalModules: undefined,
@@ -79,8 +70,8 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
-                    referencedFiles: <ts.FileReference[]>[],
-                    importedFiles: <ts.FileReference[]>[],
+                    referencedFiles: [] as ts.FileReference[],
+                    importedFiles: [] as ts.FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     ambientExternalModules: undefined,
@@ -93,7 +84,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
-                    referencedFiles: <ts.FileReference[]>[],
+                    referencedFiles: [] as ts.FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     importedFiles: [{ fileName: "r1.ts", pos: 20, end: 25 }, { fileName: "r2.ts", pos: 49, end: 54 }, { fileName: "r3.ts", pos: 78, end: 83 },
@@ -108,10 +99,10 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 /*readImportFile*/ false,
                 /*detectJavaScriptImports*/ false,
                 {
-                    referencedFiles: <ts.FileReference[]>[],
+                    referencedFiles: [] as ts.FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
-                    importedFiles: <ts.FileReference[]>[],
+                    importedFiles: [] as ts.FileReference[],
                     ambientExternalModules: undefined,
                     isLibFile: false
                 });
@@ -122,7 +113,7 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
-                    referencedFiles: <ts.FileReference[]>[],
+                    referencedFiles: [] as ts.FileReference[],
                     typeReferenceDirectives: [],
                     libReferenceDirectives: [],
                     importedFiles: [{ fileName: "r3.ts", pos: 73, end: 78 }],
@@ -187,6 +178,193 @@ describe("unittests:: services:: PreProcessFile:", () => {
             });
         });
 
+        it("Correctly ignore commented imports following template expression", () => {
+            /* eslint-disable no-template-curly-in-string */
+            test("/**" + "\n" +
+                " * Before" + "\n" +
+                " * ```" + "\n" +
+                " * import * as a from \"a\";" + "\n" +
+                " * ```" + "\n" +
+                " */" + "\n" +
+                "type Foo = `${string}`;" + "\n" +
+                "/**" + "\n" +
+                " * After" + "\n" +
+                " * ```" + "\n" +
+                " * import { B } from \"b\";" + "\n" +
+                " * import * as c from \"c\";" + "\n" +
+                " * ```" + "\n" +
+                " */",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ true,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+            /* eslint-enable no-template-curly-in-string */
+        });
+
+        it("Ignores imports in template strings", () => {
+            /* eslint-disable no-template-curly-in-string */
+            test("a ? `&${a}` : `#${b}`;\n\n `import(\"${moduleSpecifier}\").${id}`;",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ true,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+            /* eslint-enable no-template-curly-in-string */
+        });
+
+        it("Correctly returns imports after a template expression", () => {
+            /* eslint-disable no-template-curly-in-string */
+            test("`${foo}`; import \"./foo\";",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ true,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [
+                    { fileName: "./foo", pos: 17, end: 22 }
+                ],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+            /* eslint-enable no-template-curly-in-string */
+        });
+
+        it("Correctly returns dynamic imports from template expression", () => {
+            /* eslint-disable no-template-curly-in-string */
+            test("`${(<div>Text `` ${} text {} " + "\n" +
+                "${import(\"a\")} {import(\"b\")} " + "\n" +
+                "${/* A comment */} ${/* import(\"ignored\") */} </div>)}`",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ true,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [
+                    { fileName: "a", pos: 39, end: 40 },
+                    { fileName: "b", pos: 53, end: 54 }
+                ],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+            /* eslint-enable no-template-curly-in-string */
+        });
+
+        it("Correctly returns dynamic imports from nested template expression", () => {
+            /* eslint-disable no-template-curly-in-string */
+            test("`${foo(`${bar(`${import(\"a\")} ${import(\"b\")}`, `${baz(`${import(\"c\") ${import(\"d\")}`)}`)}`)}`",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ true,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [
+                    { fileName: "a", pos: 24, end: 25 },
+                    { fileName: "b", pos: 39, end: 40 },
+                    { fileName: "c", pos: 64, end: 65 },
+                    { fileName: "d", pos: 78, end: 79 },
+                ],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+            /* eslint-enable no-template-curly-in-string */
+        });
+
+        it("Correctly returns dynamic imports from tagged template expression", () => {
+            /* eslint-disable no-template-curly-in-string */
+            test("foo`${ fn({ a: 100 }, import(\"a\"), `${import(\"b\")}`, import(\"c\"), `${import(\"d\")} foo`, import(\"e\")) }`",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ true,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [
+                    { fileName: "a", pos: 29, end: 30 },
+                    { fileName: "b", pos: 45, end: 46 },
+                    { fileName: "c", pos: 60, end: 61 },
+                    { fileName: "d", pos: 76, end: 77 },
+                    { fileName: "e", pos: 95, end: 96 },
+                ],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+            /* eslint-enable no-template-curly-in-string */
+        });
+
+        it("Correctly returns dynamic imports from template expression and imports following it", () => {
+            /* eslint-disable no-template-curly-in-string */
+            test("const x = `hello ${await import(\"a\").default}`;" + "\n\n" +
+                "import { y } from \"b\";",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ true,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [
+                    { fileName: "a", pos: 32, end: 33 },
+                    { fileName: "b", pos: 67, end: 68 },
+                ],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+            /* eslint-enable no-template-curly-in-string */
+        });
+
+        it("Correctly returns dynamic imports from template expressions and other imports", () => {
+            /* eslint-disable no-template-curly-in-string */
+            test("const x = `x ${await import(\"a\").default}`;" + "\n\n" +
+                "import { y } from \"b\";" + "\n" +
+                "const y = `y ${import(\"c\")}`;" + "\n\n" +
+                "import { d } from \"d\";",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ true,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [
+                    { fileName: "a", pos: 28, end: 29 },
+                    { fileName: "b", pos: 63, end: 64 },
+                    { fileName: "c", pos: 90, end: 91 },
+                    { fileName: "d", pos: 117, end: 118 },
+                ],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+            /* eslint-enable no-template-curly-in-string */
+        });
+
+        it("Correctly returns empty importedFiles with incorrect template expression", () => {
+            /* eslint-disable no-template-curly-in-string */
+            test("const foo = `${",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ true,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+            /* eslint-enable no-template-curly-in-string */
+        });
+
         it("Correctly return ES6 exports", () => {
             test("export * from \"m1\";" + "\n" +
                 "export {a} from \"m2\";" + "\n" +
@@ -203,6 +381,86 @@ describe("unittests:: services:: PreProcessFile:", () => {
                     { fileName: "m2", pos: 36, end: 38 },
                     { fileName: "m3", pos: 63, end: 65 },
                     { fileName: "m4", pos: 101, end: 103 },
+                ],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+        });
+
+        it("Correctly handles import types", () => {
+            test("import type * as ns from \"m1\";" + "\n" +
+                "import type def, * as ns from \"m2\";" + "\n" +
+                "import type def from \"m3\";" + "\n" +
+                "import type {a} from \"m4\";" + "\n" +
+                "import type {a as A} from \"m5\";" + "\n" +
+                "import type {a as A, b, c as C} from \"m6\";" + "\n" +
+                "import type def , {a, b, c as C} from \"m7\";" + "\n" +
+                "import type from \"m8\";" + "\n" +
+                "import type T = require(\"m9\");" + "\n" +
+                "import type = require(\"m10\");" + "\n" +
+                "export import type T = require(\"m11\");" + "\n" +
+                "export import type = require(\"m12\");" + "\n",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ false,
+            {
+                referencedFiles: [] as ts.FileReference[],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [
+                    { fileName: "m1", pos: 25, end: 27 },
+                    { fileName: "m2", pos: 61, end: 63 },
+                    { fileName: "m3", pos: 88, end: 90 },
+                    { fileName: "m4", pos: 115, end: 117 },
+                    { fileName: "m5", pos: 147, end: 149 },
+                    { fileName: "m6", pos: 190, end: 192 },
+                    { fileName: "m7", pos: 234, end: 236 },
+                    { fileName: "m8", pos: 257, end: 259 },
+                    { fileName: "m9", pos: 287, end: 289 },
+                    { fileName: "m10", pos: 316, end: 319 },
+                    { fileName: "m11", pos: 355, end: 358 },
+                    { fileName: "m12", pos: 392, end: 395 },
+                ],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+        });
+
+        it("Correctly handles export types", () => {
+            test("export type * from \"m1\";" + "\n" +
+                "export type {a} from \"m2\";" + "\n" +
+                "export type {a as A} from \"m3\";" + "\n" +
+                "export type {a as A, b, c as C} from \"m4\";" + "\n",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ false,
+            {
+                referencedFiles: [] as ts.FileReference[],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [
+                    { fileName: "m1", pos: 19, end: 21 },
+                    { fileName: "m2", pos: 46, end: 48 },
+                    { fileName: "m3", pos: 78, end: 80 },
+                    { fileName: "m4", pos: 121, end: 123 },
+                ],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+        });
+
+        it("Correctly handles import type node", () => {
+            test("const x: import(\"m1\") = { x: 0, y: 0 };" + "\n" +
+                "let y: import(\"m2\").Bar.I = { a: \"\", b: 0 };" + "\n" +
+                "let shim: typeof import(\"m3\") = { Bar: Bar2 };" + "\n",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ false,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [
+                    { fileName: "m1", pos: 16, end: 18 },
+                    { fileName: "m2", pos: 54, end: 56 },
+                    { fileName: "m3", pos: 109, end: 111 },
                 ],
                 ambientExternalModules: undefined,
                 isLibFile: false
@@ -530,6 +788,65 @@ describe("unittests:: services:: PreProcessFile:", () => {
                 isLibFile: false
             });
         });
+
+        it("Correctly handles dynamic imports with template literals", () => {
+            test("const m1 = import('mod1');" + "\n" +
+            "const m2 = import(`mod2`);" + "\n" +
+            "Promise.all([import('mod3'), import(`mod4`)]);" + "\n" +
+            "import(/* webpackChunkName: 'module5' */ `mod5`);" + "\n",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ false,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [
+                    { fileName: "mod1", pos: 18, end: 22 },
+                    { fileName: "mod2", pos: 45, end: 49 },
+                    { fileName: "mod3", pos: 74, end: 78 },
+                    { fileName: "mod4", pos: 90, end: 94 },
+                    { fileName: "mod5", pos: 142, end: 146 }
+                ],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+        });
+
+        it("Correctly handles require calls with template literals in JS files", () => {
+            test("const m1 = require(`mod1`);" + "\n" +
+            "f(require(`mod2`));" + "\n" +
+            "const a = { x: require(`mod3`) };" + "\n",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ true,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [
+                    { fileName: "mod1", pos: 19, end: 23 },
+                    { fileName: "mod2", pos: 38, end: 42 },
+                    { fileName: "mod3", pos: 71, end: 75 }
+                ],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+        });
+
+        it("Correctly handles dependency lists in define(modName, [deplist]) calls with template literals in JS files", () => {
+            test("define(`mod`, [`mod1`, `mod2`], (m1, m2) => {});",
+            /*readImportFile*/ true,
+            /*detectJavaScriptImports*/ true,
+            {
+                referencedFiles: [],
+                typeReferenceDirectives: [],
+                libReferenceDirectives: [],
+                importedFiles: [
+                    { fileName: "mod1", pos: 15, end: 19 },
+                    { fileName: "mod2", pos: 23, end: 27 },
+                ],
+                ambientExternalModules: undefined,
+                isLibFile: false
+            });
+        });
     });
 });
-

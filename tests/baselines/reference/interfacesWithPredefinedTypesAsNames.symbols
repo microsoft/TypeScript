@@ -12,3 +12,9 @@ interface boolean { }
 >boolean : Symbol(boolean, Decl(interfacesWithPredefinedTypesAsNames.ts, 2, 20))
 
 interface void {}
+interface unknown {}
+>unknown : Symbol(unknown, Decl(interfacesWithPredefinedTypesAsNames.ts, 4, 17))
+
+interface never {}
+>never : Symbol(never, Decl(interfacesWithPredefinedTypesAsNames.ts, 5, 20))
+

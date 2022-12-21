@@ -52,8 +52,8 @@ function other<T extends Date>(arg: T) {
 >1 : 1
 
     var e = r2['1']; 
->e : Object
->r2['1'] : Object
+>e : T
+>r2['1'] : T
 >r2 : { [x: string]: Object; [x: number]: T; }
 >'1' : "1"
 }

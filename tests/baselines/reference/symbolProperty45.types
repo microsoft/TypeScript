@@ -4,18 +4,18 @@ class C {
 
     get [Symbol.hasInstance]() {
 >[Symbol.hasInstance] : string
->Symbol.hasInstance : symbol
+>Symbol.hasInstance : unique symbol
 >Symbol : SymbolConstructor
->hasInstance : symbol
+>hasInstance : unique symbol
 
         return "";
 >"" : ""
     }
     get [Symbol.toPrimitive]() {
 >[Symbol.toPrimitive] : string
->Symbol.toPrimitive : symbol
+>Symbol.toPrimitive : unique symbol
 >Symbol : SymbolConstructor
->toPrimitive : symbol
+>toPrimitive : unique symbol
 
         return "";
 >"" : ""

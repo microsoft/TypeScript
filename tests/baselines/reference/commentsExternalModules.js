@@ -64,6 +64,7 @@ var newVar2 = new extMod.m4.m2.c();
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.m4 = exports.m1 = void 0;
     /** Module comment*/
     var m1;
     (function (m1) {

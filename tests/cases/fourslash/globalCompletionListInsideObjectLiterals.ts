@@ -26,9 +26,10 @@
 // 1: Completion on '{' location.
 // 2: Literal member completion after member name with empty member expression and missing colon.
 // 5, 6: Literal member completion after member name with empty member expression.
-const exact = ["p1", "p2", "p3", "p4", ...completion.globalsPlus(["ObjectLiterals"])];
+const exact = completion.globalsPlus(["p1", "p2", "p3", "p4", "ObjectLiterals"]);
 verify.completions(
-    { marker: ["1"], exact, isNewIdentifierLocation: true },
-    { marker: ["2", "3", "5", "6"], exact },
-    { marker: "4", exact: undefined },
+    { marker: ["1",], exact: exact.filter(name => name !== 'p1'), isNewIdentifierLocation: true },
+    { marker: ["2", "3"], exact: exact.filter(name => name !== 'p2') },
+    { marker: ["4"], exact: exact.filter(name => name !== 'p3' ) },
+    { marker: ["5", "6"], exact: exact.filter(name => name !== 'p4') },
 );

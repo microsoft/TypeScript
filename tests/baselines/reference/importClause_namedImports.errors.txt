@@ -1,0 +1,23 @@
+/d.ts(2,5): error TS1361: 'A' cannot be used as a value because it was imported using 'import type'.
+/d.ts(6,13): error TS1361: 'A' cannot be used as a value because it was imported using 'import type'.
+
+
+==== /abc.ts (0 errors) ====
+    export class A {}
+    export type B  = { b: string };
+    export const C = "";
+    
+==== /d.ts (2 errors) ====
+    import type { A, B, C } from './abc';
+    new A();
+        ~
+!!! error TS1361: 'A' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /d.ts:1:15: 'A' was imported here.
+    declare let a: A;
+    declare let b: B;
+    b.b;
+    const c = { A };
+                ~
+!!! error TS1361: 'A' cannot be used as a value because it was imported using 'import type'.
+!!! related TS1376 /d.ts:1:15: 'A' was imported here.
+    

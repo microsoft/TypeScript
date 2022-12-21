@@ -70,7 +70,7 @@ f.self = f;
  * @param {{y: typeof b}} b
  */
 function g(a, b) {
->g : (a: { x: string; }, b: { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }) => void
+>g : (a: {    x: string;}, b: { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }) => void
 >a : { x: string; }
 >b : { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }
 
@@ -93,7 +93,7 @@ export { g };
  * @param {{y: typeof b}} b
  */
 function hh(a, b) {
->hh : (a: { x: string; }, b: { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }) => void
+>hh : (a: {    x: string;}, b: { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }) => void
 >a : { x: string; }
 >b : { y: typeof import("tests/cases/conformance/jsdoc/declarations/index").b; }
 

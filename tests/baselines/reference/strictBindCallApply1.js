@@ -72,6 +72,33 @@ C.apply(c, [10]);  // Error
 C.apply(c, [10, 20]);  // Error
 C.apply(c, [10, "hello", 30]);  // Error
 
+function bar<T extends unknown[]>(callback: (this: 1, ...args: T) => void) {
+    callback.bind(1);
+    callback.bind(2); // Error
+}
+
+function baz<T extends 1 | 2>(callback: (this: 1, ...args: T extends 1 ? [unknown] : [unknown, unknown]) => void) {
+    callback.bind(1);
+    callback.bind(2); // Error
+}
+
+// Repro from #32964
+class Foo<T extends unknown[]> {
+    constructor() {
+        this.fn.bind(this);
+    }
+
+    fn(...args: T): void {}
+}
+
+class Bar<T extends 1 | 2> {
+    constructor() {
+        this.fn.bind(this);
+    }
+
+    fn(...args: T extends 1 ? [unknown] : [unknown, unknown]) {}
+}
+
 
 //// [strictBindCallApply1.js]
 "use strict";
@@ -126,3 +153,36 @@ C.apply(c, [10, "hello"]);
 C.apply(c, [10]); // Error
 C.apply(c, [10, 20]); // Error
 C.apply(c, [10, "hello", 30]); // Error
+function bar(callback) {
+    callback.bind(1);
+    callback.bind(2); // Error
+}
+function baz(callback) {
+    callback.bind(1);
+    callback.bind(2); // Error
+}
+// Repro from #32964
+var Foo = /** @class */ (function () {
+    function Foo() {
+        this.fn.bind(this);
+    }
+    Foo.prototype.fn = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+    };
+    return Foo;
+}());
+var Bar = /** @class */ (function () {
+    function Bar() {
+        this.fn.bind(this);
+    }
+    Bar.prototype.fn = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+    };
+    return Bar;
+}());

@@ -1,0 +1,77 @@
+=== tests/cases/compiler/genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts ===
+interface A { x: number }
+>A : Symbol(A, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 0))
+>x : Symbol(A.x, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 13))
+
+declare function isA(a: unknown): a is A;
+>isA : Symbol(isA, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 25))
+>a : Symbol(a, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 2, 21))
+>a : Symbol(a, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 2, 21))
+>A : Symbol(A, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 0))
+
+type FunctionsObj<T> = {
+>FunctionsObj : Symbol(FunctionsObj, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 2, 41))
+>T : Symbol(T, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 4, 18))
+
+    [K in keyof T]: () => unknown
+>K : Symbol(K, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 5, 5))
+>T : Symbol(T, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 4, 18))
+}
+
+function g<
+>g : Symbol(g, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 6, 1))
+
+    T extends FunctionsObj<T>,
+>T : Symbol(T, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 8, 11))
+>FunctionsObj : Symbol(FunctionsObj, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 2, 41))
+>T : Symbol(T, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 8, 11))
+
+    M extends keyof T
+>M : Symbol(M, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 9, 30))
+>T : Symbol(T, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 8, 11))
+
+>(a2: ReturnType<T[M]>, x: A) {
+>a2 : Symbol(a2, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 11, 2))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 8, 11))
+>M : Symbol(M, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 9, 30))
+>x : Symbol(x, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 11, 23))
+>A : Symbol(A, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 0))
+
+    x = a2;
+>x : Symbol(x, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 11, 23))
+>a2 : Symbol(a2, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 11, 2))
+}
+
+// Original CFA report of the above issue
+
+function g2<
+>g2 : Symbol(g2, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 13, 1))
+
+    T extends FunctionsObj<T>,
+>T : Symbol(T, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 17, 12))
+>FunctionsObj : Symbol(FunctionsObj, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 2, 41))
+>T : Symbol(T, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 17, 12))
+
+    M extends keyof T
+>M : Symbol(M, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 18, 30))
+>T : Symbol(T, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 17, 12))
+
+>(a2: ReturnType<T[M]>) {
+>a2 : Symbol(a2, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 20, 2))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 17, 12))
+>M : Symbol(M, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 18, 30))
+
+    if (isA(a2)) {
+>isA : Symbol(isA, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 25))
+>a2 : Symbol(a2, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 20, 2))
+
+        // a2 is not narrowed
+        a2.x // error, but should be ok
+>a2.x : Symbol(A.x, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 13))
+>a2 : Symbol(a2, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 20, 2))
+>x : Symbol(A.x, Decl(genericConditionalConstrainedToUnknownNotAssignableToConcreteObject.ts, 0, 13))
+    }
+}
+

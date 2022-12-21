@@ -7,10 +7,14 @@
 //// >>>>>>> Feature
 
 
-var c = classification;
+const c = classification("original");
 verify.syntacticClassificationsAre(
     c.comment("<<<<<<< HEAD"),
     c.stringLiteral("\"AAAA\""),
     c.comment("======="),
     c.stringLiteral("\"BBBB\""),
     c.comment(">>>>>>> Feature"));
+
+const c2 = classification("2020");
+    verify.semanticClassificationsAre("2020",
+);

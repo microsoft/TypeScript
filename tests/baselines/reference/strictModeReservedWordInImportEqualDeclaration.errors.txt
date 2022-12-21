@@ -1,5 +1,5 @@
 tests/cases/compiler/strictModeReservedWordInImportEqualDeclaration.ts(2,8): error TS1214: Identifier expected. 'public' is a reserved word in strict mode. Modules are automatically in strict mode.
-tests/cases/compiler/strictModeReservedWordInImportEqualDeclaration.ts(2,25): error TS2307: Cannot find module '1'.
+tests/cases/compiler/strictModeReservedWordInImportEqualDeclaration.ts(2,25): error TS2307: Cannot find module '1' or its corresponding type declarations.
 
 
 ==== tests/cases/compiler/strictModeReservedWordInImportEqualDeclaration.ts (2 errors) ====
@@ -8,4 +8,4 @@ tests/cases/compiler/strictModeReservedWordInImportEqualDeclaration.ts(2,25): er
            ~~~~~~
 !!! error TS1214: Identifier expected. 'public' is a reserved word in strict mode. Modules are automatically in strict mode.
                             ~~~
-!!! error TS2307: Cannot find module '1'.
+!!! error TS2307: Cannot find module '1' or its corresponding type declarations.

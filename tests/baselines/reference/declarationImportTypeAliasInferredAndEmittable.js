@@ -32,7 +32,8 @@ var Conn = /** @class */ (function () {
 module.exports = Conn;
 //// [usage.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Wrap = void 0;
 var Wrap = /** @class */ (function () {
     function Wrap(c) {
         if (c === void 0) { c = x; }

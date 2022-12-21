@@ -1,30 +1,51 @@
 //// [invalidTryStatements.ts]
 function fn() {
-    try {
-    } catch (x) {
-        var x: string; // ensure x is 'Any'
-    }
+    catch(x) { } // error missing try
 
-    // no type annotation allowed
-    try { } catch (z: any) { }
-    try { } catch (a: number) { }
-    try { } catch (y: string) { }
+    finally { } // potential error; can be absorbed by the 'catch'
+
+    try { }; // error missing finally
 }
 
+function fn2() {
+    finally { } // error missing try
+    catch (x) { } // error missing try
+    
+    try { } finally { } // statement is here, so the 'catch' clause above doesn't absorb errors from the 'finally' clause below
 
+    finally { } // error missing try
+    
+    catch (x) { } // error missing try
+
+    try { } catch () { } // error missing catch binding
+}
 
 //// [invalidTryStatements.js]
 function fn() {
     try {
     }
-    catch (x) {
-        var x; // ensure x is 'Any'
+    catch (x) { } // error missing try
+    finally { } // potential error; can be absorbed by the 'catch'
+    try { }
+    finally { // error missing finally
+     } // error missing finally
+    ; // error missing finally
+}
+function fn2() {
+    try {
     }
-    // no type annotation allowed
+    finally { } // error missing try
+    try {
+    }
+    catch (x) { } // error missing try
     try { }
-    catch (z) { }
+    finally { } // statement is here, so the 'catch' clause above doesn't absorb errors from the 'finally' clause below
+    try {
+    }
+    finally { } // error missing try
+    try {
+    }
+    catch (x) { } // error missing try
     try { }
-    catch (a) { }
-    try { }
-    catch (y) { }
+    catch () { } // error missing catch binding
 }

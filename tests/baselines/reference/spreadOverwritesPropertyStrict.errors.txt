@@ -1,0 +1,57 @@
+tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts(3,17): error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts(9,14): error TS2783: 'x' is specified more than once, so this usage will be overwritten.
+tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts(15,14): error TS2783: 'x' is specified more than once, so this usage will be overwritten.
+tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts(24,14): error TS2783: 'command' is specified more than once, so this usage will be overwritten.
+tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts(28,14): error TS2783: 'a' is specified more than once, so this usage will be overwritten.
+
+
+==== tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts (5 errors) ====
+    declare var ab: { a: number, b: number };
+    declare var abq: { a: number, b?: number };
+    var unused1 = { b: 1, ...ab } // error
+                    ~~~~
+!!! error TS2783: 'b' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts:3:23: This spread always overwrites this property.
+    var unused2 = { ...ab, ...ab } // ok, overwritten error doesn't apply to spreads
+    var unused3 = { b: 1, ...abq } // ok, abq might have b: undefined
+    var unused4 = { ...ab, b: 1 } // ok, we don't care that b in ab is overwritten
+    var unused5 = { ...abq, b: 1 } // ok
+    function g(obj: { x: number | undefined }) {
+        return { x: 1, ...obj }; // ok, obj might have x: undefined
+                 ~~~~
+!!! error TS2783: 'x' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts:9:20: This spread always overwrites this property.
+    }
+    function f(obj: { x: number } | undefined) {
+        return { x: 1, ...obj }; // ok, obj might be undefined
+    }
+    function h(obj: { x: number } | { x: string }) {
+        return { x: 1, ...obj } // error
+                 ~~~~
+!!! error TS2783: 'x' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts:15:20: This spread always overwrites this property.
+    }
+    function i(b: boolean, t: { command: string, ok: string }) {
+        return { command: "hi", ...(b ? t : {}) } // ok
+    }
+    function j() {
+        return { ...{ command: "hi" } , ...{ command: "bye" } } // ok
+    }
+    function k(t: { command: string, ok: string }) {
+        return { command: "hi", ...{ spoiler: true }, spoiler2: true, ...t } // error
+                 ~~~~~~~~~~~~~
+!!! error TS2783: 'command' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts:24:67: This spread always overwrites this property.
+    }
+    
+    function l(anyrequired: { a: any }) {
+        return { a: 'zzz', ...anyrequired } // error
+                 ~~~~~~~~
+!!! error TS2783: 'a' is specified more than once, so this usage will be overwritten.
+!!! related TS2785 tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts:28:24: This spread always overwrites this property.
+    }
+    function m(anyoptional: { a?: any }) {
+        return { a: 'zzz', ...anyoptional } // ok
+    }
+    
+    

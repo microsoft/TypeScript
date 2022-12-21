@@ -17,7 +17,7 @@ interface Goo {
 }
 
 function foo<T>(f: { y: T }): T { return null }
->foo : <T>(f: { y: T; }) => T
+>foo : <T>(f: {    y: T;}) => T
 >f : { y: T; }
 >y : T
 >null : null

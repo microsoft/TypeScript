@@ -1,0 +1,50 @@
+=== tests/cases/compiler/mappedTypeCircularReferenceInAccessor.ts ===
+interface User {
+>User : Symbol(User, Decl(mappedTypeCircularReferenceInAccessor.ts, 0, 0))
+
+  firstName: string,
+>firstName : Symbol(User.firstName, Decl(mappedTypeCircularReferenceInAccessor.ts, 0, 16))
+
+  level: number,
+>level : Symbol(User.level, Decl(mappedTypeCircularReferenceInAccessor.ts, 1, 20))
+
+  get bestFriend(): User
+>bestFriend : Symbol(User.bestFriend, Decl(mappedTypeCircularReferenceInAccessor.ts, 2, 16), Decl(mappedTypeCircularReferenceInAccessor.ts, 3, 24))
+>User : Symbol(User, Decl(mappedTypeCircularReferenceInAccessor.ts, 0, 0))
+
+  set bestFriend(user: SerializablePartial<User>)
+>bestFriend : Symbol(User.bestFriend, Decl(mappedTypeCircularReferenceInAccessor.ts, 2, 16), Decl(mappedTypeCircularReferenceInAccessor.ts, 3, 24))
+>user : Symbol(user, Decl(mappedTypeCircularReferenceInAccessor.ts, 4, 17))
+>SerializablePartial : Symbol(SerializablePartial, Decl(mappedTypeCircularReferenceInAccessor.ts, 7, 137))
+>User : Symbol(User, Decl(mappedTypeCircularReferenceInAccessor.ts, 0, 0))
+}
+
+type FilteredKeys<T> = { [K in keyof T]: T[K] extends number ? K : T[K] extends string ? K : T[K] extends boolean ? K : never }[keyof T];
+>FilteredKeys : Symbol(FilteredKeys, Decl(mappedTypeCircularReferenceInAccessor.ts, 5, 1))
+>T : Symbol(T, Decl(mappedTypeCircularReferenceInAccessor.ts, 7, 18))
+>K : Symbol(K, Decl(mappedTypeCircularReferenceInAccessor.ts, 7, 26))
+>T : Symbol(T, Decl(mappedTypeCircularReferenceInAccessor.ts, 7, 18))
+>T : Symbol(T, Decl(mappedTypeCircularReferenceInAccessor.ts, 7, 18))
+>K : Symbol(K, Decl(mappedTypeCircularReferenceInAccessor.ts, 7, 26))
+>K : Symbol(K, Decl(mappedTypeCircularReferenceInAccessor.ts, 7, 26))
+>T : Symbol(T, Decl(mappedTypeCircularReferenceInAccessor.ts, 7, 18))
+>K : Symbol(K, Decl(mappedTypeCircularReferenceInAccessor.ts, 7, 26))
+>K : Symbol(K, Decl(mappedTypeCircularReferenceInAccessor.ts, 7, 26))
+>T : Symbol(T, Decl(mappedTypeCircularReferenceInAccessor.ts, 7, 18))
+>K : Symbol(K, Decl(mappedTypeCircularReferenceInAccessor.ts, 7, 26))
+>K : Symbol(K, Decl(mappedTypeCircularReferenceInAccessor.ts, 7, 26))
+>T : Symbol(T, Decl(mappedTypeCircularReferenceInAccessor.ts, 7, 18))
+
+type SerializablePartial<T> = {
+>SerializablePartial : Symbol(SerializablePartial, Decl(mappedTypeCircularReferenceInAccessor.ts, 7, 137))
+>T : Symbol(T, Decl(mappedTypeCircularReferenceInAccessor.ts, 9, 25))
+
+  [K in FilteredKeys<T>]: T[K]
+>K : Symbol(K, Decl(mappedTypeCircularReferenceInAccessor.ts, 10, 3))
+>FilteredKeys : Symbol(FilteredKeys, Decl(mappedTypeCircularReferenceInAccessor.ts, 5, 1))
+>T : Symbol(T, Decl(mappedTypeCircularReferenceInAccessor.ts, 9, 25))
+>T : Symbol(T, Decl(mappedTypeCircularReferenceInAccessor.ts, 9, 25))
+>K : Symbol(K, Decl(mappedTypeCircularReferenceInAccessor.ts, 10, 3))
+
+};
+

@@ -1,0 +1,31 @@
+=== tests/cases/conformance/salsa/main.js ===
+const {
+    chalk: { grey }
+>chalk : Symbol(chalk, Decl(mod1.js, 2, 2))
+>grey : Symbol(grey, Decl(main.js, 1, 12))
+
+} = require('./mod1');
+>require : Symbol(require)
+>'./mod1' : Symbol("tests/cases/conformance/salsa/mod1", Decl(mod1.js, 0, 0))
+
+grey
+>grey : Symbol(grey, Decl(main.js, 1, 12))
+
+chalk
+
+=== tests/cases/conformance/salsa/mod1.js ===
+const chalk = {
+>chalk : Symbol(chalk, Decl(mod1.js, 0, 5))
+
+    grey: {}
+>grey : Symbol(grey, Decl(mod1.js, 0, 15))
+
+};
+module.exports.chalk = chalk
+>module.exports.chalk : Symbol(chalk, Decl(mod1.js, 2, 2))
+>module.exports : Symbol(chalk, Decl(mod1.js, 2, 2))
+>module : Symbol(module, Decl(mod1.js, 2, 2))
+>exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
+>chalk : Symbol(chalk, Decl(mod1.js, 2, 2))
+>chalk : Symbol(chalk, Decl(mod1.js, 0, 5))
+

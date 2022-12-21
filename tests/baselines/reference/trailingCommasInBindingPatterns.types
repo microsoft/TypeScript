@@ -14,7 +14,7 @@ let c, d;
 ([...c,] = []);
 >([...c,] = []) : undefined[]
 >[...c,] = [] : undefined[]
->[...c,] : undefined[]
+>[...c,] : any[]
 >...c : any
 >c : any
 >[] : undefined[]

@@ -3,7 +3,7 @@
 ////type As = 'arf' | 'abacus' | 'abaddon';
 ////let a: As;
 ////switch (a) {
-////    case '/**/
+////    case '[|/**/|]
 ////}
 
 verify.completions({ marker: "", exact: ["arf", "abacus", "abaddon" ] });

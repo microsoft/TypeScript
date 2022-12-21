@@ -64,8 +64,8 @@ var b = new ComparableString("b");
 >"b" : "b"
 
 var c = compare<ComparableString>(a, b);
->c : any
->compare<ComparableString>(a, b) : any
+>c : number
+>compare<ComparableString>(a, b) : number
 >compare : <T extends Comparable<T>>(x: T, y: T) => number
 >a : ComparableString
 >b : ComparableString

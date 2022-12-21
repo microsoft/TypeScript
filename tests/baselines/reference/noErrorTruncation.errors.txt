@@ -1,4 +1,4 @@
-tests/cases/compiler/noErrorTruncation.ts(10,7): error TS2322: Type '42' is not assignable to type 'SomeLongOptionA | SomeLongOptionB | SomeLongOptionC | SomeLongOptionD | SomeLongOptionE | SomeLongOptionF'.
+tests/cases/compiler/noErrorTruncation.ts(10,7): error TS2322: Type 'number' is not assignable to type 'SomeLongOptionA | SomeLongOptionB | SomeLongOptionC | SomeLongOptionD | SomeLongOptionE | SomeLongOptionF'.
 
 
 ==== tests/cases/compiler/noErrorTruncation.ts (1 errors) ====
@@ -13,7 +13,7 @@ tests/cases/compiler/noErrorTruncation.ts(10,7): error TS2322: Type '42' is not 
     
     const x: SomeLongOptionA
           ~
-!!! error TS2322: Type '42' is not assignable to type 'SomeLongOptionA | SomeLongOptionB | SomeLongOptionC | SomeLongOptionD | SomeLongOptionE | SomeLongOptionF'.
+!!! error TS2322: Type 'number' is not assignable to type 'SomeLongOptionA | SomeLongOptionB | SomeLongOptionC | SomeLongOptionD | SomeLongOptionE | SomeLongOptionF'.
            | SomeLongOptionB
            | SomeLongOptionC
            | SomeLongOptionD

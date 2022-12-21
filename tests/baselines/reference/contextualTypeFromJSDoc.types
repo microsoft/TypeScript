@@ -22,7 +22,7 @@ const arr = [
 
 /** @return {Array<[string, {x?:number, y?:number}]>} */
 function f() {
->f : () => [string, { x?: number; y?: number; }][]
+>f : () => Array<[string, {    x?: number;    y?: number;}]>
 
     return [
 >[        ['a', { x: 1 }],        ['b', { y: 2 }]    ] : ([string, { x: number; }] | [string, { y: number; }])[]

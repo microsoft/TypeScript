@@ -4,7 +4,7 @@ var tuple: [string, number];
 
 [...c] = tupel; // intentionally misspelled
 >[...c] = tupel : any
->[...c] : undefined[]
+>[...c] : any[]
 >...c : any
 >c : any
 >tupel : any

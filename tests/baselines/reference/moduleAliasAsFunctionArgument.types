@@ -4,7 +4,7 @@ import a = require('moduleAliasAsFunctionArgument_0');
 >a : typeof a
 
 function fn(arg: { x: number }) {
->fn : (arg: { x: number; }) => void
+>fn : (arg: {    x: number;}) => void
 >arg : { x: number; }
 >x : number
 }

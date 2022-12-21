@@ -7,7 +7,7 @@ declare function OneThing(): JSX.Element;
 >JSX : any
 
 declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
->OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
+>OneThing : { (): JSX.Element; (l: {    yy: number;    yy1: string;}): JSX.Element; }
 >l : { yy: number; yy1: string; }
 >yy : number
 >yy1 : string

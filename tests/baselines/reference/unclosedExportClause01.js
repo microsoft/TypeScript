@@ -17,28 +17,33 @@ export { x as a, from "./t1"
 
 //// [t1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
 exports.x = "x";
 //// [t2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.from = exports.x = void 0;
 var t1_1 = require("./t1");
-exports.x = t1_1.x;
-exports.from = t1_1.from;
+Object.defineProperty(exports, "x", { enumerable: true, get: function () { return t1_1.x; } });
+Object.defineProperty(exports, "from", { enumerable: true, get: function () { return t1_1.from; } });
 //// [t3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.from = void 0;
 var t1_1 = require("./t1");
-exports.from = t1_1.from;
+Object.defineProperty(exports, "from", { enumerable: true, get: function () { return t1_1.from; } });
 //// [t4.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.from = exports.a = void 0;
 var t1_1 = require("./t1");
-exports.a = t1_1.x;
-exports.from = t1_1.from;
+Object.defineProperty(exports, "a", { enumerable: true, get: function () { return t1_1.x; } });
+Object.defineProperty(exports, "from", { enumerable: true, get: function () { return t1_1.from; } });
 //// [t5.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.from = exports.a = void 0;
 var t1_1 = require("./t1");
-exports.a = t1_1.x;
-exports.from = t1_1.from;
+Object.defineProperty(exports, "a", { enumerable: true, get: function () { return t1_1.x; } });
+Object.defineProperty(exports, "from", { enumerable: true, get: function () { return t1_1.from; } });

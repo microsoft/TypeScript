@@ -12,7 +12,7 @@ var buzz = 10;
 buzz += 3;
 
 var bizz = 8;
-bizz++; // compiles to exports.bizz = bizz += 1
+bizz++; // compiles to exports.bizz = (bizz++, bizz)
 bizz--; // similarly
 ++bizz; // compiles to exports.bizz = ++bizz
 

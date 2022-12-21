@@ -18,7 +18,7 @@
 ////     }
 //// }
 
-var c = classification;
+const c = classification("original");
 verify.syntacticClassificationsAre(
     c.comment("// comment"),
     c.keyword("module"), c.moduleName("M"), c.punctuation("{"),

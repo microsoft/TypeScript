@@ -25,7 +25,8 @@ export var x6 = new m();
 
 //// [server.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x11 = exports.a12 = exports.a11 = exports.m = exports.x = exports.a = void 0;
 var a = /** @class */ (function () {
     function a() {
     }
@@ -64,7 +65,8 @@ var x11 = /** @class */ (function () {
 exports.x11 = x11;
 //// [client.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x6 = exports.x3 = exports.x5 = exports.x4 = exports.x2 = exports.x1 = void 0;
 var server_1 = require("./server");
 exports.x1 = new server_1.a();
 var server_2 = require("./server");

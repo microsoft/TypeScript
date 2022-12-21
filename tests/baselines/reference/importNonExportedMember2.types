@@ -1,0 +1,9 @@
+=== tests/cases/compiler/a.ts ===
+
+export {}
+interface Foo {}
+
+=== tests/cases/compiler/b.ts ===
+import { Foo } from './a';
+>Foo : any
+

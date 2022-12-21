@@ -1,0 +1,97 @@
+=== tests/cases/conformance/override/override7.ts ===
+class B {
+>B : Symbol(B, Decl(override7.ts, 0, 0))
+
+    p1: number = 1;
+>p1 : Symbol(B.p1, Decl(override7.ts, 0, 9))
+
+    p2: number = 2;
+>p2 : Symbol(B.p2, Decl(override7.ts, 1, 19))
+
+    p3: number = 3;
+>p3 : Symbol(B.p3, Decl(override7.ts, 2, 19))
+
+    p4: number = 4;
+>p4 : Symbol(B.p4, Decl(override7.ts, 3, 19))
+}
+
+class D extends B{
+>D : Symbol(D, Decl(override7.ts, 5, 1))
+>B : Symbol(B, Decl(override7.ts, 0, 0))
+
+    declare p1: number
+>p1 : Symbol(D.p1, Decl(override7.ts, 7, 18))
+
+    override declare p2: number;
+>p2 : Symbol(D.p2, Decl(override7.ts, 8, 22))
+
+    readonly override p3: number;
+>p3 : Symbol(D.p3, Decl(override7.ts, 10, 32))
+
+    override readonly p4: number;
+>p4 : Symbol(D.p4, Decl(override7.ts, 12, 33))
+
+    static override sp: number;
+>sp : Symbol(D.sp, Decl(override7.ts, 14, 33))
+
+    override override oop: number;
+>oop : Symbol(D.oop, Decl(override7.ts, 16, 31))
+
+    public override pp: number;
+>pp : Symbol(D.pp, Decl(override7.ts, 18, 34))
+
+    override public op: number;
+>op : Symbol(D.op, Decl(override7.ts, 20, 31))
+
+    override constructor () {
+        super();
+>super : Symbol(B, Decl(override7.ts, 0, 0))
+    }
+}
+
+
+abstract class AB {
+>AB : Symbol(AB, Decl(override7.ts, 26, 1))
+
+    abstract f (): void;
+>f : Symbol(AB.f, Decl(override7.ts, 29, 19))
+
+    abstract b (): void;
+>b : Symbol(AB.b, Decl(override7.ts, 30, 24))
+}
+
+abstract class AD extends AB {
+>AD : Symbol(AD, Decl(override7.ts, 32, 1))
+>AB : Symbol(AB, Decl(override7.ts, 26, 1))
+
+    override abstract f(): void;
+>f : Symbol(AD.f, Decl(override7.ts, 34, 30))
+
+    abstract override b(): void;
+>b : Symbol(AD.b, Decl(override7.ts, 35, 32))
+}
+
+abstract class AND {
+>AND : Symbol(AND, Decl(override7.ts, 37, 1))
+
+    override abstract f(): void;
+>f : Symbol(AND.f, Decl(override7.ts, 39, 20))
+
+    abstract override b(): void;
+>b : Symbol(AND.b, Decl(override7.ts, 40, 32))
+}
+
+class ADD extends AD {
+>ADD : Symbol(ADD, Decl(override7.ts, 42, 1))
+>AD : Symbol(AD, Decl(override7.ts, 32, 1))
+
+    override f(): void {
+>f : Symbol(ADD.f, Decl(override7.ts, 44, 22))
+
+    }
+    override b(): void {
+>b : Symbol(ADD.b, Decl(override7.ts, 47, 5))
+
+    }
+}
+

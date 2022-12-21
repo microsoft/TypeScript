@@ -13,7 +13,7 @@ function fill<B extends typeof A>(f: B) {
 } 
 
 fill(32);
->fill(32) : any
+>fill(32) : void
 >fill : <B extends { '': number; }>(f: B) => void
 >32 : 32
 

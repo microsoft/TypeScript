@@ -1,0 +1,53 @@
+=== tests/cases/conformance/externalModules/typeOnly/a.ts ===
+export class A {}
+>A : A
+
+=== tests/cases/conformance/externalModules/typeOnly/b.ts ===
+import type * as a from './a';
+>a : typeof a
+
+import A = a.A; // Error
+>A : typeof a.A
+>a : typeof a
+>A : a.A
+
+import aa = a;  // Error
+>aa : typeof a
+>a : typeof a
+
+const x = 0;
+>x : 0
+>0 : 0
+
+export { a, A, x };
+>a : typeof a
+>A : typeof a.A
+>x : 0
+
+=== tests/cases/conformance/externalModules/typeOnly/c.ts ===
+import * as b from './b';
+>b : typeof b
+
+import A = b.a.A; // Error
+>A : typeof b.a.A
+>b : typeof b
+>a : typeof b.a
+>A : b.a.A
+
+import AA = b.A; // Error
+>AA : typeof b.a.A
+>b : typeof b
+>A : b.a.A
+
+import x = b.x;
+>x : 0
+>b : typeof b
+>x : 0
+
+console.log(x);
+>console.log(x) : void
+>console.log : (...data: any[]) => void
+>console : Console
+>log : (...data: any[]) => void
+>x : 0
+

@@ -1,0 +1,21 @@
+tests/cases/conformance/classes/members/privateNames/privateNamesUnique-5.ts(12,7): error TS2322: Type 'B' is not assignable to type 'A2'.
+  Property '#foo' in type 'B' refers to a different member that cannot be accessed from within type 'A'.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNamesUnique-5.ts (1 errors) ====
+    // same as privateNamesUnique-1, but with an interface
+    
+    class A {
+        #foo: number;
+    }
+    interface A2 extends A { }
+    
+    class B {
+        #foo: number;
+    }
+    
+    const b: A2 = new B();
+          ~
+!!! error TS2322: Type 'B' is not assignable to type 'A2'.
+!!! error TS2322:   Property '#foo' in type 'B' refers to a different member that cannot be accessed from within type 'A'.
+    

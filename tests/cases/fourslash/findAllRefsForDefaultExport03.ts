@@ -1,17 +1,17 @@
 /// <reference path='fourslash.ts'/>
 
-////[|function [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}f|]() {
+/////*1*/function /*2*/f() {
 ////    return 100;
-////}|]
+////}
 ////
-////[|export default [|{| "contextRangeIndex": 2 |}f|];|]
+/////*3*/export default /*4*/f;
 ////
-////var x: typeof [|f|];
+////var x: typeof /*5*/f;
 ////
-////var y = [|f|]();
+////var y = /*6*/f();
 ////
-////[|namespace [|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 6 |}f|] {
+/////*7*/namespace /*8*/f {
 ////    var local = 100;
-////}|]
+////}
 
-verify.singleReferenceGroup("namespace f\nfunction f(): number", "f");
+verify.baselineFindAllReferences('1', '2', '3', '4', '5', '6', '7', '8');

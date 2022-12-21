@@ -10,7 +10,7 @@ export { };
 
 === tests/cases/compiler/module.d.ts ===
 export = React;
->React : Symbol(React, Decl(module.d.ts, 1, 26))
+>React : Symbol(React, Decl(module.d.ts, 1, 26), Decl(global.d.ts, 1, 9))
 
 export as namespace React;
 >React : Symbol(React, Decl(module.d.ts, 0, 15))

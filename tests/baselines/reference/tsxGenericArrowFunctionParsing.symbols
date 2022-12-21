@@ -64,4 +64,11 @@ x5.isElement;
 >x5 : Symbol(x5, Decl(file.tsx, 23, 3))
 >isElement : Symbol(JSX.Element.isElement, Decl(file.tsx, 1, 20))
 
+// This is a generic function
+var x6 = <T = string,>() => {};
+>x6 : Symbol(x6, Decl(file.tsx, 27, 3))
+>T : Symbol(T, Decl(file.tsx, 27, 10))
+
+x6();
+>x6 : Symbol(x6, Decl(file.tsx, 27, 3))
 

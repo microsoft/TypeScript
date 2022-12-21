@@ -6,7 +6,7 @@ declare const moduleFile: number;
 
 import(getSpecifier());
 
-var p0 = import(`${directory}\${moduleFile}`);
+var p0 = import(`${directory}\\${moduleFile}`);
 var p1 = import(getSpecifier());
 const p2 = import(whatToLoad ? getSpecifier() : "defaulPath")
 
@@ -15,12 +15,12 @@ function returnDynamicLoad(path: string) {
 }
 
 //// [importCallExpressionDeclarationEmit1.js]
-Promise.resolve().then(() => require(getSpecifier()));
-var p0 = Promise.resolve().then(() => require(`${directory}\${moduleFile}`));
-var p1 = Promise.resolve().then(() => require(getSpecifier()));
-const p2 = Promise.resolve().then(() => require(whatToLoad ? getSpecifier() : "defaulPath"));
+Promise.resolve(`${getSpecifier()}`).then(s => require(s));
+var p0 = Promise.resolve(`${`${directory}\\${moduleFile}`}`).then(s => require(s));
+var p1 = Promise.resolve(`${getSpecifier()}`).then(s => require(s));
+const p2 = Promise.resolve(`${whatToLoad ? getSpecifier() : "defaulPath"}`).then(s => require(s));
 function returnDynamicLoad(path) {
-    return Promise.resolve().then(() => require(path));
+    return Promise.resolve(`${path}`).then(s => require(s));
 }
 
 

@@ -6,17 +6,17 @@ var x = 0;
 
 /// @ts-ignore
 x();
->x() : error
+>x() : any
 >x : number
 
 /// @ts-ignore
 x();
->x() : error
+>x() : any
 >x : number
 
 /// @ts-ignore
 x(
->x(    2,    3) : error
+>x(    2,    3) : any
 >x : number
 
     2,
@@ -34,13 +34,29 @@ x(
 // @another
 
 x();
->x() : error
+>x() : any
+>x : number
+
+/* @ts-ignore */
+/*another comment
+ that could be multiline*/
+
+x();
+>x() : any
+>x : number
+
+/* @ts-ignore
+continuing comment
+ that could be multiline*/
+
+x();
+>x() : any
 >x : number
 
 
 
 // @ts-ignore: no call signature
 x();
->x() : error
+>x() : any
 >x : number
 

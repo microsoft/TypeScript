@@ -27,20 +27,20 @@ tests/cases/compiler/betterErrorForAccidentalCall.ts(13,1): error TS2349: This e
     ~~~~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'String' has no call signatures.
-!!! related TS2734 tests/cases/compiler/betterErrorForAccidentalCall.ts:7:1: It is highly likely that you are missing a semicolon.
+!!! related TS2734 tests/cases/compiler/betterErrorForAccidentalCall.ts:7:1: Are you missing a semicolon?
     (1 as number).toString();
     
     foo()
     ~~~~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'String' has no call signatures.
-!!! related TS2734 tests/cases/compiler/betterErrorForAccidentalCall.ts:10:1: It is highly likely that you are missing a semicolon.
+!!! related TS2734 tests/cases/compiler/betterErrorForAccidentalCall.ts:10:1: Are you missing a semicolon?
         (1 + 2).toString();
     
     foo()
     ~~~~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'String' has no call signatures.
-!!! related TS2734 tests/cases/compiler/betterErrorForAccidentalCall.ts:13:1: It is highly likely that you are missing a semicolon.
+!!! related TS2734 tests/cases/compiler/betterErrorForAccidentalCall.ts:13:1: Are you missing a semicolon?
         (<number>1).toString();
     

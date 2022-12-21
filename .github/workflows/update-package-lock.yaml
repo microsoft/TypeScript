@@ -1,0 +1,32 @@
+name: Update package-lock.json
+
+on:
+    schedule:
+        # This is probably 6am UTC, which is 10pm PST or 11pm PDT
+        # Alternatively, 6am local is also fine
+        - cron: '0 6 * * *'
+    workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.repository == 'microsoft/TypeScript'
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - name: Configure git and update package-lock.json
+      run: |
+        git config user.email "typescriptbot@microsoft.com"
+        git config user.name "TypeScript Bot"
+        rm package-lock.json
+        npm install --package-lock-only --ignore-scripts # This is a no-op if package-lock.json is present.
+        git add -f package-lock.json
+        if git commit -m "Update package-lock.json"; then
+          git push
+        fi

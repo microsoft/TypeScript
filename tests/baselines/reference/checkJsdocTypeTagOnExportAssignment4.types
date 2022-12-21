@@ -1,0 +1,12 @@
+=== tests/cases/compiler/checkJsdocTypeTagOnExportAssignment4.js ===
+
+=== tests/cases/compiler/a.js ===
+
+/**
+ * @typedef {number} Foo
+ */
+
+/** @type {Foo} */
+export default "";
+
+

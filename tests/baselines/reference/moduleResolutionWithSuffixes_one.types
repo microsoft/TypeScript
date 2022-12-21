@@ -1,0 +1,12 @@
+=== /index.ts ===
+import { ios } from "./foo";
+>ios : () => void
+
+=== /foo.ios.ts ===
+export function ios() {}
+>ios : () => void
+
+=== /foo.ts ===
+export function base() {}
+>base : () => void
+

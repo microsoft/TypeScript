@@ -8,7 +8,7 @@
 //// export var y: string;
 
 verify.codeFix({
-    description: "Remove declaration for: 'm'",
+    description: "Remove unused declaration for: 'm'",
     index: 0,
     newRangeContent: `var x = function f1() {}`,
 });

@@ -1,0 +1,71 @@
+tests/cases/conformance/override/override1.ts(9,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+tests/cases/conformance/override/override1.ts(11,14): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
+tests/cases/conformance/override/override1.ts(15,14): error TS4112: This member cannot have an 'override' modifier because its containing class 'C' does not extend another class.
+tests/cases/conformance/override/override1.ts(22,9): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+tests/cases/conformance/override/override1.ts(24,18): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
+tests/cases/conformance/override/override1.ts(33,5): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class '(Anonymous class)'.
+tests/cases/conformance/override/override1.ts(37,14): error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class '(Anonymous class)'.
+tests/cases/conformance/override/override1.ts(42,18): error TS4112: This member cannot have an 'override' modifier because its containing class '(Anonymous class)' does not extend another class.
+
+
+==== tests/cases/conformance/override/override1.ts (8 errors) ====
+    class B {
+        foo (v: string) {}
+        fooo (v: string) {}
+    }
+    
+    class D extends B {
+        override foo (v: string) {}
+    
+        fooo (v: string) {}
+        ~~~~
+!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+    
+        override bar(v: string) {}
+                 ~~~
+!!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
+    }
+    
+    class C {
+        override foo(v: string) {}
+                 ~~~
+!!! error TS4112: This member cannot have an 'override' modifier because its containing class 'C' does not extend another class.
+    }
+    
+    function f () {
+        return class extends B {
+            override foo (v: string) {}
+        
+            fooo (v: string) {}
+            ~~~~
+!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'B'.
+        
+            override bar(v: string) {}
+                     ~~~
+!!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class 'B'.
+        }
+    }
+    
+    class E extends (class {
+        foo () { }
+        bar () { }
+    }) {
+        override foo () { }
+        bar () { }
+        ~~~
+!!! error TS4114: This member must have an 'override' modifier because it overrides a member in the base class '(Anonymous class)'.
+    
+        baz() {}
+    
+        override bazz () {}
+                 ~~~~
+!!! error TS4113: This member cannot have an 'override' modifier because it is not declared in the base class '(Anonymous class)'.
+    }
+    
+    function ff () {
+        return class {
+            override foo () {}
+                     ~~~
+!!! error TS4112: This member cannot have an 'override' modifier because its containing class '(Anonymous class)' does not extend another class.
+        }
+    }

@@ -9,4 +9,6 @@ import a = require("server");
 
 //// [server.js]
 var a = 10;
+export {};
 //// [client.js]
+export {};

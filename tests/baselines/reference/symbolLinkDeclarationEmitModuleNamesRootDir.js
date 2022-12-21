@@ -26,17 +26,19 @@ export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(null as any);
 
 //// [application.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [usage.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CONTROLLER_CLASS = void 0;
 var context_1 = require("@loopback/context");
 exports.CONTROLLER_CLASS = context_1.BindingKey.create(null); // line in question
 
 
 //// [application.d.ts]
 import { Constructor } from "@loopback/context";
-export declare type ControllerClass = Constructor<any>;
+export type ControllerClass = Constructor<any>;
 //// [usage.d.ts]
+import { ControllerClass } from './application';
 import { BindingKey } from '@loopback/context';
-export declare const CONTROLLER_CLASS: BindingKey<import("@loopback/context").Constructor<any>>;
+export declare const CONTROLLER_CLASS: BindingKey<ControllerClass>;

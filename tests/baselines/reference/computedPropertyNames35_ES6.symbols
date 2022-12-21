@@ -13,4 +13,5 @@ interface I<T> {
     [foo<T>()](): void;
 >[foo<T>()] : Symbol(I[foo<T>()], Decl(computedPropertyNames35_ES6.ts, 2, 18))
 >foo : Symbol(foo, Decl(computedPropertyNames35_ES6.ts, 0, 0))
+>T : Symbol(T)
 }

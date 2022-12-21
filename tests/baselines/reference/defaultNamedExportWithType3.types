@@ -1,0 +1,9 @@
+=== tests/cases/compiler/defaultNamedExportWithType3.ts ===
+interface Foo {}
+export const Foo = {};
+>Foo : {}
+>{} : {}
+
+export default Foo;
+>Foo : Foo
+

@@ -1,0 +1,10 @@
+tests/cases/conformance/classes/members/privateNames/privateNameInObjectLiteral-1.ts(2,5): error TS18016: Private identifiers are not allowed outside class bodies.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameInObjectLiteral-1.ts (1 errors) ====
+    const obj = {
+        #foo: 1
+        ~~~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+    };
+    

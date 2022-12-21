@@ -10,9 +10,10 @@ export const Baa = {
 //// [objectLiteralComputedNameNoDeclarationError.js]
 "use strict";
 var _a;
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Baa = void 0;
 var Foo = {
-    BANANA: 'banana'
+    BANANA: 'banana',
 };
 exports.Baa = (_a = {},
     _a[Foo.BANANA] = 1,
@@ -20,10 +21,6 @@ exports.Baa = (_a = {},
 
 
 //// [objectLiteralComputedNameNoDeclarationError.d.ts]
-declare const Foo: {
-    BANANA: "banana";
-};
 export declare const Baa: {
     banana: number;
 };
-export {};

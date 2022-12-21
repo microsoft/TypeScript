@@ -12,14 +12,18 @@ module TypeScript {
 
         constructor (public checker: TypeChecker) { }
 >checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>TypeChecker : Symbol(TypeChecker)
 
         public resolveBaseTypeLinks(typeLinks: TypeLink[], scope: SymbolScope) {
 >resolveBaseTypeLinks : Symbol(Binder.resolveBaseTypeLinks, Decl(parserRealSource9.ts, 7, 53))
 >typeLinks : Symbol(typeLinks, Decl(parserRealSource9.ts, 8, 36))
+>TypeLink : Symbol(TypeLink)
 >scope : Symbol(scope, Decl(parserRealSource9.ts, 8, 58))
+>SymbolScope : Symbol(SymbolScope)
 
             var extendsList: Type[] = null;
 >extendsList : Symbol(extendsList, Decl(parserRealSource9.ts, 9, 15))
+>Type : Symbol(Type)
 
             if (typeLinks) {
 >typeLinks : Symbol(typeLinks, Decl(parserRealSource9.ts, 8, 36))
@@ -82,7 +86,9 @@ module TypeScript {
         public resolveBases(scope: SymbolScope, type: Type) {
 >resolveBases : Symbol(Binder.resolveBases, Decl(parserRealSource9.ts, 26, 9))
 >scope : Symbol(scope, Decl(parserRealSource9.ts, 28, 28))
+>SymbolScope : Symbol(SymbolScope)
 >type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
+>Type : Symbol(Type)
 
             type.extendsList = this.resolveBaseTypeLinks(type.extendsTypeLinks, scope);
 >type : Symbol(type, Decl(parserRealSource9.ts, 28, 47))
@@ -200,8 +206,11 @@ module TypeScript {
         public resolveSignatureGroup(signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) {
 >resolveSignatureGroup : Symbol(Binder.resolveSignatureGroup, Decl(parserRealSource9.ts, 64, 9))
 >signatureGroup : Symbol(signatureGroup, Decl(parserRealSource9.ts, 66, 37))
+>SignatureGroup : Symbol(SignatureGroup)
 >scope : Symbol(scope, Decl(parserRealSource9.ts, 66, 68))
+>SymbolScope : Symbol(SymbolScope)
 >instanceType : Symbol(instanceType, Decl(parserRealSource9.ts, 66, 88))
+>Type : Symbol(Type)
 
             var supplyVar = !(signatureGroup.hasImplementation);
 >supplyVar : Symbol(supplyVar, Decl(parserRealSource9.ts, 67, 15))
@@ -260,6 +269,7 @@ module TypeScript {
                     // check that last parameter has an array type
                     var lastParam = <ParameterSymbol>signature.parameters[paramLen - 1];
 >lastParam : Symbol(lastParam, Decl(parserRealSource9.ts, 82, 23))
+>ParameterSymbol : Symbol(ParameterSymbol)
 >signature : Symbol(signature, Decl(parserRealSource9.ts, 69, 19))
 >paramLen : Symbol(paramLen, Decl(parserRealSource9.ts, 76, 19))
 
@@ -291,8 +301,11 @@ module TypeScript {
         public bindType(scope: SymbolScope, type: Type, instanceType: Type): void {
 >bindType : Symbol(Binder.bindType, Decl(parserRealSource9.ts, 91, 9))
 >scope : Symbol(scope, Decl(parserRealSource9.ts, 93, 24))
+>SymbolScope : Symbol(SymbolScope)
 >type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
+>Type : Symbol(Type)
 >instanceType : Symbol(instanceType, Decl(parserRealSource9.ts, 93, 55))
+>Type : Symbol(Type)
 
             if (instanceType) {
 >instanceType : Symbol(instanceType, Decl(parserRealSource9.ts, 93, 55))
@@ -362,6 +375,7 @@ module TypeScript {
 >this.checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
 >this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
 >checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
+>ModuleDeclaration : Symbol(ModuleDeclaration)
 >type : Symbol(type, Decl(parserRealSource9.ts, 93, 43))
 
                     this.checker.inBind = true;
@@ -477,6 +491,7 @@ module TypeScript {
         public bindSymbol(scope: SymbolScope, symbol: Symbol) {
 >bindSymbol : Symbol(Binder.bindSymbol, Decl(parserRealSource9.ts, 142, 9))
 >scope : Symbol(scope, Decl(parserRealSource9.ts, 144, 26))
+>SymbolScope : Symbol(SymbolScope)
 >symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
 >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
 
@@ -521,6 +536,7 @@ module TypeScript {
 
                         var typeSymbol = <TypeSymbol>symbol;
 >typeSymbol : Symbol(typeSymbol, Decl(parserRealSource9.ts, 157, 27))
+>TypeSymbol : Symbol(TypeSymbol)
 >symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
 
                         typeSymbol.flags |= SymbolFlags.Bound;
@@ -538,6 +554,7 @@ module TypeScript {
 
                             var modPath = (<Identifier>typeSymbol.aliasLink.alias).text;
 >modPath : Symbol(modPath, Decl(parserRealSource9.ts, 166, 31))
+>Identifier : Symbol(Identifier)
 >typeSymbol : Symbol(typeSymbol, Decl(parserRealSource9.ts, 157, 27))
 
                             var modSym = this.checker.findSymbolForDynamicModule(modPath, this.checker.locationInfo.filename, (id) => scope.find(id, false, true));
@@ -605,6 +622,7 @@ module TypeScript {
 >this : Symbol(Binder, Decl(parserRealSource9.ts, 5, 19))
 >checker : Symbol(Binder.checker, Decl(parserRealSource9.ts, 7, 21))
 >scope : Symbol(scope, Decl(parserRealSource9.ts, 144, 26))
+>FieldSymbol : Symbol(FieldSymbol)
 >symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
 
                                                 false);
@@ -617,6 +635,7 @@ module TypeScript {
 >scope : Symbol(scope, Decl(parserRealSource9.ts, 144, 26))
 
                                                 (<ParameterSymbol>symbol).parameter.typeLink,
+>ParameterSymbol : Symbol(ParameterSymbol)
 >symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
 
                                                 true);
@@ -635,7 +654,9 @@ module TypeScript {
         public bind(scope: SymbolScope, table: IHashTable) {
 >bind : Symbol(Binder.bind, Decl(parserRealSource9.ts, 197, 9))
 >scope : Symbol(scope, Decl(parserRealSource9.ts, 199, 20))
+>SymbolScope : Symbol(SymbolScope)
 >table : Symbol(table, Decl(parserRealSource9.ts, 199, 39))
+>IHashTable : Symbol(IHashTable)
 
             table.map(
 >table : Symbol(table, Decl(parserRealSource9.ts, 199, 39))

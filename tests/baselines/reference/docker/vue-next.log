@@ -1,0 +1,193 @@
+Exit Code: 7
+Standard output:
+
+> build
+> node scripts/build.js "--types"
+Rolling up type definitions for compiler-core...
+Analysis will use the bundled TypeScript version 4.1.5
+*** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
+Writing: /vue-next/temp/compiler-core.api.json
+The API report is up to date: temp/compiler-core.api.md
+Writing package typings: /vue-next/packages/compiler-core/dist/compiler-core.d.ts
+Writing package typings: /vue-next/dist/compiler-core.d.ts
+API Extractor completed successfully.
+Rolling up type definitions for compiler-dom...
+Analysis will use the bundled TypeScript version 4.1.5
+*** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
+Writing: /vue-next/temp/compiler-dom.api.json
+The API report is up to date: temp/compiler-dom.api.md
+Writing package typings: /vue-next/packages/compiler-dom/dist/compiler-dom.d.ts
+Writing package typings: /vue-next/dist/compiler-dom.d.ts
+API Extractor completed successfully.
+Rolling up type definitions for compiler-sfc...
+Analysis will use the bundled TypeScript version 4.1.5
+*** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
+Writing: /vue-next/temp/compiler-sfc.api.json
+The API report is up to date: temp/compiler-sfc.api.md
+Writing package typings: /vue-next/packages/compiler-sfc/dist/compiler-sfc.d.ts
+Writing package typings: /vue-next/dist/compiler-sfc.d.ts
+API Extractor completed successfully.
+Rolling up type definitions for compiler-ssr...
+Analysis will use the bundled TypeScript version 4.1.5
+*** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
+Writing: /vue-next/temp/compiler-ssr.api.json
+The API report is up to date: temp/compiler-ssr.api.md
+Writing package typings: /vue-next/packages/compiler-ssr/dist/compiler-ssr.d.ts
+Writing package typings: /vue-next/dist/compiler-ssr.d.ts
+API Extractor completed successfully.
+Rolling up type definitions for reactivity...
+Analysis will use the bundled TypeScript version 4.1.5
+*** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
+Writing: /vue-next/temp/reactivity.api.json
+The API report is up to date: temp/reactivity.api.md
+Writing package typings: /vue-next/packages/reactivity/dist/reactivity.d.ts
+Writing package typings: /vue-next/dist/reactivity.d.ts
+API Extractor completed successfully.
+Rolling up type definitions for runtime-core...
+Analysis will use the bundled TypeScript version 4.1.5
+*** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
+Writing: /vue-next/temp/runtime-core.api.json
+The API report is up to date: temp/runtime-core.api.md
+Writing package typings: /vue-next/packages/runtime-core/dist/runtime-core.d.ts
+Writing package typings: /vue-next/dist/runtime-core.d.ts
+API Extractor completed successfully.
+Rolling up type definitions for server-renderer...
+Analysis will use the bundled TypeScript version 4.1.5
+*** The target project appears to use TypeScript X.X.X-insiders.xxxxxxxx which is newer than the bundled compiler engine; consider upgrading API Extractor.
+Writing: /vue-next/temp/server-renderer.api.json
+The API report is up to date: temp/server-renderer.api.md
+Writing package typings: /vue-next/packages/server-renderer/dist/server-renderer.d.ts
+Writing package typings: /vue-next/dist/server-renderer.d.ts
+API Extractor completed successfully.
+
+
+
+Standard error:
+
+/vue-next/packages/compiler-core/src/index.ts → packages/compiler-core/dist/compiler-core.esm-bundler.js...
+/vue-next/packages/compiler-dom/src/index.ts → packages/compiler-dom/dist/compiler-dom.esm-bundler.js...
+created packages/compiler-dom/dist/compiler-dom.esm-bundler.js in ?s
+/vue-next/packages/compiler-dom/src/index.ts → packages/compiler-dom/dist/compiler-dom.esm-browser.js...
+created packages/compiler-core/dist/compiler-core.esm-bundler.js in ?s
+/vue-next/packages/compiler-core/src/index.ts → packages/compiler-core/dist/compiler-core.cjs.js...
+created packages/compiler-dom/dist/compiler-dom.esm-browser.js in ?s
+/vue-next/packages/compiler-dom/src/index.ts → packages/compiler-dom/dist/compiler-dom.cjs.js...
+created packages/compiler-core/dist/compiler-core.cjs.js in ?s
+/vue-next/packages/compiler-core/src/index.ts → packages/compiler-core/dist/compiler-core.cjs.prod.js...
+created packages/compiler-dom/dist/compiler-dom.cjs.js in ?s
+/vue-next/packages/compiler-dom/src/index.ts → packages/compiler-dom/dist/compiler-dom.global.js...
+created packages/compiler-core/dist/compiler-core.cjs.prod.js in ?s
+created packages/compiler-dom/dist/compiler-dom.global.js in ?s
+/vue-next/packages/compiler-dom/src/index.ts → packages/compiler-dom/dist/compiler-dom.esm-browser.prod.js...
+created packages/compiler-dom/dist/compiler-dom.esm-browser.prod.js in ?s
+/vue-next/packages/compiler-dom/src/index.ts → packages/compiler-dom/dist/compiler-dom.cjs.prod.js...
+created packages/compiler-dom/dist/compiler-dom.cjs.prod.js in ?s
+/vue-next/packages/compiler-dom/src/index.ts → packages/compiler-dom/dist/compiler-dom.global.prod.js...
+Warning: dist/packages/compiler-core/src/options.d.ts:36:25 - (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
+Warning: dist/packages/compiler-core/src/options.d.ts:36:26 - (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
+Warning: dist/packages/compiler-core/src/options.d.ts:36:19 - (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
+Warning: dist/packages/compiler-core/src/options.d.ts:36:20 - (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
+Warning: dist/packages/compiler-core/src/options.d.ts:89:42 - (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
+Warning: dist/packages/compiler-core/src/options.d.ts:89:43 - (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
+Warning: dist/packages/compiler-core/src/options.d.ts:89:35 - (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
+Warning: dist/packages/compiler-core/src/options.d.ts:89:36 - (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
+Warning: dist/packages/compiler-core/src/options.d.ts:130:39 - (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
+Warning: dist/packages/compiler-core/src/options.d.ts:130:21 - (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
+Warning: dist/packages/compiler-core/src/options.d.ts:151:42 - (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
+Warning: dist/packages/compiler-core/src/options.d.ts:151:43 - (tsdoc-escape-right-brace) The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag
+Warning: dist/packages/compiler-core/src/options.d.ts:151:35 - (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
+Warning: dist/packages/compiler-core/src/options.d.ts:151:36 - (tsdoc-malformed-inline-tag) Expecting a TSDoc tag starting with "{@"
+Warning: /vue-next/packages/reactivity/src/baseHandlers.ts:198:3 - (TS2322) Type '(string | number | symbol)[]' is not assignable to type '(string | symbol)[]'.
+  Type 'string | number | symbol' is not assignable to type 'string | symbol'.
+    Type 'number' is not assignable to type 'string | symbol'.
+/vue-next/packages/compiler-sfc/src/index.ts → packages/compiler-sfc/dist/compiler-sfc.cjs.js...
+created packages/compiler-dom/dist/compiler-dom.global.prod.js in ?s
+created packages/compiler-sfc/dist/compiler-sfc.cjs.js in ?s
+/vue-next/packages/compiler-sfc/src/index.ts → packages/compiler-sfc/dist/compiler-sfc.esm-browser.js...
+Warning: /vue-next/packages/reactivity/src/baseHandlers.ts:198:3 - (TS2322) Type '(string | number | symbol)[]' is not assignable to type '(string | symbol)[]'.
+  Type 'string | number | symbol' is not assignable to type 'string | symbol'.
+    Type 'number' is not assignable to type 'string | symbol'.
+/vue-next/packages/compiler-ssr/src/index.ts → packages/compiler-ssr/dist/compiler-ssr.cjs.js...
+created packages/compiler-sfc/dist/compiler-sfc.esm-browser.js in ?s
+created packages/compiler-ssr/dist/compiler-ssr.cjs.js in ?s
+Warning: dist/packages/compiler-sfc/src/compileScript.d.ts:28:36 - (tsdoc-escape-greater-than) The ">" character should be escaped using a backslash to avoid confusion with an HTML tag
+Warning: dist/packages/compiler-sfc/src/compileScript.d.ts:28:23 - (tsdoc-html-tag-missing-equals) The HTML element has an invalid attribute: Expecting "=" after HTML attribute name
+Warning: dist/packages/compiler-sfc/src/compileStyle.d.ts:18:8 - (tsdoc-missing-deprecation-message) The @deprecated block must include a deprecation message, e.g. describing the recommended alternative
+Warning: /vue-next/packages/reactivity/src/baseHandlers.ts:198:3 - (TS2322) Type '(string | number | symbol)[]' is not assignable to type '(string | symbol)[]'.
+  Type 'string | number | symbol' is not assignable to type 'string | symbol'.
+    Type 'number' is not assignable to type 'string | symbol'.
+Warning: /vue-next/packages/reactivity/src/baseHandlers.ts:198:3 - (TS2322) Type '(string | number | symbol)[]' is not assignable to type '(string | symbol)[]'.
+  Type 'string | number | symbol' is not assignable to type 'string | symbol'.
+    Type 'number' is not assignable to type 'string | symbol'.
+/vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.esm-bundler.js...
+/vue-next/packages/runtime-core/src/index.ts → packages/runtime-core/dist/runtime-core.esm-bundler.js...
+created packages/reactivity/dist/reactivity.esm-bundler.js in ?s
+/vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.esm-browser.js...
+created packages/reactivity/dist/reactivity.esm-browser.js in ?s
+/vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.cjs.js...
+created packages/reactivity/dist/reactivity.cjs.js in ?s
+/vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.global.js...
+created packages/runtime-core/dist/runtime-core.esm-bundler.js in ?s
+/vue-next/packages/runtime-core/src/index.ts → packages/runtime-core/dist/runtime-core.cjs.js...
+created packages/reactivity/dist/reactivity.global.js in ?s
+/vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.esm-browser.prod.js...
+created packages/reactivity/dist/reactivity.esm-browser.prod.js in ?s
+/vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.cjs.prod.js...
+created packages/reactivity/dist/reactivity.cjs.prod.js in ?s
+/vue-next/packages/reactivity/src/index.ts → packages/reactivity/dist/reactivity.global.prod.js...
+created packages/runtime-core/dist/runtime-core.cjs.js in ?s
+/vue-next/packages/runtime-core/src/index.ts → packages/runtime-core/dist/runtime-core.cjs.prod.js...
+created packages/reactivity/dist/reactivity.global.prod.js in ?s
+created packages/runtime-core/dist/runtime-core.cjs.prod.js in ?s
+Warning: src/baseHandlers.ts:198:3 - (TS2322) Type '(string | number | symbol)[]' is not assignable to type '(string | symbol)[]'.
+  Type 'string | number | symbol' is not assignable to type 'string | symbol'.
+    Type 'number' is not assignable to type 'string | symbol'.
+Warning: /vue-next/packages/reactivity/src/baseHandlers.ts:198:3 - (TS2322) Type '(string | number | symbol)[]' is not assignable to type '(string | symbol)[]'.
+  Type 'string | number | symbol' is not assignable to type 'string | symbol'.
+    Type 'number' is not assignable to type 'string | symbol'.
+Warning: dist/packages/runtime-core/src/index.d.ts:34:9 - (TS2717) Subsequent property declarations must have the same type.  Property 'runtimeCoreBailTypes' must be of type 'VNode<RendererNode, RendererElement, { [key: string]: any; }> | { $: ComponentInternalInstance; }', but here has type 'VNode<RendererNode, RendererElement, { [key: string]: any; }> | { $: ComponentInternalInstance; }'.
+/vue-next/packages/runtime-dom/src/index.ts → packages/runtime-dom/dist/runtime-dom.esm-bundler.js...
+/vue-next/packages/server-renderer/src/index.ts → packages/server-renderer/dist/server-renderer.cjs.js...
+created packages/runtime-dom/dist/runtime-dom.esm-bundler.js in ?s
+/vue-next/packages/runtime-dom/src/index.ts → packages/runtime-dom/dist/runtime-dom.esm-browser.js...
+created packages/server-renderer/dist/server-renderer.cjs.js in ?s
+/vue-next/packages/server-renderer/src/index.ts → packages/server-renderer/dist/server-renderer.cjs.prod.js...
+created packages/runtime-dom/dist/runtime-dom.esm-browser.js in ?s
+/vue-next/packages/runtime-dom/src/index.ts → packages/runtime-dom/dist/runtime-dom.cjs.js...
+created packages/runtime-dom/dist/runtime-dom.cjs.js in ?s
+/vue-next/packages/runtime-dom/src/index.ts → packages/runtime-dom/dist/runtime-dom.global.js...
+created packages/server-renderer/dist/server-renderer.cjs.prod.js in ?s
+created packages/runtime-dom/dist/runtime-dom.global.js in ?s
+/vue-next/packages/runtime-dom/src/index.ts → packages/runtime-dom/dist/runtime-dom.esm-browser.prod.js...
+Warning: /vue-next/packages/reactivity/src/baseHandlers.ts:198:3 - (TS2322) Type '(string | number | symbol)[]' is not assignable to type '(string | symbol)[]'.
+  Type 'string | number | symbol' is not assignable to type 'string | symbol'.
+    Type 'number' is not assignable to type 'string | symbol'.
+/vue-next/packages/sfc-playground/src/index.ts → packages/sfc-playground/dist/sfc-playground.global.js...
+[!] Error: Could not resolve entry module (packages/sfc-playground/src/index.ts).
+Error: Could not resolve entry module (packages/sfc-playground/src/index.ts).
+    at error (/vue-next/node_modules/rollup/dist/shared/rollup.js:5239:30)
+    at ModuleLoader.loadEntryModule (/vue-next/node_modules/rollup/dist/shared/rollup.js:18677:20)
+    at async Promise.all (index 0)
+/vue-next/node_modules/brotli/build/encode.js:3
+1<process.argv.length?process.argv[1].replace(/\\/g,"/"):"unknown-program");b.arguments=process.argv.slice(2);"undefined"!==typeof module&&(module.exports=b);process.on("uncaughtException",function(a){if(!(a instanceof y))throw a;});b.inspect=function(){return"[Emscripten Module object]"}}else if(x)b.print||(b.print=print),"undefined"!=typeof printErr&&(b.printErr=printErr),b.read="undefined"!=typeof read?read:function(){throw"no read() available (jsc?)";},b.readBinary=function(a){if("function"===
+                                                                                                                                                                                                                              ^
+Error: Command failed with exit code 1: rollup -c --environment COMMIT:4fe4de0,NODE_ENV:development,TARGET:sfc-playground,TYPES:true
+    at makeError (/vue-next/node_modules/execa/lib/error.js:59:11)
+    at handlePromise (/vue-next/node_modules/execa/index.js:114:26)
+    at processTicksAndRejections (node:internal/process/task_queues:94:5)
+    at async build (/vue-next/scripts/build.js:91:3)
+    at async runParallel (/vue-next/scripts/build.js:67:9)
+    at async buildAll (/vue-next/scripts/build.js:53:3)
+    at async run (/vue-next/scripts/build.js:44:5) {
+  shortMessage: 'Command failed with exit code 1: rollup -c --environment COMMIT:4fe4de0,NODE_ENV:development,TARGET:sfc-playground,TYPES:true',
+  command: 'rollup -c --environment COMMIT:4fe4de0,NODE_ENV:development,TARGET:sfc-playground,TYPES:true',
+  exitCode: 1,
+  signal: undefined,
+  signalDescription: undefined,
+  stdout: undefined,
+  stderr: undefined,
+  failed: true,
+  timedOut: false,
+  isCanceled: false,
+  killed: false
+}

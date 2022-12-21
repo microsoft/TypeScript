@@ -1,5 +1,5 @@
 tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(2,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
-tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(6,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
+tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(11,11): error TS2589: Type instantiation is excessively deep and possibly infinite.
 tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(18,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
 tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(22,5): error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
 tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(37,24): error TS2313: Type parameter 'T' has a circular constraint.
@@ -15,13 +15,13 @@ tests/cases/conformance/types/keyof/circularIndexedAccessErrors.ts(37,30): error
     
     type T2<K extends "x" | "y"> = {
         x: T2<K>[K];  // Error
-        ~
-!!! error TS2502: 'x' is referenced directly or indirectly in its own type annotation.
         y: number;
     }
     
     declare let x2: T2<"x">;
     let x2x = x2.x;
+              ~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
     
     interface T3<T extends T3<T>> {
         x: T["x"];

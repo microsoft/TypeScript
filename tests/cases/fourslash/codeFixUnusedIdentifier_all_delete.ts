@@ -12,8 +12,9 @@
 ////function f(a, b) {
 ////    const x = 0;
 ////}
-////function g(a, b, c) { return a; }
-////f; g;
+////function g(a) { return a; }
+////function h(c) { return c; }
+////f(); g(); h();
 ////
 ////interface I {
 ////    m(x: number): void;
@@ -30,6 +31,15 @@
 ////takesCb((x, y) => {});
 ////takesCb((x, y) => { x; });
 ////takesCb((x, y) => { y; });
+////
+////function fn1(x: number, y: string): void {}
+////takesCb(fn1);
+////
+////function fn2(x: number, y: string): void { x; }
+////takesCb(fn2);
+////
+////function fn3(x: number, y: string): void { y; }
+////takesCb(fn3);
 ////
 ////x => {
 ////    const y = 0;
@@ -50,16 +60,19 @@
 
 verify.codeFixAll({
     fixId: "unusedIdentifier_delete",
-    fixAllDescription: "Delete all unused declarations",
+    fixAllDescription: ts.Diagnostics.Delete_all_unused_declarations.message,
     newFileContent:
-`import { used1 } from "foo";
-import { used2 } from "foo";
+`import d from "foo";
+import d2, { used1 } from "foo";
+import { x } from "foo";
+import { x2, used2 } from "foo";
 used1; used2;
 
 function f() {
 }
 function g(a) { return a; }
-f; g;
+function h(c) { return c; }
+f(); g(); h();
 
 interface I {
     m(x: number): void;
@@ -75,6 +88,15 @@ declare function takesCb(cb: (x: number, y: string) => void): void;
 takesCb(() => {});
 takesCb((x) => { x; });
 takesCb((x, y) => { y; });
+
+function fn1(x: number, y: string): void {}
+takesCb(fn1);
+
+function fn2(x: number, y: string): void { x; }
+takesCb(fn2);
+
+function fn3(x: number, y: string): void { y; }
+takesCb(fn3);
 
 () => {
 };

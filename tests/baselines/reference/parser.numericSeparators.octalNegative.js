@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/parser/ecmascriptnext/numericSeparators/parser.numericSeparators.octalNegative.ts] ////
+//// [tests/cases/conformance/parser/ecmascript2021/numericSeparators/parser.numericSeparators.octalNegative.ts] ////
 
 //// [1.ts]
 0o00_

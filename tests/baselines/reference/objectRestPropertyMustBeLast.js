@@ -20,6 +20,6 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 var _a, _b;
 var _c = { x: 1 }, x = _c.x; // Error, rest must be last property
-(_a = { x: 1 }, (x = _a.x, _a)); // Error, rest must be last property
+(_a = { x: 1 }, x = _a.x); // Error, rest must be last property
 var _d = { x: 1 }, x = _d.x, b = __rest(_d, ["a", "x"]); // Error, rest must be last property
-(_b = { x: 1 }, (x = _b.x, _b), b = __rest(_b, ["x"])); // Error, rest must be last property
+(_b = { x: 1 }, x = _b.x, b = __rest(_b, ["x"])); // Error, rest must be last property

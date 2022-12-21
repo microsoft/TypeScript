@@ -1,4 +1,4 @@
-tests/cases/conformance/salsa/b.js(2,1): error TS2322: Type '2' is not assignable to type '() => void'.
+tests/cases/conformance/salsa/b.js(2,1): error TS2322: Type 'number' is not assignable to type '() => void'.
 
 
 ==== tests/cases/conformance/salsa/a.d.ts (0 errors) ====
@@ -9,5 +9,5 @@ tests/cases/conformance/salsa/b.js(2,1): error TS2322: Type '2' is not assignabl
     C.prototype = {};
     C.bar = 2;
     ~~~~~
-!!! error TS2322: Type '2' is not assignable to type '() => void'.
+!!! error TS2322: Type 'number' is not assignable to type '() => void'.
     

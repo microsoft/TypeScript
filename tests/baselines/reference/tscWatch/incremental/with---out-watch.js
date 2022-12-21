@@ -1,4 +1,4 @@
-/a/lib/tsc.js -w
+Input::
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -21,12 +21,57 @@ const y = 20;
 //// [/users/username/projects/project/tsconfig.json]
 {"compilerOptions":{"incremental":true,"outFile":"out.js"}}
 
+
+/a/lib/tsc.js -w
+Output::
+>> Screen clear
+[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+
+[[90m12:00:28 AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
+Program options: {"incremental":true,"outFile":"/users/username/projects/project/out.js","watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+PolledWatches::
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/users/username/projects/project/tsconfig.json:
+  {}
+/users/username/projects/project/file1.ts:
+  {}
+/users/username/projects/project/file2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project:
+  {}
+
+exitCode:: ExitStatus.undefined
+
 //// [/users/username/projects/project/out.js]
 var x = 10;
 var y = 20;
 
 
 //// [/users/username/projects/project/out.tsbuildinfo]
+{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file1.ts","./file2.ts"],"js":{"sections":[{"pos":0,"end":24,"kind":"text"}],"hash":"-5596233073-var x = 10;\nvar y = 20;\n"}},"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","5029505981-const x = 10;","2026007743-const y = 20;"],"options":{"outFile":"./out.js"}},"version":"FakeTSVersion"}
+
+//// [/users/username/projects/project/out.tsbuildinfo.readable.baseline.txt]
 {
   "bundle": {
     "commonSourceDirectory": "./",
@@ -41,10 +86,27 @@ var y = 20;
           "end": 24,
           "kind": "text"
         }
-      ]
+      ],
+      "hash": "-5596233073-var x = 10;\nvar y = 20;\n"
     }
   },
-  "version": "FakeTSVersion"
+  "program": {
+    "fileNames": [
+      "../../../../a/lib/lib.d.ts",
+      "./file1.ts",
+      "./file2.ts"
+    ],
+    "fileInfos": {
+      "../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "./file1.ts": "5029505981-const x = 10;",
+      "./file2.ts": "2026007743-const y = 20;"
+    },
+    "options": {
+      "outFile": "./out.js"
+    }
+  },
+  "version": "FakeTSVersion",
+  "size": 753
 }
 
 //// [/users/username/projects/project/out.tsbuildinfo.baseline.txt]
@@ -57,41 +119,3 @@ var y = 20;
 
 ======================================================================
 
-
-Output::
->> Screen clear
-12:00:23 AM - Starting compilation in watch mode...
-
-
-
-12:00:28 AM - Found 0 errors. Watching for file changes.
-
-
-Program root files: ["/users/username/projects/project/file1.ts","/users/username/projects/project/file2.ts"]
-Program options: {"incremental":true,"outFile":"/users/username/projects/project/out.js","watch":true,"configFilePath":"/users/username/projects/project/tsconfig.json"}
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-No cached semantic diagnostics in the builder::
-
-WatchedFiles::
-/users/username/projects/project/tsconfig.json:
-  {"pollingInterval":250}
-/users/username/projects/project/file1.ts:
-  {"pollingInterval":250}
-/users/username/projects/project/file2.ts:
-  {"pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"pollingInterval":250}
-
-FsWatches::
-
-FsWatchesRecursive::
-/users/username/projects/project/node_modules/@types:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/users/username/projects/project:
-  {"fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-
-exitCode:: ExitStatus.undefined

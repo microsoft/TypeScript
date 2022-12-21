@@ -1,0 +1,76 @@
+=== tests/cases/compiler/test.ts ===
+import {dropPrivateProps1, dropPrivateProps2} from './api';
+>dropPrivateProps1 : Symbol(dropPrivateProps1, Decl(test.ts, 0, 8))
+>dropPrivateProps2 : Symbol(dropPrivateProps2, Decl(test.ts, 0, 26))
+
+const a = dropPrivateProps1({foo: 42, _bar: 'secret'}); // type is {foo: number}
+>a : Symbol(a, Decl(test.ts, 1, 5))
+>dropPrivateProps1 : Symbol(dropPrivateProps1, Decl(test.ts, 0, 8))
+>foo : Symbol(foo, Decl(test.ts, 1, 29))
+>_bar : Symbol(_bar, Decl(test.ts, 1, 37))
+
+//a._bar                                                // error: _bar does not exist           <===== as expected
+const b = dropPrivateProps2({foo: 42, _bar: 'secret'}); // type is {foo: number, _bar: string}
+>b : Symbol(b, Decl(test.ts, 3, 5))
+>dropPrivateProps2 : Symbol(dropPrivateProps2, Decl(test.ts, 0, 26))
+>foo : Symbol(foo, Decl(test.ts, 3, 29))
+>_bar : Symbol(_bar, Decl(test.ts, 3, 37))
+
+//b._bar                                                // no error, type of b._bar is string   <===== NOT expected
+
+=== tests/cases/compiler/api.ts ===
+import {excludePrivateKeys1, excludePrivateKeys2} from './internal';
+>excludePrivateKeys1 : Symbol(excludePrivateKeys1, Decl(api.ts, 0, 8))
+>excludePrivateKeys2 : Symbol(excludePrivateKeys2, Decl(api.ts, 0, 28))
+
+export const dropPrivateProps1 = <Obj>(obj: Obj) => excludePrivateKeys1(obj);
+>dropPrivateProps1 : Symbol(dropPrivateProps1, Decl(api.ts, 1, 12))
+>Obj : Symbol(Obj, Decl(api.ts, 1, 34))
+>obj : Symbol(obj, Decl(api.ts, 1, 39))
+>Obj : Symbol(Obj, Decl(api.ts, 1, 34))
+>excludePrivateKeys1 : Symbol(excludePrivateKeys1, Decl(api.ts, 0, 8))
+>obj : Symbol(obj, Decl(api.ts, 1, 39))
+
+export const dropPrivateProps2 = <Obj>(obj: Obj) => excludePrivateKeys2(obj);
+>dropPrivateProps2 : Symbol(dropPrivateProps2, Decl(api.ts, 2, 12))
+>Obj : Symbol(Obj, Decl(api.ts, 2, 34))
+>obj : Symbol(obj, Decl(api.ts, 2, 39))
+>Obj : Symbol(Obj, Decl(api.ts, 2, 34))
+>excludePrivateKeys2 : Symbol(excludePrivateKeys2, Decl(api.ts, 0, 28))
+>obj : Symbol(obj, Decl(api.ts, 2, 39))
+
+=== tests/cases/compiler/internal.ts ===
+export declare function excludePrivateKeys1<Obj>(obj: Obj): {[K in PublicKeys1<keyof Obj>]: Obj[K]};
+>excludePrivateKeys1 : Symbol(excludePrivateKeys1, Decl(internal.ts, 0, 0))
+>Obj : Symbol(Obj, Decl(internal.ts, 0, 44))
+>obj : Symbol(obj, Decl(internal.ts, 0, 49))
+>Obj : Symbol(Obj, Decl(internal.ts, 0, 44))
+>K : Symbol(K, Decl(internal.ts, 0, 62))
+>PublicKeys1 : Symbol(PublicKeys1, Decl(internal.ts, 1, 100))
+>Obj : Symbol(Obj, Decl(internal.ts, 0, 44))
+>Obj : Symbol(Obj, Decl(internal.ts, 0, 44))
+>K : Symbol(K, Decl(internal.ts, 0, 62))
+
+export declare function excludePrivateKeys2<Obj>(obj: Obj): {[K in PublicKeys2<keyof Obj>]: Obj[K]};
+>excludePrivateKeys2 : Symbol(excludePrivateKeys2, Decl(internal.ts, 0, 100))
+>Obj : Symbol(Obj, Decl(internal.ts, 1, 44))
+>obj : Symbol(obj, Decl(internal.ts, 1, 49))
+>Obj : Symbol(Obj, Decl(internal.ts, 1, 44))
+>K : Symbol(K, Decl(internal.ts, 1, 62))
+>PublicKeys2 : Symbol(PublicKeys2, Decl(internal.ts, 2, 64))
+>Obj : Symbol(Obj, Decl(internal.ts, 1, 44))
+>Obj : Symbol(Obj, Decl(internal.ts, 1, 44))
+>K : Symbol(K, Decl(internal.ts, 1, 62))
+
+export type PublicKeys1<T> = T extends `_${string}` ? never : T;
+>PublicKeys1 : Symbol(PublicKeys1, Decl(internal.ts, 1, 100))
+>T : Symbol(T, Decl(internal.ts, 2, 24))
+>T : Symbol(T, Decl(internal.ts, 2, 24))
+>T : Symbol(T, Decl(internal.ts, 2, 24))
+
+type PublicKeys2<T>        = T extends `_${string}` ? never : T;
+>PublicKeys2 : Symbol(PublicKeys2, Decl(internal.ts, 2, 64))
+>T : Symbol(T, Decl(internal.ts, 3, 17))
+>T : Symbol(T, Decl(internal.ts, 3, 17))
+>T : Symbol(T, Decl(internal.ts, 3, 17))
+

@@ -1,0 +1,77 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesInNestedClasses-1.ts ===
+class A {
+>A : Symbol(A, Decl(privateNamesInNestedClasses-1.ts, 0, 0))
+
+   #foo = "A's #foo";
+>#foo : Symbol(A.#foo, Decl(privateNamesInNestedClasses-1.ts, 0, 9))
+
+   #bar = "A's #bar";
+>#bar : Symbol(A.#bar, Decl(privateNamesInNestedClasses-1.ts, 1, 21))
+
+   method () {
+>method : Symbol(A.method, Decl(privateNamesInNestedClasses-1.ts, 2, 21))
+
+       class B {
+>B : Symbol(B, Decl(privateNamesInNestedClasses-1.ts, 3, 14))
+
+           #foo = "B's #foo";
+>#foo : Symbol(B.#foo, Decl(privateNamesInNestedClasses-1.ts, 4, 16))
+
+           bar (a: any) {
+>bar : Symbol(B.bar, Decl(privateNamesInNestedClasses-1.ts, 5, 29))
+>a : Symbol(a, Decl(privateNamesInNestedClasses-1.ts, 6, 16))
+
+               a.#foo; // OK, no compile-time error, don't know what `a` is
+>a : Symbol(a, Decl(privateNamesInNestedClasses-1.ts, 6, 16))
+           }
+           baz (a: A) {
+>baz : Symbol(B.baz, Decl(privateNamesInNestedClasses-1.ts, 8, 12))
+>a : Symbol(a, Decl(privateNamesInNestedClasses-1.ts, 9, 16))
+>A : Symbol(A, Decl(privateNamesInNestedClasses-1.ts, 0, 0))
+
+               a.#foo; // compile-time error, shadowed
+>a : Symbol(a, Decl(privateNamesInNestedClasses-1.ts, 9, 16))
+           }
+           quux (b: B) {
+>quux : Symbol(B.quux, Decl(privateNamesInNestedClasses-1.ts, 11, 12))
+>b : Symbol(b, Decl(privateNamesInNestedClasses-1.ts, 12, 17))
+>B : Symbol(B, Decl(privateNamesInNestedClasses-1.ts, 3, 14))
+
+               b.#foo; // OK
+>b.#foo : Symbol(B.#foo, Decl(privateNamesInNestedClasses-1.ts, 4, 16))
+>b : Symbol(b, Decl(privateNamesInNestedClasses-1.ts, 12, 17))
+           }
+       }
+       const a = new A();
+>a : Symbol(a, Decl(privateNamesInNestedClasses-1.ts, 16, 12))
+>A : Symbol(A, Decl(privateNamesInNestedClasses-1.ts, 0, 0))
+
+       new B().bar(a);
+>new B().bar : Symbol(B.bar, Decl(privateNamesInNestedClasses-1.ts, 5, 29))
+>B : Symbol(B, Decl(privateNamesInNestedClasses-1.ts, 3, 14))
+>bar : Symbol(B.bar, Decl(privateNamesInNestedClasses-1.ts, 5, 29))
+>a : Symbol(a, Decl(privateNamesInNestedClasses-1.ts, 16, 12))
+
+       new B().baz(a);
+>new B().baz : Symbol(B.baz, Decl(privateNamesInNestedClasses-1.ts, 8, 12))
+>B : Symbol(B, Decl(privateNamesInNestedClasses-1.ts, 3, 14))
+>baz : Symbol(B.baz, Decl(privateNamesInNestedClasses-1.ts, 8, 12))
+>a : Symbol(a, Decl(privateNamesInNestedClasses-1.ts, 16, 12))
+
+       const b = new B();
+>b : Symbol(b, Decl(privateNamesInNestedClasses-1.ts, 19, 12))
+>B : Symbol(B, Decl(privateNamesInNestedClasses-1.ts, 3, 14))
+
+       new B().quux(b);
+>new B().quux : Symbol(B.quux, Decl(privateNamesInNestedClasses-1.ts, 11, 12))
+>B : Symbol(B, Decl(privateNamesInNestedClasses-1.ts, 3, 14))
+>quux : Symbol(B.quux, Decl(privateNamesInNestedClasses-1.ts, 11, 12))
+>b : Symbol(b, Decl(privateNamesInNestedClasses-1.ts, 19, 12))
+   }
+}
+
+new A().method();
+>new A().method : Symbol(A.method, Decl(privateNamesInNestedClasses-1.ts, 2, 21))
+>A : Symbol(A, Decl(privateNamesInNestedClasses-1.ts, 0, 0))
+>method : Symbol(A.method, Decl(privateNamesInNestedClasses-1.ts, 2, 21))
+

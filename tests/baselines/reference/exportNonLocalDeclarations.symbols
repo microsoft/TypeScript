@@ -1,0 +1,7 @@
+=== tests/cases/conformance/externalModules/exportNonLocalDeclarations.ts ===
+export { string };
+>string : Symbol(string, Decl(exportNonLocalDeclarations.ts, 0, 8))
+
+export type { number };
+>number : Symbol(number, Decl(exportNonLocalDeclarations.ts, 1, 13))
+

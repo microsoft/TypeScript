@@ -1,0 +1,128 @@
+=== tests/cases/compiler/index.tsx ===
+interface MiddlewareArray<T> extends Array<T> {}
+>MiddlewareArray : Symbol(MiddlewareArray, Decl(index.tsx, 0, 0))
+>T : Symbol(T, Decl(index.tsx, 0, 26))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>T : Symbol(T, Decl(index.tsx, 0, 26))
+
+declare function configureStore(options: { middleware: MiddlewareArray<any> }): void;
+>configureStore : Symbol(configureStore, Decl(index.tsx, 0, 48))
+>options : Symbol(options, Decl(index.tsx, 1, 32))
+>middleware : Symbol(middleware, Decl(index.tsx, 1, 42))
+>MiddlewareArray : Symbol(MiddlewareArray, Decl(index.tsx, 0, 0))
+
+declare const defaultMiddleware: MiddlewareArray<any>;
+>defaultMiddleware : Symbol(defaultMiddleware, Decl(index.tsx, 3, 13))
+>MiddlewareArray : Symbol(MiddlewareArray, Decl(index.tsx, 0, 0))
+
+configureStore({
+>configureStore : Symbol(configureStore, Decl(index.tsx, 0, 48))
+
+  middleware: [...defaultMiddleware], // Should not error
+>middleware : Symbol(middleware, Decl(index.tsx, 4, 16))
+>defaultMiddleware : Symbol(defaultMiddleware, Decl(index.tsx, 3, 13))
+
+});
+
+declare namespace React {
+>React : Symbol(React, Decl(index.tsx, 6, 3), Decl(index.tsx, 25, 11))
+
+  type DetailedHTMLProps<E extends HTMLAttributes<T>, T> = E;
+>DetailedHTMLProps : Symbol(DetailedHTMLProps, Decl(index.tsx, 8, 25))
+>E : Symbol(E, Decl(index.tsx, 9, 25))
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(index.tsx, 9, 61))
+>T : Symbol(T, Decl(index.tsx, 9, 53))
+>T : Symbol(T, Decl(index.tsx, 9, 53))
+>E : Symbol(E, Decl(index.tsx, 9, 25))
+
+  interface HTMLAttributes<T> {
+>HTMLAttributes : Symbol(HTMLAttributes, Decl(index.tsx, 9, 61))
+>T : Symbol(T, Decl(index.tsx, 10, 27))
+
+    children?: ReactNode;
+>children : Symbol(HTMLAttributes.children, Decl(index.tsx, 10, 31))
+>ReactNode : Symbol(ReactNode, Decl(index.tsx, 12, 3))
+  }
+  type ReactNode = ReactChild | ReactFragment | boolean | null | undefined;
+>ReactNode : Symbol(ReactNode, Decl(index.tsx, 12, 3))
+>ReactChild : Symbol(ReactChild, Decl(index.tsx, 14, 35))
+>ReactFragment : Symbol(ReactFragment, Decl(index.tsx, 15, 30))
+
+  type ReactText = string | number;
+>ReactText : Symbol(ReactText, Decl(index.tsx, 13, 75))
+
+  type ReactChild = ReactText;
+>ReactChild : Symbol(ReactChild, Decl(index.tsx, 14, 35))
+>ReactText : Symbol(ReactText, Decl(index.tsx, 13, 75))
+
+  type ReactFragment = {} | ReactNodeArray;
+>ReactFragment : Symbol(ReactFragment, Decl(index.tsx, 15, 30))
+>ReactNodeArray : Symbol(ReactNodeArray, Decl(index.tsx, 16, 43))
+
+  interface ReactNodeArray extends Array<ReactNode> {}
+>ReactNodeArray : Symbol(ReactNodeArray, Decl(index.tsx, 16, 43))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>ReactNode : Symbol(ReactNode, Decl(index.tsx, 12, 3))
+}
+declare namespace JSX {
+>JSX : Symbol(JSX, Decl(index.tsx, 18, 1))
+
+  interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(index.tsx, 19, 23))
+
+    ul: React.DetailedHTMLProps<React.HTMLAttributes<HTMLUListElement>, HTMLUListElement>;
+>ul : Symbol(IntrinsicElements.ul, Decl(index.tsx, 20, 31))
+>React : Symbol(React, Decl(index.tsx, 6, 3), Decl(index.tsx, 25, 11))
+>DetailedHTMLProps : Symbol(React.DetailedHTMLProps, Decl(index.tsx, 8, 25))
+>React : Symbol(React, Decl(index.tsx, 6, 3), Decl(index.tsx, 25, 11))
+>HTMLAttributes : Symbol(React.HTMLAttributes, Decl(index.tsx, 9, 61))
+>HTMLUListElement : Symbol(HTMLUListElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>HTMLUListElement : Symbol(HTMLUListElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    li: React.DetailedHTMLProps<React.HTMLAttributes<HTMLLIElement>, HTMLLIElement>;
+>li : Symbol(IntrinsicElements.li, Decl(index.tsx, 21, 90))
+>React : Symbol(React, Decl(index.tsx, 6, 3), Decl(index.tsx, 25, 11))
+>DetailedHTMLProps : Symbol(React.DetailedHTMLProps, Decl(index.tsx, 8, 25))
+>React : Symbol(React, Decl(index.tsx, 6, 3), Decl(index.tsx, 25, 11))
+>HTMLAttributes : Symbol(React.HTMLAttributes, Decl(index.tsx, 9, 61))
+>HTMLLIElement : Symbol(HTMLLIElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>HTMLLIElement : Symbol(HTMLLIElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+  }
+}
+declare var React: any;
+>React : Symbol(React, Decl(index.tsx, 6, 3), Decl(index.tsx, 25, 11))
+
+const Component = () => {
+>Component : Symbol(Component, Decl(index.tsx, 27, 5))
+
+  const categories = ['Fruit', 'Vegetables'];
+>categories : Symbol(categories, Decl(index.tsx, 28, 7))
+
+  return (
+    <ul>
+>ul : Symbol(JSX.IntrinsicElements.ul, Decl(index.tsx, 20, 31))
+
+      <li>All</li>
+>li : Symbol(JSX.IntrinsicElements.li, Decl(index.tsx, 21, 90))
+>li : Symbol(JSX.IntrinsicElements.li, Decl(index.tsx, 21, 90))
+
+      {categories.map((category) => (
+>categories.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>categories : Symbol(categories, Decl(index.tsx, 28, 7))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>category : Symbol(category, Decl(index.tsx, 33, 23))
+
+        <li key={category}>{category}</li> // Error about 'key' only
+>li : Symbol(JSX.IntrinsicElements.li, Decl(index.tsx, 21, 90))
+>key : Symbol(key, Decl(index.tsx, 34, 11))
+>category : Symbol(category, Decl(index.tsx, 33, 23))
+>category : Symbol(category, Decl(index.tsx, 33, 23))
+>li : Symbol(JSX.IntrinsicElements.li, Decl(index.tsx, 21, 90))
+
+      ))}
+    </ul>
+>ul : Symbol(JSX.IntrinsicElements.ul, Decl(index.tsx, 20, 31))
+
+  );
+};
+

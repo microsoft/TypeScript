@@ -1,0 +1,36 @@
+=== tests/cases/compiler/test.js ===
+module.exports = {
+>module.exports : Symbol(module.exports, Decl(test.js, 0, 0))
+>module : Symbol(export=, Decl(test.js, 0, 0))
+>exports : Symbol(export=, Decl(test.js, 0, 0))
+
+   message: ""
+>message : Symbol(message, Decl(test.js, 0, 18))
+}
+
+=== tests/cases/compiler/types1.ts ===
+import test from "./test";
+>test : Symbol(test, Decl(types1.ts, 0, 6), Decl(types1.ts, 0, 26))
+
+export type test
+>test : Symbol(test, Decl(types1.ts, 0, 26))
+
+> : Symbol(unknown)
+
+=== tests/cases/compiler/types2.ts ===
+import test from "./test";
+>test : Symbol(test, Decl(types2.ts, 0, 6), Decl(types2.ts, 0, 26))
+
+export type test = 
+>test : Symbol(test, Decl(types2.ts, 0, 26))
+
+> : Symbol(unknown)
+
+=== tests/cases/compiler/types3.ts ===
+import test from "./test";
+>test : Symbol(test, Decl(types3.ts, 0, 6), Decl(types3.ts, 0, 26))
+
+export type test = test;
+>test : Symbol(test, Decl(types3.ts, 0, 26))
+>test : Symbol(test, Decl(types3.ts, 0, 26))
+

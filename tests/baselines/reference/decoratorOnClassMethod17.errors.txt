@@ -1,0 +1,15 @@
+tests/cases/conformance/decorators/class/method/decoratorOnClassMethod17.ts(4,18): error TS1436: Decorators must precede the name and all keywords of property declarations.
+
+
+==== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod17.ts (1 errors) ====
+    declare var decorator: any;
+    
+    class Foo {
+        private prop @decorator
+                     ~
+!!! error TS1436: Decorators must precede the name and all keywords of property declarations.
+        foo() {
+            return 0;
+        }
+    }
+    

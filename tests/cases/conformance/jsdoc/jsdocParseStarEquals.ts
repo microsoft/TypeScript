@@ -12,3 +12,8 @@ function f(...args) {
 
 /** @type *= */
 var x;
+
+
+/** @param {function():*=} f */
+function cbf(f) {
+}

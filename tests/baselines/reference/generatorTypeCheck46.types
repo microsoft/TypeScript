@@ -19,9 +19,9 @@ foo("", function* () {
 
         *[Symbol.iterator]() {
 >[Symbol.iterator] : () => Generator<(x: string) => number, void, undefined>
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 
             yield x => x.length
 >yield x => x.length : undefined

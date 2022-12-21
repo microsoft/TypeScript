@@ -21,7 +21,8 @@ export namespace Something {
 
 //// [this.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Something = exports.make = void 0;
 var me = require("./this");
 function make(x) {
     return null;
@@ -32,11 +33,11 @@ var MyComponent = /** @class */ (function () {
     }
     return MyComponent;
 }());
-exports["default"] = MyComponent;
+exports.default = MyComponent;
 var Something;
 (function (Something) {
     var MyComponent = 2; // Shadow declaration, so symbol is only usable via the self-import
-    Something.create = make(me["default"]);
+    Something.create = make(me.default);
 })(Something = exports.Something || (exports.Something = {}));
 
 

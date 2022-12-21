@@ -36,7 +36,7 @@ declare var React: any;
 // @filename: 17.tsx
 <a b={}>;
 // @filename: 18.tsx
-var x = <div>one</div><div>two</div>;;
+var x = /* Leading trivia */ <div>one</div><div>two</div>;;
 // @filename: 19.tsx
 var x = <div>one</div> /* intervening comment */ <div>two</div>;;
 // @filename: 20.tsx

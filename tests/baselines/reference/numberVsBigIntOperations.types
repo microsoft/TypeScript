@@ -707,8 +707,8 @@ else isNumber(zeroOrBigOne);
 
 // Distinguishing truthy from falsy
 const isOne = (x: 1 | 1n) => x;
->isOne : (x: 1n | 1) => 1n | 1
->(x: 1 | 1n) => x : (x: 1n | 1) => 1n | 1
+>isOne : (x: 1 | 1n) => 1n | 1
+>(x: 1 | 1n) => x : (x: 1 | 1n) => 1n | 1
 >x : 1n | 1
 >x : 1n | 1
 
@@ -726,4 +726,21 @@ if (bigZeroOrOne) isOne(bigZeroOrOne);
 >isOne(bigZeroOrOne) : 1n | 1
 >isOne : (x: 1n | 1) => 1n | 1
 >bigZeroOrOne : 1
+
+type NumberOrBigint = number | bigint;
+>NumberOrBigint : number | bigint
+
+function getKey<S extends NumberOrBigint>(key: S) {
+>getKey : <S extends NumberOrBigint>(key: S) => void
+>key : S
+
+    +key;   // should error
+>+key : number
+>key : S
+
+    0 + key;    // should error
+>0 + key : any
+>0 : 0
+>key : S
+}
 

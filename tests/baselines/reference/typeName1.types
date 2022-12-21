@@ -112,7 +112,7 @@ var x12:{z:I;x:boolean;y:(s:string)=>boolean;w:{ z:I;[s:string]:{ x; y; };[n:num
 >3 : 3
 
 var x13:{ new(): number; new(n:number):number; x: string; w: {y: number;}; (): {}; } = 3;
->x13 : { (): {}; new (): number; new (n: number): number; x: string; w: { y: number; }; }
+>x13 : { (): {}; new (): number; new (n: number): number; x: string; w: {    y: number;}; }
 >n : number
 >x : string
 >w : { y: number; }

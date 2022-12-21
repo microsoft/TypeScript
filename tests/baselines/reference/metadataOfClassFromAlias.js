@@ -17,6 +17,7 @@ export class ClassA {
 //// [auxiliry.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SomeClass = void 0;
 var SomeClass = /** @class */ (function () {
     function SomeClass() {
     }
@@ -35,6 +36,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ClassA = void 0;
 var auxiliry_1 = require("./auxiliry");
 function annotation() {
     return function (target) { };

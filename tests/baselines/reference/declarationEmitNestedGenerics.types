@@ -1,10 +1,10 @@
 === tests/cases/compiler/declarationEmitNestedGenerics.ts ===
 function f<T>(p: T) {
->f : <T>(p: T) => <T>(x: T) => T
+>f : <T>(p: T) => <T>(x: T) => typeof p
 >p : T
 
     let g: <T>(x: T) => typeof p = null as any;
->g : <T>(x: T) => T
+>g : <T>(x: T) => typeof p
 >x : T
 >p : T
 >null as any : any

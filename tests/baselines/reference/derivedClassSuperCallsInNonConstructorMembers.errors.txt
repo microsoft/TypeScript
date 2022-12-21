@@ -1,43 +1,18 @@
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(8,8): error TS2304: Cannot find name 'super'.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(8,13): error TS1005: ';' expected.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(8,14): error TS1109: Expression expected.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(9,5): error TS2304: Cannot find name 'b'.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(9,9): error TS1005: ';' expected.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(8,13): error TS1441: Cannot start a function call in a type annotation.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(8,14): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(10,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(12,5): error TS2304: Cannot find name 'get'.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(12,9): error TS1005: ';' expected.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(12,9): error TS2304: Cannot find name 'C'.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(12,13): error TS1005: ';' expected.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(13,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(16,5): error TS2304: Cannot find name 'set'.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(16,9): error TS1005: ';' expected.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(16,9): error TS2304: Cannot find name 'C'.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(16,11): error TS2304: Cannot find name 'v'.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(16,14): error TS1005: ';' expected.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(17,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(20,5): error TS1128: Declaration or statement expected.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(20,15): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(21,5): error TS1128: Declaration or statement expected.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(21,12): error TS2304: Cannot find name 'b'.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(21,16): error TS1005: ';' expected.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(20,15): error TS2304: Cannot find name 'super'.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(20,20): error TS1441: Cannot start a function call in a type annotation.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(20,21): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(22,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(24,5): error TS1128: Declaration or statement expected.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(24,12): error TS2304: Cannot find name 'get'.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(24,16): error TS1005: ';' expected.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(24,16): error TS2304: Cannot find name 'C'.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(24,20): error TS1005: ';' expected.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(25,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(28,5): error TS1128: Declaration or statement expected.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(28,12): error TS2304: Cannot find name 'set'.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(28,16): error TS1005: ';' expected.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(28,16): error TS2304: Cannot find name 'C'.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(28,18): error TS2304: Cannot find name 'v'.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(28,21): error TS1005: ';' expected.
 tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(29,9): error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
-tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts(31,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts (37 errors) ====
+==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts (12 errors) ====
     // error to use super calls outside a constructor
     
     class Base {
@@ -49,97 +24,47 @@ tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassS
            ~~~~~
 !!! error TS2304: Cannot find name 'super'.
                 ~
-!!! error TS1005: ';' expected.
+!!! error TS1441: Cannot start a function call in a type annotation.
                  ~
-!!! error TS1109: Expression expected.
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
         b() {
-        ~
-!!! error TS2304: Cannot find name 'b'.
-            ~
-!!! error TS1005: ';' expected.
             super();
             ~~~~~
 !!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
         }
         get C() {
-        ~~~
-!!! error TS2304: Cannot find name 'get'.
-            ~
-!!! error TS1005: ';' expected.
-            ~
-!!! error TS2304: Cannot find name 'C'.
-                ~
-!!! error TS1005: ';' expected.
             super();
             ~~~~~
 !!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
             return 1;
         }
         set C(v) {
-        ~~~
-!!! error TS2304: Cannot find name 'set'.
-            ~
-!!! error TS1005: ';' expected.
-            ~
-!!! error TS2304: Cannot find name 'C'.
-              ~
-!!! error TS2304: Cannot find name 'v'.
-                 ~
-!!! error TS1005: ';' expected.
             super();
             ~~~~~
 !!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
         }
     
         static a: super();
-        ~~~~~~
-!!! error TS1128: Declaration or statement expected.
                   ~~~~~
-!!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
+!!! error TS2304: Cannot find name 'super'.
+                       ~
+!!! error TS1441: Cannot start a function call in a type annotation.
+                        ~
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
         static b() {
-        ~~~~~~
-!!! error TS1128: Declaration or statement expected.
-               ~
-!!! error TS2304: Cannot find name 'b'.
-                   ~
-!!! error TS1005: ';' expected.
             super();
             ~~~~~
 !!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
         }
         static get C() {
-        ~~~~~~
-!!! error TS1128: Declaration or statement expected.
-               ~~~
-!!! error TS2304: Cannot find name 'get'.
-                   ~
-!!! error TS1005: ';' expected.
-                   ~
-!!! error TS2304: Cannot find name 'C'.
-                       ~
-!!! error TS1005: ';' expected.
             super();
             ~~~~~
 !!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
             return 1;
         }
         static set C(v) {
-        ~~~~~~
-!!! error TS1128: Declaration or statement expected.
-               ~~~
-!!! error TS2304: Cannot find name 'set'.
-                   ~
-!!! error TS1005: ';' expected.
-                   ~
-!!! error TS2304: Cannot find name 'C'.
-                     ~
-!!! error TS2304: Cannot find name 'v'.
-                        ~
-!!! error TS1005: ';' expected.
             super();
             ~~~~~
 !!! error TS2337: Super calls are not permitted outside constructors or in nested functions inside constructors.
         }
     }
-    ~
-!!! error TS1128: Declaration or statement expected.

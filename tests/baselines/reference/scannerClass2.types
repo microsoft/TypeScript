@@ -3,7 +3,7 @@
 >LoggerAdapter : LoggerAdapter
 
         constructor (public logger: ILogger) { 
->logger : any
+>logger : ILogger
 
             this._information = this.logger.information();
 >this._information = this.logger.information() : any
@@ -12,9 +12,9 @@
 >_information : any
 >this.logger.information() : any
 >this.logger.information : any
->this.logger : any
+>this.logger : ILogger
 >this : this
->logger : any
+>logger : ILogger
 >information : any
         }
     }

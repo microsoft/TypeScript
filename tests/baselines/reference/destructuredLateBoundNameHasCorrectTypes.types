@@ -1,8 +1,8 @@
 === tests/cases/compiler/destructuredLateBoundNameHasCorrectTypes.ts ===
 let { [Symbol.iterator]: destructured } = [];
->Symbol.iterator : symbol
+>Symbol.iterator : unique symbol
 >Symbol : SymbolConstructor
->iterator : symbol
+>iterator : unique symbol
 >destructured : () => IterableIterator<undefined>
 >[] : undefined[]
 

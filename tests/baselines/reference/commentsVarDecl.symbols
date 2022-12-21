@@ -23,7 +23,7 @@ var x = 70; /* multiline trailing comment
 >x : Symbol(x, Decl(commentsVarDecl.ts, 16, 3))
 
 this is multiline trailing comment */
-/** Triple slash comment on the assignement shouldnt be in .d.ts file*/
+/** Triple slash comment on the assignment shouldnt be in .d.ts file*/
 x = myVariable;
 >x : Symbol(x, Decl(commentsVarDecl.ts, 16, 3))
 >myVariable : Symbol(myVariable, Decl(commentsVarDecl.ts, 1, 3))

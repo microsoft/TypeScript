@@ -9,6 +9,7 @@ class C {
 >p2 : any
 
 	static static p3;
+>static : any
 >p3 : any
 
 	public private p4;

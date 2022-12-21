@@ -1,0 +1,23 @@
+=== tests/cases/conformance/jsdoc/declarations/a.js ===
+export const kSymbol = Symbol("my-symbol");
+>kSymbol : unique symbol
+>Symbol("my-symbol") : unique symbol
+>Symbol : SymbolConstructor
+>"my-symbol" : "my-symbol"
+
+/**
+ * @typedef {{[kSymbol]: true}} WithSymbol
+ */
+=== tests/cases/conformance/jsdoc/declarations/b.js ===
+/**
+ * @returns {import('./a').WithSymbol} 
+ * @param {import('./a').WithSymbol} value 
+ */
+export function b(value) {
+>b : (value: import('./a').WithSymbol) => import('./a').WithSymbol
+>value : import("tests/cases/conformance/jsdoc/declarations/a").WithSymbol
+
+    return value;
+>value : import("tests/cases/conformance/jsdoc/declarations/a").WithSymbol
+}
+

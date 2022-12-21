@@ -1,0 +1,15 @@
+tests/cases/conformance/override/a.js(7,5): error TS4123: This member cannot have a JSDoc comment with an 'override' tag because it is not declared in the base class 'A'. Did you mean 'doSomething'?
+
+
+==== tests/cases/conformance/override/a.js (1 errors) ====
+    class A {
+        doSomething() {}
+    }
+    
+    class B extends A {
+        /** @override  */
+        doSomethang() {}
+        ~~~~~~~~~~~
+!!! error TS4123: This member cannot have a JSDoc comment with an 'override' tag because it is not declared in the base class 'A'. Did you mean 'doSomething'?
+    }
+    

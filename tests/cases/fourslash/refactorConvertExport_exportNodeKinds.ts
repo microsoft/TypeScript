@@ -28,6 +28,9 @@
 ////export const x = 0;
 ////x;
 
+// @Filename: /var_with_type.ts
+////export const fn: (n: number) => number = (n) => 1;
+
 const tests: { [fileName: string]: string | undefined } = {
     fn: `export default function f() {}`,
 
@@ -59,6 +62,11 @@ export default T;
 `const x = 0;
 export default x;
 x;`,
+
+    var_with_type:
+`const fn: (n: number) => number = (n) => 1;
+export default fn;
+`,
 };
 
 for (const name in tests) {

@@ -79,3 +79,15 @@ type ListChild = Child<ListWidget>
 
 declare let x: ListChild;
 x.type;
+
+// Repros from #41790
+
+export type TV<T, K extends keyof T> = T[K] extends Record<infer E, any> ? E : never;
+
+export type ObjectOrArray<T, K extends keyof any = keyof any> = T[] | Record<K, T | Record<K, T> | T[]>;
+export type ThemeValue<K extends keyof ThemeType, ThemeType, TVal = any> =
+    ThemeType[K] extends TVal[] ? number :
+    ThemeType[K] extends Record<infer E, TVal> ? E :
+    ThemeType[K] extends ObjectOrArray<infer F> ? F : never;
+
+export type Foo<T> = T extends { [P in infer E]: any } ? E : never;

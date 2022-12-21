@@ -284,10 +284,12 @@ var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
         return extendStatics(d, b);
     };
     return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
         extendStatics(d, b);
         function __() { this.constructor = d; }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
@@ -299,7 +301,7 @@ var TypeScriptAllInOne;
 (function (TypeScriptAllInOne) {
     var Program = /** @class */ (function () {
         function Program() {
-            this["case"] = bfs.STATEMENTS(4);
+            this.case = bfs.STATEMENTS(4);
         }
         Program.Main = function () {
             var args = [];
@@ -312,13 +314,13 @@ var TypeScriptAllInOne;
                 retValue = bfs.VARIABLES();
                 if (retValue != 0)
                      ^= {
-                        "return": 1
+                        return: 1
                     };
             }
             finally {
             }
         };
-        Program.prototype["if"] = function (retValue) { };
+        Program.prototype.if = function (retValue) { };
         return Program;
     }());
     TypeScriptAllInOne.Program = Program;
@@ -372,7 +374,7 @@ var BasicFeatures = /** @class */ (function () {
         ;
         var quoted = '"', quoted2 = "'";
         var reg = /\w*/;
-        var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; }, "instanceof": function () { return 'objLit{42}'; } };
+        var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; }, instanceof: function () { return 'objLit{42}'; } };
         var weekday = Weekdays.Monday;
         var con = char + f + hexchar + float.toString() + float2.toString() + reg.toString() + objLit + weekday;
         //
@@ -499,7 +501,7 @@ var CLASS = /** @class */ (function () {
     }
     Object.defineProperty(CLASS.prototype, "Property", {
         get: function () { return 0; },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     CLASS.prototype.Member = function () {

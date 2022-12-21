@@ -1,2 +1,2 @@
-function f(a,#) {
+function f(a,¬) {
 }

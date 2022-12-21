@@ -7,7 +7,7 @@ class A {
 >A : A
 
     doIt(x: Array<string>): void {
->doIt : (x: string[]) => void
+>doIt : (x: Array<string>) => void
 >x : string[]
 
         x.forEach((v) => {

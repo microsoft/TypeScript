@@ -32,16 +32,24 @@ function testcase() {
 >_float : Symbol(_float, Decl(parser15.4.4.14-9-2.ts, 14, 5))
 
   if (a.indexOf(-(4/3)) === 14 &&      // a[14]=_float===-(4/3)
+>a.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(parser15.4.4.14-9-2.ts, 15, 5))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
 
       a.indexOf(0) === 7      &&       // a[7] = +0, 0===+0
+>a.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(parser15.4.4.14-9-2.ts, 15, 5))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
 
       a.indexOf(-0) === 7      &&     // a[7] = +0, -0===+0
+>a.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(parser15.4.4.14-9-2.ts, 15, 5))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
 
       a.indexOf(1) === 10 )            // a[10] =one=== 1
+>a.indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(parser15.4.4.14-9-2.ts, 15, 5))
+>indexOf : Symbol(Array.indexOf, Decl(lib.es5.d.ts, --, --))
   {
     return true;
   }

@@ -1,0 +1,63 @@
+tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers10.ts(6,16): error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers10.ts(12,16): error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers10.ts(13,26): error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
+tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers10.ts(14,22): error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
+
+
+==== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInStaticMembers10.ts (4 errors) ====
+    declare const foo: any;
+    
+    @foo
+    class C {
+        static a = 1;
+        static b = this.a + 1;
+                   ~~~~
+!!! error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
+    }
+    
+    @foo
+    class D extends C {
+        static c = 2;
+        static d = this.c + 1;
+                   ~~~~
+!!! error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
+        static e = super.a + this.c + 1;
+                             ~~~~
+!!! error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
+        static f = () => this.c + 1;
+                         ~~~~
+!!! error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
+        static ff = function () { this.c + 1 }
+        static foo () {
+            return this.c + 1;
+        }
+        static get fa () {
+            return this.c + 1;
+        }
+        static set fa (v: number) {
+            this.c = v + 1;
+        }
+    }
+    
+    class CC {
+        static a = 1;
+        static b = this.a + 1;
+    }
+    
+    class DD extends CC {
+        static c = 2;
+        static d = this.c + 1;
+        static e = super.a + this.c + 1;
+        static f = () => this.c + 1;
+        static ff = function () { this.c + 1 }
+        static foo () {
+            return this.c + 1;
+        }
+        static get fa () {
+            return this.c + 1;
+        }
+        static set fa (v: number) {
+            this.c = v + 1;
+        }
+    }
+    

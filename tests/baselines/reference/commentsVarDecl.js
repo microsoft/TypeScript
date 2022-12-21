@@ -17,7 +17,7 @@ var anotherAnotherVariable = 70; /* these are multiple trailing comments */ /* m
 /** comment line 2*/
 var x = 70; /* multiline trailing comment 
 this is multiline trailing comment */
-/** Triple slash comment on the assignement shouldnt be in .d.ts file*/
+/** Triple slash comment on the assignment shouldnt be in .d.ts file*/
 x = myVariable;
 
 /** triple slash comment1*/
@@ -57,7 +57,7 @@ var anotherAnotherVariable = 70; /* these are multiple trailing comments */ /* m
 /** comment line 2*/
 var x = 70; /* multiline trailing comment
 this is multiline trailing comment */
-/** Triple slash comment on the assignement shouldnt be in .d.ts file*/
+/** Triple slash comment on the assignment shouldnt be in .d.ts file*/
 x = myVariable;
 /** triple slash comment1*/
 /** jsdocstyle comment - only this comment should be in .d.ts file*/

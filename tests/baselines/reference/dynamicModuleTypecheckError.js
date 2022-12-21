@@ -10,7 +10,8 @@ for(var i = 0; i < 30; i++) {
 
 //// [dynamicModuleTypecheckError.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
 exports.x = 1;
 for (var i = 0; i < 30; i++) {
     exports.x = i * 1000; // should not be an error here

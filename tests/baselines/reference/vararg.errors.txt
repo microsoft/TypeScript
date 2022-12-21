@@ -3,8 +3,8 @@ tests/cases/compiler/vararg.ts(17,13): error TS2304: Cannot find name 'builder'.
 tests/cases/compiler/vararg.ts(19,17): error TS2304: Cannot find name 'builder'.
 tests/cases/compiler/vararg.ts(21,20): error TS2304: Cannot find name 'builder'.
 tests/cases/compiler/vararg.ts(28,13): error TS2345: Argument of type 'C' is not assignable to parameter of type 'string'.
-tests/cases/compiler/vararg.ts(29,13): error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
-tests/cases/compiler/vararg.ts(32,17): error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
+tests/cases/compiler/vararg.ts(29,13): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/compiler/vararg.ts(32,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 tests/cases/compiler/vararg.ts(33,17): error TS2345: Argument of type 'C' is not assignable to parameter of type 'string'.
 
 
@@ -49,12 +49,12 @@ tests/cases/compiler/vararg.ts(33,17): error TS2345: Argument of type 'C' is not
 !!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'string'.
     result+=x.f(3,"hello",3); // bad second param
                 ~
-!!! error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     result+=x.f("hello",3,3,3,3,3); // ok
     result+=x.f("hello"); // ok varargs length 0
     result+=x.fonly(3); // ok conversion
                     ~
-!!! error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
     result+=x.fonly(x); // bad param
                     ~
 !!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'string'.

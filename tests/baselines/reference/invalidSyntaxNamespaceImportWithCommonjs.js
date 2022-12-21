@@ -8,7 +8,8 @@ import * from Zero from "./0"
 
 //// [0.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {
     }
@@ -17,7 +18,7 @@ var C = /** @class */ (function () {
 exports.C = C;
 //// [1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var from = require();
 from;
 "./0";

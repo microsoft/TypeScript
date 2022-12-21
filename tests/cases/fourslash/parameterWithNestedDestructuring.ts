@@ -1,9 +1,13 @@
 /// <reference path='fourslash.ts'/>
 
-////[[{foo: 'hello', bar: [1]}]]
-////  .map(([{foo, bar: [baz]}]) => /*1*/foo + /*2*/baz);
+////[[{ a: 'hello', b: [1] }]]
+////  .map(([{ a, b: [c] }]) => /*1*/a + /*2*/c);
+
+////function f([[/*3*/a]]: [[string]], { b1: { /*4*/b2 } }: { b1: { b2: string; } }) {}
 
 verify.quickInfos({
-    1: "var foo: string",
-    2: "var baz: number"
+    1: "(parameter) a: string",
+    2: "(parameter) c: number",
+    3: "(parameter) a: string",
+    4: "(parameter) b2: string"
 });

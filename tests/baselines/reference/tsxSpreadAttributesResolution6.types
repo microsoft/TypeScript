@@ -3,7 +3,7 @@ import React = require('react');
 >React : typeof React
 
 type TextProps = { editable: false }
->TextProps : TextProps
+>TextProps : { editable: false; } | { editable: true; onEdit: (newText: string) => void; }
 >editable : false
 >false : false
 
@@ -34,7 +34,7 @@ let x = <TextComponent editable={true} />
 >x : JSX.Element
 ><TextComponent editable={true} /> : JSX.Element
 >TextComponent : typeof TextComponent
->editable : boolean
+>editable : true
 >true : true
 
 const textProps: TextProps = {

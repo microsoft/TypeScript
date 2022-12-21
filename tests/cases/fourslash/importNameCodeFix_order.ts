@@ -15,7 +15,7 @@ goTo.file("/c.ts");
 verify.importFixAtPosition([
 `import { bar, foo } from "./b";
 foo;`,
-`import { bar } from "./b";
-import { foo } from "./a";
+`import { foo } from "./a";
+import { bar } from "./b";
 foo;`,
 ]);

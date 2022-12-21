@@ -34,12 +34,12 @@ foo(fileText);
 
 //// [user.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 ///<reference path="declarations.d.ts" />
 var foobarbaz_1 = require("foobarbaz");
-foobarbaz_1.foo(foobarbaz_1.baz);
+(0, foobarbaz_1.foo)(foobarbaz_1.baz);
 var foosball_1 = require("foosball");
-foobarbaz_1.foo(foosball_1.foos);
+(0, foobarbaz_1.foo)(foosball_1.foos);
 // Works with relative file name
 var file_text_1 = require("./file!text");
-foobarbaz_1.foo(file_text_1["default"]);
+(0, foobarbaz_1.foo)(file_text_1.default);

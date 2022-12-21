@@ -1,0 +1,27 @@
+=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty7.ts ===
+export namespace Foo {
+>Foo : Symbol(Foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 0, 0))
+
+    export const key = Symbol();
+>key : Symbol(key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 1, 16))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
+}
+
+export class C {
+>C : Symbol(C, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 2, 1))
+
+    [Foo.key]: string;
+>[Foo.key] : Symbol(C[Foo.key], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 4, 16))
+>Foo.key : Symbol(Foo.key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 1, 16))
+>Foo : Symbol(Foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 0, 0))
+>key : Symbol(Foo.key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 1, 16))
+
+    constructor() {
+        this[Foo.key] = "hello";
+>this : Symbol(C, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 2, 1))
+>Foo.key : Symbol(Foo.key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 1, 16))
+>Foo : Symbol(Foo, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 0, 0))
+>key : Symbol(Foo.key, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty7.ts, 1, 16))
+    }
+}
+

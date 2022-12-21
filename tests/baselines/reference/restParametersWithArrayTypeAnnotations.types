@@ -71,18 +71,18 @@ var b = {
 
 
 function foo2(...x: Array<string>) { }
->foo2 : (...x: string[]) => void
+>foo2 : (...x: Array<string>) => void
 >x : string[]
 
 var f3 = function foo(...x: Array<string>) { }
->f3 : (...x: string[]) => void
->function foo(...x: Array<string>) { } : (...x: string[]) => void
->foo : (...x: string[]) => void
+>f3 : (...x: Array<string>) => void
+>function foo(...x: Array<string>) { } : (...x: Array<string>) => void
+>foo : (...x: Array<string>) => void
 >x : string[]
 
 var f4 = (...x: Array<string>, ...y: Array<string>) => { }
->f4 : (...x: string[], ...y: string[]) => void
->(...x: Array<string>, ...y: Array<string>) => { } : (...x: string[], ...y: string[]) => void
+>f4 : (...x: Array<string>, ...y: Array<string>) => void
+>(...x: Array<string>, ...y: Array<string>) => { } : (...x: Array<string>, ...y: Array<string>) => void
 >x : string[]
 >y : string[]
 
@@ -90,7 +90,7 @@ class C2 {
 >C2 : C2
 
     foo(...x: Array<string>) { }
->foo : (...x: string[]) => void
+>foo : (...x: Array<string>) => void
 >x : string[]
 }
 
@@ -99,39 +99,39 @@ interface I2 {
 >x : string[]
 
     foo(...x: Array<string>, ...y: Array<string>);
->foo : (...x: string[], ...y: string[]) => any
+>foo : (...x: Array<string>, ...y: Array<string>) => any
 >x : string[]
 >y : string[]
 }
 
 var a2: {
->a2 : { (...x: string[]): any; foo(...x: string[]): any; }
+>a2 : { (...x: Array<string>): any; foo(...x: Array<string>): any; }
 
     (...x: Array<string>);
 >x : string[]
 
     foo(...x: Array<string>);
->foo : (...x: string[]) => any
+>foo : (...x: Array<string>) => any
 >x : string[]
 }
 
 var b2 = {
->b2 : { foo(...x: string[]): void; a: (...x: string[], ...y: string[]) => void; b: (...x: string[]) => void; }
->{    foo(...x: Array<string>) { },    a: function foo(...x: Array<string>, ...y: Array<string>) { },    b: (...x: Array<string>) => { }} : { foo(...x: string[]): void; a: (...x: string[], ...y: string[]) => void; b: (...x: string[]) => void; }
+>b2 : { foo(...x: Array<string>): void; a: (...x: Array<string>, ...y: Array<string>) => void; b: (...x: Array<string>) => void; }
+>{    foo(...x: Array<string>) { },    a: function foo(...x: Array<string>, ...y: Array<string>) { },    b: (...x: Array<string>) => { }} : { foo(...x: Array<string>): void; a: (...x: Array<string>, ...y: Array<string>) => void; b: (...x: Array<string>) => void; }
 
     foo(...x: Array<string>) { },
->foo : (...x: string[]) => void
+>foo : (...x: Array<string>) => void
 >x : string[]
 
     a: function foo(...x: Array<string>, ...y: Array<string>) { },
->a : (...x: string[], ...y: string[]) => void
->function foo(...x: Array<string>, ...y: Array<string>) { } : (...x: string[], ...y: string[]) => void
->foo : (...x: string[], ...y: string[]) => void
+>a : (...x: Array<string>, ...y: Array<string>) => void
+>function foo(...x: Array<string>, ...y: Array<string>) { } : (...x: Array<string>, ...y: Array<string>) => void
+>foo : (...x: Array<string>, ...y: Array<string>) => void
 >x : string[]
 >y : string[]
 
     b: (...x: Array<string>) => { }
->b : (...x: string[]) => void
->(...x: Array<string>) => { } : (...x: string[]) => void
+>b : (...x: Array<string>) => void
+>(...x: Array<string>) => { } : (...x: Array<string>) => void
 >x : string[]
 }

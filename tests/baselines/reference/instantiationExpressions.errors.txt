@@ -1,0 +1,228 @@
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(6,16): error TS1099: Type argument list cannot be empty.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(9,17): error TS2635: Type '{ <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }' has no signatures for which the type argument list is applicable.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(12,21): error TS1099: Type argument list cannot be empty.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(15,22): error TS2635: Type '{ <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }' has no signatures for which the type argument list is applicable.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(18,21): error TS1099: Type argument list cannot be empty.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(20,22): error TS2635: Type 'ArrayConstructor' has no signatures for which the type argument list is applicable.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(23,24): error TS1099: Type argument list cannot be empty.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(25,25): error TS2635: Type 'ArrayConstructor' has no signatures for which the type argument list is applicable.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(50,16): error TS2635: Type '{ x: string; y: string; }' has no signatures for which the type argument list is applicable.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(82,16): error TS2635: Type '{ x: string; } & { y: string; }' has no signatures for which the type argument list is applicable.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(106,16): error TS2635: Type '(a: string, b: number) => string[]' has no signatures for which the type argument list is applicable.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(114,16): error TS2635: Type '{ x: string; } | { y: string; }' has no signatures for which the type argument list is applicable.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(126,16): error TS2635: Type '(a: string, b: number) => string[]' has no signatures for which the type argument list is applicable.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(130,16): error TS2635: Type 'new (a: string, b: number) => string[]' has no signatures for which the type argument list is applicable.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(163,40): error TS2344: Type 'U' does not satisfy the constraint 'number'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts(164,40): error TS2344: Type 'U' does not satisfy the constraint 'string'.
+  Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/instantiationExpressions.ts (16 errors) ====
+    declare function fx<T>(x: T): T;
+    declare function fx<T>(x: T, n: number): T;
+    declare function fx<T, U>(t: [T, U]): [T, U];
+    
+    function f1() {
+        let f0 = fx<>;  // Error
+                   ~~
+!!! error TS1099: Type argument list cannot be empty.
+        let f1 = fx<string>;  // { (x: string): string; (x: string, n: number): string; }
+        let f2 = fx<string, number>;  // (t: [string, number]) => [string, number]
+        let f3 = fx<string, number, boolean>;  // Error
+                    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2635: Type '{ <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }' has no signatures for which the type argument list is applicable.
+    }
+    
+    type T10 = typeof fx<>;  // Error
+                        ~~
+!!! error TS1099: Type argument list cannot be empty.
+    type T11 = typeof fx<string>;  // { (x: string): string; (x: string, n: number): string; }
+    type T12 = typeof fx<string, number>;  // (t: [string, number]) => [string, number]
+    type T13 = typeof fx<string, number, boolean>;  // Error
+                         ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2635: Type '{ <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }' has no signatures for which the type argument list is applicable.
+    
+    function f2() {
+        const A0 = Array<>;  // Error
+                        ~~
+!!! error TS1099: Type argument list cannot be empty.
+        const A1 = Array<string>;  // new (...) => string[]
+        const A2 = Array<string, number>;  // Error
+                         ~~~~~~~~~~~~~~
+!!! error TS2635: Type 'ArrayConstructor' has no signatures for which the type argument list is applicable.
+    }
+    
+    type T20 = typeof Array<>;  // Error
+                           ~~
+!!! error TS1099: Type argument list cannot be empty.
+    type T21 = typeof Array<string>;  // new (...) => string[]
+    type T22 = typeof Array<string, number>;  // Error
+                            ~~~~~~~~~~~~~~
+!!! error TS2635: Type 'ArrayConstructor' has no signatures for which the type argument list is applicable.
+    
+    declare class C<T> {
+        constructor(x: T);
+        static f<U>(x: U): U[];
+    }
+    
+    function f3() {
+        let c1 = C<string>;  // { new (x: string): C<string>; f<U>(x: U): T[]; prototype: C<any>; }
+        let f1 = C.f<string>;  // (x: string) => string[]
+    }
+    
+    function f10(f: { <T>(a: T): T, <U>(a: U, b: number): U[] }) {
+        let fs = f<string>;  // { (a: string): string; (a: string, b: number): string[]; }
+    }
+    
+    function f11(f: { <T>(a: T): T, (a: string, b: number): string[] }) {
+        let fs = f<string>;  // (a: string) => string
+    }
+    
+    function f12(f: { <T>(a: T): T, x: string }) {
+        let fs = f<string>;  // { (a: string): string; x: string; }
+    }
+    
+    function f13(f: { x: string, y: string }) {
+        let fs = f<string>;  // Error, no applicable signatures
+                   ~~~~~~
+!!! error TS2635: Type '{ x: string; y: string; }' has no signatures for which the type argument list is applicable.
+    }
+    
+    function f14(f: { new <T>(a: T): T, new <U>(a: U, b: number): U[] }) {
+        let fs = f<string>;  // { new (a: string): string; new (a: string, b: number): string[]; }
+    }
+    
+    function f15(f: { new <T>(a: T): T, <U>(a: U, b: number): U[] }) {
+        let fs = f<string>;  // { new (a: string): string; (a: string, b: number): string[]; }
+    }
+    
+    function f16(f: { new <T>(a: T): T, (a: string, b: number): string[] }) {
+        let fs = f<string>;  // new (a: string) => string
+    }
+    
+    function f17(f: { <T>(a: T): T, new (a: string, b: number): string[] }) {
+        let fs = f<string>;  // (a: string) => string
+    }
+    
+    function f20(f: (<T>(a: T) => T) & (<U>(a: U, b: number) => U[])) {
+        let fs = f<string>;  // ((a: string) => string) & ((a: string, b: number) => string[]])
+    }
+    
+    function f21(f: (<T>(a: T) => T) & ((a: string, b: number) => string[])) {
+        let fs = f<string>;  // (a: string) => string
+    }
+    
+    function f22(f: (<T>(a: T) => T) & { x: string }) {
+        let fs = f<string>;  // ((a: string) => string) & { x: string }
+    }
+    
+    function f23(f: { x: string } & { y: string }) {
+        let fs = f<string>;  // Error, no applicable signatures
+                   ~~~~~~
+!!! error TS2635: Type '{ x: string; } & { y: string; }' has no signatures for which the type argument list is applicable.
+    }
+    
+    function f24(f: (new <T>(a: T) => T) & (new <U>(a: U, b: number) => U[])) {
+        let fs = f<string>;  // (new (a: string) => string) & ((a: string, b: number) => string[]])
+    }
+    
+    function f25(f: (new <T>(a: T) => T) & (<U>(a: U, b: number) => U[])) {
+        let fs = f<string>;  // (new (a: string) => string) & ((a: string, b: number) => string[]])
+    }
+    
+    function f26(f: (new <T>(a: T) => T) & ((a: string, b: number) => string[])) {
+        let fs = f<string>;  // new (a: string) => string
+    }
+    
+    function f27(f: (<T>(a: T) => T) & (new (a: string, b: number) => string[])) {
+        let fs = f<string>;  // (a: string) => string
+    }
+    
+    function f30(f: (<T>(a: T) => T) | (<U>(a: U, b: number) => U[])) {
+        let fs = f<string>;  // ((a: string) => string) | ((a: string, b: number) => string[]])
+    }
+    
+    function f31(f: (<T>(a: T) => T) | ((a: string, b: number) => string[])) {
+        let fs = f<string>;  // Error, '(a: string, b: number) => string[]' has no applicable signatures
+                   ~~~~~~
+!!! error TS2635: Type '(a: string, b: number) => string[]' has no signatures for which the type argument list is applicable.
+    }
+    
+    function f32(f: (<T>(a: T) => T) | { x: string }) {
+        let fs = f<string>;  // ((a: string) => string) | { x: string }
+    }
+    
+    function f33(f: { x: string } | { y: string }) {
+        let fs = f<string>;  // Error, no applicable signatures
+                   ~~~~~~
+!!! error TS2635: Type '{ x: string; } | { y: string; }' has no signatures for which the type argument list is applicable.
+    }
+    
+    function f34(f: (new <T>(a: T) => T) | (new <U>(a: U, b: number) => U[])) {
+        let fs = f<string>;  // (new (a: string) => string) | ((a: string, b: number) => string[]])
+    }
+    
+    function f35(f: (new <T>(a: T) => T) | (<U>(a: U, b: number) => U[])) {
+        let fs = f<string>;  // (new (a: string) => string) | ((a: string, b: number) => string[]])
+    }
+    
+    function f36(f: (new <T>(a: T) => T) | ((a: string, b: number) => string[])) {
+        let fs = f<string>;  // Error, '(a: string, b: number) => string[]' has no applicable signatures
+                   ~~~~~~
+!!! error TS2635: Type '(a: string, b: number) => string[]' has no signatures for which the type argument list is applicable.
+    }
+    
+    function f37(f: (<T>(a: T) => T) | (new (a: string, b: number) => string[])) {
+        let fs = f<string>;  // Error, 'new (a: string, b: number) => string[]' has no applicable signatures
+                   ~~~~~~
+!!! error TS2635: Type 'new (a: string, b: number) => string[]' has no signatures for which the type argument list is applicable.
+    }
+    
+    function f38<T extends (<A>(x: A) => A) | (<B>(x: B) => B[]), U>(f: T | U | (<C>(x: C) => C[][])) {
+        let fs = f<string>;  // U | ((x: string) => string) | ((x: string) => string[]) | ((x: string) => string[][])
+    }
+    
+    function makeBox<T>(value: T) {
+        return { value };
+    }
+    
+    type BoxFunc<T> = typeof makeBox<T>;  // (value: T) => { value: T }
+    type StringBoxFunc = BoxFunc<string>;  // (value: string) => { value: string }
+    
+    type Box<T> = ReturnType<typeof makeBox<T>>;  // { value: T }
+    type StringBox = Box<string>;  // { value: string }
+    
+    type A<U> = InstanceType<typeof Array<U>>;  // U[]
+    
+    declare const g1: {
+        <T>(a: T): { a: T };
+        new <U>(b: U): { b: U };
+    }
+    
+    type T30<V> = typeof g1<V>;  // { (a: V) => { a: V }; new (b: V) => { b: V }; }
+    type T31<A> = ReturnType<T30<A>>;  // { a: A }
+    type T32<B> = InstanceType<T30<B>>;  // { b: B }
+    
+    declare const g2: {
+        <T extends string>(a: T): T;
+        new <T extends number>(b: T): T;
+    }
+    
+    type T40<U extends string> = typeof g2<U>;  // Error
+                                           ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'number'.
+!!! error TS2344:   Type 'string' is not assignable to type 'number'.
+    type T41<U extends number> = typeof g2<U>;  // Error
+                                           ~
+!!! error TS2344: Type 'U' does not satisfy the constraint 'string'.
+!!! error TS2344:   Type 'number' is not assignable to type 'string'.
+    
+    declare const g3: {
+        <T extends string>(a: T): T;
+        new <T extends number, Q>(b: T): T;
+    }
+    
+    type T50<U extends string> = typeof g3<U>;  // (a: U) => U
+    type T51<U extends number> = typeof g3<U, any>;  // (b: U) => U
+    
