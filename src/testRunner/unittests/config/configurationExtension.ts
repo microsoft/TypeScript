@@ -362,12 +362,12 @@ describe("unittests:: config:: configurationExtension", () => {
 
             testFailure("can error when 'extends' is an empty string", "extends3.json", [{
                 code: 18051,
-                messageText: `Compiler option 'extends' cannot have an empty string.`
+                messageText: `Compiler option 'extends' cannot be empty.`
             }]);
 
             testFailure("can error when 'extends' is an empty string in an array", "extends4.json", [{
                 code: 18051,
-                messageText: `Compiler option 'extends' cannot have an empty string.`
+                messageText: `Compiler option 'extends' cannot be empty.`
             }]);
 
             testSuccess("can overwrite compiler options using extended 'null'", "configs/third.json", {

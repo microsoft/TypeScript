@@ -7605,7 +7605,7 @@
         "category": "Error",
         "code": 18050
     },
-    "Compiler option '{0}' cannot have an empty string.": {
+    "Compiler option '{0}' cannot be empty.": {
         "category": "Error",
         "code": 18051
     }

@@ -3268,10 +3268,7 @@ function parseOwnConfigOfJson(
     json.compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
     let extendedConfigPath: string | string[] | undefined;
 
-    if (json.extends === "") {
-        errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_cannot_have_an_empty_string, "extends"));
-    }
-    if (json.extends) {
+    if (json.extends || json.extends === "") {
         if (!isCompilerOptionsValue(extendsOptionDeclaration, json.extends)) {
             errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", getCompilerOptionValueTypeString(extendsOptionDeclaration)));
         }
@@ -3285,7 +3282,7 @@ function parseOwnConfigOfJson(
                 for (const fileName of json.extends as unknown[]) {
                     if (isString(fileName)) {
                         extendedConfigPath = append(extendedConfigPath, getExtendsConfigPath(fileName, host, newBase, errors, createCompilerDiagnostic));
-                }
+                    }
                     else {
                         errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", getCompilerOptionValueTypeString(extendsOptionDeclaration.element)));
                     }
@@ -3421,7 +3418,7 @@ function getExtendsConfigPath(
         return resolved.resolvedModule.resolvedFileName;
     }
     if (extendedConfig === "") {
-        errors.push(createDiagnostic(Diagnostics.Compiler_option_0_cannot_have_an_empty_string, "extends"));
+        errors.push(createDiagnostic(Diagnostics.Compiler_option_0_cannot_be_empty, "extends"));
     }
     else {
         errors.push(createDiagnostic(Diagnostics.File_0_not_found, extendedConfig));
