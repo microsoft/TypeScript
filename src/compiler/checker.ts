@@ -42793,7 +42793,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // Import equals declaration is deprecated in es6 or above
                     grammarErrorOnNode(node, Diagnostics.Import_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
                 }
-                else if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler) {
+                else if (!(node.flags & NodeFlags.Ambient) && getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler) {
                     grammarErrorOnNode(node, Diagnostics.Import_assignment_is_not_allowed_when_moduleResolution_is_set_to_bundler_Consider_using_import_Asterisk_as_ns_from_mod_import_a_from_mod_import_d_from_mod_or_another_module_format_instead);
                 }
             }
@@ -45476,7 +45476,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return grammarErrorOnNode(node, Diagnostics.A_class_member_cannot_have_the_0_keyword, tokenToString(SyntaxKind.ConstKeyword));
                     }
                     const parent = node.parent;
-                    if (node.kind === SyntaxKind.TypeParameter && !(isFunctionLikeDeclaration(parent) || isClassDeclaration(parent) || isFunctionTypeNode(parent) ||
+                    if (node.kind === SyntaxKind.TypeParameter && !(isFunctionLikeDeclaration(parent) || isClassLike(parent) || isFunctionTypeNode(parent) ||
                         isConstructorTypeNode(parent) || isCallSignatureDeclaration(parent) || isConstructSignatureDeclaration(parent) || isMethodSignature(parent))) {
                         return grammarErrorOnNode(modifier, Diagnostics._0_modifier_can_only_appear_on_a_type_parameter_of_a_function_method_or_class, tokenToString(modifier.kind));
                     }
@@ -45596,6 +45596,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // If node.kind === SyntaxKind.Parameter, checkParameter reports an error if it's not a parameter property.
                         return grammarErrorOnNode(modifier, Diagnostics.readonly_modifier_can_only_appear_on_a_property_declaration_or_index_signature);
                     }
+                    else if (flags & ModifierFlags.Accessor) {
+                        return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "readonly", "accessor");
+                    }
                     flags |= ModifierFlags.Readonly;
                     break;
 
@@ -45652,6 +45655,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     else if (isPrivateIdentifierClassElementDeclaration(node)) {
                         return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_a_private_identifier, "declare");
+                    }
+                    else if (flags & ModifierFlags.Accessor) {
+                        return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_be_used_with_1_modifier, "declare", "accessor");
                     }
                     flags |= ModifierFlags.Ambient;
                     lastDeclare = modifier;

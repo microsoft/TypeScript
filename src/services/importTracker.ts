@@ -16,6 +16,7 @@ import {
     isExportSpecifier,
     isImportEqualsDeclaration,
     isImportTypeNode,
+    isJSDocCallbackTag,
     isJSDocTypedefTag,
     isNamedExports,
     isNamespaceExport,
@@ -622,7 +623,7 @@ export function getImportOrExportSymbol(node: Node, symbol: Symbol, checker: Typ
             else if (isBinaryExpression(grandparent)) {
                 return getSpecialPropertyExport(grandparent, /*useLhsSymbol*/ true);
             }
-            else if (isJSDocTypedefTag(parent)) {
+            else if (isJSDocTypedefTag(parent) || isJSDocCallbackTag(parent)) {
                 return exportInfo(symbol, ExportKind.Named);
             }
         }

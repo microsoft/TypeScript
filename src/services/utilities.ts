@@ -176,6 +176,7 @@ import {
     CommentRange,
     CompilerOptions,
     ConditionalExpression,
+    ContextFlags,
     Declaration,
     Decorator,
     DeleteExpression,
@@ -3322,21 +3323,21 @@ export function needsParentheses(expression: Expression): boolean {
 }
 
 /** @internal */
-export function getContextualTypeFromParent(node: Expression, checker: TypeChecker): Type | undefined {
+export function getContextualTypeFromParent(node: Expression, checker: TypeChecker, contextFlags?: ContextFlags): Type | undefined {
     const { parent } = node;
     switch (parent.kind) {
         case SyntaxKind.NewExpression:
-            return checker.getContextualType(parent as NewExpression);
+            return checker.getContextualType(parent as NewExpression, contextFlags);
         case SyntaxKind.BinaryExpression: {
             const { left, operatorToken, right } = parent as BinaryExpression;
             return isEqualityOperatorKind(operatorToken.kind)
                 ? checker.getTypeAtLocation(node === right ? left : right)
-                : checker.getContextualType(node);
+                : checker.getContextualType(node, contextFlags);
         }
         case SyntaxKind.CaseClause:
             return (parent as CaseClause).expression === node ? getSwitchedType(parent as CaseClause, checker) : undefined;
         default:
-            return checker.getContextualType(node);
+            return checker.getContextualType(node, contextFlags);
     }
 }
 
