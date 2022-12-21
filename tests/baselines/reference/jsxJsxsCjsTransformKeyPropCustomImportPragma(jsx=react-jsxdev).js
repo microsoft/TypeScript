@@ -33,7 +33,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var preact_1 = require("preact");
 var jsx_dev_runtime_1 = require("preact/jsx-dev-runtime");
 var _jsxFileName = "tests/cases/conformance/jsx/jsxs/preact.tsx";
@@ -55,7 +55,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var react_1 = require("react");
 var jsx_dev_runtime_1 = require("react/jsx-dev-runtime");
 var _jsxFileName = "tests/cases/conformance/jsx/jsxs/react.tsx";

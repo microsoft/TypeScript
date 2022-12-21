@@ -185,5 +185,4 @@ import "./unittests/tsserver/typeReferenceDirectives";
 import "./unittests/tsserver/typingsInstaller";
 import "./unittests/tsserver/versionCache";
 import "./unittests/tsserver/watchEnvironment";
-import "./unittests/tsserver/webServer";
 import "./unittests/debugDeprecation";

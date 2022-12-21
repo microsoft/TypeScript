@@ -853,3 +853,29 @@ const checkIsTouchDevice = () =>
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
 >navigator : Symbol(navigator, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 
+// Repro from #51501
+
+function isHTMLTable<T extends object | null>(table: T): boolean {
+>isHTMLTable : Symbol(isHTMLTable, Decl(inKeywordTypeguard.ts, 341, 71))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 345, 21))
+>table : Symbol(table, Decl(inKeywordTypeguard.ts, 345, 46))
+>T : Symbol(T, Decl(inKeywordTypeguard.ts, 345, 21))
+
+    return !!table && 'html' in table;
+>table : Symbol(table, Decl(inKeywordTypeguard.ts, 345, 46))
+>table : Symbol(table, Decl(inKeywordTypeguard.ts, 345, 46))
+}
+
+// Repro from #51549
+
+const f = <P extends object>(a: P & {}) => {
+>f : Symbol(f, Decl(inKeywordTypeguard.ts, 351, 5))
+>P : Symbol(P, Decl(inKeywordTypeguard.ts, 351, 11))
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 351, 29))
+>P : Symbol(P, Decl(inKeywordTypeguard.ts, 351, 11))
+
+    "foo" in a;
+>a : Symbol(a, Decl(inKeywordTypeguard.ts, 351, 29))
+
+};
+

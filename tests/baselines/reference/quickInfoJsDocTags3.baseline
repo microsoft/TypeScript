@@ -133,7 +133,15 @@
           "name": "throws",
           "text": [
             {
-              "text": "{Error} comment",
+              "text": "{Error}",
+              "kind": "text"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "comment",
               "kind": "text"
             }
           ]

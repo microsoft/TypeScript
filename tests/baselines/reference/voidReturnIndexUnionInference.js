@@ -26,7 +26,7 @@ function bad<P extends Props>(props: Readonly<P>) {
 
 //// [voidReturnIndexUnionInference.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.safeInvoke = void 0;
 // repro from https://github.com/Microsoft/TypeScript/issues/25274
 function safeInvoke(func, arg1) {

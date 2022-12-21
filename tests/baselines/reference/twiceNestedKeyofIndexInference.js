@@ -36,8 +36,8 @@ const newState: State = set(state, ["a", 'b'], 'why'); // shouldn't be an error
 var state = {
     a: {
         b: "",
-        c: 0
+        c: 0,
     },
-    d: false
+    d: false,
 };
 var newState = set(state, ["a", 'b'], 'why'); // shouldn't be an error

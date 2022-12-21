@@ -18,7 +18,7 @@ module Query {
 
 //// [privacyCheckAnonymousFunctionParameter.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 1; // Makes this an external module
 var Query;

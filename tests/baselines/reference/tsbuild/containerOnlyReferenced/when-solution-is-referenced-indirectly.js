@@ -50,7 +50,7 @@ Output::
 [[90m12:00:22 AM[0m] Building project '/src/project2/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 src/project2/src/b.ts
   Matched by default include pattern '**/*'
 [[90m12:00:28 AM[0m] Project 'src/project3/tsconfig.json' is out of date because output file 'src/project3/tsconfig.tsbuildinfo' does not exist
@@ -58,7 +58,7 @@ src/project2/src/b.ts
 [[90m12:00:29 AM[0m] Building project '/src/project3/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 src/project3/src/c.ts
   Matched by default include pattern '**/*'
 [[90m12:00:35 AM[0m] Project 'src/project4/tsconfig.json' is out of date because output file 'src/project4/tsconfig.tsbuildinfo' does not exist
@@ -66,7 +66,7 @@ src/project3/src/c.ts
 [[90m12:00:36 AM[0m] Building project '/src/project4/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 src/project4/src/d.ts
   Matched by default include pattern '**/*'
 exitCode:: ExitStatus.Success
@@ -78,7 +78,7 @@ export declare const b = 10;
 
 //// [/src/project2/src/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.b = 10;
 
@@ -133,7 +133,7 @@ export declare const c = 10;
 
 //// [/src/project3/src/c.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = void 0;
 exports.c = 10;
 
@@ -188,7 +188,7 @@ export declare const d = 10;
 
 //// [/src/project4/src/d.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = void 0;
 exports.d = 10;
 
@@ -261,7 +261,7 @@ Output::
 [[90m12:00:46 AM[0m] Building project '/src/project3/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 src/project3/src/c.ts
   Matched by default include pattern '**/*'
 [[90m12:00:52 AM[0m] Project 'src/project4/tsconfig.json' is out of date because output 'src/project4/tsconfig.tsbuildinfo' is older than input 'src/project3'
@@ -271,7 +271,7 @@ src/project3/src/c.ts
 [[90m12:00:54 AM[0m] Updating unchanged output timestamps of project '/src/project4/tsconfig.json'...
 
 lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 src/project4/src/d.ts
   Matched by default include pattern '**/*'
 exitCode:: ExitStatus.Success
@@ -283,7 +283,7 @@ export declare const cc = 10;
 
 //// [/src/project3/src/c.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.cc = void 0;
 exports.cc = 10;
 
