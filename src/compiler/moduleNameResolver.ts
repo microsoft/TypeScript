@@ -2756,27 +2756,31 @@ function loadModuleFromImmediateNodeModulesDirectory(extensions: Extensions, mod
 
 function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, moduleName: string, nodeModulesDirectory: string, nodeModulesDirectoryExists: boolean, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): Resolved | undefined {
     const candidate = normalizePath(combinePaths(nodeModulesDirectory, moduleName));
+    const { packageName, rest } = parsePackageName(moduleName);
+    const packageDirectory = combinePaths(nodeModulesDirectory, packageName);
 
+    let rootPackageInfo: PackageJsonInfo | undefined;
     // First look for a nested package.json, as in `node_modules/foo/bar/package.json`.
     let packageInfo = getPackageJsonInfo(candidate, !nodeModulesDirectoryExists, state);
     // But only if we're not respecting export maps (if we are, we might redirect around this location)
-    if (!(state.features & NodeResolutionFeatures.Exports)) {
-        if (packageInfo) {
-            const fromFile = loadModuleFromFile(extensions, candidate, !nodeModulesDirectoryExists, state);
-            if (fromFile) {
-                return noPackageId(fromFile);
-            }
-
-            const fromDirectory = loadNodeModuleFromDirectoryWorker(
-                extensions,
-                candidate,
-                !nodeModulesDirectoryExists,
-                state,
-                packageInfo.contents.packageJsonContent,
-                getVersionPathsOfPackageJsonInfo(packageInfo, state),
-            );
-            return withPackageId(packageInfo, fromDirectory);
+    if (rest !== "" && packageInfo && (
+        !(state.features & NodeResolutionFeatures.Exports) ||
+        !hasProperty((rootPackageInfo = getPackageJsonInfo(packageDirectory, !nodeModulesDirectoryExists, state))?.contents.packageJsonContent ?? emptyArray, "exports")
+    )) {
+        const fromFile = loadModuleFromFile(extensions, candidate, !nodeModulesDirectoryExists, state);
+        if (fromFile) {
+            return noPackageId(fromFile);
         }
+
+        const fromDirectory = loadNodeModuleFromDirectoryWorker(
+            extensions,
+            candidate,
+            !nodeModulesDirectoryExists,
+            state,
+            packageInfo.contents.packageJsonContent,
+            getVersionPathsOfPackageJsonInfo(packageInfo, state),
+        );
+        return withPackageId(packageInfo, fromDirectory);
     }
 
     const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => {
@@ -2803,11 +2807,9 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
         return withPackageId(packageInfo, pathAndExtension);
     };
 
-    const { packageName, rest } = parsePackageName(moduleName);
-    const packageDirectory = combinePaths(nodeModulesDirectory, packageName);
     if (rest !== "") {
         // Previous `packageInfo` may have been from a nested package.json; ensure we have the one from the package root now.
-        packageInfo = getPackageJsonInfo(packageDirectory, !nodeModulesDirectoryExists, state);
+        packageInfo = rootPackageInfo ?? getPackageJsonInfo(packageDirectory, !nodeModulesDirectoryExists, state);
     }
     // package exports are higher priority than file/directory/typesVersions lookups and (and, if there's exports present, blocks them)
     if (packageInfo && packageInfo.contents.packageJsonContent.exports && state.features & NodeResolutionFeatures.Exports) {
