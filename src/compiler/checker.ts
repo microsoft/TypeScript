@@ -2069,8 +2069,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     const contextualTypes: (Type | undefined)[] = [];
     let contextualTypeCount = 0;
 
-    let currentInferenceNode: Node | undefined;
-    let currentInferenceContext: InferenceContext | undefined;
+    const inferenceContextNodes: Node[] = [];
+    const inferenceContexts: (InferenceContext | undefined)[] = [];
+    let inferenceContextCount = 0;
 
     const emptyStringType = getStringLiteralType("");
     const zeroType = getNumberLiteralType(0);
@@ -28764,8 +28765,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return -1;
     }
 
+    function pushInferenceContext(node: Node, inferenceContext: InferenceContext | undefined) {
+        inferenceContextNodes[inferenceContextCount] = node;
+        inferenceContexts[inferenceContextCount] = inferenceContext;
+        inferenceContextCount++;
+    }
+
+    function popInferenceContext() {
+        inferenceContextCount--;
+    }
+
     function getInferenceContext(node: Node) {
-        return isNodeDescendantOf(node, currentInferenceNode) ? currentInferenceContext : undefined;
+        for (let i = inferenceContextCount - 1; i >= 0; i--) {
+            if (isNodeDescendantOf(node, inferenceContextNodes[i])) {
+                return inferenceContexts[i];
+            }
+        }
     }
 
     function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement, contextFlags: ContextFlags | undefined) {
@@ -36022,10 +36037,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkExpressionWithContextualType(node: Expression, contextualType: Type, inferenceContext: InferenceContext | undefined, checkMode: CheckMode): Type {
         const contextNode = getContextNode(node);
         pushContextualType(contextNode, contextualType);
-        const saveInferenceNode = currentInferenceNode;
-        const saveInferenceContext = currentInferenceContext;
-        currentInferenceNode = contextNode;
-        currentInferenceContext = inferenceContext;
+        pushInferenceContext(contextNode, inferenceContext);
         const type = checkExpression(node, checkMode | CheckMode.Contextual | (inferenceContext ? CheckMode.Inferential : 0));
         // In CheckMode.Inferential we collect intra-expression inference sites to process before fixing any type
         // parameters. This information is no longer needed after the call to checkExpression.
@@ -36037,8 +36049,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // here would be to not mark contextually typed literals as fresh in the first place.
         const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node, /*contextFlags*/ undefined)) ?
             getRegularTypeOfLiteralType(type) : type;
-        currentInferenceNode = saveInferenceNode;
-        currentInferenceContext = saveInferenceContext;
+        popInferenceContext();
         popContextualType();
         return result;
     }
