@@ -4,4 +4,4 @@
 ARG VARIANT="14-buster"
 FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:0-${VARIANT}
 
-RUN sudo -u node npm install -g gulp-cli
+RUN sudo -u node npm install -g hereby

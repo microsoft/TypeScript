@@ -1,5 +1,5 @@
 tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts(7,9): error TS7027: Unreachable code detected.
-tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts(235,5): error TS2367: This condition will always return 'false' since the types 'keyof O' and '"c"' have no overlap.
+tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts(235,5): error TS2367: This comparison appears to be unintentional because the types 'keyof O' and '"c"' have no overlap.
 tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts(247,10): error TS2339: Property 'kind' does not exist on type 'never'.
 
 
@@ -242,7 +242,7 @@ tests/cases/conformance/controlFlow/exhaustiveSwitchStatements1.ts(247,10): erro
         }
         k === 'c';  // Error
         ~~~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'keyof O' and '"c"' have no overlap.
+!!! error TS2367: This comparison appears to be unintentional because the types 'keyof O' and '"c"' have no overlap.
         return o[k];
     }
     

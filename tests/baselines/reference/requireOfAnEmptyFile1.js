@@ -12,4 +12,4 @@ import fs = require('./requireOfAnEmptyFile1_b');
 //// [requireOfAnEmptyFile1_a.js]
 "use strict";
 //requireOfAnEmptyFile1
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });

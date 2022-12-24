@@ -128,10 +128,10 @@ export interface InterfaceWithPrivateNamedProperties {
 export interface InterfaceWithPrivateNamedMethods {
     [s](): any;
 }
-export declare type TypeLiteralWithPrivateNamedProperties = {
+export type TypeLiteralWithPrivateNamedProperties = {
     [s]: any;
 };
-export declare type TypeLiteralWithPrivateNamedMethods = {
+export type TypeLiteralWithPrivateNamedMethods = {
     [s](): any;
 };
 export declare class ClassWithPrivateNamedProperties {

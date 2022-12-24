@@ -19,6 +19,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericC
                                         ~~~~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'U'.
 !!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+!!! related TS2208 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/genericCallWithObjectTypeArgsAndInitializers.ts:6:15: This type parameter might need an `extends U` constraint.
     function foo5<T, U extends T>(x: U, y: T = x) { } // ok
     function foo6<T, U extends T, V extends U>(x: T, y: U, z: V = y) { } // error
                                                            ~~~~~~~~

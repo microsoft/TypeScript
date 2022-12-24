@@ -1,9 +1,11 @@
+error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
 tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithES3.ts(4,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithES3.ts(10,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithES3.ts(15,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithES3.ts(19,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
 
+!!! error TS5101: Flag 'ES3' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
 ==== tests/cases/conformance/classes/propertyMemberDeclarations/memberAccessorDeclarations/accessorWithES3.ts (4 errors) ====
     // error to use accessors in ES3 mode
     

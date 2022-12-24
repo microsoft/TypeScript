@@ -44,7 +44,7 @@ if ('d' in c) {
 >c : A | B
 
     c; // never
->c : never
+>c : (A | B) & Record<"d", unknown>
 }
 
 if (a in c) {
@@ -67,6 +67,6 @@ if (d in c) {
 >c : A | B
 
     c; // never
->c : never
+>c : (A | B) & Record<"d", unknown>
 }
 
