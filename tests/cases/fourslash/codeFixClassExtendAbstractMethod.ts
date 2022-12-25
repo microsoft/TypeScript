@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @noImplicitOverride: true
 ////abstract class A {
 ////    abstract f(a: number, b: string): boolean;
 ////    abstract f(a: number, b: string): this;
@@ -22,14 +23,14 @@ verify.codeFix({
 }
 
 class C extends A {
-    f(a: number, b: string): boolean;
-    f(a: number, b: string): this;
-    f(a: string, b: number): Function;
-    f(a: string): Function;
-    f(a: unknown, b?: unknown): boolean | Function | this {
+    override f(a: number, b: string): boolean;
+    override f(a: number, b: string): this;
+    override f(a: string, b: number): Function;
+    override f(a: string): Function;
+    override f(a: unknown, b?: unknown): boolean | Function | this {
         throw new Error("Method not implemented.");
     }
-    foo(): number {
+    override foo(): number {
         throw new Error("Method not implemented.");
     }
 }`

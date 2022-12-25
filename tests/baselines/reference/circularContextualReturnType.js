@@ -14,5 +14,5 @@ Object.freeze({
 Object.freeze({
     foo: function () {
         return Object.freeze('a');
-    }
+    },
 });

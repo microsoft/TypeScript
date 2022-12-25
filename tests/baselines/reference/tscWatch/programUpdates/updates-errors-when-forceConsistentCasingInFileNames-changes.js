@@ -69,7 +69,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 var C = /** @class */ (function () {
     function C() {
@@ -81,7 +81,7 @@ exports.C = C;
 
 //// [/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 

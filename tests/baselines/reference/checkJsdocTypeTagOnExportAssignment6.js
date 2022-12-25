@@ -25,11 +25,11 @@ a;
  * @property {number} a
  * @property {number} b
  */
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /** @type {Foo} */
-exports["default"] = { a: 1, b: 1, c: 1 };
+exports.default = { a: 1, b: 1, c: 1 };
 //// [b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var a_1 = require("./a");
-a_1["default"];
+a_1.default;
