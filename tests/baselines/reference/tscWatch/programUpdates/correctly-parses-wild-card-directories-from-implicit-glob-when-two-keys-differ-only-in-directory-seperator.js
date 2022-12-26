@@ -83,7 +83,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/f1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 1;
 
@@ -94,7 +94,7 @@ export declare const x = 1;
 
 //// [/user/username/projects/myproject/f2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 exports.y = 1;
 
@@ -116,15 +116,27 @@ export declare const y = 1;
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./f1.ts": {
+        "original": {
+          "version": "-10906998252-export const x = 1",
+          "signature": "-7495133367-export declare const x = 1;\n"
+        },
         "version": "-10906998252-export const x = 1",
         "signature": "-7495133367-export declare const x = 1;\n"
       },
       "./f2.ts": {
+        "original": {
+          "version": "-10905812331-export const y = 1",
+          "signature": "-6203665398-export declare const y = 1;\n"
+        },
         "version": "-10905812331-export const y = 1",
         "signature": "-6203665398-export declare const y = 1;\n"
       }
@@ -226,19 +238,35 @@ exitCode:: ExitStatus.undefined
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./f1.ts": {
+        "original": {
+          "version": "-10906998252-export const x = 1",
+          "signature": "-7495133367-export declare const x = 1;\n"
+        },
         "version": "-10906998252-export const x = 1",
         "signature": "-7495133367-export declare const x = 1;\n"
       },
       "./f2.ts": {
+        "original": {
+          "version": "-10905812331-export const y = 1",
+          "signature": "-6203665398-export declare const y = 1;\n"
+        },
         "version": "-10905812331-export const y = 1",
         "signature": "-6203665398-export declare const y = 1;\n"
       },
       "./new-file.ts": {
+        "original": {
+          "version": "-11960320495-export const z = 1;",
+          "signature": "-9207164725-export declare const z = 1;\n"
+        },
         "version": "-11960320495-export const z = 1;",
         "signature": "-9207164725-export declare const z = 1;\n"
       }
@@ -262,7 +290,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/new-file.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.z = void 0;
 exports.z = 1;
 
@@ -350,19 +378,35 @@ exitCode:: ExitStatus.undefined
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./new-file.ts": {
+        "original": {
+          "version": "-11960320495-export const z = 1;",
+          "signature": "-9207164725-export declare const z = 1;\n"
+        },
         "version": "-11960320495-export const z = 1;",
         "signature": "-9207164725-export declare const z = 1;\n"
       },
       "./f1.ts": {
+        "original": {
+          "version": "1363236232-import { z } from \"./new-file\";export const x = 1",
+          "signature": "-7495133367-export declare const x = 1;\n"
+        },
         "version": "1363236232-import { z } from \"./new-file\";export const x = 1",
         "signature": "-7495133367-export declare const x = 1;\n"
       },
       "./f2.ts": {
+        "original": {
+          "version": "-10905812331-export const y = 1",
+          "signature": "-6203665398-export declare const y = 1;\n"
+        },
         "version": "-10905812331-export const y = 1",
         "signature": "-6203665398-export declare const y = 1;\n"
       }

@@ -1,3 +1,6 @@
+import * as evaluator from "../../_namespaces/evaluator";
+import * as ts from "../../_namespaces/ts";
+
 describe("unittests:: evaluation:: asyncGeneratorEvaluation", () => {
     it("return (es5)", async () => {
         const result = evaluator.evaluateTypeScript(`
@@ -25,6 +28,32 @@ describe("unittests:: evaluation:: asyncGeneratorEvaluation", () => {
         await result.main();
         assert.deepEqual(result.output, [
             { value: 0, done: true }
+        ]);
+    });
+    it("yields in finally block with async delegator (es2017)", async () => {
+        const result = evaluator.evaluateTypeScript(`
+        async function* g1() {
+            try {
+                yield 1;
+            } finally {
+                yield 2;
+            }
+        }
+        async function* g2() {
+            yield* g1();
+        }
+        export const output: any[] = [];
+        export async function main() {
+            const it = g2();
+            output.push(await it.next());
+            output.push(await it.return());
+            output.push(await it.next());
+        }`, { target: ts.ScriptTarget.ES2017 });
+        await result.main();
+        assert.deepEqual(result.output, [
+            { done: false, value: 1 },
+            { done: false, value: 2 },
+            { done: true, value: undefined }
         ]);
     });
 });

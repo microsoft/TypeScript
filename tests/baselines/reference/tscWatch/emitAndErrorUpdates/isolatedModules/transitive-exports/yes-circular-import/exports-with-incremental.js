@@ -127,7 +127,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/lib1/tools/tools.interface.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/lib1/tools/public.js]
@@ -146,7 +146,7 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./tools.interface"), exports);
 
 
@@ -166,13 +166,13 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./tools/public"), exports);
 
 
 //// [/user/username/projects/myproject/lib2/data2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Data2 = void 0;
 var Data2 = /** @class */ (function () {
     function Data2() {
@@ -184,7 +184,7 @@ exports.Data2 = Data2;
 
 //// [/user/username/projects/myproject/lib2/data.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Data = void 0;
 var Data = /** @class */ (function () {
     function Data() {
@@ -216,13 +216,13 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./data"), exports);
 
 
 //// [/user/username/projects/myproject/app.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.App = void 0;
 var public_1 = require("lib2/public");
 var App = /** @class */ (function () {
@@ -270,6 +270,10 @@ exports.App = App;
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
@@ -480,11 +484,19 @@ exitCode:: ExitStatus.undefined
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./lib1/tools/tools.interface.ts": {
+        "original": {
+          "version": "-3501597171-export interface ITest {\n    title2: string;\n}",
+          "signature": "-3883556937-export interface ITest {\n    title2: string;\n}\n"
+        },
         "version": "-3501597171-export interface ITest {\n    title2: string;\n}",
         "signature": "-3883556937-export interface ITest {\n    title2: string;\n}\n"
       },
@@ -707,11 +719,19 @@ exitCode:: ExitStatus.undefined
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./lib1/tools/tools.interface.ts": {
+        "original": {
+          "version": "-4369626085-export interface ITest {\n    title: string;\n}",
+          "signature": "-2463740027-export interface ITest {\n    title: string;\n}\n"
+        },
         "version": "-4369626085-export interface ITest {\n    title: string;\n}",
         "signature": "-2463740027-export interface ITest {\n    title: string;\n}\n"
       },
@@ -917,11 +937,19 @@ exitCode:: ExitStatus.undefined
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./lib1/tools/tools.interface.ts": {
+        "original": {
+          "version": "-3501597171-export interface ITest {\n    title2: string;\n}",
+          "signature": "-3883556937-export interface ITest {\n    title2: string;\n}\n"
+        },
         "version": "-3501597171-export interface ITest {\n    title2: string;\n}",
         "signature": "-3883556937-export interface ITest {\n    title2: string;\n}\n"
       },

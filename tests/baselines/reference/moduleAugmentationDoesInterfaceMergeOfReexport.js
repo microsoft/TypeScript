@@ -24,7 +24,7 @@ f.self.self;
 
 //// [file.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [reexport.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -41,11 +41,11 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./file"), exports);
 //// [augment.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 f.x;
 f.self;
 f.self.x;

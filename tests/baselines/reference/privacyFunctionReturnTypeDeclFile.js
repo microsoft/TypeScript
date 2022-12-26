@@ -1194,7 +1194,7 @@ module publicModuleInGlobal {
 
 //// [privacyFunctionReturnTypeDeclFile_externalModule.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.publicModule = exports.publicFunctionWithPrivateModuleParameterTypes1 = exports.publicFunctionWithPrivateModuleParameterTypes = exports.publicClassWithPrivateModuleParameterTypes = exports.publicFunctionWithPublicParmeterTypes1 = exports.publicFunctionWithPrivateParmeterTypes1 = exports.publicFunctionWithPublicParmeterTypes = exports.publicFunctionWithPrivateParmeterTypes = exports.publicClassWithWithPublicParmeterTypes = exports.publicClassWithWithPrivateParmeterTypes = exports.publicClass = void 0;
 var privateClass = /** @class */ (function () {
     function privateClass() {
