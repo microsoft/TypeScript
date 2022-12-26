@@ -44,7 +44,7 @@ export function fn6(optionalEnum?: MyStringEnumWithEmpty) {
 
 //// [enumMemberReduction.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.fn6 = exports.fn5 = exports.fn4 = exports.fn3 = exports.fn2 = exports.fn = void 0;
 var MyEnum;
 (function (MyEnum) {

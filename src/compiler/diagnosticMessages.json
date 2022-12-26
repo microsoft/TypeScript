@@ -907,6 +907,10 @@
         "category": "Error",
         "code": 1276
     },
+    "'{0}' modifier can only appear on a type parameter of a function, method or class": {
+        "category": "Error",
+        "code": 1277
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -1844,14 +1848,6 @@
         "category": "Error",
         "code": 2359
     },
-    "The left-hand side of an 'in' expression must be a private identifier or of type 'any', 'string', 'number', or 'symbol'.": {
-        "category": "Error",
-        "code": 2360
-    },
-    "The right-hand side of an 'in' expression must not be a primitive.": {
-        "category": "Error",
-        "code": 2361
-    },
     "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.": {
         "category": "Error",
         "code": 2362
@@ -2264,7 +2260,7 @@
         "category": "Error",
         "code": 2473
     },
-    "const enum member initializers can only contain literal values and other computed enum values.": {
+    "const enum member initializers must be constant expressions.": {
         "category": "Error",
         "code": 2474
     },
@@ -2487,10 +2483,6 @@
     "A function returning 'never' cannot have a reachable end point.": {
         "category": "Error",
         "code": 2534
-    },
-    "Enum type '{0}' has members with initializers that are not literals.": {
-        "category": "Error",
-        "code": 2535
     },
     "Type '{0}' cannot be used to index type '{1}'.": {
         "category": "Error",
@@ -2844,6 +2836,10 @@
     "Variance annotations are only supported in type aliases for object, function, constructor, and mapped types.": {
         "category": "Error",
         "code": 2637
+    },
+    "Type '{0}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.": {
+        "category": "Error",
+        "code": 2638
     },
 
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
@@ -3399,7 +3395,7 @@
         "category": "Error",
         "code": 2791
     },
-    "Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?": {
+    "Cannot find module '{0}'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?": {
         "category": "Error",
         "code": 2792
     },
@@ -3566,6 +3562,14 @@
     "Type of instance member variable '{0}' cannot reference identifier '{1}' declared in the constructor.": {
         "category": "Error",
         "code": 2844
+    },
+    "This condition will always return '{0}'.": {
+        "category": "Error",
+        "code": 2845
+    },
+    "A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file '{0}' instead?": {
+        "category": "Error",
+        "code": 2846
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -4121,7 +4125,7 @@
         "category": "Error",
         "code": 5069
     },
-    "Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.": {
+    "Option '--resolveJsonModule' cannot be specified when 'moduleResolution' is set to 'classic'.": {
         "category": "Error",
         "code": 5070
     },
@@ -4224,6 +4228,38 @@
     "Option 'preserveValueImports' can only be used when 'module' is set to 'es2015' or later.": {
         "category": "Error",
         "code": 5095
+    },
+    "Option 'allowImportingTsExtensions' can only be used when 'moduleResolution' is set to 'bundler' and either 'noEmit' or 'emitDeclarationOnly' is set.": {
+        "category": "Error",
+        "code": 5096
+    },
+    "An import path can only end with a '{0}' extension when 'allowImportingTsExtensions' is enabled.": {
+        "category": "Error",
+        "code": 5097
+    },
+    "Option '{0}' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'bundler'.": {
+        "category": "Error",
+        "code": 5098
+    },
+    "Import assignment is not allowed when 'moduleResolution' is set to 'bundler'. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
+        "category": "Error",
+        "code": 5099
+    },
+    "Export assignment cannot be used when 'moduleResolution' is set to 'bundler'. Consider using 'export default' or another module format instead.": {
+        "category": "Error",
+        "code": 5100
+    },
+    "Flag '{0}' is deprecated and will stop functioning in TypeScript {1}. Specify 'ignoreDeprecations: \"{2}\"' to silence this error.": {
+        "category": "Error",
+        "code": 5101
+    },
+    "Flag '{0}' is deprecated. Please remove it from your configuration.": {
+        "category": "Error",
+        "code": 5102
+    },
+    "Invalid value for '--ignoreDeprecations'.": {
+        "category": "Error",
+        "code": 5103
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -4447,10 +4483,6 @@
         "category": "Message",
         "code": 6066
     },
-    "Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6).": {
-        "category": "Message",
-        "code": 6069
-    },
     "Initializes a TypeScript project and creates a tsconfig.json file.": {
         "category": "Message",
         "code": 6070
@@ -4551,7 +4583,7 @@
         "category": "Message",
         "code": 6094
     },
-    "Loading module as file / folder, candidate module location '{0}', target file type '{1}'.": {
+    "Loading module as file / folder, candidate module location '{0}', target file types: {1}.": {
         "category": "Message",
         "code": 6095
     },
@@ -4563,7 +4595,7 @@
         "category": "Message",
         "code": 6097
     },
-    "Loading module '{0}' from 'node_modules' folder, target file type '{1}'.": {
+    "Loading module '{0}' from 'node_modules' folder, target file types: {1}.": {
         "category": "Message",
         "code": 6098
     },
@@ -5413,6 +5445,46 @@
     "Project '{0}' is out of date because there was error reading file '{1}'": {
         "category": "Message",
         "code": 6401
+    },
+    "Resolving in {0} mode with conditions {1}.": {
+        "category": "Message",
+        "code": 6402
+    },
+    "Matched '{0}' condition '{1}'.": {
+        "category": "Message",
+        "code": 6403
+    },
+    "Using '{0}' subpath '{1}' with target '{2}'.": {
+        "category": "Message",
+        "code": 6404
+    },
+    "Saw non-matching condition '{0}'.": {
+        "category": "Message",
+        "code": 6405
+    },
+    "Project '{0}' is out of date because buildinfo file '{1}' indicates there is change in compilerOptions": {
+        "category": "Message",
+        "code": 6406
+    },
+    "Allow imports to include TypeScript file extensions. Requires '--moduleResolution bundler' and either '--noEmit' or '--emitDeclarationOnly' to be set.": {
+        "category": "Message",
+        "code": 6407
+    },
+    "Use the package.json 'exports' field when resolving package imports.": {
+        "category": "Message",
+        "code": 6408
+    },
+    "Use the package.json 'imports' field when resolving imports.": {
+        "category": "Message",
+        "code": 6409
+    },
+    "Conditions to set in addition to the resolver-specific defaults when resolving imports.": {
+        "category": "Message",
+        "code": 6410
+    },
+    "`true` when 'moduleResolution' is 'node16', 'nodenext', or 'bundler'; otherwise `false`.": {
+        "category": "Message",
+        "code": 6411
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -6687,6 +6759,14 @@
         "category": "Message",
         "code": 90058
     },
+    "Export '{0}' from module '{1}'": {
+        "category": "Message",
+        "code": 90059
+    },
+    "Export all referenced locals": {
+        "category": "Message",
+        "code": 90060
+    },
 
     "Convert function to an ES2015 class": {
         "category": "Message",
@@ -7360,7 +7440,14 @@
         "category": "Message",
         "code": 95173
     },
-
+    "Use `{0}`.": {
+        "category": "Message",
+        "code": 95174
+    },
+    "Use `Number.isNaN` in all conditions.": {
+        "category": "Message",
+        "code": 95175
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -7450,7 +7537,7 @@
         "category": "Error",
         "code": 18032
     },
-    "Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.": {
+    "Type '{0}' is not assignable to type '{1}' as required for computed enum member values.": {
         "category": "Error",
         "code": 18033
     },

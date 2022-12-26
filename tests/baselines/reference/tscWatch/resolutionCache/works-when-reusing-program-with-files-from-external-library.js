@@ -87,14 +87,14 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/projects/myProject/dist/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var module1 = require("module1");
 module1("hello");
 
 
 //// [/a/b/projects/myProject/dist/file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var module11 = require("module1");
 module11("hello");
 
@@ -162,7 +162,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/projects/myProject/dist/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var module1 = require("module1");
 module1("hello");
 ;

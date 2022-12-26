@@ -1,4 +1,4 @@
-tests/cases/compiler/amdDependencyCommentName3.ts(5,21): error TS2792: Cannot find module 'm2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+tests/cases/compiler/amdDependencyCommentName3.ts(5,21): error TS2792: Cannot find module 'm2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 
 
 ==== tests/cases/compiler/amdDependencyCommentName3.ts (1 errors) ====
@@ -8,5 +8,5 @@ tests/cases/compiler/amdDependencyCommentName3.ts(5,21): error TS2792: Cannot fi
     
     import m1 = require("m2")
                         ~~~~
-!!! error TS2792: Cannot find module 'm2'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+!!! error TS2792: Cannot find module 'm2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
     m1.f();

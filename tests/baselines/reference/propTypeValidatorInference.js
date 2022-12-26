@@ -91,7 +91,7 @@ const x: true = (null as any as ExtractPropsMatch);
 
 //// [file.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var PropTypes = require("prop-types");
 var innerProps = {
     foo: PropTypes.string.isRequired,
@@ -108,7 +108,7 @@ var propTypes = {
     array: PropTypes.array.isRequired,
     bool: PropTypes.bool.isRequired,
     shape: PropTypes.shape(innerProps).isRequired,
-    oneOfType: PropTypes.oneOfType(arrayOfTypes).isRequired
+    oneOfType: PropTypes.oneOfType(arrayOfTypes).isRequired,
 };
 // JS checking
 var propTypesWithoutAnnotation = {
@@ -116,6 +116,6 @@ var propTypesWithoutAnnotation = {
     array: PropTypes.array.isRequired,
     bool: PropTypes.bool.isRequired,
     shape: PropTypes.shape(innerProps).isRequired,
-    oneOfType: PropTypes.oneOfType(arrayOfTypes).isRequired
+    oneOfType: PropTypes.oneOfType(arrayOfTypes).isRequired,
 };
 var x = null;

@@ -23,7 +23,7 @@ export const createClient = <
 
 //// [declarationEmitShadowingInferNotRenamed.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.createClient = void 0;
 var createClient = function (clientDef) {
     return null;

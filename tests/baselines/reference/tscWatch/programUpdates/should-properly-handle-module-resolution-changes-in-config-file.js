@@ -79,7 +79,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
@@ -142,6 +142,6 @@ exitCode:: ExitStatus.undefined
 //// [/a/b/file1.js] file written with same contents
 //// [/a/module1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
