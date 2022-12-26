@@ -569,6 +569,8 @@ import {
     isLiteralExpressionOfObject,
     isLiteralImportTypeNode,
     isLiteralTypeNode,
+    isLogicalOrCoalescingBinaryExpression,
+    isLogicalOrCoalescingBinaryOperator,
     isMetaProperty,
     isMethodDeclaration,
     isMethodSignature,
@@ -680,7 +682,6 @@ import {
     isValidBigIntString,
     isValidESSymbolDeclaration,
     isValidTypeOnlyAliasUseSite,
-    isValueCoalescingBinaryExpression,
     isValueSignatureDeclaration,
     isVarConst,
     isVariableDeclaration,
@@ -35325,9 +35326,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 setLeftType(state, leftType);
                 setLastResult(state, /*type*/ undefined);
                 const operator = operatorToken.kind;
-                if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
+                if (isLogicalOrCoalescingBinaryOperator(operator)) {
                     let parent = node.parent;
-                    while (parent.kind === SyntaxKind.ParenthesizedExpression || isValueCoalescingBinaryExpression(parent)) {
+                    while (parent.kind === SyntaxKind.ParenthesizedExpression || isLogicalOrCoalescingBinaryExpression(parent)) {
                         parent = parent.parent;
                     }
                     if (operator === SyntaxKind.AmpersandAmpersandToken || isIfStatement(parent)) {
@@ -35419,7 +35420,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return checkDestructuringAssignment(left, checkExpression(right, checkMode), checkMode, right.kind === SyntaxKind.ThisKeyword);
         }
         let leftType: Type;
-        if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken || operator === SyntaxKind.QuestionQuestionToken) {
+        if (isLogicalOrCoalescingBinaryOperator(operator)) {
             leftType = checkTruthinessExpression(left, checkMode);
         }
         else {
@@ -39666,11 +39667,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function helper(condExpr: Expression, body: Expression | Statement | undefined) {
-            const location = isValueCoalescingBinaryExpression(condExpr) ? skipParentheses(condExpr.right) : condExpr;
+            const location = isLogicalOrCoalescingBinaryExpression(condExpr) ? skipParentheses(condExpr.right) : condExpr;
             if (isModuleExportsAccessExpression(location)) {
                 return;
             }
-            if (isValueCoalescingBinaryExpression(location)) {
+            if (isLogicalOrCoalescingBinaryExpression(location)) {
                 bothHelper(location, body);
                 return;
             }

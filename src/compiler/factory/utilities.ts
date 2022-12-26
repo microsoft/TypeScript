@@ -69,7 +69,6 @@ import {
     ImportEqualsDeclaration,
     isAssignmentExpression,
     isAssignmentOperator,
-    isBinaryExpression,
     isBlock,
     isComputedPropertyName,
     isDeclarationBindingElement,
@@ -1233,11 +1232,6 @@ function isBitwiseOperatorOrHigher(kind: SyntaxKind): kind is BitwiseOperatorOrH
 function isLogicalOperator(kind: SyntaxKind): kind is LogicalOperator {
     return kind === SyntaxKind.AmpersandAmpersandToken
         || kind === SyntaxKind.BarBarToken;
-}
-
-/** @internal */
-export function isValueCoalescingBinaryExpression(expr: Node): expr is BinaryExpression {
-    return isBinaryExpression(expr) && (isLogicalOperator(expr.operatorToken.kind) || expr.operatorToken.kind === SyntaxKind.QuestionQuestionToken);
 }
 
 function isLogicalOperatorOrHigher(kind: SyntaxKind): kind is LogicalOperatorOrHigher {

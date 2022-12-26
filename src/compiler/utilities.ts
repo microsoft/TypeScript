@@ -350,6 +350,7 @@ import {
     LiteralImportTypeNode,
     LiteralLikeElementAccessExpression,
     LiteralLikeNode,
+    LogicalOperator,
     LogicalOrCoalescingAssignmentOperator,
     map,
     mapDefined,
@@ -6075,11 +6076,13 @@ export function modifierToFlag(token: SyntaxKind): ModifierFlags {
     return ModifierFlags.None;
 }
 
+function isBinaryLogicalOperator(token: SyntaxKind): boolean {
+    return token === SyntaxKind.BarBarToken || token === SyntaxKind.AmpersandAmpersandToken;
+}
+
 /** @internal */
 export function isLogicalOperator(token: SyntaxKind): boolean {
-    return token === SyntaxKind.BarBarToken
-        || token === SyntaxKind.AmpersandAmpersandToken
-        || token === SyntaxKind.ExclamationToken;
+    return isBinaryLogicalOperator(token) || token === SyntaxKind.ExclamationToken;
 }
 
 /** @internal */
@@ -6090,8 +6093,18 @@ export function isLogicalOrCoalescingAssignmentOperator(token: SyntaxKind): toke
 }
 
 /** @internal */
-export function isLogicalOrCoalescingAssignmentExpression(expr: BinaryExpression): expr is AssignmentExpression<Token<LogicalOrCoalescingAssignmentOperator>> {
-    return isLogicalOrCoalescingAssignmentOperator(expr.operatorToken.kind);
+export function isLogicalOrCoalescingAssignmentExpression(expr: Node): expr is AssignmentExpression<Token<LogicalOrCoalescingAssignmentOperator>> {
+    return isBinaryExpression(expr) && isLogicalOrCoalescingAssignmentOperator(expr.operatorToken.kind);
+}
+
+/** @internal */
+export function isLogicalOrCoalescingBinaryOperator(token: SyntaxKind): token is LogicalOperator | SyntaxKind.QuestionQuestionToken {
+    return isBinaryLogicalOperator(token) || token === SyntaxKind.QuestionQuestionToken;
+}
+
+/** @internal */
+export function isLogicalOrCoalescingBinaryExpression(expr: Node): expr is BinaryExpression {
+    return isBinaryExpression(expr) && isLogicalOrCoalescingBinaryOperator(expr.operatorToken.kind);
 }
 
 /** @internal */
