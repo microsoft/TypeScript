@@ -35,7 +35,7 @@ var thisIsOk = new ClassA<ConcreteClass>(new ConcreteClass(), {
 
 //// [inferenceDoesntCompareAgainstUninstantiatedTypeParameter.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var ClassA = /** @class */ (function () {
     function ClassA(entity, settings) {
         this.entity = entity;

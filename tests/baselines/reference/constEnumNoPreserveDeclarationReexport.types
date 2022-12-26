@@ -3,10 +3,10 @@ export const enum MyConstEnum {
 >MyConstEnum : MyConstEnum
 
     Foo,
->Foo : MyConstEnum
+>Foo : MyConstEnum.Foo
 
     Bar
->Bar : MyConstEnum
+>Bar : MyConstEnum.Bar
 }
 === tests/cases/compiler/ImportExport.d.ts ===
 import { MyConstEnum } from './ConstEnum';
@@ -31,17 +31,17 @@ import StillEnum from "./ReExport";
 >StillEnum : typeof MyConstEnum
 
 MyConstEnum.Foo;
->MyConstEnum.Foo : MyConstEnum
+>MyConstEnum.Foo : MyConstEnum.Foo
 >MyConstEnum : typeof MyConstEnum
->Foo : MyConstEnum
+>Foo : MyConstEnum.Foo
 
 AlsoEnum.Foo;
->AlsoEnum.Foo : MyConstEnum
+>AlsoEnum.Foo : MyConstEnum.Foo
 >AlsoEnum : typeof MyConstEnum
->Foo : MyConstEnum
+>Foo : MyConstEnum.Foo
 
 StillEnum.Foo;
->StillEnum.Foo : MyConstEnum
+>StillEnum.Foo : MyConstEnum.Foo
 >StillEnum : typeof MyConstEnum
->Foo : MyConstEnum
+>Foo : MyConstEnum.Foo
 

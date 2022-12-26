@@ -16,6 +16,40 @@ function f(x: {}, y: unknown) {
     y;  // {}
 }
 
+// Repro from #51007
+
+function isHTMLTable(table: unknown): boolean {
+    return !!table && table instanceof Object && 'html' in table;
+}
+
+function f1(x: unknown) {
+    return x && x instanceof Object && 'a' in x;
+}
+
+function f2<T>(x: T) {
+    return x && x instanceof Object && 'a' in x;
+}
+
+function f3(x: {}) {
+    return x instanceof Object && 'a' in x;
+}
+
+function f4<T extends {}>(x: T) {
+    return x instanceof Object && 'a' in x;
+}
+
+function f5<T>(x: T & {}) {
+    return x instanceof Object && 'a' in x;
+}
+
+function f6<T extends {}>(x: T & {}) {
+    return x instanceof Object && 'a' in x;
+}
+
+function f7<T extends object>(x: T & {}) {
+    return x instanceof Object && 'a' in x;
+}
+
 
 //// [inKeywordAndUnknown.js]
 "use strict";
@@ -33,4 +67,29 @@ function f(x, y) {
         return;
     }
     y; // {}
+}
+// Repro from #51007
+function isHTMLTable(table) {
+    return !!table && table instanceof Object && 'html' in table;
+}
+function f1(x) {
+    return x && x instanceof Object && 'a' in x;
+}
+function f2(x) {
+    return x && x instanceof Object && 'a' in x;
+}
+function f3(x) {
+    return x instanceof Object && 'a' in x;
+}
+function f4(x) {
+    return x instanceof Object && 'a' in x;
+}
+function f5(x) {
+    return x instanceof Object && 'a' in x;
+}
+function f6(x) {
+    return x instanceof Object && 'a' in x;
+}
+function f7(x) {
+    return x instanceof Object && 'a' in x;
 }

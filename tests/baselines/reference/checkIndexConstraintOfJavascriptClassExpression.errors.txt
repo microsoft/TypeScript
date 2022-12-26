@@ -1,8 +1,10 @@
+error TS5101: Flag 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
 tests/cases/compiler/weird.js(1,1): error TS2552: Cannot find name 'someFunction'. Did you mean 'Function'?
 tests/cases/compiler/weird.js(1,23): error TS7006: Parameter 'BaseClass' implicitly has an 'any' type.
 tests/cases/compiler/weird.js(9,17): error TS7006: Parameter 'error' implicitly has an 'any' type.
 
 
+!!! error TS5101: Flag 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
 ==== tests/cases/compiler/weird.js (3 errors) ====
     someFunction(function(BaseClass) {
     ~~~~~~~~~~~~
