@@ -50,15 +50,15 @@ Output::
     * project2/tsconfig.json
     * tsconfig.json
 
-[[90m12:00:53 AM[0m] Project 'project1/tsconfig.json' is out of date because output file 'project1/index.js' does not exist
+[[90m12:00:53 AM[0m] Project 'project1/tsconfig.json' is out of date because output file 'project1/tsconfig.tsbuildinfo' does not exist
 
 [[90m12:00:54 AM[0m] Building project '/user/username/projects/myproject/project1/tsconfig.json'...
 
-[[90m12:01:03 AM[0m] Project 'project2/tsconfig.json' is out of date because output file 'project2/index.js' does not exist
+[[90m12:01:04 AM[0m] Project 'project2/tsconfig.json' is out of date because output file 'project2/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:04 AM[0m] Building project '/user/username/projects/myproject/project2/tsconfig.json'...
+[[90m12:01:05 AM[0m] Building project '/user/username/projects/myproject/project2/tsconfig.json'...
 
-[[90m12:01:13 AM[0m] Found 0 errors. Watching for file changes.
+[[90m12:01:15 AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -107,28 +107,25 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/project2/index.ts (computed .d.ts during emit)
 /user/username/projects/myproject/node_modules/@types/foo/index.d.ts (used version)
 
-WatchedFiles::
-/user/username/projects/myproject/project1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/project1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/project1/index.ts:
-  {"fileName":"/user/username/projects/myproject/project1/index.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/project1/node_modules/file/package.json:
-  {"fileName":"/user/username/projects/myproject/project1/node_modules/file/package.json","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/project1/node_modules/file/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types/foo/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types/foo/package.json","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/node_modules/@types/foo/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types/bar/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types/bar/package.json","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/node_modules/@types/bar/package.json","pollingInterval":250}
-/user/username/projects/myproject/project2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/project2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/project2/index.ts:
-  {"fileName":"/user/username/projects/myproject/project2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":2000}
 
 FsWatches::
+/user/username/projects/myproject/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/project1/index.ts:
+  {}
+/user/username/projects/myproject/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/project2/index.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 
@@ -136,7 +133,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/project1/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/project1/index.d.ts]
@@ -144,7 +141,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/project1/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./node_modules/file/index.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts","../node_modules/@types/bar/index.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-12737086933-export const foo = 10;",{"version":"-4708082513-import { foo } from \"file\";","signature":"-3531856636-export {};\n"},"-12737086933-export const foo = 10;","-12042713060-export const bar = 10;"],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,4,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./node_modules/file/index.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts","../node_modules/@types/bar/index.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-12737086933-export const foo = 10;",{"version":"-4708082513-import { foo } from \"file\";","signature":"-3531856636-export {};\n"},"-12737086933-export const foo = 10;","-12042713060-export const bar = 10;"],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,4,3,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/project1/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -163,6 +160,10 @@ export {};
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
@@ -172,6 +173,10 @@ export {};
         "signature": "-12737086933-export const foo = 10;"
       },
       "./index.ts": {
+        "original": {
+          "version": "-4708082513-import { foo } from \"file\";",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "-4708082513-import { foo } from \"file\";",
         "signature": "-3531856636-export {};\n"
       },
@@ -199,15 +204,16 @@ export {};
       "../node_modules/@types/foo/index.d.ts",
       "./index.ts",
       "./node_modules/file/index.d.ts"
-    ]
+    ],
+    "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 971
+  "size": 1009
 }
 
 //// [/user/username/projects/myproject/project2/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/project2/index.d.ts]
@@ -215,7 +221,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/project2/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./file.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-12737086933-export const foo = 10;",{"version":"-4708082513-import { foo } from \"file\";","signature":"-3531856636-export {};\n"},"-12737086933-export const foo = 10;"],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,2,3]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./file.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-12737086933-export const foo = 10;",{"version":"-4708082513-import { foo } from \"file\";","signature":"-3531856636-export {};\n"},"-12737086933-export const foo = 10;"],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,2,3],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -233,6 +239,10 @@ export {};
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
@@ -242,6 +252,10 @@ export {};
         "signature": "-12737086933-export const foo = 10;"
       },
       "./index.ts": {
+        "original": {
+          "version": "-4708082513-import { foo } from \"file\";",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "-4708082513-import { foo } from \"file\";",
         "signature": "-3531856636-export {};\n"
       },
@@ -264,10 +278,11 @@ export {};
       "../node_modules/@types/foo/index.d.ts",
       "./file.d.ts",
       "./index.ts"
-    ]
+    ],
+    "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 872
+  "size": 910
 }
 
 
@@ -280,11 +295,11 @@ import { foo } from "file";const bar = 10;
 
 Output::
 >> Screen clear
-[[90m12:01:16 AM[0m] File change detected. Starting incremental compilation...
+[[90m12:01:18 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:17 AM[0m] Project 'project1/tsconfig.json' is out of date because oldest output 'project1/index.js' is older than newest input 'project1/index.ts'
+[[90m12:01:19 AM[0m] Project 'project1/tsconfig.json' is out of date because output 'project1/tsconfig.tsbuildinfo' is older than input 'project1/index.ts'
 
-[[90m12:01:18 AM[0m] Building project '/user/username/projects/myproject/project1/tsconfig.json'...
+[[90m12:01:20 AM[0m] Building project '/user/username/projects/myproject/project1/tsconfig.json'...
 
 [[90m12:01:31 AM[0m] Found 0 errors. Watching for file changes.
 
@@ -306,28 +321,25 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/project1/index.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/project1/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/project1/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/project1/index.ts:
-  {"fileName":"/user/username/projects/myproject/project1/index.ts","pollingInterval":250}
+PolledWatches::
 /user/username/projects/myproject/project1/node_modules/file/package.json:
-  {"fileName":"/user/username/projects/myproject/project1/node_modules/file/package.json","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/project1/node_modules/file/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types/foo/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types/foo/package.json","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/node_modules/@types/foo/package.json","pollingInterval":250}
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types/bar/package.json:
-  {"fileName":"/user/username/projects/myproject/node_modules/@types/bar/package.json","pollingInterval":250}
-  {"fileName":"/user/username/projects/myproject/node_modules/@types/bar/package.json","pollingInterval":250}
-/user/username/projects/myproject/project2/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/project2/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/project2/index.ts:
-  {"fileName":"/user/username/projects/myproject/project2/index.ts","pollingInterval":250}
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
+  {"pollingInterval":2000}
 
 FsWatches::
+/user/username/projects/myproject/project1/tsconfig.json:
+  {}
+/user/username/projects/myproject/project1/index.ts:
+  {}
+/user/username/projects/myproject/project2/tsconfig.json:
+  {}
+/user/username/projects/myproject/project2/index.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
 
 FsWatchesRecursive::
 
@@ -335,13 +347,12 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/project1/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var bar = 10;
 
 
-//// [/user/username/projects/myproject/project1/index.d.ts] file written with same contents
 //// [/user/username/projects/myproject/project1/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./node_modules/file/index.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts","../node_modules/@types/bar/index.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-12737086933-export const foo = 10;",{"version":"-7561100220-import { foo } from \"file\";const bar = 10;","signature":"-3531856636-export {};\n"},"-12737086933-export const foo = 10;","-12042713060-export const bar = 10;"],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,4,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./node_modules/file/index.d.ts","./index.ts","../node_modules/@types/foo/index.d.ts","../node_modules/@types/bar/index.d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-12737086933-export const foo = 10;",{"version":"-7561100220-import { foo } from \"file\";const bar = 10;","signature":"-3531856636-export {};\n"},"-12737086933-export const foo = 10;","-12042713060-export const bar = 10;"],"options":{"composite":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,5,4,3,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/project1/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -360,6 +371,10 @@ var bar = 10;
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
@@ -369,6 +384,10 @@ var bar = 10;
         "signature": "-12737086933-export const foo = 10;"
       },
       "./index.ts": {
+        "original": {
+          "version": "-7561100220-import { foo } from \"file\";const bar = 10;",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "-7561100220-import { foo } from \"file\";const bar = 10;",
         "signature": "-3531856636-export {};\n"
       },
@@ -396,9 +415,10 @@ var bar = 10;
       "../node_modules/@types/foo/index.d.ts",
       "./index.ts",
       "./node_modules/file/index.d.ts"
-    ]
+    ],
+    "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 986
+  "size": 1024
 }
 

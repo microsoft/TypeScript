@@ -57,31 +57,29 @@ Shape signatures in builder refreshed for::
 /a/b/node_modules/module1.ts (used version)
 /a/b/file1.ts (used version)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1.ts:
-  {"fileName":"/a/b/file1.ts","pollingInterval":250}
-/a/b/node_modules/module1.ts:
-  {"fileName":"/a/b/node_modules/module1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/b/node_modules/module1/package.json:
-  {"fileName":"/a/b/node_modules/module1/package.json","pollingInterval":250}
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/file1.ts:
+  {}
+/a/b/node_modules/module1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
 /a/b/node_modules:
-  {"directoryName":"/a/b/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
@@ -121,29 +119,29 @@ Shape signatures in builder refreshed for::
 /a/module1.ts (computed .d.ts)
 /a/b/file1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/file1.ts:
-  {"fileName":"/a/b/file1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/a/module1.ts:
-  {"fileName":"/a/module1.ts","pollingInterval":250}
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/file1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/a/module1.ts:
+  {}
 /a/b:
-  {"directoryName":"/a/b","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
 //// [/a/b/file1.js] file written with same contents
 //// [/a/module1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 

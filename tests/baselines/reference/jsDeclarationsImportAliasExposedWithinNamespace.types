@@ -26,7 +26,7 @@ export {myTypes};
 
 === tests/cases/conformance/jsdoc/declarations/file2.js ===
 import {myTypes} from './file.js';
->myTypes : any
+>myTypes : { [x: string]: any; }
 
 /**
  * @namespace testFnTypes

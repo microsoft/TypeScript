@@ -34,7 +34,7 @@ export class Api<SecurityDataType = unknown> {
 
 //// [http-client.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.HttpClient = void 0;
 var HttpClient = /** @class */ (function () {
     function HttpClient() {
@@ -47,7 +47,7 @@ var HttpClient = /** @class */ (function () {
 exports.HttpClient = HttpClient;
 //// [Api.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Api = void 0;
 var Api = /** @class */ (function () {
     function Api(http) {
@@ -63,7 +63,7 @@ exports.Api = Api;
 
 
 //// [http-client.d.ts]
-declare type TPromise<ResolveType, RejectType = any> = Omit<Promise<ResolveType>, "then" | "catch"> & {
+type TPromise<ResolveType, RejectType = any> = Omit<Promise<ResolveType>, "then" | "catch"> & {
     then<TResult1 = ResolveType, TResult2 = never>(onfulfilled?: ((value: ResolveType) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: RejectType) => TResult2 | PromiseLike<TResult2>) | undefined | null): TPromise<TResult1 | TResult2, RejectType>;
     catch<TResult = never>(onrejected?: ((reason: RejectType) => TResult | PromiseLike<TResult>) | undefined | null): TPromise<ResolveType | TResult, RejectType>;
 };

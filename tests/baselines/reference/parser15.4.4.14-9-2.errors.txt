@@ -3,7 +3,7 @@ tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(17,17): error 
 tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(18,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
 tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(19,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
 tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(20,17): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean'.
-tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(25,1): error TS2304: Cannot find name 'runTestCase'.
+tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(25,1): error TS2552: Cannot find name 'runTestCase'. Did you mean 'testcase'?
 
 
 ==== tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts (6 errors) ====
@@ -43,5 +43,6 @@ tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts(25,1): error T
      }
     runTestCase(testcase);
     ~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'runTestCase'.
+!!! error TS2552: Cannot find name 'runTestCase'. Did you mean 'testcase'?
+!!! related TS2728 tests/cases/conformance/parser/ecmascript5/parser15.4.4.14-9-2.ts:12:10: 'testcase' is declared here.
     

@@ -34,7 +34,7 @@ getPoint().c.x;
 import "./d";
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true}}
+{}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -50,7 +50,7 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 
-/a/lib/tsc.js --w
+/a/lib/tsc.js --w --assumeChangesOnlyAffectDirectDependencies --d
 Output::
 >> Screen clear
 [[90m12:00:29 AM[0m] Starting compilation in watch mode...
@@ -76,7 +76,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
@@ -102,35 +102,35 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/d.ts (computed .d.ts during emit)
 /user/username/projects/myproject/e.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/c.ts:
-  {"fileName":"/user/username/projects/myproject/c.ts","pollingInterval":250}
-/user/username/projects/myproject/d.ts:
-  {"fileName":"/user/username/projects/myproject/d.ts","pollingInterval":250}
-/user/username/projects/myproject/e.ts:
-  {"fileName":"/user/username/projects/myproject/e.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/a.ts:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
+/user/username/projects/myproject/c.ts:
+  {}
+/user/username/projects/myproject/d.ts:
+  {}
+/user/username/projects/myproject/e.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/a.d.ts]
@@ -146,7 +146,7 @@ export interface Coords {
 
 //// [/user/username/projects/myproject/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/b.d.ts]
@@ -157,7 +157,7 @@ export interface PointWrapper extends Point {
 
 //// [/user/username/projects/myproject/c.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPoint = void 0;
 function getPoint() {
     return {
@@ -179,7 +179,7 @@ export declare function getPoint(): PointWrapper;
 
 //// [/user/username/projects/myproject/d.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var c_1 = require("./c");
 (0, c_1.getPoint)().c.x;
 
@@ -190,7 +190,7 @@ export {};
 
 //// [/user/username/projects/myproject/e.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 require("./d");
 
 
@@ -238,7 +238,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -256,29 +256,29 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/c.ts:
-  {"fileName":"/user/username/projects/myproject/c.ts","pollingInterval":250}
-/user/username/projects/myproject/d.ts:
-  {"fileName":"/user/username/projects/myproject/d.ts","pollingInterval":250}
-/user/username/projects/myproject/e.ts:
-  {"fileName":"/user/username/projects/myproject/e.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/a.ts:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
+/user/username/projects/myproject/c.ts:
+  {}
+/user/username/projects/myproject/d.ts:
+  {}
+/user/username/projects/myproject/e.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -336,7 +336,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -354,29 +354,29 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/c.ts:
-  {"fileName":"/user/username/projects/myproject/c.ts","pollingInterval":250}
-/user/username/projects/myproject/d.ts:
-  {"fileName":"/user/username/projects/myproject/d.ts","pollingInterval":250}
-/user/username/projects/myproject/e.ts:
-  {"fileName":"/user/username/projects/myproject/e.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/a.ts:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
+/user/username/projects/myproject/c.ts:
+  {}
+/user/username/projects/myproject/d.ts:
+  {}
+/user/username/projects/myproject/e.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -434,7 +434,7 @@ Output::
 
 
 Program root files: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts","/user/username/projects/myproject/c.ts","/user/username/projects/myproject/d.ts","/user/username/projects/myproject/e.ts"]
-Program options: {"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"watch":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+Program options: {"watch":true,"assumeChangesOnlyAffectDirectDependencies":true,"declaration":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -452,29 +452,29 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/a.ts (computed .d.ts)
 /user/username/projects/myproject/b.ts (computed .d.ts)
 
-WatchedFiles::
-/user/username/projects/myproject/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/a.ts:
-  {"fileName":"/user/username/projects/myproject/a.ts","pollingInterval":250}
-/user/username/projects/myproject/b.ts:
-  {"fileName":"/user/username/projects/myproject/b.ts","pollingInterval":250}
-/user/username/projects/myproject/c.ts:
-  {"fileName":"/user/username/projects/myproject/c.ts","pollingInterval":250}
-/user/username/projects/myproject/d.ts:
-  {"fileName":"/user/username/projects/myproject/d.ts","pollingInterval":250}
-/user/username/projects/myproject/e.ts:
-  {"fileName":"/user/username/projects/myproject/e.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/tsconfig.json:
+  {}
+/user/username/projects/myproject/a.ts:
+  {}
+/user/username/projects/myproject/b.ts:
+  {}
+/user/username/projects/myproject/c.ts:
+  {}
+/user/username/projects/myproject/d.ts:
+  {}
+/user/username/projects/myproject/e.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 /user/username/projects/myproject:
-  {"directoryName":"/user/username/projects/myproject","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 

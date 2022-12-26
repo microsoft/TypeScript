@@ -31,7 +31,7 @@ Output::
 [[90m12:00:17 AM[0m] Starting compilation in watch mode...
 
 a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a/b/commonFile1.ts
   Part of 'files' list in tsconfig.json
 a/b/commonFile2.ts
@@ -58,21 +58,21 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (used version)
 /a/b/commonfile2.ts (used version)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/commonfile1.ts:
+  {}
+/a/b/commonfile2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -97,7 +97,7 @@ Output::
 [[90m12:00:25 AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a/b/commonFile1.ts
   Part of 'files' list in tsconfig.json
 a/b/commonFile2.ts
@@ -123,21 +123,21 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile2.ts (computed .d.ts)
 /a/b/commonfile1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
-/a/b/commonfile2.ts:
-  {"fileName":"/a/b/commonFile2.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/commonfile1.ts:
+  {}
+/a/b/commonfile2.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 
@@ -163,7 +163,7 @@ Output::
 [[90m12:00:36 AM[0m] File change detected. Starting incremental compilation...
 
 a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 a/b/commonFile1.ts
   Part of 'files' list in tsconfig.json
 [[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
@@ -183,19 +183,19 @@ Semantic diagnostics in builder refreshed for::
 Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (computed .d.ts)
 
-WatchedFiles::
-/a/b/tsconfig.json:
-  {"fileName":"/a/b/tsconfig.json","pollingInterval":250}
-/a/b/commonfile1.ts:
-  {"fileName":"/a/b/commonFile1.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
+PolledWatches::
+/a/b/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/a/b/tsconfig.json:
+  {}
+/a/b/commonfile1.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
 
 FsWatchesRecursive::
-/a/b/node_modules/@types:
-  {"directoryName":"/a/b/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
 
 exitCode:: ExitStatus.undefined
 

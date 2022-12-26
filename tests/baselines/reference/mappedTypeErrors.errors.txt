@@ -88,6 +88,7 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
         let y: Pick<Shape, T>;  // Error
                            ~
 !!! error TS2344: Type 'T' does not satisfy the constraint 'keyof Shape'.
+!!! related TS2208 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:32:13: This type parameter might need an `extends keyof Shape` constraint.
     }
     
     function f2<T extends string | number>(x: T) {
@@ -240,6 +241,7 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
         pt: {[P in T]?: T[P]}, // note: should be in keyof T
                    ~
 !!! error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
+!!! related TS2208 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:134:11: This type parameter might need an `extends string | number | symbol` constraint.
                         ~~~~
 !!! error TS2536: Type 'P' cannot be used to index type 'T'.
     };

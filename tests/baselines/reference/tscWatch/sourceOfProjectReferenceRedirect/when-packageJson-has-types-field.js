@@ -66,50 +66,47 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/packages/b/src/bar.ts (used version)
 /user/username/projects/myproject/packages/a/src/index.ts (computed .d.ts during emit)
 
-WatchedFiles::
-/user/username/projects/myproject/packages/a/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/packages/A/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/packages/b/tsconfig.json:
-  {"fileName":"/user/username/projects/myproject/packages/B/tsconfig.json","pollingInterval":250}
-/user/username/projects/myproject/packages/a/src/index.ts:
-  {"fileName":"/user/username/projects/myproject/packages/A/src/index.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/b/src/index.ts:
-  {"fileName":"/user/username/projects/myproject/packages/B/src/index.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/b/src/bar.ts:
-  {"fileName":"/user/username/projects/myproject/packages/B/src/bar.ts","pollingInterval":250}
-/a/lib/lib.d.ts:
-  {"fileName":"/a/lib/lib.d.ts","pollingInterval":250}
-/user/username/projects/myproject/packages/b/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/b/package.json","pollingInterval":250}
-/user/username/projects/myproject/packages/b/lib/bar/package.json:
-  {"fileName":"/user/username/projects/myproject/packages/b/lib/bar/package.json","pollingInterval":250}
+PolledWatches::
+/user/username/projects/myproject/packages/a/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules:
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/a/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/packages/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
 
 FsWatches::
+/user/username/projects/myproject/packages/a/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/b/tsconfig.json:
+  {}
+/user/username/projects/myproject/packages/a/src/index.ts:
+  {}
+/user/username/projects/myproject/packages/b/src/index.ts:
+  {}
+/user/username/projects/myproject/packages/b/src/bar.ts:
+  {}
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/packages/b/package.json:
+  {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject/packages/b/src:
-  {"directoryName":"/user/username/projects/myproject/packages/b/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /user/username/projects/myproject/packages/a/src:
-  {"directoryName":"/user/username/projects/myproject/packages/A/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-  {"directoryName":"/user/username/projects/myproject/packages/a/src","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/packages/a/node_modules:
-  {"directoryName":"/user/username/projects/myproject/packages/A/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/packages/node_modules:
-  {"directoryName":"/user/username/projects/myproject/packages/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 /user/username/projects/myproject/node_modules:
-  {"directoryName":"/user/username/projects/myproject/node_modules","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/packages/a/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/packages/A/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/packages/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/packages/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
-/user/username/projects/myproject/node_modules/@types:
-  {"directoryName":"/user/username/projects/myproject/node_modules/@types","fallbackPollingInterval":500,"fallbackOptions":{"watchFile":"PriorityPollingInterval"}}
+  {}
 
 exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/packages/A/lib/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var b_1 = require("b");
 var bar_1 = require("b/lib/bar");
 (0, b_1.foo)();
@@ -121,7 +118,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/src/index.ts","../b/src/bar.ts","./src/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"4646078106-export function foo() { }","1045484683-export function bar() { }",{"version":"3563314629-import { foo } from 'b';\nimport { bar } from 'b/lib/bar';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/src/index.ts","../b/src/bar.ts","./src/index.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"4646078106-export function foo() { }","1045484683-export function bar() { }",{"version":"3563314629-import { foo } from 'b';\nimport { bar } from 'b/lib/bar';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"fileIdsList":[[2,3]],"referencedMap":[[4,1]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,3,2],"latestChangedDtsFile":"./lib/index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -140,6 +137,10 @@ export {};
     ],
     "fileInfos": {
       "../../../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
@@ -153,6 +154,10 @@ export {};
         "signature": "1045484683-export function bar() { }"
       },
       "./src/index.ts": {
+        "original": {
+          "version": "3563314629-import { foo } from 'b';\nimport { bar } from 'b/lib/bar';\nfoo();\nbar();\n",
+          "signature": "-3531856636-export {};\n"
+        },
         "version": "3563314629-import { foo } from 'b';\nimport { bar } from 'b/lib/bar';\nfoo();\nbar();\n",
         "signature": "-3531856636-export {};\n"
       }
@@ -174,9 +179,10 @@ export {};
       "./src/index.ts",
       "../b/src/bar.ts",
       "../b/src/index.ts"
-    ]
+    ],
+    "latestChangedDtsFile": "./lib/index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 948
+  "size": 990
 }
 

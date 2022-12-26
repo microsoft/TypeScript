@@ -403,3 +403,64 @@ type _Expect<TActual extends TExpected, TExpected> = TActual;
 >TExpected : Symbol(TExpected, Decl(awaitedType.ts, 160, 39))
 >TActual : Symbol(TActual, Decl(awaitedType.ts, 160, 13))
 
+// https://github.com/microsoft/TypeScript/issues/48320
+async function f17<T extends (...args: any[]) => Promise<any>>(fn: T) {
+>f17 : Symbol(f17, Decl(awaitedType.ts, 160, 61))
+>T : Symbol(T, Decl(awaitedType.ts, 163, 19))
+>args : Symbol(args, Decl(awaitedType.ts, 163, 30))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>fn : Symbol(fn, Decl(awaitedType.ts, 163, 63))
+>T : Symbol(T, Decl(awaitedType.ts, 163, 19))
+
+    const ret: Awaited<ReturnType<T>> = await fn(1, 2, 3);
+>ret : Symbol(ret, Decl(awaitedType.ts, 164, 9))
+>Awaited : Symbol(Awaited, Decl(lib.es5.d.ts, --, --))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(awaitedType.ts, 163, 19))
+>fn : Symbol(fn, Decl(awaitedType.ts, 163, 63))
+
+    return ret;
+>ret : Symbol(ret, Decl(awaitedType.ts, 164, 9))
+}
+async function f17_usage() {
+>f17_usage : Symbol(f17_usage, Decl(awaitedType.ts, 166, 1))
+
+    const x = await f17(async () => 123 as const);
+>x : Symbol(x, Decl(awaitedType.ts, 168, 9))
+>f17 : Symbol(f17, Decl(awaitedType.ts, 160, 61))
+>const : Symbol(const)
+
+    return { x };
+>x : Symbol(x, Decl(awaitedType.ts, 169, 12))
+}
+
+// https://github.com/microsoft/TypeScript/issues/47144
+type GenericStructure<
+>GenericStructure : Symbol(GenericStructure, Decl(awaitedType.ts, 170, 1))
+
+  AcceptableKeyType extends string = string
+>AcceptableKeyType : Symbol(AcceptableKeyType, Decl(awaitedType.ts, 173, 22))
+
+> = Record<AcceptableKeyType, number>;
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>AcceptableKeyType : Symbol(AcceptableKeyType, Decl(awaitedType.ts, 173, 22))
+
+async function brokenExample<AcceptableKeyType extends string = string>(structurePromise: Promise<GenericStructure<AcceptableKeyType>>, key: AcceptableKeyType): Promise<void> {
+>brokenExample : Symbol(brokenExample, Decl(awaitedType.ts, 175, 38))
+>AcceptableKeyType : Symbol(AcceptableKeyType, Decl(awaitedType.ts, 177, 29))
+>structurePromise : Symbol(structurePromise, Decl(awaitedType.ts, 177, 72))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>GenericStructure : Symbol(GenericStructure, Decl(awaitedType.ts, 170, 1))
+>AcceptableKeyType : Symbol(AcceptableKeyType, Decl(awaitedType.ts, 177, 29))
+>key : Symbol(key, Decl(awaitedType.ts, 177, 135))
+>AcceptableKeyType : Symbol(AcceptableKeyType, Decl(awaitedType.ts, 177, 29))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+
+  const structure = await structurePromise;
+>structure : Symbol(structure, Decl(awaitedType.ts, 178, 7))
+>structurePromise : Symbol(structurePromise, Decl(awaitedType.ts, 177, 72))
+
+  structure[key] = 1;
+>structure : Symbol(structure, Decl(awaitedType.ts, 178, 7))
+>key : Symbol(key, Decl(awaitedType.ts, 177, 135))
+}

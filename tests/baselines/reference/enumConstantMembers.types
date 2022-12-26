@@ -53,39 +53,39 @@ enum E5 {
 >E5 : E5
 
     a = 1 / 0,
->a : E5
+>a : E5.a
 >1 / 0 : number
 >1 : 1
 >0 : 0
 
     b = 2 / 0.0,
->b : E5
+>b : E5.a
 >2 / 0.0 : number
 >2 : 2
 >0.0 : 0
 
     c = 1.0 / 0.0,
->c : E5
+>c : E5.a
 >1.0 / 0.0 : number
 >1.0 : 1
 >0.0 : 0
 
     d = 0.0 / 0.0,
->d : E5
+>d : E5.d
 >0.0 / 0.0 : number
 >0.0 : 0
 >0.0 : 0
 
     e = NaN,
->e : E5
+>e : E5.d
 >NaN : number
 
     f = Infinity,
->f : E5
+>f : E5.a
 >Infinity : number
 
     g = -Infinity
->g : E5
+>g : E5.g
 >-Infinity : number
 >Infinity : number
 }
@@ -94,39 +94,39 @@ const enum E6 {
 >E6 : E6
 
     a = 1 / 0,
->a : E6
+>a : E6.a
 >1 / 0 : number
 >1 : 1
 >0 : 0
 
     b = 2 / 0.0,
->b : E6
+>b : E6.a
 >2 / 0.0 : number
 >2 : 2
 >0.0 : 0
 
     c = 1.0 / 0.0,
->c : E6
+>c : E6.a
 >1.0 / 0.0 : number
 >1.0 : 1
 >0.0 : 0
 
     d = 0.0 / 0.0,
->d : E6
+>d : E6.d
 >0.0 / 0.0 : number
 >0.0 : 0
 >0.0 : 0
 
     e = NaN,
->e : E6
+>e : E6.d
 >NaN : number
 
     f = Infinity,
->f : E6
+>f : E6.a
 >Infinity : number
 
     g = -Infinity
->g : E6
+>g : E6.g
 >-Infinity : number
 >Infinity : number
 }
