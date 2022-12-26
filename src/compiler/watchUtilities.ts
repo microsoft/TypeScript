@@ -195,7 +195,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
             return createCachedFileSystemEntries(rootDir, rootDirPath);
         }
         catch (_e) {
-            // If there is exception to read directories, dont cache the result and direct the calls to host
+            // If there is exception to read directories, don't cache the result and direct the calls to host
             Debug.assert(!cachedReadDirectoryResult.has(ensureTrailingDirectorySeparator(rootDirPath)));
             return undefined;
         }
@@ -305,7 +305,7 @@ export function createCachedDirectoryStructureHost(host: DirectoryStructureHost,
         // or we never cached the directory containing it
 
         if (!host.directoryExists) {
-            // Since host doesnt support directory exists, clear the cache as otherwise it might not be same
+            // Since host doesn't support directory exists, clear the cache as otherwise it might not be same
             clearCache();
             return undefined;
         }
@@ -527,7 +527,7 @@ export function updateWatchingWildcardDirectories(
             createNewValue: createWildcardDirectoryWatcher,
             // Close existing watch thats not needed any more
             onDeleteValue: closeFileWatcherOf,
-            // Close existing watch that doesnt match in the flags
+            // Close existing watch that doesn't match in the flags
             onExistingValue: updateWildcardDirectoryWatcher
         }
     );
@@ -541,7 +541,7 @@ export function updateWatchingWildcardDirectories(
     }
 
     function updateWildcardDirectoryWatcher(existingWatcher: WildcardDirectoryWatcher, flags: WatchDirectoryFlags, directory: string) {
-        // Watcher needs to be updated if the recursive flags dont match
+        // Watcher needs to be updated if the recursive flags don't match
         if (existingWatcher.flags === flags) {
             return;
         }
