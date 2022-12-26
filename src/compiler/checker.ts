@@ -24325,7 +24325,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                             else if (middleLength === 1 && elementFlags[startLength] & ElementFlags.Rest) {
                                 // Middle of target is exactly one rest element. If middle of source is not empty, infer union of middle element types.
-                                const restType = isTupleType(source) ? getElementTypeOfSliceOfTupleType(source, startLength, endLength) : getTypeArguments(source)[0];
+                                const restType = getElementTypeOfSliceOfTupleType(source, startLength, endLength);
                                 if (restType) {
                                     inferFromTypes(restType, elementTypes[startLength]);
                                 }
