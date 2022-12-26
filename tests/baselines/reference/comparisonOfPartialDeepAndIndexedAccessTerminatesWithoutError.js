@@ -13,5 +13,5 @@ export {};
 
 //// [comparisonOfPartialDeepAndIndexedAccessTerminatesWithoutError.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var x = null;

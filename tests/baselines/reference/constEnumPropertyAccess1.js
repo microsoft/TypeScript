@@ -63,4 +63,7 @@ declare var a: G;
 declare var a1: G;
 declare var g: boolean;
 declare class C {
+    [G.A](): void;
+    get [G.B](): number;
+    set [G.B](x: number);
 }

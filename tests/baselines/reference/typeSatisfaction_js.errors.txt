@@ -1,6 +1,8 @@
+error TS5101: Flag 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
 /src/a.js(1,29): error TS8037: Type satisfaction expressions can only be used in TypeScript files.
 
 
+!!! error TS5101: Flag 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
 ==== /src/a.js (1 errors) ====
     var v = undefined satisfies 1;
                                 ~

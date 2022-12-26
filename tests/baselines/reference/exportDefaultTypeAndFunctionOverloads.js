@@ -10,8 +10,8 @@ export default Foo
 
 //// [exportDefaultTypeAndFunctionOverloads.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function foo(value) {
     return 1;
 }
-exports["default"] = foo;
+exports.default = foo;
