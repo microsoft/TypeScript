@@ -24325,6 +24325,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     if (constraint && isTupleType(constraint) && !constraint.target.hasRestElement) {
                                         const impliedArity = constraint.target.fixedLength;
                                         inferFromTypes(sliceTupleType(source, startLength, sourceArity - (startLength + impliedArity)), elementTypes[startLength]);
+                                        inferFromTypes(getElementTypeOfSliceOfTupleType(source, startLength + impliedArity, endLength)!, elementTypes[startLength + 1]);
                                     }
                                 }
                                 else if (elementFlags[startLength] & ElementFlags.Rest && elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(source)) {
