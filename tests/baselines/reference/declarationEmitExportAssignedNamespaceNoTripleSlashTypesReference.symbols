@@ -66,6 +66,6 @@ export const obj = {
 >getComp : Symbol(getComp, Decl(inferred-comp-export.ts, 0, 8))
 }
 === tests/cases/compiler/src/some-other-file.ts ===
+
 export * from '@emotion/core';
-No type information for this code.
-No type information for this code.
+

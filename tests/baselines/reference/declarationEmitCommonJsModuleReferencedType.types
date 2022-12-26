@@ -1,10 +1,13 @@
 === tests/cases/compiler/r/node_modules/foo/node_modules/nested/index.d.ts ===
+
 export interface NestedProps {}
-No type information for this code.=== tests/cases/compiler/r/node_modules/foo/other/index.d.ts ===
+=== tests/cases/compiler/r/node_modules/foo/other/index.d.ts ===
+
 export interface OtherIndexProps {}
-No type information for this code.=== tests/cases/compiler/r/node_modules/foo/other.d.ts ===
+=== tests/cases/compiler/r/node_modules/foo/other.d.ts ===
+
 export interface OtherProps {}
-No type information for this code.=== tests/cases/compiler/r/node_modules/foo/index.d.ts ===
+=== tests/cases/compiler/r/node_modules/foo/index.d.ts ===
 import { OtherProps } from "./other";
 >OtherProps : any
 

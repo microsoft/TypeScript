@@ -71,7 +71,7 @@ Info 17   [00:00:44.000] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/bar.ts
 	  Matched by include pattern './src' in 'tsconfig.json'
 	src/foo.ts
@@ -388,7 +388,7 @@ Info 58   [00:01:44.000] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/bar.ts
 	  Matched by include pattern './src' in 'tsconfig.json'
 	src/foo.ts

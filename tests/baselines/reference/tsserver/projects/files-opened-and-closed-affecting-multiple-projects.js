@@ -69,7 +69,7 @@ Info 16   [00:00:41.000] 	Files (3)
 
 
 	../../../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../files/file1.ts
 	  Imported via "../files/file1" from file 'file.ts'
 	file.ts
@@ -275,7 +275,7 @@ Info 41   [00:01:26.000] 	Files (3)
 
 
 	../../../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../files/file1.ts
 	  Imported via "../files/file1" from file 'file.ts'
 	file.ts

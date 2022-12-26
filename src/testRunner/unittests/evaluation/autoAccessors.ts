@@ -1,3 +1,6 @@
+import * as ts from "../../_namespaces/ts";
+import * as evaluator from "../../_namespaces/evaluator";
+
 describe("unittests:: evaluation:: autoAccessors", () => {
     const editions = [
         { name: "es2022", target: ts.ScriptTarget.ES2022 },

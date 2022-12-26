@@ -132,7 +132,7 @@ function farr<T extends [number, string, string] | [string, number, number]>(x: 
 
     const [head, ...tail] = x;
 >head : string | number
->tail : (string | number)[]
+>tail : [string, string] | [number, number]
 >x : [number, string, string] | [string, number, number]
 
     if (x[0] === 'number') {
@@ -144,7 +144,7 @@ function farr<T extends [number, string, string] | [string, number, number]>(x: 
 
         const [head, ...tail] = x;
 >head : "number"
->tail : (string | number)[]
+>tail : [string, string] | [number, number]
 >x : [number, string, string] | [string, number, number]
     }
 }

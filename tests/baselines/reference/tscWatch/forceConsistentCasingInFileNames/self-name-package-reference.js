@@ -31,7 +31,6 @@ Output::
 [[90m12:00:23 AM[0m] Starting compilation in watch mode...
 
 Found 'package.json' at '/Users/name/projects/web/package.json'.
-'package.json' does not have a 'typesVersions' field.
 ======== Resolving module '@this/package' from '/Users/name/projects/web/index.ts'. ========
 Module resolution kind is not specified, using 'NodeNext'.
 Resolving in ESM mode with conditions 'node', 'import', 'types'.
@@ -115,12 +114,22 @@ export declare function thing(): void;
     ],
     "fileInfos": {
       "../../../../../a/lib/lib.esnext.full.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true,
         "impliedFormat": "commonjs"
       },
       "../index.ts": {
+        "original": {
+          "version": "14361483761-import * as me from \"@this/package\";\nme.thing();\nexport function thing(): void {}\n",
+          "signature": "-2724770439-export declare function thing(): void;\n",
+          "impliedFormat": 99
+        },
         "version": "14361483761-import * as me from \"@this/package\";\nme.thing();\nexport function thing(): void {}\n",
         "signature": "-2724770439-export declare function thing(): void;\n",
         "impliedFormat": "esnext"
