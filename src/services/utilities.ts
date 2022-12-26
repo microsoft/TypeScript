@@ -29,6 +29,7 @@ import {
     CompilerOptions,
     ConditionalExpression,
     contains,
+    ContextFlags,
     createPrinter,
     createRange,
     createScanner,
@@ -225,6 +226,7 @@ import {
     isTaggedTemplateExpression,
     isTemplateLiteralKind,
     isToken,
+    isTransientSymbol,
     isTypeAliasDeclaration,
     isTypeElement,
     isTypeNode,
@@ -271,7 +273,6 @@ import {
     nodeIsMissing,
     nodeIsPresent,
     nodeIsSynthesized,
-    noop,
     normalizePath,
     NoSubstitutionTemplateLiteral,
     notImplemented,
@@ -337,7 +338,6 @@ import {
     textSpanEnd,
     Token,
     tokenToString,
-    TransientSymbol,
     tryCast,
     Type,
     TypeChecker,
@@ -2375,6 +2375,7 @@ export function programContainsModules(program: Program): boolean {
 export function programContainsEsModules(program: Program): boolean {
     return program.getSourceFiles().some(s => !s.isDeclarationFile && !program.isSourceFileFromExternalLibrary(s) && !!s.externalModuleIndicator);
 }
+// TODO: this function is, at best, poorly named. Use sites are pretty suspicious.
 /** @internal */
 export function compilerOptionsIndicateEsModules(compilerOptions: CompilerOptions): boolean {
     return !!compilerOptions.module || getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
@@ -2410,13 +2411,8 @@ export function getModuleSpecifierResolverHost(program: Program, host: LanguageS
 }
 
 /** @internal */
-export function moduleResolutionRespectsExports(moduleResolution: ModuleResolutionKind): boolean {
-    return moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
-}
-
-/** @internal */
 export function moduleResolutionUsesNodeModules(moduleResolution: ModuleResolutionKind): boolean {
-    return moduleResolution === ModuleResolutionKind.NodeJs || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
+    return moduleResolution === ModuleResolutionKind.Node10 || moduleResolution >= ModuleResolutionKind.Node16 && moduleResolution <= ModuleResolutionKind.NodeNext;
 }
 
 /** @internal */
@@ -2546,7 +2542,7 @@ export function insertImports(changes: textChanges.ChangeTracker, sourceFile: So
     if (!existingImportStatements.length) {
         changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
     }
-    else if (existingImportStatements && OrganizeImports.importsAreSorted(existingImportStatements)) {
+    else if (existingImportStatements && OrganizeImports.detectImportDeclarationSorting(existingImportStatements)) {
         for (const newImport of sortedNewImports) {
             const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport);
             if (insertionIndex === 0) {
@@ -2721,10 +2717,6 @@ function getDisplayPartWriter(): DisplayPartsSymbolWriter {
         increaseIndent: () => { indent++; },
         decreaseIndent: () => { indent--; },
         clear: resetWriter,
-        trackSymbol: () => false,
-        reportInaccessibleThisError: noop,
-        reportInaccessibleUniqueSymbolError: noop,
-        reportPrivateInBaseOfClassExpression: noop,
     };
 
     function writeIndent() {
@@ -2898,7 +2890,7 @@ export function buildLinkParts(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain,
             if (text) parts.push(linkTextPart(text));
         }
         else {
-            parts.push(linkTextPart(name + (suffix || text.indexOf("://") === 0 ? "" : " ") + text));
+            parts.push(linkTextPart(name + (suffix ? "" : " ") + text));
         }
     }
     parts.push(linkPart("}"));
@@ -2915,15 +2907,21 @@ function skipSeparatorFromLinkText(text: string) {
 }
 
 function findLinkNameEnd(text: string) {
+    let pos = text.indexOf("://");
+    if (pos === 0) {
+        while (pos < text.length && text.charCodeAt(pos) !== CharacterCodes.bar) pos++;
+        return pos;
+    }
     if (text.indexOf("()") === 0) return 2;
-    if (text[0] !== "<") return 0;
-    let brackets = 0;
-    let i = 0;
-    while (i < text.length) {
-        if (text[i] === "<") brackets++;
-        if (text[i] === ">") brackets--;
-        i++;
-        if (!brackets) return i;
+    if (text.charAt(0) === "<") {
+        let brackets = 0;
+        let i = 0;
+        while (i < text.length) {
+            if (text[i] === "<") brackets++;
+            if (text[i] === ">") brackets--;
+            i++;
+            if (!brackets) return i;
+        }
     }
     return 0;
 }
@@ -3002,19 +3000,15 @@ export function getScriptKind(fileName: string, host: LanguageServiceHost): Scri
 /** @internal */
 export function getSymbolTarget(symbol: Symbol, checker: TypeChecker): Symbol {
     let next: Symbol = symbol;
-    while (isAliasSymbol(next) || (isTransientSymbol(next) && next.target)) {
-        if (isTransientSymbol(next) && next.target) {
-            next = next.target;
+    while (isAliasSymbol(next) || (isTransientSymbol(next) && next.links.target)) {
+        if (isTransientSymbol(next) && next.links.target) {
+            next = next.links.target;
         }
         else {
             next = skipAlias(next, checker);
         }
     }
     return next;
-}
-
-function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
-    return (symbol.flags & SymbolFlags.Transient) !== 0;
 }
 
 function isAliasSymbol(symbol: Symbol): boolean {
@@ -3277,21 +3271,21 @@ export function needsParentheses(expression: Expression): boolean {
 }
 
 /** @internal */
-export function getContextualTypeFromParent(node: Expression, checker: TypeChecker): Type | undefined {
+export function getContextualTypeFromParent(node: Expression, checker: TypeChecker, contextFlags?: ContextFlags): Type | undefined {
     const { parent } = node;
     switch (parent.kind) {
         case SyntaxKind.NewExpression:
-            return checker.getContextualType(parent as NewExpression);
+            return checker.getContextualType(parent as NewExpression, contextFlags);
         case SyntaxKind.BinaryExpression: {
             const { left, operatorToken, right } = parent as BinaryExpression;
             return isEqualityOperatorKind(operatorToken.kind)
                 ? checker.getTypeAtLocation(node === right ? left : right)
-                : checker.getContextualType(node);
+                : checker.getContextualType(node, contextFlags);
         }
         case SyntaxKind.CaseClause:
             return (parent as CaseClause).expression === node ? getSwitchedType(parent as CaseClause, checker) : undefined;
         default:
-            return checker.getContextualType(node);
+            return checker.getContextualType(node, contextFlags);
     }
 }
 

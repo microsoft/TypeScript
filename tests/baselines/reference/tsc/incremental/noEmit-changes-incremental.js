@@ -61,7 +61,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 //// [/src/project/src/class.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.classC = void 0;
 var classC = /** @class */ (function () {
     function classC() {
@@ -74,14 +74,14 @@ exports.classC = classC;
 
 //// [/src/project/src/directUse.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var indirectClass_1 = require("./indirectClass");
 new indirectClass_1.indirectClass().classC.prop;
 
 
 //// [/src/project/src/indirectClass.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.indirectClass = void 0;
 var class_1 = require("./class");
 var indirectClass = /** @class */ (function () {
@@ -95,14 +95,14 @@ exports.indirectClass = indirectClass;
 
 //// [/src/project/src/indirectUse.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var indirectClass_1 = require("./indirectClass");
 new indirectClass_1.indirectClass().classC.prop;
 
 
 //// [/src/project/src/noChangeFile.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.writeLog = void 0;
 function writeLog(s) {
 }
@@ -736,7 +736,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 //// [/src/project/src/class.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.classC = void 0;
 var classC = /** @class */ (function () {
     function classC() {
@@ -1239,7 +1239,7 @@ exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 
 //// [/src/project/src/class.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.classC = void 0;
 var classC = /** @class */ (function () {
     function classC() {

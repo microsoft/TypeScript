@@ -46,7 +46,7 @@ CreatingProgramWith::
   options: {"composite":true,"traceResolution":true,"outDir":"/src/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/src/project/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /src/project/fileWithImports.ts 250 undefined Source file
 ======== Resolving module 'pkg0' from '/src/project/fileWithImports.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/src/project/node_modules/pkg0/package.json' does not exist.
 File '/src/project/node_modules/pkg0.ts' does not exist.
@@ -58,7 +58,7 @@ File '/src/project/node_modules/pkg0/index.d.ts' exist - use it as a name resolu
 Resolving real path for '/src/project/node_modules/pkg0/index.d.ts', result '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Module name 'pkg0' was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'. ========
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/src/project/node_modules/pkg1.ts' does not exist.
 File '/src/project/node_modules/pkg1.tsx' does not exist.
@@ -112,7 +112,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src/project/node_modules/@t
 [7m [0m [91m                                          ~~~~~~~[0m
 
 ../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
 fileWithImports.ts
@@ -179,7 +179,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/src/project/outDir/fileWithImports.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/src/project/outDir/fileWithImports.d.ts]
@@ -188,7 +188,7 @@ export {};
 
 //// [/src/project/outDir/fileWithTypeRefs.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference types="pkg2"/>
 /// <reference types="pkg3"/>
 
@@ -339,7 +339,7 @@ CreatingProgramWith::
   options: {"composite":true,"traceResolution":true,"outDir":"/src/project/outDir","watch":true,"explainFiles":true,"extendedDiagnostics":true,"configFilePath":"/src/project/tsconfig.json"}
 Reusing resolution of module 'pkg0' from '/src/project/fileWithImports.ts' of old program, it was successfully resolved to '/src/project/node_modules/pkg0/index.d.ts'.
 ======== Resolving module 'pkg1' from '/src/project/fileWithImports.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 File '/src/project/node_modules/pkg1/package.json' does not exist.
 File '/src/project/node_modules/pkg1.ts' does not exist.
@@ -364,7 +364,7 @@ Reusing resolution of type reference directive 'pkg3' from '/src/project/fileWit
 [7m [0m [91m                                          ~~~~~~~[0m
 
 ../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
 node_modules/pkg1/index.d.ts
@@ -581,7 +581,7 @@ FileWatcher:: Added:: WatchInfo: /src/project/node_modules/pkg3/index.d.ts 250 u
 [7m [0m [91m                                          ~~~~~~~[0m
 
 ../../a/lib/lib.d.ts
-  Default library for target 'es3'
+  Default library for target 'es5'
 node_modules/pkg0/index.d.ts
   Imported via "pkg0" from file 'fileWithImports.ts'
 node_modules/pkg1/index.d.ts

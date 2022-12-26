@@ -44,7 +44,7 @@ Output::
 [[90m12:00:41 AM[0m] Building project '/user/username/projects/myproject/packages/pkg2/tsconfig.json'...
 
 ======== Resolving module 'const' from '/user/username/projects/myproject/packages/pkg2/index.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/user/username/projects/myproject/packages/pkg2', using this value to resolve non-relative module name 'const'.
 Resolving module name 'const' relative to base url '/user/username/projects/myproject/packages/pkg2' - '/user/username/projects/myproject/packages/pkg2/const'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const', target file types: TypeScript, Declaration.
@@ -55,15 +55,15 @@ File '/user/username/projects/myproject/packages/pkg2/const.ts' exist - use it a
 [[90m12:00:59 AM[0m] Building project '/user/username/projects/myproject/packages/pkg1/tsconfig.json'...
 
 ======== Resolving module 'pkg2' from '/user/username/projects/myproject/packages/pkg1/index.ts'. ========
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg2' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
-'package.json' does not have a 'typesVersions' field.
 File '/user/username/projects/myproject/node_modules/pkg2.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2.tsx' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
+'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'build/index.js' that references '/user/username/projects/myproject/node_modules/pkg2/build/index.js'.
@@ -78,7 +78,7 @@ Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/bui
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
 ======== Resolving module 'const' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
-Module resolution kind is not specified, using 'NodeJs'.
+Module resolution kind is not specified, using 'Node10'.
 'baseUrl' option is set to '/user/username/projects/myproject/packages/pkg2', using this value to resolve non-relative module name 'const'.
 Resolving module name 'const' relative to base url '/user/username/projects/myproject/packages/pkg2' - '/user/username/projects/myproject/packages/pkg2/const'.
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const', target file types: TypeScript, Declaration.
@@ -135,7 +135,7 @@ exitCode:: ExitStatus.Success
 
 //// [/user/username/projects/myproject/packages/pkg2/build/const.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/const.d.ts]
@@ -144,7 +144,7 @@ export type TheNum = 42;
 
 //// [/user/username/projects/myproject/packages/pkg2/build/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/packages/pkg2/build/index.d.ts]
@@ -221,7 +221,7 @@ export type { TheNum } from 'const';
 
 //// [/user/username/projects/myproject/packages/pkg1/build/index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.theNum = void 0;
 exports.theNum = 42;
 

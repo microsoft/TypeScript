@@ -53,7 +53,7 @@ Info 19   [00:01:16.000] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -157,7 +157,7 @@ Info 45   [00:02:17.000] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts
@@ -235,7 +235,7 @@ Info 73   [00:02:51.000] 	Files (4)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	src/helpers/functions.ts
 	  Imported via 'helpers/functions' from file 'src/main.ts'
 	src/main.ts

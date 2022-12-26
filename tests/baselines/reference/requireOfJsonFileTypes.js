@@ -64,7 +64,7 @@ booleanLiteral = g[0];
 [true, false]
 //// [out/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var b = require("./b.json");
 var c = require("./c.json");
 var d = require("./d.json");

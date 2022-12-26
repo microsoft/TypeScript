@@ -22,8 +22,6 @@ import {
     TscCompileSystem,
     verifyTsc,
     verifyTscCompileLike,
-    verifyTscWithEdits,
-    VerifyTscWithEditsInput,
 } from "../tsc/helpers";
 
 describe("unittests:: tsbuild:: outFile::", () => {
@@ -56,26 +54,26 @@ describe("unittests:: tsbuild:: outFile::", () => {
         baselineOnly,
         additionalCommandLineArgs,
     }: VerifyOutFileScenarioInput) {
-        const edits: TestTscEdit[] = [];
+        let edits: TestTscEdit[] | undefined;
         if (!ignoreDtsChanged) {
-            edits.push({
-                subScenario: "incremental-declaration-changes",
-                modifyFs: fs => replaceText(fs, "/src/first/first_PART1.ts", "Hello", "Hola"),
+            (edits ??= []).push({
+                caption: "incremental-declaration-changes",
+                edit: fs => replaceText(fs, "/src/first/first_PART1.ts", "Hello", "Hola"),
             });
         }
         if (!ignoreDtsUnchanged) {
-            edits.push({
-                subScenario: "incremental-declaration-doesnt-change",
-                modifyFs: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
+            (edits ??= []).push({
+                caption: "incremental-declaration-doesnt-change",
+                edit: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
             });
         }
         if (modifyAgainFs) {
-            edits.push({
-                subScenario: "incremental-headers-change-without-dts-changes",
-                modifyFs: modifyAgainFs
+            (edits ??= []).push({
+                caption: "incremental-headers-change-without-dts-changes",
+                edit: modifyAgainFs
             });
         }
-        const input: VerifyTscWithEditsInput = {
+        verifyTsc({
             subScenario,
             fs: () => outFileFs,
             scenario: "outfile-concat",
@@ -84,10 +82,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
             modifyFs,
             baselineReadFileCalls: !baselineOnly,
             edits,
-        };
-        return edits.length ?
-            verifyTscWithEdits(input) :
-            verifyTsc(input);
+        });
     }
 
     // Verify initial + incremental edits
@@ -139,7 +134,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
         return outFileWithBuildFs = fs;
     }
 
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "outFile",
         subScenario: "clean projects",
         fs: getOutFileFsAfterBuild,
@@ -176,7 +171,7 @@ describe("unittests:: tsbuild:: outFile::", () => {
         }
     });
 
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "outFile",
         subScenario: "rebuilds completely when command line incremental flag changes between non dts changes",
         fs: () => outFileFs,
@@ -186,27 +181,27 @@ describe("unittests:: tsbuild:: outFile::", () => {
         commandLineArgs: ["--b", "/src/third", "--i", "--verbose"],
         edits: [
             {
-                subScenario: "Make non incremental build with change in file that doesnt affect dts",
-                modifyFs: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
+                caption: "Make non incremental build with change in file that doesnt affect dts",
+                edit: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
                 commandLineArgs: ["--b", "/src/third", "--verbose"],
             },
             {
-                subScenario: "Make incremental build with change in file that doesnt affect dts",
-                modifyFs: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
+                caption: "Make incremental build with change in file that doesnt affect dts",
+                edit: fs => appendText(fs, "/src/first/first_PART1.ts", "console.log(s);"),
                 commandLineArgs: ["--b", "/src/third", "--verbose", "--incremental"],
             }
         ]
     });
 
-    verifyTscWithEdits({
+    verifyTsc({
         scenario: "outFile",
         subScenario: "when input file text does not change but its modified time changes",
         fs: () => outFileFs,
         commandLineArgs: ["--b", "/src/third", "--verbose"],
         edits: [
             {
-                subScenario: "upstream project changes without changing file text",
-                modifyFs: fs => {
+                caption: "upstream project changes without changing file text",
+                edit: fs => {
                     const time = new Date(fs.time());
                     fs.utimesSync("/src/first/first_PART1.ts", time, time);
                 },

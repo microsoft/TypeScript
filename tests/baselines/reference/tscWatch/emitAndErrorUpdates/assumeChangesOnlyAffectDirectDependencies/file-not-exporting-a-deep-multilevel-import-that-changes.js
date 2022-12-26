@@ -130,17 +130,17 @@ exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/a.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/b.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 //// [/user/username/projects/myproject/c.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPoint = void 0;
 function getPoint() {
     return {
@@ -157,14 +157,14 @@ exports.getPoint = getPoint;
 
 //// [/user/username/projects/myproject/d.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var c_1 = require("./c");
 (0, c_1.getPoint)().c.x;
 
 
 //// [/user/username/projects/myproject/e.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 require("./d");
 
 

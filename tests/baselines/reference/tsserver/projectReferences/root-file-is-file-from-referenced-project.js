@@ -1,12 +1,12 @@
 Info 0    [00:01:17.000] Provided types map file "/a/lib/typesMap.json" doesn't exist
 Info 1    [00:01:18.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/project/src/common/input/keyboard.ts"
-      }
+      },
+      "seq": 1,
+      "type": "request"
     }
 Before request
 //// [/user/username/projects/project/src/common/tsconfig.json]
@@ -48,7 +48,7 @@ interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/project/out/input/keyboard.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.evaluateKeyboardEvent = void 0;
 function bar() { return "just a random function so .d.ts location doesnt match"; }
 function evaluateKeyboardEvent() { }
@@ -64,7 +64,7 @@ export declare function evaluateKeyboardEvent(): void;
 
 //// [/user/username/projects/project/out/input/keyboard.test.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var keyboard_1 = require("common/input/keyboard");
 function testEvaluateKeyboardEvent() {
     return (0, keyboard_1.evaluateKeyboardEvent)();
@@ -145,7 +145,7 @@ export {};
 
 //// [/user/username/projects/project/out/terminal.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var keyboard_1 = require("common/input/keyboard");
 function foo() {
     return (0, keyboard_1.evaluateKeyboardEvent)();
@@ -161,7 +161,7 @@ export {};
 
 //// [/user/username/projects/project/out/common/input/keyboard.test.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var keyboard_1 = require("common/input/keyboard");
 function testEvaluateKeyboardEvent() {
     return (0, keyboard_1.evaluateKeyboardEvent)();
@@ -295,7 +295,7 @@ Info 20   [00:01:37.000] 	Files (3)
 
 
 	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	input/keyboard.ts
 	  Imported via 'common/input/keyboard' from file 'input/keyboard.test.ts'
 	  Matched by include pattern './**/*' in 'tsconfig.json'
@@ -350,12 +350,12 @@ Info 28   [00:01:54.000] response:
     }
 Info 29   [00:01:55.000] request:
     {
-      "seq": 0,
-      "type": "request",
       "command": "open",
       "arguments": {
         "file": "/user/username/projects/project/src/terminal.ts"
-      }
+      },
+      "seq": 2,
+      "type": "request"
     }
 Before request
 
@@ -429,7 +429,7 @@ Info 43   [00:02:09.000] 	Files (4)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	common/input/keyboard.ts
 	  Imported via 'common/input/keyboard' from file 'terminal.ts'
 	  Imported via 'common/input/keyboard' from file 'common/input/keyboard.test.ts'
@@ -493,7 +493,7 @@ Info 48   [00:02:25.000] request:
         "line": 2,
         "offset": 17
       },
-      "seq": 1,
+      "seq": 3,
       "type": "request"
     }
 Before request

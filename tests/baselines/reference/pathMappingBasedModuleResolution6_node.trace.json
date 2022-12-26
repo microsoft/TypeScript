@@ -1,6 +1,6 @@
 [
     "======== Resolving module './project/file3' from 'c:/root/src/file1.ts'. ========",
-    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Module resolution kind is not specified, using 'Node10'.",
     "'rootDirs' option is set, using it to resolve relative module name './project/file3'.",
     "Checking if 'c:/root/src/' is the longest matching prefix for 'c:/root/src/project/file3' - 'true'.",
     "Checking if 'c:/root/generated/src/' is the longest matching prefix for 'c:/root/src/project/file3' - 'false'.",
@@ -14,7 +14,7 @@
     "File 'c:/root/generated/src/project/file3.ts' exist - use it as a name resolution result.",
     "======== Module name './project/file3' was successfully resolved to 'c:/root/generated/src/project/file3.ts'. ========",
     "======== Resolving module '../file2' from 'c:/root/generated/src/project/file3.ts'. ========",
-    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Module resolution kind is not specified, using 'Node10'.",
     "'rootDirs' option is set, using it to resolve relative module name '../file2'.",
     "Checking if 'c:/root/src/' is the longest matching prefix for 'c:/root/generated/src/file2' - 'false'.",
     "Checking if 'c:/root/generated/src/' is the longest matching prefix for 'c:/root/generated/src/file2' - 'true'.",
