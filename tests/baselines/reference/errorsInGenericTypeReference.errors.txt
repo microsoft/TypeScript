@@ -2,7 +2,6 @@ tests/cases/compiler/errorsInGenericTypeReference.ts(11,17): error TS2304: Canno
 tests/cases/compiler/errorsInGenericTypeReference.ts(17,31): error TS2304: Cannot find name 'V'.
 tests/cases/compiler/errorsInGenericTypeReference.ts(22,29): error TS2304: Cannot find name 'V'.
 tests/cases/compiler/errorsInGenericTypeReference.ts(23,36): error TS2304: Cannot find name 'V'.
-tests/cases/compiler/errorsInGenericTypeReference.ts(24,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/errorsInGenericTypeReference.ts(24,27): error TS2304: Cannot find name 'V'.
 tests/cases/compiler/errorsInGenericTypeReference.ts(25,24): error TS2304: Cannot find name 'V'.
 tests/cases/compiler/errorsInGenericTypeReference.ts(30,36): error TS2304: Cannot find name 'V'.
@@ -22,7 +21,7 @@ tests/cases/compiler/errorsInGenericTypeReference.ts(67,40): error TS2304: Canno
 tests/cases/compiler/errorsInGenericTypeReference.ts(68,24): error TS2304: Cannot find name 'V'.
 
 
-==== tests/cases/compiler/errorsInGenericTypeReference.ts (22 errors) ====
+==== tests/cases/compiler/errorsInGenericTypeReference.ts (21 errors) ====
     interface IFoo<T> { }
     
     class Foo<T> { }
@@ -55,8 +54,6 @@ tests/cases/compiler/errorsInGenericTypeReference.ts(68,24): error TS2304: Canno
                                        ~
 !!! error TS2304: Cannot find name 'V'.
         set a(value: Foo<{ x: V }>) { } // error: could not find symbol V
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                               ~
 !!! error TS2304: Cannot find name 'V'.
         property: Foo<{ x: V }>; // error: could not find symbol V

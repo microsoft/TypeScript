@@ -81,16 +81,28 @@ var y = 20;
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./file1.ts": {
+        "original": {
+          "version": "5029505981-const x = 10;",
+          "affectsGlobalScope": true
+        },
         "version": "5029505981-const x = 10;",
         "signature": "5029505981-const x = 10;",
         "affectsGlobalScope": true
       },
       "./file2.ts": {
+        "original": {
+          "version": "2414573776-const y: string = 20;",
+          "affectsGlobalScope": true
+        },
         "version": "2414573776-const y: string = 20;",
         "signature": "2414573776-const y: string = 20;",
         "affectsGlobalScope": true
@@ -182,16 +194,30 @@ var z = 10;
     ],
     "fileInfos": {
       "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "affectsGlobalScope": true
+        },
         "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
         "affectsGlobalScope": true
       },
       "./file1.ts": {
+        "original": {
+          "version": "3317474623-const z = 10;",
+          "signature": "-368931399-declare const z = 10;\n",
+          "affectsGlobalScope": true
+        },
         "version": "3317474623-const z = 10;",
         "signature": "-368931399-declare const z = 10;\n",
         "affectsGlobalScope": true
       },
       "./file2.ts": {
+        "original": {
+          "version": "2414573776-const y: string = 20;",
+          "signature": "509180395-declare const y: string;\n",
+          "affectsGlobalScope": true
+        },
         "version": "2414573776-const y: string = 20;",
         "signature": "509180395-declare const y: string;\n",
         "affectsGlobalScope": true

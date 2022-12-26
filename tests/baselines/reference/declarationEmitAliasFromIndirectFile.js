@@ -29,9 +29,9 @@ export default fp.l10ns;
 
 //// [app.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var fp = { l10ns: {} };
-exports["default"] = fp.l10ns;
+exports.default = fp.l10ns;
 
 
 //// [app.d.ts]
