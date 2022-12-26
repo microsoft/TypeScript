@@ -24,6 +24,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 function foo() {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield Promise.resolve().then(() => require((yield Promise.resolve().then(() => require("./foo"))).default));
+        return yield Promise.resolve(`${(yield Promise.resolve().then(() => require("./foo"))).default}`).then(s => require(s));
     });
 }

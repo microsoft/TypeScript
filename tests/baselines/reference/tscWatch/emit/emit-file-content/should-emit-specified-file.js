@@ -79,7 +79,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/f1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 function Foo() { return 10; }
 exports.Foo = Foo;
@@ -87,7 +87,7 @@ exports.Foo = Foo;
 
 //// [/a/b/f2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = void 0;
 var f1_1 = require("./f1");
 exports.y = (0, f1_1.Foo)();
@@ -95,7 +95,7 @@ exports.y = (0, f1_1.Foo)();
 
 //// [/a/b/f3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var f2_1 = require("./f2");
 var x = f2_1.y;
 
@@ -159,7 +159,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/f1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.foo2 = exports.Foo = void 0;
 function Foo() { return 10; }
 exports.Foo = Foo;
@@ -226,7 +226,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/f1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.fooN = exports.foo2 = exports.Foo = void 0;
 function Foo() { return 10; }
 exports.Foo = Foo;

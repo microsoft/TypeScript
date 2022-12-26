@@ -19,7 +19,7 @@ function check(x: Foo.ConstFooEnum): void {
 
 //// [foo.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.fooFunc = exports.ConstFooEnum = void 0;
 var ConstFooEnum;
 (function (ConstFooEnum) {
@@ -32,7 +32,7 @@ function fooFunc() { }
 exports.fooFunc = fooFunc;
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var Foo = require("./foo");
 function check(x) {
     switch (x) {

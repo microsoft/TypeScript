@@ -29,13 +29,13 @@ var v2 = 42; // Global scope
 var v4 = function () { return 5; };
 //// [file3.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.v3 = void 0;
 exports.v3 = true;
 var v2 = [1, 2, 3]; // Module scope. Should not appear in global scope
 //// [file4.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var file3 = require("./file3");
 var t1 = v1;
 var t2 = v2;

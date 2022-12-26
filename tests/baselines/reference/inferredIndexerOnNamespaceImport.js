@@ -15,13 +15,13 @@ f(foo);
 
 //// [foo.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = exports.x = void 0;
 exports.x = 3;
 exports.y = 5;
 //// [bar.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var foo = require("./foo");
 function f(map) {
     // ...

@@ -1,0 +1,73 @@
+[
+  {
+    "marker": {
+      "fileName": "/a.js",
+      "position": 175,
+      "name": ""
+    },
+    "quickInfo": {
+      "kind": "method",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 169,
+        "length": 6
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "B",
+          "kind": "className"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "method",
+          "kind": "methodName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "void",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [
+        {
+          "text": "Method documentation.",
+          "kind": "text"
+        }
+      ]
+    }
+  }
+]

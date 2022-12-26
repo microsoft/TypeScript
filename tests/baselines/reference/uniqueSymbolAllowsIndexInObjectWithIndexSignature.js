@@ -14,7 +14,7 @@ let b: I = {[SYM]: 'str'}; // Expect error
 //// [uniqueSymbolAllowsIndexInObjectWithIndexSignature.js]
 "use strict";
 var _a, _b;
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.SYM = void 0;
 // https://github.com/Microsoft/TypeScript/issues/21962
 exports.SYM = Symbol('a unique symbol');

@@ -39,6 +39,26 @@ function f12({ kind, payload }: Action) {
     }
 }
 
+// repro #50206
+function f13<T extends Action>({ kind, payload }: T) {
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+}
+
+function f14<T extends Action>(t: T) {
+    const { kind, payload } = t;
+    if (kind === 'A') {
+        payload.toFixed();
+    }
+    if (kind === 'B') {
+        payload.toUpperCase();
+    }
+}
+
 type Action2 =
     | { kind: 'A', payload: number | undefined }
     | { kind: 'B', payload: string | undefined };

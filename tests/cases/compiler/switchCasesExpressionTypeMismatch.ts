@@ -7,6 +7,17 @@ switch (0) {
     case true: break;   // Error
 }
 
+declare var q: string
+declare var r: number | "hello"
+
+switch (r) {
+    case q: break
+    case 42: break
+    case true: break // Error
+    case "hello": break
+    case "world": break // Error
+}
+
 var s: any = 0;
 
 // No error for all
