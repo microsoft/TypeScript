@@ -24339,6 +24339,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                         const startIndex = endIndex - impliedArity;
                                         const trailingSlice = createTupleType(getTypeArguments(source).slice(startIndex, endIndex), source.target.elementFlags.slice(startIndex, endIndex),
                                             /*readonly*/ false, source.target.labeledElementDeclarations && source.target.labeledElementDeclarations.slice(startIndex, endIndex));
+
+                                        inferFromTypes(getElementTypeOfSliceOfTupleType(source, startLength, endLength + impliedArity)!, elementTypes[startLength]);
                                         inferFromTypes(trailingSlice, elementTypes[startLength + 1]);
                                     }
                                 }

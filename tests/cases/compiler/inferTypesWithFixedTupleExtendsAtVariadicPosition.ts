@@ -41,6 +41,15 @@ type SubTup2TrailingVariadic<T extends unknown[]> = T extends [
 type SubTup2TrailingVariadicTest = SubTup2TrailingVariadic<[...a: number[], b: 1, c: 2]>;
 type SubTup2TrailingVariadicTest2 = SubTup2TrailingVariadic<[...a: number[], b: 1, c: 2, d: 3]>;
 
+type SubTup2RestAndTrailingVariadic2<T extends unknown[]> = T extends [
+    ...(infer C)[],
+    ...infer B extends [any, any],
+]
+    ? [C, ...B]
+    : never;
+
+type SubTup2RestAndTrailingVariadic2Test = SubTup2RestAndTrailingVariadic2<[...a: number[], b: 1, c: 2]>;
+
 type SubTup2VariadicWithLeadingFixedElements<T extends unknown[]> = T extends [
   any,
   ...infer B extends [any, any],
