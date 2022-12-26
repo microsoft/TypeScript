@@ -75,27 +75,27 @@ const c5 = <OneThing yxx1='ok'>Hello</OneThing>
 
 
 declare function TestingOneThing({y1: string}): JSX.Element;
->TestingOneThing : { ({ y1 }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
+>TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
 >y1 : any
 >string : any
 >JSX : any
 
 declare function TestingOneThing(j: {"extra-data": string, yy?: string}): JSX.Element;
->TestingOneThing : { ({ y1 }: { y1: any; }): JSX.Element; (j: {    "extra-data": string;    yy?: string;}): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
+>TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: {    "extra-data": string;    yy?: string;}): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
 >j : { "extra-data": string; yy?: string; }
 >"extra-data" : string
 >yy : string
 >JSX : any
 
 declare function TestingOneThing(n: {yy: number, direction?: number}): JSX.Element;
->TestingOneThing : { ({ y1 }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: {    yy: number;    direction?: number;}): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
+>TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: {    yy: number;    direction?: number;}): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
 >n : { yy: number; direction?: number; }
 >yy : number
 >direction : number
 >JSX : any
 
 declare function TestingOneThing(n: {yy: string, name: string}): JSX.Element;
->TestingOneThing : { ({ y1 }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: {    yy: string;    name: string;}): JSX.Element; }
+>TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: {    yy: string;    name: string;}): JSX.Element; }
 >n : { yy: string; name: string; }
 >yy : string
 >name : string
@@ -105,27 +105,27 @@ declare function TestingOneThing(n: {yy: string, name: string}): JSX.Element;
 const d1 = <TestingOneThing y1 extra-data />;
 >d1 : JSX.Element
 ><TestingOneThing y1 extra-data /> : JSX.Element
->TestingOneThing : { ({ y1 }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
+>TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
 >y1 : true
 >extra-data : true
 
 const d2 = <TestingOneThing extra-data="hello" />;
 >d2 : JSX.Element
 ><TestingOneThing extra-data="hello" /> : JSX.Element
->TestingOneThing : { ({ y1 }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
+>TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
 >extra-data : string
 
 const d3 = <TestingOneThing extra-data="hello" yy="hihi" />;
 >d3 : JSX.Element
 ><TestingOneThing extra-data="hello" yy="hihi" /> : JSX.Element
->TestingOneThing : { ({ y1 }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
+>TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
 >extra-data : string
 >yy : string
 
 const d4 = <TestingOneThing extra-data="hello" yy={9} direction={10} />;
 >d4 : JSX.Element
 ><TestingOneThing extra-data="hello" yy={9} direction={10} /> : JSX.Element
->TestingOneThing : { ({ y1 }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
+>TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
 >extra-data : string
 >yy : number
 >9 : 9
@@ -135,7 +135,7 @@ const d4 = <TestingOneThing extra-data="hello" yy={9} direction={10} />;
 const d5 = <TestingOneThing extra-data="hello" yy="hello" name="Bob" />;
 >d5 : JSX.Element
 ><TestingOneThing extra-data="hello" yy="hello" name="Bob" /> : JSX.Element
->TestingOneThing : { ({ y1 }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
+>TestingOneThing : { ({ y1: string }: { y1: any; }): JSX.Element; (j: { "extra-data": string; yy?: string; }): JSX.Element; (n: { yy: number; direction?: number; }): JSX.Element; (n: { yy: string; name: string; }): JSX.Element; }
 >extra-data : string
 >yy : string
 >name : string

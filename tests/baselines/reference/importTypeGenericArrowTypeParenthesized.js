@@ -21,7 +21,7 @@ export const works2 = fn<MakeItWork>(x => x);
 
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.works2 = exports.works1 = exports.fail2 = exports.fail1 = void 0;
 var module_1 = require("module");
 exports.fail1 = (0, module_1.fn)(function (x) { return x; });
@@ -37,6 +37,6 @@ exports.works2 = (0, module_1.fn)(function (x) { return x; });
 export declare const fail1: import("module").Modifier<(<T>(x: T) => T)>;
 export declare const fail2: import("module").Modifier<(<T>(x: T) => T)>;
 export declare const works1: import("module").Modifier<(x: number) => number>;
-declare type MakeItWork = <T>(x: T) => T;
+type MakeItWork = <T>(x: T) => T;
 export declare const works2: import("module").Modifier<MakeItWork>;
 export {};

@@ -1,0 +1,85 @@
+// === /tests/cases/fourslash/findAllReferencesFromLinkTagReference5.ts ===
+// enum E {
+//     /** {@link E./*FIND ALL REFS*/[|A|]} */
+//     [|A|]
+// }
+
+[
+  {
+    "definition": {
+      "containerKind": "",
+      "containerName": "",
+      "fileName": "/tests/cases/fourslash/findAllReferencesFromLinkTagReference5.ts",
+      "kind": "enum member",
+      "name": "(enum member) E.A = 0",
+      "textSpan": {
+        "start": 36,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": "enum member",
+          "kind": "text"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "E",
+          "kind": "enumName"
+        },
+        {
+          "text": ".",
+          "kind": "punctuation"
+        },
+        {
+          "text": "A",
+          "kind": "enumMemberName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=",
+          "kind": "operator"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "0",
+          "kind": "numericLiteral"
+        }
+      ]
+    },
+    "references": [
+      {
+        "textSpan": {
+          "start": 26,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesFromLinkTagReference5.ts",
+        "isWriteAccess": false
+      },
+      {
+        "textSpan": {
+          "start": 36,
+          "length": 1
+        },
+        "fileName": "/tests/cases/fourslash/findAllReferencesFromLinkTagReference5.ts",
+        "isWriteAccess": true
+      }
+    ]
+  }
+]

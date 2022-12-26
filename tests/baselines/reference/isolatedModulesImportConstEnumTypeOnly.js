@@ -10,7 +10,7 @@ function f(foo: Foo) { return; }
 
 //// [enum.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
 var Foo;
 (function (Foo) {
@@ -18,5 +18,5 @@ var Foo;
 })(Foo = exports.Foo || (exports.Foo = {}));
 //// [index.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 function f(foo) { return; }

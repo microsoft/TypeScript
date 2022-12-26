@@ -3,18 +3,18 @@ enum E {
 >E : E
 
     A = 1,
->A : E
+>A : E.A
 >1 : 1
 
     B,
->B : E
+>B : E.B
 
     C = 1 << 1,
->C : E
+>C : E.B
 >1 << 1 : number
 >1 : 1
 >1 : 1
 
     D,
->D : E
+>D : E.D
 }

@@ -151,8 +151,8 @@ class C implements String {
 >that : string
 >null : null
 
-    match(regexp: any): string[] { return null; }
->match : (regexp: any) => string[]
+    match(regexp: any): RegExpMatchArray { return null; }
+>match : (regexp: any) => RegExpMatchArray
 >regexp : any
 >null : null
 
@@ -221,7 +221,7 @@ class C implements String {
     [index: number]: string;
 >index : number
 }
- 
+
 // BUG 831846
 function f10(x: 'a');
 >f10 : { (x: 'a'): any; (x: C): any; }

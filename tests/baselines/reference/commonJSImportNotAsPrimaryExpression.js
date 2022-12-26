@@ -33,7 +33,7 @@ var e: number = <foo.E1>0;
 
 //// [foo_0.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.E1 = exports.C1 = void 0;
 var C1 = /** @class */ (function () {
     function C1() {
@@ -51,7 +51,7 @@ var E1;
 })(E1 = exports.E1 || (exports.E1 = {}));
 //// [foo_1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var i;
 var x = {};
 var y = false;

@@ -258,7 +258,7 @@ const test1: SpacingShorthand = "0 0 0";
 //// [templateLiteralTypes1.js]
 "use strict";
 // Template types example from #12754
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var createScopedActionType = function (scope) { return function (type) { return "".concat(scope, "/").concat(type); }; };
 var createActionInMyScope = createScopedActionType("MyScope"); // <T extends string>(type: T) => `MyScope/${T}`
 var MY_ACTION = createActionInMyScope("MY_ACTION"); // 'MyScope/MY_ACTION'
@@ -298,5 +298,5 @@ var test1 = "0 0 0";
 
 
 //// [templateLiteralTypes1.d.ts]
-export declare type Spacing = `0` | `${number}px` | `${number}rem` | `s${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`;
-export declare type SpacingShorthand = `${Spacing} ${Spacing}` | `${Spacing} ${Spacing} ${Spacing}` | `${Spacing} ${Spacing} ${Spacing} ${Spacing}`;
+export type Spacing = `0` | `${number}px` | `${number}rem` | `s${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`;
+export type SpacingShorthand = `${Spacing} ${Spacing}` | `${Spacing} ${Spacing} ${Spacing}` | `${Spacing} ${Spacing} ${Spacing} ${Spacing}`;

@@ -16,7 +16,7 @@ export const Hoc = <Tag extends Tags>(
 //// [jsxCallElaborationCheckNoCrash1.js]
 "use strict";
 /// <reference path="react16.d.ts" />
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Hoc = void 0;
 var React = require("react");
 var Hoc = function (TagElement) {

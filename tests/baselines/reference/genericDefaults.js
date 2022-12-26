@@ -1000,18 +1000,18 @@ declare class Derived03 extends Base02 {
 }
 declare const Derived03c00: Derived03;
 declare const Derived03c01: number;
-declare type DerivedProps = keyof Derived03;
-declare type t00<T = number> = {
+type DerivedProps = keyof Derived03;
+type t00<T = number> = {
     a: T;
 };
 declare const t00c00: number;
 declare const t00c01: number;
-declare type t01<T, U = T> = {
+type t01<T, U = T> = {
     a: [T, U];
 };
 declare const t01c00: [number, number];
 declare const t01c01: [number, string];
-declare type t02<T extends number, U = T> = {
+type t02<T extends number, U = T> = {
     a: [T, U];
 };
 declare const t02c00: [number, number];
@@ -1019,7 +1019,7 @@ declare const t02c01: [1, 1];
 declare const t02c02: [number, number];
 declare const t02c03: [1, number];
 declare const t02c04: [number, 1];
-declare type t03<T extends number, U extends T = T> = {
+type t03<T extends number, U extends T = T> = {
     a: [T, U];
 };
 declare const t03c00: [number, number];
