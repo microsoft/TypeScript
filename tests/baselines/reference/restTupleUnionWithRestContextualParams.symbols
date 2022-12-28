@@ -1,0 +1,8 @@
+=== tests/cases/compiler/restTupleUnionWithRestContextualParams.ts ===
+const f1: (...args: [number, string, ...boolean[]] | [string, number, ...boolean[]]) => void = (a, b, c) => {};
+>f1 : Symbol(f1, Decl(restTupleUnionWithRestContextualParams.ts, 0, 5))
+>args : Symbol(args, Decl(restTupleUnionWithRestContextualParams.ts, 0, 11))
+>a : Symbol(a, Decl(restTupleUnionWithRestContextualParams.ts, 0, 96))
+>b : Symbol(b, Decl(restTupleUnionWithRestContextualParams.ts, 0, 98))
+>c : Symbol(c, Decl(restTupleUnionWithRestContextualParams.ts, 0, 101))
+

@@ -19383,7 +19383,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const sourceType = i === restIndex ? getRestTypeAtPosition(source, i) : tryGetTypeAtPosition(source, i);
             let targetType = i === restIndex ? getRestTypeAtPosition(target, i) : tryGetTypeAtPosition(target, i);
             if (i === restIndex && targetType && sourceType && isTupleType(sourceType) && !sourceType.target.hasRestElement) {
-                targetType = mapType(targetType, t => isTupleType(t) && !t.target.hasRestElement ? sliceTupleType(t, 0, t.target.fixedLength - sourceType.target.fixedLength) : t);
+                targetType = mapType(targetType, t => {
+                    if (!isTupleType(t)) {
+                        return t;
+                    }
+
+                    const typeArguments = getTypeArguments(t);
+                    const elementTypes: Type[] = [];
+
+                    for (let i = 0; i < getTypeReferenceArity(sourceType); i++) {
+                        elementTypes.push(
+                            t.target.elementFlags[i] & ElementFlags.Required
+                                ? typeArguments[i]
+                                : getElementTypeOfSliceOfTupleType(t, i)!
+                        );
+                    }
+
+                    return createTupleType(elementTypes, elementTypes.map(() => ElementFlags.Required));
+                });
             }
             if (sourceType && targetType) {
                 // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter

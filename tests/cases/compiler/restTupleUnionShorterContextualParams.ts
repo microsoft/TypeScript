@@ -1,3 +1,4 @@
+// @strict: true
 // @noEmit: true
 
 // repro #48663
