@@ -30,3 +30,49 @@ const f4: (...args: [type: "one", x?: number] | [type: "two", x: string]) => voi
 >type : "one" | "two"
 >x : string | number | undefined
 
+// #45972
+type Fn1 = (...args: [...strs: string[], num1: number, num2: number]) => void;
+>Fn1 : (...args: [...strs: string[], num1: number, num2: number]) => void
+>args : [...strs: string[], num1: number, num2: number]
+
+const f5: Fn1 = () => {}
+>f5 : Fn1
+>() => {} : () => void
+
+const f6: Fn1 = (arg1) => {}
+>f6 : Fn1
+>(arg1) => {} : (arg1: string | number) => void
+>arg1 : string | number
+
+const f7: Fn1 = (arg1, arg2) => {}
+>f7 : Fn1
+>(arg1, arg2) => {} : (arg1: string | number, arg2: string | number) => void
+>arg1 : string | number
+>arg2 : string | number
+
+const f8: Fn1 = (arg1, arg2, arg3) => {}
+>f8 : Fn1
+>(arg1, arg2, arg3) => {} : (arg1: string | number, arg2: string | number, arg3: string | number) => void
+>arg1 : string | number
+>arg2 : string | number
+>arg3 : string | number
+
+// #45972#issuecomment-1140417029
+const f9: Fn1 = (...[arg1]: [string | number]) => {}
+>f9 : Fn1
+>(...[arg1]: [string | number]) => {} : (__0_0: string | number) => void
+>arg1 : string | number
+
+const f10: Fn1 = (...[arg1, arg2]: [string | number, string | number]) => {}
+>f10 : Fn1
+>(...[arg1, arg2]: [string | number, string | number]) => {} : (__0_0: string | number, __0_1: string | number) => void
+>arg1 : string | number
+>arg2 : string | number
+
+const f11: Fn1 = (...[arg1, arg2, arg3]: [string | number, string | number, string | number]) => {}
+>f11 : Fn1
+>(...[arg1, arg2, arg3]: [string | number, string | number, string | number]) => {} : (__0_0: string | number, __0_1: string | number, __0_2: string | number) => void
+>arg1 : string | number
+>arg2 : string | number
+>arg3 : string | number
+

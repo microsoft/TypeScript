@@ -8,3 +8,15 @@ const f2: (x: string, ...args: [string] | [number, boolean]) => void = (a, b, c)
 const f3: (...args: [type: "one"] | [type: "two", x: string]) => void = (type, x) => {}
 
 const f4: (...args: [type: "one", x?: number] | [type: "two", x: string]) => void = (type, x) => {}
+
+// #45972
+type Fn1 = (...args: [...strs: string[], num1: number, num2: number]) => void;
+const f5: Fn1 = () => {}
+const f6: Fn1 = (arg1) => {}
+const f7: Fn1 = (arg1, arg2) => {}
+const f8: Fn1 = (arg1, arg2, arg3) => {}
+
+// #45972#issuecomment-1140417029
+const f9: Fn1 = (...[arg1]: [string | number]) => {}
+const f10: Fn1 = (...[arg1, arg2]: [string | number, string | number]) => {}
+const f11: Fn1 = (...[arg1, arg2, arg3]: [string | number, string | number, string | number]) => {}
