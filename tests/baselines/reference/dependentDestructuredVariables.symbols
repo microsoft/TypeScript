@@ -965,3 +965,29 @@ const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) 
     }
 }
 
+// repros from #47190#issuecomment-1339753554
+const f70: (...args: [type: "one"] | [type: "two", x: string]) => void = (type, x) => { 
+>f70 : Symbol(f70, Decl(dependentDestructuredVariables.ts, 389, 5))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 389, 12))
+>type : Symbol(type, Decl(dependentDestructuredVariables.ts, 389, 74))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 389, 79))
+
+  if (type !== "one") x.toUpperCase();
+>type : Symbol(type, Decl(dependentDestructuredVariables.ts, 389, 74))
+>x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 389, 79))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+}
+const f71: (...args: [type: "one", x?: number] | [type: "two", x: string]) => void = (type, x) => { 
+>f71 : Symbol(f71, Decl(dependentDestructuredVariables.ts, 392, 5))
+>args : Symbol(args, Decl(dependentDestructuredVariables.ts, 392, 12))
+>type : Symbol(type, Decl(dependentDestructuredVariables.ts, 392, 86))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 392, 91))
+
+  if (type !== "one") x.toUpperCase();
+>type : Symbol(type, Decl(dependentDestructuredVariables.ts, 392, 86))
+>x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(dependentDestructuredVariables.ts, 392, 91))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+}
+

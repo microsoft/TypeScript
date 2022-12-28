@@ -14,3 +14,15 @@ const f2: (x: string, ...args: [string] | [number, boolean]) => void = (a, b, c)
 >b : Symbol(b, Decl(restTupleUnionWithRestContextualParams.ts, 2, 74))
 >c : Symbol(c, Decl(restTupleUnionWithRestContextualParams.ts, 2, 77))
 
+const f3: (...args: [type: "one"] | [type: "two", x: string]) => void = (type, x) => {}
+>f3 : Symbol(f3, Decl(restTupleUnionWithRestContextualParams.ts, 4, 5))
+>args : Symbol(args, Decl(restTupleUnionWithRestContextualParams.ts, 4, 11))
+>type : Symbol(type, Decl(restTupleUnionWithRestContextualParams.ts, 4, 73))
+>x : Symbol(x, Decl(restTupleUnionWithRestContextualParams.ts, 4, 78))
+
+const f4: (...args: [type: "one", x?: number] | [type: "two", x: string]) => void = (type, x) => {}
+>f4 : Symbol(f4, Decl(restTupleUnionWithRestContextualParams.ts, 6, 5))
+>args : Symbol(args, Decl(restTupleUnionWithRestContextualParams.ts, 6, 11))
+>type : Symbol(type, Decl(restTupleUnionWithRestContextualParams.ts, 6, 85))
+>x : Symbol(x, Decl(restTupleUnionWithRestContextualParams.ts, 6, 90))
+

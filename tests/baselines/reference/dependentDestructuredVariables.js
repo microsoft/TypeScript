@@ -387,6 +387,14 @@ const fa3: (...args: [true, number] | [false, string]) => void = (guard, value) 
     }
 }
 
+// repros from #47190#issuecomment-1339753554
+const f70: (...args: [type: "one"] | [type: "two", x: string]) => void = (type, x) => { 
+  if (type !== "one") x.toUpperCase();
+}
+const f71: (...args: [type: "one", x?: number] | [type: "two", x: string]) => void = (type, x) => { 
+  if (type !== "one") x.toUpperCase();
+}
+
 
 //// [dependentDestructuredVariables.js]
 "use strict";
@@ -687,6 +695,15 @@ const fa3 = (guard, value) => {
         }
     }
 };
+// repros from #47190#issuecomment-1339753554
+const f70 = (type, x) => {
+    if (type !== "one")
+        x.toUpperCase();
+};
+const f71 = (type, x) => {
+    if (type !== "one")
+        x.toUpperCase();
+};
 
 
 //// [dependentDestructuredVariables.d.ts]
@@ -827,3 +844,5 @@ declare function fa2(x: {
     value: string;
 }): void;
 declare const fa3: (...args: [true, number] | [false, string]) => void;
+declare const f70: (...args: [type: "one"] | [type: "two", x: string]) => void;
+declare const f71: (...args: [type: "one", x?: number] | [type: "two", x: string]) => void;
