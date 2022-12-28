@@ -83,9 +83,9 @@ namespace Decl {
 >E : E
 
         a, b, c = 3,
->a : E
->b : E
->c : E
+>a : E.a
+>b : E.b
+>c : E.c
 >3 : 3
     }
 }

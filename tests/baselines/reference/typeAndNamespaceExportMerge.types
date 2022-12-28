@@ -1,0 +1,31 @@
+=== tests/cases/conformance/externalModules/constants.ts ===
+// @strict
+
+export const COFFEE = 0;
+>COFFEE : 0
+>0 : 0
+
+export const TEA = 1;
+>TEA : 1
+>1 : 1
+
+
+=== tests/cases/conformance/externalModules/drink.ts ===
+export type Drink = 0 | 1;
+>Drink : 0 | 1
+
+export * as Drink from "./constants";
+>Drink : typeof import("tests/cases/conformance/externalModules/constants")
+
+
+=== tests/cases/conformance/externalModules/index.ts ===
+import { Drink } from "./drink";
+>Drink : typeof import("tests/cases/conformance/externalModules/constants")
+
+// 'Drink' only refers to a type, but is being used as a value here
+const x: Drink = Drink.TEA;
+>x : Drink
+>Drink.TEA : 1
+>Drink : typeof import("tests/cases/conformance/externalModules/constants")
+>TEA : 1
+

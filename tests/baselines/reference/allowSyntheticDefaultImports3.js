@@ -39,7 +39,7 @@ System.register(["./b"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            exports_1("x", x = new b_1["default"].Foo());
+            exports_1("x", x = new b_1.default.Foo());
         }
     };
 });

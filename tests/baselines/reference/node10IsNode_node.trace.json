@@ -1,0 +1,21 @@
+[
+    "======== Resolving module 'fancy-lib' from '/main.ts'. ========",
+    "Explicitly specified module resolution kind: 'Node10'.",
+    "Loading module 'fancy-lib' from 'node_modules' folder, target file types: TypeScript, Declaration.",
+    "Found 'package.json' at '/node_modules/fancy-lib/package.json'.",
+    "File '/node_modules/fancy-lib.ts' does not exist.",
+    "File '/node_modules/fancy-lib.tsx' does not exist.",
+    "File '/node_modules/fancy-lib.d.ts' does not exist.",
+    "'package.json' does not have a 'typesVersions' field.",
+    "'package.json' does not have a 'typings' field.",
+    "'package.json' does not have a 'types' field.",
+    "'package.json' has 'main' field 'index.js' that references '/node_modules/fancy-lib/index.js'.",
+    "File '/node_modules/fancy-lib/index.js' does not exist.",
+    "Loading module as file / folder, candidate module location '/node_modules/fancy-lib/index.js', target file types: TypeScript, Declaration.",
+    "File name '/node_modules/fancy-lib/index.js' has a '.js' extension - stripping it.",
+    "File '/node_modules/fancy-lib/index.ts' does not exist.",
+    "File '/node_modules/fancy-lib/index.tsx' does not exist.",
+    "File '/node_modules/fancy-lib/index.d.ts' exist - use it as a name resolution result.",
+    "Resolving real path for '/node_modules/fancy-lib/index.d.ts', result '/node_modules/fancy-lib/index.d.ts'.",
+    "======== Module name 'fancy-lib' was successfully resolved to '/node_modules/fancy-lib/index.d.ts' with Package ID 'fancy-lib/index.d.ts@1.0.0'. ========"
+]

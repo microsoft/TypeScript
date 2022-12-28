@@ -60,7 +60,7 @@ const b12 = <MainButton data-format="Hello world" />
 //// [file.jsx]
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
-    exports.__esModule = true;
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.MainButton = void 0;
     var obj = {
         children: "hi",

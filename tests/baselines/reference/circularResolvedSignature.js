@@ -18,13 +18,13 @@ export function Component() {
 
 //// [circularResolvedSignature.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Component = void 0;
 function Component() {
     var _a = useState(function () { return ({
         value: "string",
         foo: function (arg) { return setState(arg); },
-        bar: function (arg) { return setState(arg); }
+        bar: function (arg) { return setState(arg); },
     }); }), state = _a[0], setState = _a[1];
 }
 exports.Component = Component;
