@@ -6,3 +6,11 @@ const f1: (...args: [number, string, ...boolean[]] | [string, number, ...boolean
 >b : Symbol(b, Decl(restTupleUnionWithRestContextualParams.ts, 0, 98))
 >c : Symbol(c, Decl(restTupleUnionWithRestContextualParams.ts, 0, 101))
 
+const f2: (x: string, ...args: [string] | [number, boolean]) => void = (a, b, c) => {};
+>f2 : Symbol(f2, Decl(restTupleUnionWithRestContextualParams.ts, 2, 5))
+>x : Symbol(x, Decl(restTupleUnionWithRestContextualParams.ts, 2, 11))
+>args : Symbol(args, Decl(restTupleUnionWithRestContextualParams.ts, 2, 21))
+>a : Symbol(a, Decl(restTupleUnionWithRestContextualParams.ts, 2, 72))
+>b : Symbol(b, Decl(restTupleUnionWithRestContextualParams.ts, 2, 74))
+>c : Symbol(c, Decl(restTupleUnionWithRestContextualParams.ts, 2, 77))
+

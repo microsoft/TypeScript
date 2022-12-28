@@ -7,3 +7,12 @@ const f1: (...args: [number, string, ...boolean[]] | [string, number, ...boolean
 >b : string | number
 >c : boolean
 
+const f2: (x: string, ...args: [string] | [number, boolean]) => void = (a, b, c) => {};
+>f2 : (x: string, ...args: [string] | [number, boolean]) => void
+>x : string
+>args : [string] | [number, boolean]
+>(a, b, c) => {} : (a: string, b: string | number, c: boolean | undefined) => void
+>a : string
+>b : string | number
+>c : boolean | undefined
+
