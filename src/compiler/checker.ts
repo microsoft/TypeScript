@@ -19393,9 +19393,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                     for (let i = 0; i < getTypeReferenceArity(sourceType); i++) {
                         elementTypes.push(
-                            t.target.elementFlags[i] & ElementFlags.Required
-                                ? typeArguments[i]
-                                : getElementTypeOfSliceOfTupleType(t, i)!
+                            i < typeArguments.length
+                                ? t.target.elementFlags[i] & ElementFlags.Required
+                                    ? typeArguments[i]
+                                    : getElementTypeOfSliceOfTupleType(t, i)!
+                                : undefinedType
                         );
                     }
 
