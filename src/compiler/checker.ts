@@ -35637,9 +35637,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (checkForDisallowedESSymbolOperand(operator)) {
                     leftType = getBaseTypeOfLiteralType(checkNonNullType(leftType, left));
                     rightType = getBaseTypeOfLiteralType(checkNonNullType(rightType, right));
-                    reportOperatorErrorUnless((left, right) =>
-                        isTypeComparableTo(left, right) || isTypeComparableTo(right, left) || (
-                            isTypeAssignableTo(left, numberOrBigIntType) && isTypeAssignableTo(right, numberOrBigIntType)));
+                    reportOperatorErrorUnless((left, right) => {
+                        if (isTypeAny(left) || isTypeAny(right)) {
+                            return true;
+                        }
+                        const leftAssignableToNumber = isTypeAssignableTo(left, numberOrBigIntType);
+                        const rightAssignableToNumber = isTypeAssignableTo(right, numberOrBigIntType);
+                        return leftAssignableToNumber && rightAssignableToNumber ||
+                            !leftAssignableToNumber && !rightAssignableToNumber && areTypesComparable(left, right);
+                    });
                 }
                 return booleanType;
             case SyntaxKind.EqualsEqualsToken:
