@@ -76,3 +76,10 @@ const f11: Fn1 = (...[arg1, arg2, arg3]: [string | number, string | number, stri
 >arg2 : string | number
 >arg3 : string | number
 
+const f12: (...args: [...strs: string[], num: number]) => void = (a, ...rest) => {}
+>f12 : (...args: [...strs: string[], num: number]) => void
+>args : [...strs: string[], num: number]
+>(a, ...rest) => {} : (a: string | number, ...rest: (string | number)[]) => void
+>a : string | number
+>rest : (string | number)[]
+

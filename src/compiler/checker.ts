@@ -19382,26 +19382,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         for (let i = 0; i < paramCount; i++) {
             const sourceType = i === restIndex ? getRestTypeAtPosition(source, i) : tryGetTypeAtPosition(source, i);
             let targetType = i === restIndex ? getRestTypeAtPosition(target, i) : tryGetTypeAtPosition(target, i);
-            if (i === restIndex && targetType && sourceType && isTupleType(sourceType) && !sourceType.target.hasRestElement) {
+            if (i === restIndex && targetType && sourceType && isTupleType(sourceType)) {
                 targetType = mapType(targetType, t => {
-                    if (!isTupleType(t)) {
+                    if (!isTupleType(t) || isTypeIdenticalTo(sourceType, t)) {
                         return t;
                     }
 
-                    const typeArguments = getTypeArguments(t);
                     const elementTypes: Type[] = [];
+                    const elementFlags: ElementFlags[] = [];
 
                     for (let i = 0; i < getTypeReferenceArity(sourceType); i++) {
-                        elementTypes.push(
-                            i < typeArguments.length
-                                ? t.target.elementFlags[i] & ElementFlags.Required
-                                    ? typeArguments[i]
-                                    : getElementTypeOfSliceOfTupleType(t, i)!
-                                : undefinedType
-                        );
+                        elementTypes.push(getTupleElementType(t, i)!);
+                        elementFlags.push(sourceType.target.elementFlags[i]);
                     }
 
-                    return createTupleType(elementTypes, elementTypes.map(() => ElementFlags.Required));
+                    return createTupleType(elementTypes, elementFlags);
                 });
             }
             if (sourceType && targetType) {

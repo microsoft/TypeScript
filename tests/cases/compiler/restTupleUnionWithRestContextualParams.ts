@@ -20,3 +20,5 @@ const f8: Fn1 = (arg1, arg2, arg3) => {}
 const f9: Fn1 = (...[arg1]: [string | number]) => {}
 const f10: Fn1 = (...[arg1, arg2]: [string | number, string | number]) => {}
 const f11: Fn1 = (...[arg1, arg2, arg3]: [string | number, string | number, string | number]) => {}
+
+const f12: (...args: [...strs: string[], num: number]) => void = (a, ...rest) => {}
