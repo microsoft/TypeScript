@@ -809,12 +809,13 @@ export const enum NodeFlags {
     /** @internal */ PossiblyContainsDynamicImport = 1 << 21,
     /** @internal */ PossiblyContainsImportMeta    = 1 << 22,
 
-    JSDoc                                         = 1 << 23, // If node was parsed inside jsdoc
+    JSDoc                                          = 1 << 23, // If node was parsed inside jsdoc
     /** @internal */ Ambient                       = 1 << 24, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
     /** @internal */ InWithStatement               = 1 << 25, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
-    JsonFile                                      = 1 << 26, // If node was parsed in a Json
+    JsonFile                                       = 1 << 26, // If node was parsed in a Json
     /** @internal */ TypeCached                    = 1 << 27, // If a type was cached for node at any point
     /** @internal */ Deprecated                    = 1 << 28, // If has '@deprecated' JSDoc tag
+    /** @internal */ ConditionalTypeContext        = 1 << 29,
 
     BlockScoped = Let | Const,
 
