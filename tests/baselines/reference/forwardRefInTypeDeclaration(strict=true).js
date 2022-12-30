@@ -1,5 +1,4 @@
-// @strict: true,false
-
+//// [forwardRefInTypeDeclaration.ts]
 // forward ref ignored in a typeof
 declare let s: typeof s1;
 const s1 = "x";
@@ -26,3 +25,19 @@ declare class Cls1 { static a: "a"; }
 class Cls2 { static b = "b" as const; }
 declare const obj1: { c: 'c' }
 const obj2 = { d: 'd' } as const
+
+
+//// [forwardRefInTypeDeclaration.js]
+"use strict";
+var s1 = "x";
+var s2 = "x";
+var s3 = "x";
+var s4 = "x";
+var s5 = "x";
+var Cls2 = /** @class */ (function () {
+    function Cls2() {
+    }
+    Cls2.b = "b";
+    return Cls2;
+}());
+var obj2 = { d: 'd' };

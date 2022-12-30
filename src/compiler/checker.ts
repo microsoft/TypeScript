@@ -2709,7 +2709,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return true;
         }
 
-        if (!!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage) || usageInTypeDeclaration()) {
+        if (!!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage) || isInAmbientOrTypeNode(usage)) {
             return true;
         }
         if (isUsedInFunctionOrInstanceProperty(usage, declaration)) {
@@ -2723,10 +2723,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return false;
-
-        function usageInTypeDeclaration() {
-            return !!findAncestor(usage, node => isInterfaceDeclaration(node) || isTypeAliasDeclaration(node));
-        }
 
         function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
             switch (declaration.parent.parent.kind) {
@@ -24620,6 +24616,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             n => n.kind === SyntaxKind.TypeQuery ? true : n.kind === SyntaxKind.Identifier || n.kind === SyntaxKind.QualifiedName ? false : "quit");
     }
 
+    function isInAmbientOrTypeNode(node: Node): boolean {
+        return !!(node.flags & NodeFlags.Ambient || findAncestor(node, n => isInterfaceDeclaration(n) || isTypeLiteralNode(n)));
+    }
+
     // Return the flow cache key for a "dotted name" (i.e. a sequence of identifiers
     // separated by dots). The key consists of the id of the symbol referenced by the
     // leftmost identifier followed by zero or more property names separated by dots.
@@ -27293,7 +27293,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // declaration container are the same).
         const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
             type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
-            isInTypeQuery(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
+            isInTypeQuery(node) || isInAmbientOrTypeNode(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
             node.parent.kind === SyntaxKind.NonNullExpression ||
             declaration.kind === SyntaxKind.VariableDeclaration && (declaration as VariableDeclaration).exclamationToken ||
             declaration.flags & NodeFlags.Ambient;
