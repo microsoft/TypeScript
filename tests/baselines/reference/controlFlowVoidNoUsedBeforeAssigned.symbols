@@ -1,0 +1,23 @@
+=== tests/cases/conformance/controlFlow/controlFlowVoidNoUsedBeforeAssigned.ts ===
+// repro #52003
+
+declare const fn: () => string | void;
+>fn : Symbol(fn, Decl(controlFlowVoidNoUsedBeforeAssigned.ts, 2, 13))
+
+const value = fn();
+>value : Symbol(value, Decl(controlFlowVoidNoUsedBeforeAssigned.ts, 3, 5))
+>fn : Symbol(fn, Decl(controlFlowVoidNoUsedBeforeAssigned.ts, 2, 13))
+
+const result = {
+>result : Symbol(result, Decl(controlFlowVoidNoUsedBeforeAssigned.ts, 5, 5))
+
+    type: typeof value === "undefined" ? "A" : "B",
+>type : Symbol(type, Decl(controlFlowVoidNoUsedBeforeAssigned.ts, 5, 16))
+>value : Symbol(value, Decl(controlFlowVoidNoUsedBeforeAssigned.ts, 3, 5))
+
+    value: value,
+>value : Symbol(value, Decl(controlFlowVoidNoUsedBeforeAssigned.ts, 6, 51))
+>value : Symbol(value, Decl(controlFlowVoidNoUsedBeforeAssigned.ts, 3, 5))
+
+};
+

@@ -19541,8 +19541,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function containsUndefinedType(type: Type) {
+    function containsUndefinedType(type: Type): boolean {
         return !!((type.flags & TypeFlags.Union ? (type as UnionType).types[0] : type).flags & TypeFlags.Undefined);
+    }
+
+    function containsVoidType(type: Type): boolean {
+        return type.flags & TypeFlags.Union ? containsType((type as UnionType).types, voidType) : type === voidType;
     }
 
     function isStringIndexSignatureOnlyType(type: Type): boolean {
@@ -27313,7 +27317,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return convertAutoToAny(flowType);
             }
         }
-        else if (!assumeInitialized && !containsUndefinedType(type) && containsUndefinedType(flowType)) {
+        else if (!assumeInitialized && !containsUndefinedType(type) && !containsVoidType(type) && containsUndefinedType(flowType)) {
             error(node, Diagnostics.Variable_0_is_used_before_being_assigned, symbolToString(symbol));
             // Return the declared type to reduce follow-on errors
             return type;

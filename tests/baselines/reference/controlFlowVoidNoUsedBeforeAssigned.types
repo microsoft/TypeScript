@@ -1,0 +1,31 @@
+=== tests/cases/conformance/controlFlow/controlFlowVoidNoUsedBeforeAssigned.ts ===
+// repro #52003
+
+declare const fn: () => string | void;
+>fn : () => string | void
+
+const value = fn();
+>value : string | void
+>fn() : string | void
+>fn : () => string | void
+
+const result = {
+>result : { type: string; value: string | undefined; }
+>{    type: typeof value === "undefined" ? "A" : "B",    value: value,} : { type: string; value: string | undefined; }
+
+    type: typeof value === "undefined" ? "A" : "B",
+>type : string
+>typeof value === "undefined" ? "A" : "B" : "A" | "B"
+>typeof value === "undefined" : boolean
+>typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>value : string | void
+>"undefined" : "undefined"
+>"A" : "A"
+>"B" : "B"
+
+    value: value,
+>value : string | undefined
+>value : string | undefined
+
+};
+
