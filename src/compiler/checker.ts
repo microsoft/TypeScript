@@ -24617,7 +24617,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isInAmbientOrTypeNode(node: Node): boolean {
-        return !!(node.flags & NodeFlags.Ambient || findAncestor(node, n => isInterfaceDeclaration(n) || isTypeLiteralNode(n)));
+        return !!(node.flags & NodeFlags.Ambient || findAncestor(node, n => isInterfaceDeclaration(n) || isTypeAliasDeclaration(n) || isTypeLiteralNode(n)));
     }
 
     // Return the flow cache key for a "dotted name" (i.e. a sequence of identifiers
@@ -39549,7 +39549,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // For a binding pattern, validate the initializer and exit
         if (isBindingPattern(node.name)) {
-            if (findAncestor(node, n => isInterfaceDeclaration(n) || isTypeLiteralNode(n) || isTypeAliasDeclaration(n) || !!(n.flags & NodeFlags.Ambient))) {
+            if (isInAmbientOrTypeNode(node)) {
                 return;
             }
             const needCheckInitializer = hasOnlyExpressionInitializer(node) && node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement;
