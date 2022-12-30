@@ -484,7 +484,6 @@ function isBinaryOpContext(context: FormattingContext): boolean {
         case SyntaxKind.ConditionalExpression:
         case SyntaxKind.ConditionalType:
         case SyntaxKind.AsExpression:
-        case SyntaxKind.SatisfiesExpression:
         case SyntaxKind.ExportSpecifier:
         case SyntaxKind.ImportSpecifier:
         case SyntaxKind.TypePredicate:
