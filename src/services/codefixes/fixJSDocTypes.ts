@@ -1,4 +1,5 @@
 import {
+    append,
     AsExpression,
     CallSignatureDeclaration,
     CodeFixAction,
@@ -10,6 +11,7 @@ import {
     GetAccessorDeclaration,
     getTokenAtPosition,
     IndexSignatureDeclaration,
+    isJSDocNullableType,
     MappedTypeNode,
     MethodDeclaration,
     MethodSignature,
@@ -37,7 +39,12 @@ import {
 
 const fixIdPlain = "fixJSDocTypes_plain";
 const fixIdNullable = "fixJSDocTypes_nullable";
-const errorCodes = [Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments.code];
+const errorCodes = [
+    Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments.code,
+    Diagnostics._0_at_the_end_of_a_type_is_not_valid_TypeScript_syntax_Did_you_mean_to_write_1.code,
+    Diagnostics._0_at_the_start_of_a_type_is_not_valid_TypeScript_syntax_Did_you_mean_to_write_1.code,
+];
+
 registerCodeFix({
     errorCodes,
     getCodeActions(context) {
@@ -51,7 +58,7 @@ registerCodeFix({
         if (typeNode.kind === SyntaxKind.JSDocNullableType) {
             // for nullable types, suggest the flow-compatible `T | null | undefined`
             // in addition to the jsdoc/closure-compatible `T | null`
-            actions.push(fix(checker.getNullableType(type, TypeFlags.Undefined), fixIdNullable, Diagnostics.Change_all_jsdoc_style_types_to_TypeScript_and_add_undefined_to_nullable_types));
+            actions.push(fix(type, fixIdNullable, Diagnostics.Change_all_jsdoc_style_types_to_TypeScript_and_add_undefined_to_nullable_types));
         }
         return actions;
 
@@ -81,7 +88,7 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, ol
 function getInfo(sourceFile: SourceFile, pos: number, checker: TypeChecker): { readonly typeNode: TypeNode, readonly type: Type } | undefined {
     const decl = findAncestor(getTokenAtPosition(sourceFile, pos), isTypeContainer);
     const typeNode = decl && decl.type;
-    return typeNode && { typeNode, type: checker.getTypeFromTypeNode(typeNode) };
+    return typeNode && { typeNode, type: getType(checker, typeNode) };
 }
 
 // TODO: GH#19856 Node & { type: TypeNode }
@@ -114,4 +121,16 @@ function isTypeContainer(node: Node): node is TypeContainer {
         default:
             return false;
     }
+}
+
+function getType(checker: TypeChecker, node: TypeNode) {
+    if (isJSDocNullableType(node)) {
+        const type = checker.getTypeFromTypeNode(node.type);
+        if (type === checker.getNeverType() || type === checker.getVoidType()) {
+            return type;
+        }
+        return checker.getUnionType(
+            append([type, checker.getUndefinedType()], node.postfix ? undefined : checker.getNullType()));
+    }
+    return checker.getTypeFromTypeNode(node);
 }
