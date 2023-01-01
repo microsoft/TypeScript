@@ -15688,7 +15688,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const type = elementTypes[i];
             const flags = target.elementFlags[i];
             if (flags & ElementFlags.Variadic) {
-                if (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type)) {
+                if (type.flags & TypeFlags.InstantiableNonPrimitive || everyContainedType(type, isGenericMappedType)) {
                     // Generic variadic elements stay as they are.
                     addElement(type, ElementFlags.Variadic, target.labeledElementDeclarations?.[i]);
                 }
@@ -28416,13 +28416,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type) {
         return mapType(type, t => {
-            if (isGenericMappedType(t) && !t.declaration.nameType) {
-                const constraint = getConstraintTypeFromMappedType(t);
-                const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
-                const propertyNameType = nameType || getStringLiteralType(unescapeLeadingUnderscores(name));
-                if (isTypeAssignableTo(propertyNameType, constraintOfConstraint)) {
-                    return substituteIndexedMappedType(t, propertyNameType);
-                }
+            if (everyContainedType(t, t => isGenericMappedType(t) && !t.declaration.nameType)) {
+                const newTypes = mapDefined(t.flags & TypeFlags.Intersection ? (t as IntersectionType).types : [t], t => {
+                    const mappedType = t as MappedType;
+                    const constraint = getConstraintTypeFromMappedType(mappedType);
+                    const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
+                    const propertyNameType = nameType || getStringLiteralType(unescapeLeadingUnderscores(name));
+                    if (isTypeAssignableTo(propertyNameType, constraintOfConstraint)) {
+                        return substituteIndexedMappedType(mappedType, propertyNameType);
+                    }
+                });
+                return newTypes.length ? getIntersectionType(newTypes) : undefined;
             }
             else if (t.flags & TypeFlags.StructuredType) {
                 const prop = getPropertyOfType(t, name);
