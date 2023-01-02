@@ -13213,6 +13213,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isConstTypeVariable(type: Type): boolean {
         return !!(type.flags & TypeFlags.TypeParameter && some((type as TypeParameter).symbol?.declarations, d => hasSyntacticModifier(d, ModifierFlags.Const)) ||
+            isGenericTupleType(type) && findIndex(getTypeArguments(type), (t, i) => !!(type.target.elementFlags[i] & ElementFlags.Variadic) && isConstTypeVariable(t)) >= 0 ||
             type.flags & TypeFlags.IndexedAccess && isConstTypeVariable((type as IndexedAccessType).objectType));
     }
 
