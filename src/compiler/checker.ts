@@ -6348,9 +6348,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (type.flags & TypeFlags.TemplateLiteral) {
                 let texts = [...(type as TemplateLiteralType).texts];
                 let types = [...(type as TemplateLiteralType).types];
-                console.log("template before");
-                console.log(JSON.stringify(texts));
-                console.log(JSON.stringify(types.map(t => typeToString(t))));
 
                 const textOrTypes = flatMap(texts, (text, i) => [
                     { kind: "text" as const, value: text },
@@ -6375,9 +6372,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (element.kind === "type") types.push(element.value);
                     i++;
                 }
-                console.log("template after");
-                console.log(JSON.stringify(texts));
-                console.log(JSON.stringify(types.map(t => typeToString(t))));
 
                 if (types.length === 0) {
                     return typeToTypeNodeHelper(getStringLiteralType(texts.join("")), context);
