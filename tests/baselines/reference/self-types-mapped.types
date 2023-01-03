@@ -1,0 +1,254 @@
+=== tests/cases/compiler/self-types-mapped.ts ===
+// Implementing mapped types without mapped types
+
+type User =
+>User : { name: string; age: number; }
+
+  { name: string
+>name : string
+
+  , age: number
+>age : number
+  }
+
+type _Partial<T> = Mapped<keyof T, "_Partial", T, `_Partial<${Print<T>}>`>
+>_Partial : _Partial<T>
+
+interface Mappers<K, A> { _Partial: A[K & keyof A] | undefined }
+>_Partial : A[K & keyof A]
+
+// same as writing
+// type _Partial<T> = { [K in keyof T]: T[K] | undefined }
+
+let t00: _Partial<User> = {
+>t00 : Mapped<keyof User, "_Partial", User, "_Partial<User>">
+>{  name: "foo",  age: undefined} : { name: string; age: undefined; }
+
+  name: "foo",
+>name : string
+>"foo" : "foo"
+
+  age: undefined
+>age : undefined
+>undefined : undefined
+}
+
+let t01: _Partial<User> = {
+>t01 : Mapped<keyof User, "_Partial", User, "_Partial<User>">
+>{  name: 0,  age: undefined} : { name: number; age: undefined; }
+
+  name: 0,
+>name : number
+>0 : 0
+
+  age: undefined
+>age : undefined
+>undefined : undefined
+}
+
+let t02: _Partial<User> = {
+>t02 : Mapped<keyof User, "_Partial", User, "_Partial<User>">
+>{  age: undefined} : { age: undefined; }
+
+  age: undefined
+>age : undefined
+>undefined : undefined
+}
+
+type _Omit<T, K> = Mapped<Exclude<keyof T, K>, "_Omit", T, `_Omit<${Print<T>}, ${Print<K>}>`>
+>_Omit : _Omit<T, K>
+
+interface Mappers<K, A> { _Omit: A[K & keyof A] }
+>_Omit : A[K & keyof A]
+
+// same as writing
+// type _Omit<T, K> = { [K in Exclude<keyof T, K>]: T[K] }
+
+let t10: _Omit<User, "age"> = {
+>t10 : Mapped<"name", "_Omit", User, "_Omit<User, \"age\">">
+>{  name: "foo"} : { name: string; }
+
+  name: "foo"
+>name : string
+>"foo" : "foo"
+}
+
+let t11: _Omit<User, "age"> = {
+>t11 : Mapped<"name", "_Omit", User, "_Omit<User, \"age\">">
+>{  name: 0} : { name: number; }
+
+  name: 0
+>name : number
+>0 : 0
+}
+
+let t12: _Omit<User, "age"> = {
+>t12 : Mapped<"name", "_Omit", User, "_Omit<User, \"age\">">
+>{} : {}
+}
+
+type FlipValues<T, K1 extends keyof T, K2 extends keyof T> =
+>FlipValues : FlipValues<T, K1, K2>
+
+  Mapped<keyof T, "FlipValues", [T, K1, K2], `FlipValues<${Print<T>}, ${Print<K1>}, ${Print<K2>}>`>
+interface Mappers<K, A>
+  { FlipValues:
+>FlipValues : A extends [infer T, infer K1, infer K2] ? K extends K1 ? T[K2 & keyof T] : K extends K2 ? T[K1 & keyof T] : T[K & keyof T] : never
+
+      A extends [infer T, infer K1, infer K2]
+        ? K extends K1 ? T[K2 & keyof T] :
+          K extends K2 ? T[K1 & keyof T] :
+          T[K & keyof T]
+        : never
+  }
+// same as writing
+// type FlipValues<T, K1 extends keyof T, K2 extends keyof T> =
+//   { [K in keyof T]:
+//       K extends K1 ? T[K2] :
+//       K extends K2 ? T[K1] :
+//       T[K]
+//   }
+
+
+let t30: FlipValues<User, "name", "age"> = {
+>t30 : Mapped<keyof User, "FlipValues", [User, "name", "age"], "FlipValues<User, \"name\", \"age\">">
+>{  name: "foo",  age: 0} : { name: string; age: number; }
+
+  name: "foo",
+>name : string
+>"foo" : "foo"
+
+  age: 0
+>age : number
+>0 : 0
+}
+
+let t31: FlipValues<User, "name", "age"> = {
+>t31 : Mapped<keyof User, "FlipValues", [User, "name", "age"], "FlipValues<User, \"name\", \"age\">">
+>{  name: 0,  age: "foo"} : { name: number; age: string; }
+
+  name: 0,
+>name : number
+>0 : 0
+
+  age: "foo"
+>age : string
+>"foo" : "foo"
+}
+
+let t32: FlipValues<User, "name", "age"> = {
+>t32 : Mapped<keyof User, "FlipValues", [User, "name", "age"], "FlipValues<User, \"name\", \"age\">">
+>{  name: 0} : { name: number; }
+
+  name: 0
+>name : number
+>0 : 0
+}
+
+/**
+ * @param K key of new type
+ * @param F mapper identifier
+ * @param A extra argument to mapper
+ * @param N name of new type
+ */
+type Mapped<K, F, A, N> =
+>Mapped : Mapped<K, F, A, N>
+
+  MappedError<K, F, A, N, self> extends infer E extends string | string[]
+    ? [E] extends [never] ? self : Never<E>
+    : never
+
+type MappedError<K, F, A, N, Self, KCopy = K> =
+>MappedError : MappedError<K, F, A, N, Self, KCopy>
+
+  UShift<
+    K extends unknown
+      ? K extends keyof Self
+          ? Get<Mappers<K, A>, F> extends infer Fka // F<K, A>
+              ? Self[K] extends Fka
+                  ? never
+                  : [ `Type '${Print<Self>}' is not assignable to type '${N & string}'`
+                    , `Type '${Print<Self>}' is not assignable to type '${PrintMapped<KCopy, F, A>}'`
+                    , `Types at property '${PrintKey<K>}' are incompatible`
+                    , `Type '${Print<Self[K]>}' is not assignable to type '${Print<Fka>}'`
+                    ]
+              : never
+          : [ `Type '${Print<Self>}' is not assignable to type '${N & string}'`
+            , `Type '${Print<Self>}' is not assignable to type '${PrintMapped<KCopy, F, A>}'`
+            , `Property '${PrintKey<K>}' is required in target type but missing in source type`
+            ]
+      : never
+  >
+
+interface Mappers<K, A> {}
+
+type PrintMapped<K, F, A> = 
+>PrintMapped : `{ ${Join<K extends unknown ? `${PrintKey<K>}: Get<Mappers<K, A>, F>;` : never, " ">} }`
+
+  `{ ${Join<
+    K extends unknown
+      ? `${PrintKey<K>}: ${Print<Get<Mappers<K, A>, F>>};`
+      : never,
+    " "
+  >} }`
+
+
+type Join<T extends string, D extends string> =
+>Join : Join<T, D>
+
+  UIsUnit<T> extends true ? `${T}` :
+>true : true
+
+  `${Cast<UShift<T>, string | number>}${D}${Join<UShifted<T>, D>}`
+
+type UShift<U> =
+>UShift : UShift<U>
+
+  UToIntersection<U extends unknown ? (x: U) => void : never> extends (_: infer H) => void
+>x : U
+>_ : H
+
+    ? H
+    : never
+
+type UToIntersection<T> =
+>UToIntersection : UToIntersection<T>
+
+  (T extends unknown ? (_: T) => void : never) extends ((_: infer I) => void)
+>_ : T
+>_ : I
+
+    ? I
+    : never
+
+type UShifted<U> =
+>UShifted : UShifted<U>
+
+  Exclude<U, UShift<U>>
+
+type UIsUnit<U> =
+>UIsUnit : UIsUnit<U>
+
+  [UShifted<U>] extends [never] ? true : false
+>true : true
+>false : false
+
+type Cast<T, U> =
+>Cast : Cast<T, U>
+
+  T extends U ? T : U
+
+type PrintKey<K> =
+>PrintKey : PrintKey<K>
+
+  K extends symbol ? Print<K> :
+  K extends string ? K :
+  K extends number ? K :
+  never
+
+type Get<T, K> =
+>Get : Get<T, K>
+
+  K extends keyof T ? T[K] : never
+
+export {}

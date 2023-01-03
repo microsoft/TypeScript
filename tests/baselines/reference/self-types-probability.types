@@ -1,0 +1,98 @@
+=== tests/cases/compiler/self-types-probability.ts ===
+let t0: Probability = 0.5
+>t0 : Probability
+>0.5 : 0.5
+
+let t1: Probability = 0
+>t1 : Probability
+>0 : 0
+
+let t2: Probability = 1
+>t2 : Probability
+>1 : 1
+
+let t3: Probability = 1.5
+>t3 : Probability
+>1.5 : 1.5
+
+let t4: Probability = -0.5
+>t4 : Probability
+>-0.5 : -0.5
+>0.5 : 0.5
+
+let t5: Probability = 0 as number
+>t5 : Probability
+>0 as number : number
+>0 : 0
+
+let t6: number = 0.5 as Probability
+>t6 : number
+>0.5 as Probability : Probability
+>0.5 : 0.5
+
+let t7: Probability = t0 + t1
+>t7 : Probability
+>t0 + t1 : number
+>t0 : Probability
+>t1 : Probability
+
+let t8: number = t0 + t1
+>t8 : number
+>t0 + t1 : number
+>t0 : Probability
+>t1 : Probability
+
+declare const f: (x: number) => void
+>f : (x: number) => void
+>x : number
+
+f(t0)
+>f(t0) : void
+>f : (x: number) => void
+>t0 : Probability
+
+type F<T extends number> = T
+>F : T
+
+type T0 = F<Probability>
+>T0 : Probability
+
+// TODO: this should compile
+type T1 = Assert<Probability extends number ? true : false>
+>T1 : Probability extends number ? true : false
+>true : true
+>false : false
+
+type Probability =
+>Probability : self extends number ? IsProbability<self> extends true ? self : never : number
+
+  self extends number
+    ? IsProbability<self> extends true
+>true : true
+
+      ? self
+      : Never<`Type '${Print<self>}' is not assignable to type 'Probability'`>
+    : number
+
+type IsProbability<T extends number> =
+>IsProbability : IsProbability<T>
+
+  `${T}` extends `${infer H}${infer R}`
+      ? H extends "0" ? true :
+>true : true
+
+        H extends "1" ? R extends "" ? true : false :
+>true : true
+>false : false
+
+        false
+>false : false
+
+      : false
+>false : false
+
+type Assert<T extends true> = T
+>Assert : T
+>true : true
+
+export {}

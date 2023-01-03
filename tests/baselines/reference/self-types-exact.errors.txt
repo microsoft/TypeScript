@@ -1,0 +1,49 @@
+tests/cases/compiler/self-types-exact.ts(3,3): error TS2345: Argument of type '() => { a: { b: string; x: string; }; c: number; y: number; }' is not assignable to parameter of type '() => { a: { b: string; x: never; }; c: number; y: never; }'.
+  Call signature return types '{ a: { b: string; x: string; }; c: number; y: number; }' and '{ a: { b: string; x: never; }; c: number; y: never; }' are incompatible.
+    The types of 'a.x' are incompatible between these types.
+      Excess property 'x' not allowed as the target is an exact type
+
+
+==== tests/cases/compiler/self-types-exact.ts (1 errors) ====
+    declare const f: (x: Exact<() => { a: { b: string }, c: number }>) => void
+    
+    f(() => ({
+      ~~~~~~~~
+      a: {
+    ~~~~~~
+        b: "b",
+    ~~~~~~~~~~~
+        x: "x"
+    ~~~~~~~~~~
+      },
+    ~~~~
+      c: 0,
+    ~~~~~~~
+      y: 1
+    ~~~~~~
+    }))
+    ~~
+!!! error TS2345: Argument of type '() => { a: { b: string; x: string; }; c: number; y: number; }' is not assignable to parameter of type '() => { a: { b: string; x: never; }; c: number; y: never; }'.
+!!! error TS2345:   Call signature return types '{ a: { b: string; x: string; }; c: number; y: number; }' and '{ a: { b: string; x: never; }; c: number; y: never; }' are incompatible.
+!!! error TS2345:     The types of 'a.x' are incompatible between these types.
+!!! error TS2345:       Excess property 'x' not allowed as the target is an exact type
+    
+    type Exact<T, A = self> =
+      A extends T
+        ? T extends unknown
+            ? A extends (...a: infer Aa) => infer Ar
+                ? T extends (...a: infer Ea) => infer Er
+                    ? (...a: Exact<Ea, Aa>) => Exact<Er, Ar>
+                    : T :
+              A extends object
+                ? T extends object
+                    ? { [K in keyof A]:
+                          K extends keyof T ? Exact<T[K], A[K]> :
+                          Never<`Excess property '${K & string}' not allowed as the target is an exact type`>
+                      }
+                    : T :
+              T
+            : never
+        : T
+    
+    export {}

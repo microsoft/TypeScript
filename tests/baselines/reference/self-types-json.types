@@ -1,0 +1,177 @@
+=== tests/cases/compiler/self-types-json.ts ===
+interface Node {
+  children: Node[]
+>children : Node[]
+
+  parent: Node
+>parent : Node
+}
+let someNode = {} as Node
+>someNode : Node
+>{} as Node : Node
+>{} : {}
+
+let t1: Json = someNode
+>t1 : Json<never>
+>someNode : Node
+
+let t2: Json<"AllowPossiblyCircular"> = someNode
+>t2 : Json<"AllowPossiblyCircular">
+>someNode : Node
+
+let t3: Json = () => "hello"
+>t3 : Json<never>
+>() => "hello" : () => string
+>"hello" : "hello"
+
+let t4: Json = {
+>t4 : Json<never>
+>{  x: () => "hello"} : { x: () => string; }
+
+  x: () => "hello"
+>x : () => string
+>() => "hello" : () => string
+>"hello" : "hello"
+}
+let t5: Json = {
+>t5 : Json<never>
+>{  toJSON: () => "hello"} : { toJSON: () => string; }
+
+  toJSON: () => "hello"
+>toJSON : () => string
+>() => "hello" : () => string
+>"hello" : "hello"
+}
+let t6: Json = new Map()
+>t6 : Json<never>
+>new Map() : any
+>Map : any
+
+let t7: Json = ["hello", undefined]
+>t7 : Json<never>
+>["hello", undefined] : string[]
+>"hello" : "hello"
+>undefined : undefined
+
+let t8: Json = ["hello", undefined] as [string, undefined]
+>t8 : Json<never>
+>["hello", undefined] as [string, undefined] : [string, undefined]
+>["hello", undefined] : [string, undefined]
+>"hello" : "hello"
+>undefined : undefined
+
+let t9: Json<"AllowUndefined"> = ["hello", undefined]
+>t9 : Json<"AllowUndefined">
+>["hello", undefined] : string[]
+>"hello" : "hello"
+>undefined : undefined
+
+type Json<Flags extends "AllowPossiblyCircular" | "AllowUndefined" = never> =
+>Json : Json<Flags>
+
+  JsonError<Flags, self> extends infer E
+    ? [E] extends [never]
+        ? self
+        : Never<`Type '${Print<self>}' is not assignable to type 'Json', as ${E & string}`>
+    : never
+
+type JsonError<Flags, T, IsTopLevel = true, TCopy = T> =
+>JsonError : JsonError<Flags, T, IsTopLevel, TCopy>
+>true : true
+
+  T extends (...a: never[]) => unknown
+>a : never[]
+
+    ? `${IsTopLevel extends true ? "it " : ""}${UIsUnit<TCopy> extends true ? "is" : "could be"} a function` :
+>true : true
+>true : true
+
+  T extends { toJSON: () => string }
+>toJSON : () => string
+
+    ? never :
+  IsCircular<T> extends true
+>true : true
+
+    ? "AllowPossiblyCircular" extends Flags
+      ? never
+      : `${IsTopLevel extends true ? "it " : ""}possibly has circular references` :
+>true : true
+
+  T extends object
+    ? UShift<{ [K in keyof T]:
+        JsonError<Flags, T[K], false> extends infer E
+>false : false
+
+          ? [E] extends [never]
+              ? never
+              : `value at .${K extends symbol ? `(${Print<K>})` : K} ${E & string}`
+          : never
+      }[T extends unknown[] ? number & keyof T : keyof T]> : 
+  T extends undefined ? "AllowUndefined" extends Flags ? never : `${IsTopLevel extends true ? "it " : ""}${UIsUnit<TCopy> extends true ? "is" : "could be"} undefined` :
+>true : true
+>true : true
+
+  T extends bigint ? `${IsTopLevel extends true ? "it " : ""}${UIsUnit<TCopy> extends true ? "is" : "could be"} a bigint` :
+>true : true
+>true : true
+
+  T extends symbol ? `${IsTopLevel extends true ? "it " : ""}${UIsUnit<TCopy> extends true ? "is" : "could be"} a symbol` :
+>true : true
+>true : true
+
+  never
+
+type IsCircular<T, Visited = never> =
+>IsCircular : IsCircular<T, Visited>
+
+  T extends Visited ? true :
+>true : true
+
+  T extends object
+    ? true extends { [K in keyof T]: IsCircular<T[K], Visited | T> }[keyof T]
+>true : true
+
+        ? true
+>true : true
+
+        : false :
+>false : false
+
+  false
+>false : false
+
+type UShift<U> =
+>UShift : UShift<U>
+
+  UToIntersection<U extends unknown ? (x: U) => void : never> extends (_: infer H) => void
+>x : U
+>_ : H
+
+    ? H
+    : never
+
+type UToIntersection<T> =
+>UToIntersection : UToIntersection<T>
+
+  (T extends unknown ? (_: T) => void : never) extends ((_: infer I) => void)
+>_ : T
+>_ : I
+
+    ? I
+    : never
+
+type UShifted<U> =
+>UShifted : UShifted<U>
+
+  Exclude<U, UShift<U>>
+
+type UIsUnit<U> =
+>UIsUnit : UIsUnit<U>
+
+  [UShifted<U>] extends [never] ? true : false
+>true : true
+>false : false
+
+export {}
+

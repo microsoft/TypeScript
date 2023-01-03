@@ -1,0 +1,23 @@
+tests/cases/compiler/self-types-non-zero-number.ts(10,11): error TS18051: Type '0' is not assignable to type 'NonZeroNumber'
+tests/cases/compiler/self-types-non-zero-number.ts(12,11): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+
+
+==== tests/cases/compiler/self-types-non-zero-number.ts (2 errors) ====
+    type NonZeroNumber =
+      self extends number
+        ? self extends 0
+            ? Never<`Type '${Print<self>}' is not assignable to type 'NonZeroNumber'`>
+            : self
+        : number
+    
+    const divide = (a: number, b: NonZeroNumber) => (a / (b as number)) as NonZeroNumber
+    
+    divide(1, 0)
+              ~
+!!! error TS18051: Type '0' is not assignable to type 'NonZeroNumber'
+    divide(1, 1)
+    divide(1, "x")
+              ~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    
+    export {}

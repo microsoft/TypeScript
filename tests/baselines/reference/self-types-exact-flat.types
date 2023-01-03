@@ -1,0 +1,193 @@
+=== tests/cases/compiler/self-types-exact-flat.ts ===
+declare const f: (x: Exact<() => { a: { b: string }, c: number }>) => void
+>f : (x: Exact<() => {    a: {        b: string;    };    c: number;}>) => void
+>x : Exact<() => {    a: {        b: string;    };    c: number;}>
+>a : { b: string; }
+>b : string
+>c : number
+
+f(() => ({
+>f(() => ({  a: {    b: "b",    x: "x"  },  c: 0,  y: 1})) : void
+>f : (x: Exact<() => { a: { b: string; }; c: number; }>) => void
+>() => ({  a: {    b: "b",    x: "x"  },  c: 0,  y: 1}) : () => { a: { b: string; x: string; }; c: number; y: number; }
+>({  a: {    b: "b",    x: "x"  },  c: 0,  y: 1}) : { a: { b: string; x: string; }; c: number; y: number; }
+>{  a: {    b: "b",    x: "x"  },  c: 0,  y: 1} : { a: { b: string; x: string; }; c: number; y: number; }
+
+  a: {
+>a : { b: string; x: string; }
+>{    b: "b",    x: "x"  } : { b: string; x: string; }
+
+    b: "b",
+>b : string
+>"b" : "b"
+
+    x: "x"
+>x : string
+>"x" : "x"
+
+  },
+  c: 0,
+>c : number
+>0 : 0
+
+  y: 1
+>y : number
+>1 : 1
+
+}))
+
+let a0 = { a: { b: 1, c: "x", d: "y" } }
+>a0 : { a: { b: number; c: string; d: string; }; }
+>{ a: { b: 1, c: "x", d: "y" } } : { a: { b: number; c: string; d: string; }; }
+>a : { b: number; c: string; d: string; }
+>{ b: 1, c: "x", d: "y" } : { b: number; c: string; d: string; }
+>b : number
+>1 : 1
+>c : string
+>"x" : "x"
+>d : string
+>"y" : "y"
+
+let t00: { a: { b: number } } = a0
+>t00 : { a: {    b: number;}; }
+>a : { b: number; }
+>b : number
+>a0 : { a: { b: number; c: string; d: string; }; }
+
+let t01: Exact<{ a: { b: number } }> = a0
+>t01 : Exact<{ a: {    b: number;}; }>
+>a : { b: number; }
+>b : number
+>a0 : { a: { b: number; c: string; d: string; }; }
+
+let a1 = (x: { a: number, b: number }) => ({ x: 0, y: 2 })
+>a1 : (x: {    a: number;    b: number;}) => { x: number; y: number; }
+>(x: { a: number, b: number }) => ({ x: 0, y: 2 }) : (x: {    a: number;    b: number;}) => { x: number; y: number; }
+>x : { a: number; b: number; }
+>a : number
+>b : number
+>({ x: 0, y: 2 }) : { x: number; y: number; }
+>{ x: 0, y: 2 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>2 : 2
+
+let t10: (x: { a: number, b: number, c: number }) => { x: number } = a1
+>t10 : (x: {    a: number;    b: number;    c: number;}) => { x: number; }
+>x : { a: number; b: number; c: number; }
+>a : number
+>b : number
+>c : number
+>x : number
+>a1 : (x: { a: number; b: number; }) => { x: number; y: number; }
+
+let t11: Exact<(x: { a: number, b: number, c: number }) => { x: number }> = a1
+>t11 : Exact<(x: {    a: number;    b: number;    c: number;}) => { x: number; }>
+>x : { a: number; b: number; c: number; }
+>a : number
+>b : number
+>c : number
+>x : number
+>a1 : (x: { a: number; b: number; }) => { x: number; y: number; }
+
+type Exact<T> =
+>Exact : Exact<T>
+
+  self extends T
+    ? ExactError<T, self> extends infer E
+        ? [E] extends [never]
+            ? self
+            : Never<[
+                `Type '${Print<self>}' is not assignable to type 'Exact<${Print<T>}>`,
+                `Excess properties found at ${Join<E & string>}`
+              ]>
+        : never
+    : T
+
+type ExactError<T, A> =
+>ExactError : ExactError<T, A>
+
+  A extends T
+    ? T extends unknown
+        ? A extends (...a: infer Aa) => infer Ar
+>a : Aa
+
+            ? T extends (...a: infer Ea) => infer Er
+>a : Ea
+
+                ? Prefix<".$parameters", ExactError<Aa, Ea>> | Prefix<".$result", ExactError<Er, Ar>>
+                : never :
+          A extends object
+            ? T extends object
+                ? { [K in keyof A]:
+                      K extends keyof T 
+                        ? Prefix<`.${PrintKey<K>}`, ExactError<T[K], A[K]>>
+                        : `.${PrintKey<K>}`
+                  }[A extends unknown[] ? number & keyof A : keyof A]
+                : never :
+          never
+        : never
+    : never
+
+type Join<T extends string, And = false> =
+>Join : Join<T, And>
+>false : false
+
+  UIsUnit<T> extends true ? `${And extends true ? "and " : ""}${T}` :
+>true : true
+>true : true
+
+  `${Cast<UShift<T>, string | number>}, ${Join<UShifted<T>, true>}`
+>true : true
+
+type Prefix<A, B> =
+>Prefix : Prefix<A, B>
+
+  [B] extends [never]
+    ? B
+    : `${A & string}${B & string}`
+
+type PrintKey<K> = 
+>PrintKey : PrintKey<K>
+
+  K extends symbol ? Print<K> : K
+
+type UShift<U> =
+>UShift : UShift<U>
+
+  UToIntersection<U extends unknown ? (x: U) => void : never> extends (_: infer H) => void
+>x : U
+>_ : H
+
+    ? H
+    : never
+
+type UToIntersection<T> =
+>UToIntersection : UToIntersection<T>
+
+  (T extends unknown ? (_: T) => void : never) extends ((_: infer I) => void)
+>_ : T
+>_ : I
+
+    ? I
+    : never
+
+type UShifted<U> =
+>UShifted : UShifted<U>
+
+  Exclude<U, UShift<U>>
+
+type UIsUnit<U> =
+>UIsUnit : UIsUnit<U>
+
+  [UShifted<U>] extends [never] ? true : false
+>true : true
+>false : false
+
+type Cast<T, U> =
+>Cast : Cast<T, U>
+
+  T extends U ? T : U
+
+export {}

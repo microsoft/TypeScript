@@ -1,0 +1,62 @@
+=== tests/cases/compiler/self-types-string-literal.ts ===
+type StringLiteral =
+>StringLiteral : self extends string ? string extends self ? never : self : string
+
+  self extends string
+    ? string extends self
+        ? Never<`Type '${Print<self>}' is not assignable to type 'StringLiteral'`>
+        : self
+    : string
+
+let x: StringLiteral = "x" as "x"
+>x : StringLiteral
+>"x" as "x" : "x"
+>"x" : "x"
+
+let y: StringLiteral = "y" as string
+>y : StringLiteral
+>"y" as string : string
+>"y" : "y"
+
+let xx: { x: StringLiteral } = { x: "x" as "x" }
+>xx : { x: StringLiteral; }
+>x : StringLiteral
+>{ x: "x" as "x" } : { x: "x"; }
+>x : "x"
+>"x" as "x" : "x"
+>"x" : "x"
+
+let yy: { y: StringLiteral } = { y: "y" as string }
+>yy : { y: StringLiteral; }
+>y : StringLiteral
+>{ y: "y" as string } : { y: string; }
+>y : string
+>"y" as string : string
+>"y" : "y"
+
+let zs: StringLiteral[] = ["z0" as "z0", "z1" as string, "z2" as "z2"]
+>zs : StringLiteral[]
+>["z0" as "z0", "z1" as string, "z2" as "z2"] : string[]
+>"z0" as "z0" : "z0"
+>"z0" : "z0"
+>"z1" as string : string
+>"z1" : "z1"
+>"z2" as "z2" : "z2"
+>"z2" : "z2"
+
+let a: StringLiteral = "a" as StringLiteral
+>a : StringLiteral
+>"a" as StringLiteral : StringLiteral
+>"a" : "a"
+
+let b: StringLiteral = "b"
+>b : StringLiteral
+>"b" : "b"
+
+let cs: StringLiteral[] = ["c0", "c1", "c2"]
+>cs : StringLiteral[]
+>["c0", "c1", "c2"] : ("c0" | "c1" | "c2")[]
+>"c0" : "c0"
+>"c1" : "c1"
+>"c2" : "c2"
+

@@ -1,0 +1,75 @@
+=== tests/cases/compiler/self-types-json-simple.ts ===
+type Json =
+>Json : Symbol(Json, Decl(self-types-json-simple.ts, 0, 0))
+
+  | string
+  | number
+  | boolean
+  | null
+  | { toJSON: () => string }
+>toJSON : Symbol(toJSON, Decl(self-types-json-simple.ts, 5, 5))
+
+  | (self extends unknown[] ? Json[] : self extends (...a: never[]) => unknown ? never : { [_ in keyof self]: Json })
+>Json : Symbol(Json, Decl(self-types-json-simple.ts, 0, 0))
+>a : Symbol(a, Decl(self-types-json-simple.ts, 6, 53))
+>_ : Symbol(_, Decl(self-types-json-simple.ts, 6, 92))
+>Json : Symbol(Json, Decl(self-types-json-simple.ts, 0, 0))
+
+  | (self extends (...a: never[]) => unknown ? Never<`Type '${Print<self>}' is not assignable to type 'Json'`> : never)
+>a : Symbol(a, Decl(self-types-json-simple.ts, 7, 19))
+>Never : Symbol(Never, Decl(lib.es5.d.ts, --, --))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+
+interface Node {
+>Node : Symbol(Node, Decl(self-types-json-simple.ts, 7, 119))
+
+  children: Node[]
+>children : Symbol(Node.children, Decl(self-types-json-simple.ts, 9, 16))
+>Node : Symbol(Node, Decl(self-types-json-simple.ts, 7, 119))
+
+  parent: Node
+>parent : Symbol(Node.parent, Decl(self-types-json-simple.ts, 10, 18))
+>Node : Symbol(Node, Decl(self-types-json-simple.ts, 7, 119))
+}
+let someNode = {} as Node
+>someNode : Symbol(someNode, Decl(self-types-json-simple.ts, 13, 3))
+>Node : Symbol(Node, Decl(self-types-json-simple.ts, 7, 119))
+
+let t1: Json = someNode // TODO: this should probably compile
+>t1 : Symbol(t1, Decl(self-types-json-simple.ts, 15, 3))
+>Json : Symbol(Json, Decl(self-types-json-simple.ts, 0, 0))
+>someNode : Symbol(someNode, Decl(self-types-json-simple.ts, 13, 3))
+
+let t3: Json = () => "hello"
+>t3 : Symbol(t3, Decl(self-types-json-simple.ts, 16, 3))
+>Json : Symbol(Json, Decl(self-types-json-simple.ts, 0, 0))
+
+let t4: Json = {
+>t4 : Symbol(t4, Decl(self-types-json-simple.ts, 17, 3))
+>Json : Symbol(Json, Decl(self-types-json-simple.ts, 0, 0))
+
+  x: () => "hello"
+>x : Symbol(x, Decl(self-types-json-simple.ts, 17, 16))
+}
+let t5: Json = {
+>t5 : Symbol(t5, Decl(self-types-json-simple.ts, 20, 3))
+>Json : Symbol(Json, Decl(self-types-json-simple.ts, 0, 0))
+
+  toJSON: () => "hello"
+>toJSON : Symbol(toJSON, Decl(self-types-json-simple.ts, 20, 16))
+}
+let t6: Json = new Map()
+>t6 : Symbol(t6, Decl(self-types-json-simple.ts, 23, 3))
+>Json : Symbol(Json, Decl(self-types-json-simple.ts, 0, 0))
+
+let t7: Json = ["hello", undefined]
+>t7 : Symbol(t7, Decl(self-types-json-simple.ts, 24, 3))
+>Json : Symbol(Json, Decl(self-types-json-simple.ts, 0, 0))
+>undefined : Symbol(undefined)
+
+let t8: Json = ["hello", null] as [string, null]
+>t8 : Symbol(t8, Decl(self-types-json-simple.ts, 25, 3))
+>Json : Symbol(Json, Decl(self-types-json-simple.ts, 0, 0))
+
+export {}
+

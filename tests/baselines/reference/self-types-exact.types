@@ -1,0 +1,65 @@
+=== tests/cases/compiler/self-types-exact.ts ===
+declare const f: (x: Exact<() => { a: { b: string }, c: number }>) => void
+>f : (x: Exact<() => {    a: {        b: string;    };    c: number;}>) => void
+>x : Exact<() => {    a: {        b: string;    };    c: number;}, self>
+>a : { b: string; }
+>b : string
+>c : number
+
+f(() => ({
+>f(() => ({  a: {    b: "b",    x: "x"  },  c: 0,  y: 1})) : void
+>f : (x: Exact<() => { a: { b: string; }; c: number; }, self>) => void
+>() => ({  a: {    b: "b",    x: "x"  },  c: 0,  y: 1}) : () => { a: { b: string; x: string; }; c: number; y: number; }
+>({  a: {    b: "b",    x: "x"  },  c: 0,  y: 1}) : { a: { b: string; x: string; }; c: number; y: number; }
+>{  a: {    b: "b",    x: "x"  },  c: 0,  y: 1} : { a: { b: string; x: string; }; c: number; y: number; }
+
+  a: {
+>a : { b: string; x: string; }
+>{    b: "b",    x: "x"  } : { b: string; x: string; }
+
+    b: "b",
+>b : string
+>"b" : "b"
+
+    x: "x"
+>x : string
+>"x" : "x"
+
+  },
+  c: 0,
+>c : number
+>0 : 0
+
+  y: 1
+>y : number
+>1 : 1
+
+}))
+
+type Exact<T, A = self> =
+>Exact : Exact<T, A>
+
+  A extends T
+    ? T extends unknown
+        ? A extends (...a: infer Aa) => infer Ar
+>a : Aa
+
+            ? T extends (...a: infer Ea) => infer Er
+>a : Ea
+
+                ? (...a: Exact<Ea, Aa>) => Exact<Er, Ar>
+>a : Exact<Ea, Aa>
+
+                : T :
+          A extends object
+            ? T extends object
+                ? { [K in keyof A]:
+                      K extends keyof T ? Exact<T[K], A[K]> :
+                      Never<`Excess property '${K & string}' not allowed as the target is an exact type`>
+                  }
+                : T :
+          T
+        : never
+    : T
+
+export {}

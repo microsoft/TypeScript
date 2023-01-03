@@ -1,0 +1,45 @@
+=== tests/cases/compiler/self-types-keyof.ts ===
+// Implementing index types without index types
+
+type KeyOf<T> =
+>KeyOf : KeyOf<T>
+
+  self extends string | number | symbol
+    ? T extends { [_ in self]: unknown }
+        ? self
+        : Never<`Type '${Print<self>}' can't be used to index type '${Print<T>}'`>
+    : string | number | symbol
+
+let t0: KeyOf<{ a: number }> = "a"
+>t0 : KeyOf<{ a: number; }>
+>a : number
+>"a" : "a"
+
+let t1: KeyOf<{ a: number }> = "b"
+>t1 : KeyOf<{ a: number; }>
+>a : number
+>"b" : "b"
+
+declare const get:
+>get : <T, K extends KeyOf<T>>(t: T, k: K) => T extends { [_ in K]: infer X; } ? X : never
+
+  <T, K extends KeyOf<T>>(t: T, k: K) =>
+>t : T
+>k : K
+
+    T extends { [_ in K]: infer X } ? X : never
+
+let t3: number = get({ a: 10 }, "a" as "a")
+>t3 : number
+>get({ a: 10 }, "a" as "a") : { a: number; } extends { [_ in KeyOf<{ a: number; }>]: infer X; } ? X : never
+>get : <T, K extends KeyOf<T>>(t: T, k: K) => T extends { [_ in K]: infer X; } ? X : never
+>{ a: 10 } : { a: number; }
+>a : number
+>10 : 10
+>"a" as "a" : "a"
+>"a" : "a"
+
+// TODO?: this should compile
+
+export {}
+

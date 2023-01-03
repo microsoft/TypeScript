@@ -1,0 +1,60 @@
+=== tests/cases/compiler/self-types-keyof.ts ===
+// Implementing index types without index types
+
+type KeyOf<T> =
+>KeyOf : Symbol(KeyOf, Decl(self-types-keyof.ts, 0, 0))
+>T : Symbol(T, Decl(self-types-keyof.ts, 2, 11))
+
+  self extends string | number | symbol
+    ? T extends { [_ in self]: unknown }
+>T : Symbol(T, Decl(self-types-keyof.ts, 2, 11))
+>_ : Symbol(_, Decl(self-types-keyof.ts, 4, 19))
+
+        ? self
+        : Never<`Type '${Print<self>}' can't be used to index type '${Print<T>}'`>
+>Never : Symbol(Never, Decl(lib.es5.d.ts, --, --))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(self-types-keyof.ts, 2, 11))
+
+    : string | number | symbol
+
+let t0: KeyOf<{ a: number }> = "a"
+>t0 : Symbol(t0, Decl(self-types-keyof.ts, 9, 3))
+>KeyOf : Symbol(KeyOf, Decl(self-types-keyof.ts, 0, 0))
+>a : Symbol(a, Decl(self-types-keyof.ts, 9, 15))
+
+let t1: KeyOf<{ a: number }> = "b"
+>t1 : Symbol(t1, Decl(self-types-keyof.ts, 10, 3))
+>KeyOf : Symbol(KeyOf, Decl(self-types-keyof.ts, 0, 0))
+>a : Symbol(a, Decl(self-types-keyof.ts, 10, 15))
+
+declare const get:
+>get : Symbol(get, Decl(self-types-keyof.ts, 12, 13))
+
+  <T, K extends KeyOf<T>>(t: T, k: K) =>
+>T : Symbol(T, Decl(self-types-keyof.ts, 13, 3))
+>K : Symbol(K, Decl(self-types-keyof.ts, 13, 5))
+>KeyOf : Symbol(KeyOf, Decl(self-types-keyof.ts, 0, 0))
+>T : Symbol(T, Decl(self-types-keyof.ts, 13, 3))
+>t : Symbol(t, Decl(self-types-keyof.ts, 13, 26))
+>T : Symbol(T, Decl(self-types-keyof.ts, 13, 3))
+>k : Symbol(k, Decl(self-types-keyof.ts, 13, 31))
+>K : Symbol(K, Decl(self-types-keyof.ts, 13, 5))
+
+    T extends { [_ in K]: infer X } ? X : never
+>T : Symbol(T, Decl(self-types-keyof.ts, 13, 3))
+>_ : Symbol(_, Decl(self-types-keyof.ts, 14, 17))
+>K : Symbol(K, Decl(self-types-keyof.ts, 13, 5))
+>X : Symbol(X, Decl(self-types-keyof.ts, 14, 31))
+>X : Symbol(X, Decl(self-types-keyof.ts, 14, 31))
+
+let t3: number = get({ a: 10 }, "a" as "a")
+>t3 : Symbol(t3, Decl(self-types-keyof.ts, 16, 3))
+>get : Symbol(get, Decl(self-types-keyof.ts, 12, 13))
+>a : Symbol(a, Decl(self-types-keyof.ts, 16, 22))
+
+// TODO?: this should compile
+
+export {}
+

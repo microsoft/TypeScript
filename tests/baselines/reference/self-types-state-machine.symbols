@@ -1,0 +1,50 @@
+=== tests/cases/compiler/self-types-state-machine.ts ===
+type StateMachine =
+>StateMachine : Symbol(StateMachine, Decl(self-types-state-machine.ts, 0, 0))
+
+  { [S in keyof self]: { [E in keyof self[S]]: keyof self } }
+>S : Symbol(S, Decl(self-types-state-machine.ts, 1, 5))
+>E : Symbol(E, Decl(self-types-state-machine.ts, 1, 26))
+>S : Symbol(S, Decl(self-types-state-machine.ts, 1, 5))
+
+let trafficLights: StateMachine = {
+>trafficLights : Symbol(trafficLights, Decl(self-types-state-machine.ts, 3, 3))
+>StateMachine : Symbol(StateMachine, Decl(self-types-state-machine.ts, 0, 0))
+
+  off: {
+>off : Symbol(off, Decl(self-types-state-machine.ts, 3, 35))
+
+    ON: "red"
+>ON : Symbol(ON, Decl(self-types-state-machine.ts, 4, 8))
+
+  },
+  red: {
+>red : Symbol(red, Decl(self-types-state-machine.ts, 6, 4))
+
+    TICK: "yellow",
+>TICK : Symbol(TICK, Decl(self-types-state-machine.ts, 7, 8))
+
+    OFF: "off"
+>OFF : Symbol(OFF, Decl(self-types-state-machine.ts, 8, 19))
+
+  },
+  yellow: {
+>yellow : Symbol(yellow, Decl(self-types-state-machine.ts, 10, 4))
+
+    TICK: "green",
+>TICK : Symbol(TICK, Decl(self-types-state-machine.ts, 11, 11))
+
+    OFF: "off"
+>OFF : Symbol(OFF, Decl(self-types-state-machine.ts, 12, 18))
+
+  },
+  green: {
+>green : Symbol(green, Decl(self-types-state-machine.ts, 14, 4))
+
+    TICK: "reddd",
+>TICK : Symbol(TICK, Decl(self-types-state-machine.ts, 15, 10))
+
+    OFF: "off"
+>OFF : Symbol(OFF, Decl(self-types-state-machine.ts, 16, 18))
+  }
+}

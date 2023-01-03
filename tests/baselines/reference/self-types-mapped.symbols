@@ -1,0 +1,472 @@
+=== tests/cases/compiler/self-types-mapped.ts ===
+// Implementing mapped types without mapped types
+
+type User =
+>User : Symbol(User, Decl(self-types-mapped.ts, 0, 0))
+
+  { name: string
+>name : Symbol(name, Decl(self-types-mapped.ts, 3, 3))
+
+  , age: number
+>age : Symbol(age, Decl(self-types-mapped.ts, 4, 3))
+  }
+
+type _Partial<T> = Mapped<keyof T, "_Partial", T, `_Partial<${Print<T>}>`>
+>_Partial : Symbol(_Partial, Decl(self-types-mapped.ts, 5, 3))
+>T : Symbol(T, Decl(self-types-mapped.ts, 7, 14))
+>Mapped : Symbol(Mapped, Decl(self-types-mapped.ts, 73, 1))
+>T : Symbol(T, Decl(self-types-mapped.ts, 7, 14))
+>T : Symbol(T, Decl(self-types-mapped.ts, 7, 14))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(self-types-mapped.ts, 7, 14))
+
+interface Mappers<K, A> { _Partial: A[K & keyof A] | undefined }
+>Mappers : Symbol(Mappers, Decl(self-types-mapped.ts, 7, 74), Decl(self-types-mapped.ts, 26, 93), Decl(self-types-mapped.ts, 43, 99), Decl(self-types-mapped.ts, 104, 3))
+>K : Symbol(K, Decl(self-types-mapped.ts, 8, 18), Decl(self-types-mapped.ts, 27, 18), Decl(self-types-mapped.ts, 44, 18), Decl(self-types-mapped.ts, 106, 18))
+>A : Symbol(A, Decl(self-types-mapped.ts, 8, 20), Decl(self-types-mapped.ts, 27, 20), Decl(self-types-mapped.ts, 44, 20), Decl(self-types-mapped.ts, 106, 20))
+>_Partial : Symbol(Mappers._Partial, Decl(self-types-mapped.ts, 8, 25))
+>A : Symbol(A, Decl(self-types-mapped.ts, 8, 20), Decl(self-types-mapped.ts, 27, 20), Decl(self-types-mapped.ts, 44, 20), Decl(self-types-mapped.ts, 106, 20))
+>K : Symbol(K, Decl(self-types-mapped.ts, 8, 18), Decl(self-types-mapped.ts, 27, 18), Decl(self-types-mapped.ts, 44, 18), Decl(self-types-mapped.ts, 106, 18))
+>A : Symbol(A, Decl(self-types-mapped.ts, 8, 20), Decl(self-types-mapped.ts, 27, 20), Decl(self-types-mapped.ts, 44, 20), Decl(self-types-mapped.ts, 106, 20))
+
+// same as writing
+// type _Partial<T> = { [K in keyof T]: T[K] | undefined }
+
+let t00: _Partial<User> = {
+>t00 : Symbol(t00, Decl(self-types-mapped.ts, 12, 3))
+>_Partial : Symbol(_Partial, Decl(self-types-mapped.ts, 5, 3))
+>User : Symbol(User, Decl(self-types-mapped.ts, 0, 0))
+
+  name: "foo",
+>name : Symbol(name, Decl(self-types-mapped.ts, 12, 27))
+
+  age: undefined
+>age : Symbol(age, Decl(self-types-mapped.ts, 13, 14))
+>undefined : Symbol(undefined)
+}
+
+let t01: _Partial<User> = {
+>t01 : Symbol(t01, Decl(self-types-mapped.ts, 17, 3))
+>_Partial : Symbol(_Partial, Decl(self-types-mapped.ts, 5, 3))
+>User : Symbol(User, Decl(self-types-mapped.ts, 0, 0))
+
+  name: 0,
+>name : Symbol(name, Decl(self-types-mapped.ts, 17, 27))
+
+  age: undefined
+>age : Symbol(age, Decl(self-types-mapped.ts, 18, 10))
+>undefined : Symbol(undefined)
+}
+
+let t02: _Partial<User> = {
+>t02 : Symbol(t02, Decl(self-types-mapped.ts, 22, 3))
+>_Partial : Symbol(_Partial, Decl(self-types-mapped.ts, 5, 3))
+>User : Symbol(User, Decl(self-types-mapped.ts, 0, 0))
+
+  age: undefined
+>age : Symbol(age, Decl(self-types-mapped.ts, 22, 27))
+>undefined : Symbol(undefined)
+}
+
+type _Omit<T, K> = Mapped<Exclude<keyof T, K>, "_Omit", T, `_Omit<${Print<T>}, ${Print<K>}>`>
+>_Omit : Symbol(_Omit, Decl(self-types-mapped.ts, 24, 1))
+>T : Symbol(T, Decl(self-types-mapped.ts, 26, 11))
+>K : Symbol(K, Decl(self-types-mapped.ts, 26, 13))
+>Mapped : Symbol(Mapped, Decl(self-types-mapped.ts, 73, 1))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(self-types-mapped.ts, 26, 11))
+>K : Symbol(K, Decl(self-types-mapped.ts, 26, 13))
+>T : Symbol(T, Decl(self-types-mapped.ts, 26, 11))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(self-types-mapped.ts, 26, 11))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(self-types-mapped.ts, 26, 13))
+
+interface Mappers<K, A> { _Omit: A[K & keyof A] }
+>Mappers : Symbol(Mappers, Decl(self-types-mapped.ts, 7, 74), Decl(self-types-mapped.ts, 26, 93), Decl(self-types-mapped.ts, 43, 99), Decl(self-types-mapped.ts, 104, 3))
+>K : Symbol(K, Decl(self-types-mapped.ts, 8, 18), Decl(self-types-mapped.ts, 27, 18), Decl(self-types-mapped.ts, 44, 18), Decl(self-types-mapped.ts, 106, 18))
+>A : Symbol(A, Decl(self-types-mapped.ts, 8, 20), Decl(self-types-mapped.ts, 27, 20), Decl(self-types-mapped.ts, 44, 20), Decl(self-types-mapped.ts, 106, 20))
+>_Omit : Symbol(Mappers._Omit, Decl(self-types-mapped.ts, 27, 25))
+>A : Symbol(A, Decl(self-types-mapped.ts, 8, 20), Decl(self-types-mapped.ts, 27, 20), Decl(self-types-mapped.ts, 44, 20), Decl(self-types-mapped.ts, 106, 20))
+>K : Symbol(K, Decl(self-types-mapped.ts, 8, 18), Decl(self-types-mapped.ts, 27, 18), Decl(self-types-mapped.ts, 44, 18), Decl(self-types-mapped.ts, 106, 18))
+>A : Symbol(A, Decl(self-types-mapped.ts, 8, 20), Decl(self-types-mapped.ts, 27, 20), Decl(self-types-mapped.ts, 44, 20), Decl(self-types-mapped.ts, 106, 20))
+
+// same as writing
+// type _Omit<T, K> = { [K in Exclude<keyof T, K>]: T[K] }
+
+let t10: _Omit<User, "age"> = {
+>t10 : Symbol(t10, Decl(self-types-mapped.ts, 31, 3))
+>_Omit : Symbol(_Omit, Decl(self-types-mapped.ts, 24, 1))
+>User : Symbol(User, Decl(self-types-mapped.ts, 0, 0))
+
+  name: "foo"
+>name : Symbol(name, Decl(self-types-mapped.ts, 31, 31))
+}
+
+let t11: _Omit<User, "age"> = {
+>t11 : Symbol(t11, Decl(self-types-mapped.ts, 35, 3))
+>_Omit : Symbol(_Omit, Decl(self-types-mapped.ts, 24, 1))
+>User : Symbol(User, Decl(self-types-mapped.ts, 0, 0))
+
+  name: 0
+>name : Symbol(name, Decl(self-types-mapped.ts, 35, 31))
+}
+
+let t12: _Omit<User, "age"> = {
+>t12 : Symbol(t12, Decl(self-types-mapped.ts, 39, 3))
+>_Omit : Symbol(_Omit, Decl(self-types-mapped.ts, 24, 1))
+>User : Symbol(User, Decl(self-types-mapped.ts, 0, 0))
+}
+
+type FlipValues<T, K1 extends keyof T, K2 extends keyof T> =
+>FlipValues : Symbol(FlipValues, Decl(self-types-mapped.ts, 40, 1))
+>T : Symbol(T, Decl(self-types-mapped.ts, 42, 16))
+>K1 : Symbol(K1, Decl(self-types-mapped.ts, 42, 18))
+>T : Symbol(T, Decl(self-types-mapped.ts, 42, 16))
+>K2 : Symbol(K2, Decl(self-types-mapped.ts, 42, 38))
+>T : Symbol(T, Decl(self-types-mapped.ts, 42, 16))
+
+  Mapped<keyof T, "FlipValues", [T, K1, K2], `FlipValues<${Print<T>}, ${Print<K1>}, ${Print<K2>}>`>
+>Mapped : Symbol(Mapped, Decl(self-types-mapped.ts, 73, 1))
+>T : Symbol(T, Decl(self-types-mapped.ts, 42, 16))
+>T : Symbol(T, Decl(self-types-mapped.ts, 42, 16))
+>K1 : Symbol(K1, Decl(self-types-mapped.ts, 42, 18))
+>K2 : Symbol(K2, Decl(self-types-mapped.ts, 42, 38))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(self-types-mapped.ts, 42, 16))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>K1 : Symbol(K1, Decl(self-types-mapped.ts, 42, 18))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>K2 : Symbol(K2, Decl(self-types-mapped.ts, 42, 38))
+
+interface Mappers<K, A>
+>Mappers : Symbol(Mappers, Decl(self-types-mapped.ts, 7, 74), Decl(self-types-mapped.ts, 26, 93), Decl(self-types-mapped.ts, 43, 99), Decl(self-types-mapped.ts, 104, 3))
+>K : Symbol(K, Decl(self-types-mapped.ts, 8, 18), Decl(self-types-mapped.ts, 27, 18), Decl(self-types-mapped.ts, 44, 18), Decl(self-types-mapped.ts, 106, 18))
+>A : Symbol(A, Decl(self-types-mapped.ts, 8, 20), Decl(self-types-mapped.ts, 27, 20), Decl(self-types-mapped.ts, 44, 20), Decl(self-types-mapped.ts, 106, 20))
+
+  { FlipValues:
+>FlipValues : Symbol(Mappers.FlipValues, Decl(self-types-mapped.ts, 45, 3))
+
+      A extends [infer T, infer K1, infer K2]
+>A : Symbol(A, Decl(self-types-mapped.ts, 8, 20), Decl(self-types-mapped.ts, 27, 20), Decl(self-types-mapped.ts, 44, 20), Decl(self-types-mapped.ts, 106, 20))
+>T : Symbol(T, Decl(self-types-mapped.ts, 46, 22))
+>K1 : Symbol(K1, Decl(self-types-mapped.ts, 46, 31))
+>K2 : Symbol(K2, Decl(self-types-mapped.ts, 46, 41))
+
+        ? K extends K1 ? T[K2 & keyof T] :
+>K : Symbol(K, Decl(self-types-mapped.ts, 8, 18), Decl(self-types-mapped.ts, 27, 18), Decl(self-types-mapped.ts, 44, 18), Decl(self-types-mapped.ts, 106, 18))
+>K1 : Symbol(K1, Decl(self-types-mapped.ts, 46, 31))
+>T : Symbol(T, Decl(self-types-mapped.ts, 46, 22))
+>K2 : Symbol(K2, Decl(self-types-mapped.ts, 46, 41))
+>T : Symbol(T, Decl(self-types-mapped.ts, 46, 22))
+
+          K extends K2 ? T[K1 & keyof T] :
+>K : Symbol(K, Decl(self-types-mapped.ts, 8, 18), Decl(self-types-mapped.ts, 27, 18), Decl(self-types-mapped.ts, 44, 18), Decl(self-types-mapped.ts, 106, 18))
+>K2 : Symbol(K2, Decl(self-types-mapped.ts, 46, 41))
+>T : Symbol(T, Decl(self-types-mapped.ts, 46, 22))
+>K1 : Symbol(K1, Decl(self-types-mapped.ts, 46, 31))
+>T : Symbol(T, Decl(self-types-mapped.ts, 46, 22))
+
+          T[K & keyof T]
+>T : Symbol(T, Decl(self-types-mapped.ts, 46, 22))
+>K : Symbol(K, Decl(self-types-mapped.ts, 8, 18), Decl(self-types-mapped.ts, 27, 18), Decl(self-types-mapped.ts, 44, 18), Decl(self-types-mapped.ts, 106, 18))
+>T : Symbol(T, Decl(self-types-mapped.ts, 46, 22))
+
+        : never
+  }
+// same as writing
+// type FlipValues<T, K1 extends keyof T, K2 extends keyof T> =
+//   { [K in keyof T]:
+//       K extends K1 ? T[K2] :
+//       K extends K2 ? T[K1] :
+//       T[K]
+//   }
+
+
+let t30: FlipValues<User, "name", "age"> = {
+>t30 : Symbol(t30, Decl(self-types-mapped.ts, 61, 3))
+>FlipValues : Symbol(FlipValues, Decl(self-types-mapped.ts, 40, 1))
+>User : Symbol(User, Decl(self-types-mapped.ts, 0, 0))
+
+  name: "foo",
+>name : Symbol(name, Decl(self-types-mapped.ts, 61, 44))
+
+  age: 0
+>age : Symbol(age, Decl(self-types-mapped.ts, 62, 14))
+}
+
+let t31: FlipValues<User, "name", "age"> = {
+>t31 : Symbol(t31, Decl(self-types-mapped.ts, 66, 3))
+>FlipValues : Symbol(FlipValues, Decl(self-types-mapped.ts, 40, 1))
+>User : Symbol(User, Decl(self-types-mapped.ts, 0, 0))
+
+  name: 0,
+>name : Symbol(name, Decl(self-types-mapped.ts, 66, 44))
+
+  age: "foo"
+>age : Symbol(age, Decl(self-types-mapped.ts, 67, 10))
+}
+
+let t32: FlipValues<User, "name", "age"> = {
+>t32 : Symbol(t32, Decl(self-types-mapped.ts, 71, 3))
+>FlipValues : Symbol(FlipValues, Decl(self-types-mapped.ts, 40, 1))
+>User : Symbol(User, Decl(self-types-mapped.ts, 0, 0))
+
+  name: 0
+>name : Symbol(name, Decl(self-types-mapped.ts, 71, 44))
+}
+
+/**
+ * @param K key of new type
+ * @param F mapper identifier
+ * @param A extra argument to mapper
+ * @param N name of new type
+ */
+type Mapped<K, F, A, N> =
+>Mapped : Symbol(Mapped, Decl(self-types-mapped.ts, 73, 1))
+>K : Symbol(K, Decl(self-types-mapped.ts, 81, 12))
+>F : Symbol(F, Decl(self-types-mapped.ts, 81, 14))
+>A : Symbol(A, Decl(self-types-mapped.ts, 81, 17))
+>N : Symbol(N, Decl(self-types-mapped.ts, 81, 20))
+
+  MappedError<K, F, A, N, self> extends infer E extends string | string[]
+>MappedError : Symbol(MappedError, Decl(self-types-mapped.ts, 84, 11))
+>K : Symbol(K, Decl(self-types-mapped.ts, 81, 12))
+>F : Symbol(F, Decl(self-types-mapped.ts, 81, 14))
+>A : Symbol(A, Decl(self-types-mapped.ts, 81, 17))
+>N : Symbol(N, Decl(self-types-mapped.ts, 81, 20))
+>E : Symbol(E, Decl(self-types-mapped.ts, 82, 45))
+
+    ? [E] extends [never] ? self : Never<E>
+>E : Symbol(E, Decl(self-types-mapped.ts, 82, 45))
+>Never : Symbol(Never, Decl(lib.es5.d.ts, --, --))
+>E : Symbol(E, Decl(self-types-mapped.ts, 82, 45))
+
+    : never
+
+type MappedError<K, F, A, N, Self, KCopy = K> =
+>MappedError : Symbol(MappedError, Decl(self-types-mapped.ts, 84, 11))
+>K : Symbol(K, Decl(self-types-mapped.ts, 86, 17))
+>F : Symbol(F, Decl(self-types-mapped.ts, 86, 19))
+>A : Symbol(A, Decl(self-types-mapped.ts, 86, 22))
+>N : Symbol(N, Decl(self-types-mapped.ts, 86, 25))
+>Self : Symbol(Self, Decl(self-types-mapped.ts, 86, 28))
+>KCopy : Symbol(KCopy, Decl(self-types-mapped.ts, 86, 34))
+>K : Symbol(K, Decl(self-types-mapped.ts, 86, 17))
+
+  UShift<
+>UShift : Symbol(UShift, Decl(self-types-mapped.ts, 119, 66))
+
+    K extends unknown
+>K : Symbol(K, Decl(self-types-mapped.ts, 86, 17))
+
+      ? K extends keyof Self
+>K : Symbol(K, Decl(self-types-mapped.ts, 86, 17))
+>Self : Symbol(Self, Decl(self-types-mapped.ts, 86, 28))
+
+          ? Get<Mappers<K, A>, F> extends infer Fka // F<K, A>
+>Get : Symbol(Get, Decl(self-types-mapped.ts, 144, 7))
+>Mappers : Symbol(Mappers, Decl(self-types-mapped.ts, 7, 74), Decl(self-types-mapped.ts, 26, 93), Decl(self-types-mapped.ts, 43, 99), Decl(self-types-mapped.ts, 104, 3))
+>K : Symbol(K, Decl(self-types-mapped.ts, 86, 17))
+>A : Symbol(A, Decl(self-types-mapped.ts, 86, 22))
+>F : Symbol(F, Decl(self-types-mapped.ts, 86, 19))
+>Fka : Symbol(Fka, Decl(self-types-mapped.ts, 90, 47))
+
+              ? Self[K] extends Fka
+>Self : Symbol(Self, Decl(self-types-mapped.ts, 86, 28))
+>K : Symbol(K, Decl(self-types-mapped.ts, 86, 17))
+>Fka : Symbol(Fka, Decl(self-types-mapped.ts, 90, 47))
+
+                  ? never
+                  : [ `Type '${Print<Self>}' is not assignable to type '${N & string}'`
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Self : Symbol(Self, Decl(self-types-mapped.ts, 86, 28))
+>N : Symbol(N, Decl(self-types-mapped.ts, 86, 25))
+
+                    , `Type '${Print<Self>}' is not assignable to type '${PrintMapped<KCopy, F, A>}'`
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Self : Symbol(Self, Decl(self-types-mapped.ts, 86, 28))
+>PrintMapped : Symbol(PrintMapped, Decl(self-types-mapped.ts, 106, 26))
+>KCopy : Symbol(KCopy, Decl(self-types-mapped.ts, 86, 34))
+>F : Symbol(F, Decl(self-types-mapped.ts, 86, 19))
+>A : Symbol(A, Decl(self-types-mapped.ts, 86, 22))
+
+                    , `Types at property '${PrintKey<K>}' are incompatible`
+>PrintKey : Symbol(PrintKey, Decl(self-types-mapped.ts, 138, 21))
+>K : Symbol(K, Decl(self-types-mapped.ts, 86, 17))
+
+                    , `Type '${Print<Self[K]>}' is not assignable to type '${Print<Fka>}'`
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Self : Symbol(Self, Decl(self-types-mapped.ts, 86, 28))
+>K : Symbol(K, Decl(self-types-mapped.ts, 86, 17))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Fka : Symbol(Fka, Decl(self-types-mapped.ts, 90, 47))
+
+                    ]
+              : never
+          : [ `Type '${Print<Self>}' is not assignable to type '${N & string}'`
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Self : Symbol(Self, Decl(self-types-mapped.ts, 86, 28))
+>N : Symbol(N, Decl(self-types-mapped.ts, 86, 25))
+
+            , `Type '${Print<Self>}' is not assignable to type '${PrintMapped<KCopy, F, A>}'`
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Self : Symbol(Self, Decl(self-types-mapped.ts, 86, 28))
+>PrintMapped : Symbol(PrintMapped, Decl(self-types-mapped.ts, 106, 26))
+>KCopy : Symbol(KCopy, Decl(self-types-mapped.ts, 86, 34))
+>F : Symbol(F, Decl(self-types-mapped.ts, 86, 19))
+>A : Symbol(A, Decl(self-types-mapped.ts, 86, 22))
+
+            , `Property '${PrintKey<K>}' is required in target type but missing in source type`
+>PrintKey : Symbol(PrintKey, Decl(self-types-mapped.ts, 138, 21))
+>K : Symbol(K, Decl(self-types-mapped.ts, 86, 17))
+
+            ]
+      : never
+  >
+
+interface Mappers<K, A> {}
+>Mappers : Symbol(Mappers, Decl(self-types-mapped.ts, 7, 74), Decl(self-types-mapped.ts, 26, 93), Decl(self-types-mapped.ts, 43, 99), Decl(self-types-mapped.ts, 104, 3))
+>K : Symbol(K, Decl(self-types-mapped.ts, 8, 18), Decl(self-types-mapped.ts, 27, 18), Decl(self-types-mapped.ts, 44, 18), Decl(self-types-mapped.ts, 106, 18))
+>A : Symbol(A, Decl(self-types-mapped.ts, 8, 20), Decl(self-types-mapped.ts, 27, 20), Decl(self-types-mapped.ts, 44, 20), Decl(self-types-mapped.ts, 106, 20))
+
+type PrintMapped<K, F, A> = 
+>PrintMapped : Symbol(PrintMapped, Decl(self-types-mapped.ts, 106, 26))
+>K : Symbol(K, Decl(self-types-mapped.ts, 108, 17))
+>F : Symbol(F, Decl(self-types-mapped.ts, 108, 19))
+>A : Symbol(A, Decl(self-types-mapped.ts, 108, 22))
+
+  `{ ${Join<
+>Join : Symbol(Join, Decl(self-types-mapped.ts, 114, 7))
+
+    K extends unknown
+>K : Symbol(K, Decl(self-types-mapped.ts, 108, 17))
+
+      ? `${PrintKey<K>}: ${Print<Get<Mappers<K, A>, F>>};`
+>PrintKey : Symbol(PrintKey, Decl(self-types-mapped.ts, 138, 21))
+>K : Symbol(K, Decl(self-types-mapped.ts, 108, 17))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Get : Symbol(Get, Decl(self-types-mapped.ts, 144, 7))
+>Mappers : Symbol(Mappers, Decl(self-types-mapped.ts, 7, 74), Decl(self-types-mapped.ts, 26, 93), Decl(self-types-mapped.ts, 43, 99), Decl(self-types-mapped.ts, 104, 3))
+>K : Symbol(K, Decl(self-types-mapped.ts, 108, 17))
+>A : Symbol(A, Decl(self-types-mapped.ts, 108, 22))
+>F : Symbol(F, Decl(self-types-mapped.ts, 108, 19))
+
+      : never,
+    " "
+  >} }`
+
+
+type Join<T extends string, D extends string> =
+>Join : Symbol(Join, Decl(self-types-mapped.ts, 114, 7))
+>T : Symbol(T, Decl(self-types-mapped.ts, 117, 10))
+>D : Symbol(D, Decl(self-types-mapped.ts, 117, 27))
+
+  UIsUnit<T> extends true ? `${T}` :
+>UIsUnit : Symbol(UIsUnit, Decl(self-types-mapped.ts, 132, 23))
+>T : Symbol(T, Decl(self-types-mapped.ts, 117, 10))
+>T : Symbol(T, Decl(self-types-mapped.ts, 117, 10))
+
+  `${Cast<UShift<T>, string | number>}${D}${Join<UShifted<T>, D>}`
+>Cast : Symbol(Cast, Decl(self-types-mapped.ts, 135, 46))
+>UShift : Symbol(UShift, Decl(self-types-mapped.ts, 119, 66))
+>T : Symbol(T, Decl(self-types-mapped.ts, 117, 10))
+>D : Symbol(D, Decl(self-types-mapped.ts, 117, 27))
+>Join : Symbol(Join, Decl(self-types-mapped.ts, 114, 7))
+>UShifted : Symbol(UShifted, Decl(self-types-mapped.ts, 129, 11))
+>T : Symbol(T, Decl(self-types-mapped.ts, 117, 10))
+>D : Symbol(D, Decl(self-types-mapped.ts, 117, 27))
+
+type UShift<U> =
+>UShift : Symbol(UShift, Decl(self-types-mapped.ts, 119, 66))
+>U : Symbol(U, Decl(self-types-mapped.ts, 121, 12))
+
+  UToIntersection<U extends unknown ? (x: U) => void : never> extends (_: infer H) => void
+>UToIntersection : Symbol(UToIntersection, Decl(self-types-mapped.ts, 124, 11))
+>U : Symbol(U, Decl(self-types-mapped.ts, 121, 12))
+>x : Symbol(x, Decl(self-types-mapped.ts, 122, 39))
+>U : Symbol(U, Decl(self-types-mapped.ts, 121, 12))
+>_ : Symbol(_, Decl(self-types-mapped.ts, 122, 71))
+>H : Symbol(H, Decl(self-types-mapped.ts, 122, 79))
+
+    ? H
+>H : Symbol(H, Decl(self-types-mapped.ts, 122, 79))
+
+    : never
+
+type UToIntersection<T> =
+>UToIntersection : Symbol(UToIntersection, Decl(self-types-mapped.ts, 124, 11))
+>T : Symbol(T, Decl(self-types-mapped.ts, 126, 21))
+
+  (T extends unknown ? (_: T) => void : never) extends ((_: infer I) => void)
+>T : Symbol(T, Decl(self-types-mapped.ts, 126, 21))
+>_ : Symbol(_, Decl(self-types-mapped.ts, 127, 24))
+>T : Symbol(T, Decl(self-types-mapped.ts, 126, 21))
+>_ : Symbol(_, Decl(self-types-mapped.ts, 127, 57))
+>I : Symbol(I, Decl(self-types-mapped.ts, 127, 65))
+
+    ? I
+>I : Symbol(I, Decl(self-types-mapped.ts, 127, 65))
+
+    : never
+
+type UShifted<U> =
+>UShifted : Symbol(UShifted, Decl(self-types-mapped.ts, 129, 11))
+>U : Symbol(U, Decl(self-types-mapped.ts, 131, 14))
+
+  Exclude<U, UShift<U>>
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(self-types-mapped.ts, 131, 14))
+>UShift : Symbol(UShift, Decl(self-types-mapped.ts, 119, 66))
+>U : Symbol(U, Decl(self-types-mapped.ts, 131, 14))
+
+type UIsUnit<U> =
+>UIsUnit : Symbol(UIsUnit, Decl(self-types-mapped.ts, 132, 23))
+>U : Symbol(U, Decl(self-types-mapped.ts, 134, 13))
+
+  [UShifted<U>] extends [never] ? true : false
+>UShifted : Symbol(UShifted, Decl(self-types-mapped.ts, 129, 11))
+>U : Symbol(U, Decl(self-types-mapped.ts, 134, 13))
+
+type Cast<T, U> =
+>Cast : Symbol(Cast, Decl(self-types-mapped.ts, 135, 46))
+>T : Symbol(T, Decl(self-types-mapped.ts, 137, 10))
+>U : Symbol(U, Decl(self-types-mapped.ts, 137, 12))
+
+  T extends U ? T : U
+>T : Symbol(T, Decl(self-types-mapped.ts, 137, 10))
+>U : Symbol(U, Decl(self-types-mapped.ts, 137, 12))
+>T : Symbol(T, Decl(self-types-mapped.ts, 137, 10))
+>U : Symbol(U, Decl(self-types-mapped.ts, 137, 12))
+
+type PrintKey<K> =
+>PrintKey : Symbol(PrintKey, Decl(self-types-mapped.ts, 138, 21))
+>K : Symbol(K, Decl(self-types-mapped.ts, 140, 14))
+
+  K extends symbol ? Print<K> :
+>K : Symbol(K, Decl(self-types-mapped.ts, 140, 14))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(self-types-mapped.ts, 140, 14))
+
+  K extends string ? K :
+>K : Symbol(K, Decl(self-types-mapped.ts, 140, 14))
+>K : Symbol(K, Decl(self-types-mapped.ts, 140, 14))
+
+  K extends number ? K :
+>K : Symbol(K, Decl(self-types-mapped.ts, 140, 14))
+>K : Symbol(K, Decl(self-types-mapped.ts, 140, 14))
+
+  never
+
+type Get<T, K> =
+>Get : Symbol(Get, Decl(self-types-mapped.ts, 144, 7))
+>T : Symbol(T, Decl(self-types-mapped.ts, 146, 9))
+>K : Symbol(K, Decl(self-types-mapped.ts, 146, 11))
+
+  K extends keyof T ? T[K] : never
+>K : Symbol(K, Decl(self-types-mapped.ts, 146, 11))
+>T : Symbol(T, Decl(self-types-mapped.ts, 146, 9))
+>T : Symbol(T, Decl(self-types-mapped.ts, 146, 9))
+>K : Symbol(K, Decl(self-types-mapped.ts, 146, 11))
+
+export {}

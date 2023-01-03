@@ -1,0 +1,55 @@
+tests/cases/compiler/self-types-json-simple.ts(16,5): error TS2322: Type 'Node' is not assignable to type 'Json'.
+  Type 'Node' is not assignable to type '{ children: Json; parent: Json; }'.
+    Types of property 'children' are incompatible.
+      Type 'Node[]' is not assignable to type 'Json'.
+tests/cases/compiler/self-types-json-simple.ts(17,16): error TS2322: Type '() => string' is not assignable to type 'Json'.
+tests/cases/compiler/self-types-json-simple.ts(18,5): error TS2322: Type '{ x: () => string; }' is not assignable to type 'Json'.
+  Types of property 'x' are incompatible.
+    Type '() => string' is not assignable to type 'Json'.
+tests/cases/compiler/self-types-json-simple.ts(24,20): error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+
+
+==== tests/cases/compiler/self-types-json-simple.ts (4 errors) ====
+    type Json =
+      | string
+      | number
+      | boolean
+      | null
+      | { toJSON: () => string }
+      | (self extends unknown[] ? Json[] : self extends (...a: never[]) => unknown ? never : { [_ in keyof self]: Json })
+      | (self extends (...a: never[]) => unknown ? Never<`Type '${Print<self>}' is not assignable to type 'Json'`> : never)
+    
+    interface Node {
+      children: Node[]
+      parent: Node
+    }
+    let someNode = {} as Node
+    
+    let t1: Json = someNode // TODO: this should probably compile
+        ~~
+!!! error TS2322: Type 'Node' is not assignable to type 'Json'.
+!!! error TS2322:   Type 'Node' is not assignable to type '{ children: Json; parent: Json; }'.
+!!! error TS2322:     Types of property 'children' are incompatible.
+!!! error TS2322:       Type 'Node[]' is not assignable to type 'Json'.
+    let t3: Json = () => "hello"
+                   ~~~~~~~~~~~~~
+!!! error TS2322: Type '() => string' is not assignable to type 'Json'.
+!!! related TS6212 tests/cases/compiler/self-types-json-simple.ts:17:16: Did you mean to call this expression?
+    let t4: Json = {
+        ~~
+!!! error TS2322: Type '{ x: () => string; }' is not assignable to type 'Json'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type '() => string' is not assignable to type 'Json'.
+      x: () => "hello"
+    }
+    let t5: Json = {
+      toJSON: () => "hello"
+    }
+    let t6: Json = new Map()
+                       ~~~
+!!! error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
+    let t7: Json = ["hello", undefined]
+    let t8: Json = ["hello", null] as [string, null]
+    
+    export {}
+    

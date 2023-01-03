@@ -1,0 +1,111 @@
+=== tests/cases/compiler/self-types-tuple-from-union.ts ===
+let t0: TupleOf<"a" | "b" | "c"> = ["a", "b", "c"] as ["a", "b", "c"]
+>t0 : TupleOf<"a" | "b" | "c">
+>["a", "b", "c"] as ["a", "b", "c"] : ["a", "b", "c"]
+>["a", "b", "c"] : ["a", "b", "c"]
+>"a" : "a"
+>"b" : "b"
+>"c" : "c"
+
+let t1: TupleOf<"a" | "b" | "c"> = ["c", "a", "b"] as ["c", "a", "b"]
+>t1 : TupleOf<"a" | "b" | "c">
+>["c", "a", "b"] as ["c", "a", "b"] : ["c", "a", "b"]
+>["c", "a", "b"] : ["c", "a", "b"]
+>"c" : "c"
+>"a" : "a"
+>"b" : "b"
+
+let t2: TupleOf<"a" | "b" | "c"> = ["a", "x", "c"] as ["a", "x", "c"]
+>t2 : TupleOf<"a" | "b" | "c">
+>["a", "x", "c"] as ["a", "x", "c"] : ["a", "x", "c"]
+>["a", "x", "c"] : ["a", "x", "c"]
+>"a" : "a"
+>"x" : "x"
+>"c" : "c"
+
+let t3: TupleOf<"a" | "b" | "c"> = ["a", "b", "b"] as ["a", "b", "b"]
+>t3 : TupleOf<"a" | "b" | "c">
+>["a", "b", "b"] as ["a", "b", "b"] : ["a", "b", "b"]
+>["a", "b", "b"] : ["a", "b", "b"]
+>"a" : "a"
+>"b" : "b"
+>"b" : "b"
+
+type TupleOf<U> =
+>TupleOf : TupleOf<U>
+
+  self extends unknown[]
+    ? number extends self["length"]
+        ? TupleError<`Type '${Print<self>}' is not a tuple`, U, self>
+        : self["length"] extends ULength<U>
+            ? ParseTupleOf<U, self> extends infer E extends string
+                ? [E] extends [never]
+                    ? self
+                    : TupleError<E, U, self>
+                : never
+            : TupleError<`Expected ${ULength<U>} elements got ${self["length"]}`, U, self>
+    : TupleError<`Type '${Print<self>}' is not a tuple`, U, self>
+
+type ParseTupleOf<U, Self, I extends 1[] = []> =
+>ParseTupleOf : ParseTupleOf<U, Self, I>
+
+  Self extends [] ? never :
+  Self extends [infer H, ...infer R] ? 
+    H extends U
+      ? ParseTupleOf<Exclude<U, H>, R, [...I, 1]>
+      : `Type '${Print<H>}' at index ${I["length"]} is not assignable to type '${Print<U>}'` :
+        // TODO?: An intrinsic SubTypeError<A, B> for using it here like
+        // Never<[
+        //   `Type '${Print<H>}' at index ${I["length"]} is not assignable to type '${Print<U>}'`]>
+        //   ...SubTypeError<H, U>
+        // ]>
+  never
+
+type TupleError<M extends string, U, Self> =
+>TupleError : never
+
+  Never<[
+    `Type '${Print<Self>}' is not assignable to type 'TupleOf<${Print<U>}>'`,
+    M
+  ]>
+
+type ULength<U, A extends 1[] = []> =
+>ULength : ULength<U, A>
+
+  [U] extends [never] ? A["length"] :
+  ULength<UShifted<U>, [...A, 1]>
+
+type UShift<U> =
+>UShift : UShift<U>
+
+  UToIntersection<U extends unknown ? (x: U) => void : never> extends (_: infer H) => void
+>x : U
+>_ : H
+
+    ? H
+    : never
+
+type UToIntersection<T> =
+>UToIntersection : UToIntersection<T>
+
+  (T extends unknown ? (_: T) => void : never) extends ((_: infer I) => void)
+>_ : T
+>_ : I
+
+    ? I
+    : never
+
+type UShifted<U> =
+>UShifted : UShifted<U>
+
+  Exclude<U, UShift<U>>
+
+type UIsUnit<U> =
+>UIsUnit : UIsUnit<U>
+
+  [UShifted<U>] extends [never] ? true : false
+>true : true
+>false : false
+
+export {}
+

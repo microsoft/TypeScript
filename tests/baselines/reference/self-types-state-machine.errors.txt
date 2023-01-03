@@ -1,0 +1,30 @@
+tests/cases/compiler/self-types-state-machine.ts(4,5): error TS2322: Type '{ off: { ON: "red"; }; red: { TICK: "yellow"; OFF: "off"; }; yellow: { TICK: "green"; OFF: "off"; }; green: { TICK: "reddd"; OFF: "off"; }; }' is not assignable to type 'StateMachine'.
+  The types of 'green.TICK' are incompatible between these types.
+    Type '"reddd"' is not assignable to type '"off" | "red" | "yellow" | "green"'. Did you mean '"red"'?
+
+
+==== tests/cases/compiler/self-types-state-machine.ts (1 errors) ====
+    type StateMachine =
+      { [S in keyof self]: { [E in keyof self[S]]: keyof self } }
+    
+    let trafficLights: StateMachine = {
+        ~~~~~~~~~~~~~
+!!! error TS2322: Type '{ off: { ON: "red"; }; red: { TICK: "yellow"; OFF: "off"; }; yellow: { TICK: "green"; OFF: "off"; }; green: { TICK: "reddd"; OFF: "off"; }; }' is not assignable to type 'StateMachine'.
+!!! error TS2322:   The types of 'green.TICK' are incompatible between these types.
+!!! error TS2322:     Type '"reddd"' is not assignable to type '"off" | "red" | "yellow" | "green"'. Did you mean '"red"'?
+      off: {
+        ON: "red"
+      },
+      red: {
+        TICK: "yellow",
+        OFF: "off"
+      },
+      yellow: {
+        TICK: "green",
+        OFF: "off"
+      },
+      green: {
+        TICK: "reddd",
+        OFF: "off"
+      }
+    }

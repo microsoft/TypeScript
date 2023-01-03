@@ -1,0 +1,713 @@
+=== tests/cases/compiler/self-types-color.ts ===
+type Color =
+>Color : Symbol(Color, Decl(self-types-color.ts, 0, 0))
+
+  self extends string
+    ? ParseColor<self> extends infer R
+>ParseColor : Symbol(ParseColor, Decl(self-types-color.ts, 19, 22))
+>R : Symbol(R, Decl(self-types-color.ts, 2, 36))
+
+      ? R extends { error: infer E extends string }
+>R : Symbol(R, Decl(self-types-color.ts, 2, 36))
+>error : Symbol(error, Decl(self-types-color.ts, 3, 19))
+>E : Symbol(E, Decl(self-types-color.ts, 3, 32))
+
+          ? Never<[`Type '${Print<self>}' is not assignable to type 'Color'`, E]>
+>Never : Symbol(Never, Decl(lib.es5.d.ts, --, --))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>E : Symbol(E, Decl(self-types-color.ts, 3, 32))
+
+          : R
+>R : Symbol(R, Decl(self-types-color.ts, 2, 36))
+
+      : never
+    : string
+
+const t0: Color = 123
+>t0 : Symbol(t0, Decl(self-types-color.ts, 9, 5))
+>Color : Symbol(Color, Decl(self-types-color.ts, 0, 0))
+
+const t1: Color = "hello" as string
+>t1 : Symbol(t1, Decl(self-types-color.ts, 10, 5))
+>Color : Symbol(Color, Decl(self-types-color.ts, 0, 0))
+
+const t2: Color = "#fff"
+>t2 : Symbol(t2, Decl(self-types-color.ts, 11, 5))
+>Color : Symbol(Color, Decl(self-types-color.ts, 0, 0))
+
+const t3: Color = "#ffz"
+>t3 : Symbol(t3, Decl(self-types-color.ts, 12, 5))
+>Color : Symbol(Color, Decl(self-types-color.ts, 0, 0))
+
+const t4: Color = "rgb(100, 1000, 100)"
+>t4 : Symbol(t4, Decl(self-types-color.ts, 13, 5))
+>Color : Symbol(Color, Decl(self-types-color.ts, 0, 0))
+
+const t5 = "#fff" satisfies Color
+>t5 : Symbol(t5, Decl(self-types-color.ts, 14, 5))
+>Color : Symbol(Color, Decl(self-types-color.ts, 0, 0))
+
+const t6 = "#ffz" satisfies Color
+>t6 : Symbol(t6, Decl(self-types-color.ts, 15, 5))
+>Color : Symbol(Color, Decl(self-types-color.ts, 0, 0))
+
+const t7 = "#fff" as Color
+>t7 : Symbol(t7, Decl(self-types-color.ts, 16, 5))
+>Color : Symbol(Color, Decl(self-types-color.ts, 0, 0))
+
+const t8 = "#ffz" as Color
+>t8 : Symbol(t8, Decl(self-types-color.ts, 17, 5))
+>Color : Symbol(Color, Decl(self-types-color.ts, 0, 0))
+
+const t9 = "this is fine" as Color
+>t9 : Symbol(t9, Decl(self-types-color.ts, 18, 5))
+>Color : Symbol(Color, Decl(self-types-color.ts, 0, 0))
+
+const t10 = 0 as Color
+>t10 : Symbol(t10, Decl(self-types-color.ts, 19, 5))
+>Color : Symbol(Color, Decl(self-types-color.ts, 0, 0))
+
+
+type ParseColor<T> =
+>ParseColor : Symbol(ParseColor, Decl(self-types-color.ts, 19, 22))
+>T : Symbol(T, Decl(self-types-color.ts, 22, 16))
+
+  S.IsStringLiteral<T> extends false ? { error: "Expected a string literal" } :
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>IsStringLiteral : Symbol(S.IsStringLiteral, Decl(self-types-color.ts, 100, 36))
+>T : Symbol(T, Decl(self-types-color.ts, 22, 16))
+>error : Symbol(error, Decl(self-types-color.ts, 23, 40))
+
+  T extends NamedColor ? T :
+>T : Symbol(T, Decl(self-types-color.ts, 22, 16))
+>NamedColor : Symbol(NamedColor, Decl(self-types-color.ts, 93, 36))
+>T : Symbol(T, Decl(self-types-color.ts, 22, 16))
+
+  T extends `#${string}` ? ParseHexColor<T> :
+>T : Symbol(T, Decl(self-types-color.ts, 22, 16))
+>ParseHexColor : Symbol(ParseHexColor, Decl(self-types-color.ts, 27, 73))
+>T : Symbol(T, Decl(self-types-color.ts, 22, 16))
+
+  T extends `rgb${string}` ? ParseRgbColor<T> :
+>T : Symbol(T, Decl(self-types-color.ts, 22, 16))
+>ParseRgbColor : Symbol(ParseRgbColor, Decl(self-types-color.ts, 44, 11))
+>T : Symbol(T, Decl(self-types-color.ts, 22, 16))
+
+  { error: "Expected it to start with '#' or 'rgb' or be a named color" }
+>error : Symbol(error, Decl(self-types-color.ts, 27, 3))
+
+
+type ParseHexColor<T, I = 0, C = S.At<T, I>> =
+>ParseHexColor : Symbol(ParseHexColor, Decl(self-types-color.ts, 27, 73))
+>T : Symbol(T, Decl(self-types-color.ts, 30, 19))
+>I : Symbol(I, Decl(self-types-color.ts, 30, 21))
+>C : Symbol(C, Decl(self-types-color.ts, 30, 28))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>At : Symbol(S.At, Decl(self-types-color.ts, 108, 21))
+>T : Symbol(T, Decl(self-types-color.ts, 30, 19))
+>I : Symbol(I, Decl(self-types-color.ts, 30, 21))
+
+  [I, C] extends [4, ""] | [7, ""] ? T :
+>I : Symbol(I, Decl(self-types-color.ts, 30, 21))
+>C : Symbol(C, Decl(self-types-color.ts, 30, 28))
+>T : Symbol(T, Decl(self-types-color.ts, 30, 19))
+
+  I extends 0 | 1 | 2 | 3 | 4 | 5 | 6
+>I : Symbol(I, Decl(self-types-color.ts, 30, 21))
+
+    ? C extends (I extends 0 ? "#" : Hexadecimal)
+>C : Symbol(C, Decl(self-types-color.ts, 30, 28))
+>I : Symbol(I, Decl(self-types-color.ts, 30, 21))
+>Hexadecimal : Symbol(Hexadecimal, Decl(self-types-color.ts, 36, 51))
+
+      ? ParseHexColor<T, N.Increment<I>>
+>ParseHexColor : Symbol(ParseHexColor, Decl(self-types-color.ts, 27, 73))
+>T : Symbol(T, Decl(self-types-color.ts, 30, 19))
+>N : Symbol(N, Decl(self-types-color.ts, 130, 1))
+>Increment : Symbol(N.Increment, Decl(self-types-color.ts, 137, 60))
+>I : Symbol(I, Decl(self-types-color.ts, 30, 21))
+
+      : { error: `Expected ${I extends 0 ? "#": "an hexadecimal character"} got '${S.Cast<C>}' at column ${I}` } :
+>error : Symbol(error, Decl(self-types-color.ts, 35, 9))
+>I : Symbol(I, Decl(self-types-color.ts, 30, 21))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>Cast : Symbol(S.Cast, Decl(self-types-color.ts, 105, 13))
+>C : Symbol(C, Decl(self-types-color.ts, 30, 28))
+>I : Symbol(I, Decl(self-types-color.ts, 30, 21))
+
+  { error: `Unexpected character at ${N.Cast<I>}` }
+>error : Symbol(error, Decl(self-types-color.ts, 36, 3))
+>N : Symbol(N, Decl(self-types-color.ts, 130, 1))
+>Cast : Symbol(N.Cast, Decl(self-types-color.ts, 132, 20))
+>I : Symbol(I, Decl(self-types-color.ts, 30, 21))
+
+
+type Hexadecimal =
+>Hexadecimal : Symbol(Hexadecimal, Decl(self-types-color.ts, 36, 51))
+
+  ( "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+  | "a" | "b" | "c" | "d" | "e"| "f"
+  ) extends infer X
+>X : Symbol(X, Decl(self-types-color.ts, 42, 17))
+
+    ? X | Uppercase<S.Cast<X>>
+>X : Symbol(X, Decl(self-types-color.ts, 42, 17))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>Cast : Symbol(S.Cast, Decl(self-types-color.ts, 105, 13))
+>X : Symbol(X, Decl(self-types-color.ts, 42, 17))
+
+    : never
+
+type ParseRgbColor<T> =
+>ParseRgbColor : Symbol(ParseRgbColor, Decl(self-types-color.ts, 44, 11))
+>T : Symbol(T, Decl(self-types-color.ts, 46, 19))
+
+  T extends `rgb${infer S}`
+>T : Symbol(T, Decl(self-types-color.ts, 46, 19))
+>S : Symbol(S, Decl(self-types-color.ts, 47, 23))
+
+    ? S extends `(${infer S}`
+>S : Symbol(S, Decl(self-types-color.ts, 47, 23))
+>S : Symbol(S, Decl(self-types-color.ts, 48, 25))
+
+        ? ParseNumberLessThanOrEqual<S.TrimedL<S>, 255> extends infer X
+>ParseNumberLessThanOrEqual : Symbol(ParseNumberLessThanOrEqual, Decl(self-types-color.ts, 72, 46))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>TrimedL : Symbol(S.TrimedL, Decl(self-types-color.ts, 117, 27))
+>S : Symbol(S, Decl(self-types-color.ts, 48, 25))
+>X : Symbol(X, Decl(self-types-color.ts, 49, 69))
+
+            ? X extends { error: infer E } ? { error: `${S.Cast<E>} for red` } :
+>X : Symbol(X, Decl(self-types-color.ts, 49, 69))
+>error : Symbol(error, Decl(self-types-color.ts, 50, 25))
+>E : Symbol(E, Decl(self-types-color.ts, 50, 38))
+>error : Symbol(error, Decl(self-types-color.ts, 50, 46))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>Cast : Symbol(S.Cast, Decl(self-types-color.ts, 105, 13))
+>E : Symbol(E, Decl(self-types-color.ts, 50, 38))
+
+              X extends { rest: infer S } ?
+>X : Symbol(X, Decl(self-types-color.ts, 49, 69))
+>rest : Symbol(rest, Decl(self-types-color.ts, 51, 25))
+>S : Symbol(S, Decl(self-types-color.ts, 51, 37))
+
+                S.TrimedL<S> extends `,${infer S}`
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>TrimedL : Symbol(S.TrimedL, Decl(self-types-color.ts, 117, 27))
+>S : Symbol(S, Decl(self-types-color.ts, 51, 37))
+>S : Symbol(S, Decl(self-types-color.ts, 52, 46))
+
+                  ? ParseNumberLessThanOrEqual<S.TrimedL<S>, 255> extends infer X
+>ParseNumberLessThanOrEqual : Symbol(ParseNumberLessThanOrEqual, Decl(self-types-color.ts, 72, 46))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>TrimedL : Symbol(S.TrimedL, Decl(self-types-color.ts, 117, 27))
+>S : Symbol(S, Decl(self-types-color.ts, 52, 46))
+>X : Symbol(X, Decl(self-types-color.ts, 53, 79))
+
+                      ? X extends { error: infer E } ? { error: `${S.Cast<E>} for green` } :
+>X : Symbol(X, Decl(self-types-color.ts, 53, 79))
+>error : Symbol(error, Decl(self-types-color.ts, 54, 35))
+>E : Symbol(E, Decl(self-types-color.ts, 54, 48))
+>error : Symbol(error, Decl(self-types-color.ts, 54, 56))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>Cast : Symbol(S.Cast, Decl(self-types-color.ts, 105, 13))
+>E : Symbol(E, Decl(self-types-color.ts, 54, 48))
+
+                        X extends { rest: infer S } ?
+>X : Symbol(X, Decl(self-types-color.ts, 53, 79))
+>rest : Symbol(rest, Decl(self-types-color.ts, 55, 35))
+>S : Symbol(S, Decl(self-types-color.ts, 55, 47))
+
+                          S.TrimedL<S> extends `,${infer S}`
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>TrimedL : Symbol(S.TrimedL, Decl(self-types-color.ts, 117, 27))
+>S : Symbol(S, Decl(self-types-color.ts, 55, 47))
+>S : Symbol(S, Decl(self-types-color.ts, 56, 56))
+
+                            ? ParseNumberLessThanOrEqual<S.TrimedL<S>, 255> extends infer X
+>ParseNumberLessThanOrEqual : Symbol(ParseNumberLessThanOrEqual, Decl(self-types-color.ts, 72, 46))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>TrimedL : Symbol(S.TrimedL, Decl(self-types-color.ts, 117, 27))
+>S : Symbol(S, Decl(self-types-color.ts, 56, 56))
+>X : Symbol(X, Decl(self-types-color.ts, 57, 89))
+
+                                ? X extends { error: infer E } ? { error: `${S.Cast<E>} for blue` } :
+>X : Symbol(X, Decl(self-types-color.ts, 57, 89))
+>error : Symbol(error, Decl(self-types-color.ts, 58, 45))
+>E : Symbol(E, Decl(self-types-color.ts, 58, 58))
+>error : Symbol(error, Decl(self-types-color.ts, 58, 66))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>Cast : Symbol(S.Cast, Decl(self-types-color.ts, 105, 13))
+>E : Symbol(E, Decl(self-types-color.ts, 58, 58))
+
+                                  X extends { rest: infer S } ?
+>X : Symbol(X, Decl(self-types-color.ts, 57, 89))
+>rest : Symbol(rest, Decl(self-types-color.ts, 59, 45))
+>S : Symbol(S, Decl(self-types-color.ts, 59, 57))
+
+                                    S.TrimedR<S> extends `)`
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>TrimedR : Symbol(S.TrimedR, Decl(self-types-color.ts, 120, 44))
+>S : Symbol(S, Decl(self-types-color.ts, 59, 57))
+
+                                      ? T
+>T : Symbol(T, Decl(self-types-color.ts, 46, 19))
+
+                                      : { error: "Expected ')' after blue value at the end" } :
+>error : Symbol(error, Decl(self-types-color.ts, 62, 41))
+
+                                  never
+                                : never
+                            : { error: "Expected ',' after green value" } :
+>error : Symbol(error, Decl(self-types-color.ts, 65, 31))
+
+                        never
+                      : never
+                  : { error: "Expected ',' after red value" } :
+>error : Symbol(error, Decl(self-types-color.ts, 68, 21))
+
+              never
+            : never
+        : { error: `Expected '(' got ${S.Cast<S.At<T, 4>>} after rgb` }
+>error : Symbol(error, Decl(self-types-color.ts, 71, 11))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>Cast : Symbol(S.Cast, Decl(self-types-color.ts, 105, 13))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>At : Symbol(S.At, Decl(self-types-color.ts, 108, 21))
+>T : Symbol(T, Decl(self-types-color.ts, 46, 19))
+
+    : { error: `Expected 'rgb' at the start` }
+>error : Symbol(error, Decl(self-types-color.ts, 72, 7))
+
+type ParseNumberLessThanOrEqual<T, M extends number, N = ParseNumber<T>, V = N["value" & keyof N]> =
+>ParseNumberLessThanOrEqual : Symbol(ParseNumberLessThanOrEqual, Decl(self-types-color.ts, 72, 46))
+>T : Symbol(T, Decl(self-types-color.ts, 74, 32))
+>M : Symbol(M, Decl(self-types-color.ts, 74, 34))
+>N : Symbol(N, Decl(self-types-color.ts, 74, 52))
+>ParseNumber : Symbol(ParseNumber, Decl(self-types-color.ts, 77, 66))
+>T : Symbol(T, Decl(self-types-color.ts, 74, 32))
+>V : Symbol(V, Decl(self-types-color.ts, 74, 72))
+>N : Symbol(N, Decl(self-types-color.ts, 74, 52))
+>N : Symbol(N, Decl(self-types-color.ts, 74, 52))
+
+  N extends { error: unknown } ? N :
+>N : Symbol(N, Decl(self-types-color.ts, 74, 52))
+>error : Symbol(error, Decl(self-types-color.ts, 75, 13))
+>N : Symbol(N, Decl(self-types-color.ts, 74, 52))
+
+  Ns.IsLessThanOrEqual<V, `${M}`> extends true ? N :
+>Ns : Symbol(Ns, Decl(self-types-color.ts, 159, 1))
+>IsLessThanOrEqual : Symbol(Ns.IsLessThanOrEqual, Decl(self-types-color.ts, 168, 42))
+>V : Symbol(V, Decl(self-types-color.ts, 74, 72))
+>M : Symbol(M, Decl(self-types-color.ts, 74, 34))
+>N : Symbol(N, Decl(self-types-color.ts, 74, 52))
+
+  { error: `Expected value from '0' to '255' got '${S.Cast<V>}'` }
+>error : Symbol(error, Decl(self-types-color.ts, 77, 3))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>Cast : Symbol(S.Cast, Decl(self-types-color.ts, 105, 13))
+>V : Symbol(V, Decl(self-types-color.ts, 74, 72))
+  
+type ParseNumber<T, D = ParseDigit<T>> =
+>ParseNumber : Symbol(ParseNumber, Decl(self-types-color.ts, 77, 66))
+>T : Symbol(T, Decl(self-types-color.ts, 79, 17))
+>D : Symbol(D, Decl(self-types-color.ts, 79, 19))
+>ParseDigit : Symbol(ParseDigit, Decl(self-types-color.ts, 86, 7))
+>T : Symbol(T, Decl(self-types-color.ts, 79, 17))
+
+   D extends { value: infer Nh, rest: infer Sh }
+>D : Symbol(D, Decl(self-types-color.ts, 79, 19))
+>value : Symbol(value, Decl(self-types-color.ts, 80, 14))
+>Nh : Symbol(Nh, Decl(self-types-color.ts, 80, 27))
+>rest : Symbol(rest, Decl(self-types-color.ts, 80, 31))
+>Sh : Symbol(Sh, Decl(self-types-color.ts, 80, 43))
+
+    ? ParseNumber<Sh> extends infer X
+>ParseNumber : Symbol(ParseNumber, Decl(self-types-color.ts, 77, 66))
+>Sh : Symbol(Sh, Decl(self-types-color.ts, 80, 43))
+>X : Symbol(X, Decl(self-types-color.ts, 81, 35))
+
+        ? X extends { value: infer Nt, rest: infer S }
+>X : Symbol(X, Decl(self-types-color.ts, 81, 35))
+>value : Symbol(value, Decl(self-types-color.ts, 82, 21))
+>Nt : Symbol(Nt, Decl(self-types-color.ts, 82, 34))
+>rest : Symbol(rest, Decl(self-types-color.ts, 82, 38))
+>S : Symbol(S, Decl(self-types-color.ts, 82, 50))
+
+            ? { value: `${S.Cast<Nh>}${S.Cast<Nt>}`, rest: S }
+>value : Symbol(value, Decl(self-types-color.ts, 83, 15))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>Cast : Symbol(S.Cast, Decl(self-types-color.ts, 105, 13))
+>Nh : Symbol(Nh, Decl(self-types-color.ts, 80, 27))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>Cast : Symbol(S.Cast, Decl(self-types-color.ts, 105, 13))
+>Nt : Symbol(Nt, Decl(self-types-color.ts, 82, 34))
+>rest : Symbol(rest, Decl(self-types-color.ts, 83, 52))
+>S : Symbol(S, Decl(self-types-color.ts, 82, 50))
+
+            : { value: Nh, rest: Sh }
+>value : Symbol(value, Decl(self-types-color.ts, 84, 15))
+>Nh : Symbol(Nh, Decl(self-types-color.ts, 80, 27))
+>rest : Symbol(rest, Decl(self-types-color.ts, 84, 26))
+>Sh : Symbol(Sh, Decl(self-types-color.ts, 80, 43))
+
+        : never
+    : D
+>D : Symbol(D, Decl(self-types-color.ts, 79, 19))
+
+type ParseDigit<T> =
+>ParseDigit : Symbol(ParseDigit, Decl(self-types-color.ts, 86, 7))
+>T : Symbol(T, Decl(self-types-color.ts, 88, 16))
+
+  T extends `${0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}${infer S}`
+>T : Symbol(T, Decl(self-types-color.ts, 88, 16))
+>S : Symbol(S, Decl(self-types-color.ts, 89, 60))
+
+    ? T extends `${infer V}${S}`
+>T : Symbol(T, Decl(self-types-color.ts, 88, 16))
+>V : Symbol(V, Decl(self-types-color.ts, 90, 24))
+>S : Symbol(S, Decl(self-types-color.ts, 89, 60))
+
+        ? { value: `${V}`, rest: S }
+>value : Symbol(value, Decl(self-types-color.ts, 91, 11))
+>V : Symbol(V, Decl(self-types-color.ts, 90, 24))
+>rest : Symbol(rest, Decl(self-types-color.ts, 91, 26))
+>S : Symbol(S, Decl(self-types-color.ts, 89, 60))
+
+        : never
+    : { error: "Expected a number" }
+>error : Symbol(error, Decl(self-types-color.ts, 93, 7))
+
+type NamedColor =
+>NamedColor : Symbol(NamedColor, Decl(self-types-color.ts, 93, 36))
+
+ "black" | "silver" | "gray" | "white" | "maroon" | "red" | "purple" | "fuchsia" | "green" | "lime" | "olive" | "yellow" | "navy" | "blue" | "teal" | "aqua" | "aliceblue" | "antiquewhite" | "aqua" | "aquamarine" | "azure" | "beige" | "bisque" | "black" | "blanchedalmond" | "blue" | "blueviolet" | "brown" | "burlywood" | "cadetblue" | "chartreuse" | "chocolate" | "coral" | "cornflowerblue" | "cornsilk" | "crimson" | "cyan" | "darkblue" | "darkcyan" | "darkgoldenrod" | "darkgray" | "darkgreen" | "darkgrey" | "darkkhaki" | "darkmagenta" | "darkolivegreen" | "darkorange" | "darkorchid" | "darkred" | "darksalmon" | "darkseagreen" | "darkslateblue" | "darkslategray" | "darkslategrey" | "darkturquoise" | "darkviolet" | "deeppink" | "deepskyblue" | "dimgray" | "dimgrey" | "dodgerblue" | "firebrick" | "floralwhite" | "forestgreen" | "fuchsia" | "gainsboro" | "ghostwhite" | "gold" | "goldenrod" | "gray" | "green" | "greenyellow" | "grey" | "honeydew" | "hotpink" | "indianred" | "indigo" | "ivory" | "khaki" | "lavender" | "lavenderblush" | "lawngreen" | "lemonchiffon" | "lightblue" | "lightcoral" | "lightcyan" | "lightgoldenrodyellow" | "lightgray" | "lightgreen" | "lightgrey" | "lightpink" | "lightsalmon" | "lightseagreen" | "lightskyblue" | "lightslategray" | "lightslategrey" | "lightsteelblue" | "lightyellow" | "lime" | "limegreen" | "linen" | "magenta" | "maroon" | "mediumaquamarine" | "mediumblue" | "mediumorchid" | "mediumpurple" | "mediumseagreen" | "mediumslateblue" | "mediumspringgreen" | "mediumturquoise" | "mediumvioletred" | "midnightblue" | "mintcream" | "mistyrose" | "moccasin" | "navajowhite" | "navy" | "oldlace" | "olive" | "olivedrab" | "orange" | "orangered" | "orchid" | "palegoldenrod" | "palegreen" | "paleturquoise" | "palevioletred" | "papayawhip" | "peachpuff" | "peru" | "pink" | "plum" | "powderblue" | "purple" | "red" | "rosybrown" | "royalblue" | "saddlebrown" | "salmon" | "sandybrown" | "seagreen" | "seashell" | "sienna" | "silver" | "skyblue" | "slateblue" | "slategray" | "slategrey" | "snow" | "springgreen" | "steelblue" | "tan" | "teal" | "thistle" | "tomato" | "turquoise" | "violet" | "wheat" | "white" | "whitesmoke" | "yellow" | "yellowgreen"
+
+namespace S {
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+
+  export type IsString<T> =
+>IsString : Symbol(IsString, Decl(self-types-color.ts, 98, 13))
+>T : Symbol(T, Decl(self-types-color.ts, 99, 23))
+
+    T extends string ? true : false;
+>T : Symbol(T, Decl(self-types-color.ts, 99, 23))
+  
+  export type IsStringLiteral<T> =
+>IsStringLiteral : Symbol(IsStringLiteral, Decl(self-types-color.ts, 100, 36))
+>T : Symbol(T, Decl(self-types-color.ts, 102, 30))
+
+    IsString<T> extends true
+>IsString : Symbol(IsString, Decl(self-types-color.ts, 98, 13))
+>T : Symbol(T, Decl(self-types-color.ts, 102, 30))
+
+      ? string extends T ? false : true
+>T : Symbol(T, Decl(self-types-color.ts, 102, 30))
+
+      : false
+
+  export type Cast<T> =
+>Cast : Symbol(Cast, Decl(self-types-color.ts, 105, 13))
+>T : Symbol(T, Decl(self-types-color.ts, 107, 19))
+
+    A.Cast<T, string>
+>A : Symbol(A, Decl(self-types-color.ts, 177, 1))
+>Cast : Symbol(A.Cast, Decl(self-types-color.ts, 180, 20))
+>T : Symbol(T, Decl(self-types-color.ts, 107, 19))
+
+  export type At<S, I> =
+>At : Symbol(At, Decl(self-types-color.ts, 108, 21))
+>S : Symbol(S, Decl(self-types-color.ts, 110, 17))
+>I : Symbol(I, Decl(self-types-color.ts, 110, 19))
+
+    Split<S> extends { [_ in A.Cast<I, number>]: infer X }
+>Split : Symbol(Split, Decl(self-types-color.ts, 113, 10))
+>S : Symbol(S, Decl(self-types-color.ts, 110, 17))
+>_ : Symbol(_, Decl(self-types-color.ts, 111, 24))
+>A : Symbol(A, Decl(self-types-color.ts, 177, 1))
+>Cast : Symbol(A.Cast, Decl(self-types-color.ts, 180, 20))
+>I : Symbol(I, Decl(self-types-color.ts, 110, 19))
+>X : Symbol(X, Decl(self-types-color.ts, 111, 54))
+
+      ? X
+>X : Symbol(X, Decl(self-types-color.ts, 111, 54))
+
+      : ""
+
+  export type Split<T> =
+>Split : Symbol(Split, Decl(self-types-color.ts, 113, 10))
+>T : Symbol(T, Decl(self-types-color.ts, 115, 20))
+
+    T extends `${infer H}${infer T}` ? [H, ...Split<T>] :
+>T : Symbol(T, Decl(self-types-color.ts, 115, 20))
+>H : Symbol(H, Decl(self-types-color.ts, 116, 22))
+>T : Symbol(T, Decl(self-types-color.ts, 116, 32))
+>H : Symbol(H, Decl(self-types-color.ts, 116, 22))
+>Split : Symbol(Split, Decl(self-types-color.ts, 113, 10))
+>T : Symbol(T, Decl(self-types-color.ts, 116, 32))
+
+    T extends "" ? [] : [T]
+>T : Symbol(T, Decl(self-types-color.ts, 115, 20))
+>T : Symbol(T, Decl(self-types-color.ts, 115, 20))
+
+  export type TrimedL<T> =
+>TrimedL : Symbol(TrimedL, Decl(self-types-color.ts, 117, 27))
+>T : Symbol(T, Decl(self-types-color.ts, 119, 22))
+
+    T extends ` ${infer T}` ? TrimedL<T> : T
+>T : Symbol(T, Decl(self-types-color.ts, 119, 22))
+>T : Symbol(T, Decl(self-types-color.ts, 120, 23))
+>TrimedL : Symbol(TrimedL, Decl(self-types-color.ts, 117, 27))
+>T : Symbol(T, Decl(self-types-color.ts, 120, 23))
+>T : Symbol(T, Decl(self-types-color.ts, 119, 22))
+
+  export type TrimedR<T> =
+>TrimedR : Symbol(TrimedR, Decl(self-types-color.ts, 120, 44))
+>T : Symbol(T, Decl(self-types-color.ts, 122, 22))
+
+    T extends `${infer T} ` ? TrimedL<T> : T
+>T : Symbol(T, Decl(self-types-color.ts, 122, 22))
+>T : Symbol(T, Decl(self-types-color.ts, 123, 22))
+>TrimedL : Symbol(TrimedL, Decl(self-types-color.ts, 117, 27))
+>T : Symbol(T, Decl(self-types-color.ts, 123, 22))
+>T : Symbol(T, Decl(self-types-color.ts, 122, 22))
+
+  export type Length<S> =
+>Length : Symbol(Length, Decl(self-types-color.ts, 123, 44))
+>S : Symbol(S, Decl(self-types-color.ts, 125, 21))
+
+    Split<S>["length"]
+>Split : Symbol(Split, Decl(self-types-color.ts, 113, 10))
+>S : Symbol(S, Decl(self-types-color.ts, 125, 21))
+
+  export type Shifted<S> =
+>Shifted : Symbol(Shifted, Decl(self-types-color.ts, 126, 22))
+>S : Symbol(S, Decl(self-types-color.ts, 128, 22))
+
+    S extends `${infer _}${infer T}` ? T : never
+>S : Symbol(S, Decl(self-types-color.ts, 128, 22))
+>_ : Symbol(_, Decl(self-types-color.ts, 129, 22))
+>T : Symbol(T, Decl(self-types-color.ts, 129, 32))
+>T : Symbol(T, Decl(self-types-color.ts, 129, 32))
+}
+
+export namespace N {
+>N : Symbol(N, Decl(self-types-color.ts, 130, 1))
+
+  export type Cast<T> = A.Cast<T, number>
+>Cast : Symbol(Cast, Decl(self-types-color.ts, 132, 20))
+>T : Symbol(T, Decl(self-types-color.ts, 133, 19))
+>A : Symbol(A, Decl(self-types-color.ts, 177, 1))
+>Cast : Symbol(A.Cast, Decl(self-types-color.ts, 180, 20))
+>T : Symbol(T, Decl(self-types-color.ts, 133, 19))
+
+  export type NaturalNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+>NaturalNumbers : Symbol(NaturalNumbers, Decl(self-types-color.ts, 133, 41))
+
+  export type WholeNumbers = [0, ...NaturalNumbers];
+>WholeNumbers : Symbol(WholeNumbers, Decl(self-types-color.ts, 135, 103))
+>NaturalNumbers : Symbol(NaturalNumbers, Decl(self-types-color.ts, 133, 41))
+
+  export type WholeNumbersUnshifted = [-1, ...WholeNumbers];
+>WholeNumbersUnshifted : Symbol(WholeNumbersUnshifted, Decl(self-types-color.ts, 136, 52))
+>WholeNumbers : Symbol(WholeNumbers, Decl(self-types-color.ts, 135, 103))
+
+  export type Increment<N> = A.Get<NaturalNumbers, N>
+>Increment : Symbol(Increment, Decl(self-types-color.ts, 137, 60))
+>N : Symbol(N, Decl(self-types-color.ts, 139, 24))
+>A : Symbol(A, Decl(self-types-color.ts, 177, 1))
+>Get : Symbol(A.Get, Decl(self-types-color.ts, 181, 47))
+>NaturalNumbers : Symbol(NaturalNumbers, Decl(self-types-color.ts, 133, 41))
+>N : Symbol(N, Decl(self-types-color.ts, 139, 24))
+
+  export type Decrement<N> = A.Get<WholeNumbersUnshifted, N>
+>Decrement : Symbol(Decrement, Decl(self-types-color.ts, 139, 53))
+>N : Symbol(N, Decl(self-types-color.ts, 140, 24))
+>A : Symbol(A, Decl(self-types-color.ts, 177, 1))
+>Get : Symbol(A.Get, Decl(self-types-color.ts, 181, 47))
+>WholeNumbersUnshifted : Symbol(WholeNumbersUnshifted, Decl(self-types-color.ts, 136, 52))
+>N : Symbol(N, Decl(self-types-color.ts, 140, 24))
+}
+
+export namespace L {
+>L : Symbol(L, Decl(self-types-color.ts, 141, 1))
+
+  export type SlicedH<A, N> =
+>SlicedH : Symbol(SlicedH, Decl(self-types-color.ts, 143, 20))
+>A : Symbol(A, Decl(self-types-color.ts, 144, 22))
+>N : Symbol(N, Decl(self-types-color.ts, 144, 24))
+
+    N extends 0 ? [] :
+>N : Symbol(N, Decl(self-types-color.ts, 144, 24))
+
+    A extends [infer H, ...infer T] ? [H, ...SlicedH<T, N.Decrement<N>>] : 
+>A : Symbol(A, Decl(self-types-color.ts, 144, 22))
+>H : Symbol(H, Decl(self-types-color.ts, 146, 20))
+>T : Symbol(T, Decl(self-types-color.ts, 146, 32))
+>H : Symbol(H, Decl(self-types-color.ts, 146, 20))
+>SlicedH : Symbol(SlicedH, Decl(self-types-color.ts, 143, 20))
+>T : Symbol(T, Decl(self-types-color.ts, 146, 32))
+>N : Symbol(N, Decl(self-types-color.ts, 130, 1))
+>Decrement : Symbol(N.Decrement, Decl(self-types-color.ts, 139, 53))
+>N : Symbol(N, Decl(self-types-color.ts, 144, 24))
+
+    never
+}
+
+export namespace Nd {
+>Nd : Symbol(Nd, Decl(self-types-color.ts, 148, 1))
+
+  export type IsLessThanOrEqual<A, B> =
+>IsLessThanOrEqual : Symbol(IsLessThanOrEqual, Decl(self-types-color.ts, 150, 21))
+>A : Symbol(A, Decl(self-types-color.ts, 151, 32))
+>B : Symbol(B, Decl(self-types-color.ts, 151, 34))
+
+    A extends 0 ? true :
+>A : Symbol(A, Decl(self-types-color.ts, 151, 32))
+
+    B extends A.Get<L.SlicedH<N.WholeNumbers, N.Increment<A>>, number> ? false :
+>B : Symbol(B, Decl(self-types-color.ts, 151, 34))
+>A : Symbol(A, Decl(self-types-color.ts, 177, 1))
+>Get : Symbol(A.Get, Decl(self-types-color.ts, 181, 47))
+>L : Symbol(L, Decl(self-types-color.ts, 141, 1))
+>SlicedH : Symbol(L.SlicedH, Decl(self-types-color.ts, 143, 20))
+>N : Symbol(N, Decl(self-types-color.ts, 130, 1))
+>WholeNumbers : Symbol(N.WholeNumbers, Decl(self-types-color.ts, 135, 103))
+>N : Symbol(N, Decl(self-types-color.ts, 130, 1))
+>Increment : Symbol(N.Increment, Decl(self-types-color.ts, 137, 60))
+>A : Symbol(A, Decl(self-types-color.ts, 151, 32))
+
+    true
+
+  export type IsLessThan<A, B> = 
+>IsLessThan : Symbol(IsLessThan, Decl(self-types-color.ts, 154, 8))
+>A : Symbol(A, Decl(self-types-color.ts, 156, 25))
+>B : Symbol(B, Decl(self-types-color.ts, 156, 27))
+
+    A extends B ? false :
+>A : Symbol(A, Decl(self-types-color.ts, 156, 25))
+>B : Symbol(B, Decl(self-types-color.ts, 156, 27))
+
+    IsLessThanOrEqual<A, B>
+>IsLessThanOrEqual : Symbol(IsLessThanOrEqual, Decl(self-types-color.ts, 150, 21))
+>A : Symbol(A, Decl(self-types-color.ts, 156, 25))
+>B : Symbol(B, Decl(self-types-color.ts, 156, 27))
+}
+
+export namespace Ns {
+>Ns : Symbol(Ns, Decl(self-types-color.ts, 159, 1))
+
+  export type ToN<T> =
+>ToN : Symbol(ToN, Decl(self-types-color.ts, 161, 21))
+>T : Symbol(T, Decl(self-types-color.ts, 162, 18))
+
+    { [N in keyof N.WholeNumbers]:
+>N : Symbol(N, Decl(self-types-color.ts, 163, 7))
+>N : Symbol(N, Decl(self-types-color.ts, 130, 1))
+>WholeNumbers : Symbol(N.WholeNumbers, Decl(self-types-color.ts, 135, 103))
+
+        T extends N ? N.WholeNumbers[N] : never
+>T : Symbol(T, Decl(self-types-color.ts, 162, 18))
+>N : Symbol(N, Decl(self-types-color.ts, 163, 7))
+>N : Symbol(N, Decl(self-types-color.ts, 130, 1))
+>WholeNumbers : Symbol(N.WholeNumbers, Decl(self-types-color.ts, 135, 103))
+>N : Symbol(N, Decl(self-types-color.ts, 163, 7))
+
+    }[keyof N.WholeNumbers]
+>N : Symbol(N, Decl(self-types-color.ts, 130, 1))
+>WholeNumbers : Symbol(N.WholeNumbers, Decl(self-types-color.ts, 135, 103))
+
+  export type TrimL<T> =
+>TrimL : Symbol(TrimL, Decl(self-types-color.ts, 165, 27))
+>T : Symbol(T, Decl(self-types-color.ts, 167, 20))
+
+    T extends `0${infer T}` ? TrimL<T> : T
+>T : Symbol(T, Decl(self-types-color.ts, 167, 20))
+>T : Symbol(T, Decl(self-types-color.ts, 168, 23))
+>TrimL : Symbol(TrimL, Decl(self-types-color.ts, 165, 27))
+>T : Symbol(T, Decl(self-types-color.ts, 168, 23))
+>T : Symbol(T, Decl(self-types-color.ts, 167, 20))
+
+  export type IsLessThanOrEqual<_A, _B, A = TrimL<_A>, B = TrimL<_B>> =
+>IsLessThanOrEqual : Symbol(IsLessThanOrEqual, Decl(self-types-color.ts, 168, 42))
+>_A : Symbol(_A, Decl(self-types-color.ts, 170, 32))
+>_B : Symbol(_B, Decl(self-types-color.ts, 170, 35))
+>A : Symbol(A, Decl(self-types-color.ts, 170, 39))
+>TrimL : Symbol(TrimL, Decl(self-types-color.ts, 165, 27))
+>_A : Symbol(_A, Decl(self-types-color.ts, 170, 32))
+>B : Symbol(B, Decl(self-types-color.ts, 170, 54))
+>TrimL : Symbol(TrimL, Decl(self-types-color.ts, 165, 27))
+>_B : Symbol(_B, Decl(self-types-color.ts, 170, 35))
+
+    Nd.IsLessThan<S.Length<A>, S.Length<B>> extends true ? true :
+>Nd : Symbol(Nd, Decl(self-types-color.ts, 148, 1))
+>IsLessThan : Symbol(Nd.IsLessThan, Decl(self-types-color.ts, 154, 8))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>Length : Symbol(S.Length, Decl(self-types-color.ts, 123, 44))
+>A : Symbol(A, Decl(self-types-color.ts, 170, 39))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>Length : Symbol(S.Length, Decl(self-types-color.ts, 123, 44))
+>B : Symbol(B, Decl(self-types-color.ts, 170, 54))
+
+    S.Length<A> extends S.Length<B>
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>Length : Symbol(S.Length, Decl(self-types-color.ts, 123, 44))
+>A : Symbol(A, Decl(self-types-color.ts, 170, 39))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>Length : Symbol(S.Length, Decl(self-types-color.ts, 123, 44))
+>B : Symbol(B, Decl(self-types-color.ts, 170, 54))
+
+      ? Nd.IsLessThan<ToN<S.At<A, 0>>, ToN<S.At<B, 0>>> extends true ? true :
+>Nd : Symbol(Nd, Decl(self-types-color.ts, 148, 1))
+>IsLessThan : Symbol(Nd.IsLessThan, Decl(self-types-color.ts, 154, 8))
+>ToN : Symbol(ToN, Decl(self-types-color.ts, 161, 21))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>At : Symbol(S.At, Decl(self-types-color.ts, 108, 21))
+>A : Symbol(A, Decl(self-types-color.ts, 170, 39))
+>ToN : Symbol(ToN, Decl(self-types-color.ts, 161, 21))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>At : Symbol(S.At, Decl(self-types-color.ts, 108, 21))
+>B : Symbol(B, Decl(self-types-color.ts, 170, 54))
+
+        S.At<A, 0> extends S.At<B, 0> ? IsLessThanOrEqual<S.Shifted<A>, S.Shifted<B>> :
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>At : Symbol(S.At, Decl(self-types-color.ts, 108, 21))
+>A : Symbol(A, Decl(self-types-color.ts, 170, 39))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>At : Symbol(S.At, Decl(self-types-color.ts, 108, 21))
+>B : Symbol(B, Decl(self-types-color.ts, 170, 54))
+>IsLessThanOrEqual : Symbol(IsLessThanOrEqual, Decl(self-types-color.ts, 168, 42))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>Shifted : Symbol(S.Shifted, Decl(self-types-color.ts, 126, 22))
+>A : Symbol(A, Decl(self-types-color.ts, 170, 39))
+>S : Symbol(S, Decl(self-types-color.ts, 96, 2200))
+>Shifted : Symbol(S.Shifted, Decl(self-types-color.ts, 126, 22))
+>B : Symbol(B, Decl(self-types-color.ts, 170, 54))
+
+        false :
+    false
+}
+
+
+export namespace A {
+>A : Symbol(A, Decl(self-types-color.ts, 177, 1))
+
+  export type Cast<T, U> = T extends U ? T : U;
+>Cast : Symbol(Cast, Decl(self-types-color.ts, 180, 20))
+>T : Symbol(T, Decl(self-types-color.ts, 181, 19))
+>U : Symbol(U, Decl(self-types-color.ts, 181, 21))
+>T : Symbol(T, Decl(self-types-color.ts, 181, 19))
+>U : Symbol(U, Decl(self-types-color.ts, 181, 21))
+>T : Symbol(T, Decl(self-types-color.ts, 181, 19))
+>U : Symbol(U, Decl(self-types-color.ts, 181, 21))
+
+  export type Get<T, K> = K extends keyof T ? T[K] : never
+>Get : Symbol(Get, Decl(self-types-color.ts, 181, 47))
+>T : Symbol(T, Decl(self-types-color.ts, 182, 18))
+>K : Symbol(K, Decl(self-types-color.ts, 182, 20))
+>K : Symbol(K, Decl(self-types-color.ts, 182, 20))
+>T : Symbol(T, Decl(self-types-color.ts, 182, 18))
+>T : Symbol(T, Decl(self-types-color.ts, 182, 18))
+>K : Symbol(K, Decl(self-types-color.ts, 182, 20))
+}

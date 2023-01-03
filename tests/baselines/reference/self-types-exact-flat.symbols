@@ -1,0 +1,290 @@
+=== tests/cases/compiler/self-types-exact-flat.ts ===
+declare const f: (x: Exact<() => { a: { b: string }, c: number }>) => void
+>f : Symbol(f, Decl(self-types-exact-flat.ts, 0, 13))
+>x : Symbol(x, Decl(self-types-exact-flat.ts, 0, 18))
+>Exact : Symbol(Exact, Decl(self-types-exact-flat.ts, 17, 78))
+>a : Symbol(a, Decl(self-types-exact-flat.ts, 0, 34))
+>b : Symbol(b, Decl(self-types-exact-flat.ts, 0, 39))
+>c : Symbol(c, Decl(self-types-exact-flat.ts, 0, 52))
+
+f(() => ({
+>f : Symbol(f, Decl(self-types-exact-flat.ts, 0, 13))
+
+  a: {
+>a : Symbol(a, Decl(self-types-exact-flat.ts, 2, 10))
+
+    b: "b",
+>b : Symbol(b, Decl(self-types-exact-flat.ts, 3, 6))
+
+    x: "x"
+>x : Symbol(x, Decl(self-types-exact-flat.ts, 4, 11))
+
+  },
+  c: 0,
+>c : Symbol(c, Decl(self-types-exact-flat.ts, 6, 4))
+
+  y: 1
+>y : Symbol(y, Decl(self-types-exact-flat.ts, 7, 7))
+
+}))
+
+let a0 = { a: { b: 1, c: "x", d: "y" } }
+>a0 : Symbol(a0, Decl(self-types-exact-flat.ts, 11, 3))
+>a : Symbol(a, Decl(self-types-exact-flat.ts, 11, 10))
+>b : Symbol(b, Decl(self-types-exact-flat.ts, 11, 15))
+>c : Symbol(c, Decl(self-types-exact-flat.ts, 11, 21))
+>d : Symbol(d, Decl(self-types-exact-flat.ts, 11, 29))
+
+let t00: { a: { b: number } } = a0
+>t00 : Symbol(t00, Decl(self-types-exact-flat.ts, 12, 3))
+>a : Symbol(a, Decl(self-types-exact-flat.ts, 12, 10))
+>b : Symbol(b, Decl(self-types-exact-flat.ts, 12, 15))
+>a0 : Symbol(a0, Decl(self-types-exact-flat.ts, 11, 3))
+
+let t01: Exact<{ a: { b: number } }> = a0
+>t01 : Symbol(t01, Decl(self-types-exact-flat.ts, 13, 3))
+>Exact : Symbol(Exact, Decl(self-types-exact-flat.ts, 17, 78))
+>a : Symbol(a, Decl(self-types-exact-flat.ts, 13, 16))
+>b : Symbol(b, Decl(self-types-exact-flat.ts, 13, 21))
+>a0 : Symbol(a0, Decl(self-types-exact-flat.ts, 11, 3))
+
+let a1 = (x: { a: number, b: number }) => ({ x: 0, y: 2 })
+>a1 : Symbol(a1, Decl(self-types-exact-flat.ts, 15, 3))
+>x : Symbol(x, Decl(self-types-exact-flat.ts, 15, 10))
+>a : Symbol(a, Decl(self-types-exact-flat.ts, 15, 14))
+>b : Symbol(b, Decl(self-types-exact-flat.ts, 15, 25))
+>x : Symbol(x, Decl(self-types-exact-flat.ts, 15, 44))
+>y : Symbol(y, Decl(self-types-exact-flat.ts, 15, 50))
+
+let t10: (x: { a: number, b: number, c: number }) => { x: number } = a1
+>t10 : Symbol(t10, Decl(self-types-exact-flat.ts, 16, 3))
+>x : Symbol(x, Decl(self-types-exact-flat.ts, 16, 10))
+>a : Symbol(a, Decl(self-types-exact-flat.ts, 16, 14))
+>b : Symbol(b, Decl(self-types-exact-flat.ts, 16, 25))
+>c : Symbol(c, Decl(self-types-exact-flat.ts, 16, 36))
+>x : Symbol(x, Decl(self-types-exact-flat.ts, 16, 54))
+>a1 : Symbol(a1, Decl(self-types-exact-flat.ts, 15, 3))
+
+let t11: Exact<(x: { a: number, b: number, c: number }) => { x: number }> = a1
+>t11 : Symbol(t11, Decl(self-types-exact-flat.ts, 17, 3))
+>Exact : Symbol(Exact, Decl(self-types-exact-flat.ts, 17, 78))
+>x : Symbol(x, Decl(self-types-exact-flat.ts, 17, 16))
+>a : Symbol(a, Decl(self-types-exact-flat.ts, 17, 20))
+>b : Symbol(b, Decl(self-types-exact-flat.ts, 17, 31))
+>c : Symbol(c, Decl(self-types-exact-flat.ts, 17, 42))
+>x : Symbol(x, Decl(self-types-exact-flat.ts, 17, 60))
+>a1 : Symbol(a1, Decl(self-types-exact-flat.ts, 15, 3))
+
+type Exact<T> =
+>Exact : Symbol(Exact, Decl(self-types-exact-flat.ts, 17, 78))
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 19, 11))
+
+  self extends T
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 19, 11))
+
+    ? ExactError<T, self> extends infer E
+>ExactError : Symbol(ExactError, Decl(self-types-exact-flat.ts, 29, 7))
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 19, 11))
+>E : Symbol(E, Decl(self-types-exact-flat.ts, 21, 39))
+
+        ? [E] extends [never]
+>E : Symbol(E, Decl(self-types-exact-flat.ts, 21, 39))
+
+            ? self
+            : Never<[
+>Never : Symbol(Never, Decl(lib.es5.d.ts, --, --))
+
+                `Type '${Print<self>}' is not assignable to type 'Exact<${Print<T>}>`,
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 19, 11))
+
+                `Excess properties found at ${Join<E & string>}`
+>Join : Symbol(Join, Decl(self-types-exact-flat.ts, 48, 11))
+>E : Symbol(E, Decl(self-types-exact-flat.ts, 21, 39))
+
+              ]>
+        : never
+    : T
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 19, 11))
+
+type ExactError<T, A> =
+>ExactError : Symbol(ExactError, Decl(self-types-exact-flat.ts, 29, 7))
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 31, 16))
+>A : Symbol(A, Decl(self-types-exact-flat.ts, 31, 18))
+
+  A extends T
+>A : Symbol(A, Decl(self-types-exact-flat.ts, 31, 18))
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 31, 16))
+
+    ? T extends unknown
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 31, 16))
+
+        ? A extends (...a: infer Aa) => infer Ar
+>A : Symbol(A, Decl(self-types-exact-flat.ts, 31, 18))
+>a : Symbol(a, Decl(self-types-exact-flat.ts, 34, 21))
+>Aa : Symbol(Aa, Decl(self-types-exact-flat.ts, 34, 32))
+>Ar : Symbol(Ar, Decl(self-types-exact-flat.ts, 34, 45))
+
+            ? T extends (...a: infer Ea) => infer Er
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 31, 16))
+>a : Symbol(a, Decl(self-types-exact-flat.ts, 35, 25))
+>Ea : Symbol(Ea, Decl(self-types-exact-flat.ts, 35, 36))
+>Er : Symbol(Er, Decl(self-types-exact-flat.ts, 35, 49))
+
+                ? Prefix<".$parameters", ExactError<Aa, Ea>> | Prefix<".$result", ExactError<Er, Ar>>
+>Prefix : Symbol(Prefix, Decl(self-types-exact-flat.ts, 52, 67))
+>ExactError : Symbol(ExactError, Decl(self-types-exact-flat.ts, 29, 7))
+>Aa : Symbol(Aa, Decl(self-types-exact-flat.ts, 34, 32))
+>Ea : Symbol(Ea, Decl(self-types-exact-flat.ts, 35, 36))
+>Prefix : Symbol(Prefix, Decl(self-types-exact-flat.ts, 52, 67))
+>ExactError : Symbol(ExactError, Decl(self-types-exact-flat.ts, 29, 7))
+>Er : Symbol(Er, Decl(self-types-exact-flat.ts, 35, 49))
+>Ar : Symbol(Ar, Decl(self-types-exact-flat.ts, 34, 45))
+
+                : never :
+          A extends object
+>A : Symbol(A, Decl(self-types-exact-flat.ts, 31, 18))
+
+            ? T extends object
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 31, 16))
+
+                ? { [K in keyof A]:
+>K : Symbol(K, Decl(self-types-exact-flat.ts, 40, 21))
+>A : Symbol(A, Decl(self-types-exact-flat.ts, 31, 18))
+
+                      K extends keyof T 
+>K : Symbol(K, Decl(self-types-exact-flat.ts, 40, 21))
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 31, 16))
+
+                        ? Prefix<`.${PrintKey<K>}`, ExactError<T[K], A[K]>>
+>Prefix : Symbol(Prefix, Decl(self-types-exact-flat.ts, 52, 67))
+>PrintKey : Symbol(PrintKey, Decl(self-types-exact-flat.ts, 57, 34))
+>K : Symbol(K, Decl(self-types-exact-flat.ts, 40, 21))
+>ExactError : Symbol(ExactError, Decl(self-types-exact-flat.ts, 29, 7))
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 31, 16))
+>K : Symbol(K, Decl(self-types-exact-flat.ts, 40, 21))
+>A : Symbol(A, Decl(self-types-exact-flat.ts, 31, 18))
+>K : Symbol(K, Decl(self-types-exact-flat.ts, 40, 21))
+
+                        : `.${PrintKey<K>}`
+>PrintKey : Symbol(PrintKey, Decl(self-types-exact-flat.ts, 57, 34))
+>K : Symbol(K, Decl(self-types-exact-flat.ts, 40, 21))
+
+                  }[A extends unknown[] ? number & keyof A : keyof A]
+>A : Symbol(A, Decl(self-types-exact-flat.ts, 31, 18))
+>A : Symbol(A, Decl(self-types-exact-flat.ts, 31, 18))
+>A : Symbol(A, Decl(self-types-exact-flat.ts, 31, 18))
+
+                : never :
+          never
+        : never
+    : never
+
+type Join<T extends string, And = false> =
+>Join : Symbol(Join, Decl(self-types-exact-flat.ts, 48, 11))
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 50, 10))
+>And : Symbol(And, Decl(self-types-exact-flat.ts, 50, 27))
+
+  UIsUnit<T> extends true ? `${And extends true ? "and " : ""}${T}` :
+>UIsUnit : Symbol(UIsUnit, Decl(self-types-exact-flat.ts, 73, 23))
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 50, 10))
+>And : Symbol(And, Decl(self-types-exact-flat.ts, 50, 27))
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 50, 10))
+
+  `${Cast<UShift<T>, string | number>}, ${Join<UShifted<T>, true>}`
+>Cast : Symbol(Cast, Decl(self-types-exact-flat.ts, 76, 46))
+>UShift : Symbol(UShift, Decl(self-types-exact-flat.ts, 60, 33))
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 50, 10))
+>Join : Symbol(Join, Decl(self-types-exact-flat.ts, 48, 11))
+>UShifted : Symbol(UShifted, Decl(self-types-exact-flat.ts, 70, 11))
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 50, 10))
+
+type Prefix<A, B> =
+>Prefix : Symbol(Prefix, Decl(self-types-exact-flat.ts, 52, 67))
+>A : Symbol(A, Decl(self-types-exact-flat.ts, 54, 12))
+>B : Symbol(B, Decl(self-types-exact-flat.ts, 54, 14))
+
+  [B] extends [never]
+>B : Symbol(B, Decl(self-types-exact-flat.ts, 54, 14))
+
+    ? B
+>B : Symbol(B, Decl(self-types-exact-flat.ts, 54, 14))
+
+    : `${A & string}${B & string}`
+>A : Symbol(A, Decl(self-types-exact-flat.ts, 54, 12))
+>B : Symbol(B, Decl(self-types-exact-flat.ts, 54, 14))
+
+type PrintKey<K> = 
+>PrintKey : Symbol(PrintKey, Decl(self-types-exact-flat.ts, 57, 34))
+>K : Symbol(K, Decl(self-types-exact-flat.ts, 59, 14))
+
+  K extends symbol ? Print<K> : K
+>K : Symbol(K, Decl(self-types-exact-flat.ts, 59, 14))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(self-types-exact-flat.ts, 59, 14))
+>K : Symbol(K, Decl(self-types-exact-flat.ts, 59, 14))
+
+type UShift<U> =
+>UShift : Symbol(UShift, Decl(self-types-exact-flat.ts, 60, 33))
+>U : Symbol(U, Decl(self-types-exact-flat.ts, 62, 12))
+
+  UToIntersection<U extends unknown ? (x: U) => void : never> extends (_: infer H) => void
+>UToIntersection : Symbol(UToIntersection, Decl(self-types-exact-flat.ts, 65, 11))
+>U : Symbol(U, Decl(self-types-exact-flat.ts, 62, 12))
+>x : Symbol(x, Decl(self-types-exact-flat.ts, 63, 39))
+>U : Symbol(U, Decl(self-types-exact-flat.ts, 62, 12))
+>_ : Symbol(_, Decl(self-types-exact-flat.ts, 63, 71))
+>H : Symbol(H, Decl(self-types-exact-flat.ts, 63, 79))
+
+    ? H
+>H : Symbol(H, Decl(self-types-exact-flat.ts, 63, 79))
+
+    : never
+
+type UToIntersection<T> =
+>UToIntersection : Symbol(UToIntersection, Decl(self-types-exact-flat.ts, 65, 11))
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 67, 21))
+
+  (T extends unknown ? (_: T) => void : never) extends ((_: infer I) => void)
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 67, 21))
+>_ : Symbol(_, Decl(self-types-exact-flat.ts, 68, 24))
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 67, 21))
+>_ : Symbol(_, Decl(self-types-exact-flat.ts, 68, 57))
+>I : Symbol(I, Decl(self-types-exact-flat.ts, 68, 65))
+
+    ? I
+>I : Symbol(I, Decl(self-types-exact-flat.ts, 68, 65))
+
+    : never
+
+type UShifted<U> =
+>UShifted : Symbol(UShifted, Decl(self-types-exact-flat.ts, 70, 11))
+>U : Symbol(U, Decl(self-types-exact-flat.ts, 72, 14))
+
+  Exclude<U, UShift<U>>
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(self-types-exact-flat.ts, 72, 14))
+>UShift : Symbol(UShift, Decl(self-types-exact-flat.ts, 60, 33))
+>U : Symbol(U, Decl(self-types-exact-flat.ts, 72, 14))
+
+type UIsUnit<U> =
+>UIsUnit : Symbol(UIsUnit, Decl(self-types-exact-flat.ts, 73, 23))
+>U : Symbol(U, Decl(self-types-exact-flat.ts, 75, 13))
+
+  [UShifted<U>] extends [never] ? true : false
+>UShifted : Symbol(UShifted, Decl(self-types-exact-flat.ts, 70, 11))
+>U : Symbol(U, Decl(self-types-exact-flat.ts, 75, 13))
+
+type Cast<T, U> =
+>Cast : Symbol(Cast, Decl(self-types-exact-flat.ts, 76, 46))
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 78, 10))
+>U : Symbol(U, Decl(self-types-exact-flat.ts, 78, 12))
+
+  T extends U ? T : U
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 78, 10))
+>U : Symbol(U, Decl(self-types-exact-flat.ts, 78, 12))
+>T : Symbol(T, Decl(self-types-exact-flat.ts, 78, 10))
+>U : Symbol(U, Decl(self-types-exact-flat.ts, 78, 12))
+
+export {}

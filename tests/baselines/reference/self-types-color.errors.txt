@@ -1,0 +1,213 @@
+tests/cases/compiler/self-types-color.ts(10,7): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/self-types-color.ts(11,7): error TS18051: Type 'string' is not assignable to type 'Color'
+  Expected a string literal
+tests/cases/compiler/self-types-color.ts(13,7): error TS18051: Type '"#ffz"' is not assignable to type 'Color'
+  Expected an hexadecimal character got 'z' at column 3
+tests/cases/compiler/self-types-color.ts(14,7): error TS18051: Type '"rgb(100, 1000, 100)"' is not assignable to type 'Color'
+  Expected value from '0' to '255' got '1000' for green
+tests/cases/compiler/self-types-color.ts(16,29): error TS18051: Type '"#ffz"' is not assignable to type 'Color'
+  Expected an hexadecimal character got 'z' at column 3
+tests/cases/compiler/self-types-color.ts(20,13): error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+
+
+==== tests/cases/compiler/self-types-color.ts (6 errors) ====
+    type Color =
+      self extends string
+        ? ParseColor<self> extends infer R
+          ? R extends { error: infer E extends string }
+              ? Never<[`Type '${Print<self>}' is not assignable to type 'Color'`, E]>
+              : R
+          : never
+        : string
+    
+    const t0: Color = 123
+          ~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+    const t1: Color = "hello" as string
+          ~~
+!!! error TS18051: Type 'string' is not assignable to type 'Color'
+!!! error TS18051:   Expected a string literal
+    const t2: Color = "#fff"
+    const t3: Color = "#ffz"
+          ~~
+!!! error TS18051: Type '"#ffz"' is not assignable to type 'Color'
+!!! error TS18051:   Expected an hexadecimal character got 'z' at column 3
+    const t4: Color = "rgb(100, 1000, 100)"
+          ~~
+!!! error TS18051: Type '"rgb(100, 1000, 100)"' is not assignable to type 'Color'
+!!! error TS18051:   Expected value from '0' to '255' got '1000' for green
+    const t5 = "#fff" satisfies Color
+    const t6 = "#ffz" satisfies Color
+                                ~~~~~
+!!! error TS18051: Type '"#ffz"' is not assignable to type 'Color'
+!!! error TS18051:   Expected an hexadecimal character got 'z' at column 3
+    const t7 = "#fff" as Color
+    const t8 = "#ffz" as Color
+    const t9 = "this is fine" as Color
+    const t10 = 0 as Color
+                ~~~~~~~~~~
+!!! error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+    
+    
+    type ParseColor<T> =
+      S.IsStringLiteral<T> extends false ? { error: "Expected a string literal" } :
+      T extends NamedColor ? T :
+      T extends `#${string}` ? ParseHexColor<T> :
+      T extends `rgb${string}` ? ParseRgbColor<T> :
+      { error: "Expected it to start with '#' or 'rgb' or be a named color" }
+    
+    
+    type ParseHexColor<T, I = 0, C = S.At<T, I>> =
+      [I, C] extends [4, ""] | [7, ""] ? T :
+      I extends 0 | 1 | 2 | 3 | 4 | 5 | 6
+        ? C extends (I extends 0 ? "#" : Hexadecimal)
+          ? ParseHexColor<T, N.Increment<I>>
+          : { error: `Expected ${I extends 0 ? "#": "an hexadecimal character"} got '${S.Cast<C>}' at column ${I}` } :
+      { error: `Unexpected character at ${N.Cast<I>}` }
+    
+    
+    type Hexadecimal =
+      ( "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+      | "a" | "b" | "c" | "d" | "e"| "f"
+      ) extends infer X
+        ? X | Uppercase<S.Cast<X>>
+        : never
+    
+    type ParseRgbColor<T> =
+      T extends `rgb${infer S}`
+        ? S extends `(${infer S}`
+            ? ParseNumberLessThanOrEqual<S.TrimedL<S>, 255> extends infer X
+                ? X extends { error: infer E } ? { error: `${S.Cast<E>} for red` } :
+                  X extends { rest: infer S } ?
+                    S.TrimedL<S> extends `,${infer S}`
+                      ? ParseNumberLessThanOrEqual<S.TrimedL<S>, 255> extends infer X
+                          ? X extends { error: infer E } ? { error: `${S.Cast<E>} for green` } :
+                            X extends { rest: infer S } ?
+                              S.TrimedL<S> extends `,${infer S}`
+                                ? ParseNumberLessThanOrEqual<S.TrimedL<S>, 255> extends infer X
+                                    ? X extends { error: infer E } ? { error: `${S.Cast<E>} for blue` } :
+                                      X extends { rest: infer S } ?
+                                        S.TrimedR<S> extends `)`
+                                          ? T
+                                          : { error: "Expected ')' after blue value at the end" } :
+                                      never
+                                    : never
+                                : { error: "Expected ',' after green value" } :
+                            never
+                          : never
+                      : { error: "Expected ',' after red value" } :
+                  never
+                : never
+            : { error: `Expected '(' got ${S.Cast<S.At<T, 4>>} after rgb` }
+        : { error: `Expected 'rgb' at the start` }
+    
+    type ParseNumberLessThanOrEqual<T, M extends number, N = ParseNumber<T>, V = N["value" & keyof N]> =
+      N extends { error: unknown } ? N :
+      Ns.IsLessThanOrEqual<V, `${M}`> extends true ? N :
+      { error: `Expected value from '0' to '255' got '${S.Cast<V>}'` }
+      
+    type ParseNumber<T, D = ParseDigit<T>> =
+       D extends { value: infer Nh, rest: infer Sh }
+        ? ParseNumber<Sh> extends infer X
+            ? X extends { value: infer Nt, rest: infer S }
+                ? { value: `${S.Cast<Nh>}${S.Cast<Nt>}`, rest: S }
+                : { value: Nh, rest: Sh }
+            : never
+        : D
+    
+    type ParseDigit<T> =
+      T extends `${0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}${infer S}`
+        ? T extends `${infer V}${S}`
+            ? { value: `${V}`, rest: S }
+            : never
+        : { error: "Expected a number" }
+    
+    type NamedColor =
+     "black" | "silver" | "gray" | "white" | "maroon" | "red" | "purple" | "fuchsia" | "green" | "lime" | "olive" | "yellow" | "navy" | "blue" | "teal" | "aqua" | "aliceblue" | "antiquewhite" | "aqua" | "aquamarine" | "azure" | "beige" | "bisque" | "black" | "blanchedalmond" | "blue" | "blueviolet" | "brown" | "burlywood" | "cadetblue" | "chartreuse" | "chocolate" | "coral" | "cornflowerblue" | "cornsilk" | "crimson" | "cyan" | "darkblue" | "darkcyan" | "darkgoldenrod" | "darkgray" | "darkgreen" | "darkgrey" | "darkkhaki" | "darkmagenta" | "darkolivegreen" | "darkorange" | "darkorchid" | "darkred" | "darksalmon" | "darkseagreen" | "darkslateblue" | "darkslategray" | "darkslategrey" | "darkturquoise" | "darkviolet" | "deeppink" | "deepskyblue" | "dimgray" | "dimgrey" | "dodgerblue" | "firebrick" | "floralwhite" | "forestgreen" | "fuchsia" | "gainsboro" | "ghostwhite" | "gold" | "goldenrod" | "gray" | "green" | "greenyellow" | "grey" | "honeydew" | "hotpink" | "indianred" | "indigo" | "ivory" | "khaki" | "lavender" | "lavenderblush" | "lawngreen" | "lemonchiffon" | "lightblue" | "lightcoral" | "lightcyan" | "lightgoldenrodyellow" | "lightgray" | "lightgreen" | "lightgrey" | "lightpink" | "lightsalmon" | "lightseagreen" | "lightskyblue" | "lightslategray" | "lightslategrey" | "lightsteelblue" | "lightyellow" | "lime" | "limegreen" | "linen" | "magenta" | "maroon" | "mediumaquamarine" | "mediumblue" | "mediumorchid" | "mediumpurple" | "mediumseagreen" | "mediumslateblue" | "mediumspringgreen" | "mediumturquoise" | "mediumvioletred" | "midnightblue" | "mintcream" | "mistyrose" | "moccasin" | "navajowhite" | "navy" | "oldlace" | "olive" | "olivedrab" | "orange" | "orangered" | "orchid" | "palegoldenrod" | "palegreen" | "paleturquoise" | "palevioletred" | "papayawhip" | "peachpuff" | "peru" | "pink" | "plum" | "powderblue" | "purple" | "red" | "rosybrown" | "royalblue" | "saddlebrown" | "salmon" | "sandybrown" | "seagreen" | "seashell" | "sienna" | "silver" | "skyblue" | "slateblue" | "slategray" | "slategrey" | "snow" | "springgreen" | "steelblue" | "tan" | "teal" | "thistle" | "tomato" | "turquoise" | "violet" | "wheat" | "white" | "whitesmoke" | "yellow" | "yellowgreen"
+    
+    namespace S {
+      export type IsString<T> =
+        T extends string ? true : false;
+      
+      export type IsStringLiteral<T> =
+        IsString<T> extends true
+          ? string extends T ? false : true
+          : false
+    
+      export type Cast<T> =
+        A.Cast<T, string>
+    
+      export type At<S, I> =
+        Split<S> extends { [_ in A.Cast<I, number>]: infer X }
+          ? X
+          : ""
+    
+      export type Split<T> =
+        T extends `${infer H}${infer T}` ? [H, ...Split<T>] :
+        T extends "" ? [] : [T]
+    
+      export type TrimedL<T> =
+        T extends ` ${infer T}` ? TrimedL<T> : T
+    
+      export type TrimedR<T> =
+        T extends `${infer T} ` ? TrimedL<T> : T
+    
+      export type Length<S> =
+        Split<S>["length"]
+    
+      export type Shifted<S> =
+        S extends `${infer _}${infer T}` ? T : never
+    }
+    
+    export namespace N {
+      export type Cast<T> = A.Cast<T, number>
+    
+      export type NaturalNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+      export type WholeNumbers = [0, ...NaturalNumbers];
+      export type WholeNumbersUnshifted = [-1, ...WholeNumbers];
+    
+      export type Increment<N> = A.Get<NaturalNumbers, N>
+      export type Decrement<N> = A.Get<WholeNumbersUnshifted, N>
+    }
+    
+    export namespace L {
+      export type SlicedH<A, N> =
+        N extends 0 ? [] :
+        A extends [infer H, ...infer T] ? [H, ...SlicedH<T, N.Decrement<N>>] : 
+        never
+    }
+    
+    export namespace Nd {
+      export type IsLessThanOrEqual<A, B> =
+        A extends 0 ? true :
+        B extends A.Get<L.SlicedH<N.WholeNumbers, N.Increment<A>>, number> ? false :
+        true
+    
+      export type IsLessThan<A, B> = 
+        A extends B ? false :
+        IsLessThanOrEqual<A, B>
+    }
+    
+    export namespace Ns {
+      export type ToN<T> =
+        { [N in keyof N.WholeNumbers]:
+            T extends N ? N.WholeNumbers[N] : never
+        }[keyof N.WholeNumbers]
+    
+      export type TrimL<T> =
+        T extends `0${infer T}` ? TrimL<T> : T
+    
+      export type IsLessThanOrEqual<_A, _B, A = TrimL<_A>, B = TrimL<_B>> =
+        Nd.IsLessThan<S.Length<A>, S.Length<B>> extends true ? true :
+        S.Length<A> extends S.Length<B>
+          ? Nd.IsLessThan<ToN<S.At<A, 0>>, ToN<S.At<B, 0>>> extends true ? true :
+            S.At<A, 0> extends S.At<B, 0> ? IsLessThanOrEqual<S.Shifted<A>, S.Shifted<B>> :
+            false :
+        false
+    }
+    
+    
+    export namespace A {
+      export type Cast<T, U> = T extends U ? T : U;
+      export type Get<T, K> = K extends keyof T ? T[K] : never
+    }

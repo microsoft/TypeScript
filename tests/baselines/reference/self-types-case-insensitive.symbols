@@ -1,0 +1,80 @@
+=== tests/cases/compiler/self-types-case-insensitive.ts ===
+type CaseInsensitive<T extends string> =
+>CaseInsensitive : Symbol(CaseInsensitive, Decl(self-types-case-insensitive.ts, 0, 0))
+>T : Symbol(T, Decl(self-types-case-insensitive.ts, 0, 21))
+
+  self extends string
+    ? Lowercase<self> extends Lowercase<T>
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(self-types-case-insensitive.ts, 0, 21))
+
+        ? self
+        : Never<[
+>Never : Symbol(Never, Decl(lib.es5.d.ts, --, --))
+
+          `Type '${Print<self>}' is not assignable to type 'CaseInsensitive<${Print<T>}>'`,
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(self-types-case-insensitive.ts, 0, 21))
+
+          `Type 'Lowercase<${Print<self>}>' is not assignable to 'Lowercase<${Print<T>}>'`,
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(self-types-case-insensitive.ts, 0, 21))
+
+          `Type '${Print<Lowercase<self>>}' is not assignable to '${Print<Lowercase<T>>}'`
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(self-types-case-insensitive.ts, 0, 21))
+
+        ]>
+    : T
+>T : Symbol(T, Decl(self-types-case-insensitive.ts, 0, 21))
+
+declare const setHeader: 
+>setHeader : Symbol(setHeader, Decl(self-types-case-insensitive.ts, 11, 13))
+
+  (key: CaseInsensitive<"Set-Cookie" | "Accept">, value: string) => void
+>key : Symbol(key, Decl(self-types-case-insensitive.ts, 12, 3))
+>CaseInsensitive : Symbol(CaseInsensitive, Decl(self-types-case-insensitive.ts, 0, 0))
+>value : Symbol(value, Decl(self-types-case-insensitive.ts, 12, 49))
+
+setHeader("Set-Cookie", "test")
+>setHeader : Symbol(setHeader, Decl(self-types-case-insensitive.ts, 11, 13))
+
+setHeader("Accept", "test2")
+>setHeader : Symbol(setHeader, Decl(self-types-case-insensitive.ts, 11, 13))
+
+setHeader("sEt-cOoKiE", "stop writing headers like this but ok")
+>setHeader : Symbol(setHeader, Decl(self-types-case-insensitive.ts, 11, 13))
+
+setHeader("Acept", "nah this has a typo")
+>setHeader : Symbol(setHeader, Decl(self-types-case-insensitive.ts, 11, 13))
+
+// TODO?: the autocompletion doesn't work, although it could be doable by
+// instantiating `self` with `unknown`, at least in this case.
+// Or by an alternative definition...
+// type CaseInsensitive<T extends string> = T | [existing-defintion]
+// the autocompletion works now but the custom error message doesn't
+// get shown
+
+type Headers =
+>Headers : Symbol(Headers, Decl(self-types-case-insensitive.ts, 17, 41))
+
+  Record<CaseInsensitive<"set-cookie" | "accept">, string>
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>CaseInsensitive : Symbol(CaseInsensitive, Decl(self-types-case-insensitive.ts, 0, 0))
+
+let headers: Headers = {
+>headers : Symbol(headers, Decl(self-types-case-insensitive.ts, 29, 3))
+>Headers : Symbol(Headers, Decl(self-types-case-insensitive.ts, 17, 41))
+
+  // TODO: this is not an excess property, should compile
+  "Set-Cookie": "test"
+>"Set-Cookie" : Symbol("Set-Cookie", Decl(self-types-case-insensitive.ts, 29, 24))
+}
+
+export {}

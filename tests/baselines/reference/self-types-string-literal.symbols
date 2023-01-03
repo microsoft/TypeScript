@@ -1,0 +1,50 @@
+=== tests/cases/compiler/self-types-string-literal.ts ===
+type StringLiteral =
+>StringLiteral : Symbol(StringLiteral, Decl(self-types-string-literal.ts, 0, 0))
+
+  self extends string
+    ? string extends self
+        ? Never<`Type '${Print<self>}' is not assignable to type 'StringLiteral'`>
+>Never : Symbol(Never, Decl(lib.es5.d.ts, --, --))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+
+        : self
+    : string
+
+let x: StringLiteral = "x" as "x"
+>x : Symbol(x, Decl(self-types-string-literal.ts, 7, 3))
+>StringLiteral : Symbol(StringLiteral, Decl(self-types-string-literal.ts, 0, 0))
+
+let y: StringLiteral = "y" as string
+>y : Symbol(y, Decl(self-types-string-literal.ts, 8, 3))
+>StringLiteral : Symbol(StringLiteral, Decl(self-types-string-literal.ts, 0, 0))
+
+let xx: { x: StringLiteral } = { x: "x" as "x" }
+>xx : Symbol(xx, Decl(self-types-string-literal.ts, 9, 3))
+>x : Symbol(x, Decl(self-types-string-literal.ts, 9, 9))
+>StringLiteral : Symbol(StringLiteral, Decl(self-types-string-literal.ts, 0, 0))
+>x : Symbol(x, Decl(self-types-string-literal.ts, 9, 32))
+
+let yy: { y: StringLiteral } = { y: "y" as string }
+>yy : Symbol(yy, Decl(self-types-string-literal.ts, 10, 3))
+>y : Symbol(y, Decl(self-types-string-literal.ts, 10, 9))
+>StringLiteral : Symbol(StringLiteral, Decl(self-types-string-literal.ts, 0, 0))
+>y : Symbol(y, Decl(self-types-string-literal.ts, 10, 32))
+
+let zs: StringLiteral[] = ["z0" as "z0", "z1" as string, "z2" as "z2"]
+>zs : Symbol(zs, Decl(self-types-string-literal.ts, 11, 3))
+>StringLiteral : Symbol(StringLiteral, Decl(self-types-string-literal.ts, 0, 0))
+
+let a: StringLiteral = "a" as StringLiteral
+>a : Symbol(a, Decl(self-types-string-literal.ts, 12, 3))
+>StringLiteral : Symbol(StringLiteral, Decl(self-types-string-literal.ts, 0, 0))
+>StringLiteral : Symbol(StringLiteral, Decl(self-types-string-literal.ts, 0, 0))
+
+let b: StringLiteral = "b"
+>b : Symbol(b, Decl(self-types-string-literal.ts, 13, 3))
+>StringLiteral : Symbol(StringLiteral, Decl(self-types-string-literal.ts, 0, 0))
+
+let cs: StringLiteral[] = ["c0", "c1", "c2"]
+>cs : Symbol(cs, Decl(self-types-string-literal.ts, 14, 3))
+>StringLiteral : Symbol(StringLiteral, Decl(self-types-string-literal.ts, 0, 0))
+

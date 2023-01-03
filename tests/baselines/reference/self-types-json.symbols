@@ -1,0 +1,248 @@
+=== tests/cases/compiler/self-types-json.ts ===
+interface Node {
+>Node : Symbol(Node, Decl(self-types-json.ts, 0, 0))
+
+  children: Node[]
+>children : Symbol(Node.children, Decl(self-types-json.ts, 0, 16))
+>Node : Symbol(Node, Decl(self-types-json.ts, 0, 0))
+
+  parent: Node
+>parent : Symbol(Node.parent, Decl(self-types-json.ts, 1, 18))
+>Node : Symbol(Node, Decl(self-types-json.ts, 0, 0))
+}
+let someNode = {} as Node
+>someNode : Symbol(someNode, Decl(self-types-json.ts, 4, 3))
+>Node : Symbol(Node, Decl(self-types-json.ts, 0, 0))
+
+let t1: Json = someNode
+>t1 : Symbol(t1, Decl(self-types-json.ts, 6, 3))
+>Json : Symbol(Json, Decl(self-types-json.ts, 18, 53))
+>someNode : Symbol(someNode, Decl(self-types-json.ts, 4, 3))
+
+let t2: Json<"AllowPossiblyCircular"> = someNode
+>t2 : Symbol(t2, Decl(self-types-json.ts, 7, 3))
+>Json : Symbol(Json, Decl(self-types-json.ts, 18, 53))
+>someNode : Symbol(someNode, Decl(self-types-json.ts, 4, 3))
+
+let t3: Json = () => "hello"
+>t3 : Symbol(t3, Decl(self-types-json.ts, 8, 3))
+>Json : Symbol(Json, Decl(self-types-json.ts, 18, 53))
+
+let t4: Json = {
+>t4 : Symbol(t4, Decl(self-types-json.ts, 9, 3))
+>Json : Symbol(Json, Decl(self-types-json.ts, 18, 53))
+
+  x: () => "hello"
+>x : Symbol(x, Decl(self-types-json.ts, 9, 16))
+}
+let t5: Json = {
+>t5 : Symbol(t5, Decl(self-types-json.ts, 12, 3))
+>Json : Symbol(Json, Decl(self-types-json.ts, 18, 53))
+
+  toJSON: () => "hello"
+>toJSON : Symbol(toJSON, Decl(self-types-json.ts, 12, 16))
+}
+let t6: Json = new Map()
+>t6 : Symbol(t6, Decl(self-types-json.ts, 15, 3))
+>Json : Symbol(Json, Decl(self-types-json.ts, 18, 53))
+
+let t7: Json = ["hello", undefined]
+>t7 : Symbol(t7, Decl(self-types-json.ts, 16, 3))
+>Json : Symbol(Json, Decl(self-types-json.ts, 18, 53))
+>undefined : Symbol(undefined)
+
+let t8: Json = ["hello", undefined] as [string, undefined]
+>t8 : Symbol(t8, Decl(self-types-json.ts, 17, 3))
+>Json : Symbol(Json, Decl(self-types-json.ts, 18, 53))
+>undefined : Symbol(undefined)
+
+let t9: Json<"AllowUndefined"> = ["hello", undefined]
+>t9 : Symbol(t9, Decl(self-types-json.ts, 18, 3))
+>Json : Symbol(Json, Decl(self-types-json.ts, 18, 53))
+>undefined : Symbol(undefined)
+
+type Json<Flags extends "AllowPossiblyCircular" | "AllowUndefined" = never> =
+>Json : Symbol(Json, Decl(self-types-json.ts, 18, 53))
+>Flags : Symbol(Flags, Decl(self-types-json.ts, 20, 10))
+
+  JsonError<Flags, self> extends infer E
+>JsonError : Symbol(JsonError, Decl(self-types-json.ts, 25, 11))
+>Flags : Symbol(Flags, Decl(self-types-json.ts, 20, 10))
+>E : Symbol(E, Decl(self-types-json.ts, 21, 38))
+
+    ? [E] extends [never]
+>E : Symbol(E, Decl(self-types-json.ts, 21, 38))
+
+        ? self
+        : Never<`Type '${Print<self>}' is not assignable to type 'Json', as ${E & string}`>
+>Never : Symbol(Never, Decl(lib.es5.d.ts, --, --))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>E : Symbol(E, Decl(self-types-json.ts, 21, 38))
+
+    : never
+
+type JsonError<Flags, T, IsTopLevel = true, TCopy = T> =
+>JsonError : Symbol(JsonError, Decl(self-types-json.ts, 25, 11))
+>Flags : Symbol(Flags, Decl(self-types-json.ts, 27, 15))
+>T : Symbol(T, Decl(self-types-json.ts, 27, 21))
+>IsTopLevel : Symbol(IsTopLevel, Decl(self-types-json.ts, 27, 24))
+>TCopy : Symbol(TCopy, Decl(self-types-json.ts, 27, 43))
+>T : Symbol(T, Decl(self-types-json.ts, 27, 21))
+
+  T extends (...a: never[]) => unknown
+>T : Symbol(T, Decl(self-types-json.ts, 27, 21))
+>a : Symbol(a, Decl(self-types-json.ts, 28, 13))
+
+    ? `${IsTopLevel extends true ? "it " : ""}${UIsUnit<TCopy> extends true ? "is" : "could be"} a function` :
+>IsTopLevel : Symbol(IsTopLevel, Decl(self-types-json.ts, 27, 24))
+>UIsUnit : Symbol(UIsUnit, Decl(self-types-json.ts, 68, 23))
+>TCopy : Symbol(TCopy, Decl(self-types-json.ts, 27, 43))
+
+  T extends { toJSON: () => string }
+>T : Symbol(T, Decl(self-types-json.ts, 27, 21))
+>toJSON : Symbol(toJSON, Decl(self-types-json.ts, 30, 13))
+
+    ? never :
+  IsCircular<T> extends true
+>IsCircular : Symbol(IsCircular, Decl(self-types-json.ts, 47, 7))
+>T : Symbol(T, Decl(self-types-json.ts, 27, 21))
+
+    ? "AllowPossiblyCircular" extends Flags
+>Flags : Symbol(Flags, Decl(self-types-json.ts, 27, 15))
+
+      ? never
+      : `${IsTopLevel extends true ? "it " : ""}possibly has circular references` :
+>IsTopLevel : Symbol(IsTopLevel, Decl(self-types-json.ts, 27, 24))
+
+  T extends object
+>T : Symbol(T, Decl(self-types-json.ts, 27, 21))
+
+    ? UShift<{ [K in keyof T]:
+>UShift : Symbol(UShift, Decl(self-types-json.ts, 55, 7))
+>K : Symbol(K, Decl(self-types-json.ts, 37, 16))
+>T : Symbol(T, Decl(self-types-json.ts, 27, 21))
+
+        JsonError<Flags, T[K], false> extends infer E
+>JsonError : Symbol(JsonError, Decl(self-types-json.ts, 25, 11))
+>Flags : Symbol(Flags, Decl(self-types-json.ts, 27, 15))
+>T : Symbol(T, Decl(self-types-json.ts, 27, 21))
+>K : Symbol(K, Decl(self-types-json.ts, 37, 16))
+>E : Symbol(E, Decl(self-types-json.ts, 38, 51))
+
+          ? [E] extends [never]
+>E : Symbol(E, Decl(self-types-json.ts, 38, 51))
+
+              ? never
+              : `value at .${K extends symbol ? `(${Print<K>})` : K} ${E & string}`
+>K : Symbol(K, Decl(self-types-json.ts, 37, 16))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(self-types-json.ts, 37, 16))
+>K : Symbol(K, Decl(self-types-json.ts, 37, 16))
+>E : Symbol(E, Decl(self-types-json.ts, 38, 51))
+
+          : never
+      }[T extends unknown[] ? number & keyof T : keyof T]> : 
+>T : Symbol(T, Decl(self-types-json.ts, 27, 21))
+>T : Symbol(T, Decl(self-types-json.ts, 27, 21))
+>T : Symbol(T, Decl(self-types-json.ts, 27, 21))
+
+  T extends undefined ? "AllowUndefined" extends Flags ? never : `${IsTopLevel extends true ? "it " : ""}${UIsUnit<TCopy> extends true ? "is" : "could be"} undefined` :
+>T : Symbol(T, Decl(self-types-json.ts, 27, 21))
+>Flags : Symbol(Flags, Decl(self-types-json.ts, 27, 15))
+>IsTopLevel : Symbol(IsTopLevel, Decl(self-types-json.ts, 27, 24))
+>UIsUnit : Symbol(UIsUnit, Decl(self-types-json.ts, 68, 23))
+>TCopy : Symbol(TCopy, Decl(self-types-json.ts, 27, 43))
+
+  T extends bigint ? `${IsTopLevel extends true ? "it " : ""}${UIsUnit<TCopy> extends true ? "is" : "could be"} a bigint` :
+>T : Symbol(T, Decl(self-types-json.ts, 27, 21))
+>IsTopLevel : Symbol(IsTopLevel, Decl(self-types-json.ts, 27, 24))
+>UIsUnit : Symbol(UIsUnit, Decl(self-types-json.ts, 68, 23))
+>TCopy : Symbol(TCopy, Decl(self-types-json.ts, 27, 43))
+
+  T extends symbol ? `${IsTopLevel extends true ? "it " : ""}${UIsUnit<TCopy> extends true ? "is" : "could be"} a symbol` :
+>T : Symbol(T, Decl(self-types-json.ts, 27, 21))
+>IsTopLevel : Symbol(IsTopLevel, Decl(self-types-json.ts, 27, 24))
+>UIsUnit : Symbol(UIsUnit, Decl(self-types-json.ts, 68, 23))
+>TCopy : Symbol(TCopy, Decl(self-types-json.ts, 27, 43))
+
+  never
+
+type IsCircular<T, Visited = never> =
+>IsCircular : Symbol(IsCircular, Decl(self-types-json.ts, 47, 7))
+>T : Symbol(T, Decl(self-types-json.ts, 49, 16))
+>Visited : Symbol(Visited, Decl(self-types-json.ts, 49, 18))
+
+  T extends Visited ? true :
+>T : Symbol(T, Decl(self-types-json.ts, 49, 16))
+>Visited : Symbol(Visited, Decl(self-types-json.ts, 49, 18))
+
+  T extends object
+>T : Symbol(T, Decl(self-types-json.ts, 49, 16))
+
+    ? true extends { [K in keyof T]: IsCircular<T[K], Visited | T> }[keyof T]
+>K : Symbol(K, Decl(self-types-json.ts, 52, 22))
+>T : Symbol(T, Decl(self-types-json.ts, 49, 16))
+>IsCircular : Symbol(IsCircular, Decl(self-types-json.ts, 47, 7))
+>T : Symbol(T, Decl(self-types-json.ts, 49, 16))
+>K : Symbol(K, Decl(self-types-json.ts, 52, 22))
+>Visited : Symbol(Visited, Decl(self-types-json.ts, 49, 18))
+>T : Symbol(T, Decl(self-types-json.ts, 49, 16))
+>T : Symbol(T, Decl(self-types-json.ts, 49, 16))
+
+        ? true
+        : false :
+  false
+
+type UShift<U> =
+>UShift : Symbol(UShift, Decl(self-types-json.ts, 55, 7))
+>U : Symbol(U, Decl(self-types-json.ts, 57, 12))
+
+  UToIntersection<U extends unknown ? (x: U) => void : never> extends (_: infer H) => void
+>UToIntersection : Symbol(UToIntersection, Decl(self-types-json.ts, 60, 11))
+>U : Symbol(U, Decl(self-types-json.ts, 57, 12))
+>x : Symbol(x, Decl(self-types-json.ts, 58, 39))
+>U : Symbol(U, Decl(self-types-json.ts, 57, 12))
+>_ : Symbol(_, Decl(self-types-json.ts, 58, 71))
+>H : Symbol(H, Decl(self-types-json.ts, 58, 79))
+
+    ? H
+>H : Symbol(H, Decl(self-types-json.ts, 58, 79))
+
+    : never
+
+type UToIntersection<T> =
+>UToIntersection : Symbol(UToIntersection, Decl(self-types-json.ts, 60, 11))
+>T : Symbol(T, Decl(self-types-json.ts, 62, 21))
+
+  (T extends unknown ? (_: T) => void : never) extends ((_: infer I) => void)
+>T : Symbol(T, Decl(self-types-json.ts, 62, 21))
+>_ : Symbol(_, Decl(self-types-json.ts, 63, 24))
+>T : Symbol(T, Decl(self-types-json.ts, 62, 21))
+>_ : Symbol(_, Decl(self-types-json.ts, 63, 57))
+>I : Symbol(I, Decl(self-types-json.ts, 63, 65))
+
+    ? I
+>I : Symbol(I, Decl(self-types-json.ts, 63, 65))
+
+    : never
+
+type UShifted<U> =
+>UShifted : Symbol(UShifted, Decl(self-types-json.ts, 65, 11))
+>U : Symbol(U, Decl(self-types-json.ts, 67, 14))
+
+  Exclude<U, UShift<U>>
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(self-types-json.ts, 67, 14))
+>UShift : Symbol(UShift, Decl(self-types-json.ts, 55, 7))
+>U : Symbol(U, Decl(self-types-json.ts, 67, 14))
+
+type UIsUnit<U> =
+>UIsUnit : Symbol(UIsUnit, Decl(self-types-json.ts, 68, 23))
+>U : Symbol(U, Decl(self-types-json.ts, 70, 13))
+
+  [UShifted<U>] extends [never] ? true : false
+>UShifted : Symbol(UShifted, Decl(self-types-json.ts, 65, 11))
+>U : Symbol(U, Decl(self-types-json.ts, 70, 13))
+
+export {}
+

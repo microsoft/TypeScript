@@ -1,0 +1,79 @@
+=== tests/cases/compiler/self-types-json-simple.ts ===
+type Json =
+>Json : string | number | boolean | { toJSON: () => string; } | (self extends unknown[] ? Json[] : self extends (...a: never[]) => unknown ? never : { [_ in keyof self]: Json; }) | (self extends (...a: never[]) => unknown ? never : never)
+
+  | string
+  | number
+  | boolean
+  | null
+>null : null
+
+  | { toJSON: () => string }
+>toJSON : () => string
+
+  | (self extends unknown[] ? Json[] : self extends (...a: never[]) => unknown ? never : { [_ in keyof self]: Json })
+>a : never[]
+
+  | (self extends (...a: never[]) => unknown ? Never<`Type '${Print<self>}' is not assignable to type 'Json'`> : never)
+>a : never[]
+
+interface Node {
+  children: Node[]
+>children : Node[]
+
+  parent: Node
+>parent : Node
+}
+let someNode = {} as Node
+>someNode : Node
+>{} as Node : Node
+>{} : {}
+
+let t1: Json = someNode // TODO: this should probably compile
+>t1 : Json
+>someNode : Node
+
+let t3: Json = () => "hello"
+>t3 : Json
+>() => "hello" : () => string
+>"hello" : "hello"
+
+let t4: Json = {
+>t4 : Json
+>{  x: () => "hello"} : { x: () => string; }
+
+  x: () => "hello"
+>x : () => string
+>() => "hello" : () => string
+>"hello" : "hello"
+}
+let t5: Json = {
+>t5 : Json
+>{  toJSON: () => "hello"} : { toJSON: () => string; }
+
+  toJSON: () => "hello"
+>toJSON : () => string
+>() => "hello" : () => string
+>"hello" : "hello"
+}
+let t6: Json = new Map()
+>t6 : Json
+>new Map() : any
+>Map : any
+
+let t7: Json = ["hello", undefined]
+>t7 : Json
+>["hello", undefined] : string[]
+>"hello" : "hello"
+>undefined : undefined
+
+let t8: Json = ["hello", null] as [string, null]
+>t8 : Json
+>["hello", null] as [string, null] : [string, null]
+>["hello", null] : [string, null]
+>"hello" : "hello"
+>null : null
+>null : null
+
+export {}
+

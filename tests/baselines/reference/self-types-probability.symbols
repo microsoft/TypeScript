@@ -1,0 +1,103 @@
+=== tests/cases/compiler/self-types-probability.ts ===
+let t0: Probability = 0.5
+>t0 : Symbol(t0, Decl(self-types-probability.ts, 0, 3))
+>Probability : Symbol(Probability, Decl(self-types-probability.ts, 17, 59))
+
+let t1: Probability = 0
+>t1 : Symbol(t1, Decl(self-types-probability.ts, 1, 3))
+>Probability : Symbol(Probability, Decl(self-types-probability.ts, 17, 59))
+
+let t2: Probability = 1
+>t2 : Symbol(t2, Decl(self-types-probability.ts, 2, 3))
+>Probability : Symbol(Probability, Decl(self-types-probability.ts, 17, 59))
+
+let t3: Probability = 1.5
+>t3 : Symbol(t3, Decl(self-types-probability.ts, 3, 3))
+>Probability : Symbol(Probability, Decl(self-types-probability.ts, 17, 59))
+
+let t4: Probability = -0.5
+>t4 : Symbol(t4, Decl(self-types-probability.ts, 4, 3))
+>Probability : Symbol(Probability, Decl(self-types-probability.ts, 17, 59))
+
+let t5: Probability = 0 as number
+>t5 : Symbol(t5, Decl(self-types-probability.ts, 5, 3))
+>Probability : Symbol(Probability, Decl(self-types-probability.ts, 17, 59))
+
+let t6: number = 0.5 as Probability
+>t6 : Symbol(t6, Decl(self-types-probability.ts, 6, 3))
+>Probability : Symbol(Probability, Decl(self-types-probability.ts, 17, 59))
+
+let t7: Probability = t0 + t1
+>t7 : Symbol(t7, Decl(self-types-probability.ts, 7, 3))
+>Probability : Symbol(Probability, Decl(self-types-probability.ts, 17, 59))
+>t0 : Symbol(t0, Decl(self-types-probability.ts, 0, 3))
+>t1 : Symbol(t1, Decl(self-types-probability.ts, 1, 3))
+
+let t8: number = t0 + t1
+>t8 : Symbol(t8, Decl(self-types-probability.ts, 8, 3))
+>t0 : Symbol(t0, Decl(self-types-probability.ts, 0, 3))
+>t1 : Symbol(t1, Decl(self-types-probability.ts, 1, 3))
+
+declare const f: (x: number) => void
+>f : Symbol(f, Decl(self-types-probability.ts, 10, 13))
+>x : Symbol(x, Decl(self-types-probability.ts, 10, 18))
+
+f(t0)
+>f : Symbol(f, Decl(self-types-probability.ts, 10, 13))
+>t0 : Symbol(t0, Decl(self-types-probability.ts, 0, 3))
+
+type F<T extends number> = T
+>F : Symbol(F, Decl(self-types-probability.ts, 11, 5))
+>T : Symbol(T, Decl(self-types-probability.ts, 13, 7))
+>T : Symbol(T, Decl(self-types-probability.ts, 13, 7))
+
+type T0 = F<Probability>
+>T0 : Symbol(T0, Decl(self-types-probability.ts, 13, 28))
+>F : Symbol(F, Decl(self-types-probability.ts, 11, 5))
+>Probability : Symbol(Probability, Decl(self-types-probability.ts, 17, 59))
+
+// TODO: this should compile
+type T1 = Assert<Probability extends number ? true : false>
+>T1 : Symbol(T1, Decl(self-types-probability.ts, 14, 24))
+>Assert : Symbol(Assert, Decl(self-types-probability.ts, 31, 13))
+>Probability : Symbol(Probability, Decl(self-types-probability.ts, 17, 59))
+
+type Probability =
+>Probability : Symbol(Probability, Decl(self-types-probability.ts, 17, 59))
+
+  self extends number
+    ? IsProbability<self> extends true
+>IsProbability : Symbol(IsProbability, Decl(self-types-probability.ts, 24, 12))
+
+      ? self
+      : Never<`Type '${Print<self>}' is not assignable to type 'Probability'`>
+>Never : Symbol(Never, Decl(lib.es5.d.ts, --, --))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+
+    : number
+
+type IsProbability<T extends number> =
+>IsProbability : Symbol(IsProbability, Decl(self-types-probability.ts, 24, 12))
+>T : Symbol(T, Decl(self-types-probability.ts, 26, 19))
+
+  `${T}` extends `${infer H}${infer R}`
+>T : Symbol(T, Decl(self-types-probability.ts, 26, 19))
+>H : Symbol(H, Decl(self-types-probability.ts, 27, 25))
+>R : Symbol(R, Decl(self-types-probability.ts, 27, 35))
+
+      ? H extends "0" ? true :
+>H : Symbol(H, Decl(self-types-probability.ts, 27, 25))
+
+        H extends "1" ? R extends "" ? true : false :
+>H : Symbol(H, Decl(self-types-probability.ts, 27, 25))
+>R : Symbol(R, Decl(self-types-probability.ts, 27, 35))
+
+        false
+      : false
+
+type Assert<T extends true> = T
+>Assert : Symbol(Assert, Decl(self-types-probability.ts, 31, 13))
+>T : Symbol(T, Decl(self-types-probability.ts, 33, 12))
+>T : Symbol(T, Decl(self-types-probability.ts, 33, 12))
+
+export {}

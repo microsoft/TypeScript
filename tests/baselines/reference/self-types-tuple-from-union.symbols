@@ -1,0 +1,186 @@
+=== tests/cases/compiler/self-types-tuple-from-union.ts ===
+let t0: TupleOf<"a" | "b" | "c"> = ["a", "b", "c"] as ["a", "b", "c"]
+>t0 : Symbol(t0, Decl(self-types-tuple-from-union.ts, 0, 3))
+>TupleOf : Symbol(TupleOf, Decl(self-types-tuple-from-union.ts, 3, 69))
+
+let t1: TupleOf<"a" | "b" | "c"> = ["c", "a", "b"] as ["c", "a", "b"]
+>t1 : Symbol(t1, Decl(self-types-tuple-from-union.ts, 1, 3))
+>TupleOf : Symbol(TupleOf, Decl(self-types-tuple-from-union.ts, 3, 69))
+
+let t2: TupleOf<"a" | "b" | "c"> = ["a", "x", "c"] as ["a", "x", "c"]
+>t2 : Symbol(t2, Decl(self-types-tuple-from-union.ts, 2, 3))
+>TupleOf : Symbol(TupleOf, Decl(self-types-tuple-from-union.ts, 3, 69))
+
+let t3: TupleOf<"a" | "b" | "c"> = ["a", "b", "b"] as ["a", "b", "b"]
+>t3 : Symbol(t3, Decl(self-types-tuple-from-union.ts, 3, 3))
+>TupleOf : Symbol(TupleOf, Decl(self-types-tuple-from-union.ts, 3, 69))
+
+type TupleOf<U> =
+>TupleOf : Symbol(TupleOf, Decl(self-types-tuple-from-union.ts, 3, 69))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 5, 13))
+
+  self extends unknown[]
+    ? number extends self["length"]
+        ? TupleError<`Type '${Print<self>}' is not a tuple`, U, self>
+>TupleError : Symbol(TupleError, Decl(self-types-tuple-from-union.ts, 29, 7))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 5, 13))
+
+        : self["length"] extends ULength<U>
+>ULength : Symbol(ULength, Decl(self-types-tuple-from-union.ts, 35, 4))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 5, 13))
+
+            ? ParseTupleOf<U, self> extends infer E extends string
+>ParseTupleOf : Symbol(ParseTupleOf, Decl(self-types-tuple-from-union.ts, 16, 65))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 5, 13))
+>E : Symbol(E, Decl(self-types-tuple-from-union.ts, 10, 49))
+
+                ? [E] extends [never]
+>E : Symbol(E, Decl(self-types-tuple-from-union.ts, 10, 49))
+
+                    ? self
+                    : TupleError<E, U, self>
+>TupleError : Symbol(TupleError, Decl(self-types-tuple-from-union.ts, 29, 7))
+>E : Symbol(E, Decl(self-types-tuple-from-union.ts, 10, 49))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 5, 13))
+
+                : never
+            : TupleError<`Expected ${ULength<U>} elements got ${self["length"]}`, U, self>
+>TupleError : Symbol(TupleError, Decl(self-types-tuple-from-union.ts, 29, 7))
+>ULength : Symbol(ULength, Decl(self-types-tuple-from-union.ts, 35, 4))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 5, 13))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 5, 13))
+
+    : TupleError<`Type '${Print<self>}' is not a tuple`, U, self>
+>TupleError : Symbol(TupleError, Decl(self-types-tuple-from-union.ts, 29, 7))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 5, 13))
+
+type ParseTupleOf<U, Self, I extends 1[] = []> =
+>ParseTupleOf : Symbol(ParseTupleOf, Decl(self-types-tuple-from-union.ts, 16, 65))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 18, 18))
+>Self : Symbol(Self, Decl(self-types-tuple-from-union.ts, 18, 20))
+>I : Symbol(I, Decl(self-types-tuple-from-union.ts, 18, 26))
+
+  Self extends [] ? never :
+>Self : Symbol(Self, Decl(self-types-tuple-from-union.ts, 18, 20))
+
+  Self extends [infer H, ...infer R] ? 
+>Self : Symbol(Self, Decl(self-types-tuple-from-union.ts, 18, 20))
+>H : Symbol(H, Decl(self-types-tuple-from-union.ts, 20, 21))
+>R : Symbol(R, Decl(self-types-tuple-from-union.ts, 20, 33))
+
+    H extends U
+>H : Symbol(H, Decl(self-types-tuple-from-union.ts, 20, 21))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 18, 18))
+
+      ? ParseTupleOf<Exclude<U, H>, R, [...I, 1]>
+>ParseTupleOf : Symbol(ParseTupleOf, Decl(self-types-tuple-from-union.ts, 16, 65))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 18, 18))
+>H : Symbol(H, Decl(self-types-tuple-from-union.ts, 20, 21))
+>R : Symbol(R, Decl(self-types-tuple-from-union.ts, 20, 33))
+>I : Symbol(I, Decl(self-types-tuple-from-union.ts, 18, 26))
+
+      : `Type '${Print<H>}' at index ${I["length"]} is not assignable to type '${Print<U>}'` :
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>H : Symbol(H, Decl(self-types-tuple-from-union.ts, 20, 21))
+>I : Symbol(I, Decl(self-types-tuple-from-union.ts, 18, 26))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 18, 18))
+
+        // TODO?: An intrinsic SubTypeError<A, B> for using it here like
+        // Never<[
+        //   `Type '${Print<H>}' at index ${I["length"]} is not assignable to type '${Print<U>}'`]>
+        //   ...SubTypeError<H, U>
+        // ]>
+  never
+
+type TupleError<M extends string, U, Self> =
+>TupleError : Symbol(TupleError, Decl(self-types-tuple-from-union.ts, 29, 7))
+>M : Symbol(M, Decl(self-types-tuple-from-union.ts, 31, 16))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 31, 33))
+>Self : Symbol(Self, Decl(self-types-tuple-from-union.ts, 31, 36))
+
+  Never<[
+>Never : Symbol(Never, Decl(lib.es5.d.ts, --, --))
+
+    `Type '${Print<Self>}' is not assignable to type 'TupleOf<${Print<U>}>'`,
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Self : Symbol(Self, Decl(self-types-tuple-from-union.ts, 31, 36))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 31, 33))
+
+    M
+>M : Symbol(M, Decl(self-types-tuple-from-union.ts, 31, 16))
+
+  ]>
+
+type ULength<U, A extends 1[] = []> =
+>ULength : Symbol(ULength, Decl(self-types-tuple-from-union.ts, 35, 4))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 37, 13))
+>A : Symbol(A, Decl(self-types-tuple-from-union.ts, 37, 15))
+
+  [U] extends [never] ? A["length"] :
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 37, 13))
+>A : Symbol(A, Decl(self-types-tuple-from-union.ts, 37, 15))
+
+  ULength<UShifted<U>, [...A, 1]>
+>ULength : Symbol(ULength, Decl(self-types-tuple-from-union.ts, 35, 4))
+>UShifted : Symbol(UShifted, Decl(self-types-tuple-from-union.ts, 49, 11))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 37, 13))
+>A : Symbol(A, Decl(self-types-tuple-from-union.ts, 37, 15))
+
+type UShift<U> =
+>UShift : Symbol(UShift, Decl(self-types-tuple-from-union.ts, 39, 33))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 41, 12))
+
+  UToIntersection<U extends unknown ? (x: U) => void : never> extends (_: infer H) => void
+>UToIntersection : Symbol(UToIntersection, Decl(self-types-tuple-from-union.ts, 44, 11))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 41, 12))
+>x : Symbol(x, Decl(self-types-tuple-from-union.ts, 42, 39))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 41, 12))
+>_ : Symbol(_, Decl(self-types-tuple-from-union.ts, 42, 71))
+>H : Symbol(H, Decl(self-types-tuple-from-union.ts, 42, 79))
+
+    ? H
+>H : Symbol(H, Decl(self-types-tuple-from-union.ts, 42, 79))
+
+    : never
+
+type UToIntersection<T> =
+>UToIntersection : Symbol(UToIntersection, Decl(self-types-tuple-from-union.ts, 44, 11))
+>T : Symbol(T, Decl(self-types-tuple-from-union.ts, 46, 21))
+
+  (T extends unknown ? (_: T) => void : never) extends ((_: infer I) => void)
+>T : Symbol(T, Decl(self-types-tuple-from-union.ts, 46, 21))
+>_ : Symbol(_, Decl(self-types-tuple-from-union.ts, 47, 24))
+>T : Symbol(T, Decl(self-types-tuple-from-union.ts, 46, 21))
+>_ : Symbol(_, Decl(self-types-tuple-from-union.ts, 47, 57))
+>I : Symbol(I, Decl(self-types-tuple-from-union.ts, 47, 65))
+
+    ? I
+>I : Symbol(I, Decl(self-types-tuple-from-union.ts, 47, 65))
+
+    : never
+
+type UShifted<U> =
+>UShifted : Symbol(UShifted, Decl(self-types-tuple-from-union.ts, 49, 11))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 51, 14))
+
+  Exclude<U, UShift<U>>
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 51, 14))
+>UShift : Symbol(UShift, Decl(self-types-tuple-from-union.ts, 39, 33))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 51, 14))
+
+type UIsUnit<U> =
+>UIsUnit : Symbol(UIsUnit, Decl(self-types-tuple-from-union.ts, 52, 23))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 54, 13))
+
+  [UShifted<U>] extends [never] ? true : false
+>UShifted : Symbol(UShifted, Decl(self-types-tuple-from-union.ts, 49, 11))
+>U : Symbol(U, Decl(self-types-tuple-from-union.ts, 54, 13))
+
+export {}
+

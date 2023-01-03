@@ -1,0 +1,29 @@
+tests/cases/compiler/self-types-string-literal.ts(9,5): error TS18051: Type 'string' is not assignable to type 'StringLiteral'
+tests/cases/compiler/self-types-string-literal.ts(11,34): error TS18051: Type 'string' is not assignable to type 'StringLiteral'
+tests/cases/compiler/self-types-string-literal.ts(12,42): error TS18051: Type 'string' is not assignable to type 'StringLiteral'
+
+
+==== tests/cases/compiler/self-types-string-literal.ts (3 errors) ====
+    type StringLiteral =
+      self extends string
+        ? string extends self
+            ? Never<`Type '${Print<self>}' is not assignable to type 'StringLiteral'`>
+            : self
+        : string
+    
+    let x: StringLiteral = "x" as "x"
+    let y: StringLiteral = "y" as string
+        ~
+!!! error TS18051: Type 'string' is not assignable to type 'StringLiteral'
+    let xx: { x: StringLiteral } = { x: "x" as "x" }
+    let yy: { y: StringLiteral } = { y: "y" as string }
+                                     ~
+!!! error TS18051: Type 'string' is not assignable to type 'StringLiteral'
+!!! related TS6500 tests/cases/compiler/self-types-string-literal.ts:11:11: The expected type comes from property 'y' which is declared here on type '{ y: StringLiteral; }'
+    let zs: StringLiteral[] = ["z0" as "z0", "z1" as string, "z2" as "z2"]
+                                             ~~~~~~~~~~~~~~
+!!! error TS18051: Type 'string' is not assignable to type 'StringLiteral'
+    let a: StringLiteral = "a" as StringLiteral
+    let b: StringLiteral = "b"
+    let cs: StringLiteral[] = ["c0", "c1", "c2"]
+    

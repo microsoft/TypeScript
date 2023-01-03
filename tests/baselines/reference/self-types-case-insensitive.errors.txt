@@ -1,0 +1,50 @@
+tests/cases/compiler/self-types-case-insensitive.ts(18,11): error TS18051: Type '"Acept"' is not assignable to type 'CaseInsensitive<"Set-Cookie" | "Accept">'
+  Type 'Lowercase<"Acept">' is not assignable to 'Lowercase<"Set-Cookie" | "Accept">'
+    Type '"acept"' is not assignable to '"set-cookie" | "accept"'
+tests/cases/compiler/self-types-case-insensitive.ts(32,3): error TS2322: Type '{ "Set-Cookie": string; }' is not assignable to type 'Headers'.
+  Object literal may only specify known properties, and '"Set-Cookie"' does not exist in type 'Headers'.
+
+
+==== tests/cases/compiler/self-types-case-insensitive.ts (2 errors) ====
+    type CaseInsensitive<T extends string> =
+      self extends string
+        ? Lowercase<self> extends Lowercase<T>
+            ? self
+            : Never<[
+              `Type '${Print<self>}' is not assignable to type 'CaseInsensitive<${Print<T>}>'`,
+              `Type 'Lowercase<${Print<self>}>' is not assignable to 'Lowercase<${Print<T>}>'`,
+              `Type '${Print<Lowercase<self>>}' is not assignable to '${Print<Lowercase<T>>}'`
+            ]>
+        : T
+    
+    declare const setHeader: 
+      (key: CaseInsensitive<"Set-Cookie" | "Accept">, value: string) => void
+    
+    setHeader("Set-Cookie", "test")
+    setHeader("Accept", "test2")
+    setHeader("sEt-cOoKiE", "stop writing headers like this but ok")
+    setHeader("Acept", "nah this has a typo")
+              ~~~~~~~
+!!! error TS18051: Type '"Acept"' is not assignable to type 'CaseInsensitive<"Set-Cookie" | "Accept">'
+!!! error TS18051:   Type 'Lowercase<"Acept">' is not assignable to 'Lowercase<"Set-Cookie" | "Accept">'
+!!! error TS18051:     Type '"acept"' is not assignable to '"set-cookie" | "accept"'
+    
+    // TODO?: the autocompletion doesn't work, although it could be doable by
+    // instantiating `self` with `unknown`, at least in this case.
+    // Or by an alternative definition...
+    // type CaseInsensitive<T extends string> = T | [existing-defintion]
+    // the autocompletion works now but the custom error message doesn't
+    // get shown
+    
+    type Headers =
+      Record<CaseInsensitive<"set-cookie" | "accept">, string>
+    
+    let headers: Headers = {
+      // TODO: this is not an excess property, should compile
+      "Set-Cookie": "test"
+      ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ "Set-Cookie": string; }' is not assignable to type 'Headers'.
+!!! error TS2322:   Object literal may only specify known properties, and '"Set-Cookie"' does not exist in type 'Headers'.
+    }
+    
+    export {}
