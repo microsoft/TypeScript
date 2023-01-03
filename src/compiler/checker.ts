@@ -337,8 +337,8 @@ import {
     hasAccessorModifier,
     hasAmbientModifier,
     hasContextSensitiveParameters,
-    hasDecorators,
     HasDecorators,
+    hasDecorators,
     hasDynamicName,
     hasEffectiveModifier,
     hasEffectiveModifiers,
@@ -347,8 +347,8 @@ import {
     hasExtension,
     HasIllegalDecorators,
     HasIllegalModifiers,
-    hasInitializer,
     HasInitializer,
+    hasInitializer,
     hasJSDocNodes,
     hasJSDocParameterTags,
     hasJsonModuleEmitEnabled,
@@ -783,6 +783,7 @@ import {
     NamespaceExportDeclaration,
     NamespaceImport,
     needsScopeMarker,
+    NeverWithErrorType,
     NewExpression,
     Node,
     NodeArray,
@@ -832,6 +833,7 @@ import {
     PlusToken,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
+    PrintType,
     PrivateIdentifier,
     Program,
     PromiseOrAwaitableType,
@@ -1010,8 +1012,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    NeverWithErrorType,
-    PrintType,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
@@ -1811,8 +1811,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     const evolvingArrayTypes: EvolvingArrayType[] = [];
     const undefinedProperties: SymbolTable = new Map();
     const markerTypes = new Set<number>();
-    const neverWithErrorTypes = new Map<string, NeverWithErrorType>()
-    const printTypes = new Map<string, PrintType>()
+    const neverWithErrorTypes = new Map<string, NeverWithErrorType>();
+    const printTypes = new Map<string, PrintType>();
 
     const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as __String);
     const resolvingSymbol = createSymbol(0, InternalSymbolName.Resolving);
@@ -6348,39 +6348,39 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (type.flags & TypeFlags.TemplateLiteral) {
                 let texts = [...(type as TemplateLiteralType).texts];
                 let types = [...(type as TemplateLiteralType).types];
-                console.log("template before")
-                console.log(JSON.stringify(texts))
-                console.log(JSON.stringify(types.map(t => typeToString(t))))
-                
+                console.log("template before");
+                console.log(JSON.stringify(texts));
+                console.log(JSON.stringify(types.map(t => typeToString(t))));
+
                 const textOrTypes = flatMap(texts, (text, i) => [
                     { kind: "text" as const, value: text },
                     ...(types[i] ? [{ kind: "type" as const, value: types[i] }] : [])
-                ])
+                ]);
 
-                texts = []
-                types = []
+                texts = [];
+                types = [];
                 for (let i = 0; i < textOrTypes.length;) {
-                    let element = textOrTypes[i]
+                    const element = textOrTypes[i];
                     if (element.kind === "type" && element.value.flags & TypeFlags.Print) {
-                        element.value = getStringLiteralTypeFromPrintType(element.value as PrintType)
+                        element.value = getStringLiteralTypeFromPrintType(element.value as PrintType);
                     }
 
                     if (element.kind === "type" && element.value.flags & TypeFlags.StringLiteral) {
-                        texts[texts.length - 1] += (element.value as StringLiteralType).value + (textOrTypes[i+1].value as string)
-                        i += 2
+                        texts[texts.length - 1] += (element.value as StringLiteralType).value + (textOrTypes[i+1].value as string);
+                        i += 2;
                         continue;
                     }
 
-                    if (element.kind === "text") texts.push(element.value)
-                    if (element.kind === "type") types.push(element.value)
+                    if (element.kind === "text") texts.push(element.value);
+                    if (element.kind === "type") types.push(element.value);
                     i++;
                 }
-                console.log("template after")
-                console.log(JSON.stringify(texts))
-                console.log(JSON.stringify(types.map(t => typeToString(t))))
+                console.log("template after");
+                console.log(JSON.stringify(texts));
+                console.log(JSON.stringify(types.map(t => typeToString(t))));
 
                 if (types.length === 0) {
-                    return typeToTypeNodeHelper(getStringLiteralType(texts.join("")), context)
+                    return typeToTypeNodeHelper(getStringLiteralType(texts.join("")), context);
                 }
 
                 const templateHead = factory.createTemplateHead(texts[0]);
@@ -6396,7 +6396,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return symbolToTypeNode((type as StringMappingType).symbol, context, SymbolFlags.Type, [typeNode]);
             }
             if (type.flags & TypeFlags.Print) {
-                return typeToTypeNodeHelper(getStringLiteralTypeFromPrintType(type as PrintType), context)
+                return typeToTypeNodeHelper(getStringLiteralTypeFromPrintType(type as PrintType), context);
             }
             if (type.flags & TypeFlags.IndexedAccess) {
                 const objectTypeNode = typeToTypeNodeHelper((type as IndexedAccessType).objectType, context);
@@ -11774,10 +11774,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let type = typeNode ? getTypeFromTypeNode(typeNode) : errorType;
 
             const containsSelfType = !!forEachChildRecursively(declaration, node => {
-                if (node.kind === SyntaxKind.SelfKeyword) return true
+                if (node.kind === SyntaxKind.SelfKeyword) return true;
             });
-            if (containsSelfType) {   
-                type.flags |= TypeFlags.ContainsSelf
+            if (containsSelfType) {
+                type.flags |= TypeFlags.ContainsSelf;
             }
 
             if (popTypeResolution()) {
@@ -13500,7 +13500,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return constraint && constraint !== (t as StringMappingType).type ? getStringMappingType((t as StringMappingType).symbol, constraint) : stringType;
             }
             if (t.flags & TypeFlags.Print) {
-                return stringType
+                return stringType;
             }
             if (t.flags & TypeFlags.IndexedAccess) {
                 if (isMappedTypeGenericIndexedAccess(t)) {
@@ -14921,7 +14921,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return createNeverWithErrorType(typeArguments[0]);
 
                 case IntrinsicTypeKind.Print:
-                    return createPrintType(typeArguments[0], typeArguments[1])
+                    return createPrintType(typeArguments[0], typeArguments[1]);
             }
         }
 
@@ -14930,11 +14930,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const id = getTypeListId(typeArguments) + getAliasId(aliasSymbol, aliasTypeArguments);
         let instantiation = links.instantiations!.get(id);
         if (!instantiation) {
-            const filledTypeArguments = fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters), isInJSFile(symbol.valueDeclaration))
+            const filledTypeArguments = fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters), isInJSFile(symbol.valueDeclaration));
             const mapper = typeParameters ? createTypeMapper(typeParameters, filledTypeArguments) : createTypeMapper([], []);
-            instantiation = instantiateTypeWithAlias(type, mapper, aliasSymbol, aliasTypeArguments)
+            instantiation = instantiateTypeWithAlias(type, mapper, aliasSymbol, aliasTypeArguments);
             if (type.flags & TypeFlags.ContainsSelf) {
-                instantiation.flags |= TypeFlags.ContainsSelf
+                instantiation.flags |= TypeFlags.ContainsSelf;
             }
             links.instantiations!.set(id, instantiation);
         }
@@ -14960,9 +14960,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return errorType;
         }
         const type = getDeclaredTypeOfSymbol(symbol);
-        const links = getSymbolLinks(symbol)
+        const links = getSymbolLinks(symbol);
         const typeParameters = links.typeParameters;
-        const selfType = links.selfType
+        const selfType = links.selfType;
         if (typeParameters || selfType) {
             if (typeParameters) {
                 const numTypeArguments = length(node.typeArguments);
@@ -16848,43 +16848,43 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createNeverWithErrorType(errorType: Type) {
-        const id = `${getTypeId(errorType)}`
-        if (neverWithErrorTypes.has(id)) return neverWithErrorTypes.get(id)!
+        const id = `${getTypeId(errorType)}`;
+        if (neverWithErrorTypes.has(id)) return neverWithErrorTypes.get(id)!;
 
-        const type = createType(TypeFlags.Never | TypeFlags.NeverWithError) as NeverWithErrorType
-        type.intrinsicName = "NeverWithError"
-        type.errorType = errorType
+        const type = createType(TypeFlags.Never | TypeFlags.NeverWithError) as NeverWithErrorType;
+        type.intrinsicName = "NeverWithError";
+        type.errorType = errorType;
 
-        neverWithErrorTypes.set(id, type)
-        return type
+        neverWithErrorTypes.set(id, type);
+        return type;
     }
 
     function createPrintType(type: Type, flagType: Type | undefined = neverType) {
-        const id = `${getTypeId(type)},${getTypeId(flagType)}`
-        if (printTypes.has(id)) return printTypes.get(id)!
+        const id = `${getTypeId(type)},${getTypeId(flagType)}`;
+        if (printTypes.has(id)) return printTypes.get(id)!;
 
         const printType = createType(TypeFlags.Print) as PrintType;
-        printType.type = type
-        printType.flagType = flagType
+        printType.type = type;
+        printType.flagType = flagType;
 
-        printTypes.set(id, printType)
-        return printType
+        printTypes.set(id, printType);
+        return printType;
     }
 
     function getStringLiteralTypeFromPrintType(printType: PrintType) {
         if (printType.resolvedStringLiteralType) {
-            return printType.resolvedStringLiteralType
+            return printType.resolvedStringLiteralType;
         }
 
         const type = getStringLiteralType(typeToString(
-            printType.type, undefined,
+            printType.type, /* enclosingDeclaration */ undefined,
             isTypeSubtypeOf(getStringLiteralType("InTypeAlias"), printType.flagType)
                 ? TypeFormatFlags.InTypeAlias
                 : TypeFormatFlags.None
-        ))
-        
-        printType.resolvedStringLiteralType = type
-        return type
+        ));
+
+        printType.resolvedStringLiteralType = type;
+        return type;
     }
 
     /**
@@ -18058,24 +18058,24 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypeFromSelfTypeNode(node: Node): Type {
-        const links = getNodeLinks(node)
+        const links = getNodeLinks(node);
         if (links.resolvedType) return links.resolvedType;
 
-        const typeAliasDeclaration = findAncestor(node, n => n.kind === SyntaxKind.TypeAliasDeclaration)
-        if (!typeAliasDeclaration) return errorType
-        const typeAliasLinks = getSymbolLinks(getSymbolOfNode(typeAliasDeclaration)!)
+        const typeAliasDeclaration = findAncestor(node, n => n.kind === SyntaxKind.TypeAliasDeclaration);
+        if (!typeAliasDeclaration) return errorType;
+        const typeAliasLinks = getSymbolLinks(getSymbolOfNode(typeAliasDeclaration)!);
         if (typeAliasLinks.selfType) {
-            links.resolvedType = typeAliasLinks.selfType
-            return links.resolvedType
+            links.resolvedType = typeAliasLinks.selfType;
+            return links.resolvedType;
         }
 
-        const localSelfType = createTypeParameter() as TypeParameter & IntrinsicType
-        localSelfType.intrinsicName = "self"
-        localSelfType.flags |= TypeFlags.Self
-        typeAliasLinks.selfType = localSelfType
+        const localSelfType = createTypeParameter() as TypeParameter & IntrinsicType;
+        localSelfType.intrinsicName = "self";
+        localSelfType.flags |= TypeFlags.Self;
+        typeAliasLinks.selfType = localSelfType;
 
-        links.resolvedType = localSelfType
-        return links.resolvedType
+        links.resolvedType = localSelfType;
+        return links.resolvedType;
     }
 
     function getTypeFromRestTypeNode(node: RestTypeNode | NamedTupleMember) {
@@ -18743,7 +18743,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return createPrintType(
                 instantiateType((type as PrintType).type, mapper),
                 instantiateType((type as PrintType).flagType, mapper)
-            )
+            );
         }
         if (flags & TypeFlags.IndexedAccess) {
             const newAliasSymbol = aliasSymbol || type.aliasSymbol;
@@ -18768,7 +18768,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return newBaseType.flags & TypeFlags.TypeVariable ? getSubstitutionType(newBaseType, newConstraint) : getIntersectionType([newConstraint, newBaseType]);
         }
         if (flags & TypeFlags.NeverWithError) {
-            return createNeverWithErrorType(instantiateType((type as NeverWithErrorType).errorType, mapper))
+            return createNeverWithErrorType(instantiateType((type as NeverWithErrorType).errorType, mapper));
         }
         return type;
     }
@@ -19733,11 +19733,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isSimpleTypeRelatedTo(source: Type, target: Type, relation: Map<string, RelationComparisonResult>, errorReporter?: ErrorReporter): boolean {
         if (!(target.flags & TypeFlags.ContainsSelf && source.flags & TypeFlags.ContainsSelf)) {
             if (target.flags & TypeFlags.ContainsSelf) {
-                let targetSelfType = getSymbolLinks(target.aliasSymbol!).selfType!
+                const targetSelfType = getSymbolLinks(target.aliasSymbol!).selfType!;
                 target = instantiateType(target, makeUnaryTypeMapper(targetSelfType, source));
             }
             if (source.flags & TypeFlags.ContainsSelf) {
-                let sourceSelfType = getSymbolLinks(source.aliasSymbol!).selfType!
+                const sourceSelfType = getSymbolLinks(source.aliasSymbol!).selfType!;
                 source = instantiateType(source, makeUnaryTypeMapper(sourceSelfType, target));
             }
         }
@@ -19786,11 +19786,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isTypeRelatedTo(source: Type, target: Type, relation: Map<string, RelationComparisonResult>) {
         if (!(target.flags & TypeFlags.ContainsSelf && source.flags & TypeFlags.ContainsSelf)) {
             if (target.flags & TypeFlags.ContainsSelf) {
-                let targetSelfType = getSymbolLinks(target.aliasSymbol!).selfType!
+                const targetSelfType = getSymbolLinks(target.aliasSymbol!).selfType!;
                 target = instantiateType(target, makeUnaryTypeMapper(targetSelfType, source));
             }
             if (source.flags & TypeFlags.ContainsSelf) {
-                let sourceSelfType = getSymbolLinks(source.aliasSymbol!).selfType!
+                const sourceSelfType = getSymbolLinks(source.aliasSymbol!).selfType!;
                 source = instantiateType(source, makeUnaryTypeMapper(sourceSelfType, target));
             }
         }
@@ -20099,15 +20099,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const [sourceType, targetType] = getTypeNamesForErrorDisplay(source, target);
             let generalizedSource = source;
             let generalizedSourceType = sourceType;
-            
+
             if (target.flags & TypeFlags.NeverWithError) {
-                const errorType = (target as NeverWithErrorType).errorType
-                const errorsType = (isTypeSubtypeOf(errorType, stringType) ? createTupleType([errorType]) : errorType)
-                if (!isTupleType(errorsType)) return reportNonCustom()
-                
-                const errorTypes: Type[] = Array.from({ length: errorsType.target.fixedLength }, (_, i) => getTupleElementType(errorsType, i)!)
-                if (!every(errorTypes, t => !!(t.flags & TypeFlags.StringLike))) return reportNonCustom()
-                
+                const errorType = (target as NeverWithErrorType).errorType;
+                const errorsType = (isTypeSubtypeOf(errorType, stringType) ? createTupleType([errorType]) : errorType);
+                if (!isTupleType(errorsType)) return reportNonCustom();
+
+                const errorTypes: Type[] = Array.from({ length: errorsType.target.fixedLength }, (_, i) => getTupleElementType(errorsType, i)!);
+                if (!every(errorTypes, t => !!(t.flags & TypeFlags.StringLike))) return reportNonCustom();
+
                 while (errorTypes.length > 0) {
                     reportError(Diagnostics._0,
                         typeToString(errorTypes.pop()!)
@@ -20116,11 +20116,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         .replace(/\\'/g, "'")
                         .replace(/\\\\/g, "\\")
                         .replace(/\\n/g, "\n")
-                    )
+                    );
                 }
-                return
+                return;
             }
-            return reportNonCustom()
+            return reportNonCustom();
 
             function reportNonCustom() {
                 if (isLiteralType(source) && !typeCouldHaveTopLevelSingletonTypes(target)) {
@@ -20241,11 +20241,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function isRelatedTo(originalSource: Type, originalTarget: Type, recursionFlags: RecursionFlags = RecursionFlags.Both, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
             if (!(originalTarget.flags & TypeFlags.ContainsSelf && originalSource.flags & TypeFlags.ContainsSelf)) {
                 if (originalTarget.flags & TypeFlags.ContainsSelf) {
-                    let targetSelfType = getSymbolLinks(originalTarget.aliasSymbol!).selfType!
+                    const targetSelfType = getSymbolLinks(originalTarget.aliasSymbol!).selfType!;
                     originalTarget = instantiateType(originalTarget, makeUnaryTypeMapper(targetSelfType, originalSource));
                 }
                 if (originalSource.flags & TypeFlags.ContainsSelf) {
-                    let sourceSelfType = getSymbolLinks(originalSource.aliasSymbol!).selfType!
+                    const sourceSelfType = getSymbolLinks(originalSource.aliasSymbol!).selfType!;
                     originalSource = instantiateType(originalSource, makeUnaryTypeMapper(sourceSelfType, originalTarget));
                 }
             }

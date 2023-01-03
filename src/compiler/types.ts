@@ -5686,102 +5686,102 @@ export interface NodeLinks {
     serializedTypes?: Map<string, TypeNode & {truncating?: boolean, addedLength: number}>; // Collection of types serialized at this location
 }
 
-export type TypeFlags = (typeof TypeFlags)[keyof typeof TypeFlags]
+export type TypeFlags = (typeof TypeFlags)[keyof typeof TypeFlags];
 export const TypeFlags = new class TypeFlags {
-    Any             = 1n << 0n
-    Unknown         = 1n << 1n
-    String          = 1n << 2n
-    Number          = 1n << 3n
-    Boolean         = 1n << 4n
-    Enum            = 1n << 5n   // Numeric computed enum member value
-    BigInt          = 1n << 6n
-    StringLiteral   = 1n << 7n
-    NumberLiteral   = 1n << 8n
-    BooleanLiteral  = 1n << 9n
-    EnumLiteral     = 1n << 10n  // Always combined with StringLiteral, NumberLiteral, or Union
-    BigIntLiteral   = 1n << 11n
-    ESSymbol        = 1n << 12n  // Type of symbol primitive introduced in ES6
-    UniqueESSymbol  = 1n << 13n  // unique symbol
-    Void            = 1n << 14n
-    Undefined       = 1n << 15n
-    Null            = 1n << 16n
-    Never           = 1n << 17n  // Never type
-    TypeParameter   = 1n << 18n  // Type parameter
-    Object          = 1n << 19n  // Object type
-    Union           = 1n << 20n  // Union (T | U)
-    Intersection    = 1n << 21n  // Intersection (T & U)
-    Index           = 1n << 22n  // keyof T
-    IndexedAccess   = 1n << 23n  // T[K]
-    Conditional     = 1n << 24n  // T extends U ? X : Y
-    Substitution    = 1n << 25n  // Type parameter substitution
-    NonPrimitive    = 1n << 26n  // intrinsic object type
-    TemplateLiteral = 1n << 27n  // Template literal type
-    StringMapping   = 1n << 28n  // Uppercase/Lowercase type
-    Self            = 1n << 29n
-    ContainsSelf    = 1n << 30n
-    NeverWithError  = 1n << 31n
-    Print           = 1n << 32n
-    
+    Any             = 1n << 0n;
+    Unknown         = 1n << 1n;
+    String          = 1n << 2n;
+    Number          = 1n << 3n;
+    Boolean         = 1n << 4n;
+    Enum            = 1n << 5n;   // Numeric computed enum member value
+    BigInt          = 1n << 6n;
+    StringLiteral   = 1n << 7n;
+    NumberLiteral   = 1n << 8n;
+    BooleanLiteral  = 1n << 9n;
+    EnumLiteral     = 1n << 10n;  // Always combined with StringLiteral, NumberLiteral, or Union
+    BigIntLiteral   = 1n << 11n;
+    ESSymbol        = 1n << 12n;  // Type of symbol primitive introduced in ES6
+    UniqueESSymbol  = 1n << 13n;  // unique symbol
+    Void            = 1n << 14n;
+    Undefined       = 1n << 15n;
+    Null            = 1n << 16n;
+    Never           = 1n << 17n;  // Never type
+    TypeParameter   = 1n << 18n;  // Type parameter
+    Object          = 1n << 19n;  // Object type
+    Union           = 1n << 20n;  // Union (T | U)
+    Intersection    = 1n << 21n;  // Intersection (T & U)
+    Index           = 1n << 22n;  // keyof T
+    IndexedAccess   = 1n << 23n;  // T[K]
+    Conditional     = 1n << 24n;  // T extends U ? X : Y
+    Substitution    = 1n << 25n;  // Type parameter substitution
+    NonPrimitive    = 1n << 26n;  // intrinsic object type
+    TemplateLiteral = 1n << 27n;  // Template literal type
+    StringMapping   = 1n << 28n;  // Uppercase/Lowercase type
+    Self            = 1n << 29n;
+    ContainsSelf    = 1n << 30n;
+    NeverWithError  = 1n << 31n;
+    Print           = 1n << 32n;
+
     /** @internal */
-    AnyOrUnknown = this.Any | this.Unknown
+    AnyOrUnknown = this.Any | this.Unknown;
     /** @internal */
-    Nullable = this.Undefined | this.Null
-    Literal = this.StringLiteral | this.NumberLiteral | this.BigIntLiteral | this.BooleanLiteral
-    Unit = this.Literal | this.UniqueESSymbol | this.Nullable
-    StringOrNumberLiteral = this.StringLiteral | this.NumberLiteral
+    Nullable = this.Undefined | this.Null;
+    Literal = this.StringLiteral | this.NumberLiteral | this.BigIntLiteral | this.BooleanLiteral;
+    Unit = this.Literal | this.UniqueESSymbol | this.Nullable;
+    StringOrNumberLiteral = this.StringLiteral | this.NumberLiteral;
     /** @internal */
-    StringOrNumberLiteralOrUnique = this.StringLiteral | this.NumberLiteral | this.UniqueESSymbol
+    StringOrNumberLiteralOrUnique = this.StringLiteral | this.NumberLiteral | this.UniqueESSymbol;
     /** @internal */
-    DefinitelyFalsy = this.StringLiteral | this.NumberLiteral | this.BigIntLiteral | this.BooleanLiteral | this.Void | this.Undefined | this.Null
-    PossiblyFalsy = this.DefinitelyFalsy | this.String | this.Number | this.BigInt | this.Boolean
+    DefinitelyFalsy = this.StringLiteral | this.NumberLiteral | this.BigIntLiteral | this.BooleanLiteral | this.Void | this.Undefined | this.Null;
+    PossiblyFalsy = this.DefinitelyFalsy | this.String | this.Number | this.BigInt | this.Boolean;
     /** @internal */
-    Intrinsic = this.Any | this.Unknown | this.String | this.Number | this.BigInt | this.Boolean | this.BooleanLiteral | this.ESSymbol | this.Void | this.Undefined | this.Null | this.Never | this.NonPrimitive
+    Intrinsic = this.Any | this.Unknown | this.String | this.Number | this.BigInt | this.Boolean | this.BooleanLiteral | this.ESSymbol | this.Void | this.Undefined | this.Null | this.Never | this.NonPrimitive;
     /** @internal */
-    Primitive = this.String | this.Number | this.BigInt | this.Boolean | this.Enum | this.EnumLiteral | this.ESSymbol | this.Void | this.Undefined | this.Null | this.Literal | this.UniqueESSymbol
-    StringLike = this.String | this.StringLiteral | this.TemplateLiteral | this.StringMapping | this.Print
-    NumberLike = this.Number | this.NumberLiteral | this.Enum
-    BigIntLike = this.BigInt | this.BigIntLiteral
-    BooleanLike = this.Boolean | this.BooleanLiteral
-    EnumLike = this.Enum | this.EnumLiteral
-    ESSymbolLike = this.ESSymbol | this.UniqueESSymbol
-    VoidLike = this.Void | this.Undefined
+    Primitive = this.String | this.Number | this.BigInt | this.Boolean | this.Enum | this.EnumLiteral | this.ESSymbol | this.Void | this.Undefined | this.Null | this.Literal | this.UniqueESSymbol;
+    StringLike = this.String | this.StringLiteral | this.TemplateLiteral | this.StringMapping | this.Print;
+    NumberLike = this.Number | this.NumberLiteral | this.Enum;
+    BigIntLike = this.BigInt | this.BigIntLiteral;
+    BooleanLike = this.Boolean | this.BooleanLiteral;
+    EnumLike = this.Enum | this.EnumLiteral;
+    ESSymbolLike = this.ESSymbol | this.UniqueESSymbol;
+    VoidLike = this.Void | this.Undefined;
     /** @internal */
-    DefinitelyNonNullable = this.StringLike | this.NumberLike | this.BigIntLike | this.BooleanLike | this.EnumLike | this.ESSymbolLike | this.Object | this.NonPrimitive
+    DefinitelyNonNullable = this.StringLike | this.NumberLike | this.BigIntLike | this.BooleanLike | this.EnumLike | this.ESSymbolLike | this.Object | this.NonPrimitive;
     /** @internal */
-    DisjointDomains = this.NonPrimitive | this.StringLike | this.NumberLike | this.BigIntLike | this.BooleanLike | this.ESSymbolLike | this.VoidLike | this.Null
-    UnionOrIntersection = this.Union | this.Intersection
-    StructuredType = this.Object | this.Union | this.Intersection
-    TypeVariable = this.TypeParameter | this.IndexedAccess
-    InstantiableNonPrimitive = this.TypeVariable | this.Conditional | this.Substitution | this.NeverWithError
-    InstantiablePrimitive = this.Index | this.TemplateLiteral | this.StringMapping | this.Print
-    Instantiable = this.InstantiableNonPrimitive | this.InstantiablePrimitive
-    StructuredOrInstantiable = this.StructuredType | this.Instantiable
+    DisjointDomains = this.NonPrimitive | this.StringLike | this.NumberLike | this.BigIntLike | this.BooleanLike | this.ESSymbolLike | this.VoidLike | this.Null;
+    UnionOrIntersection = this.Union | this.Intersection;
+    StructuredType = this.Object | this.Union | this.Intersection;
+    TypeVariable = this.TypeParameter | this.IndexedAccess;
+    InstantiableNonPrimitive = this.TypeVariable | this.Conditional | this.Substitution | this.NeverWithError;
+    InstantiablePrimitive = this.Index | this.TemplateLiteral | this.StringMapping | this.Print;
+    Instantiable = this.InstantiableNonPrimitive | this.InstantiablePrimitive;
+    StructuredOrInstantiable = this.StructuredType | this.Instantiable;
     /** @internal */
-    ObjectFlagsType = this.Any | this.Nullable | this.Never | this.Object | this.Union | this.Intersection
+    ObjectFlagsType = this.Any | this.Nullable | this.Never | this.Object | this.Union | this.Intersection;
     /** @internal */
-    Simplifiable = this.IndexedAccess | this.Conditional
+    Simplifiable = this.IndexedAccess | this.Conditional;
     /** @internal */
-    Singleton = this.Any | this.Unknown | this.String | this.Number | this.Boolean | this.BigInt | this.ESSymbol | this.Void | this.Undefined | this.Null | this.Never | this.NonPrimitive
+    Singleton = this.Any | this.Unknown | this.String | this.Number | this.Boolean | this.BigInt | this.ESSymbol | this.Void | this.Undefined | this.Null | this.Never | this.NonPrimitive;
     // 'Narrowable' types are types where narrowing actually narrows.
     // This *should* be every type other than null, undefined, void, and never
-    Narrowable = this.Any | this.Unknown | this.StructuredOrInstantiable | this.StringLike | this.NumberLike | this.BigIntLike | this.BooleanLike | this.ESSymbol | this.UniqueESSymbol | this.NonPrimitive
+    Narrowable = this.Any | this.Unknown | this.StructuredOrInstantiable | this.StringLike | this.NumberLike | this.BigIntLike | this.BooleanLike | this.ESSymbol | this.UniqueESSymbol | this.NonPrimitive;
     // The following flags are aggregated during union and intersection type construction
     /** @internal */
-    IncludesMask = this.Any | this.Unknown | this.Primitive | this.Never | this.Object | this.Union | this.Intersection | this.NonPrimitive | this.TemplateLiteral
+    IncludesMask = this.Any | this.Unknown | this.Primitive | this.Never | this.Object | this.Union | this.Intersection | this.NonPrimitive | this.TemplateLiteral;
     // The following flags are used for different purposes during union and intersection type construction
     /** @internal */
-    IncludesMissingType = this.TypeParameter
+    IncludesMissingType = this.TypeParameter;
     /** @internal */
-    IncludesNonWideningType = this.Index
+    IncludesNonWideningType = this.Index;
     /** @internal */
-    IncludesWildcard = this.IndexedAccess
+    IncludesWildcard = this.IndexedAccess;
     /** @internal */
-    IncludesEmptyObject = this.Conditional
+    IncludesEmptyObject = this.Conditional;
     /** @internal */
-    IncludesInstantiable = this.Substitution
+    IncludesInstantiable = this.Substitution;
     /** @internal */
-    NotPrimitiveUnion = this.Any | this.Unknown | this.Enum | this.Void | this.Never | this.Object | this.Intersection | this.IncludesInstantiable
-}
+    NotPrimitiveUnion = this.Any | this.Unknown | this.Enum | this.Void | this.Never | this.Object | this.Intersection | this.IncludesInstantiable;
+}();
 
 export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
 
