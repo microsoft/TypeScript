@@ -1,3 +1,4 @@
+/* eslint-disable simple-import-sort/exports */
 /* Generated file to emulate the ts.classifier namespace. */
 
 import * as v2020 from "./ts.classifier.v2020";

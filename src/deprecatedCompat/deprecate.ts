@@ -3,8 +3,8 @@ import {
     DeprecationOptions,
     formatStringFromArgs,
     noop,
-    version,
     Version,
+    version,
 } from "./_namespaces/ts";
 
 export let enableDeprecationWarnings = true;

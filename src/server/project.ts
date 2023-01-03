@@ -1,28 +1,5 @@
 import * as ts from "./_namespaces/ts";
 import {
-    asNormalizedPath,
-    createModuleSpecifierCache,
-    emptyArray,
-    Errors,
-    FileStats,
-    forEachResolvedProjectReferenceProject,
-    LogLevel,
-    ModuleImportResult,
-    Msg,
-    NormalizedPath,
-    projectContainsInfoDirectly,
-    ProjectOptions,
-    ProjectReferenceProjectLoadKind,
-    ProjectService,
-    protocol,
-    ScriptInfo,
-    ServerHost,
-    Session,
-    toNormalizedPath,
-    TypingsCache,
-    updateProjectIfDirty,
-} from "./_namespaces/ts.server";
-import {
     addRange,
     append,
     ApplyCodeActionCommandResult,
@@ -148,6 +125,29 @@ import {
     WatchOptions,
     WatchType,
 } from "./_namespaces/ts";
+import {
+    asNormalizedPath,
+    createModuleSpecifierCache,
+    emptyArray,
+    Errors,
+    FileStats,
+    forEachResolvedProjectReferenceProject,
+    LogLevel,
+    ModuleImportResult,
+    Msg,
+    NormalizedPath,
+    projectContainsInfoDirectly,
+    ProjectOptions,
+    ProjectReferenceProjectLoadKind,
+    ProjectService,
+    protocol,
+    ScriptInfo,
+    ServerHost,
+    Session,
+    toNormalizedPath,
+    TypingsCache,
+    updateProjectIfDirty,
+} from "./_namespaces/ts.server";
 
 export enum ProjectKind {
     Inferred,

@@ -1,9 +1,4 @@
 import {
-    createCodeFixActionWithoutFixAll,
-    moduleSpecifierToValidIdentifier,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
-import {
     __String,
     arrayFrom,
     ArrowFunction,
@@ -81,6 +76,11 @@ import {
     TypeChecker,
     VariableStatement,
 } from "../_namespaces/ts";
+import {
+    createCodeFixActionWithoutFixAll,
+    moduleSpecifierToValidIdentifier,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix";
 
 registerCodeFix({
     errorCodes: [Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module.code],

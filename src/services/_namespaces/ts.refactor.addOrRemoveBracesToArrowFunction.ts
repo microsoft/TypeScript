@@ -1,3 +1,4 @@
+/* eslint-disable simple-import-sort/exports */
 /* Generated file to emulate the ts.refactor.addOrRemoveBracesToArrowFunction namespace. */
 
 export * from "../refactors/convertOverloadListToSingleSignature";

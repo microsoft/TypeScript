@@ -1,5 +1,5 @@
-import * as ts from "../_namespaces/ts";
 import { setEnableDeprecationWarnings } from "../../deprecatedCompat/deprecate";
+import * as ts from "../_namespaces/ts";
 
 describe("unittests:: FactoryAPI", () => {
     function assertSyntaxKind(node: ts.Node, expected: ts.SyntaxKind) {

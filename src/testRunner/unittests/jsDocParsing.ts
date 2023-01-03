@@ -1,5 +1,5 @@
-import * as ts from "../_namespaces/ts";
 import * as Harness from "../_namespaces/Harness";
+import * as ts from "../_namespaces/ts";
 import * as Utils from "../_namespaces/Utils";
 
 describe("unittests:: JSDocParsing", () => {

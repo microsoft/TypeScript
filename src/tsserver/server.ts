@@ -1,4 +1,11 @@
 import {
+    Debug,
+    getNodeMajorVersion,
+    setStackTraceLimit,
+    sys,
+    version,
+} from "./_namespaces/ts";
+import {
     emptyArray,
     findArgument,
     hasArgument,
@@ -6,13 +13,6 @@ import {
     Msg,
     StartInput,
 } from "./_namespaces/ts.server";
-import {
-    Debug,
-    getNodeMajorVersion,
-    setStackTraceLimit,
-    sys,
-    version,
-} from "./_namespaces/ts";
 
 export * from "./_namespaces/ts";
 
