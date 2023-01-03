@@ -1626,6 +1626,7 @@ export namespace Completion {
         "typeof",
         "unique",
         "unknown",
+        "self",
         "var",
         "void",
         "while",
