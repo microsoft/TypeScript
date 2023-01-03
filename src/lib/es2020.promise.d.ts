@@ -17,13 +17,9 @@ interface PromiseConstructor {
      * @param values An array of Promises.
      * @returns A new Promise.
      */
-    allSettled<T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>> }>;
-
-    /**
-     * Creates a Promise that is resolved with an array of results when all
-     * of the provided Promises resolve or reject.
-     * @param values An array of Promises.
-     * @returns A new Promise.
-     */
-    allSettled<T>(values: Iterable<T | PromiseLike<T>>): Promise<PromiseSettledResult<Awaited<T>>[]>;
+    allSettled<T extends [unknown] | ArrayLike<unknown> | Iterable<unknown>>(values: T): Promise<
+        T extends {[P in 0]: unknown} ? 
+            {-readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>} : 
+                T extends ArrayLike<infer S> | Iterable<infer S> ? PromiseSettledResult<Awaited<S>>[] : never 
+    >
 }
