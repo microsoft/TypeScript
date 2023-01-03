@@ -24303,13 +24303,42 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         else {
                             const middleLength = targetArity - startLength - endLength;
-                            if (middleLength === 2 && elementFlags[startLength] & elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(source)) {
-                                // Middle of target is [...T, ...U] and source is tuple type
-                                const targetInfo = getInferenceInfoForType(elementTypes[startLength]);
-                                if (targetInfo && targetInfo.impliedArity !== undefined) {
-                                    // Infer slices from source based on implied arity of T.
-                                    inferFromTypes(sliceTupleType(source, startLength, endLength + sourceArity - targetInfo.impliedArity), elementTypes[startLength]);
-                                    inferFromTypes(sliceTupleType(source, startLength + targetInfo.impliedArity, endLength), elementTypes[startLength + 1]);
+                            if (middleLength === 2) {
+                                if (elementFlags[startLength] & elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(source)) {
+                                    // Middle of target is [...T, ...U] and source is tuple type
+                                    const targetInfo = getInferenceInfoForType(elementTypes[startLength]);
+                                    if (targetInfo && targetInfo.impliedArity !== undefined) {
+                                        // Infer slices from source based on implied arity of T.
+                                        inferFromTypes(sliceTupleType(source, startLength, endLength + sourceArity - targetInfo.impliedArity), elementTypes[startLength]);
+                                        inferFromTypes(sliceTupleType(source, startLength + targetInfo.impliedArity, endLength), elementTypes[startLength + 1]);
+                                    }
+                                }
+                                else if (elementFlags[startLength] & ElementFlags.Variadic && elementFlags[startLength + 1] & ElementFlags.Rest) {
+                                    // Middle of target is [...T, ...rest] and source is tuple type
+                                    // if T is constrained by a fixed-size tuple we might be able to use its arity to infer T
+                                    const param = getInferenceInfoForType(elementTypes[startLength])?.typeParameter;
+                                    const constraint = param && getBaseConstraintOfType(param);
+                                    if (constraint && isTupleType(constraint) && !constraint.target.hasRestElement) {
+                                        const impliedArity = constraint.target.fixedLength;
+                                        inferFromTypes(sliceTupleType(source, startLength, sourceArity - (startLength + impliedArity)), elementTypes[startLength]);
+                                        inferFromTypes(getElementTypeOfSliceOfTupleType(source, startLength + impliedArity, endLength)!, elementTypes[startLength + 1]);
+                                    }
+                                }
+                                else if (elementFlags[startLength] & ElementFlags.Rest && elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(source)) {
+                                    // Middle of target is [...rest, ...T] and source is tuple type
+                                    // if T is constrained by a fixed-size tuple we might be able to use its arity to infer T
+                                    const param = getInferenceInfoForType(elementTypes[startLength + 1])?.typeParameter;
+                                    const constraint = param && getBaseConstraintOfType(param);
+                                    if (constraint && isTupleType(constraint) && !constraint.target.hasRestElement) {
+                                        const impliedArity = constraint.target.fixedLength;
+                                        const endIndex = sourceArity - getEndElementCount(target.target, ElementFlags.Fixed);
+                                        const startIndex = endIndex - impliedArity;
+                                        const trailingSlice = createTupleType(getTypeArguments(source).slice(startIndex, endIndex), source.target.elementFlags.slice(startIndex, endIndex),
+                                            /*readonly*/ false, source.target.labeledElementDeclarations && source.target.labeledElementDeclarations.slice(startIndex, endIndex));
+
+                                        inferFromTypes(getElementTypeOfSliceOfTupleType(source, startLength, endLength + impliedArity)!, elementTypes[startLength]);
+                                        inferFromTypes(trailingSlice, elementTypes[startLength + 1]);
+                                    }
                                 }
                             }
                             else if (middleLength === 1 && elementFlags[startLength] & ElementFlags.Variadic) {
