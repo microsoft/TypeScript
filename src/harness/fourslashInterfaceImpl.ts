@@ -1091,6 +1091,7 @@ export namespace Completion {
         "undefined",
         "unique",
         "unknown",
+        "self",
         "void",
     ].map(keywordEntry);
 
@@ -1269,6 +1270,7 @@ export namespace Completion {
                 case "unique":
                 case "override":
                 case "unknown":
+                case "self":
                 case "global":
                 case "bigint":
                     return false;
@@ -1411,6 +1413,7 @@ export namespace Completion {
         "typeof",
         "unique",
         "unknown",
+        "self",
         "var",
         "void",
         "while",
