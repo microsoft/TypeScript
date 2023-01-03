@@ -208,6 +208,7 @@ const libEntries: [string, string][] = [
     ["es2022.object", "lib.es2022.object.d.ts"],
     ["es2022.sharedmemory", "lib.es2022.sharedmemory.d.ts"],
     ["es2022.string", "lib.es2022.string.d.ts"],
+    ["es2022.regexp", "lib.es2022.regexp.d.ts"],
     ["esnext.array", "lib.es2022.array.d.ts"],
     ["esnext.symbol", "lib.es2019.symbol.d.ts"],
     ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
