@@ -29,4 +29,4 @@ async function countEverything(): Promise<number> {
 
 // #31179
 
-const expected: Promise<["a", "b", "c"]> = Promise.all(undefined as readonly ["a", "b", "c"]);
+const expected: Promise<["a", "b", "c"]> = Promise.all(undefined as unknown as readonly ["a", "b", "c"]);
