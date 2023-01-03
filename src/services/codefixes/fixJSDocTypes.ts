@@ -1,5 +1,4 @@
 import {
-    append,
     AsExpression,
     CallSignatureDeclaration,
     CodeFixAction,
@@ -9,7 +8,6 @@ import {
     FunctionDeclaration,
     GetAccessorDeclaration,
     IndexSignatureDeclaration,
-    isJSDocNullableType,
     MappedTypeNode,
     MethodDeclaration,
     MethodSignature,
@@ -27,8 +25,10 @@ import {
     TypeFlags,
     TypeNode,
     VariableDeclaration,
+    append,
     findAncestor,
     getTokenAtPosition,
+    isJSDocNullableType,
     textChanges,
 } from "../_namespaces/ts";
 import {
