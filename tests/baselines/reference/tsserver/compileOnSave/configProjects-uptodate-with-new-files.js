@@ -87,7 +87,7 @@ Info 19   [00:00:42.000] 	Files (6)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	moduleFile1.ts
 	  Imported via "./moduleFile1" from file 'file1Consumer1.ts'
 	  Imported via "./moduleFile1" from file 'file1Consumer2.ts'
@@ -257,7 +257,7 @@ Info 33   [00:01:04.000] 	Files (7)
 
 
 	../lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	moduleFile1.ts
 	  Imported via "./moduleFile1" from file 'file1Consumer1.ts'
 	  Imported via "./moduleFile1" from file 'file1Consumer2.ts'

@@ -73,7 +73,7 @@ exitCode:: ExitStatus.undefined
 
 //// [/a/b/file2.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.t2 = void 0;
 /// <reference path="./file1.ts" />
 exports.t2 = 10;
@@ -81,7 +81,7 @@ exports.t2 = 10;
 
 //// [/a/b/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.t1 = void 0;
 /// <reference path="./file2.ts" />
 exports.t1 = 10;
@@ -143,7 +143,7 @@ exitCode:: ExitStatus.undefined
 //// [/a/b/file2.js] file written with same contents
 //// [/a/b/file1.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.t3 = exports.t1 = void 0;
 /// <reference path="./file2.ts" />
 exports.t1 = 10;

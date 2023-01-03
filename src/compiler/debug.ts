@@ -589,23 +589,8 @@ export namespace Debug {
         if (isDebugInfoEnabled) return;
 
         // avoid recomputing
-        let weakTypeTextMap: WeakMap<Type, string> | undefined;
-        let weakNodeTextMap: WeakMap<Node, string> | undefined;
-
-        function getWeakTypeTextMap() {
-            if (weakTypeTextMap === undefined) {
-                if (typeof WeakMap === "function") weakTypeTextMap = new WeakMap();
-            }
-            return weakTypeTextMap;
-        }
-
-        function getWeakNodeTextMap() {
-            if (weakNodeTextMap === undefined) {
-                if (typeof WeakMap === "function") weakNodeTextMap = new WeakMap();
-            }
-            return weakNodeTextMap;
-        }
-
+        const weakTypeTextMap = new WeakMap<Type, string>();
+        const weakNodeTextMap = new WeakMap<Node, string>();
 
         // Add additional properties in debug mode to assist with debugging.
         Object.defineProperties(objectAllocator.getSymbolConstructor().prototype, {
@@ -659,11 +644,10 @@ export namespace Debug {
             __debugTypeToString: {
                 value(this: Type) {
                     // avoid recomputing
-                    const map = getWeakTypeTextMap();
-                    let text = map?.get(this);
+                    let text = weakTypeTextMap.get(this);
                     if (text === undefined) {
                         text = this.checker.typeToString(this);
-                        map?.set(this, text);
+                        weakTypeTextMap.set(this, text);
                     }
                     return text;
                 }
@@ -739,13 +723,12 @@ export namespace Debug {
                         value(this: Node, includeTrivia?: boolean) {
                             if (nodeIsSynthesized(this)) return "";
                             // avoid recomputing
-                            const map = getWeakNodeTextMap();
-                            let text = map?.get(this);
+                            let text = weakNodeTextMap.get(this);
                             if (text === undefined) {
                                 const parseNode = getParseTreeNode(this);
                                 const sourceFile = parseNode && getSourceFileOfNode(parseNode);
                                 text = sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
-                                map?.set(this, text);
+                                weakNodeTextMap.set(this, text);
                             }
                             return text;
                         }

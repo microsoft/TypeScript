@@ -6,6 +6,7 @@ import {
     Block,
     CallExpression,
     canBeConvertedToAsync,
+    canHaveSymbol,
     CodeFixContext,
     concatenate,
     createMultiMap,
@@ -867,7 +868,7 @@ function getArgBindingName(funcNode: Expression, transformer: Transformer): Synt
     }
 
     function getSymbol(node: Node): Symbol | undefined {
-        return node.symbol ? node.symbol : transformer.checker.getSymbolAtLocation(node);
+        return tryCast(node, canHaveSymbol)?.symbol ?? transformer.checker.getSymbolAtLocation(node);
     }
 
     function getOriginalNode(node: Node): Node {

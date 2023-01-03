@@ -172,7 +172,12 @@ function getPlainDiagnosticFollowingNewLines(diagnostic: Diagnostic, newLine: st
 export function getLocaleTimeString(system: System) {
     return !system.now ?
         new Date().toLocaleTimeString() :
-        system.now().toLocaleTimeString("en-US", { timeZone: "UTC" });
+        // On some systems / builds of Node, there's a non-breaking space between the time and AM/PM.
+        // This branch is solely for testing, so just switch it to a normal space for baseline stability.
+        // See:
+        //     - https://github.com/nodejs/node/issues/45171
+        //     - https://github.com/nodejs/node/issues/45753
+        system.now().toLocaleTimeString("en-US", { timeZone: "UTC" }).replace("\u202f", " ");
 }
 
 /**
@@ -344,8 +349,7 @@ export function listFiles<T extends BuilderProgram>(program: Program | T, write:
 /** @internal */
 export function explainFiles(program: Program, write: (s: string) => void) {
     const reasons = program.getFileIncludeReasons();
-    const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
-    const relativeFileName = (fileName: string) => convertToRelativePath(fileName, program.getCurrentDirectory(), getCanonicalFileName);
+    const relativeFileName = (fileName: string) => convertToRelativePath(fileName, program.getCurrentDirectory(), program.getCanonicalFileName);
     for (const file of program.getSourceFiles()) {
         write(`${toFileName(file, relativeFileName)}`);
         reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, reason, relativeFileName).messageText}`));
@@ -411,10 +415,9 @@ export function getMatchedFileSpec(program: Program, fileName: string) {
     const configFile = program.getCompilerOptions().configFile;
     if (!configFile?.configFileSpecs?.validatedFilesSpec) return undefined;
 
-    const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
-    const filePath = getCanonicalFileName(fileName);
+    const filePath = program.getCanonicalFileName(fileName);
     const basePath = getDirectoryPath(getNormalizedAbsolutePath(configFile.fileName, program.getCurrentDirectory()));
-    return find(configFile.configFileSpecs.validatedFilesSpec, fileSpec => getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
+    return find(configFile.configFileSpecs.validatedFilesSpec, fileSpec => program.getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
 }
 
 /** @internal */
@@ -765,7 +768,6 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
         getEnvironmentVariable: maybeBind(host, host.getEnvironmentVariable) || (() => ""),
         createHash: maybeBind(host, host.createHash),
         readDirectory: maybeBind(host, host.readDirectory),
-        disableUseFileVersionAsSignature: host.disableUseFileVersionAsSignature,
         storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
     };
     return compilerHost;
@@ -847,7 +849,6 @@ export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiag
         writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
         createHash: maybeBind(system, system.createHash),
         createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>,
-        disableUseFileVersionAsSignature: system.disableUseFileVersionAsSignature,
         storeFilesChangingSignatureDuringEmit: system.storeFilesChangingSignatureDuringEmit,
         now: maybeBind(system, system.now),
     };

@@ -36,26 +36,26 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
             { currentDirectory: "/user/username/projects/myproject" }
         ),
         commandLineArgs: ["--b", "-w"],
-        changes: [
+        edits: [
             {
                 caption: "reports syntax errors after change to config file",
-                change: sys => sys.replaceFileText(`/user/username/projects/myproject/tsconfig.json`, ",", `,
+                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/tsconfig.json`, ",", `,
         "declaration": true,`),
                 timeouts: build,
             },
             {
                 caption: "reports syntax errors after change to ts file",
-                change: sys => sys.replaceFileText(`/user/username/projects/myproject/a.ts`, "foo", "fooBar"),
+                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/a.ts`, "foo", "fooBar"),
                 timeouts: build,
             },
             {
                 caption: "reports error when there is no change to tsconfig file",
-                change: sys => sys.replaceFileText(`/user/username/projects/myproject/tsconfig.json`, "", ""),
+                edit: sys => sys.replaceFileText(`/user/username/projects/myproject/tsconfig.json`, "", ""),
                 timeouts: build,
             },
             {
                 caption: "builds after fixing config file errors",
-                change: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({
+                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, JSON.stringify({
                     compilerOptions: { composite: true, declaration: true },
                     files: ["a.ts", "b.ts"]
                 })),

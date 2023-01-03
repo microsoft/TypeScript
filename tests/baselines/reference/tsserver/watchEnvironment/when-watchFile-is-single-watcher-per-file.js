@@ -69,7 +69,7 @@ Info 20   [00:00:41.000] 	Files (3)
 
 
 	../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	tsconfig.json
 	  Imported via "./tsconfig.json" from file 'index.ts'
 	index.ts

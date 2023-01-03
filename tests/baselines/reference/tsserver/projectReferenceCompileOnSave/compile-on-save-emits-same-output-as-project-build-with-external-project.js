@@ -314,7 +314,7 @@ Info 19   [00:01:12.000] 	Files (3)
 
 
 	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es3'
+	  Default library for target 'es5'
 	../buttonClass/Source.ts
 	  Source from referenced project '../buttonClass/tsconfig.json' included because '--outFile' specified
 	Source.ts

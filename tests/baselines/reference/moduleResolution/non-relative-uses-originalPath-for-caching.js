@@ -12,7 +12,8 @@ Resolution:: {
     "resolvedFileName": "/modules/a.ts",
     "originalPath": "/sub/node_modules/a/index.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/sub/dir/node_modules/a/package.json",
@@ -32,8 +33,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/sub/node_modules/a/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "a" from /sub/foo.ts
@@ -42,7 +42,8 @@ Resolution:: {
     "resolvedFileName": "/modules/a.ts",
     "originalPath": "/sub/node_modules/a/index.ts",
     "extension": ".ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/sub/dir/node_modules/a/package.json",
@@ -62,8 +63,7 @@ Resolution:: {
   ],
   "affectingLocations": [
     "/sub/node_modules/a/package.json"
-  ],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "a" from /foo.ts
@@ -84,7 +84,5 @@ Resolution:: {
     "/node_modules/a.jsx",
     "/node_modules/a/index.js",
     "/node_modules/a/index.jsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }

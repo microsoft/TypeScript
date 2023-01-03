@@ -1489,17 +1489,18 @@ export function elideNodes<T extends Node>(factory: NodeFactory, nodes: NodeArra
  * @internal
  */
 export function getNodeForGeneratedName(name: GeneratedIdentifier | GeneratedPrivateIdentifier) {
-    if (name.autoGenerateFlags & GeneratedIdentifierFlags.Node) {
-        const autoGenerateId = name.autoGenerateId;
+    if (name.autoGenerate.flags & GeneratedIdentifierFlags.Node) {
+        const autoGenerateId = name.autoGenerate.id;
         let node = name as Node;
         let original = node.original;
         while (original) {
             node = original;
 
             // if "node" is a different generated name (having a different "autoGenerateId"), use it and stop traversing.
-            if (isMemberName(node)
-                && !!(node.autoGenerateFlags! & GeneratedIdentifierFlags.Node)
-                && node.autoGenerateId !== autoGenerateId) {
+            if (isMemberName(node) && (
+                node.autoGenerate === undefined ||
+                !!(node.autoGenerate.flags & GeneratedIdentifierFlags.Node) &&
+                node.autoGenerate.id !== autoGenerateId)) {
                 break;
             }
 

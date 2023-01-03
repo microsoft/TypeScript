@@ -11,7 +11,6 @@
         { "path": "../services" },
         { "path": "../jsTyping" },
         { "path": "../server" },
-        { "path": "../webServer" }
     ],
     "include": ["**/*"]
 }

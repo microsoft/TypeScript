@@ -7,8 +7,8 @@ import _glob from "glob";
 import util from "util";
 import chalk from "chalk";
 import { Debouncer, Deferred, exec, getDiffTool, getDirSize, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
-import { cleanTestDirs, localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
-import { cleanProject, buildProject as realBuildProject, watchProject } from "./scripts/build/projects.mjs";
+import { localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
+import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
 import esbuild from "esbuild";
@@ -21,42 +21,11 @@ const glob = util.promisify(_glob);
 /** @typedef {ReturnType<typeof task>} Task */
 void 0;
 
-const copyrightFilename = "CopyrightNotice.txt";
+const copyrightFilename = "./scripts/CopyrightNotice.txt";
 const copyright = memoize(async () => {
     const contents = await fs.promises.readFile(copyrightFilename, "utf-8");
     return contents.replace(/\r\n/g, "\n");
 });
-
-
-// TODO(jakebailey): This is really gross. If the build is cancelled (i.e. Ctrl+C), the modification will persist.
-// Waiting on: https://github.com/microsoft/TypeScript/issues/51164
-let currentlyBuilding = 0;
-let oldTsconfigBase;
-
-/** @type {typeof realBuildProject} */
-const buildProjectWithEmit = async (...args) => {
-    const tsconfigBasePath = "./src/tsconfig-base.json";
-
-    // Not using fs.promises here, to ensure we are synchronous until running the real build.
-
-    if (currentlyBuilding === 0) {
-        oldTsconfigBase = fs.readFileSync(tsconfigBasePath, "utf-8");
-        fs.writeFileSync(tsconfigBasePath, oldTsconfigBase.replace(`"emitDeclarationOnly": true,`, `"emitDeclarationOnly": false, // DO NOT COMMIT`));
-    }
-
-    currentlyBuilding++;
-
-    await realBuildProject(...args);
-
-    currentlyBuilding--;
-
-    if (currentlyBuilding === 0) {
-        fs.writeFileSync(tsconfigBasePath, oldTsconfigBase);
-    }
-};
-
-
-const buildProject = cmdLineOptions.bundle ? realBuildProject : buildProjectWithEmit;
 
 
 export const buildScripts = task({
@@ -191,7 +160,6 @@ async function runDtsBundler(entrypoint, output) {
  * @param {BundlerTaskOptions} [taskOptions]
  *
  * @typedef BundlerTaskOptions
- * @property {string[]} [external]
  * @property {boolean} [exportIsTsObject]
  * @property {boolean} [treeShaking]
  * @property {esbuild.WatchMode} [watchMode]
@@ -210,32 +178,10 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             sourcemap: "linked",
             sourcesContent: false,
             treeShaking: taskOptions.treeShaking,
-            external: [
-                ...(taskOptions.external ?? []),
-                "source-map-support",
-            ],
+            packages: "external",
             logLevel: "warning",
             // legalComments: "none", // If we add copyright headers to the source files, uncomment.
             plugins: [
-                {
-                    name: "no-node-modules",
-                    setup: (build) => {
-                        build.onLoad({ filter: /[\\/]node_modules[\\/]/ }, () => {
-                            // Ideally, we'd use "--external:./node_modules/*" here, but that doesn't work; we
-                            // will instead end up with paths to node_modules rather than the package names.
-                            // Instead, we'll return a load error when we see that we're trying to bundle from
-                            // node_modules, then explicitly declare which external dependencies we rely on, which
-                            // ensures that the correct module specifier is kept in the output (the non-wildcard
-                            // form works properly). It also helps us keep tabs on what external dependencies we
-                            // may be importing, which is handy.
-                            //
-                            // See: https://github.com/evanw/esbuild/issues/1958
-                            return {
-                                errors: [{ text: 'Attempted to bundle from node_modules; ensure "external" is set correctly.' }]
-                            };
-                        });
-                    }
-                },
                 {
                     name: "fix-require",
                     setup: (build) => {
@@ -416,11 +362,6 @@ const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     builtEntrypoint: "./built/local/tsserver/server.js",
     output: "./built/local/tsserver.js",
     mainDeps: [generateLibs],
-    // Even though this seems like an exectuable, so could be the default CJS,
-    // this is used in the browser too. Do the same thing that we do for our
-    // libraries and generate an IIFE with name `ts`, as to not pollute the global
-    // scope.
-    bundlerOptions: { exportIsTsObject: true },
 });
 export { tsserver, watchTsserver };
 
@@ -484,14 +425,6 @@ const { main: tests, watch: watchTests } = entrypointBuildTask({
     bundlerOptions: {
         // Ensure we never drop any dead code, which might be helpful while debugging.
         treeShaking: false,
-        // These are directly imported via import statements and should not be bundled.
-        external: [
-            "chai",
-            "del",
-            "diff",
-            "mocha",
-            "ms",
-        ],
         watchMode: {
             onRebuild() {
                 watchTestsEmitter.emit("rebuild");
@@ -805,7 +738,7 @@ function baselineAcceptTask(localBaseline, refBaseline) {
         }
         const toDelete = await glob(`${localBaseline}/**/*.delete`, { nodir: true });
         for (const p of toDelete) {
-            const out = localPathToRefPath(p);
+            const out = localPathToRefPath(p).replace(/\.delete$/, "");
             await fs.promises.rm(out);
         }
     };

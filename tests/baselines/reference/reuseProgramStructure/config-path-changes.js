@@ -23,7 +23,18 @@ File: a.ts
 var x = 1
 resolvedModules: undefined
 resolvedTypeReferenceDirectiveNames: 
-typerefs: undefined
+typerefs: {
+  "failedLookupLocations": [
+    "/a/b/node_modules/@types/typerefs/package.json",
+    "/a/b/node_modules/@types/typerefs/index.d.ts",
+    "node_modules/typerefs/package.json",
+    "node_modules/typerefs.d.ts",
+    "node_modules/typerefs/index.d.ts",
+    "node_modules/@types/typerefs/package.json",
+    "node_modules/@types/typerefs.d.ts",
+    "node_modules/@types/typerefs/index.d.ts"
+  ]
+}
 
 
 MissingPaths:: ["non-existing-file.ts","lib.d.ts"]
@@ -58,7 +69,18 @@ File: a.ts
 var x = 1
 resolvedModules: undefined
 resolvedTypeReferenceDirectiveNames: 
-typerefs: undefined
+typerefs: {
+  "failedLookupLocations": [
+    "/a/c/node_modules/@types/typerefs/package.json",
+    "/a/c/node_modules/@types/typerefs/index.d.ts",
+    "node_modules/typerefs/package.json",
+    "node_modules/typerefs.d.ts",
+    "node_modules/typerefs/index.d.ts",
+    "node_modules/@types/typerefs/package.json",
+    "node_modules/@types/typerefs.d.ts",
+    "node_modules/@types/typerefs/index.d.ts"
+  ]
+}
 
 
 MissingPaths:: ["non-existing-file.ts","lib.d.ts"]

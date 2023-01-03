@@ -9,7 +9,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/a/b/node_modules/foo.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/b/c/d/node_modules/foo/package.json",
@@ -35,9 +36,7 @@ Resolution:: {
     "/a/b/node_modules/foo/package.json",
     "/a/b/node_modules/foo.ts",
     "/a/b/node_modules/foo.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }
 
 Resolving "foo" from /a/b/c/d/e.ts with host that doesnt have directoryExists
@@ -51,7 +50,8 @@ Resolution:: {
   "resolvedModule": {
     "resolvedFileName": "/a/b/node_modules/foo.d.ts",
     "extension": ".d.ts",
-    "isExternalLibraryImport": true
+    "isExternalLibraryImport": true,
+    "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
     "/a/b/c/d/node_modules/foo/package.json",
@@ -77,7 +77,5 @@ Resolution:: {
     "/a/b/node_modules/foo/package.json",
     "/a/b/node_modules/foo.ts",
     "/a/b/node_modules/foo.tsx"
-  ],
-  "affectingLocations": [],
-  "resolutionDiagnostics": []
+  ]
 }

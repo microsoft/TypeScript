@@ -1,6 +1,6 @@
 [
     "======== Resolving module 'someModule' from 'tests/cases/compiler/src/main.ts'. ========",
-    "Module resolution kind is not specified, using 'NodeJs'.",
+    "Module resolution kind is not specified, using 'Node10'.",
     "'paths' option is specified, looking for a pattern to match module name 'someModule'.",
     "Loading module 'someModule' from 'node_modules' folder, target file types: TypeScript, Declaration.",
     "Directory 'tests/cases/compiler/src/node_modules' does not exist, skipping all lookups in it.",
