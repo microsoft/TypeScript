@@ -11363,7 +11363,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         getDeclaredTypeOfClassOrInterface(getSymbolOfDeclaration(node as ClassLikeDeclaration | InterfaceDeclaration)).thisType;
 
                     const selfType =
-                        node.kind === SyntaxKind.TypeAliasDeclaration ? getSymbolLinks(node.symbol).selfType : undefined;
+                        node.kind === SyntaxKind.TypeAliasDeclaration ? getSymbolLinks(getSymbolOfDeclaration(node as TypeAliasDeclaration)).selfType : undefined;
 
                     const implicitTypeParameters = [
                         ...(thisType ? [thisType] : []),
