@@ -17,6 +17,13 @@ setHeader("Accept", "test2")
 setHeader("sEt-cOoKiE", "stop writing headers like this but ok")
 setHeader("Acept", "nah this has a typo")
 
+// TODO?: the autocompletion doesn't work, although it could be doable by
+// instantiating `self` with `unknown`, at least in this case.
+// Or by an alternative definition...
+// type CaseInsensitive<T extends string> = T | [existing-defintion]
+// the autocompletion works now but the custom error message doesn't
+// get shown
+
 type Headers =
   Record<CaseInsensitive<"set-cookie" | "accept">, string>
 

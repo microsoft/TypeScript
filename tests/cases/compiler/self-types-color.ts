@@ -178,7 +178,7 @@ export namespace Ns {
 }
 
 
-namespace A {
+export namespace A {
   export type Cast<T, U> = T extends U ? T : U;
   export type Get<T, K> = K extends keyof T ? T[K] : never
 }

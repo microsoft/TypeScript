@@ -1,13 +1,11 @@
-type NonZeroNumber =
-  self extends number
-    ? self extends 0
-        ? Never<`Type '${Print<self>}' is not assignable to type 'NonZeroNumber'`>
-        : self
-    : number
+type Not<T> =
+  self extends T
+    ? Never<`Type '${Print<self>}' is not assignable to type 'Not<${Print<T>}>'`>
+    : self
 
-const divide = (a: number, b: NonZeroNumber) => (a / (b as number)) as NonZeroNumber
+const divide = (a: number, b: number & Not<0>) => a / b
 
-divide(1, 0)
+divide(1, 0) // TODO: shouldn't compile
 divide(1, 1)
 divide(1, "x")
 
