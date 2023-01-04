@@ -94,3 +94,55 @@ type IsLiteral<T> = Or<false, IsNumberLiteral<T>>;
 >IsNumberLiteral : Symbol(IsNumberLiteral, Decl(deferredConditionalTypes.ts, 13, 48))
 >T : Symbol(T, Decl(deferredConditionalTypes.ts, 17, 15))
 
+// Repro from #51145#issuecomment-1276804047
+
+type Values<O extends object> =
+>Values : Symbol(Values, Decl(deferredConditionalTypes.ts, 17, 50))
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 21, 12))
+
+  O extends any[] 
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 21, 12))
+
+    ? O[number]
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 21, 12))
+
+    : O[keyof O]
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 21, 12))
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 21, 12))
+  
+type Equals<A, B> = [A, B] extends [B, A] ? true : false;
+>Equals : Symbol(Equals, Decl(deferredConditionalTypes.ts, 24, 16))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 26, 12))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 26, 14))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 26, 12))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 26, 14))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 26, 14))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 26, 12))
+
+type FilterByStringValue<O extends object> = {
+>FilterByStringValue : Symbol(FilterByStringValue, Decl(deferredConditionalTypes.ts, 26, 57))
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 28, 25))
+
+  [K in keyof O as Equals<O[K], string> extends true ? K : never]: any
+>K : Symbol(K, Decl(deferredConditionalTypes.ts, 29, 3))
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 28, 25))
+>Equals : Symbol(Equals, Decl(deferredConditionalTypes.ts, 24, 16))
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 28, 25))
+>K : Symbol(K, Decl(deferredConditionalTypes.ts, 29, 3))
+>K : Symbol(K, Decl(deferredConditionalTypes.ts, 29, 3))
+}
+
+type FilteredValuesMatchNever<O extends object>
+>FilteredValuesMatchNever : Symbol(FilteredValuesMatchNever, Decl(deferredConditionalTypes.ts, 30, 1))
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 32, 30))
+
+  = Equals<Values<FilterByStringValue<[O]>>, never>
+>Equals : Symbol(Equals, Decl(deferredConditionalTypes.ts, 24, 16))
+>Values : Symbol(Values, Decl(deferredConditionalTypes.ts, 17, 50))
+>FilterByStringValue : Symbol(FilterByStringValue, Decl(deferredConditionalTypes.ts, 26, 57))
+>O : Symbol(O, Decl(deferredConditionalTypes.ts, 32, 30))
+
+type FilteredRes1 = FilteredValuesMatchNever<[]>
+>FilteredRes1 : Symbol(FilteredRes1, Decl(deferredConditionalTypes.ts, 33, 51))
+>FilteredValuesMatchNever : Symbol(FilteredValuesMatchNever, Decl(deferredConditionalTypes.ts, 30, 1))
+

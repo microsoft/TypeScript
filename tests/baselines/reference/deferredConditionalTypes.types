@@ -63,3 +63,32 @@ type IsLiteral<T> = Or<false, IsNumberLiteral<T>>;
 >IsLiteral : IsLiteral<T>
 >false : false
 
+// Repro from #51145#issuecomment-1276804047
+
+type Values<O extends object> =
+>Values : Values<O>
+
+  O extends any[] 
+    ? O[number]
+    : O[keyof O]
+  
+type Equals<A, B> = [A, B] extends [B, A] ? true : false;
+>Equals : Equals<A, B>
+>true : true
+>false : false
+
+type FilterByStringValue<O extends object> = {
+>FilterByStringValue : FilterByStringValue<O>
+
+  [K in keyof O as Equals<O[K], string> extends true ? K : never]: any
+>true : true
+}
+
+type FilteredValuesMatchNever<O extends object>
+>FilteredValuesMatchNever : FilteredValuesMatchNever<O>
+
+  = Equals<Values<FilterByStringValue<[O]>>, never>
+
+type FilteredRes1 = FilteredValuesMatchNever<[]>
+>FilteredRes1 : true
+

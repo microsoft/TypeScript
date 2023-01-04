@@ -18,3 +18,21 @@ type Extends<A, B> = A extends B ? true : false;
 type IsNumberLiteral<T> = And<Extends<T, number>, Not<Extends<number, T>>>;
 
 type IsLiteral<T> = Or<false, IsNumberLiteral<T>>;
+
+// Repro from #51145#issuecomment-1276804047
+
+type Values<O extends object> =
+  O extends any[] 
+    ? O[number]
+    : O[keyof O]
+  
+type Equals<A, B> = [A, B] extends [B, A] ? true : false;
+
+type FilterByStringValue<O extends object> = {
+  [K in keyof O as Equals<O[K], string> extends true ? K : never]: any
+}
+
+type FilteredValuesMatchNever<O extends object>
+  = Equals<Values<FilterByStringValue<[O]>>, never>
+
+type FilteredRes1 = FilteredValuesMatchNever<[]>
