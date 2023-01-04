@@ -19098,7 +19098,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const tupleLikeTargetParts = filterType(target, isTupleLikeType);
         const nonTupleLikeTargetParts = filterType(target, t => !isTupleLikeType(t));
         const iterationType = nonTupleLikeTargetParts !== neverType
-            ? getGlobalIterableType(false) !== emptyGenericType
+            ? getGlobalIterableType(/*reportErrors*/ false) !== emptyGenericType
                 ? getIterationTypeOfIterable(IterationUse.ForOf, IterationTypeKind.Yield, nonTupleLikeTargetParts, /*errorNode*/ undefined)
                 : getElementTypeOfArrayType(nonTupleLikeTargetParts)
             : undefined;
@@ -19110,7 +19110,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const targetIndexedPropType = tupleLikeTargetParts !== neverType ? getBestMatchIndexedAccessTypeOrUndefined(source, tupleLikeTargetParts, nameType) : undefined;
             if (targetIndexedPropType && !(targetIndexedPropType.flags & TypeFlags.IndexedAccess)) {  // Don't elaborate on indexes on generic variables
                 targetPropType = iterationType ? getUnionType([iterationType, targetIndexedPropType]) : targetIndexedPropType;
-            };
+            }
             if (!targetPropType) continue;
             let sourcePropType = getIndexedAccessTypeOrUndefined(source, nameType);
             if (!sourcePropType) continue;
@@ -19214,7 +19214,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const moreThanOneRealChildren = length(validChildren) > 1;
             let arrayLikeTargetParts: Type;
             let nonArrayLikeTargetParts: Type;
-            const iterableType = getGlobalIterableType(false);
+            const iterableType = getGlobalIterableType(/*reportErrors*/ false);
             if (iterableType !== emptyGenericType) {
                 const anyIterable = createIterableType(anyType);
                 arrayLikeTargetParts = filterType(childrenTargetType, t => isTypeAssignableTo(t, anyIterable));
