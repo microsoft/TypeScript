@@ -50,9 +50,9 @@ const Child: SFC<Props> = ({
 >`name: ${name} props: ${JSON.stringify(props)}` : string
 >name : "Apollo" | "Artemis" | "Dionysus" | "Persephone"
 >JSON.stringify(props) : string
->JSON.stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>JSON.stringify : { (value: Function | Symbol | undefined, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): undefined; (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >JSON : JSON
->stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>stringify : { (value: Function | Symbol | undefined, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): undefined; (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >props : {}
 
 // Repro from #29189

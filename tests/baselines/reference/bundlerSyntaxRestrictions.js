@@ -3,6 +3,18 @@
 //// [index.d.ts]
 declare var require: (...args: any[]) => any;
 
+//// [ambient.d.ts]
+declare module "fs" {
+    export function readFileSync(path: string, encoding?: string): string;
+}
+declare module "path" {
+    import fs = require("fs"); // ok
+    namespace path {
+        export const sep: string;
+    }
+    export = path; // ok
+}
+
 //// [mainJs.js]
 import {} from "./a";
 import("./a");

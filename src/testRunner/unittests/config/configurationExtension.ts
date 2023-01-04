@@ -7,6 +7,24 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
         cwd,
         files: {
             [root]: {
+                "dev/node_modules/@foo/tsconfig/package.json": JSON.stringify({
+                    name: "@foo/tsconfig",
+                    version: "1.0.0",
+                    exports: {
+                        ".": "./src/tsconfig.json"
+                    }
+                }),
+                "dev/node_modules/@foo/tsconfig/src/tsconfig.json": JSON.stringify({
+                    compilerOptions: {
+                        strict: true,
+                    }
+                }),
+                "dev/tsconfig.extendsFoo.json": JSON.stringify({
+                    extends: "@foo/tsconfig",
+                    files: [
+                        "main.ts",
+                    ]
+                }),
                 "dev/node_modules/config-box/package.json": JSON.stringify({
                     name: "config-box",
                     version: "1.0.0",
@@ -376,6 +394,7 @@ describe("unittests:: config:: configurationExtension", () => {
                 testSuccess("can lookup via an implicit tsconfig in a package-relative directory", "tsconfig.extendsBoxImpliedUnstrict.json", { strict: false }, [ts.combinePaths(basePath, "main.ts")]);
                 testSuccess("can lookup via an implicit tsconfig in a package-relative directory with name", "tsconfig.extendsBoxImpliedUnstrictExtension.json", { strict: false }, [ts.combinePaths(basePath, "main.ts")]);
                 testSuccess("can lookup via an implicit tsconfig in a package-relative directory with extension", "tsconfig.extendsBoxImpliedPath.json", { strict: true }, [ts.combinePaths(basePath, "main.ts")]);
+                testSuccess("can lookup via an package.json exports", "tsconfig.extendsFoo.json", { strict: true }, [ts.combinePaths(basePath, "main.ts")]);
             });
 
             it("adds extendedSourceFiles only once", () => {
