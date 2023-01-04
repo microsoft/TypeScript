@@ -19087,7 +19087,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * Assumes `target` type is assignable to the `Iterable` type, if `Iterable` is defined,
      * or that it's an array-like type, if `Iterable` is not defined.
      */
-    function elaborateIterableLikeTargetElementwise(
+    function elaborateIterableOrArrayLikeTargetElementwise(
         iterator: ElaborationIterator,
         source: Type,
         target: Type,
@@ -19228,7 +19228,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (arrayLikeTargetParts !== neverType) {
                     const realSource = createTupleType(checkJsxChildren(containingElement, CheckMode.Normal));
                     const children = generateJsxChildren(containingElement, getInvalidTextualChildDiagnostic);
-                    result = elaborateIterableLikeTargetElementwise(children, realSource, arrayLikeTargetParts, relation, containingMessageChain, errorOutputContainer) || result;
+                    result = elaborateIterableOrArrayLikeTargetElementwise(children, realSource, arrayLikeTargetParts, relation, containingMessageChain, errorOutputContainer) || result;
                 }
                 else if (!isTypeRelatedTo(getIndexedAccessType(source, childrenNameType), childrenTargetType, relation)) {
                     // arity mismatch
