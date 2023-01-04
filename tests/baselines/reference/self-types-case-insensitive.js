@@ -37,7 +37,7 @@ export {}
 
 //// [self-types-case-insensitive.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 setHeader("Set-Cookie", "test");
 setHeader("Accept", "test2");
 setHeader("sEt-cOoKiE", "stop writing headers like this but ok");

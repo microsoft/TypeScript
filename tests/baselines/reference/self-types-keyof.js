@@ -24,7 +24,7 @@ export {}
 //// [self-types-keyof.js]
 "use strict";
 // Implementing index types without index types
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var t0 = "a";
 var t1 = "b";
 var t3 = get({ a: 10 }, "a");

@@ -153,7 +153,7 @@ export {}
 //// [self-types-mapped.js]
 "use strict";
 // Implementing mapped types without mapped types
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 // same as writing
 // type _Partial<T> = { [K in keyof T]: T[K] | undefined }
 var t00 = {

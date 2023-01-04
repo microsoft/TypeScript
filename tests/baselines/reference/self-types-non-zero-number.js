@@ -16,7 +16,7 @@ export {}
 
 //// [self-types-non-zero-number.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var divide = function (a, b) { return (a / b); };
 divide(1, 0);
 divide(1, 1);

@@ -31,7 +31,7 @@ export {}
 
 //// [self-types-json-simple.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var someNode = {};
 var t1 = someNode; // TODO: this should probably compile
 var t3 = function () { return "hello"; };

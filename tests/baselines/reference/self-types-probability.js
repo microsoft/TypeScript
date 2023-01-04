@@ -38,7 +38,7 @@ export {}
 
 //// [self-types-probability.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var t0 = 0.5;
 var t1 = 0;
 var t2 = 1;

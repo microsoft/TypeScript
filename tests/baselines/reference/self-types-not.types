@@ -1,0 +1,36 @@
+=== tests/cases/compiler/self-types-not.ts ===
+type Not<T> =
+>Not : Not<T>
+
+  self extends T
+    ? Never<`Type '${Print<self>}' is not assignable to type 'Not<${Print<T>}>'`>
+    : self
+
+const divide = (a: number, b: number & Not<0>) => a / b
+>divide : (a: number, b: number & Not<0>) => number
+>(a: number, b: number & Not<0>) => a / b : (a: number, b: number & Not<0>) => number
+>a : number
+>b : number & Not<0>
+>a / b : number
+>a : number
+>b : number & Not<0>
+
+divide(1, 0)
+>divide(1, 0) : number
+>divide : (a: number, b: number & Not<0>) => number
+>1 : 1
+>0 : 0
+
+divide(1, 1)
+>divide(1, 1) : number
+>divide : (a: number, b: number & Not<0>) => number
+>1 : 1
+>1 : 1
+
+divide(1, "x")
+>divide(1, "x") : number
+>divide : (a: number, b: number & Not<0>) => number
+>1 : 1
+>"x" : "x"
+
+export {}

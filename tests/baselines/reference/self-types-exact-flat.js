@@ -84,7 +84,7 @@ export {}
 
 //// [self-types-exact-flat.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 f(function () { return ({
     a: {
         b: "b",

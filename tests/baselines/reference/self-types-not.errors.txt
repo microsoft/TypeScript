@@ -1,0 +1,25 @@
+tests/cases/compiler/self-types-not.ts(8,11): error TS2345: Argument of type 'number' is not assignable to parameter of type 'number & Not<0>'.
+  Type '0' is not assignable to type 'Not<0>'
+tests/cases/compiler/self-types-not.ts(10,11): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number & Not<0>'.
+  Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/self-types-not.ts (2 errors) ====
+    type Not<T> =
+      self extends T
+        ? Never<`Type '${Print<self>}' is not assignable to type 'Not<${Print<T>}>'`>
+        : self
+    
+    const divide = (a: number, b: number & Not<0>) => a / b
+    
+    divide(1, 0)
+              ~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'number & Not<0>'.
+!!! error TS2345:   Type '0' is not assignable to type 'Not<0>'
+    divide(1, 1)
+    divide(1, "x")
+              ~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number & Not<0>'.
+!!! error TS2345:   Type 'string' is not assignable to type 'number'.
+    
+    export {}

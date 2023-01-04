@@ -77,7 +77,7 @@ export {}
 
 //// [self-types-json.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var someNode = {};
 var t1 = someNode;
 var t2 = someNode;

@@ -186,7 +186,7 @@ export namespace A {
 
 //// [self-types-color.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var t0 = 123;
 var t1 = "hello";
 var t2 = "#fff";

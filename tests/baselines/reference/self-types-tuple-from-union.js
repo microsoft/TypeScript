@@ -61,7 +61,7 @@ export {}
 
 //// [self-types-tuple-from-union.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 var t0 = ["a", "b", "c"];
 var t1 = ["c", "a", "b"];
 var t2 = ["a", "x", "c"];
