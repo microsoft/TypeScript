@@ -3098,6 +3098,7 @@ declare namespace ts {
     interface CompilerOptions {
         allowImportingTsExtensions?: boolean;
         allowJs?: boolean;
+        allowNonJsExtensions?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowUmdGlobalAccess?: boolean;
         allowUnreachableCode?: boolean;
@@ -3361,7 +3362,7 @@ declare namespace ts {
          * Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
          * This is optional for backwards-compatibility, but will be added if not provided.
          */
-        extension: Extension;
+        extension: string;
         packageId?: PackageId;
     }
     /**

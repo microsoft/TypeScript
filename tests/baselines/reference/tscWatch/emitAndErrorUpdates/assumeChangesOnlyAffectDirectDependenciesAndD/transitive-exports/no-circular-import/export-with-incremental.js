@@ -111,6 +111,8 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
+/user/username/projects/myproject/lib1:
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -443,6 +445,8 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
+/user/username/projects/myproject/lib1:
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -656,6 +660,8 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
+/user/username/projects/myproject/lib1:
+  {}
 
 exitCode:: ExitStatus.undefined
 
@@ -869,6 +875,8 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
+/user/username/projects/myproject/lib1:
+  {}
 
 exitCode:: ExitStatus.undefined
 

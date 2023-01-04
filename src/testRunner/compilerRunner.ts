@@ -165,6 +165,8 @@ class CompilerTest {
         "noPropertyAccessFromIndexSignature",
         "resolvePackageJsonExports",
         "resolvePackageJsonImports",
+        "resolveJsonModule",
+        "allowNonJsExtensions",
     ];
     private fileName: string;
     private justName: string;
