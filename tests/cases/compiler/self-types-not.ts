@@ -5,7 +5,7 @@ type Not<T> =
 
 const divide = (a: number, b: number & Not<0>) => a / b
 
-divide(1, 0) // TODO: shouldn't compile
+divide(1, 0)
 divide(1, 1)
 divide(1, "x")
 
