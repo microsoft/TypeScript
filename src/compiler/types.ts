@@ -9771,6 +9771,11 @@ export interface UserPreferences {
     readonly allowRenameOfImportPath?: boolean;
     readonly autoImportFileExcludePatterns?: string[];
     readonly organizeImportsIgnoreCase?: "auto" | boolean;
+    readonly organizeImportsCollation?: "natural" | "ordinal";
+    readonly organizeImportsLocale?: string;
+    readonly organizeImportsNumericCollation?: boolean;
+    readonly organizeImportsAccentCollation?: boolean;
+    readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
 }
 
 /** Represents a bigint literal value without requiring bigint support */

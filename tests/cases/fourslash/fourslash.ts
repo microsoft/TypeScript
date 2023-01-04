@@ -673,6 +673,11 @@ declare namespace FourSlashInterface {
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: readonly string[];
         readonly organizeImportsIgnoreCase?: "auto" | boolean;
+        readonly organizeImportsCollation?: "natural" | "ordinal";
+        readonly organizeImportsLocale?: string;
+        readonly organizeImportsNumericCollation?: boolean;
+        readonly organizeImportsAccentCollation?: boolean;
+        readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
     }
     interface InlayHintsOptions extends UserPreferences {
         readonly includeInlayParameterNameHints?: "none" | "literals" | "all";

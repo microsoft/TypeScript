@@ -3,6 +3,7 @@ import {
     arrayIsSorted,
     binarySearch,
     compareBooleans,
+    Comparer,
     compareStringsCaseInsensitiveEslintCompatible,
     compareStringsCaseSensitive,
     compareValues,
@@ -21,9 +22,11 @@ import {
     flatMap,
     formatting,
     getNewLineOrDefaultFromHost,
+    getUILocale,
     group,
     Identifier,
     identity,
+    ImportClause,
     ImportDeclaration,
     ImportOrExportSpecifier,
     ImportSpecifier,
@@ -83,19 +86,16 @@ export function organizeImports(
     const shouldSort = mode === OrganizeImportsMode.SortAndCombine || mode === OrganizeImportsMode.All;
     const shouldCombine = shouldSort; // These are currently inseparable, but I draw a distinction for clarity and in case we add modes in the future.
     const shouldRemove = mode === OrganizeImportsMode.RemoveUnused || mode === OrganizeImportsMode.All;
-    const maybeRemove = shouldRemove ? removeUnusedImports : identity;
-    const maybeCoalesce = shouldCombine ? coalesceImports : identity;
     // All of the old ImportDeclarations in the file, in syntactic order.
     const topLevelImportGroupDecls = groupImportsByNewlineContiguous(sourceFile, sourceFile.statements.filter(isImportDeclaration));
-    const ignoreCase = typeof preferences.organizeImportsIgnoreCase === "boolean"
-        ? preferences.organizeImportsIgnoreCase
-        : shouldSort && detectSortingWorker(topLevelImportGroupDecls) === SortKind.CaseInsensitive;
+
+    const comparer = getOrganizeImportsComparer(preferences, shouldSort ? () => detectSortingWorker(topLevelImportGroupDecls) === SortKind.CaseInsensitive : undefined);
 
     const processImportsOfSameModuleSpecifier = (importGroup: readonly ImportDeclaration[]) => {
-        const processedDeclarations = maybeCoalesce(maybeRemove(importGroup, sourceFile, program), ignoreCase, sourceFile);
-        return shouldSort
-            ? stableSort(processedDeclarations, (s1, s2) => compareImportsOrRequireStatements(s1, s2))
-            : processedDeclarations;
+        if (shouldRemove) importGroup = removeUnusedImports(importGroup, sourceFile, program);
+        if (shouldCombine) importGroup = coalesceImportsWorker(importGroup, comparer, sourceFile);
+        if (shouldSort) importGroup = stableSort(importGroup, (s1, s2) => compareImportsOrRequireStatements(s1, s2));
+        return importGroup;
     };
 
     topLevelImportGroupDecls.forEach(importGroupDecl => organizeImportsWorker(importGroupDecl, processImportsOfSameModuleSpecifier));
@@ -104,7 +104,7 @@ export function organizeImports(
     if (mode !== OrganizeImportsMode.RemoveUnused) {
         // All of the old ExportDeclarations in the file, in syntactic order.
         const topLevelExportDecls = sourceFile.statements.filter(isExportDeclaration);
-        organizeImportsWorker(topLevelExportDecls, group => coalesceExports(group, ignoreCase));
+        organizeImportsWorker(topLevelExportDecls, group => coalesceExportsWorker(group, comparer));
     }
 
     for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
@@ -116,7 +116,7 @@ export function organizeImports(
         // Exports are always used
         if (mode !== OrganizeImportsMode.RemoveUnused) {
             const ambientModuleExportDecls = ambientModule.body.statements.filter(isExportDeclaration);
-            organizeImportsWorker(ambientModuleExportDecls, group => coalesceExports(group, ignoreCase));
+            organizeImportsWorker(ambientModuleExportDecls, group => coalesceExportsWorker(group, comparer));
         }
     }
 
@@ -309,12 +309,16 @@ function getExternalModuleName(specifier: Expression | undefined) {
  * @internal
  */
 export function coalesceImports(importGroup: readonly ImportDeclaration[], ignoreCase?: boolean, sourceFile?: SourceFile): readonly ImportDeclaration[] {
+    const comparer = getOrganizeImportsOrdinalStringComparer(!!ignoreCase);
+    return coalesceImportsWorker(importGroup, comparer, sourceFile);
+}
+
+function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], comparer: Comparer<string>, sourceFile?: SourceFile): readonly ImportDeclaration[] {
     if (importGroup.length === 0) {
         return importGroup;
     }
 
     const { importWithoutClause, typeOnlyImports, regularImports } = getCategorizedImports(importGroup);
-    const compareIdentifiers = ignoreCase ? compareIdentifiersCaseInsensitive : compareIdentifiersCaseSensitive;
     const coalescedImports: ImportDeclaration[] = [];
 
     if (importWithoutClause) {
@@ -330,18 +334,18 @@ export function coalesceImports(importGroup: readonly ImportDeclaration[], ignor
             // Add the namespace import to the existing default ImportDeclaration.
             const defaultImport = defaultImports[0];
             coalescedImports.push(
-                updateImportDeclarationAndClause(defaultImport, defaultImport.importClause!.name, namespaceImports[0].importClause!.namedBindings)); // TODO: GH#18217
+                updateImportDeclarationAndClause(defaultImport, defaultImport.importClause.name, namespaceImports[0].importClause.namedBindings));
 
             continue;
         }
 
         const sortedNamespaceImports = stableSort(namespaceImports, (i1, i2) =>
-            compareIdentifiers((i1.importClause!.namedBindings as NamespaceImport).name, (i2.importClause!.namedBindings as NamespaceImport).name)); // TODO: GH#18217
+            comparer(i1.importClause.namedBindings.name.text, i2.importClause.namedBindings.name.text));
 
         for (const namespaceImport of sortedNamespaceImports) {
             // Drop the name, if any
             coalescedImports.push(
-                updateImportDeclarationAndClause(namespaceImport, /*name*/ undefined, namespaceImport.importClause!.namedBindings)); // TODO: GH#18217
+                updateImportDeclarationAndClause(namespaceImport, /*name*/ undefined, namespaceImport.importClause.namedBindings));
         }
 
         if (defaultImports.length === 0 && namedImports.length === 0) {
@@ -351,20 +355,20 @@ export function coalesceImports(importGroup: readonly ImportDeclaration[], ignor
         let newDefaultImport: Identifier | undefined;
         const newImportSpecifiers: ImportSpecifier[] = [];
         if (defaultImports.length === 1) {
-            newDefaultImport = defaultImports[0].importClause!.name;
+            newDefaultImport = defaultImports[0].importClause.name;
         }
         else {
             for (const defaultImport of defaultImports) {
                 newImportSpecifiers.push(
-                    factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("default"), defaultImport.importClause!.name!)); // TODO: GH#18217
+                    factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("default"), defaultImport.importClause.name));
             }
         }
 
         newImportSpecifiers.push(...getNewImportSpecifiers(namedImports));
 
         const sortedImportSpecifiers = factory.createNodeArray(
-            sortSpecifiers(newImportSpecifiers, ignoreCase),
-            (namedImports[0]?.importClause!.namedBindings as NamedImports)?.elements.hasTrailingComma
+            sortSpecifiers(newImportSpecifiers, comparer),
+            namedImports[0].importClause.namedBindings.elements.hasTrailingComma
         );
 
         const importDecl = defaultImports.length > 0
@@ -377,11 +381,12 @@ export function coalesceImports(importGroup: readonly ImportDeclaration[], ignor
                 : factory.createNamedImports(emptyArray)
             : namedImports.length === 0
                 ? factory.createNamedImports(sortedImportSpecifiers)
-                : factory.updateNamedImports(namedImports[0].importClause!.namedBindings as NamedImports, sortedImportSpecifiers); // TODO: GH#18217
+                : factory.updateNamedImports(namedImports[0].importClause.namedBindings, sortedImportSpecifiers);
 
         if (sourceFile &&
             newNamedImports &&
-            namedImports[0]?.importClause!.namedBindings &&
+            namedImports.length &&
+            namedImports[0].importClause.namedBindings &&
             !rangeIsOnSingleLine(namedImports[0].importClause.namedBindings, sourceFile)
         ) {
             setEmitFlags(newNamedImports, EmitFlags.MultiLine);
@@ -403,13 +408,30 @@ export function coalesceImports(importGroup: readonly ImportDeclaration[], ignor
     }
 
     return coalescedImports;
-
 }
 
+type ImportDeclarationWithDefaultImport = ImportDeclaration & {
+    readonly importClause: ImportClause & {
+        readonly name: Identifier;
+    };
+};
+
+type ImportDeclarationWithNamespaceImport = ImportDeclaration & {
+    readonly importClause: ImportClause & {
+        readonly namedBindings: NamespaceImport;
+    };
+};
+
+type ImportDeclarationWithNamedImports = ImportDeclaration & {
+    readonly importClause: ImportClause & {
+        readonly namedBindings: NamedImports;
+    };
+};
+
 interface ImportGroup {
-    defaultImports: ImportDeclaration[];
-    namespaceImports: ImportDeclaration[];
-    namedImports: ImportDeclaration[];
+    defaultImports: ImportDeclarationWithDefaultImport[];
+    namespaceImports: ImportDeclarationWithNamespaceImport[];
+    namedImports: ImportDeclarationWithNamedImports[];
 }
 
 /*
@@ -436,15 +458,15 @@ function getCategorizedImports(importGroup: readonly ImportDeclaration[]) {
         const { name, namedBindings } = importDeclaration.importClause;
 
         if (name) {
-            group.defaultImports.push(importDeclaration);
+            group.defaultImports.push(importDeclaration as ImportDeclarationWithDefaultImport);
         }
 
         if (namedBindings) {
             if (isNamespaceImport(namedBindings)) {
-                group.namespaceImports.push(importDeclaration);
+                group.namespaceImports.push(importDeclaration as ImportDeclarationWithNamespaceImport);
             }
             else {
-                group.namedImports.push(importDeclaration);
+                group.namedImports.push(importDeclaration as ImportDeclarationWithNamedImports);
             }
         }
     }
@@ -463,6 +485,11 @@ function getCategorizedImports(importGroup: readonly ImportDeclaration[]) {
  * @internal
  */
 export function coalesceExports(exportGroup: readonly ExportDeclaration[], ignoreCase: boolean) {
+    const comparer = getOrganizeImportsOrdinalStringComparer(ignoreCase);
+    return coalesceExportsWorker(exportGroup, comparer);
+}
+
+function coalesceExportsWorker(exportGroup: readonly ExportDeclaration[], comparer: Comparer<string>) {
     if (exportGroup.length === 0) {
         return exportGroup;
     }
@@ -482,7 +509,7 @@ export function coalesceExports(exportGroup: readonly ExportDeclaration[], ignor
         const newExportSpecifiers: ExportSpecifier[] = [];
         newExportSpecifiers.push(...flatMap(exportGroup, i => i.exportClause && isNamedExports(i.exportClause) ? i.exportClause.elements : emptyArray));
 
-        const sortedExportSpecifiers = sortSpecifiers(newExportSpecifiers, ignoreCase);
+        const sortedExportSpecifiers = sortSpecifiers(newExportSpecifiers, comparer);
 
         const exportDecl = exportGroup[0];
         coalescedExports.push(
@@ -546,22 +573,17 @@ function updateImportDeclarationAndClause(
         importDeclaration.assertClause);
 }
 
-function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly T[], ignoreCase?: boolean) {
-    return stableSort(specifiers, (s1, s2) => compareImportOrExportSpecifiers(s1, s2, ignoreCase));
+function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly T[], comparer: Comparer<string>) {
+    return stableSort(specifiers, (s1, s2) => compareImportOrExportSpecifiersWorker(s1, s2, comparer));
 }
 
 /** @internal */
 export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T, ignoreCase?: boolean): Comparison {
-    const compareIdentifiers = ignoreCase ? compareIdentifiersCaseInsensitive : compareIdentifiersCaseSensitive;
-    return compareBooleans(s1.isTypeOnly, s2.isTypeOnly) || compareIdentifiers(s1.name, s2.name);
+    return compareImportOrExportSpecifiersWorker(s1, s2, getOrganizeImportsOrdinalStringComparer(!!ignoreCase))
 }
 
-function compareIdentifiersCaseSensitive(s1: Identifier, s2: Identifier) {
-    return compareStringsCaseSensitive(s1.text, s2.text);
-}
-
-function compareIdentifiersCaseInsensitive(s1: Identifier, s2: Identifier) {
-    return compareStringsCaseInsensitiveEslintCompatible(s1.text, s2.text);
+function compareImportOrExportSpecifiersWorker<T extends ImportOrExportSpecifier>(s1: T, s2: T, comparer: Comparer<string>): Comparison {
+    return compareBooleans(s1.isTypeOnly, s2.isTypeOnly) || comparer(s1.name.text, s2.name.text);
 }
 
 /**
@@ -698,4 +720,48 @@ function tryGetNamedBindingElements(namedImport: ImportDeclaration) {
     return namedImport.importClause?.namedBindings && isNamedImports(namedImport.importClause.namedBindings)
         ? namedImport.importClause.namedBindings.elements
         : undefined;
+}
+
+function getOrganizeImportsOrdinalStringComparer(ignoreCase: boolean) {
+    return ignoreCase ? compareStringsCaseInsensitiveEslintCompatible : compareStringsCaseSensitive;
+}
+
+function getOrganizeImportsNaturalStringComparer(ignoreCase: boolean, preferences: UserPreferences): Comparer<string> {
+    const resolvedLocale = getOrganizeImportsLocale(preferences);
+    const caseFirst = preferences.organizeImportsCaseFirst ?? false;
+    const numeric = preferences.organizeImportsNumericCollation ?? false;
+    const accents = preferences.organizeImportsAccentCollation ?? true;
+    const sensitivity =
+        ignoreCase ?
+            accents ? "accent" : "base" :
+            accents ? "variant" : "case";
+
+    const collator = new Intl.Collator(resolvedLocale, {
+        usage: "sort",
+        caseFirst: caseFirst || "false",
+        sensitivity,
+        numeric,
+    });
+
+    // `compare` is a bound method, so we do not need to close over `collator`.
+    return collator.compare;
+}
+
+function getOrganizeImportsLocale(preferences: UserPreferences): string {
+    let locale = preferences.organizeImportsLocale;
+    if (locale === "auto") locale = getUILocale();
+    if (locale === undefined) locale = "en";
+
+    const supportedLocales = Intl.Collator.supportedLocalesOf(locale);
+    const resolvedLocale = supportedLocales.length ? supportedLocales[0] : "en";
+    return resolvedLocale;
+}
+
+/** @internal */
+export function getOrganizeImportsComparer(preferences: UserPreferences, detectIgnoreCase?: () => boolean): Comparer<string> {
+    const collation = preferences.organizeImportsCollation ?? "ordinal";
+    const ignoreCase = typeof preferences.organizeImportsIgnoreCase === "boolean" ? preferences.organizeImportsIgnoreCase : detectIgnoreCase?.() ?? false;
+    return collation === "ordinal" ?
+        getOrganizeImportsOrdinalStringComparer(ignoreCase) :
+        getOrganizeImportsNaturalStringComparer(ignoreCase, preferences);
 }
