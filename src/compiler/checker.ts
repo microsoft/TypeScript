@@ -28418,7 +28418,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return mapType(type, t => {
             if (t.flags & TypeFlags.Intersection) {
                 const intersection = t as IntersectionType;
-                let newTypes = mapDefined(intersection.types, getTypeOfConcretePropertyOfContextualType);
+                let newTypes = mapDefined(intersection.types, getTypeOfConcreteLikePropertyOfContextualType);
                 if (newTypes.length > 0) {
                     return getIntersectionType(newTypes);
                 }
@@ -28428,14 +28428,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return undefined;
             }
-            const concretePropertyType = getTypeOfConcretePropertyOfContextualType(t);
+            const concretePropertyType = getTypeOfConcreteLikePropertyOfContextualType(t);
             if (concretePropertyType) {
                 return concretePropertyType;
             }
             return getTypeOfApplicableIndexInfoOfContextualType(t);
         }, /*noReductions*/ true);
 
-        function getTypeOfConcretePropertyOfContextualType(t: Type) {
+        function getTypeOfConcreteLikePropertyOfContextualType(t: Type) {
             if (isGenericMappedType(t) && !t.declaration.nameType) {
                 const constraint = getConstraintTypeFromMappedType(t);
                 const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
@@ -28455,6 +28455,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (restType && isNumericLiteralName(name) && +name >= 0) {
                         return restType;
                     }
+                }
+                if (getObjectFlags(t) & ObjectFlags.Mapped) {
+                    return getTypeOfApplicableIndexInfoOfContextualType(t);
                 }
             }
             return undefined;

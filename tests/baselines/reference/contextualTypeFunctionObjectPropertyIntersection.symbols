@@ -85,7 +85,7 @@ createMachine({
 // repro from #49307#issuecomment-1143103607
 
 declare function createSlice<T>(
->createSlice : Symbol(createSlice, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 28, 3), Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 65, 2))
+>createSlice : Symbol(createSlice, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 28, 3), Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 63, 2))
 >T : Symbol(T, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 32, 29))
 
   reducers: { [K: string]: (state: string) => void } & {
@@ -100,7 +100,7 @@ declare function createSlice<T>(
 ): void;
 
 createSlice({
->createSlice : Symbol(createSlice, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 28, 3), Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 65, 2))
+>createSlice : Symbol(createSlice, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 28, 3), Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 63, 2))
 
   f(a) {}, // implicit any, index signature should not be used here
 >f : Symbol(f, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 38, 13))
@@ -142,102 +142,98 @@ f(0, {
 
 // repro from 49307#issuecomment-1195858950
 
-type SliceCaseReducers<State> = {
+type SliceCaseReducers<State> = Record<string, (state: State) => State | void>;
 >SliceCaseReducers : Symbol(SliceCaseReducers, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 49, 2))
 >State : Symbol(State, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 53, 23))
-
-  [K: string]: (state: State) => State | void;
->K : Symbol(K, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 54, 3))
->state : Symbol(state, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 54, 16))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>state : Symbol(state, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 53, 48))
 >State : Symbol(State, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 53, 23))
 >State : Symbol(State, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 53, 23))
-
-};
 
 type ValidateSliceCaseReducers<S, ACR extends SliceCaseReducers<S>> = ACR & {
->ValidateSliceCaseReducers : Symbol(ValidateSliceCaseReducers, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 55, 2))
->S : Symbol(S, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 57, 31))
->ACR : Symbol(ACR, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 57, 33))
+>ValidateSliceCaseReducers : Symbol(ValidateSliceCaseReducers, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 53, 79))
+>S : Symbol(S, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 55, 31))
+>ACR : Symbol(ACR, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 55, 33))
 >SliceCaseReducers : Symbol(SliceCaseReducers, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 49, 2))
->S : Symbol(S, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 57, 31))
->ACR : Symbol(ACR, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 57, 33))
+>S : Symbol(S, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 55, 31))
+>ACR : Symbol(ACR, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 55, 33))
 
   [T in keyof ACR]: ACR[T] extends {
->T : Symbol(T, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 58, 3))
->ACR : Symbol(ACR, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 57, 33))
->ACR : Symbol(ACR, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 57, 33))
->T : Symbol(T, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 58, 3))
+>T : Symbol(T, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 56, 3))
+>ACR : Symbol(ACR, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 55, 33))
+>ACR : Symbol(ACR, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 55, 33))
+>T : Symbol(T, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 56, 3))
 
     reducer(s: S, action?: infer A): any;
->reducer : Symbol(reducer, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 58, 36))
->s : Symbol(s, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 59, 12))
->S : Symbol(S, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 57, 31))
->action : Symbol(action, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 59, 17))
->A : Symbol(A, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 59, 32))
+>reducer : Symbol(reducer, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 56, 36))
+>s : Symbol(s, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 57, 12))
+>S : Symbol(S, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 55, 31))
+>action : Symbol(action, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 57, 17))
+>A : Symbol(A, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 57, 32))
   }
     ? {
         prepare(...a: never[]): Omit<A, "type">;
->prepare : Symbol(prepare, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 61, 7))
->a : Symbol(a, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 62, 16))
+>prepare : Symbol(prepare, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 59, 7))
+>a : Symbol(a, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 60, 16))
 >Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
->A : Symbol(A, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 59, 32))
+>A : Symbol(A, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 57, 32))
       }
     : {};
 };
 
 declare function createSlice<
->createSlice : Symbol(createSlice, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 28, 3), Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 65, 2))
+>createSlice : Symbol(createSlice, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 28, 3), Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 63, 2))
 
   State,
->State : Symbol(State, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 67, 29))
+>State : Symbol(State, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 65, 29))
 
   CaseReducers extends SliceCaseReducers<State>
->CaseReducers : Symbol(CaseReducers, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 68, 8))
+>CaseReducers : Symbol(CaseReducers, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 66, 8))
 >SliceCaseReducers : Symbol(SliceCaseReducers, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 49, 2))
->State : Symbol(State, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 67, 29))
+>State : Symbol(State, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 65, 29))
 
 >(options: {
->options : Symbol(options, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 70, 2))
+>options : Symbol(options, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 68, 2))
 
   initialState: State | (() => State);
->initialState : Symbol(initialState, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 70, 12))
->State : Symbol(State, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 67, 29))
->State : Symbol(State, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 67, 29))
+>initialState : Symbol(initialState, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 68, 12))
+>State : Symbol(State, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 65, 29))
+>State : Symbol(State, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 65, 29))
 
   reducers: ValidateSliceCaseReducers<State, CaseReducers>;
->reducers : Symbol(reducers, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 71, 38))
->ValidateSliceCaseReducers : Symbol(ValidateSliceCaseReducers, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 55, 2))
->State : Symbol(State, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 67, 29))
->CaseReducers : Symbol(CaseReducers, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 68, 8))
+>reducers : Symbol(reducers, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 69, 38))
+>ValidateSliceCaseReducers : Symbol(ValidateSliceCaseReducers, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 53, 79))
+>State : Symbol(State, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 65, 29))
+>CaseReducers : Symbol(CaseReducers, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 66, 8))
 
 }): void;
 
 export const clientSlice = createSlice({
->clientSlice : Symbol(clientSlice, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 75, 12))
->createSlice : Symbol(createSlice, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 28, 3), Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 65, 2))
+>clientSlice : Symbol(clientSlice, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 73, 12))
+>createSlice : Symbol(createSlice, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 28, 3), Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 63, 2))
 
   initialState: {
->initialState : Symbol(initialState, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 75, 40))
+>initialState : Symbol(initialState, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 73, 40))
 
     username: "",
->username : Symbol(username, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 76, 17))
+>username : Symbol(username, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 74, 17))
 
     isLoggedIn: false,
->isLoggedIn : Symbol(isLoggedIn, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 77, 17))
+>isLoggedIn : Symbol(isLoggedIn, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 75, 17))
 
     userId: "",
->userId : Symbol(userId, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 78, 22))
+>userId : Symbol(userId, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 76, 22))
 
     avatar: "",
->avatar : Symbol(avatar, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 79, 15))
+>avatar : Symbol(avatar, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 77, 15))
 
   },
   reducers: {
->reducers : Symbol(reducers, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 81, 4))
+>reducers : Symbol(reducers, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 79, 4))
 
     onClientUserChanged(state) {},
->onClientUserChanged : Symbol(onClientUserChanged, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 82, 13))
->state : Symbol(state, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 83, 24))
+>onClientUserChanged : Symbol(onClientUserChanged, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 80, 13))
+>state : Symbol(state, Decl(contextualTypeFunctionObjectPropertyIntersection.ts, 81, 24))
 
   },
 });

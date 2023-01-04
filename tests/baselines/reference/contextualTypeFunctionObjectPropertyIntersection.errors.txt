@@ -1,9 +1,7 @@
 tests/cases/compiler/contextualTypeFunctionObjectPropertyIntersection.ts(40,5): error TS7006: Parameter 'a' implicitly has an 'any' type.
-tests/cases/compiler/contextualTypeFunctionObjectPropertyIntersection.ts(49,8): error TS7006: Parameter 's' implicitly has an 'any' type.
-tests/cases/compiler/contextualTypeFunctionObjectPropertyIntersection.ts(84,25): error TS7006: Parameter 'state' implicitly has an 'any' type.
 
 
-==== tests/cases/compiler/contextualTypeFunctionObjectPropertyIntersection.ts (3 errors) ====
+==== tests/cases/compiler/contextualTypeFunctionObjectPropertyIntersection.ts (1 errors) ====
     // repro from #48812
     
     type Action<TEvent extends { type: string }> = (ev: TEvent) => void;
@@ -55,15 +53,11 @@ tests/cases/compiler/contextualTypeFunctionObjectPropertyIntersection.ts(84,25):
     
     f(0, {
       foo: s => s + 1,
-           ~
-!!! error TS7006: Parameter 's' implicitly has an 'any' type.
     })
     
     // repro from 49307#issuecomment-1195858950
     
-    type SliceCaseReducers<State> = {
-      [K: string]: (state: State) => State | void;
-    };
+    type SliceCaseReducers<State> = Record<string, (state: State) => State | void>;
     
     type ValidateSliceCaseReducers<S, ACR extends SliceCaseReducers<S>> = ACR & {
       [T in keyof ACR]: ACR[T] extends {
@@ -92,8 +86,6 @@ tests/cases/compiler/contextualTypeFunctionObjectPropertyIntersection.ts(84,25):
       },
       reducers: {
         onClientUserChanged(state) {},
-                            ~~~~~
-!!! error TS7006: Parameter 'state' implicitly has an 'any' type.
       },
     });
     

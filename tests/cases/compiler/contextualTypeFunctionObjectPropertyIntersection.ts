@@ -54,9 +54,7 @@ f(0, {
 
 // repro from 49307#issuecomment-1195858950
 
-type SliceCaseReducers<State> = {
-  [K: string]: (state: State) => State | void;
-};
+type SliceCaseReducers<State> = Record<string, (state: State) => State | void>;
 
 type ValidateSliceCaseReducers<S, ACR extends SliceCaseReducers<S>> = ACR & {
   [T in keyof ACR]: ACR[T] extends {
