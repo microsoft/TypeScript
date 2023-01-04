@@ -19084,8 +19084,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     /**
-     * Assumes `Iterable` is defined.
-     * Assumes `target` type is assignable to the `Iterable` type.
+     * Assumes `target` type is assignable to the `Iterable` type, if `Iterable` is defined,
+     * or that it's an array-like type, if `Iterable` is not defined.
      */
     function elaborateIterableLikeTargetElementwise(
         iterator: ElaborationIterator,
@@ -19097,8 +19097,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     ) {
         const tupleLikeTargetParts = filterType(target, isTupleLikeType);
         const nonTupleLikeTargetParts = filterType(target, t => !isTupleLikeType(t));
-        // >> TODO: don't assume iterable is defined; in this case, this will be array component instead of iterable component
-        const iterationType = nonTupleLikeTargetParts !== neverType ? getIterationTypeOfIterable(IterationUse.ForOf, IterationTypeKind.Yield, nonTupleLikeTargetParts, /*errorNode*/ undefined) : undefined;
+        const iterationType = nonTupleLikeTargetParts !== neverType
+            ? getGlobalIterableType(false) !== emptyGenericType
+                ? getIterationTypeOfIterable(IterationUse.ForOf, IterationTypeKind.Yield, nonTupleLikeTargetParts, /*errorNode*/ undefined)
+                : getElementTypeOfArrayType(nonTupleLikeTargetParts)
+            : undefined;
 
         let reportedError = false;
         for (let status = iterator.next(); !status.done; status = iterator.next()) {
