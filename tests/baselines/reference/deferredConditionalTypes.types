@@ -1,0 +1,65 @@
+=== tests/cases/compiler/deferredConditionalTypes.ts ===
+type T0<X, Y> = X extends Y ? true : false;  // Deferred
+>T0 : T0<X, Y>
+>true : true
+>false : false
+
+type T1<X, Y> = [X] extends [Y] ? true : false;  // Deferred
+>T1 : T1<X, Y>
+>true : true
+>false : false
+
+type T2<X, Y> = [X, X] extends [Y, Y] ? true : false;  // Deferred
+>T2 : T2<X, Y>
+>true : true
+>false : false
+
+type T3<X, Y> = [X, X, X] extends [Y, Y, Y] ? true : false;  // Deferred
+>T3 : T3<X, Y>
+>true : true
+>false : false
+
+type T4<X, Y> = [X] extends [Y, Y] ? true : false;  // false
+>T4 : false
+>true : true
+>false : false
+
+type T5<X, Y> = [X, X] extends [Y] ? true : false;  // false
+>T5 : false
+>true : true
+>false : false
+
+// Repro from #52068
+
+type Or<A extends boolean, B extends boolean> = [A, B] extends [false, false] ? false : true;
+>Or : Or<A, B>
+>false : false
+>false : false
+>false : false
+>true : true
+
+type And<A extends boolean, B extends boolean> = [A, B] extends [true, true] ? true : false;
+>And : And<A, B>
+>true : true
+>true : true
+>true : true
+>false : false
+
+type Not<T extends boolean> = T extends true ? false : true;
+>Not : Not<T>
+>true : true
+>false : false
+>true : true
+
+type Extends<A, B> = A extends B ? true : false;
+>Extends : Extends<A, B>
+>true : true
+>false : false
+
+type IsNumberLiteral<T> = And<Extends<T, number>, Not<Extends<number, T>>>;
+>IsNumberLiteral : IsNumberLiteral<T>
+
+type IsLiteral<T> = Or<false, IsNumberLiteral<T>>;
+>IsLiteral : IsLiteral<T>
+>false : false
+

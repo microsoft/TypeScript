@@ -1,0 +1,96 @@
+=== tests/cases/compiler/deferredConditionalTypes.ts ===
+type T0<X, Y> = X extends Y ? true : false;  // Deferred
+>T0 : Symbol(T0, Decl(deferredConditionalTypes.ts, 0, 0))
+>X : Symbol(X, Decl(deferredConditionalTypes.ts, 0, 8))
+>Y : Symbol(Y, Decl(deferredConditionalTypes.ts, 0, 10))
+>X : Symbol(X, Decl(deferredConditionalTypes.ts, 0, 8))
+>Y : Symbol(Y, Decl(deferredConditionalTypes.ts, 0, 10))
+
+type T1<X, Y> = [X] extends [Y] ? true : false;  // Deferred
+>T1 : Symbol(T1, Decl(deferredConditionalTypes.ts, 0, 43))
+>X : Symbol(X, Decl(deferredConditionalTypes.ts, 1, 8))
+>Y : Symbol(Y, Decl(deferredConditionalTypes.ts, 1, 10))
+>X : Symbol(X, Decl(deferredConditionalTypes.ts, 1, 8))
+>Y : Symbol(Y, Decl(deferredConditionalTypes.ts, 1, 10))
+
+type T2<X, Y> = [X, X] extends [Y, Y] ? true : false;  // Deferred
+>T2 : Symbol(T2, Decl(deferredConditionalTypes.ts, 1, 47))
+>X : Symbol(X, Decl(deferredConditionalTypes.ts, 2, 8))
+>Y : Symbol(Y, Decl(deferredConditionalTypes.ts, 2, 10))
+>X : Symbol(X, Decl(deferredConditionalTypes.ts, 2, 8))
+>X : Symbol(X, Decl(deferredConditionalTypes.ts, 2, 8))
+>Y : Symbol(Y, Decl(deferredConditionalTypes.ts, 2, 10))
+>Y : Symbol(Y, Decl(deferredConditionalTypes.ts, 2, 10))
+
+type T3<X, Y> = [X, X, X] extends [Y, Y, Y] ? true : false;  // Deferred
+>T3 : Symbol(T3, Decl(deferredConditionalTypes.ts, 2, 53))
+>X : Symbol(X, Decl(deferredConditionalTypes.ts, 3, 8))
+>Y : Symbol(Y, Decl(deferredConditionalTypes.ts, 3, 10))
+>X : Symbol(X, Decl(deferredConditionalTypes.ts, 3, 8))
+>X : Symbol(X, Decl(deferredConditionalTypes.ts, 3, 8))
+>X : Symbol(X, Decl(deferredConditionalTypes.ts, 3, 8))
+>Y : Symbol(Y, Decl(deferredConditionalTypes.ts, 3, 10))
+>Y : Symbol(Y, Decl(deferredConditionalTypes.ts, 3, 10))
+>Y : Symbol(Y, Decl(deferredConditionalTypes.ts, 3, 10))
+
+type T4<X, Y> = [X] extends [Y, Y] ? true : false;  // false
+>T4 : Symbol(T4, Decl(deferredConditionalTypes.ts, 3, 59))
+>X : Symbol(X, Decl(deferredConditionalTypes.ts, 5, 8))
+>Y : Symbol(Y, Decl(deferredConditionalTypes.ts, 5, 10))
+>X : Symbol(X, Decl(deferredConditionalTypes.ts, 5, 8))
+>Y : Symbol(Y, Decl(deferredConditionalTypes.ts, 5, 10))
+>Y : Symbol(Y, Decl(deferredConditionalTypes.ts, 5, 10))
+
+type T5<X, Y> = [X, X] extends [Y] ? true : false;  // false
+>T5 : Symbol(T5, Decl(deferredConditionalTypes.ts, 5, 50))
+>X : Symbol(X, Decl(deferredConditionalTypes.ts, 6, 8))
+>Y : Symbol(Y, Decl(deferredConditionalTypes.ts, 6, 10))
+>X : Symbol(X, Decl(deferredConditionalTypes.ts, 6, 8))
+>X : Symbol(X, Decl(deferredConditionalTypes.ts, 6, 8))
+>Y : Symbol(Y, Decl(deferredConditionalTypes.ts, 6, 10))
+
+// Repro from #52068
+
+type Or<A extends boolean, B extends boolean> = [A, B] extends [false, false] ? false : true;
+>Or : Symbol(Or, Decl(deferredConditionalTypes.ts, 6, 50))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 10, 8))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 10, 26))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 10, 8))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 10, 26))
+
+type And<A extends boolean, B extends boolean> = [A, B] extends [true, true] ? true : false;
+>And : Symbol(And, Decl(deferredConditionalTypes.ts, 10, 93))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 11, 9))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 11, 27))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 11, 9))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 11, 27))
+
+type Not<T extends boolean> = T extends true ? false : true;
+>Not : Symbol(Not, Decl(deferredConditionalTypes.ts, 11, 92))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 12, 9))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 12, 9))
+
+type Extends<A, B> = A extends B ? true : false;
+>Extends : Symbol(Extends, Decl(deferredConditionalTypes.ts, 12, 60))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 13, 13))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 13, 15))
+>A : Symbol(A, Decl(deferredConditionalTypes.ts, 13, 13))
+>B : Symbol(B, Decl(deferredConditionalTypes.ts, 13, 15))
+
+type IsNumberLiteral<T> = And<Extends<T, number>, Not<Extends<number, T>>>;
+>IsNumberLiteral : Symbol(IsNumberLiteral, Decl(deferredConditionalTypes.ts, 13, 48))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 15, 21))
+>And : Symbol(And, Decl(deferredConditionalTypes.ts, 10, 93))
+>Extends : Symbol(Extends, Decl(deferredConditionalTypes.ts, 12, 60))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 15, 21))
+>Not : Symbol(Not, Decl(deferredConditionalTypes.ts, 11, 92))
+>Extends : Symbol(Extends, Decl(deferredConditionalTypes.ts, 12, 60))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 15, 21))
+
+type IsLiteral<T> = Or<false, IsNumberLiteral<T>>;
+>IsLiteral : Symbol(IsLiteral, Decl(deferredConditionalTypes.ts, 15, 75))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 17, 15))
+>Or : Symbol(Or, Decl(deferredConditionalTypes.ts, 6, 50))
+>IsNumberLiteral : Symbol(IsNumberLiteral, Decl(deferredConditionalTypes.ts, 13, 48))
+>T : Symbol(T, Decl(deferredConditionalTypes.ts, 17, 15))
+
