@@ -19085,7 +19085,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     /**
      * Assumes `target` type is assignable to the `Iterable` type, if `Iterable` is defined,
-     * or that it's an array-like type, if `Iterable` is not defined.
+     * or that it's an array or tuple-like type, if `Iterable` is not defined.
      */
     function elaborateIterableOrArrayLikeTargetElementwise(
         iterator: ElaborationIterator,
@@ -19095,19 +19095,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
         errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
     ) {
-        const tupleLikeTargetParts = filterType(target, isTupleLikeType);
-        const nonTupleLikeTargetParts = filterType(target, t => !isTupleLikeType(t));
-        const iterationType = nonTupleLikeTargetParts !== neverType
-            ? getGlobalIterableType(/*reportErrors*/ false) !== emptyGenericType
-                ? getIterationTypeOfIterable(IterationUse.ForOf, IterationTypeKind.Yield, nonTupleLikeTargetParts, /*errorNode*/ undefined)
-                : getElementTypeOfArrayType(nonTupleLikeTargetParts)
+        const tupleOrArrayLikeTargetParts = filterType(target, isArrayOrTupleLikeType);
+        const nonTupleOrArrayLikeTargetParts = filterType(target, t => !isArrayOrTupleLikeType(t));
+        // If `nonTupleOrArrayLikeTargetParts` is not `never`, then that should mean `Iterable` is defined.
+        const iterationType = nonTupleOrArrayLikeTargetParts !== neverType
+            ? getIterationTypeOfIterable(IterationUse.ForOf, IterationTypeKind.Yield, nonTupleOrArrayLikeTargetParts, /*errorNode*/ undefined)
             : undefined;
 
         let reportedError = false;
         for (let status = iterator.next(); !status.done; status = iterator.next()) {
             const { errorNode: prop, innerExpression: next, nameType, errorMessage } = status.value;
             let targetPropType = iterationType;
-            const targetIndexedPropType = tupleLikeTargetParts !== neverType ? getBestMatchIndexedAccessTypeOrUndefined(source, tupleLikeTargetParts, nameType) : undefined;
+            const targetIndexedPropType = tupleOrArrayLikeTargetParts !== neverType ? getBestMatchIndexedAccessTypeOrUndefined(source, tupleOrArrayLikeTargetParts, nameType) : undefined;
             if (targetIndexedPropType && !(targetIndexedPropType.flags & TypeFlags.IndexedAccess)) {  // Don't elaborate on indexes on generic variables
                 targetPropType = iterationType ? getUnionType([iterationType, targetIndexedPropType]) : targetIndexedPropType;
             }
@@ -19129,7 +19128,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         resultObj.errors = [diag];
                     }
                     else {
-                        const targetIsOptional = !!(propName && (getPropertyOfType(tupleLikeTargetParts, propName) || unknownSymbol).flags & SymbolFlags.Optional);
+                        const targetIsOptional = !!(propName && (getPropertyOfType(tupleOrArrayLikeTargetParts, propName) || unknownSymbol).flags & SymbolFlags.Optional);
                         const sourceIsOptional = !!(propName && (getPropertyOfType(source, propName) || unknownSymbol).flags & SymbolFlags.Optional);
                         targetPropType = removeMissingType(targetPropType, targetIsOptional);
                         sourcePropType = removeMissingType(sourcePropType, targetIsOptional && sourceIsOptional);
