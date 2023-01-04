@@ -19083,6 +19083,66 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return reportedError;
     }
 
+    /**
+     * Assumes `Iterable` is defined.
+     * Assumes `target` type is assignable to the `Iterable` type.
+     */
+    function elaborateIterableLikeTargetElementwise(
+        iterator: ElaborationIterator,
+        source: Type,
+        target: Type,
+        relation: Map<string, RelationComparisonResult>,
+        containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
+        errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } | undefined
+    ) {
+        const tupleLikeTargetParts = filterType(target, isTupleLikeType);
+        const nonTupleLikeTargetParts = filterType(target, t => !isTupleLikeType(t));
+        // >> TODO: don't assume iterable is defined; in this case, this will be array component instead of iterable component
+        const iterationType = nonTupleLikeTargetParts !== neverType ? getIterationTypeOfIterable(IterationUse.ForOf, IterationTypeKind.Yield, nonTupleLikeTargetParts, /*errorNode*/ undefined) : undefined;
+
+        let reportedError = false;
+        for (let status = iterator.next(); !status.done; status = iterator.next()) {
+            const { errorNode: prop, innerExpression: next, nameType, errorMessage } = status.value;
+            let targetPropType = iterationType;
+            const targetIndexedPropType = tupleLikeTargetParts !== neverType ? getBestMatchIndexedAccessTypeOrUndefined(source, tupleLikeTargetParts, nameType) : undefined;
+            if (targetIndexedPropType && !(targetIndexedPropType.flags & TypeFlags.IndexedAccess)) {  // Don't elaborate on indexes on generic variables
+                targetPropType = iterationType ? getUnionType([iterationType, targetIndexedPropType]) : targetIndexedPropType;
+            };
+            if (!targetPropType) continue;
+            let sourcePropType = getIndexedAccessTypeOrUndefined(source, nameType);
+            if (!sourcePropType) continue;
+            const propName = getPropertyNameFromIndex(nameType, /*accessNode*/ undefined);
+            if (!checkTypeRelatedTo(sourcePropType, targetPropType, relation, /*errorNode*/ undefined)) {
+                const elaborated = next && elaborateError(next, sourcePropType, targetPropType, relation, /*headMessage*/ undefined, containingMessageChain, errorOutputContainer);
+                reportedError = true;
+                if (!elaborated) {
+                    // Issue error on the prop itself, since the prop couldn't elaborate the error
+                    const resultObj: { errors?: Diagnostic[] } = errorOutputContainer || {};
+                    // Use the expression type, if available
+                    const specificSource = next ? checkExpressionForMutableLocationWithContextualType(next, sourcePropType) : sourcePropType;
+                    if (exactOptionalPropertyTypes && isExactOptionalPropertyMismatch(specificSource, targetPropType)) {
+                        const diag = createDiagnosticForNode(prop, Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target, typeToString(specificSource), typeToString(targetPropType));
+                        diagnostics.add(diag);
+                        resultObj.errors = [diag];
+                    }
+                    else {
+                        const targetIsOptional = !!(propName && (getPropertyOfType(tupleLikeTargetParts, propName) || unknownSymbol).flags & SymbolFlags.Optional);
+                        const sourceIsOptional = !!(propName && (getPropertyOfType(source, propName) || unknownSymbol).flags & SymbolFlags.Optional);
+                        targetPropType = removeMissingType(targetPropType, targetIsOptional);
+                        sourcePropType = removeMissingType(sourcePropType, targetIsOptional && sourceIsOptional);
+                        const result = checkTypeRelatedTo(specificSource, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
+                        if (result && specificSource !== sourcePropType) {
+                            // If for whatever reason the expression type doesn't yield an error, make sure we still issue an error on the sourcePropType
+                            checkTypeRelatedTo(sourcePropType, targetPropType, relation, prop, errorMessage, containingMessageChain, resultObj);
+                        }
+                    }
+                }
+            }
+        }
+        return reportedError;
+    }
+
+
     function *generateJsxAttributes(node: JsxAttributes): ElaborationIterator {
         if (!length(node.properties)) return;
         for (const prop of node.properties) {
@@ -19149,13 +19209,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return result;
             }
             const moreThanOneRealChildren = length(validChildren) > 1;
-            const arrayLikeTargetParts = filterType(childrenTargetType, isArrayOrTupleLikeType);
-            const nonArrayLikeTargetParts = filterType(childrenTargetType, t => !isArrayOrTupleLikeType(t));
+            let arrayLikeTargetParts: Type;
+            let nonArrayLikeTargetParts: Type;
+            const iterableType = getGlobalIterableType(false);
+            if (iterableType !== emptyGenericType) {
+                const anyIterable = createIterableType(anyType);
+                arrayLikeTargetParts = filterType(childrenTargetType, t => isTypeAssignableTo(t, anyIterable));
+                nonArrayLikeTargetParts = filterType(childrenTargetType, t => !isTypeAssignableTo(t, anyIterable));
+            }
+            else {
+                arrayLikeTargetParts = filterType(childrenTargetType, isArrayOrTupleLikeType);
+                nonArrayLikeTargetParts = filterType(childrenTargetType, t => !isArrayOrTupleLikeType(t));
+            }
             if (moreThanOneRealChildren) {
                 if (arrayLikeTargetParts !== neverType) {
                     const realSource = createTupleType(checkJsxChildren(containingElement, CheckMode.Normal));
                     const children = generateJsxChildren(containingElement, getInvalidTextualChildDiagnostic);
-                    result = elaborateElementwise(children, realSource, arrayLikeTargetParts, relation, containingMessageChain, errorOutputContainer) || result;
+                    result = elaborateIterableLikeTargetElementwise(children, realSource, arrayLikeTargetParts, relation, containingMessageChain, errorOutputContainer) || result;
                 }
                 else if (!isTypeRelatedTo(getIndexedAccessType(source, childrenNameType), childrenTargetType, relation)) {
                     // arity mismatch

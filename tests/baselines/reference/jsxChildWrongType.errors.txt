@@ -1,4 +1,4 @@
-tests/cases/compiler/index.tsx(5,4): error TS2746: This JSX tag's 'children' prop expects a single child of type 'ReactNode', but multiple children were provided.
+tests/cases/compiler/index.tsx(6,5): error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
 
 
 ==== tests/cases/compiler/index.tsx (1 errors) ====
@@ -7,9 +7,9 @@ tests/cases/compiler/index.tsx(5,4): error TS2746: This JSX tag's 'children' pro
     
     const a = (
       <main>
-       ~~~~
-!!! error TS2746: This JSX tag's 'children' prop expects a single child of type 'ReactNode', but multiple children were provided.
         {(<div />) as unknown}
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
         <span />
       </main>
     );
