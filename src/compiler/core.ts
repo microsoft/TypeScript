@@ -1824,7 +1824,8 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
  * @internal
  */
 export function isArray(value: any): value is readonly unknown[] {
-    return Array.isArray ? Array.isArray(value) : value instanceof Array;
+    // See: https://github.com/microsoft/TypeScript/issues/17002
+    return Array.isArray(value);
 }
 
 /** @internal */
