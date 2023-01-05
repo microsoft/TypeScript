@@ -44,10 +44,14 @@ export interface Collection<K> extends ReadonlyCollection<K> {
     clear(): void;
 }
 
-/** Array that is only intended to be pushed to, never read. */
+/**
+ * Array that is only intended to be pushed to, never read.
+ *
+ * @internal
+ */
 export interface Push<T> {
     push(...values: T[]): void;
-    /** @internal */ readonly length: number;
+    readonly length: number;
 }
 
 /** @internal */
