@@ -72,13 +72,13 @@ type TN6 = Uncapitalize<42>;  // Error
 >TN6 : 42
 
 type TX1<S extends string> = Uppercase<`aB${S}`>;
->TX1 : `AB${Uppercase<S>}`
+>TX1 : Uppercase<`aB${S}`>
 
 type TX2 = TX1<'xYz'>;  // "ABXYZ"
 >TX2 : "ABXYZ"
 
 type TX3<S extends string> = Lowercase<`aB${S}`>;
->TX3 : `ab${Lowercase<S>}`
+>TX3 : Lowercase<`aB${S}`>
 
 type TX4 = TX3<'xYz'>;  // "abxyz"
 >TX4 : "abxyz"
