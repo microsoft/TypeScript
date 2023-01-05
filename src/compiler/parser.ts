@@ -1093,6 +1093,7 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.JSDocThisTag]: forEachChildInJSDocTypeLikeTag,
     [SyntaxKind.JSDocEnumTag]: forEachChildInJSDocTypeLikeTag,
     [SyntaxKind.JSDocThrowsTag]: forEachChildInJSDocTypeLikeTag,
+    [SyntaxKind.JSDocOverloadTag]: forEachChildInJSDocTypeLikeTag,
     [SyntaxKind.JSDocSignature]: function forEachChildInJSDocSignature<T>(node: JSDocSignature, cbNode: (node: Node) => T | undefined, _cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return forEach(node.typeParameters, cbNode) ||
             forEach(node.parameters, cbNode) ||
@@ -1186,7 +1187,7 @@ function forEachChildInJSDocParameterOrPropertyTag<T>(node: JSDocParameterTag | 
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
 
-function forEachChildInJSDocTypeLikeTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocThrowsTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+function forEachChildInJSDocTypeLikeTag<T>(node: JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocThrowsTag | JSDocOverloadTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
     return visitNode(cbNode, node.tagName) ||
         visitNode(cbNode, node.typeExpression) ||
         (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
@@ -2806,7 +2807,7 @@ namespace Parser {
             case ParsingContext.ArrayBindingElements:
                 return token() === SyntaxKind.CommaToken || token() === SyntaxKind.DotDotDotToken || isBindingIdentifierOrPrivateIdentifierOrPattern();
             case ParsingContext.TypeParameters:
-                return token() === SyntaxKind.InKeyword || isIdentifier();
+                return token() === SyntaxKind.InKeyword || token() === SyntaxKind.ConstKeyword || isIdentifier();
             case ParsingContext.ArrayLiteralMembers:
                 switch (token()) {
                     case SyntaxKind.CommaToken:
@@ -3815,7 +3816,7 @@ namespace Parser {
 
     function parseTypeParameter(): TypeParameterDeclaration {
         const pos = getNodePos();
-        const modifiers = parseModifiers(/*allowDecorators*/ false);
+        const modifiers = parseModifiers(/*allowDecorators*/ false, /*permitConstAsModifier*/ true);
         const name = parseIdentifier();
         let constraint: TypeNode | undefined;
         let expression: Expression | undefined;
@@ -4801,7 +4802,6 @@ namespace Parser {
         if (contextFlags & NodeFlags.TypeExcludesFlags) {
             return doOutsideOfContext(NodeFlags.TypeExcludesFlags, parseType);
         }
-
         if (isStartOfFunctionTypeOrConstructorType()) {
             return parseFunctionOrConstructorType();
         }
@@ -5198,13 +5198,14 @@ namespace Parser {
 
             // If we have "<" not followed by an identifier,
             // then this definitely is not an arrow function.
-            if (!isIdentifier()) {
+            if (!isIdentifier() && token() !== SyntaxKind.ConstKeyword) {
                 return Tristate.False;
             }
 
             // JSX overrides
             if (languageVariant === LanguageVariant.JSX) {
                 const isArrowFunctionInJsx = lookAhead(() => {
+                    parseOptional(SyntaxKind.ConstKeyword);
                     const third = nextToken();
                     if (third === SyntaxKind.ExtendsKeyword) {
                         const fourth = nextToken();
@@ -7679,11 +7680,11 @@ namespace Parser {
         return finishNode(factory.createDecorator(expression), pos);
     }
 
-    function tryParseModifier(hasSeenStaticModifier: boolean, permitInvalidConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): Modifier | undefined {
+    function tryParseModifier(hasSeenStaticModifier: boolean, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): Modifier | undefined {
         const pos = getNodePos();
         const kind = token();
 
-        if (token() === SyntaxKind.ConstKeyword && permitInvalidConstAsModifier) {
+        if (token() === SyntaxKind.ConstKeyword && permitConstAsModifier) {
             // We need to ensure that any subsequent modifiers appear on the same line
             // so that when 'const' is a standalone declaration, we don't issue an error.
             if (!tryParse(nextTokenIsOnSameLineAndCanFollowModifier)) {
@@ -7710,15 +7711,15 @@ namespace Parser {
         * In those situations, if we are entirely sure that 'const' is not valid on its own (such as when ASI takes effect
         * and turns it into a standalone declaration), then it is better to parse it and report an error later.
         *
-        * In such situations, 'permitInvalidConstAsModifier' should be set to true.
+        * In such situations, 'permitConstAsModifier' should be set to true.
         */
-    function parseModifiers(allowDecorators: false, permitInvalidConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<Modifier> | undefined;
-    function parseModifiers(allowDecorators: true, permitInvalidConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<ModifierLike> | undefined;
-    function parseModifiers(allowDecorators: boolean, permitInvalidConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<ModifierLike> | undefined {
+    function parseModifiers(allowDecorators: false, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<Modifier> | undefined;
+    function parseModifiers(allowDecorators: true, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<ModifierLike> | undefined;
+    function parseModifiers(allowDecorators: boolean, permitConstAsModifier?: boolean, stopOnStartOfClassStaticBlock?: boolean): NodeArray<ModifierLike> | undefined {
         const pos = getNodePos();
         let list: ModifierLike[] | undefined;
         let modifier, hasSeenStaticModifier = false;
-        while (modifier = tryParseModifier(hasSeenStaticModifier, permitInvalidConstAsModifier, stopOnStartOfClassStaticBlock)) {
+        while (modifier = tryParseModifier(hasSeenStaticModifier, permitConstAsModifier, stopOnStartOfClassStaticBlock)) {
             if (modifier.kind === SyntaxKind.StaticKeyword) hasSeenStaticModifier = true;
             list = append(list, modifier);
         }
@@ -7731,7 +7732,7 @@ namespace Parser {
                 list = append(list, decorator);
             }
 
-            while (modifier = tryParseModifier(hasSeenStaticModifier, permitInvalidConstAsModifier, stopOnStartOfClassStaticBlock)) {
+            while (modifier = tryParseModifier(hasSeenStaticModifier, permitConstAsModifier, stopOnStartOfClassStaticBlock)) {
                 if (modifier.kind === SyntaxKind.StaticKeyword) hasSeenStaticModifier = true;
                 list = append(list, modifier);
             }
@@ -7769,7 +7770,7 @@ namespace Parser {
         }
 
         const hasJSDoc = hasPrecedingJSDocComment();
-        const modifiers = parseModifiers(/*allowDecorators*/ true, /*permitInvalidConstAsModifier*/ true, /*stopOnStartOfClassStaticBlock*/ true);
+        const modifiers = parseModifiers(/*allowDecorators*/ true, /*permitConstAsModifier*/ true, /*stopOnStartOfClassStaticBlock*/ true);
         if (token() === SyntaxKind.StaticKeyword && lookAhead(nextTokenIsOpenBrace)) {
             return parseClassStaticBlockDeclaration(pos, hasJSDoc, modifiers);
         }

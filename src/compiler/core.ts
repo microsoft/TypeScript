@@ -1137,6 +1137,8 @@ export function append<T>(to: T[], value: T | undefined): T[] | undefined {
  *
  * @internal
  */
+export function combine<T>(xs: T[] | undefined, ys: T[] | undefined): T[] | undefined;
+/** @internal */
 export function combine<T>(xs: T | readonly T[] | undefined, ys: T | readonly T[] | undefined): T | readonly T[] | undefined;
 /** @internal */
 export function combine<T>(xs: T | T[] | undefined, ys: T | T[] | undefined): T | T[] | undefined;

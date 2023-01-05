@@ -903,13 +903,17 @@
         "category": "Error",
         "code": 1276
     },
-    "The runtime will invoke the decorator with {1} arguments, but the decorator expects {0}.": {
+    "'{0}' modifier can only appear on a type parameter of a function, method or class": {
         "category": "Error",
         "code": 1277
     },
-    "The runtime will invoke the decorator with {1} arguments, but the decorator expects at least {0}.": {
+    "The runtime will invoke the decorator with {1} arguments, but the decorator expects {0}.": {
         "category": "Error",
         "code": 1278
+    },
+    "The runtime will invoke the decorator with {1} arguments, but the decorator expects at least {0}.": {
+        "category": "Error",
+        "code": 1279
     },
 
     "'with' statements are not allowed in an async function block.": {
@@ -6548,6 +6552,14 @@
     "Unknown type acquisition option '{0}'. Did you mean '{1}'?": {
         "category": "Error",
         "code": 17018
+    },
+    "'{0}' at the end of a type is not valid TypeScript syntax. Did you mean to write '{1}'?": {
+        "category": "Error",
+        "code": 17019
+    },
+    "'{0}' at the start of a type is not valid TypeScript syntax. Did you mean to write '{1}'?": {
+        "category": "Error",
+        "code": 17020
     },
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
