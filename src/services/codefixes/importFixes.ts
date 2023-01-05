@@ -1366,7 +1366,7 @@ function doAddExistingFix(
         // to do a sorted insertion.
         const specifierSort = existingSpecifiers?.length && OrganizeImports.detectImportSpecifierSorting(existingSpecifiers, preferences);
         if (specifierSort && !(ignoreCaseForSorting && specifierSort === SortKind.CaseSensitive)) {
-            const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, /*ignoreCase*/ false);
+            const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, ignoreCaseForSorting);
             for (const spec of newSpecifiers) {
                 // Organize imports puts type-only import specifiers last, so if we're
                 // adding a non-type-only specifier and converting all the other ones to

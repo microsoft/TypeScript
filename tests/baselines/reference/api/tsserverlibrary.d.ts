@@ -2802,7 +2802,57 @@ declare namespace ts {
                 readonly includeInlayFunctionLikeReturnTypeHints?: boolean;
                 readonly includeInlayEnumMemberValueHints?: boolean;
                 readonly autoImportFileExcludePatterns?: string[];
+                /**
+                 * Indicates whether imports should be organized in a case-insensitive manner.
+                 */
                 readonly organizeImportsIgnoreCase?: "auto" | boolean;
+                /**
+                 * Indicates whether imports should be organized via an "ordinal" (binary) comparison using the numeric value
+                 * of their code points, or via "natural" collation using rules associated with the locale specified by
+                 * {@link organizeImportsCollationLocale}.
+                 *
+                 * NOTE: When comparing paths `"ordinal"` collation is always used.
+                 *
+                 * Default: `"ordinal"`.
+                 */
+                readonly organizeImportsCollation?: "natural" | "ordinal";
+                /**
+                 * Indicates the locale to use for "natural" collation. If not specified, the locale `"en"` is used as an invariant
+                 * for the sake of consistent sorting. Use `"auto"` to use the detected UI locale.
+                 *
+                 * This preference is ignored if {@link organizeImportsCollation} is not `"natural"`.
+                 *
+                 * Default: `"en"`
+                 */
+                readonly organizeImportsCollationLocale?: string;
+                /**
+                 * Indicates whether numeric collation should be used for digit sequences in strings. When `true`, will collate
+                 * strings such that `a1z < a2z < a100z`. When `false`, will collate strings such that `a1z < a100z < a2z`.
+                 *
+                 * This preference is ignored if {@link organizeImportsCollation} is not `"natural"`.
+                 *
+                 * Default: `true`
+                 */
+                readonly organizeImportsNumericCollation?: boolean;
+                /**
+                 * Indicates whether accents and other diacritic marks are considered unequal for the purpose of collation. When
+                 * `true`, characters with accents and other diacritics will be collated in the order defined by the locale specified
+                 * in {@link organizeImportsCollationLocale}.
+                 *
+                 * This preference is ignored if {@link organizeImportsCollation} is not `"natural"`.
+                 *
+                 * Default: `true`
+                 */
+                readonly organizeImportsAccentCollation?: boolean;
+                /**
+                 * Indicates whether upper case or lower case should sort first. When `false`, the default order for the locale
+                 * specified in {@link organizeImportsCollationLocale} is used.
+                 *
+                 * This preference is ignored if {@link organizeImportsCollation} is not `"natural"`.
+                 *
+                 * Default: `false`
+                 */
+                readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
                 /**
                  * Indicates whether {@link ReferencesResponseItem.lineText} is supported.
                  */
@@ -8404,6 +8454,11 @@ declare namespace ts {
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
         readonly organizeImportsIgnoreCase?: "auto" | boolean;
+        readonly organizeImportsCollation?: "natural" | "ordinal";
+        readonly organizeImportsLocale?: string;
+        readonly organizeImportsNumericCollation?: boolean;
+        readonly organizeImportsAccentCollation?: boolean;
+        readonly organizeImportsCaseFirst?: "upper" | "lower" | false;
     }
     /** Represents a bigint literal value without requiring bigint support */
     interface PseudoBigInt {

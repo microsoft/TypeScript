@@ -19,6 +19,7 @@ import {
     FileTextChanges,
     find,
     FindAllReferences,
+    firstOrUndefined,
     flatMap,
     formatting,
     getNewLineOrDefaultFromHost,
@@ -349,7 +350,10 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
                 updateImportDeclarationAndClause(namespaceImport, /*name*/ undefined, namespaceImport.importClause.namedBindings));
         }
 
-        if (defaultImports.length === 0 && namedImports.length === 0) {
+        const firstDefaultImport = firstOrUndefined(defaultImports);
+        const firstNamedImport = firstOrUndefined(namedImports);
+        const importDecl = firstDefaultImport ?? firstNamedImport;
+        if (!importDecl) {
             continue;
         }
 
@@ -369,26 +373,21 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
 
         const sortedImportSpecifiers = factory.createNodeArray(
             sortSpecifiers(newImportSpecifiers, comparer),
-            namedImports[0].importClause.namedBindings.elements.hasTrailingComma
+            firstNamedImport?.importClause.namedBindings.elements.hasTrailingComma
         );
-
-        const importDecl = defaultImports.length > 0
-            ? defaultImports[0]
-            : namedImports[0];
 
         const newNamedImports = sortedImportSpecifiers.length === 0
             ? newDefaultImport
                 ? undefined
                 : factory.createNamedImports(emptyArray)
-            : namedImports.length === 0
-                ? factory.createNamedImports(sortedImportSpecifiers)
-                : factory.updateNamedImports(namedImports[0].importClause.namedBindings, sortedImportSpecifiers);
+            : firstNamedImport
+                ? factory.updateNamedImports(firstNamedImport.importClause.namedBindings, sortedImportSpecifiers)
+                : factory.createNamedImports(sortedImportSpecifiers);
 
         if (sourceFile &&
             newNamedImports &&
-            namedImports.length &&
-            namedImports[0].importClause.namedBindings &&
-            !rangeIsOnSingleLine(namedImports[0].importClause.namedBindings, sourceFile)
+            firstNamedImport?.importClause.namedBindings &&
+            !rangeIsOnSingleLine(firstNamedImport.importClause.namedBindings, sourceFile)
         ) {
             setEmitFlags(newNamedImports, EmitFlags.MultiLine);
         }
@@ -400,7 +399,7 @@ function coalesceImportsWorker(importGroup: readonly ImportDeclaration[], compar
             coalescedImports.push(
                 updateImportDeclarationAndClause(importDecl, newDefaultImport, /*namedBindings*/ undefined));
             coalescedImports.push(
-                updateImportDeclarationAndClause(namedImports[0] ?? importDecl, /*name*/ undefined, newNamedImports));
+                updateImportDeclarationAndClause(firstNamedImport ?? importDecl, /*name*/ undefined, newNamedImports));
         }
         else {
             coalescedImports.push(
