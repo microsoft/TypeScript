@@ -11,11 +11,10 @@ import {
 } from "./core";
 import { Debug } from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
+import { textToKeyword, textToToken } from "./scannerKeywords";
 import {
     parsePseudoBigInt,
     positionIsSynthesized,
-    textToKeyword,
-    textToToken,
 } from "./scannerUtilities";
 import {
     CharacterCodes,

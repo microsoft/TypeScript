@@ -76,7 +76,7 @@ import {
     tokenIsIdentifierOrKeywordOrGreaterThan,
     tokenToString,
 } from "./scanner";
-import { textToKeywordObj } from "./scannerUtilities";
+import { textToKeywordObj } from "./scannerKeywords";
 import { tracing } from "./tracing";
 import {
     AccessorDeclaration,
