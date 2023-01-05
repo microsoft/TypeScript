@@ -63,10 +63,8 @@ import {
     isUnionTypeNode,
     isVoidExpression,
 } from "../compiler/factory/nodeTests";
-import {
-    forEachChild,
-    isExternalModule,
-} from "../compiler/parser";
+import { forEachChild } from "../compiler/parser";
+import { forEachReturnStatement } from "../compiler/parserUtilities";
 import {
     getModeForUsageLocation,
     getReferencedFileLocation,
@@ -134,7 +132,6 @@ import {
 } from "../compiler/types";
 import {
     addToSeen,
-    forEachReturnStatement,
     getAllSuperTypeNodes,
     getAncestor,
     getAssignmentDeclarationKind,
@@ -153,6 +150,7 @@ import {
     isAccessExpression,
     isBindableObjectDefinePropertyCall,
     isDeclarationName,
+    isExternalModule,
     isExternalOrCommonJsModule,
     isImportMeta,
     isInJSFile,

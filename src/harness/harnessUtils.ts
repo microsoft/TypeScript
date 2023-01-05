@@ -1,5 +1,6 @@
 import * as ts from "./_namespaces/ts";
 import * as Harness from "./_namespaces/Harness";
+import { containsParseError } from "../compiler/parserUtilities";
 
 export function encodeString(s: string): string {
     return ts.sys.bufferFrom!(s).toString("utf8");
@@ -185,7 +186,7 @@ export function sourceFileToJSON(file: ts.Node): string {
 
     function serializeNode(n: ts.Node): any {
         const o: any = { kind: getKindName(n.kind) };
-        if (ts.containsParseError(n)) {
+        if (containsParseError(n)) {
             o.containsParseError = true;
         }
 
@@ -288,7 +289,7 @@ export function assertStructuralEquals(node1: ts.Node, node2: ts.Node) {
 
     // call this on both nodes to ensure all propagated flags have been set (and thus can be
     // compared).
-    assert.equal(ts.containsParseError(node1), ts.containsParseError(node2));
+    assert.equal(containsParseError(node1), containsParseError(node2));
     assert.equal(node1.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, node2.flags & ~ts.NodeFlags.ReachabilityAndEmitFlags, "node1.flags !== node2.flags");
 
     ts.forEachChild(node1,

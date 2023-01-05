@@ -41,7 +41,6 @@ import {
     tryGetModuleNameFromFile,
 } from "../../factory/utilities";
 import { setTextRange } from "../../factory/utilitiesPublic";
-import { isExternalModule } from "../../parser";
 import {
     BinaryExpression,
     BindingElement,
@@ -112,6 +111,7 @@ import {
     isDeclarationNameOfEnumOrNamespace,
     isDestructuringAssignment,
     isEffectiveExternalModule,
+    isExternalModule,
     isExternalModuleImportEqualsDeclaration,
     isImportCall,
     isImportMeta,

@@ -47,27 +47,28 @@ import {
     isProgramUptoDate,
     parseConfigHostFromCompilerHostLike,
 } from "./program";
+import { changesAffectModuleResolution } from "./programUtilities";
 import {
     createResolutionCache,
     ResolutionCacheHost,
 } from "./resolutionCache";
 import {
-    DirectoryWatcherCallback,
-    FileWatcher,
-    FileWatcherCallback,
-    FileWatcherEventKind,
     PollingInterval,
     sys,
-    System,
 } from "./sys";
+import { getNewLineCharacter } from "./sysUtilities";
 import {
     BuildInfo,
     CompilerHost,
     CompilerOptions,
     Diagnostic,
     DiagnosticMessage,
+    DirectoryWatcherCallback,
     FileExtensionInfo,
     FileReference,
+    FileWatcher,
+    FileWatcherCallback,
+    FileWatcherEventKind,
     HasInvalidatedResolutions,
     ParsedCommandLine,
     Path,
@@ -81,15 +82,14 @@ import {
     ScriptTarget,
     SourceFile,
     StringLiteralLike,
+    System,
     WatchDirectoryFlags,
     WatchOptions,
 } from "./types";
 import {
-    changesAffectModuleResolution,
     clearMap,
     closeFileWatcher,
     createCompilerDiagnostic,
-    getNewLineCharacter,
 } from "./utilities";
 import {
     createCompilerHostFromProgramHost,

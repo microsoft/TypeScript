@@ -72,6 +72,7 @@ import {
     setOriginalNode,
     setTextRange,
 } from "../factory/utilitiesPublic";
+import { setParent } from "../parserUtilities";
 import { skipTrivia } from "../scanner";
 import {
     __String,
@@ -183,7 +184,6 @@ import {
     moveRangePos,
     nodeIsSynthesized,
     rangeEndIsOnSameLineAsRangeStart,
-    setParent,
     setTextRangeEnd,
     setTextRangePos,
     skipOuterExpressions,

@@ -133,10 +133,8 @@ import {
     getTypesPackageName,
 } from "../compiler/moduleNameResolver";
 import { getNodeModulesPackageName } from "../compiler/moduleSpecifiers";
-import {
-    forEachChild,
-    isExternalModule,
-} from "../compiler/parser";
+import { forEachChild } from "../compiler/parser";
+import { getLastChild } from "../compiler/parserUtilities";
 import {
     combinePaths,
     forEachAncestorDirectory,
@@ -222,6 +220,7 @@ import {
     ModuleDeclaration,
     ModuleResolutionKind,
     ModuleSpecifierResolutionHost,
+    Mutable,
     NamedDeclaration,
     NewExpression,
     NewLineKind,
@@ -285,7 +284,6 @@ import {
     getEmitScriptTarget,
     getExternalModuleImportEqualsDeclarationExpression,
     getIndentString,
-    getLastChild,
     getLeadingCommentRangesOfNode,
     getLocaleSpecificMessage,
     getRootDeclaration,
@@ -300,6 +298,7 @@ import {
     isAnyImportSyntax,
     isDeclarationName,
     isExpressionNode,
+    isExternalModule,
     isExternalModuleImportEqualsDeclaration,
     isFileLevelUniqueName,
     isFunctionBlock,
@@ -320,7 +319,6 @@ import {
     isStringOrNumericLiteralLike,
     isTransientSymbol,
     isVarConst,
-    Mutable,
     nodeIsMissing,
     nodeIsPresent,
     nodeIsSynthesized,

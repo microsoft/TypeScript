@@ -2,6 +2,7 @@ import { Debug } from "../../compiler/debug";
 import { factory } from "../../compiler/factory/nodeFactory";
 import { setTextRange } from "../../compiler/factory/utilitiesPublic";
 import { parseBaseNodeFactory } from "../../compiler/parser";
+import { setParent } from "../../compiler/parserUtilities";
 import {
     ArrowFunction,
     AsteriskToken,
@@ -32,6 +33,7 @@ import {
     JSDocTypeExpression,
     MethodSignature,
     Modifier,
+    Mutable,
     NamedExportBindings,
     NamedImportBindings,
     Node,
@@ -59,11 +61,7 @@ import {
     VariableDeclaration,
     YieldExpression,
 } from "../../compiler/types";
-import {
-    Mutable,
-    setParent,
-    setTextRangePosEnd,
-} from "../../compiler/utilities";
+import { setTextRangePosEnd } from "../../compiler/utilities";
 import { isNodeKind } from "../../compiler/utilitiesPublic";
 import { deprecate } from "../deprecate";
 import { DeprecationOptions } from "../deprecations";

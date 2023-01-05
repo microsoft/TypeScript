@@ -52,10 +52,7 @@ import {
     getConfigFileParsingDiagnostics,
 } from "../compiler/program";
 import { getLineStarts } from "../compiler/scanner";
-import {
-    sys,
-    System,
-} from "../compiler/sys";
+import { sys } from "../compiler/sys";
 import {
     dumpTracingLegend,
     startTracing,
@@ -85,6 +82,7 @@ import {
     ParsedCommandLine,
     Program,
     SourceFile,
+    System,
     WatchOptions,
 } from "../compiler/types";
 import {
@@ -1062,7 +1060,7 @@ interface SolutionPerformance {
 
 function enableSolutionPerformance(system: System, options: BuildOptions) {
     if (system === sys && options.extendedDiagnostics) {
-        performance.enable();
+        performance.enable(sys);
         return createSolutionPerfomrance();
     }
 }
@@ -1120,7 +1118,7 @@ function reportSolutionBuilderTimes(
         if (isSolutionMarkOrMeasure(name)) statistics.push({ name: `${getNameFromSolutionBuilderMarkOrMeasure(name)} time`, value: duration, type: StatisticType.time });
     });
     performance.disable();
-    performance.enable();
+    performance.enable(sys);
     solutionPerformance.clear();
 
     reportAllStatistics(sys, statistics);

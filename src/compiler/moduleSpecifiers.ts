@@ -39,6 +39,11 @@ import {
     pathContainsNodeModules,
     shouldAllowImportingTsExtension,
 } from "./moduleNameResolver";
+import {
+    getModuleSpecifierEndingPreference,
+    getNodeModulePathParts,
+    NodeModulePathParts,
+} from "./moduleSpecifiersUtilities";
 import { isDeclarationFileName } from "./parser";
 import {
     combinePaths,
@@ -65,6 +70,7 @@ import {
     getModeForResolutionAtIndex,
     getModuleNameStringLiteralAt,
 } from "./program";
+import { containsIgnoredPath } from "./sysUtilities";
 import {
     __String,
     AmbientModuleDeclaration,
@@ -96,11 +102,8 @@ import {
 } from "./types";
 import {
     compareNumberOfDirectorySeparators,
-    containsIgnoredPath,
     extensionFromPath,
     getEmitModuleResolutionKind,
-    getModuleSpecifierEndingPreference,
-    getNodeModulePathParts,
     getPathsBasePath,
     getSourceFileOfModule,
     getSupportedExtensions,
@@ -113,7 +116,6 @@ import {
     isNonGlobalAmbientModule,
     matchPatternOrExact,
     ModuleSpecifierEnding,
-    NodeModulePathParts,
     removeFileExtension,
     tryGetExtensionFromPath,
     tryParsePatterns,

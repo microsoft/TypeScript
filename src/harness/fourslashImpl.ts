@@ -6,6 +6,7 @@ import * as fakes from "./_namespaces/fakes";
 import * as vpath from "./_namespaces/vpath";
 import * as Utils from "./_namespaces/Utils";
 import { applyChanges } from "../services/textChanges";
+import { regExpEscape } from "../compiler/fileMatcher";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
@@ -4635,7 +4636,7 @@ function displayExpectedAndActualString(expected: string, actual: string, quoted
 }
 
 function templateToRegExp(template: string) {
-    return new RegExp(`^${ts.regExpEscape(template).replace(/\\\{\d+\\\}/g, ".*?")}$`);
+    return new RegExp(`^${regExpEscape(template).replace(/\\\{\d+\\\}/g, ".*?")}$`);
 }
 
 function rangesOfDiffBetweenTwoStrings(source: string, target: string) {

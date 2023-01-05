@@ -23,7 +23,9 @@ import {
 import { Push } from "../corePublic";
 import { Debug } from "../debug";
 import { getBuildInfo } from "../emitter";
+import { objectAllocator } from "../objectAllocator";
 import { parseNodeFactory } from "../parser";
+import { setEachParent, setParent } from "../parserUtilities";
 import {
     createScanner,
     getLineAndCharacterOfPosition,
@@ -233,6 +235,7 @@ import {
     ModuleKind,
     ModuleName,
     ModuleReference,
+    Mutable,
     MutableNodeArray,
     NamedExportBindings,
     NamedExports,
@@ -377,12 +380,8 @@ import {
     isSuperProperty,
     isThisIdentifier,
     modifiersToFlags,
-    Mutable,
     nodeIsSynthesized,
-    objectAllocator,
     pseudoBigIntToString,
-    setEachParent,
-    setParent,
     setTextRangePosWidth,
     skipOuterExpressions,
     skipParentheses,

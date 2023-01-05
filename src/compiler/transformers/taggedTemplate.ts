@@ -2,7 +2,6 @@ import { Debug } from "../debug";
 import { factory } from "../factory/nodeFactory";
 import { isNoSubstitutionTemplateLiteral } from "../factory/nodeTests";
 import { setTextRange } from "../factory/utilitiesPublic";
-import { isExternalModule } from "../parser";
 import {
     CallExpression,
     Expression,
@@ -21,6 +20,7 @@ import {
 import {
     getSourceTextOfNodeFromSourceFile,
     hasInvalidEscape,
+    isExternalModule,
 } from "../utilities";
 import { isExpression } from "../utilitiesPublic";
 import {

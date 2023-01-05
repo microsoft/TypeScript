@@ -1,7 +1,7 @@
 import { Debug } from "../compiler/debug";
 import { nodeModulesPathPart } from "../compiler/moduleNameResolver";
-import { FileWatcher } from "../compiler/sys";
 import {
+    FileWatcher,
     ModulePath,
     ModuleSpecifierCache,
     ModuleSpecifierOptions,

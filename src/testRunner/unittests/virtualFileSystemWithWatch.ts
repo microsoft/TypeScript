@@ -29,7 +29,6 @@ import {
     isArray,
     isString,
     mapDefined,
-    matchFiles,
     ModuleResolutionHost,
     MultiMap,
     noop,
@@ -43,6 +42,7 @@ import {
     toPath,
 } from "../_namespaces/ts";
 import { timeIncrements } from "../_namespaces/vfs";
+import { matchFiles } from "../../compiler/fileMatcher";
 
 export const libFile: File = {
     path: "/a/lib/lib.d.ts",

@@ -56,10 +56,6 @@ import {
     ResolutionCache,
 } from "../compiler/resolutionCache";
 import {
-    DirectoryWatcherCallback,
-    FileWatcher,
-    FileWatcherCallback,
-    FileWatcherEventKind,
     generateDjb2Hash,
     PollingInterval,
 } from "../compiler/sys";
@@ -68,9 +64,13 @@ import {
     CompilerHost,
     CompilerOptions,
     Diagnostic,
+    DirectoryWatcherCallback,
     DocumentPositionMapper,
     Extension,
     FileReference,
+    FileWatcher,
+    FileWatcherCallback,
+    FileWatcherEventKind,
     HasInvalidatedResolutions,
     ModuleResolutionHost,
     ParsedCommandLine,
@@ -90,10 +90,8 @@ import {
     WatchOptions,
 } from "../compiler/types";
 import {
-    changesAffectModuleResolution,
     clearMap,
     closeFileWatcher,
-    createSymlinkCache,
     forEachEntry,
     forEachKey,
     getAllowJSCompilerOption,
@@ -103,7 +101,6 @@ import {
     removeFileExtension,
     resolutionExtensionIsTSOrJson,
     stripQuotes,
-    SymlinkCache,
 } from "../compiler/utilities";
 import {
     getDefaultLibFileName,
@@ -176,6 +173,11 @@ import {
     ProjectOptions,
     toNormalizedPath,
 } from "./utilitiesPublic";
+import {
+    createSymlinkCache,
+    SymlinkCache,
+} from "../compiler/symlinkCache";
+import { changesAffectModuleResolution } from "../compiler/programUtilities";
 
 export enum ProjectKind {
     Inferred,

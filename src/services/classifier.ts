@@ -16,6 +16,7 @@ import {
     isModuleDeclaration,
 } from "../compiler/factory/nodeTests";
 import { parseIsolatedJSDocComment } from "../compiler/parser";
+import { setParent } from "../compiler/parserUtilities";
 import {
     couldStartTrivia,
     createScanner,
@@ -65,7 +66,6 @@ import {
     isThisIdentifier,
     isTrivia,
     nodeIsMissing,
-    setParent,
 } from "../compiler/utilities";
 import {
     createTextSpan,

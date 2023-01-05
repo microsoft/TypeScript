@@ -15,6 +15,7 @@ import {
 } from "../factory/nodeTests";
 import { setTextRange } from "../factory/utilitiesPublic";
 import { parseNodeFactory } from "../parser";
+import { setParent } from "../parserUtilities";
 import {
     AccessorDeclaration,
     ArrayLiteralExpression,
@@ -65,7 +66,6 @@ import {
     getStrictOptionValue,
     isAsyncFunction,
     nodeIsPresent,
-    setParent,
     skipTypeParentheses,
 } from "../utilities";
 import {

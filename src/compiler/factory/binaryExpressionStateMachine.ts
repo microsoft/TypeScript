@@ -1,5 +1,4 @@
-import { AssertionLevel } from "../core";
-import { Debug } from "../debug";
+import { AssertionLevel, Debug } from "../debug";
 import {
     BinaryExpression,
     BinaryOperatorToken,

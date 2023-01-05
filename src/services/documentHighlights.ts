@@ -36,6 +36,7 @@ import {
     isYieldExpression,
 } from "../compiler/factory/nodeTests";
 import { forEachChild } from "../compiler/parser";
+import { forEachReturnStatement } from "../compiler/parserUtilities";
 import { toPath } from "../compiler/path";
 import {
     __String,
@@ -65,7 +66,6 @@ import {
     TryStatement,
 } from "../compiler/types";
 import {
-    forEachReturnStatement,
     getContainingFunction,
     isFunctionBlock,
     modifierToFlag,

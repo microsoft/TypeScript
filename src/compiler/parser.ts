@@ -2,7 +2,6 @@ import { convertToObjectWorker } from "./commandLineParser";
 import {
     addRange,
     append,
-    AssertionLevel,
     concatenate,
     emptyArray,
     emptyMap,
@@ -19,7 +18,7 @@ import {
     toArray,
     trimString,
 } from "./core";
-import { Debug } from "./debug";
+import { AssertionLevel, Debug } from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import { BaseNodeFactory } from "./factory/baseNodeFactory";
 import {
@@ -55,6 +54,13 @@ import {
     setTextRange,
 } from "./factory/utilitiesPublic";
 import { PackageJsonInfo } from "./moduleNameResolver";
+import { objectAllocator } from "./objectAllocator";
+import {
+    containsParseError,
+    getLastChild,
+    setParent,
+    setParentRecursive,
+} from "./parserUtilities";
 import {
     fileExtensionIsOneOf,
     normalizePath,
@@ -251,6 +257,7 @@ import {
     ModuleBlock,
     ModuleDeclaration,
     ModuleKind,
+    Mutable,
     NamedExportBindings,
     NamedExports,
     NamedImports,
@@ -363,26 +370,21 @@ import {
     addRelatedInfo,
     attachFileToDiagnostics,
     canHaveJSDoc,
-    containsParseError,
     createDetachedDiagnostic,
     ensureScriptKind,
     getBinaryOperatorPrecedence,
     getFullWidth,
     getJSDocCommentRanges,
     getLanguageVariant,
-    getLastChild,
     getTextOfNodeFromSourceText,
     isAssignmentOperator,
+    isExternalModule,
     isKeyword,
     isStringOrNumericLiteralLike,
     modifiersToFlags,
-    Mutable,
     nodeIsMissing,
     nodeIsPresent,
-    objectAllocator,
     OperatorPrecedence,
-    setParent,
-    setParentRecursive,
     setTextRangePos,
     setTextRangePosEnd,
     setTextRangePosWidth,
@@ -1382,11 +1384,6 @@ export function parseIsolatedEntityName(text: string, languageVersion: ScriptTar
  */
 export function parseJsonText(fileName: string, sourceText: string): JsonSourceFile {
     return Parser.parseJsonText(fileName, sourceText);
-}
-
-// See also `isExternalOrCommonJsModule` in utilities.ts
-export function isExternalModule(file: SourceFile): boolean {
-    return file.externalModuleIndicator !== undefined;
 }
 
 // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter

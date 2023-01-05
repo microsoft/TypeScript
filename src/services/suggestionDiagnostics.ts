@@ -18,6 +18,7 @@ import {
     isVariableDeclaration,
     isVariableStatement,
 } from "../compiler/factory/nodeTests";
+import { forEachReturnStatement } from "../compiler/parserUtilities";
 import { fileExtensionIsOneOf } from "../compiler/path";
 import { getModeForUsageLocation } from "../compiler/program";
 import {
@@ -49,7 +50,6 @@ import {
 } from "../compiler/types";
 import {
     createDiagnosticForNode,
-    forEachReturnStatement,
     FunctionFlags,
     getAllowSyntheticDefaultImports,
     getAssignmentDeclarationKind,

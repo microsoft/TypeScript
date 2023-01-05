@@ -14,7 +14,6 @@ import {
 import {
     arrayFrom,
     arrayToMap,
-    AssertionLevel,
     contains,
     createGetCanonicalFileName,
     createMultiMap,
@@ -44,7 +43,7 @@ import {
     ReadonlyCollection,
     version,
 } from "../compiler/corePublic";
-import { Debug } from "../compiler/debug";
+import { AssertionLevel, Debug } from "../compiler/debug";
 import { parsePackageName } from "../compiler/moduleNameResolver";
 import { parseJsonText } from "../compiler/parser";
 import {
@@ -74,8 +73,6 @@ import {
     removeIgnoredPath,
 } from "../compiler/resolutionCache";
 import {
-    FileWatcher,
-    FileWatcherEventKind,
     getFileWatcherEventKind,
     missingFileModifiedTime,
     PollingInterval,
@@ -88,6 +85,8 @@ import {
     DocumentPosition,
     DocumentPositionMapper,
     FileExtensionInfo,
+    FileWatcher,
+    FileWatcherEventKind,
     ParsedCommandLine,
     Path,
     PluginImport,

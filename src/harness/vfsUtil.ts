@@ -3,6 +3,7 @@ import * as ts from "./_namespaces/ts";
 import * as vpath from "./_namespaces/vpath";
 import * as documents from "./_namespaces/documents";
 import * as Harness from "./_namespaces/Harness";
+import { FileSystemEntries } from "../compiler/fileMatcher";
 
 /**
  * Posix-style path to the TypeScript compiler build outputs (including tsc.js, lib.d.ts, etc.)
@@ -1212,7 +1213,7 @@ export interface FileSystemResolver {
 
 export interface FileSystemResolverHost {
     useCaseSensitiveFileNames(): boolean;
-    getAccessibleFileSystemEntries(path: string): ts.FileSystemEntries;
+    getAccessibleFileSystemEntries(path: string): FileSystemEntries;
     directoryExists(path: string): boolean;
     fileExists(path: string): boolean;
     getFileSize(path: string): number;

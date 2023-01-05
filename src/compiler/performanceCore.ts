@@ -1,8 +1,4 @@
 import { isNodeLikeSystem } from "./core";
-import {
-    Version,
-    VersionRange,
-} from "./semver";
 
 // The following definitions provide the minimum compatible support for the Web Performance User Timings API
 // between browsers and NodeJS:
@@ -90,31 +86,6 @@ function tryGetNodePerformanceHooks(): PerformanceHooks | undefined {
             const { performance: nodePerformance, PerformanceObserver } = require("perf_hooks") as typeof import("perf_hooks");
             if (hasRequiredAPI(nodePerformance as unknown as Performance, PerformanceObserver)) {
                 performance = nodePerformance as unknown as Performance;
-                // There is a bug in Node's performance.measure prior to 12.16.3/13.13.0 that does not
-                // match the Web Performance API specification. Node's implementation did not allow
-                // optional `start` and `end` arguments for `performance.measure`.
-                // See https://github.com/nodejs/node/pull/32651 for more information.
-                const version = new Version(process.versions.node);
-                const range = new VersionRange("<12.16.3 || 13 <13.13");
-                if (range.test(version)) {
-                    performance = {
-                        get timeOrigin() { return nodePerformance.timeOrigin; },
-                        now() { return nodePerformance.now(); },
-                        mark(name) { return nodePerformance.mark(name); },
-                        measure(name, start = "nodeStart", end?) {
-                            if (end === undefined) {
-                                end = "__performance.measure-fix__";
-                                nodePerformance.mark(end);
-                            }
-                            nodePerformance.measure(name, start, end);
-                            if (end === "__performance.measure-fix__") {
-                                nodePerformance.clearMarks("__performance.measure-fix__");
-                            }
-                        },
-                        clearMarks(name) { return nodePerformance.clearMarks(name); },
-                        clearMeasures(name) { return (nodePerformance as unknown as Performance).clearMeasures(name); },
-                    };
-                }
                 return {
                     // By default, only write native events when generating a cpu profile or using the v8 profiler.
                     shouldWriteNativeEvents: false,

@@ -18,11 +18,16 @@ import {
     isIdentifier,
 } from "../compiler/factory/nodeTests";
 import {
+    getPatternFromSpec,
+    getRegexFromPattern,
+} from "../compiler/fileMatcher";
+import {
     getPackageNameFromTypesPackageName,
     nodeModulesPathPart,
     unmangleScopedPackageName,
 } from "../compiler/moduleNameResolver";
 import { forEachFileNameOfModule } from "../compiler/moduleSpecifiers";
+import { getNodeModulePathParts } from "../compiler/moduleSpecifiersUtilities";
 import {
     forEachAncestorDirectory,
     getBaseFileName,
@@ -49,9 +54,6 @@ import {
     addToSeen,
     forEachEntry,
     getLocalSymbolForExportDefault,
-    getNodeModulePathParts,
-    getPatternFromSpec,
-    getRegexFromPattern,
     hostGetCanonicalFileName,
     hostUsesCaseSensitiveFileNames,
     isExternalOrCommonJsModule,

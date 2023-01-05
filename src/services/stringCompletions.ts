@@ -1,3 +1,4 @@
+import { readJson } from "../compiler/commandLineParserUtilities";
 import {
     arrayFrom,
     compareStringsCaseSensitive,
@@ -49,6 +50,7 @@ import {
     unmangleScopedPackageName,
 } from "../compiler/moduleNameResolver";
 import { tryGetJSExtensionForFile } from "../compiler/moduleSpecifiers";
+import { getModuleSpecifierEndingPreference } from "../compiler/moduleSpecifiersUtilities";
 import {
     altDirectorySeparator,
     combinePaths,
@@ -111,14 +113,12 @@ import {
     addToSeen,
     changeExtension,
     getEmitModuleResolutionKind,
-    getModuleSpecifierEndingPreference,
     getResolvePackageJsonExports,
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
     hostGetCanonicalFileName,
     isImportCall,
     ModuleSpecifierEnding,
-    readJson,
     removeFileExtension,
     signatureHasRestParameter,
     skipParentheses,

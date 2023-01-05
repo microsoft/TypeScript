@@ -55,7 +55,7 @@ import {
     setOriginalNode,
     setTextRange,
 } from "../factory/utilitiesPublic";
-import { isExternalModule } from "../parser";
+import { setParent } from "../parserUtilities";
 import { skipTrivia } from "../scanner";
 import {
     __String,
@@ -157,6 +157,7 @@ import {
     insertStatementsAfterStandardPrologue,
     isAccessExpression,
     isEnumConst,
+    isExternalModule,
     isExternalModuleImportEqualsDeclaration,
     isInJSFile,
     isJsonSourceFile,
@@ -166,7 +167,6 @@ import {
     moveRangePos,
     nodeIsMissing,
     parameterIsThisKeyword,
-    setParent,
     setTextRangeEnd,
     setTextRangePos,
     setTextRangePosEnd,

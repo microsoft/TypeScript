@@ -2,7 +2,7 @@ import {
     Node,
     SyntaxKind,
 } from "../types";
-import { objectAllocator } from "../utilities";
+import { objectAllocator } from "../objectAllocator";
 
 /**
  * A `BaseNodeFactory` is an abstraction over an `ObjectAllocator` that handles caching `Node` constructors

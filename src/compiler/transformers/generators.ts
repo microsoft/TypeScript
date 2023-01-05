@@ -26,6 +26,7 @@ import {
     setOriginalNode,
     setTextRange,
 } from "../factory/utilitiesPublic";
+import { setParent } from "../parserUtilities";
 import {
     AccessorDeclaration,
     ArrayLiteralExpression,
@@ -54,6 +55,7 @@ import {
     LabeledStatement,
     LeftHandSideExpression,
     LiteralExpression,
+    Mutable,
     NewExpression,
     Node,
     NodeArray,
@@ -88,8 +90,6 @@ import {
     insertStatementsAfterStandardPrologue,
     isImportCall,
     isLogicalOperator,
-    Mutable,
-    setParent,
 } from "../utilities";
 import {
     getOriginalNode,

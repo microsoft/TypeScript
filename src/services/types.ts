@@ -1,5 +1,6 @@
 import { EmitOutput } from "../compiler/builderStatePublic";
 import { ModuleResolutionCache } from "../compiler/moduleNameResolver";
+import { SymlinkCache } from "../compiler/symlinkCache";
 import {
     __String,
     CancellationToken,
@@ -41,7 +42,6 @@ import {
     TypeChecker,
     UserPreferences,
 } from "../compiler/types";
-import { SymlinkCache } from "../compiler/utilities";
 import { RulesMap } from "./formatting/rulesMap";
 import { SourceMapper } from "./sourcemaps";
 

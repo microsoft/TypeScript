@@ -96,7 +96,6 @@ import {
     hasSyntacticModifier,
     insertStatementsAfterStandardPrologue,
     isDestructuringAssignment,
-    isEffectiveStrictModeSourceFile,
     isSuperProperty,
     skipParentheses,
     unwrapInnermostStatementOfLabel,
@@ -132,7 +131,7 @@ import {
     ProcessLevel,
     processTaggedTemplateExpression,
 } from "./taggedTemplate";
-import { chainBundle } from "./utilities";
+import { chainBundle, isEffectiveStrictModeSourceFile } from "./utilities";
 
 const enum ESNextSubstitutionFlags {
     /** Enables substitutions for async methods with `super` calls. */

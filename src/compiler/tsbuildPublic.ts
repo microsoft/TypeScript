@@ -78,13 +78,10 @@ import {
     resolveProjectReferencePath,
 } from "./program";
 import {
-    FileWatcher,
-    FileWatcherCallback,
     getModifiedTime,
     missingFileModifiedTime,
     PollingInterval,
     sys,
-    System,
 } from "./sys";
 import {
     resolveConfigFileProjectName,
@@ -104,11 +101,14 @@ import {
     DiagnosticMessage,
     EmitResult,
     ExitStatus,
+    FileWatcher,
+    FileWatcherCallback,
     ParsedCommandLine,
     Path,
     Program,
     ResolvedConfigFileName,
     SourceFile,
+    System,
     WatchOptions,
     WriteFileCallback,
 } from "./types";

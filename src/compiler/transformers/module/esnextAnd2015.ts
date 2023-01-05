@@ -19,7 +19,6 @@ import {
     setOriginalNode,
     setTextRange,
 } from "../../factory/utilitiesPublic";
-import { isExternalModule } from "../../parser";
 import {
     Bundle,
     EmitFlags,
@@ -50,6 +49,7 @@ import {
     hasSyntacticModifier,
     insertStatementsAfterCustomPrologue,
     isExportNamespaceAsDefaultDeclaration,
+    isExternalModule,
     isExternalModuleImportEqualsDeclaration,
 } from "../../utilities";
 import {

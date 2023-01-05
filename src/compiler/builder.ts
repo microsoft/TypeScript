@@ -55,6 +55,11 @@ import {
     filterSemanticDiagnostics,
     handleNoEmitOptions,
 } from "./program";
+import {
+    compilerOptionsAffectDeclarationPath,
+    compilerOptionsAffectEmit,
+    compilerOptionsAffectSemanticDiagnostics,
+} from "./programUtilities";
 import { generateDjb2Hash } from "./sys";
 import {
     BuildInfo,
@@ -81,9 +86,6 @@ import {
     WriteFileCallbackData,
 } from "./types";
 import {
-    compilerOptionsAffectDeclarationPath,
-    compilerOptionsAffectEmit,
-    compilerOptionsAffectSemanticDiagnostics,
     forEachEntry,
     forEachKey,
     getEmitDeclarations,

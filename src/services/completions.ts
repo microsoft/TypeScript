@@ -102,6 +102,7 @@ import {
     stringToToken,
     tokenToString,
 } from "../compiler/scanner";
+import { getNewLineCharacter } from "../compiler/sysUtilities";
 import { isInitializedProperty } from "../compiler/transformers/utilities";
 import {
     __String,
@@ -222,7 +223,6 @@ import {
     getLanguageVariant,
     getLeftmostAccessExpression,
     getLocalSymbolForExportDefault,
-    getNewLineCharacter,
     getPropertyNameForPropertyNameNode,
     getRootDeclaration,
     getSourceFileOfModule,

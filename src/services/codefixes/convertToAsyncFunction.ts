@@ -31,6 +31,7 @@ import {
     isVariableDeclaration,
 } from "../../compiler/factory/nodeTests";
 import { forEachChild } from "../../compiler/parser";
+import { forEachReturnStatement } from "../../compiler/parserUtilities";
 import { skipTrivia } from "../../compiler/scanner";
 import {
     ArrowFunction,
@@ -63,7 +64,6 @@ import {
     UnionReduction,
 } from "../../compiler/types";
 import {
-    forEachReturnStatement,
     getContainingFunction,
     getObjectFlags,
     isInJSFile,

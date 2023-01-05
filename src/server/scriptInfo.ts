@@ -23,11 +23,9 @@ import {
     LineInfo,
 } from "../compiler/sourcemap";
 import {
+    DocumentPositionMapper,
     FileWatcher,
     FileWatcherEventKind,
-} from "../compiler/sys";
-import {
-    DocumentPositionMapper,
     Path,
     ScriptKind,
     SourceFile,

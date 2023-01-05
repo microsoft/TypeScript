@@ -24,6 +24,7 @@ import {
     isJSDoc,
     isJSDocParameterTag,
 } from "../compiler/factory/nodeTests";
+import { forEachReturnStatement } from "../compiler/parserUtilities";
 import {
     ArrowFunction,
     AssignmentDeclarationKind,
@@ -63,7 +64,6 @@ import {
 } from "../compiler/types";
 import {
     forEachAncestor,
-    forEachReturnStatement,
     getAssignmentDeclarationKind,
     getJSDocCommentsAndTags,
     hasJSFileExtension,

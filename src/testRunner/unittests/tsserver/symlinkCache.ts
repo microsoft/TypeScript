@@ -8,6 +8,9 @@ import {
     createSession,
     openFilesForSession,
 } from "./helpers";
+import {
+    createSymlinkCache,
+} from "../../../compiler/symlinkCache";
 
 const appTsconfigJson: File = {
     path: "/packages/app/tsconfig.json",
@@ -69,7 +72,7 @@ describe("unittests:: tsserver:: symlinkCache", () => {
     });
 
     it("works for paths close to the root", () => {
-        const cache = ts.createSymlinkCache("/", ts.createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false));
+        const cache = createSymlinkCache("/", ts.createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ false));
         // Used to crash, #44953
         const map = ts.createModeAwareCache<ts.ResolvedTypeReferenceDirectiveWithFailedLookupLocations>();
         map.set("foo", /*mode*/ undefined, {

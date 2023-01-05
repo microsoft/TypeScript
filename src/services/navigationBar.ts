@@ -30,10 +30,7 @@ import {
     isVariableDeclaration,
 } from "../compiler/factory/nodeTests";
 import { setTextRange } from "../compiler/factory/utilitiesPublic";
-import {
-    forEachChild,
-    isExternalModule,
-} from "../compiler/parser";
+import { forEachChild } from "../compiler/parser";
 import {
     getBaseFileName,
     normalizePath,
@@ -96,6 +93,7 @@ import {
     hasDynamicName,
     isAmbientModule,
     isBindableStaticAccessExpression,
+    isExternalModule,
     isJSDocTypeAlias,
     isPropertyNameLiteral,
     isStatic,

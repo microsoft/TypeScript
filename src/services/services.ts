@@ -56,6 +56,10 @@ import {
 } from "../compiler/factory/nodeTests";
 import { ModeAwareCache } from "../compiler/moduleNameResolver";
 import {
+    ObjectAllocator,
+    setObjectAllocator,
+} from "../compiler/objectAllocator";
+import {
     createSourceFile,
     CreateSourceFileOptions,
     forEachChild,
@@ -74,6 +78,7 @@ import {
     changeCompilerHostLikeToUseCache,
     createProgram,
     getImpliedNodeFormatForFile,
+    getSetExternalModuleIndicator,
     isProgramUptoDate,
 } from "../compiler/program";
 import {
@@ -81,7 +86,9 @@ import {
     getLineAndCharacterOfPosition,
     getLineStarts,
 } from "../compiler/scanner";
+import { positionIsSynthesized } from "../compiler/scannerUtilities";
 import { sys } from "../compiler/sys";
+import { getNewLineCharacter } from "../compiler/sysUtilities";
 import { tracing } from "../compiler/tracing";
 import {
     __String,
@@ -183,9 +190,7 @@ import {
     getAssignmentDeclarationKind,
     getEmitDeclarations,
     getEscapedTextOfIdentifierOrLiteral,
-    getNewLineCharacter,
     getObjectFlags,
-    getSetExternalModuleIndicator,
     getSourceFileOfNode,
     getTokenPosOfNode,
     hasStaticModifier,
@@ -201,9 +206,6 @@ import {
     isThisTypeParameter,
     isTransientSymbol,
     maybeSetLocalizedDiagnosticMessages,
-    ObjectAllocator,
-    positionIsSynthesized,
-    setObjectAllocator,
 } from "../compiler/utilities";
 import {
     createTextSpanFromBounds,

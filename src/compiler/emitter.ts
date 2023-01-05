@@ -419,11 +419,9 @@ import {
     getLinesBetweenRangeEndAndRangeStart,
     getLiteralText,
     GetLiteralTextFlags,
-    getNewLineCharacter,
     getOwnEmitOutputFilePath,
     getSourceFileOfNode,
     getSourceFilePathInNewDir,
-    getSourceFilesToEmit,
     getSourceTextOfNodeFromSourceFile,
     getTrailingSemicolonDeferringWriter,
     isAccessExpression,
@@ -443,16 +441,12 @@ import {
     makeIdentifierFromModuleName,
     nodeIsSynthesized,
     outFile,
-    positionIsSynthesized,
     positionsAreOnSameLine,
     rangeEndIsOnSameLineAsRangeStart,
     rangeEndPositionsAreOnSameLine,
     rangeIsOnSingleLine,
     rangeStartPositionsAreOnSameLine,
-    readJsonOrUndefined,
     removeFileExtension,
-    setEachParent,
-    setParent,
     setTextRangePosEnd,
     setTextRangePosWidth,
     supportedJSExtensionsFlat,
@@ -481,6 +475,11 @@ import {
     isUnparsedNode,
     skipPartiallyEmittedExpressions,
 } from "./utilitiesPublic";
+import { positionIsSynthesized } from "./scannerUtilities";
+import { getNewLineCharacter } from "./sysUtilities";
+import { getSourceFilesToEmit } from "./emitterUtilities";
+import { setEachParent, setParent } from "./parserUtilities";
+import { readJsonOrUndefined } from "./commandLineParserUtilities";
 
 const brackets = createBracketsMap();
 

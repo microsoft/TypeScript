@@ -8414,7 +8414,9 @@ declare namespace ts {
         negative: boolean;
         base10Value: string;
     }
-    function getNodeMajorVersion(): number | undefined;
+    interface FileWatcher {
+        close(): void;
+    }
     enum FileWatcherEventKind {
         Created = 0,
         Changed = 1,
@@ -8464,9 +8466,7 @@ declare namespace ts {
         base64decode?(input: string): string;
         base64encode?(input: string): string;
     }
-    interface FileWatcher {
-        close(): void;
-    }
+    function getNodeMajorVersion(): number | undefined;
     let sys: System;
     function tokenToString(t: SyntaxKind): string | undefined;
     function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number;
@@ -8794,6 +8794,7 @@ declare namespace ts {
         parent: ConstructorDeclaration;
         name: Identifier;
     };
+    function isExternalModule(file: SourceFile): boolean;
     function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind): boolean;
     function createUnparsedSourceFile(text: string): UnparsedSource;
     function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
@@ -9102,7 +9103,6 @@ declare namespace ts {
      * @param sourceText
      */
     function parseJsonText(fileName: string, sourceText: string): JsonSourceFile;
-    function isExternalModule(file: SourceFile): boolean;
     function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
     interface CreateSourceFileOptions {
         languageVersion: ScriptTarget;

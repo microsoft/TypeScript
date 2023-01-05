@@ -32,7 +32,7 @@ import {
     startOnNewLine,
 } from "../factory/utilities";
 import { setTextRange } from "../factory/utilitiesPublic";
-import { isExternalModule } from "../parser";
+import { setParentRecursive } from "../parserUtilities";
 import {
     getLineAndCharacterOfPosition,
     utf16EncodeAsString,
@@ -76,10 +76,10 @@ import {
     getJSXRuntimeImport,
     getSemanticJsxChildren,
     insertStatementAfterCustomPrologue,
+    isExternalModule,
     isExternalOrCommonJsModule,
     isIntrinsicJsxName,
     isStringDoubleQuoted,
-    setParentRecursive,
 } from "../utilities";
 import {
     getOriginalNode,

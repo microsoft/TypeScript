@@ -1,4 +1,5 @@
 import { DiagnosticReporter, moduleResolutionOptionDeclarations } from "./commandLineParser";
+import { readJson } from "./commandLineParserUtilities";
 import {
     append,
     appendIfUnique,
@@ -67,7 +68,6 @@ import {
     toPath,
 } from "./path";
 import { perfLogger } from "./perfLogger";
-import { ResolutionNameAndModeGetter } from "./program";
 import {
     Version,
     VersionRange,
@@ -87,6 +87,7 @@ import {
     PackageId,
     Path,
     ResolutionMode,
+    ResolutionNameAndModeGetter,
     ResolvedModuleWithFailedLookupLocations,
     ResolvedProjectReference,
     ResolvedTypeReferenceDirective,
@@ -108,7 +109,6 @@ import {
     hostGetCanonicalFileName,
     matchPatternOrExact,
     packageIdToString,
-    readJson,
     removeExtension,
     removeFileExtension,
     supportedDeclarationExtensions,

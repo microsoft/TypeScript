@@ -1,41 +1,46 @@
 import * as fs from "fs";
 import * as path from "path";
-
 import {
-    installNpmPackages,
-    Log,
-    RequestCompletedAction,
-    TypingsInstaller,
-} from "./_namespaces/ts.server.typingsInstaller";
+    createGetCanonicalFileName,
+    getEntries,
+    stringContains,
+} from "../compiler/core";
+import {
+    MapLike,
+    version,
+} from "../compiler/corePublic";
+import { Debug } from "../compiler/debug";
+import {
+    combinePaths,
+    forEachAncestorDirectory,
+    getDirectoryPath,
+    normalizePath,
+    normalizeSlashes,
+    toPath,
+} from "../compiler/path";
+import { sys } from "../compiler/sys";
 import {
     ActionPackageInstalled,
     Arguments,
     EventTypesRegistry,
     findArgument,
     hasArgument,
+    nowString,
+} from "../jsTyping/shared";
+import {
     InitializationFailedResponse,
     InstallTypingHost,
-    nowString,
     PackageInstalledResponse,
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
     TypingInstallerResponseUnion,
-} from "./_namespaces/ts.server";
+} from "../jsTyping/types";
 import {
-    combinePaths,
-    createGetCanonicalFileName,
-    Debug,
-    forEachAncestorDirectory,
-    getDirectoryPath,
-    getEntries,
-    MapLike,
-    normalizePath,
-    normalizeSlashes,
-    stringContains,
-    sys,
-    toPath,
-    version,
-} from "./_namespaces/ts";
+    installNpmPackages,
+    Log,
+    RequestCompletedAction,
+    TypingsInstaller,
+} from "../typingsInstallerCore/typingsInstaller";
 
 class FileLog implements Log {
     constructor(private logFile: string | undefined) {

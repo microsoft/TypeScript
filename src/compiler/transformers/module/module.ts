@@ -48,7 +48,6 @@ import {
     setOriginalNode,
     setTextRange,
 } from "../../factory/utilitiesPublic";
-import { isExternalModule } from "../../parser";
 import {
     ArrowFunction,
     BinaryExpression,
@@ -118,6 +117,7 @@ import {
     isDestructuringAssignment,
     isEffectiveExternalModule,
     isExportNamespaceAsDefaultDeclaration,
+    isExternalModule,
     isExternalModuleImportEqualsDeclaration,
     isImportCall,
     isJsonSourceFile,

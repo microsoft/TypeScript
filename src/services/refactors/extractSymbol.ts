@@ -54,6 +54,7 @@ import {
 } from "../../compiler/factory/nodeTests";
 import { canHaveModifiers } from "../../compiler/factory/utilitiesPublic";
 import { forEachChild } from "../../compiler/parser";
+import { positionIsSynthesized } from "../../compiler/scannerUtilities";
 import { nullTransformationContext } from "../../compiler/transformer";
 import {
     __String,
@@ -131,7 +132,6 @@ import {
     isKeyword,
     isPartOfTypeNode,
     isStatic,
-    positionIsSynthesized,
     skipParentheses,
 } from "../../compiler/utilities";
 import {

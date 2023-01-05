@@ -3,12 +3,10 @@ import {
     SortedReadonlyArray,
 } from "../compiler/corePublic";
 import {
+    CompilerOptions,
     DirectoryWatcherCallback,
     FileWatcher,
     FileWatcherCallback,
-} from "../compiler/sys";
-import {
-    CompilerOptions,
     Path,
     TypeAcquisition,
     WatchOptions,

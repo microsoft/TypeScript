@@ -4,6 +4,7 @@ import { notImplementedHost } from "./extract/helpers";
 import { applyChanges, ChangeTracker, deleteNode, LeadingTriviaOption, TrailingTriviaOption } from "../../../services/textChanges";
 import { FormatContext } from "../../../services/types";
 import { getFormatContext } from "../../../services/formatting/formatting";
+import { getNewLineCharacter } from "../../../compiler/sysUtilities";
 
 // Some tests have trailing whitespace
 
@@ -22,7 +23,7 @@ describe("unittests:: services:: textChanges", () => {
     }
 
     const printerOptions = { newLine: ts.NewLineKind.LineFeed };
-    const newLineCharacter = ts.getNewLineCharacter(printerOptions);
+    const newLineCharacter = getNewLineCharacter(printerOptions);
 
     function getRuleProvider(placeOpenBraceOnNewLineForFunctions: boolean): FormatContext {
         return getFormatContext(placeOpenBraceOnNewLineForFunctions ? { ...ts.testFormatSettings, placeOpenBraceOnNewLineForFunctions: true } : ts.testFormatSettings, notImplementedHost);

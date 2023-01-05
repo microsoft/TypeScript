@@ -23,6 +23,11 @@ import {
     SortedReadonlyArray,
 } from "./corePublic";
 import { Debug } from "./debug";
+import {
+    emptyFileSystemEntries,
+    FileSystemEntries,
+    matchFiles,
+} from "./fileMatcher";
 import { isDeclarationFileName } from "./parser";
 import {
     ensureTrailingDirectorySeparator,
@@ -37,17 +42,17 @@ import {
 import { timestamp } from "./performanceCore";
 import { removeIgnoredPath } from "./resolutionCache";
 import {
-    DirectoryWatcherCallback,
-    FileWatcher,
-    FileWatcherCallback,
-    FileWatcherEventKind,
     PollingInterval,
     setSysLog,
 } from "./sys";
 import {
     CompilerOptions,
+    DirectoryWatcherCallback,
     Extension,
     FileExtensionInfo,
+    FileWatcher,
+    FileWatcherCallback,
+    FileWatcherEventKind,
     Path,
     Program,
     WatchDirectoryFlags,
@@ -56,10 +61,7 @@ import {
 } from "./types";
 import {
     closeFileWatcher,
-    emptyFileSystemEntries,
-    FileSystemEntries,
     isSupportedSourceFileName,
-    matchFiles,
     mutateMap,
     outFile,
     removeFileExtension,

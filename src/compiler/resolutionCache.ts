@@ -46,17 +46,15 @@ import {
     createTypeReferenceResolutionLoader,
     inferredTypesContainingFile, moduleResolutionNameAndModeGetter, ResolutionLoader,
 } from "./program";
-import {
-    DirectoryWatcherCallback,
-    FileWatcher,
-    FileWatcherCallback,
-    ignoredPaths,
-} from "./sys";
+import { ignoredPaths } from "./sysUtilities";
 import {
     CharacterCodes,
     CompilerOptions,
+    DirectoryWatcherCallback,
     Extension,
     FileReference,
+    FileWatcher,
+    FileWatcherCallback,
     HasInvalidatedResolutions,
     MinimalResolutionCacheHost,
     PackageId,

@@ -8,6 +8,8 @@ import {
 } from "../core";
 import { Debug } from "../debug";
 import { parseNodeFactory } from "../parser";
+import { setParent } from "../parserUtilities";
+import { isIdentifierText } from "../scanner";
 import {
     AccessorDeclaration,
     AdditiveOperator,
@@ -67,6 +69,7 @@ import {
     ModuleName,
     MultiplicativeOperator,
     MultiplicativeOperatorOrHigher,
+    Mutable,
     NamedImportBindings,
     Node,
     NodeArray,
@@ -86,6 +89,7 @@ import {
     ReadonlyKeyword,
     RelationalOperator,
     RelationalOperatorOrHigher,
+    ScriptTarget,
     SetAccessorDeclaration,
     ShiftOperator,
     ShiftOperatorOrHigher,
@@ -116,9 +120,8 @@ import {
     isEffectiveExternalModule,
     isExportNamespaceAsDefaultDeclaration,
     isFileLevelUniqueName,
-    Mutable,
+    isNumericLiteralName,
     outFile,
-    setParent,
 } from "../utilities";
 import {
     getJSDocType,
@@ -1319,4 +1322,11 @@ export function createAccessorPropertySetRedirector(factory: NodeFactory, node: 
             )
         ])
     );
+}
+
+/** @internal */
+export function createPropertyNameNodeForIdentifierOrLiteral(factory: NodeFactory, name: string, target: ScriptTarget, singleQuote?: boolean, stringNamed?: boolean) {
+    return isIdentifierText(name, target) ? factory.createIdentifier(name) :
+        !stringNamed && isNumericLiteralName(name) && +name >= 0 ? factory.createNumericLiteral(+name) :
+        factory.createStringLiteral(name, !!singleQuote);
 }

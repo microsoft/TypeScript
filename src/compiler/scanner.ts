@@ -9,9 +9,11 @@ import {
     isWhiteSpaceSingleLine,
     trimStringStart,
 } from "./core";
-// import { Debug } from "./debug";
+import { Debug } from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import {
+    parsePseudoBigInt,
+    positionIsSynthesized,
     textToKeyword,
     textToToken,
 } from "./scannerUtilities";
@@ -32,10 +34,6 @@ import {
     SyntaxKind,
     TokenFlags,
 } from "./types";
-import {
-    parsePseudoBigInt,
-    positionIsSynthesized,
-} from "./utilities";
 
 export type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
 
@@ -291,8 +289,7 @@ export function computePositionOfLineAndCharacter(lineStarts: readonly number[],
             line = line < 0 ? 0 : line >= lineStarts.length ? lineStarts.length - 1 : line;
         }
         else {
-            // Debug.fail(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arraysEqual(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
-            throw new Error(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arraysEqual(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
+            Debug.fail(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arraysEqual(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
         }
     }
 
@@ -304,16 +301,10 @@ export function computePositionOfLineAndCharacter(lineStarts: readonly number[],
         return res > lineStarts[line + 1] ? lineStarts[line + 1] : typeof debugText === "string" && res > debugText.length ? debugText.length : res;
     }
     if (line < lineStarts.length - 1) {
-        if (!(res < lineStarts[line + 1])) {
-            throw new Error();
-        }
-        // Debug.assert(res < lineStarts[line + 1]);
+        Debug.assert(res < lineStarts[line + 1]);
     }
     else if (debugText !== undefined) {
-        if (!(res <= debugText.length)) {
-            throw new Error();
-        }
-        // Debug.assert(res <= debugText.length); // Allow single character overflow for trailing newline
+        Debug.assert(res <= debugText.length); // Allow single character overflow for trailing newline
     }
     return res;
 }
@@ -347,10 +338,7 @@ export function computeLineOfPosition(lineStarts: readonly number[], position: n
         // We want the index of the previous line start, so we subtract 1.
         // Review 2's-complement if this is confusing.
         lineNumber = ~lineNumber - 1;
-        // Debug.assert(lineNumber !== -1, "position cannot precede the beginning of the file");
-        if (!(lineNumber !== -1)) {
-            throw new Error("position cannot precede the beginning of the file");
-        }
+        Debug.assert(lineNumber !== -1, "position cannot precede the beginning of the file");
     }
     return lineNumber;
 }
@@ -516,10 +504,7 @@ export function skipTrivia(text: string, pos: number, stopAfterLineBreak?: boole
 const mergeConflictMarkerLength = "<<<<<<<".length;
 
 function isConflictMarkerTrivia(text: string, pos: number) {
-    // Debug.assert(pos >= 0);
-    if (!(pos >= 0)) {
-        throw new Error();
-    }
+    Debug.assert(pos >= 0);
 
     // Conflict markers must be at the start of a line.
     if (pos === 0 || isLineBreak(text.charCodeAt(pos - 1))) {
@@ -554,10 +539,7 @@ function scanConflictMarkerTrivia(text: string, pos: number, error?: (diag: Diag
         }
     }
     else {
-        // Debug.assert(ch === CharacterCodes.bar || ch === CharacterCodes.equals);
-        if (!(ch === CharacterCodes.bar || ch === CharacterCodes.equals)) {
-            throw new Error();
-        }
+        Debug.assert(ch === CharacterCodes.bar || ch === CharacterCodes.equals);
         // Consume everything from the start of a ||||||| or ======= marker to the start
         // of the next ======= or >>>>>>> marker.
         while (pos < len) {
@@ -578,10 +560,7 @@ const shebangTriviaRegex = /^#!.*/;
 /** @internal */
 export function isShebangTrivia(text: string, pos: number) {
     // Shebangs check must only be done at the start of the file
-    // Debug.assert(pos === 0);
-    if (!(pos === 0)) {
-        throw new Error();
-    }
+    Debug.assert(pos === 0);
     return shebangTriviaRegex.test(text);
 }
 
@@ -871,14 +850,14 @@ export function createScanner(languageVersion: ScriptTarget,
         scanRange,
     };
 
-    // if (Debug.isDebugging) {
-    //     Object.defineProperty(scanner, "__debugShowCurrentPositionInText", {
-    //         get: () => {
-    //             const text = scanner.getText();
-    //             return text.slice(0, scanner.getStartPos()) + "║" + text.slice(scanner.getStartPos());
-    //         },
-    //     });
-    // }
+    if (Debug.isDebugging) {
+        Object.defineProperty(scanner, "__debugShowCurrentPositionInText", {
+            get: () => {
+                const text = scanner.getText();
+                return text.slice(0, scanner.getStartPos()) + "║" + text.slice(scanner.getStartPos());
+            },
+        });
+    }
 
     return scanner;
 
@@ -1174,10 +1153,7 @@ export function createScanner(languageVersion: ScriptTarget,
             pos++;
         }
 
-        // Debug.assert(resultingToken !== undefined);
-        if (!(resultingToken !== undefined)) {
-            throw new Error();
-        }
+        Debug.assert(resultingToken !== undefined);
 
         tokenValue = contents;
         return resultingToken;
@@ -1977,10 +1953,7 @@ export function createScanner(languageVersion: ScriptTarget,
     }
 
     function reScanInvalidIdentifier(): SyntaxKind {
-        // Debug.assert(token === SyntaxKind.Unknown, "'reScanInvalidIdentifier' should only be called when the current token is 'SyntaxKind.Unknown'.");
-        if (!(token === SyntaxKind.Unknown)) {
-            throw new Error("'reScanInvalidIdentifier' should only be called when the current token is 'SyntaxKind.Unknown'.");
-        }
+        Debug.assert(token === SyntaxKind.Unknown, "'reScanInvalidIdentifier' should only be called when the current token is 'SyntaxKind.Unknown'.");
         pos = tokenPos = startPos;
         tokenFlags = 0;
         const ch = codePointAt(text, pos);
@@ -2029,10 +2002,7 @@ export function createScanner(languageVersion: ScriptTarget,
     }
 
     function reScanAsteriskEqualsToken(): SyntaxKind {
-        // Debug.assert(token === SyntaxKind.AsteriskEqualsToken, "'reScanAsteriskEqualsToken' should only be called on a '*='");
-        if (!(token === SyntaxKind.AsteriskEqualsToken)) {
-            throw new Error("'reScanAsteriskEqualsToken' should only be called on a '*='");
-        }
+        Debug.assert(token === SyntaxKind.AsteriskEqualsToken, "'reScanAsteriskEqualsToken' should only be called on a '*='");
         pos = tokenPos + 1;
         return token = SyntaxKind.EqualsToken;
     }
@@ -2132,10 +2102,7 @@ export function createScanner(languageVersion: ScriptTarget,
      * Unconditionally back up and scan a template expression portion.
      */
     function reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind {
-        // Debug.assert(token === SyntaxKind.CloseBraceToken, "'reScanTemplateToken' should only be called on a '}'");
-        if (!(token === SyntaxKind.CloseBraceToken)) {
-            throw new Error("'reScanTemplateToken' should only be called on a '}'");
-        }
+        Debug.assert(token === SyntaxKind.CloseBraceToken, "'reScanTemplateToken' should only be called on a '}'");
         pos = tokenPos;
         return token = scanTemplateAndSetTokenValue(isTaggedTemplate);
     }
@@ -2167,10 +2134,7 @@ export function createScanner(languageVersion: ScriptTarget,
     }
 
     function reScanQuestionToken(): SyntaxKind {
-        // Debug.assert(token === SyntaxKind.QuestionQuestionToken, "'reScanQuestionToken' should only be called on a '??'");
-        if (!(token === SyntaxKind.QuestionQuestionToken)) {
-            throw new Error("'reScanQuestionToken' should only be called on a '??'");
-        }
+        Debug.assert(token === SyntaxKind.QuestionQuestionToken, "'reScanQuestionToken' should only be called on a '??'");
         pos = tokenPos + 1;
         return token = SyntaxKind.QuestionToken;
     }
@@ -2475,10 +2439,7 @@ export function createScanner(languageVersion: ScriptTarget,
     }
 
     function setTextPos(textPos: number) {
-        // Debug.assert(textPos >= 0);
-        if (!(textPos >= 0)) {
-            throw new Error();
-        }
+        Debug.assert(textPos >= 0);
         pos = textPos;
         startPos = textPos;
         tokenPos = textPos;
@@ -2523,11 +2484,7 @@ function charSize(ch: number) {
 
 // Derived from the 10.1.1 UTF16Encoding of the ES6 Spec.
 function utf16EncodeAsStringFallback(codePoint: number) {
-    // Debug.assert(0x0 <= codePoint && codePoint <= 0x10FFFF);
-    if (!(0x0 <= codePoint && codePoint <= 0x10FFFF)) {
-        throw new Error();
-    }
-
+    Debug.assert(0x0 <= codePoint && codePoint <= 0x10FFFF);
     if (codePoint <= 65535) {
         return String.fromCharCode(codePoint);
     }

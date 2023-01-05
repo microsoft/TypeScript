@@ -43,6 +43,8 @@ import {
     isSourceFile,
     isTypeLiteralNode,
 } from "../../compiler/factory/nodeTests";
+import { createPropertyNameNodeForIdentifierOrLiteral } from "../../compiler/factory/utilities";
+import { setParent } from "../../compiler/parserUtilities";
 import { isIdentifierText } from "../../compiler/scanner";
 import {
     __String,
@@ -88,7 +90,6 @@ import {
 } from "../../compiler/types";
 import {
     addToSeen,
-    createPropertyNameNodeForIdentifierOrLiteral,
     getCheckFlags,
     getClassLikeDeclarationOfSymbol,
     getEmitScriptTarget,
@@ -98,7 +99,6 @@ import {
     hasAbstractModifier,
     isSourceFileJS,
     isTransientSymbol,
-    setParent,
 } from "../../compiler/utilities";
 import {
     findAncestor,
@@ -786,7 +786,7 @@ function createPropertyNameFromSymbol(symbol: Symbol, target: ScriptTarget, quot
         const prop = checker.symbolToNode(symbol, SymbolFlags.Value, /*enclosingDeclaration*/ undefined, NodeBuilderFlags.WriteComputedProps);
         if (prop && isComputedPropertyName(prop)) return prop;
     }
-    return createPropertyNameNodeForIdentifierOrLiteral(symbol.name, target, quotePreference === QuotePreference.Single);
+    return createPropertyNameNodeForIdentifierOrLiteral(factory, symbol.name, target, quotePreference === QuotePreference.Single);
 }
 
 function findScope(node: Node) {

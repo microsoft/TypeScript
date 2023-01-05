@@ -18,6 +18,10 @@ import {
     isSourceFile,
     isStringLiteral,
 } from "../compiler/factory/nodeTests";
+import {
+    getFileMatcherPatterns,
+    getRegexFromPattern,
+} from "../compiler/fileMatcher";
 import { resolveModuleName } from "../compiler/moduleNameResolver";
 import { updateModuleSpecifier } from "../compiler/moduleSpecifiers";
 import {
@@ -46,8 +50,6 @@ import {
 } from "../compiler/types";
 import {
     createRange,
-    getFileMatcherPatterns,
-    getRegexFromPattern,
     getTsConfigObjectLiteralExpression,
     hostUsesCaseSensitiveFileNames,
     isAmbientModule,

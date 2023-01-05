@@ -86,7 +86,6 @@ import {
     getFunctionFlags,
     getInitializedVariables,
     insertStatementsAfterStandardPrologue,
-    isEffectiveStrictModeSourceFile,
     isNodeWithPossibleHoistedDeclaration,
     isSuperProperty,
 } from "../utilities";
@@ -111,7 +110,7 @@ import {
     visitNodes,
     visitParameterList,
 } from "../visitorPublic";
-import { chainBundle } from "./utilities";
+import { chainBundle, isEffectiveStrictModeSourceFile } from "./utilities";
 
 type SuperContainer = ClassDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration;
 

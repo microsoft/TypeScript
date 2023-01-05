@@ -41,6 +41,13 @@ import {
     isObjectLiteralExpression,
     isStringLiteral,
 } from "./factory/nodeTests";
+import {
+    getFileMatcherPatterns,
+    getRegexFromPattern,
+    getRegularExpressionForWildcard,
+    getRegularExpressionsForWildcards,
+    isImplicitGlob,
+} from "./fileMatcher";
 import { nodeNextJsonConfigResolver } from "./moduleNameResolver";
 import { parseJsonText } from "./parser";
 import {
@@ -115,18 +122,13 @@ import {
     createCompilerDiagnostic,
     createDiagnosticForNodeInSourceFile,
     forEachEntry,
-    getFileMatcherPatterns,
     getLocaleSpecificMessage,
-    getRegexFromPattern,
-    getRegularExpressionForWildcard,
-    getRegularExpressionsForWildcards,
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
     getTextOfPropertyName,
     getTsConfigPropArray,
     getTsConfigPropArrayElementValue,
     isComputedNonLiteralName,
-    isImplicitGlob,
     isStringDoubleQuoted,
 } from "./utilities";
 import { unescapeLeadingUnderscores } from "./utilitiesPublic";

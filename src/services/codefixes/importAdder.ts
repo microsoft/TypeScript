@@ -47,7 +47,6 @@ import {
     getModuleSpecifiersWithCacheInfo,
     tryGetModuleSpecifiersFromCache,
 } from "../../compiler/moduleSpecifiers";
-import { isExternalModule } from "../../compiler/parser";
 import {
     getBaseFileName,
     getDirectoryPath,
@@ -72,6 +71,7 @@ import {
     InternalSymbolName,
     ModuleKind,
     ModuleResolutionKind,
+    Mutable,
     NamedImports,
     Node,
     NodeFlags,
@@ -99,6 +99,7 @@ import {
     getSourceFileOfNode,
     hostGetCanonicalFileName,
     importFromModuleSpecifier,
+    isExternalModule,
     isInJSFile,
     isIntrinsicJsxName,
     isJSXTagName,
@@ -107,7 +108,6 @@ import {
     isUMDExportSymbol,
     isValidTypeOnlyAliasUseSite,
     isVariableDeclarationInitializedToRequire,
-    Mutable,
     nodeIsMissing,
     removeFileExtension,
     skipAlias,

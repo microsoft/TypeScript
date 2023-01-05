@@ -10,6 +10,7 @@ import {
     TypeWriterResult,
     TypeWriterWalker,
 } from "./_namespaces/Harness";
+import { FileSystemEntries } from "../compiler/fileMatcher";
 
 export interface IO {
     newLine(): string;
@@ -33,7 +34,7 @@ export interface IO {
     getWorkspaceRoot(): string;
     exit(exitCode?: number): void;
     readDirectory(path: string, extension?: readonly string[], exclude?: readonly string[], include?: readonly string[], depth?: number): readonly string[];
-    getAccessibleFileSystemEntries(dirname: string): ts.FileSystemEntries;
+    getAccessibleFileSystemEntries(dirname: string): FileSystemEntries;
     tryEnableSourceMapsForHost?(): void;
     getEnvironmentVariable?(name: string): string;
     getMemoryUsage?(): number | undefined;
@@ -106,7 +107,7 @@ function createNodeIO(): IO {
         return filesInFolder(path);
     }
 
-    function getAccessibleFileSystemEntries(dirname: string): ts.FileSystemEntries {
+    function getAccessibleFileSystemEntries(dirname: string): FileSystemEntries {
         try {
             const entries: string[] = fs.readdirSync(dirname || ".").sort(ts.sys.useCaseSensitiveFileNames ? ts.compareStringsCaseSensitive : ts.compareStringsCaseInsensitive);
             const files: string[] = [];

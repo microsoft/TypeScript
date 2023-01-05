@@ -43,6 +43,7 @@ import {
     nodeModulesPathPart,
     unmangleScopedPackageName,
 } from "../compiler/moduleNameResolver";
+import { getNodeModulePathParts } from "../compiler/moduleSpecifiersUtilities";
 import { isDeclarationFileName } from "../compiler/parser";
 import {
     getNormalizedAbsolutePath,
@@ -80,7 +81,6 @@ import {
     getDeclarationFromName,
     getDeclarationOfKind,
     getEmitDeclarations,
-    getNodeModulePathParts,
     getTextOfIdentifierOrLiteral,
     isAccessExpression,
     outFile,

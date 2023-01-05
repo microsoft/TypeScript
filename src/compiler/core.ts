@@ -7,7 +7,7 @@ import {
     SortedArray,
     SortedReadonlyArray,
 } from "./corePublic";
-// import { Debug } from "./debug";
+import { Debug } from "./debug";
 import {
     __String,
     CharacterCodes,
@@ -136,7 +136,7 @@ export function reduceLeftIterator<T, U>(iterator: Iterator<T> | undefined, f: (
 /** @internal */
 export function zipWith<T, U, V>(arrayA: readonly T[], arrayB: readonly U[], callback: (a: T, b: U, index: number) => V): V[] {
     const result: V[] = [];
-    // Debug.assertEqual(arrayA.length, arrayB.length);
+    Debug.assertEqual(arrayA.length, arrayB.length);
     for (let i = 0; i < arrayA.length; i++) {
         result.push(callback(arrayA[i], arrayB[i], i));
     }
@@ -145,7 +145,7 @@ export function zipWith<T, U, V>(arrayA: readonly T[], arrayB: readonly U[], cal
 
 /** @internal */
 export function zipToIterator<T, U>(arrayA: readonly T[], arrayB: readonly U[]): Iterator<[T, U]> {
-    // Debug.assertEqual(arrayA.length, arrayB.length);
+    Debug.assertEqual(arrayA.length, arrayB.length);
     let i = 0;
     return {
         next() {
@@ -160,7 +160,7 @@ export function zipToIterator<T, U>(arrayA: readonly T[], arrayB: readonly U[]):
 
 /** @internal */
 export function zipToMap<K, V>(keys: readonly K[], values: readonly V[]): Map<K, V> {
-    // Debug.assert(keys.length === values.length);
+    Debug.assert(keys.length === values.length);
     const map = new Map<K, V>();
     for (let i = 0; i < keys.length; ++i) {
         map.set(keys[i], values[i]);
@@ -280,8 +280,7 @@ export function findMap<T, U>(array: readonly T[], callback: (element: T, index:
             return result;
         }
     }
-    // return Debug.fail();
-    throw new Error();
+    return Debug.fail();
 }
 
 /** @internal */
@@ -899,8 +898,7 @@ function deduplicateSorted<T>(array: SortedReadonlyArray<T>, comparer: EqualityC
 
             case Comparison.LessThan:
                 // If `array` is sorted, `next` should **never** be less than `last`.
-                // return Debug.fail("Array is unsorted.");
-                throw new Error("Array is unsorted.");
+                return Debug.fail("Array is unsorted.");
         }
 
         deduplicated.push(last = next);
@@ -1058,14 +1056,14 @@ export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | und
     loopB: for (let offsetA = 0, offsetB = 0; offsetB < arrayB.length; offsetB++) {
         if (offsetB > 0) {
             // Ensure `arrayB` is properly sorted.
-            // Debug.assertGreaterThanOrEqual(comparer(arrayB[offsetB], arrayB[offsetB - 1]), Comparison.EqualTo);
+            Debug.assertGreaterThanOrEqual(comparer(arrayB[offsetB], arrayB[offsetB - 1]), Comparison.EqualTo);
         }
 
         loopA: for (const startA = offsetA; offsetA < arrayA.length; offsetA++) {
             if (offsetA > startA) {
                 // Ensure `arrayA` is properly sorted. We only need to perform this check if
                 // `offsetA` has changed since we entered the loop.
-                // Debug.assertGreaterThanOrEqual(comparer(arrayA[offsetA], arrayA[offsetA - 1]), Comparison.EqualTo);
+                Debug.assertGreaterThanOrEqual(comparer(arrayA[offsetA], arrayA[offsetA - 1]), Comparison.EqualTo);
             }
 
             switch (comparer(arrayB[offsetB], arrayA[offsetA])) {
@@ -1314,7 +1312,7 @@ export function firstOrUndefined<T>(array: readonly T[] | undefined): T | undefi
 
 /** @internal */
 export function first<T>(array: readonly T[]): T {
-    // Debug.assert(array.length !== 0);
+    Debug.assert(array.length !== 0);
     return array[0];
 }
 
@@ -1329,7 +1327,7 @@ export function lastOrUndefined<T>(array: readonly T[] | undefined): T | undefin
 
 /** @internal */
 export function last<T>(array: readonly T[]): T {
-    // Debug.assert(array.length !== 0);
+    Debug.assert(array.length !== 0);
     return array[array.length - 1];
 }
 
@@ -1350,12 +1348,7 @@ export function singleOrUndefined<T>(array: readonly T[] | undefined): T | undef
  * @internal
  */
 export function single<T>(array: readonly T[]): T {
-    // return Debug.checkDefined(singleOrUndefined(array));
-    const result = singleOrUndefined(array);
-    if (result === undefined) {
-        throw new Error();
-    }
-    return result;
+    return Debug.checkDefined(singleOrUndefined(array));
 }
 
 /**
@@ -2051,8 +2044,7 @@ export function tryCast<T>(value: T, test: (value: T) => boolean): T | undefined
 /** @internal */
 export function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut {
     if (value !== undefined && test(value)) return value;
-    throw new Error(`Invalid cast. The supplied value ${value} did not pass the test`);
-    // return Debug.fail(`Invalid cast. The supplied value ${value} did not pass the test '${Debug.getFunctionName(test)}'.`);
+    return Debug.fail(`Invalid cast. The supplied value ${value} did not pass the test '${Debug.getFunctionName(test)}'.`);
 }
 
 /**
@@ -2246,24 +2238,6 @@ export function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t
         return t => t;
     }
 }
-
-/** @internal */
-export const enum AssertionLevel {
-    None = 0,
-    Normal = 1,
-    Aggressive = 2,
-    VeryAggressive = 3,
-}
-
-/**
- * Safer version of `Function` which should not be called.
- * Every function should be assignable to this, but this should not be assignable to every function.
- *
- * @internal
- */
-export type AnyFunction = (...args: never[]) => void;
-/** @internal */
-export type AnyConstructor = new (...args: unknown[]) => unknown;
 
 /** @internal */
 export function equateValues<T>(a: T, b: T) {
@@ -2576,7 +2550,7 @@ export function getSpellingSuggestion<T>(name: string, candidates: T[], getName:
                 continue;
             }
 
-            // Debug.assert(distance < bestDistance); // Else `levenshteinWithMax` should return undefined
+            Debug.assert(distance < bestDistance); // Else `levenshteinWithMax` should return undefined
             bestDistance = distance;
             bestCandidate = candidate;
         }
@@ -2790,7 +2764,7 @@ export function patternText({ prefix, suffix }: Pattern): string {
  * @internal
  */
 export function matchedText(pattern: Pattern, candidate: string): string {
-    // Debug.assert(isPatternMatch(pattern, candidate));
+    Debug.assert(isPatternMatch(pattern, candidate));
     return candidate.substring(pattern.prefix.length, candidate.length - pattern.suffix.length);
 }
 

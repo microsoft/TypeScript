@@ -50,10 +50,12 @@ import {
     isVariableDeclaration,
     isVariableStatement,
 } from "./factory/nodeTests";
+import { objectAllocator } from "./objectAllocator";
+import { forEachChild } from "./parser";
 import {
-    forEachChild,
-    isExternalModule,
-} from "./parser";
+    setParent,
+    setParentRecursive,
+} from "./parserUtilities";
 import { perfLogger } from "./perfLogger";
 import * as performance from "./performance";
 import { tokenToString } from "./scanner";
@@ -147,6 +149,7 @@ import {
     ModuleBlock,
     ModuleDeclaration,
     ModuleResolutionKind,
+    Mutable,
     NamespaceExportDeclaration,
     Node,
     NodeArray,
@@ -245,6 +248,7 @@ import {
     isEntityNameExpression,
     isEnumConst,
     isExportsIdentifier,
+    isExternalModule,
     isExternalOrCommonJsModule,
     isFunctionSymbol,
     isGlobalScopeAugmentation,
@@ -273,13 +277,9 @@ import {
     isStringOrNumericLiteralLike,
     isThisInitializedDeclaration,
     isVariableDeclarationInitializedToBareOrAccessedRequire,
-    Mutable,
     nodeIsMissing,
     nodeIsPresent,
-    objectAllocator,
     removeFileExtension,
-    setParent,
-    setParentRecursive,
     setValueDeclaration,
     shouldPreserveConstEnums,
     skipParentheses,

@@ -42,6 +42,7 @@ import {
     maybeBind,
     memoize,
     noop,
+    or,
     padLeft,
     removePrefix,
     removeSuffix,
@@ -85,6 +86,7 @@ import {
     isImportEqualsDeclaration,
     isImportSpecifier,
     isImportTypeNode,
+    isJsxFragment,
     isModuleDeclaration,
     isObjectLiteralExpression,
     isStringLiteral,
@@ -117,10 +119,11 @@ import {
     forEachChild,
     forEachChildRecursively,
     isDeclarationFileName,
-    isExternalModule,
+    isFileProbablyExternalModule,
     parseIsolatedEntityName,
     parseNodeFactory,
 } from "./parser";
+import { setParent, setParentRecursive } from "./parserUtilities";
 import {
     combinePaths,
     comparePaths,
@@ -147,6 +150,13 @@ import {
 } from "./path";
 import * as performance from "./performance";
 import {
+    changesAffectingProgramStructure,
+    changesAffectModuleResolution,
+    hasChangesInResolutions,
+    setResolvedModule,
+    setResolvedTypeReferenceDirective,
+} from "./programUtilities";
+import {
     computeLineAndCharacterOfPosition,
     getLineAndCharacterOfPosition,
     getLineStarts,
@@ -156,9 +166,14 @@ import {
     tokenToString,
 } from "./scanner";
 import {
-    sys,
-    System,
-} from "./sys";
+    createSymlinkCache,
+    SymlinkCache,
+} from "./symlinkCache";
+import { sys } from "./sys";
+import {
+    containsIgnoredPath,
+    getNewLineCharacter,
+} from "./sysUtilities";
 import { tracing } from "./tracing";
 import {
     getTransformers,
@@ -213,9 +228,11 @@ import {
     ModifierLike,
     ModuleBlock,
     ModuleDeclaration,
+    ModuleDetectionKind,
     ModuleKind,
     ModuleResolutionHost,
     ModuleResolutionKind,
+    Mutable,
     Node,
     NodeArray,
     NodeFlags,
@@ -232,6 +249,7 @@ import {
     PropertyDeclaration,
     ReferencedFile,
     ResolutionMode,
+    ResolutionNameAndModeGetter,
     ResolvedConfigFileName,
     ResolvedModuleFull,
     ResolvedModuleWithFailedLookupLocations,
@@ -247,6 +265,8 @@ import {
     StringLiteralLike,
     StructureIsReused,
     SyntaxKind,
+    System,
+    TransformFlags,
     TsConfigSourceFile,
     TypeChecker,
     UnparsedSource,
@@ -258,10 +278,7 @@ import {
 import {
     chainDiagnosticMessages,
     changeExtension,
-    changesAffectingProgramStructure,
-    changesAffectModuleResolution,
     compareDataObjects,
-    containsIgnoredPath,
     createCommentDirectivesMap,
     createCompilerDiagnostic,
     createCompilerDiagnosticFromMessageChain,
@@ -270,13 +287,13 @@ import {
     createDiagnosticForRange,
     createFileDiagnostic,
     createFileDiagnosticFromMessageChain,
-    createSymlinkCache,
     extensionFromPath,
     externalHelpersModuleNameText,
     forEachEntry,
     forEachKey,
     getAllowJSCompilerOption,
     getEmitDeclarations,
+    getEmitModuleDetectionKind,
     getEmitModuleKind,
     getEmitModuleResolutionKind,
     getEmitScriptTarget,
@@ -284,12 +301,10 @@ import {
     getExternalModuleName,
     getJSXImplicitImportBase,
     getJSXRuntimeImport,
-    getNewLineCharacter,
     getPropertyArrayElementValue,
     getPropertyAssignment,
     getResolvedModule,
     getResolveJsonModule,
-    getSetExternalModuleIndicator,
     getStrictOptionValue,
     getSupportedExtensions,
     getSupportedExtensionsWithJsonIfResolveJsonModule,
@@ -297,7 +312,6 @@ import {
     getTsConfigObjectLiteralExpression,
     getTsConfigPropArray,
     getTsConfigPropArrayElementValue,
-    hasChangesInResolutions,
     hasJSFileExtension,
     hasJsonModuleEmitEnabled,
     hasSyntacticModifier,
@@ -305,6 +319,7 @@ import {
     isAmbientModule,
     isAnyImportOrReExport,
     isCheckJsEnabledForFile,
+    isExternalModule,
     isImportCall,
     isIncrementalCompilation,
     isInJSFile,
@@ -314,7 +329,6 @@ import {
     isSourceFileJS,
     moduleResolutionIsEqualTo,
     moduleResolutionSupportsPackageJsonExportsAndImports,
-    Mutable,
     optionsHaveChanges,
     outFile,
     packageIdToPackageName,
@@ -322,14 +336,9 @@ import {
     projectReferenceIsEqualTo,
     removeFileExtension,
     resolutionExtensionIsTSOrJson,
-    setParent,
-    setParentRecursive,
-    setResolvedModule,
-    setResolvedTypeReferenceDirective,
     skipTypeChecking,
     sourceFileMayBeEmitted,
     supportedJSExtensionsFlat,
-    SymlinkCache,
     typeDirectiveIsEqualTo,
     walkUpParenthesizedExpressions,
     writeFileEnsuringDirectories,
@@ -338,6 +347,7 @@ import {
     getDefaultLibFileName,
     hasJSDocNodes,
     isExternalModuleNameRelative,
+    isJsxOpeningLikeElement,
     isModifier,
     isStringLiteralLike,
     sortAndDeduplicateDiagnostics,
@@ -954,12 +964,6 @@ const emptyResolution: ResolvedModuleWithFailedLookupLocations & ResolvedTypeRef
     resolvedModule: undefined,
     resolvedTypeReferenceDirective: undefined,
 };
-
-/** @internal */
-export interface ResolutionNameAndModeGetter<Entry, SourceFile> {
-    getName(entry: Entry): string;
-    getMode(entry: Entry, file: SourceFile): ResolutionMode;
-}
 
 
 /** @internal */
@@ -5037,4 +5041,60 @@ export function getModuleNameStringLiteralAt({ imports, moduleAugmentations }: S
         // Do nothing if it's an Identifier; we don't need to do module resolution for `declare global`.
     }
     Debug.fail("should never ask for module name at index higher than possible module name");
+}
+
+/** @internal */
+export function getSetExternalModuleIndicator(options: CompilerOptions): (file: SourceFile) => void {
+    // TODO: Should this callback be cached?
+    switch (getEmitModuleDetectionKind(options)) {
+        case ModuleDetectionKind.Force:
+            // All non-declaration files are modules, declaration files still do the usual isFileProbablyExternalModule
+            return (file: SourceFile) => {
+                file.externalModuleIndicator = isFileProbablyExternalModule(file) || !file.isDeclarationFile || undefined;
+            };
+        case ModuleDetectionKind.Legacy:
+            // Files are modules if they have imports, exports, or import.meta
+            return (file: SourceFile) => {
+                file.externalModuleIndicator = isFileProbablyExternalModule(file);
+            };
+        case ModuleDetectionKind.Auto:
+            // If module is nodenext or node16, all esm format files are modules
+            // If jsx is react-jsx or react-jsxdev then jsx tags force module-ness
+            // otherwise, the presence of import or export statments (or import.meta) implies module-ness
+            const checks: ((file: SourceFile) => Node | true | undefined)[] = [isFileProbablyExternalModule];
+            if (options.jsx === JsxEmit.ReactJSX || options.jsx === JsxEmit.ReactJSXDev) {
+                checks.push(isFileModuleFromUsingJSXTag);
+            }
+            checks.push(isFileForcedToBeModuleByFormat);
+            const combined = or(...checks);
+            const callback = (file: SourceFile) => void (file.externalModuleIndicator = combined(file));
+            return callback;
+    }
+}
+
+/**
+ * This is a somewhat unavoidable full tree walk to locate a JSX tag - `import.meta` requires the same,
+ * but we avoid that walk (or parts of it) if at all possible using the `PossiblyContainsImportMeta` node flag.
+ * Unfortunately, there's no `NodeFlag` space to do the same for JSX.
+ */
+function walkTreeForJSXTags(node: Node): Node | undefined {
+    if (!(node.transformFlags & TransformFlags.ContainsJsx)) return undefined;
+    return isJsxOpeningLikeElement(node) || isJsxFragment(node) ? node : forEachChild(node, walkTreeForJSXTags);
+}
+
+function isFileModuleFromUsingJSXTag(file: SourceFile): Node | undefined {
+    // Excludes declaration files - they still require an explicit `export {}` or the like
+    // for back compat purposes. (not that declaration files should contain JSX tags!)
+    return !file.isDeclarationFile ? walkTreeForJSXTags(file) : undefined;
+}
+
+/**
+ * Note that this requires file.impliedNodeFormat be set already; meaning it must be set very early on
+ * in SourceFile construction.
+ */
+function isFileForcedToBeModuleByFormat(file: SourceFile): true | undefined {
+    // Excludes declaration files - they still require an explicit `export {}` or the like
+    // for back compat purposes. The only non-declaration files _not_ forced to be a module are `.js` files
+    // that aren't esm-mode (meaning not in a `type: module` scope).
+    return (file.impliedNodeFormat === ModuleKind.ESNext || (fileExtensionIsOneOf(file.fileName, [Extension.Cjs, Extension.Cts, Extension.Mjs, Extension.Mts]))) && !file.isDeclarationFile ? true : undefined;
 }

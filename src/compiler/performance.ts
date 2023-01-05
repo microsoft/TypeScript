@@ -6,10 +6,7 @@ import {
     timestamp,
     tryGetNativePerformanceHooks,
 } from "./performanceCore";
-import {
-    sys,
-    System,
-} from "./sys";
+import { System } from "./types";
 
 /** Performance measurements for the compiler. */
 
@@ -172,7 +169,7 @@ export function isEnabled() {
  *
  * @internal
  */
-export function enable(system: System = sys) {
+export function enable(system: System) {
     if (!enabled) {
         enabled = true;
         perfHooks ||= tryGetNativePerformanceHooks();

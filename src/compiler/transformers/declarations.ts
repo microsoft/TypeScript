@@ -72,10 +72,8 @@ import {
 } from "../factory/utilitiesPublic";
 import { pathContainsNodeModules } from "../moduleNameResolver";
 import { getModuleSpecifier } from "../moduleSpecifiers";
-import {
-    isExternalModule,
-    parseNodeFactory,
-} from "../parser";
+import { parseNodeFactory } from "../parser";
+import { setParent } from "../parserUtilities";
 import {
     getDirectoryPath,
     getRelativePathToDirectoryOrUrl,
@@ -195,6 +193,7 @@ import {
     hasSyntacticModifier,
     isAnyImportSyntax,
     isEntityNameExpression,
+    isExternalModule,
     isExternalModuleAugmentation,
     isExternalOrCommonJsModule,
     isGlobalScopeAugmentation,
@@ -205,7 +204,6 @@ import {
     isSourceFileJS,
     isSourceFileNotJson,
     isStringANonContextualKeyword,
-    setParent,
 } from "../utilities";
 import {
     getNameOfDeclaration,

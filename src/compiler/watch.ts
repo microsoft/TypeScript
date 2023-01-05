@@ -32,6 +32,10 @@ import { SortedReadonlyArray } from "./corePublic";
 import { Debug } from "./debug";
 import { Diagnostics } from "./diagnosticInformationMap.generated";
 import {
+    getPatternFromSpec,
+    getRegexFromPattern,
+} from "./fileMatcher";
+import {
     combinePaths,
     convertToRelativePath,
     fileExtensionIs,
@@ -61,11 +65,10 @@ import {
     whitespaceOrMapCommentRegExp,
 } from "./sourcemap";
 import {
-    FileWatcher,
     generateDjb2Hash,
     sys,
-    System,
 } from "./sys";
+import { getNewLineCharacter } from "./sysUtilities";
 import {
     ReportEmitErrorSummary,
     ReportFileInError,
@@ -86,12 +89,14 @@ import {
     FileExtensionInfo,
     FileIncludeKind,
     FileIncludeReason,
+    FileWatcher,
     HasCurrentDirectory,
     ModuleKind,
     ParsedCommandLine,
     Program,
     ProjectReference,
     SourceFile,
+    System,
     WatchOptions,
     WriteFileCallback,
 } from "./types";
@@ -101,9 +106,6 @@ import {
     externalHelpersModuleNameText,
     forEachEntry,
     getEmitScriptTarget,
-    getNewLineCharacter,
-    getPatternFromSpec,
-    getRegexFromPattern,
     isExternalOrCommonJsModule,
     outFile,
     packageIdToString,

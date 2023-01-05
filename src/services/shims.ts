@@ -12,6 +12,7 @@ import {
     toFileNameLowerCase,
 } from "../compiler/core";
 import { MapLike } from "../compiler/corePublic";
+import { getFileMatcherPatterns } from "../compiler/fileMatcher";
 import {
     getAutomaticTypeDirectiveNames,
     resolveModuleName,
@@ -43,10 +44,7 @@ import {
     TypeAcquisition,
     UserPreferences,
 } from "../compiler/types";
-import {
-    extensionFromPath,
-    getFileMatcherPatterns,
-} from "../compiler/utilities";
+import { extensionFromPath } from "../compiler/utilities";
 import {
     createTextChangeRange,
     createTextSpan,

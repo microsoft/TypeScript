@@ -15,7 +15,7 @@ import {
     isDeclarationFileName,
 } from "../compiler/parser";
 import { toPath } from "../compiler/path";
-import { getImpliedNodeFormatForFile } from "../compiler/program";
+import { getImpliedNodeFormatForFile, getSetExternalModuleIndicator } from "../compiler/program";
 import { tracing } from "../compiler/tracing";
 import {
     CompilerOptions,
@@ -30,7 +30,6 @@ import {
     ensureScriptKind,
     forEachEntry,
     getEmitScriptTarget,
-    getSetExternalModuleIndicator,
 } from "../compiler/utilities";
 import {
     createLanguageServiceSourceFile,
