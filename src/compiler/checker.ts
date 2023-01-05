@@ -1986,8 +1986,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     const contextualTypes: (Type | undefined)[] = [];
     let contextualTypeCount = 0;
 
-    let currentInferenceNode: Node | undefined;
-    let currentInferenceContext: InferenceContext | undefined;
+    const inferenceContextNodes: Node[] = [];
+    const inferenceContexts: (InferenceContext | undefined)[] = [];
+    let inferenceContextCount = 0;
 
     const emptyStringType = getStringLiteralType("");
     const zeroType = getNumberLiteralType(0);
@@ -2625,7 +2626,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return true;
         }
 
-        if (!!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage) || usageInTypeDeclaration()) {
+        if (!!(usage.flags & NodeFlags.JSDoc) || isInTypeQuery(usage) || isInAmbientOrTypeNode(usage)) {
             return true;
         }
         if (isUsedInFunctionOrInstanceProperty(usage, declaration)) {
@@ -2639,10 +2640,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return false;
-
-        function usageInTypeDeclaration() {
-            return !!findAncestor(usage, node => isInterfaceDeclaration(node) || isTypeAliasDeclaration(node));
-        }
 
         function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
             switch (declaration.parent.parent.kind) {
@@ -24221,13 +24218,42 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                         else {
                             const middleLength = targetArity - startLength - endLength;
-                            if (middleLength === 2 && elementFlags[startLength] & elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(source)) {
-                                // Middle of target is [...T, ...U] and source is tuple type
-                                const targetInfo = getInferenceInfoForType(elementTypes[startLength]);
-                                if (targetInfo && targetInfo.impliedArity !== undefined) {
-                                    // Infer slices from source based on implied arity of T.
-                                    inferFromTypes(sliceTupleType(source, startLength, endLength + sourceArity - targetInfo.impliedArity), elementTypes[startLength]);
-                                    inferFromTypes(sliceTupleType(source, startLength + targetInfo.impliedArity, endLength), elementTypes[startLength + 1]);
+                            if (middleLength === 2) {
+                                if (elementFlags[startLength] & elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(source)) {
+                                    // Middle of target is [...T, ...U] and source is tuple type
+                                    const targetInfo = getInferenceInfoForType(elementTypes[startLength]);
+                                    if (targetInfo && targetInfo.impliedArity !== undefined) {
+                                        // Infer slices from source based on implied arity of T.
+                                        inferFromTypes(sliceTupleType(source, startLength, endLength + sourceArity - targetInfo.impliedArity), elementTypes[startLength]);
+                                        inferFromTypes(sliceTupleType(source, startLength + targetInfo.impliedArity, endLength), elementTypes[startLength + 1]);
+                                    }
+                                }
+                                else if (elementFlags[startLength] & ElementFlags.Variadic && elementFlags[startLength + 1] & ElementFlags.Rest) {
+                                    // Middle of target is [...T, ...rest] and source is tuple type
+                                    // if T is constrained by a fixed-size tuple we might be able to use its arity to infer T
+                                    const param = getInferenceInfoForType(elementTypes[startLength])?.typeParameter;
+                                    const constraint = param && getBaseConstraintOfType(param);
+                                    if (constraint && isTupleType(constraint) && !constraint.target.hasRestElement) {
+                                        const impliedArity = constraint.target.fixedLength;
+                                        inferFromTypes(sliceTupleType(source, startLength, sourceArity - (startLength + impliedArity)), elementTypes[startLength]);
+                                        inferFromTypes(getElementTypeOfSliceOfTupleType(source, startLength + impliedArity, endLength)!, elementTypes[startLength + 1]);
+                                    }
+                                }
+                                else if (elementFlags[startLength] & ElementFlags.Rest && elementFlags[startLength + 1] & ElementFlags.Variadic && isTupleType(source)) {
+                                    // Middle of target is [...rest, ...T] and source is tuple type
+                                    // if T is constrained by a fixed-size tuple we might be able to use its arity to infer T
+                                    const param = getInferenceInfoForType(elementTypes[startLength + 1])?.typeParameter;
+                                    const constraint = param && getBaseConstraintOfType(param);
+                                    if (constraint && isTupleType(constraint) && !constraint.target.hasRestElement) {
+                                        const impliedArity = constraint.target.fixedLength;
+                                        const endIndex = sourceArity - getEndElementCount(target.target, ElementFlags.Fixed);
+                                        const startIndex = endIndex - impliedArity;
+                                        const trailingSlice = createTupleType(getTypeArguments(source).slice(startIndex, endIndex), source.target.elementFlags.slice(startIndex, endIndex),
+                                            /*readonly*/ false, source.target.labeledElementDeclarations && source.target.labeledElementDeclarations.slice(startIndex, endIndex));
+
+                                        inferFromTypes(getElementTypeOfSliceOfTupleType(source, startLength, endLength + impliedArity)!, elementTypes[startLength]);
+                                        inferFromTypes(trailingSlice, elementTypes[startLength + 1]);
+                                    }
                                 }
                             }
                             else if (middleLength === 1 && elementFlags[startLength] & ElementFlags.Variadic) {
@@ -24532,6 +24558,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !!findAncestor(
             node,
             n => n.kind === SyntaxKind.TypeQuery ? true : n.kind === SyntaxKind.Identifier || n.kind === SyntaxKind.QualifiedName ? false : "quit");
+    }
+
+    function isInAmbientOrTypeNode(node: Node): boolean {
+        return !!(node.flags & NodeFlags.Ambient || findAncestor(node, n => isInterfaceDeclaration(n) || isTypeLiteralNode(n)));
     }
 
     // Return the flow cache key for a "dotted name" (i.e. a sequence of identifiers
@@ -26733,7 +26763,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
             // for `a?.b`, we emulate a synthetic `a !== null && a !== undefined` condition for `a`
             if (isExpressionOfOptionalChainRoot(expr) ||
-                isBinaryExpression(expr.parent) && expr.parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken && expr.parent.left === expr) {
+                isBinaryExpression(expr.parent) && (expr.parent.operatorToken.kind === SyntaxKind.QuestionQuestionToken || expr.parent.operatorToken.kind === SyntaxKind.QuestionQuestionEqualsToken) && expr.parent.left === expr) {
                 return narrowTypeByOptionality(type, expr, assumeTrue);
             }
             switch (expr.kind) {
@@ -26968,6 +26998,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getNarrowedTypeOfSymbol(symbol: Symbol, location: Identifier) {
+        const type = getTypeOfSymbol(symbol);
         const declaration = symbol.valueDeclaration;
         if (declaration) {
             // If we have a non-rest binding element with no initializer declared as a const variable or a const-like
@@ -27048,7 +27079,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        return getTypeOfSymbol(symbol);
+        return type;
     }
 
     function checkIdentifier(node: Identifier, checkMode: CheckMode | undefined): Type {
@@ -27207,7 +27238,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // declaration container are the same).
         const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
             type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
-            isInTypeQuery(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
+            isInTypeQuery(node) || isInAmbientOrTypeNode(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
             node.parent.kind === SyntaxKind.NonNullExpression ||
             declaration.kind === SyntaxKind.VariableDeclaration && (declaration as VariableDeclaration).exclamationToken ||
             declaration.flags & NodeFlags.Ambient;
@@ -28679,8 +28710,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return -1;
     }
 
+    function pushInferenceContext(node: Node, inferenceContext: InferenceContext | undefined) {
+        inferenceContextNodes[inferenceContextCount] = node;
+        inferenceContexts[inferenceContextCount] = inferenceContext;
+        inferenceContextCount++;
+    }
+
+    function popInferenceContext() {
+        inferenceContextCount--;
+    }
+
     function getInferenceContext(node: Node) {
-        return isNodeDescendantOf(node, currentInferenceNode) ? currentInferenceContext : undefined;
+        for (let i = inferenceContextCount - 1; i >= 0; i--) {
+            if (isNodeDescendantOf(node, inferenceContextNodes[i])) {
+                return inferenceContexts[i];
+            }
+        }
     }
 
     function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement, contextFlags: ContextFlags | undefined) {
@@ -31761,7 +31806,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         reportErrors: boolean,
         containingMessageChain: (() => DiagnosticMessageChain | undefined) | undefined,
     ): readonly Diagnostic[] | undefined {
-
         const errorOutputContainer: { errors?: Diagnostic[], skipLogging?: boolean } = { errors: undefined, skipLogging: true };
         if (isJsxOpeningLikeElement(node)) {
             if (!checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, checkMode, reportErrors, containingMessageChain, errorOutputContainer)) {
@@ -31771,10 +31815,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return undefined;
         }
         const thisType = getThisTypeOfSignature(signature);
-        if (thisType && thisType !== voidType && node.kind !== SyntaxKind.NewExpression) {
+        if (thisType && thisType !== voidType && !(isNewExpression(node) || isCallExpression(node) && isSuperProperty(node.expression))) {
             // If the called expression is not of the form `x.f` or `x["f"]`, then sourceType = voidType
             // If the signature's 'this' type is voidType, then the check is skipped -- anything is compatible.
-            // If the expression is a new expression, then the check is skipped.
+            // If the expression is a new expression or super call expression, then the check is skipped.
             const thisArgumentNode = getThisArgumentOfCall(node);
             const thisArgumentType = getThisArgumentType(thisArgumentNode);
             const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
@@ -35937,10 +35981,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkExpressionWithContextualType(node: Expression, contextualType: Type, inferenceContext: InferenceContext | undefined, checkMode: CheckMode): Type {
         const contextNode = getContextNode(node);
         pushContextualType(contextNode, contextualType);
-        const saveInferenceNode = currentInferenceNode;
-        const saveInferenceContext = currentInferenceContext;
-        currentInferenceNode = contextNode;
-        currentInferenceContext = inferenceContext;
+        pushInferenceContext(contextNode, inferenceContext);
         const type = checkExpression(node, checkMode | CheckMode.Contextual | (inferenceContext ? CheckMode.Inferential : 0));
         // In CheckMode.Inferential we collect intra-expression inference sites to process before fixing any type
         // parameters. This information is no longer needed after the call to checkExpression.
@@ -35952,8 +35993,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // here would be to not mark contextually typed literals as fresh in the first place.
         const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node, /*contextFlags*/ undefined)) ?
             getRegularTypeOfLiteralType(type) : type;
-        currentInferenceNode = saveInferenceNode;
-        currentInferenceContext = saveInferenceContext;
+        popInferenceContext();
         popContextualType();
         return result;
     }
@@ -43198,7 +43238,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkJSDocTypeIsInJsFile(node: Node): void {
         if (!isInJSFile(node)) {
-            grammarErrorOnNode(node, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
+            if (isJSDocNonNullableType(node) || isJSDocNullableType(node)) {
+                const token = tokenToString(isJSDocNonNullableType(node) ? SyntaxKind.ExclamationToken : SyntaxKind.QuestionToken);
+                const diagnostic = node.postfix
+                    ? Diagnostics._0_at_the_end_of_a_type_is_not_valid_TypeScript_syntax_Did_you_mean_to_write_1
+                    : Diagnostics._0_at_the_start_of_a_type_is_not_valid_TypeScript_syntax_Did_you_mean_to_write_1;
+                const typeNode = node.type;
+                const type = getTypeFromTypeNode(typeNode);
+                grammarErrorOnNode(node, diagnostic, token, typeToString(
+                    isJSDocNullableType(node) && !(type === neverType || type === voidType)
+                        ? getUnionType(append([type, undefinedType], node.postfix ? undefined : nullType)) : type));
+            }
+            else {
+                grammarErrorOnNode(node, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
+            }
         }
     }
 
