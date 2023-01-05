@@ -1156,10 +1156,11 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "experimentalDecorators",
         type: "boolean",
+        affectsEmit: true,
         affectsSemanticDiagnostics: true,
         affectsBuildInfo: true,
         category: Diagnostics.Language_and_Environment,
-        description: Diagnostics.Enable_experimental_support_for_TC39_stage_2_draft_decorators,
+        description: Diagnostics.Enable_experimental_support_for_legacy_experimental_decorators,
         defaultValueDescription: false,
     },
     {

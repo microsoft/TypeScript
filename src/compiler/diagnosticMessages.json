@@ -5631,7 +5631,7 @@
         "category": "Message",
         "code": 6629
     },
-    "Enable experimental support for TC39 stage 2 draft decorators.": {
+    "Enable experimental support for legacy experimental decorators.": {
         "category": "Message",
         "code": 6630
     },
