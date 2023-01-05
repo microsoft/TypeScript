@@ -758,7 +758,7 @@ function getOrganizeImportsOrdinalStringComparer(ignoreCase: boolean) {
     return ignoreCase ? compareStringsCaseInsensitiveEslintCompatible : compareStringsCaseSensitive;
 }
 
-function getOrganizeImportsNaturalStringComparer(ignoreCase: boolean, preferences: UserPreferences): Comparer<string> {
+function getOrganizeImportsUnicodeStringComparer(ignoreCase: boolean, preferences: UserPreferences): Comparer<string> {
     const resolvedLocale = getOrganizeImportsLocale(preferences);
     const caseFirst = preferences.organizeImportsCaseFirst ?? false;
     const numeric = preferences.organizeImportsNumericCollation ?? false;
@@ -792,9 +792,9 @@ function getOrganizeImportsLocale(preferences: UserPreferences): string {
 /** @internal */
 export function getOrganizeImportsComparer(preferences: UserPreferences, ignoreCase: boolean): Comparer<string> {
     const collation = preferences.organizeImportsCollation ?? "ordinal";
-    return collation === "ordinal" ?
-        getOrganizeImportsOrdinalStringComparer(ignoreCase) :
-        getOrganizeImportsNaturalStringComparer(ignoreCase, preferences);
+    return collation === "unicode" ?
+        getOrganizeImportsUnicodeStringComparer(ignoreCase, preferences) :
+        getOrganizeImportsOrdinalStringComparer(ignoreCase);
 }
 
 function getOrganizeImportsComparerWithDetection(preferences: UserPreferences, detectIgnoreCase?: () => boolean): Comparer<string> {

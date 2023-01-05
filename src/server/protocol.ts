@@ -3523,14 +3523,15 @@ export interface UserPreferences {
     readonly organizeImportsIgnoreCase?: "auto" | boolean;
     /**
      * Indicates whether imports should be organized via an "ordinal" (binary) comparison using the numeric value
-     * of their code points, or via "natural" collation using rules associated with the locale specified by
-     * {@link organizeImportsCollationLocale}.
+     * of their code points, or via "unicode" collation (via the 
+     * [Unicode Collation Algorithm](https://unicode.org/reports/tr10/#Scope)) using rules associated with the locale
+     * specified in {@link organizeImportsCollationLocale}.
      *
      * NOTE: When comparing paths `"ordinal"` collation is always used.
      *
      * Default: `"ordinal"`.
      */
-    readonly organizeImportsCollation?: "natural" | "ordinal";
+    readonly organizeImportsCollation?: "ordinal" | "unicode";
     /**
      * Indicates the locale to use for "natural" collation. If not specified, the locale `"en"` is used as an invariant
      * for the sake of consistent sorting. Use `"auto"` to use the detected UI locale.

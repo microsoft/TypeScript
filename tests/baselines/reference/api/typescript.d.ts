@@ -4469,7 +4469,7 @@ declare namespace ts {
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: string[];
         readonly organizeImportsIgnoreCase?: "auto" | boolean;
-        readonly organizeImportsCollation?: "natural" | "ordinal";
+        readonly organizeImportsCollation?: "ordinal" | "unicode";
         readonly organizeImportsLocale?: string;
         readonly organizeImportsNumericCollation?: boolean;
         readonly organizeImportsAccentCollation?: boolean;

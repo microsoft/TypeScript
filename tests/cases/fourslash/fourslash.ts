@@ -673,7 +673,7 @@ declare namespace FourSlashInterface {
         readonly allowRenameOfImportPath?: boolean;
         readonly autoImportFileExcludePatterns?: readonly string[];
         readonly organizeImportsIgnoreCase?: "auto" | boolean;
-        readonly organizeImportsCollation?: "natural" | "ordinal";
+        readonly organizeImportsCollation?: "unicode" | "ordinal";
         readonly organizeImportsLocale?: string;
         readonly organizeImportsNumericCollation?: boolean;
         readonly organizeImportsAccentCollation?: boolean;

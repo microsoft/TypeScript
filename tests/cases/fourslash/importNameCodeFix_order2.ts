@@ -49,5 +49,5 @@ verify.importFixAtPosition([
 aB;`,
 ], undefined, {
     organizeImportsIgnoreCase: false,
-    organizeImportsCollation: "natural"
+    organizeImportsCollation: "unicode"
 });

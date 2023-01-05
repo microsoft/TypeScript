@@ -11,16 +11,15 @@
 
 verify.organizeImports(
 `import {
+    Ab,
     _Ab,
     _aB,
-    Ab,
     aB,
 } from './foo';
 
 console.log(_aB, _Ab, aB, Ab);`, /*mode*/ undefined, {
     organizeImportsIgnoreCase: false,
-    organizeImportsCollation: "natural",
-    organizeImportsCaseFirst: "upper",
+    organizeImportsCollation: "ordinal",
 });
 
 verify.organizeImports(
@@ -33,6 +32,5 @@ verify.organizeImports(
 
 console.log(_aB, _Ab, aB, Ab);`, /*mode*/ undefined, {
     organizeImportsIgnoreCase: false,
-    organizeImportsCollation: "natural",
-    organizeImportsCaseFirst: "lower",
+    organizeImportsCollation: "unicode",
 });

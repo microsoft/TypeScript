@@ -17,7 +17,7 @@ verify.organizeImports(
 
 console.log(A, À, B);`, /*mode*/ undefined, {
     organizeImportsIgnoreCase: false,
-    organizeImportsCollation: "natural",
+    organizeImportsCollation: "unicode",
     organizeImportsAccentCollation: false,
 });
 
@@ -30,6 +30,6 @@ verify.organizeImports(
 
 console.log(A, À, B);`, /*mode*/ undefined, {
     organizeImportsIgnoreCase: false,
-    organizeImportsCollation: "natural",
+    organizeImportsCollation: "unicode",
     organizeImportsAccentCollation: true,
 });
