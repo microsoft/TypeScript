@@ -1145,22 +1145,23 @@ export function rangeEquals<T>(array1: readonly T[], array2: readonly T[], pos: 
     }
     return true;
 }
-
 /**
  * Returns the element at a specific offset in an array if non-empty, `undefined` otherwise.
  * A negative offset indicates the element should be retrieved from the end of the array.
  *
  * @internal
  */
-export function elementAt<T>(array: readonly T[] | undefined, offset: number): T | undefined {
-    if (array) {
-        offset = toOffset(array, offset);
-        if (offset < array.length) {
-            return array[offset];
+export const elementAt: <T>(array: readonly T[] | undefined, offset: number) => T | undefined = !!Array.prototype.at
+    ? (array, offset) => array?.at(offset)
+    : (array, offset) => {
+        if (array) {
+            offset = toOffset(array, offset);
+            if (offset < array.length) {
+                return array[offset];
+            }
         }
-    }
-    return undefined;
-}
+        return undefined;
+    };
 
 /**
  * Returns the first element of an array if non-empty, `undefined` otherwise.
