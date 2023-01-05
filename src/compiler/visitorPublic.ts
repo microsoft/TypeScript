@@ -346,23 +346,31 @@ function visitArrayWorker(
             if (updated === undefined) {
                 // Ensure we have a copy of `nodes`, up to the current index.
                 updated = nodes.slice(0, i);
+                Debug.assertEachNode(updated, test);
             }
             if (visited) {
                 if (isArray(visited)) {
                     for (const visitedNode of visited) {
+                        Debug.assertNode(visitedNode, test);
                         updated.push(visitedNode);
                     }
                 }
                 else {
+                    Debug.assertNode(visited, test);
                     updated.push(visited);
                 }
             }
         }
     }
 
-    const result = updated ?? nodes;
-    Debug.assertEachNode(result, test);
-    return result;
+    if (updated) {
+        // If we have an updated array, then all items will have been tested.
+        return updated;
+    }
+
+    // If we are going to return the original array, ensure it passes the test.
+    Debug.assertEachNode(nodes, test);
+    return nodes;
 }
 
 /**
