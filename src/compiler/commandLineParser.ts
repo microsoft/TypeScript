@@ -2287,7 +2287,7 @@ function convertConfigFileToObject(sourceFile: JsonSourceFile, errors: Push<Diag
 /**
  * Convert the json syntax tree into the json value
  */
-export function convertToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>): any {
+export function convertToObject(sourceFile: JsonSourceFile, errors: Diagnostic[]): any {
     return convertToObjectWorker(sourceFile, sourceFile.statements[0]?.expression, errors, /*returnValue*/ true, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
 }
 
@@ -3176,7 +3176,7 @@ function parseConfig(
     basePath: string,
     configFileName: string | undefined,
     resolutionStack: string[],
-    errors: Push<Diagnostic>,
+    errors: Diagnostic[],
     extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>
 ): ParsedTsconfig {
     basePath = normalizeSlashes(basePath);
@@ -3431,7 +3431,7 @@ function getExtendedConfig(
     extendedConfigPath: string,
     host: ParseConfigHost,
     resolutionStack: string[],
-    errors: Push<Diagnostic>,
+    errors: Diagnostic[],
     extendedConfigCache: Map<string, ExtendedConfigCacheEntry> | undefined,
     result: ExtendsResult
 ): ParsedTsconfig | undefined {
