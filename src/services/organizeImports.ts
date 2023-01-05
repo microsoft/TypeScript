@@ -579,7 +579,7 @@ function sortSpecifiers<T extends ImportOrExportSpecifier>(specifiers: readonly 
 
 /** @internal */
 export function compareImportOrExportSpecifiers<T extends ImportOrExportSpecifier>(s1: T, s2: T, ignoreCase?: boolean): Comparison {
-    return compareImportOrExportSpecifiersWorker(s1, s2, getOrganizeImportsOrdinalStringComparer(!!ignoreCase))
+    return compareImportOrExportSpecifiersWorker(s1, s2, getOrganizeImportsOrdinalStringComparer(!!ignoreCase));
 }
 
 function compareImportOrExportSpecifiersWorker<T extends ImportOrExportSpecifier>(s1: T, s2: T, comparer: Comparer<string>): Comparison {

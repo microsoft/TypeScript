@@ -3523,7 +3523,7 @@ export interface UserPreferences {
     readonly organizeImportsIgnoreCase?: "auto" | boolean;
     /**
      * Indicates whether imports should be organized via an "ordinal" (binary) comparison using the numeric value
-     * of their code points, or via "unicode" collation (via the 
+     * of their code points, or via "unicode" collation (via the
      * [Unicode Collation Algorithm](https://unicode.org/reports/tr10/#Scope)) using rules associated with the locale
      * specified in {@link organizeImportsCollationLocale}.
      *
