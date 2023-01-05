@@ -27083,6 +27083,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getNarrowedTypeOfSymbol(symbol: Symbol, location: Identifier) {
+        const type = getTypeOfSymbol(symbol);
         const declaration = symbol.valueDeclaration;
         if (declaration) {
             // If we have a non-rest binding element with no initializer declared as a const variable or a const-like
@@ -27163,7 +27164,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        return getTypeOfSymbol(symbol);
+        return type;
     }
 
     function checkIdentifier(node: Identifier, checkMode: CheckMode | undefined): Type {
