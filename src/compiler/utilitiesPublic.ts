@@ -602,7 +602,7 @@ export const supportedLocaleDirectories = ["cs", "de", "es", "fr", "it", "ja", "
 export function validateLocaleAndSetLanguage(
     locale: string,
     sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string | undefined },
-    errors?: Push<Diagnostic>) {
+    errors?: Diagnostic[]) {
     const lowerCaseLocale = locale.toLowerCase();
     const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(lowerCaseLocale);
 
