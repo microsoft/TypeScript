@@ -5714,6 +5714,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     /**
      * Returns a value indicating whether a name is unique globally or within the current file.
+     *
+     * @param _isPrivate (unused) this parameter exists to avoid an unnecessary adaptor frame in v8
+     * when `isfileLevelUniqueName` is passed as a callback to `makeUniqueName`.
      */
     function isFileLevelUniqueName(name: string, _isPrivate: boolean) {
         return currentSourceFile ? ts.isFileLevelUniqueName(currentSourceFile, name, hasGlobalName) : true;
