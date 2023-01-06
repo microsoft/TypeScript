@@ -1145,6 +1145,7 @@ export function rangeEquals<T>(array1: readonly T[], array2: readonly T[], pos: 
     }
     return true;
 }
+
 /**
  * Returns the element at a specific offset in an array if non-empty, `undefined` otherwise.
  * A negative offset indicates the element should be retrieved from the end of the array.
