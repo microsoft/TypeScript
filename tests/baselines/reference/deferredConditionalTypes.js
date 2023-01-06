@@ -1,11 +1,15 @@
 //// [deferredConditionalTypes.ts]
-type T0<X, Y> = X extends Y ? true : false;  // Deferred
-type T1<X, Y> = [X] extends [Y] ? true : false;  // Deferred
-type T2<X, Y> = [X, X] extends [Y, Y] ? true : false;  // Deferred
-type T3<X, Y> = [X, X, X] extends [Y, Y, Y] ? true : false;  // Deferred
+type A<T> = { x: T } extends { x: 0 } ? 1 : 0;
 
-type T4<X, Y> = [X] extends [Y, Y] ? true : false;  // false
-type T5<X, Y> = [X, X] extends [Y] ? true : false;  // false
+type T0<T> = A<T> extends 0 ? 1 : 0;  // Deferred
+type T1<T> = [A<T>] extends [0] ? 1 : 0;  // Deferred
+type T2<T> = [A<T>, A<T>] extends [0, 0] ? 1 : 0;  // Deferred
+type T3<T> = [A<T>, A<T>, A<T>] extends [0, 0, 0] ? 1 : 0;  // Deferred
+
+type T4<T> = [A<T>] extends [0, 0] ? 1 : 0;  // 0
+type T5<T> = [A<T>, A<T>] extends [0] ? 1 : 0;  // 0
+
+type T6<T> = { y: A<T> } extends { y: 0 } ? 1 : 0;  // 0, but should be deferred
 
 // Repro from #52068
 
@@ -17,6 +21,24 @@ type Extends<A, B> = A extends B ? true : false;
 type IsNumberLiteral<T> = And<Extends<T, number>, Not<Extends<number, T>>>;
 
 type IsLiteral<T> = Or<false, IsNumberLiteral<T>>;
+
+// Repro from #51145#issuecomment-1276804047
+
+type Values<O extends object> =
+  O extends any[] 
+    ? O[number]
+    : O[keyof O]
+
+type Equals<A, B> = [A, B] extends [B, A] ? true : false;
+
+type FilterByStringValue<O extends object> = {
+  [K in keyof O as Equals<O[K], string> extends true ? K : never]: any
+}
+
+type FilteredValuesMatchNever<O extends object>
+  = Equals<Values<FilterByStringValue<[O]>>, never>
+
+type FilteredRes1 = FilteredValuesMatchNever<[]>
 
 
 //// [deferredConditionalTypes.js]
