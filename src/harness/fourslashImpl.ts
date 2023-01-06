@@ -1130,7 +1130,7 @@ export class TestState {
     }
 
     public setTypesRegistry(map: ts.MapLike<void>): void {
-        this.languageServiceAdapterHost.typesRegistry = new Map(ts.getEntries(map));
+        this.languageServiceAdapterHost.typesRegistry = new Map(Object.entries(map));
     }
 
     public verifyTypeOfSymbolAtLocation(range: Range, symbol: ts.Symbol, expected: string): void {
@@ -2010,7 +2010,7 @@ export class TestState {
             let selectionRange: ts.SelectionRange | undefined = this.languageService.getSmartSelectionRange(this.activeFile.fileName, marker.position);
             while (selectionRange) {
                 const { textSpan } = selectionRange;
-                let masked = Array.from(fileContent).map((char, index) => {
+                let masked = ts.arrayFrom(fileContent).map((char, index) => {
                     const charCode = char.charCodeAt(0);
                     if (index >= textSpan.start && index < ts.textSpanEnd(textSpan)) {
                         return char === " " ? "•" : ts.isLineBreak(charCode) ? `↲${n}` : char;
@@ -2019,8 +2019,8 @@ export class TestState {
                 }).join("");
                 masked = masked.replace(/^\s*$\r?\n?/gm, ""); // Remove blank lines
                 const isRealCharacter = (char: string) => char !== "•" && char !== "↲" && !ts.isWhiteSpaceLike(char.charCodeAt(0));
-                const leadingWidth = Array.from(masked).findIndex(isRealCharacter);
-                const trailingWidth = ts.findLastIndex(Array.from(masked), isRealCharacter);
+                const leadingWidth = ts.arrayFrom(masked).findIndex(isRealCharacter);
+                const trailingWidth = ts.findLastIndex(ts.arrayFrom(masked), isRealCharacter);
                 masked = masked.slice(0, leadingWidth)
                     + masked.slice(leadingWidth, trailingWidth).replace(/•/g, " ").replace(/↲/g, "")
                     + masked.slice(trailingWidth);
@@ -3180,7 +3180,7 @@ export class TestState {
 
     public verifyBraceCompletionAtPosition(negative: boolean, openingBrace: string) {
 
-        const openBraceMap = new Map(ts.getEntries<ts.CharacterCodes>({
+        const openBraceMap = new Map(Object.entries<ts.CharacterCodes>({
             "(": ts.CharacterCodes.openParen,
             "{": ts.CharacterCodes.openBrace,
             "[": ts.CharacterCodes.openBracket,

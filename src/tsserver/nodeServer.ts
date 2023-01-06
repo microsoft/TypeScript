@@ -55,7 +55,6 @@ import {
     DirectoryWatcherCallback,
     FileWatcher,
     getDirectoryPath,
-    getEntries,
     getNodeMajorVersion,
     getRootLength,
     JsTyping,
@@ -691,7 +690,7 @@ function startNodeSession(options: StartSessionOptions, logger: Logger, cancella
 
             switch (response.kind) {
                 case EventTypesRegistry:
-                    this.typesRegistryCache = new Map(getEntries(response.typesRegistry));
+                    this.typesRegistryCache = new Map(Object.entries(response.typesRegistry));
                     break;
                 case ActionPackageInstalled: {
                     const { success, message } = response;

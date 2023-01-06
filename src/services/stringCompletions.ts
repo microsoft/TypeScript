@@ -159,7 +159,7 @@ import {
 interface NameAndKindSet {
     add(value: NameAndKind): void;
     has(name: string): boolean;
-    values(): Iterator<NameAndKind>;
+    values(): IterableIterator<NameAndKind>;
 }
 const kindPrecedence = {
     [ScriptElementKind.directory]: 0,
