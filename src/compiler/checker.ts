@@ -17302,25 +17302,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return constraint && (isGenericObjectType(constraint) || isGenericIndexType(constraint)) ? cloneTypeParameter(p) : p;
     }
 
-    function isTypicalNondistributiveConditional(root: ConditionalRoot) {
-        return !root.isDistributive && isSingletonTupleType(root.node.checkType) && isSingletonTupleType(root.node.extendsType);
+    function isSimpleTupleType(node: TypeNode) {
+        return isTupleTypeNode(node) && length(node.elements) > 0 &&
+            !some(node.elements, e => isOptionalTypeNode(e) || isRestTypeNode(e) || isNamedTupleMember(e) && !!(e.questionToken || e.dotDotDotToken));
     }
 
-    function isSingletonTupleType(node: TypeNode) {
-        return isTupleTypeNode(node) &&
-            length(node.elements) === 1 &&
-            !isOptionalTypeNode(node.elements[0]) &&
-            !isRestTypeNode(node.elements[0]) &&
-            !(isNamedTupleMember(node.elements[0]) && (node.elements[0].questionToken || node.elements[0].dotDotDotToken));
-    }
-
-    /**
-     * We syntactually check for common nondistributive conditional shapes and unwrap them into
-     * the intended comparison - we do this so we can check if the unwrapped types are generic or
-     * not and appropriately defer condition calculation
-     */
-    function unwrapNondistributiveConditionalTuple(root: ConditionalRoot, type: Type) {
-        return isTypicalNondistributiveConditional(root) && isTupleType(type) ? getTypeArguments(type)[0] : type;
+    function isDeferredType(type: Type, checkTuples: boolean) {
+        return isGenericType(type) || checkTuples && isTupleType(type) && some(getTypeArguments(type), isGenericType);
     }
 
     function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined, aliasSymbol?: Symbol, aliasTypeArguments?: readonly Type[]): Type {
@@ -17338,10 +17326,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 result = errorType;
                 break;
             }
-            const isUnwrapped = isTypicalNondistributiveConditional(root);
-            const checkType = instantiateType(unwrapNondistributiveConditionalTuple(root, getActualTypeVariable(root.checkType)), mapper);
-            const checkTypeInstantiable = isGenericType(checkType);
-            const extendsType = instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), mapper);
+            // When the check and extends types are simple tuple types of the same arity, we defer resolution of the
+            // conditional type when any tuple elements are generic. This is such that non-distributable conditional
+            // types can be written `[X] extends [Y] ? ...` and be deferred similarly to `X extends Y ? ...`.
+            const checkTuples = isSimpleTupleType(root.node.checkType) && isSimpleTupleType(root.node.extendsType) &&
+                length((root.node.checkType as TupleTypeNode).elements) === length((root.node.extendsType as TupleTypeNode).elements);
+            const checkType = instantiateType(getActualTypeVariable(root.checkType), mapper);
+            const checkTypeDeferred = isDeferredType(checkType, checkTuples);
+            const extendsType = instantiateType(root.extendsType, mapper);
             if (checkType === wildcardType || extendsType === wildcardType) {
                 return wildcardType;
             }
@@ -17375,7 +17367,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         }
                     }
                 }
-                if (!checkTypeInstantiable) {
+                if (!checkTypeDeferred) {
                     // We don't want inferences from constraints as they may cause us to eagerly resolve the
                     // conditional type instead of deferring resolution. Also, we always want strict function
                     // types rules (i.e. proper contravariance) for inferences.
@@ -17388,16 +17380,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 combinedMapper = mapper ? combineTypeMappers(innerMapper, mapper) : innerMapper;
             }
             // Instantiate the extends type including inferences for 'infer T' type parameters
-            const inferredExtendsType = combinedMapper ? instantiateType(unwrapNondistributiveConditionalTuple(root, root.extendsType), combinedMapper) : extendsType;
+            const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
             // We attempt to resolve the conditional type only when the check and extends types are non-generic
-            if (!checkTypeInstantiable && !isGenericType(inferredExtendsType)) {
+            if (!checkTypeDeferred && !isDeferredType(inferredExtendsType, checkTuples)) {
                 // Return falseType for a definitely false extends check. We check an instantiations of the two
                 // types with type parameters mapped to the wildcard type, the most permissive instantiations
                 // possible (the wildcard type is assignable to and from all types). If those are not related,
                 // then no instantiations will be and we can just return the false branch type.
-                if (!(inferredExtendsType.flags & TypeFlags.AnyOrUnknown) && ((checkType.flags & TypeFlags.Any && !isUnwrapped) || !isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType)))) {
+                if (!(inferredExtendsType.flags & TypeFlags.AnyOrUnknown) && (checkType.flags & TypeFlags.Any || !isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType)))) {
                     // Return union of trueType and falseType for 'any' since it matches anything
-                    if (checkType.flags & TypeFlags.Any && !isUnwrapped) {
+                    if (checkType.flags & TypeFlags.Any) {
                         (extraTypes || (extraTypes = [])).push(instantiateType(getTypeFromTypeNode(root.node.trueType), combinedMapper || mapper));
                     }
                     // If falseType is an immediately nested conditional type that isn't distributive or has an
