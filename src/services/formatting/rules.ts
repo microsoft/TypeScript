@@ -57,7 +57,11 @@ export function getAllRules(): RuleSpec[] {
     const anyTokenIncludingEOF = tokenRangeFrom([...allTokens, SyntaxKind.EndOfFileToken]);
     const keywords = tokenRangeFromRange(SyntaxKind.FirstKeyword, SyntaxKind.LastKeyword);
     const binaryOperators = tokenRangeFromRange(SyntaxKind.FirstBinaryOperator, SyntaxKind.LastBinaryOperator);
-    const binaryKeywordOperators = [SyntaxKind.InKeyword, SyntaxKind.InstanceOfKeyword, SyntaxKind.OfKeyword, SyntaxKind.AsKeyword, SyntaxKind.IsKeyword];
+    const binaryKeywordOperators = [
+        SyntaxKind.InKeyword, SyntaxKind.InstanceOfKeyword,
+        SyntaxKind.OfKeyword, SyntaxKind.AsKeyword,
+        SyntaxKind.IsKeyword, SyntaxKind.SatisfiesKeyword,
+    ];
     const unaryPrefixOperators = [SyntaxKind.PlusPlusToken, SyntaxKind.MinusMinusToken, SyntaxKind.TildeToken, SyntaxKind.ExclamationToken];
     const unaryPrefixExpressions = [
         SyntaxKind.NumericLiteral, SyntaxKind.BigIntLiteral, SyntaxKind.Identifier, SyntaxKind.OpenParenToken,
