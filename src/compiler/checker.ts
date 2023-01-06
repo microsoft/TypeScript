@@ -181,6 +181,7 @@ import {
     first,
     firstDefined,
     firstOrUndefined,
+    firstOrUndefinedIterator,
     flatMap,
     flatten,
     FlowArrayMutation,
@@ -259,7 +260,6 @@ import {
     getEmitScriptTarget,
     getEnclosingBlockScopeContainer,
     getEntityNameFromTypeNode,
-    getEntries,
     getErrorSpanForNode,
     getEscapedTextOfIdentifierOrLiteral,
     getESModuleInterop,
@@ -347,8 +347,8 @@ import {
     hasAccessorModifier,
     hasAmbientModifier,
     hasContextSensitiveParameters,
-    hasDecorators,
     HasDecorators,
+    hasDecorators,
     hasDynamicName,
     hasEffectiveModifier,
     hasEffectiveModifiers,
@@ -357,8 +357,8 @@ import {
     hasExtension,
     HasIllegalDecorators,
     HasIllegalModifiers,
-    hasInitializer,
     HasInitializer,
+    hasInitializer,
     hasJSDocNodes,
     hasJSDocParameterTags,
     hasJsonModuleEmitEnabled,
@@ -926,7 +926,6 @@ import {
     stripQuotes,
     StructuredType,
     SubstitutionType,
-    sum,
     SuperCall,
     SwitchStatement,
     Symbol,
@@ -1180,7 +1179,7 @@ export const enum TypeFacts {
     AndFactsMask = All & ~OrFactsMask,
 }
 
-const typeofNEFacts: ReadonlyMap<string, TypeFacts> = new Map(getEntries({
+const typeofNEFacts: ReadonlyMap<string, TypeFacts> = new Map(Object.entries({
     string: TypeFacts.TypeofNEString,
     number: TypeFacts.TypeofNENumber,
     bigint: TypeFacts.TypeofNEBigInt,
@@ -1301,7 +1300,7 @@ const enum IntrinsicTypeKind {
     Uncapitalize
 }
 
-const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(getEntries({
+const intrinsicTypeKinds: ReadonlyMap<string, IntrinsicTypeKind> = new Map(Object.entries({
     Uppercase: IntrinsicTypeKind.Uppercase,
     Lowercase: IntrinsicTypeKind.Lowercase,
     Capitalize: IntrinsicTypeKind.Capitalize,
@@ -1436,9 +1435,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // extra cost of calling `getParseTreeNode` when calling these functions from inside the
     // checker.
     const checker: TypeChecker = {
-        getNodeCount: () => sum(host.getSourceFiles(), "nodeCount"),
-        getIdentifierCount: () => sum(host.getSourceFiles(), "identifierCount"),
-        getSymbolCount: () => sum(host.getSourceFiles(), "symbolCount") + symbolCount,
+        getNodeCount: () => reduceLeft(host.getSourceFiles(), (n, s) => n + s.nodeCount, 0),
+        getIdentifierCount: () => reduceLeft(host.getSourceFiles(), (n, s) => n + s.identifierCount, 0),
+        getSymbolCount: () => reduceLeft(host.getSourceFiles(), (n, s) => n + s.symbolCount, symbolCount),
         getTypeCount: () => typeCount,
         getInstantiationCount: () => totalInstantiationCount,
         getRelationCacheSizes: () => ({
@@ -13649,7 +13648,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             isUnion &&
             (propSet || checkFlags & CheckFlags.Partial) &&
             checkFlags & (CheckFlags.ContainsPrivate | CheckFlags.ContainsProtected) &&
-            !(propSet && getCommonDeclarationsOfSymbols(arrayFrom(propSet.values())))
+            !(propSet && getCommonDeclarationsOfSymbols(propSet.values()))
         ) {
             // No property was found, or, in a union, a property has a private or protected declaration in one
             // constituent, but is missing or has a different declaration in another constituent.
@@ -13757,7 +13756,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return property;
     }
 
-    function getCommonDeclarationsOfSymbols(symbols: readonly Symbol[]) {
+    function getCommonDeclarationsOfSymbols(symbols: Iterable<Symbol>) {
         let commonDeclarations: Set<Node> | undefined;
         for (const symbol of symbols) {
             if (!symbol.declarations) {
@@ -19009,8 +19008,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     ) {
         // Assignability failure - check each prop individually, and if that fails, fall back on the bad error span
         let reportedError = false;
-        for (let status = iterator.next(); !status.done; status = iterator.next()) {
-            const { errorNode: prop, innerExpression: next, nameType, errorMessage } = status.value;
+        for (const value of iterator) {
+            const { errorNode: prop, innerExpression: next, nameType, errorMessage } = value;
             let targetPropType = getBestMatchIndexedAccessTypeOrUndefined(source, target, nameType);
             if (!targetPropType || targetPropType.flags & TypeFlags.IndexedAccess) continue; // Don't elaborate on indexes on generic variables
             let sourcePropType = getIndexedAccessTypeOrUndefined(source, nameType);
@@ -23563,8 +23562,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): Symbol | undefined {
-        const result = getUnmatchedProperties(source, target, requireOptionalProperties, matchDiscriminantProperties).next();
-        if (!result.done) return result.value;
+        return firstOrUndefinedIterator(getUnmatchedProperties(source, target, requireOptionalProperties, matchDiscriminantProperties));
     }
 
     function tupleTypesDefinitelyUnrelated(source: TupleTypeReference, target: TupleTypeReference) {

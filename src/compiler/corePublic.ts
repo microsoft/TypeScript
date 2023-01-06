@@ -31,7 +31,7 @@ export interface SortedArray<T> extends Array<T> {
 export interface ReadonlyCollection<K> {
     readonly size: number;
     has(key: K): boolean;
-    keys(): Iterator<K>;
+    keys(): IterableIterator<K>;
 }
 
 /**
