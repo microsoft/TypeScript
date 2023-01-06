@@ -603,6 +603,7 @@ import {
     isNewExpression,
     isNightly,
     isNodeDescendantOf,
+    isNonNullAccess,
     isNullishCoalesce,
     isNumericLiteral,
     isNumericLiteralName,
@@ -26299,7 +26300,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (propName === undefined) {
                 return type;
             }
-            const removeNullable = strictNullChecks && isOptionalChain(access) && maybeTypeOfKind(type, TypeFlags.Nullable);
+            const removeNullable = strictNullChecks && (isOptionalChain(access) || isNonNullAccess(access)) && maybeTypeOfKind(type, TypeFlags.Nullable);
             let propType = getTypeOfPropertyOfType(removeNullable ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type, propName);
             if (!propType) {
                 return type;
