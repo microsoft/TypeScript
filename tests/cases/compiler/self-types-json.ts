@@ -13,7 +13,7 @@ let t4: Json = {
 let t5: Json = {
   toJSON: () => "hello"
 }
-let t6: Json = new Map()
+let t6: Json = new Map() // TODO: fourslash doesn't seem to include Map
 let t7: Json = ["hello", undefined]
 let t8: Json = ["hello", undefined] as [string, undefined]
 let t9: Json<"AllowUndefined"> = ["hello", undefined]

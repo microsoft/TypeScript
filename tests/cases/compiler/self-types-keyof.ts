@@ -14,7 +14,7 @@ declare const get:
   <T, K extends KeyOf<T>>(t: T, k: K) =>
     T extends { [_ in K]: infer X } ? X : never
 
-let t3: number = get({ a: 10 }, "a" as "a")
-// TODO?: this should compile
+let t3: number = get({ a: 10 }, "a")
+let t4 = get({ a: 10 }, "b")
 
 export {}

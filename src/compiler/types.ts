@@ -6030,7 +6030,7 @@ export const TypeFlags = new class TypeFlags {
     TemplateLiteral = 1n << 27n;  // Template literal type
     StringMapping   = 1n << 28n;  // Uppercase/Lowercase type
     Self            = 1n << 29n;
-    ContainsSelf    = 1n << 30n;
+    Selfed          = 1n << 30n;
     NeverWithError  = 1n << 31n;
     Print           = 1n << 32n;
 
@@ -6064,7 +6064,7 @@ export const TypeFlags = new class TypeFlags {
     UnionOrIntersection = this.Union | this.Intersection;
     StructuredType = this.Object | this.Union | this.Intersection;
     TypeVariable = this.TypeParameter | this.IndexedAccess;
-    InstantiableNonPrimitive = this.TypeVariable | this.Conditional | this.Substitution | this.NeverWithError;
+    InstantiableNonPrimitive = this.TypeVariable | this.Conditional | this.Substitution | this.Selfed | this.NeverWithError;
     InstantiablePrimitive = this.Index | this.TemplateLiteral | this.StringMapping | this.Print;
     Instantiable = this.InstantiableNonPrimitive | this.InstantiablePrimitive;
     StructuredOrInstantiable = this.StructuredType | this.Instantiable;
@@ -6610,6 +6610,12 @@ export interface SubstitutionType extends InstantiableType {
     objectFlags: ObjectFlags;
     baseType: Type;    // Target type
     constraint: Type;  // Constraint that target type is known to satisfy
+}
+
+export interface SelfedType extends InstantiableType {
+    type: Type
+    selfType: Type
+    instantiations: Map<string, Type>
 }
 
 export interface NeverWithErrorType extends InstantiableType, IntrinsicType {
