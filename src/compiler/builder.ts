@@ -66,7 +66,6 @@ import {
     Program,
     ProjectReference,
     ReadBuildProgramHost,
-    ReadonlyCollection,
     returnFalse,
     returnUndefined,
     SemanticDiagnosticsBuilderProgram,
@@ -277,7 +276,7 @@ export function getPendingEmitKind(optionsOrEmitKind: CompilerOptions | BuilderF
     return result;
 }
 
-function hasSameKeys(map1: ReadonlyCollection<string> | undefined, map2: ReadonlyCollection<string> | undefined): boolean {
+function hasSameKeys(map1: ReadonlyMap<string, unknown> | ReadonlySet<string> | undefined, map2: ReadonlyMap<string, unknown> | ReadonlySet<string> | undefined): boolean {
     // Has same size and every key is present in both maps
     return map1 === map2 || map1 !== undefined && map2 !== undefined && map1.size === map2.size && !forEachKey(map1, key => !map2.has(key));
 }

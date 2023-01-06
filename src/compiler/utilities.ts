@@ -425,7 +425,6 @@ import {
     PropertySignature,
     PseudoBigInt,
     QualifiedName,
-    ReadonlyCollection,
     ReadonlyTextRange,
     removeTrailingDirectorySeparator,
     RequireOrImportCall,
@@ -670,7 +669,7 @@ export function forEachEntry<K, V, U>(map: ReadonlyMap<K, V>, callback: (value: 
  *
  * @internal
  */
-export function forEachKey<K, T>(map: ReadonlyCollection<K>, callback: (key: K) => T | undefined): T | undefined {
+export function forEachKey<K, T>(map: ReadonlyMap<K, unknown> | ReadonlySet<K>, callback: (key: K) => T | undefined): T | undefined {
     const iterator = map.keys();
     for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
         const result = callback(iterResult.value);

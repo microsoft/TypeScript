@@ -24,27 +24,6 @@ export interface SortedArray<T> extends Array<T> {
 }
 
 /**
- * Common read methods for ES6 Map/Set.
- *
- * @internal
- */
-export interface ReadonlyCollection<K> {
-    readonly size: number;
-    has(key: K): boolean;
-    keys(): Iterator<K>;
-}
-
-/**
- * Common write methods for ES6 Map/Set.
- *
- * @internal
- */
-export interface Collection<K> extends ReadonlyCollection<K> {
-    delete(key: K): boolean;
-    clear(): void;
-}
-
-/**
  * Array that is only intended to be pushed to, never read.
  *
  * @internal
