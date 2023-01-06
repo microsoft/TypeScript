@@ -704,8 +704,7 @@ function verifyTscEditDiscrepancies({
         computeDtsSignatures: true,
     });
     let headerAdded = false;
-    // TODO(jakebailey): redundant?
-    for (const outputFile of ts.arrayFrom(sys.writtenFiles.keys())) {
+    for (const outputFile of sys.writtenFiles.keys()) {
         const cleanBuildText = sys.readFile(outputFile);
         const incrementalBuildText = newSys.readFile(outputFile);
         if (ts.isBuildInfoFile(outputFile)) {

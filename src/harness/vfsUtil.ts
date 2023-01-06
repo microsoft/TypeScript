@@ -1605,8 +1605,7 @@ function* iteratePatchWorker(dirname: string, container: FileSet): IterableItera
         const entry = normalizeFileSetEntry(container[name]);
         const file = dirname ? vpath.combine(dirname, name) : name;
         if (entry instanceof Directory) {
-            // TODO(jakebailey): redundant?
-            yield* ts.arrayFrom(iteratePatchWorker(file, entry.files));
+            yield* iteratePatchWorker(file, entry.files);
         }
         else if (entry instanceof File) {
             const content = typeof entry.data === "string" ? entry.data : entry.data.toString("utf8");
