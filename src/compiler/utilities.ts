@@ -7317,6 +7317,12 @@ function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: num
     (this as Identifier).flowNode = undefined;
 }
 
+Object.defineProperty(Identifier.prototype, "originalKeywordKind" satisfies keyof Identifier, {
+    get(this: Identifier) {
+        return stringToToken(this.escapedText as string);
+    }
+});
+
 function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
     this.fileName = fileName;
     this.text = text;

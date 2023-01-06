@@ -1685,6 +1685,9 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
     isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
     /** @internal */ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
     /** @internal */ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
+    /**
+     * @deprecated `originalKeywordKind` will be removed in the future.
+     */ readonly originalKeywordKind?: SyntaxKind;
     /**@internal*/ hasExtendedUnicodeEscape?: boolean;
 }
 
