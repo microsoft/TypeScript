@@ -1,0 +1,90 @@
+tests/cases/compiler/self-types-ryan.ts(24,11): error TS18051: Type '"Acept"' is not assignable to type 'CaseInsensitive<"Set-Cookie" | "Accept">'
+  Type 'Lowercase<"Acept">' is not assignable to 'Lowercase<"Set-Cookie" | "Accept">'
+    Type '"acept"' is not assignable to '"set-cookie" | "accept"'
+tests/cases/compiler/self-types-ryan.ts(38,10): error TS18051: Type '"XYZ"' is not assignable to type 'CaseInsensitive<"bar">'
+  Type 'Lowercase<"XYZ">' is not assignable to 'Lowercase<"bar">'
+    Type '"xyz"' is not assignable to '"bar"'
+tests/cases/compiler/self-types-ryan.ts(42,7): error TS2322: Type 'CaseInsensitive<T>' is not assignable to type 'AnyString1<T>'.
+  Type 'T | (Lowercase<self> extends Lowercase<T> ? self : never)' is not assignable to type 'AnyString1<T>'.
+    Type 'T' is not assignable to type 'AnyString1<T>'.
+      Type 'string' is not assignable to type 'AnyString1<T>'.
+tests/cases/compiler/self-types-ryan.ts(43,7): error TS2322: Type 'string' is not assignable to type 'T'.
+  'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
+tests/cases/compiler/self-types-ryan.ts(48,7): error TS2322: Type 'CaseInsensitive<T>' is not assignable to type 'AnyString2'.
+  Type 'T | (Lowercase<self> extends Lowercase<T> ? self : never)' is not assignable to type 'AnyString2'.
+    Type 'T' is not assignable to type 'AnyString2'.
+      Type 'string' is not assignable to type 'AnyString2'.
+
+
+==== tests/cases/compiler/self-types-ryan.ts (5 errors) ====
+    type CaseInsensitive<T extends string> =
+      self extends string
+        ? Lowercase<self> extends Lowercase<T>
+            ? self
+            : Never<[
+              `Type '${Print<self>}' is not assignable to type 'CaseInsensitive<${Print<T>}>'`,
+              `Type 'Lowercase<${Print<self>}>' is not assignable to 'Lowercase<${Print<T>}>'`,
+              `Type '${Print<Lowercase<self>>}' is not assignable to '${Print<Lowercase<T>>}'`
+            ]>
+        : T
+    
+    type Box<T> = { value: T };
+    type Fooish = CaseInsensitive<"Foo">;
+    const x1: CaseInsensitive<"Foo"> = "FOO";
+    const x2: Fooish = "FOO";
+    const x3: Box<CaseInsensitive<"Foo">> = { value: "FOO" };
+    const x4: Box<Fooish> = { value: "FOO" };
+    
+    type HeaderNames = CaseInsensitive<"Set-Cookie" | "Accept">;
+    declare const setHeader: (key: HeaderNames, value: string) => void
+    setHeader("Set-Cookie", "test")
+    setHeader("Accept", "test2")
+    setHeader("sEt-cOoKiE", "stop writing headers like this but ok")
+    setHeader("Acept", "nah this has a typo")
+              ~~~~~~~
+!!! error TS18051: Type '"Acept"' is not assignable to type 'CaseInsensitive<"Set-Cookie" | "Accept">'
+!!! error TS18051:   Type 'Lowercase<"Acept">' is not assignable to 'Lowercase<"Set-Cookie" | "Accept">'
+!!! error TS18051:     Type '"acept"' is not assignable to '"set-cookie" | "accept"'
+    
+    type DistributeCaseInsensitive<T extends string> = T extends unknown ? CaseInsensitive<T> : never;
+    let m: DistributeCaseInsensitive<"A" | "B"> = "a"
+    
+    type BarIfFoo<T> = 
+      T extends "foo"
+        ? CaseInsensitive<"bar">
+        : never
+    
+    declare const f:
+      <T extends string>(x: T, y: BarIfFoo<T>) => void
+    
+    f("foo", "BAR")
+    f("foo", "XYZ")
+             ~~~~~
+!!! error TS18051: Type '"XYZ"' is not assignable to type 'CaseInsensitive<"bar">'
+!!! error TS18051:   Type 'Lowercase<"XYZ">' is not assignable to 'Lowercase<"bar">'
+!!! error TS18051:     Type '"xyz"' is not assignable to '"bar"'
+    
+    type AnyString1<T> = self extends string ? T : never;
+    function foo1<T extends string>(a: CaseInsensitive<T>) {
+      let m: AnyString1<T> = a;
+          ~
+!!! error TS2322: Type 'CaseInsensitive<T>' is not assignable to type 'AnyString1<T>'.
+!!! error TS2322:   Type 'T | (Lowercase<self> extends Lowercase<T> ? self : never)' is not assignable to type 'AnyString1<T>'.
+!!! error TS2322:     Type 'T' is not assignable to type 'AnyString1<T>'.
+!!! error TS2322:       Type 'string' is not assignable to type 'AnyString1<T>'.
+      let n: AnyString1<T> = {} as string;
+          ~
+!!! error TS2322: Type 'string' is not assignable to type 'T'.
+!!! error TS2322:   'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
+    }
+    
+    type AnyString2 = self extends string ? self : never;
+    function foo2<T extends string>(a: CaseInsensitive<T>) {
+      let m: AnyString2 = a; // TODO?: this should probably compile
+          ~
+!!! error TS2322: Type 'CaseInsensitive<T>' is not assignable to type 'AnyString2'.
+!!! error TS2322:   Type 'T | (Lowercase<self> extends Lowercase<T> ? self : never)' is not assignable to type 'AnyString2'.
+!!! error TS2322:     Type 'T' is not assignable to type 'AnyString2'.
+!!! error TS2322:       Type 'string' is not assignable to type 'AnyString2'.
+      let n: AnyString2 = {} as string;
+    }

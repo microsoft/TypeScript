@@ -15,8 +15,8 @@ declare const get:
   <T, K extends KeyOf<T>>(t: T, k: K) =>
     T extends { [_ in K]: infer X } ? X : never
 
-let t3: number = get({ a: 10 }, "a" as "a")
-// TODO?: this should compile
+let t3: number = get({ a: 10 }, "a")
+let t4 = get({ a: 10 }, "b")
 
 export {}
 
@@ -28,3 +28,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var t0 = "a";
 var t1 = "b";
 var t3 = get({ a: 10 }, "a");
+var t4 = get({ a: 10 }, "b");

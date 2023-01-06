@@ -42,7 +42,7 @@ let t5: Json = {
   toJSON: () => "hello"
 >toJSON : Symbol(toJSON, Decl(self-types-json.ts, 12, 16))
 }
-let t6: Json = new Map()
+let t6: Json = new Map() // TODO: fourslash doesn't seem to include Map
 >t6 : Symbol(t6, Decl(self-types-json.ts, 15, 3))
 >Json : Symbol(Json, Decl(self-types-json.ts, 18, 53))
 

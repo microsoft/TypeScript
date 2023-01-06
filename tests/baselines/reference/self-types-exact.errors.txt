@@ -28,17 +28,23 @@ tests/cases/compiler/self-types-exact.ts(3,3): error TS2345: Argument of type '(
 !!! error TS2345:     The types of 'a.x' are incompatible between these types.
 !!! error TS2345:       Excess property 'x' not allowed as the target is an exact type
     
-    type Exact<T, A = self> =
+    type Exact<T> =
+      _Exact<T, self>
+    
+    // TODO: doesn't work if written as,,,
+    // type Exact<T, A = self> = ...
+    
+    type _Exact<T, A> =
       A extends T
         ? T extends unknown
             ? A extends (...a: infer Aa) => infer Ar
                 ? T extends (...a: infer Ea) => infer Er
-                    ? (...a: Exact<Ea, Aa>) => Exact<Er, Ar>
+                    ? (...a: _Exact<Ea, Aa>) => _Exact<Er, Ar>
                     : T :
               A extends object
                 ? T extends object
                     ? { [K in keyof A]:
-                          K extends keyof T ? Exact<T[K], A[K]> :
+                          K extends keyof T ? _Exact<T[K], A[K]> :
                           Never<`Excess property '${K & string}' not allowed as the target is an exact type`>
                       }
                     : T :

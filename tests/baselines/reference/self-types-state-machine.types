@@ -1,6 +1,6 @@
 === tests/cases/compiler/self-types-state-machine.ts ===
 type StateMachine =
->StateMachine : { [S in keyof self]: { [E in keyof self[S]]: keyof self; }; }
+>StateMachine : StateMachine
 
   { [S in keyof self]: { [E in keyof self[S]]: keyof self } }
 

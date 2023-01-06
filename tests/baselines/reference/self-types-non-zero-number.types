@@ -1,6 +1,6 @@
 === tests/cases/compiler/self-types-non-zero-number.ts ===
 type NonZeroNumber =
->NonZeroNumber : self extends number ? self extends 0 ? never : self : number
+>NonZeroNumber : NonZeroNumber
 
   self extends number
     ? self extends 0

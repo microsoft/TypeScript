@@ -1,6 +1,6 @@
 === tests/cases/compiler/self-types-json-simple.ts ===
 type Json =
->Json : string | number | boolean | { toJSON: () => string; } | (self extends unknown[] ? Json[] : self extends (...a: never[]) => unknown ? never : { [_ in keyof self]: Json; }) | (self extends (...a: never[]) => unknown ? never : never)
+>Json : Json
 
   | string
   | number
@@ -63,7 +63,7 @@ let t6: Json = new Map()
 
 let t7: Json = ["hello", undefined]
 >t7 : Json
->["hello", undefined] : string[]
+>["hello", undefined] : "hello"[]
 >"hello" : "hello"
 >undefined : undefined
 

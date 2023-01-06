@@ -1,6 +1,6 @@
 === tests/cases/compiler/self-types-color.ts ===
 type Color =
->Color : self extends string ? ParseColor<self> extends infer R ? R extends { error: infer E extends string; } ? never : R : never : string
+>Color : Color
 
   self extends string
     ? ParseColor<self> extends infer R

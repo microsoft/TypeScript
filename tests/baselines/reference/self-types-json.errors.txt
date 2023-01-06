@@ -1,5 +1,5 @@
 tests/cases/compiler/self-types-json.ts(7,5): error TS18051: Type 'Node' is not assignable to type 'Json', as it possibly has circular references
-tests/cases/compiler/self-types-json.ts(9,5): error TS18051: Type '() => string' is not assignable to type 'Json', as it is a function
+tests/cases/compiler/self-types-json.ts(9,16): error TS18051: Type '() => string' is not assignable to type 'Json', as it is a function
 tests/cases/compiler/self-types-json.ts(10,5): error TS18051: Type '{ x: () => string; }' is not assignable to type 'Json', as value at .x is a function
 tests/cases/compiler/self-types-json.ts(16,5): error TS18051: Type 'any' is not assignable to type 'Json', as ${any}
 tests/cases/compiler/self-types-json.ts(16,20): error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2015' or later.
@@ -18,8 +18,9 @@ tests/cases/compiler/self-types-json.ts(18,5): error TS18051: Type '[string, und
 !!! error TS18051: Type 'Node' is not assignable to type 'Json', as it possibly has circular references
     let t2: Json<"AllowPossiblyCircular"> = someNode
     let t3: Json = () => "hello"
-        ~~
+                   ~~~~~~~~~~~~~
 !!! error TS18051: Type '() => string' is not assignable to type 'Json', as it is a function
+!!! related TS6212 tests/cases/compiler/self-types-json.ts:9:16: Did you mean to call this expression?
     let t4: Json = {
         ~~
 !!! error TS18051: Type '{ x: () => string; }' is not assignable to type 'Json', as value at .x is a function
@@ -28,7 +29,7 @@ tests/cases/compiler/self-types-json.ts(18,5): error TS18051: Type '[string, und
     let t5: Json = {
       toJSON: () => "hello"
     }
-    let t6: Json = new Map()
+    let t6: Json = new Map() // TODO: fourslash doesn't seem to include Map
         ~~
 !!! error TS18051: Type 'any' is not assignable to type 'Json', as ${any}
                        ~~~

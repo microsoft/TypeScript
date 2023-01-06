@@ -49,12 +49,15 @@ declare const get:
 >X : Symbol(X, Decl(self-types-keyof.ts, 14, 31))
 >X : Symbol(X, Decl(self-types-keyof.ts, 14, 31))
 
-let t3: number = get({ a: 10 }, "a" as "a")
+let t3: number = get({ a: 10 }, "a")
 >t3 : Symbol(t3, Decl(self-types-keyof.ts, 16, 3))
 >get : Symbol(get, Decl(self-types-keyof.ts, 12, 13))
 >a : Symbol(a, Decl(self-types-keyof.ts, 16, 22))
 
-// TODO?: this should compile
+let t4 = get({ a: 10 }, "b")
+>t4 : Symbol(t4, Decl(self-types-keyof.ts, 17, 3))
+>get : Symbol(get, Decl(self-types-keyof.ts, 12, 13))
+>a : Symbol(a, Decl(self-types-keyof.ts, 17, 14))
 
 export {}
 

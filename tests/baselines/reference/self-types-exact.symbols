@@ -28,73 +28,84 @@ f(() => ({
 
 }))
 
-type Exact<T, A = self> =
+type Exact<T> =
 >Exact : Symbol(Exact, Decl(self-types-exact.ts, 9, 3))
 >T : Symbol(T, Decl(self-types-exact.ts, 11, 11))
->A : Symbol(A, Decl(self-types-exact.ts, 11, 13))
+
+  _Exact<T, self>
+>_Exact : Symbol(_Exact, Decl(self-types-exact.ts, 12, 17))
+>T : Symbol(T, Decl(self-types-exact.ts, 11, 11))
+
+// TODO: doesn't work if written as,,,
+// type Exact<T, A = self> = ...
+
+type _Exact<T, A> =
+>_Exact : Symbol(_Exact, Decl(self-types-exact.ts, 12, 17))
+>T : Symbol(T, Decl(self-types-exact.ts, 17, 12))
+>A : Symbol(A, Decl(self-types-exact.ts, 17, 14))
 
   A extends T
->A : Symbol(A, Decl(self-types-exact.ts, 11, 13))
->T : Symbol(T, Decl(self-types-exact.ts, 11, 11))
+>A : Symbol(A, Decl(self-types-exact.ts, 17, 14))
+>T : Symbol(T, Decl(self-types-exact.ts, 17, 12))
 
     ? T extends unknown
->T : Symbol(T, Decl(self-types-exact.ts, 11, 11))
+>T : Symbol(T, Decl(self-types-exact.ts, 17, 12))
 
         ? A extends (...a: infer Aa) => infer Ar
->A : Symbol(A, Decl(self-types-exact.ts, 11, 13))
->a : Symbol(a, Decl(self-types-exact.ts, 14, 21))
->Aa : Symbol(Aa, Decl(self-types-exact.ts, 14, 32))
->Ar : Symbol(Ar, Decl(self-types-exact.ts, 14, 45))
+>A : Symbol(A, Decl(self-types-exact.ts, 17, 14))
+>a : Symbol(a, Decl(self-types-exact.ts, 20, 21))
+>Aa : Symbol(Aa, Decl(self-types-exact.ts, 20, 32))
+>Ar : Symbol(Ar, Decl(self-types-exact.ts, 20, 45))
 
             ? T extends (...a: infer Ea) => infer Er
->T : Symbol(T, Decl(self-types-exact.ts, 11, 11))
->a : Symbol(a, Decl(self-types-exact.ts, 15, 25))
->Ea : Symbol(Ea, Decl(self-types-exact.ts, 15, 36))
->Er : Symbol(Er, Decl(self-types-exact.ts, 15, 49))
+>T : Symbol(T, Decl(self-types-exact.ts, 17, 12))
+>a : Symbol(a, Decl(self-types-exact.ts, 21, 25))
+>Ea : Symbol(Ea, Decl(self-types-exact.ts, 21, 36))
+>Er : Symbol(Er, Decl(self-types-exact.ts, 21, 49))
 
-                ? (...a: Exact<Ea, Aa>) => Exact<Er, Ar>
->a : Symbol(a, Decl(self-types-exact.ts, 16, 19))
->Exact : Symbol(Exact, Decl(self-types-exact.ts, 9, 3))
->Ea : Symbol(Ea, Decl(self-types-exact.ts, 15, 36))
->Aa : Symbol(Aa, Decl(self-types-exact.ts, 14, 32))
->Exact : Symbol(Exact, Decl(self-types-exact.ts, 9, 3))
->Er : Symbol(Er, Decl(self-types-exact.ts, 15, 49))
->Ar : Symbol(Ar, Decl(self-types-exact.ts, 14, 45))
+                ? (...a: _Exact<Ea, Aa>) => _Exact<Er, Ar>
+>a : Symbol(a, Decl(self-types-exact.ts, 22, 19))
+>_Exact : Symbol(_Exact, Decl(self-types-exact.ts, 12, 17))
+>Ea : Symbol(Ea, Decl(self-types-exact.ts, 21, 36))
+>Aa : Symbol(Aa, Decl(self-types-exact.ts, 20, 32))
+>_Exact : Symbol(_Exact, Decl(self-types-exact.ts, 12, 17))
+>Er : Symbol(Er, Decl(self-types-exact.ts, 21, 49))
+>Ar : Symbol(Ar, Decl(self-types-exact.ts, 20, 45))
 
                 : T :
->T : Symbol(T, Decl(self-types-exact.ts, 11, 11))
+>T : Symbol(T, Decl(self-types-exact.ts, 17, 12))
 
           A extends object
->A : Symbol(A, Decl(self-types-exact.ts, 11, 13))
+>A : Symbol(A, Decl(self-types-exact.ts, 17, 14))
 
             ? T extends object
->T : Symbol(T, Decl(self-types-exact.ts, 11, 11))
+>T : Symbol(T, Decl(self-types-exact.ts, 17, 12))
 
                 ? { [K in keyof A]:
->K : Symbol(K, Decl(self-types-exact.ts, 20, 21))
->A : Symbol(A, Decl(self-types-exact.ts, 11, 13))
+>K : Symbol(K, Decl(self-types-exact.ts, 26, 21))
+>A : Symbol(A, Decl(self-types-exact.ts, 17, 14))
 
-                      K extends keyof T ? Exact<T[K], A[K]> :
->K : Symbol(K, Decl(self-types-exact.ts, 20, 21))
->T : Symbol(T, Decl(self-types-exact.ts, 11, 11))
->Exact : Symbol(Exact, Decl(self-types-exact.ts, 9, 3))
->T : Symbol(T, Decl(self-types-exact.ts, 11, 11))
->K : Symbol(K, Decl(self-types-exact.ts, 20, 21))
->A : Symbol(A, Decl(self-types-exact.ts, 11, 13))
->K : Symbol(K, Decl(self-types-exact.ts, 20, 21))
+                      K extends keyof T ? _Exact<T[K], A[K]> :
+>K : Symbol(K, Decl(self-types-exact.ts, 26, 21))
+>T : Symbol(T, Decl(self-types-exact.ts, 17, 12))
+>_Exact : Symbol(_Exact, Decl(self-types-exact.ts, 12, 17))
+>T : Symbol(T, Decl(self-types-exact.ts, 17, 12))
+>K : Symbol(K, Decl(self-types-exact.ts, 26, 21))
+>A : Symbol(A, Decl(self-types-exact.ts, 17, 14))
+>K : Symbol(K, Decl(self-types-exact.ts, 26, 21))
 
                       Never<`Excess property '${K & string}' not allowed as the target is an exact type`>
 >Never : Symbol(Never, Decl(lib.es5.d.ts, --, --))
->K : Symbol(K, Decl(self-types-exact.ts, 20, 21))
+>K : Symbol(K, Decl(self-types-exact.ts, 26, 21))
                   }
                 : T :
->T : Symbol(T, Decl(self-types-exact.ts, 11, 11))
+>T : Symbol(T, Decl(self-types-exact.ts, 17, 12))
 
           T
->T : Symbol(T, Decl(self-types-exact.ts, 11, 11))
+>T : Symbol(T, Decl(self-types-exact.ts, 17, 12))
 
         : never
     : T
->T : Symbol(T, Decl(self-types-exact.ts, 11, 11))
+>T : Symbol(T, Decl(self-types-exact.ts, 17, 12))
 
 export {}

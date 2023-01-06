@@ -1,0 +1,171 @@
+=== tests/cases/compiler/self-types-ryan.ts ===
+type CaseInsensitive<T extends string> =
+>CaseInsensitive : Symbol(CaseInsensitive, Decl(self-types-ryan.ts, 0, 0))
+>T : Symbol(T, Decl(self-types-ryan.ts, 0, 21))
+
+  self extends string
+    ? Lowercase<self> extends Lowercase<T>
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(self-types-ryan.ts, 0, 21))
+
+        ? self
+        : Never<[
+>Never : Symbol(Never, Decl(lib.es5.d.ts, --, --))
+
+          `Type '${Print<self>}' is not assignable to type 'CaseInsensitive<${Print<T>}>'`,
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(self-types-ryan.ts, 0, 21))
+
+          `Type 'Lowercase<${Print<self>}>' is not assignable to 'Lowercase<${Print<T>}>'`,
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(self-types-ryan.ts, 0, 21))
+
+          `Type '${Print<Lowercase<self>>}' is not assignable to '${Print<Lowercase<T>>}'`
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>Print : Symbol(Print, Decl(lib.es5.d.ts, --, --))
+>Lowercase : Symbol(Lowercase, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(self-types-ryan.ts, 0, 21))
+
+        ]>
+    : T
+>T : Symbol(T, Decl(self-types-ryan.ts, 0, 21))
+
+type Box<T> = { value: T };
+>Box : Symbol(Box, Decl(self-types-ryan.ts, 9, 7))
+>T : Symbol(T, Decl(self-types-ryan.ts, 11, 9))
+>value : Symbol(value, Decl(self-types-ryan.ts, 11, 15))
+>T : Symbol(T, Decl(self-types-ryan.ts, 11, 9))
+
+type Fooish = CaseInsensitive<"Foo">;
+>Fooish : Symbol(Fooish, Decl(self-types-ryan.ts, 11, 27))
+>CaseInsensitive : Symbol(CaseInsensitive, Decl(self-types-ryan.ts, 0, 0))
+
+const x1: CaseInsensitive<"Foo"> = "FOO";
+>x1 : Symbol(x1, Decl(self-types-ryan.ts, 13, 5))
+>CaseInsensitive : Symbol(CaseInsensitive, Decl(self-types-ryan.ts, 0, 0))
+
+const x2: Fooish = "FOO";
+>x2 : Symbol(x2, Decl(self-types-ryan.ts, 14, 5))
+>Fooish : Symbol(Fooish, Decl(self-types-ryan.ts, 11, 27))
+
+const x3: Box<CaseInsensitive<"Foo">> = { value: "FOO" };
+>x3 : Symbol(x3, Decl(self-types-ryan.ts, 15, 5))
+>Box : Symbol(Box, Decl(self-types-ryan.ts, 9, 7))
+>CaseInsensitive : Symbol(CaseInsensitive, Decl(self-types-ryan.ts, 0, 0))
+>value : Symbol(value, Decl(self-types-ryan.ts, 15, 41))
+
+const x4: Box<Fooish> = { value: "FOO" };
+>x4 : Symbol(x4, Decl(self-types-ryan.ts, 16, 5))
+>Box : Symbol(Box, Decl(self-types-ryan.ts, 9, 7))
+>Fooish : Symbol(Fooish, Decl(self-types-ryan.ts, 11, 27))
+>value : Symbol(value, Decl(self-types-ryan.ts, 16, 25))
+
+type HeaderNames = CaseInsensitive<"Set-Cookie" | "Accept">;
+>HeaderNames : Symbol(HeaderNames, Decl(self-types-ryan.ts, 16, 41))
+>CaseInsensitive : Symbol(CaseInsensitive, Decl(self-types-ryan.ts, 0, 0))
+
+declare const setHeader: (key: HeaderNames, value: string) => void
+>setHeader : Symbol(setHeader, Decl(self-types-ryan.ts, 19, 13))
+>key : Symbol(key, Decl(self-types-ryan.ts, 19, 26))
+>HeaderNames : Symbol(HeaderNames, Decl(self-types-ryan.ts, 16, 41))
+>value : Symbol(value, Decl(self-types-ryan.ts, 19, 43))
+
+setHeader("Set-Cookie", "test")
+>setHeader : Symbol(setHeader, Decl(self-types-ryan.ts, 19, 13))
+
+setHeader("Accept", "test2")
+>setHeader : Symbol(setHeader, Decl(self-types-ryan.ts, 19, 13))
+
+setHeader("sEt-cOoKiE", "stop writing headers like this but ok")
+>setHeader : Symbol(setHeader, Decl(self-types-ryan.ts, 19, 13))
+
+setHeader("Acept", "nah this has a typo")
+>setHeader : Symbol(setHeader, Decl(self-types-ryan.ts, 19, 13))
+
+type DistributeCaseInsensitive<T extends string> = T extends unknown ? CaseInsensitive<T> : never;
+>DistributeCaseInsensitive : Symbol(DistributeCaseInsensitive, Decl(self-types-ryan.ts, 23, 41))
+>T : Symbol(T, Decl(self-types-ryan.ts, 25, 31))
+>T : Symbol(T, Decl(self-types-ryan.ts, 25, 31))
+>CaseInsensitive : Symbol(CaseInsensitive, Decl(self-types-ryan.ts, 0, 0))
+>T : Symbol(T, Decl(self-types-ryan.ts, 25, 31))
+
+let m: DistributeCaseInsensitive<"A" | "B"> = "a"
+>m : Symbol(m, Decl(self-types-ryan.ts, 26, 3))
+>DistributeCaseInsensitive : Symbol(DistributeCaseInsensitive, Decl(self-types-ryan.ts, 23, 41))
+
+type BarIfFoo<T> = 
+>BarIfFoo : Symbol(BarIfFoo, Decl(self-types-ryan.ts, 26, 49))
+>T : Symbol(T, Decl(self-types-ryan.ts, 28, 14))
+
+  T extends "foo"
+>T : Symbol(T, Decl(self-types-ryan.ts, 28, 14))
+
+    ? CaseInsensitive<"bar">
+>CaseInsensitive : Symbol(CaseInsensitive, Decl(self-types-ryan.ts, 0, 0))
+
+    : never
+
+declare const f:
+>f : Symbol(f, Decl(self-types-ryan.ts, 33, 13))
+
+  <T extends string>(x: T, y: BarIfFoo<T>) => void
+>T : Symbol(T, Decl(self-types-ryan.ts, 34, 3))
+>x : Symbol(x, Decl(self-types-ryan.ts, 34, 21))
+>T : Symbol(T, Decl(self-types-ryan.ts, 34, 3))
+>y : Symbol(y, Decl(self-types-ryan.ts, 34, 26))
+>BarIfFoo : Symbol(BarIfFoo, Decl(self-types-ryan.ts, 26, 49))
+>T : Symbol(T, Decl(self-types-ryan.ts, 34, 3))
+
+f("foo", "BAR")
+>f : Symbol(f, Decl(self-types-ryan.ts, 33, 13))
+
+f("foo", "XYZ")
+>f : Symbol(f, Decl(self-types-ryan.ts, 33, 13))
+
+type AnyString1<T> = self extends string ? T : never;
+>AnyString1 : Symbol(AnyString1, Decl(self-types-ryan.ts, 37, 15))
+>T : Symbol(T, Decl(self-types-ryan.ts, 39, 16))
+>T : Symbol(T, Decl(self-types-ryan.ts, 39, 16))
+
+function foo1<T extends string>(a: CaseInsensitive<T>) {
+>foo1 : Symbol(foo1, Decl(self-types-ryan.ts, 39, 53))
+>T : Symbol(T, Decl(self-types-ryan.ts, 40, 14))
+>a : Symbol(a, Decl(self-types-ryan.ts, 40, 32))
+>CaseInsensitive : Symbol(CaseInsensitive, Decl(self-types-ryan.ts, 0, 0))
+>T : Symbol(T, Decl(self-types-ryan.ts, 40, 14))
+
+  let m: AnyString1<T> = a;
+>m : Symbol(m, Decl(self-types-ryan.ts, 41, 5))
+>AnyString1 : Symbol(AnyString1, Decl(self-types-ryan.ts, 37, 15))
+>T : Symbol(T, Decl(self-types-ryan.ts, 40, 14))
+>a : Symbol(a, Decl(self-types-ryan.ts, 40, 32))
+
+  let n: AnyString1<T> = {} as string;
+>n : Symbol(n, Decl(self-types-ryan.ts, 42, 5))
+>AnyString1 : Symbol(AnyString1, Decl(self-types-ryan.ts, 37, 15))
+>T : Symbol(T, Decl(self-types-ryan.ts, 40, 14))
+}
+
+type AnyString2 = self extends string ? self : never;
+>AnyString2 : Symbol(AnyString2, Decl(self-types-ryan.ts, 43, 1))
+
+function foo2<T extends string>(a: CaseInsensitive<T>) {
+>foo2 : Symbol(foo2, Decl(self-types-ryan.ts, 45, 53))
+>T : Symbol(T, Decl(self-types-ryan.ts, 46, 14))
+>a : Symbol(a, Decl(self-types-ryan.ts, 46, 32))
+>CaseInsensitive : Symbol(CaseInsensitive, Decl(self-types-ryan.ts, 0, 0))
+>T : Symbol(T, Decl(self-types-ryan.ts, 46, 14))
+
+  let m: AnyString2 = a; // TODO?: this should probably compile
+>m : Symbol(m, Decl(self-types-ryan.ts, 47, 5))
+>AnyString2 : Symbol(AnyString2, Decl(self-types-ryan.ts, 43, 1))
+>a : Symbol(a, Decl(self-types-ryan.ts, 46, 32))
+
+  let n: AnyString2 = {} as string;
+>n : Symbol(n, Decl(self-types-ryan.ts, 48, 5))
+>AnyString2 : Symbol(AnyString2, Decl(self-types-ryan.ts, 43, 1))
+}

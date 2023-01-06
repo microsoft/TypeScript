@@ -1,0 +1,139 @@
+=== tests/cases/compiler/self-types-ryan.ts ===
+type CaseInsensitive<T extends string> =
+>CaseInsensitive : CaseInsensitive<T>
+
+  self extends string
+    ? Lowercase<self> extends Lowercase<T>
+        ? self
+        : Never<[
+          `Type '${Print<self>}' is not assignable to type 'CaseInsensitive<${Print<T>}>'`,
+          `Type 'Lowercase<${Print<self>}>' is not assignable to 'Lowercase<${Print<T>}>'`,
+          `Type '${Print<Lowercase<self>>}' is not assignable to '${Print<Lowercase<T>>}'`
+        ]>
+    : T
+
+type Box<T> = { value: T };
+>Box : Box<T>
+>value : T
+
+type Fooish = CaseInsensitive<"Foo">;
+>Fooish : CaseInsensitive<"Foo">
+
+const x1: CaseInsensitive<"Foo"> = "FOO";
+>x1 : CaseInsensitive<"Foo">
+>"FOO" : "FOO"
+
+const x2: Fooish = "FOO";
+>x2 : CaseInsensitive<"Foo">
+>"FOO" : "FOO"
+
+const x3: Box<CaseInsensitive<"Foo">> = { value: "FOO" };
+>x3 : Box<CaseInsensitive<"Foo">>
+>{ value: "FOO" } : { value: "FOO"; }
+>value : "FOO"
+>"FOO" : "FOO"
+
+const x4: Box<Fooish> = { value: "FOO" };
+>x4 : Box<CaseInsensitive<"Foo">>
+>{ value: "FOO" } : { value: "FOO"; }
+>value : "FOO"
+>"FOO" : "FOO"
+
+type HeaderNames = CaseInsensitive<"Set-Cookie" | "Accept">;
+>HeaderNames : CaseInsensitive<"Set-Cookie" | "Accept">
+
+declare const setHeader: (key: HeaderNames, value: string) => void
+>setHeader : (key: HeaderNames, value: string) => void
+>key : CaseInsensitive<"Set-Cookie" | "Accept">
+>value : string
+
+setHeader("Set-Cookie", "test")
+>setHeader("Set-Cookie", "test") : void
+>setHeader : (key: CaseInsensitive<"Set-Cookie" | "Accept">, value: string) => void
+>"Set-Cookie" : "Set-Cookie"
+>"test" : "test"
+
+setHeader("Accept", "test2")
+>setHeader("Accept", "test2") : void
+>setHeader : (key: CaseInsensitive<"Set-Cookie" | "Accept">, value: string) => void
+>"Accept" : "Accept"
+>"test2" : "test2"
+
+setHeader("sEt-cOoKiE", "stop writing headers like this but ok")
+>setHeader("sEt-cOoKiE", "stop writing headers like this but ok") : void
+>setHeader : (key: CaseInsensitive<"Set-Cookie" | "Accept">, value: string) => void
+>"sEt-cOoKiE" : "sEt-cOoKiE"
+>"stop writing headers like this but ok" : "stop writing headers like this but ok"
+
+setHeader("Acept", "nah this has a typo")
+>setHeader("Acept", "nah this has a typo") : void
+>setHeader : (key: CaseInsensitive<"Set-Cookie" | "Accept">, value: string) => void
+>"Acept" : "Acept"
+>"nah this has a typo" : "nah this has a typo"
+
+type DistributeCaseInsensitive<T extends string> = T extends unknown ? CaseInsensitive<T> : never;
+>DistributeCaseInsensitive : DistributeCaseInsensitive<T>
+
+let m: DistributeCaseInsensitive<"A" | "B"> = "a"
+>m : CaseInsensitive<"A"> | CaseInsensitive<"B">
+>"a" : "a"
+
+type BarIfFoo<T> = 
+>BarIfFoo : BarIfFoo<T>
+
+  T extends "foo"
+    ? CaseInsensitive<"bar">
+    : never
+
+declare const f:
+>f : <T extends string>(x: T, y: BarIfFoo<T>) => void
+
+  <T extends string>(x: T, y: BarIfFoo<T>) => void
+>x : T
+>y : BarIfFoo<T>
+
+f("foo", "BAR")
+>f("foo", "BAR") : void
+>f : <T extends string>(x: T, y: BarIfFoo<T>) => void
+>"foo" : "foo"
+>"BAR" : "BAR"
+
+f("foo", "XYZ")
+>f("foo", "XYZ") : void
+>f : <T extends string>(x: T, y: BarIfFoo<T>) => void
+>"foo" : "foo"
+>"XYZ" : "XYZ"
+
+type AnyString1<T> = self extends string ? T : never;
+>AnyString1 : AnyString1<T>
+
+function foo1<T extends string>(a: CaseInsensitive<T>) {
+>foo1 : <T extends string>(a: CaseInsensitive<T>) => void
+>a : CaseInsensitive<T>
+
+  let m: AnyString1<T> = a;
+>m : AnyString1<T>
+>a : CaseInsensitive<T>
+
+  let n: AnyString1<T> = {} as string;
+>n : AnyString1<T>
+>{} as string : string
+>{} : {}
+}
+
+type AnyString2 = self extends string ? self : never;
+>AnyString2 : AnyString2
+
+function foo2<T extends string>(a: CaseInsensitive<T>) {
+>foo2 : <T extends string>(a: CaseInsensitive<T>) => void
+>a : CaseInsensitive<T>
+
+  let m: AnyString2 = a; // TODO?: this should probably compile
+>m : AnyString2
+>a : CaseInsensitive<T>
+
+  let n: AnyString2 = {} as string;
+>n : AnyString2
+>{} as string : string
+>{} : {}
+}

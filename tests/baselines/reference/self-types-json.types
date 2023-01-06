@@ -42,7 +42,7 @@ let t5: Json = {
 >() => "hello" : () => string
 >"hello" : "hello"
 }
-let t6: Json = new Map()
+let t6: Json = new Map() // TODO: fourslash doesn't seem to include Map
 >t6 : Json<never>
 >new Map() : any
 >Map : any

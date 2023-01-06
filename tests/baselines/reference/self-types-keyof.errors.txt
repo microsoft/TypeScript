@@ -1,10 +1,8 @@
 tests/cases/compiler/self-types-keyof.ts(11,5): error TS18051: Type '"b"' can't be used to index type '{ a: number; }'
-tests/cases/compiler/self-types-keyof.ts(17,5): error TS2322: Type '{ a: number; } extends { [_ in KeyOf<{ a: number; }>]: infer X; } ? X : never' is not assignable to type 'number'.
-  Type 'unknown' is not assignable to type 'number'.
-tests/cases/compiler/self-types-keyof.ts(17,33): error TS2345: Argument of type 'string' is not assignable to parameter of type 'KeyOf<{ a: number; }>'.
+tests/cases/compiler/self-types-keyof.ts(18,25): error TS18051: Type '"b"' can't be used to index type '{ a: number; }'
 
 
-==== tests/cases/compiler/self-types-keyof.ts (3 errors) ====
+==== tests/cases/compiler/self-types-keyof.ts (2 errors) ====
     // Implementing index types without index types
     
     type KeyOf<T> =
@@ -23,13 +21,10 @@ tests/cases/compiler/self-types-keyof.ts(17,33): error TS2345: Argument of type 
       <T, K extends KeyOf<T>>(t: T, k: K) =>
         T extends { [_ in K]: infer X } ? X : never
     
-    let t3: number = get({ a: 10 }, "a" as "a")
-        ~~
-!!! error TS2322: Type '{ a: number; } extends { [_ in KeyOf<{ a: number; }>]: infer X; } ? X : never' is not assignable to type 'number'.
-!!! error TS2322:   Type 'unknown' is not assignable to type 'number'.
-                                    ~~~~~~~~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'KeyOf<{ a: number; }>'.
-    // TODO?: this should compile
+    let t3: number = get({ a: 10 }, "a")
+    let t4 = get({ a: 10 }, "b")
+                            ~~~
+!!! error TS18051: Type '"b"' can't be used to index type '{ a: number; }'
     
     export {}
     

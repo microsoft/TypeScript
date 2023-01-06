@@ -64,7 +64,7 @@ type T1 = Assert<Probability extends number ? true : false>
 >false : false
 
 type Probability =
->Probability : self extends number ? IsProbability<self> extends true ? self : never : number
+>Probability : Probability
 
   self extends number
     ? IsProbability<self> extends true

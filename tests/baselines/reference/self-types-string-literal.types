@@ -1,6 +1,6 @@
 === tests/cases/compiler/self-types-string-literal.ts ===
 type StringLiteral =
->StringLiteral : self extends string ? string extends self ? never : self : string
+>StringLiteral : StringLiteral
 
   self extends string
     ? string extends self

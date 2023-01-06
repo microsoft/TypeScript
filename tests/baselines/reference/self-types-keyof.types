@@ -29,17 +29,23 @@ declare const get:
 
     T extends { [_ in K]: infer X } ? X : never
 
-let t3: number = get({ a: 10 }, "a" as "a")
+let t3: number = get({ a: 10 }, "a")
 >t3 : number
->get({ a: 10 }, "a" as "a") : { a: number; } extends { [_ in KeyOf<{ a: number; }>]: infer X; } ? X : never
+>get({ a: 10 }, "a") : number
 >get : <T, K extends KeyOf<T>>(t: T, k: K) => T extends { [_ in K]: infer X; } ? X : never
 >{ a: 10 } : { a: number; }
 >a : number
 >10 : 10
->"a" as "a" : "a"
 >"a" : "a"
 
-// TODO?: this should compile
+let t4 = get({ a: 10 }, "b")
+>t4 : { a: number; } extends { [_ in KeyOf<{ a: number; }>]: infer X; } ? X : never
+>get({ a: 10 }, "b") : { a: number; } extends { [_ in KeyOf<{ a: number; }>]: infer X; } ? X : never
+>get : <T, K extends KeyOf<T>>(t: T, k: K) => T extends { [_ in K]: infer X; } ? X : never
+>{ a: 10 } : { a: number; }
+>a : number
+>10 : 10
+>"b" : "b"
 
 export {}
 

@@ -12,7 +12,7 @@ type User =
   }
 
 type _Partial<T> = Mapped<keyof T, "_Partial", T, `_Partial<${Print<T>}>`>
->_Partial : _Partial<T>
+>_Partial : Mapped<keyof T, "_Partial", T, "_Partial<T>">
 
 interface Mappers<K, A> { _Partial: A[K & keyof A] | undefined }
 >_Partial : A[K & keyof A]
@@ -56,7 +56,7 @@ let t02: _Partial<User> = {
 }
 
 type _Omit<T, K> = Mapped<Exclude<keyof T, K>, "_Omit", T, `_Omit<${Print<T>}, ${Print<K>}>`>
->_Omit : _Omit<T, K>
+>_Omit : Mapped<Exclude<keyof T, K>, "_Omit", T, "_Omit<T, K>">
 
 interface Mappers<K, A> { _Omit: A[K & keyof A] }
 >_Omit : A[K & keyof A]
@@ -88,7 +88,7 @@ let t12: _Omit<User, "age"> = {
 }
 
 type FlipValues<T, K1 extends keyof T, K2 extends keyof T> =
->FlipValues : FlipValues<T, K1, K2>
+>FlipValues : Mapped<keyof T, "FlipValues", [T, K1, K2], "FlipValues<T, K1, K2>">
 
   Mapped<keyof T, "FlipValues", [T, K1, K2], `FlipValues<${Print<T>}, ${Print<K1>}, ${Print<K2>}>`>
 interface Mappers<K, A>
