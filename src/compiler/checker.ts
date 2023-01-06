@@ -347,8 +347,8 @@ import {
     hasAccessorModifier,
     hasAmbientModifier,
     hasContextSensitiveParameters,
-    HasDecorators,
     hasDecorators,
+    HasDecorators,
     hasDynamicName,
     hasEffectiveModifier,
     hasEffectiveModifiers,
@@ -357,8 +357,8 @@ import {
     hasExtension,
     HasIllegalDecorators,
     HasIllegalModifiers,
-    HasInitializer,
     hasInitializer,
+    HasInitializer,
     hasJSDocNodes,
     hasJSDocParameterTags,
     hasJsonModuleEmitEnabled,
@@ -892,6 +892,7 @@ import {
     SatisfiesExpression,
     ScriptKind,
     ScriptTarget,
+    SelfedType,
     SetAccessorDeclaration,
     setCommentRange,
     setEmitFlags,
@@ -1033,7 +1034,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    SelfedType,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
@@ -11784,7 +11784,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (node.kind === SyntaxKind.SelfKeyword) return true;
             });
             if (containsSelfType) {
-                type = createSelfedType(type, links.selfType!)
+                type = createSelfedType(type, links.selfType!);
             }
 
             if (popTypeResolution()) {
@@ -13533,7 +13533,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getBaseConstraint(getSubstitutionIntersection(t as SubstitutionType));
             }
             if (t.flags & TypeFlags.Selfed) {
-                return getBaseConstraint((t as SelfedType).type)
+                return getBaseConstraint((t as SelfedType).type);
             }
             return t;
         }
@@ -16867,15 +16867,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const selfType = createTypeParameter() as TypeParameter & IntrinsicType;
         selfType.intrinsicName = "self";
         selfType.flags |= TypeFlags.Self;
-        return selfType
+        return selfType;
     }
 
     function createSelfedType(type: Type, selfType: Type) {
-        const selfedType = createType(TypeFlags.Selfed) as SelfedType
-        selfedType.type = type
-        selfedType.selfType = selfType
-        selfedType.instantiations = new Map()
-        return selfedType
+        const selfedType = createType(TypeFlags.Selfed) as SelfedType;
+        selfedType.type = type;
+        selfedType.selfType = selfType;
+        selfedType.instantiations = new Map();
+        return selfedType;
     }
 
     function createNeverWithErrorType(errorType: Type) {
@@ -18807,7 +18807,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return createSelfedType(
                 instantiateType((type as SelfedType).type, mapper),
                 (type as SelfedType).selfType
-            )
+            );
         }
         if (flags & TypeFlags.NeverWithError) {
             return createNeverWithErrorType(instantiateType((type as NeverWithErrorType).errorType, mapper));
@@ -19780,8 +19780,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isSimpleTypeRelatedTo(source: Type, target: Type, relation: Map<string, RelationComparisonResult>, errorReporter?: ErrorReporter): boolean {
-        source = instantiateSelfTypeIfRequired(source, target)
-        target = instantiateSelfTypeIfRequired(target, source)
+        source = instantiateSelfTypeIfRequired(source, target);
+        target = instantiateSelfTypeIfRequired(target, source);
         const s = source.flags;
         const t = target.flags;
         if (t & TypeFlags.AnyOrUnknown || s & TypeFlags.Never || source === wildcardType) return true;
@@ -19825,8 +19825,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isTypeRelatedTo(source: Type, target: Type, relation: Map<string, RelationComparisonResult>) {
-        source = instantiateSelfTypeIfRequired(source, target)
-        target = instantiateSelfTypeIfRequired(target, source)
+        source = instantiateSelfTypeIfRequired(source, target);
+        target = instantiateSelfTypeIfRequired(target, source);
         if (isFreshLiteralType(source)) {
             source = (source as FreshableType).regularType;
         }
@@ -20273,8 +20273,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * * Ternary.False if they are not related.
          */
         function isRelatedTo(originalSource: Type, originalTarget: Type, recursionFlags: RecursionFlags = RecursionFlags.Both, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
-            originalSource = instantiateSelfTypeIfRequired(originalSource, originalTarget)
-            originalTarget = instantiateSelfTypeIfRequired(originalTarget, originalSource)
+            originalSource = instantiateSelfTypeIfRequired(originalSource, originalTarget);
+            originalTarget = instantiateSelfTypeIfRequired(originalTarget, originalSource);
             // Before normalization: if `source` is type an object type, and `target` is primitive,
             // skip all the checks we don't need and just return `isSimpleTypeRelatedTo` result
             if (originalSource.flags & TypeFlags.Object && originalTarget.flags & TypeFlags.Primitive) {
