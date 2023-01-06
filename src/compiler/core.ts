@@ -581,9 +581,6 @@ export function tryAddToSet<T>(set: Set<T>, value: T) {
 }
 
 /** @internal */
-export const emptyIterator: IterableIterator<never> = (function*() {})(); // TODO(jakebailey): remove? empty array?
-
-/** @internal */
 export function *singleIterator<T>(value: T) {
     yield value;
 }
