@@ -86405,6 +86405,18 @@
           ]
         },
         {
+          "name": "self",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "self",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
           "name": "string",
           "kind": "keyword",
           "kindModifiers": "",
@@ -91770,6 +91782,18 @@
           "displayParts": [
             {
               "text": "satisfies",
+              "kind": "keyword"
+            }
+          ]
+        },
+        {
+          "name": "self",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "self",
               "kind": "keyword"
             }
           ]

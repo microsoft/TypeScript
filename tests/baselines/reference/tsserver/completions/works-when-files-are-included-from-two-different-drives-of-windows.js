@@ -477,6 +477,12 @@ Info 37   [00:01:41.000] response:
             "sortText": "15"
           },
           {
+            "name": "self",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "super",
             "kind": "keyword",
             "kindModifiers": "",

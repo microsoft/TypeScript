@@ -736,6 +736,12 @@ Info 54   [00:01:54.000] response:
             "sortText": "15"
           },
           {
+            "name": "self",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "string",
             "kind": "keyword",
             "kindModifiers": "",
@@ -1299,6 +1305,12 @@ Info 71   [00:02:11.000] response:
             "sortText": "15"
           },
           {
+            "name": "self",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "string",
             "kind": "keyword",
             "kindModifiers": "",
@@ -1854,6 +1866,12 @@ Info 87   [00:02:27.000] response:
           },
           {
             "name": "satisfies",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "self",
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"

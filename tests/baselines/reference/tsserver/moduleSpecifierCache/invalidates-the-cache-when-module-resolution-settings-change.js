@@ -736,6 +736,12 @@ Info 54   [00:01:54.000] response:
             "sortText": "15"
           },
           {
+            "name": "self",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "string",
             "kind": "keyword",
             "kindModifiers": "",

@@ -547,6 +547,12 @@ Info 49   [00:01:28.000] response:
             "sortText": "15"
           },
           {
+            "name": "self",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "string",
             "kind": "keyword",
             "kindModifiers": "",
@@ -1007,6 +1013,12 @@ Info 59   [00:01:44.000] response:
           },
           {
             "name": "satisfies",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "self",
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"
