@@ -521,7 +521,9 @@ export namespace BuilderState {
                 seenMap.add(path);
                 const references = state.referencedMap.getValues(path);
                 if (references) {
-                    queue.push(...references.keys());
+                    for (const key of references.keys()) {
+                        queue.push(key);
+                    }
                 }
             }
         }
