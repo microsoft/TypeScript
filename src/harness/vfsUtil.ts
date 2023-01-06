@@ -486,7 +486,7 @@ export class FileSystem {
         const { node } = this._walk(this._resolve(path));
         if (!node) throw createIOError("ENOENT");
         if (!isDirectory(node)) throw createIOError("ENOTDIR");
-        return Array.from(this._getLinks(node).keys());
+        return ts.arrayFrom(this._getLinks(node).keys());
     }
 
     /**
@@ -1606,7 +1606,7 @@ function* iteratePatchWorker(dirname: string, container: FileSet): IterableItera
         const file = dirname ? vpath.combine(dirname, name) : name;
         if (entry instanceof Directory) {
             // TODO(jakebailey): redundant?
-            yield* Array.from(iteratePatchWorker(file, entry.files));
+            yield* ts.arrayFrom(iteratePatchWorker(file, entry.files));
         }
         else if (entry instanceof File) {
             const content = typeof entry.data === "string" ? entry.data : entry.data.toString("utf8");

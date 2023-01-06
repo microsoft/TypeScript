@@ -1965,7 +1965,7 @@ export class TestState {
 
     public baselineQuickInfo() {
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
-        const result = Array.from(this.testData.markerPositions.entries(), ([name, marker]) => ({
+        const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
             marker: { ...marker, name },
             quickInfo: this.languageService.getQuickInfoAtPosition(marker.fileName, marker.position)
         }));
@@ -1974,7 +1974,7 @@ export class TestState {
 
     public baselineSignatureHelp() {
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
-        const result = Array.from(this.testData.markerPositions.entries(), ([name, marker]) => ({
+        const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => ({
             marker: { ...marker, name },
             signatureHelp: this.languageService.getSignatureHelpItems(marker.fileName, marker.position, /*options*/ undefined)
         }));
@@ -1983,7 +1983,7 @@ export class TestState {
 
     public baselineCompletions(preferences?: ts.UserPreferences) {
         const baselineFile = this.getBaselineFileNameForContainingTestFile();
-        const result = Array.from(this.testData.markerPositions.entries(), ([name, marker]) => {
+        const result = ts.arrayFrom(this.testData.markerPositions.entries(), ([name, marker]) => {
             this.goToMarker(marker);
             const completions = this.getCompletionListAtCaret(preferences);
             return {
@@ -2010,7 +2010,7 @@ export class TestState {
             let selectionRange: ts.SelectionRange | undefined = this.languageService.getSmartSelectionRange(this.activeFile.fileName, marker.position);
             while (selectionRange) {
                 const { textSpan } = selectionRange;
-                let masked = Array.from(fileContent).map((char, index) => {
+                let masked = ts.arrayFrom(fileContent).map((char, index) => {
                     const charCode = char.charCodeAt(0);
                     if (index >= textSpan.start && index < ts.textSpanEnd(textSpan)) {
                         return char === " " ? "•" : ts.isLineBreak(charCode) ? `↲${n}` : char;
@@ -2019,8 +2019,8 @@ export class TestState {
                 }).join("");
                 masked = masked.replace(/^\s*$\r?\n?/gm, ""); // Remove blank lines
                 const isRealCharacter = (char: string) => char !== "•" && char !== "↲" && !ts.isWhiteSpaceLike(char.charCodeAt(0));
-                const leadingWidth = Array.from(masked).findIndex(isRealCharacter);
-                const trailingWidth = ts.findLastIndex(Array.from(masked), isRealCharacter);
+                const leadingWidth = ts.arrayFrom(masked).findIndex(isRealCharacter);
+                const trailingWidth = ts.findLastIndex(ts.arrayFrom(masked), isRealCharacter);
                 masked = masked.slice(0, leadingWidth)
                     + masked.slice(leadingWidth, trailingWidth).replace(/•/g, " ").replace(/↲/g, "")
                     + masked.slice(trailingWidth);
@@ -2526,7 +2526,7 @@ export class TestState {
     }
 
     public getMarkerNames(): string[] {
-        return Array.from(this.testData.markerPositions.keys());
+        return ts.arrayFrom(this.testData.markerPositions.keys());
     }
 
     public getRanges(): Range[] {
@@ -4598,7 +4598,7 @@ function unique<T>(inputs: readonly T[], getOutput: (t: T) => string): string[] 
         const out = getOutput(input);
         set.set(out, true);
     }
-    return Array.from(set.keys());
+    return ts.arrayFrom(set.keys());
 }
 
 function toArray<T>(x: ArrayOrSingle<T>): readonly T[] {

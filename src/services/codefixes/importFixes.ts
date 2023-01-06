@@ -2,6 +2,7 @@ import {
     AnyImportOrRequire,
     AnyImportOrRequireStatement,
     AnyImportSyntax,
+    arrayFrom,
     CancellationToken,
     cast,
     CodeAction,
@@ -356,7 +357,7 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
                 sourceFile,
                 importClauseOrBindingPattern,
                 defaultImport,
-                Array.from(namedImports.entries(), ([name, addAsTypeOnly]) => ({ addAsTypeOnly, name })),
+                arrayFrom(namedImports.entries(), ([name, addAsTypeOnly]) => ({ addAsTypeOnly, name })),
                 compilerOptions,
                 preferences);
         });
@@ -369,7 +370,7 @@ function createImportAdderWorker(sourceFile: SourceFile, program: Program, useAu
                 moduleSpecifier,
                 quotePreference,
                 defaultImport,
-                namedImports && Array.from(namedImports.entries(), ([name, addAsTypeOnly]) => ({ addAsTypeOnly, name })),
+                namedImports && arrayFrom(namedImports.entries(), ([name, addAsTypeOnly]) => ({ addAsTypeOnly, name })),
                 namespaceLikeImport);
             newDeclarations = combine(newDeclarations, declarations);
         });
@@ -1066,7 +1067,7 @@ function getFixesInfoForNonUMDImport({ sourceFile, program, cancellationToken, h
         const useRequire = shouldUseRequire(sourceFile, program);
         const exportInfo = getExportInfos(symbolName, isJSXTagName(symbolToken), getMeaningFromLocation(symbolToken), cancellationToken, sourceFile, program, useAutoImportProvider, host, preferences);
         // TODO(jakebailey): surely this doesn't need the intermediary array
-        const fixes = Array.from(flatMapIterator(exportInfo.entries(), ([_, exportInfos]) =>
+        const fixes = arrayFrom(flatMapIterator(exportInfo.entries(), ([_, exportInfos]) =>
             getImportFixes(exportInfos, { symbolName, position: symbolToken.getStart(sourceFile) }, isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences).fixes));
         return fixes.map(fix => ({ fix, symbolName, errorIdentifierText: symbolToken.text, isJsxNamespaceFix: symbolName !== symbolToken.text }));
     });

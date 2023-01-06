@@ -881,7 +881,7 @@ export function verifyGetErrScenario(scenario: VerifyGetErrScenario) {
 }
 
 export function verifyDynamic(service: ts.server.ProjectService, path: string) {
-    const info = ts.Debug.checkDefined(service.filenameToScriptInfo.get(path), `Expected ${path} in :: ${JSON.stringify(Array.from(service.filenameToScriptInfo.entries(), ([key, f]) => ({ key, fileName: f.fileName, path: f.path })))}`);
+    const info = ts.Debug.checkDefined(service.filenameToScriptInfo.get(path), `Expected ${path} in :: ${JSON.stringify(ts.arrayFrom(service.filenameToScriptInfo.entries(), ([key, f]) => ({ key, fileName: f.fileName, path: f.path })))}`);
     assert.isTrue(info.isDynamic);
 }
 

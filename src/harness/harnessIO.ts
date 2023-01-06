@@ -964,7 +964,7 @@ export namespace Compiler {
 
     export function* iterateOutputs(outputFiles: Iterable<documents.TextDocument>): IterableIterator<[string, string]> {
         // Collect, test, and sort the fileNames
-        const files = Array.from(outputFiles);
+        const files = ts.arrayFrom(outputFiles);
         files.slice().sort((a, b) => ts.compareStringsCaseSensitive(cleanName(a.file), cleanName(b.file)));
         const dupeCase = new Map<string, number>();
         // Yield them
@@ -1048,7 +1048,7 @@ function splitVaryBySettingValue(text: string, varyBy: string): string[] | undef
 
     if (star && values) {
         // add all entries
-        for (const [key, value] of Array.from(values.entries())) {
+        for (const [key, value] of ts.arrayFrom(values.entries())) {
             if (ts.findIndex(variations, v => v.key === key || v.value === value) === -1) {
                 variations.push({ key, value });
             }
@@ -1482,7 +1482,7 @@ export namespace Baseline {
                 errorMsg += "\n";
             }
             if (missing.length) {
-                const writtenFilesArray = Array.from(writtenFiles.keys());
+                const writtenFilesArray = ts.arrayFrom(writtenFiles.keys());
                 errorMsg += `Baseline missing ${missing.length} files:${"\n    " + missing.slice(0, 5).join("\n    ") + (missing.length > 5 ? "\n" + `    and ${missing.length - 5} more` : "") + "\n"}Written ${writtenFiles.size} files:${"\n    " + writtenFilesArray.slice(0, 5).join("\n    ") + (writtenFilesArray.length > 5 ? "\n" + `    and ${writtenFilesArray.length - 5} more` : "")}`;
             }
             throw new Error(errorMsg);

@@ -1,6 +1,7 @@
 import {
     addToSeen,
     altDirectorySeparator,
+    arrayFrom,
     CallLikeExpression,
     CancellationToken,
     changeExtension,
@@ -558,7 +559,7 @@ function getCompletionEntriesForRelativeModules(literalValue: string, scriptDire
             compilerOptions.rootDirs, literalValue, scriptDirectory, extensionOptions, compilerOptions, host, scriptPath);
     }
     else {
-        return Array.from(getCompletionEntriesForDirectoryFragment(literalValue, scriptDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ false, scriptPath).values());
+        return arrayFrom(getCompletionEntriesForDirectoryFragment(literalValue, scriptDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ false, scriptPath).values());
     }
 }
 
@@ -593,7 +594,7 @@ function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[]
     const basePath = compilerOptions.project || host.getCurrentDirectory();
     const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
     const baseDirectories = getBaseDirectoriesFromRootDirs(rootDirs, basePath, scriptDirectory, ignoreCase);
-    return flatMap(baseDirectories, baseDirectory => Array.from(getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ true, exclude).values()));
+    return flatMap(baseDirectories, baseDirectory => arrayFrom(getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensionOptions, host, /*moduleSpecifierIsRelative*/ true, exclude).values()));
 }
 
 const enum ReferenceKind {
@@ -891,7 +892,7 @@ function getCompletionEntriesForNonRelativeModules(
         }
     }
 
-    return Array.from(result.values());
+    return arrayFrom(result.values());
 }
 
 function getPatternFromFirstMatchingCondition(target: unknown, conditions: readonly string[]): string | undefined {
@@ -1048,7 +1049,7 @@ function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: num
     const names = kind === "path" ? getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getExtensionOptions(compilerOptions, ReferenceKind.Filename, sourceFile), host, /*moduleSpecifierIsRelative*/ true, sourceFile.path)
         : kind === "types" ? getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, getFragmentDirectory(toComplete), getExtensionOptions(compilerOptions, ReferenceKind.ModuleSpecifier, sourceFile))
         : Debug.fail();
-    return addReplacementSpans(toComplete, range.pos + prefix.length, Array.from(names.values()));
+    return addReplacementSpans(toComplete, range.pos + prefix.length, arrayFrom(names.values()));
 }
 
 function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, fragmentDirectory: string | undefined, extensionOptions: ExtensionOptions, result = createNameAndKindSet()): NameAndKindSet {

@@ -12,6 +12,7 @@ import {
     AnyImportSyntax,
     AnyValidImportOrReExport,
     append,
+    arrayFrom,
     ArrayLiteralExpression,
     ArrayTypeNode,
     ArrowFunction,
@@ -1049,7 +1050,7 @@ export function createCommentDirectivesMap(sourceFile: SourceFile, commentDirect
     return { getUnusedExpectations, markUsed };
 
     function getUnusedExpectations() {
-        return Array.from(directivesByLine.entries())
+        return arrayFrom(directivesByLine.entries())
             .filter(([line, directive]) => directive.type === CommentDirectiveType.ExpectError && !usedLines.get(line))
             .map(([_, directive]) => directive);
     }

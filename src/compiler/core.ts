@@ -1416,6 +1416,23 @@ export function arrayOf<T>(count: number, f: (index: number) => T): T[] {
     return result;
 }
 
+/**
+ * Shims `Array.from`.
+ *
+ * @internal
+ */
+export function arrayFrom<T, U>(iterator: Iterable<T>, map: (t: T) => U): U[];
+/** @internal */
+export function arrayFrom<T>(iterator: Iterable<T>): T[];
+/** @internal */
+export function arrayFrom<T, U>(iterator: Iterable<T>, map?: (t: T) => U): (T | U)[] {
+    const result: (T | U)[] = [];
+    for (const value of iterator) {
+        result.push(map ? map(value) : value);
+    }
+    return result;
+}
+
 /** @internal */
 export function assign<T extends object>(t: T, ...args: (T | undefined)[]) {
     for (const arg of args) {
@@ -1521,7 +1538,7 @@ export function group<T>(values: readonly T[], getGroupId: (value: T) => string)
 export function group<T, R>(values: readonly T[], getGroupId: (value: T) => string, resultSelector: (values: readonly T[]) => R): R[];
 /** @internal */
 export function group<T, K>(values: readonly T[], getGroupId: (value: T) => K, resultSelector: (values: readonly T[]) => readonly T[] = identity): readonly (readonly T[])[] {
-    return Array.from(arrayToMultiMap(values, getGroupId).values(), resultSelector);
+    return arrayFrom(arrayToMultiMap(values, getGroupId).values(), resultSelector);
 }
 
 /** @internal */
@@ -1787,7 +1804,7 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
             return size;
         },
         forEach(action: (value: TElement, key: TElement, set: Set<TElement>) => void): void {
-            for (const elements of Array.from(multiMap.values())) {
+            for (const elements of arrayFrom(multiMap.values())) {
                 if (isArray(elements)) {
                     for (const element of elements) {
                         action(element, element, set);

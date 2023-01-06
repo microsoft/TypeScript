@@ -1,5 +1,6 @@
 import {
     addRange,
+    arrayFrom,
     BinaryExpression,
     CallExpression,
     CheckFlags,
@@ -235,7 +236,7 @@ export function getSymbolModifiers(typeChecker: TypeChecker, symbol: Symbol): st
     if (symbol.flags & SymbolFlags.Optional) {
         modifiers.add(ScriptElementKindModifier.optionalModifier);
     }
-    return modifiers.size > 0 ? Array.from(modifiers.values()).join(",") : ScriptElementKindModifier.none;
+    return modifiers.size > 0 ? arrayFrom(modifiers.values()).join(",") : ScriptElementKindModifier.none;
 }
 
 /** @internal */

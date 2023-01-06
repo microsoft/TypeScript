@@ -3,6 +3,7 @@ import {
     allKeysStartWithDot,
     AmbientModuleDeclaration,
     append,
+    arrayFrom,
     CharacterCodes,
     combinePaths,
     compareBooleans,
@@ -645,7 +646,7 @@ function getAllModulePathsWorker(importingFileName: Path, importedFileName: stri
         directory = newDirectory;
     }
     if (allFileNames.size) {
-        const remainingPaths = Array.from(allFileNames.values());
+        const remainingPaths = arrayFrom(allFileNames.values());
         if (remainingPaths.length > 1) remainingPaths.sort(comparePathsByRedirectAndNumberOfDirectorySeparators);
         sortedPaths.push(...remainingPaths);
     }

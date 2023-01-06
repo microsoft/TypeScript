@@ -20,11 +20,11 @@ describe("unittests:: customTransforms", () => {
                 writeFile: (fileName, text) => outputs.set(fileName, text),
             };
 
-            const program = ts.createProgram(Array.from(fileMap.keys()), { newLine: ts.NewLineKind.LineFeed, ...options }, host);
+            const program = ts.createProgram(ts.arrayFrom(fileMap.keys()), { newLine: ts.NewLineKind.LineFeed, ...options }, host);
             program.emit(/*targetSourceFile*/ undefined, host.writeFile, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ false, customTransformers);
             let content = "";
             // TODO(jakebailey): redundant
-            for (const [file, text] of Array.from(outputs.entries())) {
+            for (const [file, text] of ts.arrayFrom(outputs.entries())) {
                 if (content) content += "\n\n";
                 content += `// [${file}]\n`;
                 content += text;

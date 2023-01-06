@@ -26,6 +26,7 @@ import {
     addRange,
     append,
     ApplyCodeActionCommandResult,
+    arrayFrom,
     arrayToMap,
     BuilderState,
     CachedDirectoryStructureHost,
@@ -1654,11 +1655,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     getChangesSinceVersion(lastKnownVersion?: number, includeProjectReferenceRedirectInfo?: boolean): ProjectFilesWithTSDiagnostics {
         const includeProjectReferenceRedirectInfoIfRequested =
             includeProjectReferenceRedirectInfo
-                ? (files: Map<string, boolean>) => Array.from(files.entries(), ([fileName, isSourceOfProjectReferenceRedirect]): protocol.FileWithProjectReferenceRedirectInfo => ({
+                ? (files: Map<string, boolean>) => arrayFrom(files.entries(), ([fileName, isSourceOfProjectReferenceRedirect]): protocol.FileWithProjectReferenceRedirectInfo => ({
                     fileName,
                     isSourceOfProjectReferenceRedirect
                 }))
-                : (files: Map<string, boolean>) => Array.from(files.keys());
+                : (files: Map<string, boolean>) => arrayFrom(files.keys());
 
         // Update the graph only if initial configured project load is not pending
         if (!this.isInitialLoadPending()) {
@@ -1696,7 +1697,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             const added: Map<string, boolean> = new Map<string, boolean>();
             const removed: Map<string, boolean> = new Map<string, boolean>();
 
-            const updated: string[] = updatedFileNames ? Array.from(updatedFileNames.keys()) : [];
+            const updated: string[] = updatedFileNames ? arrayFrom(updatedFileNames.keys()) : [];
             const updatedRedirects: protocol.FileWithProjectReferenceRedirectInfo[] = [];
 
             forEachEntry(currentFiles, (isSourceOfProjectReferenceRedirect, fileName) => {
@@ -2279,7 +2280,7 @@ export class AutoImportProviderProject extends Project {
         let dependenciesAdded = 0;
         if (dependencyNames) {
             const symlinkCache = hostProject.getSymlinkCache();
-            for (const name of Array.from(dependencyNames.keys())) {
+            for (const name of arrayFrom(dependencyNames.keys())) {
                 // Avoid creating a large project that would significantly slow down time to editor interactivity
                 if (dependencySelection === PackageJsonAutoImportPreference.Auto && dependenciesAdded > this.maxDependencies) {
                     hostProject.log(`AutoImportProviderProject: attempted to add more than ${this.maxDependencies} dependencies. Aborting.`);

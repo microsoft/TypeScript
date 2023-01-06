@@ -1,5 +1,6 @@
 import {
     addEmitHelpers,
+    arrayFrom,
     Bundle,
     chainBundle,
     createExpressionForJsxElement,
@@ -159,10 +160,10 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             statements = insertStatementAfterCustomPrologue(statements.slice(), factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([currentFileState.filenameDeclaration], NodeFlags.Const)));
         }
         if (currentFileState.utilizedImplicitRuntimeImports) {
-            for (const [importSource, importSpecifiersMap] of Array.from(currentFileState.utilizedImplicitRuntimeImports.entries())) {
+            for (const [importSource, importSpecifiersMap] of arrayFrom(currentFileState.utilizedImplicitRuntimeImports.entries())) {
                 if (isExternalModule(node)) {
                     // Add `import` statement
-                    const importStatement = factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*typeOnly*/ false, /*name*/ undefined, factory.createNamedImports(Array.from(importSpecifiersMap.values()))), factory.createStringLiteral(importSource), /*assertClause*/ undefined);
+                    const importStatement = factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*typeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))), factory.createStringLiteral(importSource), /*assertClause*/ undefined);
                     setParentRecursive(importStatement, /*incremental*/ false);
                     statements = insertStatementAfterCustomPrologue(statements.slice(), importStatement);
                 }
@@ -170,7 +171,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                     // Add `require` statement
                     const requireStatement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
                         factory.createVariableDeclaration(
-                            factory.createObjectBindingPattern(Array.from(importSpecifiersMap.values(), s => factory.createBindingElement(/*dotdotdot*/ undefined, s.propertyName, s.name))),
+                            factory.createObjectBindingPattern(arrayFrom(importSpecifiersMap.values(), s => factory.createBindingElement(/*dotdotdot*/ undefined, s.propertyName, s.name))),
                             /*exclaimationToken*/ undefined,
                             /*type*/ undefined,
                             factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [factory.createStringLiteral(importSource)])

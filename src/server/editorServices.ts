@@ -49,6 +49,8 @@ import {
 import {
     addToSeen,
 
+    arrayFrom,
+
     arrayToMap,
     AssertionLevel,
     CachedDirectoryStructureHost,
@@ -1210,7 +1212,7 @@ export class ProjectService {
         const event: ProjectsUpdatedInBackgroundEvent = {
             eventName: ProjectsUpdatedInBackgroundEvent,
             data: {
-                openFiles: Array.from(this.openFiles.keys(), path => this.getScriptInfoForPath(path as Path)!.fileName)
+                openFiles: arrayFrom(this.openFiles.keys(), path => this.getScriptInfoForPath(path as Path)!.fileName)
             }
         };
         this.eventHandler(event);
@@ -1641,7 +1643,7 @@ export class ProjectService {
                 !info.isAttached(project),
                 "Found script Info still attached to project",
                 () => `${project.projectName}: ScriptInfos still attached: ${JSON.stringify(
-                    Array.from(
+                    arrayFrom(
                         mapDefinedIterator(
                             this.filenameToScriptInfo.values(),
                             info => info.isAttached(project) ?
@@ -2781,7 +2783,7 @@ export class ProjectService {
 
     /** @internal */
     logErrorForScriptInfoNotFound(fileName: string): void {
-        const names = Array.from(this.filenameToScriptInfo.entries(), ([path, scriptInfo]) => ({ path, fileName: scriptInfo.fileName }));
+        const names = arrayFrom(this.filenameToScriptInfo.entries(), ([path, scriptInfo]) => ({ path, fileName: scriptInfo.fileName }));
         this.logger.msg(`Could not find file ${JSON.stringify(fileName)}.\nAll files are: ${JSON.stringify(names)}`, Msg.Err);
     }
 
@@ -2989,9 +2991,9 @@ export class ProjectService {
         let info = this.getScriptInfoForPath(path);
         if (!info) {
             const isDynamic = isDynamicFileName(fileName);
-            Debug.assert(isRootedDiskPath(fileName) || isDynamic || openedByClient, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: Array.from(this.openFilesWithNonRootedDiskPath.keys()) })}\nScript info with non-dynamic relative file name can only be open script info or in context of host currentDirectory`);
-            Debug.assert(!isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)), "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: Array.from(this.openFilesWithNonRootedDiskPath.keys()) })}\nOpen script files with non rooted disk path opened with current directory context cannot have same canonical names`);
-            Debug.assert(!isDynamic || this.currentDirectory === currentDirectory || this.useInferredProjectPerProjectRoot, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: Array.from(this.openFilesWithNonRootedDiskPath.keys()) })}\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`);
+            Debug.assert(isRootedDiskPath(fileName) || isDynamic || openedByClient, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nScript info with non-dynamic relative file name can only be open script info or in context of host currentDirectory`);
+            Debug.assert(!isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)), "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nOpen script files with non rooted disk path opened with current directory context cannot have same canonical names`);
+            Debug.assert(!isDynamic || this.currentDirectory === currentDirectory || this.useInferredProjectPerProjectRoot, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nDynamic files must always be opened with service's current directory or service should support inferred project per projectRootPath.`);
             // If the file is not opened by client and the file doesnot exist on the disk, return
             if (!openedByClient && !isDynamic && !(hostToQueryFileExistsOn || this.host).fileExists(fileName)) {
                 return;
@@ -3674,7 +3676,7 @@ export class ProjectService {
 
         const seenProjects = new Set<NormalizedPath>();
         // Work on array copy as we could add more projects as part of callback
-        for (const project of Array.from(this.configuredProjects.values())) {
+        for (const project of arrayFrom(this.configuredProjects.values())) {
             // If this project has potential project reference for any of the project we are loading ancestor tree for
             // load this project first
             if (forEachPotentialProjectReference(project, potentialRefPath => forProjects!.has(potentialRefPath))) {
@@ -4329,7 +4331,7 @@ export class ProjectService {
         }
 
         // Consume the pending plugin enablement requests
-        const entries = Array.from(this.pendingPluginEnablements.entries());
+        const entries = arrayFrom(this.pendingPluginEnablements.entries());
         this.pendingPluginEnablements = undefined;
 
         // Start processing the requests, keeping track of the promise for the operation so that

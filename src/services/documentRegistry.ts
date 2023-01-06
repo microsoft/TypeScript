@@ -1,4 +1,5 @@
 import {
+    arrayFrom,
     CompilerOptions,
     createGetCanonicalFileName,
     createLanguageServiceSourceFile,
@@ -188,7 +189,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
     const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
     function reportStats() {
-        const bucketInfoArray = Array.from(buckets.keys()).filter(name => name && name.charAt(0) === "_").map(name => {
+        const bucketInfoArray = arrayFrom(buckets.keys()).filter(name => name && name.charAt(0) === "_").map(name => {
             const entries = buckets.get(name)!;
             const sourceFiles: { name: string; scriptKind: ScriptKind, refCount: number; }[] = [];
             entries.forEach((entry, name) => {
@@ -383,7 +384,7 @@ export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boole
     }
 
     function getLanguageServiceRefCounts(path: Path, scriptKind: ScriptKind) {
-        return Array.from(buckets.entries(), ([key, bucket]): [string, number | undefined] => {
+        return arrayFrom(buckets.entries(), ([key, bucket]): [string, number | undefined] => {
             const bucketEntry = bucket.get(path);
             const entry = bucketEntry && getDocumentRegistryEntry(bucketEntry, scriptKind);
             return [key, entry && entry.languageServiceRefCount];

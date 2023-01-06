@@ -1,6 +1,7 @@
 import {
     AlternateModeDiagnostics,
     append,
+    arrayFrom,
     ArrayLiteralExpression,
     arrayToMap,
     assign,
@@ -1693,7 +1694,7 @@ export function createCompilerDiagnosticForInvalidCustomType(opt: CommandLineOpt
 }
 
 function createDiagnosticForInvalidCustomType(opt: CommandLineOptionOfCustomType, createDiagnostic: (message: DiagnosticMessage, arg0: string, arg1: string) => Diagnostic): Diagnostic {
-    const namesOfType = Array.from(opt.type.keys());
+    const namesOfType = arrayFrom(opt.type.keys());
     const stringNames = (opt.deprecatedKeys ? namesOfType.filter(k => !opt.deprecatedKeys!.has(k)) : namesOfType).map(key => `'${key}'`).join(", ");
     return createDiagnostic(Diagnostics.Argument_for_0_option_must_be_Colon_1, `--${opt.name}`, stringNames);
 }
@@ -2599,7 +2600,7 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
 /** @internal */
 export function optionMapToObject(optionMap: Map<string, CompilerOptionsValue>): object {
     return {
-        ...Array.from(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
+        ...arrayFrom(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
     };
 }
 
@@ -3212,7 +3213,7 @@ function parseConfig(
         if (!ownConfig.raw.exclude && result.exclude) ownConfig.raw.exclude = result.exclude;
         if (!ownConfig.raw.files && result.files) ownConfig.raw.files = result.files;
         if (ownConfig.raw.compileOnSave === undefined && result.compileOnSave) ownConfig.raw.compileOnSave = result.compileOnSave;
-        if (sourceFile && result.extendedSourceFiles) sourceFile.extendedSourceFiles = Array.from(result.extendedSourceFiles.keys());
+        if (sourceFile && result.extendedSourceFiles) sourceFile.extendedSourceFiles = arrayFrom(result.extendedSourceFiles.keys());
 
         ownConfig.options = assign(result.options, ownConfig.options);
         ownConfig.watchOptions = ownConfig.watchOptions && result.watchOptions ?
@@ -3740,10 +3741,10 @@ export function getFileNamesFromConfigSpecs(
         }
     }
 
-    const literalFiles = Array.from(literalFileMap.values());
-    const wildcardFiles = Array.from(wildcardFileMap.values());
+    const literalFiles = arrayFrom(literalFileMap.values());
+    const wildcardFiles = arrayFrom(wildcardFileMap.values());
 
-    return literalFiles.concat(wildcardFiles, Array.from(wildCardJsonFileMap.values()));
+    return literalFiles.concat(wildcardFiles, arrayFrom(wildCardJsonFileMap.values()));
 }
 
 /** @internal */

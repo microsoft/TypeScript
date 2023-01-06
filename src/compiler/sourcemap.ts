@@ -1,4 +1,5 @@
 import {
+    arrayFrom,
     binarySearchKey,
     CharacterCodes,
     combinePaths,
@@ -723,7 +724,7 @@ export function createDocumentPositionMapper(host: DocumentPositionMapperHost, m
     function getDecodedMappings() {
         if (decodedMappings === undefined) {
             const decoder = decodeMappings(map.mappings);
-            const mappings = Array.from(decoder, processMapping);
+            const mappings = arrayFrom(decoder, processMapping);
             if (decoder.error !== undefined) {
                 if (host.log) {
                     host.log(`Encountered error while decoding sourcemap: ${decoder.error}`);

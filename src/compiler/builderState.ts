@@ -1,4 +1,5 @@
 import {
+    arrayFrom,
     CancellationToken,
     computeSignatureWithDiagnostics,
     CustomTransformers,
@@ -525,7 +526,7 @@ export namespace BuilderState {
             }
         }
 
-        return Array.from(mapDefinedIterator(seenMap.keys(), path => programOfThisState.getSourceFileByPath(path)?.fileName ?? path));
+        return arrayFrom(mapDefinedIterator(seenMap.keys(), path => programOfThisState.getSourceFileByPath(path)?.fileName ?? path));
     }
 
     /**
@@ -544,7 +545,7 @@ export namespace BuilderState {
      */
     export function getReferencedByPaths(state: Readonly<BuilderState>, referencedFilePath: Path) {
         const keys = state.referencedMap!.getKeys(referencedFilePath);
-        return keys ? Array.from(keys.keys()) : [];
+        return keys ? arrayFrom(keys.keys()) : [];
     }
 
     /**
@@ -656,6 +657,6 @@ export namespace BuilderState {
         }
 
         // Return array of values that needs emit
-        return Array.from(mapDefinedIterator(seenFileNamesMap.values(), value => value));
+        return arrayFrom(mapDefinedIterator(seenFileNamesMap.values(), value => value));
     }
 }

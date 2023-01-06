@@ -134,15 +134,15 @@ describe("unittests:: compilerCore", () => {
             const expected = [0, 1, 2, 3];
             let actual: number[];
 
-            actual = Array.from(set.keys());
+            actual = ts.arrayFrom(set.keys());
             actual.sort();
             assert.deepEqual(actual, expected);
 
-            actual = Array.from(set.values());
+            actual = ts.arrayFrom(set.values());
             actual.sort();
             assert.deepEqual(actual, expected);
 
-            const actualTuple = Array.from(set.entries());
+            const actualTuple = ts.arrayFrom(set.entries());
             assert.isFalse(actualTuple.some(([v, k]) => v !== k));
             actual = actualTuple.map(([v, _]) => v);
             actual.sort();

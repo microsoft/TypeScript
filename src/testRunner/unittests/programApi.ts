@@ -12,7 +12,7 @@ function verifyMissingFilePaths(missingPaths: readonly ts.Path[], expected: read
         assert.isTrue(value, `${missing} to be ${value === undefined ? "not present" : "present only once"}, in actual: ${missingPaths} expected: ${expected}`);
         map.delete(missing);
     }
-    const notFound = Array.from(ts.mapDefinedIterator(map.keys(), k => map.has(k) ? k : undefined));
+    const notFound = ts.arrayFrom(ts.mapDefinedIterator(map.keys(), k => map.has(k) ? k : undefined));
     assert.equal(notFound.length, 0, `Not found ${notFound} in actual: ${missingPaths} expected: ${expected}`);
 }
 

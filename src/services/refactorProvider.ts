@@ -1,5 +1,6 @@
 import {
     ApplicableRefactorInfo,
+    arrayFrom,
     flatMapIterator,
     Refactor,
     RefactorContext,
@@ -22,7 +23,7 @@ export function registerRefactor(name: string, refactor: Refactor) {
 
 /** @internal */
 export function getApplicableRefactors(context: RefactorContext): ApplicableRefactorInfo[] {
-    return Array.from(flatMapIterator(refactors.values(), refactor =>
+    return arrayFrom(flatMapIterator(refactors.values(), refactor =>
         context.cancellationToken && context.cancellationToken.isCancellationRequested() ||
         !refactor.kinds?.some(kind => refactorKindBeginsWith(kind, context.kind)) ? undefined :
         refactor.getAvailableActions(context)));

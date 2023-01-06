@@ -4,6 +4,7 @@ import {
     addEmitFlags,
     addRange,
     append,
+    arrayFrom,
     arrayIsEqualTo,
     AsExpression,
     AssertClause,
@@ -1709,7 +1710,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         }
 
-        missingFilePaths = Array.from(mapDefinedIterator(filesByName.entries(), ([path, file]) => file === undefined ? path as Path : undefined));
+        missingFilePaths = arrayFrom(mapDefinedIterator(filesByName.entries(), ([path, file]) => file === undefined ? path as Path : undefined));
         files = stableSort(processingDefaultLibFiles, compareDefaultLibFiles).concat(processingOtherFiles);
         processingDefaultLibFiles = undefined;
         processingOtherFiles = undefined;

@@ -5,6 +5,7 @@ import {
 } from "../_namespaces/ts.codefix";
 import {
     __String,
+    arrayFrom,
     ArrowFunction,
     BinaryExpression,
     BindingElement,
@@ -451,7 +452,7 @@ function convertExportsDotXEquals_replaceNode(name: string | undefined, exported
 function replaceImportUseSites<T extends Node>(node: T, useSitesToUnqualify: Map<Node, Node> | undefined): T;
 function replaceImportUseSites<T extends Node>(nodes: NodeArray<T>, useSitesToUnqualify: Map<Node, Node> | undefined): NodeArray<T>;
 function replaceImportUseSites<T extends Node>(nodeOrNodes: T | NodeArray<T>, useSitesToUnqualify: Map<Node, Node> | undefined) {
-    if (!useSitesToUnqualify || !some(Array.from(useSitesToUnqualify.keys()), original => rangeContainsRange(nodeOrNodes, original))) {
+    if (!useSitesToUnqualify || !some(arrayFrom(useSitesToUnqualify.keys()), original => rangeContainsRange(nodeOrNodes, original))) {
         return nodeOrNodes;
     }
 
@@ -557,7 +558,7 @@ function convertSingleIdentifierImport(name: Identifier, moduleSpecifier: String
         }
     }
 
-    const namedBindings = namedBindingsNames.size === 0 ? undefined : Array.from(mapIterator(namedBindingsNames.entries(), ([propertyName, idName]) =>
+    const namedBindings = namedBindingsNames.size === 0 ? undefined : arrayFrom(mapIterator(namedBindingsNames.entries(), ([propertyName, idName]) =>
         factory.createImportSpecifier(/*isTypeOnly*/ false, propertyName === idName ? undefined : factory.createIdentifier(propertyName), factory.createIdentifier(idName))));
     if (!namedBindings) {
         // If it was unused, ensure that we at least import *something*.

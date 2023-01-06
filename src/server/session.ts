@@ -1,4 +1,5 @@
 import {
+    arrayFrom,
     arrayReverseIterator,
     CallHierarchyIncomingCall,
     CallHierarchyItem,
@@ -1338,7 +1339,7 @@ export class Session<TMessage = string> implements EventSender {
 
     private cleanup() {
         this.cleanProjects("inferred projects", this.projectService.inferredProjects);
-        this.cleanProjects("configured projects", Array.from(this.projectService.configuredProjects.values()));
+        this.cleanProjects("configured projects", arrayFrom(this.projectService.configuredProjects.values()));
         this.cleanProjects("external projects", this.projectService.externalProjects);
         if (this.host.gc) {
             this.logger.info(`host.gc()`);
@@ -1542,7 +1543,7 @@ export class Session<TMessage = string> implements EventSender {
                     }
                 }
             }
-            definitions = Array.from(definitionSet.values());
+            definitions = arrayFrom(definitionSet.values());
         }
 
         definitions = definitions.filter(d => !d.isAmbient && !d.failedAliasResolution);
@@ -1966,7 +1967,7 @@ export class Session<TMessage = string> implements EventSender {
             const scriptInfo = Debug.checkDefined(this.projectService.getScriptInfo(fileName));
             group.locs.push({ ...toProtocolTextSpanWithContext(textSpan, contextSpan, scriptInfo), ...prefixSuffixText });
         }
-        return Array.from(map.values());
+        return arrayFrom(map.values());
     }
 
     private getReferences(args: protocol.FileLocationRequestArgs, simplifiedResult: boolean): protocol.ReferencesResponseBody | readonly ReferencedSymbol[] {

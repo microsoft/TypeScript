@@ -1,5 +1,6 @@
 import * as ts from "./_namespaces/ts";
 import {
+    arrayFrom,
     BuilderProgram,
     BuildOptions,
     buildOpts,
@@ -302,7 +303,7 @@ function generateOptionOutput(sys: System, option: CommandLineOption, rightAlign
     ) {
         return defaultValue !== undefined && typeof type === "object"
             // e.g. ScriptTarget.ES2015 -> "es6/es2015"
-            ? Array.from(type.entries())
+            ? arrayFrom(type.entries())
                   .filter(([, value]) => value === defaultValue)
                   .map(([name]) => name)
                   .join("/")
