@@ -109,10 +109,10 @@ export function reduceLeftIterator<T, U>(iterator: Iterable<T> | undefined, f: (
 
 /** @internal */
 export function zipWith<T, U, V>(arrayA: readonly T[], arrayB: readonly U[], callback: (a: T, b: U, index: number) => V): V[] {
+    const result: V[] = [];
     Debug.assertEqual(arrayA.length, arrayB.length);
-    const result: V[] = new Array(arrayA.length);
     for (let i = 0; i < arrayA.length; i++) {
-        result[i] = callback(arrayA[i], arrayB[i], i);
+        result.push(callback(arrayA[i], arrayB[i], i));
     }
     return result;
 }
