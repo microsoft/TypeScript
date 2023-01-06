@@ -242,7 +242,6 @@ import {
     PrivateIdentifier,
     Program,
     PropertyName,
-    Push,
     QuickInfo,
     refactor,
     RefactorContext,
@@ -491,7 +490,7 @@ function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Nod
     return children;
 }
 
-function addSyntheticNodes(nodes: Push<Node>, pos: number, end: number, parent: Node): void {
+function addSyntheticNodes(nodes: Node[], pos: number, end: number, parent: Node): void {
     scanner.setTextPos(pos);
     while (pos < end) {
         const token = scanner.scan();
