@@ -1085,14 +1085,14 @@ export namespace Completion {
         "number",
         "object",
         "readonly",
+        "self",
         "string",
         "symbol",
         "true",
         "undefined",
         "unique",
         "unknown",
-        "self",
-        "void",
+        "void"
     ].map(keywordEntry);
 
     export function sorted(entries: readonly ExpectedCompletionEntry[]): readonly ExpectedCompletionEntry[] {
@@ -1263,13 +1263,13 @@ export namespace Completion {
                 case "readonly":
                 case "number":
                 case "object":
+                case "self":
                 case "string":
                 case "symbol":
                 case "type":
                 case "unique":
                 case "override":
                 case "unknown":
-                case "self":
                 case "global":
                 case "bigint":
                     return false;
@@ -1400,6 +1400,7 @@ export namespace Completion {
         "readonly",
         "return",
         "satisfies",
+        "self",
         "string",
         "super",
         "switch",
@@ -1412,7 +1413,6 @@ export namespace Completion {
         "typeof",
         "unique",
         "unknown",
-        "self",
         "var",
         "void",
         "while",
@@ -1616,6 +1616,7 @@ export namespace Completion {
         "readonly",
         "return",
         "satisfies",
+        "self",
         "string",
         "super",
         "switch",
@@ -1628,7 +1629,6 @@ export namespace Completion {
         "typeof",
         "unique",
         "unknown",
-        "self",
         "var",
         "void",
         "while",
