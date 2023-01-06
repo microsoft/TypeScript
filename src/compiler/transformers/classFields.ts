@@ -155,6 +155,7 @@ import {
     SuperProperty,
     SyntaxKind,
     TaggedTemplateExpression,
+    Ternary,
     ThisExpression,
     TransformationContext,
     TransformFlags,
@@ -293,6 +294,7 @@ const enum ClassFacts {
     NeedsClassConstructorReference = 1 << 1,
     NeedsClassSuperReference = 1 << 2,
     NeedsSubstitutionForThisInClassStaticField = 1 << 3,
+    WillHoistInitializersToConstructor = 1 << 4,
 }
 
 /**
@@ -328,8 +330,12 @@ export function transformClassFields(context: TransformationContext): (x: Source
     // We need to transform private members and class static blocks when target < ES2022.
     const shouldTransformPrivateElementsOrClassStaticBlocks = languageVersion < ScriptTarget.ES2022;
 
-    // We need to transform `accessor` fields when target < ESNext
-    const shouldTransformAutoAccessors = languageVersion < ScriptTarget.ESNext;
+    // We need to transform `accessor` fields when target < ESNext.
+    // We may need to transform `accessor` fields when `useDefineForClassFields: false`
+    const shouldTransformAutoAccessors =
+        languageVersion < ScriptTarget.ESNext ? Ternary.True :
+        !useDefineForClassFields ? Ternary.Maybe :
+        Ternary.False;
 
     // We need to transform `this` in a static initializer into a reference to the class
     // when target < ES2022 since the assignment will be moved outside of the class body.
@@ -342,7 +348,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     const shouldTransformAnything =
         shouldTransformInitializers ||
         shouldTransformPrivateElementsOrClassStaticBlocks ||
-        shouldTransformAutoAccessors;
+        shouldTransformAutoAccessors === Ternary.True;
 
     const previousOnSubstituteNode = context.onSubstituteNode;
     context.onSubstituteNode = onSubstituteNode;
@@ -394,7 +400,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
         switch (node.kind) {
             case SyntaxKind.AccessorKeyword:
-                return shouldTransformAutoAccessors ? undefined : node;
+                return shouldTransformAutoAccessorsInCurrentClass() ? undefined : node;
             case SyntaxKind.ClassDeclaration:
                 return visitClassDeclaration(node as ClassDeclaration);
             case SyntaxKind.ClassExpression:
@@ -730,7 +736,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
             return info.isValid ? undefined : node;
         }
 
-        if (shouldTransformInitializersUsingSet && !isStatic(node)) {
+        if (shouldTransformInitializersUsingSet && !isStatic(node) && currentClassLexicalEnvironment && currentClassLexicalEnvironment.facts & ClassFacts.WillHoistInitializersToConstructor) {
             // If we are transforming initializers using Set semantics we will elide the initializer as it will
             // be moved to the constructor to preserve evaluation order next to public instance fields. We don't
             // need to do this transformation for private static fields since public static fields can be
@@ -749,7 +755,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     }
 
     function transformPublicFieldInitializer(node: PropertyDeclaration) {
-        if (shouldTransformInitializers) {
+        if (shouldTransformInitializers && !isAutoAccessorPropertyDeclaration(node)) {
             // Create a temporary variable to store a computed property name (if necessary).
             // If it's not inlineable, then we emit an expression after the class which assigns
             // the property name to the temporary variable.
@@ -791,10 +797,16 @@ export function transformClassFields(context: TransformationContext): (x: Source
             transformPublicFieldInitializer(node);
     }
 
+    function shouldTransformAutoAccessorsInCurrentClass() {
+        return shouldTransformAutoAccessors === Ternary.True ||
+            shouldTransformAutoAccessors === Ternary.Maybe &&
+            !!currentClassLexicalEnvironment && !!(currentClassLexicalEnvironment.facts & ClassFacts.WillHoistInitializersToConstructor);
+    }
+
     function visitPropertyDeclaration(node: PropertyDeclaration) {
         // If this is an auto-accessor, we defer to `transformAutoAccessor`. That function
         // will in turn call `transformFieldInitializer` as needed.
-        if (shouldTransformAutoAccessors && isAutoAccessorPropertyDeclaration(node)) {
+        if (shouldTransformAutoAccessorsInCurrentClass() && isAutoAccessorPropertyDeclaration(node)) {
             return transformAutoAccessor(node);
         }
 
@@ -1289,25 +1301,54 @@ export function transformClassFields(context: TransformationContext): (x: Source
         if (isClassDeclaration(original) && classOrConstructorParameterIsDecorated(original)) {
             facts |= ClassFacts.ClassWasDecorated;
         }
+        let containsPublicInstanceFields = false;
+        let containsInitializedPublicInstanceFields = false;
+        let containsInstancePrivateElements = false;
+        let containsInstanceAutoAccessors = false;
         for (const member of node.members) {
-            if (!isStatic(member)) continue;
-            if (member.name && (isPrivateIdentifier(member.name) || isAutoAccessorPropertyDeclaration(member)) && shouldTransformPrivateElementsOrClassStaticBlocks) {
-                facts |= ClassFacts.NeedsClassConstructorReference;
-            }
-            if (isPropertyDeclaration(member) || isClassStaticBlockDeclaration(member)) {
-                if (shouldTransformThisInStaticInitializers && member.transformFlags & TransformFlags.ContainsLexicalThis) {
-                    facts |= ClassFacts.NeedsSubstitutionForThisInClassStaticField;
-                    if (!(facts & ClassFacts.ClassWasDecorated)) {
-                        facts |= ClassFacts.NeedsClassConstructorReference;
+            if (isStatic(member)) {
+                if (member.name && (isPrivateIdentifier(member.name) || isAutoAccessorPropertyDeclaration(member)) && shouldTransformPrivateElementsOrClassStaticBlocks) {
+                    facts |= ClassFacts.NeedsClassConstructorReference;
+                }
+                if (isPropertyDeclaration(member) || isClassStaticBlockDeclaration(member)) {
+                    if (shouldTransformThisInStaticInitializers && member.transformFlags & TransformFlags.ContainsLexicalThis) {
+                        facts |= ClassFacts.NeedsSubstitutionForThisInClassStaticField;
+                        if (!(facts & ClassFacts.ClassWasDecorated)) {
+                            facts |= ClassFacts.NeedsClassConstructorReference;
+                        }
+                    }
+                    if (shouldTransformSuperInStaticInitializers && member.transformFlags & TransformFlags.ContainsLexicalSuper) {
+                        if (!(facts & ClassFacts.ClassWasDecorated)) {
+                            facts |= ClassFacts.NeedsClassConstructorReference | ClassFacts.NeedsClassSuperReference;
+                        }
                     }
                 }
-                if (shouldTransformSuperInStaticInitializers && member.transformFlags & TransformFlags.ContainsLexicalSuper) {
-                    if (!(facts & ClassFacts.ClassWasDecorated)) {
-                        facts |= ClassFacts.NeedsClassConstructorReference | ClassFacts.NeedsClassSuperReference;
-                    }
+            }
+            else if (!hasAbstractModifier(getOriginalNode(member))) {
+                if (isAutoAccessorPropertyDeclaration(member)) {
+                    containsInstanceAutoAccessors = true;
+                    containsInstancePrivateElements ||= isPrivateIdentifierClassElementDeclaration(member);
+                }
+                else if (isPrivateIdentifierClassElementDeclaration(member)) {
+                    containsInstancePrivateElements = true;
+                }
+                else if (isPropertyDeclaration(member)) {
+                    containsPublicInstanceFields = true;
+                    containsInitializedPublicInstanceFields ||= !!member.initializer;
                 }
             }
         }
+
+        const willHoistInitializersToConstructor =
+            shouldTransformInitializersUsingDefine && containsPublicInstanceFields ||
+            shouldTransformInitializersUsingSet && containsInitializedPublicInstanceFields ||
+            shouldTransformPrivateElementsOrClassStaticBlocks && containsInstancePrivateElements ||
+            shouldTransformPrivateElementsOrClassStaticBlocks && containsInstanceAutoAccessors && shouldTransformAutoAccessors === Ternary.True;
+
+        if (willHoistInitializersToConstructor) {
+            facts |= ClassFacts.WillHoistInitializersToConstructor;
+        }
+
         return facts;
     }
 
@@ -1632,20 +1673,9 @@ export function transformClassFields(context: TransformationContext): (x: Source
         );
     }
 
-    function isClassElementThatRequiresConstructorStatement(member: ClassElement) {
-        if (isStatic(member) || hasAbstractModifier(getOriginalNode(member))) {
-            return false;
-        }
-
-        return shouldTransformInitializersUsingDefine && isPropertyDeclaration(member) ||
-            shouldTransformInitializersUsingSet && isInitializedProperty(member) ||
-            shouldTransformPrivateElementsOrClassStaticBlocks && isPrivateIdentifierClassElementDeclaration(member) ||
-            shouldTransformPrivateElementsOrClassStaticBlocks && shouldTransformAutoAccessors && isAutoAccessorPropertyDeclaration(member);
-    }
-
     function transformConstructor(constructor: ConstructorDeclaration | undefined, container: ClassDeclaration | ClassExpression) {
         constructor = visitNode(constructor, visitor, isConstructorDeclaration);
-        if (!some(container.members, isClassElementThatRequiresConstructorStatement)) {
+        if (!currentClassLexicalEnvironment || !(currentClassLexicalEnvironment.facts & ClassFacts.WillHoistInitializersToConstructor)) {
             return constructor;
         }
 

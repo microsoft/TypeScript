@@ -1454,7 +1454,6 @@ namespace Parser {
     let currentToken: SyntaxKind;
     let nodeCount: number;
     let identifiers: Map<string, string>;
-    let privateIdentifiers: Map<string, string>;
     let identifierCount: number;
 
     let parsingContext: ParsingContext;
@@ -1681,7 +1680,6 @@ namespace Parser {
         parseDiagnostics = [];
         parsingContext = 0;
         identifiers = new Map<string, string>();
-        privateIdentifiers = new Map<string, string>();
         identifierCount = 0;
         nodeCount = 0;
         sourceFlags = 0;
@@ -2661,17 +2659,9 @@ namespace Parser {
         return finishNode(factory.createComputedPropertyName(expression), pos);
     }
 
-    function internPrivateIdentifier(text: string): string {
-        let privateIdentifier = privateIdentifiers.get(text);
-        if (privateIdentifier === undefined) {
-            privateIdentifiers.set(text, privateIdentifier = text);
-        }
-        return privateIdentifier;
-    }
-
     function parsePrivateIdentifier(): PrivateIdentifier {
         const pos = getNodePos();
-        const node = factory.createPrivateIdentifier(internPrivateIdentifier(scanner.getTokenValue()));
+        const node = factory.createPrivateIdentifier(internIdentifier(scanner.getTokenValue()));
         nextToken();
         return finishNode(node, pos);
     }
