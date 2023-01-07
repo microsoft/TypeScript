@@ -6924,9 +6924,6 @@ declare namespace ts {
         selfType: Type;
         instantiations: Map<string, Type>;
     }
-    interface NeverWithErrorType extends InstantiableType, IntrinsicType {
-        errorType: Type;
-    }
     interface PrintType extends InstantiableType {
         type: Type;
         flagType: Type;
