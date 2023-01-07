@@ -18815,19 +18815,29 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type;
     }
 
-    function instantiateSelfTypeIfRequired(source: Type, target: Type) {
-        if (!(source.flags & TypeFlags.Selfed)) return source;
+    function instantiateSelfTypesIfRequired(source: Type, target: Type): [Type, Type] {
+        if (!(source.flags & TypeFlags.Selfed) && !(target.flags & TypeFlags.Selfed)) {
+            return [source, target];
+        }
+        if (source.flags & TypeFlags.Selfed && target.flags & TypeFlags.Selfed) {
+            if (getTypeId(target) === getTypeId(source)) return [source, target];
+            return [(source as SelfedType).type, (target as SelfedType).type];
+        }
+        if (source.flags & TypeFlags.Selfed) {
+            return [instantiateSelfType(source as SelfedType, target), target]
+        }
         if (target.flags & TypeFlags.Selfed) {
-            if (getTypeId(target) === getTypeId(source)) return source;
-            return (source as SelfedType).type;
+            return [source, instantiateSelfType(target as SelfedType, source)]
         }
+        return Debug.fail()
+    }
 
-        const sourceSelfed = source as SelfedType;
-        if (sourceSelfed.instantiations.has(getTypeId(target).toString())) {
-            return sourceSelfed.instantiations.get(getTypeId(target).toString())!;
+    function instantiateSelfType(selfed: SelfedType, self: Type) {
+        if (selfed.instantiations.has(getTypeId(self).toString())) {
+            return selfed.instantiations.get(getTypeId(self).toString())!;
         }
-        const instantiated = instantiateType(sourceSelfed.type, makeUnaryTypeMapper(sourceSelfed.selfType, target));
-        sourceSelfed.instantiations.set(getTypeId(target).toString(), instantiated);
+        const instantiated = instantiateType(selfed.type, makeUnaryTypeMapper(selfed.selfType, self));
+        selfed.instantiations.set(getTypeId(self).toString(), instantiated);
         return instantiated;
     }
 
@@ -19780,8 +19790,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isSimpleTypeRelatedTo(source: Type, target: Type, relation: Map<string, RelationComparisonResult>, errorReporter?: ErrorReporter): boolean {
-        source = instantiateSelfTypeIfRequired(source, target);
-        target = instantiateSelfTypeIfRequired(target, source);
+        [source, target] = instantiateSelfTypesIfRequired(source, target);
         const s = source.flags;
         const t = target.flags;
         if (t & TypeFlags.AnyOrUnknown || s & TypeFlags.Never || source === wildcardType) return true;
@@ -19825,8 +19834,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isTypeRelatedTo(source: Type, target: Type, relation: Map<string, RelationComparisonResult>) {
-        source = instantiateSelfTypeIfRequired(source, target);
-        target = instantiateSelfTypeIfRequired(target, source);
+        [source, target] = instantiateSelfTypesIfRequired(source, target);
         if (isFreshLiteralType(source)) {
             source = (source as FreshableType).regularType;
         }
@@ -20273,8 +20281,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * * Ternary.False if they are not related.
          */
         function isRelatedTo(originalSource: Type, originalTarget: Type, recursionFlags: RecursionFlags = RecursionFlags.Both, reportErrors = false, headMessage?: DiagnosticMessage, intersectionState = IntersectionState.None): Ternary {
-            originalSource = instantiateSelfTypeIfRequired(originalSource, originalTarget);
-            originalTarget = instantiateSelfTypeIfRequired(originalTarget, originalSource);
+            [originalSource, originalTarget] = instantiateSelfTypesIfRequired(originalSource, originalTarget);
             // Before normalization: if `source` is type an object type, and `target` is primitive,
             // skip all the checks we don't need and just return `isSimpleTypeRelatedTo` result
             if (originalSource.flags & TypeFlags.Object && originalTarget.flags & TypeFlags.Primitive) {
