@@ -5293,6 +5293,7 @@ export const enum NodeBuilderFlags {
     UseSingleQuotesForStringLiteralType     = 1 << 28,  // Use single quotes for string literal type
     NoTypeReduction                         = 1 << 29,  // Don't call getReducedType
     OmitThisParameter                       = 1 << 25,
+    NoStringLiteralEscaping                 = 1 << 31,
 
     // Error handling
     AllowThisInObjectLiteral                = 1 << 15,
@@ -5353,13 +5354,15 @@ export const enum TypeFormatFlags {
     InElementType                           = 1 << 21, // Writing an array or union element type
     InFirstTypeArgument                     = 1 << 22, // Writing first type argument of the instantiated type
     InTypeAlias                             = 1 << 23, // Writing type in type alias declaration
+    
+    NoStringLiteralEscaping                 = 1 << 31,
 
     /** @deprecated */ WriteOwnNameForAnyLike  = 0,  // Does nothing
 
     NodeBuilderFlagsMask = NoTruncation | WriteArrayAsGenericType | UseStructuralFallback | WriteTypeArgumentsOfSignature |
         UseFullyQualifiedType | SuppressAnyReturnType | MultilineObjectLiterals | WriteClassExpressionAsTypeLiteral |
         UseTypeOfFunction | OmitParameterModifiers | UseAliasDefinedOutsideCurrentScope | AllowUniqueESSymbolType | InTypeAlias |
-        UseSingleQuotesForStringLiteralType | NoTypeReduction | OmitThisParameter
+        UseSingleQuotesForStringLiteralType | NoTypeReduction | OmitThisParameter | NoStringLiteralEscaping
 }
 
 export const enum SymbolFormatFlags {
@@ -7916,6 +7919,7 @@ export const enum EmitFlags {
     /** @internal */ IgnoreSourceNewlines = 1 << 28,   // Overrides `printerOptions.preserveSourceNewlines` to print this node (and all descendants) with default whitespace.
     /** @internal */ Immutable = 1 << 29,      // Indicates a node is a singleton intended to be reused in multiple locations. Any attempt to make further changes to the node will result in an error.
     /** @internal */ IndirectCall = 1 << 30,   // Emit CallExpression as an indirect call: `(0, f)()`
+    NoStringEscaping = 1 << 31
 }
 
 export interface EmitHelperBase {

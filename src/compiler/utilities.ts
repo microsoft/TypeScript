@@ -1281,7 +1281,8 @@ export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile | u
     // or a (possibly escaped) quoted form of the original text if it's string-like.
     switch (node.kind) {
         case SyntaxKind.StringLiteral: {
-            const escapeText = flags & GetLiteralTextFlags.JsxAttributeEscape ? escapeJsxAttributeString :
+            const escapeText = getEmitFlags(node) & EmitFlags.NoStringEscaping ? ((x: string) => x) :
+                flags & GetLiteralTextFlags.JsxAttributeEscape ? escapeJsxAttributeString :
                 flags & GetLiteralTextFlags.NeverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? escapeString :
                 escapeNonAsciiString;
             if ((node as StringLiteral).singleQuote) {

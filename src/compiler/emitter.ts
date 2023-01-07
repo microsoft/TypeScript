@@ -5460,7 +5460,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             const textSourceNode = (node as StringLiteral).textSourceNode!;
             if (isIdentifier(textSourceNode) || isPrivateIdentifier(textSourceNode) || isNumericLiteral(textSourceNode)) {
                 const text = isNumericLiteral(textSourceNode) ? textSourceNode.text : getTextOfNode(textSourceNode);
-                return jsxAttributeEscape ? `"${escapeJsxAttributeString(text)}"` :
+                return getEmitFlags(node) & EmitFlags.NoStringEscaping ? `"${text}"` :
+                    jsxAttributeEscape ? `"${escapeJsxAttributeString(text)}"` :
                     neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ? `"${escapeString(text)}"` :
                     `"${escapeNonAsciiString(text)}"`;
             }

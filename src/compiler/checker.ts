@@ -6042,7 +6042,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function typeToString(type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope, writer: EmitTextWriter = createTextWriter("")): string {
+    function typeToString(type: Type, enclosingDeclaration?: Node, flags: TypeFormatFlags = getTypeToStringDefaultFlags(), writer: EmitTextWriter = createTextWriter("")): string {
         const noTruncation = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation;
         const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | (noTruncation ? NodeBuilderFlags.NoTruncation : 0));
         if (typeNode === undefined) return Debug.fail("should always get typenode");
@@ -6059,6 +6059,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return result.substr(0, maxLength - "...".length) + "...";
         }
         return result;
+    }
+
+    function getTypeToStringDefaultFlags() {
+        return TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope
     }
 
     function getTypeNamesForErrorDisplay(left: Type, right: Type): [string, string] {
@@ -6244,7 +6248,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (type.flags & TypeFlags.StringLiteral) {
                 context.approximateLength += ((type as StringLiteralType).value.length + 2);
-                return factory.createLiteralTypeNode(setEmitFlags(factory.createStringLiteral((type as StringLiteralType).value, !!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType)), EmitFlags.NoAsciiEscaping));
+                return factory.createLiteralTypeNode(setEmitFlags(
+                    factory.createStringLiteral((type as StringLiteralType).value, !!(context.flags & NodeBuilderFlags.UseSingleQuotesForStringLiteralType)),
+                    EmitFlags.NoAsciiEscaping | (context.flags & NodeBuilderFlags.NoStringLiteralEscaping ? EmitFlags.NoStringEscaping : 0)
+                ));
             }
             if (type.flags & TypeFlags.NumberLiteral) {
                 const value = (type as NumberLiteralType).value;
@@ -6430,6 +6437,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return symbolToTypeNode((type as StringMappingType).symbol, context, SymbolFlags.Type, [typeNode]);
             }
             if (type.flags & TypeFlags.Print) {
+                // TODO: if type has some type parameters return `Print<${T}>` instead of `${Print<T>}`
                 return typeToTypeNodeHelper(getStringLiteralTypeFromPrintType(type as PrintType), context);
             }
             if (type.flags & TypeFlags.IndexedAccess) {
@@ -16909,9 +16917,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const type = getStringLiteralType(typeToString(
             printType.type, /* enclosingDeclaration */ undefined,
-            isTypeSubtypeOf(getStringLiteralType("InTypeAlias"), printType.flagType)
+            getTypeToStringDefaultFlags() |
+            (isTypeSubtypeOf(getStringLiteralType("InTypeAlias"), printType.flagType)
                 ? TypeFormatFlags.InTypeAlias
-                : TypeFormatFlags.None
+                : 0)
         ));
 
         printType.resolvedStringLiteralType = type;
@@ -20150,13 +20159,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!every(errorTypes, t => !!(t.flags & TypeFlags.StringLike))) return reportNonCustom();
 
                 while (errorTypes.length > 0) {
-                    reportError(Diagnostics._0,
-                        typeToString(errorTypes.pop()!)
+                    reportError(
+                        Diagnostics._0,
+                        typeToString(
+                            errorTypes.pop()!,
+                            /* enclosingDeclaration */ undefined,
+                            TypeFormatFlags.NoStringLiteralEscaping | getTypeToStringDefaultFlags()
+                        )
                         .slice(1,-1)
-                        .replace(/\\"/g, '"')
-                        .replace(/\\'/g, "'")
-                        .replace(/\\\\/g, "\\")
-                        .replace(/\\n/g, "\n")
                     );
                 }
                 return;
