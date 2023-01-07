@@ -6062,7 +6062,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypeToStringDefaultFlags() {
-        return TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope
+        return TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope;
     }
 
     function getTypeNamesForErrorDisplay(left: Type, right: Type): [string, string] {
@@ -18833,12 +18833,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return [(source as SelfedType).type, (target as SelfedType).type];
         }
         if (source.flags & TypeFlags.Selfed) {
-            return [instantiateSelfType(source as SelfedType, target), target]
+            return [instantiateSelfType(source as SelfedType, target), target];
         }
         if (target.flags & TypeFlags.Selfed) {
-            return [source, instantiateSelfType(target as SelfedType, source)]
+            return [source, instantiateSelfType(target as SelfedType, source)];
         }
-        return Debug.fail()
+        return Debug.fail();
     }
 
     function instantiateSelfType(selfed: SelfedType, self: Type) {

@@ -5354,7 +5354,7 @@ export const enum TypeFormatFlags {
     InElementType                           = 1 << 21, // Writing an array or union element type
     InFirstTypeArgument                     = 1 << 22, // Writing first type argument of the instantiated type
     InTypeAlias                             = 1 << 23, // Writing type in type alias declaration
-    
+
     NoStringLiteralEscaping                 = 1 << 31,
 
     /** @deprecated */ WriteOwnNameForAnyLike  = 0,  // Does nothing
