@@ -6618,6 +6618,7 @@ export interface SelfedType extends InstantiableType {
     instantiations: Map<string, Type>
 }
 
+/** @internal */
 export interface NeverWithErrorType extends InstantiableType, IntrinsicType {
     errorType: Type
 }
