@@ -4679,6 +4679,7 @@ function isTypeScriptOnlyKeyword(kind: SyntaxKind) {
         case SyntaxKind.ProtectedKeyword:
         case SyntaxKind.PublicKeyword:
         case SyntaxKind.ReadonlyKeyword:
+        case SyntaxKind.SelfKeyword:
         case SyntaxKind.StringKeyword:
         case SyntaxKind.SymbolKeyword:
         case SyntaxKind.TypeKeyword:

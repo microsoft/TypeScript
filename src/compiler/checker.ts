@@ -3584,7 +3584,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function isPrimitiveTypeName(name: __String) {
-        return name === "any" || name === "string" || name === "number" || name === "boolean" || name === "never" || name === "unknown";
+        return name === "any" || name === "string" || name === "number" || name === "boolean" || name === "never" || name === "unknown" || name === "self";
     }
 
     function checkAndReportErrorForExportingPrimitiveType(errorLocation: Node, name: __String): boolean {
@@ -41391,6 +41391,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case "symbol":
             case "void":
             case "object":
+            case "self":
                 error(name, message, name.escapedText as string);
         }
     }
