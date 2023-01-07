@@ -2494,6 +2494,7 @@ declare namespace ts {
         UseSingleQuotesForStringLiteralType = 268435456,
         NoTypeReduction = 536870912,
         OmitThisParameter = 33554432,
+        NoStringLiteralEscaping = -2147483648,
         AllowThisInObjectLiteral = 32768,
         AllowQualifiedNameInPlaceOfIdentifier = 65536,
         /** @deprecated AllowQualifedNameInPlaceOfIdentifier. Use AllowQualifiedNameInPlaceOfIdentifier instead. */
@@ -2532,8 +2533,9 @@ declare namespace ts {
         InElementType = 2097152,
         InFirstTypeArgument = 4194304,
         InTypeAlias = 8388608,
+        NoStringLiteralEscaping = -2147483648,
         /** @deprecated */ WriteOwnNameForAnyLike = 0,
-        NodeBuilderFlagsMask = 848330091
+        NodeBuilderFlagsMask = -1299153557
     }
     enum SymbolFormatFlags {
         None = 0,
@@ -3536,7 +3538,8 @@ declare namespace ts {
         NoHoisting = 4194304,
         HasEndOfDeclarationMarker = 8388608,
         Iterator = 16777216,
-        NoAsciiEscaping = 33554432
+        NoAsciiEscaping = 33554432,
+        NoStringEscaping = -2147483648
     }
     interface EmitHelperBase {
         readonly name: string;
