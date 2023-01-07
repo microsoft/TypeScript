@@ -33,9 +33,9 @@ type BorkedType = {
 };
 const borked: BorkedType = null as unknown as BorkedType;
 if (borked.thing!.name !== "Correct") {
-    console.log(borked.thing!.message); // Error: We don't narrow it to exclude the "correct" variant here
+    console.log(borked.thing!.message);
 } else {
-    console.log(borked.thing!.id); // Error: We also don't narrow it here
+    console.log(borked.thing!.id);
 }
 
 export type FixedType = {
@@ -71,10 +71,10 @@ else {
 }
 var borked = null;
 if (borked.thing.name !== "Correct") {
-    console.log(borked.thing.message); // Error: We don't narrow it to exclude the "correct" variant here
+    console.log(borked.thing.message);
 }
 else {
-    console.log(borked.thing.id); // Error: We also don't narrow it here
+    console.log(borked.thing.id);
 }
 var fixed = null;
 if (((_a = fixed.thing) === null || _a === void 0 ? void 0 : _a.name) !== "Correct") {

@@ -147,7 +147,7 @@ if (borked.thing!.name !== "Correct") {
 >name : "Error1" | "Error2" | "Error3" | "Error4" | "Error5" | "Error6" | "Error7" | "Error8" | "Correct"
 >"Correct" : "Correct"
 
-    console.log(borked.thing!.message); // Error: We don't narrow it to exclude the "correct" variant here
+    console.log(borked.thing!.message);
 >console.log(borked.thing!.message) : void
 >console.log : (...data: any[]) => void
 >console : Console
@@ -160,7 +160,7 @@ if (borked.thing!.name !== "Correct") {
 >message : string
 
 } else {
-    console.log(borked.thing!.id); // Error: We also don't narrow it here
+    console.log(borked.thing!.id);
 >console.log(borked.thing!.id) : void
 >console.log : (...data: any[]) => void
 >console : Console

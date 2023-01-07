@@ -135,7 +135,7 @@ if (borked.thing!.name !== "Correct") {
 >thing : Symbol(thing, Decl(narrowingUnionWithBang.ts, 20, 19))
 >name : Symbol(name, Decl(narrowingUnionWithBang.ts, 22, 5), Decl(narrowingUnionWithBang.ts, 23, 5), Decl(narrowingUnionWithBang.ts, 24, 5), Decl(narrowingUnionWithBang.ts, 25, 5), Decl(narrowingUnionWithBang.ts, 26, 5) ... and 4 more)
 
-    console.log(borked.thing!.message); // Error: We don't narrow it to exclude the "correct" variant here
+    console.log(borked.thing!.message);
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
@@ -146,7 +146,7 @@ if (borked.thing!.name !== "Correct") {
 >message : Symbol(message, Decl(narrowingUnionWithBang.ts, 22, 21), Decl(narrowingUnionWithBang.ts, 23, 21), Decl(narrowingUnionWithBang.ts, 24, 21), Decl(narrowingUnionWithBang.ts, 25, 21), Decl(narrowingUnionWithBang.ts, 26, 21) ... and 3 more)
 
 } else {
-    console.log(borked.thing!.id); // Error: We also don't narrow it here
+    console.log(borked.thing!.id);
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))
 >log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))

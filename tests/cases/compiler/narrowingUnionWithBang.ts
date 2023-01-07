@@ -33,9 +33,9 @@ type BorkedType = {
 };
 const borked: BorkedType = null as unknown as BorkedType;
 if (borked.thing!.name !== "Correct") {
-    console.log(borked.thing!.message); // Error: We don't narrow it to exclude the "correct" variant here
+    console.log(borked.thing!.message);
 } else {
-    console.log(borked.thing!.id); // Error: We also don't narrow it here
+    console.log(borked.thing!.id);
 }
 
 export type FixedType = {
