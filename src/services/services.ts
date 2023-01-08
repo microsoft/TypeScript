@@ -94,7 +94,6 @@ import {
     getDefaultLibFileName,
     getDirectoryPath,
     getEmitDeclarations,
-    getEntries,
     getEscapedTextOfIdentifierOrLiteral,
     getFileEmitOutput,
     getImpliedNodeFormatForFile,
@@ -2327,7 +2326,7 @@ export function createLanguageService(
         return OutliningElementsCollector.collectElements(sourceFile, cancellationToken);
     }
 
-    const braceMatching = new Map(getEntries({
+    const braceMatching = new Map(Object.entries({
         [SyntaxKind.OpenBraceToken]: SyntaxKind.CloseBraceToken,
         [SyntaxKind.OpenParenToken]: SyntaxKind.CloseParenToken,
         [SyntaxKind.OpenBracketToken]: SyntaxKind.CloseBracketToken,

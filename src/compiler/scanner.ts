@@ -11,7 +11,6 @@ import {
     Debug,
     DiagnosticMessage,
     Diagnostics,
-    getEntries,
     identity,
     JSDocSyntaxKind,
     JsxTokenSyntaxKind,
@@ -192,9 +191,9 @@ export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
     of: SyntaxKind.OfKeyword,
 };
 
-const textToKeyword = new Map(getEntries(textToKeywordObj));
+const textToKeyword = new Map(Object.entries(textToKeywordObj));
 
-const textToToken = new Map(getEntries({
+const textToToken = new Map(Object.entries({
     ...textToKeywordObj,
     "{": SyntaxKind.OpenBraceToken,
     "}": SyntaxKind.CloseBraceToken,

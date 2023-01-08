@@ -100,7 +100,6 @@ import {
     getDefaultFormatCodeSettings,
     getDirectoryPath,
     getDocumentPositionMapper,
-    getEntries,
     getFileNamesFromConfigSpecs,
     getFileWatcherEventKind,
     getNormalizedAbsolutePath,
@@ -356,7 +355,7 @@ function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: Command
 
 const compilerOptionConverters = prepareConvertersForEnumLikeCompilerOptions(optionDeclarations);
 const watchOptionsConverters = prepareConvertersForEnumLikeCompilerOptions(optionsForWatch);
-const indentStyle = new Map(getEntries({
+const indentStyle = new Map(Object.entries({
     none: IndentStyle.None,
     block: IndentStyle.Block,
     smart: IndentStyle.Smart
@@ -823,7 +822,7 @@ export interface OpenFileArguments {
 /** @internal */
 export interface ChangeFileArguments {
     fileName: string;
-    changes: Iterator<TextChange>;
+    changes: Iterable<TextChange>;
 }
 
 export interface WatchOptionsAndErrors {
@@ -2472,7 +2471,7 @@ export class ProjectService {
             config!.watchedDirectoriesStale = false;
             updateWatchingWildcardDirectories(
                 config!.watchedDirectories ||= new Map(),
-                new Map(getEntries(config!.parsedCommandLine!.wildcardDirectories!)),
+                new Map(Object.entries(config!.parsedCommandLine!.wildcardDirectories!)),
                 // Create new directory watcher
                 (directory, flags) => this.watchWildcardDirectory(directory as Path, flags, configFileName, config!),
             );
@@ -2783,7 +2782,7 @@ export class ProjectService {
 
     /** @internal */
     logErrorForScriptInfoNotFound(fileName: string): void {
-        const names = arrayFrom(this.filenameToScriptInfo.entries()).map(([path, scriptInfo]) => ({ path, fileName: scriptInfo.fileName }));
+        const names = arrayFrom(this.filenameToScriptInfo.entries(), ([path, scriptInfo]) => ({ path, fileName: scriptInfo.fileName }));
         this.logger.msg(`Could not find file ${JSON.stringify(fileName)}.\nAll files are: ${JSON.stringify(names)}`, Msg.Err);
     }
 
@@ -3879,7 +3878,7 @@ export class ProjectService {
 
     private collectChanges(
         lastKnownProjectVersions: protocol.ProjectVersionInfo[],
-        currentProjects: Project[],
+        currentProjects: Iterable<Project>,
         includeProjectReferenceRedirectInfo: boolean | undefined,
         result: ProjectFilesWithTSDiagnostics[]
         ): void {
@@ -3893,20 +3892,17 @@ export class ProjectService {
     synchronizeProjectList(knownProjects: protocol.ProjectVersionInfo[], includeProjectReferenceRedirectInfo?: boolean): ProjectFilesWithTSDiagnostics[] {
         const files: ProjectFilesWithTSDiagnostics[] = [];
         this.collectChanges(knownProjects, this.externalProjects, includeProjectReferenceRedirectInfo, files);
-        this.collectChanges(knownProjects, arrayFrom(this.configuredProjects.values()), includeProjectReferenceRedirectInfo, files);
+        this.collectChanges(knownProjects, this.configuredProjects.values(), includeProjectReferenceRedirectInfo, files);
         this.collectChanges(knownProjects, this.inferredProjects, includeProjectReferenceRedirectInfo, files);
         return files;
     }
 
     /** @internal */
-    applyChangesInOpenFiles(openFiles: Iterator<OpenFileArguments> | undefined, changedFiles?: Iterator<ChangeFileArguments>, closedFiles?: string[]): void {
+    applyChangesInOpenFiles(openFiles: Iterable<OpenFileArguments> | undefined, changedFiles?: Iterable<ChangeFileArguments>, closedFiles?: string[]): void {
         let openScriptInfos: ScriptInfo[] | undefined;
         let assignOrphanScriptInfosToInferredProject = false;
         if (openFiles) {
-            while (true) {
-                const iterResult = openFiles.next();
-                if (iterResult.done) break;
-                const file = iterResult.value;
+            for (const file of openFiles) {
                 // Create script infos so we have the new content for all the open files before we do any updates to projects
                 const info = this.getOrCreateOpenScriptInfo(
                     toNormalizedPath(file.fileName),
@@ -3920,10 +3916,7 @@ export class ProjectService {
         }
 
         if (changedFiles) {
-            while (true) {
-                const iterResult = changedFiles.next();
-                if (iterResult.done) break;
-                const file = iterResult.value;
+            for (const file of changedFiles) {
                 const scriptInfo = this.getScriptInfo(file.fileName)!;
                 Debug.assert(!!scriptInfo);
                 // Make edits to script infos and marks containing project as dirty
@@ -3962,11 +3955,8 @@ export class ProjectService {
     }
 
     /** @internal */
-    applyChangesToFile(scriptInfo: ScriptInfo, changes: Iterator<TextChange>) {
-        while (true) {
-            const iterResult = changes.next();
-            if (iterResult.done) break;
-            const change = iterResult.value;
+    applyChangesToFile(scriptInfo: ScriptInfo, changes: Iterable<TextChange>) {
+        for (const change of changes) {
             scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
         }
     }

@@ -15,7 +15,6 @@ import {
     flatten,
     GeneratedIdentifierFlags,
     getEmitScriptTarget,
-    getEntries,
     getJSXImplicitImportBase,
     getJSXRuntimeImport,
     getLineAndCharacterOfPosition,
@@ -172,7 +171,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                     // Add `require` statement
                     const requireStatement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
                         factory.createVariableDeclaration(
-                            factory.createObjectBindingPattern(map(arrayFrom(importSpecifiersMap.values()), s => factory.createBindingElement(/*dotdotdot*/ undefined, s.propertyName, s.name))),
+                            factory.createObjectBindingPattern(arrayFrom(importSpecifiersMap.values(), s => factory.createBindingElement(/*dotdotdot*/ undefined, s.propertyName, s.name))),
                             /*exclaimationToken*/ undefined,
                             /*type*/ undefined,
                             factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [factory.createStringLiteral(importSource)])
@@ -636,7 +635,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     }
 }
 
-const entities = new Map(getEntries({
+const entities = new Map(Object.entries({
     quot: 0x0022,
     amp: 0x0026,
     apos: 0x0027,

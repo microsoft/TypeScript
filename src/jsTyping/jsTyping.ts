@@ -12,7 +12,6 @@ import {
     forEach,
     getBaseFileName,
     getDirectoryPath,
-    getEntries,
     getNormalizedAbsolutePath,
     getOwnKeys,
     getPathComponents,
@@ -136,14 +135,14 @@ export type SafeList = ReadonlyMap<string, string>;
 /** @internal */
 export function loadSafeList(host: TypingResolutionHost, safeListPath: Path): SafeList {
     const result = readConfigFile(safeListPath, path => host.readFile(path));
-    return new Map(getEntries<string>(result.config));
+    return new Map(Object.entries<string>(result.config));
 }
 
 /** @internal */
 export function loadTypesMap(host: TypingResolutionHost, typesMapPath: Path): SafeList | undefined {
     const result = readConfigFile(typesMapPath, path => host.readFile(path));
-    if (result.config) {
-        return new Map(getEntries<string>(result.config.simpleMap));
+    if (result.config?.simpleMap) {
+        return new Map(Object.entries<string>(result.config.simpleMap));
     }
     return undefined;
 }
