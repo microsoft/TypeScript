@@ -71,6 +71,7 @@ import {
     PropertyName,
     QuestionToken,
     SetAccessorDeclaration,
+    some,
     TypeAliasDeclaration,
     TypeElement,
     TypeNode,
@@ -496,7 +497,7 @@ function patchNodeFactory(factory: NodeFactory) {
                 (name === undefined || typeof name === "string" || isPropertyName(name)) &&
                 (questionToken === undefined || typeof questionToken === "object" && isQuestionToken(questionToken)) &&
                 (typeParameters === undefined || isArray(typeParameters)) &&
-                (parameters === undefined || every<Node>(parameters, isParameter)) &&
+                (parameters === undefined || !some<Node>(parameters, isTypeParameterDeclaration)) &&
                 (type === undefined || !isArray(type)) &&
                 (body === undefined || isBlock(body)),
 
@@ -505,7 +506,7 @@ function patchNodeFactory(factory: NodeFactory) {
                 (asteriskToken === undefined || typeof asteriskToken === "object" && isAsteriskToken(asteriskToken)) &&
                 (name === undefined || typeof name === "string" || isPropertyName(name)) &&
                 (questionToken === undefined || !isArray(questionToken)) &&
-                (typeParameters === undefined || every<Node>(typeParameters, isTypeParameterDeclaration)) &&
+                (typeParameters === undefined || !some<Node>(typeParameters, isParameter)) &&
                 (parameters === undefined || isArray(parameters)) &&
                 (type === undefined || isTypeNode(type)) &&
                 (body === undefined || isBlock(body)),
@@ -532,7 +533,7 @@ function patchNodeFactory(factory: NodeFactory) {
                 (name === undefined || typeof name === "string" || isPropertyName(name)) &&
                 (questionToken === undefined || typeof questionToken === "object" && isQuestionToken(questionToken)) &&
                 (typeParameters === undefined || isArray(typeParameters)) &&
-                (parameters === undefined || every<Node>(parameters, isParameter)) &&
+                (parameters === undefined || !some<Node>(parameters, isTypeParameterDeclaration)) &&
                 (type === undefined || !isArray(type)) &&
                 (body === undefined || isBlock(body)),
 
@@ -541,7 +542,7 @@ function patchNodeFactory(factory: NodeFactory) {
                 (asteriskToken === undefined || typeof asteriskToken === "object" && isAsteriskToken(asteriskToken)) &&
                 (name === undefined || typeof name === "string" || isPropertyName(name)) &&
                 (questionToken === undefined || !isArray(questionToken)) &&
-                (typeParameters === undefined || every<Node>(typeParameters, isTypeParameterDeclaration)) &&
+                (typeParameters === undefined || !some<Node>(typeParameters, isParameter)) &&
                 (parameters === undefined || isArray(parameters)) &&
                 (type === undefined || isTypeNode(type)) &&
                 (body === undefined || isBlock(body)),
@@ -564,13 +565,13 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([modifiers, parameters, body, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
-                (parameters === undefined || every<Node>(parameters, isParameter)) &&
+                (modifiers === undefined || !some<Node>(modifiers, isDecorator)) &&
+                (parameters === undefined || !some<Node>(parameters, isModifier)) &&
                 (body === undefined || !isArray(body)),
 
             1: ([decorators, modifiers, parameters, body]) =>
-                (decorators === undefined || every<Node>(decorators, isDecorator)) &&
-                (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
+                (decorators === undefined || !some<Node>(decorators, isModifier)) &&
+                (modifiers === undefined || !some<Node>(modifiers, isParameter)) &&
                 (parameters === undefined || isArray(parameters)) &&
                 (body === undefined || isBlock(body)),
         })
@@ -592,13 +593,13 @@ function patchNodeFactory(factory: NodeFactory) {
         .bind({
             0: ([, modifiers, parameters, body, other]) =>
                 (other === undefined) &&
-                (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
-                (parameters === undefined || every<Node>(parameters, isParameter)) &&
+                (modifiers === undefined || !some<Node>(modifiers, isDecorator)) &&
+                (parameters === undefined || !some<Node>(parameters, isModifier)) &&
                 (body === undefined || !isArray(body)),
 
             1: ([, decorators, modifiers, parameters, body]) =>
-                (decorators === undefined || every<Node>(decorators, isDecorator)) &&
-                (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
+                (decorators === undefined || !some<Node>(decorators, isModifier)) &&
+                (modifiers === undefined || !some<Node>(modifiers, isParameter)) &&
                 (parameters === undefined || isArray(parameters)) &&
                 (body === undefined || isBlock(body)),
         })
@@ -765,7 +766,7 @@ function patchNodeFactory(factory: NodeFactory) {
             0: ([, modifiers, parameters, type, other]) =>
                 (other === undefined) &&
                 (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
-                (parameters === undefined || every<Node>(parameters, isParameter)) &&
+                (parameters === undefined || every(parameters, isParameter)) &&
                 (type === undefined || !isArray(type)),
 
             1: ([, decorators, modifiers, parameters, type]) =>
@@ -846,8 +847,8 @@ function patchNodeFactory(factory: NodeFactory) {
                 (other === undefined) &&
                 (name === undefined || !isArray(name)) &&
                 (typeParameters === undefined || isArray(typeParameters)) &&
-                (heritageClauses === undefined || every<Node>(heritageClauses, isHeritageClause)) &&
-                (members === undefined || every<Node>(members, isClassElement)),
+                (heritageClauses === undefined || every(heritageClauses, isHeritageClause)) &&
+                (members === undefined || every(members, isClassElement)),
 
             1: ([, modifiers, name, typeParameters, heritageClauses, members]) =>
                 (modifiers === undefined || isArray(modifiers)) &&
@@ -876,8 +877,8 @@ function patchNodeFactory(factory: NodeFactory) {
                 (other === undefined) &&
                 (name === undefined || !isArray(name)) &&
                 (typeParameters === undefined || isArray(typeParameters)) &&
-                (heritageClauses === undefined || every<Node>(heritageClauses, isHeritageClause)) &&
-                (members === undefined || every<Node>(members, isClassElement)),
+                (heritageClauses === undefined || every(heritageClauses, isHeritageClause)) &&
+                (members === undefined || every(members, isClassElement)),
 
             1: ([, , modifiers, name, typeParameters, heritageClauses, members]) =>
                 (modifiers === undefined || isArray(modifiers)) &&
@@ -941,7 +942,7 @@ function patchNodeFactory(factory: NodeFactory) {
                 (asteriskToken === undefined || !isArray(asteriskToken)) &&
                 (name === undefined || isIdentifier(name)) &&
                 (typeParameters === undefined || isArray(typeParameters)) &&
-                (parameters === undefined || every<Node>(parameters, isParameter)) &&
+                (parameters === undefined || every(parameters, isParameter)) &&
                 (type === undefined || !isArray(type)) &&
                 (body === undefined || isBlock(body)),
 
@@ -974,8 +975,8 @@ function patchNodeFactory(factory: NodeFactory) {
                 (other === undefined) &&
                 (name === undefined || !isArray(name)) &&
                 (typeParameters === undefined || isArray(typeParameters)) &&
-                (heritageClauses === undefined || every<Node>(heritageClauses, isHeritageClause)) &&
-                (members === undefined || every<Node>(members, isClassElement)),
+                (heritageClauses === undefined || every(heritageClauses, isHeritageClause)) &&
+                (members === undefined || every(members, isClassElement)),
 
             1: () => true,
         })
@@ -999,8 +1000,8 @@ function patchNodeFactory(factory: NodeFactory) {
                 (other === undefined) &&
                 (name === undefined || !isArray(name)) &&
                 (typeParameters === undefined || isArray(typeParameters)) &&
-                (heritageClauses === undefined || every<Node>(heritageClauses, isHeritageClause)) &&
-                (members === undefined || every<Node>(members, isClassElement)),
+                (heritageClauses === undefined || every(heritageClauses, isHeritageClause)) &&
+                (members === undefined || every(members, isClassElement)),
 
             1: ([, , modifiers, name, typeParameters, heritageClauses, members]) =>
                 (modifiers === undefined || isArray(modifiers)) &&
@@ -1030,8 +1031,8 @@ function patchNodeFactory(factory: NodeFactory) {
                 (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                 (name === undefined || !isArray(name)) &&
                 (typeParameters === undefined || isArray(typeParameters)) &&
-                (heritageClauses === undefined || every<Node>(heritageClauses, isHeritageClause)) &&
-                (members === undefined || every<Node>(members, isTypeElement)),
+                (heritageClauses === undefined || every(heritageClauses, isHeritageClause)) &&
+                (members === undefined || every(members, isTypeElement)),
 
             1: ([decorators, modifiers, name, typeParameters, heritageClauses, members]) =>
                 (decorators === undefined || every<Node>(decorators, isDecorator)) &&
@@ -1062,8 +1063,8 @@ function patchNodeFactory(factory: NodeFactory) {
                 (modifiers === undefined || every<Node>(modifiers, isModifier)) &&
                 (name === undefined || !isArray(name)) &&
                 (typeParameters === undefined || isArray(typeParameters)) &&
-                (heritageClauses === undefined || every<Node>(heritageClauses, isHeritageClause)) &&
-                (members === undefined || every<Node>(members, isTypeElement)),
+                (heritageClauses === undefined || every(heritageClauses, isHeritageClause)) &&
+                (members === undefined || every(members, isTypeElement)),
 
             1: ([, decorators, modifiers, name, typeParameters, heritageClauses, members]) =>
                 (decorators === undefined || every<Node>(decorators, isDecorator)) &&
@@ -1331,7 +1332,7 @@ function patchNodeFactory(factory: NodeFactory) {
                 (assertClause === undefined || isAssertClause(assertClause)),
 
             1: ([decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>
-                (decorators === undefined || every<Node>(decorators, isDecorator)) &&
+                (decorators === undefined || every(decorators, isDecorator)) &&
                 (modifiers === undefined || isArray(modifiers)) &&
                 (importClause === undefined || isImportClause(importClause)) &&
                 (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&
@@ -1361,7 +1362,7 @@ function patchNodeFactory(factory: NodeFactory) {
                 (assertClause === undefined || isAssertClause(assertClause)),
 
             1: ([, decorators, modifiers, importClause, moduleSpecifier, assertClause]) =>
-                (decorators === undefined || every<Node>(decorators, isDecorator)) &&
+                (decorators === undefined || every(decorators, isDecorator)) &&
                 (modifiers === undefined || isArray(modifiers)) &&
                 (importClause === undefined || isImportClause(importClause)) &&
                 (moduleSpecifier !== undefined && isExpression(moduleSpecifier)) &&
@@ -1390,7 +1391,7 @@ function patchNodeFactory(factory: NodeFactory) {
                 (typeof expression === "object"),
 
             1: ([decorators, modifiers, isExportEquals, expression]) =>
-                (decorators === undefined || every<Node>(decorators, isDecorator)) &&
+                (decorators === undefined || every(decorators, isDecorator)) &&
                 (modifiers === undefined || isArray(modifiers)) &&
                 (isExportEquals === undefined || typeof isExportEquals === "boolean") &&
                 (expression !== undefined && isExpression(expression)),
@@ -1417,7 +1418,7 @@ function patchNodeFactory(factory: NodeFactory) {
                 (expression !== undefined && !isArray(expression)),
 
             1: ([, decorators, modifiers, expression]) =>
-                (decorators === undefined || every<Node>(decorators, isDecorator)) &&
+                (decorators === undefined || every(decorators, isDecorator)) &&
                 (modifiers === undefined || isArray(modifiers)) &&
                 (expression !== undefined && isExpression(expression)),
         })
@@ -1446,7 +1447,7 @@ function patchNodeFactory(factory: NodeFactory) {
                 (assertClause === undefined || isAssertClause(assertClause)),
 
             1: ([decorators, modifiers, isTypeOnly, exportClause, moduleSpecifier, assertClause]) =>
-                (decorators === undefined || every<Node>(decorators, isDecorator)) &&
+                (decorators === undefined || every(decorators, isDecorator)) &&
                 (modifiers === undefined || isArray(modifiers)) &&
                 (typeof isTypeOnly === "boolean") &&
                 (exportClause === undefined || isNamedExportBindings(exportClause)) &&
