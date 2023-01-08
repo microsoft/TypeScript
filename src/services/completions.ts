@@ -4818,7 +4818,7 @@ function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, 
         case SyntaxKind.SyntaxList:
             return tryCast(location.parent, isObjectTypeDeclaration);
         case SyntaxKind.EndOfFileToken:
-            const cls = tryCast<ObjectTypeDeclaration>(lastOrUndefined(cast(location.parent, isSourceFile).statements), isObjectTypeDeclaration);
+            const cls = tryCast(lastOrUndefined(cast(location.parent, isSourceFile).statements), isObjectTypeDeclaration);
             if (cls && !findChildOfKind(cls, SyntaxKind.CloseBraceToken, sourceFile)) {
                 return cls;
             }
