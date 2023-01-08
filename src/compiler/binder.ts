@@ -867,7 +867,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 return declareSymbol(container.symbol.exports!, container.symbol, node, symbolFlags, symbolExcludes);
             }
             else {
-                Debug.assertNode<Node, HasLocals>(container, canHaveLocals);
+                Debug.assertNode(container, canHaveLocals);
                 return declareSymbol(container.locals!, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
             }
         }
@@ -899,7 +899,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 return local;
             }
             else {
-                Debug.assertNode<Node, HasLocals>(container, canHaveLocals);
+                Debug.assertNode(container, canHaveLocals);
                 return declareSymbol(container.locals!, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
             }
         }
@@ -2331,7 +2331,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 }
                 // falls through
             default:
-                Debug.assertNode<Node, HasLocals>(blockScopeContainer, canHaveLocals);
+                Debug.assertNode(blockScopeContainer, canHaveLocals);
                 if (!blockScopeContainer.locals) {
                     blockScopeContainer.locals = createSymbolTable();
                     addToContainerChain(blockScopeContainer);
