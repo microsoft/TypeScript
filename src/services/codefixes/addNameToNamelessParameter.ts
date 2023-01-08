@@ -1,6 +1,5 @@
 import {
     Debug,
-    Diagnostics,
     factory,
     getTokenAtPosition,
     Identifier,
@@ -13,6 +12,7 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const fixId = "addNameToNamelessParameter";
 const errorCodes = [Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1.code];

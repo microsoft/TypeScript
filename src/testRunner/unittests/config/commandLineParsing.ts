@@ -1,5 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import * as Harness from "../../_namespaces/Harness";
+import * as Diagnostics from "../../../compiler/diagnosticInformationMap.generated";
 
 describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
     function assertParseResult(subScenario: string, commandLine: string[], workerDiagnostic?: () => ts.ParseCommandLineWorkerDiagnostics) {
@@ -118,8 +119,8 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
                             name: "optionName",
                             type: type(),
                             isTSConfigOnly: true,
-                            category: ts.Diagnostics.Backwards_Compatibility,
-                            description: ts.Diagnostics.Enable_project_compilation,
+                            category: Diagnostics.Backwards_Compatibility,
+                            description: Diagnostics.Enable_project_compilation,
                             defaultValueDescription: undefined,
                         }
                     ];

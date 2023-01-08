@@ -3,7 +3,6 @@ import {
     CodeFixContextBase,
     contains,
     createTextSpanFromNode,
-    Diagnostics,
     ExportSpecifier,
     factory,
     filter,
@@ -23,6 +22,7 @@ import {
     createCodeFixAction,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const errorCodes = [Diagnostics.Re_exporting_a_type_when_the_isolatedModules_flag_is_provided_requires_using_export_type.code];
 const fixId = "convertToTypeOnlyExport";

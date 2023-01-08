@@ -33,7 +33,6 @@ import {
     Diagnostic,
     DiagnosticMessage,
     DiagnosticReporter,
-    Diagnostics,
     dumpTracingLegend,
     EmitAndSemanticDiagnosticsBuilderProgram,
     emitFilesAndReportErrorsAndGetExitStatus,
@@ -88,6 +87,7 @@ import {
     WatchOptions,
 } from "./_namespaces/ts";
 import * as performance from "../compiler/_namespaces/ts.performance";
+import * as Diagnostics from "../compiler/diagnosticInformationMap.generated";
 
 interface Statistic {
     name: string;

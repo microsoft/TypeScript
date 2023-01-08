@@ -7,7 +7,6 @@ import {
     Declaration,
     DeclarationName,
     DiagnosticMessage,
-    Diagnostics,
     ExpressionWithTypeArguments,
     FunctionDeclaration,
     GetAccessorDeclaration,
@@ -60,6 +59,7 @@ import {
     TypeParameterDeclaration,
     VariableDeclaration,
 } from "../../_namespaces/ts";
+import * as Diagnostics from "../../diagnosticInformationMap.generated";
 
 /** @internal */
 export type GetSymbolAccessibilityDiagnostic = (symbolAccessibilityResult: SymbolAccessibilityResult) => (SymbolAccessibilityDiagnostic | undefined);

@@ -19,7 +19,6 @@ import {
     createPackageJsonImportFilter,
     Debug,
     DiagnosticAndArguments,
-    Diagnostics,
     DiagnosticWithLocation,
     emptyArray,
     escapeLeadingUnderscores,
@@ -143,6 +142,7 @@ import {
     eachDiagnostic,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 /** @internal */
 export const importFixName = "import";

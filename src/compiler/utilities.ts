@@ -90,7 +90,6 @@ import {
     DiagnosticMessage,
     DiagnosticMessageChain,
     DiagnosticRelatedInformation,
-    Diagnostics,
     DiagnosticWithDetachedLocation,
     DiagnosticWithLocation,
     directorySeparator,
@@ -529,6 +528,7 @@ import {
     WriteFileCallbackData,
     YieldExpression,
 } from "./_namespaces/ts";
+import * as Diagnostics from "./diagnosticInformationMap.generated";
 
 /** @internal */
 export const resolvingEmptyArray: never[] = [];

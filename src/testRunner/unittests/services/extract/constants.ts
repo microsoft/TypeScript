@@ -1,4 +1,4 @@
-import * as ts from "../../../_namespaces/ts";
+import * as Diagnostics from "../../../../compiler/diagnosticInformationMap.generated";
 import {
     testExtractSymbol,
     testExtractSymbolFailed,
@@ -300,9 +300,9 @@ switch (1) {
 });
 
 function testExtractConstant(caption: string, text: string) {
-    testExtractSymbol(caption, text, "extractConstant", ts.Diagnostics.Extract_constant);
+    testExtractSymbol(caption, text, "extractConstant", Diagnostics.Extract_constant);
 }
 
 function testExtractConstantFailed(caption: string, text: string) {
-    testExtractSymbolFailed(caption, text, ts.Diagnostics.Extract_constant);
+    testExtractSymbolFailed(caption, text, Diagnostics.Extract_constant);
 }

@@ -1,6 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
 import * as fakes from "../../_namespaces/fakes";
+import * as Diagnostics from "../../../compiler/diagnosticInformationMap.generated";
 
 describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () => {
     function assertParseResult(jsonText: string, expectedConfigObject: { config?: any; error?: ts.Diagnostic[] }) {
@@ -13,13 +14,13 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
             const parsedCommand = ts.parseJsonConfigFileContent(parsed.config, ts.sys, "tests/cases/unittests");
             assert.isTrue(parsedCommand.errors && parsedCommand.errors.length === 1 &&
-                parsedCommand.errors[0].code === ts.Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
+                parsedCommand.errors[0].code === Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
         }
         {
             const parsed = ts.parseJsonText("/apath/tsconfig.json", jsonText);
             const parsedCommand = ts.parseJsonSourceFileConfigFileContent(parsed, ts.sys, "tests/cases/unittests");
             assert.isTrue(parsedCommand.errors && parsedCommand.errors.length === 1 &&
-                parsedCommand.errors[0].code === ts.Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
+                parsedCommand.errors[0].code === Diagnostics.Unknown_option_excludes_Did_you_mean_exclude.code);
         }
     }
 
@@ -145,7 +146,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
     it("returns object with error when json is invalid", () => {
         const parsed = ts.parseConfigFileTextToJson("/apath/tsconfig.json", "invalid");
         assert.deepEqual(parsed.config, {});
-        const expected = ts.createCompilerDiagnostic(ts.Diagnostics._0_expected, "{");
+        const expected = ts.createCompilerDiagnostic(Diagnostics._0_expected, "{");
         const error = parsed.error!;
         assert.equal(error.messageText, expected.messageText);
         assert.equal(error.category, expected.category);
@@ -293,7 +294,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             ["/apath/a.ts"],
-            ts.Diagnostics.The_files_list_in_config_file_0_is_empty.code);
+            Diagnostics.The_files_list_in_config_file_0_is_empty.code);
     });
 
     it("generates errors for empty files list when no references are provided", () => {
@@ -305,7 +306,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             ["/apath/a.ts"],
-            ts.Diagnostics.The_files_list_in_config_file_0_is_empty.code);
+            Diagnostics.The_files_list_in_config_file_0_is_empty.code);
     });
 
     it("does not generate errors for empty files list when one or more references are provided", () => {
@@ -317,7 +318,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             ["/apath/a.ts"],
-            ts.Diagnostics.The_files_list_in_config_file_0_is_empty.code);
+            Diagnostics.The_files_list_in_config_file_0_is_empty.code);
     });
 
     it("generates errors for directory with no .ts files", () => {
@@ -327,7 +328,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             ["/apath/a.js"],
-            ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
+            Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
             /*noLocation*/ true);
     });
 
@@ -341,7 +342,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             [],
-            ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
+            Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
             /*noLocation*/ true);
     });
 
@@ -353,7 +354,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             ["/apath/a.ts"],
-            ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
+            Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
             /*noLocation*/ true);
     });
 
@@ -368,7 +369,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             ["/apath/a.ts"],
-            ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
+            Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code,
             /*noLocation*/ true);
     });
 
@@ -398,7 +399,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             ["/apath/a.ts"],
-            ts.Diagnostics.Compiler_option_0_requires_a_value_of_type_1.code,
+            Diagnostics.Compiler_option_0_requires_a_value_of_type_1.code,
             /*noLocation*/ true);
     });
 
@@ -412,7 +413,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             "/apath/tsconfig.json",
             "tests/cases/unittests",
             ["/apath/a.ts"],
-            ts.Diagnostics.Compiler_option_0_requires_a_value_of_type_1.code,
+            Diagnostics.Compiler_option_0_requires_a_value_of_type_1.code,
             /*noLocation*/ true);
     });
 

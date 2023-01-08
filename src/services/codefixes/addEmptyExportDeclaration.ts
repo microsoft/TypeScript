@@ -3,10 +3,10 @@ import {
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
 import {
-    Diagnostics,
     factory,
     textChanges,
 } from "../_namespaces/ts";
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 registerCodeFix({
     errorCodes: [

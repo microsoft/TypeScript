@@ -1,6 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import * as fakes from "../../_namespaces/fakes";
 import * as vfs from "../../_namespaces/vfs";
+import * as Diagnostics from "../../../compiler/diagnosticInformationMap.generated";
 
 const caseInsensitiveBasePath = "c:/dev/";
 const caseInsensitiveTsconfigPath = "c:/dev/tsconfig.json";
@@ -254,7 +255,7 @@ describe("unittests:: config:: matchFiles", () => {
             const expected: ts.ParsedCommandLine = {
                 options: {},
                 errors: [
-                    ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
+                    ts.createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                         caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                 ],
                 fileNames: [],
@@ -272,7 +273,7 @@ describe("unittests:: config:: matchFiles", () => {
             const expected: ts.ParsedCommandLine = {
                 options: {},
                 errors: [
-                    ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
+                    ts.createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                         caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                 ],
                 fileNames: [],
@@ -607,7 +608,7 @@ describe("unittests:: config:: matchFiles", () => {
             const expected: ts.ParsedCommandLine = {
                 options: {},
                 errors: [
-                    ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
+                    ts.createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                         caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                 ],
                 fileNames: [],
@@ -801,7 +802,7 @@ describe("unittests:: config:: matchFiles", () => {
                     allowJs: false
                 },
                 errors: [
-                    ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
+                    ts.createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                         caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                 ],
                 fileNames: [],
@@ -916,7 +917,7 @@ describe("unittests:: config:: matchFiles", () => {
             const expected: ts.ParsedCommandLine = {
                 options: {},
                 errors: [
-                    ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
+                    ts.createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                         caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(json.exclude))]
                 ,
                 fileNames: [],
@@ -1147,8 +1148,8 @@ describe("unittests:: config:: matchFiles", () => {
                 const expected: ts.ParsedCommandLine = {
                     options: {},
                     errors: [
-                        createDiagnosticForConfigFile(json, 12, 4, ts.Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**"),
-                        ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
+                        createDiagnosticForConfigFile(json, 12, 4, Diagnostics.File_specification_cannot_end_in_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**"),
+                        ts.createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                             caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                     ],
                     fileNames: [],
@@ -1168,7 +1169,7 @@ describe("unittests:: config:: matchFiles", () => {
                 const expected: ts.ParsedCommandLine = {
                     options: {},
                     errors: [
-                        ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
+                        ts.createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                             caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(json.exclude))
                     ],
                     fileNames: [],
@@ -1234,8 +1235,8 @@ describe("unittests:: config:: matchFiles", () => {
                 const expected: ts.ParsedCommandLine = {
                     options: {},
                     errors: [
-                        createDiagnosticForConfigFile(json, 12, 9, ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/../*"),
-                        ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
+                        createDiagnosticForConfigFile(json, 12, 9, Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/../*"),
+                        ts.createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                             caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                     ],
                     fileNames: [],
@@ -1253,8 +1254,8 @@ describe("unittests:: config:: matchFiles", () => {
                 const expected: ts.ParsedCommandLine = {
                     options: {},
                     errors: [
-                        createDiagnosticForConfigFile(json, 12, 11, ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/y/../*"),
-                        ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
+                        createDiagnosticForConfigFile(json, 12, 11, Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/y/../*"),
+                        ts.createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                             caseInsensitiveTsconfigPath, JSON.stringify(json.include), "[]")
                     ],
                     fileNames: [],
@@ -1275,7 +1276,7 @@ describe("unittests:: config:: matchFiles", () => {
                 const expected: ts.ParsedCommandLine = {
                     options: {},
                     errors: [
-                        createDiagnosticForConfigFile(json, 34, 7, ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/..")
+                        createDiagnosticForConfigFile(json, 34, 7, Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/..")
                     ],
                     fileNames: [
                         "c:/dev/a.ts",
@@ -1302,7 +1303,7 @@ describe("unittests:: config:: matchFiles", () => {
                 const expected: ts.ParsedCommandLine = {
                     options: {},
                     errors: [
-                        createDiagnosticForConfigFile(json, 34, 9, ts.Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/y/..")
+                        createDiagnosticForConfigFile(json, 34, 9, Diagnostics.File_specification_cannot_contain_a_parent_directory_that_appears_after_a_recursive_directory_wildcard_Asterisk_Asterisk_Colon_0, "**/y/..")
                     ],
                     fileNames: [
                         "c:/dev/a.ts",
@@ -1431,7 +1432,7 @@ describe("unittests:: config:: matchFiles", () => {
                 const expected: ts.ParsedCommandLine = {
                     options: {},
                     errors: [
-                        ts.createCompilerDiagnostic(ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
+                        ts.createCompilerDiagnostic(Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
                             caseInsensitiveTsconfigPath, JSON.stringify(json.include), JSON.stringify(json.exclude))
                     ],
                     fileNames: [],

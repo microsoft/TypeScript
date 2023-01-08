@@ -3,7 +3,6 @@ import {
     append,
     CodeFixAction,
     CodeFixContext,
-    Diagnostics,
     factory,
     firstDefined,
     getHostSignatureFromJSDoc,
@@ -27,6 +26,7 @@ import {
     eachDiagnostic,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const deleteUnmatchedParameter = "deleteUnmatchedParameter";
 const renameUnmatchedParameter = "renameUnmatchedParameter";

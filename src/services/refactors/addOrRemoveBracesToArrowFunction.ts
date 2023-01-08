@@ -6,7 +6,6 @@ import {
     copyTrailingAsLeadingComments,
     copyTrailingComments,
     Debug,
-    Diagnostics,
     emptyArray,
     Expression,
     factory,
@@ -33,6 +32,7 @@ import {
     refactorKindBeginsWith,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const refactorName = "Add or remove braces in an arrow function";
 const refactorDescription = Diagnostics.Add_or_remove_braces_in_an_arrow_function.message;

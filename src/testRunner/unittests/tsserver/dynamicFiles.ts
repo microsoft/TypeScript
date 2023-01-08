@@ -15,6 +15,8 @@ import {
     openFilesForSession,
     verifyDynamic,
 } from "./helpers";
+import * as Diagnostics from "../../../compiler/diagnosticInformationMap.generated";
+
 
 function verifyPathRecognizedAsDynamic(path: string) {
     const file: File = {
@@ -62,7 +64,7 @@ describe("unittests:: tsserver:: dynamicFiles:: Untitled files", () => {
                 startOffset: 1,
                 endLine: 3,
                 endOffset: 5,
-                errorCodes: [ts.Diagnostics.Cannot_find_name_0_Did_you_mean_1.code],
+                errorCodes: [Diagnostics.Cannot_find_name_0_Did_you_mean_1.code],
             }
         });
         baselineTsserverLogs("dynamicFiles", "untitled can convert positions to locations", session);

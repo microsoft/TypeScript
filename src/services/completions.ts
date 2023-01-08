@@ -44,7 +44,6 @@ import {
     Debug,
     Declaration,
     DefaultClause,
-    Diagnostics,
     diagnosticToString,
     displayPart,
     EmitHint,
@@ -362,6 +361,7 @@ import {
     walkUpParenthesizedExpressions,
 } from "./_namespaces/ts";
 import { StringCompletions } from "./_namespaces/ts.Completions";
+import * as Diagnostics from "../compiler/diagnosticInformationMap.generated";
 
 // Exported only for tests
 /** @internal */

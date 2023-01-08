@@ -6,7 +6,6 @@ import {
 } from "../_namespaces/ts.codefix";
 import {
     CodeFixAction,
-    Diagnostics,
     Expression,
     factory,
     getEmitModuleKind,
@@ -16,6 +15,7 @@ import {
     ScriptTarget,
     textChanges,
 } from "../_namespaces/ts";
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 registerCodeFix({
     errorCodes: [

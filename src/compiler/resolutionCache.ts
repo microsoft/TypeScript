@@ -13,7 +13,6 @@ import {
     createTypeReferenceDirectiveResolutionCache,
     createTypeReferenceResolutionLoader,
     Debug,
-    Diagnostics,
     directorySeparator,
     DirectoryWatcherCallback,
     emptyArray,
@@ -73,6 +72,7 @@ import {
     updateResolutionField,
     WatchDirectoryFlags,
 } from "./_namespaces/ts";
+import * as Diagnostics from "./diagnosticInformationMap.generated";
 
 /**
  * This is the cache of module/typedirectives resolution that can be retained across program

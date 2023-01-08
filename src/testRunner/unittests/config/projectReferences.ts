@@ -2,6 +2,7 @@ import * as ts from "../../_namespaces/ts";
 import * as fakes from "../../_namespaces/fakes";
 import * as vfs from "../../_namespaces/vfs";
 import { libFile } from "../virtualFileSystemWithWatch";
+import * as Diagnostics from "../../../compiler/diagnosticInformationMap.generated";
 
 interface TestProjectSpecification {
     configFileName?: string;
@@ -136,7 +137,7 @@ describe("unittests:: config:: project-references constraint checking for settin
 
         testProjectReferences(spec, "/primary/tsconfig.json", program => {
             const errs = program.getOptionsDiagnostics();
-            assertHasError("Reports an error about the wrong decl setting", errs, ts.Diagnostics.Composite_projects_may_not_disable_declaration_emit);
+            assertHasError("Reports an error about the wrong decl setting", errs, Diagnostics.Composite_projects_may_not_disable_declaration_emit);
         });
     });
 
@@ -159,7 +160,7 @@ describe("unittests:: config:: project-references constraint checking for settin
         };
         testProjectReferences(spec, "/reference/tsconfig.json", program => {
             const errs = program.getOptionsDiagnostics();
-            assertHasError("Reports an error about 'composite' not being set", errs, ts.Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true);
+            assertHasError("Reports an error about 'composite' not being set", errs, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true);
         });
     });
 
@@ -198,7 +199,7 @@ describe("unittests:: config:: project-references constraint checking for settin
 
         testProjectReferences(spec, "/primary/tsconfig.json", program => {
             const errs = program.getSemanticDiagnostics(program.getSourceFile("/primary/a.ts"));
-            assertHasError("Reports an error about b.ts not being in the list", errs, ts.Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern);
+            assertHasError("Reports an error about b.ts not being in the list", errs, Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern);
         });
     });
 
@@ -211,7 +212,7 @@ describe("unittests:: config:: project-references constraint checking for settin
         };
         testProjectReferences(spec, "/primary/tsconfig.json", program => {
             const errs = program.getOptionsDiagnostics();
-            assertHasError("Reports an error about a missing file", errs, ts.Diagnostics.File_0_not_found);
+            assertHasError("Reports an error about a missing file", errs, Diagnostics.File_0_not_found);
         });
     });
 
@@ -227,7 +228,7 @@ describe("unittests:: config:: project-references constraint checking for settin
         };
         testProjectReferences(spec, "/primary/tsconfig.json", program => {
             const errs = program.getOptionsDiagnostics();
-            assertHasError("Reports an error about outFile not being set", errs, ts.Diagnostics.Cannot_prepend_project_0_because_it_does_not_have_outFile_set);
+            assertHasError("Reports an error about outFile not being set", errs, Diagnostics.Cannot_prepend_project_0_because_it_does_not_have_outFile_set);
         });
     });
 
@@ -244,7 +245,7 @@ describe("unittests:: config:: project-references constraint checking for settin
         };
         testProjectReferences(spec, "/primary/tsconfig.json", program => {
             const errs = program.getOptionsDiagnostics();
-            assertHasError("Reports an error about outFile being missing", errs, ts.Diagnostics.Output_file_0_from_project_1_does_not_exist);
+            assertHasError("Reports an error about outFile being missing", errs, Diagnostics.Output_file_0_from_project_1_does_not_exist);
         });
     });
 });
@@ -267,7 +268,7 @@ describe("unittests:: config:: project-references path mapping", () => {
         };
         testProjectReferences(spec, "/beta/tsconfig.json", program => {
             assertNoErrors("File setup should be correct", program.getOptionsDiagnostics());
-            assertHasError("Found a type error", program.getSemanticDiagnostics(), ts.Diagnostics.Module_0_has_no_exported_member_1);
+            assertHasError("Found a type error", program.getSemanticDiagnostics(), Diagnostics.Module_0_has_no_exported_member_1);
         });
     });
 });
@@ -285,7 +286,7 @@ describe("unittests:: config:: project-references nice-behavior", () => {
             }
         };
         testProjectReferences(spec, "/beta/tsconfig.json", program => {
-            assertHasError("Issues a useful error", program.getSemanticDiagnostics(), ts.Diagnostics.Output_file_0_has_not_been_built_from_source_file_1);
+            assertHasError("Issues a useful error", program.getSemanticDiagnostics(), Diagnostics.Output_file_0_has_not_been_built_from_source_file_1);
         });
     });
 
@@ -307,7 +308,7 @@ describe("unittests:: config:: project-references nice-behavior", () => {
             }
         };
         testProjectReferences(spec, "/beta/tsconfig.json", program => {
-            assertHasError("Issues a useful error", program.getSemanticDiagnostics(), ts.Diagnostics.Output_file_0_has_not_been_built_from_source_file_1);
+            assertHasError("Issues a useful error", program.getSemanticDiagnostics(), Diagnostics.Output_file_0_has_not_been_built_from_source_file_1);
         });
     });
 });
@@ -348,8 +349,8 @@ describe("unittests:: config:: project-references errors when a file in a compos
         };
         testProjectReferences(spec, "/alpha/tsconfig.json", (program) => {
             const semanticDiagnostics = program.getSemanticDiagnostics(program.getSourceFile("/alpha/src/a.ts"));
-            assertHasError("Issues an error about the rootDir", semanticDiagnostics, ts.Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files);
-            assertHasError("Issues an error about the fileList", semanticDiagnostics, ts.Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern);
+            assertHasError("Issues an error about the rootDir", semanticDiagnostics, Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files);
+            assertHasError("Issues an error about the fileList", semanticDiagnostics, Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern);
         });
     });
 });

@@ -22,7 +22,6 @@ import {
     Debug,
     Declaration,
     DeclarationStatement,
-    Diagnostics,
     emptyArray,
     EnumDeclaration,
     escapeLeadingUnderscores,
@@ -129,6 +128,7 @@ import {
     VariableStatement,
 } from "../_namespaces/ts";
 import { registerRefactor } from "../_namespaces/ts.refactor";
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const refactorName = "Move to a new file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);

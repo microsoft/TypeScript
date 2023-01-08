@@ -20,6 +20,8 @@ import {
     SymLink,
 } from "../virtualFileSystemWithWatch";
 import { solutionBuildWithBaseline } from "../tscWatch/helpers";
+import * as Diagnostics from "../../../compiler/diagnosticInformationMap.generated";
+
 
 describe("unittests:: tsserver:: with project references and tsbuild", () => {
     describe("with container project", () => {
@@ -1381,7 +1383,7 @@ bar;`
                     startOffset: 1,
                     endLine: 1,
                     endOffset: 4,
-                    errorCodes: [ts.Diagnostics.Cannot_find_name_0.code],
+                    errorCodes: [Diagnostics.Cannot_find_name_0.code],
                 }
             });
             baselineTsserverLogs("projectReferences", `auto import with referenced project${built ? " when built" : ""}${disableSourceOfProjectReferenceRedirect ? " with disableSourceOfProjectReferenceRedirect": ""}`, session);

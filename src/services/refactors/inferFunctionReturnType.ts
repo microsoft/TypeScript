@@ -1,7 +1,6 @@
 import {
     ApplicableRefactorInfo,
     ArrowFunction,
-    Diagnostics,
     emptyArray,
     factory,
     findAncestor,
@@ -33,6 +32,7 @@ import {
     refactorKindBeginsWith,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const refactorName = "Infer function return type";
 const refactorDescription = Diagnostics.Infer_function_return_type.message;

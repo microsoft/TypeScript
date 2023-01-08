@@ -10,7 +10,6 @@ import {
     compareValues,
     Debug,
     DiagnosticMessage,
-    Diagnostics,
     identity,
     JSDocSyntaxKind,
     JsxTokenSyntaxKind,
@@ -26,6 +25,7 @@ import {
     TokenFlags,
     trimStringStart,
 } from "./_namespaces/ts";
+import * as Diagnostics from "./diagnosticInformationMap.generated";
 
 export type ErrorCallback = (message: DiagnosticMessage, length: number) => void;
 

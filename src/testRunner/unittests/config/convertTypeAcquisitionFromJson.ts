@@ -1,6 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import * as fakes from "../../_namespaces/fakes";
 import * as vfs from "../../_namespaces/vfs";
+import * as Diagnostics from "../../../compiler/diagnosticInformationMap.generated";
 
 interface ExpectedResult { typeAcquisition: ts.TypeAcquisition; errors: ts.Diagnostic[]; }
 describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
@@ -47,7 +48,7 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
         const { typeAcquisition: actualTypeAcquisition, errors: actualParseErrors } = ts.parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
         verifyAcquisition(actualTypeAcquisition, expectedResult);
 
-        const actualErrors = ts.filter(actualParseErrors, error => error.code !== ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
+        const actualErrors = ts.filter(actualParseErrors, error => error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
         verifyErrors(actualErrors, expectedResult, /*hasLocation*/ true);
     }
 
@@ -114,8 +115,8 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
                 },
                 errors: [
                     {
-                        category: ts.Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.category,
-                        code: ts.Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.code,
+                        category: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.category,
+                        code: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.code,
                         file: undefined,
                         start: 0,
                         length: 0,
@@ -209,8 +210,8 @@ describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
                 },
                 errors: [
                     {
-                        category: ts.Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.category,
-                        code: ts.Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.code,
+                        category: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.category,
+                        code: Diagnostics.Unknown_type_acquisition_option_0_Did_you_mean_1.code,
                         file: undefined,
                         start: 0,
                         length: 0,

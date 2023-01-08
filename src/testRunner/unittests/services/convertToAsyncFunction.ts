@@ -10,6 +10,7 @@ import {
     newLineCharacter,
     notImplementedHost,
 } from "./extract/helpers";
+import * as Diagnostics from "../../../compiler/diagnosticInformationMap.generated";
 
 const libFile: File = {
     path: "/a/lib/lib.d.ts",
@@ -360,10 +361,10 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
         };
 
         const diagnostics = languageService.getSuggestionDiagnostics(f.path);
-        const diagnostic = ts.find(diagnostics, diagnostic => diagnostic.messageText === ts.Diagnostics.This_may_be_converted_to_an_async_function.message &&
+        const diagnostic = ts.find(diagnostics, diagnostic => diagnostic.messageText === Diagnostics.This_may_be_converted_to_an_async_function.message &&
             diagnostic.start === context.span.start && diagnostic.length === context.span.length);
         const actions = ts.codefix.getFixes(context);
-        const action = ts.find(actions, action => action.description === ts.Diagnostics.Convert_to_async_function.message);
+        const action = ts.find(actions, action => action.description === Diagnostics.Convert_to_async_function.message);
 
         let outputText: string | null;
         if (action?.changes.length) {

@@ -17,6 +17,7 @@ import {
     verifyTscWatch,
     watchBaseline,
 } from "./helpers";
+import * as Diagnostics from "../../../compiler/diagnosticInformationMap.generated";
 
 describe("unittests:: tsc-watch:: emit file --incremental", () => {
     const project = "/users/username/projects/project";
@@ -212,8 +213,8 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                     file: state.program!.getSourceFileByPath(file2.path as ts.Path)!,
                     start: 13,
                     length: 1,
-                    code: ts.Diagnostics.Type_0_is_not_assignable_to_type_1.code,
-                    category: ts.Diagnostics.Type_0_is_not_assignable_to_type_1.category,
+                    code: Diagnostics.Type_0_is_not_assignable_to_type_1.code,
+                    category: Diagnostics.Type_0_is_not_assignable_to_type_1.category,
                     messageText: "Type 'number' is not assignable to type 'string'.",
                     relatedInformation: undefined,
                     reportsUnnecessary: undefined,

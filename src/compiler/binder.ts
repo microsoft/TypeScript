@@ -47,7 +47,6 @@ import {
     DiagnosticCategory,
     DiagnosticMessage,
     DiagnosticRelatedInformation,
-    Diagnostics,
     DiagnosticWithLocation,
     DoStatement,
     DynamicNamedDeclaration,
@@ -311,6 +310,7 @@ import {
     WithStatement,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
+import * as Diagnostics from "./diagnosticInformationMap.generated";
 
 /** @internal */
 export const enum ModuleInstanceState {

@@ -5,6 +5,7 @@ import * as ts from "./_namespaces/ts";
 import * as fakes from "./_namespaces/fakes";
 import * as vpath from "./_namespaces/vpath";
 import * as Utils from "./_namespaces/Utils";
+import * as Diagnostics from "../compiler/diagnosticInformationMap.generated";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
@@ -3136,7 +3137,7 @@ export class TestState {
 
     public verifyImportFixModuleSpecifiers(markerName: string, moduleSpecifiers: string[], preferences?: ts.UserPreferences) {
         const marker = this.getMarkerByName(markerName);
-        const codeFixes = this.getCodeFixes(marker.fileName, ts.Diagnostics.Cannot_find_name_0.code, {
+        const codeFixes = this.getCodeFixes(marker.fileName, Diagnostics.Cannot_find_name_0.code, {
             includeCompletionsForModuleExports: true,
             includeCompletionsWithInsertText: true,
             ...preferences,

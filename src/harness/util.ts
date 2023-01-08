@@ -1,4 +1,5 @@
 import * as ts from "./_namespaces/ts";
+import * as Diagnostics from "../compiler/diagnosticInformationMap.generated";
 
 /**
  * Common utilities
@@ -17,7 +18,7 @@ function createDiagnosticMessageReplacer<R extends (messageArgs: string[], ...ar
 }
 
 const replaceTypesVersionsMessage = createDiagnosticMessageReplacer(
-    ts.Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2,
+    Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2,
     ([entry, , moduleName], compilerVersion) => [entry, compilerVersion, moduleName]);
 
 export function sanitizeTraceResolutionLogEntry(text: string) {

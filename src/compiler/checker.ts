@@ -130,7 +130,6 @@ import {
     DiagnosticMessage,
     DiagnosticMessageChain,
     DiagnosticRelatedInformation,
-    Diagnostics,
     DiagnosticWithLocation,
     DoStatement,
     DynamicNamedDeclaration,
@@ -1033,6 +1032,7 @@ import {
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
+import * as Diagnostics from "./diagnosticInformationMap.generated";
 
 const ambientModuleSymbolRegex = /^".+"$/;
 const anon = "(anonymous)" as __String & string;

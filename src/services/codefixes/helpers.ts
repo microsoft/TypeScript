@@ -10,7 +10,6 @@ import {
     CodeFixContextBase,
     combine,
     Debug,
-    Diagnostics,
     emptyArray,
     EntityName,
     Expression,
@@ -102,6 +101,7 @@ import {
     visitNode,
 } from "../_namespaces/ts";
 import { ImportAdder } from "../_namespaces/ts.codefix";
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 /**
  * Finds members of the resolved type that are missing in the class pointed to by class decl

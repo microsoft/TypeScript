@@ -25,6 +25,7 @@ import {
     openFilesForSession,
     verifyGetErrRequest,
 } from "./helpers";
+import * as Diagnostics from "../../../compiler/diagnosticInformationMap.generated";
 
 describe("unittests:: tsserver:: ConfiguredProjects", () => {
     it("create configured project without file list", () => {
@@ -1278,7 +1279,7 @@ describe("unittests:: tsserver:: ConfiguredProjects:: when reading tsconfig file
                 triggerFile: file1.path,
                 configFileName: configFile.path,
                 diagnostics: [
-                    ts.createCompilerDiagnostic(ts.Diagnostics.Cannot_read_file_0, configFile.path)
+                    ts.createCompilerDiagnostic(Diagnostics.Cannot_read_file_0, configFile.path)
                 ]
             }
         }]);

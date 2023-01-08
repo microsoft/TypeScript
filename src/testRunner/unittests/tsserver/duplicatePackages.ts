@@ -9,6 +9,8 @@ import {
     createSession,
     openFilesForSession,
 } from "./helpers";
+import * as Diagnostics from "../../../compiler/diagnosticInformationMap.generated";
+
 
 describe("unittests:: tsserver:: duplicate packages", () => {
     // Tests that 'moduleSpecifiers.ts' will import from the redirecting file, and not from the file it redirects to, if that can provide a global module specifier.
@@ -42,7 +44,7 @@ describe("unittests:: tsserver:: duplicate packages", () => {
                     startOffset: 1,
                     endLine: 2,
                     endOffset: 4,
-                    errorCodes: [ts.Diagnostics.Cannot_find_name_0.code],
+                    errorCodes: [Diagnostics.Cannot_find_name_0.code],
                 }
             });
         }

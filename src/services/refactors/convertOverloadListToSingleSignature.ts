@@ -4,7 +4,6 @@ import {
     ConstructorDeclaration,
     ConstructSignatureDeclaration,
     Debug,
-    Diagnostics,
     displayPartsToString,
     EmitFlags,
     emptyArray,
@@ -40,6 +39,7 @@ import {
     TupleTypeNode,
 } from "../_namespaces/ts";
 import { registerRefactor } from "../_namespaces/ts.refactor";
+import * as Diagnostics from "../../compiler/diagnosticInformationMap.generated";
 
 const refactorName = "Convert overload list to single signature";
 const refactorDescription = Diagnostics.Convert_overload_list_to_single_signature.message;

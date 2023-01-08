@@ -1,6 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import * as fakes from "../../_namespaces/fakes";
 import * as vfs from "../../_namespaces/vfs";
+import * as Diagnostics from "../../../compiler/diagnosticInformationMap.generated";
 
 describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
     const formatDiagnosticHost: ts.FormatDiagnosticsHost = {
@@ -58,7 +59,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
         assert.equal(actualCompilerOptions.configFile, result);
 
         if (!isExpectedResultWithParsingFailure(expectedResult)) {
-            verifyErrors(actualParseErrors.filter(error => error.code !== ts.Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code), expectedResult.errors);
+            verifyErrors(actualParseErrors.filter(error => error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code), expectedResult.errors);
         }
     }
 
@@ -160,8 +161,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     start: 0,
                     length: 0,
                     messageText: "Argument for '--jsx' option must be: 'preserve', 'react-native', 'react'.",
-                    code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
-                    category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category
+                    code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                    category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
             }
         );
@@ -188,8 +189,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     start: 0,
                     length: 0,
                     messageText: "Argument for '--module' option must be: 'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015', 'es2020', 'es2022', 'esnext'.",
-                    code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
-                    category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category
+                    code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                    category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
             }
         );
@@ -216,8 +217,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     start: 0,
                     length: 0,
                     messageText: "Argument for '--newLine' option must be: 'crlf', 'lf'.",
-                    code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
-                    category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category
+                    code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                    category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
             }
         );
@@ -242,8 +243,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     start: 0,
                     length: 0,
                     messageText: "Argument for '--target' option must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'esnext'.",
-                    code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
-                    category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category
+                    code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                    category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
             }
         );
@@ -268,8 +269,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     start: 0,
                     length: 0,
                     messageText: "Argument for '--moduleResolution' option must be: 'node', 'classic'.",
-                    code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
-                    category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category
+                    code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                    category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
             }
         );
@@ -299,8 +300,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     start: 0,
                     length: 0,
                     messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.symbol', 'esnext.intl', 'esnext.bigint', 'esnext.bigint', 'esnext.string', 'esnext.promise'.",
-                    code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
-                    category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category
+                    code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                    category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
             }
         );
@@ -330,8 +331,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     start: 0,
                     length: 0,
                     messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.symbol', 'esnext.intl', 'esnext.bigint', 'esnext.string', 'esnext.promise'.",
-                    code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
-                    category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category
+                    code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                    category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
             }
         );
@@ -361,8 +362,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     start: 0,
                     length: 0,
                     messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.symbol', 'esnext.intl', 'esnext.bigint', 'esnext.string', 'esnext.promise'.",
-                    code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
-                    category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category
+                    code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                    category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
             }
         );
@@ -392,8 +393,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     start: 0,
                     length: 0,
                     messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.symbol', 'esnext.intl', 'esnext.bigint', 'esnext.string', 'esnext.promise'.",
-                    code: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
-                    category: ts.Diagnostics.Argument_for_0_option_must_be_Colon_1.category
+                    code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
+                    category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category
                 }]
             }
         );
@@ -501,8 +502,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     start: 0,
                     length: 0,
                     messageText: "Unknown compiler option 'modu'.",
-                    code: ts.Diagnostics.Unknown_compiler_option_0.code,
-                    category: ts.Diagnostics.Unknown_compiler_option_0.category
+                    code: Diagnostics.Unknown_compiler_option_0.code,
+                    category: Diagnostics.Unknown_compiler_option_0.category
                 }]
             }
         );
@@ -616,8 +617,8 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                     start: 0,
                     length: 0,
                     messageText: "Unknown compiler option 'modu'.",
-                    code: ts.Diagnostics.Unknown_compiler_option_0.code,
-                    category: ts.Diagnostics.Unknown_compiler_option_0.category
+                    code: Diagnostics.Unknown_compiler_option_0.code,
+                    category: Diagnostics.Unknown_compiler_option_0.category
                 }]
             }
         );
@@ -682,7 +683,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             },
             hasParseErrors: true,
             errors: [{
-                ...ts.Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
+                ...Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
                 messageText: "The root value of a 'tsconfig.json' file must be an object.",
                 file: undefined,
                 start: 0,
@@ -702,7 +703,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             },
             hasParseErrors: true,
             errors: [{
-                ...ts.Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
+                ...Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
                 messageText: "The root value of a 'tsconfig.json' file must be an object.",
                 file: undefined,
                 start: 0,
@@ -721,7 +722,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
                 target: ts.ScriptTarget.ESNext
             },
             errors: [{
-                ...ts.Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
+                ...Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
                 messageText: "The root value of a 'tsconfig.json' file must be an object.",
                 file: undefined,
                 start: 0,
@@ -736,7 +737,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
             }`, "tsconfig.json", {
             compilerOptions: {},
             errors: [{
-                ...ts.Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file,
+                ...Diagnostics._0_should_be_set_inside_the_compilerOptions_object_of_the_config_json_file,
                 messageText: "'module' should be set inside the 'compilerOptions' object of the config json file.",
                 file: undefined,
                 start: 0,
@@ -763,7 +764,7 @@ describe("unittests:: config:: convertCompilerOptionsFromJson", () => {
         assertCompilerOptionsWithJsonText(`42`, "tsconfig.json", {
             compilerOptions: {},
             errors: [{
-                ...ts.Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
+                ...Diagnostics.The_root_value_of_a_0_file_must_be_an_object,
                 messageText: "The root value of a 'tsconfig.json' file must be an object.",
                 file: undefined,
                 start: 0,
