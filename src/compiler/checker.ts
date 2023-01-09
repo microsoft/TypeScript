@@ -35810,7 +35810,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return getRegularTypeOfObjectLiteral(rightType);
                 }
             case SyntaxKind.CommaToken:
-                if (!compilerOptions.allowUnreachableCode && isSideEffectFree(left) && !isEvalNode(right)) {
+                if (!compilerOptions.allowUnreachableCode && isSideEffectFree(left) && !isIndirectCall(left.parent as BinaryExpression)) {
                     const sf = getSourceFileOfNode(left);
                     const sourceText = sf.text;
                     const start = skipTrivia(sourceText, left.pos);
@@ -35846,8 +35846,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        function isEvalNode(node: Expression) {
-            return node.kind === SyntaxKind.Identifier && (node as Identifier).escapedText === "eval";
+        // Return true for "indirect calls", (i.e. `(0, x.f)(...)` or `(0, eval)(...)`), which prevents passing `this`.
+        function isIndirectCall(node: BinaryExpression): boolean {
+            return node.parent.kind === SyntaxKind.ParenthesizedExpression &&
+                isNumericLiteral(node.left) &&
+                node.left.text === "0" &&
+                (isCallExpression(node.parent.parent) && node.parent.parent.expression === node.parent || node.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) &&
+                // special-case for "eval" because it's the only non-access case where an indirect call actually affects behavior.
+                (isAccessExpression(node.right) || isIdentifier(node.right) && node.right.escapedText === "eval");
         }
 
         // Return true if there was no error, false if there was an error.
