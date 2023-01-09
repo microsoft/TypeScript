@@ -427,6 +427,7 @@ import {
     isBlock,
     isBlockOrCatchScoped,
     isBlockScopedContainerTopLevel,
+    isBooleanLiteral,
     isCallChain,
     isCallExpression,
     isCallLikeExpression,
@@ -36345,7 +36346,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         else if (isAssertionExpression(expr) && !isConstTypeReference(expr.type)) {
             return getTypeFromTypeNode((expr as TypeAssertion).type);
         }
-        else if (isLiteralExpression(node)) {
+        else if (isLiteralExpression(node) || isBooleanLiteral(node)) {
             return checkExpression(node);
         }
         return undefined;
