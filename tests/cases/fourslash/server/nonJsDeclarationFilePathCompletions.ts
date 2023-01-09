@@ -1,6 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
-// @allowNonJsExtensions: true
+// @allowArbitraryExtensions: true
 // @Filename: /project/mod.d.html.ts
 ////export declare class HtmlModuleThing {}
 

@@ -1,5 +1,5 @@
 // @declaration: true
-// @allowNonJsExtensions: true
+// @allowArbitraryExtensions: true
 // @filename: foo.d.html.ts
 export declare class CustomHtmlRepresentationThing {}
 
