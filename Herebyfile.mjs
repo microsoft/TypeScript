@@ -818,13 +818,6 @@ export const lkg = task({
     dependencies: [produceLKG],
 });
 
-export const generateSpec = task({
-    name: "generate-spec",
-    description: "Generates a Markdown version of the Language Specification",
-    hiddenFromTaskList: true,
-    run: () => exec("cscript", ["//nologo", "scripts/word2md.mjs", path.resolve("doc/TypeScript Language Specification - ARCHIVED.docx"), path.resolve("doc/spec-ARCHIVED.md")]),
-});
-
 export const cleanBuilt = task({
     name: "clean-built",
     hiddenFromTaskList: true,

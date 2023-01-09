@@ -191,7 +191,7 @@ export class CompilationResult {
     public getSourceMapRecord(): string | undefined {
         const maps = this.result!.sourceMaps;
         if (maps && maps.length > 0) {
-            return Harness.SourceMapRecorder.getSourceMapRecord(maps, this.program!, Array.from(this.js.values()).filter(d => !ts.fileExtensionIs(d.file, ts.Extension.Json)), Array.from(this.dts.values()));
+            return Harness.SourceMapRecorder.getSourceMapRecord(maps, this.program!, ts.arrayFrom(this.js.values()).filter(d => !ts.fileExtensionIs(d.file, ts.Extension.Json)), ts.arrayFrom(this.dts.values()));
         }
     }
 

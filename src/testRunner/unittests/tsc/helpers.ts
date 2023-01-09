@@ -440,10 +440,7 @@ function addLibAndMakeReadonly(fs: vfs.FileSystem, libContentToAppend?: string) 
 
 export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: ts.ReadonlyCollection<ts.Path>; }) {
     const mapFileNames = ts.mapDefinedIterator(sys.writtenFiles.keys(), f => f.endsWith(".map") ? f : undefined);
-    while (true) {
-        const result = mapFileNames.next();
-        if (result.done) break;
-        const mapFile = result.value;
+    for (const mapFile of mapFileNames) {
         const text = Harness.SourceMapRecorder.getSourceMapRecordWithSystem(sys, mapFile);
         sys.writeFile(`${mapFile}.baseline.txt`, text);
     }
@@ -707,7 +704,7 @@ function verifyTscEditDiscrepancies({
         computeDtsSignatures: true,
     });
     let headerAdded = false;
-    for (const outputFile of ts.arrayFrom(sys.writtenFiles.keys())) {
+    for (const outputFile of sys.writtenFiles.keys()) {
         const cleanBuildText = sys.readFile(outputFile);
         const incrementalBuildText = newSys.readFile(outputFile);
         if (ts.isBuildInfoFile(outputFile)) {
@@ -807,8 +804,8 @@ function verifyTscEditDiscrepancies({
     ) {
         verifyPresenceAbsence(incremental, clean, `Incremental and clean do not match:: ${message}`);
         if (!incremental || !clean) return;
-        const incrementalMap = new Map(ts.getEntries(incremental));
-        const cleanMap = new Map(ts.getEntries(clean));
+        const incrementalMap = new Map(Object.entries(incremental));
+        const cleanMap = new Map(Object.entries(clean));
         cleanMap.forEach((cleanValue, key) => {
             const result = verifyValue(key, incrementalMap.get(key), cleanValue);
             if (result) addBaseline(...result);
