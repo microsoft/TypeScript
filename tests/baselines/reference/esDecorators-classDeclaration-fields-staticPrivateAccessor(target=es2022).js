@@ -33,14 +33,14 @@ let C = (() => {
     };
 })();
 let D = (() => {
-    var _field1_get, _field1_set, _field1_1_accessor_storage;
+    var _field1_get, _field1_set, _field1_accessor_storage;
     let _classDecorators = [dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
     let _classThis;
     var D = class {
         static { __setFunctionName(this, "D"); }
-        static { _field1_get = function _field1_get() { return __classPrivateFieldGet(this, _classThis, "f", _field1_1_accessor_storage); }, _field1_set = function _field1_set(value) { __classPrivateFieldSet(this, _classThis, value, "f", _field1_1_accessor_storage); }; }
+        static { _field1_get = function _field1_get() { return __classPrivateFieldGet(this, _classThis, "f", _field1_accessor_storage); }, _field1_set = function _field1_set(value) { __classPrivateFieldSet(this, _classThis, value, "f", _field1_accessor_storage); }; }
         static {
             __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
             D = _classThis = _classDescriptor.value;
@@ -53,6 +53,6 @@ let D = (() => {
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
-    _field1_1_accessor_storage = { value: 0 };
+    _field1_accessor_storage = { value: 0 };
     return D = _classThis;
 })();
