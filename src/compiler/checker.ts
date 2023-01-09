@@ -427,6 +427,7 @@ import {
     isAssignmentTarget,
     isAsyncFunction,
     isAutoAccessorPropertyDeclaration,
+    isAwaitExpression,
     isBinaryExpression,
     isBindableObjectDefinePropertyCall,
     isBindableStaticElementAccessExpression,
@@ -3903,7 +3904,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const hasDefaultOnly = isOnlyImportedAsDefault(specifier);
         const hasSyntheticDefault = canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias, specifier);
         if (!exportDefaultSymbol && !hasSyntheticDefault && !hasDefaultOnly) {
-            if (hasExportAssignmentSymbol(moduleSymbol)) {
+            if (hasExportAssignmentSymbol(moduleSymbol) && !(getAllowSyntheticDefaultImports(compilerOptions) || getESModuleInterop(compilerOptions))) {
                 const compilerOptionName = moduleKind >= ModuleKind.ES2015 ? "allowSyntheticDefaultImports" : "esModuleInterop";
                 const exportEqualsSymbol = moduleSymbol.exports!.get(InternalSymbolName.ExportEquals);
                 const exportAssignment = exportEqualsSymbol!.valueDeclaration;
@@ -9004,25 +9005,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // Is bound into file.symbol.globalExports instead, which we don't currently traverse
                         addResult(factory.createNamespaceExportDeclaration(idText((node as NamespaceExportDeclaration).name)), ModifierFlags.None);
                         break;
-                    case SyntaxKind.ImportClause:
+                    case SyntaxKind.ImportClause: {
+                        const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
+                        const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as ImportClause).parent.moduleSpecifier;
                         addResult(factory.createImportDeclaration(
                             /*modifiers*/ undefined,
                             factory.createImportClause(/*isTypeOnly*/ false, factory.createIdentifier(localName), /*namedBindings*/ undefined),
-                            // We use `target.parent || target` below as `target.parent` is unset when the target is a module which has been export assigned
-                            // And then made into a default by the `esModuleInterop` or `allowSyntheticDefaultImports` flag
-                            // In such cases, the `target` refers to the module itself already
-                            factory.createStringLiteral(getSpecifierForModuleSymbol(target.parent || target, context)),
-                             /*assertClause*/ undefined
+                            specifier,
+                            (node as ImportClause).parent.assertClause
                         ), ModifierFlags.None);
                         break;
-                    case SyntaxKind.NamespaceImport:
+                    }
+                    case SyntaxKind.NamespaceImport: {
+                        const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
+                        const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as NamespaceImport).parent.parent.moduleSpecifier;
                         addResult(factory.createImportDeclaration(
                             /*modifiers*/ undefined,
                             factory.createImportClause(/*isTypeOnly*/ false, /*importClause*/ undefined, factory.createNamespaceImport(factory.createIdentifier(localName))),
-                            factory.createStringLiteral(getSpecifierForModuleSymbol(target, context)),
-                             /*assertClause*/ undefined
+                            specifier,
+                            (node as NamespaceImport).parent.parent.assertClause
                         ), ModifierFlags.None);
                         break;
+                    }
                     case SyntaxKind.NamespaceExport:
                         addResult(factory.createExportDeclaration(
                             /*modifiers*/ undefined,
@@ -9031,7 +9035,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             factory.createStringLiteral(getSpecifierForModuleSymbol(target, context))
                         ), ModifierFlags.None);
                         break;
-                    case SyntaxKind.ImportSpecifier:
+                    case SyntaxKind.ImportSpecifier: {
+                        const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
+                        const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as ImportSpecifier).parent.parent.parent.moduleSpecifier;
                         addResult(factory.createImportDeclaration(
                             /*modifiers*/ undefined,
                             factory.createImportClause(
@@ -9044,10 +9050,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                         factory.createIdentifier(localName)
                                     )
                                 ])),
-                            factory.createStringLiteral(getSpecifierForModuleSymbol(target.parent || target, context)),
-                             /*assertClause*/ undefined
+                            specifier,
+                            (node as ImportSpecifier).parent.parent.parent.assertClause,
                         ), ModifierFlags.None);
                         break;
+                    }
                     case SyntaxKind.ExportSpecifier:
                         // does not use localName because the symbol name in this case refers to the name in the exports table,
                         // which we must exactly preserve
@@ -36481,7 +36488,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type;
     }
 
-    function getQuickTypeOfExpression(node: Expression) {
+    function getQuickTypeOfExpression(node: Expression): Type | undefined {
         let expr = skipParentheses(node, /*excludeJSDocTypeAssertions*/ true);
         if (isJSDocTypeAssertion(expr)) {
             const type = getJSDocTypeAssertionType(expr);
@@ -36490,14 +36497,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         expr = skipParentheses(node);
+        if (isAwaitExpression(expr)) {
+            const type = getQuickTypeOfExpression(expr.expression);
+            return type ? getAwaitedType(type) : undefined;
+        }
         // Optimize for the common case of a call to a function with a single non-generic call
         // signature where we can just fetch the return type without checking the arguments.
         if (isCallExpression(expr) && expr.expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*checkArgumentIsStringLiteralLike*/ true) && !isSymbolOrSymbolForCall(expr)) {
-            const type = isCallChain(expr) ? getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr) :
+            return isCallChain(expr) ? getReturnTypeOfSingleNonGenericSignatureOfCallChain(expr) :
                 getReturnTypeOfSingleNonGenericCallSignature(checkNonNullExpression(expr.expression));
-            if (type) {
-                return type;
-            }
         }
         else if (isAssertionExpression(expr) && !isConstTypeReference(expr.type)) {
             return getTypeFromTypeNode((expr as TypeAssertion).type);
@@ -43105,16 +43113,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             grammarErrorOnNode(node.expression, Diagnostics.The_expression_of_an_export_assignment_must_be_an_identifier_or_qualified_name_in_an_ambient_context);
         }
 
-        if (node.isExportEquals && !(node.flags & NodeFlags.Ambient)) {
-            if (moduleKind >= ModuleKind.ES2015 && getSourceFileOfNode(node).impliedNodeFormat !== ModuleKind.CommonJS) {
+        if (node.isExportEquals) {
+            // Forbid export= in esm implementation files, and esm mode declaration files
+            if (moduleKind >= ModuleKind.ES2015 &&
+                ((node.flags & NodeFlags.Ambient && getSourceFileOfNode(node).impliedNodeFormat === ModuleKind.ESNext) ||
+                (!(node.flags & NodeFlags.Ambient) && getSourceFileOfNode(node).impliedNodeFormat !== ModuleKind.CommonJS))) {
                 // export assignment is not supported in es6 modules
                 grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_targeting_ECMAScript_modules_Consider_using_export_default_or_another_module_format_instead);
             }
-            else if (moduleKind === ModuleKind.System) {
+            else if (moduleKind === ModuleKind.System && !(node.flags & NodeFlags.Ambient)) {
                 // system modules does not support export assignment
                 grammarErrorOnNode(node, Diagnostics.Export_assignment_is_not_supported_when_module_flag_is_system);
             }
-            else if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler) {
+            else if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler && !(node.flags & NodeFlags.Ambient)) {
                 grammarErrorOnNode(node, Diagnostics.Export_assignment_cannot_be_used_when_moduleResolution_is_set_to_bundler_Consider_using_export_default_or_another_module_format_instead);
             }
         }
