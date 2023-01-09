@@ -16,7 +16,6 @@
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 17,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "template"
             },
@@ -31,7 +30,6 @@
                         "kind": "Identifier",
                         "pos": 18,
                         "end": 19,
-                        "modifierFlagsCache": 0,
                         "transformFlags": 0,
                         "escapedText": "T"
                     }

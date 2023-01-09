@@ -16,7 +16,6 @@
                 "kind": "Identifier",
                 "pos": 8,
                 "end": 14,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },
@@ -46,7 +45,6 @@
                 "kind": "Identifier",
                 "pos": 51,
                 "end": 57,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },
@@ -62,7 +60,6 @@
                 "kind": "Identifier",
                 "pos": 113,
                 "end": 119,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },
@@ -78,7 +75,6 @@
                 "kind": "Identifier",
                 "pos": 171,
                 "end": 177,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },
@@ -108,7 +104,6 @@
                 "kind": "Identifier",
                 "pos": 228,
                 "end": 234,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },
@@ -138,7 +133,6 @@
                 "kind": "Identifier",
                 "pos": 273,
                 "end": 279,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },
@@ -154,7 +148,6 @@
                 "kind": "Identifier",
                 "pos": 339,
                 "end": 345,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },
@@ -184,7 +177,6 @@
                 "kind": "Identifier",
                 "pos": 382,
                 "end": 388,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },
@@ -214,7 +206,6 @@
                 "kind": "Identifier",
                 "pos": 399,
                 "end": 405,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },
@@ -244,7 +235,6 @@
                 "kind": "Identifier",
                 "pos": 430,
                 "end": 436,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },
@@ -274,7 +264,6 @@
                 "kind": "Identifier",
                 "pos": 446,
                 "end": 452,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },
@@ -304,7 +293,6 @@
                 "kind": "Identifier",
                 "pos": 454,
                 "end": 460,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },
@@ -334,7 +322,6 @@
                 "kind": "Identifier",
                 "pos": 462,
                 "end": 468,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },
@@ -364,7 +351,6 @@
                 "kind": "Identifier",
                 "pos": 487,
                 "end": 493,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },
@@ -394,7 +380,6 @@
                 "kind": "Identifier",
                 "pos": 498,
                 "end": 504,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },
@@ -424,7 +409,6 @@
                 "kind": "Identifier",
                 "pos": 523,
                 "end": 529,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },
@@ -454,7 +438,6 @@
                 "kind": "Identifier",
                 "pos": 560,
                 "end": 566,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },
@@ -470,7 +453,6 @@
                 "kind": "Identifier",
                 "pos": 600,
                 "end": 607,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "address"
             },
@@ -486,7 +468,6 @@
                 "kind": "Identifier",
                 "pos": 647,
                 "end": 653,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "author"
             },

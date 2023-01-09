@@ -1,5 +1,4 @@
 import {
-    BaseNodeFactory,
     CreateSourceFileOptions,
     EmitHelperFactory,
     GetCanonicalFileName,
@@ -1684,7 +1683,7 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
     isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
     /** @internal */ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
     /** @internal */ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
-    /**@internal*/ hasExtendedUnicodeEscape?: boolean;
+    /** @internal */ hasExtendedUnicodeEscape?: boolean;
 }
 
 // Transient identifier node (marked by id === -1)
@@ -4388,6 +4387,32 @@ export interface SourceFile extends Declaration, LocalsContainer {
     /** @internal */ endFlowNode?: FlowNode;
 }
 
+/**
+ * Represents an immutable snapshot of a script at a specified time.Once acquired, the
+ * snapshot is observably immutable. i.e. the same calls with the same parameters will return
+ * the same values.
+ */
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export interface IScriptSnapshot {
+    /** Gets a portion of the script snapshot specified by [start, end). */
+    getText(start: number, end: number): string;
+
+    /** Gets the length of this script snapshot. */
+    getLength(): number;
+
+    /**
+     * Gets the TextChangeRange that describe how the text changed between this text and
+     * an older version.  This information is used by the incremental parser to determine
+     * what sections of the script need to be re-parsed.  'undefined' can be returned if the
+     * change range cannot be determined.  However, in that case, incremental parsing will
+     * not happen and the entire document will be re - parsed.
+     */
+    getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined;
+
+    /** Releases all resources held by this script snapshot */
+    dispose?(): void;
+}
+
 /** @internal */
 export interface ReadonlyPragmaContext {
     languageVersion: ScriptTarget;
@@ -6111,6 +6136,7 @@ export interface Type {
     /** @internal */
     widened?: Type; // Cached widened form of the type
 }
+
 
 /** @internal */
 // Intrinsic types (TypeFlags.Intrinsic)
@@ -8106,7 +8132,6 @@ export interface GeneratedNamePart {
 export interface NodeFactory {
     /** @internal */ readonly parenthesizer: ParenthesizerRules;
     /** @internal */ readonly converters: NodeConverters;
-    /** @internal */ readonly baseFactory: BaseNodeFactory;
     /** @internal */ readonly flags: NodeFactoryFlags;
     createNodeArray<T extends Node>(elements?: readonly T[], hasTrailingComma?: boolean): NodeArray<T>;
 
@@ -9793,4 +9818,31 @@ export const enum DeprecationVersion {
     v5_5 = "5.5",
     v6_0 = "6.0",
     /* eslint-enable @typescript-eslint/naming-convention */
+}
+
+/**
+ * Resolves to a type only when the 'services' project is loaded. Otherwise, results in `never`.
+ * @internal
+ */
+export type ServicesOnlyType<T, Fallback = never> = ServicesForwardRefs extends { __services: true } ? T : Fallback;
+
+/**
+ * Resolves a forward-reference to a type declared in the 'services' project.
+ * If 'services' is not present, results in `never`.
+ * @internal
+ */
+export type ServicesForwardRef<K extends string> = ServicesForwardRefs extends { [P in K]: infer T } ? T : never;
+
+/**
+ * Resolves a forward-reference to an array of a type declared in the 'services' project.
+ * If 'services' is not present, results in `never`.
+ * @internal
+ */
+ export type ServicesForwardRefArray<K extends string> = ServicesOnlyType<ServicesForwardRef<K>[]>;
+
+/**
+ * A registry of forward references declared in the 'services' project.
+ * @internal
+ */
+export interface ServicesForwardRefs {
 }

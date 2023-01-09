@@ -249,7 +249,6 @@ import {
     NonNullChain,
     NonNullExpression,
     NumericLiteral,
-    objectAllocator,
     ObjectLiteralExpression,
     OptionalChain,
     ParameterDeclaration,
@@ -310,6 +309,7 @@ import {
     WhileStatement,
     WithStatement,
 } from "./_namespaces/ts";
+import { SymbolObject as SymbolObject } from "./objectConstructors";
 import * as performance from "./_namespaces/ts.performance";
 
 /** @internal */
@@ -534,7 +534,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     let symbolCount = 0;
 
-    let Symbol: new (flags: SymbolFlags, name: __String) => Symbol;
     let classifiableNames: Set<__String>;
 
     const unreachableFlow: FlowNode = { flags: FlowFlags.Unreachable };
@@ -557,8 +556,6 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         inStrictMode = bindInStrictMode(file, opts);
         classifiableNames = new Set();
         symbolCount = 0;
-
-        Symbol = objectAllocator.getSymbolConstructor();
 
         // Attach debugging information if necessary
         Debug.attachFlowNodeDebugInfo(unreachableFlow);
@@ -610,7 +607,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
 
     function createSymbol(flags: SymbolFlags, name: __String): Symbol {
         symbolCount++;
-        return new Symbol(flags, name);
+        return new SymbolObject(flags, name);
     }
 
     function addDeclarationToSymbol(symbol: Symbol, node: Declaration, symbolFlags: SymbolFlags) {

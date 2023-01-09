@@ -13,6 +13,7 @@ import {
     GetEffectiveTypeRootsHost,
     HasChangedAutomaticTypeDirectiveNames,
     HasInvalidatedResolutions,
+    IScriptSnapshot,
     LineAndCharacter,
     MinimalResolutionCacheHost,
     ModuleResolutionCache,
@@ -40,6 +41,19 @@ import {
     TextSpan,
     UserPreferences,
 } from "./_namespaces/ts";
+
+declare module "../compiler/types" {
+    /**
+     * A registry of forward references declared in the 'services' project.
+     * @internal
+     */
+    export interface ServicesForwardRefs {
+        __services: true;
+
+        SymbolDisplayPart: SymbolDisplayPart;
+        JSDocTagInfo: JSDocTagInfo;
+    }
+}
 
 declare module "../compiler/types" {
     // Module transform: converted from interface augmentation
@@ -144,9 +158,9 @@ declare module "../compiler/types" {
 declare module "../compiler/types" {
     // Module transform: converted from interface augmentation
     export interface Signature {
-        getDeclaration(): SignatureDeclaration;
-        getTypeParameters(): TypeParameter[] | undefined;
-        getParameters(): Symbol[];
+        getDeclaration(): JSDocSignature | SignatureDeclaration;
+        getTypeParameters(): readonly TypeParameter[] | undefined;
+        getParameters(): readonly Symbol[];
         getTypeParameterAtPosition(pos: number): Type;
         getReturnType(): Type;
         getDocumentationComment(typeChecker: TypeChecker | undefined): SymbolDisplayPart[];
@@ -185,32 +199,6 @@ declare module "../compiler/types" {
     export interface SourceMapSource {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
-}
-
-/**
- * Represents an immutable snapshot of a script at a specified time.Once acquired, the
- * snapshot is observably immutable. i.e. the same calls with the same parameters will return
- * the same values.
- */
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export interface IScriptSnapshot {
-    /** Gets a portion of the script snapshot specified by [start, end). */
-    getText(start: number, end: number): string;
-
-    /** Gets the length of this script snapshot. */
-    getLength(): number;
-
-    /**
-     * Gets the TextChangeRange that describe how the text changed between this text and
-     * an older version.  This information is used by the incremental parser to determine
-     * what sections of the script need to be re-parsed.  'undefined' can be returned if the
-     * change range cannot be determined.  However, in that case, incremental parsing will
-     * not happen and the entire document will be re - parsed.
-     */
-    getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange | undefined;
-
-    /** Releases all resources held by this script snapshot */
-    dispose?(): void;
 }
 
 export namespace ScriptSnapshot {

@@ -331,6 +331,7 @@ function verifyMatchingSymbols(decl) {
  * @param {ts.Symbol} moduleSymbol
  */
 function emitAsNamespace(name, moduleSymbol) {
+    if (!(moduleSymbol.flags & ts.SymbolFlags.ValueModule)) debugger;
     assert(moduleSymbol.flags & ts.SymbolFlags.ValueModule, "moduleSymbol is not a module");
 
     scopeStack.push(new Map());

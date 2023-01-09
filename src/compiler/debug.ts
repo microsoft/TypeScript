@@ -68,7 +68,6 @@ import {
     NodeFlags,
     nodeIsSynthesized,
     noop,
-    objectAllocator,
     ObjectFlags,
     ObjectType,
     RelationComparisonResult,
@@ -92,6 +91,17 @@ import {
     VarianceFlags,
     zipWith,
 } from "./_namespaces/ts";
+import {
+    SignatureObject,
+    SymbolObject,
+    TypeObject,
+} from "./objectConstructors";
+import {
+    IdentifierObject,
+    NodeObject,
+    SourceFileObject,
+    TokenObject,
+} from "./nodeConstructors";
 
 /** @internal */
 export enum LogLevel {
@@ -592,7 +602,7 @@ export namespace Debug {
         const weakNodeTextMap = new WeakMap<Node, string>();
 
         // Add additional properties in debug mode to assist with debugging.
-        Object.defineProperties(objectAllocator.getSymbolConstructor().prototype, {
+        Object.defineProperties(SymbolObject.prototype, {
             // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
             __tsDebuggerDisplay: {
                 value(this: Symbol) {
@@ -606,7 +616,7 @@ export namespace Debug {
             __debugFlags: { get(this: Symbol) { return formatSymbolFlags(this.flags); } }
         });
 
-        Object.defineProperties(objectAllocator.getTypeConstructor().prototype, {
+        Object.defineProperties(TypeObject.prototype, {
             // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
             __tsDebuggerDisplay: {
                 value(this: Type) {
@@ -653,16 +663,16 @@ export namespace Debug {
             },
         });
 
-        Object.defineProperties(objectAllocator.getSignatureConstructor().prototype, {
+        Object.defineProperties(SignatureObject.prototype, {
             __debugFlags: { get(this: Signature) { return formatSignatureFlags(this.flags); } },
             __debugSignatureToString: { value(this: Signature) { return this.checker?.signatureToString(this); } }
         });
 
         const nodeConstructors = [
-            objectAllocator.getNodeConstructor(),
-            objectAllocator.getIdentifierConstructor(),
-            objectAllocator.getTokenConstructor(),
-            objectAllocator.getSourceFileConstructor()
+            NodeObject,
+            IdentifierObject,
+            TokenObject,
+            SourceFileObject
         ];
 
         for (const ctor of nodeConstructors) {

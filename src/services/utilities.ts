@@ -101,7 +101,6 @@ import {
     getSourceFileOfNode,
     getSpanOfTokenAtPosition,
     getSymbolId,
-    getTextOfIdentifierOrLiteral,
     getTextOfNode,
     getTypesPackageName,
     hasSyntacticModifier,
@@ -109,7 +108,6 @@ import {
     Identifier,
     identifierIsThisKeyword,
     identity,
-    idText,
     IfStatement,
     ImportClause,
     ImportDeclaration,
@@ -220,7 +218,6 @@ import {
     isStringDoubleQuoted,
     isStringLiteral,
     isStringLiteralLike,
-    isStringOrNumericLiteralLike,
     isStringTextContainingNode,
     isSyntaxList,
     isTaggedTemplateExpression,
@@ -287,7 +284,6 @@ import {
     ProjectPackageJsonInfo,
     PropertyAccessExpression,
     PropertyAssignment,
-    PropertyName,
     QualifiedName,
     RefactorContext,
     Scanner,
@@ -2357,14 +2353,6 @@ export function repeatString(str: string, count: number): string {
 /** @internal */
 export function skipConstraint(type: Type): Type {
     return type.isTypeParameter() ? type.getConstraint() || type : type;
-}
-
-/** @internal */
-export function getNameFromPropertyName(name: PropertyName): string | undefined {
-    return name.kind === SyntaxKind.ComputedPropertyName
-        // treat computed property names where expression is string/numeric literal as just string/numeric literal
-        ? isStringOrNumericLiteralLike(name.expression) ? name.expression.text : undefined
-        : isPrivateIdentifier(name) ? idText(name) : getTextOfIdentifierOrLiteral(name);
 }
 
 /** @internal */

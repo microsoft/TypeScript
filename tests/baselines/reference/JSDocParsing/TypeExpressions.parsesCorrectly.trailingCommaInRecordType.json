@@ -18,7 +18,6 @@
                 "pos": 2,
                 "end": 3,
                 "flags": "JSDoc",
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "a"
             }
