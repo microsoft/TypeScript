@@ -1207,7 +1207,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         defaultValueDescription: false,
     },
     {
-        name: "allowNonJsExtensions",
+        name: "allowArbitraryExtensions",
         type: "boolean",
         affectsModuleResolution: true,
         category: Diagnostics.Modules,

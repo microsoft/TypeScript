@@ -1,4 +1,4 @@
-// @allowNonJsExtensions: true
+// @allowArbitraryExtensions: true
 // @module: nodenext
 // @filename: package.json
 {"type": "module"}

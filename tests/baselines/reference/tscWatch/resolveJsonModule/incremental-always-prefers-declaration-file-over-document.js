@@ -34,7 +34,7 @@ Output::
 >> Screen clear
 [[90m12:00:21 AM[0m] Starting compilation in watch mode...
 
-[96msrc/project/main.ts[0m:[93m1[0m:[93m18[0m - [91merror[0m[90m TS6263: [0mModule './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowNonJsExtensions' is not set.
+[96msrc/project/main.ts[0m:[93m1[0m:[93m18[0m - [91merror[0m[90m TS6263: [0mModule './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowArbitraryExtensions' is not set.
 
 [7m1[0m import data from "./data.json"; let x: string = data;
 [7m [0m [91m                 ~~~~~~~~~~~~~[0m
@@ -89,7 +89,7 @@ var x = data_json_1.default;
 
 
 //// [/src/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../a/lib/lib.d.ts","./data.d.json.ts","./main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"2718060498-declare var val: string; export default val;","6961905452-import data from \"./data.json\"; let x: string = data;"],"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"./main.ts","start":17,"length":13,"messageText":"Module './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowNonJsExtensions' is not set.","category":1,"code":6263}]]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../a/lib/lib.d.ts","./data.d.json.ts","./main.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"2718060498-declare var val: string; export default val;","6961905452-import data from \"./data.json\"; let x: string = data;"],"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"./main.ts","start":17,"length":13,"messageText":"Module './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowArbitraryExtensions' is not set.","category":1,"code":6263}]]]},"version":"FakeTSVersion"}
 
 //// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -130,7 +130,7 @@ var x = data_json_1.default;
             "file": "./main.ts",
             "start": 17,
             "length": 13,
-            "messageText": "Module './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowNonJsExtensions' is not set.",
+            "messageText": "Module './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowArbitraryExtensions' is not set.",
             "category": 1,
             "code": 6263
           }
@@ -139,7 +139,7 @@ var x = data_json_1.default;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 925
+  "size": 929
 }
 
 
@@ -158,7 +158,7 @@ Output::
 >> Screen clear
 [[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
 
-[96msrc/project/main.ts[0m:[93m1[0m:[93m18[0m - [91merror[0m[90m TS6263: [0mModule './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowNonJsExtensions' is not set.
+[96msrc/project/main.ts[0m:[93m1[0m:[93m18[0m - [91merror[0m[90m TS6263: [0mModule './data.json' was resolved to '/src/project/data.d.json.ts', but '--allowArbitraryExtensions' is not set.
 
 [7m1[0m import data from "./data.json"; let x: string = data;
 [7m [0m [91m                 ~~~~~~~~~~~~~[0m

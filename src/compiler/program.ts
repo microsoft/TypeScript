@@ -4981,8 +4981,8 @@ export function getResolutionDiagnostic(options: CompilerOptions, { extension }:
         return getResolveJsonModule(options) ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_resolveJsonModule_is_not_used;
     }
     function needAllowNonJsExtensions() {
-        // But don't report the allowNonJsExtensions error from declaration files (no reason to report it, since the import doesn't have a runtime component)
-        return isDeclarationFile || options.allowNonJsExtensions ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_allowNonJsExtensions_is_not_set;
+        // But don't report the allowArbitraryExtensions error from declaration files (no reason to report it, since the import doesn't have a runtime component)
+        return isDeclarationFile || options.allowArbitraryExtensions ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_allowArbitraryExtensions_is_not_set;
     }
 }
 

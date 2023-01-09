@@ -1,4 +1,4 @@
-// @allowNonJsExtensions: true
+// @allowArbitraryExtensions: true
 // @resolveJsonModule: true,false
 // @filename: main.ts
 import data from "./data.json";

@@ -6974,7 +6974,7 @@ export interface CompilerOptions {
     allowImportingTsExtensions?: boolean;
     allowJs?: boolean;
     /** @internal */ allowNonTsExtensions?: boolean;
-    allowNonJsExtensions?: boolean;
+    allowArbitraryExtensions?: boolean;
     allowSyntheticDefaultImports?: boolean;
     allowUmdGlobalAccess?: boolean;
     allowUnreachableCode?: boolean;

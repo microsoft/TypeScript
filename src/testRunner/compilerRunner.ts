@@ -166,7 +166,7 @@ class CompilerTest {
         "resolvePackageJsonExports",
         "resolvePackageJsonImports",
         "resolveJsonModule",
-        "allowNonJsExtensions",
+        "allowArbitraryExtensions",
     ];
     private fileName: string;
     private justName: string;

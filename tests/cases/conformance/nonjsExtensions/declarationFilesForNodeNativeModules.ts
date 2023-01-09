@@ -1,6 +1,6 @@
 // @lib: es2020,dom
 // @target: es2020
-// @allowNonJsExtensions: true,false
+// @allowArbitraryExtensions: true,false
 // @module: nodenext
 // @filename: package.json
 {"type": "module"}

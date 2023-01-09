@@ -1,4 +1,4 @@
-tests/cases/conformance/nonjsExtensions/file.ts(1,22): error TS6263: Module './component.html' was resolved to 'tests/cases/conformance/nonjsExtensions/component.d.html.ts', but '--allowNonJsExtensions' is not set.
+tests/cases/conformance/nonjsExtensions/file.ts(1,22): error TS6263: Module './component.html' was resolved to 'tests/cases/conformance/nonjsExtensions/component.d.html.ts', but '--allowArbitraryExtensions' is not set.
 
 
 ==== tests/cases/conformance/nonjsExtensions/component.d.html.ts (0 errors) ====
@@ -18,7 +18,7 @@ tests/cases/conformance/nonjsExtensions/file.ts(1,22): error TS6263: Module './c
 ==== tests/cases/conformance/nonjsExtensions/file.ts (1 errors) ====
     import * as mod from "./component.html";
                          ~~~~~~~~~~~~~~~~~~
-!!! error TS6263: Module './component.html' was resolved to 'tests/cases/conformance/nonjsExtensions/component.d.html.ts', but '--allowNonJsExtensions' is not set.
+!!! error TS6263: Module './component.html' was resolved to 'tests/cases/conformance/nonjsExtensions/component.d.html.ts', but '--allowArbitraryExtensions' is not set.
     
     window.customElements.define("my-html5-element", mod.HTML5Element);
     

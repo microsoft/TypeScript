@@ -1,6 +1,6 @@
 // @lib: es2020,dom
 // @target: es2020
-// @allowNonJsExtensions: true,false
+// @allowArbitraryExtensions: true,false
 // @filename: component.d.html.ts
 
 // html modules were proposed at https://github.com/WICG/webcomponents/blob/gh-pages/proposals/html-modules-explainer.md

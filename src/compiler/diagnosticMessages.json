@@ -5194,7 +5194,7 @@
         "category": "Message",
         "code": 6262
     },
-    "Module '{0}' was resolved to '{1}', but '--allowNonJsExtensions' is not set.": {
+    "Module '{0}' was resolved to '{1}', but '--allowArbitraryExtensions' is not set.": {
         "category": "Error",
         "code": 6263
     },

@@ -3083,7 +3083,7 @@ declare namespace ts {
     interface CompilerOptions {
         allowImportingTsExtensions?: boolean;
         allowJs?: boolean;
-        allowNonJsExtensions?: boolean;
+        allowArbitraryExtensions?: boolean;
         allowSyntheticDefaultImports?: boolean;
         allowUmdGlobalAccess?: boolean;
         allowUnreachableCode?: boolean;
