@@ -5,7 +5,6 @@ import {
     Expression,
     getOriginalNodeId,
     Identifier,
-    idText,
     isIdentifier,
     isPrivateIdentifier,
     isPropertyAccessExpression,
@@ -15,7 +14,6 @@ import {
     JsxOpeningElement,
     JsxSelfClosingElement,
     Node,
-    nodeIsSynthesized,
     PropertyAccessExpression,
     PropertyAssignment,
     setTextRange,
@@ -139,7 +137,7 @@ export function transformES5(context: TransformationContext): (x: SourceFile | B
      * @param name An Identifier
      */
     function trySubstituteReservedName(name: Identifier) {
-        const token = name.originalKeywordKind || (nodeIsSynthesized(name) ? stringToToken(idText(name)) : undefined);
+        const token = stringToToken(name.escapedText as string);
         if (token !== undefined && token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord) {
             return setTextRange(factory.createStringLiteralFromNode(name), name);
         }

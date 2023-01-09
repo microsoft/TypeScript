@@ -136,6 +136,7 @@ import {
     SourceFile,
     Statement,
     StringLiteral,
+    stringToToken,
     suppressLeadingAndTrailingTrivia,
     Symbol,
     SymbolFlags,
@@ -1351,7 +1352,7 @@ function extractConstantInScope(
 
     // Make a unique name for the extracted variable
     const file = scope.getSourceFile();
-    const localNameText = isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !isKeyword(node.name.originalKeywordKind!)
+    const localNameText = isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !isKeyword(stringToToken(node.name.escapedText as string) || SyntaxKind.Unknown)
         ? node.name.text
         : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
     const isJS = isInJSFile(scope);

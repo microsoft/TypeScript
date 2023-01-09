@@ -4339,7 +4339,8 @@ export function isStringAKeyword(name: string) {
 }
 
 /** @internal */
-export function isIdentifierANonContextualKeyword({ originalKeywordKind }: Identifier): boolean {
+export function isIdentifierANonContextualKeyword(node: Identifier): boolean {
+    const originalKeywordKind = stringToToken(node.escapedText as string);
     return !!originalKeywordKind && !isContextualKeyword(originalKeywordKind);
 }
 
@@ -5707,7 +5708,7 @@ export function isThisInTypeQuery(node: Node): boolean {
 
 /** @internal */
 export function identifierIsThisKeyword(id: Identifier): boolean {
-    return id.originalKeywordKind === SyntaxKind.ThisKeyword;
+    return id.escapedText === "this";
 }
 
 /** @internal */
@@ -7325,8 +7326,13 @@ function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: num
     this.parent = undefined!;
     this.original = undefined;
     this.emitNode = undefined;
-    (this as Identifier).flowNode = undefined;
 }
+
+Object.defineProperty(Identifier.prototype, "originalKeywordKind", {
+    get: function(this: Identifier) {
+        return stringToToken(this.escapedText as string);
+    }
+});
 
 function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
     this.fileName = fileName;

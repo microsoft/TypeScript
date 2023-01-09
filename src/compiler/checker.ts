@@ -925,6 +925,7 @@ import {
     StringLiteralLike,
     StringLiteralType,
     StringMappingType,
+    stringToToken,
     stripQuotes,
     StructuredType,
     SubstitutionType,
@@ -23209,15 +23210,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 break;
             case SyntaxKind.Parameter:
                 const param = declaration as ParameterDeclaration;
-                if (isIdentifier(param.name) &&
-                    (isCallSignatureDeclaration(param.parent) || isMethodSignature(param.parent) || isFunctionTypeNode(param.parent)) &&
-                    param.parent.parameters.indexOf(param) > -1 &&
-                    (resolveName(param, param.name.escapedText, SymbolFlags.Type, undefined, param.name.escapedText, /*isUse*/ true) ||
-                    param.name.originalKeywordKind && isTypeNodeKind(param.name.originalKeywordKind))) {
-                    const newName = "arg" + param.parent.parameters.indexOf(param);
-                    const typeName = declarationNameToString(param.name) + (param.dotDotDotToken ? "[]" : "");
-                    errorOrSuggestion(noImplicitAny, declaration, Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1, newName, typeName);
-                    return;
+                if (isIdentifier(param.name)) {
+                    const originalKeywordKind = stringToToken(param.name.escapedText as string);1
+                    if ((isCallSignatureDeclaration(param.parent) || isMethodSignature(param.parent) || isFunctionTypeNode(param.parent)) &&
+                        param.parent.parameters.indexOf(param) > -1 &&
+                        (resolveName(param, param.name.escapedText, SymbolFlags.Type, undefined, param.name.escapedText, /*isUse*/ true) ||
+                        originalKeywordKind && isTypeNodeKind(originalKeywordKind))) {
+                        const newName = "arg" + param.parent.parameters.indexOf(param);
+                        const typeName = declarationNameToString(param.name) + (param.dotDotDotToken ? "[]" : "");
+                        errorOrSuggestion(noImplicitAny, declaration, Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1, newName, typeName);
+                        return;
+                    }
                 }
                 diagnostic = (declaration as ParameterDeclaration).dotDotDotToken ?
                     noImplicitAny ? Diagnostics.Rest_parameter_0_implicitly_has_an_any_type : Diagnostics.Rest_parameter_0_implicitly_has_an_any_type_but_a_better_type_may_be_inferred_from_usage :
@@ -46867,7 +46870,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkGrammarNameInLetOrConstDeclarations(name: Identifier | BindingPattern): boolean {
         if (name.kind === SyntaxKind.Identifier) {
-            if (name.originalKeywordKind === SyntaxKind.LetKeyword) {
+            if (name.escapedText === "let") {
                 return grammarErrorOnNode(name, Diagnostics.let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations);
             }
         }

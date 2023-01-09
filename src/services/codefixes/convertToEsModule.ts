@@ -75,6 +75,7 @@ import {
     SourceFile,
     Statement,
     StringLiteralLike,
+    stringToToken,
     SymbolFlags,
     SyntaxKind,
     textChanges,
@@ -161,7 +162,8 @@ type ExportRenames = ReadonlyMap<string, string>;
 function collectExportRenames(sourceFile: SourceFile, checker: TypeChecker, identifiers: Identifiers): ExportRenames {
     const res = new Map<string, string>();
     forEachExportReference(sourceFile, node => {
-        const { text, originalKeywordKind } = node.name;
+        const { text } = node.name;
+        const originalKeywordKind = stringToToken(text);
         if (!res.has(text) && (originalKeywordKind !== undefined && isNonContextualKeyword(originalKeywordKind)
             || checker.resolveName(text, node, SymbolFlags.Value, /*excludeGlobals*/ true))) {
             // Unconditionally add an underscore in case `text` is a keyword.

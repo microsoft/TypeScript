@@ -1147,14 +1147,15 @@ export function getJSDocReturnType(node: Node): TypeNode | undefined {
 
 function getJSDocTagsWorker(node: Node, noCache?: boolean): readonly JSDocTag[] {
     if (!canHaveJSDoc(node)) return emptyArray;
-    let tags = node.jsDocCache;
+    let tags = node.jsDoc?.jsDocCache;
     // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
     if (tags === undefined || noCache) {
         const comments = getJSDocCommentsAndTags(node, noCache);
         Debug.assert(comments.length < 2 || comments[0] !== comments[1]);
         tags = flatMap(comments, j => isJSDoc(j) ? j.tags : j);
         if (!noCache) {
-            node.jsDocCache = tags;
+            node.jsDoc ??= [];
+            node.jsDoc.jsDocCache = tags;
         }
     }
     return tags;

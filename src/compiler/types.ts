@@ -910,8 +910,12 @@ export interface Node extends ReadonlyTextRange {
 
 export interface JSDocContainer extends Node {
     _jsdocContainerBrand: any;
-    /** @internal */ jsDoc?: JSDoc[];                      // JSDoc that directly precedes this node
-    /** @internal */ jsDocCache?: readonly JSDocTag[];     // Cache for getJSDocTags
+    /** @internal */ jsDoc?: JSDocArray;                   // JSDoc that directly precedes this node
+}
+
+/** @internal */
+export interface JSDocArray extends Array<JSDoc> {
+    jsDocCache?: readonly JSDocTag[];                      // Cache for getJSDocTags
 }
 
 export interface LocalsContainer extends Node {

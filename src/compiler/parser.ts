@@ -3058,9 +3058,9 @@ namespace Parser {
             return undefined;
         }
 
-        if (canHaveJSDoc(node) && node.jsDocCache) {
+        if (canHaveJSDoc(node) && node.jsDoc?.jsDocCache) {
             // jsDocCache may include tags from parent nodes, which might have been modified.
-            node.jsDocCache = undefined;
+            node.jsDoc.jsDocCache = undefined;
         }
 
         return node;
@@ -3185,7 +3185,7 @@ namespace Parser {
                     // into an actual .ConstructorDeclaration.
                     const methodDeclaration = node as MethodDeclaration;
                     const nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier &&
-                        methodDeclaration.name.originalKeywordKind === SyntaxKind.ConstructorKeyword;
+                        methodDeclaration.name.escapedText === "constructor";
 
                     return !nameIsConstructor;
             }
