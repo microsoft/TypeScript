@@ -134,6 +134,8 @@ const jsDocTagNames = [
     "lends",
     "license",
     "link",
+    "linkcode",
+    "linkplain",
     "listens",
     "member",
     "memberof",
