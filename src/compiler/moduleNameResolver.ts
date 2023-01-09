@@ -2981,14 +2981,10 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
     }
 }
 
-export function moduleResolutionSupportsResolvingTsExtensions(compilerOptions: CompilerOptions) {
-    return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler;
-}
-
 // Program errors validate that `noEmit` or `emitDeclarationOnly` is also set,
 // so this function doesn't check them to avoid propagating errors.
 export function shouldAllowImportingTsExtension(compilerOptions: CompilerOptions, fromFileName?: string) {
-    return moduleResolutionSupportsResolvingTsExtensions(compilerOptions) && (
+    return getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.Bundler && (
         !!compilerOptions.allowImportingTsExtensions ||
         fromFileName && isDeclarationFileName(fromFileName));
 }

@@ -218,7 +218,6 @@ import {
     moduleResolutionIsEqualTo,
     ModuleResolutionKind,
     moduleResolutionSupportsPackageJsonExportsAndImports,
-    moduleResolutionSupportsResolvingTsExtensions,
     Mutable,
     Node,
     NodeArray,
@@ -4213,7 +4212,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             createOptionValueDiagnostic("importsNotUsedAsValues", Diagnostics.Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later);
         }
 
-        if (options.allowImportingTsExtensions && !(moduleResolutionSupportsResolvingTsExtensions(options) && (options.noEmit || options.emitDeclarationOnly))) {
+        if (options.allowImportingTsExtensions && !(options.noEmit || options.emitDeclarationOnly)) {
             createOptionValueDiagnostic("allowImportingTsExtensions", Diagnostics.Option_allowImportingTsExtensions_can_only_be_used_when_moduleResolution_is_set_to_bundler_and_either_noEmit_or_emitDeclarationOnly_is_set);
         }
 
@@ -4968,7 +4967,7 @@ export function getResolutionDiagnostic(options: CompilerOptions, { extension }:
         case Extension.Json:
             return needResolveJsonModule();
         default:
-            return needAllowNonJsExtensions();
+            return needAllowArbitraryExtensions();
     }
 
     function needJsx() {
@@ -4980,7 +4979,7 @@ export function getResolutionDiagnostic(options: CompilerOptions, { extension }:
     function needResolveJsonModule() {
         return getResolveJsonModule(options) ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_resolveJsonModule_is_not_used;
     }
-    function needAllowNonJsExtensions() {
+    function needAllowArbitraryExtensions() {
         // But don't report the allowArbitraryExtensions error from declaration files (no reason to report it, since the import doesn't have a runtime component)
         return isDeclarationFile || options.allowArbitraryExtensions ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_allowArbitraryExtensions_is_not_set;
     }
