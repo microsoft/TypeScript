@@ -1156,7 +1156,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.originalKeywordKind = originalKeywordKind;
         node.escapedText = escapedText;
         node.autoGenerate = undefined;
-        node.hasExtendedUnicodeEscape = undefined;
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
         node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
         node.flowNode = undefined; // initialized by binder (FlowContainer)
@@ -1186,13 +1185,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         }
 
         const node = createBaseIdentifier(escapeLeadingUnderscores(text), originalKeywordKind);
-        node.hasExtendedUnicodeEscape = hasExtendedUnicodeEscape;
+        if (hasExtendedUnicodeEscape) node.flags |= NodeFlags.HasExtendedUnicodeEscape;
 
         // NOTE: we do not include transform flags of typeArguments in an identifier as they do not contribute to transformations
         if (node.originalKeywordKind === SyntaxKind.AwaitKeyword) {
             node.transformFlags |= TransformFlags.ContainsPossibleTopLevelAwait;
         }
-        if (node.hasExtendedUnicodeEscape) {
+        if (node.flags & NodeFlags.HasExtendedUnicodeEscape) {
             node.transformFlags |= TransformFlags.ContainsES2015;
         }
 
@@ -6381,7 +6380,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function cloneIdentifier(node: Identifier): Identifier {
         const clone = createBaseIdentifier(node.escapedText, node.originalKeywordKind);
         clone.flags |= node.flags & ~NodeFlags.Synthesized;
-        clone.hasExtendedUnicodeEscape = node.hasExtendedUnicodeEscape;
         clone.jsDoc = node.jsDoc;
         clone.jsDocCache = node.jsDocCache;
         clone.flowNode = node.flowNode;

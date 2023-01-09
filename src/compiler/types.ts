@@ -831,6 +831,8 @@ export const enum NodeFlags {
     // never cleared on SourceFiles which get re-used in between incremental parses.
     // See the comment above on `PossiblyContainsDynamicImport` and `PossiblyContainsImportMeta`.
     /** @internal */ PermanentlySetIncrementalFlags = PossiblyContainsDynamicImport | PossiblyContainsImportMeta,
+
+    /** @internal */ HasExtendedUnicodeEscape = ContainsThis, // Reuses ContainsThis value with a different meaning on Identifiers
 }
 
 export const enum ModifierFlags {
@@ -1682,7 +1684,6 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
     /** @internal */ generatedImportReference?: ImportSpecifier; // Reference to the generated import specifier this identifier refers to
     isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
     /** @internal */ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
-    /** @internal */ hasExtendedUnicodeEscape?: boolean;
 }
 
 // Transient identifier node (marked by id === -1)

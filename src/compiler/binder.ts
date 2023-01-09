@@ -1030,6 +1030,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
         else if (containerFlags & ContainerFlags.IsInterface) {
             seenThisKeyword = false;
             bindChildren(node);
+            Debug.assertNotNode(node, isIdentifier); // ContainsThis cannot overlap with HasExtendedUnicodeEscape on Identifier
             node.flags = seenThisKeyword ? node.flags | NodeFlags.ContainsThis : node.flags & ~NodeFlags.ContainsThis;
         }
         else {

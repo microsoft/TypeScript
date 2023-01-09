@@ -1,5 +1,6 @@
 import * as ts from "./_namespaces/ts";
 import * as Harness from "./_namespaces/Harness";
+import { isIdentifier } from "./_namespaces/ts";
 
 export function encodeString(s: string): string {
     return ts.sys.bufferFrom!(s).toString("utf8");
@@ -189,7 +190,7 @@ export function sourceFileToJSON(file: ts.Node): string {
             o.containsParseError = true;
         }
 
-        for (const propertyName of Object.getOwnPropertyNames(n) as readonly (keyof ts.SourceFile | keyof ts.Identifier)[]) {
+        for (const propertyName of Object.getOwnPropertyNames(n) as readonly (keyof ts.SourceFile | keyof ts.Identifier | keyof ts.StringLiteral)[]) {
             switch (propertyName) {
                 case "parent":
                 case "symbol":
@@ -219,7 +220,13 @@ export function sourceFileToJSON(file: ts.Node): string {
                     // Clear the flags that are produced by aggregating child values. That is ephemeral
                     // data we don't care about in the dump. We only care what the parser set directly
                     // on the AST.
-                    const flags = n.flags & ~(ts.NodeFlags.JavaScriptFile | ts.NodeFlags.HasAggregatedChildData);
+                    let flags = n.flags & ~(ts.NodeFlags.JavaScriptFile | ts.NodeFlags.HasAggregatedChildData);
+                    if (isIdentifier(n)) {
+                        if (flags & ts.NodeFlags.HasExtendedUnicodeEscape) {
+                            o.hasExtendedUnicodeEscape = true;
+                            flags &= ~ts.NodeFlags.HasExtendedUnicodeEscape;
+                        }
+                    }
                     if (flags) {
                         o[propertyName] = getNodeFlagName(flags);
                     }
