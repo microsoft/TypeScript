@@ -1684,7 +1684,6 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
      */
     readonly escapedText: __String;
     readonly originalKeywordKind?: SyntaxKind;                // Original syntaxKind which get set so that we can report an error later
-    /** @internal */ readonly autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers.
     /** @internal */ generatedImportReference?: ImportSpecifier; // Reference to the generated import specifier this identifier refers to
     isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
     /** @internal */ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
@@ -1705,7 +1704,7 @@ export interface AutoGenerateInfo {
 
 /** @internal */
 export interface GeneratedIdentifier extends Identifier {
-    readonly autoGenerate: AutoGenerateInfo;
+    readonly emitNode: EmitNode & { autoGenerate: AutoGenerateInfo; };
 }
 
 export interface QualifiedName extends Node, FlowContainer {
@@ -1783,12 +1782,11 @@ export interface PrivateIdentifier extends PrimaryExpression {
     // escaping not strictly necessary
     // avoids gotchas in transforms and utils
     readonly escapedText: __String;
-    /** @internal */ readonly autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers.
 }
 
 /** @internal */
 export interface GeneratedPrivateIdentifier extends PrivateIdentifier {
-    readonly autoGenerate: AutoGenerateInfo;
+    readonly emitNode: EmitNode & { autoGenerate: AutoGenerateInfo };
 }
 
 /** @internal */
@@ -7832,6 +7830,7 @@ export interface EmitNode {
     snippetElement?: SnippetElement;         // Snippet element of the node
     typeNode?: TypeNode;                     // VariableDeclaration type
     identifierTypeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized identifiers. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
+    autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers and private identifiers.
 }
 
 /** @internal */

@@ -1476,12 +1476,12 @@ export function isStringTextContainingNode(node: Node): node is StringLiteral | 
 
 /** @internal */
 export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
-    return isIdentifier(node) && node.autoGenerate !== undefined;
+    return isIdentifier(node) && node.emitNode?.autoGenerate !== undefined;
 }
 
 /** @internal */
 export function isGeneratedPrivateIdentifier(node: Node): node is GeneratedPrivateIdentifier {
-    return isPrivateIdentifier(node) && node.autoGenerate !== undefined;
+    return isPrivateIdentifier(node) && node.emitNode?.autoGenerate !== undefined;
 }
 
 // Private Identifiers

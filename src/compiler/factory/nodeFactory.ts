@@ -391,6 +391,7 @@ import {
     SetAccessorDeclaration,
     setEachParent,
     setEmitFlags,
+    setIdentifierAutoGenerate,
     setIdentifierTypeArguments,
     setParent,
     setTextRange,
@@ -1154,7 +1155,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function createBaseIdentifier(escapedText: __String) {
         const node = baseFactory.createBaseIdentifierNode(SyntaxKind.Identifier) as Mutable<Identifier>;
         node.escapedText = escapedText;
-        node.autoGenerate = undefined;
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
         node.flowNode = undefined; // initialized by binder (FlowContainer)
         node.symbol = undefined!; // initialized by checker
@@ -1163,12 +1163,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     function createBaseGeneratedIdentifier(text: string, autoGenerateFlags: GeneratedIdentifierFlags, prefix: string | GeneratedNamePart | undefined, suffix: string | undefined) {
         const node = createBaseIdentifier(escapeLeadingUnderscores(text)) as Mutable<GeneratedIdentifier>;
-        node.autoGenerate = {
+        setIdentifierAutoGenerate(node, {
             flags: autoGenerateFlags,
             id: nextAutoGenerateId,
             prefix,
             suffix
-        };
+        });
         nextAutoGenerateId++;
         return node;
     }
@@ -1239,7 +1239,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function createBasePrivateIdentifier(escapedText: __String) {
         const node = baseFactory.createBasePrivateIdentifierNode(SyntaxKind.PrivateIdentifier) as Mutable<PrivateIdentifier>;
         node.escapedText = escapedText;
-        node.autoGenerate = undefined;
         node.transformFlags |= TransformFlags.ContainsClassFields;
         return node;
     }
@@ -1252,12 +1251,12 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
 
     function createBaseGeneratedPrivateIdentifier(text: string, autoGenerateFlags: GeneratedIdentifierFlags, prefix: string | GeneratedNamePart | undefined, suffix: string | undefined) {
         const node = createBasePrivateIdentifier(escapeLeadingUnderscores(text));
-        node.autoGenerate = {
+        setIdentifierAutoGenerate(node, {
             flags: autoGenerateFlags,
             id: nextAutoGenerateId,
             prefix,
             suffix,
-        };
+        });
         nextAutoGenerateId++;
         return node;
     }
@@ -6304,9 +6303,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function cloneGeneratedIdentifier(node: GeneratedIdentifier): GeneratedIdentifier {
         const clone = createBaseIdentifier(node.escapedText) as Mutable<GeneratedIdentifier>;
         clone.flags |= node.flags & ~NodeFlags.Synthesized;
-        clone.autoGenerate = { ...node.autoGenerate };
         clone.transformFlags = node.transformFlags;
         setOriginalNode(clone, node);
+        setIdentifierAutoGenerate(clone, { ...node.emitNode.autoGenerate });
         return clone;
     }
 
@@ -6328,9 +6327,9 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function cloneGeneratedPrivateIdentifier(node: GeneratedPrivateIdentifier): GeneratedPrivateIdentifier {
         const clone = createBasePrivateIdentifier(node.escapedText) as Mutable<GeneratedPrivateIdentifier>;
         clone.flags |= node.flags & ~NodeFlags.Synthesized;
-        clone.autoGenerate = { ...node.autoGenerate };
         clone.transformFlags = node.transformFlags;
         setOriginalNode(clone, node);
+        setIdentifierAutoGenerate(clone, { ...node.emitNode.autoGenerate });
         return clone;
     }
 

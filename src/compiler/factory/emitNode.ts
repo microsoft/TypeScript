@@ -2,6 +2,7 @@ import {
     AccessExpression,
     append,
     appendIfUnique,
+    AutoGenerateInfo,
     Debug,
     EmitFlags,
     EmitHelper,
@@ -13,6 +14,7 @@ import {
     Node,
     NodeArray,
     orderedRemoveItem,
+    PrivateIdentifier,
     SnippetElement,
     some,
     SourceFile,
@@ -331,4 +333,15 @@ export function setIdentifierTypeArguments<T extends Identifier>(node: T, typeAr
 /** @internal */
 export function getIdentifierTypeArguments(node: Identifier): NodeArray<TypeNode | TypeParameterDeclaration> | undefined {
     return node.emitNode?.identifierTypeArguments;
+}
+
+/** @internal */
+export function setIdentifierAutoGenerate<T extends Identifier | PrivateIdentifier>(node: T, autoGenerate: AutoGenerateInfo | undefined) {
+    getOrCreateEmitNode(node).autoGenerate = autoGenerate;
+    return node;
+}
+
+/** @internal */
+export function getIdentifierAutoGenerate(node: Identifier | PrivateIdentifier): AutoGenerateInfo | undefined {
+    return node.emitNode?.autoGenerate;
 }

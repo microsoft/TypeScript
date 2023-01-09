@@ -1649,7 +1649,7 @@ export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemp
     switch (name.kind) {
         case SyntaxKind.Identifier:
         case SyntaxKind.PrivateIdentifier:
-            return name.autoGenerate ? undefined : name.escapedText;
+            return name.emitNode?.autoGenerate ? undefined : name.escapedText;
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NumericLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
