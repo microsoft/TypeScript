@@ -23211,7 +23211,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.Parameter:
                 const param = declaration as ParameterDeclaration;
                 if (isIdentifier(param.name)) {
-                    const originalKeywordKind = stringToToken(param.name.escapedText as string);1
+                    const originalKeywordKind = stringToToken(param.name.escapedText as string);
                     if ((isCallSignatureDeclaration(param.parent) || isMethodSignature(param.parent) || isFunctionTypeNode(param.parent)) &&
                         param.parent.parameters.indexOf(param) > -1 &&
                         (resolveName(param, param.name.escapedText, SymbolFlags.Type, undefined, param.name.escapedText, /*isUse*/ true) ||

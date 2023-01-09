@@ -7329,7 +7329,7 @@ function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: num
 }
 
 Object.defineProperty(Identifier.prototype, "originalKeywordKind", {
-    get: function(this: Identifier) {
+    get(this: Identifier) {
         return stringToToken(this.escapedText as string);
     }
 });
