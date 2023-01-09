@@ -7325,7 +7325,6 @@ function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: num
     this.parent = undefined!;
     this.original = undefined;
     this.emitNode = undefined;
-    (this as Identifier).flowNode = undefined;
 }
 
 function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
