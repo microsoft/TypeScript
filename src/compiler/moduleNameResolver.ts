@@ -214,7 +214,8 @@ function createResolvedModuleWithFailedLookupLocations(
     failedLookupLocations: string[],
     affectingLocations: string[],
     diagnostics: Diagnostic[],
-    resultFromCache: ResolvedModuleWithFailedLookupLocations | undefined
+    resultFromCache: ResolvedModuleWithFailedLookupLocations | undefined,
+    legacyResult?: string,
 ): ResolvedModuleWithFailedLookupLocations {
     if (resultFromCache) {
         resultFromCache.failedLookupLocations = updateResolutionField(resultFromCache.failedLookupLocations, failedLookupLocations);
@@ -234,6 +235,7 @@ function createResolvedModuleWithFailedLookupLocations(
         failedLookupLocations: initializeResolutionField(failedLookupLocations),
         affectingLocations: initializeResolutionField(affectingLocations),
         resolutionDiagnostics: initializeResolutionField(diagnostics),
+        legacyResult,
     };
 }
 function initializeResolutionField<T>(value: T[]): T[] | undefined {
@@ -1665,12 +1667,30 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
         const priorityExtensions = extensions & (Extensions.TypeScript | Extensions.Declaration);
         const secondaryExtensions = extensions & ~(Extensions.TypeScript | Extensions.Declaration);
         result =
-            priorityExtensions && tryResolve(priorityExtensions) ||
-            secondaryExtensions && tryResolve(secondaryExtensions) ||
+            priorityExtensions && tryResolve(priorityExtensions, state) ||
+            secondaryExtensions && tryResolve(secondaryExtensions, state) ||
             undefined;
     }
     else {
-        result = tryResolve(extensions);
+        result = tryResolve(extensions, state);
+    }
+
+    // For non-relative names that failed to resolve in modes that look up an "import" condition in package.json "exports",
+    // try again with "exports" disabled to try to detect if this is likely a configuration error in a dependency's package.json.
+    let legacyResult;
+    if (!result && !isConfigLookup && !isExternalModuleNameRelative(moduleName) && features & NodeResolutionFeatures.Exports && conditions.indexOf("import") > -1) {
+        traceIfEnabled(state, Diagnostics.Resolution_of_non_relative_name_failed_trying_with_modern_Node_resolution_features_disabled_to_see_if_npm_library_needs_configuration_update);
+        const diagnosticState = {
+            ...state,
+            features: state.features & ~NodeResolutionFeatures.Exports,
+            failedLookupLocations: [],
+            affectingLocations: [],
+            reportDiagnostic: noop,
+        };
+        const diagnosticResult = tryResolve(extensions & (Extensions.TypeScript | Extensions.Declaration), diagnosticState);
+        if (diagnosticResult?.value?.isExternalLibraryImport) {
+            legacyResult = diagnosticResult.value.resolved.path;
+        }
     }
 
     return createResolvedModuleWithFailedLookupLocations(
@@ -1679,10 +1699,11 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
         failedLookupLocations,
         affectingLocations,
         diagnostics,
-        state.resultFromCache
+        state.resultFromCache,
+        legacyResult,
     );
 
-    function tryResolve(extensions: Extensions): SearchResult<{ resolved: Resolved, isExternalLibraryImport: boolean }> {
+    function tryResolve(extensions: Extensions, state: ModuleResolutionState): SearchResult<{ resolved: Resolved, isExternalLibraryImport: boolean }> {
         const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => nodeLoadModuleByRelativeName(extensions, candidate, onlyRecordFailures, state, /*considerPackageJson*/ true);
         const resolved = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loader, state);
         if (resolved) {

@@ -311,6 +311,7 @@ import {
     getOwnKeys,
     getParameterSymbolFromJSDoc,
     getParseTreeNode,
+    getPathComponents,
     getPropertyAssignmentAliasLikeExpression,
     getPropertyNameForPropertyNameNode,
     getResolutionDiagnostic,
@@ -814,6 +815,7 @@ import {
     nodeIsPresent,
     nodeIsSynthesized,
     NodeLinks,
+    nodeModulesPathPart,
     nodeStartsNewLexicalEnvironment,
     NodeWithTypeArguments,
     NonNullChain,
@@ -4899,7 +4901,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 else {
-                    error(errorNode, moduleNotFoundError, moduleReference);
+                    const legacyResult = currentSourceFile.resolvedModules?.get(moduleReference, mode)?.legacyResult;
+                    if (legacyResult) {
+                        const isInTypesScope = legacyResult.indexOf(nodeModulesPathPart + "@types/") > -1;
+                        const moduleNameParts = getPathComponents(moduleReference);
+                        moduleNameParts.shift(); // Empty string for nonrelative module name
+                        if (moduleNameParts.length > 1 && moduleNameParts[0] === "@types") {
+                            moduleNameParts.shift();
+                        }
+                        const isScopedLibrary = moduleNameParts.length > 1 && startsWith(moduleNameParts[0], "@");
+                        const libraryName = isScopedLibrary ? `${moduleNameParts[0]}/${moduleNameParts[1]}` : moduleNameParts[0];
+                        const details = chainDiagnosticMessages(
+                            /*details*/ undefined,
+                            Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json,
+                            legacyResult,
+                            isInTypesScope ? `@types/${mangleScopedPackageName(libraryName)}` : libraryName
+                        );
+                        diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, chainDiagnosticMessages(details, moduleNotFoundError, moduleReference)));
+                    }
+                    else {
+                        error(errorNode, moduleNotFoundError, moduleReference);
+                    }
                 }
             }
         }

@@ -7605,6 +7605,8 @@ export interface ResolvedModuleWithFailedLookupLocations {
     affectingLocations?: string[];
     /** @internal */
     resolutionDiagnostics?: Diagnostic[]
+    /** @internal */
+    legacyResult?: string;
 }
 
 export interface ResolvedTypeReferenceDirective {
