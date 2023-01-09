@@ -5219,6 +5219,14 @@
         "category": "Message",
         "code": 6276
     },
+    "Resolution of non-relative name failed; trying with modern Node resolution features disabled to see if npm library needs configuration update.": {
+        "category": "Message",
+        "code": 6277
+    },
+    "There are types at '{0}', but this result could not be resolved when respecting package.json \"exports\". The '{1}' library may need to update its package.json.": {
+        "category": "Message",
+        "code": 6278
+    },
 
     "Enable project compilation": {
         "category": "Message",
@@ -6544,6 +6552,14 @@
     "Unknown type acquisition option '{0}'. Did you mean '{1}'?": {
         "category": "Error",
         "code": 17018
+    },
+    "'{0}' at the end of a type is not valid TypeScript syntax. Did you mean to write '{1}'?": {
+        "category": "Error",
+        "code": 17019
+    },
+    "'{0}' at the start of a type is not valid TypeScript syntax. Did you mean to write '{1}'?": {
+        "category": "Error",
+        "code": 17020
     },
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",

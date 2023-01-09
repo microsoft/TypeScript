@@ -1365,8 +1365,10 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     let privateNameTempFlags: TempFlags; // TempFlags for the current name generation scope.
     let tempFlagsStack: TempFlags[]; // Stack of enclosing name generation scopes.
     let tempFlags: TempFlags; // TempFlags for the current name generation scope.
-    let reservedNamesStack: Set<string>[]; // Stack of TempFlags reserved in enclosing name generation scopes.
-    let reservedNames: Set<string>; // TempFlags to reserve in nested name generation scopes.
+    let reservedNamesStack: (Set<string> | undefined)[]; // Stack of reserved names in enclosing name generation scopes.
+    let reservedNames: Set<string> | undefined; // Names reserved in nested name generation scopes.
+    let reservedPrivateNamesStack: (Set<string> | undefined)[]; // Stack of reserved member names in enclosing name generation scopes.
+    let reservedPrivateNames: Set<string> | undefined; // Member names reserved in nested name generation scopes.
     let preserveSourceNewlines = printerOptions.preserveSourceNewlines; // Can be overridden inside nodes with the `IgnoreSourceNewlines` emit flag.
     let nextListElementPos: number | undefined; // See comment in `getLeadingLineTerminatorCount`.
 
@@ -1658,6 +1660,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         tempFlagsStack = [];
         tempFlags = TempFlags.Auto;
         reservedNamesStack = [];
+        reservedNames = undefined;
+        reservedPrivateNamesStack = [];
+        reservedPrivateNames = undefined;
         currentSourceFile = undefined;
         currentLineMap = undefined;
         detachedCommentsInfo = undefined;
@@ -2501,9 +2506,13 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitComputedPropertyName(node: ComputedPropertyName) {
+        const savedPrivateNameTempFlags = privateNameTempFlags;
+        const savedReservedMemberNames = reservedPrivateNames;
+        popPrivateNameGenerationScope();
         writePunctuation("[");
         emitExpression(node.expression, parenthesizer.parenthesizeExpressionOfComputedPropertyName);
         writePunctuation("]");
+        pushPrivateNameGenerationScope(savedPrivateNameTempFlags, savedReservedMemberNames);
     }
 
     //
@@ -2723,10 +2732,16 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitTypeLiteral(node: TypeLiteralNode) {
+        // Type literals don't have private names, but we need to push a new scope so that
+        // we can step out of it when emitting a computed property.
+        pushPrivateNameGenerationScope(TempFlags.Auto, /*newReservedMemberNames*/ undefined);
+
         writePunctuation("{");
         const flags = getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineTypeLiteralMembers : ListFormat.MultiLineTypeLiteralMembers;
         emitList(node, node.members, flags | ListFormat.NoSpaceIfEmpty);
         writePunctuation("}");
+
+        popPrivateNameGenerationScope();
     }
 
     function emitArrayType(node: ArrayTypeNode) {
@@ -2943,6 +2958,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitObjectLiteralExpression(node: ObjectLiteralExpression) {
+        // Object literals don't have private names, but we need to push a new scope so that
+        // we can step out of it when emitting a computed property.
+        pushPrivateNameGenerationScope(TempFlags.Auto, /*newReservedMemberNames*/ undefined);
         forEach(node.properties, generateMemberNames);
 
         const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
@@ -2957,6 +2975,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (indentedFlag) {
             decreaseIndent();
         }
+
+        popPrivateNameGenerationScope();
     }
 
     function emitPropertyAccessExpression(node: PropertyAccessExpression) {
@@ -3763,6 +3783,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitClassDeclarationOrExpression(node: ClassDeclaration | ClassExpression) {
+        pushPrivateNameGenerationScope(TempFlags.Auto, /*newReservedMemberNames*/ undefined);
+
         forEach(node.members, generateMemberNames);
 
         emitDecoratorsAndModifiers(node, node.modifiers);
@@ -3788,9 +3810,15 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (indentedFlag) {
             decreaseIndent();
         }
+
+        popPrivateNameGenerationScope();
     }
 
     function emitInterfaceDeclaration(node: InterfaceDeclaration) {
+        // Interfaces don't have private names, but we need to push a new scope so that
+        // we can step out of it when emitting a computed property.
+        pushPrivateNameGenerationScope(TempFlags.Auto, /*newReservedMemberNames*/ undefined);
+
         emitModifiers(node, node.modifiers);
         writeKeyword("interface");
         writeSpace();
@@ -3801,6 +3829,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         writePunctuation("{");
         emitList(node, node.members, ListFormat.InterfaceMembers);
         writePunctuation("}");
+
+        popPrivateNameGenerationScope();
     }
 
     function emitTypeAliasDeclaration(node: TypeAliasDeclaration) {
@@ -5486,8 +5516,6 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
         tempFlagsStack.push(tempFlags);
         tempFlags = TempFlags.Auto;
-        privateNameTempFlagsStack.push(privateNameTempFlags);
-        privateNameTempFlags = TempFlags.Auto;
         formattedNameTempFlagsStack.push(formattedNameTempFlags);
         formattedNameTempFlags = undefined;
         reservedNamesStack.push(reservedNames);
@@ -5501,9 +5529,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             return;
         }
         tempFlags = tempFlagsStack.pop()!;
-        privateNameTempFlags = privateNameTempFlagsStack.pop()!;
         formattedNameTempFlags = formattedNameTempFlagsStack.pop();
-        reservedNames = reservedNamesStack.pop()!;
+        reservedNames = reservedNamesStack.pop();
     }
 
     function reserveNameInNestedScopes(name: string) {
@@ -5511,6 +5538,31 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             reservedNames = new Set();
         }
         reservedNames.add(name);
+    }
+
+    /**
+     * Push a new member name generation scope.
+     */
+    function pushPrivateNameGenerationScope(newPrivateNameTempFlags: TempFlags, newReservedMemberNames: Set<string> | undefined) {
+        privateNameTempFlagsStack.push(privateNameTempFlags);
+        privateNameTempFlags = newPrivateNameTempFlags;
+        reservedPrivateNamesStack.push(reservedNames);
+        reservedPrivateNames = newReservedMemberNames;
+    }
+
+    /**
+     * Pop the current member name generation scope.
+     */
+    function popPrivateNameGenerationScope() {
+        privateNameTempFlags = privateNameTempFlagsStack.pop()!;
+        reservedPrivateNames = reservedPrivateNamesStack.pop();
+    }
+
+    function reservePrivateNameInNestedScopes(name: string) {
+        if (!reservedPrivateNames || reservedPrivateNames === lastOrUndefined(reservedPrivateNamesStack)) {
+            reservedPrivateNames = new Set();
+        }
+        reservedPrivateNames.add(name);
     }
 
     function generateNames(node: Node | undefined) {
@@ -5650,16 +5702,23 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * Returns a value indicating whether a name is unique globally, within the current file,
      * or within the NameGenerator.
      */
-    function isUniqueName(name: string): boolean {
-        return isFileLevelUniqueName(name)
-            && !generatedNames.has(name)
-            && !(reservedNames && reservedNames.has(name));
+    function isUniqueName(name: string, privateName: boolean): boolean {
+        return isFileLevelUniqueName(name, privateName)
+            && !isReservedName(name, privateName)
+            && !generatedNames.has(name);
+    }
+
+    function isReservedName(name: string, privateName: boolean): boolean {
+        return privateName ? !!reservedPrivateNames?.has(name) : !!reservedNames?.has(name);
     }
 
     /**
      * Returns a value indicating whether a name is unique globally or within the current file.
+     *
+     * @param _isPrivate (unused) this parameter exists to avoid an unnecessary adaptor frame in v8
+     * when `isfileLevelUniqueName` is passed as a callback to `makeUniqueName`.
      */
-    function isFileLevelUniqueName(name: string) {
+    function isFileLevelUniqueName(name: string, _isPrivate: boolean) {
         return currentSourceFile ? ts.isFileLevelUniqueName(currentSourceFile, name, hasGlobalName) : true;
     }
 
@@ -5722,9 +5781,12 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         if (flags && !(tempFlags & flags)) {
             const name = flags === TempFlags._i ? "_i" : "_n";
             const fullName = formatGeneratedName(privateName, prefix, name, suffix);
-            if (isUniqueName(fullName)) {
+            if (isUniqueName(fullName, privateName)) {
                 tempFlags |= flags;
-                if (reservedInNestedScopes) {
+                if (privateName) {
+                    reservePrivateNameInNestedScopes(fullName);
+                }
+                else if (reservedInNestedScopes) {
                     reserveNameInNestedScopes(fullName);
                 }
                 setTempFlags(key, tempFlags);
@@ -5741,8 +5803,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                     ? "_" + String.fromCharCode(CharacterCodes.a + count)
                     : "_" + (count - 26);
                 const fullName = formatGeneratedName(privateName, prefix, name, suffix);
-                if (isUniqueName(fullName)) {
-                    if (reservedInNestedScopes) {
+                if (isUniqueName(fullName, privateName)) {
+                    if (privateName) {
+                        reservePrivateNameInNestedScopes(fullName);
+                    }
+                    else if (reservedInNestedScopes) {
                         reserveNameInNestedScopes(fullName);
                     }
                     setTempFlags(key, tempFlags);
@@ -5759,7 +5824,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * makeUniqueName are guaranteed to never conflict.
      * If `optimistic` is set, the first instance will use 'baseName' verbatim instead of 'baseName_1'
      */
-    function makeUniqueName(baseName: string, checkFn: (name: string) => boolean = isUniqueName, optimistic: boolean, scoped: boolean, privateName: boolean, prefix: string, suffix: string): string {
+    function makeUniqueName(baseName: string, checkFn: (name: string, privateName: boolean) => boolean = isUniqueName, optimistic: boolean, scoped: boolean, privateName: boolean, prefix: string, suffix: string): string {
         if (baseName.length > 0 && baseName.charCodeAt(0) === CharacterCodes.hash) {
             baseName = baseName.slice(1);
         }
@@ -5768,8 +5833,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
         if (optimistic) {
             const fullName = formatGeneratedName(privateName, prefix, baseName, suffix);
-            if (checkFn(fullName)) {
-                if (scoped) {
+            if (checkFn(fullName, privateName)) {
+                if (privateName) {
+                    reservePrivateNameInNestedScopes(fullName);
+                }
+                else if (scoped) {
                     reserveNameInNestedScopes(fullName);
                 }
                 else {
@@ -5785,8 +5853,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         let i = 1;
         while (true) {
             const fullName = formatGeneratedName(privateName, prefix, baseName + i, suffix);
-            if (checkFn(fullName)) {
-                if (scoped) {
+            if (checkFn(fullName, privateName)) {
+                if (privateName) {
+                    reservePrivateNameInNestedScopes(fullName);
+                }
+                else if (scoped) {
                     reserveNameInNestedScopes(fullName);
                 }
                 else {

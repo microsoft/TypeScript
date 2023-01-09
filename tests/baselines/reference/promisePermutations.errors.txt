@@ -447,7 +447,7 @@ tests/cases/compiler/promisePermutations.ts(160,21): error TS2769: No overload m
 !!! error TS2769:   The last overload gave the following error.
 !!! error TS2769:     Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => Promise<number>'.
 !!! error TS2769:       Property 'catch' is missing in type 'IPromise<string>' but required in type 'Promise<number>'.
-!!! related TS2728 /.ts/lib.es5.d.ts:1540:5: 'catch' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:1547:5: 'catch' is declared here.
 !!! related TS2771 tests/cases/compiler/promisePermutations.ts:5:5: The last overload is declared here.
     var s10g = s10.then(testFunctionP, nIPromise, sIPromise).then(sPromise, sIPromise, sIPromise); // ok
     

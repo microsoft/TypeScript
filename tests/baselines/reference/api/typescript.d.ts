@@ -31,21 +31,6 @@ declare namespace ts {
     interface SortedArray<T> extends Array<T> {
         " __sortedArrayBrand": any;
     }
-    /** Common read methods for ES6 Map/Set. */
-    interface ReadonlyCollection<K> {
-        readonly size: number;
-        has(key: K): boolean;
-        keys(): Iterator<K>;
-    }
-    /** Common write methods for ES6 Map/Set. */
-    interface Collection<K> extends ReadonlyCollection<K> {
-        delete(key: K): boolean;
-        clear(): void;
-    }
-    /** Array that is only intended to be pushed to, never read. */
-    interface Push<T> {
-        push(...values: T[]): void;
-    }
     type Path = string & {
         __pathBrand: any;
     };
@@ -4634,7 +4619,7 @@ declare namespace ts {
         resolvePath(path: string): string;
         fileExists(fileName: string): boolean;
         readFile(fileName: string): string | undefined;
-    }, errors?: Push<Diagnostic>): void;
+    }, errors?: Diagnostic[]): void;
     function getOriginalNode(node: Node): Node;
     function getOriginalNode<T extends Node>(node: Node, nodeTest: (node: Node) => node is T): T;
     function getOriginalNode(node: Node | undefined): Node | undefined;
@@ -5214,7 +5199,7 @@ declare namespace ts {
     /**
      * Convert the json syntax tree into the json value
      */
-    function convertToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>): any;
+    function convertToObject(sourceFile: JsonSourceFile, errors: Diagnostic[]): any;
     /**
      * Parse the contents of a config file (tsconfig.json).
      * @param json The contents of the config file to parse

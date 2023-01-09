@@ -157,7 +157,6 @@ import {
     getCombinedModifierFlags,
     getCombinedNodeFlags,
     getDirectoryPath,
-    getEntries,
     getJSDocAugmentsTag,
     getJSDocDeprecatedTagNoCache,
     getJSDocImplementsTags,
@@ -655,8 +654,7 @@ export function forEachAncestor<T>(node: Node, callback: (n: Node) => T | undefi
  */
 export function forEachEntry<K, V, U>(map: ReadonlyMap<K, V>, callback: (value: V, key: K) => U | undefined): U | undefined {
     const iterator = map.entries();
-    for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-        const [key, value] = iterResult.value;
+    for (const [key, value] of iterator) {
         const result = callback(value, key);
         if (result) {
             return result;
@@ -672,8 +670,8 @@ export function forEachEntry<K, V, U>(map: ReadonlyMap<K, V>, callback: (value: 
  */
 export function forEachKey<K, T>(map: ReadonlyCollection<K>, callback: (key: K) => T | undefined): T | undefined {
     const iterator = map.keys();
-    for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-        const result = callback(iterResult.value);
+    for (const key of iterator) {
+        const result = callback(key);
         if (result) {
             return result;
         }
@@ -5087,7 +5085,7 @@ const doubleQuoteEscapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u202
 const singleQuoteEscapedCharsRegExp = /[\\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
 // Template strings preserve simple LF newlines, still encode CRLF (or CR)
 const backtickQuoteEscapedCharsRegExp = /\r\n|[\\\`\u0000-\u001f\t\v\f\b\r\u2028\u2029\u0085]/g;
-const escapedCharsMap = new Map(getEntries({
+const escapedCharsMap = new Map(Object.entries({
     "\t": "\\t",
     "\v": "\\v",
     "\f": "\\f",
@@ -5155,7 +5153,7 @@ export function escapeNonAsciiString(s: string, quoteChar?: CharacterCodes.doubl
 // the map below must be updated.
 const jsxDoubleQuoteEscapedCharsRegExp = /[\"\u0000-\u001f\u2028\u2029\u0085]/g;
 const jsxSingleQuoteEscapedCharsRegExp = /[\'\u0000-\u001f\u2028\u2029\u0085]/g;
-const jsxEscapedCharsMap = new Map(getEntries({
+const jsxEscapedCharsMap = new Map(Object.entries({
     "\"": "&quot;",
     "\'": "&apos;"
 }));
