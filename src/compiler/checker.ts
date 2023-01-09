@@ -26300,12 +26300,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (propName === undefined) {
                 return type;
             }
-            const removeNullable = strictNullChecks && (isOptionalChain(access) || isNonNullAccess(access)) && maybeTypeOfKind(type, TypeFlags.Nullable);
+            const optionalChain = isOptionalChain(access);
+            const removeNullable = strictNullChecks && (optionalChain || isNonNullAccess(access)) && maybeTypeOfKind(type, TypeFlags.Nullable);
             let propType = getTypeOfPropertyOfType(removeNullable ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type, propName);
             if (!propType) {
                 return type;
             }
-            propType = removeNullable ? getOptionalType(propType) : propType;
+            propType = removeNullable && optionalChain ? getOptionalType(propType) : propType;
             const narrowedPropType = narrowType(propType);
             return filterType(type, t => {
                 const discriminantType = getTypeOfPropertyOrIndexSignature(t, propName);
