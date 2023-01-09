@@ -1008,7 +1008,6 @@ export type ForEachChildNodes =
 /** @internal */
 export type VisitEachChildNodes =
     | HasChildren
-    | Identifier
     ;
 
 /** @internal */
@@ -1682,9 +1681,8 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
     /** @internal */ readonly autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers.
     /** @internal */ generatedImportReference?: ImportSpecifier; // Reference to the generated import specifier this identifier refers to
     isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
-    /** @internal */ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
     /** @internal */ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
-    /**@internal*/ hasExtendedUnicodeEscape?: boolean;
+    /** @internal */ hasExtendedUnicodeEscape?: boolean;
 }
 
 // Transient identifier node (marked by id === -1)
@@ -7828,6 +7826,7 @@ export interface EmitNode {
     startsOnNewLine?: boolean;               // If the node should begin on a new line
     snippetElement?: SnippetElement;         // Snippet element of the node
     typeNode?: TypeNode;                     // VariableDeclaration type
+    identifierTypeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized identifiers. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
 }
 
 /** @internal */
@@ -8126,8 +8125,7 @@ export interface NodeFactory {
     //
 
     createIdentifier(text: string): Identifier;
-    /** @internal */ createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind, hasExtendedUnicodeEscape?: boolean): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
-    /** @internal */ updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier;
+    /** @internal */ createIdentifier(text: string, originalKeywordKind?: SyntaxKind, hasExtendedUnicodeEscape?: boolean): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
 
     /**
      * Create a unique temporary variable.

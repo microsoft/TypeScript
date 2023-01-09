@@ -272,6 +272,7 @@ import {
     getFirstIdentifier,
     getFunctionFlags,
     getHostSignatureFromJSDoc,
+    getIdentifierTypeArguments,
     getImmediatelyInvokedFunctionExpression,
     getInitializerOfBinaryExpression,
     getInterfaceBaseTypeNodes,
@@ -893,6 +894,7 @@ import {
     SetAccessorDeclaration,
     setCommentRange,
     setEmitFlags,
+    setIdentifierTypeArguments,
     setNodeFlags,
     setOriginalNode,
     setParent,
@@ -6792,12 +6794,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     let qualifier = root.qualifier;
                     if (qualifier) {
                         if (isIdentifier(qualifier)) {
-                            qualifier = factory.updateIdentifier(qualifier, typeArguments);
+                            if (typeArguments !== getIdentifierTypeArguments(qualifier)) {
+                                qualifier = setIdentifierTypeArguments(factory.cloneNode(qualifier), typeArguments);
+                            }
                         }
                         else {
-                            qualifier = factory.updateQualifiedName(qualifier,
-                                qualifier.left,
-                                factory.updateIdentifier(qualifier.right, typeArguments));
+                            if (typeArguments !== getIdentifierTypeArguments(qualifier.right)) {
+                                qualifier = factory.updateQualifiedName(qualifier,
+                                    qualifier.left,
+                                    setIdentifierTypeArguments(factory.cloneNode(qualifier.right), typeArguments));
+                            }
                         }
                     }
                     typeArguments = ref.typeArguments;
@@ -6819,12 +6825,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     let typeArguments = root.typeArguments;
                     let typeName = root.typeName;
                     if (isIdentifier(typeName)) {
-                        typeName = factory.updateIdentifier(typeName, typeArguments);
+                        if (typeArguments !== getIdentifierTypeArguments(typeName)) {
+                            typeName = setIdentifierTypeArguments(factory.cloneNode(typeName), typeArguments);
+                        }
                     }
                     else {
-                        typeName = factory.updateQualifiedName(typeName,
-                            typeName.left,
-                            factory.updateIdentifier(typeName.right, typeArguments));
+                        if (typeArguments !== getIdentifierTypeArguments(typeName.right)) {
+                            typeName = factory.updateQualifiedName(typeName,
+                                typeName.left,
+                                setIdentifierTypeArguments(factory.cloneNode(typeName.right), typeArguments));
+                        }
                     }
                     typeArguments = ref.typeArguments;
                     // then move qualifiers
@@ -7542,7 +7552,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!nonRootParts || isEntityName(nonRootParts)) {
                     if (nonRootParts) {
                         const lastId = isIdentifier(nonRootParts) ? nonRootParts : nonRootParts.right;
-                        lastId.typeArguments = undefined;
+                        setIdentifierTypeArguments(lastId, /*typeArguments*/ undefined);
                     }
                     return factory.createImportTypeNode(lit, assertion, nonRootParts as EntityName, typeParameterNodes as readonly TypeNode[], isTypeOf);
                 }
@@ -7562,8 +7572,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else {
                 const lastId = isIdentifier(entityName) ? entityName : entityName.right;
-                const lastTypeArgs = lastId.typeArguments;
-                lastId.typeArguments = undefined;
+                const lastTypeArgs = getIdentifierTypeArguments(lastId);
+                setIdentifierTypeArguments(lastId, /*typeArguments*/ undefined);
                 return factory.createTypeReferenceNode(entityName, lastTypeArgs as NodeArray<TypeNode>);
             }
 
@@ -7617,7 +7627,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
 
-                const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
+                if (typeParameterNodes) setIdentifierTypeArguments(identifier, factory.createNodeArray<TypeNode | TypeParameterDeclaration>(typeParameterNodes));
                 identifier.symbol = symbol;
 
                 if (index > stopper) {
@@ -7662,7 +7673,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     text = `${rawtext}_${i}`;
                 }
                 if (text !== rawtext) {
-                    result = factory.createIdentifier(text, result.typeArguments);
+                    const typeArguments = getIdentifierTypeArguments(result);
+                    result = factory.createIdentifier(text);
+                    setIdentifierTypeArguments(result, typeArguments);
                 }
                 // avoiding iterations of the above loop turns out to be worth it when `i` starts to get large, so we cache the max
                 // `i` we've used thus far, to save work later
@@ -7697,7 +7710,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.flags ^= NodeBuilderFlags.InInitialEntityName;
                 }
 
-                const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
+                if (typeParameterNodes) setIdentifierTypeArguments(identifier, factory.createNodeArray<TypeNode | TypeParameterDeclaration>(typeParameterNodes));
                 identifier.symbol = symbol;
 
                 return index > 0 ? factory.createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1), identifier) : identifier;
@@ -7726,7 +7740,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context));
                 }
                 if (index === 0 || canUsePropertyAccess(symbolName, languageVersion)) {
-                    const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                    const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
+                    if (typeParameterNodes) setIdentifierTypeArguments(identifier, factory.createNodeArray<TypeNode | TypeParameterDeclaration>(typeParameterNodes));
                     identifier.symbol = symbol;
 
                     return index > 0 ? factory.createPropertyAccessExpression(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
@@ -7744,8 +7759,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         expression = factory.createNumericLiteral(+symbolName);
                     }
                     if (!expression) {
-                        expression = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
-                        (expression as Identifier).symbol = symbol;
+                        const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
+                        if (typeParameterNodes) setIdentifierTypeArguments(identifier, factory.createNodeArray<TypeNode | TypeParameterDeclaration>(typeParameterNodes));
+                        identifier.symbol = symbol;
+                        expression = identifier;
                     }
                     return factory.createElementAccessExpression(createExpressionFromSymbolChain(chain, index - 1), expression);
                 }

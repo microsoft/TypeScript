@@ -148,6 +148,7 @@ import {
     getEmitModuleKind,
     getExternalHelpersModuleName,
     getExternalModuleName,
+    getIdentifierTypeArguments,
     getLeadingCommentRanges,
     getLineAndCharacterOfPosition,
     getLinesBetweenPositionAndNextNonWhitespaceCharacter,
@@ -2478,7 +2479,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     function emitIdentifier(node: Identifier) {
         const writeText = node.symbol ? writeSymbol : write;
         writeText(getTextOfNode(node, /*includeTrivia*/ false), node.symbol);
-        emitList(node, node.typeArguments, ListFormat.TypeParameters); // Call emitList directly since it could be an array of TypeParameterDeclarations _or_ type arguments
+        emitList(node, getIdentifierTypeArguments(node), ListFormat.TypeParameters); // Call emitList directly since it could be an array of TypeParameterDeclarations _or_ type arguments
     }
 
     //

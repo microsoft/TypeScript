@@ -8,8 +8,10 @@ import {
     EmitNode,
     getParseTreeNode,
     getSourceFileOfNode,
+    Identifier,
     isParseTreeNode,
     Node,
+    NodeArray,
     orderedRemoveItem,
     SnippetElement,
     some,
@@ -19,6 +21,7 @@ import {
     SynthesizedComment,
     TextRange,
     TypeNode,
+    TypeParameterDeclaration,
 } from "../_namespaces/ts";
 
 /**
@@ -317,4 +320,15 @@ export function setTypeNode<T extends Node>(node: T, type: TypeNode): T {
 /** @internal */
 export function getTypeNode<T extends Node>(node: T): TypeNode | undefined {
     return node.emitNode?.typeNode;
+}
+
+/** @internal */
+export function setIdentifierTypeArguments<T extends Identifier>(node: T, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined) {
+    getOrCreateEmitNode(node).identifierTypeArguments = typeArguments;
+    return node;
+}
+
+/** @internal */
+export function getIdentifierTypeArguments(node: Identifier): NodeArray<TypeNode | TypeParameterDeclaration> | undefined {
+    return node.emitNode?.identifierTypeArguments;
 }

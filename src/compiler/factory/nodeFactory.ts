@@ -116,6 +116,7 @@ import {
     getCommentRange,
     getElementsOfBindingOrAssignmentPattern,
     getEmitFlags,
+    getIdentifierTypeArguments,
     getJSDocTypeAliasName,
     getLineAndCharacterOfPosition,
     getNameOfDeclaration,
@@ -390,6 +391,7 @@ import {
     SetAccessorDeclaration,
     setEachParent,
     setEmitFlags,
+    setIdentifierTypeArguments,
     setParent,
     setTextRange,
     setTextRangePosWidth,
@@ -532,7 +534,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         createRegularExpressionLiteral,
         createLiteralLikeNode,
         createIdentifier,
-        updateIdentifier,
         createTempVariable,
         createLoopVariable,
         createUniqueName,
@@ -1155,7 +1156,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         node.originalKeywordKind = originalKeywordKind;
         node.escapedText = escapedText;
         node.autoGenerate = undefined;
-        node.typeArguments = undefined;
         node.hasExtendedUnicodeEscape = undefined;
         node.jsDoc = undefined; // initialized by parser (JsDocContainer)
         node.jsDocCache = undefined; // initialized by parser (JsDocContainer)
@@ -1177,7 +1177,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind, hasExtendedUnicodeEscape?: boolean): Identifier {
+    function createIdentifier(text: string, originalKeywordKind?: SyntaxKind, hasExtendedUnicodeEscape?: boolean): Identifier {
         if (originalKeywordKind === undefined && text) {
             originalKeywordKind = stringToToken(text);
         }
@@ -1186,7 +1186,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         }
 
         const node = createBaseIdentifier(escapeLeadingUnderscores(text), originalKeywordKind);
-        node.typeArguments = asNodeArray(typeArguments);
         node.hasExtendedUnicodeEscape = hasExtendedUnicodeEscape;
 
         // NOTE: we do not include transform flags of typeArguments in an identifier as they do not contribute to transformations
@@ -1198,13 +1197,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         }
 
         return node;
-    }
-
-    // @api
-    function updateIdentifier(node: Identifier, typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier {
-        return node.typeArguments !== typeArguments
-            ? update(createIdentifier(idText(node), typeArguments), node)
-            : node;
     }
 
     // @api
@@ -6389,7 +6381,6 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     function cloneIdentifier(node: Identifier): Identifier {
         const clone = createBaseIdentifier(node.escapedText, node.originalKeywordKind);
         clone.flags |= node.flags & ~NodeFlags.Synthesized;
-        clone.typeArguments = node.typeArguments;
         clone.hasExtendedUnicodeEscape = node.hasExtendedUnicodeEscape;
         clone.jsDoc = node.jsDoc;
         clone.jsDocCache = node.jsDocCache;
@@ -6397,6 +6388,10 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         clone.symbol = node.symbol;
         clone.transformFlags = node.transformFlags;
         setOriginalNode(clone, node);
+
+        // clone type arguments for emitter/typeWriter
+        const typeArguments = getIdentifierTypeArguments(node);
+        if (typeArguments) setIdentifierTypeArguments(clone, typeArguments);
         return clone;
     }
 
