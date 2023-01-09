@@ -8999,25 +8999,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         // Is bound into file.symbol.globalExports instead, which we don't currently traverse
                         addResult(factory.createNamespaceExportDeclaration(idText((node as NamespaceExportDeclaration).name)), ModifierFlags.None);
                         break;
-                    case SyntaxKind.ImportClause:
+                    case SyntaxKind.ImportClause: {
+                        const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
+                        const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as ImportClause).parent.moduleSpecifier;
                         addResult(factory.createImportDeclaration(
                             /*modifiers*/ undefined,
                             factory.createImportClause(/*isTypeOnly*/ false, factory.createIdentifier(localName), /*namedBindings*/ undefined),
-                            // We use `target.parent || target` below as `target.parent` is unset when the target is a module which has been export assigned
-                            // And then made into a default by the `esModuleInterop` or `allowSyntheticDefaultImports` flag
-                            // In such cases, the `target` refers to the module itself already
-                            factory.createStringLiteral(getSpecifierForModuleSymbol(target.parent || target, context)),
-                             /*assertClause*/ undefined
+                            specifier,
+                            (node as ImportClause).parent.assertClause
                         ), ModifierFlags.None);
                         break;
-                    case SyntaxKind.NamespaceImport:
+                    }
+                    case SyntaxKind.NamespaceImport: {
+                        const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
+                        const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as NamespaceImport).parent.parent.moduleSpecifier;
                         addResult(factory.createImportDeclaration(
                             /*modifiers*/ undefined,
                             factory.createImportClause(/*isTypeOnly*/ false, /*importClause*/ undefined, factory.createNamespaceImport(factory.createIdentifier(localName))),
-                            factory.createStringLiteral(getSpecifierForModuleSymbol(target, context)),
-                             /*assertClause*/ undefined
+                            specifier,
+                            (node as NamespaceImport).parent.parent.assertClause
                         ), ModifierFlags.None);
                         break;
+                    }
                     case SyntaxKind.NamespaceExport:
                         addResult(factory.createExportDeclaration(
                             /*modifiers*/ undefined,
@@ -9026,7 +9029,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             factory.createStringLiteral(getSpecifierForModuleSymbol(target, context))
                         ), ModifierFlags.None);
                         break;
-                    case SyntaxKind.ImportSpecifier:
+                    case SyntaxKind.ImportSpecifier: {
+                        const generatedSpecifier = getSpecifierForModuleSymbol(target.parent || target, context); // generate specifier (even though we're reusing and existing one) for ambient module reference include side effects
+                        const specifier = bundled ? factory.createStringLiteral(generatedSpecifier) : (node as ImportSpecifier).parent.parent.parent.moduleSpecifier;
                         addResult(factory.createImportDeclaration(
                             /*modifiers*/ undefined,
                             factory.createImportClause(
@@ -9039,10 +9044,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                         factory.createIdentifier(localName)
                                     )
                                 ])),
-                            factory.createStringLiteral(getSpecifierForModuleSymbol(target.parent || target, context)),
-                             /*assertClause*/ undefined
+                            specifier,
+                            (node as ImportSpecifier).parent.parent.parent.assertClause,
                         ), ModifierFlags.None);
                         break;
+                    }
                     case SyntaxKind.ExportSpecifier:
                         // does not use localName because the symbol name in this case refers to the name in the exports table,
                         // which we must exactly preserve
