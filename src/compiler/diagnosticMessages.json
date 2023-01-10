@@ -5190,6 +5190,18 @@
         "category": "Message",
         "code": 6261
     },
+    "File name '{0}' has a '{1}' extension - looking up '{2}' instead.": {
+        "category": "Message",
+        "code": 6262
+    },
+    "Module '{0}' was resolved to '{1}', but '--allowArbitraryExtensions' is not set.": {
+        "category": "Error",
+        "code": 6263
+    },
+    "Enable importing files with any extension, provided a declaration file is present.": {
+        "category": "Message",
+        "code": 6264
+    },
 
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
         "category": "Message",
