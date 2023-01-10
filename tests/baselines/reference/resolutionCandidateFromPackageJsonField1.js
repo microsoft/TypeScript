@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/suppressResolvedUsingTsExtension1.ts] ////
+//// [tests/cases/compiler/resolutionCandidateFromPackageJsonField1.ts] ////
 
 //// [package.json]
 {

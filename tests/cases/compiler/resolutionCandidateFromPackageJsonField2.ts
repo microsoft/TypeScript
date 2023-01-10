@@ -1,4 +1,4 @@
-// @moduleResolution: bundler
+// @moduleResolution: node10,bundler
 
 // @filename: tsconfig.json
 {

@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/suppressResolvedUsingTsExtension2.ts] ////
+//// [tests/cases/compiler/resolutionCandidateFromPackageJsonField2.ts] ////
 
 //// [bar.ts]
 export const a = 1234;
