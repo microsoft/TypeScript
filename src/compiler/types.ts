@@ -1684,7 +1684,6 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
      */
     readonly escapedText: __String;
     readonly originalKeywordKind?: SyntaxKind;                // Original syntaxKind which get set so that we can report an error later
-    /** @internal */ generatedImportReference?: ImportSpecifier; // Reference to the generated import specifier this identifier refers to
     isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
     /** @internal */ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
 }
@@ -7831,6 +7830,7 @@ export interface EmitNode {
     typeNode?: TypeNode;                     // VariableDeclaration type
     identifierTypeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized identifiers. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
     autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers and private identifiers.
+    generatedImportReference?: ImportSpecifier; // Reference to the generated import specifier this identifier refers to
 }
 
 /** @internal */

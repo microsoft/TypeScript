@@ -272,6 +272,7 @@ import {
     getFirstIdentifier,
     getFunctionFlags,
     getHostSignatureFromJSDoc,
+    getIdentifierGeneratedImportReference,
     getIdentifierTypeArguments,
     getImmediatelyInvokedFunctionExpression,
     getInitializerOfBinaryExpression,
@@ -44598,8 +44599,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // When resolved as an expression identifier, if the given node references an import, return the declaration of
     // that import. Otherwise, return undefined.
     function getReferencedImportDeclaration(nodeIn: Identifier): Declaration | undefined {
-        if (nodeIn.generatedImportReference) {
-            return nodeIn.generatedImportReference;
+        const specifier = getIdentifierGeneratedImportReference(nodeIn);
+        if (specifier) {
+            return specifier;
         }
         const node = getParseTreeNode(nodeIn, isIdentifier);
         if (node) {

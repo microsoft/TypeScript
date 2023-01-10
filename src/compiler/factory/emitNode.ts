@@ -10,6 +10,7 @@ import {
     getParseTreeNode,
     getSourceFileOfNode,
     Identifier,
+    ImportSpecifier,
     isParseTreeNode,
     Node,
     NodeArray,
@@ -344,4 +345,15 @@ export function setIdentifierAutoGenerate<T extends Identifier | PrivateIdentifi
 /** @internal */
 export function getIdentifierAutoGenerate(node: Identifier | PrivateIdentifier): AutoGenerateInfo | undefined {
     return node.emitNode?.autoGenerate;
+}
+
+/** @internal */
+export function setIdentifierGeneratedImportReference<T extends Identifier | PrivateIdentifier>(node: T, value: ImportSpecifier | undefined) {
+    getOrCreateEmitNode(node).generatedImportReference = value;
+    return node;
+}
+
+/** @internal */
+export function getIdentifierGeneratedImportReference(node: Identifier | PrivateIdentifier): ImportSpecifier | undefined {
+    return node.emitNode?.generatedImportReference;
 }
