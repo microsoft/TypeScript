@@ -9162,8 +9162,7 @@ namespace Parser {
                 if (some(tags, isJSDocSatisfiesTag)) {
                     parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
                 }
-
-                const typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
+                const typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ false);
                 const comments = margin !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), margin, indentText) : undefined;
                 return finishNode(factory.createJSDocSatisfiesTag(tagName, typeExpression, comments), start);
             }
