@@ -1183,13 +1183,13 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         }
 
         const node = createBaseIdentifier(escapeLeadingUnderscores(text));
-        if (hasExtendedUnicodeEscape) node.flags |= NodeFlags.HasExtendedUnicodeEscape;
+        if (hasExtendedUnicodeEscape) node.flags |= NodeFlags.IdentifierHasExtendedUnicodeEscape;
 
         // NOTE: we do not include transform flags of typeArguments in an identifier as they do not contribute to transformations
         if (node.escapedText === "await") {
             node.transformFlags |= TransformFlags.ContainsPossibleTopLevelAwait;
         }
-        if (node.flags & NodeFlags.HasExtendedUnicodeEscape) {
+        if (node.flags & NodeFlags.IdentifierHasExtendedUnicodeEscape) {
             node.transformFlags |= TransformFlags.ContainsES2015;
         }
 

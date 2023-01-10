@@ -6200,7 +6200,7 @@ export function getEffectiveModifierFlagsNoCache(node: Node): ModifierFlags {
  */
 export function getSyntacticModifierFlagsNoCache(node: Node): ModifierFlags {
     let flags = canHaveModifiers(node) ? modifiersToFlags(node.modifiers) : ModifierFlags.None;
-    if (node.flags & NodeFlags.NestedNamespace || (node.kind === SyntaxKind.Identifier && (node as Identifier).isInJSDocNamespace)) {
+    if (node.flags & NodeFlags.NestedNamespace || node.kind === SyntaxKind.Identifier && node.flags & NodeFlags.IdentifierIsInJSDocNamespace) {
         flags |= ModifierFlags.Export;
     }
     return flags;
@@ -7335,9 +7335,17 @@ function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: num
     this.emitNode = undefined;
 }
 
-Object.defineProperty(Identifier.prototype, "originalKeywordKind", {
-    get(this: Identifier) {
-        return stringToToken(this.escapedText as string);
+Object.defineProperties(Identifier.prototype, {
+    originalKeywordKind: {
+        get(this: Identifier) {
+            return stringToToken(this.escapedText as string);
+        }
+    },
+    isInJSDocNamespace: {
+        get(this: Identifier) {
+            // NOTE: Returns `true` or `undefined` to match previous possible values.
+            return this.flags & NodeFlags.IdentifierIsInJSDocNamespace ? true : undefined;
+        }
     }
 });
 

@@ -222,9 +222,9 @@ export function sourceFileToJSON(file: ts.Node): string {
                     // on the AST.
                     let flags = n.flags & ~(ts.NodeFlags.JavaScriptFile | ts.NodeFlags.HasAggregatedChildData);
                     if (isIdentifier(n)) {
-                        if (flags & ts.NodeFlags.HasExtendedUnicodeEscape) {
+                        if (flags & ts.NodeFlags.IdentifierHasExtendedUnicodeEscape) {
                             o.hasExtendedUnicodeEscape = true;
-                            flags &= ~ts.NodeFlags.HasExtendedUnicodeEscape;
+                            flags &= ~ts.NodeFlags.IdentifierHasExtendedUnicodeEscape;
                         }
                     }
                     if (flags) {

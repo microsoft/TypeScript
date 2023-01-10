@@ -4585,7 +4585,7 @@ declare namespace ts {
          */
         readonly escapedText: __String;
         readonly originalKeywordKind?: SyntaxKind;
-        isInJSDocNamespace?: boolean;
+        /** @deprecated */ readonly isInJSDocNamespace?: boolean;
     }
     interface Identifier {
         readonly text: string;

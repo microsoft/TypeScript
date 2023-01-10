@@ -9252,7 +9252,7 @@ namespace Parser {
                 }
 
                 if (nested) {
-                    typeNameOrNamespaceName.isInJSDocNamespace = true;
+                    (typeNameOrNamespaceName as Mutable<Identifier>).flags |= NodeFlags.IdentifierIsInJSDocNamespace;
                 }
                 return typeNameOrNamespaceName;
             }

@@ -414,7 +414,7 @@ function getModuleInstanceStateWorker(node: Node, visited: Map<number, ModuleIns
         case SyntaxKind.Identifier:
             // Only jsdoc typedef definition can exist in jsdoc namespace, and it should
             // be considered the same as type alias
-            if ((node as Identifier).isInJSDocNamespace) {
+            if (node.flags & NodeFlags.IdentifierIsInJSDocNamespace) {
                 return ModuleInstanceState.NonInstantiated;
             }
     }
@@ -2734,7 +2734,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 // for typedef type names with namespaces, bind the new jsdoc type symbol here
                 // because it requires all containing namespaces to be in effect, namely the
                 // current "blockScopeContainer" needs to be set to its immediate namespace parent.
-                if ((node as Identifier).isInJSDocNamespace) {
+                if (node.flags & NodeFlags.IdentifierIsInJSDocNamespace) {
                     let parentNode = node.parent;
                     while (parentNode && !isJSDocTypeAlias(parentNode)) {
                         parentNode = parentNode.parent;

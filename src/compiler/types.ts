@@ -832,7 +832,9 @@ export const enum NodeFlags {
     // See the comment above on `PossiblyContainsDynamicImport` and `PossiblyContainsImportMeta`.
     /** @internal */ PermanentlySetIncrementalFlags = PossiblyContainsDynamicImport | PossiblyContainsImportMeta,
 
-    /** @internal */ HasExtendedUnicodeEscape = ContainsThis, // Reuses ContainsThis value with a different meaning on Identifiers
+    // The following flags repurpose other NodeFlags as different meanings for Identifier nodes
+    /** @internal */ IdentifierHasExtendedUnicodeEscape = ContainsThis, // Indicates whether the identifier contains an extended unicode escape sequence
+    IdentifierIsInJSDocNamespace = HasAsyncFunctions, // Indicates whether the identifier is part of a JSDoc namespace
 }
 
 export const enum ModifierFlags {
@@ -1684,7 +1686,8 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
      */
     readonly escapedText: __String;
     readonly originalKeywordKind?: SyntaxKind;                // Original syntaxKind which get set so that we can report an error later
-    isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
+    /** @deprecated Use `node.flags & NodeFlags.IdentifierIsInJSDocNamespace` instead. */
+    readonly isInJSDocNamespace?: boolean; // if the node is a member in a JSDoc namespace.
 }
 
 // Transient identifier node (marked by id === -1)
