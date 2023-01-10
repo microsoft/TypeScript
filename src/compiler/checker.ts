@@ -28833,14 +28833,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 Debug.assert(parent.parent.kind === SyntaxKind.TemplateExpression);
                 return getContextualTypeForSubstitutionExpression(parent.parent as TemplateExpression, node);
             case SyntaxKind.ParenthesizedExpression: {
-                if (isJSDocSatisfiesExpression(parent)) {
-                    return getTypeFromTypeNode(getJSDocSatisfiesExpressionType(parent));
+                if (isInJSFile(parent)) {
+                    if (isJSDocSatisfiesExpression(parent)) {
+                        return getTypeFromTypeNode(getJSDocSatisfiesExpressionType(parent));
+                    }
+                    // Like in `checkParenthesizedExpression`, an `/** @type {xyz} */` comment before a parenthesized expression acts as a type cast.
+                    const typeTag = getJSDocTypeTag(parent);
+                    if (typeTag && !isConstTypeReference(typeTag.typeExpression.type)) {
+                        return getTypeFromTypeNode(typeTag.typeExpression.type);
+                    }
                 }
-                // Like in `checkParenthesizedExpression`, an `/** @type {xyz} */` comment before a parenthesized expression acts as a type cast.
-                const tag = isInJSFile(parent) ? getJSDocTypeTag(parent) : undefined;
-                return !tag ? getContextualType(parent as ParenthesizedExpression, contextFlags) :
-                    isJSDocTypeTag(tag) && isConstTypeReference(tag.typeExpression.type) ? getContextualType(parent as ParenthesizedExpression, contextFlags) :
-                    getTypeFromTypeNode(tag.typeExpression.type);
+                return getContextualType(parent as ParenthesizedExpression, contextFlags);
             }
             case SyntaxKind.NonNullExpression:
                 return getContextualType(parent as NonNullExpression, contextFlags);
