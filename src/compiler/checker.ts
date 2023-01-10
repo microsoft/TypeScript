@@ -15488,7 +15488,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getGlobalClassAccessorDecoratorResultType(reportErrors: boolean) {
-        return (deferredGlobalClassAccessorDecoratorResultType ??= getGlobalType("ClassAccessorDecoratorResult" as __String, /*arity*/ 3, reportErrors)) ?? emptyGenericType;
+        return (deferredGlobalClassAccessorDecoratorResultType ??= getGlobalType("ClassAccessorDecoratorResult" as __String, /*arity*/ 2, reportErrors)) ?? emptyGenericType;
     }
 
     function getGlobalClassFieldDecoratorContextType(reportErrors: boolean) {
@@ -34402,14 +34402,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return tryCreateTypeReference(getGlobalClassAccessorDecoratorTargetType(/*reportError*/ true), [thisType, valueType]);
     }
 
-    function createClassAccessorDecoratorResultType(thisType: Type, inputType: Type, outputType: Type) {
-        return tryCreateTypeReference(getGlobalClassAccessorDecoratorResultType(/*reportError*/ true), [thisType, inputType, outputType]);
+    function createClassAccessorDecoratorResultType(thisType: Type, valueType: Type) {
+        return tryCreateTypeReference(getGlobalClassAccessorDecoratorResultType(/*reportError*/ true), [thisType, valueType]);
     }
 
-    function createClassFieldDecoratorInitializerMutatorType(thisType: Type, inputType: Type, outputType: Type) {
+    function createClassFieldDecoratorInitializerMutatorType(thisType: Type, valueType: Type) {
         const thisParam = createParameter("this" as __String, thisType);
-        const valueParam = createParameter("value" as __String, outputType);
-        return createFunctionType(/*typeParameters*/ undefined, thisParam, [valueParam], inputType, /*typePredicate*/ undefined, 1);
+        const valueParam = createParameter("value" as __String, valueType);
+        return createFunctionType(/*typeParameters*/ undefined, thisParam, [valueParam], valueType, /*typePredicate*/ undefined, 1);
     }
 
     /**
@@ -34431,10 +34431,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function getESDecoratorCallSignature(decorator: Decorator) {
         // We are considering a future change that would allow the type of a decorator to affect the type of the
-        // class and its members, such as a `@Stringify` decorator changing the type of a `number` field to
-        // `string`, or a `@Callable` decorator adding a call signature to a `class`. For now, the type arguments
-        // for the various context types that will eventually change to reflect such mutations will be stubbed out
-        // with fixed types so that we have a convenient place to apply these mutations.
+        // class and its members, such as a `@Stringify` decorator changing the type of a `number` field to `string`, or
+        // a `@Callable` decorator adding a call signature to a `class`. The type arguments for the various context
+        // types may eventually change to reflect such mutations.
         //
         // In some cases we describe such potential mutations as coming from a "prior decorator application". It is
         // important to note that, while decorators are *evaluated* left to right, they are *applied* right to left
@@ -34523,22 +34522,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // argument will be the "final type" of the class after all decorators are applied.
 
                     const node = parent as ClassDeclaration | ClassExpression;
-
-                    // TODO: This should eventually correspond with the "output type" of any prior decorator, or
-                    //       the type of the class after all member decorator type mutations have been applied.
-                    const inputType = getTypeOfSymbol(getSymbolOfDeclaration(node));
-
-                    // TODO: This should eventually be a type variable that is allowed to be any valid `function`
-                    //       type, and whose type will be inferred from decorator application and used as either
-                    //       the "input type" of the next decorator, or the "final type" of the class.
-                    const outputType = inputType;
-
-                    // TODO: This should eventually be a type variable that is the result of the type mutations from
-                    //       all decorators.
-                    const finalType = outputType;
-
-                    const contextType = createClassDecoratorContextType(finalType);
-                    links.decoratorSignature = createESDecoratorCallSignature(inputType, contextType, outputType);
+                    const targetType = getTypeOfSymbol(getSymbolOfDeclaration(node));
+                    const contextType = createClassDecoratorContextType(targetType);
+                    links.decoratorSignature = createESDecoratorCallSignature(targetType, contextType, targetType);
                     break;
                 }
 
@@ -34560,24 +34546,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // In all three cases, the `This` type argument is the "final type" of either the class or
                     // instance, depending on whether the member was `static`.
 
-                    // TODO: This should eventually correspond with either the "output type" of any prior decorator
-                    //       or the "original type" of the member.
-                    const inputType =
+                    const valueType =
                         isMethodDeclaration(node) ? getOrCreateTypeFromSignature(getSignatureFromDeclaration(node)) :
                         getTypeOfNode(node);
 
-                    // TODO: This should eventually be a type variable whose type will be inferred from decorator
-                    //       application and used as either the "input type" of the next decorator, or the
-                    //       "final type" of the member.
-                    const outputType = inputType;
-
-                    // TODO: This should eventually be a type variable that is the result of the type mutations from
-                    //       all decorators of the member.
-                    const finalType = outputType;
-
-                    // TODO: This should eventually be a type variable that is the result of the type mutations from
-                    //       all decorators applied to the class and its members.
-                    const finalThisType = hasStaticModifier(node) ?
+                    const thisType = hasStaticModifier(node) ?
                         getTypeOfSymbol(getSymbolOfDeclaration(node.parent)) :
                         getDeclaredTypeOfClassOrInterface(getSymbolOfDeclaration(node.parent));
 
@@ -34585,17 +34558,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // something like `() => inputType`, for setters it's `(value: inputType) => void` and for
                     // methods it is just the input type.
                     const targetType =
-                        isGetAccessorDeclaration(node) ? createGetterFunctionType(inputType) :
-                        isSetAccessorDeclaration(node) ? createSetterFunctionType(inputType) :
-                        inputType;
+                        isGetAccessorDeclaration(node) ? createGetterFunctionType(valueType) :
+                        isSetAccessorDeclaration(node) ? createSetterFunctionType(valueType) :
+                        valueType;
 
-                    const contextType = createClassMemberDecoratorContextTypeForNode(node, finalThisType, finalType);
+                    const contextType = createClassMemberDecoratorContextTypeForNode(node, thisType, valueType);
 
                     // We also wrap the "output type", as needed.
                     const returnType =
-                        isGetAccessorDeclaration(node) ? createGetterFunctionType(outputType) :
-                        isSetAccessorDeclaration(node) ? createSetterFunctionType(outputType) :
-                        outputType;
+                        isGetAccessorDeclaration(node) ? createGetterFunctionType(valueType) :
+                        isSetAccessorDeclaration(node) ? createSetterFunctionType(valueType) :
+                        valueType;
 
                     links.decoratorSignature = createESDecoratorCallSignature(targetType, contextType, returnType);
                     break;
@@ -34611,22 +34584,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // depending on whether the member was `static`, and the `Value` type argument corresponds to
                     // the "final type" of the value stored in the field.
 
-                    // TODO: This should eventually correspond with either the "output type" of any prior decorator
-                    //       or the "original type" of the member.
-                    const inputType = getTypeOfNode(node);
-
-                    // TODO: This should eventually be a type variable whose type will be inferred from decorator
-                    //       application and used as either the "input type" of the next decorator, or the
-                    //       "final type" of the member.
-                    const outputType = inputType;
-
-                    // TODO: This should eventually be a type variable that is the result of the type mutations from
-                    //       all decorators of the member.
-                    const finalType = outputType;
-
-                    // TODO: This should eventually be a type variable that is the result of the type mutations from
-                    //       all decorators applied to the class and its members.
-                    const finalThisType = hasStaticModifier(node) ?
+                    const valueType = getTypeOfNode(node);
+                    const thisType = hasStaticModifier(node) ?
                         getTypeOfSymbol(getSymbolOfDeclaration(node.parent)) :
                         getDeclaredTypeOfClassOrInterface(getSymbolOfDeclaration(node.parent));
 
@@ -34634,18 +34593,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // runtime-generated getter and setter that are added to the class/prototype. The `target` of a
                     // regular field decorator is always `undefined` as it isn't installed until it is initialized.
                     const targetType =
-                        hasAccessorModifier(node) ? createClassAccessorDecoratorTargetType(finalThisType, inputType) :
+                        hasAccessorModifier(node) ? createClassAccessorDecoratorTargetType(thisType, valueType) :
                         undefinedType;
 
-                    const contextType = createClassMemberDecoratorContextTypeForNode(node, finalThisType, finalType);
+                    const contextType = createClassMemberDecoratorContextTypeForNode(node, thisType, valueType);
 
                     // We wrap the "output type" depending on the declaration. For auto-accessors, we wrap the
                     // "output type" in a `ClassAccessorDecoratorResult<This, In, Out>` type, which allows for
                     // mutation of the runtime-generated getter and setter, as well as the injection of an
                     // initializer mutator. For regular fields, we wrap the "output type" in an initializer mutator.
                     const returnType =
-                        hasAccessorModifier(node) ? createClassAccessorDecoratorResultType(finalThisType, inputType, finalType) :
-                        createClassFieldDecoratorInitializerMutatorType(finalThisType, inputType, finalType);
+                        hasAccessorModifier(node) ? createClassAccessorDecoratorResultType(thisType, valueType) :
+                        createClassFieldDecoratorInitializerMutatorType(thisType, valueType);
 
                     links.decoratorSignature = createESDecoratorCallSignature(targetType, contextType, returnType);
                     break;
