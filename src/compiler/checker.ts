@@ -46534,8 +46534,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * undefined: Need to do full checking on the modifiers.
      */
     function reportObviousModifierErrors(node: HasModifiers | HasIllegalModifiers): boolean | undefined {
-        const unmodified = canHaveModifiers(node) ? !node.modifiers : !node.decoratorsAndModifiers;
-        if (unmodified) return false;
+        if (!node.modifiers) return false;
 
         const modifier = findFirstIllegalModifier(node);
         return modifier && grammarErrorOnFirstToken(modifier, Diagnostics.Modifiers_cannot_appear_here);
@@ -46572,7 +46571,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.NamespaceExportDeclaration:
             case SyntaxKind.FunctionType:
             case SyntaxKind.MissingDeclaration:
-                return find(node.decoratorsAndModifiers, isModifier);
+                return find(node.modifiers, isModifier);
             default:
                 if (node.parent.kind === SyntaxKind.ModuleBlock || node.parent.kind === SyntaxKind.SourceFile) {
                     return undefined;
@@ -46602,7 +46601,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function findFirstIllegalDecorator(node: HasModifiers | HasDecorators | HasIllegalModifiers | HasIllegalDecorators): Decorator | undefined {
-        if (canHaveIllegalDecorators(node)) return find(node.decoratorsAndModifiers, isDecorator);
+        return canHaveIllegalDecorators(node) ? find(node.modifiers, isDecorator) : undefined;
     }
 
     function checkGrammarAsyncModifier(node: Node, asyncModifier: Node): boolean {
@@ -46947,8 +46946,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
-            else if (canHaveIllegalModifiers(prop) && prop.decoratorsAndModifiers) {
-                for (const mod of prop.decoratorsAndModifiers) {
+            else if (canHaveIllegalModifiers(prop) && prop.modifiers) {
+                for (const mod of prop.modifiers) {
                         if (isModifier(mod)) {
                         grammarErrorOnNode(mod, Diagnostics._0_modifier_cannot_be_used_here, getTextOfNode(mod));
                     }

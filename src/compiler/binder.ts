@@ -3024,7 +3024,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindNamespaceExportDeclaration(node: NamespaceExportDeclaration) {
-        if (some(node.decoratorsAndModifiers)) {
+        if (some(node.modifiers)) {
             file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Modifiers_cannot_appear_here));
         }
         const diag = !isSourceFile(node.parent) ? Diagnostics.Global_module_exports_may_only_appear_at_top_level

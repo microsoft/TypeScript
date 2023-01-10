@@ -1975,7 +1975,7 @@ export interface PropertyAssignment extends ObjectLiteralElement, JSDocContainer
     readonly initializer: Expression;
 
     // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined; // property assignment cannot have decorators or modifiers
+    /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined; // property assignment cannot have decorators or modifiers
     /** @internal */ readonly questionToken?: QuestionToken | undefined; // property assignment cannot have a question token
     /** @internal */ readonly exclamationToken?: ExclamationToken | undefined; // property assignment cannot have an exclamation token
 }
@@ -1990,7 +1990,7 @@ export interface ShorthandPropertyAssignment extends ObjectLiteralElement, JSDoc
     readonly objectAssignmentInitializer?: Expression;
 
     // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined; // shorthand property assignment cannot have decorators or modifiers
+    /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined; // shorthand property assignment cannot have decorators or modifiers
     /** @internal */ readonly questionToken?: QuestionToken | undefined; // shorthand property assignment cannot have a question token
     /** @internal */ readonly exclamationToken?: ExclamationToken | undefined; // shorthand property assignment cannot have an exclamation token
 }
@@ -2062,12 +2062,9 @@ export type FunctionLike = SignatureDeclaration;
 
 export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement, LocalsContainer {
     readonly kind: SyntaxKind.FunctionDeclaration;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly name?: Identifier;
     readonly body?: FunctionBody;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined; // functions cannot have decorators
 }
 
 export interface MethodSignature extends SignatureDeclarationBase, TypeElement, LocalsContainer {
@@ -2100,11 +2097,10 @@ export interface MethodDeclaration extends FunctionLikeDeclarationBase, ClassEle
 export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer, LocalsContainer {
     readonly kind: SyntaxKind.Constructor;
     readonly parent: ClassLikeDeclaration;
-    readonly modifiers?: NodeArray<Modifier> | undefined;
+    readonly modifiers?: NodeArray<ModifierLike> | undefined;
     readonly body?: FunctionBody | undefined;
 
     // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined; // constructors cannot have decorators
     /** @internal */ readonly typeParameters?: NodeArray<TypeParameterDeclaration>; // A constructor cannot have type parameters
     /** @internal */ readonly type?: TypeNode; // A constructor cannot have a return type annotation
 }
@@ -2147,11 +2143,8 @@ export type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaratio
 export interface IndexSignatureDeclaration extends SignatureDeclarationBase, ClassElement, TypeElement, LocalsContainer {
     readonly kind: SyntaxKind.IndexSignature;
     readonly parent: ObjectTypeDeclaration;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly type: TypeNode;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined;
 }
 
 export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContainer, LocalsContainer {
@@ -2163,7 +2156,7 @@ export interface ClassStaticBlockDeclaration extends ClassElement, JSDocContaine
     /** @internal */ returnFlowNode?: FlowNode;
 
     // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined;
+    /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined;
 }
 
 export interface TypeNode extends Node {
@@ -2212,7 +2205,7 @@ export interface FunctionTypeNode extends FunctionOrConstructorTypeNodeBase, Loc
     readonly kind: SyntaxKind.FunctionType;
 
     // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined;
+    /** @internal */ readonly modifiers?: NodeArray<Modifier> | undefined;
 }
 
 export interface ConstructorTypeNode extends FunctionOrConstructorTypeNodeBase, LocalsContainer {
@@ -3333,7 +3326,7 @@ export interface MissingDeclaration extends DeclarationStatement, PrimaryExpress
     readonly name?: Identifier;
 
     // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined;
+    /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined;
 }
 
 export type BlockLike =
@@ -3351,11 +3344,8 @@ export interface Block extends Statement, LocalsContainer {
 
 export interface VariableStatement extends Statement, FlowContainer {
     readonly kind: SyntaxKind.VariableStatement;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly declarationList: VariableDeclarationList;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined;
 }
 
 export interface ExpressionStatement extends Statement, FlowContainer {
@@ -3562,14 +3552,11 @@ export interface TypeElement extends NamedDeclaration {
 
 export interface InterfaceDeclaration extends DeclarationStatement, JSDocContainer {
     readonly kind: SyntaxKind.InterfaceDeclaration;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly name: Identifier;
     readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
     readonly heritageClauses?: NodeArray<HeritageClause>;
     readonly members: NodeArray<TypeElement>;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined;
 }
 
 export interface HeritageClause extends Node {
@@ -3581,13 +3568,10 @@ export interface HeritageClause extends Node {
 
 export interface TypeAliasDeclaration extends DeclarationStatement, JSDocContainer, LocalsContainer {
     readonly kind: SyntaxKind.TypeAliasDeclaration;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly name: Identifier;
     readonly typeParameters?: NodeArray<TypeParameterDeclaration>;
     readonly type: TypeNode;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined;
 }
 
 export interface EnumMember extends NamedDeclaration, JSDocContainer {
@@ -3601,12 +3585,9 @@ export interface EnumMember extends NamedDeclaration, JSDocContainer {
 
 export interface EnumDeclaration extends DeclarationStatement, JSDocContainer {
     readonly kind: SyntaxKind.EnumDeclaration;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly name: Identifier;
     readonly members: NodeArray<EnumMember>;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined;
 }
 
 export type ModuleName =
@@ -3627,12 +3608,9 @@ export interface AmbientModuleDeclaration extends ModuleDeclaration {
 export interface ModuleDeclaration extends DeclarationStatement, JSDocContainer, LocalsContainer {
     readonly kind: SyntaxKind.ModuleDeclaration;
     readonly parent: ModuleBody | SourceFile;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly name: ModuleName;
     readonly body?: ModuleBody | JSDocNamespaceDeclaration;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined;
 }
 
 export type NamespaceBody =
@@ -3674,16 +3652,13 @@ export type ModuleReference =
 export interface ImportEqualsDeclaration extends DeclarationStatement, JSDocContainer {
     readonly kind: SyntaxKind.ImportEqualsDeclaration;
     readonly parent: SourceFile | ModuleBlock;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly name: Identifier;
     readonly isTypeOnly: boolean;
 
     // 'EntityName' for an internal module reference, 'ExternalModuleReference' for an external
     // module reference.
     readonly moduleReference: ModuleReference;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined;
 }
 
 export interface ExternalModuleReference extends Node {
@@ -3699,14 +3674,11 @@ export interface ExternalModuleReference extends Node {
 export interface ImportDeclaration extends Statement {
     readonly kind: SyntaxKind.ImportDeclaration;
     readonly parent: SourceFile | ModuleBlock;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly importClause?: ImportClause;
     /** If this is not a StringLiteral it will be a grammar error. */
     readonly moduleSpecifier: Expression;
     readonly assertClause?: AssertClause;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined;
 }
 
 export type NamedImportBindings =
@@ -3766,22 +3738,19 @@ export interface NamespaceExportDeclaration extends DeclarationStatement, JSDocC
     readonly name: Identifier;
 
     // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined;
+    /** @internal */ readonly modifiers?: NodeArray<ModifierLike> | undefined;
 }
 
 export interface ExportDeclaration extends DeclarationStatement, JSDocContainer {
     readonly kind: SyntaxKind.ExportDeclaration;
     readonly parent: SourceFile | ModuleBlock;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly isTypeOnly: boolean;
     /** Will not be assigned in the case of `export * from "foo";` */
     readonly exportClause?: NamedExportBindings;
     /** If this is not a StringLiteral it will be a grammar error. */
     readonly moduleSpecifier?: Expression;
     readonly assertClause?: AssertClause;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined;
 }
 
 export interface NamedImports extends Node {
@@ -3841,12 +3810,9 @@ export type TypeOnlyAliasDeclaration =
 export interface ExportAssignment extends DeclarationStatement, JSDocContainer {
     readonly kind: SyntaxKind.ExportAssignment;
     readonly parent: SourceFile;
-    readonly modifiers?: NodeArray<Modifier>;
+    readonly modifiers?: NodeArray<ModifierLike>;
     readonly isExportEquals?: boolean;
     readonly expression: Expression;
-
-    // The following properties are used only to report grammar errors
-    /** @internal */ readonly decoratorsAndModifiers?: NodeArray<ModifierLike> | undefined;
 }
 
 export interface FileReference extends TextRange {
@@ -8255,8 +8221,8 @@ export interface NodeFactory {
     updateMethodSignature(node: MethodSignature, modifiers: readonly Modifier[] | undefined, name: PropertyName, questionToken: QuestionToken | undefined, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): MethodSignature;
     createMethodDeclaration(modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
     updateMethodDeclaration(node: MethodDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: PropertyName, questionToken: QuestionToken | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): MethodDeclaration;
-    createConstructorDeclaration(modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
-    updateConstructorDeclaration(node: ConstructorDeclaration, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
+    createConstructorDeclaration(modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
+    updateConstructorDeclaration(node: ConstructorDeclaration, modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], body: Block | undefined): ConstructorDeclaration;
     createGetAccessorDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
     updateGetAccessorDeclaration(node: GetAccessorDeclaration, modifiers: readonly ModifierLike[] | undefined, name: PropertyName, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): GetAccessorDeclaration;
     createSetAccessorDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | PropertyName, parameters: readonly ParameterDeclaration[], body: Block | undefined): SetAccessorDeclaration;
@@ -8265,9 +8231,9 @@ export interface NodeFactory {
     updateCallSignature(node: CallSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): CallSignatureDeclaration;
     createConstructSignature(typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): ConstructSignatureDeclaration;
     updateConstructSignature(node: ConstructSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): ConstructSignatureDeclaration;
-    createIndexSignature(modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
-    /** @internal */ createIndexSignature(modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): IndexSignatureDeclaration; // eslint-disable-line @typescript-eslint/unified-signatures
-    updateIndexSignature(node: IndexSignatureDeclaration, modifiers: readonly Modifier[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
+    createIndexSignature(modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
+    /** @internal */ createIndexSignature(modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined): IndexSignatureDeclaration; // eslint-disable-line @typescript-eslint/unified-signatures
+    updateIndexSignature(node: IndexSignatureDeclaration, modifiers: readonly ModifierLike[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration;
     createTemplateLiteralTypeSpan(type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
     updateTemplateLiteralTypeSpan(node: TemplateLiteralTypeSpan, type: TypeNode, literal: TemplateMiddle | TemplateTail): TemplateLiteralTypeSpan;
     createClassStaticBlockDeclaration(body: Block): ClassStaticBlockDeclaration;
@@ -8431,8 +8397,8 @@ export interface NodeFactory {
 
     createBlock(statements: readonly Statement[], multiLine?: boolean): Block;
     updateBlock(node: Block, statements: readonly Statement[]): Block;
-    createVariableStatement(modifiers: readonly Modifier[] | undefined, declarationList: VariableDeclarationList | readonly VariableDeclaration[]): VariableStatement;
-    updateVariableStatement(node: VariableStatement, modifiers: readonly Modifier[] | undefined, declarationList: VariableDeclarationList): VariableStatement;
+    createVariableStatement(modifiers: readonly ModifierLike[] | undefined, declarationList: VariableDeclarationList | readonly VariableDeclaration[]): VariableStatement;
+    updateVariableStatement(node: VariableStatement, modifiers: readonly ModifierLike[] | undefined, declarationList: VariableDeclarationList): VariableStatement;
     createEmptyStatement(): EmptyStatement;
     createExpressionStatement(expression: Expression): ExpressionStatement;
     updateExpressionStatement(node: ExpressionStatement, expression: Expression): ExpressionStatement;
@@ -8473,24 +8439,24 @@ export interface NodeFactory {
     updateFunctionDeclaration(node: FunctionDeclaration, modifiers: readonly ModifierLike[] | undefined, asteriskToken: AsteriskToken | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, parameters: readonly ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined): FunctionDeclaration;
     createClassDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
     updateClassDeclaration(node: ClassDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier | undefined, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly ClassElement[]): ClassDeclaration;
-    createInterfaceDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
-    updateInterfaceDeclaration(node: InterfaceDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
-    createTypeAliasDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
-    updateTypeAliasDeclaration(node: TypeAliasDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
-    createEnumDeclaration(modifiers: readonly Modifier[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration;
-    updateEnumDeclaration(node: EnumDeclaration, modifiers: readonly Modifier[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration;
-    createModuleDeclaration(modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags): ModuleDeclaration;
-    updateModuleDeclaration(node: ModuleDeclaration, modifiers: readonly Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration;
+    createInterfaceDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
+    updateInterfaceDeclaration(node: InterfaceDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, heritageClauses: readonly HeritageClause[] | undefined, members: readonly TypeElement[]): InterfaceDeclaration;
+    createTypeAliasDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
+    updateTypeAliasDeclaration(node: TypeAliasDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, typeParameters: readonly TypeParameterDeclaration[] | undefined, type: TypeNode): TypeAliasDeclaration;
+    createEnumDeclaration(modifiers: readonly ModifierLike[] | undefined, name: string | Identifier, members: readonly EnumMember[]): EnumDeclaration;
+    updateEnumDeclaration(node: EnumDeclaration, modifiers: readonly ModifierLike[] | undefined, name: Identifier, members: readonly EnumMember[]): EnumDeclaration;
+    createModuleDeclaration(modifiers: readonly ModifierLike[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags): ModuleDeclaration;
+    updateModuleDeclaration(node: ModuleDeclaration, modifiers: readonly ModifierLike[] | undefined, name: ModuleName, body: ModuleBody | undefined): ModuleDeclaration;
     createModuleBlock(statements: readonly Statement[]): ModuleBlock;
     updateModuleBlock(node: ModuleBlock, statements: readonly Statement[]): ModuleBlock;
     createCaseBlock(clauses: readonly CaseOrDefaultClause[]): CaseBlock;
     updateCaseBlock(node: CaseBlock, clauses: readonly CaseOrDefaultClause[]): CaseBlock;
     createNamespaceExportDeclaration(name: string | Identifier): NamespaceExportDeclaration;
     updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, name: Identifier): NamespaceExportDeclaration;
-    createImportEqualsDeclaration(modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
-    updateImportEqualsDeclaration(node: ImportEqualsDeclaration, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
-    createImportDeclaration(modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause): ImportDeclaration;
-    updateImportDeclaration(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration;
+    createImportEqualsDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: string | Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+    updateImportEqualsDeclaration(node: ImportEqualsDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, name: Identifier, moduleReference: ModuleReference): ImportEqualsDeclaration;
+    createImportDeclaration(modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause?: AssertClause): ImportDeclaration;
+    updateImportDeclaration(node: ImportDeclaration, modifiers: readonly ModifierLike[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration;
     createImportClause(isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
     updateImportClause(node: ImportClause, isTypeOnly: boolean, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause;
     createAssertClause(elements: NodeArray<AssertEntry>, multiLine?: boolean): AssertClause;
@@ -8507,10 +8473,10 @@ export interface NodeFactory {
     updateNamedImports(node: NamedImports, elements: readonly ImportSpecifier[]): NamedImports;
     createImportSpecifier(isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
     updateImportSpecifier(node: ImportSpecifier, isTypeOnly: boolean, propertyName: Identifier | undefined, name: Identifier): ImportSpecifier;
-    createExportAssignment(modifiers: readonly Modifier[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
-    updateExportAssignment(node: ExportAssignment, modifiers: readonly Modifier[] | undefined, expression: Expression): ExportAssignment;
-    createExportDeclaration(modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration;
-    updateExportDeclaration(node: ExportDeclaration, modifiers: readonly Modifier[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration;
+    createExportAssignment(modifiers: readonly ModifierLike[] | undefined, isExportEquals: boolean | undefined, expression: Expression): ExportAssignment;
+    updateExportAssignment(node: ExportAssignment, modifiers: readonly ModifierLike[] | undefined, expression: Expression): ExportAssignment;
+    createExportDeclaration(modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier?: Expression, assertClause?: AssertClause): ExportDeclaration;
+    updateExportDeclaration(node: ExportDeclaration, modifiers: readonly ModifierLike[] | undefined, isTypeOnly: boolean, exportClause: NamedExportBindings | undefined, moduleSpecifier: Expression | undefined, assertClause: AssertClause | undefined): ExportDeclaration;
     createNamedExports(elements: readonly ExportSpecifier[]): NamedExports;
     updateNamedExports(node: NamedExports, elements: readonly ExportSpecifier[]): NamedExports;
     createExportSpecifier(isTypeOnly: boolean, propertyName: string | Identifier | undefined, name: string | Identifier): ExportSpecifier;

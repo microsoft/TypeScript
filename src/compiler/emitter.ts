@@ -2527,7 +2527,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     //
 
     function emitTypeParameter(node: TypeParameterDeclaration) {
-        emitModifiers(node, node.modifiers);
+        emitModifierList(node, node.modifiers);
         emit(node.name);
         if (node.constraint) {
             writeSpace();
@@ -2544,7 +2544,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitParameter(node: ParameterDeclaration) {
-        emitDecoratorsAndModifiers(node, node.modifiers);
+        emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ true);
         emit(node.dotDotDotToken);
         emitNodeWithWriter(node.name, writeParameter);
         emit(node.questionToken);
@@ -2568,7 +2568,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     //
 
     function emitPropertySignature(node: PropertySignature) {
-        emitModifiers(node, node.modifiers);
+        emitModifierList(node, node.modifiers);
         emitNodeWithWriter(node.name, writeProperty);
         emit(node.questionToken);
         emitTypeAnnotation(node.type);
@@ -2576,7 +2576,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitPropertyDeclaration(node: PropertyDeclaration) {
-        emitDecoratorsAndModifiers(node, node.modifiers);
+        emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ true);
         emit(node.name);
         emit(node.questionToken);
         emit(node.exclamationToken);
@@ -2587,7 +2587,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function emitMethodSignature(node: MethodSignature) {
         pushNameGenerationScope(node);
-        emitModifiers(node, node.modifiers);
+        emitModifierList(node, node.modifiers);
         emit(node.name);
         emit(node.questionToken);
         emitTypeParameters(node, node.typeParameters);
@@ -2598,7 +2598,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitMethodDeclaration(node: MethodDeclaration) {
-        emitDecoratorsAndModifiers(node, node.modifiers);
+        emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ true);
         emit(node.asteriskToken);
         emit(node.name);
         emit(node.questionToken);
@@ -2611,13 +2611,13 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitConstructor(node: ConstructorDeclaration) {
-        emitModifiers(node, node.modifiers);
+        emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ false);
         writeKeyword("constructor");
         emitSignatureAndBody(node, emitSignatureHead);
     }
 
     function emitAccessorDeclaration(node: AccessorDeclaration) {
-        const pos = emitDecoratorsAndModifiers(node, node.modifiers);
+        const pos = emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ true);
         const token = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.GetKeyword : SyntaxKind.SetKeyword;
         emitTokenWithComment(token, pos, writeKeyword, node);
         writeSpace();
@@ -2646,7 +2646,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitIndexSignature(node: IndexSignatureDeclaration) {
-        emitModifiers(node, node.modifiers);
+        emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ false);
         emitParametersForIndexSignature(node, node.parameters);
         emitTypeAnnotation(node.type);
         writeTrailingSemicolon();
@@ -2720,7 +2720,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
     function emitConstructorType(node: ConstructorTypeNode) {
         pushNameGenerationScope(node);
-        emitModifiers(node, node.modifiers);
+        emitModifierList(node, node.modifiers);
         writeKeyword("new");
         writeSpace();
         emitTypeParameters(node, node.typeParameters);
@@ -3108,7 +3108,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitArrowFunction(node: ArrowFunction) {
-        emitModifiers(node, node.modifiers);
+        emitModifierList(node, node.modifiers);
         emitSignatureAndBody(node, emitArrowFunctionHead);
     }
 
@@ -3383,7 +3383,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitVariableStatement(node: VariableStatement) {
-        emitModifiers(node, node.modifiers);
+        emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ false);
         emit(node.declarationList);
         writeTrailingSemicolon();
     }
@@ -3664,7 +3664,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitFunctionDeclarationOrExpression(node: FunctionDeclaration | FunctionExpression) {
-        emitModifiers(node, node.modifiers);
+        emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ false);
         writeKeyword("function");
         emit(node.asteriskToken);
         writeSpace();
@@ -3795,7 +3795,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
 
         forEach(node.members, generateMemberNames);
 
-        emitDecoratorsAndModifiers(node, node.modifiers);
+        emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ true);
         emitTokenWithComment(SyntaxKind.ClassKeyword, moveRangePastModifiers(node).pos, writeKeyword, node);
         if (node.name) {
             writeSpace();
@@ -3827,7 +3827,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         // we can step out of it when emitting a computed property.
         pushPrivateNameGenerationScope(TempFlags.Auto, /*newReservedMemberNames*/ undefined);
 
-        emitModifiers(node, node.modifiers);
+        emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ false);
         writeKeyword("interface");
         writeSpace();
         emit(node.name);
@@ -3842,7 +3842,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitTypeAliasDeclaration(node: TypeAliasDeclaration) {
-        emitModifiers(node, node.modifiers);
+        emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ false);
         writeKeyword("type");
         writeSpace();
         emit(node.name);
@@ -3855,7 +3855,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitEnumDeclaration(node: EnumDeclaration) {
-        emitModifiers(node, node.modifiers);
+        emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ false);
         writeKeyword("enum");
         writeSpace();
         emit(node.name);
@@ -3867,7 +3867,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitModuleDeclaration(node: ModuleDeclaration) {
-        emitModifiers(node, node.modifiers);
+        emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ false);
         if (~node.flags & NodeFlags.GlobalAugmentation) {
             writeKeyword(node.flags & NodeFlags.Namespace ? "namespace" : "module");
             writeSpace();
@@ -3900,7 +3900,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitImportEqualsDeclaration(node: ImportEqualsDeclaration) {
-        emitModifiers(node, node.modifiers);
+        emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ false);
         emitTokenWithComment(SyntaxKind.ImportKeyword, node.modifiers ? node.modifiers.end : node.pos, writeKeyword, node);
         writeSpace();
         if (node.isTypeOnly) {
@@ -3925,7 +3925,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitImportDeclaration(node: ImportDeclaration) {
-        emitModifiers(node, node.modifiers);
+        emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ false);
         emitTokenWithComment(SyntaxKind.ImportKeyword, node.modifiers ? node.modifiers.end : node.pos, writeKeyword, node);
         writeSpace();
         if (node.importClause) {
@@ -3987,7 +3987,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitExportDeclaration(node: ExportDeclaration) {
-        emitModifiers(node, node.modifiers);
+        emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ false);
         let nextPos = emitTokenWithComment(SyntaxKind.ExportKeyword, node.pos, writeKeyword, node);
         writeSpace();
         if (node.isTypeOnly) {
@@ -4717,16 +4717,19 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         write = savedWrite;
     }
 
-    function emitDecoratorsAndModifiers(node: Node, modifiers: NodeArray<ModifierLike> | undefined) {
+    function emitDecoratorsAndModifiers(node: Node, modifiers: NodeArray<ModifierLike> | undefined, allowDecorators: boolean) {
         if (modifiers?.length) {
             if (every(modifiers, isModifier)) {
                 // if all modifier-likes are `Modifier`, simply emit the array as modifiers.
-                return emitModifiers(node, modifiers as NodeArray<Modifier>);
+                return emitModifierList(node, modifiers as NodeArray<Modifier>);
             }
 
             if (every(modifiers, isDecorator)) {
-                // if all modifier-likes are `Decorator`, simply emit the array as decorators.
-                return emitDecorators(node, modifiers as NodeArray<Decorator>);
+                if (allowDecorators) {
+                    // if all modifier-likes are `Decorator`, simply emit the array as decorators.
+                    return emitDecoratorList(node, modifiers as NodeArray<Decorator>);
+                }
+                return node.pos;
             }
 
             onBeforeEmitNodeArray?.(modifiers);
@@ -4754,16 +4757,18 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
                 const textRange: TextRange = { pos: -1, end: -1 };
                 if (start === 0) textRange.pos = modifiers.pos;
                 if (pos === modifiers.length - 1) textRange.end = modifiers.end;
-                emitNodeListItems(
-                    emit,
-                    node,
-                    modifiers,
-                    lastMode === "modifiers" ? ListFormat.Modifiers : ListFormat.Decorators,
-                    /*parenthesizerRule*/ undefined,
-                    start,
-                    pos - start,
-                    /*hasTrailingComma*/ false,
-                    textRange);
+                if (lastMode === "modifiers" || allowDecorators) {
+                    emitNodeListItems(
+                        emit,
+                        node,
+                        modifiers,
+                        lastMode === "modifiers" ? ListFormat.Modifiers : ListFormat.Decorators,
+                        /*parenthesizerRule*/ undefined,
+                        start,
+                        pos - start,
+                        /*hasTrailingComma*/ false,
+                        textRange);
+                }
                 start = pos;
                 lastMode = mode;
                 pos++;
@@ -4779,7 +4784,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         return node.pos;
     }
 
-    function emitModifiers(node: Node, modifiers: NodeArray<Modifier> | undefined): number {
+    function emitModifierList(node: Node, modifiers: NodeArray<Modifier> | undefined): number {
         emitList(node, modifiers, ListFormat.Modifiers);
         const lastModifier = lastOrUndefined(modifiers);
         return lastModifier && !positionIsSynthesized(lastModifier.end) ? lastModifier.end : node.pos;
@@ -4848,7 +4853,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         }
     }
 
-    function emitDecorators(parentNode: Node, decorators: NodeArray<Decorator> | undefined): number {
+    function emitDecoratorList(parentNode: Node, decorators: NodeArray<Decorator> | undefined): number {
         emitList(parentNode, decorators, ListFormat.Decorators);
         const lastDecorator = lastOrUndefined(decorators);
         return lastDecorator && !positionIsSynthesized(lastDecorator.end) ? lastDecorator.end : parentNode.pos;

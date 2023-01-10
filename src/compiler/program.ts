@@ -2943,7 +2943,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
             function walkArray(nodes: NodeArray<Node>, parent: Node) {
                 if (canHaveIllegalDecorators(parent)) {
-                    const decorator = find(parent.decoratorsAndModifiers, isDecorator);
+                    const decorator = find(parent.modifiers, isDecorator);
                     if (decorator) {
                         // report illegal decorator
                         diagnostics.push(createDiagnosticForNode(decorator, Diagnostics.Decorators_are_not_valid_here));
