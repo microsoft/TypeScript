@@ -1,8 +1,8 @@
-/a.js(19,20): error TS1360: Type '{ a: number; b: number; }' does not satisfy the expected type 'T1'.
+/a.js(24,20): error TS1360: Type '{ a: number; b: number; }' does not satisfy the expected type 'T1'.
   Object literal may only specify known properties, and 'b' does not exist in type 'T1'.
-/a.js(22,16): error TS1360: Type '{}' does not satisfy the expected type 'T1'.
+/a.js(27,16): error TS1360: Type '{}' does not satisfy the expected type 'T1'.
   Property 'a' is missing in type '{}' but required in type 'T1'.
-/a.js(39,25): error TS1360: Type '{ a: string; b: string; }' does not satisfy the expected type 'T2'.
+/a.js(44,25): error TS1360: Type '{ a: string; b: string; }' does not satisfy the expected type 'T2'.
   Object literal may only specify known properties, and 'b' does not exist in type 'T2'.
 
 
@@ -15,6 +15,11 @@
     /**
      * @typedef {Object} T2
      * @property {string} a
+     */
+    
+    /**
+     * @typedef {Object} T3
+     * @property {"a" | "b"} a
      */
     
     /**
@@ -56,4 +61,9 @@
                             ~~~~~~~~~
 !!! error TS1360: Type '{ a: string; b: string; }' does not satisfy the expected type 'T2'.
 !!! error TS1360:   Object literal may only specify known properties, and 'b' does not exist in type 'T2'.
+    
+    /**
+     * @satisfies {T2}
+     */
+    const t7 = { a: "a" };
     

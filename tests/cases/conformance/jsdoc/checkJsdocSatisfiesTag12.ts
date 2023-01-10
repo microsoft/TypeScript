@@ -14,6 +14,11 @@
  */
 
 /**
+ * @typedef {Object} T3
+ * @property {"a" | "b"} a
+ */
+
+/**
  * @satisfies {T1}
  */
 const t1 = { a: 1 };
@@ -42,3 +47,8 @@ const t5 = { a: 'test' };
  * @satisfies {T2}
  */
 const t6 = { a: 'test', b: 'test' };
+
+/**
+ * @satisfies {T2}
+ */
+const t7 = { a: "a" };

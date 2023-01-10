@@ -10,6 +10,11 @@
  */
 
 /**
+ * @typedef {Object} T3
+ * @property {"a" | "b"} a
+ */
+
+/**
  * @satisfies {T1}
  */
 const t1 = { a: 1 };
@@ -64,4 +69,13 @@ const t6 = { a: 'test', b: 'test' };
 >'test' : "test"
 >b : string
 >'test' : "test"
+
+/**
+ * @satisfies {T2}
+ */
+const t7 = { a: "a" };
+>t7 : { a: string; }
+>{ a: "a" } : { a: string; }
+>a : string
+>"a" : "a"
 
