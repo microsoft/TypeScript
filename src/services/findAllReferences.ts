@@ -41,6 +41,7 @@ import {
     firstOrUndefined,
     flatMap,
     forEachChild,
+    forEachChildRecursively,
     forEachReturnStatement,
     ForInOrOfStatement,
     FunctionDeclaration,
@@ -130,6 +131,8 @@ import {
     isJSDocMemberName,
     isJSDocTag,
     isJsxClosingElement,
+    isJsxElement,
+    isJsxFragment,
     isJsxOpeningElement,
     isJsxSelfClosingElement,
     isJumpStatementTarget,
@@ -232,6 +235,7 @@ import {
     textPart,
     TextSpan,
     tokenToString,
+    TransformFlags,
     tryAddToSet,
     tryCast,
     tryGetClassExtendingExpressionWithTypeArguments,
@@ -1125,6 +1129,14 @@ export namespace Core {
                 }
                 // import("foo") with no qualifier will reference the `export =` of the module, which may be referenced anyway.
                 return nodeEntry(reference.literal);
+            }
+            else if (reference.kind === "implicit") {
+                // Return either: The first JSX node in the file, the first statement of the file, or the whole file if neither of those exist
+                const range = forEachChildRecursively(
+                    reference.referencingFile,
+                    n => !(n.transformFlags & TransformFlags.ContainsJsx) ? "skip" : isJsxElement(n) || isJsxSelfClosingElement(n) || isJsxFragment(n) ? n : undefined
+                ) || reference.referencingFile.statements[0] || reference.referencingFile;
+                return nodeEntry(range);
             }
             else {
                 return {
