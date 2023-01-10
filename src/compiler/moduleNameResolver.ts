@@ -1675,10 +1675,17 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
         result = tryResolve(extensions, state);
     }
 
-    // For non-relative names that failed to resolve in modes that look up an "import" condition in package.json "exports",
+    // For non-relative names that resolved to JS but no types in modes that look up an "import" condition in package.json "exports",
     // try again with "exports" disabled to try to detect if this is likely a configuration error in a dependency's package.json.
     let legacyResult;
-    if (!result && !isConfigLookup && !isExternalModuleNameRelative(moduleName) && features & NodeResolutionFeatures.Exports && conditions.indexOf("import") > -1) {
+    if (result?.value?.isExternalLibraryImport
+        && !isConfigLookup
+        && extensions & (Extensions.TypeScript | Extensions.Declaration)
+        && features & NodeResolutionFeatures.Exports
+        && !isExternalModuleNameRelative(moduleName)
+        && !extensionIsOk(Extensions.TypeScript | Extensions.Declaration, result.value.resolved.extension)
+        && conditions.indexOf("import") > -1
+    ) {
         traceIfEnabled(state, Diagnostics.Resolution_of_non_relative_name_failed_trying_with_modern_Node_resolution_features_disabled_to_see_if_npm_library_needs_configuration_update);
         const diagnosticState = {
             ...state,
