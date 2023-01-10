@@ -1,4 +1,4 @@
-//// [tests/cases/compiler/issue52182.ts] ////
+//// [tests/cases/compiler/suppressResolvedUsingTsExtension1.ts] ////
 
 //// [package.json]
 {
