@@ -259,7 +259,7 @@ export interface ModuleResolutionState {
     requestContainingDirectory: string | undefined;
     reportDiagnostic: DiagnosticReporter;
     isConfigLookup: boolean;
-    suppressResolvedUsingTsExtension: boolean;
+    candidateIsFromPackageJsonField: boolean;
 }
 
 /** Just the fields that we use for module resolution.
@@ -527,7 +527,7 @@ export function resolveTypeReferenceDirective(typeReferenceDirectiveName: string
         requestContainingDirectory: containingDirectory,
         reportDiagnostic: diag => void diagnostics.push(diag),
         isConfigLookup: false,
-        suppressResolvedUsingTsExtension: false,
+        candidateIsFromPackageJsonField: false,
     };
     let resolved = primaryLookup();
     let primary = true;
@@ -1654,7 +1654,7 @@ function nodeModuleNameResolverWorker(features: NodeResolutionFeatures, moduleNa
         requestContainingDirectory: containingDirectory,
         reportDiagnostic: diag => void diagnostics.push(diag),
         isConfigLookup,
-        suppressResolvedUsingTsExtension: false,
+        candidateIsFromPackageJsonField: false,
     };
 
     if (traceEnabled && getEmitModuleResolutionKind(compilerOptions) >= ModuleResolutionKind.Node16 && getEmitModuleResolutionKind(compilerOptions) <= ModuleResolutionKind.NodeNext) {
@@ -1951,7 +1951,7 @@ function tryAddingExtensions(candidate: string, extensions: Extensions, original
 
     function tryExtension(ext: string, resolvedUsingTsExtension?: boolean): PathAndExtension | undefined {
         const path = tryFile(candidate + ext, onlyRecordFailures, state);
-        return path === undefined ? undefined : { path, ext, resolvedUsingTsExtension: !state.suppressResolvedUsingTsExtension && resolvedUsingTsExtension };
+        return path === undefined ? undefined : { path, ext, resolvedUsingTsExtension: !state.candidateIsFromPackageJsonField && resolvedUsingTsExtension };
     }
 }
 
@@ -2114,7 +2114,7 @@ export function getTemporaryModuleResolutionState(packageJsonInfoCache: PackageJ
         requestContainingDirectory: undefined,
         reportDiagnostic: noop,
         isConfigLookup: false,
-        suppressResolvedUsingTsExtension: false,
+        candidateIsFromPackageJsonField: false,
     };
 }
 
@@ -2236,14 +2236,14 @@ function loadNodeModuleFromDirectoryWorker(extensions: Extensions, candidate: st
         // (technically it only emits a deprecation warning in esm packages right now, but that's probably
         // enough to mean we don't need to support it)
         const features = state.features;
-        const suppressResolvedUsingTsExtension = state.suppressResolvedUsingTsExtension;
-        state.suppressResolvedUsingTsExtension = true;
+        const candidateIsFromPackageJsonField = state.candidateIsFromPackageJsonField;
+        state.candidateIsFromPackageJsonField = true;
         if (jsonContent?.type !== "module") {
             state.features &= ~NodeResolutionFeatures.EsmMode;
         }
         const result = nodeLoadModuleByRelativeName(expandedExtensions, candidate, onlyRecordFailures, state, /*considerPackageJson*/ false);
         state.features = features;
-        state.suppressResolvedUsingTsExtension = suppressResolvedUsingTsExtension;
+        state.candidateIsFromPackageJsonField = candidateIsFromPackageJsonField;
         return result;
     };
 
@@ -2942,7 +2942,7 @@ export function classicNameResolver(moduleName: string, containingFile: string, 
         requestContainingDirectory: containingDirectory,
         reportDiagnostic: diag => void diagnostics.push(diag),
         isConfigLookup: false,
-        suppressResolvedUsingTsExtension: false,
+        candidateIsFromPackageJsonField: false,
     };
 
     const resolved =
@@ -3023,7 +3023,7 @@ export function loadModuleFromGlobalCache(moduleName: string, projectName: strin
         requestContainingDirectory: undefined,
         reportDiagnostic: diag => void diagnostics.push(diag),
         isConfigLookup: false,
-        suppressResolvedUsingTsExtension: false,
+        candidateIsFromPackageJsonField: false,
     };
     const resolved = loadModuleFromImmediateNodeModulesDirectory(Extensions.Declaration, moduleName, globalCache, state, /*typesScopeOnly*/ false, /*cache*/ undefined, /*redirectedReference*/ undefined);
     return createResolvedModuleWithFailedLookupLocations(
