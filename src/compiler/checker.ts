@@ -311,7 +311,6 @@ import {
     getOwnKeys,
     getParameterSymbolFromJSDoc,
     getParseTreeNode,
-    getPathComponents,
     getPropertyAssignmentAliasLikeExpression,
     getPropertyNameForPropertyNameNode,
     getResolutionDiagnostic,
@@ -4767,7 +4766,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (sourceFile.symbol) {
                 if (resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
-                    errorOnImplicitAnyModule(/*isError*/ false, errorNode, resolvedModule, moduleReference);
+                    errorOnImplicitAnyModule(/*isError*/ false, errorNode, currentSourceFile, mode, resolvedModule, moduleReference);
                 }
                 if (moduleResolutionKind === ModuleResolutionKind.Node16 || moduleResolutionKind === ModuleResolutionKind.NodeNext) {
                     const isSyncImport = (currentSourceFile.impliedNodeFormat === ModuleKind.CommonJS && !findAncestor(location, isImportCall)) || !!findAncestor(location, isImportEqualsDeclaration);
@@ -4855,7 +4854,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(errorNode, diag, moduleReference, resolvedModule!.resolvedFileName);
             }
             else {
-                errorOnImplicitAnyModule(/*isError*/ noImplicitAny && !!moduleNotFoundError, errorNode, resolvedModule!, moduleReference);
+                errorOnImplicitAnyModule(/*isError*/ noImplicitAny && !!moduleNotFoundError, errorNode, currentSourceFile, mode, resolvedModule!, moduleReference);
             }
             // Failed imports and untyped modules are both treated in an untyped manner; only difference is whether we give a diagnostic first.
             return undefined;
@@ -4901,27 +4900,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 else {
-                    const legacyResult = currentSourceFile.resolvedModules?.get(moduleReference, mode)?.legacyResult;
-                    if (legacyResult) {
-                        const isInTypesScope = legacyResult.indexOf(nodeModulesPathPart + "@types/") > -1;
-                        const moduleNameParts = getPathComponents(moduleReference);
-                        moduleNameParts.shift(); // Empty string for nonrelative module name
-                        if (moduleNameParts.length > 1 && moduleNameParts[0] === "@types") {
-                            moduleNameParts.shift();
-                        }
-                        const isScopedLibrary = moduleNameParts.length > 1 && startsWith(moduleNameParts[0], "@");
-                        const libraryName = isScopedLibrary ? `${moduleNameParts[0]}/${moduleNameParts[1]}` : moduleNameParts[0];
-                        const details = chainDiagnosticMessages(
-                            /*details*/ undefined,
-                            Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json,
-                            legacyResult,
-                            isInTypesScope ? `@types/${mangleScopedPackageName(libraryName)}` : libraryName
-                        );
-                        diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, chainDiagnosticMessages(details, moduleNotFoundError, moduleReference)));
-                    }
-                    else {
-                        error(errorNode, moduleNotFoundError, moduleReference);
-                    }
+                    error(errorNode, moduleNotFoundError, moduleReference);
                 }
             }
         }
@@ -4945,25 +4924,33 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function errorOnImplicitAnyModule(isError: boolean, errorNode: Node, { packageId, resolvedFileName }: ResolvedModuleFull, moduleReference: string): void {
-        const errorInfo = !isExternalModuleNameRelative(moduleReference) && packageId
-            ? typesPackageExists(packageId.name)
+    function errorOnImplicitAnyModule(isError: boolean, errorNode: Node, sourceFile: SourceFile, mode: ResolutionMode, { packageId, resolvedFileName }: ResolvedModuleFull, moduleReference: string): void {
+        let errorInfo;
+        if (!isExternalModuleNameRelative(moduleReference) && packageId) {
+            const legacyResult = sourceFile.resolvedModules?.get(moduleReference, mode)?.legacyResult;
+            errorInfo = legacyResult
                 ? chainDiagnosticMessages(
                     /*details*/ undefined,
-                    Diagnostics.If_the_0_package_actually_exposes_this_module_consider_sending_a_pull_request_to_amend_https_Colon_Slash_Slashgithub_com_SlashDefinitelyTyped_SlashDefinitelyTyped_Slashtree_Slashmaster_Slashtypes_Slash_1,
-                    packageId.name, mangleScopedPackageName(packageId.name))
-                : packageBundlesTypes(packageId.name)
+                    Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json,
+                    legacyResult,
+                    legacyResult.indexOf(nodeModulesPathPart + "@types/") > -1 ? `@types/${mangleScopedPackageName(packageId.name)}` : packageId.name)
+                : typesPackageExists(packageId.name)
                     ? chainDiagnosticMessages(
                         /*details*/ undefined,
-                        Diagnostics.If_the_0_package_actually_exposes_this_module_try_adding_a_new_declaration_d_ts_file_containing_declare_module_1,
-                        packageId.name,
-                        moduleReference)
-                    : chainDiagnosticMessages(
-                        /*details*/ undefined,
-                        Diagnostics.Try_npm_i_save_dev_types_Slash_1_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
-                        moduleReference,
-                        mangleScopedPackageName(packageId.name))
-            : undefined;
+                        Diagnostics.If_the_0_package_actually_exposes_this_module_consider_sending_a_pull_request_to_amend_https_Colon_Slash_Slashgithub_com_SlashDefinitelyTyped_SlashDefinitelyTyped_Slashtree_Slashmaster_Slashtypes_Slash_1,
+                        packageId.name, mangleScopedPackageName(packageId.name))
+                    : packageBundlesTypes(packageId.name)
+                        ? chainDiagnosticMessages(
+                            /*details*/ undefined,
+                            Diagnostics.If_the_0_package_actually_exposes_this_module_try_adding_a_new_declaration_d_ts_file_containing_declare_module_1,
+                            packageId.name,
+                            moduleReference)
+                        : chainDiagnosticMessages(
+                            /*details*/ undefined,
+                            Diagnostics.Try_npm_i_save_dev_types_Slash_1_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
+                            moduleReference,
+                            mangleScopedPackageName(packageId.name));
+        }
         errorOrSuggestion(isError, errorNode, chainDiagnosticMessages(
             errorInfo,
             Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
