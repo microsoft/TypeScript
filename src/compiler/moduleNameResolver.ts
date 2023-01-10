@@ -2313,7 +2313,18 @@ function loadModuleFromSelfNameReference(extensions: Extensions, moduleName: str
         return undefined;
     }
     const trailingParts = parts.slice(nameParts.length);
-    return loadModuleFromExports(scope, extensions, !length(trailingParts) ? "." : `.${directorySeparator}${trailingParts.join(directorySeparator)}`, state, cache, redirectedReference);
+    const subpath = !length(trailingParts) ? "." : `.${directorySeparator}${trailingParts.join(directorySeparator)}`;
+    // Maybe TODO: splitting extensions into two priorities should be unnecessary, except
+    // https://github.com/microsoft/TypeScript/issues/50762 makes the behavior different.
+    // As long as that bug exists, we need to do two passes here in self-name loading
+    // in order to be consistent with (non-self) library-name loading in
+    // `loadModuleFromNearestNodeModulesDirectoryWorker`, which uses two passes in order
+    // to prioritize `@types` packages higher up the directory tree over untyped
+    // implementation packages.
+    const priorityExtensions = extensions & (Extensions.TypeScript | Extensions.Declaration);
+    const secondaryExtensions = extensions & ~(Extensions.TypeScript | Extensions.Declaration);
+    return loadModuleFromExports(scope, priorityExtensions, subpath, state, cache, redirectedReference)
+        || loadModuleFromExports(scope, secondaryExtensions, subpath, state, cache, redirectedReference);
 }
 
 function loadModuleFromExports(scope: PackageJsonInfo, extensions: Extensions, subpath: string, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): SearchResult<Resolved> {
