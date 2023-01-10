@@ -1783,6 +1783,13 @@ export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): T
     return createTextSpanFromBounds(start, scanner.getTextPos());
 }
 
+/** @internal */
+export function scanTokenAtPosition(sourceFile: SourceFile, pos: number) {
+    const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
+    scanner.scan();
+    return scanner.getToken();
+}
+
 function getErrorSpanForArrowFunction(sourceFile: SourceFile, node: ArrowFunction): TextSpan {
     const pos = skipTrivia(sourceFile.text, node.pos);
     if (node.body && node.body.kind === SyntaxKind.Block) {

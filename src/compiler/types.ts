@@ -1685,7 +1685,6 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
     readonly escapedText: __String;
     readonly originalKeywordKind?: SyntaxKind;                // Original syntaxKind which get set so that we can report an error later
     isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
-    /** @internal */ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
 }
 
 // Transient identifier node (marked by id === -1)
@@ -1710,7 +1709,6 @@ export interface QualifiedName extends Node, FlowContainer {
     readonly kind: SyntaxKind.QualifiedName;
     readonly left: EntityName;
     readonly right: Identifier;
-    /** @internal */ jsdocDotPos?: number;                      // QualifiedName occurs in JSDoc-style generic: Id1.Id2.<T>
 }
 
 export type EntityName = Identifier | QualifiedName;

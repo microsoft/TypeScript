@@ -3452,14 +3452,12 @@ namespace Parser {
     function parseEntityName(allowReservedWords: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
         const pos = getNodePos();
         let entity: EntityName = allowReservedWords ? parseIdentifierName(diagnosticMessage) : parseIdentifier(diagnosticMessage);
-        let dotPos = getNodePos();
         while (parseOptional(SyntaxKind.DotToken)) {
             if (token() === SyntaxKind.LessThanToken) {
-                // the entity is part of a JSDoc-style generic, so record the trailing dot for later error reporting
-                entity.jsdocDotPos = dotPos;
+                // The entity is part of a JSDoc-style generic. We will use the gap between `typeName` and
+                // `typeArguments` to report it as a grammar error in the checker.
                 break;
             }
-            dotPos = getNodePos();
             entity = finishNode(
                 factory.createQualifiedName(
                     entity,

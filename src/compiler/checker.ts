@@ -890,6 +890,7 @@ import {
     ReverseMappedType,
     sameMap,
     SatisfiesExpression,
+    scanTokenAtPosition,
     ScriptKind,
     ScriptTarget,
     SetAccessorDeclaration,
@@ -37463,8 +37464,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkTypeReferenceNode(node: TypeReferenceNode | ExpressionWithTypeArguments) {
         checkGrammarTypeArguments(node, node.typeArguments);
-        if (node.kind === SyntaxKind.TypeReference && node.typeName.jsdocDotPos !== undefined && !isInJSFile(node) && !isInJSDoc(node)) {
-            grammarErrorAtPos(node, node.typeName.jsdocDotPos, 1, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
+        if (node.kind === SyntaxKind.TypeReference && !isInJSFile(node) && !isInJSDoc(node) && node.typeArguments && node.typeName.end !== node.typeArguments.pos) {
+            // If there was a token between the type name and the type arguments, check if it was a DotToken
+            const sourceFile = getSourceFileOfNode(node);
+            if (scanTokenAtPosition(sourceFile, node.typeName.end) === SyntaxKind.DotToken) {
+                grammarErrorAtPos(node, skipTrivia(sourceFile.text, node.typeName.end), 1, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
+            }
         }
         forEach(node.typeArguments, checkSourceElement);
         const type = getTypeFromTypeReference(node);
