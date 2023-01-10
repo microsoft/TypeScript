@@ -1,4 +1,9 @@
-import { Identifier, NodeFlags, addObjectAllocatorPatcher, idKeyword } from "../_namespaces/ts";
+import {
+    addObjectAllocatorPatcher,
+    Identifier,
+    idKeyword,
+    NodeFlags,
+} from "../_namespaces/ts";
 import { deprecate } from "../deprecate";
 
 addObjectAllocatorPatcher(objectAllocator => {
@@ -7,7 +12,7 @@ addObjectAllocatorPatcher(objectAllocator => {
     const propertyNames = Object.getOwnPropertyNames(Identifier.prototype);
     if (!propertyNames.includes("originalKeywordKind")) {
         Object.defineProperty(Identifier.prototype, "originalKeywordKind", {
-            get: deprecate(function(this: Identifier) {
+            get: deprecate(function (this: Identifier) {
                 return idKeyword(this);
             }, {
                 name: "originalKeywordKind",
