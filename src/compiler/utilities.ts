@@ -296,6 +296,7 @@ import {
     isNamespaceExport,
     isNamespaceExportDeclaration,
     isNamespaceImport,
+    isNonNullExpression,
     isNoSubstitutionTemplateLiteral,
     isNumericLiteral,
     isObjectLiteralExpression,
@@ -9485,6 +9486,12 @@ export function isOptionalDeclaration(declaration: Declaration): boolean {
 }
 
 /** @internal */
+export function isNonNullAccess(node: Node): node is AccessExpression {
+    const kind = node.kind;
+    return (kind === SyntaxKind.PropertyAccessExpression
+        || kind === SyntaxKind.ElementAccessExpression) && isNonNullExpression((node as AccessExpression).expression);
+}
+
 export function isJSDocSatisfiesExpression(node: Node): node is JSDocSatisfiesExpression {
     return isInJSFile(node) && isParenthesizedExpression(node) && !!getJSDocSatisfiesTag(node);
 }
