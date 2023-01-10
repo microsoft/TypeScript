@@ -9492,6 +9492,7 @@ export function isNonNullAccess(node: Node): node is AccessExpression {
         || kind === SyntaxKind.ElementAccessExpression) && isNonNullExpression((node as AccessExpression).expression);
 }
 
+/** @internal */
 export function isJSDocSatisfiesExpression(node: Node): node is JSDocSatisfiesExpression {
     return isInJSFile(node) && isParenthesizedExpression(node) && !!getJSDocSatisfiesTag(node);
 }
