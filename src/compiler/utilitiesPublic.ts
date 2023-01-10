@@ -249,6 +249,7 @@ import {
     Statement,
     StringLiteral,
     StringLiteralLike,
+    stringToToken,
     Symbol,
     SyntaxKind,
     TemplateLiteral,
@@ -761,6 +762,15 @@ export function unescapeLeadingUnderscores(identifier: __String): string {
 export function idText(identifierOrPrivateName: Identifier | PrivateIdentifier): string {
     return unescapeLeadingUnderscores(identifierOrPrivateName.escapedText);
 }
+
+/**
+ * If the text of an Identifier matches a keyword (including contextual and TypeScript-specific keywords), returns the
+ * SyntaxKind for the matching keyword.
+ */
+export function idKeyword(node: Identifier) {
+    return stringToToken(node.escapedText as string);
+}
+
 export function symbolName(symbol: Symbol): string {
     if (symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
         return idText(symbol.valueDeclaration.name);

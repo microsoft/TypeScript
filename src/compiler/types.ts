@@ -1685,9 +1685,10 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
      * Text of identifier, but if the identifier begins with two underscores, this will begin with three.
      */
     readonly escapedText: __String;
-    readonly originalKeywordKind?: SyntaxKind;                // Original syntaxKind which get set so that we can report an error later
-    /** @deprecated Use `node.flags & NodeFlags.IdentifierIsInJSDocNamespace` instead. */
-    readonly isInJSDocNamespace?: boolean; // if the node is a member in a JSDoc namespace.
+    /** @deprecated Use `idKeyword(identifier)` instead. */
+    readonly originalKeywordKind?: SyntaxKind;  // Original syntaxKind which get set so that we can report an error later
+    /** @deprecated Use `identifier.flags & NodeFlags.IdentifierIsInJSDocNamespace` instead. */
+    readonly isInJSDocNamespace?: boolean;      // if the node is a member in a JSDoc namespace.
 }
 
 // Transient identifier node (marked by id === -1)
