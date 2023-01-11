@@ -2300,7 +2300,7 @@ function resolvedIfExtensionMatches(extensions: Extensions, path: string, resolv
 }
 
 /** True if `extension` is one of the supported `extensions`. */
-function extensionIsOk(extensions: Extensions, extension: Extension): boolean {
+function extensionIsOk(extensions: Extensions, extension: string): boolean {
     return extensions & Extensions.JavaScript && (extension === Extension.Js || extension === Extension.Jsx || extension === Extension.Mjs || extension === Extension.Cjs)
         || extensions & Extensions.TypeScript && (extension === Extension.Ts || extension === Extension.Tsx || extension === Extension.Mts || extension === Extension.Cts)
         || extensions & Extensions.Declaration && (extension === Extension.Dts || extension === Extension.Dmts || extension === Extension.Dcts)
