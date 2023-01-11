@@ -1764,7 +1764,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         return x;
                     };
                 }))
-                static x = order.push("static field initializer evaluation");
+                static z = order.push("static field initializer evaluation");
 
                 static [(order.push("static computed property name evaluation"), "y")]() {}
 
@@ -1822,7 +1822,39 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         order.push("static method extra initializer evaluation 2b");
                     });
                 }))
-                static z() {}
+                static x() {}
+
+                @(order.push("static auto-accessor decorator evaluation 1"), ((t, c) => {
+                    order.push("static auto-accessor decorator application 1");
+                    c.addInitializer(() => {
+                        order.push("static auto-accessor extra initializer evaluation 1a");
+                    });
+                    c.addInitializer(() => {
+                        order.push("static auto-accessor extra initializer evaluation 1b");
+                    });
+                    return {
+                        init: x => {
+                            order.push("static auto-accessor injected initializer evaluation 1");
+                            return x;
+                        }
+                    };
+                }))
+                @(order.push("static auto-accessor decorator evaluation 2"), ((t, c) => {
+                    order.push("static auto-accessor decorator application 2");
+                    c.addInitializer(() => {
+                        order.push("static auto-accessor extra initializer evaluation 2a");
+                    });
+                    c.addInitializer(() => {
+                        order.push("static auto-accessor extra initializer evaluation 2b");
+                    });
+                    return {
+                        init: x => {
+                            order.push("static auto-accessor injected initializer evaluation 2");
+                            return x;
+                        }
+                    };
+                }))
+                static accessor w = order.push("static auto-accessor initializer evaluation");
 
                 @(order.push("instance method decorator evaluation 1"), ((t, c) => {
                     order.push("instance method decorator application 1");
@@ -1843,6 +1875,38 @@ describe("unittests:: evaluation:: esDecorators", () => {
                     });
                 }))
                 c() {}
+
+                @(order.push("instance auto-accessor decorator evaluation 1"), ((t, c) => {
+                    order.push("instance auto-accessor decorator application 1");
+                    c.addInitializer(() => {
+                        order.push("instance auto-accessor extra initializer evaluation 1a");
+                    });
+                    c.addInitializer(() => {
+                        order.push("instance auto-accessor extra initializer evaluation 1b");
+                    });
+                    return {
+                        init: x => {
+                            order.push("instance auto-accessor injected initializer evaluation 1");
+                            return x;
+                        }
+                    };
+                }))
+                @(order.push("instance auto-accessor decorator evaluation 2"), ((t, c) => {
+                    order.push("instance auto-accessor decorator application 2");
+                    c.addInitializer(() => {
+                        order.push("instance auto-accessor extra initializer evaluation 2a");
+                    });
+                    c.addInitializer(() => {
+                        order.push("instance auto-accessor extra initializer evaluation 2b");
+                    });
+                    return {
+                        init: x => {
+                            order.push("instance auto-accessor injected initializer evaluation 2");
+                            return x;
+                        }
+                    };
+                }))
+                accessor d = order.push("instance auto-accessor initializer evaluation");
             }
 
             order.push("instance construction");
@@ -1866,18 +1930,26 @@ describe("unittests:: evaluation:: esDecorators", () => {
             "instance computed property name evaluation",
             "static method decorator evaluation 1",
             "static method decorator evaluation 2",
+            "static auto-accessor decorator evaluation 1",
+            "static auto-accessor decorator evaluation 2",
             "instance method decorator evaluation 1",
             "instance method decorator evaluation 2",
+            "instance auto-accessor decorator evaluation 1",
+            "instance auto-accessor decorator evaluation 2",
             // NOTE: at this point, all of the class elements have been collected.
 
             // next, for each static method, in document order, we apply that method's decorators in reverse order:
             "static method decorator application 2",
             "static method decorator application 1",
+            "static auto-accessor decorator application 2",
+            "static auto-accessor decorator application 1",
             // NOTE: at this point, all non-private static methods are defined on the class.
 
             // next, for each instance method, in document order, we apply that method's decorators in reverse order:
             "instance method decorator application 2",
             "instance method decorator application 1",
+            "instance auto-accessor decorator application 2",
+            "instance auto-accessor decorator application 1",
             // NOTE: at this point, all non-private instance methods are defined on the prototype.
 
             // next, for each static field, in document order, we apply that field's decorators in reverse order:
@@ -1904,6 +1976,10 @@ describe("unittests:: evaluation:: esDecorators", () => {
             "static method extra initializer evaluation 2b",
             "static method extra initializer evaluation 1a",
             "static method extra initializer evaluation 1b",
+            "static auto-accessor extra initializer evaluation 2a",
+            "static auto-accessor extra initializer evaluation 2b",
+            "static auto-accessor extra initializer evaluation 1a",
+            "static auto-accessor extra initializer evaluation 1b",
             "static field extra initializer evaluation 2a",
             "static field extra initializer evaluation 2b",
             "static field extra initializer evaluation 1a",
@@ -1915,6 +1991,9 @@ describe("unittests:: evaluation:: esDecorators", () => {
             "static field initializer evaluation",
             "static field injected initializer evaluation 2",
             "static field injected initializer evaluation 1",
+            "static auto-accessor initializer evaluation",
+            "static auto-accessor injected initializer evaluation 2",
+            "static auto-accessor injected initializer evaluation 1",
             // NOTE: at this point, static private fields will be installed (TODO: on the replacement class)
 
             // finally, class extra initializers are applied in the order they were added (i.e., methods before fields,
@@ -1944,6 +2023,10 @@ describe("unittests:: evaluation:: esDecorators", () => {
             "instance method extra initializer evaluation 2b",
             "instance method extra initializer evaluation 1a",
             "instance method extra initializer evaluation 1b",
+            "instance auto-accessor extra initializer evaluation 2a",
+            "instance auto-accessor extra initializer evaluation 2b",
+            "instance auto-accessor extra initializer evaluation 1a",
+            "instance auto-accessor extra initializer evaluation 1b",
             "instance field extra initializer evaluation 2a",
             "instance field extra initializer evaluation 2b",
             "instance field extra initializer evaluation 1a",
@@ -1954,6 +2037,9 @@ describe("unittests:: evaluation:: esDecorators", () => {
             "instance field initializer evaluation",
             "instance field injected initializer evaluation 2",
             "instance field injected initializer evaluation 1",
+            "instance auto-accessor initializer evaluation",
+            "instance auto-accessor injected initializer evaluation 2",
+            "instance auto-accessor injected initializer evaluation 1",
             // NOTE: at this point, instance private fields will be installed.
 
             // finally, statements in the constructor after the call to `super()` are evaluated:

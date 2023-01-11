@@ -51,10 +51,10 @@ import {
 //       - 15.8.19 RS: ClassDefinitionEvaluation, Step 23.
 //       - 15.8.15 RS: ClassFieldDefinitionEvaluation, Step 1.
 //       - 15.4.5 RS: MethodDefinitionEvaluation, Step 1.
-// 5. Static non-field element decorators are applied
-// 6. Non-static non-field element decorators are applied
-// 7. Static field element decorators are applied
-// 8. Non-static field element decorators are applied
+// 5. Static non-field (method/getter/setter/auto-accessor) element decorators are applied
+// 6. Non-static non-field (method/getter/setter/auto-accessor) element decorators are applied
+// 7. Static field (excl. auto-accessor) element decorators are applied
+// 8. Non-static field (excl. auto-accessor) element decorators are applied
 // 9. Class decorators are applied
 // 10. Class binding is initialized
 // 11. Static extra initializers are evaluated
@@ -952,16 +952,16 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
             pendingExpressions ??= [];
             pendingExpressions.push(memberDecoratorsAssignment);
 
-            // 5. Static non-field element decorators are applied
-            // 6. Non-static non-field element decorators are applied
-            // 7. Static field element decorators are applied
-            // 8. Non-static field element decorators are applied
+            // 5. Static non-field (method/getter/setter/auto-accessor) element decorators are applied
+            // 6. Non-static non-field (method/getter/setter/auto-accessor) element decorators are applied
+            // 7. Static field (excl. auto-accessor) element decorators are applied
+            // 8. Non-static field (excl. auto-accessor) element decorators are applied
             const statements =
-                isMethodOrAccessor(member) ?
+                isMethodOrAccessor(member) || isAutoAccessorPropertyDeclaration(member) ?
                     isStatic(member) ?
                         classInfo.staticNonFieldDecorationStatements ??= [] :
                         classInfo.nonStaticNonFieldDecorationStatements ??= [] :
-                isPropertyDeclaration(member) ?
+                isPropertyDeclaration(member) && !isAutoAccessorPropertyDeclaration(member) ?
                     isStatic(member) ?
                         classInfo.staticFieldDecorationStatements ??= [] :
                         classInfo.nonStaticFieldDecorationStatements ??= [] :

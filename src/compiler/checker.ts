@@ -34486,13 +34486,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         //
         // Per [the specification][1], decorators are applied in the following order:
         //
-        // 1. For each static method (incl. get/set methods), in document order:
+        // 1. For each static method (incl. get/set methods and `accessor` fields), in document order:
         //    a. Apply each decorator for that method, in reverse order (`A1`, `A2`).
-        // 2. For each instance method (incl. get/set methods), in document order:
+        // 2. For each instance method (incl. get/set methods and `accessor` fields), in document order:
         //    a. Apply each decorator for that method, in reverse order (`B1`, `B2`).
-        // 3. For each static field (incl. auto-accessors), in document order:
+        // 3. For each static field (excl. auto-accessors), in document order:
         //    a. Apply each decorator for that field, in reverse order (`C1`, `C2`).
-        // 4. For each instance field (incl. auto-accessors), in document order:
+        // 4. For each instance field (excl. auto-accessors), in document order:
         //    a. Apply each decorator for that field, in reverse order (`D1`, `D2`).
         // 5. Apply each decorator for the class, in reverse order (`E1`, `E2`).
         //
