@@ -6040,7 +6040,7 @@ export const enum TypeFlags {
     /** @internal */
     Intrinsic = Any | Unknown | String | Number | BigInt | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
     /** @internal */
-    Primitive = String | Number | BigInt | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
+    Primitive = String | Number | BigInt | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol | TemplateLiteral,
     StringLike = String | StringLiteral | TemplateLiteral | StringMapping,
     NumberLike = Number | NumberLiteral | Enum,
     BigIntLike = BigInt | BigIntLiteral,
