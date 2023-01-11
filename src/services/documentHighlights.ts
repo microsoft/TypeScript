@@ -8,7 +8,6 @@ import {
     canHaveSymbol,
     CaseClause,
     cast,
-    ClassElement,
     concatenate,
     ConstructorDeclaration,
     contains,
@@ -83,7 +82,6 @@ import {
     toPath,
     tryCast,
     TryStatement,
-    TypeElement,
 } from "./_namespaces/ts";
 
 export interface DocumentHighlights {
@@ -323,7 +321,7 @@ export namespace DocumentHighlights {
                 // If we're an accessibility modifier, we're in an instance member and should search
                 // the constructor's parameter list for instance members as well.
                 if (modifierFlag & (ModifierFlags.AccessibilityModifier | ModifierFlags.Readonly)) {
-                    const constructor = find<ClassElement | TypeElement, ConstructorDeclaration>(container.members, isConstructorDeclaration);
+                    const constructor = find(container.members, isConstructorDeclaration);
                     if (constructor) {
                         return [...nodes, ...constructor.parameters];
                     }

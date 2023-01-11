@@ -8711,7 +8711,7 @@ export function isAnySupportedFileExtension(path: string): boolean {
 
 /** @internal */
 export function tryGetExtensionFromPath(path: string): Extension | undefined {
-    return find<Extension>(extensionsToRemove, e => fileExtensionIs(path, e));
+    return find(extensionsToRemove, e => fileExtensionIs(path, e));
 }
 
 /** @internal */
