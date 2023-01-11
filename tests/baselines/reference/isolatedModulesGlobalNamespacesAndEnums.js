@@ -40,7 +40,7 @@ var Instantiated;
 })(Instantiated || (Instantiated = {}));
 //// [module-namespaces.js]
 "use strict";
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Instantiated = void 0;
 var Instantiated;
 (function (Instantiated) {
