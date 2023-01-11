@@ -285,7 +285,7 @@ declare namespace FourSlashInterface {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
         completions(...options: CompletionsOptions[]): void;
-        applyCodeActionFromCompletion(markerName: string, options: {
+        applyCodeActionFromCompletion(markerName: string | undefined, options: {
             name: string,
             source?: string,
             data?: ts.CompletionEntryData,

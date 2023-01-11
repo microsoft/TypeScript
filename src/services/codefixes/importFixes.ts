@@ -666,7 +666,7 @@ function getAddAsTypeOnly(
         // Not writing a (top-level) type-only import here would create an error because the runtime dependency is unnecessary
         return AddAsTypeOnly.Required;
     }
-    if (compilerOptions.isolatedModules && compilerOptions.preserveValueImports &&
+    if ((compilerOptions.isolatedModules && compilerOptions.preserveValueImports || compilerOptions.verbatimModuleSyntax) &&
         (!(targetFlags & SymbolFlags.Value) || !!checker.getTypeOnlyAliasDeclaration(symbol))
     ) {
         // A type-only import is required for this symbol if under these settings if the symbol will
@@ -1262,7 +1262,7 @@ function getModuleSpecifierText(promotedDeclaration: ImportClause | ImportEquals
 
 function promoteFromTypeOnly(changes: textChanges.ChangeTracker, aliasDeclaration: TypeOnlyAliasDeclaration, compilerOptions: CompilerOptions, sourceFile: SourceFile) {
     // See comment in `doAddExistingFix` on constant with the same name.
-    const convertExistingToTypeOnly = compilerOptions.preserveValueImports && compilerOptions.isolatedModules;
+    const convertExistingToTypeOnly = compilerOptions.preserveValueImports && compilerOptions.isolatedModules || compilerOptions.verbatimModuleSyntax;
     switch (aliasDeclaration.kind) {
         case SyntaxKind.ImportSpecifier:
             if (aliasDeclaration.isTypeOnly) {
@@ -1347,7 +1347,8 @@ function doAddExistingFix(
     // never used in an emitting position). These are allowed to be imported without being type-only,
     // but the user has clearly already signified that they don't need them to be present at runtime
     // by placing them in a type-only import. So, just mark each specifier as type-only.
-    const convertExistingToTypeOnly = promoteFromTypeOnly && compilerOptions.preserveValueImports && compilerOptions.isolatedModules;
+    const convertExistingToTypeOnly = promoteFromTypeOnly
+        && (compilerOptions.preserveValueImports && compilerOptions.isolatedModules || compilerOptions.verbatimModuleSyntax);
 
     if (defaultImport) {
         Debug.assert(!clause.name, "Cannot add a default import to an import clause that already has one");

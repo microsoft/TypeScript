@@ -480,7 +480,7 @@ export class Verify extends VerifyNegatable {
         this.state.getAndApplyCodeActions(errorCode, index);
     }
 
-    public applyCodeActionFromCompletion(markerName: string, options: VerifyCompletionActionOptions): void {
+    public applyCodeActionFromCompletion(markerName: string | undefined, options: VerifyCompletionActionOptions): void {
         this.state.applyCodeActionFromCompletion(markerName, options);
     }
 
@@ -492,8 +492,8 @@ export class Verify extends VerifyNegatable {
         this.state.verifyImportFixModuleSpecifiers(marker, moduleSpecifiers, preferences);
     }
 
-    public baselineAutoImports(marker: string, preferences?: ts.UserPreferences) {
-        this.state.baselineAutoImports(marker, preferences);
+    public baselineAutoImports(marker: string, fullNamesForCodeFix?: string[], options?: ts.UserPreferences) {
+        this.state.baselineAutoImports(marker, fullNamesForCodeFix, options);
     }
 
     public navigationBar(json: any, options?: { checkSpans?: boolean }) {
