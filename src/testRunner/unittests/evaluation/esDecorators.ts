@@ -1,5 +1,6 @@
 import * as evaluator from "../../_namespaces/evaluator";
 import * as ts from "../../_namespaces/ts";
+import { ScriptTarget } from "../../_namespaces/ts";
 
 describe("unittests:: evaluation:: esDecorators", () => {
     const options: ts.CompilerOptions = { target: ts.ScriptTarget.ES2021 };
@@ -1705,348 +1706,362 @@ describe("unittests:: evaluation:: esDecorators", () => {
         });
     });
 
-    it("class definition evaluation order", () => {
-        const { order } = exec`
-            export const order = [];
+    const nodeVersion = ts.Version.tryParse(process.version);
+    const supportsClassStaticBlock = nodeVersion && nodeVersion.major >= 16;
 
-            class Base {
-                constructor() {
-                    order.push("superclass construction");
-                }
-            }
+    const targets = [
+        // NOTE: Class static blocks weren't supported in Node v14
+        ...(supportsClassStaticBlock ? [ScriptTarget.ES2022] : []),
+        ScriptTarget.ES2021,
+        ScriptTarget.ES2015,
+    ];
+    for (const target of targets) {
+        const options: ts.CompilerOptions = { target };
+        const exec = (array: TemplateStringsArray) => evaluator.evaluateTypeScript(array[0], options);
 
-            @(order.push("class decorator evaluation 1"), ((t, c) => {
-                order.push("class decorator application 1");
-                c.addInitializer(() => {
-                    order.push("class extra initializer evaluation 1a");
-                });
-                c.addInitializer(() => {
-                    order.push("class extra initializer evaluation 1b");
-                });
-            }))
-            @(order.push("class decorator evaluation 2"), ((t, c) => {
-                order.push("class decorator application 2");
-                c.addInitializer(() => {
-                    order.push("class extra initializer evaluation 2a");
-                });
-                c.addInitializer(() => {
-                    order.push("class extra initializer evaluation 2b");
-                });
-            }))
-            class Derived extends (order.push("heritage clause evaluation"), Base) {
-                static {
-                    order.push("static block evaluation");
+        it(`class definition evaluation order (${ts.Debug.formatEnum(target, (ts as any).ScriptTarget)})`, () => {
+            const { order } = exec`
+                export const order = [];
+
+                class Base {
+                    constructor() {
+                        order.push("superclass construction");
+                    }
                 }
 
-                @(order.push("static field decorator evaluation 1"), ((t, c) => {
-                    order.push("static field decorator application 1");
+                @(order.push("class decorator evaluation 1"), ((t, c) => {
+                    order.push("class decorator application 1");
                     c.addInitializer(() => {
-                        order.push("static field extra initializer evaluation 1a");
+                        order.push("class extra initializer evaluation 1a");
                     });
                     c.addInitializer(() => {
-                        order.push("static field extra initializer evaluation 1b");
+                        order.push("class extra initializer evaluation 1b");
                     });
-                    return x => {
-                        order.push("static field injected initializer evaluation 1");
-                        return x;
-                    };
                 }))
-                @(order.push("static field decorator evaluation 2"), ((t, c) => {
-                    order.push("static field decorator application 2");
+                @(order.push("class decorator evaluation 2"), ((t, c) => {
+                    order.push("class decorator application 2");
                     c.addInitializer(() => {
-                        order.push("static field extra initializer evaluation 2a");
+                        order.push("class extra initializer evaluation 2a");
                     });
                     c.addInitializer(() => {
-                        order.push("static field extra initializer evaluation 2b");
+                        order.push("class extra initializer evaluation 2b");
                     });
-                    return x => {
-                        order.push("static field injected initializer evaluation 2");
-                        return x;
-                    };
                 }))
-                static z = order.push("static field initializer evaluation");
+                class Derived extends (order.push("heritage clause evaluation"), Base) {
+                    static {
+                        order.push("static block evaluation");
+                    }
 
-                static [(order.push("static computed property name evaluation"), "y")]() {}
+                    @(order.push("static field decorator evaluation 1"), ((t, c) => {
+                        order.push("static field decorator application 1");
+                        c.addInitializer(() => {
+                            order.push("static field extra initializer evaluation 1a");
+                        });
+                        c.addInitializer(() => {
+                            order.push("static field extra initializer evaluation 1b");
+                        });
+                        return x => {
+                            order.push("static field injected initializer evaluation 1");
+                            return x;
+                        };
+                    }))
+                    @(order.push("static field decorator evaluation 2"), ((t, c) => {
+                        order.push("static field decorator application 2");
+                        c.addInitializer(() => {
+                            order.push("static field extra initializer evaluation 2a");
+                        });
+                        c.addInitializer(() => {
+                            order.push("static field extra initializer evaluation 2b");
+                        });
+                        return x => {
+                            order.push("static field injected initializer evaluation 2");
+                            return x;
+                        };
+                    }))
+                    static z = order.push("static field initializer evaluation");
 
-                @(order.push("instance field decorator evaluation 1"), ((t, c) => {
-                    order.push("instance field decorator application 1");
-                    c.addInitializer(() => {
-                        order.push("instance field extra initializer evaluation 1a");
-                    });
-                    c.addInitializer(() => {
-                        order.push("instance field extra initializer evaluation 1b");
-                    });
-                    return x => {
-                        order.push("instance field injected initializer evaluation 1");
-                        return x;
-                    };
-                }))
-                @(order.push("instance field decorator evaluation 2"), ((t, c) => {
-                    order.push("instance field decorator application 2");
-                    c.addInitializer(() => {
-                        order.push("instance field extra initializer evaluation 2a");
-                    });
-                    c.addInitializer(() => {
-                        order.push("instance field extra initializer evaluation 2b");
-                    });
-                    return x => {
-                        order.push("instance field injected initializer evaluation 2");
-                        return x;
-                    };
-                }))
-                a = order.push("instance field initializer evaluation");
+                    static [(order.push("static computed property name evaluation"), "y")]() {}
 
-                [(order.push("instance computed property name evaluation"), "b")]() {}
+                    @(order.push("instance field decorator evaluation 1"), ((t, c) => {
+                        order.push("instance field decorator application 1");
+                        c.addInitializer(() => {
+                            order.push("instance field extra initializer evaluation 1a");
+                        });
+                        c.addInitializer(() => {
+                            order.push("instance field extra initializer evaluation 1b");
+                        });
+                        return x => {
+                            order.push("instance field injected initializer evaluation 1");
+                            return x;
+                        };
+                    }))
+                    @(order.push("instance field decorator evaluation 2"), ((t, c) => {
+                        order.push("instance field decorator application 2");
+                        c.addInitializer(() => {
+                            order.push("instance field extra initializer evaluation 2a");
+                        });
+                        c.addInitializer(() => {
+                            order.push("instance field extra initializer evaluation 2b");
+                        });
+                        return x => {
+                            order.push("instance field injected initializer evaluation 2");
+                            return x;
+                        };
+                    }))
+                    a = order.push("instance field initializer evaluation");
 
-                constructor() {
-                    order.push("pre-super constructor evaluation");
-                    super();
-                    order.push("post-super constructor evaluation");
+                    [(order.push("instance computed property name evaluation"), "b")]() {}
+
+                    constructor() {
+                        order.push("pre-super constructor evaluation");
+                        super();
+                        order.push("post-super constructor evaluation");
+                    }
+
+                    @(order.push("static method decorator evaluation 1"), ((t, c) => {
+                        order.push("static method decorator application 1");
+                        c.addInitializer(() => {
+                            order.push("static method extra initializer evaluation 1a");
+                        });
+                        c.addInitializer(() => {
+                            order.push("static method extra initializer evaluation 1b");
+                        });
+                    }))
+                    @(order.push("static method decorator evaluation 2"), ((t, c) => {
+                        order.push("static method decorator application 2");
+                        c.addInitializer(() => {
+                            order.push("static method extra initializer evaluation 2a");
+                        });
+                        c.addInitializer(() => {
+                            order.push("static method extra initializer evaluation 2b");
+                        });
+                    }))
+                    static x() {}
+
+                    @(order.push("static auto-accessor decorator evaluation 1"), ((t, c) => {
+                        order.push("static auto-accessor decorator application 1");
+                        c.addInitializer(() => {
+                            order.push("static auto-accessor extra initializer evaluation 1a");
+                        });
+                        c.addInitializer(() => {
+                            order.push("static auto-accessor extra initializer evaluation 1b");
+                        });
+                        return {
+                            init: x => {
+                                order.push("static auto-accessor injected initializer evaluation 1");
+                                return x;
+                            }
+                        };
+                    }))
+                    @(order.push("static auto-accessor decorator evaluation 2"), ((t, c) => {
+                        order.push("static auto-accessor decorator application 2");
+                        c.addInitializer(() => {
+                            order.push("static auto-accessor extra initializer evaluation 2a");
+                        });
+                        c.addInitializer(() => {
+                            order.push("static auto-accessor extra initializer evaluation 2b");
+                        });
+                        return {
+                            init: x => {
+                                order.push("static auto-accessor injected initializer evaluation 2");
+                                return x;
+                            }
+                        };
+                    }))
+                    static accessor w = order.push("static auto-accessor initializer evaluation");
+
+                    @(order.push("instance method decorator evaluation 1"), ((t, c) => {
+                        order.push("instance method decorator application 1");
+                        c.addInitializer(() => {
+                            order.push("instance method extra initializer evaluation 1a");
+                        });
+                        c.addInitializer(() => {
+                            order.push("instance method extra initializer evaluation 1b");
+                        });
+                    }))
+                    @(order.push("instance method decorator evaluation 2"), ((t, c) => {
+                        order.push("instance method decorator application 2");
+                        c.addInitializer(() => {
+                            order.push("instance method extra initializer evaluation 2a");
+                        });
+                        c.addInitializer(() => {
+                            order.push("instance method extra initializer evaluation 2b");
+                        });
+                    }))
+                    c() {}
+
+                    @(order.push("instance auto-accessor decorator evaluation 1"), ((t, c) => {
+                        order.push("instance auto-accessor decorator application 1");
+                        c.addInitializer(() => {
+                            order.push("instance auto-accessor extra initializer evaluation 1a");
+                        });
+                        c.addInitializer(() => {
+                            order.push("instance auto-accessor extra initializer evaluation 1b");
+                        });
+                        return {
+                            init: x => {
+                                order.push("instance auto-accessor injected initializer evaluation 1");
+                                return x;
+                            }
+                        };
+                    }))
+                    @(order.push("instance auto-accessor decorator evaluation 2"), ((t, c) => {
+                        order.push("instance auto-accessor decorator application 2");
+                        c.addInitializer(() => {
+                            order.push("instance auto-accessor extra initializer evaluation 2a");
+                        });
+                        c.addInitializer(() => {
+                            order.push("instance auto-accessor extra initializer evaluation 2b");
+                        });
+                        return {
+                            init: x => {
+                                order.push("instance auto-accessor injected initializer evaluation 2");
+                                return x;
+                            }
+                        };
+                    }))
+                    accessor d = order.push("instance auto-accessor initializer evaluation");
                 }
 
-                @(order.push("static method decorator evaluation 1"), ((t, c) => {
-                    order.push("static method decorator application 1");
-                    c.addInitializer(() => {
-                        order.push("static method extra initializer evaluation 1a");
-                    });
-                    c.addInitializer(() => {
-                        order.push("static method extra initializer evaluation 1b");
-                    });
-                }))
-                @(order.push("static method decorator evaluation 2"), ((t, c) => {
-                    order.push("static method decorator application 2");
-                    c.addInitializer(() => {
-                        order.push("static method extra initializer evaluation 2a");
-                    });
-                    c.addInitializer(() => {
-                        order.push("static method extra initializer evaluation 2b");
-                    });
-                }))
-                static x() {}
+                order.push("instance construction");
+                new Derived();
+                order.push("done");
+            `;
 
-                @(order.push("static auto-accessor decorator evaluation 1"), ((t, c) => {
-                    order.push("static auto-accessor decorator application 1");
-                    c.addInitializer(() => {
-                        order.push("static auto-accessor extra initializer evaluation 1a");
-                    });
-                    c.addInitializer(() => {
-                        order.push("static auto-accessor extra initializer evaluation 1b");
-                    });
-                    return {
-                        init: x => {
-                            order.push("static auto-accessor injected initializer evaluation 1");
-                            return x;
-                        }
-                    };
-                }))
-                @(order.push("static auto-accessor decorator evaluation 2"), ((t, c) => {
-                    order.push("static auto-accessor decorator application 2");
-                    c.addInitializer(() => {
-                        order.push("static auto-accessor extra initializer evaluation 2a");
-                    });
-                    c.addInitializer(() => {
-                        order.push("static auto-accessor extra initializer evaluation 2b");
-                    });
-                    return {
-                        init: x => {
-                            order.push("static auto-accessor injected initializer evaluation 2");
-                            return x;
-                        }
-                    };
-                }))
-                static accessor w = order.push("static auto-accessor initializer evaluation");
+            // TODO: static private method and field evaluation order when that is supported.
+            assert.deepEqual(order, [
+                // first, we evaluate the class decorator expressions and heritage clause in document order:
+                "class decorator evaluation 1",
+                "class decorator evaluation 2",
+                "heritage clause evaluation",
 
-                @(order.push("instance method decorator evaluation 1"), ((t, c) => {
-                    order.push("instance method decorator application 1");
-                    c.addInitializer(() => {
-                        order.push("instance method extra initializer evaluation 1a");
-                    });
-                    c.addInitializer(() => {
-                        order.push("instance method extra initializer evaluation 1b");
-                    });
-                }))
-                @(order.push("instance method decorator evaluation 2"), ((t, c) => {
-                    order.push("instance method decorator application 2");
-                    c.addInitializer(() => {
-                        order.push("instance method extra initializer evaluation 2a");
-                    });
-                    c.addInitializer(() => {
-                        order.push("instance method extra initializer evaluation 2b");
-                    });
-                }))
-                c() {}
+                // next, we evaluate decorators interleaved with computed property names in document order:
+                "static field decorator evaluation 1",
+                "static field decorator evaluation 2",
+                "static computed property name evaluation",
+                "instance field decorator evaluation 1",
+                "instance field decorator evaluation 2",
+                "instance computed property name evaluation",
+                "static method decorator evaluation 1",
+                "static method decorator evaluation 2",
+                "static auto-accessor decorator evaluation 1",
+                "static auto-accessor decorator evaluation 2",
+                "instance method decorator evaluation 1",
+                "instance method decorator evaluation 2",
+                "instance auto-accessor decorator evaluation 1",
+                "instance auto-accessor decorator evaluation 2",
+                // NOTE: at this point, all of the class elements have been collected.
 
-                @(order.push("instance auto-accessor decorator evaluation 1"), ((t, c) => {
-                    order.push("instance auto-accessor decorator application 1");
-                    c.addInitializer(() => {
-                        order.push("instance auto-accessor extra initializer evaluation 1a");
-                    });
-                    c.addInitializer(() => {
-                        order.push("instance auto-accessor extra initializer evaluation 1b");
-                    });
-                    return {
-                        init: x => {
-                            order.push("instance auto-accessor injected initializer evaluation 1");
-                            return x;
-                        }
-                    };
-                }))
-                @(order.push("instance auto-accessor decorator evaluation 2"), ((t, c) => {
-                    order.push("instance auto-accessor decorator application 2");
-                    c.addInitializer(() => {
-                        order.push("instance auto-accessor extra initializer evaluation 2a");
-                    });
-                    c.addInitializer(() => {
-                        order.push("instance auto-accessor extra initializer evaluation 2b");
-                    });
-                    return {
-                        init: x => {
-                            order.push("instance auto-accessor injected initializer evaluation 2");
-                            return x;
-                        }
-                    };
-                }))
-                accessor d = order.push("instance auto-accessor initializer evaluation");
-            }
+                // next, for each static method, in document order, we apply that method's decorators in reverse order:
+                "static method decorator application 2",
+                "static method decorator application 1",
+                "static auto-accessor decorator application 2",
+                "static auto-accessor decorator application 1",
+                // NOTE: at this point, all non-private static methods are defined on the class.
 
-            order.push("instance construction");
-            new Derived();
-            order.push("done");
-        `;
+                // next, for each instance method, in document order, we apply that method's decorators in reverse order:
+                "instance method decorator application 2",
+                "instance method decorator application 1",
+                "instance auto-accessor decorator application 2",
+                "instance auto-accessor decorator application 1",
+                // NOTE: at this point, all non-private instance methods are defined on the prototype.
 
-        // TODO: static private method and field evaluation order when that is supported.
-        assert.deepEqual(order, [
-            // first, we evaluate the class decorator expressions and heritage clause in document order:
-            "class decorator evaluation 1",
-            "class decorator evaluation 2",
-            "heritage clause evaluation",
+                // next, for each static field, in document order, we apply that field's decorators in reverse order:
+                "static field decorator application 2",
+                "static field decorator application 1",
+                // NOTE: at this point, static fields have not yet been applied
 
-            // next, we evaluate decorators interleaved with computed property names in document order:
-            "static field decorator evaluation 1",
-            "static field decorator evaluation 2",
-            "static computed property name evaluation",
-            "instance field decorator evaluation 1",
-            "instance field decorator evaluation 2",
-            "instance computed property name evaluation",
-            "static method decorator evaluation 1",
-            "static method decorator evaluation 2",
-            "static auto-accessor decorator evaluation 1",
-            "static auto-accessor decorator evaluation 2",
-            "instance method decorator evaluation 1",
-            "instance method decorator evaluation 2",
-            "instance auto-accessor decorator evaluation 1",
-            "instance auto-accessor decorator evaluation 2",
-            // NOTE: at this point, all of the class elements have been collected.
+                // next, for each instance field, in document order, we apply that field's decorators in reverse order:
+                "instance field decorator application 2",
+                "instance field decorator application 1",
+                // NOTE: at this point, instance fields have not yet been applied
 
-            // next, for each static method, in document order, we apply that method's decorators in reverse order:
-            "static method decorator application 2",
-            "static method decorator application 1",
-            "static auto-accessor decorator application 2",
-            "static auto-accessor decorator application 1",
-            // NOTE: at this point, all non-private static methods are defined on the class.
+                // next, apply class decorators in reverse order:
+                "class decorator application 2",
+                "class decorator application 1",
+                // NOTE: at this point, any constructor replacement has occurred.
+                // NOTE: at this point the local class binding (i.e., the class name) has been initialized and can be
+                //       referenced
+                // NOTE: at this point, static private methods will be installed (TODO: on the replacement class)
 
-            // next, for each instance method, in document order, we apply that method's decorators in reverse order:
-            "instance method decorator application 2",
-            "instance method decorator application 1",
-            "instance auto-accessor decorator application 2",
-            "instance auto-accessor decorator application 1",
-            // NOTE: at this point, all non-private instance methods are defined on the prototype.
+                // next, static extra initializers are applied in the order they were added (i.e., methods before fields,
+                // reverse order of decorator evaluation) and are applied to the replacement class.
+                "static method extra initializer evaluation 2a",
+                "static method extra initializer evaluation 2b",
+                "static method extra initializer evaluation 1a",
+                "static method extra initializer evaluation 1b",
+                "static auto-accessor extra initializer evaluation 2a",
+                "static auto-accessor extra initializer evaluation 2b",
+                "static auto-accessor extra initializer evaluation 1a",
+                "static auto-accessor extra initializer evaluation 1b",
+                "static field extra initializer evaluation 2a",
+                "static field extra initializer evaluation 2b",
+                "static field extra initializer evaluation 1a",
+                "static field extra initializer evaluation 1b",
 
-            // next, for each static field, in document order, we apply that field's decorators in reverse order:
-            "static field decorator application 2",
-            "static field decorator application 1",
-            // NOTE: at this point, static fields have not yet been applied
+                // next, static initializers (i.e., fields, auto-accessors, and static blocks) are evaluated in document
+                // order and applied to the replacement class:
+                "static block evaluation",
+                "static field initializer evaluation",
+                "static field injected initializer evaluation 2",
+                "static field injected initializer evaluation 1",
+                "static auto-accessor initializer evaluation",
+                "static auto-accessor injected initializer evaluation 2",
+                "static auto-accessor injected initializer evaluation 1",
+                // NOTE: at this point, static private fields will be installed (TODO: on the replacement class)
 
-            // next, for each instance field, in document order, we apply that field's decorators in reverse order:
-            "instance field decorator application 2",
-            "instance field decorator application 1",
-            // NOTE: at this point, instance fields have not yet been applied
+                // finally, class extra initializers are applied in the order they were added (i.e., methods before fields,
+                // reverse order of decorator evaluation).
+                "class extra initializer evaluation 2a",
+                "class extra initializer evaluation 2b",
+                "class extra initializer evaluation 1a",
+                "class extra initializer evaluation 1b",
+                // NOTE: at this point, class definition evaluation has finished.
 
-            // next, apply class decorators in reverse order:
-            "class decorator application 2",
-            "class decorator application 1",
-            // NOTE: at this point, any constructor replacement has occurred.
-            // NOTE: at this point the local class binding (i.e., the class name) has been initialized and can be
-            //       referenced
-            // NOTE: at this point, static private methods will be installed (TODO: on the replacement class)
+                // now we move on to construction:
+                "instance construction",
 
-            // next, static extra initializers are applied in the order they were added (i.e., methods before fields,
-            // reverse order of decorator evaluation) and are applied to the replacement class.
-            "static method extra initializer evaluation 2a",
-            "static method extra initializer evaluation 2b",
-            "static method extra initializer evaluation 1a",
-            "static method extra initializer evaluation 1b",
-            "static auto-accessor extra initializer evaluation 2a",
-            "static auto-accessor extra initializer evaluation 2b",
-            "static auto-accessor extra initializer evaluation 1a",
-            "static auto-accessor extra initializer evaluation 1b",
-            "static field extra initializer evaluation 2a",
-            "static field extra initializer evaluation 2b",
-            "static field extra initializer evaluation 1a",
-            "static field extra initializer evaluation 1b",
+                // first, statements before `super()` are evaluated:
+                "pre-super constructor evaluation",
+                // NOTE: at this point `this` is still not yet bound.
 
-            // next, static initializers (i.e., fields, auto-accessors, and static blocks) are evaluated in document
-            // order and applied to the replacement class:
-            "static block evaluation",
-            "static field initializer evaluation",
-            "static field injected initializer evaluation 2",
-            "static field injected initializer evaluation 1",
-            "static auto-accessor initializer evaluation",
-            "static auto-accessor injected initializer evaluation 2",
-            "static auto-accessor injected initializer evaluation 1",
-            // NOTE: at this point, static private fields will be installed (TODO: on the replacement class)
+                // next, statements in the superclass constructor are evaluated:
+                "superclass construction",
+                // NOTE: as we return from the `super()` call, we start instance field initialization.
+                // NOTE: at this point, `this` is bound.
+                // NOTE: at this point, instance private methods are installed.
 
-            // finally, class extra initializers are applied in the order they were added (i.e., methods before fields,
-            // reverse order of decorator evaluation).
-            "class extra initializer evaluation 2a",
-            "class extra initializer evaluation 2b",
-            "class extra initializer evaluation 1a",
-            "class extra initializer evaluation 1b",
-            // NOTE: at this point, class definition evaluation has finished.
+                // next, instance extra initializers are applied in the order they were added (i.e., methods before fields,
+                // reverse order of decorator evaluation).
+                "instance method extra initializer evaluation 2a",
+                "instance method extra initializer evaluation 2b",
+                "instance method extra initializer evaluation 1a",
+                "instance method extra initializer evaluation 1b",
+                "instance auto-accessor extra initializer evaluation 2a",
+                "instance auto-accessor extra initializer evaluation 2b",
+                "instance auto-accessor extra initializer evaluation 1a",
+                "instance auto-accessor extra initializer evaluation 1b",
+                "instance field extra initializer evaluation 2a",
+                "instance field extra initializer evaluation 2b",
+                "instance field extra initializer evaluation 1a",
+                "instance field extra initializer evaluation 1b",
 
-            // now we move on to construction:
-            "instance construction",
+                // next, instance initializers (i.e., fields, auto-accessors, and static blocks) are evaluated in document
+                // order:
+                "instance field initializer evaluation",
+                "instance field injected initializer evaluation 2",
+                "instance field injected initializer evaluation 1",
+                "instance auto-accessor initializer evaluation",
+                "instance auto-accessor injected initializer evaluation 2",
+                "instance auto-accessor injected initializer evaluation 1",
+                // NOTE: at this point, instance private fields will be installed.
 
-            // first, statements before `super()` are evaluated:
-            "pre-super constructor evaluation",
-            // NOTE: at this point `this` is still not yet bound.
+                // finally, statements in the constructor after the call to `super()` are evaluated:
+                "post-super constructor evaluation",
 
-            // next, statements in the superclass constructor are evaluated:
-            "superclass construction",
-            // NOTE: as we return from the `super()` call, we start instance field initialization.
-            // NOTE: at this point, `this` is bound.
-            // NOTE: at this point, instance private methods are installed.
-
-            // next, instance extra initializers are applied in the order they were added (i.e., methods before fields,
-            // reverse order of decorator evaluation).
-            "instance method extra initializer evaluation 2a",
-            "instance method extra initializer evaluation 2b",
-            "instance method extra initializer evaluation 1a",
-            "instance method extra initializer evaluation 1b",
-            "instance auto-accessor extra initializer evaluation 2a",
-            "instance auto-accessor extra initializer evaluation 2b",
-            "instance auto-accessor extra initializer evaluation 1a",
-            "instance auto-accessor extra initializer evaluation 1b",
-            "instance field extra initializer evaluation 2a",
-            "instance field extra initializer evaluation 2b",
-            "instance field extra initializer evaluation 1a",
-            "instance field extra initializer evaluation 1b",
-
-            // next, instance initializers (i.e., fields, auto-accessors, and static blocks) are evaluated in document
-            // order:
-            "instance field initializer evaluation",
-            "instance field injected initializer evaluation 2",
-            "instance field injected initializer evaluation 1",
-            "instance auto-accessor initializer evaluation",
-            "instance auto-accessor injected initializer evaluation 2",
-            "instance auto-accessor injected initializer evaluation 1",
-            // NOTE: at this point, instance private fields will be installed.
-
-            // finally, statements in the constructor after the call to `super()` are evaluated:
-            "post-super constructor evaluation",
-
-            // and now evaluation has completed:
-            "done"
-        ]);
-    });
+                // and now evaluation has completed:
+                "done"
+            ]);
+        });
+    }
 });
