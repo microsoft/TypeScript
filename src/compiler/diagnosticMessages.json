@@ -3864,6 +3864,10 @@
         "category": "Error",
         "code": 4084
     },
+    "Extends clause for inferred type '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4085
+    },
     "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
         "category": "Error",
         "code": 4090
