@@ -57,7 +57,7 @@ const t6 = { a: 'test', b: 'test' };
 >b : Symbol(b, Decl(a.js, 43, 23))
 
 /**
- * @satisfies {T2}
+ * @satisfies {T3}
  */
 const t7 = { a: "a" };
 >t7 : Symbol(t7, Decl(a.js, 48, 5))

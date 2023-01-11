@@ -49,6 +49,6 @@ const t5 = { a: 'test' };
 const t6 = { a: 'test', b: 'test' };
 
 /**
- * @satisfies {T2}
+ * @satisfies {T3}
  */
 const t7 = { a: "a" };
