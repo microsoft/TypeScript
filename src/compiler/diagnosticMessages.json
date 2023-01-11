@@ -931,6 +931,10 @@
         "category": "Error",
         "code": 1283
     },
+    "An import alias cannot resolve to a type or type-only declaration when 'verbatimModuleSyntax' is enabled.": {
+        "category": "Error",
+        "code": 1284
+    },
 
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
