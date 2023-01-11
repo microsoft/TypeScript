@@ -2028,12 +2028,17 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 }
             }
 
-            if (shouldTransformAutoAccessors && (shouldTransformPrivateElementsOrClassStaticBlocks || shouldTransformPrivateStaticElementsInClass)) {
+            if (shouldTransformAutoAccessorsInCurrentClass()) {
                 for (const member of node.members) {
                     if (isAutoAccessorPropertyDeclaration(member)) {
-                        if (shouldTransformAutoAccessors || shouldTransformPrivateStaticElementsInClass && hasStaticModifier(member) && isPrivateIdentifier(member.name)) {
-                            const storageName = factory.getGeneratedPrivateNameForNode(member.name, /*prefix*/ undefined, "_accessor_storage");
+                        const storageName = factory.getGeneratedPrivateNameForNode(member.name, /*prefix*/ undefined, "_accessor_storage");
+                        if (shouldTransformPrivateElementsOrClassStaticBlocks ||
+                            shouldTransformPrivateStaticElementsInClass && hasStaticModifier(member)) {
                             addPrivateIdentifierToEnvironment(member, storageName, addPrivateIdentifierPropertyDeclarationToEnvironment);
+                        }
+                        else {
+                            const privateEnv = getPrivateIdentifierEnvironment();
+                            setPrivateIdentifier(privateEnv, storageName, { kind: "untransformed" });
                         }
                     }
                 }

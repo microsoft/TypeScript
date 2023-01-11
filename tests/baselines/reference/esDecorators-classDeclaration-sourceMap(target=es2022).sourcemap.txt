@@ -60,7 +60,7 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 >>>let C = (() => {
 1 >^^^^
 2 >    ^
-3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >declare var dec: any;
   >
   >@dec
@@ -70,7 +70,7 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 1 >Emitted(50, 5) Source(5, 7) + SourceIndex(0)
 2 >Emitted(50, 6) Source(5, 8) + SourceIndex(0)
 ---
->>>    var _method_get, _x_get, _x_set, _y, _z_accessor_storage, _z_get, _z_set, _z_1_accessor_storage;
+>>>    var _method_get, _x_get, _x_set, _y, _z_accessor_storage, _z_get, _z_set;
 >>>    let _classDecorators = [dec, dec];
 1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 2 >                            ^^^
@@ -120,7 +120,7 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 2 >Emitted(76, 10) Source(5, 8) + SourceIndex(0)
 ---
 >>>        static { __setFunctionName(this, "C"); }
->>>        static { _z_1_accessor_storage = new WeakMap(), _method_get = function _method_get() { return _static_private_method_descriptor.value; }, _x_get = function _x_get() { return _static_private_get_x_descriptor.get.call(this); }, _x_set = function _x_set(value) { return _static_private_set_x_descriptor.set.call(this, value); }, _z_get = function _z_get() { return _static_private_z_descriptor.get.call(this); }, _z_set = function _z_set(value) { return _static_private_z_descriptor.set.call(this, value); }; }
+>>>        static { _method_get = function _method_get() { return _static_private_method_descriptor.value; }, _x_get = function _x_get() { return _static_private_get_x_descriptor.get.call(this); }, _x_set = function _x_set(value) { return _static_private_set_x_descriptor.set.call(this, value); }, _z_get = function _z_get() { return _static_private_z_descriptor.get.call(this); }, _z_set = function _z_set(value) { return _static_private_z_descriptor.set.call(this, value); }; }
 >>>        static {
 >>>            _method_decorators = [dec, dec];
 1->^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -736,45 +736,44 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 4 >Emitted(107, 109) Source(20, 10) + SourceIndex(0)
 5 >Emitted(107, 112) Source(20, 11) + SourceIndex(0)
 ---
->>>        #z_1_accessor_storage = __runInitializers(this, _z_initializers, 1);
+>>>        #z_accessor_storage = __runInitializers(this, _z_initializers, 1);
 1 >^^^^^^^^
-2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                                                         ^
-4 >                                                                          ^^
-5 >                                                                            ^^^^^^^^^->
+2 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                                       ^
+4 >                                                                        ^^
 1 >
   >
   >    @dec
   >    @dec
   >    
 2 >        accessor z = 
-3 >                                                                         1
-4 >                                                                          ;
+3 >                                                                       1
+4 >                                                                        ;
 1 >Emitted(108, 9) Source(24, 5) + SourceIndex(0)
-2 >Emitted(108, 74) Source(24, 18) + SourceIndex(0)
-3 >Emitted(108, 75) Source(24, 19) + SourceIndex(0)
-4 >Emitted(108, 77) Source(24, 20) + SourceIndex(0)
+2 >Emitted(108, 72) Source(24, 18) + SourceIndex(0)
+3 >Emitted(108, 73) Source(24, 19) + SourceIndex(0)
+4 >Emitted(108, 75) Source(24, 20) + SourceIndex(0)
 ---
->>>        get z() { return __classPrivateFieldGet(this, _z_1_accessor_storage, "f"); }
-1->^^^^^^^^
+>>>        get z() { return this.#z_accessor_storage; }
+1 >^^^^^^^^
 2 >        ^^^^
 3 >            ^
-4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-5 >                                                                                    ^^^^^^->
-1->
+4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+5 >                                                    ^^^^^^^->
+1 >
 2 >        accessor 
 3 >            z
 4 >              = 1;
-1->Emitted(109, 9) Source(24, 5) + SourceIndex(0)
+1 >Emitted(109, 9) Source(24, 5) + SourceIndex(0)
 2 >Emitted(109, 13) Source(24, 14) + SourceIndex(0)
 3 >Emitted(109, 14) Source(24, 15) + SourceIndex(0)
-4 >Emitted(109, 85) Source(24, 20) + SourceIndex(0)
+4 >Emitted(109, 53) Source(24, 20) + SourceIndex(0)
 ---
->>>        set z(value) { __classPrivateFieldSet(this, _z_1_accessor_storage, value, "f"); }
+>>>        set z(value) { this.#z_accessor_storage = value; }
 1->^^^^^^^^
 2 >        ^^^^
 3 >            ^
-4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1->
 2 >        accessor 
 3 >            z
@@ -782,7 +781,7 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 1->Emitted(110, 9) Source(24, 5) + SourceIndex(0)
 2 >Emitted(110, 13) Source(24, 14) + SourceIndex(0)
 3 >Emitted(110, 14) Source(24, 15) + SourceIndex(0)
-4 >Emitted(110, 90) Source(24, 20) + SourceIndex(0)
+4 >Emitted(110, 59) Source(24, 20) + SourceIndex(0)
 ---
 >>>        static {
 >>>            _y = { value: __runInitializers(_classThis, _static_private_y_initializers, 1) };

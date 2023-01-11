@@ -85,7 +85,7 @@ class C {
 //// [esDecorators-classExpression-commentPreservation.js]
 /*1*/
 ((() => {
-    var _method_get, _x_get, _x_set, _y, _z_accessor_storage, _z_get, _z_set, _z_1_accessor_storage, _a;
+    var _method_get, _x_get, _x_set, _y, _z_accessor_storage, _z_get, _z_set, _a;
     let _classDecorators = [dec, dec];
     let _classDescriptor;
     let _classExtraInitializers = [];
@@ -111,7 +111,7 @@ class C {
     let _z_decorators;
     let _z_initializers = [];
     var C = (_a = class {
-            static { _z_1_accessor_storage = new WeakMap(), _method_get = function _method_get() { return _static_private_method_descriptor.value; }, _x_get = function _x_get() { return _static_private_get_x_descriptor.get.call(this); }, _x_set = function _x_set(value) { return _static_private_set_x_descriptor.set.call(this, value); }, _z_get = function _z_get() { return _static_private_z_descriptor.get.call(this); }, _z_set = function _z_set(value) { return _static_private_z_descriptor.set.call(this, value); }; }
+            static { _method_get = function _method_get() { return _static_private_method_descriptor.value; }, _x_get = function _x_get() { return _static_private_get_x_descriptor.get.call(this); }, _x_set = function _x_set(value) { return _static_private_set_x_descriptor.set.call(this, value); }, _z_get = function _z_get() { return _static_private_z_descriptor.get.call(this); }, _z_set = function _z_set(value) { return _static_private_z_descriptor.set.call(this, value); }; }
             static {
                 _method_decorators = [dec, dec];
                 _get_x_decorators = [dec, dec];
@@ -145,10 +145,10 @@ class C {
             set x(value) { }
             /*14*/
             y = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers, 1));
-            #z_1_accessor_storage = __runInitializers(this, _z_initializers, 1);
+            #z_accessor_storage = __runInitializers(this, _z_initializers, 1);
             /*17*/
-            get z() { return __classPrivateFieldGet(this, _z_1_accessor_storage, "f"); }
-            set z(value) { __classPrivateFieldSet(this, _z_1_accessor_storage, value, "f"); }
+            get z() { return this.#z_accessor_storage; }
+            set z(value) { this.#z_accessor_storage = value; }
             static {
                 /*29*/
                 _y = { value: __runInitializers(_classThis, _static_private_y_initializers, 1) };
