@@ -41,12 +41,12 @@ import {
     find,
     findIndex,
     firstDefined,
+    firstOrUndefinedIterator,
     flatten,
     forEach,
     forEachEntry,
     getBaseFileName,
     getDirectoryPath,
-    getEntries,
     getFileMatcherPatterns,
     getLocaleSpecificMessage,
     getNormalizedAbsolutePath,
@@ -85,7 +85,7 @@ import {
     NewLineKind,
     Node,
     NodeArray,
-    nodeModuleNameResolver,
+    nodeNextJsonConfigResolver,
     normalizePath,
     normalizeSlashes,
     NumericLiteral,
@@ -128,7 +128,7 @@ export const compileOnSaveCommandLineOption: CommandLineOption = {
     defaultValueDescription: false,
 };
 
-const jsxOptionMap = new Map(getEntries({
+const jsxOptionMap = new Map(Object.entries({
     "preserve": JsxEmit.Preserve,
     "react-native": JsxEmit.ReactNative,
     "react": JsxEmit.React,
@@ -137,7 +137,7 @@ const jsxOptionMap = new Map(getEntries({
 }));
 
 /** @internal */
-export const inverseJsxOptionMap = new Map(arrayFrom(mapIterator(jsxOptionMap.entries(), ([key, value]: [string, JsxEmit]) => ["" + value, key] as const)));
+export const inverseJsxOptionMap = new Map(mapIterator(jsxOptionMap.entries(), ([key, value]: [string, JsxEmit]) => ["" + value, key] as const));
 
 // NOTE: The order here is important to default lib ordering as entries will have the same
 //       order in the generated program (see `getDefaultLibPriority` in program.ts). This
@@ -208,6 +208,7 @@ const libEntries: [string, string][] = [
     ["es2022.object", "lib.es2022.object.d.ts"],
     ["es2022.sharedmemory", "lib.es2022.sharedmemory.d.ts"],
     ["es2022.string", "lib.es2022.string.d.ts"],
+    ["es2022.regexp", "lib.es2022.regexp.d.ts"],
     ["esnext.array", "lib.es2022.array.d.ts"],
     ["esnext.symbol", "lib.es2019.symbol.d.ts"],
     ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
@@ -240,7 +241,7 @@ export const libMap = new Map(libEntries);
 export const optionsForWatch: CommandLineOption[] = [
     {
         name: "watchFile",
-        type: new Map(getEntries({
+        type: new Map(Object.entries({
             fixedpollinginterval: WatchFileKind.FixedPollingInterval,
             prioritypollinginterval: WatchFileKind.PriorityPollingInterval,
             dynamicprioritypolling: WatchFileKind.DynamicPriorityPolling,
@@ -254,7 +255,7 @@ export const optionsForWatch: CommandLineOption[] = [
     },
     {
         name: "watchDirectory",
-        type: new Map(getEntries({
+        type: new Map(Object.entries({
             usefsevents: WatchDirectoryKind.UseFsEvents,
             fixedpollinginterval: WatchDirectoryKind.FixedPollingInterval,
             dynamicprioritypolling: WatchDirectoryKind.DynamicPriorityPolling,
@@ -266,7 +267,7 @@ export const optionsForWatch: CommandLineOption[] = [
     },
     {
         name: "fallbackPolling",
-        type: new Map(getEntries({
+        type: new Map(Object.entries({
             fixedinterval: PollingWatchKind.FixedInterval,
             priorityinterval: PollingWatchKind.PriorityInterval,
             dynamicpriority: PollingWatchKind.DynamicPriority,
@@ -501,7 +502,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
 export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
     name: "target",
     shortName: "t",
-    type: new Map(getEntries({
+    type: new Map(Object.entries({
         es3: ScriptTarget.ES3,
         es5: ScriptTarget.ES5,
         es6: ScriptTarget.ES2015,
@@ -530,7 +531,7 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
 export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
     name: "module",
     shortName: "m",
-    type: new Map(getEntries({
+    type: new Map(Object.entries({
         none: ModuleKind.None,
         commonjs: ModuleKind.CommonJS,
         amd: ModuleKind.AMD,
@@ -755,7 +756,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
     {
         name: "importsNotUsedAsValues",
-        type: new Map(getEntries({
+        type: new Map(Object.entries({
             remove: ImportsNotUsedAsValues.Remove,
             preserve: ImportsNotUsedAsValues.Preserve,
             error: ImportsNotUsedAsValues.Error,
@@ -967,7 +968,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     // Module Resolution
     {
         name: "moduleResolution",
-        type: new Map(getEntries({
+        type: new Map(Object.entries({
             // N.B. The first entry specifies the value shown in `tsc --init`
             node10: ModuleResolutionKind.Node10,
             node: ModuleResolutionKind.Node10,
@@ -1212,6 +1213,14 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Enable_importing_json_files,
         defaultValueDescription: false,
     },
+    {
+        name: "allowArbitraryExtensions",
+        type: "boolean",
+        affectsModuleResolution: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Enable_importing_files_with_any_extension_provided_a_declaration_file_is_present,
+        defaultValueDescription: false,
+    },
 
     {
         name: "out",
@@ -1262,7 +1271,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
     {
         name: "newLine",
-        type: new Map(getEntries({
+        type: new Map(Object.entries({
             crlf: NewLineKind.CarriageReturnLineFeed,
             lf: NewLineKind.LineFeed
         })),
@@ -1508,7 +1517,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
     {
         name: "moduleDetection",
-        type: new Map(getEntries({
+        type: new Map(Object.entries({
             auto: ModuleDetectionKind.Auto,
             legacy: ModuleDetectionKind.Legacy,
             force: ModuleDetectionKind.Force,
@@ -2294,7 +2303,7 @@ function convertConfigFileToObject(sourceFile: JsonSourceFile, errors: Push<Diag
 /**
  * Convert the json syntax tree into the json value
  */
-export function convertToObject(sourceFile: JsonSourceFile, errors: Push<Diagnostic>): any {
+export function convertToObject(sourceFile: JsonSourceFile, errors: Diagnostic[]): any {
     return convertToObjectWorker(sourceFile, sourceFile.statements[0]?.expression, errors, /*returnValue*/ true, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
 }
 
@@ -3183,7 +3192,7 @@ function parseConfig(
     basePath: string,
     configFileName: string | undefined,
     resolutionStack: string[],
-    errors: Push<Diagnostic>,
+    errors: Diagnostic[],
     extendedConfigCache?: Map<string, ExtendedConfigCacheEntry>
 ): ParsedTsconfig {
     basePath = normalizeSlashes(basePath);
@@ -3420,7 +3429,7 @@ function getExtendsConfigPath(
         return extendedConfigPath;
     }
     // If the path isn't a rooted or relative path, resolve like a module
-    const resolved = nodeModuleNameResolver(extendedConfig, combinePaths(basePath, "tsconfig.json"), { moduleResolution: ModuleResolutionKind.Node10 }, host, /*cache*/ undefined, /*projectRefs*/ undefined, /*lookupConfig*/ true);
+    const resolved = nodeNextJsonConfigResolver(extendedConfig, combinePaths(basePath, "tsconfig.json"), host);
     if (resolved.resolvedModule) {
         return resolved.resolvedModule.resolvedFileName;
     }
@@ -3438,7 +3447,7 @@ function getExtendedConfig(
     extendedConfigPath: string,
     host: ParseConfigHost,
     resolutionStack: string[],
-    errors: Push<Diagnostic>,
+    errors: Diagnostic[],
     extendedConfigCache: Map<string, ExtendedConfigCacheEntry> | undefined,
     result: ExtendsResult
 ): ParsedTsconfig | undefined {
@@ -4039,8 +4048,8 @@ function getDefaultValueForOption(option: CommandLineOption): {} {
         case "object":
             return {};
         default:
-            const iterResult = option.type.keys().next();
-            if (!iterResult.done) return iterResult.value;
+            const value = firstOrUndefinedIterator(option.type.keys());
+            if (value !== undefined) return value;
             return Debug.fail("Expected 'option.type' to have entries.");
     }
 }

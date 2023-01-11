@@ -1,8 +1,8 @@
-/main.ts(1,8): error TS1281: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
-/main.ts(2,13): error TS1281: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
-/main.ts(3,10): error TS1281: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
-/main.ts(5,1): error TS1281: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
-/main.ts(8,1): error TS1282: A top-level 'export' modifier can only be used on type aliases and interfaces in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+/main.ts(1,8): error TS1282: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+/main.ts(2,13): error TS1282: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+/main.ts(3,10): error TS1282: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+/main.ts(5,1): error TS1282: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+/main.ts(8,1): error TS1283: A top-level 'export' modifier can only be used on type aliases and interfaces in a CommonJS module when 'verbatimModuleSyntax' is enabled.
 /main2.ts(2,1): error TS2309: An export assignment cannot be used in a module with other exported elements.
 
 
@@ -14,22 +14,22 @@
 ==== /main.ts (5 errors) ====
     import esmy from "./decl"; // error
            ~~~~
-!!! error TS1281: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+!!! error TS1282: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
     import * as esmy2 from "./decl"; // error
                 ~~~~~
-!!! error TS1281: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+!!! error TS1282: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
     import { funciton } from "./decl"; // error
              ~~~~~~~~
-!!! error TS1281: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+!!! error TS1282: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
     import type { funciton as funciton2 } from "./decl"; // ok I guess?
     import("./decl"); // error
     ~~~~~~~~~~~~~~~~
-!!! error TS1281: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+!!! error TS1282: ESM syntax is not allowed in a CommonJS module when 'verbatimModuleSyntax' is enabled.
     type T = typeof import("./decl"); // ok
     export {}; // error
     export const x = 1; // error
     ~~~~~~
-!!! error TS1282: A top-level 'export' modifier can only be used on type aliases and interfaces in a CommonJS module when 'verbatimModuleSyntax' is enabled.
+!!! error TS1283: A top-level 'export' modifier can only be used on type aliases and interfaces in a CommonJS module when 'verbatimModuleSyntax' is enabled.
     export interface I {} // ok
     export type { T }; // ok
     

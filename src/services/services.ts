@@ -6,6 +6,7 @@ import {
     ApplicableRefactorInfo,
     ApplyCodeActionCommandResult,
     AssignmentDeclarationKind,
+    AutoGenerateInfo,
     BaseType,
     BinaryExpression,
     BreakpointResolver,
@@ -85,7 +86,6 @@ import {
     FormatCodeSettings,
     formatting,
     FunctionLikeDeclaration,
-    GeneratedIdentifierFlags,
     getAdjustedRenameLocation,
     getAllSuperTypeNodes,
     getAssignmentDeclarationKind,
@@ -94,7 +94,6 @@ import {
     getDefaultLibFileName,
     getDirectoryPath,
     getEmitDeclarations,
-    getEntries,
     getEscapedTextOfIdentifierOrLiteral,
     getFileEmitOutput,
     getImpliedNodeFormatForFile,
@@ -735,7 +734,7 @@ class TokenObject<TKind extends SyntaxKind> extends TokenOrIdentifierObject impl
 class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
     public kind: SyntaxKind.Identifier = SyntaxKind.Identifier;
     public escapedText!: __String;
-    public autoGenerateFlags!: GeneratedIdentifierFlags;
+    public autoGenerate: AutoGenerateInfo | undefined;
     declare _primaryExpressionBrand: any;
     declare _memberExpressionBrand: any;
     declare _leftHandSideExpressionBrand: any;
@@ -758,7 +757,7 @@ IdentifierObject.prototype.kind = SyntaxKind.Identifier;
 class PrivateIdentifierObject extends TokenOrIdentifierObject implements PrivateIdentifier {
     public kind: SyntaxKind.PrivateIdentifier = SyntaxKind.PrivateIdentifier;
     public escapedText!: __String;
-    // public symbol!: Symbol;
+    public autoGenerate: AutoGenerateInfo | undefined;
     declare _primaryExpressionBrand: any;
     declare _memberExpressionBrand: any;
     declare _leftHandSideExpressionBrand: any;
@@ -2327,7 +2326,7 @@ export function createLanguageService(
         return OutliningElementsCollector.collectElements(sourceFile, cancellationToken);
     }
 
-    const braceMatching = new Map(getEntries({
+    const braceMatching = new Map(Object.entries({
         [SyntaxKind.OpenBraceToken]: SyntaxKind.CloseBraceToken,
         [SyntaxKind.OpenParenToken]: SyntaxKind.CloseParenToken,
         [SyntaxKind.OpenBracketToken]: SyntaxKind.CloseBracketToken,

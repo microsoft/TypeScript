@@ -335,6 +335,7 @@ declare namespace FourSlashInterface {
         baselineGetFileReferences(fileName: string): void;
         symbolAtLocation(startRange: Range, ...declarationRanges: Range[]): void;
         typeOfSymbolAtLocation(range: Range, symbol: any, expected: string): void;
+        typeAtLocation(range: Range, expected: string): void;
         /** @deprecated Use baselineFindAllReferences instead */
         singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[] | string): void;
         rangesAreOccurrences(isWriteAccess?: boolean, ranges?: Range[]): void;

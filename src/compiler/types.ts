@@ -809,10 +809,10 @@ export const enum NodeFlags {
     /** @internal */ PossiblyContainsDynamicImport = 1 << 21,
     /** @internal */ PossiblyContainsImportMeta    = 1 << 22,
 
-    JSDoc                                         = 1 << 23, // If node was parsed inside jsdoc
+    JSDoc                                          = 1 << 23, // If node was parsed inside jsdoc
     /** @internal */ Ambient                       = 1 << 24, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
     /** @internal */ InWithStatement               = 1 << 25, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
-    JsonFile                                      = 1 << 26, // If node was parsed in a Json
+    JsonFile                                       = 1 << 26, // If node was parsed in a Json
     /** @internal */ TypeCached                    = 1 << 27, // If a type was cached for node at any point
     /** @internal */ Deprecated                    = 1 << 28, // If has '@deprecated' JSDoc tag
 
@@ -1002,6 +1002,7 @@ export type ForEachChildNodes =
     | JSDocDeprecatedTag
     | JSDocThrowsTag
     | JSDocOverrideTag
+    | JSDocOverloadTag
     ;
 
 /** @internal */
@@ -1678,10 +1679,7 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
      */
     readonly escapedText: __String;
     readonly originalKeywordKind?: SyntaxKind;                // Original syntaxKind which get set so that we can report an error later
-    /** @internal */ readonly autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
-    /** @internal */ readonly autoGenerateId?: number;           // Ensures unique generated identifiers get unique names, but clones get the same name.
-    /** @internal */ readonly autoGeneratePrefix?: string | GeneratedNamePart;
-    /** @internal */ readonly autoGenerateSuffix?: string;
+    /** @internal */ readonly autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers.
     /** @internal */ generatedImportReference?: ImportSpecifier; // Reference to the generated import specifier this identifier refers to
     isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
     /** @internal */ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
@@ -1695,8 +1693,16 @@ export interface TransientIdentifier extends Identifier {
 }
 
 /** @internal */
+export interface AutoGenerateInfo {
+    flags: GeneratedIdentifierFlags;            // Specifies whether to auto-generate the text for an identifier.
+    readonly id: number;                        // Ensures unique generated identifiers get unique names, but clones get the same name.
+    readonly prefix?: string | GeneratedNamePart;
+    readonly suffix?: string;
+}
+
+/** @internal */
 export interface GeneratedIdentifier extends Identifier {
-    autoGenerateFlags: GeneratedIdentifierFlags;
+    readonly autoGenerate: AutoGenerateInfo;
 }
 
 export interface QualifiedName extends Node, FlowContainer {
@@ -1774,15 +1780,12 @@ export interface PrivateIdentifier extends PrimaryExpression {
     // escaping not strictly necessary
     // avoids gotchas in transforms and utils
     readonly escapedText: __String;
-    /** @internal */ readonly autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
-    /** @internal */ readonly autoGenerateId?: number;           // Ensures unique generated identifiers get unique names, but clones get the same name.
-    /** @internal */ readonly autoGeneratePrefix?: string | GeneratedNamePart;
-    /** @internal */ readonly autoGenerateSuffix?: string;
+    /** @internal */ readonly autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers.
 }
 
 /** @internal */
 export interface GeneratedPrivateIdentifier extends PrivateIdentifier {
-    autoGenerateFlags: GeneratedIdentifierFlags;
+    readonly autoGenerate: AutoGenerateInfo;
 }
 
 /** @internal */
@@ -5997,9 +6000,6 @@ export interface NodeLinks {
     skipDirectInference?: true;         // Flag set by the API `getContextualType` call on a node when `Completions` is passed to force the checker to skip making inferences to a node's type
     declarationRequiresScopeChange?: boolean; // Set by `useOuterVariableScopeInParameter` in checker when downlevel emit would change the name resolution scope inside of a parameter.
     serializedTypes?: Map<string, SerializedTypeEntry>; // Collection of types serialized at this location
-
-    contextualType?: Type;              // Used to temporarily assign a contextual type during overload resolution
-    inferenceContext?: InferenceContext; // Inference context for contextual type
 }
 
 /** @internal */
@@ -6989,6 +6989,7 @@ export interface CompilerOptions {
     allowImportingTsExtensions?: boolean;
     allowJs?: boolean;
     /** @internal */ allowNonTsExtensions?: boolean;
+    allowArbitraryExtensions?: boolean;
     allowSyntheticDefaultImports?: boolean;
     allowUmdGlobalAccess?: boolean;
     allowUnreachableCode?: boolean;
@@ -7573,7 +7574,7 @@ export interface ResolvedModuleFull extends ResolvedModule {
      * Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
      * This is optional for backwards-compatibility, but will be added if not provided.
      */
-    extension: Extension;
+    extension: string;
     packageId?: PackageId;
 }
 

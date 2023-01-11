@@ -66,7 +66,6 @@ import {
     FunctionLikeDeclaration,
     FunctionTypeNode,
     GeneratedIdentifier,
-    GeneratedIdentifierFlags,
     GeneratedPrivateIdentifier,
     GetAccessorDeclaration,
     getAssignmentDeclarationKind,
@@ -76,6 +75,7 @@ import {
     getElementOrPropertyAccessArgumentExpressionOrName,
     getEmitScriptTarget,
     getJSDocCommentsAndTags,
+    getJSDocRoot,
     getJSDocTypeParameterDeclarations,
     hasAccessorModifier,
     hasDecorators,
@@ -192,6 +192,7 @@ import {
     LabeledStatement,
     lastOrUndefined,
     LeftHandSideExpression,
+    length,
     LiteralExpression,
     LiteralToken,
     MemberName,
@@ -601,7 +602,7 @@ export const supportedLocaleDirectories = ["cs", "de", "es", "fr", "it", "ja", "
 export function validateLocaleAndSetLanguage(
     locale: string,
     sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string | undefined },
-    errors?: Push<Diagnostic>) {
+    errors?: Diagnostic[]) {
     const lowerCaseLocale = locale.toLowerCase();
     const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(lowerCaseLocale);
 
@@ -1211,12 +1212,10 @@ function formatJSDocLink(link: JSDocLink | JSDocLinkCode | JSDocLinkPlain) {
  */
 export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): readonly TypeParameterDeclaration[] {
     if (isJSDocSignature(node)) {
-        if (isJSDoc(node.parent)) {
-            const overloadTag = find(node.parent.tags, (tag) => {
-                return isJSDocOverloadTag(tag) && tag.typeExpression === node;
-            });
-            if (overloadTag) {
-                return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined);
+        if (isJSDocOverloadTag(node.parent)) {
+            const jsDoc = getJSDocRoot(node.parent);
+            if (jsDoc && length(jsDoc.tags)) {
+                return flatMap(jsDoc.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined);
             }
         }
         return emptyArray;
@@ -1476,12 +1475,12 @@ export function isStringTextContainingNode(node: Node): node is StringLiteral | 
 
 /** @internal */
 export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
-    return isIdentifier(node) && (node.autoGenerateFlags! & GeneratedIdentifierFlags.KindMask) > GeneratedIdentifierFlags.None;
+    return isIdentifier(node) && node.autoGenerate !== undefined;
 }
 
 /** @internal */
 export function isGeneratedPrivateIdentifier(node: Node): node is GeneratedPrivateIdentifier {
-    return isPrivateIdentifier(node) && (node.autoGenerateFlags! & GeneratedIdentifierFlags.KindMask) > GeneratedIdentifierFlags.None;
+    return isPrivateIdentifier(node) && node.autoGenerate !== undefined;
 }
 
 // Private Identifiers
