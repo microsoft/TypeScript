@@ -891,40 +891,40 @@ export function transformClassFields(context: TransformationContext): (x: Source
         const commentRange = getCommentRange(node);
         const sourceMapRange = getSourceMapRange(node);
 
-            // Since we're creating two declarations where there was previously one, cache
-            // the expression for any computed property names.
-            const name = node.name;
-            let getterName = name;
-            let setterName = name;
-            if (isComputedPropertyName(name) && !isSimpleInlineableExpression(name.expression)) {
-                const cacheAssignment = findComputedPropertyNameCacheAssignment(name);
-                if (cacheAssignment) {
-                    getterName = factory.updateComputedPropertyName(name, visitNode(name.expression, visitor, isExpression));
-                    setterName = factory.updateComputedPropertyName(name, cacheAssignment.left);
-                }
-                else {
-                    const temp = factory.createTempVariable(hoistVariableDeclaration);
-                    setSourceMapRange(temp, name.expression);
-                    const expression = visitNode(name.expression, visitor, isExpression);
-                    const assignment = factory.createAssignment(temp, expression);
-                    setSourceMapRange(assignment, name.expression);
-                    getterName = factory.updateComputedPropertyName(name, assignment);
-                    setterName = factory.updateComputedPropertyName(name, temp);
-                }
+        // Since we're creating two declarations where there was previously one, cache
+        // the expression for any computed property names.
+        const name = node.name;
+        let getterName = name;
+        let setterName = name;
+        if (isComputedPropertyName(name) && !isSimpleInlineableExpression(name.expression)) {
+            const cacheAssignment = findComputedPropertyNameCacheAssignment(name);
+            if (cacheAssignment) {
+                getterName = factory.updateComputedPropertyName(name, visitNode(name.expression, visitor, isExpression));
+                setterName = factory.updateComputedPropertyName(name, cacheAssignment.left);
             }
+            else {
+                const temp = factory.createTempVariable(hoistVariableDeclaration);
+                setSourceMapRange(temp, name.expression);
+                const expression = visitNode(name.expression, visitor, isExpression);
+                const assignment = factory.createAssignment(temp, expression);
+                setSourceMapRange(assignment, name.expression);
+                getterName = factory.updateComputedPropertyName(name, assignment);
+                setterName = factory.updateComputedPropertyName(name, temp);
+            }
+        }
 
+        const modifiers = visitNodes(node.modifiers, m => isAccessorModifier(m) ? undefined : m);
+        const backingField = createAccessorPropertyBackingField(factory, node, modifiers, node.initializer);
+        setOriginalNode(backingField, node);
+        setEmitFlags(backingField, EmitFlags.NoComments);
+        setSourceMapRange(backingField, sourceMapRange);
 
-            const backingField = createAccessorPropertyBackingField(factory, node, node.modifiers, node.initializer);
-            setOriginalNode(backingField, node);
-            setEmitFlags(backingField, EmitFlags.NoComments);
-            setSourceMapRange(backingField, sourceMapRange);
-
-        const getter = createAccessorPropertyGetRedirector(factory, node, node.modifiers, getterName);
+        const getter = createAccessorPropertyGetRedirector(factory, node, modifiers, getterName);
         setOriginalNode(getter, node);
         setCommentRange(getter, commentRange);
         setSourceMapRange(getter, sourceMapRange);
 
-        const setter = createAccessorPropertySetRedirector(factory, node, node.modifiers, setterName);
+        const setter = createAccessorPropertySetRedirector(factory, node, modifiers, setterName);
         setOriginalNode(setter, node);
         setEmitFlags(setter, EmitFlags.NoComments);
         setSourceMapRange(setter, sourceMapRange);
@@ -938,8 +938,22 @@ export function transformClassFields(context: TransformationContext): (x: Source
             const info = accessPrivateIdentifier(node.name);
             Debug.assert(info, "Undeclared private name for property declaration.");
 
-            // Leave invalid code untransformed; otherwise, elide the node as it is transformed elsewhere.
-            return info.isValid ? undefined : node;
+            // Leave invalid code untransformed
+            if (!info.isValid) {
+                return node;
+            }
+
+            // If we encounter a valid private static field and we're not transforming
+            // class static blocks, initialize it
+            if (info.isStatic && !shouldTransformPrivateElementsOrClassStaticBlocks) {
+                // TODO: fix
+                const statement = transformPropertyOrClassStaticBlock(node, factory.createThis());
+                if (statement) {
+                    return factory.createClassStaticBlockDeclaration(factory.createBlock([statement], /*multiLine*/ true));
+                }
+            }
+
+            return undefined;
         }
 
         if (shouldTransformInitializersUsingSet && !isStatic(node) && lexicalEnvironment?.data && lexicalEnvironment.data.facts & ClassFacts.WillHoistInitializersToConstructor) {
@@ -2278,7 +2292,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
      */
     function addPropertyOrClassStaticBlockStatements(statements: Statement[], properties: readonly (PropertyDeclaration | ClassStaticBlockDeclaration)[], receiver: LeftHandSideExpression) {
         for (const property of properties) {
-            if (isStatic(property) && !shouldTransformPrivateElementsOrClassStaticBlocks && !useDefineForClassFields && !(getInternalEmitFlags(property) & InternalEmitFlags.TransformPrivateStaticElements)) {
+            if (isStatic(property) && !shouldTransformPrivateElementsOrClassStaticBlocks) {
                 continue;
             }
 

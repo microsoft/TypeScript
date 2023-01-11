@@ -46,6 +46,9 @@ let D = (() => {
             D = _classThis = _classDescriptor.value;
         }
         static {
+            _field1_accessor_storage = { value: 0 };
+        }
+        static {
             __classPrivateFieldGet(_classThis, _classThis, "a", _field1_get);
             __classPrivateFieldSet(_classThis, _classThis, 1, "a", _field1_set);
         }
@@ -53,6 +56,5 @@ let D = (() => {
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
-    _field1_accessor_storage = { value: 0 };
     return D = _classThis;
 })();

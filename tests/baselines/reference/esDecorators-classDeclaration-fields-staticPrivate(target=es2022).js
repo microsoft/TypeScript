@@ -42,6 +42,9 @@ let D = (() => {
             D = _classThis = _classDescriptor.value;
         }
         static {
+            _field1 = { value: 0 };
+        }
+        static {
             __classPrivateFieldGet(_classThis, _classThis, "f", _field1);
             __classPrivateFieldSet(_classThis, _classThis, 1, "f", _field1);
         }
@@ -49,6 +52,5 @@ let D = (() => {
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
-    _field1 = { value: 0 };
     return D = _classThis;
 })();

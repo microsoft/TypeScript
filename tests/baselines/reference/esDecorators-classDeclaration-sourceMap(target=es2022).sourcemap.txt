@@ -785,43 +785,13 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
 4 >Emitted(110, 90) Source(24, 20) + SourceIndex(0)
 ---
 >>>        static {
->>>            __runInitializers(_classThis, _classExtraInitializers);
+>>>            _y = { value: __runInitializers(_classThis, _static_private_y_initializers, 1) };
 1 >^^^^^^^^^^^^
-2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                                                        ^
+4 >                                                                                         ^^^
+5 >                                                                                            ^
 1 >
-2 >            C
-1 >Emitted(112, 13) Source(5, 7) + SourceIndex(0)
-2 >Emitted(112, 68) Source(5, 8) + SourceIndex(0)
----
->>>        }
->>>    };
->>>    _y = { value: __runInitializers(_classThis, _static_private_y_initializers, 1) };
-1 >^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                                                                ^
-4 >                                                                                 ^^^
-5 >                                                                                    ^
-6 >                                                                                     ^^^^^^^^^^^^^^^^^^->
-1 > {
-  >    @dec
-  >    @dec
-  >    method() {}
-  >
-  >    @dec
-  >    @dec
-  >    get x() { return 1; }
-  >
-  >    @dec
-  >    @dec
-  >    set x(value: number) { }
-  >
-  >    @dec
-  >    @dec
-  >    y = 1;
-  >
-  >    @dec
-  >    @dec
-  >    accessor z = 1;
   >
   >    @dec
   >    @dec
@@ -838,44 +808,58 @@ sourceFile:esDecorators-classDeclaration-sourceMap.ts
   >    @dec
   >    @dec
   >    static 
-2 >    #y = 
-3 >                                                                                1
-4 >                                                                                 
-5 >                                                                                     = 1;
-1 >Emitted(115, 5) Source(40, 12) + SourceIndex(0)
-2 >Emitted(115, 81) Source(40, 17) + SourceIndex(0)
-3 >Emitted(115, 82) Source(40, 18) + SourceIndex(0)
-4 >Emitted(115, 85) Source(40, 14) + SourceIndex(0)
-5 >Emitted(115, 86) Source(40, 19) + SourceIndex(0)
+2 >            #y = 
+3 >                                                                                        1
+4 >                                                                                         
+5 >                                                                                             = 1;
+1 >Emitted(112, 13) Source(40, 12) + SourceIndex(0)
+2 >Emitted(112, 89) Source(40, 17) + SourceIndex(0)
+3 >Emitted(112, 90) Source(40, 18) + SourceIndex(0)
+4 >Emitted(112, 93) Source(40, 14) + SourceIndex(0)
+5 >Emitted(112, 94) Source(40, 19) + SourceIndex(0)
 ---
->>>    _z_accessor_storage = { value: __runInitializers(_classThis, _static_private_z_initializers, 1) };
-1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                                                                                                 ^
-4 >                                                                                                  ^^^
-5 >                                                                                                     ^
-1->
+>>>        }
+>>>        static {
+>>>            _z_accessor_storage = { value: __runInitializers(_classThis, _static_private_z_initializers, 1) };
+1 >^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 >                                                                                                         ^
+4 >                                                                                                          ^^^
+5 >                                                                                                             ^
+1 >
   >
   >    @dec
   >    @dec
   >    static accessor 
-2 >    #z = 
-3 >                                                                                                 1
-4 >                                                                                                  
-5 >                                                                                                      = 1;
-1->Emitted(116, 5) Source(44, 21) + SourceIndex(0)
-2 >Emitted(116, 98) Source(44, 26) + SourceIndex(0)
-3 >Emitted(116, 99) Source(44, 27) + SourceIndex(0)
-4 >Emitted(116, 102) Source(44, 23) + SourceIndex(0)
-5 >Emitted(116, 103) Source(44, 28) + SourceIndex(0)
+2 >            #z = 
+3 >                                                                                                         1
+4 >                                                                                                          
+5 >                                                                                                              = 1;
+1 >Emitted(115, 13) Source(44, 21) + SourceIndex(0)
+2 >Emitted(115, 106) Source(44, 26) + SourceIndex(0)
+3 >Emitted(115, 107) Source(44, 27) + SourceIndex(0)
+4 >Emitted(115, 110) Source(44, 23) + SourceIndex(0)
+5 >Emitted(115, 111) Source(44, 28) + SourceIndex(0)
 ---
+>>>        }
+>>>        static {
+>>>            __runInitializers(_classThis, _classExtraInitializers);
+1 >^^^^^^^^^^^^
+2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >            C
+1 >Emitted(118, 13) Source(5, 7) + SourceIndex(0)
+2 >Emitted(118, 68) Source(5, 8) + SourceIndex(0)
+---
+>>>        }
+>>>    };
 >>>    return C = _classThis;
 1 >^^^^^^^^^^^
 2 >           ^
 1 >
 2 >           C
-1 >Emitted(117, 12) Source(5, 7) + SourceIndex(0)
-2 >Emitted(117, 13) Source(5, 8) + SourceIndex(0)
+1 >Emitted(121, 12) Source(5, 7) + SourceIndex(0)
+2 >Emitted(121, 13) Source(5, 8) + SourceIndex(0)
 ---
 >>>})();
 >>>//# sourceMappingURL=esDecorators-classDeclaration-sourceMap.js.map===================================================================

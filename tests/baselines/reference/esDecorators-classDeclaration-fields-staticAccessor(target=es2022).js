@@ -59,6 +59,9 @@ let D = (() => {
             __esDecorate(null, _classDescriptor = { value: this }, _classDecorators, { kind: "class", name: this.name }, null, _classExtraInitializers);
             D = _classThis = _classDescriptor.value;
         }
+        static {
+            _field1_accessor_storage = { value: 1 };
+        }
         static get field1() { return __classPrivateFieldGet(this, _classThis, "f", _field1_accessor_storage); }
         static set field1(value) { __classPrivateFieldSet(this, _classThis, value, "f", _field1_accessor_storage); }
         static {
@@ -69,6 +72,5 @@ let D = (() => {
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
-    _field1_accessor_storage = { value: 1 };
     return D = _classThis;
 })();

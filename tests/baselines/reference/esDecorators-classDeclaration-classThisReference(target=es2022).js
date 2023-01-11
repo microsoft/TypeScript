@@ -26,6 +26,9 @@ let C = (() => {
         }
         static { _classThis; }
         static x = _classThis;
+        static {
+            _a_accessor_storage = { value: _classThis };
+        }
         static get a() { return __classPrivateFieldGet(this, _classThis, "f", _a_accessor_storage); }
         static set a(value) { __classPrivateFieldSet(this, _classThis, value, "f", _a_accessor_storage); }
         static m() { this; }
@@ -34,12 +37,5 @@ let C = (() => {
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
-    Object.defineProperty(_classThis, "x", {
-        enumerable: true,
-        configurable: true,
-        writable: true,
-        value: _classThis
-    });
-    _a_accessor_storage = { value: _classThis };
     return C = _classThis;
 })();

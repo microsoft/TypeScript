@@ -188,12 +188,16 @@ let C = (() => {
         get z() { return __classPrivateFieldGet(this, _z_1_accessor_storage, "f"); }
         set z(value) { __classPrivateFieldSet(this, _z_1_accessor_storage, value, "f"); }
         static {
+            /*28*/
+            _y = { value: __runInitializers(_classThis, _static_private_y_initializers, 1) };
+        }
+        static {
+            _z_accessor_storage = { value: __runInitializers(_classThis, _static_private_z_initializers, 1) };
+        }
+        static {
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
-    /*28*/
-    _y = { value: __runInitializers(_classThis, _static_private_y_initializers, 1) };
-    _z_accessor_storage = { value: __runInitializers(_classThis, _static_private_z_initializers, 1) };
     return C = _classThis;
 })();
 //// [file2.js]

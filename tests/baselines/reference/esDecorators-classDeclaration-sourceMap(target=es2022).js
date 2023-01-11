@@ -158,11 +158,15 @@ let C = (() => {
         get z() { return __classPrivateFieldGet(this, _z_1_accessor_storage, "f"); }
         set z(value) { __classPrivateFieldSet(this, _z_1_accessor_storage, value, "f"); }
         static {
+            _y = { value: __runInitializers(_classThis, _static_private_y_initializers, 1) };
+        }
+        static {
+            _z_accessor_storage = { value: __runInitializers(_classThis, _static_private_z_initializers, 1) };
+        }
+        static {
             __runInitializers(_classThis, _classExtraInitializers);
         }
     };
-    _y = { value: __runInitializers(_classThis, _static_private_y_initializers, 1) };
-    _z_accessor_storage = { value: __runInitializers(_classThis, _static_private_z_initializers, 1) };
     return C = _classThis;
 })();
 //# sourceMappingURL=esDecorators-classDeclaration-sourceMap.js.map
