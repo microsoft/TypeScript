@@ -691,6 +691,10 @@ function getCompletionEntriesForDirectoryFragment(
 }
 
 function getFilenameWithExtensionOption(name: string, compilerOptions: CompilerOptions, extensionOptions: ExtensionOptions): { name: string, extension: Extension | undefined } {
+    const nonJsResult = moduleSpecifiers.tryGetRealFileNameForNonJsDeclarationFileName(name);
+    if (nonJsResult) {
+        return { name: nonJsResult, extension: tryGetExtensionFromPath(nonJsResult) };
+    }
     if (extensionOptions.referenceKind === ReferenceKind.Filename) {
         return { name, extension: tryGetExtensionFromPath(name) };
     }

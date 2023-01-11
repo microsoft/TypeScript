@@ -213,7 +213,7 @@ export class CompilationResult {
         }
         else {
             path = vpath.resolve(this.vfs.cwd(), path);
-            const outDir = ext === ".d.ts" || ext === ".json.d.ts" || ext === ".d.mts" || ext === ".d.cts" ? this.options.declarationDir || this.options.outDir : this.options.outDir;
+            const outDir = ext === ".d.ts" || ext === ".d.mts" || ext === ".d.cts" || (ext.endsWith(".ts") || ts.stringContains(ext, ".d.")) ? this.options.declarationDir || this.options.outDir : this.options.outDir;
             if (outDir) {
                 const common = this.commonSourceDirectory;
                 if (common) {

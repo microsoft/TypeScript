@@ -6948,6 +6948,7 @@ export interface CompilerOptions {
     allowImportingTsExtensions?: boolean;
     allowJs?: boolean;
     /** @internal */ allowNonTsExtensions?: boolean;
+    allowArbitraryExtensions?: boolean;
     allowSyntheticDefaultImports?: boolean;
     allowUmdGlobalAccess?: boolean;
     allowUnreachableCode?: boolean;
@@ -7531,7 +7532,7 @@ export interface ResolvedModuleFull extends ResolvedModule {
      * Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
      * This is optional for backwards-compatibility, but will be added if not provided.
      */
-    extension: Extension;
+    extension: string;
     packageId?: PackageId;
 }
 
