@@ -1206,6 +1206,14 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Enable_importing_json_files,
         defaultValueDescription: false,
     },
+    {
+        name: "allowArbitraryExtensions",
+        type: "boolean",
+        affectsModuleResolution: true,
+        category: Diagnostics.Modules,
+        description: Diagnostics.Enable_importing_files_with_any_extension_provided_a_declaration_file_is_present,
+        defaultValueDescription: false,
+    },
 
     {
         name: "out",
