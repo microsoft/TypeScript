@@ -31,17 +31,13 @@ Output::
 >> Screen clear
 [[90m12:00:15 AM[0m] Starting compilation in watch mode...
 
-[96ma.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1371: [0mThis import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
+[96mtsconfig.json[0m:[93m1[0m:[93m36[0m - [91merror[0m[90m TS5101: [0mFlag 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+  Use 'verbatimModuleSyntax' instead.
 
-[7m1[0m import {B} from './b'
-[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
+[7m1[0m {"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error"}}
+[7m [0m [91m                                   ~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
-[96ma.ts[0m:[93m3[0m:[93m14[0m - [91merror[0m[90m TS1219: [0mExperimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
-
-[7m3[0m export class A {
-[7m [0m [91m             ~[0m
-
-[[90m12:00:20 AM[0m] Found 2 errors. Watching for file changes.
+[[90m12:00:20 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -53,10 +49,7 @@ Program files::
 /a.ts
 /a/lib/lib.d.ts
 
-Semantic diagnostics in builder refreshed for::
-/b.ts
-/a.ts
-/a/lib/lib.d.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /b.ts (used version)
@@ -115,10 +108,11 @@ Output::
 >> Screen clear
 [[90m12:00:23 AM[0m] File change detected. Starting incremental compilation...
 
-[96ma.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1371: [0mThis import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.
+[96mtsconfig.json[0m:[93m1[0m:[93m36[0m - [91merror[0m[90m TS5101: [0mFlag 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+  Use 'verbatimModuleSyntax' instead.
 
-[7m1[0m import {B} from './b'
-[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~[0m
+[7m1[0m {"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true}}
+[7m [0m [91m                                   ~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
 
@@ -132,10 +126,7 @@ Program files::
 /a.ts
 /a/lib/lib.d.ts
 
-Semantic diagnostics in builder refreshed for::
-/b.ts
-/a.ts
-/a/lib/lib.d.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -169,7 +160,13 @@ Output::
 >> Screen clear
 [[90m12:00:27 AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m1[0m:[93m36[0m - [91merror[0m[90m TS5101: [0mFlag 'importsNotUsedAsValues' is deprecated and will stop functioning in TypeScript 5.5. Specify 'ignoreDeprecations: "5.0"' to silence this error.
+  Use 'verbatimModuleSyntax' instead.
+
+[7m1[0m {"compilerOptions":{"target":"es6","importsNotUsedAsValues":"error","experimentalDecorators":true,"emitDecoratorMetadata":true}}
+[7m [0m [91m                                   ~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -181,10 +178,7 @@ Program files::
 /a.ts
 /a/lib/lib.d.ts
 
-Semantic diagnostics in builder refreshed for::
-/b.ts
-/a.ts
-/a/lib/lib.d.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 

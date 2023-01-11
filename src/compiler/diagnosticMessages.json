@@ -4305,6 +4305,10 @@
         "category": "Error",
         "code": 5105
     },
+    "Use '{0}' instead.": {
+        "category": "Message",
+        "code": 5106
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",

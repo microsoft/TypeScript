@@ -2281,7 +2281,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             addErrorOrSuggestion(isError, "message" in message ? createFileDiagnostic(file, 0, 0, message, arg0, arg1, arg2, arg3) : createDiagnosticForFileFromMessageChain(file, message)); // eslint-disable-line local/no-in-operator
             return;
         }
-        addErrorOrSuggestion(isError, "message" in message ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3) : createDiagnosticForNodeFromMessageChain(location, message)); // eslint-disable-line local/no-in-operator
+        addErrorOrSuggestion(isError, "message" in message ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3) : createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(location), location, message)); // eslint-disable-line local/no-in-operator
     }
 
     function errorAndMaybeSuggestAwait(
@@ -4832,7 +4832,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     }
                                 }
                             }
-                            diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, chainDiagnosticMessages(
+                            diagnostics.add(createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(errorNode), errorNode, chainDiagnosticMessages(
                                 diagnosticDetails,
                                 Diagnostics.The_current_file_is_a_CommonJS_module_whose_imports_will_produce_require_calls_however_the_referenced_file_is_an_ECMAScript_module_and_cannot_be_imported_with_require_Consider_writing_a_dynamic_import_0_call_instead,
                                 moduleReference)));
@@ -11595,7 +11595,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!isValidBaseType(reducedBaseType)) {
             const elaboration = elaborateNeverIntersection(/*errorInfo*/ undefined, baseType);
             const diagnostic = chainDiagnosticMessages(elaboration, Diagnostics.Base_constructor_return_type_0_is_not_an_object_type_or_intersection_of_object_types_with_statically_known_members, typeToString(reducedBaseType));
-            diagnostics.add(createDiagnosticForNodeFromMessageChain(baseTypeNode.expression, diagnostic));
+            diagnostics.add(createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(baseTypeNode.expression), baseTypeNode.expression, diagnostic));
             return type.resolvedBaseTypes = emptyArray;
         }
         if (type === reducedBaseType || hasBaseType(reducedBaseType, type)) {
@@ -17013,7 +17013,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                     errorInfo,
                                     Diagnostics.Element_implicitly_has_an_any_type_because_expression_of_type_0_can_t_be_used_to_index_type_1, typeToString(fullIndexType), typeToString(objectType)
                                 );
-                                diagnostics.add(createDiagnosticForNodeFromMessageChain(accessExpression, errorInfo));
+                                diagnostics.add(createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(accessExpression), accessExpression, errorInfo));
                             }
                         }
                     }
@@ -19857,7 +19857,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
             }
-            const diag = createDiagnosticForNodeFromMessageChain(errorNode!, errorInfo, relatedInformation);
+            const diag = createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(errorNode!), errorNode!, errorInfo, relatedInformation);
             if (relatedInfo) {
                 addRelatedInfo(diag, ...relatedInfo);
             }
@@ -31076,7 +31076,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
         }
-        const resultDiagnostic = createDiagnosticForNodeFromMessageChain(propNode, errorInfo);
+        const resultDiagnostic = createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(propNode), propNode, errorInfo);
         if (relatedInfo) {
             addRelatedInfo(resultDiagnostic, relatedInfo);
         }
@@ -32505,7 +32505,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         diag = { file, start, length, code: chain.code, category: chain.category, messageText: chain, relatedInformation: related };
                     }
                     else {
-                        diag = createDiagnosticForNodeFromMessageChain(node, chain, related);
+                        diag = createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(node), node, chain, related);
                     }
                     addImplementationSuccessElaboration(candidatesForArgumentError[0], diag);
                     diagnostics.add(diag);
@@ -33137,7 +33137,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
     function invocationError(errorTarget: Node, apparentType: Type, kind: SignatureKind, relatedInformation?: DiagnosticRelatedInformation) {
         const { messageChain, relatedMessage: relatedInfo } = invocationErrorDetails(errorTarget, apparentType, kind);
-        const diagnostic = createDiagnosticForNodeFromMessageChain(errorTarget, messageChain);
+        const diagnostic = createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(errorTarget), errorTarget, messageChain);
         if (relatedInfo) {
             addRelatedInfo(diagnostic, createDiagnosticForNode(errorTarget, relatedInfo));
         }
@@ -33248,7 +33248,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!callSignatures.length) {
             const errorDetails = invocationErrorDetails(node.expression, apparentType, SignatureKind.Call);
             const messageChain = chainDiagnosticMessages(errorDetails.messageChain, headMessage);
-            const diag = createDiagnosticForNodeFromMessageChain(node.expression, messageChain);
+            const diag = createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(node.expression), node.expression, messageChain);
             if (errorDetails.relatedMessage) {
                 addRelatedInfo(diag, createDiagnosticForNode(node.expression, errorDetails.relatedMessage));
             }
@@ -38470,7 +38470,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     chain = chainDiagnosticMessages(chain, Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1, typeToString(type), typeToString(thisTypeForErrorOut.value));
                 }
                 chain = chainDiagnosticMessages(chain, diagnosticMessage, arg0);
-                diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, chain));
+                diagnostics.add(createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(errorNode), errorNode, chain));
             }
             return undefined;
         }
@@ -42067,7 +42067,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                         let errorInfo = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Named_property_0_of_types_1_and_2_are_not_identical, symbolToString(prop), typeName1, typeName2);
                         errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
-                        diagnostics.add(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo));
+                        diagnostics.add(createDiagnosticForNodeFromMessageChain(getSourceFileOfNode(typeNode), typeNode, errorInfo));
                     }
                 }
             }

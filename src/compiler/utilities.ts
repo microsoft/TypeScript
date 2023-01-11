@@ -1715,8 +1715,7 @@ export function createDiagnosticForNodeInSourceFile(sourceFile: SourceFile, node
 }
 
 /** @internal */
-export function createDiagnosticForNodeFromMessageChain(node: Node, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
-    const sourceFile = getSourceFileOfNode(node);
+export function createDiagnosticForNodeFromMessageChain(sourceFile: SourceFile, node: Node, messageChain: DiagnosticMessageChain, relatedInformation?: DiagnosticRelatedInformation[]): DiagnosticWithLocation {
     const span = getErrorSpanForNode(sourceFile, node);
     return createFileDiagnosticFromMessageChain(sourceFile, span.start, span.length, messageChain, relatedInformation);
 }

@@ -34,6 +34,7 @@ import {
     createCompilerDiagnostic,
     createCompilerDiagnosticFromMessageChain,
     createDiagnosticCollection,
+    createDiagnosticForNodeFromMessageChain,
     createDiagnosticForNodeInSourceFile,
     createDiagnosticForRange,
     createFileDiagnostic,
@@ -4310,15 +4311,35 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (options.out) {
             createDeprecatedDiagnosticForOption(version, "out");
         }
+        if (options.importsNotUsedAsValues) {
+            createDeprecatedDiagnosticForOption(version, "importsNotUsedAsValues", /*value*/ undefined, "verbatimModuleSyntax");
+        }
+        if (options.preserveValueImports) {
+            createDeprecatedDiagnosticForOption(version, "preserveValueImports", /*value*/ undefined, "verbatimModuleSyntax");
+        }
     }
 
-    function createDeprecatedDiagnosticForOption(version: string, name: string, value?: string) {
+    function createDeprecatedDiagnosticForOption(version: string, name: string, value?: string, useInstead?: string) {
         if (version === DeprecationVersion.v6_0) {
-            createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, Diagnostics.Flag_0_is_deprecated_Please_remove_it_from_your_configuration, value || name);
+            if (useInstead) {
+                const details = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Use_0_instead, useInstead);
+                const chain = chainDiagnosticMessages(details, Diagnostics.Flag_0_is_deprecated_Please_remove_it_from_your_configuration, value || name);
+                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, chain);
+            }
+            else {
+                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, Diagnostics.Flag_0_is_deprecated_Please_remove_it_from_your_configuration, value || name);
+            }
         }
         else {
-            createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined,
-                Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
+            if (useInstead) {
+                const details = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Use_0_instead, useInstead);
+                const chain = chainDiagnosticMessages(details, Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
+                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined, chain);
+            }
+            else {
+                createDiagnosticForOption(/*onKey*/ !value, name, /*option2*/ undefined,
+                    Diagnostics.Flag_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_ignoreDeprecations_Colon_2_to_silence_this_error, value || name, DeprecationVersion.v5_5, DeprecationVersion.v5_0);
+            }
         }
     }
 
@@ -4567,13 +4588,21 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
     }
 
-    function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number) {
+    function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessageChain): void;
+    function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): void;
+    function createDiagnosticForOption(onKey: boolean, option1: string, option2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number): void {
         const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
         const needCompilerDiagnostic = !compilerOptionsObjectLiteralSyntax ||
             !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, arg0, arg1, arg2);
 
         if (needCompilerDiagnostic) {
-            programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
+            // eslint-disable-next-line local/no-in-operator
+            if ("messageText" in message) {
+                programDiagnostics.add(createCompilerDiagnosticFromMessageChain(message));
+            }
+            else {
+                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
+            }
         }
     }
 
@@ -4593,10 +4622,19 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return _compilerOptionsObjectLiteralSyntax || undefined;
     }
 
-    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean {
+    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, messageChain: DiagnosticMessageChain): boolean;
+    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean;
+    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean;
+    function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, message: DiagnosticMessage | DiagnosticMessageChain, arg0?: string | number, arg1?: string | number, arg2?: string | number): boolean {
         const props = getPropertyAssignment(objectLiteral, key1, key2);
         for (const prop of props) {
-            programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
+            // eslint-disable-next-line local/no-in-operator
+            if ("messageText" in message) {
+                programDiagnostics.add(createDiagnosticForNodeFromMessageChain(options.configFile!, onKey ? prop.name : prop.initializer, message));
+            }
+            else {
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, onKey ? prop.name : prop.initializer, message, arg0, arg1, arg2));
+            }
         }
         return !!props.length;
     }
