@@ -1715,11 +1715,13 @@ describe("unittests:: evaluation:: esDecorators", () => {
         ScriptTarget.ES2021,
         ScriptTarget.ES2015,
     ];
+
     for (const target of targets) {
+        const targetName = ts.Debug.formatEnum(target, (ts as any).ScriptTarget);
         const options: ts.CompilerOptions = { target };
         const exec = (array: TemplateStringsArray) => evaluator.evaluateTypeScript(array[0], options);
 
-        it(`class definition evaluation order (${ts.Debug.formatEnum(target, (ts as any).ScriptTarget)})`, () => {
+        it(`class definition evaluation order (${targetName})`, () => {
             const { order } = exec`
                 export const order = [];
 
@@ -2062,6 +2064,226 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 // and now evaluation has completed:
                 "done"
             ]);
+        });
+
+        describe("examples", () => {
+            // see https://github.com/tc39/proposal-decorators#classes
+            it(`@logged (${targetName})`, () => {
+                const { output } = exec`
+                    export const output: string[] = [];
+
+                    function log(s: string) {
+                        output.push(s);
+                    }
+
+                    function logged<T extends abstract new (...args: any) => any>(target: T, context: ClassDecoratorContext<T>): T | void;
+                    function logged<This, T extends (this: This, ...args: any) => any>(target: T, context: ClassMethodDecoratorContext<This, T>): T | void;
+                    function logged<This, T>(target: (this: This) => T, context: ClassGetterDecoratorContext<This, T>): (this: This) => T;
+                    function logged<This, T>(target: (this: This, value: T) => void, context: ClassSetterDecoratorContext<This, T>): (this: This, value: T) => void;
+                    function logged<This, T>(target: ClassAccessorDecoratorTarget<This, T>, context: ClassAccessorDecoratorContext<This, T>): ClassAccessorDecoratorResult<This, T> | void;
+                    function logged(target: any, context: DecoratorContext): any {
+                        switch (context.kind) {
+                            case "class": {
+                                const name = context.name ?? "(anonymous)";
+                                return class extends target {
+                                    constructor(...args: any) {
+                                        log("constructor " + name + " enter");
+                                        try {
+                                            super(...args);
+                                        }
+                                        finally {
+                                            log("constructor " + name + " exit");
+                                        }
+                                    }
+                                };
+                            }
+                            case "method":
+                            case "getter":
+                            case "setter": {
+                                const name = context.name.toString();
+                                const kind = context.kind;
+                                return function (this: any, ...args: any) {
+                                    log(kind + " " + name + " enter");
+                                    try {
+                                        return target.apply(this, args);
+                                    }
+                                    finally {
+                                        log(kind + " " + name + " exit");
+                                    }
+                                }
+                            }
+                            case "accessor": {
+                                const name = context.name.toString();
+                                return {
+                                    get: function (this: any) {
+                                        log("accessor(get) " + name + " enter");
+                                        try {
+                                            return target.get.call(this);
+                                        }
+                                        finally {
+                                            log("accessor(get) " + name + " exit");
+                                        }
+                                    },
+                                    set: function (this: any, value: any) {
+                                        log("accessor(set) " + name + " enter");
+                                        try {
+                                            target.set.call(this, value);
+                                        }
+                                        finally {
+                                            log("accessor(set) " + name + " exit");
+                                        }
+                                    }
+                                };
+                            }
+                            default:
+                                throw new TypeError("Not supported");
+                        }
+                    }
+
+                    @logged
+                    class C {
+                        constructor() {
+                            log("C body");
+                        }
+
+                        @logged m() {
+                            log("m body");
+                        }
+
+                        @logged get x() {
+                            log("get x body");
+                            return 0;
+                        }
+
+                        @logged set y(value: number) {
+                            log("set y body");
+                        }
+
+                        @logged accessor z = 0;
+                    }
+
+                    const obj = new C();
+                    obj.m();
+                    obj.x;
+                    obj.y = 1;
+                    obj.z = 2;
+                `;
+
+                assert.deepEqual(output, [
+                    "constructor C enter",
+                    "C body",
+                    "constructor C exit",
+                    "method m enter",
+                    "m body",
+                    "method m exit",
+                    "getter x enter",
+                    "get x body",
+                    "getter x exit",
+                    "setter y enter",
+                    "set y body",
+                    "setter y exit",
+                    "accessor(set) z enter",
+                    "accessor(set) z exit",
+                ]);
+            });
+
+            // see https://github.com/tc39/proposal-decorators#example-bound
+            it(`@bound (${targetName})`, () => {
+                const { output } = exec`
+                    export const output: string[] = [];
+
+                    type MatchingKeys<TRecord, TMatch, K extends keyof TRecord = keyof TRecord> = K extends (TRecord[K] extends TMatch ? K : never) ? K : never;
+                    type Method<This, A extends any[], T> = (this: This, ...args: A) => T;
+
+                    function bound<This, A extends any[], T, K extends MatchingKeys<This, Method<This, A, T>>>(
+                        target: Method<This, A, T>,
+                        { addInitializer, name }: Omit<ClassMethodDecoratorContext<This, Method<This, A, T>>, "name"> & { name: K, private: false }
+                    ): void {
+                        addInitializer(function (this: This) {
+                            const method = this[name] as Method<This, A, T>;
+                            const boundMethod = method.bind(this) as Method<undefined, A, T>;
+                            this[name] = boundMethod as typeof this[K];
+                        });
+                    }
+
+                    class C {
+                        constructor(private message: string) {}
+
+                        @bound speak() {
+                            output.push(this.message);
+                        }
+                    }
+
+                    const { speak } = new C("test");
+                    speak();
+                `;
+
+                assert.deepEqual(output, ["test"]);
+            });
+
+            // see https://github.com/tc39/proposal-decorators#access-and-metadata-sidechanneling
+            it(`dependency injection (${targetName})`, () => {
+                const { result } = exec`
+                    const INJECTIONS = new WeakMap<object, { injectionKey: string, set: (this: any, value: any) => void }[]>();
+
+                    function createInjections() {
+                        const injections: { injectionKey: string, set: (this: any, value: any) => void }[] = [];
+
+                        function injectable<T extends new (...args: any) => any>(Class: T, context: ClassDecoratorContext<T>) {
+                            INJECTIONS.set(Class, injections);
+                        }
+
+                        function inject(injectionKey: string) {
+                            return function applyInjection(v: undefined, context: ClassFieldDecoratorContext<any, any>) {
+                                injections.push({ injectionKey, set: context.access.set });
+                            };
+                        }
+
+                        return { injectable, inject };
+                    }
+
+                    class Container {
+                        registry = new Map();
+
+                        register(injectionKey: string, value: any) {
+                            this.registry.set(injectionKey, value);
+                        }
+
+                        lookup(injectionKey: string) {
+                            return this.registry.get(injectionKey);
+                        }
+
+                        create<T extends new (...args: any) => any>(Class: T) {
+                            let instance = new Class();
+
+                            for (const { injectionKey, set } of INJECTIONS.get(Class) || []) {
+                                set.call(instance, this.lookup(injectionKey));
+                            }
+
+                            return instance;
+                        }
+                    }
+
+                    class Store {}
+
+                    const { injectable, inject } = createInjections();
+
+                    @injectable
+                    class C {
+                        @inject('store') store!: Store;
+                    }
+
+                    let container = new Container();
+                    let store = new Store();
+
+                    container.register('store', store);
+
+                    let c = container.create(C);
+
+                    export const result = c.store === store;
+                `;
+                assert.isTrue(result);
+            });
         });
     }
 });

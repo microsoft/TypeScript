@@ -85,6 +85,7 @@ import {
     isClassExpression,
     isClassLike,
     isClassStaticBlockDeclaration,
+    isCommaExpression,
     isCompoundAssignment,
     isComputedPropertyName,
     isConstructorDeclaration,
@@ -106,9 +107,11 @@ import {
     isModifierLike,
     isNamedEvaluation,
     isNonStaticMethodOrAccessorWithPrivateName,
+    isNumericLiteral,
     isObjectLiteralElementLike,
     isObjectLiteralExpression,
     isOmittedExpression,
+    isParameter,
     isParameterPropertyDeclaration,
     isParenthesizedExpression,
     isPrefixUnaryExpression,
@@ -133,6 +136,7 @@ import {
     isSuperProperty,
     isTemplateLiteral,
     isThisProperty,
+    isVoidExpression,
     LeftHandSideExpression,
     LexicalEnvironment,
     map,
@@ -163,6 +167,7 @@ import {
     PropertyAssignment,
     PropertyDeclaration,
     PropertyName,
+    removeAllComments,
     ScriptTarget,
     SetAccessorDeclaration,
     setCommentRange,
@@ -2147,7 +2152,8 @@ export function transformClassFields(context: TransformationContext): (x: Source
     }
 
     function transformConstructorBody(node: ClassDeclaration | ClassExpression, constructor: ConstructorDeclaration | undefined, isDerivedClass: boolean) {
-        let properties = getProperties(node, /*requireInitializer*/ false, /*isStatic*/ false);
+        const instanceProperties = getProperties(node, /*requireInitializer*/ false, /*isStatic*/ false);
+        let properties = instanceProperties;
         if (!useDefineForClassFields) {
             properties = filter(properties, property => !!property.initializer || isPrivateIdentifier(property.name) || hasAccessorModifier(property));
         }
@@ -2216,47 +2222,38 @@ export function transformClassFields(context: TransformationContext): (x: Source
         // We instead *remove* them from the transformed output at this stage.
         let parameterPropertyDeclarationCount = 0;
         if (constructor?.body) {
-            if (useDefineForClassFields) {
-                statements = statements.filter(statement => !isParameterPropertyDeclaration(getOriginalNode(statement), constructor));
+            // parameter-property assignments should occur immediately after the prologue and `super()`,
+            // so only count the statements that immediately follow.
+            for (let i = indexOfFirstStatementAfterSuperAndPrologue; i < constructor.body.statements.length; i++) {
+                const statement = constructor.body.statements[i];
+                if (isParameterPropertyDeclaration(getOriginalNode(statement), constructor)) {
+                    parameterPropertyDeclarationCount++;
+                }
+                else {
+                    break;
+                }
             }
-            else {
-                for (const statement of constructor.body.statements) {
-                    if (isParameterPropertyDeclaration(getOriginalNode(statement), constructor)) {
-                        parameterPropertyDeclarationCount++;
-                    }
-                }
-                if (parameterPropertyDeclarationCount > 0) {
-                    const parameterProperties = visitNodes(constructor.body.statements, visitor, isStatement, indexOfFirstStatementAfterSuperAndPrologue, parameterPropertyDeclarationCount);
-
-                    // If there was a super() call found, add parameter properties immediately after it
-                    if (superStatementIndex >= 0) {
-                        addRange(statements, parameterProperties);
-                    }
-                    else {
-                        // Add add parameter properties to the top of the constructor after the prologue
-                        let superAndPrologueStatementCount = prologueStatementCount;
-                        // If a synthetic super() call was added, need to account for that
-                        if (needsSyntheticConstructor) superAndPrologueStatementCount++;
-                        statements = [
-                            ...statements.slice(0, superAndPrologueStatementCount),
-                            ...parameterProperties,
-                            ...statements.slice(superAndPrologueStatementCount),
-                        ];
-                    }
-
-                    indexOfFirstStatementAfterSuperAndPrologue += parameterPropertyDeclarationCount;
-                }
+            if (parameterPropertyDeclarationCount > 0) {
+                indexOfFirstStatementAfterSuperAndPrologue += parameterPropertyDeclarationCount;
             }
         }
 
         const receiver = factory.createThis();
         // private methods can be called in property initializers, they should execute first.
         addInstanceMethodStatements(statements, privateMethodsAndAccessors, receiver);
-        addPropertyOrClassStaticBlockStatements(statements, properties, receiver);
+        if (constructor) {
+            const parameterProperties = filter(instanceProperties, prop => isParameterPropertyDeclaration(getOriginalNode(prop), constructor));
+            const nonParameterProperties = filter(properties, prop => !isParameterPropertyDeclaration(getOriginalNode(prop), constructor));
+            addPropertyOrClassStaticBlockStatements(statements, parameterProperties, receiver);
+            addPropertyOrClassStaticBlockStatements(statements, nonParameterProperties, receiver);
+        }
+        else {
+            addPropertyOrClassStaticBlockStatements(statements, properties, receiver);
+        }
 
         // Add existing statements after the initial prologues and super call
         if (constructor) {
-            addRange(statements, visitNodes(constructor.body!.statements, visitBodyStatement, isStatement, indexOfFirstStatementAfterSuperAndPrologue));
+            addRange(statements, visitNodes(constructor.body!.statements, visitor, isStatement, indexOfFirstStatementAfterSuperAndPrologue));
         }
 
         statements = factory.mergeLexicalEnvironment(statements, endLexicalEnvironment());
@@ -2279,14 +2276,6 @@ export function transformClassFields(context: TransformationContext): (x: Source
             ),
             /*location*/ constructor ? constructor.body : undefined
         );
-
-        function visitBodyStatement(statement: Node) {
-            if (useDefineForClassFields && isParameterPropertyDeclaration(getOriginalNode(statement), constructor!)) {
-                return undefined;
-            }
-
-            return visitor(statement);
-        }
     }
 
     /**
@@ -2321,8 +2310,17 @@ export function transformClassFields(context: TransformationContext): (x: Source
         const statement = factory.createExpressionStatement(expression);
         setOriginalNode(statement, property);
         addEmitFlags(statement, getEmitFlags(property) & EmitFlags.NoComments);
-        setSourceMapRange(statement, moveRangePastModifiers(property));
         setCommentRange(statement, property);
+
+        const propertyOriginalNode = getOriginalNode(property);
+        if (isParameter(propertyOriginalNode)) {
+            // replicate comment and source map behavior from the ts transform for parameter properties.
+            setSourceMapRange(statement, propertyOriginalNode);
+            removeAllComments(statement);
+        }
+        else {
+            setSourceMapRange(statement, moveRangePastModifiers(property));
+        }
 
         // `setOriginalNode` *copies* the `emitNode` from `property`, so now both
         // `statement` and `expression` have a copy of the synthesized comments.
@@ -2332,7 +2330,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
 
         // If the property was originally an auto-accessor, don't emit comments here since they will be attached to
         // the synthezized getter.
-        if (hasAccessorModifier(getOriginalNode(property))) {
+        if (hasAccessorModifier(propertyOriginalNode)) {
             addEmitFlags(statement, EmitFlags.NoComments);
         }
 
@@ -2450,14 +2448,39 @@ export function transformClassFields(context: TransformationContext): (x: Source
             return undefined;
         }
 
-        const initializer = property.initializer || emitAssignment ? visitNode(property.initializer, initializerVisitor, isExpression) ?? factory.createVoidZero()
-            : isParameterPropertyDeclaration(propertyOriginalNode, propertyOriginalNode.parent) && isIdentifier(propertyName) ? propertyName
-            : factory.createVoidZero();
+        let initializer = visitNode(property.initializer, initializerVisitor, isExpression);
+        if (isParameterPropertyDeclaration(propertyOriginalNode, propertyOriginalNode.parent) && isIdentifier(propertyName)) {
+            // A parameter-property declaration always overrides the initializer. The only time a parameter-property
+            // declaration *should* have an initializer is when decorators have added initializers that need to run before
+            // any other initializer
+            const localName = factory.cloneNode(propertyName);
+            if (initializer) {
+                // unwrap `(__runInitializers(this, _instanceExtraInitializers), void 0)`
+                if (isParenthesizedExpression(initializer) &&
+                    isCommaExpression(initializer.expression) &&
+                    isCallToHelper(initializer.expression.left, "___runInitializers" as __String) &&
+                    isVoidExpression(initializer.expression.right) &&
+                    isNumericLiteral(initializer.expression.right.expression)) {
+                    initializer = initializer.expression.left;
+                }
+                initializer = factory.inlineExpressions([initializer, localName]);
+            }
+            else {
+                initializer = localName;
+            }
+            setEmitFlags(propertyName, EmitFlags.NoComments | EmitFlags.NoSourceMap);
+            setSourceMapRange(localName, propertyOriginalNode.name);
+            setEmitFlags(localName, EmitFlags.NoComments);
+        }
+        else {
+            initializer ??= factory.createVoidZero();
+        }
 
         if (emitAssignment || isPrivateIdentifier(propertyName)) {
             const memberAccess = createMemberAccessForPropertyName(factory, receiver, propertyName, /*location*/ propertyName);
             addEmitFlags(memberAccess, EmitFlags.NoLeadingComments);
-            return factory.createAssignment(memberAccess, initializer);
+            const expression = factory.createAssignment(memberAccess, initializer);
+            return expression;
         }
         else {
             const name = isComputedPropertyName(propertyName) ? propertyName.expression
