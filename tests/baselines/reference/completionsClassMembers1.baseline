@@ -1,7 +1,7 @@
 [
   {
     "marker": {
-      "fileName": "/tests/cases/fourslash/completionsClassMembers.ts",
+      "fileName": "/tests/cases/fourslash/completionsClassMembers1.ts",
       "position": 93,
       "name": ""
     },
