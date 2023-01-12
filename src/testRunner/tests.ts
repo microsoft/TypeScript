@@ -114,6 +114,7 @@ import "./unittests/tscWatch/moduleResolution";
 import "./unittests/tscWatch/programUpdates";
 import "./unittests/tscWatch/projectsWithReferences";
 import "./unittests/tscWatch/resolutionCache";
+import "./unittests/tscWatch/resolveJsonModuleWithIncremental";
 import "./unittests/tscWatch/sourceOfProjectReferenceRedirect";
 import "./unittests/tscWatch/watchApi";
 import "./unittests/tscWatch/watchEnvironment";

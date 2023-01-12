@@ -11,12 +11,12 @@ import {
 function createExportingModuleFile(path: string, exportPrefix: string, exportCount: number): File {
     return {
         path,
-        content: ts.fill(exportCount, i => `export const ${exportPrefix}_${i} = ${i};`).join("\n"),
+        content: ts.arrayOf(exportCount, i => `export const ${exportPrefix}_${i} = ${i};`).join("\n"),
     };
 }
 
 function createExportingModuleFiles(pathPrefix: string, fileCount: number, exportCount: number, getExportPrefix: (fileIndex: number) => string): File[] {
-    return ts.fill(fileCount, fileIndex => createExportingModuleFile(
+    return ts.arrayOf(fileCount, fileIndex => createExportingModuleFile(
         `${pathPrefix}_${fileIndex}.ts`,
         getExportPrefix(fileIndex),
         exportCount));
@@ -98,7 +98,7 @@ describe("unittests:: tsserver:: completionsIncomplete", () => {
     });
 
     it("ambient module specifier resolutions do not count against the resolution limit", () => {
-        const ambientFiles = ts.fill(100, (i): File => ({
+        const ambientFiles = ts.arrayOf(100, (i): File => ({
             path: `/lib/ambient_${i}.ts`,
             content: `declare module "ambient_${i}" { export const aa_${i} = ${i}; }`,
         }));

@@ -1054,7 +1054,7 @@ function getExhaustiveCaseSnippets(
                         elements.push(factory.createNumericLiteral(type.value));
                         break;
                     case "string":
-                        elements.push(factory.createStringLiteral(type.value));
+                        elements.push(factory.createStringLiteral(type.value, quotePreference === QuotePreference.Single));
                         break;
                 }
             }
@@ -2876,8 +2876,10 @@ function getCompletionData(
 
                 case SyntaxKind.JsxExpression:
                 case SyntaxKind.JsxSpreadAttribute:
-                    // For `<div foo={true} [||] ></div>`, `parent` will be `{true}` and `previousToken` will be `}`
-                    if (previousToken.kind === SyntaxKind.CloseBraceToken && currentToken.kind === SyntaxKind.GreaterThanToken) {
+                    // First case is for `<div foo={true} [||] />` or `<div foo={true} [||] ></div>`,
+                    // `parent` will be `{true}` and `previousToken` will be `}`
+                    // Second case is for `<div foo={true} t[||] ></div>`
+                    if (previousToken.kind === SyntaxKind.CloseBraceToken || (previousToken.kind === SyntaxKind.Identifier || previousToken.parent.kind === SyntaxKind.JsxAttribute)) {
                         isJsxIdentifierExpected = true;
                     }
                     break;
@@ -5216,4 +5218,3 @@ function toUpperCharCode(charCode: number) {
     }
     return charCode;
 }
-

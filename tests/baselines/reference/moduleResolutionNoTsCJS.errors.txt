@@ -1,6 +1,6 @@
-tests/cases/compiler/user.ts(1,15): error TS2691: An import path cannot end with a '.ts' extension. Consider importing './x' instead.
-tests/cases/compiler/user.ts(2,15): error TS2691: An import path cannot end with a '.tsx' extension. Consider importing './y' instead.
-tests/cases/compiler/user.ts(3,15): error TS2691: An import path cannot end with a '.d.ts' extension. Consider importing './z' instead.
+tests/cases/compiler/user.ts(1,15): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+tests/cases/compiler/user.ts(2,15): error TS5097: An import path can only end with a '.tsx' extension when 'allowImportingTsExtensions' is enabled.
+tests/cases/compiler/user.ts(3,15): error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './z' instead?
 
 
 ==== tests/cases/compiler/x.ts (0 errors) ====
@@ -18,13 +18,13 @@ tests/cases/compiler/user.ts(3,15): error TS2691: An import path cannot end with
 ==== tests/cases/compiler/user.ts (3 errors) ====
     import x from "./x.ts";
                   ~~~~~~~~
-!!! error TS2691: An import path cannot end with a '.ts' extension. Consider importing './x' instead.
+!!! error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
     import y from "./y.tsx";
                   ~~~~~~~~~
-!!! error TS2691: An import path cannot end with a '.tsx' extension. Consider importing './y' instead.
+!!! error TS5097: An import path can only end with a '.tsx' extension when 'allowImportingTsExtensions' is enabled.
     import z from "./z.d.ts";
                   ~~~~~~~~~~
-!!! error TS2691: An import path cannot end with a '.d.ts' extension. Consider importing './z' instead.
+!!! error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './z' instead?
     
     // Making sure the suggested fixes are valid:
     import x2 from "./x";

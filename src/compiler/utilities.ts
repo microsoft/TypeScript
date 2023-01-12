@@ -103,6 +103,7 @@ import {
     EmitResolver,
     EmitTextWriter,
     emptyArray,
+    endsWith,
     ensurePathIsNonModuleName,
     ensureTrailingDirectorySeparator,
     EntityName,
@@ -157,7 +158,6 @@ import {
     getCombinedModifierFlags,
     getCombinedNodeFlags,
     getDirectoryPath,
-    getEntries,
     getJSDocAugmentsTag,
     getJSDocDeprecatedTagNoCache,
     getJSDocImplementsTags,
@@ -295,6 +295,7 @@ import {
     isNamespaceExport,
     isNamespaceExportDeclaration,
     isNamespaceImport,
+    isNonNullExpression,
     isNoSubstitutionTemplateLiteral,
     isNumericLiteral,
     isObjectLiteralExpression,
@@ -655,8 +656,7 @@ export function forEachAncestor<T>(node: Node, callback: (n: Node) => T | undefi
  */
 export function forEachEntry<K, V, U>(map: ReadonlyMap<K, V>, callback: (value: V, key: K) => U | undefined): U | undefined {
     const iterator = map.entries();
-    for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-        const [key, value] = iterResult.value;
+    for (const [key, value] of iterator) {
         const result = callback(value, key);
         if (result) {
             return result;
@@ -672,8 +672,8 @@ export function forEachEntry<K, V, U>(map: ReadonlyMap<K, V>, callback: (value: 
  */
 export function forEachKey<K, T>(map: ReadonlyCollection<K>, callback: (key: K) => T | undefined): T | undefined {
     const iterator = map.keys();
-    for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-        const result = callback(iterResult.value);
+    for (const key of iterator) {
+        const result = callback(key);
         if (result) {
             return result;
         }
@@ -5087,7 +5087,7 @@ const doubleQuoteEscapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u202
 const singleQuoteEscapedCharsRegExp = /[\\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
 // Template strings preserve simple LF newlines, still encode CRLF (or CR)
 const backtickQuoteEscapedCharsRegExp = /\r\n|[\\\`\u0000-\u001f\t\v\f\b\r\u2028\u2029\u0085]/g;
-const escapedCharsMap = new Map(getEntries({
+const escapedCharsMap = new Map(Object.entries({
     "\t": "\\t",
     "\v": "\\v",
     "\f": "\\f",
@@ -5155,7 +5155,7 @@ export function escapeNonAsciiString(s: string, quoteChar?: CharacterCodes.doubl
 // the map below must be updated.
 const jsxDoubleQuoteEscapedCharsRegExp = /[\"\u0000-\u001f\u2028\u2029\u0085]/g;
 const jsxSingleQuoteEscapedCharsRegExp = /[\'\u0000-\u001f\u2028\u2029\u0085]/g;
-const jsxEscapedCharsMap = new Map(getEntries({
+const jsxEscapedCharsMap = new Map(Object.entries({
     "\"": "&quot;",
     "\'": "&apos;"
 }));
@@ -5499,7 +5499,7 @@ export function getDeclarationEmitOutputFilePathWorker(fileName: string, options
 export function getDeclarationEmitExtensionForPath(path: string) {
     return fileExtensionIsOneOf(path, [Extension.Mjs, Extension.Mts]) ? Extension.Dmts :
         fileExtensionIsOneOf(path, [Extension.Cjs, Extension.Cts]) ? Extension.Dcts :
-        fileExtensionIsOneOf(path, [Extension.Json]) ? `.json.d.ts` : // Drive-by redefinition of json declaration file output name so if it's ever enabled, it behaves well
+        fileExtensionIsOneOf(path, [Extension.Json]) ? `.d.json.ts` : // Drive-by redefinition of json declaration file output name so if it's ever enabled, it behaves well
         Extension.Dts;
 }
 
@@ -5511,7 +5511,7 @@ export function getDeclarationEmitExtensionForPath(path: string) {
 export function getPossibleOriginalInputExtensionForExtension(path: string) {
     return fileExtensionIsOneOf(path, [Extension.Dmts, Extension.Mjs, Extension.Mts]) ? [Extension.Mts, Extension.Mjs] :
         fileExtensionIsOneOf(path, [Extension.Dcts, Extension.Cjs, Extension.Cts]) ? [Extension.Cts, Extension.Cjs]:
-        fileExtensionIsOneOf(path, [`.json.d.ts`]) ? [Extension.Json] :
+        fileExtensionIsOneOf(path, [`.d.json.ts`]) ? [Extension.Json] :
         [Extension.Tsx, Extension.Ts, Extension.Jsx, Extension.Js];
 }
 
@@ -8672,12 +8672,12 @@ export function positionIsSynthesized(pos: number): boolean {
  *
  * @internal
  */
-export function extensionIsTS(ext: Extension): boolean {
-    return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts || ext === Extension.Cts || ext === Extension.Mts || ext === Extension.Dmts || ext === Extension.Dcts;
+export function extensionIsTS(ext: string): boolean {
+    return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts || ext === Extension.Cts || ext === Extension.Mts || ext === Extension.Dmts || ext === Extension.Dcts || (startsWith(ext, ".d.") && endsWith(ext, ".ts"));
 }
 
 /** @internal */
-export function resolutionExtensionIsTSOrJson(ext: Extension) {
+export function resolutionExtensionIsTSOrJson(ext: string) {
     return extensionIsTS(ext) || ext === Extension.Json;
 }
 
@@ -9481,4 +9481,11 @@ export function isOptionalDeclaration(declaration: Declaration): boolean {
         default:
             return false;
     }
+}
+
+/** @internal */
+export function isNonNullAccess(node: Node): node is AccessExpression {
+    const kind = node.kind;
+    return (kind === SyntaxKind.PropertyAccessExpression
+        || kind === SyntaxKind.ElementAccessExpression) && isNonNullExpression((node as AccessExpression).expression);
 }

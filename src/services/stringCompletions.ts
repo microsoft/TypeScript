@@ -159,7 +159,7 @@ import {
 interface NameAndKindSet {
     add(value: NameAndKind): void;
     has(name: string): boolean;
-    values(): Iterator<NameAndKind>;
+    values(): IterableIterator<NameAndKind>;
 }
 const kindPrecedence = {
     [ScriptElementKind.directory]: 0,
@@ -421,7 +421,7 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
     function fromContextualType(): StringLiteralCompletion {
         // Get completion for string literal from string literal type
         // i.e. var x: "hi" | "hello" = "/*completion position*/"
-        return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker)), isNewIdentifier: false };
+        return { kind: StringLiteralCompletionKind.Types, types: getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, ContextFlags.Completions)), isNewIdentifier: false };
     }
 }
 
@@ -691,6 +691,10 @@ function getCompletionEntriesForDirectoryFragment(
 }
 
 function getFilenameWithExtensionOption(name: string, compilerOptions: CompilerOptions, extensionOptions: ExtensionOptions): { name: string, extension: Extension | undefined } {
+    const nonJsResult = moduleSpecifiers.tryGetRealFileNameForNonJsDeclarationFileName(name);
+    if (nonJsResult) {
+        return { name: nonJsResult, extension: tryGetExtensionFromPath(nonJsResult) };
+    }
     if (extensionOptions.referenceKind === ReferenceKind.Filename) {
         return { name, extension: tryGetExtensionFromPath(name) };
     }

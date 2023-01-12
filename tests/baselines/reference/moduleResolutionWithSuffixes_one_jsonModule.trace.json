@@ -2,6 +2,8 @@
     "======== Resolving module './foo.json' from '/index.ts'. ========",
     "Explicitly specified module resolution kind: 'Node10'.",
     "Loading module as file / folder, candidate module location '/foo.json', target file types: TypeScript, Declaration.",
+    "File name '/foo.json' has a '.json' extension - stripping it.",
+    "File '/foo.d.json.ios.ts' does not exist.",
     "File '/foo.json.ios.ts' does not exist.",
     "File '/foo.json.ios.tsx' does not exist.",
     "File '/foo.json.ios.d.ts' does not exist.",

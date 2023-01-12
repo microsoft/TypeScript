@@ -3864,6 +3864,10 @@
         "category": "Error",
         "code": 4084
     },
+    "Extends clause for inferred type '{0}' has or is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4085
+    },
     "Conflicting definitions for '{0}' found at '{1}' and '{2}'. Consider installing a specific version of this library to resolve the conflict.": {
         "category": "Error",
         "code": 4090
@@ -5189,6 +5193,18 @@
     "Found {0} errors in {1} files.": {
         "category": "Message",
         "code": 6261
+    },
+    "File name '{0}' has a '{1}' extension - looking up '{2}' instead.": {
+        "category": "Message",
+        "code": 6262
+    },
+    "Module '{0}' was resolved to '{1}', but '--allowArbitraryExtensions' is not set.": {
+        "category": "Error",
+        "code": 6263
+    },
+    "Enable importing files with any extension, provided a declaration file is present.": {
+        "category": "Message",
+        "code": 6264
     },
 
     "Directory '{0}' has no containing package.json scope. Imports will not resolve.": {
@@ -6544,6 +6560,14 @@
     "Unknown type acquisition option '{0}'. Did you mean '{1}'?": {
         "category": "Error",
         "code": 17018
+    },
+    "'{0}' at the end of a type is not valid TypeScript syntax. Did you mean to write '{1}'?": {
+        "category": "Error",
+        "code": 17019
+    },
+    "'{0}' at the start of a type is not valid TypeScript syntax. Did you mean to write '{1}'?": {
+        "category": "Error",
+        "code": 17020
     },
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
