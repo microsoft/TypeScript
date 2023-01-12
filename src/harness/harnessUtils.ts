@@ -1,6 +1,5 @@
 import * as ts from "./_namespaces/ts";
 import * as Harness from "./_namespaces/Harness";
-import { isIdentifier } from "./_namespaces/ts";
 
 export function encodeString(s: string): string {
     return ts.sys.bufferFrom!(s).toString("utf8");
@@ -221,7 +220,7 @@ export function sourceFileToJSON(file: ts.Node): string {
                     // data we don't care about in the dump. We only care what the parser set directly
                     // on the AST.
                     let flags = n.flags & ~(ts.NodeFlags.JavaScriptFile | ts.NodeFlags.HasAggregatedChildData);
-                    if (isIdentifier(n)) {
+                    if (ts.isIdentifier(n)) {
                         if (flags & ts.NodeFlags.IdentifierHasExtendedUnicodeEscape) {
                             o.hasExtendedUnicodeEscape = true;
                             flags &= ~ts.NodeFlags.IdentifierHasExtendedUnicodeEscape;

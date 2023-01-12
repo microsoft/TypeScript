@@ -4414,8 +4414,7 @@ declare namespace ts {
         ReachabilityCheckFlags = 768,
         ReachabilityAndEmitFlags = 2816,
         ContextFlags = 50720768,
-        TypeExcludesFlags = 40960,
-        IdentifierIsInJSDocNamespace = 2048
+        TypeExcludesFlags = 40960
     }
     enum ModifierFlags {
         None = 0,
@@ -4585,13 +4584,15 @@ declare namespace ts {
          * Text of identifier, but if the identifier begins with two underscores, this will begin with three.
          */
         readonly escapedText: __String;
-        /** @deprecated Use `idKeyword(identifier)` instead. */
-        readonly originalKeywordKind?: SyntaxKind;
-        /** @deprecated Use `identifier.flags & NodeFlags.IdentifierIsInJSDocNamespace` instead. */
-        readonly isInJSDocNamespace?: boolean;
     }
     interface Identifier {
         readonly text: string;
+    }
+    interface Identifier {
+        /** @deprecated Use `idKeyword(identifier)` instead. */
+        readonly originalKeywordKind?: SyntaxKind;
+        /** @deprecated Use `.parent` or the surrounding context to determine this instead. */
+        readonly isInJSDocNamespace?: boolean;
     }
     interface TransientIdentifier extends Identifier {
         resolvedSymbol: Symbol;
@@ -8605,7 +8606,7 @@ declare namespace ts {
      * If the text of an Identifier matches a keyword (including contextual and TypeScript-specific keywords), returns the
      * SyntaxKind for the matching keyword.
      */
-    function idKeyword(node: Identifier): SyntaxKind | undefined;
+    function identifierToKeywordKind(node: Identifier): KeywordSyntaxKind | undefined;
     function symbolName(symbol: Symbol): string;
     function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | PrivateIdentifier | undefined;
     function getNameOfDeclaration(declaration: Declaration | Expression | undefined): DeclarationName | undefined;

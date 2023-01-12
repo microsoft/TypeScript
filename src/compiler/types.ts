@@ -1014,11 +1014,6 @@ export type ForEachChildNodes =
     ;
 
 /** @internal */
-export type VisitEachChildNodes =
-    | HasChildren
-    ;
-
-/** @internal */
 export type HasChildren =
     | QualifiedName
     | ComputedPropertyName

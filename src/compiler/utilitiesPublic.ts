@@ -190,6 +190,7 @@ import {
     JsxExpression,
     JsxOpeningLikeElement,
     JsxTagNameExpression,
+    KeywordSyntaxKind,
     LabeledStatement,
     lastOrUndefined,
     LeftHandSideExpression,
@@ -769,7 +770,7 @@ export function idText(identifierOrPrivateName: Identifier | PrivateIdentifier):
  * If the text of an Identifier matches a keyword (including contextual and TypeScript-specific keywords), returns the
  * SyntaxKind for the matching keyword.
  */
-export function identifierToKeywordKind(node: Identifier) {
+export function identifierToKeywordKind(node: Identifier): KeywordSyntaxKind | undefined {
     const token = stringToToken(node.escapedText as string);
     return token ? tryCast(token, isKeyword) : undefined;
 }
