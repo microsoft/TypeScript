@@ -88,20 +88,12 @@ function buildInfoFileOutput(messageTable, inputFilePathRel) {
         "",
         "import { DiagnosticCategory, DiagnosticMessage } from \"./types\";",
         "",
-        "function diag(code: number, category: DiagnosticCategory, key: string, message: string, reportsUnnecessary?: {}, elidedInCompatabilityPyramid?: boolean, reportsDeprecated?: {}): DiagnosticMessage {",
-        "    return { code, category, key, message, reportsUnnecessary, elidedInCompatabilityPyramid, reportsDeprecated };",
-        "}",
-        "",
         "/** @internal */",
         "export const Diagnostics = {",
     ];
     messageTable.forEach(({ code, category, reportsUnnecessary, elidedInCompatabilityPyramid, reportsDeprecated }, name) => {
         const propName = convertPropertyName(name);
-        const argReportsUnnecessary = reportsUnnecessary ? `, /*reportsUnnecessary*/ ${reportsUnnecessary}` : "";
-        const argElidedInCompatabilityPyramid = elidedInCompatabilityPyramid ? `${!reportsUnnecessary ? ", /*reportsUnnecessary*/ undefined" : ""}, /*elidedInCompatabilityPyramid*/ ${elidedInCompatabilityPyramid}` : "";
-        const argReportsDeprecated = reportsDeprecated ? `${!argElidedInCompatabilityPyramid ? ", /*reportsUnnecessary*/ undefined, /*elidedInCompatabilityPyramid*/ undefined" : ""}, /*reportsDeprecated*/ ${reportsDeprecated}` : "";
-
-        result.push(`    ${propName}: diag(${code}, DiagnosticCategory.${category}, "${createKey(propName, code)}", ${JSON.stringify(name)}${argReportsUnnecessary}${argElidedInCompatabilityPyramid}${argReportsDeprecated}),`);
+        result.push(`    ${propName}: { code: ${code}, category: DiagnosticCategory.${category}, key: "${createKey(propName, code)}", message: ${JSON.stringify(name)}, reportsUnnecessary: ${reportsUnnecessary}, elidedInCompatabilityPyramid: ${elidedInCompatabilityPyramid}, reportsDeprecated: ${reportsDeprecated} } satisfies DiagnosticMessage as DiagnosticMessage,`);
     });
 
     result.push("};");
