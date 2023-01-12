@@ -107,6 +107,7 @@ import {
     hasInitializer,
     hasType,
     Identifier,
+    identifierToKeywordKind,
     ImportDeclaration,
     ImportEqualsDeclaration,
     ImportKind,
@@ -1691,7 +1692,7 @@ function isModifierLike(node: Node): ModifierSyntaxKind | undefined {
         return node.kind;
     }
     if (isIdentifier(node)) {
-        const originalKeywordKind = stringToToken(node.escapedText as string);
+        const originalKeywordKind = identifierToKeywordKind(node);
         if (originalKeywordKind && isModifierKind(originalKeywordKind)) {
             return originalKeywordKind;
         }
@@ -4723,7 +4724,7 @@ function isFunctionLikeBodyKeyword(kind: SyntaxKind) {
 }
 
 function keywordForNode(node: Node): SyntaxKind {
-    return isIdentifier(node) ? stringToToken(node.escapedText as string) || SyntaxKind.Unknown : node.kind;
+    return isIdentifier(node) ? identifierToKeywordKind(node) ?? SyntaxKind.Unknown : node.kind;
 }
 
 function getContextualKeywords(
@@ -4827,8 +4828,8 @@ function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, 
             }
             break;
        case SyntaxKind.Identifier: {
-            const originalKeywordKind = stringToToken((location as Identifier).text);
-            if (originalKeywordKind && isKeyword(originalKeywordKind)) {
+            const originalKeywordKind = identifierToKeywordKind(location as Identifier);
+            if (originalKeywordKind) {
                 return undefined;
             }
             // class c { public prop = c| }
@@ -4873,7 +4874,7 @@ function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, 
                 return undefined;
             }
             const isValidKeyword = isClassLike(contextToken.parent.parent) ? isClassMemberCompletionKeyword : isInterfaceOrTypeLiteralCompletionKeyword;
-            return (isValidKeyword(contextToken.kind) || contextToken.kind === SyntaxKind.AsteriskToken || isIdentifier(contextToken) && isValidKeyword(stringToToken(contextToken.text)!)) // TODO: GH#18217
+            return (isValidKeyword(contextToken.kind) || contextToken.kind === SyntaxKind.AsteriskToken || isIdentifier(contextToken) && isValidKeyword(identifierToKeywordKind(contextToken) ?? SyntaxKind.Unknown))
                 ? contextToken.parent.parent as ObjectTypeDeclaration : undefined;
     }
 }

@@ -50,7 +50,7 @@ import {
     isExportsOrModuleExportsOrAlias,
     isFunctionExpression,
     isIdentifier,
-    isNonContextualKeyword,
+    isIdentifierANonContextualKeyword,
     isObjectLiteralExpression,
     isPropertyAccessExpression,
     isRequireCall,
@@ -75,7 +75,6 @@ import {
     SourceFile,
     Statement,
     StringLiteralLike,
-    stringToToken,
     SymbolFlags,
     SyntaxKind,
     textChanges,
@@ -163,8 +162,7 @@ function collectExportRenames(sourceFile: SourceFile, checker: TypeChecker, iden
     const res = new Map<string, string>();
     forEachExportReference(sourceFile, node => {
         const { text } = node.name;
-        const originalKeywordKind = stringToToken(text);
-        if (!res.has(text) && (originalKeywordKind !== undefined && isNonContextualKeyword(originalKeywordKind)
+        if (!res.has(text) && (isIdentifierANonContextualKeyword(node.name)
             || checker.resolveName(text, node, SymbolFlags.Value, /*excludeGlobals*/ true))) {
             // Unconditionally add an underscore in case `text` is a keyword.
             res.set(text, makeUniqueName(`_${text}`, identifiers));

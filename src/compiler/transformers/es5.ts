@@ -5,6 +5,7 @@ import {
     Expression,
     getOriginalNodeId,
     Identifier,
+    identifierToKeywordKind,
     isIdentifier,
     isPrivateIdentifier,
     isPropertyAccessExpression,
@@ -18,7 +19,6 @@ import {
     PropertyAssignment,
     setTextRange,
     SourceFile,
-    stringToToken,
     SyntaxKind,
     TransformationContext,
 } from "../_namespaces/ts";
@@ -137,7 +137,7 @@ export function transformES5(context: TransformationContext): (x: SourceFile | B
      * @param name An Identifier
      */
     function trySubstituteReservedName(name: Identifier) {
-        const token = stringToToken(name.escapedText as string);
+        const token = identifierToKeywordKind(name);
         if (token !== undefined && token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord) {
             return setTextRange(factory.createStringLiteralFromNode(name), name);
         }

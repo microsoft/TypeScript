@@ -377,6 +377,7 @@ import {
     hasSyntacticModifiers,
     HeritageClause,
     Identifier,
+    identifierToKeywordKind,
     IdentifierTypePredicate,
     idText,
     IfStatement,
@@ -927,7 +928,6 @@ import {
     StringLiteralLike,
     StringLiteralType,
     StringMappingType,
-    stringToToken,
     stripQuotes,
     StructuredType,
     SubstitutionType,
@@ -23213,7 +23213,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.Parameter:
                 const param = declaration as ParameterDeclaration;
                 if (isIdentifier(param.name)) {
-                    const originalKeywordKind = stringToToken(param.name.escapedText as string);
+                    const originalKeywordKind = identifierToKeywordKind(param.name);
                     if ((isCallSignatureDeclaration(param.parent) || isMethodSignature(param.parent) || isFunctionTypeNode(param.parent)) &&
                         param.parent.parameters.indexOf(param) > -1 &&
                         (resolveName(param, param.name.escapedText, SymbolFlags.Type, undefined, param.name.escapedText, /*isUse*/ true) ||

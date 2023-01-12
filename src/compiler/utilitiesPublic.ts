@@ -138,6 +138,7 @@ import {
     isJSDocTypeAlias,
     isJSDocTypeLiteral,
     isJSDocTypeTag,
+    isKeyword,
     isModuleBlock,
     isNonNullExpression,
     isNotEmittedStatement,
@@ -259,6 +260,7 @@ import {
     TextChangeRange,
     TextRange,
     TextSpan,
+    tryCast,
     TypeElement,
     TypeNode,
     TypeOnlyAliasDeclaration,
@@ -767,8 +769,9 @@ export function idText(identifierOrPrivateName: Identifier | PrivateIdentifier):
  * If the text of an Identifier matches a keyword (including contextual and TypeScript-specific keywords), returns the
  * SyntaxKind for the matching keyword.
  */
-export function idKeyword(node: Identifier) {
-    return stringToToken(node.escapedText as string);
+export function identifierToKeywordKind(node: Identifier) {
+    const token = stringToToken(node.escapedText as string);
+    return token ? tryCast(token, isKeyword) : undefined;
 }
 
 export function symbolName(symbol: Symbol): string {

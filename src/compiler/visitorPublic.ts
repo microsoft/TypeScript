@@ -7,6 +7,7 @@ import {
     FunctionBody,
     getEmitFlags,
     getEmitScriptTarget,
+    HasChildren,
     Identifier,
     isArray,
     isArrayBindingElement,
@@ -98,7 +99,6 @@ import {
     Statement,
     SyntaxKind,
     TransformationContext,
-    VisitEachChildNodes,
     Visitor,
 } from "./_namespaces/ts";
 
@@ -518,7 +518,7 @@ type VisitEachChildFunction<T extends Node> = (node: T, visitor: Visitor, contex
 //  }
 //
 // This is then used as the expected type for `visitEachChildTable`.
-type VisitEachChildTable = { [TNode in VisitEachChildNodes as TNode["kind"]]: VisitEachChildFunction<TNode> };
+type VisitEachChildTable = { [TNode in HasChildren as TNode["kind"]]: VisitEachChildFunction<TNode> };
 
 // NOTE: Before you can add a new method to `visitEachChildTable`, you must first ensure the `Node` subtype you
 //       wish to add is defined in the `HasChildren` union in types.ts.

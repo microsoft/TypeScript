@@ -834,7 +834,7 @@ export const enum NodeFlags {
 
     // The following flags repurpose other NodeFlags as different meanings for Identifier nodes
     /** @internal */ IdentifierHasExtendedUnicodeEscape = ContainsThis, // Indicates whether the identifier contains an extended unicode escape sequence
-    IdentifierIsInJSDocNamespace = HasAsyncFunctions, // Indicates whether the identifier is part of a JSDoc namespace
+    /** @internal */ IdentifierIsInJSDocNamespace = HasAsyncFunctions, // Indicates whether the identifier is part of a JSDoc namespace
 }
 
 export const enum ModifierFlags {
@@ -1685,10 +1685,6 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
      * Text of identifier, but if the identifier begins with two underscores, this will begin with three.
      */
     readonly escapedText: __String;
-    /** @deprecated Use `idKeyword(identifier)` instead. */
-    readonly originalKeywordKind?: SyntaxKind;  // Original syntaxKind which get set so that we can report an error later
-    /** @deprecated Use `identifier.flags & NodeFlags.IdentifierIsInJSDocNamespace` instead. */
-    readonly isInJSDocNamespace?: boolean;      // if the node is a member in a JSDoc namespace.
 }
 
 // Transient identifier node (marked by id === -1)

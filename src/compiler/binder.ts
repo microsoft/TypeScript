@@ -114,6 +114,7 @@ import {
     HasLocals,
     hasSyntacticModifier,
     Identifier,
+    identifierToKeywordKind,
     idText,
     IfStatement,
     ImportClause,
@@ -283,7 +284,6 @@ import {
     SpreadElement,
     Statement,
     StringLiteral,
-    stringToToken,
     SuperExpression,
     SwitchStatement,
     Symbol,
@@ -2422,7 +2422,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             !isIdentifierName(node)) {
 
             // strict mode identifiers
-            const originalKeywordKind = stringToToken(node.escapedText as string);
+            const originalKeywordKind = identifierToKeywordKind(node);
             if (inStrictMode &&
                 originalKeywordKind! >= SyntaxKind.FirstFutureReservedWord &&
                 originalKeywordKind! <= SyntaxKind.LastFutureReservedWord) {

@@ -203,6 +203,7 @@ import {
     HasTypeArguments,
     HeritageClause,
     Identifier,
+    identifierToKeywordKind,
     IdentifierTypePredicate,
     identity,
     idText,
@@ -4347,7 +4348,7 @@ export function isStringAKeyword(name: string) {
 
 /** @internal */
 export function isIdentifierANonContextualKeyword(node: Identifier): boolean {
-    const originalKeywordKind = stringToToken(node.escapedText as string);
+    const originalKeywordKind = identifierToKeywordKind(node);
     return !!originalKeywordKind && !isContextualKeyword(originalKeywordKind);
 }
 
@@ -7334,20 +7335,6 @@ function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: num
     this.original = undefined;
     this.emitNode = undefined;
 }
-
-Object.defineProperties(Identifier.prototype, {
-    originalKeywordKind: {
-        get(this: Identifier) {
-            return stringToToken(this.escapedText as string);
-        }
-    },
-    isInJSDocNamespace: {
-        get(this: Identifier) {
-            // NOTE: Returns `true` or `undefined` to match previous possible values.
-            return this.flags & NodeFlags.IdentifierIsInJSDocNamespace ? true : undefined;
-        }
-    }
-});
 
 function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
     this.fileName = fileName;
