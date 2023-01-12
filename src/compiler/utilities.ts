@@ -195,8 +195,8 @@ import {
     HasExpressionInitializer,
     hasExtension,
     HasFlowNode,
-    hasInitializer,
     HasInitializer,
+    hasInitializer,
     HasJSDoc,
     hasJSDocNodes,
     HasModifiers,
@@ -275,6 +275,7 @@ import {
     isJSDocOverloadTag,
     isJSDocParameterTag,
     isJSDocPropertyLikeTag,
+    isJSDocSatisfiesTag,
     isJSDocSignature,
     isJSDocTag,
     isJSDocTemplateTag,
@@ -3755,11 +3756,11 @@ function filterOwnedJSDocTags(hostNode: Node, jsDoc: JSDoc | JSDocTag) {
 }
 
 /**
- * Determines whether a host node owns a jsDoc tag. A `@type` tag attached to a
+ * Determines whether a host node owns a jsDoc tag. A `@type`/`@satisfies` tag attached to a
  * a ParenthesizedExpression belongs only to the ParenthesizedExpression.
  */
 function ownsJSDocTag(hostNode: Node, tag: JSDocTag) {
-    return !isJSDocTypeTag(tag)
+    return !(isJSDocTypeTag(tag) || isJSDocSatisfiesTag(tag))
         || !tag.parent
         || !isJSDoc(tag.parent)
         || !isParenthesizedExpression(tag.parent.parent)
@@ -9494,18 +9495,16 @@ export function isNonNullAccess(node: Node): node is AccessExpression {
 
 /** @internal */
 export function isJSDocSatisfiesExpression(node: Node): node is JSDocSatisfiesExpression {
-    return isInJSFile(node) && isParenthesizedExpression(node) && !!getJSDocSatisfiesTag(node);
+    return isInJSFile(node) && isParenthesizedExpression(node) && hasJSDocNodes(node) && !!getJSDocSatisfiesTag(node);
 }
 
 /** @internal */
 export function getJSDocSatisfiesExpressionType(node: JSDocSatisfiesExpression) {
-    const type = getJSDocSatisfiesTypeNode(node);
-    Debug.assertIsDefined(type);
-    return type;
+    return Debug.checkDefined(tryGetJSDocSatisfiesTypeNode(node));
 }
 
 /** @internal */
-export function getJSDocSatisfiesTypeNode(node: Node) {
+export function tryGetJSDocSatisfiesTypeNode(node: Node) {
     const tag = getJSDocSatisfiesTag(node);
     return tag && tag.typeExpression && tag.typeExpression.type;
 }

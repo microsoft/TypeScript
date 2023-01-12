@@ -63,3 +63,6 @@ const t7 = { a: "a" };
 >t7 : Symbol(t7, Decl(a.js, 48, 5))
 >a : Symbol(a, Decl(a.js, 48, 12))
 
+/** @satisfies {string} */ const t8 = (1);
+>t8 : Symbol(t8, Decl(a.js, 50, 32))
+

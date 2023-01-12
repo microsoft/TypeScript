@@ -18,3 +18,8 @@
  * @satisfies {T2}
  */
 const t1 = { a: 1 };
+
+/**
+ * @satisfies {number}
+ */
+const t2 = /** @satisfies {number} */ (1);

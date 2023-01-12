@@ -52,3 +52,5 @@ const t6 = { a: 'test', b: 'test' };
  * @satisfies {T3}
  */
 const t7 = { a: "a" };
+
+/** @satisfies {string} */ const t8 = (1);

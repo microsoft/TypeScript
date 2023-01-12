@@ -222,6 +222,7 @@ import {
     GetAccessorDeclaration,
     getAliasDeclarationFromName,
     getAllAccessorDeclarations,
+    getAllJSDocTags,
     getAllowSyntheticDefaultImports,
     getAncestor,
     getAssignedExpandoInitializer,
@@ -283,7 +284,6 @@ import {
     getJSDocParameterTags,
     getJSDocRoot,
     getJSDocSatisfiesExpressionType,
-    getJSDocSatisfiesTypeNode,
     getJSDocTags,
     getJSDocThisTag,
     getJSDocType,
@@ -558,6 +558,7 @@ import {
     isJSDocPropertyTag,
     isJSDocReturnTag,
     isJSDocSatisfiesExpression,
+    isJSDocSatisfiesTag,
     isJSDocSignature,
     isJSDocTemplateTag,
     isJSDocTypeAlias,
@@ -971,6 +972,7 @@ import {
     tryExtractTSExtension,
     tryGetClassImplementingOrExtendingExpressionWithTypeArguments,
     tryGetExtensionFromPath,
+    tryGetJSDocSatisfiesTypeNode,
     tryGetModuleSpecifierFromDeclaration,
     tryGetPropertyAccessOrIdentifierToString,
     TryStatement,
@@ -10230,19 +10232,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Use the type of the initializer expression if one is present and the declaration is
         // not a parameter of a contextually typed function
         if (hasOnlyExpressionInitializer(declaration) && !!declaration.initializer) {
-            if (isInJSFile(declaration)) {
-                const initializer = declaration.initializer;
-                if (!isJSDocSatisfiesExpression(initializer)) {
-                    const typeNode = getJSDocSatisfiesTypeNode(declaration);
-                    if (typeNode) {
-                        return checkSatisfiesExpressionWorker(initializer, typeNode, checkMode);
-                    }
-                }
-                if (!isParameter(declaration)) {
-                    const containerObjectType = getJSContainerObjectType(declaration, getSymbolOfDeclaration(declaration), getDeclaredExpandoInitializer(declaration));
-                    if (containerObjectType) {
-                        return containerObjectType;
-                    }
+            if (isInJSFile(declaration) && !isParameter(declaration)) {
+                const containerObjectType = getJSContainerObjectType(declaration, getSymbolOfDeclaration(declaration), getDeclaredExpandoInitializer(declaration));
+                if (containerObjectType) {
+                    return containerObjectType;
                 }
             }
             const type = widenTypeInferredFromInitializer(declaration, checkDeclarationInitializer(declaration, checkMode));
@@ -28169,7 +28162,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getContextualTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
-        const typeNode = getEffectiveTypeAnnotationNode(declaration) || (isInJSFile(declaration) ? getJSDocSatisfiesTypeNode(declaration) : undefined);
+        const typeNode = getEffectiveTypeAnnotationNode(declaration) || (isInJSFile(declaration) ? tryGetJSDocSatisfiesTypeNode(declaration) : undefined);
         if (typeNode) {
             return getTypeFromTypeNode(typeNode);
         }
@@ -36228,6 +36221,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         contextualType?: Type | undefined
     ) {
         const initializer = getEffectiveInitializer(declaration)!;
+        if (isInJSFile(declaration)) {
+            const typeNode = tryGetJSDocSatisfiesTypeNode(declaration);
+            if (typeNode) {
+                return checkSatisfiesExpressionWorker(initializer, typeNode, checkMode);
+            }
+        }
         const type = getQuickTypeOfExpression(initializer) ||
             (contextualType ?
                 checkExpressionWithContextualType(initializer, contextualType, /*inferenceContext*/ undefined, checkMode || CheckMode.Normal)
@@ -38850,6 +38849,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkJSDocSatisfiesTag(node: JSDocSatisfiesTag) {
         checkSourceElement(node.typeExpression);
+        const host = getEffectiveJSDocHost(node);
+        if (host) {
+            const tags = getAllJSDocTags(host, isJSDocSatisfiesTag);
+            if (length(tags) > 1) {
+                for (let i = 1; i < length(tags); i++) {
+                    const tagName = tags[i].tagName;
+                    error(tagName, Diagnostics._0_tag_already_specified, idText(tagName));
+                }
+            }
+        }
     }
 
     function checkJSDocLinkLikeTag(node: JSDocLink | JSDocLinkCode | JSDocLinkPlain) {

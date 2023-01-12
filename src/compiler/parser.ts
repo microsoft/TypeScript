@@ -144,7 +144,6 @@ import {
     isJSDocFunctionType,
     isJSDocNullableType,
     isJSDocReturnTag,
-    isJSDocSatisfiesTag,
     isJSDocTypeTag,
     isJsxOpeningElement,
     isJsxOpeningFragment,
@@ -9153,9 +9152,6 @@ namespace Parser {
             }
 
             function parseSatisfiesTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocSatisfiesTag {
-                if (some(tags, isJSDocSatisfiesTag)) {
-                    parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
-                }
                 const typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ false);
                 const comments = margin !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), margin, indentText) : undefined;
                 return finishNode(factory.createJSDocSatisfiesTag(tagName, typeExpression, comments), start);

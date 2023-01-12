@@ -79,3 +79,8 @@ const t7 = { a: "a" };
 >a : "a"
 >"a" : "a"
 
+/** @satisfies {string} */ const t8 = (1);
+>t8 : 1
+>(1) : 1
+>1 : 1
+
