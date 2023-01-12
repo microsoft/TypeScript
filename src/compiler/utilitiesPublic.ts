@@ -54,6 +54,7 @@ import {
     EnumDeclaration,
     every,
     ExportAssignment,
+    ExportDeclaration,
     ExportSpecifier,
     Expression,
     FileReference,
@@ -1458,6 +1459,8 @@ export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnl
         case SyntaxKind.ImportClause:
         case SyntaxKind.ImportEqualsDeclaration:
             return (node as ImportClause | ImportEqualsDeclaration).isTypeOnly;
+        case SyntaxKind.ExportDeclaration:
+            return (node as ExportDeclaration).isTypeOnly && !!(node as ExportDeclaration).moduleSpecifier && !(node as ExportDeclaration).exportClause;
         default:
             return false;
     }

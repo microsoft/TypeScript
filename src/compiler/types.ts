@@ -3817,6 +3817,7 @@ export type TypeOnlyCompatibleAliasDeclaration =
     | ImportEqualsDeclaration
     | NamespaceImport
     | ImportOrExportSpecifier
+    | ExportDeclaration
     ;
 
 export type TypeOnlyAliasDeclaration =
@@ -3825,6 +3826,7 @@ export type TypeOnlyAliasDeclaration =
     | NamespaceImport & { readonly parent: ImportClause & { readonly isTypeOnly: true } }
     | ImportSpecifier & ({ readonly isTypeOnly: true } | { readonly parent: NamedImports & { readonly parent: ImportClause & { readonly isTypeOnly: true } } })
     | ExportSpecifier & ({ readonly isTypeOnly: true } | { readonly parent: NamedExports & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true } } })
+    | ExportDeclaration & { readonly isTypeOnly: true } // export * from "mod"
     ;
 
 /**
@@ -5802,6 +5804,8 @@ export interface SymbolLinks {
     deferralParent?: Type;                      // Source union/intersection of a deferred type
     cjsExportMerged?: Symbol;                   // Version of the symbol with all non export= exports merged with the export= target
     typeOnlyDeclaration?: TypeOnlyAliasDeclaration | false; // First resolved alias declaration that makes the symbol only usable in type constructs
+    typeOnlyExportStarMap?: UnderscoreEscapedMap<ExportDeclaration & { readonly isTypeOnly: true }>; // Set on a module symbol when some of its exports were resolved through a 'export type * from "mod"' declaration
+    typeOnlyExportStarName?: __String;          // Set to the name of the symbol re-exported by an 'export type *' declaration, when different from the symbol name
     isConstructorDeclaredProperty?: boolean;    // Property declared through 'this.x = ...' assignment in constructor
     tupleLabelDeclaration?: NamedTupleMember | ParameterDeclaration; // Declaration associated with the tuple's label
     accessibleChainCache?: Map<string, Symbol[] | undefined>;

@@ -3386,7 +3386,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (result && errorLocation && meaning & SymbolFlags.Value && result.flags & SymbolFlags.Alias && !(result.flags & SymbolFlags.Value) && !isValidTypeOnlyAliasUseSite(errorLocation)) {
                     const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(result, SymbolFlags.Value);
                     if (typeOnlyDeclaration) {
-                        const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier
+                        const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier || typeOnlyDeclaration.kind === SyntaxKind.ExportDeclaration
                             ? Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type
                             : Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type;
                         const unescapedName = unescapeLeadingUnderscores(name);
@@ -3407,7 +3407,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             diagnostic,
             createDiagnosticForNode(
                 typeOnlyDeclaration,
-                typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier ? Diagnostics._0_was_exported_here : Diagnostics._0_was_imported_here,
+                typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier || typeOnlyDeclaration.kind === SyntaxKind.ExportDeclaration
+                    ? Diagnostics._0_was_exported_here
+                    : Diagnostics._0_was_imported_here,
                 unescapedName));
     }
 
@@ -3804,7 +3806,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkAndReportErrorForResolvingImportAliasToTypeOnlySymbol(node: ImportEqualsDeclaration, resolved: Symbol | undefined) {
         if (markSymbolOfAliasDeclarationIfTypeOnly(node, /*immediateTarget*/ undefined, resolved, /*overwriteEmpty*/ false) && !node.isTypeOnly) {
             const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(getSymbolOfDeclaration(node))!;
-            const isExport = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier;
+            const isExport = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier || typeOnlyDeclaration.kind === SyntaxKind.ExportDeclaration;
             const message = isExport
                 ? Diagnostics.An_import_alias_cannot_reference_a_declaration_that_was_exported_using_export_type
                 : Diagnostics.An_import_alias_cannot_reference_a_declaration_that_was_imported_using_import_type;
@@ -3812,7 +3814,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 ? Diagnostics._0_was_exported_here
                 : Diagnostics._0_was_imported_here;
 
-            const name = unescapeLeadingUnderscores(typeOnlyDeclaration.name.escapedText);
+            // TODO: how to get name for export *?
+            const name = typeOnlyDeclaration.kind === SyntaxKind.ExportDeclaration ? "*" : unescapeLeadingUnderscores(typeOnlyDeclaration.name.escapedText);
             addRelatedInfo(error(node.moduleReference, message), createDiagnosticForNode(typeOnlyDeclaration, relatedMessage, name));
         }
     }
@@ -4025,7 +4028,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (symbol.flags & SymbolFlags.Module) {
             const exportSymbol = getExportsOfSymbol(symbol).get(name.escapedText);
             const resolved = resolveSymbol(exportSymbol, dontResolveAlias);
-            markSymbolOfAliasDeclarationIfTypeOnly(specifier, exportSymbol, resolved, /*overwriteEmpty*/ false);
+            const exportStarDeclaration = getSymbolLinks(symbol).typeOnlyExportStarMap?.get(name.escapedText);
+            markSymbolOfAliasDeclarationIfTypeOnly(specifier, exportSymbol, resolved, /*overwriteEmpty*/ false, exportStarDeclaration, name.escapedText);
             return resolved;
         }
     }
@@ -4386,6 +4390,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         immediateTarget: Symbol | undefined,
         finalTarget: Symbol | undefined,
         overwriteEmpty: boolean,
+        exportStarDeclaration?: ExportDeclaration & { readonly isTypeOnly: true },
+        exportStarName?: __String,
     ): boolean {
         if (!aliasDeclaration || isPropertyAccessExpression(aliasDeclaration)) return false;
 
@@ -4395,6 +4401,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isTypeOnlyImportOrExportDeclaration(aliasDeclaration)) {
             const links = getSymbolLinks(sourceSymbol);
             links.typeOnlyDeclaration = aliasDeclaration;
+            return true;
+        }
+        if (exportStarDeclaration) {
+            const links = getSymbolLinks(sourceSymbol);
+            links.typeOnlyDeclaration = exportStarDeclaration;
+            if (sourceSymbol.escapedName !== exportStarName) {
+                links.typeOnlyExportStarName = exportStarName;
+            }
             return true;
         }
 
@@ -4422,7 +4436,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return links.typeOnlyDeclaration || undefined;
         }
         if (links.typeOnlyDeclaration) {
-            return getAllSymbolFlags(resolveAlias(links.typeOnlyDeclaration.symbol)) & include ? links.typeOnlyDeclaration : undefined;
+            const resolved = links.typeOnlyDeclaration.kind === SyntaxKind.ExportDeclaration
+                ? resolveSymbol(getExportsOfModule(links.typeOnlyDeclaration.symbol.parent!).get(links.typeOnlyExportStarName || symbol.escapedName))!
+                : resolveAlias(links.typeOnlyDeclaration.symbol);
+            return getAllSymbolFlags(resolved) & include ? links.typeOnlyDeclaration : undefined;
         }
         return undefined;
     }
@@ -5133,7 +5150,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function getExportsOfModule(moduleSymbol: Symbol): SymbolTable {
         const links = getSymbolLinks(moduleSymbol);
-        return links.resolvedExports || (links.resolvedExports = getExportsOfModuleWorker(moduleSymbol));
+        if (!links.resolvedExports) {
+            const { exports, typeOnlyExportStarMap } = getExportsOfModuleWorker(moduleSymbol);
+            links.resolvedExports = exports;
+            links.typeOnlyExportStarMap = typeOnlyExportStarMap;
+        }
+        return links.resolvedExports;
     }
 
     interface ExportCollisionTracker {
@@ -5173,21 +5195,38 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         });
     }
 
-    function getExportsOfModuleWorker(moduleSymbol: Symbol): SymbolTable {
+    function getExportsOfModuleWorker(moduleSymbol: Symbol) {
         const visitedSymbols: Symbol[] = [];
+        let typeOnlyExportStarMap: UnderscoreEscapedMap<ExportDeclaration & { readonly isTypeOnly: true }> | undefined;
+        const nonTypeOnlyNames = new Set<__String>();
 
         // A module defined by an 'export=' consists of one export that needs to be resolved
         moduleSymbol = resolveExternalModuleSymbol(moduleSymbol);
+        const exports = visit(moduleSymbol) || emptySymbols;
 
-        return visit(moduleSymbol) || emptySymbols;
+        if (typeOnlyExportStarMap) {
+            nonTypeOnlyNames.forEach(name => typeOnlyExportStarMap!.delete(name));
+        }
+
+        return {
+            exports,
+            typeOnlyExportStarMap,
+        };
 
         // The ES6 spec permits export * declarations in a module to circularly reference the module itself. For example,
         // module 'a' can 'export * from "b"' and 'b' can 'export * from "a"' without error.
-        function visit(symbol: Symbol | undefined): SymbolTable | undefined {
+        function visit(symbol: Symbol | undefined, exportStar?: ExportDeclaration, isTypeOnly?: boolean): SymbolTable | undefined {
+            if (!isTypeOnly && symbol?.exports) {
+                // Add non-type-only names before checking if we've visited this module,
+                // because we might have visited it via an 'export type *', and visiting
+                // again with 'export *' will override the type-onlyness of its exports.
+                symbol.exports.forEach((_, name) => nonTypeOnlyNames.add(name));
+            }
             if (!(symbol && symbol.exports && pushIfUnique(visitedSymbols, symbol))) {
                 return;
             }
             const symbols = new Map(symbol.exports);
+
             // All export * declarations are collected in an __export symbol by the binder
             const exportStars = symbol.exports.get(InternalSymbolName.ExportStar);
             if (exportStars) {
@@ -5196,7 +5235,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (exportStars.declarations) {
                     for (const node of exportStars.declarations) {
                         const resolvedModule = resolveExternalModuleName(node, (node as ExportDeclaration).moduleSpecifier!);
-                        const exportedSymbols = visit(resolvedModule);
+                        const exportedSymbols = visit(resolvedModule, node as ExportDeclaration, isTypeOnly || (node as ExportDeclaration).isTypeOnly);
                         extendExportSymbols(
                             nestedSymbols,
                             exportedSymbols,
@@ -5220,6 +5259,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 });
                 extendExportSymbols(symbols, nestedSymbols);
+            }
+            if (exportStar?.isTypeOnly) {
+                typeOnlyExportStarMap ??= new Map();
+                symbols.forEach((_, escapedName) => typeOnlyExportStarMap!.set(
+                    escapedName,
+                    exportStar as ExportDeclaration & { readonly isTypeOnly: true }));
             }
             return symbols;
         }
@@ -12131,7 +12176,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!links[resolutionKind]) {
             const isStatic = resolutionKind === MembersOrExportsResolutionKind.resolvedExports;
             const earlySymbols = !isStatic ? symbol.members :
-                symbol.flags & SymbolFlags.Module ? getExportsOfModuleWorker(symbol) :
+                symbol.flags & SymbolFlags.Module ? getExportsOfModuleWorker(symbol).exports :
                 symbol.exports;
 
             // In the event we recursively resolve the members/exports of the symbol, we
@@ -42983,13 +43028,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkGrammarExportDeclaration(node: ExportDeclaration): boolean {
-        if (node.isTypeOnly) {
-            if (node.exportClause?.kind === SyntaxKind.NamedExports) {
-                return checkGrammarNamedImportsOrExports(node.exportClause);
-            }
-            else {
-                return grammarErrorOnNode(node, Diagnostics.Only_named_exports_may_use_export_type);
-            }
+        if (node.isTypeOnly && node.exportClause?.kind === SyntaxKind.NamedExports) {
+            return checkGrammarNamedImportsOrExports(node.exportClause);
         }
         return false;
     }
