@@ -4825,7 +4825,7 @@ function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, 
                 return cls;
             }
             break;
-       case SyntaxKind.Identifier: {
+        case SyntaxKind.Identifier: {
             const originalKeywordKind = (location as Identifier).originalKeywordKind;
             if (originalKeywordKind && isKeyword(originalKeywordKind)) {
                 return undefined;
@@ -4848,6 +4848,12 @@ function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, 
         // class C { blah \n constructor/**/ }
         || (isIdentifier(contextToken) && isPropertyDeclaration(contextToken.parent) && isClassLike(location))) {
         return findAncestor(contextToken, isClassLike) as ObjectTypeDeclaration;
+    }
+
+    // class C { prop = ""\n | }
+    if (contextToken && isPropertyDeclaration(contextToken.parent) && isClassLike(location)
+        && getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line !== getLineAndCharacterOfPosition(sourceFile, position).line) {
+        return location;
     }
 
     switch (contextToken.kind) {
