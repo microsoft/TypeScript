@@ -4211,13 +4211,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 createDiagnosticForOptionName(Diagnostics.Option_verbatimModuleSyntax_cannot_be_used_when_module_is_set_to_UMD_AMD_or_System, "verbatimModuleSyntax");
             }
             if (options.isolatedModules) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_is_redundant_and_cannot_be_specified_with_option_1, "isolatedModules", "verbatimModuleSyntax");
+                createRedundantOptionDiagnostic("isolatedModules", "verbatimModuleSyntax");
             }
             if (options.preserveValueImports) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_is_redundant_and_cannot_be_specified_with_option_1, "preserveValueImports", "verbatimModuleSyntax");
+                createRedundantOptionDiagnostic("preserveValueImports", "verbatimModuleSyntax");
             }
             if (options.importsNotUsedAsValues) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_is_redundant_and_cannot_be_specified_with_option_1, "importsNotUsedAsValues", "verbatimModuleSyntax");
+                createRedundantOptionDiagnostic("importsNotUsedAsValues", "verbatimModuleSyntax");
             }
         }
 
@@ -4637,6 +4637,26 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         }
         return !!props.length;
+    }
+
+    /**
+     * Only creates a diagnostic on the option key specified by `errorOnOption`.
+     * If both options are specified in the program in separate config files via `extends`,
+     * a diagnostic is only created if `errorOnOption` is specified in the leaf config file.
+     * Useful if `redundantWithOption` represents a superset of the functionality of `errorOnOption`:
+     * if a user inherits `errorOnOption` from a base config file, it's still valid and useful to
+     * override it in the leaf config file.
+     */
+    function createRedundantOptionDiagnostic(errorOnOption: string, redundantWithOption: string) {
+        const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
+        if (compilerOptionsObjectLiteralSyntax) {
+            // This is a no-op if `errorOnOption` isn't present in the leaf config file.
+            createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, /*onKey*/ true, errorOnOption, /*key2*/ undefined, Diagnostics.Option_0_is_redundant_and_cannot_be_specified_with_option_1, errorOnOption, redundantWithOption);
+        }
+        else {
+            // There was no config file, so both options were specified on the command line.
+            createDiagnosticForOptionName(Diagnostics.Option_0_is_redundant_and_cannot_be_specified_with_option_1, errorOnOption, redundantWithOption);
+        }
     }
 
     function blockEmittingOfFile(emitFileName: string, diag: Diagnostic) {
