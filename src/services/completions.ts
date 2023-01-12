@@ -227,6 +227,7 @@ import {
     isTypeLiteralNode,
     isTypeNode,
     isTypeOfExpression,
+    isTypeOnlyImportDeclaration,
     isTypeOnlyImportOrExportDeclaration,
     isTypeReferenceType,
     isValidTypeOnlyAliasUseSite,
@@ -351,7 +352,7 @@ import {
     typeHasCallOrConstructSignatures,
     TypeLiteralNode,
     TypeNode,
-    TypeOnlyAliasDeclaration,
+    TypeOnlyImportDeclaration,
     TypeQueryNode,
     TypeReferenceNode,
     unescapeLeadingUnderscores,
@@ -466,8 +467,8 @@ interface SymbolOriginInfoResolvedExport extends SymbolOriginInfo {
     moduleSpecifier: string;
 }
 
-interface SymbolOriginInfoTypeOnlyAlias extends SymbolOriginInfo {
-    declaration: TypeOnlyAliasDeclaration;
+interface SymbolOriginInfoTypeOnlyImport extends SymbolOriginInfo {
+    declaration: TypeOnlyImportDeclaration;
 }
 
 interface SymbolOriginInfoObjectLiteralMethod extends SymbolOriginInfo {
@@ -508,7 +509,7 @@ function originIsNullableMember(origin: SymbolOriginInfo): boolean {
     return !!(origin.kind & SymbolOriginInfoKind.Nullable);
 }
 
-function originIsTypeOnlyAlias(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoTypeOnlyAlias {
+function originIsTypeOnlyAlias(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoTypeOnlyImport {
     return !!(origin && origin.kind & SymbolOriginInfoKind.TypeOnlyAlias);
 }
 
@@ -3330,9 +3331,9 @@ function getCompletionData(
                 symbolToSortTextMap[getSymbolId(symbol)] = SortText.GlobalsOrKeywords;
             }
             if (typeOnlyAliasNeedsPromotion && !(symbol.flags & SymbolFlags.Value)) {
-                const typeOnlyAliasDeclaration = symbol.declarations && find(symbol.declarations, isTypeOnlyImportOrExportDeclaration);
+                const typeOnlyAliasDeclaration = symbol.declarations && find(symbol.declarations, isTypeOnlyImportDeclaration);
                 if (typeOnlyAliasDeclaration) {
-                    const origin: SymbolOriginInfoTypeOnlyAlias = { kind: SymbolOriginInfoKind.TypeOnlyAlias, declaration: typeOnlyAliasDeclaration };
+                    const origin: SymbolOriginInfoTypeOnlyImport = { kind: SymbolOriginInfoKind.TypeOnlyAlias, declaration: typeOnlyAliasDeclaration };
                     symbolToOriginInfoMap[i] = origin;
                 }
             }

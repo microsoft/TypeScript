@@ -3821,15 +3821,20 @@ export type TypeOnlyCompatibleAliasDeclaration =
     | NamespaceExport
     ;
 
-export type TypeOnlyAliasDeclaration =
+export type TypeOnlyImportDeclaration =
     | ImportClause & { readonly isTypeOnly: true, readonly name: Identifier }
     | ImportEqualsDeclaration & { readonly isTypeOnly: true }
     | NamespaceImport & { readonly parent: ImportClause & { readonly isTypeOnly: true } }
     | ImportSpecifier & ({ readonly isTypeOnly: true } | { readonly parent: NamedImports & { readonly parent: ImportClause & { readonly isTypeOnly: true } } })
+    ;
+
+export type TypeOnlyExportDeclaration =
     | ExportSpecifier & ({ readonly isTypeOnly: true } | { readonly parent: NamedExports & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true } } })
     | ExportDeclaration & { readonly isTypeOnly: true } // export * from "mod"
     | NamespaceExport & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true } } // export * as ns from "mod"
     ;
+
+export type TypeOnlyAliasDeclaration = TypeOnlyImportDeclaration | TypeOnlyExportDeclaration;
 
 /**
  * This is either an `export =` or an `export default` declaration.
