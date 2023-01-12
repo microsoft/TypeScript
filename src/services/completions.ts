@@ -4850,12 +4850,6 @@ function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, 
         return findAncestor(contextToken, isClassLike) as ObjectTypeDeclaration;
     }
 
-    // class C { prop = ""\n | }
-    if (contextToken && isPropertyDeclaration(contextToken.parent) && isClassLike(location)
-        && getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line !== getLineAndCharacterOfPosition(sourceFile, position).line) {
-        return location;
-    }
-
     switch (contextToken.kind) {
         case SyntaxKind.EqualsToken: // class c { public prop = | /* global completions */ }
             return undefined;
@@ -4870,16 +4864,17 @@ function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, 
         case SyntaxKind.CommaToken: // class c {getValue(): number, | }
             return tryCast(contextToken.parent, isObjectTypeDeclaration);
         default:
-            if (!isFromObjectTypeDeclaration(contextToken)) {
-                // class c extends React.Component { a: () => 1\n| }
-                if (getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line !== getLineAndCharacterOfPosition(sourceFile, position).line && isObjectTypeDeclaration(location)) {
+            if (isObjectTypeDeclaration(location)) {
+                // class C extends React.Component { a: () => 1\n| }
+                // class C { prop = ""\n | }
+                if (isClassLike(location) && getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line !== getLineAndCharacterOfPosition(sourceFile, position).line) {
                     return location;
                 }
-                return undefined;
+                const isValidKeyword = isClassLike(contextToken.parent.parent) ? isClassMemberCompletionKeyword : isInterfaceOrTypeLiteralCompletionKeyword;
+                return (isValidKeyword(contextToken.kind) || contextToken.kind === SyntaxKind.AsteriskToken || isIdentifier(contextToken) && isValidKeyword(stringToToken(contextToken.text)!)) // TODO: GH#18217
+                    ? contextToken.parent.parent as ObjectTypeDeclaration : undefined;
             }
-            const isValidKeyword = isClassLike(contextToken.parent.parent) ? isClassMemberCompletionKeyword : isInterfaceOrTypeLiteralCompletionKeyword;
-            return (isValidKeyword(contextToken.kind) || contextToken.kind === SyntaxKind.AsteriskToken || isIdentifier(contextToken) && isValidKeyword(stringToToken(contextToken.text)!)) // TODO: GH#18217
-                ? contextToken.parent.parent as ObjectTypeDeclaration : undefined;
+            return undefined;
     }
 }
 
