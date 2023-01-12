@@ -3386,7 +3386,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (result && errorLocation && meaning & SymbolFlags.Value && result.flags & SymbolFlags.Alias && !(result.flags & SymbolFlags.Value) && !isValidTypeOnlyAliasUseSite(errorLocation)) {
                     const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(result, SymbolFlags.Value);
                     if (typeOnlyDeclaration) {
-                        const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier || typeOnlyDeclaration.kind === SyntaxKind.ExportDeclaration
+                        const message = typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier || typeOnlyDeclaration.kind === SyntaxKind.ExportDeclaration || typeOnlyDeclaration.kind === SyntaxKind.NamespaceExport
                             ? Diagnostics._0_cannot_be_used_as_a_value_because_it_was_exported_using_export_type
                             : Diagnostics._0_cannot_be_used_as_a_value_because_it_was_imported_using_import_type;
                         const unescapedName = unescapeLeadingUnderscores(name);
@@ -3407,7 +3407,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             diagnostic,
             createDiagnosticForNode(
                 typeOnlyDeclaration,
-                typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier || typeOnlyDeclaration.kind === SyntaxKind.ExportDeclaration
+                typeOnlyDeclaration.kind === SyntaxKind.ExportSpecifier || typeOnlyDeclaration.kind === SyntaxKind.ExportDeclaration || typeOnlyDeclaration.kind === SyntaxKind.NamespaceExport
                     ? Diagnostics._0_was_exported_here
                     : Diagnostics._0_was_imported_here,
                 unescapedName));

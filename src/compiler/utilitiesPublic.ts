@@ -209,6 +209,7 @@ import {
     NamedExportBindings,
     NamedImportBindings,
     NamespaceBody,
+    NamespaceExport,
     NamespaceImport,
     NewExpression,
     Node,
@@ -1461,6 +1462,8 @@ export function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnl
             return (node as ImportClause | ImportEqualsDeclaration).isTypeOnly;
         case SyntaxKind.ExportDeclaration:
             return (node as ExportDeclaration).isTypeOnly && !!(node as ExportDeclaration).moduleSpecifier && !(node as ExportDeclaration).exportClause;
+        case SyntaxKind.NamespaceExport:
+            return (node as NamespaceExport).parent.isTypeOnly;
         default:
             return false;
     }

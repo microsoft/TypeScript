@@ -3818,6 +3818,7 @@ export type TypeOnlyCompatibleAliasDeclaration =
     | NamespaceImport
     | ImportOrExportSpecifier
     | ExportDeclaration
+    | NamespaceExport
     ;
 
 export type TypeOnlyAliasDeclaration =
@@ -3827,6 +3828,7 @@ export type TypeOnlyAliasDeclaration =
     | ImportSpecifier & ({ readonly isTypeOnly: true } | { readonly parent: NamedImports & { readonly parent: ImportClause & { readonly isTypeOnly: true } } })
     | ExportSpecifier & ({ readonly isTypeOnly: true } | { readonly parent: NamedExports & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true } } })
     | ExportDeclaration & { readonly isTypeOnly: true } // export * from "mod"
+    | NamespaceExport & { readonly parent: ExportDeclaration & { readonly isTypeOnly: true } } // export * as ns from "mod"
     ;
 
 /**
