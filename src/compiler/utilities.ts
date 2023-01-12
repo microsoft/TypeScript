@@ -204,6 +204,7 @@ import {
     HasTypeArguments,
     HeritageClause,
     Identifier,
+    identifierToKeywordKind,
     IdentifierTypePredicate,
     identity,
     idText,
@@ -1651,7 +1652,7 @@ export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemp
     switch (name.kind) {
         case SyntaxKind.Identifier:
         case SyntaxKind.PrivateIdentifier:
-            return name.autoGenerate ? undefined : name.escapedText;
+            return name.emitNode?.autoGenerate ? undefined : name.escapedText;
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NumericLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -1783,6 +1784,13 @@ export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): T
     scanner.scan();
     const start = scanner.getTokenPos();
     return createTextSpanFromBounds(start, scanner.getTextPos());
+}
+
+/** @internal */
+export function scanTokenAtPosition(sourceFile: SourceFile, pos: number) {
+    const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
+    scanner.scan();
+    return scanner.getToken();
 }
 
 function getErrorSpanForArrowFunction(sourceFile: SourceFile, node: ArrowFunction): TextSpan {
@@ -4341,7 +4349,8 @@ export function isStringAKeyword(name: string) {
 }
 
 /** @internal */
-export function isIdentifierANonContextualKeyword({ originalKeywordKind }: Identifier): boolean {
+export function isIdentifierANonContextualKeyword(node: Identifier): boolean {
+    const originalKeywordKind = identifierToKeywordKind(node);
     return !!originalKeywordKind && !isContextualKeyword(originalKeywordKind);
 }
 
@@ -5709,7 +5718,7 @@ export function isThisInTypeQuery(node: Node): boolean {
 
 /** @internal */
 export function identifierIsThisKeyword(id: Identifier): boolean {
-    return id.originalKeywordKind === SyntaxKind.ThisKeyword;
+    return id.escapedText === "this";
 }
 
 /** @internal */
@@ -6194,7 +6203,7 @@ export function getEffectiveModifierFlagsNoCache(node: Node): ModifierFlags {
  */
 export function getSyntacticModifierFlagsNoCache(node: Node): ModifierFlags {
     let flags = canHaveModifiers(node) ? modifiersToFlags(node.modifiers) : ModifierFlags.None;
-    if (node.flags & NodeFlags.NestedNamespace || (node.kind === SyntaxKind.Identifier && (node as Identifier).isInJSDocNamespace)) {
+    if (node.flags & NodeFlags.NestedNamespace || node.kind === SyntaxKind.Identifier && node.flags & NodeFlags.IdentifierIsInJSDocNamespace) {
         flags |= ModifierFlags.Export;
     }
     return flags;
@@ -7327,7 +7336,6 @@ function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: num
     this.parent = undefined!;
     this.original = undefined;
     this.emitNode = undefined;
-    (this as Identifier).flowNode = undefined;
 }
 
 function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
@@ -7350,9 +7358,21 @@ export const objectAllocator: ObjectAllocator = {
     getSourceMapSourceConstructor: () => SourceMapSource as any,
 };
 
+const objectAllocatorPatchers: ((objectAllocator: ObjectAllocator) => void)[] = [];
+
+/**
+ * Used by `deprecatedCompat` to patch the object allocator to apply deprecations.
+ * @internal
+ */
+export function addObjectAllocatorPatcher(fn: (objectAllocator: ObjectAllocator) => void) {
+    objectAllocatorPatchers.push(fn);
+    fn(objectAllocator);
+}
+
 /** @internal */
 export function setObjectAllocator(alloc: ObjectAllocator) {
     Object.assign(objectAllocator, alloc);
+    forEach(objectAllocatorPatchers, fn => fn(objectAllocator));
 }
 
 /** @internal */
