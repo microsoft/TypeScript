@@ -1778,8 +1778,8 @@ declare namespace ts {
         readonly name: Identifier;
     }
     type ImportOrExportSpecifier = ImportSpecifier | ExportSpecifier;
-    type TypeOnlyCompatibleAliasDeclaration = ImportClause | ImportEqualsDeclaration | NamespaceImport | ImportOrExportSpecifier;
-    type TypeOnlyAliasDeclaration = ImportClause & {
+    type TypeOnlyCompatibleAliasDeclaration = ImportClause | ImportEqualsDeclaration | NamespaceImport | ImportOrExportSpecifier | ExportDeclaration | NamespaceExport;
+    type TypeOnlyImportDeclaration = ImportClause & {
         readonly isTypeOnly: true;
         readonly name: Identifier;
     } | ImportEqualsDeclaration & {
@@ -1796,7 +1796,8 @@ declare namespace ts {
                 readonly isTypeOnly: true;
             };
         };
-    }) | ExportSpecifier & ({
+    });
+    type TypeOnlyExportDeclaration = ExportSpecifier & ({
         readonly isTypeOnly: true;
     } | {
         readonly parent: NamedExports & {
@@ -1804,7 +1805,14 @@ declare namespace ts {
                 readonly isTypeOnly: true;
             };
         };
-    });
+    }) | ExportDeclaration & {
+        readonly isTypeOnly: true;
+    } | NamespaceExport & {
+        readonly parent: ExportDeclaration & {
+            readonly isTypeOnly: true;
+        };
+    };
+    type TypeOnlyAliasDeclaration = TypeOnlyImportDeclaration | TypeOnlyExportDeclaration;
     /**
      * This is either an `export =` or an `export default` declaration.
      * Unless `isExportEquals` is set, this node was parsed as an `export default`.
@@ -4797,6 +4805,8 @@ declare namespace ts {
     function isTemplateLiteralToken(node: Node): node is TemplateLiteralToken;
     function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail;
     function isImportOrExportSpecifier(node: Node): node is ImportSpecifier | ExportSpecifier;
+    function isTypeOnlyImportDeclaration(node: Node): node is TypeOnlyImportDeclaration;
+    function isTypeOnlyExportDeclaration(node: Node): node is TypeOnlyExportDeclaration;
     function isTypeOnlyImportOrExportDeclaration(node: Node): node is TypeOnlyAliasDeclaration;
     function isAssertionKey(node: Node): node is AssertionKey;
     function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken;
