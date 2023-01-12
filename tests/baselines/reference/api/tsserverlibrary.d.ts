@@ -3739,7 +3739,9 @@ declare namespace ts {
             fileName: NormalizedPath;
             project: Project;
         }
+        /** @deprecated use ts.server.protocol.CommandTypes */
         type CommandNames = protocol.CommandTypes;
+        /** @deprecated use ts.server.protocol.CommandTypes */
         const CommandNames: any;
         type Event = <T extends object>(body: T, eventName: string) => void;
         interface EventSender {
