@@ -84,7 +84,9 @@ import {
     Expression,
     ExpressionStatement,
     ExpressionWithTypeArguments,
+    Extension,
     ExternalModuleReference,
+    fileExtensionIs,
     fileExtensionIsOneOf,
     findIndex,
     forEach,
@@ -98,6 +100,7 @@ import {
     FunctionOrConstructorTypeNode,
     FunctionTypeNode,
     GetAccessorDeclaration,
+    getBaseFileName,
     getBinaryOperatorPrecedence,
     getFullWidth,
     getJSDocCommentRanges,
@@ -328,6 +331,7 @@ import {
     SpreadElement,
     startsWith,
     Statement,
+    stringContains,
     StringLiteral,
     supportedDeclarationExtensions,
     SwitchStatement,
@@ -10114,7 +10118,7 @@ namespace IncrementalParser {
 
 /** @internal */
 export function isDeclarationFileName(fileName: string): boolean {
-    return fileExtensionIsOneOf(fileName, supportedDeclarationExtensions);
+    return fileExtensionIsOneOf(fileName, supportedDeclarationExtensions) || (fileExtensionIs(fileName, Extension.Ts) && stringContains(getBaseFileName(fileName), ".d."));
 }
 
 function parseResolutionMode(mode: string | undefined, pos: number, end: number, reportDiagnostic: PragmaDiagnosticReporter): ResolutionMode {

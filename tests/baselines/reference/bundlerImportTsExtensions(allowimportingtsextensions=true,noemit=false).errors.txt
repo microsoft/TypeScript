@@ -6,8 +6,7 @@ error TS6054: File '/project/e.txt' has an unsupported extension. The only suppo
     Root file specified for compilation
 /project/main.ts(8,16): error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './b' instead?
 /project/main.ts(12,16): error TS6142: Module './c.tsx' was resolved to '/project/c.tsx', but '--jsx' is not set.
-/project/types.d.ts(2,16): error TS2691: An import path cannot end with a '.d.ts' extension. Consider importing './a' instead.
-/project/types.d.ts(3,21): error TS2691: An import path cannot end with a '.d.ts' extension. Consider importing './a' instead.
+/project/types.d.ts(2,16): error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './a' instead?
 
 
 !!! error TS5056: Cannot write file 'out/b.js' because it would be overwritten by multiple input files.
@@ -80,11 +79,9 @@ error TS6054: File '/project/e.txt' has an unsupported extension. The only suppo
     import {} from "./e";
     import {} from "./e.txt";
     
-==== /project/types.d.ts (2 errors) ====
+==== /project/types.d.ts (1 errors) ====
     import {} from "./a.ts";
     import {} from "./a.d.ts";
                    ~~~~~~~~~~
-!!! error TS2691: An import path cannot end with a '.d.ts' extension. Consider importing './a' instead.
+!!! error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './a' instead?
     import type {} from "./a.d.ts";
-                        ~~~~~~~~~~
-!!! error TS2691: An import path cannot end with a '.d.ts' extension. Consider importing './a' instead.

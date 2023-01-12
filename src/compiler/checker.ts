@@ -604,6 +604,7 @@ import {
     isNewExpression,
     isNightly,
     isNodeDescendantOf,
+    isNonNullAccess,
     isNullishCoalesce,
     isNumericLiteral,
     isNumericLiteralName,
@@ -4738,7 +4739,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const mode = contextSpecifier && isStringLiteralLike(contextSpecifier) ? getModeForUsageLocation(currentSourceFile, contextSpecifier) : currentSourceFile.impliedNodeFormat;
         const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
         const resolvedModule = getResolvedModule(currentSourceFile, moduleReference, mode);
-        const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
+        const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule, currentSourceFile);
         const sourceFile = resolvedModule
             && (!resolutionDiagnostic || resolutionDiagnostic === Diagnostics.Module_0_was_resolved_to_1_but_jsx_is_not_set)
             && host.getSourceFile(resolvedModule.resolvedFileName);
@@ -11339,7 +11340,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // The outer type parameters are those defined by enclosing generic classes, methods, or functions.
     function getOuterTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] | undefined {
-        const declaration = symbol.flags & SymbolFlags.Class ? symbol.valueDeclaration : getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration)!;
+        const declaration = (symbol.flags & SymbolFlags.Class || symbol.flags & SymbolFlags.Function)
+            ? symbol.valueDeclaration
+            : symbol.declarations?.find(decl => {
+                if (decl.kind === SyntaxKind.InterfaceDeclaration) {
+                    return true;
+                }
+                if (decl.kind !== SyntaxKind.VariableDeclaration) {
+                    return false;
+                }
+                const initializer = (decl as VariableDeclaration).initializer;
+                return !!initializer && (initializer.kind === SyntaxKind.FunctionExpression || initializer.kind === SyntaxKind.ArrowFunction);
+            })!;
         Debug.assert(!!declaration, "Class was missing valueDeclaration -OR- non-class had no interface declarations");
         return getOuterTypeParameters(declaration);
     }
@@ -20859,7 +20871,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (variances === emptyArray) {
                     return Ternary.Unknown;
                 }
-                const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances, intersectionState);
+                const params = getSymbolLinks(source.aliasSymbol).typeParameters!;
+                const minParams = getMinTypeArgumentCount(params);
+                const sourceTypes = fillMissingTypeArguments(source.aliasTypeArguments, params, minParams, isInJSFile(source.aliasSymbol.valueDeclaration));
+                const targetTypes = fillMissingTypeArguments(target.aliasTypeArguments, params, minParams, isInJSFile(source.aliasSymbol.valueDeclaration));
+                const varianceResult = relateVariances(sourceTypes, targetTypes, variances, intersectionState);
                 if (varianceResult !== undefined) {
                     return varianceResult;
                 }
@@ -23793,8 +23809,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (source.aliasSymbol && source.aliasSymbol === target.aliasSymbol) {
                 if (source.aliasTypeArguments) {
                     // Source and target are types originating in the same generic type alias declaration.
-                    // Simply infer from source type arguments to target type arguments.
-                    inferFromTypeArguments(source.aliasTypeArguments, target.aliasTypeArguments!, getAliasVariances(source.aliasSymbol));
+                    // Simply infer from source type arguments to target type arguments, with defaults applied.
+                    const params = getSymbolLinks(source.aliasSymbol).typeParameters!;
+                    const minParams = getMinTypeArgumentCount(params);
+                    const sourceTypes = fillMissingTypeArguments(source.aliasTypeArguments, params, minParams, isInJSFile(source.aliasSymbol.valueDeclaration));
+                    const targetTypes = fillMissingTypeArguments(target.aliasTypeArguments, params, minParams, isInJSFile(source.aliasSymbol.valueDeclaration));
+                    inferFromTypeArguments(sourceTypes, targetTypes!, getAliasVariances(source.aliasSymbol));
                 }
                 // And if there weren't any type arguments, there's no reason to run inference as the types must be the same.
                 return;
@@ -24578,8 +24598,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // parameter and has inferences that would conflict. Otherwise, we use the contra-variant inference.
                     const useCovariantType = inferredCovariantType && !(inferredCovariantType.flags & TypeFlags.Never) &&
                         some(inference.contraCandidates, t => isTypeSubtypeOf(inferredCovariantType, t)) &&
-                        every(context.inferences, other => other === inference ||
-                            getConstraintOfTypeParameter(other.typeParameter) !== inference.typeParameter ||
+                        every(context.inferences, other =>
+                            other !== inference && getConstraintOfTypeParameter(other.typeParameter) !== inference.typeParameter ||
                             every(other.candidates, t => isTypeSubtypeOf(t, inferredCovariantType)));
                     inferredType = useCovariantType ? inferredCovariantType : getContravariantInference(inference);
                 }
@@ -26372,12 +26392,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (propName === undefined) {
                 return type;
             }
-            const removeNullable = strictNullChecks && isOptionalChain(access) && maybeTypeOfKind(type, TypeFlags.Nullable);
+            const optionalChain = isOptionalChain(access);
+            const removeNullable = strictNullChecks && (optionalChain || isNonNullAccess(access)) && maybeTypeOfKind(type, TypeFlags.Nullable);
             let propType = getTypeOfPropertyOfType(removeNullable ? getTypeWithFacts(type, TypeFacts.NEUndefinedOrNull) : type, propName);
             if (!propType) {
                 return type;
             }
-            propType = removeNullable ? getOptionalType(propType) : propType;
+            propType = removeNullable && optionalChain ? getOptionalType(propType) : propType;
             const narrowedPropType = narrowType(propType);
             return filterType(type, t => {
                 const discriminantType = getTypeOfPropertyOrIndexSignature(t, propName);
@@ -35810,7 +35831,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return getRegularTypeOfObjectLiteral(rightType);
                 }
             case SyntaxKind.CommaToken:
-                if (!compilerOptions.allowUnreachableCode && isSideEffectFree(left) && !isEvalNode(right)) {
+                if (!compilerOptions.allowUnreachableCode && isSideEffectFree(left) && !isIndirectCall(left.parent as BinaryExpression)) {
                     const sf = getSourceFileOfNode(left);
                     const sourceText = sf.text;
                     const start = skipTrivia(sourceText, left.pos);
@@ -35846,8 +35867,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        function isEvalNode(node: Expression) {
-            return node.kind === SyntaxKind.Identifier && (node as Identifier).escapedText === "eval";
+        // Return true for "indirect calls", (i.e. `(0, x.f)(...)` or `(0, eval)(...)`), which prevents passing `this`.
+        function isIndirectCall(node: BinaryExpression): boolean {
+            return node.parent.kind === SyntaxKind.ParenthesizedExpression &&
+                isNumericLiteral(node.left) &&
+                node.left.text === "0" &&
+                (isCallExpression(node.parent.parent) && node.parent.parent.expression === node.parent || node.parent.parent.kind === SyntaxKind.TaggedTemplateExpression) &&
+                // special-case for "eval" because it's the only non-access case where an indirect call actually affects behavior.
+                (isAccessExpression(node.right) || isIdentifier(node.right) && node.right.escapedText === "eval");
         }
 
         // Return true if there was no error, false if there was an error.
