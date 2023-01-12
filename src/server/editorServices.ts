@@ -36,7 +36,6 @@ import {
     ProjectFilesWithTSDiagnostics,
     ProjectKind,
     ProjectOptions,
-    protocol,
     ScriptInfo,
     ScriptInfoVersion,
     ServerHost,
@@ -179,6 +178,7 @@ import {
     WatchType,
     WildcardDirectoryWatcher,
 } from "./_namespaces/ts";
+import * as protocol from "./protocol";
 
 export const maxProgramSizeForNonTsFiles = 20 * 1024 * 1024;
 /** @internal */

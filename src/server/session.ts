@@ -170,7 +170,6 @@ import {
     ProjectServiceEventHandler,
     ProjectServiceOptions,
     ProjectsUpdatedInBackgroundEvent,
-    protocol,
     ScriptInfo,
     ScriptInfoOrConfig,
     ServerHost,
@@ -178,6 +177,7 @@ import {
     toNormalizedPath,
     updateProjectIfDirty,
 } from "./_namespaces/ts.server";
+import * as protocol from "./protocol";
 
 interface StackTraceError extends Error {
     stack?: string;
