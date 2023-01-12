@@ -4,10 +4,10 @@
 export class A {}
 
 //// [b.ts]
-export type * from './a'; // Grammar error
+export type * from './a';
 
 //// [c.ts]
-export type * as ns from './a'; // Grammar error
+export type * as ns from './a';
 
 //// [d.ts]
 import { A } from './b';
@@ -41,5 +41,4 @@ A;
 //// [e.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var c_1 = require("./c");
-c_1.ns.A;
+ns.A;
