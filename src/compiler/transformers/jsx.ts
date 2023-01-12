@@ -57,6 +57,7 @@ import {
     NodeFlags,
     PropertyAssignment,
     ScriptTarget,
+    setIdentifierGeneratedImportReference,
     setParentRecursive,
     setTextRange,
     singleOrUndefined,
@@ -135,7 +136,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         }
         const generatedName = factory.createUniqueName(`_${name}`, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.AllowNameSubstitution);
         const specifier = factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier(name), generatedName);
-        generatedName.generatedImportReference = specifier;
+        setIdentifierGeneratedImportReference(generatedName, specifier);
         specifierSourceImports.set(name, specifier);
         return generatedName;
     }
