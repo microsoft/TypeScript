@@ -2553,7 +2553,7 @@ namespace Parser {
 
         const pos = getNodePos();
         const result =
-            kind === SyntaxKind.Identifier ? factory.createIdentifier("", /*typeArguments*/ undefined, /*originalKeywordKind*/ undefined) :
+            kind === SyntaxKind.Identifier ? factory.createIdentifier("", /*originalKeywordKind*/ undefined) :
             isTemplateLiteralKind(kind) ? factory.createTemplateLiteralLikeNode(kind, "", "", /*templateFlags*/ undefined) :
             kind === SyntaxKind.NumericLiteral ? factory.createNumericLiteral("", /*numericLiteralFlags*/ undefined) :
             kind === SyntaxKind.StringLiteral ? factory.createStringLiteral("", /*isSingleQuote*/ undefined) :
@@ -2582,7 +2582,7 @@ namespace Parser {
             const text = internIdentifier(scanner.getTokenValue());
             const hasExtendedUnicodeEscape = scanner.hasExtendedUnicodeEscape();
             nextTokenWithoutCheck();
-            return finishNode(factory.createIdentifier(text, /*typeArguments*/ undefined, originalKeywordKind, hasExtendedUnicodeEscape), pos);
+            return finishNode(factory.createIdentifier(text, originalKeywordKind, hasExtendedUnicodeEscape), pos);
         }
 
         if (token() === SyntaxKind.PrivateIdentifier) {
@@ -3064,9 +3064,9 @@ namespace Parser {
             return undefined;
         }
 
-        if (canHaveJSDoc(node) && node.jsDocCache) {
+        if (canHaveJSDoc(node) && node.jsDoc?.jsDocCache) {
             // jsDocCache may include tags from parent nodes, which might have been modified.
-            node.jsDocCache = undefined;
+            node.jsDoc.jsDocCache = undefined;
         }
 
         return node;
@@ -3191,7 +3191,7 @@ namespace Parser {
                     // into an actual .ConstructorDeclaration.
                     const methodDeclaration = node as MethodDeclaration;
                     const nameIsConstructor = methodDeclaration.name.kind === SyntaxKind.Identifier &&
-                        methodDeclaration.name.originalKeywordKind === SyntaxKind.ConstructorKeyword;
+                        methodDeclaration.name.escapedText === "constructor";
 
                     return !nameIsConstructor;
             }
@@ -3458,14 +3458,12 @@ namespace Parser {
     function parseEntityName(allowReservedWords: boolean, diagnosticMessage?: DiagnosticMessage): EntityName {
         const pos = getNodePos();
         let entity: EntityName = allowReservedWords ? parseIdentifierName(diagnosticMessage) : parseIdentifier(diagnosticMessage);
-        let dotPos = getNodePos();
         while (parseOptional(SyntaxKind.DotToken)) {
             if (token() === SyntaxKind.LessThanToken) {
-                // the entity is part of a JSDoc-style generic, so record the trailing dot for later error reporting
-                entity.jsdocDotPos = dotPos;
+                // The entity is part of a JSDoc-style generic. We will use the gap between `typeName` and
+                // `typeArguments` to report it as a grammar error in the checker.
                 break;
             }
-            dotPos = getNodePos();
             entity = finishNode(
                 factory.createQualifiedName(
                     entity,
@@ -9269,7 +9267,7 @@ namespace Parser {
                 }
 
                 if (nested) {
-                    typeNameOrNamespaceName.isInJSDocNamespace = true;
+                    (typeNameOrNamespaceName as Mutable<Identifier>).flags |= NodeFlags.IdentifierIsInJSDocNamespace;
                 }
                 return typeNameOrNamespaceName;
             }
@@ -9492,7 +9490,7 @@ namespace Parser {
                 const end = scanner.getTextPos();
                 const originalKeywordKind = token();
                 const text = internIdentifier(scanner.getTokenValue());
-                const result = finishNode(factory.createIdentifier(text, /*typeArguments*/ undefined, originalKeywordKind), pos, end);
+                const result = finishNode(factory.createIdentifier(text, originalKeywordKind), pos, end);
                 nextTokenJSDoc();
                 return result;
             }

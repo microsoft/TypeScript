@@ -139,6 +139,7 @@ import {
     isJSDocTypeAlias,
     isJSDocTypeLiteral,
     isJSDocTypeTag,
+    isKeyword,
     isModuleBlock,
     isNonNullExpression,
     isNotEmittedStatement,
@@ -191,6 +192,7 @@ import {
     JsxExpression,
     JsxOpeningLikeElement,
     JsxTagNameExpression,
+    KeywordSyntaxKind,
     LabeledStatement,
     lastOrUndefined,
     LeftHandSideExpression,
@@ -251,6 +253,7 @@ import {
     Statement,
     StringLiteral,
     StringLiteralLike,
+    stringToToken,
     Symbol,
     SyntaxKind,
     TemplateLiteral,
@@ -260,6 +263,7 @@ import {
     TextChangeRange,
     TextRange,
     TextSpan,
+    tryCast,
     TypeElement,
     TypeNode,
     TypeOnlyAliasDeclaration,
@@ -763,6 +767,16 @@ export function unescapeLeadingUnderscores(identifier: __String): string {
 export function idText(identifierOrPrivateName: Identifier | PrivateIdentifier): string {
     return unescapeLeadingUnderscores(identifierOrPrivateName.escapedText);
 }
+
+/**
+ * If the text of an Identifier matches a keyword (including contextual and TypeScript-specific keywords), returns the
+ * SyntaxKind for the matching keyword.
+ */
+export function identifierToKeywordKind(node: Identifier): KeywordSyntaxKind | undefined {
+    const token = stringToToken(node.escapedText as string);
+    return token ? tryCast(token, isKeyword) : undefined;
+}
+
 export function symbolName(symbol: Symbol): string {
     if (symbol.valueDeclaration && isPrivateIdentifierClassElementDeclaration(symbol.valueDeclaration)) {
         return idText(symbol.valueDeclaration.name);
@@ -1153,14 +1167,15 @@ export function getJSDocReturnType(node: Node): TypeNode | undefined {
 
 function getJSDocTagsWorker(node: Node, noCache?: boolean): readonly JSDocTag[] {
     if (!canHaveJSDoc(node)) return emptyArray;
-    let tags = node.jsDocCache;
+    let tags = node.jsDoc?.jsDocCache;
     // If cache is 'null', that means we did the work of searching for JSDoc tags and came up with nothing.
     if (tags === undefined || noCache) {
         const comments = getJSDocCommentsAndTags(node, noCache);
         Debug.assert(comments.length < 2 || comments[0] !== comments[1]);
         tags = flatMap(comments, j => isJSDoc(j) ? j.tags : j);
         if (!noCache) {
-            node.jsDocCache = tags;
+            node.jsDoc ??= [];
+            node.jsDoc.jsDocCache = tags;
         }
     }
     return tags;
@@ -1481,12 +1496,12 @@ export function isStringTextContainingNode(node: Node): node is StringLiteral | 
 
 /** @internal */
 export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
-    return isIdentifier(node) && node.autoGenerate !== undefined;
+    return isIdentifier(node) && node.emitNode?.autoGenerate !== undefined;
 }
 
 /** @internal */
 export function isGeneratedPrivateIdentifier(node: Node): node is GeneratedPrivateIdentifier {
-    return isPrivateIdentifier(node) && node.autoGenerate !== undefined;
+    return isPrivateIdentifier(node) && node.emitNode?.autoGenerate !== undefined;
 }
 
 // Private Identifiers
