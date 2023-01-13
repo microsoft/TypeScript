@@ -1334,6 +1334,7 @@ function createCompletionEntry(
     isRightOfOpenTag: boolean | undefined,
 ): CompletionEntry | undefined {
     let insertText: string | undefined;
+    let filterText: string | undefined;
     let replacementSpan = getReplacementSpanForContextToken(replacementToken);
     let data: CompletionEntryData | undefined;
     let isSnippet: true | undefined;
@@ -1405,8 +1406,8 @@ function createCompletionEntry(
         completionKind === CompletionKind.MemberLike &&
         isClassLikeMemberCompletion(symbol, location, sourceFile)) {
         let importAdder;
-        ({ insertText, isSnippet, importAdder, replacementSpan } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken, formatContext));
-        sortText = SortText.ClassMemberSnippets; // sortText has to be lower priority than the sortText for keywords. See #47852.
+        ({ insertText, filterText, isSnippet, importAdder, replacementSpan } = getEntryForMemberCompletion(host, program, options, preferences, name, symbol, location, contextToken, formatContext));
+        // sortText = SortText.ClassMemberSnippets; // sortText has to be lower priority than the sortText for keywords. See #47852.
         if (importAdder?.hasFixes()) {
             hasAction = true;
             source = CompletionSource.ClassMemberSnippet;
@@ -1477,6 +1478,7 @@ function createCompletionEntry(
         hasAction: hasAction ? true : undefined,
         isRecommended: isRecommendedCompletionMatch(symbol, recommendedCompletion, typeChecker) || undefined,
         insertText,
+        filterText,
         replacementSpan,
         sourceDisplay,
         labelDetails,
@@ -1546,7 +1548,7 @@ function getEntryForMemberCompletion(
     location: Node,
     contextToken: Node | undefined,
     formatContext: formatting.FormatContext | undefined,
-): { insertText: string, isSnippet?: true, importAdder?: codefix.ImportAdder, replacementSpan?: TextSpan } {
+): { insertText: string, filterText?: string, isSnippet?: true, importAdder?: codefix.ImportAdder, replacementSpan?: TextSpan } {
     const classLikeDeclaration = findAncestor(location, isClassLike);
     if (!classLikeDeclaration) {
         return { insertText: name };
@@ -1555,6 +1557,7 @@ function getEntryForMemberCompletion(
     let isSnippet: true | undefined;
     let replacementSpan: TextSpan | undefined;
     let insertText: string = name;
+    let filterText;
 
     const checker = program.getTypeChecker();
     const sourceFile = location.getSourceFile();
@@ -1587,7 +1590,7 @@ function getEntryForMemberCompletion(
     // e.g. in `abstract class C { abstract | }`, we should offer abstract method signatures at position `|`.
     const { modifiers: presentModifiers, span: modifiersSpan } = getPresentModifiers(contextToken);
     const isAbstract = !!(presentModifiers & ModifierFlags.Abstract);
-    const completionNodes: Node[] = [];
+    const completionNodes: codefix.AddNode[] = [];
     codefix.addNewNodeForMemberSymbol(
         symbol,
         classLikeDeclaration,
@@ -1627,6 +1630,7 @@ function getEntryForMemberCompletion(
         isAbstract);
 
     if (completionNodes.length) {
+        const nodesWithoutModifiers = completionNodes.map(node => factory.updateModifiers(node, ModifierFlags.None));
         const format = ListFormat.MultiLine | ListFormat.NoTrailingNewLine;
         replacementSpan = modifiersSpan;
          // If we have access to formatting settings, we print the nodes using the emitter,
@@ -1644,9 +1648,13 @@ function getEntryForMemberCompletion(
                 factory.createNodeArray(completionNodes),
                 sourceFile);
         }
+        filterText = printer.printSnippetList(
+            format,
+            factory.createNodeArray(nodesWithoutModifiers),
+            sourceFile);
     }
 
-    return { insertText, isSnippet, importAdder, replacementSpan };
+    return { insertText, filterText, isSnippet, importAdder, replacementSpan };
 }
 
 function getPresentModifiers(contextToken: Node | undefined): { modifiers: ModifierFlags, span?: TextSpan } {
