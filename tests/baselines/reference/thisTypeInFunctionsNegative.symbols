@@ -696,3 +696,18 @@ const f4 = async <T>(this: {n: number}, m: number) => m + this.n;
 >m : Symbol(m, Decl(thisTypeInFunctionsNegative.ts, 177, 39))
 >this : Symbol(globalThis)
 
+class Derived3 extends Base2 {
+>Derived3 : Symbol(Derived3, Decl(thisTypeInFunctionsNegative.ts, 177, 65))
+>Base2 : Symbol(Base2, Decl(thisTypeInFunctionsNegative.ts, 128, 1))
+
+    f(this: this) {
+>f : Symbol(Derived3.f, Decl(thisTypeInFunctionsNegative.ts, 179, 30))
+>this : Symbol(this, Decl(thisTypeInFunctionsNegative.ts, 180, 6))
+
+        super.polymorphic();
+>super.polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
+>super : Symbol(Base2, Decl(thisTypeInFunctionsNegative.ts, 128, 1))
+>polymorphic : Symbol(Base2.polymorphic, Decl(thisTypeInFunctionsNegative.ts, 130, 13))
+    }
+}
+

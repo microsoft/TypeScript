@@ -804,3 +804,19 @@ const f4 = async <T>(this: {n: number}, m: number) => m + this.n;
 >this : typeof globalThis
 >n : any
 
+class Derived3 extends Base2 {
+>Derived3 : Derived3
+>Base2 : Base2
+
+    f(this: this) {
+>f : (this: this) => void
+>this : this
+
+        super.polymorphic();
+>super.polymorphic() : number
+>super.polymorphic : (this: this) => number
+>super : Base2
+>polymorphic : (this: this) => number
+    }
+}
+

@@ -382,7 +382,7 @@ describe("unittests:: moduleResolution:: Node module resolution - non-relative p
 describe("unittests:: moduleResolution:: Relative imports", () => {
     function test(scenario: string, filesMapLike: ts.MapLike<string>, currentDirectory: string, rootFiles: string[], relativeNamesToCheck: string[]) {
         it(scenario, () => {
-            const files = new Map(ts.getEntries(filesMapLike));
+            const files = new Map(Object.entries(filesMapLike));
             const baselines: string[] = [];
             files.forEach((content, file) => baselines.push(`//// [${file}]\n${content}`, ""));
             const options: ts.CompilerOptions = { module: ts.ModuleKind.CommonJS };
@@ -464,7 +464,7 @@ describe("unittests:: moduleResolution:: Files with different casing with forceC
     ): void {
         it(scenario, () => {
             const getCanonicalFileName = ts.createGetCanonicalFileName(useCaseSensitiveFileNames);
-            let files = new Map(ts.getEntries(filesMapLike));
+            let files = new Map(Object.entries(filesMapLike));
             if (!useCaseSensitiveFileNames) {
                 const oldFiles = files;
                 files = new Map<string, string>();

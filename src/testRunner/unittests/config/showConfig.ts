@@ -177,9 +177,8 @@ describe("unittests:: config:: showConfig", () => {
                 break;
             }
             default: {
-                const iterResult = option.type.keys().next();
-                if (iterResult.done) return ts.Debug.fail("Expected 'option.type' to have entries");
-                const val = iterResult.value;
+                const val = ts.firstOrUndefinedIterator(option.type.keys());
+                if (val === undefined) return ts.Debug.fail("Expected 'option.type' to have entries");
                 if (option.isTSConfigOnly) {
                     args = ["-p", "tsconfig.json"];
                     optionValue = { [option.name]: val };

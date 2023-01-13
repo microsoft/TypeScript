@@ -52,7 +52,7 @@ export function createDeprecation(name: string, options: DeprecationOptions = {}
     const errorAfter = typeof options.errorAfter === "string" ? new Version(options.errorAfter) : options.errorAfter;
     const warnAfter = typeof options.warnAfter === "string" ? new Version(options.warnAfter) : options.warnAfter;
     const since = typeof options.since === "string" ? new Version(options.since) : options.since ?? warnAfter;
-    const error = options.error || errorAfter && version.compareTo(errorAfter) <= 0;
+    const error = options.error || errorAfter && version.compareTo(errorAfter) >= 0;
     const warn = !warnAfter || version.compareTo(warnAfter) >= 0;
     return error ? createErrorDeprecation(name, errorAfter, since, options.message) :
         warn ? createWarningDeprecation(name, errorAfter, since, options.message) :
