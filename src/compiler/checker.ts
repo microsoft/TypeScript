@@ -28842,7 +28842,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const index = findContextualNode(node);
         if (index >= 0) {
-            return contextualTypes[index];
+            const cached = contextualTypes[index];
+            if (cached || !contextFlags) return cached;
         }
         const { parent } = node;
         switch (parent.kind) {
