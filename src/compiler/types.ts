@@ -7573,6 +7573,12 @@ export interface ResolvedModuleWithFailedLookupLocations {
     affectingLocations?: string[];
     /** @internal */
     resolutionDiagnostics?: Diagnostic[]
+    /**
+     * @internal
+     * Used to issue a diagnostic if typings for a non-relative import couldn't be found
+     * while respecting package.json `exports`, but were found when disabling `exports`.
+     */
+    node10Result?: string;
 }
 
 export interface ResolvedTypeReferenceDirective {
