@@ -9,7 +9,7 @@ import fs from "fs";
 import path from "path";
 import minimist from "minimist";
 import url from "url";
-import ts from "../lib/typescript.js";
+import ts from "typescript";
 import assert, { fail } from "assert";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
