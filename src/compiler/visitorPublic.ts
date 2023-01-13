@@ -153,8 +153,7 @@ export function visitNode(
         return node;
     }
 
-    // TODO(jakebailey): remove this check?
-    const visited = visitor ? visitor(node) : node;
+    const visited = visitor(node);
 
     let visitedNode: Node | undefined;
     if (visited === undefined) {
