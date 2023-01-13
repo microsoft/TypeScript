@@ -14,6 +14,7 @@ const dest = path.join(root, "lib");
 
 async function produceLKG() {
     console.log(`Building LKG from ${source} to ${dest}`);
+    await fs.mkdirp(dest);
     await del(`${dest.replace(/\\/g, "/")}/**`, { ignore: ["**/README.md"] });
     await fs.mkdirp(dest);
     await copyLibFiles();
