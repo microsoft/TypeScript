@@ -5239,7 +5239,7 @@
         "category": "Message",
         "code": 6277
     },
-    "There are types at '{0}', but this result could not be resolved when respecting package.json \"exports\". The '{1}' library may need to update its package.json.": {
+    "There are types at '{0}', but this result could not be resolved when respecting package.json \"exports\". The '{1}' library may need to update its package.json or typings.": {
         "category": "Message",
         "code": 6278
     },

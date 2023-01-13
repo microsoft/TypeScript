@@ -4929,13 +4929,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function errorOnImplicitAnyModule(isError: boolean, errorNode: Node, sourceFile: SourceFile, mode: ResolutionMode, { packageId, resolvedFileName }: ResolvedModuleFull, moduleReference: string): void {
         let errorInfo;
         if (!isExternalModuleNameRelative(moduleReference) && packageId) {
-            const legacyResult = sourceFile.resolvedModules?.get(moduleReference, mode)?.legacyResult;
-            errorInfo = legacyResult
+            const node10Result = sourceFile.resolvedModules?.get(moduleReference, mode)?.node10Result;
+            errorInfo = node10Result
                 ? chainDiagnosticMessages(
                     /*details*/ undefined,
-                    Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json,
-                    legacyResult,
-                    legacyResult.indexOf(nodeModulesPathPart + "@types/") > -1 ? `@types/${mangleScopedPackageName(packageId.name)}` : packageId.name)
+                    Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
+                    node10Result,
+                    node10Result.indexOf(nodeModulesPathPart + "@types/") > -1 ? `@types/${mangleScopedPackageName(packageId.name)}` : packageId.name)
                 : typesPackageExists(packageId.name)
                     ? chainDiagnosticMessages(
                         /*details*/ undefined,
