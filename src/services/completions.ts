@@ -1655,8 +1655,9 @@ function getEntryForMemberCompletion(
 }
 
 function getPresentModifiers(contextToken: Node | undefined, position: number): { modifiers: ModifierFlags, span?: TextSpan } {
-    if (!contextToken
-        || getLineAndCharacterOfPosition(contextToken.getSourceFile(), position).line > getLineAndCharacterOfPosition(contextToken.getSourceFile(), contextToken.getEnd()).line) {
+    if (!contextToken ||
+        getLineAndCharacterOfPosition(contextToken.getSourceFile(), position).line
+            > getLineAndCharacterOfPosition(contextToken.getSourceFile(), contextToken.getEnd()).line) {
         return { modifiers: ModifierFlags.None };
     }
     let modifiers = ModifierFlags.None;
