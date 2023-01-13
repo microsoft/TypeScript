@@ -272,6 +272,8 @@ import {
     getFirstIdentifier,
     getFunctionFlags,
     getHostSignatureFromJSDoc,
+    getIdentifierGeneratedImportReference,
+    getIdentifierTypeArguments,
     getImmediatelyInvokedFunctionExpression,
     getInitializerOfBinaryExpression,
     getInterfaceBaseTypeNodes,
@@ -375,6 +377,7 @@ import {
     hasSyntacticModifiers,
     HeritageClause,
     Identifier,
+    identifierToKeywordKind,
     IdentifierTypePredicate,
     idText,
     IfStatement,
@@ -387,7 +390,6 @@ import {
     ImportSpecifier,
     ImportTypeAssertionContainer,
     ImportTypeNode,
-    IncompleteType,
     IndexedAccessType,
     IndexedAccessTypeNode,
     IndexInfo,
@@ -816,6 +818,7 @@ import {
     nodeIsPresent,
     nodeIsSynthesized,
     NodeLinks,
+    nodeModulesPathPart,
     nodeStartsNewLexicalEnvironment,
     NodeWithTypeArguments,
     NonNullChain,
@@ -890,11 +893,13 @@ import {
     ReverseMappedType,
     sameMap,
     SatisfiesExpression,
+    scanTokenAtPosition,
     ScriptKind,
     ScriptTarget,
     SetAccessorDeclaration,
     setCommentRange,
     setEmitFlags,
+    setIdentifierTypeArguments,
     setNodeFlags,
     setOriginalNode,
     setParent,
@@ -4768,7 +4773,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (sourceFile.symbol) {
                 if (resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
-                    errorOnImplicitAnyModule(/*isError*/ false, errorNode, resolvedModule, moduleReference);
+                    errorOnImplicitAnyModule(/*isError*/ false, errorNode, currentSourceFile, mode, resolvedModule, moduleReference);
                 }
                 if (moduleResolutionKind === ModuleResolutionKind.Node16 || moduleResolutionKind === ModuleResolutionKind.NodeNext) {
                     const isSyncImport = (currentSourceFile.impliedNodeFormat === ModuleKind.CommonJS && !findAncestor(location, isImportCall)) || !!findAncestor(location, isImportEqualsDeclaration);
@@ -4856,7 +4861,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(errorNode, diag, moduleReference, resolvedModule!.resolvedFileName);
             }
             else {
-                errorOnImplicitAnyModule(/*isError*/ noImplicitAny && !!moduleNotFoundError, errorNode, resolvedModule!, moduleReference);
+                errorOnImplicitAnyModule(/*isError*/ noImplicitAny && !!moduleNotFoundError, errorNode, currentSourceFile, mode, resolvedModule!, moduleReference);
             }
             // Failed imports and untyped modules are both treated in an untyped manner; only difference is whether we give a diagnostic first.
             return undefined;
@@ -4926,25 +4931,33 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function errorOnImplicitAnyModule(isError: boolean, errorNode: Node, { packageId, resolvedFileName }: ResolvedModuleFull, moduleReference: string): void {
-        const errorInfo = !isExternalModuleNameRelative(moduleReference) && packageId
-            ? typesPackageExists(packageId.name)
+    function errorOnImplicitAnyModule(isError: boolean, errorNode: Node, sourceFile: SourceFile, mode: ResolutionMode, { packageId, resolvedFileName }: ResolvedModuleFull, moduleReference: string): void {
+        let errorInfo;
+        if (!isExternalModuleNameRelative(moduleReference) && packageId) {
+            const node10Result = sourceFile.resolvedModules?.get(moduleReference, mode)?.node10Result;
+            errorInfo = node10Result
                 ? chainDiagnosticMessages(
                     /*details*/ undefined,
-                    Diagnostics.If_the_0_package_actually_exposes_this_module_consider_sending_a_pull_request_to_amend_https_Colon_Slash_Slashgithub_com_SlashDefinitelyTyped_SlashDefinitelyTyped_Slashtree_Slashmaster_Slashtypes_Slash_1,
-                    packageId.name, mangleScopedPackageName(packageId.name))
-                : packageBundlesTypes(packageId.name)
+                    Diagnostics.There_are_types_at_0_but_this_result_could_not_be_resolved_when_respecting_package_json_exports_The_1_library_may_need_to_update_its_package_json_or_typings,
+                    node10Result,
+                    node10Result.indexOf(nodeModulesPathPart + "@types/") > -1 ? `@types/${mangleScopedPackageName(packageId.name)}` : packageId.name)
+                : typesPackageExists(packageId.name)
                     ? chainDiagnosticMessages(
                         /*details*/ undefined,
-                        Diagnostics.If_the_0_package_actually_exposes_this_module_try_adding_a_new_declaration_d_ts_file_containing_declare_module_1,
-                        packageId.name,
-                        moduleReference)
-                    : chainDiagnosticMessages(
-                        /*details*/ undefined,
-                        Diagnostics.Try_npm_i_save_dev_types_Slash_1_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
-                        moduleReference,
-                        mangleScopedPackageName(packageId.name))
-            : undefined;
+                        Diagnostics.If_the_0_package_actually_exposes_this_module_consider_sending_a_pull_request_to_amend_https_Colon_Slash_Slashgithub_com_SlashDefinitelyTyped_SlashDefinitelyTyped_Slashtree_Slashmaster_Slashtypes_Slash_1,
+                        packageId.name, mangleScopedPackageName(packageId.name))
+                    : packageBundlesTypes(packageId.name)
+                        ? chainDiagnosticMessages(
+                            /*details*/ undefined,
+                            Diagnostics.If_the_0_package_actually_exposes_this_module_try_adding_a_new_declaration_d_ts_file_containing_declare_module_1,
+                            packageId.name,
+                            moduleReference)
+                        : chainDiagnosticMessages(
+                            /*details*/ undefined,
+                            Diagnostics.Try_npm_i_save_dev_types_Slash_1_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
+                            moduleReference,
+                            mangleScopedPackageName(packageId.name));
+        }
         errorOrSuggestion(isError, errorNode, chainDiagnosticMessages(
             errorInfo,
             Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
@@ -6799,12 +6812,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     let qualifier = root.qualifier;
                     if (qualifier) {
                         if (isIdentifier(qualifier)) {
-                            qualifier = factory.updateIdentifier(qualifier, typeArguments);
+                            if (typeArguments !== getIdentifierTypeArguments(qualifier)) {
+                                qualifier = setIdentifierTypeArguments(factory.cloneNode(qualifier), typeArguments);
+                            }
                         }
                         else {
-                            qualifier = factory.updateQualifiedName(qualifier,
-                                qualifier.left,
-                                factory.updateIdentifier(qualifier.right, typeArguments));
+                            if (typeArguments !== getIdentifierTypeArguments(qualifier.right)) {
+                                qualifier = factory.updateQualifiedName(qualifier,
+                                    qualifier.left,
+                                    setIdentifierTypeArguments(factory.cloneNode(qualifier.right), typeArguments));
+                            }
                         }
                     }
                     typeArguments = ref.typeArguments;
@@ -6826,12 +6843,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     let typeArguments = root.typeArguments;
                     let typeName = root.typeName;
                     if (isIdentifier(typeName)) {
-                        typeName = factory.updateIdentifier(typeName, typeArguments);
+                        if (typeArguments !== getIdentifierTypeArguments(typeName)) {
+                            typeName = setIdentifierTypeArguments(factory.cloneNode(typeName), typeArguments);
+                        }
                     }
                     else {
-                        typeName = factory.updateQualifiedName(typeName,
-                            typeName.left,
-                            factory.updateIdentifier(typeName.right, typeArguments));
+                        if (typeArguments !== getIdentifierTypeArguments(typeName.right)) {
+                            typeName = factory.updateQualifiedName(typeName,
+                                typeName.left,
+                                setIdentifierTypeArguments(factory.cloneNode(typeName.right), typeArguments));
+                        }
                     }
                     typeArguments = ref.typeArguments;
                     // then move qualifiers
@@ -7549,7 +7570,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!nonRootParts || isEntityName(nonRootParts)) {
                     if (nonRootParts) {
                         const lastId = isIdentifier(nonRootParts) ? nonRootParts : nonRootParts.right;
-                        lastId.typeArguments = undefined;
+                        setIdentifierTypeArguments(lastId, /*typeArguments*/ undefined);
                     }
                     return factory.createImportTypeNode(lit, assertion, nonRootParts as EntityName, typeParameterNodes as readonly TypeNode[], isTypeOf);
                 }
@@ -7569,8 +7590,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else {
                 const lastId = isIdentifier(entityName) ? entityName : entityName.right;
-                const lastTypeArgs = lastId.typeArguments;
-                lastId.typeArguments = undefined;
+                const lastTypeArgs = getIdentifierTypeArguments(lastId);
+                setIdentifierTypeArguments(lastId, /*typeArguments*/ undefined);
                 return factory.createTypeReferenceNode(entityName, lastTypeArgs as NodeArray<TypeNode>);
             }
 
@@ -7624,7 +7645,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
 
-                const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
+                if (typeParameterNodes) setIdentifierTypeArguments(identifier, factory.createNodeArray<TypeNode | TypeParameterDeclaration>(typeParameterNodes));
                 identifier.symbol = symbol;
 
                 if (index > stopper) {
@@ -7669,7 +7691,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     text = `${rawtext}_${i}`;
                 }
                 if (text !== rawtext) {
-                    result = factory.createIdentifier(text, result.typeArguments);
+                    const typeArguments = getIdentifierTypeArguments(result);
+                    result = factory.createIdentifier(text);
+                    setIdentifierTypeArguments(result, typeArguments);
                 }
                 // avoiding iterations of the above loop turns out to be worth it when `i` starts to get large, so we cache the max
                 // `i` we've used thus far, to save work later
@@ -7704,7 +7728,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.flags ^= NodeBuilderFlags.InInitialEntityName;
                 }
 
-                const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
+                if (typeParameterNodes) setIdentifierTypeArguments(identifier, factory.createNodeArray<TypeNode | TypeParameterDeclaration>(typeParameterNodes));
                 identifier.symbol = symbol;
 
                 return index > 0 ? factory.createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1), identifier) : identifier;
@@ -7733,7 +7758,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return factory.createStringLiteral(getSpecifierForModuleSymbol(symbol, context));
                 }
                 if (index === 0 || canUsePropertyAccess(symbolName, languageVersion)) {
-                    const identifier = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
+                    const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
+                    if (typeParameterNodes) setIdentifierTypeArguments(identifier, factory.createNodeArray<TypeNode | TypeParameterDeclaration>(typeParameterNodes));
                     identifier.symbol = symbol;
 
                     return index > 0 ? factory.createPropertyAccessExpression(createExpressionFromSymbolChain(chain, index - 1), identifier) : identifier;
@@ -7751,8 +7777,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         expression = factory.createNumericLiteral(+symbolName);
                     }
                     if (!expression) {
-                        expression = setEmitFlags(factory.createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
-                        (expression as Identifier).symbol = symbol;
+                        const identifier = setEmitFlags(factory.createIdentifier(symbolName), EmitFlags.NoAsciiEscaping);
+                        if (typeParameterNodes) setIdentifierTypeArguments(identifier, factory.createNodeArray<TypeNode | TypeParameterDeclaration>(typeParameterNodes));
+                        identifier.symbol = symbol;
+                        expression = identifier;
                     }
                     return factory.createElementAccessExpression(createExpressionFromSymbolChain(chain, index - 1), expression);
                 }
@@ -20876,7 +20904,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (variances === emptyArray) {
                     return Ternary.Unknown;
                 }
-                const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances, intersectionState);
+                const params = getSymbolLinks(source.aliasSymbol).typeParameters!;
+                const minParams = getMinTypeArgumentCount(params);
+                const sourceTypes = fillMissingTypeArguments(source.aliasTypeArguments, params, minParams, isInJSFile(source.aliasSymbol.valueDeclaration));
+                const targetTypes = fillMissingTypeArguments(target.aliasTypeArguments, params, minParams, isInJSFile(source.aliasSymbol.valueDeclaration));
+                const varianceResult = relateVariances(sourceTypes, targetTypes, variances, intersectionState);
                 if (varianceResult !== undefined) {
                     return varianceResult;
                 }
@@ -23216,15 +23248,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 break;
             case SyntaxKind.Parameter:
                 const param = declaration as ParameterDeclaration;
-                if (isIdentifier(param.name) &&
-                    (isCallSignatureDeclaration(param.parent) || isMethodSignature(param.parent) || isFunctionTypeNode(param.parent)) &&
-                    param.parent.parameters.indexOf(param) > -1 &&
-                    (resolveName(param, param.name.escapedText, SymbolFlags.Type, undefined, param.name.escapedText, /*isUse*/ true) ||
-                    param.name.originalKeywordKind && isTypeNodeKind(param.name.originalKeywordKind))) {
-                    const newName = "arg" + param.parent.parameters.indexOf(param);
-                    const typeName = declarationNameToString(param.name) + (param.dotDotDotToken ? "[]" : "");
-                    errorOrSuggestion(noImplicitAny, declaration, Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1, newName, typeName);
-                    return;
+                if (isIdentifier(param.name)) {
+                    const originalKeywordKind = identifierToKeywordKind(param.name);
+                    if ((isCallSignatureDeclaration(param.parent) || isMethodSignature(param.parent) || isFunctionTypeNode(param.parent)) &&
+                        param.parent.parameters.indexOf(param) > -1 &&
+                        (resolveName(param, param.name.escapedText, SymbolFlags.Type, undefined, param.name.escapedText, /*isUse*/ true) ||
+                        originalKeywordKind && isTypeNodeKind(originalKeywordKind))) {
+                        const newName = "arg" + param.parent.parameters.indexOf(param);
+                        const typeName = declarationNameToString(param.name) + (param.dotDotDotToken ? "[]" : "");
+                        errorOrSuggestion(noImplicitAny, declaration, Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1, newName, typeName);
+                        return;
+                    }
                 }
                 diagnostic = (declaration as ParameterDeclaration).dotDotDotToken ?
                     noImplicitAny ? Diagnostics.Rest_parameter_0_implicitly_has_an_any_type : Diagnostics.Rest_parameter_0_implicitly_has_an_any_type_but_a_better_type_may_be_inferred_from_usage :
@@ -23464,6 +23498,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !!(type === typeParameter ||
             type.flags & TypeFlags.UnionOrIntersection && some((type as UnionOrIntersectionType).types, t => isTypeParameterAtTopLevel(t, typeParameter)) ||
             type.flags & TypeFlags.Conditional && (getTrueTypeFromConditionalType(type as ConditionalType) === typeParameter || getFalseTypeFromConditionalType(type as ConditionalType) === typeParameter));
+    }
+
+    function isTypeParameterAtTopLevelInReturnType(signature: Signature, typeParameter: TypeParameter) {
+        const typePredicate = getTypePredicateOfSignature(signature);
+        return typePredicate ? !!typePredicate.type && isTypeParameterAtTopLevel(typePredicate.type, typeParameter) :
+            isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), typeParameter);
     }
 
     /** Create an object with properties named in the string literal type. Every property has type `any` */
@@ -23810,8 +23850,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (source.aliasSymbol && source.aliasSymbol === target.aliasSymbol) {
                 if (source.aliasTypeArguments) {
                     // Source and target are types originating in the same generic type alias declaration.
-                    // Simply infer from source type arguments to target type arguments.
-                    inferFromTypeArguments(source.aliasTypeArguments, target.aliasTypeArguments!, getAliasVariances(source.aliasSymbol));
+                    // Simply infer from source type arguments to target type arguments, with defaults applied.
+                    const params = getSymbolLinks(source.aliasSymbol).typeParameters!;
+                    const minParams = getMinTypeArgumentCount(params);
+                    const sourceTypes = fillMissingTypeArguments(source.aliasTypeArguments, params, minParams, isInJSFile(source.aliasSymbol.valueDeclaration));
+                    const targetTypes = fillMissingTypeArguments(target.aliasTypeArguments, params, minParams, isInJSFile(source.aliasSymbol.valueDeclaration));
+                    inferFromTypeArguments(sourceTypes, targetTypes!, getAliasVariances(source.aliasSymbol));
                 }
                 // And if there weren't any type arguments, there's no reason to run inference as the types must be the same.
                 return;
@@ -24570,7 +24614,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // the type parameter was fixed during inference or does not occur at top-level in the return type.
         const primitiveConstraint = hasPrimitiveConstraint(inference.typeParameter) || isConstTypeVariable(inference.typeParameter);
         const widenLiteralTypes = !primitiveConstraint && inference.topLevel &&
-            (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
+            (inference.isFixed || !isTypeParameterAtTopLevelInReturnType(signature, inference.typeParameter));
         const baseCandidates = primitiveConstraint ? sameMap(candidates, getRegularTypeOfLiteralType) :
             widenLiteralTypes ? sameMap(candidates, getWidenedLiteralType) :
             candidates;
@@ -25520,7 +25564,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypeFromFlowType(flowType: FlowType) {
-        return flowType.flags === 0 ? (flowType as IncompleteType).type : flowType as Type;
+        return flowType.flags === 0 ? flowType.type : flowType as Type;
     }
 
     function createFlowType(type: Type, incomplete: boolean): FlowType {
@@ -37474,8 +37518,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkTypeReferenceNode(node: TypeReferenceNode | ExpressionWithTypeArguments) {
         checkGrammarTypeArguments(node, node.typeArguments);
-        if (node.kind === SyntaxKind.TypeReference && node.typeName.jsdocDotPos !== undefined && !isInJSFile(node) && !isInJSDoc(node)) {
-            grammarErrorAtPos(node, node.typeName.jsdocDotPos, 1, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
+        if (node.kind === SyntaxKind.TypeReference && !isInJSFile(node) && !isInJSDoc(node) && node.typeArguments && node.typeName.end !== node.typeArguments.pos) {
+            // If there was a token between the type name and the type arguments, check if it was a DotToken
+            const sourceFile = getSourceFileOfNode(node);
+            if (scanTokenAtPosition(sourceFile, node.typeName.end) === SyntaxKind.DotToken) {
+                grammarErrorAtPos(node, skipTrivia(sourceFile.text, node.typeName.end), 1, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
+            }
         }
         forEach(node.typeArguments, checkSourceElement);
         const type = getTypeFromTypeReference(node);
@@ -44613,8 +44661,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // When resolved as an expression identifier, if the given node references an import, return the declaration of
     // that import. Otherwise, return undefined.
     function getReferencedImportDeclaration(nodeIn: Identifier): Declaration | undefined {
-        if (nodeIn.generatedImportReference) {
-            return nodeIn.generatedImportReference;
+        const specifier = getIdentifierGeneratedImportReference(nodeIn);
+        if (specifier) {
+            return specifier;
         }
         const node = getParseTreeNode(nodeIn, isIdentifier);
         if (node) {
@@ -46885,7 +46934,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkGrammarNameInLetOrConstDeclarations(name: Identifier | BindingPattern): boolean {
         if (name.kind === SyntaxKind.Identifier) {
-            if (name.originalKeywordKind === SyntaxKind.LetKeyword) {
+            if (name.escapedText === "let") {
                 return grammarErrorOnNode(name, Diagnostics.let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations);
             }
         }
