@@ -108,8 +108,8 @@ interface Uint8ClampedArray {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findLast<S extends number>(predicate: (value: number, index: number, array: Uint8ClampedArray[]) => value is S, thisArg?: any): S | undefined;
-    findLast(predicate: (value: number, index: number, array: Uint8ClampedArray[]) => unknown, thisArg?: any): number | undefined;
+    findLast<S extends number>(predicate: (value: number, index: number, array: Uint8ClampedArray) => value is S, thisArg?: any): S | undefined;
+    findLast(predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any): number | undefined;
 
     /**
      * Returns the index of the last element in the array where predicate is true, and -1
@@ -120,7 +120,7 @@ interface Uint8ClampedArray {
      * @param thisArg If provided, it will be used as the this value for each invocation of
      * predicate. If it is not provided, undefined is used instead.
      */
-    findLastIndex(predicate: (value: number, index: number, array: Uint8ClampedArray[]) => unknown, thisArg?: any): number;
+    findLastIndex(predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any): number;
 }
 
 interface Int16Array {
