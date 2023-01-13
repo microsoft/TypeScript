@@ -6637,7 +6637,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                 function deepCloneOrReuseNodes(
                     nodes: NodeArray<Node> | undefined,
-                    visitor: Visitor | undefined,
+                    visitor: Visitor,
                     test?: (node: Node) => boolean,
                     start?: number,
                     count?: number,

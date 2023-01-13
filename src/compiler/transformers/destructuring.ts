@@ -74,7 +74,7 @@ interface FlattenContext {
     createArrayBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ArrayBindingOrAssignmentPattern;
     createObjectBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ObjectBindingOrAssignmentPattern;
     createArrayBindingOrAssignmentElement: (node: Identifier) => BindingOrAssignmentElement;
-    visitor?: (node: Node) => VisitResult<Node | undefined>;
+    visitor: (node: Node) => VisitResult<Node | undefined>;
 }
 
 /** @internal */
@@ -98,7 +98,7 @@ export const enum FlattenLevel {
  */
 export function flattenDestructuringAssignment(
     node: VariableDeclaration | DestructuringAssignment,
-    visitor: ((node: Node) => VisitResult<Node | undefined>) | undefined,
+    visitor: ((node: Node) => VisitResult<Node | undefined>),
     context: TransformationContext,
     level: FlattenLevel,
     needsValue?: boolean,

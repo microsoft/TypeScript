@@ -118,7 +118,7 @@ import {
  */
 export function visitNode<TIn extends Node | undefined, TVisited extends Node | undefined, TOut extends Node>(
     node: TIn,
-    visitor: Visitor<NonNullable<TIn>, TVisited> | undefined,
+    visitor: Visitor<NonNullable<TIn>, TVisited>,
     test: (node: Node) => node is TOut,
     lift?: (node: readonly Node[]) => Node,
 ): TOut | (TIn & undefined) | (TVisited & undefined);
@@ -138,13 +138,13 @@ export function visitNode<TIn extends Node | undefined, TVisited extends Node | 
  */
 export function visitNode<TIn extends Node | undefined, TVisited extends Node | undefined>(
     node: TIn,
-    visitor: Visitor<NonNullable<TIn>, TVisited> | undefined,
+    visitor: Visitor<NonNullable<TIn>, TVisited>,
     test?: (node: Node) => boolean,
     lift?: (node: readonly Node[]) => Node,
 ): Node | (TIn & undefined) | (TVisited & undefined);
 export function visitNode(
     node: Node,
-    visitor: Visitor | undefined,
+    visitor: Visitor,
     test?: (node: Node) => boolean,
     lift?: (node: readonly Node[]) => Node,
 ): Node | undefined {
@@ -153,6 +153,7 @@ export function visitNode(
         return node;
     }
 
+    // TODO(jakebailey): remove this check?
     const visited = visitor ? visitor(node) : node;
 
     let visitedNode: Node | undefined;
@@ -190,7 +191,7 @@ export function visitNode(
  */
 export function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TOut extends Node>(
     nodes: TInArray,
-    visitor: Visitor<TIn, Node | undefined> | undefined,
+    visitor: Visitor<TIn, Node | undefined>,
     test: (node: Node) => node is TOut,
     start?: number,
     count?: number,
@@ -212,14 +213,14 @@ export function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | u
  */
 export function visitNodes<TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(
     nodes: TInArray,
-    visitor: Visitor<TIn, Node | undefined> | undefined,
+    visitor: Visitor<TIn, Node | undefined>,
     test?: (node: Node) => boolean,
     start?: number,
     count?: number,
 ): NodeArray<Node> | (TInArray & undefined);
 export function visitNodes(
     nodes: NodeArray<Node> | undefined,
-    visitor: Visitor | undefined,
+    visitor: Visitor,
     test?: (node: Node) => boolean,
     start?: number,
     count?: number,
@@ -270,7 +271,7 @@ export function visitNodes(
 /** @internal */
 export function visitArray<TIn extends Node, TInArray extends readonly TIn[] | undefined, TOut extends Node>(
     nodes: TInArray,
-    visitor: Visitor<TIn, Node | undefined> | undefined,
+    visitor: Visitor<TIn, Node | undefined>,
     test: (node: Node) => node is TOut,
     start?: number,
     count?: number,
@@ -278,14 +279,14 @@ export function visitArray<TIn extends Node, TInArray extends readonly TIn[] | u
 /** @internal */
 export function visitArray<TIn extends Node, TInArray extends readonly TIn[] | undefined>(
     nodes: TInArray,
-    visitor: Visitor<TIn, Node | undefined> | undefined,
+    visitor: Visitor<TIn, Node | undefined>,
     test?: (node: Node) => boolean,
     start?: number,
     count?: number,
 ): readonly Node[] | (TInArray & undefined);
 export function visitArray(
     nodes: readonly Node[] | undefined,
-    visitor: Visitor | undefined,
+    visitor: Visitor,
     test?: (node: Node) => boolean,
     start?: number,
     count?: number,
@@ -310,14 +311,14 @@ export function visitArray(
 
 function visitArrayWorker<TIn extends Node, TInArray extends readonly TIn[], TOut extends Node>(
     nodes: TInArray,
-    visitor: Visitor<TIn, Node | undefined> | undefined,
+    visitor: Visitor<TIn, Node | undefined>,
     test: (node: Node) => node is TOut,
     start: number,
     count: number,
 ): readonly TOut[];
 function visitArrayWorker<TIn extends Node, TInArray extends readonly TIn[]>(
     nodes: TInArray,
-    visitor: Visitor<TIn, Node | undefined> | undefined,
+    visitor: Visitor<TIn, Node | undefined>,
     test: ((node: Node) => boolean) | undefined,
     start: number,
     count: number,
@@ -632,9 +633,9 @@ const visitEachChildTable: VisitEachChildTable = {
     [SyntaxKind.Parameter]: function visitEachChildOfParameterDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
         return context.factory.updateParameterDeclaration(node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
-            nodeVisitor(node.dotDotDotToken, tokenVisitor, isDotDotDotToken),
+            tokenVisitor ? nodeVisitor(node.dotDotDotToken, tokenVisitor, isDotDotDotToken) : node.dotDotDotToken,
             Debug.checkDefined(nodeVisitor(node.name, visitor, isBindingName)),
-            nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
+            tokenVisitor ? nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken) : node.questionToken,
             nodeVisitor(node.type, visitor, isTypeNode),
             nodeVisitor(node.initializer, visitor, isExpression));
     },
@@ -649,7 +650,7 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updatePropertySignature(node,
             nodesVisitor(node.modifiers, visitor, isModifier),
             Debug.checkDefined(nodeVisitor(node.name, visitor, isPropertyName)),
-            nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
+            tokenVisitor ? nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken) : node.questionToken,
             nodeVisitor(node.type, visitor, isTypeNode));
     },
 
@@ -658,7 +659,7 @@ const visitEachChildTable: VisitEachChildTable = {
             nodesVisitor(node.modifiers, visitor, isModifierLike),
             Debug.checkDefined(nodeVisitor(node.name, visitor, isPropertyName)),
             // QuestionToken and ExclamationToken are mutually exclusive in PropertyDeclaration
-            nodeVisitor(node.questionToken ?? node.exclamationToken, tokenVisitor, isQuestionOrExclamationToken),
+            tokenVisitor ? nodeVisitor(node.questionToken ?? node.exclamationToken, tokenVisitor, isQuestionOrExclamationToken) : node.questionToken ?? node.exclamationToken,
             nodeVisitor(node.type, visitor, isTypeNode),
             nodeVisitor(node.initializer, visitor, isExpression));
     },
@@ -667,7 +668,7 @@ const visitEachChildTable: VisitEachChildTable = {
         return context.factory.updateMethodSignature(node,
             nodesVisitor(node.modifiers, visitor, isModifier),
             Debug.checkDefined(nodeVisitor(node.name, visitor, isPropertyName)),
-            nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
+            tokenVisitor ? nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken) : node.questionToken,
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
             nodesVisitor(node.parameters, visitor, isParameter),
             nodeVisitor(node.type, visitor, isTypeNode));
@@ -676,9 +677,9 @@ const visitEachChildTable: VisitEachChildTable = {
     [SyntaxKind.MethodDeclaration]: function visitEachChildOfMethodDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
         return context.factory.updateMethodDeclaration(node,
             nodesVisitor(node.modifiers, visitor, isModifierLike),
-            nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken),
+            tokenVisitor ? nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken) : node.asteriskToken,
             Debug.checkDefined(nodeVisitor(node.name, visitor, isPropertyName)),
-            nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
+            tokenVisitor ? nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken) : node.questionToken,
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
             visitParameterList(node.parameters, visitor, context, nodesVisitor),
             nodeVisitor(node.type, visitor, isTypeNode),
@@ -839,9 +840,9 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.NamedTupleMember]: function visitEachChildOfNamedTupleMember(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
         return context.factory.updateNamedTupleMember(node,
-            nodeVisitor(node.dotDotDotToken, tokenVisitor, isDotDotDotToken),
+            tokenVisitor ? nodeVisitor(node.dotDotDotToken, tokenVisitor, isDotDotDotToken) : node.dotDotDotToken,
             Debug.checkDefined(nodeVisitor(node.name, visitor, isIdentifier)),
-            nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken),
+            tokenVisitor ? nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken) : node.questionToken,
             Debug.checkDefined(nodeVisitor(node.type, visitor, isTypeNode)),
         );
     },
@@ -864,10 +865,10 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.MappedType]: function visitEachChildOfMappedType(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
         return context.factory.updateMappedTypeNode(node,
-            nodeVisitor(node.readonlyToken, tokenVisitor, isReadonlyKeywordOrPlusOrMinusToken),
+            tokenVisitor ? nodeVisitor(node.readonlyToken, tokenVisitor, isReadonlyKeywordOrPlusOrMinusToken) : node.readonlyToken,
             Debug.checkDefined(nodeVisitor(node.typeParameter, visitor, isTypeParameterDeclaration)),
             nodeVisitor(node.nameType, visitor, isTypeNode),
-            nodeVisitor(node.questionToken, tokenVisitor, isQuestionOrPlusOrMinusToken),
+            tokenVisitor ? nodeVisitor(node.questionToken, tokenVisitor, isQuestionOrPlusOrMinusToken) : node.questionToken,
             nodeVisitor(node.type, visitor, isTypeNode),
             nodesVisitor(node.members, visitor, isTypeElement));
     },
@@ -902,7 +903,7 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.BindingElement]: function visitEachChildOfBindingElement(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
         return context.factory.updateBindingElement(node,
-            nodeVisitor(node.dotDotDotToken, tokenVisitor, isDotDotDotToken),
+            tokenVisitor ? nodeVisitor(node.dotDotDotToken, tokenVisitor, isDotDotDotToken) : node.dotDotDotToken,
             nodeVisitor(node.propertyName, visitor, isPropertyName),
             Debug.checkDefined(nodeVisitor(node.name, visitor, isBindingName)),
             nodeVisitor(node.initializer, visitor, isExpression));
@@ -923,7 +924,7 @@ const visitEachChildTable: VisitEachChildTable = {
         return isPropertyAccessChain(node) ?
             context.factory.updatePropertyAccessChain(node,
                 Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
-                nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken),
+                tokenVisitor ? nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken) : node.questionDotToken,
                 Debug.checkDefined(nodeVisitor(node.name, visitor, isMemberName))) :
             context.factory.updatePropertyAccessExpression(node,
                 Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
@@ -934,7 +935,7 @@ const visitEachChildTable: VisitEachChildTable = {
         return isElementAccessChain(node) ?
             context.factory.updateElementAccessChain(node,
                 Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
-                nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken),
+                tokenVisitor ? nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken) : node.questionDotToken,
                 Debug.checkDefined(nodeVisitor(node.argumentExpression, visitor, isExpression))) :
             context.factory.updateElementAccessExpression(node,
                 Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
@@ -945,7 +946,7 @@ const visitEachChildTable: VisitEachChildTable = {
         return isCallChain(node) ?
             context.factory.updateCallChain(node,
                 Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
-                nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken),
+                tokenVisitor ? nodeVisitor(node.questionDotToken, tokenVisitor, isQuestionDotToken) : node.questionDotToken,
                 nodesVisitor(node.typeArguments, visitor, isTypeNode),
                 nodesVisitor(node.arguments, visitor, isExpression)) :
             context.factory.updateCallExpression(node,
@@ -982,7 +983,7 @@ const visitEachChildTable: VisitEachChildTable = {
     [SyntaxKind.FunctionExpression]: function visitEachChildOfFunctionExpression(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
         return context.factory.updateFunctionExpression(node,
             nodesVisitor(node.modifiers, visitor, isModifier),
-            nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken),
+            tokenVisitor ? nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken) : node.asteriskToken,
             nodeVisitor(node.name, visitor, isIdentifier),
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
             visitParameterList(node.parameters, visitor, context, nodesVisitor),
@@ -996,7 +997,7 @@ const visitEachChildTable: VisitEachChildTable = {
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
             visitParameterList(node.parameters, visitor, context, nodesVisitor),
             nodeVisitor(node.type, visitor, isTypeNode),
-            Debug.checkDefined(nodeVisitor(node.equalsGreaterThanToken, tokenVisitor, isEqualsGreaterThanToken)),
+            tokenVisitor ? Debug.checkDefined(nodeVisitor(node.equalsGreaterThanToken, tokenVisitor, isEqualsGreaterThanToken)) : node.equalsGreaterThanToken,
             visitFunctionBody(node.body, visitor, context, nodeVisitor));
     },
 
@@ -1033,16 +1034,16 @@ const visitEachChildTable: VisitEachChildTable = {
     [SyntaxKind.BinaryExpression]: function visitEachChildOfBinaryExpression(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
         return context.factory.updateBinaryExpression(node,
             Debug.checkDefined(nodeVisitor(node.left, visitor, isExpression)),
-            Debug.checkDefined(nodeVisitor(node.operatorToken, tokenVisitor, isBinaryOperatorToken)),
+            tokenVisitor ? Debug.checkDefined(nodeVisitor(node.operatorToken, tokenVisitor, isBinaryOperatorToken)) : node.operatorToken,
             Debug.checkDefined(nodeVisitor(node.right, visitor, isExpression)));
     },
 
     [SyntaxKind.ConditionalExpression]: function visitEachChildOfConditionalExpression(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
         return context.factory.updateConditionalExpression(node,
             Debug.checkDefined(nodeVisitor(node.condition, visitor, isExpression)),
-            Debug.checkDefined(nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken)),
+            tokenVisitor ? Debug.checkDefined(nodeVisitor(node.questionToken, tokenVisitor, isQuestionToken)) : node.questionToken,
             Debug.checkDefined(nodeVisitor(node.whenTrue, visitor, isExpression)),
-            Debug.checkDefined(nodeVisitor(node.colonToken, tokenVisitor, isColonToken)),
+            tokenVisitor ? Debug.checkDefined(nodeVisitor(node.colonToken, tokenVisitor, isColonToken)) : node.colonToken,
             Debug.checkDefined(nodeVisitor(node.whenFalse, visitor, isExpression)));
     },
 
@@ -1054,7 +1055,7 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.YieldExpression]: function visitEachChildOfYieldExpression(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
         return context.factory.updateYieldExpression(node,
-            nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken),
+            tokenVisitor ? nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken) : node.asteriskToken,
             nodeVisitor(node.expression, visitor, isExpression));
     },
 
@@ -1163,7 +1164,7 @@ const visitEachChildTable: VisitEachChildTable = {
 
     [SyntaxKind.ForOfStatement]: function visitEachChildOfForOfStatement(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
         return context.factory.updateForOfStatement(node,
-            nodeVisitor(node.awaitModifier, tokenVisitor, isAwaitKeyword),
+            tokenVisitor ? nodeVisitor(node.awaitModifier, tokenVisitor, isAwaitKeyword) : node.awaitModifier,
             Debug.checkDefined(nodeVisitor(node.initializer, visitor, isForInitializer)),
             Debug.checkDefined(nodeVisitor(node.expression, visitor, isExpression)),
             visitIterationBody(node.statement, visitor, context, nodeVisitor));
@@ -1217,7 +1218,7 @@ const visitEachChildTable: VisitEachChildTable = {
     [SyntaxKind.VariableDeclaration]: function visitEachChildOfVariableDeclaration(node, visitor, context, _nodesVisitor, nodeVisitor, tokenVisitor) {
         return context.factory.updateVariableDeclaration(node,
             Debug.checkDefined(nodeVisitor(node.name, visitor, isBindingName)),
-            nodeVisitor(node.exclamationToken, tokenVisitor, isExclamationToken),
+            tokenVisitor ? nodeVisitor(node.exclamationToken, tokenVisitor, isExclamationToken) : node.exclamationToken,
             nodeVisitor(node.type, visitor, isTypeNode),
             nodeVisitor(node.initializer, visitor, isExpression));
     },
@@ -1230,7 +1231,7 @@ const visitEachChildTable: VisitEachChildTable = {
     [SyntaxKind.FunctionDeclaration]: function visitEachChildOfFunctionDeclaration(node, visitor, context, nodesVisitor, nodeVisitor, tokenVisitor) {
         return context.factory.updateFunctionDeclaration(node,
             nodesVisitor(node.modifiers, visitor, isModifier),
-            nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken),
+            tokenVisitor ? nodeVisitor(node.asteriskToken, tokenVisitor, isAsteriskToken) : node.asteriskToken,
             nodeVisitor(node.name, visitor, isIdentifier),
             nodesVisitor(node.typeParameters, visitor, isTypeParameterDeclaration),
             visitParameterList(node.parameters, visitor, context, nodesVisitor),

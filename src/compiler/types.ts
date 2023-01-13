@@ -9071,13 +9071,13 @@ export type Visitor<TIn extends Node = Node, TOut extends Node | undefined = TIn
 export interface NodeVisitor {
     <TIn extends Node | undefined, TVisited extends Node | undefined, TOut extends Node>(
         node: TIn,
-        visitor: Visitor<NonNullable<TIn>, TVisited> | undefined,
+        visitor: Visitor<NonNullable<TIn>, TVisited>,
         test: (node: Node) => node is TOut,
         lift?: (node: readonly Node[]) => Node,
     ): TOut | (TIn & undefined) | (TVisited & undefined);
     <TIn extends Node | undefined, TVisited extends Node | undefined>(
         node: TIn,
-        visitor: Visitor<NonNullable<TIn>, TVisited> | undefined,
+        visitor: Visitor<NonNullable<TIn>, TVisited>,
         test?: (node: Node) => boolean,
         lift?: (node: readonly Node[]) => Node,
     ): Node | (TIn & undefined) | (TVisited & undefined);
@@ -9097,14 +9097,14 @@ export interface NodeVisitor {
 export interface NodesVisitor {
     <TIn extends Node, TInArray extends NodeArray<TIn> | undefined, TOut extends Node>(
         nodes: TInArray,
-        visitor: Visitor<TIn, Node | undefined> | undefined,
+        visitor: Visitor<TIn, Node | undefined>,
         test: (node: Node) => node is TOut,
         start?: number,
         count?: number,
     ): NodeArray<TOut> | (TInArray & undefined);
     <TIn extends Node, TInArray extends NodeArray<TIn> | undefined>(
         nodes: TInArray,
-        visitor: Visitor<TIn, Node | undefined> | undefined,
+        visitor: Visitor<TIn, Node | undefined>,
         test?: (node: Node) => boolean,
         start?: number,
         count?: number,

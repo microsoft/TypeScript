@@ -1573,7 +1573,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         if (isBindingPattern(node.name)) {
             return flattenDestructuringAssignment(
                 visitNode(node, visitor, isInitializedVariable),
-                /*visitor*/ undefined,
+                visitor,
                 context,
                 FlattenLevel.All,
                 /*needsValue*/ false,

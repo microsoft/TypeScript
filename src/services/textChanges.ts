@@ -1344,7 +1344,7 @@ export function assignPositionsToNode(node: Node): Node {
 
 function assignPositionsToNodeArray(
     nodes: NodeArray<Node> | undefined,
-    visitor: Visitor | undefined,
+    visitor: Visitor,
     test?: (node: Node) => boolean,
     start?: number,
     count?: number,
