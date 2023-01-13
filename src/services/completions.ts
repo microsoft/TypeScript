@@ -4871,7 +4871,7 @@ function tryGetObjectTypeDeclarationCompletionContainer(sourceFile: SourceFile, 
             if (isObjectTypeDeclaration(location)) {
                 // class C extends React.Component { a: () => 1\n| }
                 // class C { prop = ""\n | }
-                if (isClassLike(location) && getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line !== getLineAndCharacterOfPosition(sourceFile, position).line) {
+                if (getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line !== getLineAndCharacterOfPosition(sourceFile, position).line) {
                     return location;
                 }
                 const isValidKeyword = isClassLike(contextToken.parent.parent) ? isClassMemberCompletionKeyword : isInterfaceOrTypeLiteralCompletionKeyword;
