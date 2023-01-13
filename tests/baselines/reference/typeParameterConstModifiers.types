@@ -300,3 +300,34 @@ set(obj, ['a', 'b', 'c'], value);
 >'c' : "c"
 >value : "123"
 
+// Repro from #52007
+
+declare function inners<const T extends readonly any[]>(...args: readonly [unknown, ...T, unknown]): T;
+>inners : <const T extends readonly any[]>(...args: readonly [unknown, ...T, unknown]) => T
+>args : readonly [unknown, ...T, unknown]
+
+const test = inners(1,2,3,4,5);
+>test : [2, 3, 4]
+>inners(1,2,3,4,5) : [2, 3, 4]
+>inners : <const T extends readonly any[]>(...args: readonly [unknown, ...T, unknown]) => T
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
+
+declare function inners2<const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]): T;
+>inners2 : <const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]) => T
+>args : readonly [unknown, ...T, unknown]
+
+const test2 = inners2([1,2,3,4,5]);
+>test2 : [2, 3, 4]
+>inners2([1,2,3,4,5]) : [2, 3, 4]
+>inners2 : <const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]) => T
+>[1,2,3,4,5] : [number, 2, 3, 4, number]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
+
