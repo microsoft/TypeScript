@@ -51,10 +51,10 @@ new Uint8Array().findLast((item) => item === 0);
 
 new Uint8ClampedArray().findLast((item) => item === 0);
 >new Uint8ClampedArray().findLast((item) => item === 0) : number
->new Uint8ClampedArray().findLast : { <S extends number>(predicate: (value: number, index: number, array: Uint8ClampedArray[]) => value is S, thisArg?: any): S; (predicate: (value: number, index: number, array: Uint8ClampedArray[]) => unknown, thisArg?: any): number; }
+>new Uint8ClampedArray().findLast : { <S extends number>(predicate: (value: number, index: number, array: Uint8ClampedArray) => value is S, thisArg?: any): S; (predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any): number; }
 >new Uint8ClampedArray() : Uint8ClampedArray
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
->findLast : { <S extends number>(predicate: (value: number, index: number, array: Uint8ClampedArray[]) => value is S, thisArg?: any): S; (predicate: (value: number, index: number, array: Uint8ClampedArray[]) => unknown, thisArg?: any): number; }
+>findLast : { <S extends number>(predicate: (value: number, index: number, array: Uint8ClampedArray) => value is S, thisArg?: any): S; (predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any): number; }
 >(item) => item === 0 : (item: number) => boolean
 >item : number
 >item === 0 : boolean
@@ -213,10 +213,10 @@ new Uint8Array().findLastIndex((item) => item === 0);
 
 new Uint8ClampedArray().findLastIndex((item) => item === 0);
 >new Uint8ClampedArray().findLastIndex((item) => item === 0) : number
->new Uint8ClampedArray().findLastIndex : (predicate: (value: number, index: number, array: Uint8ClampedArray[]) => unknown, thisArg?: any) => number
+>new Uint8ClampedArray().findLastIndex : (predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any) => number
 >new Uint8ClampedArray() : Uint8ClampedArray
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
->findLastIndex : (predicate: (value: number, index: number, array: Uint8ClampedArray[]) => unknown, thisArg?: any) => number
+>findLastIndex : (predicate: (value: number, index: number, array: Uint8ClampedArray) => unknown, thisArg?: any) => number
 >(item) => item === 0 : (item: number) => boolean
 >item : number
 >item === 0 : boolean
