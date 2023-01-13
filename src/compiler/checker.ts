@@ -390,7 +390,6 @@ import {
     ImportSpecifier,
     ImportTypeAssertionContainer,
     ImportTypeNode,
-    IncompleteType,
     IndexedAccessType,
     IndexedAccessTypeNode,
     IndexInfo,
@@ -13257,6 +13256,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function isConstTypeVariable(type: Type): boolean {
         return !!(type.flags & TypeFlags.TypeParameter && some((type as TypeParameter).symbol?.declarations, d => hasSyntacticModifier(d, ModifierFlags.Const)) ||
+            isGenericTupleType(type) && findIndex(getTypeArguments(type), (t, i) => !!(type.target.elementFlags[i] & ElementFlags.Variadic) && isConstTypeVariable(t)) >= 0 ||
             type.flags & TypeFlags.IndexedAccess && isConstTypeVariable((type as IndexedAccessType).objectType));
     }
 
@@ -25560,7 +25560,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getTypeFromFlowType(flowType: FlowType) {
-        return flowType.flags === 0 ? (flowType as IncompleteType).type : flowType as Type;
+        return flowType.flags === 0 ? flowType.type : flowType as Type;
     }
 
     function createFlowType(type: Type, incomplete: boolean): FlowType {
@@ -27285,7 +27285,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (func.parameters.length >= 2 && isContextSensitiveFunctionOrObjectLiteralMethod(func)) {
                     const contextualSignature = getContextualSignature(func);
                     if (contextualSignature && contextualSignature.parameters.length === 1 && signatureHasRestParameter(contextualSignature)) {
-                        const restType = getReducedApparentType(getTypeOfSymbol(contextualSignature.parameters[0]));
+                        const restType = getReducedApparentType(instantiateType(getTypeOfSymbol(contextualSignature.parameters[0]), getInferenceContext(func)?.nonFixingMapper));
                         if (restType.flags & TypeFlags.Union && everyType(restType, isTupleType) && !isSymbolAssigned(symbol)) {
                             const narrowedType = getFlowTypeOfReference(func, restType, restType, /*flowContainer*/ undefined, location.flowNode);
                             const index = func.parameters.indexOf(declaration) - (getThisParameter(func) ? 1 : 0);
@@ -28842,7 +28842,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const index = findContextualNode(node);
         if (index >= 0) {
-            return contextualTypes[index];
+            const cached = contextualTypes[index];
+            if (cached || !contextFlags) return cached;
         }
         const { parent } = node;
         switch (parent.kind) {
