@@ -59,10 +59,10 @@ const t5 = /** @satisfies {T3} */((m) => m.substring(0));
 >substring : (start: number, end?: number) => string
 >0 : 0
 
-const t6 = /** @satisfies {Array.<number, number>} */ ([1, 2]);
->t6 : number[]
->([1, 2]) : number[]
->[1, 2] : number[]
+const t6 = /** @satisfies {[number, number]} */ ([1, 2]);
+>t6 : [number, number]
+>([1, 2]) : [number, number]
+>[1, 2] : [number, number]
 >1 : 1
 >2 : 2
 

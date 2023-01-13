@@ -32,6 +32,6 @@ const t4 = /** @satisfies {T2} */ ({ a: "a" });
 
 /** @type {(m: string) => string} */
 const t5 = /** @satisfies {T3} */((m) => m.substring(0));
-const t6 = /** @satisfies {Array.<number, number>} */ ([1, 2]);
+const t6 = /** @satisfies {[number, number]} */ ([1, 2]);
 const t7 = /** @satisfies {T4} */ ({ a: 'test' });
 const t8 = /** @satisfies {T4} */ ({ a: 'test', b: 'test' });
