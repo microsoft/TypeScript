@@ -573,7 +573,7 @@ export function transformDeclarations(context: TransformationContext) {
         return updated;
 
         function getLibReferences() {
-            return map(arrayFrom(libs.keys()), lib => ({ fileName: lib, pos: -1, end: -1 }));
+            return arrayFrom(libs.keys(), lib => ({ fileName: lib, pos: -1, end: -1 }));
         }
 
         function getFileReferencesForUsedTypeReferences() {

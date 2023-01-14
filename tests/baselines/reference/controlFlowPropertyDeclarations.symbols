@@ -232,9 +232,9 @@ export class HTMLtoJSX {
 >whitespace : Symbol(whitespace, Decl(controlFlowPropertyDeclarations.ts, 121, 50))
 
           return '{' + JSON.stringify(whitespace) + '}';
->JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >whitespace : Symbol(whitespace, Decl(controlFlowPropertyDeclarations.ts, 121, 50))
 
         });
