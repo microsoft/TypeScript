@@ -52,6 +52,7 @@ import {
     JSDocImplementsTag,
     JSDocParameterTag,
     JSDocPropertyTag,
+    JSDocSatisfiesTag,
     JSDocSeeTag,
     JSDocTag,
     JSDocTagInfo,
@@ -291,7 +292,8 @@ function getCommentDisplayParts(tag: JSDocTag, checker?: TypeChecker): SymbolDis
             }
             return displayParts;
         case SyntaxKind.JSDocTypeTag:
-            return withNode((tag as JSDocTypeTag).typeExpression);
+        case SyntaxKind.JSDocSatisfiesTag:
+            return withNode((tag as JSDocTypeTag | JSDocSatisfiesTag).typeExpression);
         case SyntaxKind.JSDocTypedefTag:
         case SyntaxKind.JSDocCallbackTag:
         case SyntaxKind.JSDocPropertyTag:
