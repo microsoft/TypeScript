@@ -4,7 +4,7 @@
 ////    method(a: any, b: string): boolean;
 ////    method(a: string, b: number): Function;
 ////    method(a: string): Function;
-////    method(a: string | number, b?: string | number): boolean | Function { return a + b as any; }
+////    method(a: string | number, b?: string | number): boolean | Function { return a + b; }
 ////}
 ////class C implements A { }
 
@@ -15,7 +15,7 @@ verify.codeFix({
     method(a: any, b: string): boolean;
     method(a: string, b: number): Function;
     method(a: string): Function;
-    method(a: string | number, b?: string | number): boolean | Function { return a + b as any; }
+    method(a: string | number, b?: string | number): boolean | Function { return a + b; }
 }
 class C implements A {
     method(a: any, b: string): boolean;

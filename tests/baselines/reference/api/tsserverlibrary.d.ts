@@ -7072,6 +7072,7 @@ declare namespace ts {
         noImplicitReturns?: boolean;
         noImplicitThis?: boolean;
         noStrictGenericChecks?: boolean;
+        noUnnecessaryTypeAssertions?: boolean;
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;

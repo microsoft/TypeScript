@@ -2,7 +2,7 @@
 
 ////class A {
 ////    method(a: number, b: string): boolean;
-////    method(a: string | number, b?: string | number): boolean | Function { return a + b as any; }
+////    method(a: string | number, b?: string | number): boolean | Function { return a + b; }
 ////}
 ////class C implements A {}
 
@@ -11,7 +11,7 @@ verify.codeFix({
     newFileContent:
 `class A {
     method(a: number, b: string): boolean;
-    method(a: string | number, b?: string | number): boolean | Function { return a + b as any; }
+    method(a: string | number, b?: string | number): boolean | Function { return a + b; }
 }
 class C implements A {
     method(a: number, b: string): boolean;
