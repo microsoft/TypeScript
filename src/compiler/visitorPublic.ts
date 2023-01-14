@@ -49,7 +49,6 @@ import {
     isQuestionOrExclamationToken,
     isQuestionOrPlusOrMinusToken,
     isReadonlyKeywordOrPlusOrMinusToken,
-    isTypeNodeOrTypeParameterDeclaration,
 } from "./factory/utilities";
 import { setTextRange } from "./factory/utilitiesPublic";
 import {
@@ -57,6 +56,7 @@ import {
     EmitFlags,
     Expression,
     FunctionBody,
+    HasChildren,
     Identifier,
     LexicalEnvironmentFlags,
     Node,
@@ -68,7 +68,6 @@ import {
     Statement,
     SyntaxKind,
     TransformationContext,
-    VisitEachChildNodes,
     Visitor,
 } from "./types";
 import {
@@ -523,23 +522,17 @@ type VisitEachChildFunction<T extends Node> = (node: T, visitor: Visitor, contex
 // This looks something like:
 //
 //  {
-//      [SyntaxKind.Identifier]: VisitEachChildFunction<Identifier>;
 //      [SyntaxKind.QualifiedName]: VisitEachChildFunction<QualifiedName>;
 //      [SyntaxKind.ComputedPropertyName]: VisitEachChildFunction<ComputedPropertyName>;
 //      ...
 //  }
 //
 // This is then used as the expected type for `visitEachChildTable`.
-type VisitEachChildTable = { [TNode in VisitEachChildNodes as TNode["kind"]]: VisitEachChildFunction<TNode> };
+type VisitEachChildTable = { [TNode in HasChildren as TNode["kind"]]: VisitEachChildFunction<TNode> };
 
 // NOTE: Before you can add a new method to `visitEachChildTable`, you must first ensure the `Node` subtype you
 //       wish to add is defined in the `HasChildren` union in types.ts.
 const visitEachChildTable: VisitEachChildTable = {
-    [SyntaxKind.Identifier]: function visitEachChildOfIdentifier(node, visitor, context, nodesVisitor, _nodeVisitor, _tokenVisitor) {
-        return context.factory.updateIdentifier(node,
-            nodesVisitor(node.typeArguments, visitor, isTypeNodeOrTypeParameterDeclaration));
-    },
-
     [SyntaxKind.QualifiedName]: function visitEachChildOfQualifiedName(node, visitor, context, _nodesVisitor, nodeVisitor, _tokenVisitor) {
         return context.factory.updateQualifiedName(node,
             nodeVisitor(node.left, visitor, isEntityName),

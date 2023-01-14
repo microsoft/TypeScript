@@ -1162,7 +1162,6 @@ function updateJSDocHost(parent: HasJSDoc): HasJSDoc {
         parent.parent as HasJSDoc :
         parent.parent.parent as HasJSDoc;
     jsDocNode.jsDoc = parent.jsDoc;
-    jsDocNode.jsDocCache = parent.jsDocCache;
     return jsDocNode;
 }
 

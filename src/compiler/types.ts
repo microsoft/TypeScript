@@ -834,6 +834,10 @@ export const enum NodeFlags {
     // never cleared on SourceFiles which get re-used in between incremental parses.
     // See the comment above on `PossiblyContainsDynamicImport` and `PossiblyContainsImportMeta`.
     /** @internal */ PermanentlySetIncrementalFlags = PossiblyContainsDynamicImport | PossiblyContainsImportMeta,
+
+    // The following flags repurpose other NodeFlags as different meanings for Identifier nodes
+    /** @internal */ IdentifierHasExtendedUnicodeEscape = ContainsThis, // Indicates whether the identifier contains an extended unicode escape sequence
+    /** @internal */ IdentifierIsInJSDocNamespace = HasAsyncFunctions, // Indicates whether the identifier is part of a JSDoc namespace
 }
 
 export const enum ModifierFlags {
@@ -911,8 +915,12 @@ export interface Node extends ReadonlyTextRange {
 
 export interface JSDocContainer extends Node {
     _jsdocContainerBrand: any;
-    /** @internal */ jsDoc?: JSDoc[];                      // JSDoc that directly precedes this node
-    /** @internal */ jsDocCache?: readonly JSDocTag[];     // Cache for getJSDocTags
+    /** @internal */ jsDoc?: JSDocArray;                   // JSDoc that directly precedes this node
+}
+
+/** @internal */
+export interface JSDocArray extends Array<JSDoc> {
+    jsDocCache?: readonly JSDocTag[];                      // Cache for getJSDocTags
 }
 
 export interface LocalsContainer extends Node {
@@ -1006,12 +1014,6 @@ export type ForEachChildNodes =
     | JSDocThrowsTag
     | JSDocOverrideTag
     | JSDocOverloadTag
-    ;
-
-/** @internal */
-export type VisitEachChildNodes =
-    | HasChildren
-    | Identifier
     ;
 
 /** @internal */
@@ -1681,13 +1683,6 @@ export interface Identifier extends PrimaryExpression, Declaration, JSDocContain
      * Text of identifier, but if the identifier begins with two underscores, this will begin with three.
      */
     readonly escapedText: __String;
-    readonly originalKeywordKind?: SyntaxKind;                // Original syntaxKind which get set so that we can report an error later
-    /** @internal */ readonly autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers.
-    /** @internal */ generatedImportReference?: ImportSpecifier; // Reference to the generated import specifier this identifier refers to
-    isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
-    /** @internal */ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
-    /** @internal */ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
-    /**@internal*/ hasExtendedUnicodeEscape?: boolean;
 }
 
 // Transient identifier node (marked by id === -1)
@@ -1705,14 +1700,13 @@ export interface AutoGenerateInfo {
 
 /** @internal */
 export interface GeneratedIdentifier extends Identifier {
-    readonly autoGenerate: AutoGenerateInfo;
+    readonly emitNode: EmitNode & { autoGenerate: AutoGenerateInfo; };
 }
 
 export interface QualifiedName extends Node, FlowContainer {
     readonly kind: SyntaxKind.QualifiedName;
     readonly left: EntityName;
     readonly right: Identifier;
-    /** @internal */ jsdocDotPos?: number;                      // QualifiedName occurs in JSDoc-style generic: Id1.Id2.<T>
 }
 
 export type EntityName = Identifier | QualifiedName;
@@ -1783,12 +1777,11 @@ export interface PrivateIdentifier extends PrimaryExpression {
     // escaping not strictly necessary
     // avoids gotchas in transforms and utils
     readonly escapedText: __String;
-    /** @internal */ readonly autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers.
 }
 
 /** @internal */
 export interface GeneratedPrivateIdentifier extends PrivateIdentifier {
-    readonly autoGenerate: AutoGenerateInfo;
+    readonly emitNode: EmitNode & { autoGenerate: AutoGenerateInfo };
 }
 
 /** @internal */
@@ -6977,6 +6970,7 @@ export interface CompilerOptions {
     allowImportingTsExtensions?: boolean;
     allowJs?: boolean;
     /** @internal */ allowNonTsExtensions?: boolean;
+    allowArbitraryExtensions?: boolean;
     allowSyntheticDefaultImports?: boolean;
     allowUmdGlobalAccess?: boolean;
     allowUnreachableCode?: boolean;
@@ -7560,7 +7554,7 @@ export interface ResolvedModuleFull extends ResolvedModule {
      * Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
      * This is optional for backwards-compatibility, but will be added if not provided.
      */
-    extension: Extension;
+    extension: string;
     packageId?: PackageId;
 }
 
@@ -7608,6 +7602,12 @@ export interface ResolvedModuleWithFailedLookupLocations {
     affectingLocations?: string[];
     /** @internal */
     resolutionDiagnostics?: Diagnostic[]
+    /**
+     * @internal
+     * Used to issue a diagnostic if typings for a non-relative import couldn't be found
+     * while respecting package.json `exports`, but were found when disabling `exports`.
+     */
+    node10Result?: string;
 }
 
 export interface ResolvedTypeReferenceDirective {
@@ -7831,6 +7831,9 @@ export interface EmitNode {
     startsOnNewLine?: boolean;               // If the node should begin on a new line
     snippetElement?: SnippetElement;         // Snippet element of the node
     typeNode?: TypeNode;                     // VariableDeclaration type
+    identifierTypeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized identifiers. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
+    autoGenerate: AutoGenerateInfo | undefined; // Used for auto-generated identifiers and private identifiers.
+    generatedImportReference?: ImportSpecifier; // Reference to the generated import specifier this identifier refers to
 }
 
 /** @internal */
@@ -8129,8 +8132,7 @@ export interface NodeFactory {
     //
 
     createIdentifier(text: string): Identifier;
-    /** @internal */ createIdentifier(text: string, typeArguments?: readonly (TypeNode | TypeParameterDeclaration)[], originalKeywordKind?: SyntaxKind, hasExtendedUnicodeEscape?: boolean): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
-    /** @internal */ updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier;
+    /** @internal */ createIdentifier(text: string, originalKeywordKind?: SyntaxKind, hasExtendedUnicodeEscape?: boolean): Identifier; // eslint-disable-line @typescript-eslint/unified-signatures
 
     /**
      * Create a unique temporary variable.

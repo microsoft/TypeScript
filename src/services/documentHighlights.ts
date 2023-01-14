@@ -9,6 +9,7 @@ import {
     forEach,
     isWhiteSpaceSingleLine,
     mapDefined,
+    mapDefinedIterator,
     toArray,
     tryCast,
 } from "../compiler/core";
@@ -127,7 +128,7 @@ function getSemanticDocumentHighlights(position: number, node: Node, program: Pr
     if (!referenceEntries) return undefined;
     const map = arrayToMultiMap(referenceEntries.map(toHighlightSpan), e => e.fileName, e => e.span);
     const getCanonicalFileName = createGetCanonicalFileName(program.useCaseSensitiveFileNames());
-    return mapDefined(arrayFrom(map.entries()), ([fileName, highlightSpans]) => {
+    return arrayFrom(mapDefinedIterator(map.entries(), ([fileName, highlightSpans]) => {
         if (!sourceFilesSet.has(fileName)) {
             if (!program.redirectTargetsMap.has(toPath(fileName, program.getCurrentDirectory(), getCanonicalFileName))) {
                 return undefined;
@@ -138,7 +139,7 @@ function getSemanticDocumentHighlights(position: number, node: Node, program: Pr
             Debug.assert(sourceFilesSet.has(fileName));
         }
         return { fileName, highlightSpans };
-    });
+    }));
 }
 
 function getSyntacticDocumentHighlights(node: Node, sourceFile: SourceFile): DocumentHighlights[] | undefined {

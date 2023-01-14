@@ -2,7 +2,6 @@ import * as fs from "fs";
 import * as path from "path";
 import {
     createGetCanonicalFileName,
-    getEntries,
     stringContains,
 } from "../compiler/core";
 import {
@@ -88,7 +87,7 @@ function loadTypesRegistryFile(typesRegistryFilePath: string, host: InstallTypin
     }
     try {
         const content = JSON.parse(host.readFile(typesRegistryFilePath)!) as TypesRegistryFile;
-        return new Map(getEntries(content.entries));
+        return new Map(Object.entries(content.entries));
     }
     catch (e) {
         if (log.isEnabled()) {

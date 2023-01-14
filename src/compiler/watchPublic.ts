@@ -15,7 +15,6 @@ import {
 } from "./commandLineParser";
 import {
     createGetCanonicalFileName,
-    getEntries,
     isArray,
     maybeBind,
     noop,
@@ -1040,7 +1039,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         if (wildcardDirectories) {
             updateWatchingWildcardDirectories(
                 watchedWildcardDirectories || (watchedWildcardDirectories = new Map()),
-                new Map(getEntries(wildcardDirectories)),
+                new Map(Object.entries(wildcardDirectories)),
                 watchWildcardDirectory
             );
         }
@@ -1147,7 +1146,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         if (commandLine.parsedCommandLine?.wildcardDirectories) {
             updateWatchingWildcardDirectories(
                 commandLine.watchedDirectories ||= new Map(),
-                new Map(getEntries(commandLine.parsedCommandLine?.wildcardDirectories)),
+                new Map(Object.entries(commandLine.parsedCommandLine?.wildcardDirectories)),
                 (directory, flags) => watchDirectory(
                     directory,
                     fileOrDirectory => {

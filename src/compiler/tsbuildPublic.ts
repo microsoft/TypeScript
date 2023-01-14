@@ -29,7 +29,6 @@ import {
     emptyArray,
     findIndex,
     forEach,
-    getEntries,
     hasProperty,
     identity,
     isArray,
@@ -2347,7 +2346,7 @@ function watchWildCardDirectories(state: SolutionBuilderState, resolved: Resolve
     if (!state.watch) return;
     updateWatchingWildcardDirectories(
         getOrCreateValueMapFromConfigFileMap(state.allWatchedWildcardDirectories, resolvedPath),
-        new Map(getEntries(parsed.wildcardDirectories!)),
+        new Map(Object.entries(parsed.wildcardDirectories!)),
         (dir, flags) => state.watchDirectory(
             dir,
             fileOrDirectory => {

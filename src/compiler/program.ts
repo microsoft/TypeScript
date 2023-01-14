@@ -104,7 +104,6 @@ import {
     ModeAwareCache,
     ModeAwareCacheKey,
     ModuleResolutionCache,
-    moduleResolutionSupportsResolvingTsExtensions,
     nodeModulesPathPart,
     PackageJsonInfoCache,
     resolveModuleName,
@@ -3889,7 +3888,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 // Don't add the file if it has a bad extension (e.g. 'tsx' if we don't have '--allowJs')
                 // This may still end up being an untyped module -- the file won't be included but imports will be allowed.
                 const shouldAddFile = resolvedFileName
-                    && !getResolutionDiagnostic(optionsForFile, resolution)
+                    && !getResolutionDiagnostic(optionsForFile, resolution, file)
                     && !optionsForFile.noResolve
                     && index < file.imports.length
                     && !elideImport
@@ -4257,7 +4256,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             createOptionValueDiagnostic("importsNotUsedAsValues", Diagnostics.Option_preserveValueImports_can_only_be_used_when_module_is_set_to_es2015_or_later);
         }
 
-        if (options.allowImportingTsExtensions && !(moduleResolutionSupportsResolvingTsExtensions(options) && (options.noEmit || options.emitDeclarationOnly))) {
+        if (options.allowImportingTsExtensions && !(options.noEmit || options.emitDeclarationOnly)) {
             createOptionValueDiagnostic("allowImportingTsExtensions", Diagnostics.Option_allowImportingTsExtensions_can_only_be_used_when_moduleResolution_is_set_to_bundler_and_either_noEmit_or_emitDeclarationOnly_is_set);
         }
 
@@ -4991,10 +4990,14 @@ export function resolveProjectReferencePath(hostOrRef: ResolveProjectReferencePa
  *
  * @internal
  */
-export function getResolutionDiagnostic(options: CompilerOptions, { extension }: ResolvedModuleFull): DiagnosticMessage | undefined {
+export function getResolutionDiagnostic(options: CompilerOptions, { extension }: ResolvedModuleFull, { isDeclarationFile }: { isDeclarationFile: SourceFile["isDeclarationFile"] }): DiagnosticMessage | undefined {
     switch (extension) {
         case Extension.Ts:
         case Extension.Dts:
+        case Extension.Mts:
+        case Extension.Dmts:
+        case Extension.Cts:
+        case Extension.Dcts:
             // These are always allowed.
             return undefined;
         case Extension.Tsx:
@@ -5002,9 +5005,13 @@ export function getResolutionDiagnostic(options: CompilerOptions, { extension }:
         case Extension.Jsx:
             return needJsx() || needAllowJs();
         case Extension.Js:
+        case Extension.Mjs:
+        case Extension.Cjs:
             return needAllowJs();
         case Extension.Json:
             return needResolveJsonModule();
+        default:
+            return needAllowArbitraryExtensions();
     }
 
     function needJsx() {
@@ -5015,6 +5022,10 @@ export function getResolutionDiagnostic(options: CompilerOptions, { extension }:
     }
     function needResolveJsonModule() {
         return getResolveJsonModule(options) ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_resolveJsonModule_is_not_used;
+    }
+    function needAllowArbitraryExtensions() {
+        // But don't report the allowArbitraryExtensions error from declaration files (no reason to report it, since the import doesn't have a runtime component)
+        return isDeclarationFile || options.allowArbitraryExtensions ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_allowArbitraryExtensions_is_not_set;
     }
 }
 

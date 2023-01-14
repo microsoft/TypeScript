@@ -7,7 +7,6 @@ import {
 import {
     addRange,
     filter,
-    getEntries,
     hasProperty,
     isString,
 } from "../compiler/core";
@@ -127,7 +126,7 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
     }
 
     if (transpileOptions.renamedDependencies) {
-        sourceFile.renamedDependencies = new Map(getEntries(transpileOptions.renamedDependencies));
+        sourceFile.renamedDependencies = new Map(Object.entries(transpileOptions.renamedDependencies));
     }
 
     // Output

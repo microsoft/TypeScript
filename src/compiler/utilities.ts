@@ -10,6 +10,7 @@ import {
     contains,
     createGetCanonicalFileName,
     emptyArray,
+    endsWith,
     equalOwnProperties,
     equateValues,
     every,
@@ -24,7 +25,6 @@ import {
     flatten,
     forEach,
     GetCanonicalFileName,
-    getEntries,
     getOwnKeys,
     hasProperty,
     identity,
@@ -110,6 +110,7 @@ import {
     isNamespaceExport,
     isNamespaceExportDeclaration,
     isNamespaceImport,
+    isNonNullExpression,
     isNoSubstitutionTemplateLiteral,
     isNumericLiteral,
     isObjectLiteralExpression,
@@ -480,6 +481,7 @@ import {
     getParseTreeNode,
     hasInitializer,
     hasJSDocNodes,
+    identifierToKeywordKind,
     idText,
     isAccessor,
     isBindingPattern,
@@ -623,8 +625,7 @@ export function forEachAncestor<T>(node: Node, callback: (n: Node) => T | undefi
  */
 export function forEachEntry<K, V, U>(map: ReadonlyMap<K, V>, callback: (value: V, key: K) => U | undefined): U | undefined {
     const iterator = map.entries();
-    for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-        const [key, value] = iterResult.value;
+    for (const [key, value] of iterator) {
         const result = callback(value, key);
         if (result) {
             return result;
@@ -640,8 +641,8 @@ export function forEachEntry<K, V, U>(map: ReadonlyMap<K, V>, callback: (value: 
  */
 export function forEachKey<K, T>(map: ReadonlyCollection<K>, callback: (key: K) => T | undefined): T | undefined {
     const iterator = map.keys();
-    for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
-        const result = callback(iterResult.value);
+    for (const key of iterator) {
+        const result = callback(key);
         if (result) {
             return result;
         }
@@ -1459,7 +1460,7 @@ export function tryGetTextOfPropertyName(name: PropertyName | NoSubstitutionTemp
     switch (name.kind) {
         case SyntaxKind.Identifier:
         case SyntaxKind.PrivateIdentifier:
-            return name.autoGenerate ? undefined : name.escapedText;
+            return name.emitNode?.autoGenerate ? undefined : name.escapedText;
         case SyntaxKind.StringLiteral:
         case SyntaxKind.NumericLiteral:
         case SyntaxKind.NoSubstitutionTemplateLiteral:
@@ -1591,6 +1592,13 @@ export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): T
     scanner.scan();
     const start = scanner.getTokenPos();
     return createTextSpanFromBounds(start, scanner.getTextPos());
+}
+
+/** @internal */
+export function scanTokenAtPosition(sourceFile: SourceFile, pos: number) {
+    const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError:*/ undefined, pos);
+    scanner.scan();
+    return scanner.getToken();
 }
 
 function getErrorSpanForArrowFunction(sourceFile: SourceFile, node: ArrowFunction): TextSpan {
@@ -4080,7 +4088,8 @@ export function isStringAKeyword(name: string) {
 }
 
 /** @internal */
-export function isIdentifierANonContextualKeyword({ originalKeywordKind }: Identifier): boolean {
+export function isIdentifierANonContextualKeyword(node: Identifier): boolean {
+    const originalKeywordKind = identifierToKeywordKind(node);
     return !!originalKeywordKind && !isContextualKeyword(originalKeywordKind);
 }
 
@@ -4826,7 +4835,7 @@ const doubleQuoteEscapedCharsRegExp = /[\\\"\u0000-\u001f\t\v\f\b\r\n\u2028\u202
 const singleQuoteEscapedCharsRegExp = /[\\\'\u0000-\u001f\t\v\f\b\r\n\u2028\u2029\u0085]/g;
 // Template strings preserve simple LF newlines, still encode CRLF (or CR)
 const backtickQuoteEscapedCharsRegExp = /\r\n|[\\\`\u0000-\u001f\t\v\f\b\r\u2028\u2029\u0085]/g;
-const escapedCharsMap = new Map(getEntries({
+const escapedCharsMap = new Map(Object.entries({
     "\t": "\\t",
     "\v": "\\v",
     "\f": "\\f",
@@ -4894,7 +4903,7 @@ export function escapeNonAsciiString(s: string, quoteChar?: CharacterCodes.doubl
 // the map below must be updated.
 const jsxDoubleQuoteEscapedCharsRegExp = /[\"\u0000-\u001f\u2028\u2029\u0085]/g;
 const jsxSingleQuoteEscapedCharsRegExp = /[\'\u0000-\u001f\u2028\u2029\u0085]/g;
-const jsxEscapedCharsMap = new Map(getEntries({
+const jsxEscapedCharsMap = new Map(Object.entries({
     "\"": "&quot;",
     "\'": "&apos;"
 }));
@@ -5238,7 +5247,7 @@ export function getDeclarationEmitOutputFilePathWorker(fileName: string, options
 export function getDeclarationEmitExtensionForPath(path: string) {
     return fileExtensionIsOneOf(path, [Extension.Mjs, Extension.Mts]) ? Extension.Dmts :
         fileExtensionIsOneOf(path, [Extension.Cjs, Extension.Cts]) ? Extension.Dcts :
-        fileExtensionIsOneOf(path, [Extension.Json]) ? `.json.d.ts` : // Drive-by redefinition of json declaration file output name so if it's ever enabled, it behaves well
+        fileExtensionIsOneOf(path, [Extension.Json]) ? `.d.json.ts` : // Drive-by redefinition of json declaration file output name so if it's ever enabled, it behaves well
         Extension.Dts;
 }
 
@@ -5250,7 +5259,7 @@ export function getDeclarationEmitExtensionForPath(path: string) {
 export function getPossibleOriginalInputExtensionForExtension(path: string) {
     return fileExtensionIsOneOf(path, [Extension.Dmts, Extension.Mjs, Extension.Mts]) ? [Extension.Mts, Extension.Mjs] :
         fileExtensionIsOneOf(path, [Extension.Dcts, Extension.Cjs, Extension.Cts]) ? [Extension.Cts, Extension.Cjs]:
-        fileExtensionIsOneOf(path, [`.json.d.ts`]) ? [Extension.Json] :
+        fileExtensionIsOneOf(path, [`.d.json.ts`]) ? [Extension.Json] :
         [Extension.Tsx, Extension.Ts, Extension.Jsx, Extension.Js];
 }
 
@@ -5415,7 +5424,7 @@ export function isThisInTypeQuery(node: Node): boolean {
 
 /** @internal */
 export function identifierIsThisKeyword(id: Identifier): boolean {
-    return id.originalKeywordKind === SyntaxKind.ThisKeyword;
+    return id.escapedText === "this";
 }
 
 /** @internal */
@@ -5900,7 +5909,7 @@ export function getEffectiveModifierFlagsNoCache(node: Node): ModifierFlags {
  */
 export function getSyntacticModifierFlagsNoCache(node: Node): ModifierFlags {
     let flags = canHaveModifiers(node) ? modifiersToFlags(node.modifiers) : ModifierFlags.None;
-    if (node.flags & NodeFlags.NestedNamespace || (node.kind === SyntaxKind.Identifier && (node as Identifier).isInJSDocNamespace)) {
+    if (node.flags & NodeFlags.NestedNamespace || node.kind === SyntaxKind.Identifier && node.flags & NodeFlags.IdentifierIsInJSDocNamespace) {
         flags |= ModifierFlags.Export;
     }
     return flags;
@@ -7639,12 +7648,12 @@ export function tryParsePatterns(paths: MapLike<string[]>): (string | Pattern)[]
  *
  * @internal
  */
-export function extensionIsTS(ext: Extension): boolean {
-    return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts || ext === Extension.Cts || ext === Extension.Mts || ext === Extension.Dmts || ext === Extension.Dcts;
+export function extensionIsTS(ext: string): boolean {
+    return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts || ext === Extension.Cts || ext === Extension.Mts || ext === Extension.Dmts || ext === Extension.Dcts || (startsWith(ext, ".d.") && endsWith(ext, ".ts"));
 }
 
 /** @internal */
-export function resolutionExtensionIsTSOrJson(ext: Extension) {
+export function resolutionExtensionIsTSOrJson(ext: string) {
     return extensionIsTS(ext) || ext === Extension.Json;
 }
 
@@ -8370,4 +8379,11 @@ export function isEffectiveExternalModule(node: SourceFile, compilerOptions: Com
 export function canHaveExportModifier(node: Node): node is Extract<HasModifiers, Statement> {
     return isEnumDeclaration(node) || isVariableStatement(node) || isFunctionDeclaration(node) || isClassDeclaration(node)
         || isInterfaceDeclaration(node) || isTypeDeclaration(node) || (isModuleDeclaration(node) && !isExternalModuleAugmentation(node) && !isGlobalScopeAugmentation(node));
+}
+
+/** @internal */
+export function isNonNullAccess(node: Node): node is AccessExpression {
+    const kind = node.kind;
+    return (kind === SyntaxKind.PropertyAccessExpression
+        || kind === SyntaxKind.ElementAccessExpression) && isNonNullExpression((node as AccessExpression).expression);
 }

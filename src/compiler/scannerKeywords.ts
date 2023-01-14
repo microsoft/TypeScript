@@ -1,4 +1,3 @@
-import { getEntries } from "./core";
 import { MapLike } from "./corePublic";
 import {
     KeywordSyntaxKind,
@@ -90,9 +89,9 @@ export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
     of: SyntaxKind.OfKeyword,
 };
 
-export const textToKeyword = new Map(getEntries(textToKeywordObj));
+export const textToKeyword = new Map(Object.entries(textToKeywordObj));
 
-export const textToToken = new Map(getEntries({
+export const textToToken = new Map(Object.entries({
     ...textToKeywordObj,
     "{": SyntaxKind.OpenBraceToken,
     "}": SyntaxKind.CloseBraceToken,

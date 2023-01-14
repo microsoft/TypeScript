@@ -83,7 +83,7 @@ export namespace testFnTypes {
  * @returns {number|null} Result.
  */
 export function testFn(input: testFnTypes.input): number | null;
-import { myTypes } from "./file.js";
+import { myTypes } from './file.js';
 /**
  * @namespace testFnTypes
  * @global

@@ -4,7 +4,6 @@ import {
     filter,
     find,
     flatten,
-    getEntries,
     isLineBreak,
     isWhiteSpaceSingleLine,
     length,
@@ -14,7 +13,7 @@ import {
     spanMap,
 } from "../core";
 import { Debug } from "../debug";
-import { addEmitHelpers } from "../factory/emitNode";
+import { addEmitHelpers, setIdentifierGeneratedImportReference } from "../factory/emitNode";
 import {
     isIdentifier,
     isJsxAttribute,
@@ -150,7 +149,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         }
         const generatedName = factory.createUniqueName(`_${name}`, GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel | GeneratedIdentifierFlags.AllowNameSubstitution);
         const specifier = factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier(name), generatedName);
-        generatedName.generatedImportReference = specifier;
+        setIdentifierGeneratedImportReference(generatedName, specifier);
         specifierSourceImports.set(name, specifier);
         return generatedName;
     }
@@ -186,7 +185,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
                     // Add `require` statement
                     const requireStatement = factory.createVariableStatement(/*modifiers*/ undefined, factory.createVariableDeclarationList([
                         factory.createVariableDeclaration(
-                            factory.createObjectBindingPattern(map(arrayFrom(importSpecifiersMap.values()), s => factory.createBindingElement(/*dotdotdot*/ undefined, s.propertyName, s.name))),
+                            factory.createObjectBindingPattern(arrayFrom(importSpecifiersMap.values(), s => factory.createBindingElement(/*dotdotdot*/ undefined, s.propertyName, s.name))),
                             /*exclaimationToken*/ undefined,
                             /*type*/ undefined,
                             factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, [factory.createStringLiteral(importSource)])
@@ -650,7 +649,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
     }
 }
 
-const entities = new Map(getEntries({
+const entities = new Map(Object.entries({
     quot: 0x0022,
     amp: 0x0026,
     apos: 0x0027,

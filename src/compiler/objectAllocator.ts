@@ -1,3 +1,4 @@
+import { forEach } from "./core";
 import { Debug } from "./debug";
 import { tracing } from "./tracing";
 import {
@@ -21,6 +22,8 @@ import {
     TypeChecker,
     TypeFlags,
 } from "./types";
+
+const objectAllocatorPatchers: ((objectAllocator: ObjectAllocator) => void)[] = [];
 
 /** @internal */
 export interface ObjectAllocator {
@@ -48,9 +51,19 @@ export const objectAllocator: ObjectAllocator = {
     getSourceMapSourceConstructor: () => SourceMapSource as any,
 };
 
+/**
+ * Used by `deprecatedCompat` to patch the object allocator to apply deprecations.
+ * @internal
+ */
+export function addObjectAllocatorPatcher(fn: (objectAllocator: ObjectAllocator) => void) {
+    objectAllocatorPatchers.push(fn);
+    fn(objectAllocator);
+}
+
 /** @internal */
 export function setObjectAllocator(alloc: ObjectAllocator) {
     Object.assign(objectAllocator, alloc);
+    forEach(objectAllocatorPatchers, fn => fn(objectAllocator));
 }
 
 function Symbol(this: Symbol, flags: SymbolFlags, name: __String) {
@@ -118,7 +131,6 @@ function Identifier(this: Mutable<Node>, kind: SyntaxKind, pos: number, end: num
     this.parent = undefined!;
     this.original = undefined;
     this.emitNode = undefined;
-    (this as Identifier).flowNode = undefined;
 }
 
 function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {

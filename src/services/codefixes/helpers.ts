@@ -560,8 +560,8 @@ function createTypeParametersForArguments(checker: TypeChecker, argumentTypePara
         }
     }
 
-    return map(
-        arrayFrom(usedNames.values()),
+    return arrayFrom(
+        usedNames.values(),
         usedName => factory.createTypeParameterDeclaration(/*modifiers*/ undefined, usedName, constraintsByName.get(usedName)?.constraint),
     );
 }

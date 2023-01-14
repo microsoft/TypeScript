@@ -878,7 +878,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
                 return convertedLoopState.argumentsName || (convertedLoopState.argumentsName = factory.createUniqueName("arguments"));
             }
         }
-        if (node.hasExtendedUnicodeEscape) {
+        if (node.flags & NodeFlags.IdentifierHasExtendedUnicodeEscape) {
             return setOriginalNode(setTextRange(
                 factory.createIdentifier(unescapeLeadingUnderscores(node.escapedText)),
                 node

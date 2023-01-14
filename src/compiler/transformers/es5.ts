@@ -5,7 +5,6 @@ import {
     isPropertyAssignment,
 } from "../factory/nodeTests";
 import { setTextRange } from "../factory/utilitiesPublic";
-import { stringToToken } from "../scanner";
 import {
     Bundle,
     EmitHint,
@@ -22,8 +21,7 @@ import {
     SyntaxKind,
     TransformationContext,
 } from "../types";
-import { nodeIsSynthesized } from "../utilities";
-import { idText } from "../utilitiesPublic";
+import { identifierToKeywordKind } from "../utilitiesPublic";
 import {
     chainBundle,
     getOriginalNodeId,
@@ -143,7 +141,7 @@ export function transformES5(context: TransformationContext): (x: SourceFile | B
      * @param name An Identifier
      */
     function trySubstituteReservedName(name: Identifier) {
-        const token = name.originalKeywordKind || (nodeIsSynthesized(name) ? stringToToken(idText(name)) : undefined);
+        const token = identifierToKeywordKind(name);
         if (token !== undefined && token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord) {
             return setTextRange(factory.createStringLiteralFromNode(name), name);
         }
