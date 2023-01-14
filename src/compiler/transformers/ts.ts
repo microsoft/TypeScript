@@ -602,6 +602,7 @@ export function transformTypeScript(context: TransformationContext) {
             case SyntaxKind.ReadonlyKeyword:
             case SyntaxKind.InKeyword:
             case SyntaxKind.OutKeyword:
+            case SyntaxKind.PreferInferKeyword:
             // TypeScript accessibility and readonly modifiers are elided
             // falls through
             case SyntaxKind.ArrayType:

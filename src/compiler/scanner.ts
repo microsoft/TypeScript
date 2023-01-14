@@ -156,6 +156,7 @@ export const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
     number: SyntaxKind.NumberKeyword,
     object: SyntaxKind.ObjectKeyword,
     package: SyntaxKind.PackageKeyword,
+    preferinfer: SyntaxKind.PreferInferKeyword,
     private: SyntaxKind.PrivateKeyword,
     protected: SyntaxKind.ProtectedKeyword,
     public: SyntaxKind.PublicKeyword,

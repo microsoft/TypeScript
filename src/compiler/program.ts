@@ -3016,6 +3016,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                         case SyntaxKind.OverrideKeyword:
                         case SyntaxKind.InKeyword:
                         case SyntaxKind.OutKeyword:
+                        case SyntaxKind.PreferInferKeyword:
                             diagnostics.push(createDiagnosticForNode(modifier, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, tokenToString(modifier.kind)));
                             break;
 

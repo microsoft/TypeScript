@@ -1331,6 +1331,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
             case SyntaxKind.InKeyword:
             case SyntaxKind.OutKeyword:
             case SyntaxKind.OverrideKeyword:
+            case SyntaxKind.PreferInferKeyword:
             case SyntaxKind.StringKeyword:
             case SyntaxKind.BooleanKeyword:
             case SyntaxKind.SymbolKeyword:
@@ -1417,6 +1418,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         if (flags & ModifierFlags.Async) result.push(createModifier(SyntaxKind.AsyncKeyword));
         if (flags & ModifierFlags.In) result.push(createModifier(SyntaxKind.InKeyword));
         if (flags & ModifierFlags.Out) result.push(createModifier(SyntaxKind.OutKeyword));
+        if (flags & ModifierFlags.PreferInfer) result.push(createModifier(SyntaxKind.PreferInferKeyword));
         return result.length ? result : undefined;
     }
 

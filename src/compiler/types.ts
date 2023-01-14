@@ -198,6 +198,7 @@ export const enum SyntaxKind {
     NamespaceKeyword,
     NeverKeyword,
     OutKeyword,
+    PreferInferKeyword,
     ReadonlyKeyword,
     RequireKeyword,
     NumberKeyword,
@@ -625,6 +626,7 @@ export type KeywordSyntaxKind =
     | SyntaxKind.ObjectKeyword
     | SyntaxKind.OfKeyword
     | SyntaxKind.PackageKeyword
+    | SyntaxKind.PreferInferKeyword
     | SyntaxKind.PrivateKeyword
     | SyntaxKind.ProtectedKeyword
     | SyntaxKind.PublicKeyword
@@ -665,6 +667,7 @@ export type ModifierSyntaxKind =
     | SyntaxKind.DefaultKeyword
     | SyntaxKind.ExportKeyword
     | SyntaxKind.InKeyword
+    | SyntaxKind.PreferInferKeyword
     | SyntaxKind.PrivateKeyword
     | SyntaxKind.ProtectedKeyword
     | SyntaxKind.PublicKeyword
@@ -858,6 +861,7 @@ export const enum ModifierFlags {
     In =                 1 << 15, // Contravariance modifier
     Out =                1 << 16, // Covariance modifier
     Decorator =          1 << 17, // Contains a decorator.
+    PreferInfer =        1 << 18, // preferinfer modifier on type params to allow partial inference
     HasComputedFlags =   1 << 29, // Modifier flags have been computed
 
     AccessibilityModifier = Public | Private | Protected,
@@ -865,9 +869,9 @@ export const enum ModifierFlags {
     ParameterPropertyModifier = AccessibilityModifier | Readonly | Override,
     NonPublicAccessibilityModifier = Private | Protected,
 
-    TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override | In | Out,
+    TypeScriptModifier = Ambient | Public | Private | Protected | Readonly | Abstract | Const | Override | In | Out | PreferInfer,
     ExportDefault = Export | Default,
-    All = Export | Ambient | Public | Private | Protected | Static | Readonly | Abstract | Accessor | Async | Default | Const | Deprecated | Override | In | Out | Decorator,
+    All = ExportDefault | Static | Accessor | Async | Deprecated | Decorator | TypeScriptModifier,
     Modifier = All & ~Decorator
 }
 
@@ -1606,6 +1610,7 @@ export type DeclareKeyword = ModifierToken<SyntaxKind.DeclareKeyword>;
 export type DefaultKeyword = ModifierToken<SyntaxKind.DefaultKeyword>;
 export type ExportKeyword = ModifierToken<SyntaxKind.ExportKeyword>;
 export type InKeyword = ModifierToken<SyntaxKind.InKeyword>;
+export type PreferInferKeyword = ModifierToken<SyntaxKind.PreferInferKeyword>;
 export type PrivateKeyword = ModifierToken<SyntaxKind.PrivateKeyword>;
 export type ProtectedKeyword = ModifierToken<SyntaxKind.ProtectedKeyword>;
 export type PublicKeyword = ModifierToken<SyntaxKind.PublicKeyword>;
@@ -1626,6 +1631,7 @@ export type Modifier =
     | DefaultKeyword
     | ExportKeyword
     | InKeyword
+    | PreferInferKeyword
     | PrivateKeyword
     | ProtectedKeyword
     | PublicKeyword
