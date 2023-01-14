@@ -1,4 +1,5 @@
 //// [destructureCatchClause.ts]
+// These are okay with useUnknownInCatchVariables=false, but not okay with useUnknownInCatchVariables=true.
 try {} catch ({ x }) { x }
 try {} catch ([ x ]) { x }
 
@@ -37,6 +38,7 @@ try {} catch ({ a: { b: { c: { x }} }}: unknown) { x }
 
 //// [destructureCatchClause.js]
 "use strict";
+// These are okay with useUnknownInCatchVariables=false, but not okay with useUnknownInCatchVariables=true.
 try { }
 catch (_a) {
     var x = _a.x;

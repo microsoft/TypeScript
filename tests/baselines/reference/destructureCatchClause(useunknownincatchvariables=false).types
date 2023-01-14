@@ -1,4 +1,5 @@
 === tests/cases/compiler/destructureCatchClause.ts ===
+// These are okay with useUnknownInCatchVariables=false, but not okay with useUnknownInCatchVariables=true.
 try {} catch ({ x }) { x }
 >x : any
 >x : any

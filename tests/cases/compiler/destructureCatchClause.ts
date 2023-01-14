@@ -1,7 +1,7 @@
 // @strict: true
 // @useUnknownInCatchVariables: true, false
 
-
+// These are okay with useUnknownInCatchVariables=false, but not okay with useUnknownInCatchVariables=true.
 try {} catch ({ x }) { x }
 try {} catch ([ x ]) { x }
 

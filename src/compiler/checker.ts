@@ -10205,7 +10205,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const isOptional = includeOptionality && isOptionalDeclaration(declaration);
 
         // Use type from type annotation if one is present
-        const declaredType = tryGetTypeFromEffectiveTypeNode(declaration);
+        let declaredType = tryGetTypeFromEffectiveTypeNode(declaration);
+        if (isCatchClauseVariableDeclarationOrBindingElement(declaration)) {
+            if (declaredType) {
+                // If the catch clause is explicitly annotated with any or unknown, accept it, otherwise error.
+                return isTypeAny(declaredType) || declaredType === unknownType ? declaredType : errorType;
+            }
+            // If the catch clause is not explicitly annotated, treat it as though it were explicitly
+            // annotated with unknown or any, depending on useUnknownInCatchVariables.
+            declaredType = useUnknownInCatchVariables ? unknownType : anyType;
+        }
         if (declaredType) {
             return addOptionality(declaredType, isProperty, isOptional);
         }
@@ -10867,15 +10876,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Handle catch clause variables
         Debug.assertIsDefined(symbol.valueDeclaration);
         const declaration = symbol.valueDeclaration;
-        if (isCatchClauseVariableDeclarationOrBindingElement(declaration)) {
-            const typeNode = getEffectiveTypeAnnotationNode(declaration);
-            if (typeNode === undefined) {
-                return useUnknownInCatchVariables ? unknownType : anyType;
-            }
-            const type = getTypeOfNode(typeNode);
-            // an errorType will make `checkTryStatement` issue an error
-            return isTypeAny(type) || type === unknownType ? type : errorType;
-        }
         // Handle export default expressions
         if (isSourceFile(declaration) && isJsonSourceFile(declaration)) {
             if (!declaration.statements.length) {
@@ -41178,9 +41178,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // Grammar checking
             if (catchClause.variableDeclaration) {
                 const declaration = catchClause.variableDeclaration;
-                const typeNode = getEffectiveTypeAnnotationNode(getRootDeclaration(declaration));
+                checkVariableLikeDeclaration(declaration);
+                const typeNode = getEffectiveTypeAnnotationNode(declaration);
                 if (typeNode) {
-                    const type = getTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ false, CheckMode.Normal);
+                    const type = getTypeFromTypeNode(typeNode);
                     if (type && !(type.flags & TypeFlags.AnyOrUnknown)) {
                         grammarErrorOnFirstToken(typeNode, Diagnostics.Catch_clause_variable_type_annotation_must_be_any_or_unknown_if_specified);
                     }
