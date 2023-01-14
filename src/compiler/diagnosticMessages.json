@@ -6694,7 +6694,15 @@
         "category": "Suggestion",
         "code": 80008
     },
-
+    "JSDoc typedef may be converted to TypeScript type.": {
+        "category": "Suggestion",
+        "code": 80009
+    },
+    "JSDoc typedefs may be converted to TypeScript types.": {
+        "category": "Suggestion",
+        "code": 80010
+    },
+    
     "Add missing 'super()' call": {
         "category": "Message",
         "code": 90001
