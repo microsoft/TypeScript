@@ -1,4 +1,4 @@
-// @strict: true
+// @strict: true, false
 // @useUnknownInCatchVariables: true, false
 
 // These are okay with useUnknownInCatchVariables=false, but not okay with useUnknownInCatchVariables=true.
