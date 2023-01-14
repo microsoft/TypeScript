@@ -12,10 +12,10 @@ import {
     JSDocTypedefTag,
     JSDocTypeExpression,
     JSDocTypeLiteral,
+    mapDefined,
     Node,
     ParenthesizedTypeNode,
     PropertySignature,
-    reduceLeft,
     some,
     SourceFile,
     SyntaxKind,
@@ -137,13 +137,14 @@ function createSignatureFromTypeLiteral(typeLiteral: JSDocTypeLiteral): Property
     const propertyTags = typeLiteral.jsDocPropertyTags;
     if (!propertyTags || propertyTags.length === 0) return;
 
-    const getSignatures = (signatures: PropertySignature[], tag: JSDocPropertyTag) => {
+    const getSignature = (tag: JSDocPropertyTag) => {
         const name = getPropertyName(tag);
         const type = tag.typeExpression?.type;
+        const isOptional = tag.isBracketed;
         let typeReference;
 
-        // Recursively handle nested object type
-        if (type && type.kind === SyntaxKind.JSDocTypeLiteral) {
+         // Recursively handle nested object type
+         if (type && type.kind === SyntaxKind.JSDocTypeLiteral) {
             const signatures = createSignatureFromTypeLiteral(type as JSDocTypeLiteral);
             typeReference = factory.createTypeLiteralNode(signatures);
         }
@@ -151,19 +152,21 @@ function createSignatureFromTypeLiteral(typeLiteral: JSDocTypeLiteral): Property
         else if (type) {
             typeReference = createTypeReference(type);
         }
+
         if (typeReference && name) {
+            const questionToken = isOptional ? factory.createToken(SyntaxKind.QuestionToken) : undefined;
             const prop = factory.createPropertySignature(
                 [],
                 name,
-                // eslint-disable-next-line local/boolean-trivia
-                undefined,
+                questionToken,
                 typeReference
             );
-            return [...signatures, prop];
+
+            return prop;
         }
     };
 
-    const props = reduceLeft(propertyTags, getSignatures, []);
+    const props = mapDefined(propertyTags, getSignature);
     return props;
 }
 
@@ -192,13 +195,14 @@ function createTypeReference(type: TypeNode): TypeNode | undefined {
     // Create TypeReferenceNode for UnionType
     if (type.kind === SyntaxKind.UnionType) {
         const elements = (type as UnionTypeNode).types;
-        const nodes = reduceLeft(
+        const nodes = mapDefined(
             elements,
-            (nodeArray, element) => {
+            (element) => {
                 const node = transformUnionTypeKeyword(element.kind);
-                if (node) return [...nodeArray, node];
-            },
-            []
+                if (node) {
+                    return node;
+                }
+            }
         );
 
         if (!nodes) return;

@@ -8,7 +8,7 @@
 ////  * @property {number} data.age
 ////  * @property {object} data.contact
 ////  * @property {string} data.contact.address
-////  * @property {string} data.contact.phone
+////  * @property {string} [data.contact.phone]
 ////  */
 ////
 
@@ -22,7 +22,7 @@ interface Person {
         age: number;
         contact: {
             address: string;
-            phone: string;
+            phone?: string;
         };
     };
 }

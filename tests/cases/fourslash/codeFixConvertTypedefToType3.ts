@@ -5,8 +5,8 @@
 ////  * @typedef Foo
 ////  * type {object}
 ////  * @property {string} id - person's ID
-////  * @property {string} name - person's name
-////  * @property {number} age - person's age
+////  * @property name {string} // person's name
+////  * @property {number|undefined} age - person's age
 ////  */
 ////
 
@@ -17,7 +17,7 @@ verify.codeFix({
 interface Foo {
     id: string;
     name: string;
-    age: number;
+    age: number | undefined;
 }
 `,
 });
