@@ -1590,7 +1590,7 @@ function getEntryForMemberCompletion(
     let modifiers = ModifierFlags.None;
     // Whether the suggested member should be abstract.
     // e.g. in `abstract class C { abstract | }`, we should offer abstract method signatures at position `|`.
-    const { modifiers: presentModifiers, span: modifiersSpan } = getPresentModifiers(contextToken, position);
+    const { modifiers: presentModifiers, span: modifiersSpan } = getPresentModifiers(contextToken, sourceFile, position);
     const isAbstract = !!(presentModifiers & ModifierFlags.Abstract);
     const completionNodes: Node[] = [];
     codefix.addNewNodeForMemberSymbol(
@@ -1654,10 +1654,13 @@ function getEntryForMemberCompletion(
     return { insertText, isSnippet, importAdder, replacementSpan };
 }
 
-function getPresentModifiers(contextToken: Node | undefined, position: number): { modifiers: ModifierFlags, span?: TextSpan } {
+function getPresentModifiers(
+    contextToken: Node | undefined,
+    sourceFile: SourceFile,
+    position: number): { modifiers: ModifierFlags, span?: TextSpan } {
     if (!contextToken ||
-        getLineAndCharacterOfPosition(contextToken.getSourceFile(), position).line
-            > getLineAndCharacterOfPosition(contextToken.getSourceFile(), contextToken.getEnd()).line) {
+        getLineAndCharacterOfPosition(sourceFile, position).line
+            > getLineAndCharacterOfPosition(sourceFile, contextToken.getEnd()).line) {
         return { modifiers: ModifierFlags.None };
     }
     let modifiers = ModifierFlags.None;
