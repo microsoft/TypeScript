@@ -237,6 +237,7 @@ import {
     JSDocParameterTag,
     JSDocPropertyTag,
     JSDocReturnTag,
+    JSDocSatisfiesTag,
     JSDocTag,
     JSDocTagInfo,
     JSDocTemplateTag,
@@ -2999,7 +3000,8 @@ function getCompletionData(
         | JSDocTypeTag
         | JSDocTypedefTag
         | JSDocTemplateTag
-        | JSDocThrowsTag;
+        | JSDocThrowsTag
+        | JSDocSatisfiesTag;
 
     function isTagWithTypeExpression(tag: JSDocTag): tag is JSDocTagWithTypeExpression {
         switch (tag.kind) {
@@ -3009,6 +3011,7 @@ function getCompletionData(
             case SyntaxKind.JSDocTypeTag:
             case SyntaxKind.JSDocTypedefTag:
             case SyntaxKind.JSDocThrowsTag:
+            case SyntaxKind.JSDocSatisfiesTag:
                 return true;
             case SyntaxKind.JSDocTemplateTag:
                 return !!(tag as JSDocTemplateTag).constraint;

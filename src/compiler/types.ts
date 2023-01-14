@@ -479,9 +479,9 @@ export const enum SyntaxKind {
     LastStatement = DebuggerStatement,
     FirstNode = QualifiedName,
     FirstJSDocNode = JSDocTypeExpression,
-    LastJSDocNode = JSDocThrowsTag,
+    LastJSDocNode = JSDocSatisfiesTag,
     FirstJSDocTagNode = JSDocTag,
-    LastJSDocTagNode = JSDocThrowsTag,
+    LastJSDocTagNode = JSDocSatisfiesTag,
     /** @internal */ FirstContextualKeyword = AbstractKeyword,
     /** @internal */ LastContextualKeyword = OfKeyword,
 }

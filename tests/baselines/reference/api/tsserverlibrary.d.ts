@@ -4372,9 +4372,9 @@ declare namespace ts {
         LastStatement = 256,
         FirstNode = 163,
         FirstJSDocNode = 312,
-        LastJSDocNode = 352,
+        LastJSDocNode = 353,
         FirstJSDocTagNode = 330,
-        LastJSDocTagNode = 352
+        LastJSDocTagNode = 353
     }
     type TriviaSyntaxKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia | SyntaxKind.NewLineTrivia | SyntaxKind.WhitespaceTrivia | SyntaxKind.ShebangTrivia | SyntaxKind.ConflictMarkerTrivia;
     type LiteralSyntaxKind = SyntaxKind.NumericLiteral | SyntaxKind.BigIntLiteral | SyntaxKind.StringLiteral | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.RegularExpressionLiteral | SyntaxKind.NoSubstitutionTemplateLiteral;

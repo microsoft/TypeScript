@@ -152,6 +152,7 @@ const jsDocTagNames = [
     "readonly",
     "requires",
     "returns",
+    "satisfies",
     "see",
     "since",
     "static",
