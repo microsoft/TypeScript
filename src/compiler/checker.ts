@@ -1940,6 +1940,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     const markerSubTypeForCheck = createTypeParameter();
     markerSubTypeForCheck.constraint = markerSuperTypeForCheck;
 
+    const preferInferType = createTypeParameter();
+
     const noTypePredicate = createTypePredicate(TypePredicateKind.Identifier, "<<unresolved>>", 0, anyType);
 
     const anySignature = createSignature(undefined, undefined, undefined, emptyArray, anyType, /*resolvedTypePredicate*/ undefined, 0, SignatureFlags.None);
@@ -13260,6 +13262,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             type.flags & TypeFlags.IndexedAccess && isConstTypeVariable((type as IndexedAccessType).objectType));
     }
 
+    function isTypeVariablePreferringInference(typeParameter: TypeParameter): boolean {
+        return some(typeParameter.symbol?.declarations, d => hasSyntacticModifier(d, ModifierFlags.PreferInfer));
+    }
+
     function getConstraintOfIndexedAccess(type: IndexedAccessType) {
         return hasNonCircularBaseConstraint(type) ? getConstraintFromIndexedAccess(type) : undefined;
     }
@@ -14095,7 +14101,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let minTypeArgumentCount = 0;
         if (typeParameters) {
             for (let i = 0; i < typeParameters.length; i++) {
-                if (!hasTypeParameterDefault(typeParameters[i])) {
+                if (!hasTypeParameterDefault(typeParameters[i]) && !isTypeVariablePreferringInference(typeParameters[i])) {
                     minTypeArgumentCount = i + 1;
                 }
             }
@@ -14127,7 +14133,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const baseDefaultType = getDefaultTypeArgumentType(isJavaScriptImplicitAny);
             for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                let defaultType = getDefaultFromTypeParameter(typeParameters![i]);
+                const typeParam = typeParameters![i];
+                if (isTypeVariablePreferringInference(typeParam)) {
+                    result[i] = preferInferType;
+                    continue;
+                }
+                let defaultType = getDefaultFromTypeParameter(typeParam);
                 if (isJavaScriptImplicitAny && defaultType && (isTypeIdenticalTo(defaultType, unknownType) || isTypeIdenticalTo(defaultType, emptyObjectType))) {
                     defaultType = anyType;
                 }
@@ -31865,9 +31876,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkTypeArguments(signature: Signature, typeArgumentNodes: readonly TypeNode[], reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | undefined {
+        return checkTypeArgumentsTypes(signature, typeArgumentNodes, map(typeArgumentNodes, getTypeFromTypeNode), reportErrors, headMessage);
+    }
+
+    function checkTypeArgumentsTypes(signature: Signature, typeArgumentNodes: readonly TypeNode[], typeArguments: readonly Type[], reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | undefined {
         const isJavascript = isInJSFile(signature.declaration);
         const typeParameters = signature.typeParameters!;
-        const typeArgumentTypes = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, getMinTypeArgumentCount(typeParameters), isJavascript);
+        const typeArgumentTypes = fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters), isJavascript);
+        if (some(typeArgumentTypes, t => t === preferInferType)) {
+            // Do validation once partial inference is complete
+            return typeArgumentTypes;
+        }
         let mapper: TypeMapper | undefined;
         for (let i = 0; i < typeArgumentNodes.length; i++) {
             Debug.assert(typeParameters[i] !== undefined, "Should not call checkTypeArguments with too many type arguments");
@@ -32608,6 +32627,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 let inferenceContext: InferenceContext | undefined;
 
                 if (candidate.typeParameters) {
+                    const isJavascript = isInJSFile(candidate.declaration);
                     let typeArgumentTypes: Type[] | undefined;
                     if (some(typeArguments)) {
                         typeArgumentTypes = checkTypeArguments(candidate, typeArguments, /*reportErrors*/ false);
@@ -32615,13 +32635,35 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             candidateForTypeArgumentError = candidate;
                             continue;
                         }
+                        if (some(typeArgumentTypes, t => t === preferInferType)) {
+                            // There are implied inferences we must make, despite having type arguments
+                            const originalParams = candidate.typeParameters;
+                            const withOriginalArgs = map(typeArgumentTypes, (r, i) => r === preferInferType ? originalParams[i] : r);
+                            const uninferedInstantiation = getSignatureInstantiation(candidate, withOriginalArgs, isJavascript);
+                            inferenceContext = createInferenceContext(originalParams, uninferedInstantiation, isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
+                            for (let i = 0; i < inferenceContext.inferences.length; i++) {
+                                const correspondingArgument = typeArgumentTypes[i];
+                                if (correspondingArgument !== preferInferType) {
+                                    const inference = inferenceContext.inferences[i];
+                                    inference.inferredType = correspondingArgument;
+                                    inference.isFixed = true;
+                                    inference.priority = InferencePriority.None;
+                                }
+                            }
+                            typeArgumentTypes = inferTypeArguments(node, uninferedInstantiation, args, argCheckMode | CheckMode.SkipGenericFunctions, inferenceContext);
+                            // TODO: implement plumbing for error reporting
+                            // if (!checkTypeArgumentsTypes(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false)) {
+                            //     continue;
+                            // }
+                            argCheckMode |= inferenceContext.flags & InferenceFlags.SkippedGenericFunction ? CheckMode.SkipGenericFunctions : CheckMode.Normal;
+                        }
                     }
                     else {
                         inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
                         typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode | CheckMode.SkipGenericFunctions, inferenceContext);
                         argCheckMode |= inferenceContext.flags & InferenceFlags.SkippedGenericFunction ? CheckMode.SkipGenericFunctions : CheckMode.Normal;
                     }
-                    checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
+                    checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isJavascript, inferenceContext && inferenceContext.inferredTypeParameters);
                     // If the original signature has a generic rest type, instantiation may produce a
                     // signature with different arity and we need to perform another arity check.
                     if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
@@ -45649,15 +45691,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_an_index_signature, tokenToString(modifier.kind));
                 }
             }
-            if (modifier.kind !== SyntaxKind.InKeyword && modifier.kind !== SyntaxKind.OutKeyword && modifier.kind !== SyntaxKind.ConstKeyword) {
+            if (modifier.kind !== SyntaxKind.InKeyword && modifier.kind !== SyntaxKind.OutKeyword && modifier.kind !== SyntaxKind.ConstKeyword && modifier.kind !== SyntaxKind.PreferInferKeyword) {
                 if (node.kind === SyntaxKind.TypeParameter) {
                     return grammarErrorOnNode(modifier, Diagnostics._0_modifier_cannot_appear_on_a_type_parameter, tokenToString(modifier.kind));
                 }
             }
             switch (modifier.kind) {
                 case SyntaxKind.ConstKeyword:
+                case SyntaxKind.PreferInferKeyword:
                     if (node.kind !== SyntaxKind.EnumDeclaration && node.kind !== SyntaxKind.TypeParameter) {
-                        return grammarErrorOnNode(node, Diagnostics.A_class_member_cannot_have_the_0_keyword, tokenToString(SyntaxKind.ConstKeyword));
+                        return grammarErrorOnNode(node, Diagnostics.A_class_member_cannot_have_the_0_keyword, tokenToString(modifier.kind));
                     }
                     const parent = node.parent;
                     if (node.kind === SyntaxKind.TypeParameter && !(isFunctionLikeDeclaration(parent) || isClassLike(parent) || isFunctionTypeNode(parent) ||

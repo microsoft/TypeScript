@@ -1,0 +1,163 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterLists/inferPartialTypeArgumentsErrors.ts ===
+declare function testConstraints1<A extends string, preferinfer B extends A>(arg?: {
+>testConstraints1 : <A extends string, B extends A>(arg?: {    a?: A[];    b?: B[];}) => {    a: A[];    b: B[];}
+>arg : { a?: A[] | undefined; b?: B[] | undefined; } | undefined
+
+  a?: A[];
+>a : A[] | undefined
+
+  b?: B[];
+>b : B[] | undefined
+
+}): { a: A[]; b: B[] };
+>a : A[]
+>b : B[]
+
+const expectError1 = testConstraints1<"z">({ b: ["x", "y"] });
+>expectError1 : { a: "z"[]; b: A[]; }
+>testConstraints1<"z">({ b: ["x", "y"] }) : { a: "z"[]; b: A[]; }
+>testConstraints1 : <A extends string, B extends A>(arg?: { a?: A[] | undefined; b?: B[] | undefined; } | undefined) => { a: A[]; b: B[]; }
+>{ b: ["x", "y"] } : { b: ("x" | "y")[]; }
+>b : ("x" | "y")[]
+>["x", "y"] : ("x" | "y")[]
+>"x" : "x"
+>"y" : "y"
+
+declare function testConstraints2<A extends B, preferinfer B extends string>(arg?: {
+>testConstraints2 : <A extends B, B extends string>(arg?: {    a?: A[];    b?: B[];}) => {    a: A[];    b: B[];}
+>arg : { a?: A[] | undefined; b?: B[] | undefined; } | undefined
+
+  a?: A[];
+>a : A[] | undefined
+
+  b?: B[];
+>b : B[] | undefined
+
+}): { a: A[]; b: B[] };
+>a : A[]
+>b : B[]
+
+const expectAllowed1 = testConstraints2<"x">({ b: ["x", "y"] });
+>expectAllowed1 : { a: "x"[]; b: ("x" | "y")[]; }
+>testConstraints2<"x">({ b: ["x", "y"] }) : { a: "x"[]; b: ("x" | "y")[]; }
+>testConstraints2 : <A extends B, B extends string>(arg?: { a?: A[] | undefined; b?: B[] | undefined; } | undefined) => { a: A[]; b: B[]; }
+>{ b: ["x", "y"] } : { b: ("x" | "y")[]; }
+>b : ("x" | "y")[]
+>["x", "y"] : ("x" | "y")[]
+>"x" : "x"
+>"y" : "y"
+
+const expectError2 = testConstraints2<"z">({ b: ["x", "y"] });
+>expectError2 : { a: "z"[]; b: ("x" | "y")[]; }
+>testConstraints2<"z">({ b: ["x", "y"] }) : { a: "z"[]; b: ("x" | "y")[]; }
+>testConstraints2 : <A extends B, B extends string>(arg?: { a?: A[] | undefined; b?: B[] | undefined; } | undefined) => { a: A[]; b: B[]; }
+>{ b: ["x", "y"] } : { b: ("x" | "y")[]; }
+>b : ("x" | "y")[]
+>["x", "y"] : ("x" | "y")[]
+>"x" : "x"
+>"y" : "y"
+
+declare function testConstraints3<A extends string, preferinfer B extends A>(arg?: {
+>testConstraints3 : <A extends string, B extends A>(arg?: {    a?: A[];    b?: B[];}) => {    a: A[];    b: B[];}
+>arg : { a?: A[] | undefined; b?: B[] | undefined; } | undefined
+
+  a?: A[];
+>a : A[] | undefined
+
+  b?: B[];
+>b : B[] | undefined
+
+}): { a: A[]; b: B[] };
+>a : A[]
+>b : B[]
+
+const expectAllowed3 = testConstraints3<"x" | "y">({ b: ["x"] });
+>expectAllowed3 : { a: ("x" | "y")[]; b: "x"[]; }
+>testConstraints3<"x" | "y">({ b: ["x"] }) : { a: ("x" | "y")[]; b: "x"[]; }
+>testConstraints3 : <A extends string, B extends A>(arg?: { a?: A[] | undefined; b?: B[] | undefined; } | undefined) => { a: A[]; b: B[]; }
+>{ b: ["x"] } : { b: "x"[]; }
+>b : "x"[]
+>["x"] : "x"[]
+>"x" : "x"
+
+const expectError3 = testConstraints3<"x" | "y">({ b: ["x", "y", "z"] });
+>expectError3 : { a: ("x" | "y")[]; b: A[]; }
+>testConstraints3<"x" | "y">({ b: ["x", "y", "z"] }) : { a: ("x" | "y")[]; b: A[]; }
+>testConstraints3 : <A extends string, B extends A>(arg?: { a?: A[] | undefined; b?: B[] | undefined; } | undefined) => { a: A[]; b: B[]; }
+>{ b: ["x", "y", "z"] } : { b: ("z" | "x" | "y")[]; }
+>b : ("z" | "x" | "y")[]
+>["x", "y", "z"] : ("z" | "x" | "y")[]
+>"x" : "x"
+>"y" : "y"
+>"z" : "z"
+
+declare function complexConstraints1<
+>complexConstraints1 : <A extends string, B extends A, C extends B>(arg: {    a?: A[];    b?: B[];    c?: C[];}) => {    a: A[];    b: B[];    c: C[];}
+
+  A extends string,
+  preferinfer B extends A,
+  preferinfer C extends B
+>(arg: { a?: A[]; b?: B[]; c?: C[] }): { a: A[]; b: B[]; c: C[] };
+>arg : { a?: A[] | undefined; b?: B[] | undefined; c?: C[] | undefined; }
+>a : A[] | undefined
+>b : B[] | undefined
+>c : C[] | undefined
+>a : A[]
+>b : B[]
+>c : C[]
+
+const expectAllowed4 = complexConstraints1<"x" | "y" | "z">({
+>expectAllowed4 : { a: ("z" | "x" | "y")[]; b: ("z" | "x" | "y")[]; c: ("x" | "y")[]; }
+>complexConstraints1<"x" | "y" | "z">({  a: ["x"],  c: ["x", "y"],}) : { a: ("z" | "x" | "y")[]; b: ("z" | "x" | "y")[]; c: ("x" | "y")[]; }
+>complexConstraints1 : <A extends string, B extends A, C extends B>(arg: { a?: A[] | undefined; b?: B[] | undefined; c?: C[] | undefined; }) => { a: A[]; b: B[]; c: C[]; }
+>{  a: ["x"],  c: ["x", "y"],} : { a: "x"[]; c: ("x" | "y")[]; }
+
+  a: ["x"],
+>a : "x"[]
+>["x"] : "x"[]
+>"x" : "x"
+
+  c: ["x", "y"],
+>c : ("x" | "y")[]
+>["x", "y"] : ("x" | "y")[]
+>"x" : "x"
+>"y" : "y"
+
+});
+const expectError5 = complexConstraints1<"x">({ c: ["y"] });
+>expectError5 : { a: "x"[]; b: A[]; c: B[]; }
+>complexConstraints1<"x">({ c: ["y"] }) : { a: "x"[]; b: A[]; c: B[]; }
+>complexConstraints1 : <A extends string, B extends A, C extends B>(arg: { a?: A[] | undefined; b?: B[] | undefined; c?: C[] | undefined; }) => { a: A[]; b: B[]; c: C[]; }
+>{ c: ["y"] } : { c: "y"[]; }
+>c : "y"[]
+>["y"] : "y"[]
+>"y" : "y"
+
+declare function complexConstraints2<
+>complexConstraints2 : <A extends string, B extends C, C extends A>(arg: {    a?: A[];    b?: B[];    c?: C[];}) => {    a: A[];    b: B[];    c: C[];}
+
+  A extends string,
+  preferinfer B extends C,
+  preferinfer C extends A
+>(arg: { a?: A[]; b?: B[]; c?: C[] }): { a: A[]; b: B[]; c: C[] };
+>arg : { a?: A[] | undefined; b?: B[] | undefined; c?: C[] | undefined; }
+>a : A[] | undefined
+>b : B[] | undefined
+>c : C[] | undefined
+>a : A[]
+>b : B[]
+>c : C[]
+
+const expectError4 = complexConstraints2<"x" | "y" | "z", "x" | "y">({
+>expectError4 : { a: ("z" | "x" | "y")[]; b: ("x" | "y")[]; c: "x"[]; }
+>complexConstraints2<"x" | "y" | "z", "x" | "y">({  c: ["x"],}) : { a: ("z" | "x" | "y")[]; b: ("x" | "y")[]; c: "x"[]; }
+>complexConstraints2 : <A extends string, B extends C, C extends A>(arg: { a?: A[] | undefined; b?: B[] | undefined; c?: C[] | undefined; }) => { a: A[]; b: B[]; c: C[]; }
+>{  c: ["x"],} : { c: "x"[]; }
+
+  c: ["x"],
+>c : "x"[]
+>["x"] : "x"[]
+>"x" : "x"
+
+});
+

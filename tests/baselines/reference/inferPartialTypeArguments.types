@@ -1,0 +1,182 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterLists/inferPartialTypeArguments.tsx ===
+declare module JSX {
+  interface Element {}
+  interface IntrinsicElements {
+    h: {}
+>h : {}
+  }
+}
+declare namespace React {
+>React : typeof React
+
+  export function createElement(
+>createElement : (x: any, p: any, ...children: any[]) => JSX.Element
+
+    x: any,
+>x : any
+
+    p: any,
+>p : any
+
+    ...children: any[]
+>children : any[]
+
+  ): JSX.Element;
+>JSX : any
+}
+class Foo<T, preferinfer U> {
+>Foo : Foo<T, U>
+
+  constructor(public prop1: T, public prop2: U) {}
+>prop1 : T
+>prop2 : U
+}
+function foo<T, preferinfer U>(x: T, y: U): [T, U] {
+>foo : <T, U>(x: T, y: U) => [T, U]
+>x : T
+>y : U
+
+  return [x, y];
+>[x, y] : [T, U]
+>x : T
+>y : U
+}
+interface ComponentProps<T, U> {
+  x: T;
+>x : T
+
+  y: U;
+>y : U
+
+  cb(props: this): void;
+>cb : (props: this) => void
+>props : this
+}
+function Component<T, preferinfer U>(x: ComponentProps<T, U>) {
+>Component : <T, U>(x: ComponentProps<T, U>) => JSX.Element
+>x : ComponentProps<T, U>
+
+  return <h></h>;
+><h></h> : JSX.Element
+>h : any
+>h : any
+}
+
+const instance1 = new Foo<number>(0, "");
+>instance1 : Foo<number, string>
+>new Foo<number>(0, "") : Foo<number, string>
+>Foo : typeof Foo
+>0 : 0
+>"" : ""
+
+const result1 = foo<number>(0, "");
+>result1 : [number, string]
+>foo<number>(0, "") : [number, string]
+>foo : <T, U>(x: T, y: U) => [T, U]
+>0 : 0
+>"" : ""
+
+const jsx1 = (
+>jsx1 : JSX.Element
+>(  <Component<number>    x={12}    y=""    cb={(props) => void (props.x.toFixed() + props.y.toUpperCase())}  />) : JSX.Element
+
+  <Component<number>
+><Component<number>    x={12}    y=""    cb={(props) => void (props.x.toFixed() + props.y.toUpperCase())}  /> : JSX.Element
+>Component : <T, U>(x: ComponentProps<T, U>) => JSX.Element
+
+    x={12}
+>x : number
+>12 : 12
+
+    y=""
+>y : string
+
+    cb={(props) => void (props.x.toFixed() + props.y.toUpperCase())}
+>cb : (props: ComponentProps<number, string>) => undefined
+>(props) => void (props.x.toFixed() + props.y.toUpperCase()) : (props: ComponentProps<number, string>) => undefined
+>props : ComponentProps<number, string>
+>void (props.x.toFixed() + props.y.toUpperCase()) : undefined
+>(props.x.toFixed() + props.y.toUpperCase()) : string
+>props.x.toFixed() + props.y.toUpperCase() : string
+>props.x.toFixed() : string
+>props.x.toFixed : (fractionDigits?: number | undefined) => string
+>props.x : number
+>props : ComponentProps<number, string>
+>x : number
+>toFixed : (fractionDigits?: number | undefined) => string
+>props.y.toUpperCase() : string
+>props.y.toUpperCase : () => string
+>props.y : string
+>props : ComponentProps<number, string>
+>y : string
+>toUpperCase : () => string
+
+  />
+);
+
+declare function stillDefaultsIfNoInference<
+>stillDefaultsIfNoInference : <X, A = string, B = number, C = boolean>(arg: {    a?: A;    b?: B;    c?: C;    x?: X;}) => {    a: A;    b: B;    c: C;    x: X;}
+
+  X,
+  preferinfer A = string,
+  preferinfer B = number,
+  preferinfer C = boolean
+>(arg: { a?: A; b?: B; c?: C; x?: X }): { a: A; b: B; c: C; x: X };
+>arg : { a?: A | undefined; b?: B | undefined; c?: C | undefined; x?: X | undefined; }
+>a : A | undefined
+>b : B | undefined
+>c : C | undefined
+>x : X | undefined
+>a : A
+>b : B
+>c : C
+>x : X
+
+const result4 = stillDefaultsIfNoInference<object>({ b: "test" });
+>result4 : { a: string; b: string; c: boolean; x: object; }
+>stillDefaultsIfNoInference<object>({ b: "test" }) : { a: string; b: string; c: boolean; x: object; }
+>stillDefaultsIfNoInference : <X, A = string, B = number, C = boolean>(arg: { a?: A | undefined; b?: B | undefined; c?: C | undefined; x?: X | undefined; }) => { a: A; b: B; c: C; x: X; }
+>{ b: "test" } : { b: string; }
+>b : string
+>"test" : "test"
+
+class Foo2<A = number, preferinfer B extends { x: string } = { x: string; y: number }> {
+>Foo2 : Foo2<A, B>
+>x : string
+>x : string
+>y : number
+
+  constructor(public a: A, public b: B) {}
+>a : A
+>b : B
+}
+const x = new Foo2<string>('test', { x: 'foo', z: 100 });
+>x : Foo2<string, { x: string; z: number; }>
+>new Foo2<string>('test', { x: 'foo', z: 100 }) : Foo2<string, { x: string; z: number; }>
+>Foo2 : typeof Foo2
+>'test' : "test"
+>{ x: 'foo', z: 100 } : { x: string; z: number; }
+>x : string
+>'foo' : "foo"
+>z : number
+>100 : 100
+
+x.a;
+>x.a : string
+>x : Foo2<string, { x: string; z: number; }>
+>a : string
+
+x.b.x;
+>x.b.x : string
+>x.b : { x: string; z: number; }
+>x : Foo2<string, { x: string; z: number; }>
+>b : { x: string; z: number; }
+>x : string
+
+x.b.z;
+>x.b.z : number
+>x.b : { x: string; z: number; }
+>x : Foo2<string, { x: string; z: number; }>
+>b : { x: string; z: number; }
+>z : number
+

@@ -1,0 +1,172 @@
+=== tests/cases/conformance/types/typeParameters/typeParameterLists/inferPartialTypeArgumentsErrors.ts ===
+declare function testConstraints1<A extends string, preferinfer B extends A>(arg?: {
+>testConstraints1 : Symbol(testConstraints1, Decl(inferPartialTypeArgumentsErrors.ts, 0, 0))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 0, 34))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors.ts, 0, 51))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 0, 34))
+>arg : Symbol(arg, Decl(inferPartialTypeArgumentsErrors.ts, 0, 77))
+
+  a?: A[];
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors.ts, 0, 84))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 0, 34))
+
+  b?: B[];
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors.ts, 1, 10))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors.ts, 0, 51))
+
+}): { a: A[]; b: B[] };
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors.ts, 3, 5))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 0, 34))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors.ts, 3, 13))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors.ts, 0, 51))
+
+const expectError1 = testConstraints1<"z">({ b: ["x", "y"] });
+>expectError1 : Symbol(expectError1, Decl(inferPartialTypeArgumentsErrors.ts, 4, 5))
+>testConstraints1 : Symbol(testConstraints1, Decl(inferPartialTypeArgumentsErrors.ts, 0, 0))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors.ts, 4, 44))
+
+declare function testConstraints2<A extends B, preferinfer B extends string>(arg?: {
+>testConstraints2 : Symbol(testConstraints2, Decl(inferPartialTypeArgumentsErrors.ts, 4, 62))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 6, 34))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors.ts, 6, 46))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors.ts, 6, 46))
+>arg : Symbol(arg, Decl(inferPartialTypeArgumentsErrors.ts, 6, 77))
+
+  a?: A[];
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors.ts, 6, 84))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 6, 34))
+
+  b?: B[];
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors.ts, 7, 10))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors.ts, 6, 46))
+
+}): { a: A[]; b: B[] };
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors.ts, 9, 5))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 6, 34))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors.ts, 9, 13))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors.ts, 6, 46))
+
+const expectAllowed1 = testConstraints2<"x">({ b: ["x", "y"] });
+>expectAllowed1 : Symbol(expectAllowed1, Decl(inferPartialTypeArgumentsErrors.ts, 10, 5))
+>testConstraints2 : Symbol(testConstraints2, Decl(inferPartialTypeArgumentsErrors.ts, 4, 62))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors.ts, 10, 46))
+
+const expectError2 = testConstraints2<"z">({ b: ["x", "y"] });
+>expectError2 : Symbol(expectError2, Decl(inferPartialTypeArgumentsErrors.ts, 11, 5))
+>testConstraints2 : Symbol(testConstraints2, Decl(inferPartialTypeArgumentsErrors.ts, 4, 62))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors.ts, 11, 44))
+
+declare function testConstraints3<A extends string, preferinfer B extends A>(arg?: {
+>testConstraints3 : Symbol(testConstraints3, Decl(inferPartialTypeArgumentsErrors.ts, 11, 62))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 13, 34))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors.ts, 13, 51))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 13, 34))
+>arg : Symbol(arg, Decl(inferPartialTypeArgumentsErrors.ts, 13, 77))
+
+  a?: A[];
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors.ts, 13, 84))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 13, 34))
+
+  b?: B[];
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors.ts, 14, 10))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors.ts, 13, 51))
+
+}): { a: A[]; b: B[] };
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors.ts, 16, 5))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 13, 34))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors.ts, 16, 13))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors.ts, 13, 51))
+
+const expectAllowed3 = testConstraints3<"x" | "y">({ b: ["x"] });
+>expectAllowed3 : Symbol(expectAllowed3, Decl(inferPartialTypeArgumentsErrors.ts, 17, 5))
+>testConstraints3 : Symbol(testConstraints3, Decl(inferPartialTypeArgumentsErrors.ts, 11, 62))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors.ts, 17, 52))
+
+const expectError3 = testConstraints3<"x" | "y">({ b: ["x", "y", "z"] });
+>expectError3 : Symbol(expectError3, Decl(inferPartialTypeArgumentsErrors.ts, 18, 5))
+>testConstraints3 : Symbol(testConstraints3, Decl(inferPartialTypeArgumentsErrors.ts, 11, 62))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors.ts, 18, 50))
+
+declare function complexConstraints1<
+>complexConstraints1 : Symbol(complexConstraints1, Decl(inferPartialTypeArgumentsErrors.ts, 18, 73))
+
+  A extends string,
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 20, 37))
+
+  preferinfer B extends A,
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors.ts, 21, 19))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 20, 37))
+
+  preferinfer C extends B
+>C : Symbol(C, Decl(inferPartialTypeArgumentsErrors.ts, 22, 26))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors.ts, 21, 19))
+
+>(arg: { a?: A[]; b?: B[]; c?: C[] }): { a: A[]; b: B[]; c: C[] };
+>arg : Symbol(arg, Decl(inferPartialTypeArgumentsErrors.ts, 24, 2))
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors.ts, 24, 8))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 20, 37))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors.ts, 24, 17))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors.ts, 21, 19))
+>c : Symbol(c, Decl(inferPartialTypeArgumentsErrors.ts, 24, 26))
+>C : Symbol(C, Decl(inferPartialTypeArgumentsErrors.ts, 22, 26))
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors.ts, 24, 40))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 20, 37))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors.ts, 24, 48))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors.ts, 21, 19))
+>c : Symbol(c, Decl(inferPartialTypeArgumentsErrors.ts, 24, 56))
+>C : Symbol(C, Decl(inferPartialTypeArgumentsErrors.ts, 22, 26))
+
+const expectAllowed4 = complexConstraints1<"x" | "y" | "z">({
+>expectAllowed4 : Symbol(expectAllowed4, Decl(inferPartialTypeArgumentsErrors.ts, 25, 5))
+>complexConstraints1 : Symbol(complexConstraints1, Decl(inferPartialTypeArgumentsErrors.ts, 18, 73))
+
+  a: ["x"],
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors.ts, 25, 61))
+
+  c: ["x", "y"],
+>c : Symbol(c, Decl(inferPartialTypeArgumentsErrors.ts, 26, 11))
+
+});
+const expectError5 = complexConstraints1<"x">({ c: ["y"] });
+>expectError5 : Symbol(expectError5, Decl(inferPartialTypeArgumentsErrors.ts, 29, 5))
+>complexConstraints1 : Symbol(complexConstraints1, Decl(inferPartialTypeArgumentsErrors.ts, 18, 73))
+>c : Symbol(c, Decl(inferPartialTypeArgumentsErrors.ts, 29, 47))
+
+declare function complexConstraints2<
+>complexConstraints2 : Symbol(complexConstraints2, Decl(inferPartialTypeArgumentsErrors.ts, 29, 60))
+
+  A extends string,
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 31, 37))
+
+  preferinfer B extends C,
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors.ts, 32, 19))
+>C : Symbol(C, Decl(inferPartialTypeArgumentsErrors.ts, 33, 26))
+
+  preferinfer C extends A
+>C : Symbol(C, Decl(inferPartialTypeArgumentsErrors.ts, 33, 26))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 31, 37))
+
+>(arg: { a?: A[]; b?: B[]; c?: C[] }): { a: A[]; b: B[]; c: C[] };
+>arg : Symbol(arg, Decl(inferPartialTypeArgumentsErrors.ts, 35, 2))
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors.ts, 35, 8))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 31, 37))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors.ts, 35, 17))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors.ts, 32, 19))
+>c : Symbol(c, Decl(inferPartialTypeArgumentsErrors.ts, 35, 26))
+>C : Symbol(C, Decl(inferPartialTypeArgumentsErrors.ts, 33, 26))
+>a : Symbol(a, Decl(inferPartialTypeArgumentsErrors.ts, 35, 40))
+>A : Symbol(A, Decl(inferPartialTypeArgumentsErrors.ts, 31, 37))
+>b : Symbol(b, Decl(inferPartialTypeArgumentsErrors.ts, 35, 48))
+>B : Symbol(B, Decl(inferPartialTypeArgumentsErrors.ts, 32, 19))
+>c : Symbol(c, Decl(inferPartialTypeArgumentsErrors.ts, 35, 56))
+>C : Symbol(C, Decl(inferPartialTypeArgumentsErrors.ts, 33, 26))
+
+const expectError4 = complexConstraints2<"x" | "y" | "z", "x" | "y">({
+>expectError4 : Symbol(expectError4, Decl(inferPartialTypeArgumentsErrors.ts, 36, 5))
+>complexConstraints2 : Symbol(complexConstraints2, Decl(inferPartialTypeArgumentsErrors.ts, 29, 60))
+
+  c: ["x"],
+>c : Symbol(c, Decl(inferPartialTypeArgumentsErrors.ts, 36, 70))
+
+});
+
