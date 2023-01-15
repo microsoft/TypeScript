@@ -52,25 +52,19 @@ export class TypeWriterWalker {
         const sourceFile = this.program.getSourceFile(fileName)!;
         this.currentSourceFile = sourceFile;
         const gen = this.visitNode(sourceFile, /*isSymbolWalk*/ true);
-        for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
-            yield value as TypeWriterSymbolResult;
-        }
+        yield* gen as IterableIterator<TypeWriterSymbolResult>;
     }
 
     public *getTypes(fileName: string): IterableIterator<TypeWriterTypeResult> {
         const sourceFile = this.program.getSourceFile(fileName)!;
         this.currentSourceFile = sourceFile;
         const gen = this.visitNode(sourceFile, /*isSymbolWalk*/ false);
-        for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
-            yield value as TypeWriterTypeResult;
-        }
+        yield* gen as IterableIterator<TypeWriterTypeResult>;
     }
 
     private *visitNode(node: ts.Node, isSymbolWalk: boolean): IterableIterator<TypeWriterResult> {
         const gen = forEachASTNode(node);
-        let res = gen.next();
-        for (; !res.done; res = gen.next()) {
-            const {value: node} = res;
+        for (const node of gen) {
             if (ts.isExpressionNode(node) || node.kind === ts.SyntaxKind.Identifier || ts.isDeclarationName(node)) {
                 const result = this.writeTypeOrSymbol(node, isSymbolWalk);
                 if (result) {

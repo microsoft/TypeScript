@@ -6,6 +6,7 @@ import { task } from "hereby";
 import _glob from "glob";
 import util from "util";
 import chalk from "chalk";
+import fsExtra from "fs-extra";
 import { Debouncer, Deferred, exec, getDiffTool, getDirSize, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
 import { localBaseline, localRwcBaseline, refBaseline, refRwcBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
 import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
@@ -818,13 +819,6 @@ export const lkg = task({
     dependencies: [produceLKG],
 });
 
-export const generateSpec = task({
-    name: "generate-spec",
-    description: "Generates a Markdown version of the Language Specification",
-    hiddenFromTaskList: true,
-    run: () => exec("cscript", ["//nologo", "scripts/word2md.mjs", path.resolve("doc/TypeScript Language Specification - ARCHIVED.docx"), path.resolve("doc/spec-ARCHIVED.md")]),
-});
-
 export const cleanBuilt = task({
     name: "clean-built",
     hiddenFromTaskList: true,
@@ -860,4 +854,15 @@ export const help = task({
     description: "Prints the top-level tasks.",
     hiddenFromTaskList: true,
     run: () => exec("hereby", ["--tasks"], { hidePrompt: true }),
+});
+
+export const bumpLkgToNightly = task({
+    name: "bump-lkg-to-nightly",
+    description: "Bumps typescript in package.json to the latest nightly and copies it to LKG.",
+    run: async () => {
+        await exec("npm", ["install", "--save-dev", "--save-exact", "typescript@next"]);
+        await fs.promises.rm("lib", { recursive: true, force: true });
+        await fsExtra.copy("node_modules/typescript/lib", "lib");
+        await fs.promises.writeFile("lib/.gitattributes", "* text eol=lf");
+    }
 });

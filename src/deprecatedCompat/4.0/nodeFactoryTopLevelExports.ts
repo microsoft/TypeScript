@@ -988,7 +988,7 @@ export const createToken = deprecate(function createToken<TKind extends SyntaxKi
 
 /** @deprecated Use `factory.createIdentifier` or the factory supplied by your transformation context instead. */
 export const createIdentifier = deprecate(function createIdentifier(text: string) {
-    return factory.createIdentifier(text, /*typeArguments*/ undefined, /*originalKeywordKind*/ undefined);
+    return factory.createIdentifier(text, /*originalKeywordKind*/ undefined);
 }, factoryDeprecation);
 
 /** @deprecated Use `factory.createTempVariable` or the factory supplied by your transformation context instead. */
