@@ -107,7 +107,7 @@ function createInterfaceForTypeLiteral(
     typeLiteral: JSDocTypeLiteral
 ): InterfaceDeclaration | undefined {
     const propertySignatures = createSignatureFromTypeLiteral(typeLiteral);
-    if (!propertySignatures || propertySignatures.length === 0) return;
+    if (!some(propertySignatures)) return;
     const interfaceDeclaration = factory.createInterfaceDeclaration(
         [],
         typeName,
@@ -135,7 +135,7 @@ function createTypeAliasForTypeExpression(
 
 function createSignatureFromTypeLiteral(typeLiteral: JSDocTypeLiteral): PropertySignature[] | undefined {
     const propertyTags = typeLiteral.jsDocPropertyTags;
-    if (!propertyTags || propertyTags.length === 0) return;
+    if (!some(propertyTags)) return;
 
     const getSignature = (tag: JSDocPropertyTag) => {
         const name = getPropertyName(tag);
@@ -143,8 +143,8 @@ function createSignatureFromTypeLiteral(typeLiteral: JSDocTypeLiteral): Property
         const isOptional = tag.isBracketed;
         let typeReference;
 
-         // Recursively handle nested object type
-         if (type && type.kind === SyntaxKind.JSDocTypeLiteral) {
+        // Recursively handle nested object type
+        if (type && type.kind === SyntaxKind.JSDocTypeLiteral) {
             const signatures = createSignatureFromTypeLiteral(type as JSDocTypeLiteral);
             typeReference = factory.createTypeLiteralNode(signatures);
         }
